@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{ECE059C1-0706-45F3-B897-7026376F49A9}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CrashEdit</RootNamespace>
+    <AssemblyName>CrashEdit</AssemblyName>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\Crash.Game\Crash.Game.csproj">
+      <Project>{A9FA7B81-317B-4072-ADB3-5656ECC797AC}</Project>
+      <Name>Crash.Game</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Crash.Graphics\Crash.Graphics.csproj">
+      <Project>{DFF574F7-C6C0-44F0-AFF2-6ECB4EB0B486}</Project>
+      <Name>Crash.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Crash.Unknown0\Crash.Unknown0.csproj">
+      <Project>{6E451534-597D-489D-9D97-BD479FEEA587}</Project>
+      <Name>Crash.Unknown0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Crash.Unknown3\Crash.Unknown3.csproj">
+      <Project>{DA01247D-3E78-4102-99A8-E692F28B800B}</Project>
+      <Name>Crash.Unknown3</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Crash.Unknown4\Crash.Unknown4.csproj">
+      <Project>{59F3F938-85D6-4965-A87E-A0DEEC32BC9E}</Project>
+      <Name>Crash.Unknown4</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Crash.Unknown5\Crash.Unknown5.csproj">
+      <Project>{B5E04A9B-6336-41F6-A4C6-3AECC9BE6B61}</Project>
+      <Name>Crash.Unknown5</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Crash\Crash.csproj">
+      <Project>{FFBFB4B9-97BD-4D21-91DE-CAF7AE9DDB65}</Project>
+      <Name>Crash</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HexBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NSFBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Resources.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Icons\Arrow.gif" />
+    <Content Include="Resources\Icons\File.gif" />
+    <Content Include="Resources\Icons\Folder.gif" />
+    <Content Include="Resources\Icons\Image.gif" />
+    <Content Include="Resources\Icons\Journals\Blue.gif" />
+    <Content Include="Resources\Icons\Journals\White.gif" />
+    <Content Include="Resources\Icons\Journals\Yellow.gif" />
+    <Content Include="Resources\Icons\Music.gif" />
+    <Content Include="Resources\Icons\Open.gif" />
+    <Content Include="Resources\Icons\Save.gif" />
+    <Content Include="Resources\Icons\Thing.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
