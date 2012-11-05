@@ -130,7 +130,10 @@ namespace CrashEdit
         public void SaveNSF(string filename,NSF nsf)
         {
             byte[] nsfdata = nsf.Save();
-            IO.File.WriteAllBytes(filename,nsfdata);
+            if (MessageBox.Show("Saving can (and in most cases will) produce an NSF file partially unusable by the game.\n\nContinue anyway?","Save Confirmation Prompt",MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                IO.File.WriteAllBytes(filename,nsfdata);
+            }
         }
 
         public void CloseNSF()
