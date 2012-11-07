@@ -1,5 +1,6 @@
 namespace Crash.Game
 {
+    [EntryType(19)]
     public sealed class DemoEntryLoader : EntryLoader
     {
         public override Entry Load(byte[][] items,int unknown)
