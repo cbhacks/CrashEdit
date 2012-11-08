@@ -16,6 +16,11 @@ namespace Crash.Unknown0
             get { return 21; }
         }
 
+        public IList<byte[]> Items
+        {
+            get { return items; }
+        }
+
         public override byte[] Save()
         {
             return Save(items);
