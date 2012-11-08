@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Crash.Unknown0
 {
-    public sealed class T11Entry : Entry
+    public sealed class T11Entry : Entry,IMysteryMultiItemEntry
     {
         private List<byte[]> items;
 

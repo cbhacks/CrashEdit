@@ -504,65 +504,21 @@ namespace CrashEdit
 
         private Control DisplayEntry(Entry entry)
         {
-            if (entry is T1Entry)
-            {
-                return DisplayItems(((T1Entry)entry).Items);
-            }
-            else if (entry is T2Entry)
-            {
-                return DisplayItems(((T2Entry)entry).Items);
-            }
-            else if (entry is T3Entry)
-            {
-                return DisplayItems(((T3Entry)entry).Items);
-            }
-            else if (entry is T4Entry)
-            {
-                return DisplayItems(((T4Entry)entry).Items);
-            }
-            else if (entry is EntityEntry)
+            if (entry is EntityEntry)
             {
                 return DisplayNothing();
-            }
-            else if (entry is T11Entry)
-            {
-                return DisplayItems(((T11Entry)entry).Items);
             }
             else if (entry is SoundEntry)
             {
                 return DisplayNothing();
             }
-            else if (entry is T13Entry)
+            else if (entry is IMysteryUniItemEntry)
             {
-                return DisplayItems(((T13Entry)entry).Items);
+                return DisplayHex(((IMysteryUniItemEntry)entry).Data);
             }
-            else if (entry is T14Entry)
+            else if (entry is IMysteryMultiItemEntry)
             {
-                return DisplayHex(((T14Entry)entry).Data);
-            }
-            else if (entry is T15Entry)
-            {
-                return DisplayHex(((T15Entry)entry).Data);
-            }
-            else if (entry is T17Entry)
-            {
-                return DisplayItems(((T17Entry)entry).Items);
-            }
-            else if (entry is DemoEntry)
-            {
-                return DisplayHex(((DemoEntry)entry).Data);
-            }
-            else if (entry is T20Entry)
-            {
-                return DisplayHex(((T20Entry)entry).Data);
-            }
-            else if (entry is T21Entry)
-            {
-                return DisplayItems(((T21Entry)entry).Items);
-            }
-            else if (entry is UnknownEntry)
-            {
-                return DisplayItems(((UnknownEntry)entry).Items);
+                return DisplayItems(((IMysteryMultiItemEntry)entry).Items);
             }
             else
             {

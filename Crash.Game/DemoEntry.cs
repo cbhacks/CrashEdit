@@ -1,6 +1,6 @@
 namespace Crash.Game
 {
-    public sealed class DemoEntry : Entry
+    public sealed class DemoEntry : Entry,IMysteryUniItemEntry
     {
         private byte[] data;
 

@@ -1,6 +1,6 @@
 namespace Crash.Unknown4
 {
-    public sealed class T14Entry : Entry
+    public sealed class T14Entry : Entry,IMysteryUniItemEntry
     {
         private int id;
         private byte[] data;

@@ -1,6 +1,8 @@
+using System.Collections.Generic;
+
 namespace Crash
 {
-    public sealed class UnknownEntry : Entry
+    public sealed class UnknownEntry : Entry,IMysteryMultiItemEntry
     {
         private byte[][] items;
         private int type;
@@ -17,6 +19,11 @@ namespace Crash
         }
 
         public byte[][] Items
+        {
+            get { return items; }
+        }
+
+        IList<byte[]> IMysteryMultiItemEntry.Items
         {
             get { return items; }
         }

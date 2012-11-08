@@ -1,6 +1,6 @@
 namespace Crash.Unknown5
 {
-    public sealed class T20Entry : Entry
+    public sealed class T20Entry : Entry,IMysteryUniItemEntry
     {
         private byte[] data;
 
