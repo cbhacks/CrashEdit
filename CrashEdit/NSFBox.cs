@@ -7,6 +7,7 @@ using Crash.Unknown4;
 using Crash.Unknown5;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace CrashEdit
 {
@@ -451,13 +452,121 @@ namespace CrashEdit
 
         private Control Display(object obj)
         {
-            if (obj is Entity)
+            if (obj is Chunk)
+            {
+                return DisplayChunk((Chunk)obj);
+            }
+            else if (obj is Entry)
+            {
+                return DisplayEntry((Entry)obj);
+            }
+            else if (obj is Entity)
             {
                 return DisplayEntity((Entity)obj);
             }
             else
             {
                 return DisplayNothing();
+            }
+        }
+
+        public Control DisplayChunk(Chunk chunk)
+        {
+            if (chunk is NormalChunk)
+            {
+                return DisplayNothing();
+            }
+            else if (chunk is TextureChunk)
+            {
+                return DisplayHex(((TextureChunk)chunk).Data);
+            }
+            else if (chunk is T3Chunk)
+            {
+                return DisplayNothing();
+            }
+            else if (chunk is T4Chunk)
+            {
+                return DisplayEntry(((T4Chunk)chunk).Entry);
+            }
+            else if (chunk is T5Chunk)
+            {
+                return DisplayNothing();
+            }
+            else if (chunk is UnknownChunk)
+            {
+                return DisplayHex(((UnknownChunk)chunk).Data);
+            }
+            else
+            {
+                throw new System.Exception();
+            }
+        }
+
+        private Control DisplayEntry(Entry entry)
+        {
+            if (entry is T1Entry)
+            {
+                return DisplayItems(((T1Entry)entry).Items);
+            }
+            else if (entry is T2Entry)
+            {
+                return DisplayItems(((T2Entry)entry).Items);
+            }
+            else if (entry is T3Entry)
+            {
+                return DisplayItems(((T3Entry)entry).Items);
+            }
+            else if (entry is T4Entry)
+            {
+                return DisplayItems(((T4Entry)entry).Items);
+            }
+            else if (entry is EntityEntry)
+            {
+                return DisplayNothing();
+            }
+            else if (entry is T11Entry)
+            {
+                return DisplayItems(((T11Entry)entry).Items);
+            }
+            else if (entry is T12Entry)
+            {
+                return DisplayHex(((T12Entry)entry).Data);
+            }
+            else if (entry is T13Entry)
+            {
+                return DisplayItems(((T13Entry)entry).Items);
+            }
+            else if (entry is T14Entry)
+            {
+                return DisplayHex(((T14Entry)entry).Data);
+            }
+            else if (entry is T15Entry)
+            {
+                return DisplayHex(((T15Entry)entry).Data);
+            }
+            else if (entry is T17Entry)
+            {
+                return DisplayItems(((T17Entry)entry).Items);
+            }
+            else if (entry is DemoEntry)
+            {
+                return DisplayHex(((DemoEntry)entry).Data);
+            }
+            else if (entry is T20Entry)
+            {
+                return DisplayHex(((T20Entry)entry).Data);
+            }
+            else if (entry is T21Entry)
+            {
+                return DisplayItems(((T21Entry)entry).Items);
+            }
+            else if (entry is UnknownEntry)
+            {
+                return DisplayItems(((UnknownEntry)entry).Items);
+            }
+            else
+            {
+                throw new System.Exception();
             }
         }
 
@@ -487,6 +596,50 @@ namespace CrashEdit
             label.Text += string.Format("\nElement Count: {0}",field.ElementCount);
             label.Text += string.Format("\n???: {0}",field.Unknown3);
             return label;
+        }
+
+        private Control DisplayItems(IList<byte[]> items)
+        {
+            TabControl tabctl = new TabControl();
+            tabctl.Dock = DockStyle.Fill;
+            foreach (byte[] item in items)
+            {
+                TabPage tab = new TabPage("Item");
+                tab.Controls.Add(DisplayHex(item));
+                tabctl.TabPages.Add(tab);
+            }
+            return tabctl;
+        }
+
+        private Control DisplayHex(byte[] data)
+        {
+            HexBox hexbox = new HexBox();
+            hexbox.Dock = DockStyle.Fill;
+            hexbox.Data = data;
+            ToolStripButton savebutton = new ToolStripButton();
+            savebutton.Text = "Export";
+            savebutton.Tag = data;
+            savebutton.Click += new System.EventHandler(DisplayHex_savebutton_Click);
+            ToolStrip toolstrip = new ToolStrip();
+            toolstrip.Dock = DockStyle.Top;
+            toolstrip.Items.Add(savebutton);
+            Panel panel = new Panel();
+            panel.Dock = DockStyle.Fill;
+            panel.Controls.Add(hexbox);
+            panel.Controls.Add(toolstrip);
+            return panel;
+        }
+
+        private void DisplayHex_savebutton_Click(object sender,System.EventArgs e)
+        {
+            using (SaveFileDialog dialog = new SaveFileDialog())
+            {
+                dialog.Filter = "All Files (*.*)|*.*";
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    System.IO.File.WriteAllBytes(dialog.FileName,(byte[])((ToolStripButton)sender).Tag);
+                }
+            }
         }
 
         private Control DisplayNothing()
