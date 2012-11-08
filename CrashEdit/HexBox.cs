@@ -200,7 +200,7 @@ namespace CrashEdit
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            Pen borderpen = new Pen(Brushes.Black);
+            Pen borderpen = Pens.Black;
             Brush brush = Brushes.Navy;
             Brush backbrush = Brushes.White;
             Brush selbrush = Brushes.White;
@@ -217,10 +217,8 @@ namespace CrashEdit
             selformat.LineAlignment = StringAlignment.Center;
             int hstep = (Width - 1) / 16;
             int vstep = (Height - 1) / 16;
-            int left = Location.X;
-            int right = Location.X + hstep * 16;
-            int top = Location.Y;
-            int bottom = Location.Y + vstep * 16;
+            int width = hstep * 16;
+            int height = vstep * 16;
             int xsel = position % 16;
             int ysel = position / 16;
             for (int y = 0;y < 16;y++)
@@ -232,8 +230,8 @@ namespace CrashEdit
                     Brush curbackbrush;
                     StringFormat curformat;
                     Rectangle rect = new Rectangle();
-                    rect.X = left + hstep * x + 1;
-                    rect.Y = left + vstep * y + 1;
+                    rect.X = hstep * x + 1;
+                    rect.Y = vstep * y + 1;
                     rect.Width = hstep - 1;
                     rect.Height = vstep - 1;
                     if (x == xsel && y + offset == ysel)
@@ -267,8 +265,8 @@ namespace CrashEdit
             }
             for (int i = 0; i < 17; i++)
             {
-                e.Graphics.DrawLine(borderpen,left + hstep * i,top,left + hstep * i,bottom);
-                e.Graphics.DrawLine(borderpen,left,top + vstep * i,right,top + vstep * i);
+                e.Graphics.DrawLine(borderpen,hstep * i,0,hstep * i,height);
+                e.Graphics.DrawLine(borderpen,0,vstep * i,width,vstep * i);
             }
         }
     }
