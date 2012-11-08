@@ -39,6 +39,10 @@
   </Target>
   -->
   <ItemGroup>
+    <ProjectReference Include="..\Crash.Audio\Crash.Audio.csproj">
+      <Project>{E64E1497-BA5B-4E88-8129-596BFE065C61}</Project>
+      <Name>Crash.Audio</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Crash.Game\Crash.Game.csproj">
       <Project>{A9FA7B81-317B-4072-ADB3-5656ECC797AC}</Project>
       <Name>Crash.Game</Name>
@@ -50,10 +54,6 @@
     <ProjectReference Include="..\Crash.Unknown0\Crash.Unknown0.csproj">
       <Project>{6E451534-597D-489D-9D97-BD479FEEA587}</Project>
       <Name>Crash.Unknown0</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Crash.Unknown3\Crash.Unknown3.csproj">
-      <Project>{DA01247D-3E78-4102-99A8-E692F28B800B}</Project>
-      <Name>Crash.Unknown3</Name>
     </ProjectReference>
     <ProjectReference Include="..\Crash.Unknown4\Crash.Unknown4.csproj">
       <Project>{59F3F938-85D6-4965-A87E-A0DEEC32BC9E}</Project>

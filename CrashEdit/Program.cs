@@ -17,8 +17,8 @@ namespace CrashEdit
             RegisterAssembly("Crash");
             RegisterAssembly("Crash.Game");
             RegisterAssembly("Crash.Graphics");
+            RegisterAssembly("Crash.Audio");
             RegisterAssembly("Crash.Unknown0");
-            RegisterAssembly("Crash.Unknown3");
             RegisterAssembly("Crash.Unknown4");
             RegisterAssembly("Crash.Unknown5");
             using (MainForm mainform = new MainForm())

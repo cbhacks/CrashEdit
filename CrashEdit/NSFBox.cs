@@ -1,8 +1,8 @@
 using Crash;
 using Crash.Game;
 using Crash.Graphics;
+using Crash.Audio;
 using Crash.Unknown0;
-using Crash.Unknown3;
 using Crash.Unknown4;
 using Crash.Unknown5;
 using System.Drawing;
@@ -24,7 +24,7 @@ namespace CrashEdit
                 imglist.Images.Add("trv_nsf",Resources.FileIcon);
                 imglist.Images.Add("trv_normalchunk",Resources.YellowJournalIcon);
                 imglist.Images.Add("trv_texturechunk",Resources.ImageIcon);
-                imglist.Images.Add("trv_t3chunk",Resources.BlueJournalIcon);
+                imglist.Images.Add("trv_soundchunk",Resources.BlueJournalIcon);
                 imglist.Images.Add("trv_t4chunk",Resources.MusicIcon);
                 imglist.Images.Add("trv_t5chunk",Resources.WhiteJournalIcon);
                 imglist.Images.Add("trv_unknownchunk",Resources.FileIcon);
@@ -34,7 +34,7 @@ namespace CrashEdit
                 imglist.Images.Add("trv_t4entry",Resources.ThingIcon);
                 imglist.Images.Add("trv_entityentry",Resources.ThingIcon);
                 imglist.Images.Add("trv_t11entry",Resources.ThingIcon);
-                imglist.Images.Add("trv_t12entry",Resources.ThingIcon);
+                imglist.Images.Add("trv_soundentry",Resources.ThingIcon);
                 imglist.Images.Add("trv_t13entry",Resources.MusicIcon);
                 imglist.Images.Add("trv_t14entry",Resources.MusicIcon);
                 imglist.Images.Add("trv_t15entry",Resources.ThingIcon);
@@ -117,9 +117,9 @@ namespace CrashEdit
             {
                 return Populate((TextureChunk)chunk);
             }
-            else if (chunk is T3Chunk)
+            else if (chunk is SoundChunk)
             {
-                return Populate((T3Chunk)chunk);
+                return Populate((SoundChunk)chunk);
             }
             else if (chunk is T4Chunk)
             {
@@ -163,14 +163,14 @@ namespace CrashEdit
             return node;
         }
 
-        private TreeNode Populate(T3Chunk chunk)
+        private TreeNode Populate(SoundChunk chunk)
         {
             TreeNode node = new TreeNode();
             node.Tag = chunk;
-            node.Text = "T3 Chunk";
-            node.ImageKey = "trv_t3chunk";
-            node.SelectedImageKey = "trv_t3chunk";
-            foreach (T12Entry entry in chunk.Entries)
+            node.Text = "Sound Chunk";
+            node.ImageKey = "trv_soundchunk";
+            node.SelectedImageKey = "trv_soundchunk";
+            foreach (SoundEntry entry in chunk.Entries)
             {
                 node.Nodes.Add(Populate(entry));
             }
@@ -237,9 +237,9 @@ namespace CrashEdit
             {
                 return Populate((T11Entry)entry);
             }
-            else if (entry is T12Entry)
+            else if (entry is SoundEntry)
             {
-                return Populate((T12Entry)entry);
+                return Populate((SoundEntry)entry);
             }
             else if (entry is T13Entry)
             {
@@ -343,13 +343,13 @@ namespace CrashEdit
             return node;
         }
 
-        private TreeNode Populate(T12Entry entry)
+        private TreeNode Populate(SoundEntry entry)
         {
             TreeNode node = new TreeNode();
             node.Tag = entry;
-            node.Text = "T12 Entry";
-            node.ImageKey = "trv_t12entry";
-            node.SelectedImageKey = "trv_t12entry";
+            node.Text = "Sound Entry";
+            node.ImageKey = "trv_soundentry";
+            node.SelectedImageKey = "trv_soundentry";
             return node;
         }
 
@@ -480,7 +480,7 @@ namespace CrashEdit
             {
                 return DisplayHex(((TextureChunk)chunk).Data);
             }
-            else if (chunk is T3Chunk)
+            else if (chunk is SoundChunk)
             {
                 return DisplayNothing();
             }
@@ -528,9 +528,9 @@ namespace CrashEdit
             {
                 return DisplayItems(((T11Entry)entry).Items);
             }
-            else if (entry is T12Entry)
+            else if (entry is SoundEntry)
             {
-                return DisplayHex(((T12Entry)entry).Data);
+                return DisplayNothing();
             }
             else if (entry is T13Entry)
             {

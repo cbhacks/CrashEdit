@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 
-namespace Crash.Unknown3
+namespace Crash.Audio
 {
-    public sealed class T3Chunk : EntryChunk
+    public sealed class SoundChunk : EntryChunk
     {
-        private List<T12Entry> entries;
+        private List<SoundEntry> entries;
         private int unknown1;
         private int unknown2;
 
-        public T3Chunk(IEnumerable<T12Entry> entries,int unknown1,int unknown2)
+        public SoundChunk(IEnumerable<SoundEntry> entries,int unknown1,int unknown2)
         {
-            this.entries = new List<T12Entry>(entries);
+            this.entries = new List<SoundEntry>(entries);
             this.unknown1 = unknown1;
             this.unknown2 = unknown2;
         }
@@ -20,7 +20,7 @@ namespace Crash.Unknown3
             get { return 3; }
         }
 
-        public IList<T12Entry> Entries
+        public IList<SoundEntry> Entries
         {
             get { return entries; }
         }

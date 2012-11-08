@@ -1,25 +1,25 @@
 using System.Collections.Generic;
 
-namespace Crash.Unknown3
+namespace Crash.Audio
 {
     [ChunkType(3)]
-    public sealed class T3ChunkLoader : EntryChunkLoader
+    public sealed class SoundChunkLoader : EntryChunkLoader
     {
         public override Chunk Load(Entry[] entries,int unknown1,int unknown2)
         {
-            List<T12Entry> t12entries = new List<T12Entry>();
+            List<SoundEntry> soundentries = new List<SoundEntry>();
             foreach (Entry entry in entries)
             {
-                if (entry is T12Entry)
+                if (entry is SoundEntry)
                 {
-                    t12entries.Add((T12Entry)entry);
+                    soundentries.Add((SoundEntry)entry);
                 }
                 else
                 {
                     throw new System.Exception();
                 }
             }
-            return new T3Chunk(t12entries,unknown1,unknown2);
+            return new SoundChunk(soundentries,unknown1,unknown2);
         }
     }
 }

@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{DA01247D-3E78-4102-99A8-E692F28B800B}</ProjectGuid>
+    <ProjectGuid>{E64E1497-BA5B-4E88-8129-596BFE065C61}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Crash.Unknown3</RootNamespace>
-    <AssemblyName>Crash.Unknown3</AssemblyName>
+    <RootNamespace>Crash.Audio</RootNamespace>
+    <AssemblyName>Crash.Audio</AssemblyName>
     <StartupObject>
     </StartupObject>
   </PropertyGroup>
@@ -45,9 +45,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="T12Entry.cs" />
-    <Compile Include="T12EntryLoader.cs" />
-    <Compile Include="T3Chunk.cs" />
-    <Compile Include="T3ChunkLoader.cs" />
+    <Compile Include="SampleLine.cs" />
+    <Compile Include="SampleLineType.cs" />
+    <Compile Include="SoundChunk.cs" />
+    <Compile Include="SoundChunkLoader.cs" />
+    <Compile Include="SoundEntry.cs" />
+    <Compile Include="SoundEntryLoader.cs" />
   </ItemGroup>
 </Project>
