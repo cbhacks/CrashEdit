@@ -1,9 +1,22 @@
+using Crash;
+using Crash.Game;
+using Crash.Graphics;
+using Crash.Audio;
+using Crash.Unknown0;
+using Crash.Unknown4;
+using Crash.Unknown5;
 using System.Windows.Forms;
 
 using IO = System.IO;
 
 namespace CrashEdit
 {
+    [EditorControl(typeof(TextureChunk))]
+    [EditorControl(typeof(UnknownChunk))]
+    [EditorControl(typeof(T14Entry))]
+    [EditorControl(typeof(T15Entry))]
+    [EditorControl(typeof(DemoEntry))]
+    [EditorControl(typeof(T20Entry))]
     public sealed class MysteryBox : UserControl
     {
         private byte[] data;
@@ -30,6 +43,18 @@ namespace CrashEdit
 
             Controls.Add(hbData);
             Controls.Add(tsToolbar);
+        }
+
+        public MysteryBox(TextureChunk chunk) : this(chunk.Data)
+        {
+        }
+
+        public MysteryBox(UnknownChunk chunk) : this(chunk.Data)
+        {
+        }
+
+        public MysteryBox(IMysteryUniItemEntry entry) : this(entry.Data)
+        {
         }
 
         void tbbExport_Click(object sender,System.EventArgs e)

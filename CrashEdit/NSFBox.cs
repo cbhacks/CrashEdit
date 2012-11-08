@@ -14,6 +14,7 @@ namespace CrashEdit
     public sealed class NSFBox : UserControl
     {
         private static ImageList imglist;
+        private static Dictionary<System.Type,System.Type> editorcontrols;
 
         static NSFBox()
         {
@@ -48,6 +49,14 @@ namespace CrashEdit
             catch
             {
                 imglist.Images.Clear();
+            }
+            editorcontrols = new Dictionary<System.Type,System.Type>();
+            foreach (System.Type editorcontrol in System.Reflection.Assembly.GetExecutingAssembly().GetTypes())
+            {
+                foreach (EditorControlAttribute attribute in editorcontrol.GetCustomAttributes(typeof(EditorControlAttribute),false))
+                {
+                    editorcontrols.Add(attribute.Type,editorcontrol);
+                }
             }
         }
 
@@ -452,119 +461,20 @@ namespace CrashEdit
 
         private Control Display(object obj)
         {
-            if (obj is Chunk)
+            if (editorcontrols.ContainsKey(obj.GetType()))
             {
-                return DisplayChunk((Chunk)obj);
+                Control control = (Control)System.Activator.CreateInstance(editorcontrols[obj.GetType()],obj);
+                control.Dock = DockStyle.Fill;
+                return control;
             }
-            else if (obj is Entry)
+            else if (obj is T4Chunk)
             {
-                return DisplayEntry((Entry)obj);
-            }
-            else if (obj is Entity)
-            {
-                return DisplayEntity((Entity)obj);
+                return Display(((T4Chunk)obj).Entry);
             }
             else
             {
                 return DisplayNothing();
             }
-        }
-
-        public Control DisplayChunk(Chunk chunk)
-        {
-            if (chunk is NormalChunk)
-            {
-                return DisplayNothing();
-            }
-            else if (chunk is TextureChunk)
-            {
-                return DisplayHex(((TextureChunk)chunk).Data);
-            }
-            else if (chunk is SoundChunk)
-            {
-                return DisplayNothing();
-            }
-            else if (chunk is T4Chunk)
-            {
-                return DisplayEntry(((T4Chunk)chunk).Entry);
-            }
-            else if (chunk is T5Chunk)
-            {
-                return DisplayNothing();
-            }
-            else if (chunk is UnknownChunk)
-            {
-                return DisplayHex(((UnknownChunk)chunk).Data);
-            }
-            else
-            {
-                throw new System.Exception();
-            }
-        }
-
-        private Control DisplayEntry(Entry entry)
-        {
-            if (entry is EntityEntry)
-            {
-                return DisplayNothing();
-            }
-            else if (entry is SoundEntry)
-            {
-                return DisplayNothing();
-            }
-            else if (entry is IMysteryUniItemEntry)
-            {
-                return DisplayHex(((IMysteryUniItemEntry)entry).Data);
-            }
-            else if (entry is IMysteryMultiItemEntry)
-            {
-                return DisplayItems(((IMysteryMultiItemEntry)entry).Items);
-            }
-            else
-            {
-                throw new System.Exception();
-            }
-        }
-
-        private Control DisplayEntity(Entity entity)
-        {
-            TabControl tabctl = new TabControl();
-            tabctl.Dock = DockStyle.Fill;
-            foreach (EntityField field in entity.Fields)
-            {
-                TabPage tab = new TabPage();
-                tab.Text = field.Type.ToString("X");
-                tab.Controls.Add(DisplayEntityField(field));
-                tabctl.TabPages.Add(tab);
-            }
-            return tabctl;
-        }
-
-        private Control DisplayEntityField(EntityField field)
-        {
-            Label label = new Label();
-            label.Dock = DockStyle.Fill;
-            label.Text = "Field\n";
-            label.Text += string.Format("\nType: 0x{0:X}",field.Type);
-            label.Text += string.Format("\n???: {0}",field.Unknown1);
-            label.Text += string.Format("\nElement Size: {0}",field.ElementSize);
-            label.Text += string.Format("\n???: {0}",field.Unknown2);
-            label.Text += string.Format("\nElement Count: {0}",field.ElementCount);
-            label.Text += string.Format("\n???: {0}",field.Unknown3);
-            return label;
-        }
-
-        private Control DisplayItems(IList<byte[]> items)
-        {
-            TabControl tabctl = new TabControl();
-            tabctl.Dock = DockStyle.Fill;
-            foreach (byte[] item in items)
-            {
-                TabPage tab = new TabPage("Item");
-                tab.Controls.Add(DisplayHex(item));
-                tabctl.TabPages.Add(tab);
-            }
-            return tabctl;
         }
 
         private Control DisplayHex(byte[] data)
