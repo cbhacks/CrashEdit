@@ -613,33 +613,9 @@ namespace CrashEdit
 
         private Control DisplayHex(byte[] data)
         {
-            HexBox hexbox = new HexBox();
-            hexbox.Dock = DockStyle.Fill;
-            hexbox.Data = data;
-            ToolStripButton savebutton = new ToolStripButton();
-            savebutton.Text = "Export";
-            savebutton.Tag = data;
-            savebutton.Click += new System.EventHandler(DisplayHex_savebutton_Click);
-            ToolStrip toolstrip = new ToolStrip();
-            toolstrip.Dock = DockStyle.Top;
-            toolstrip.Items.Add(savebutton);
-            Panel panel = new Panel();
-            panel.Dock = DockStyle.Fill;
-            panel.Controls.Add(hexbox);
-            panel.Controls.Add(toolstrip);
-            return panel;
-        }
-
-        private void DisplayHex_savebutton_Click(object sender,System.EventArgs e)
-        {
-            using (SaveFileDialog dialog = new SaveFileDialog())
-            {
-                dialog.Filter = "All Files (*.*)|*.*";
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    System.IO.File.WriteAllBytes(dialog.FileName,(byte[])((ToolStripButton)sender).Tag);
-                }
-            }
+            MysteryBox mysterybox = new MysteryBox(data);
+            mysterybox.Dock = DockStyle.Fill;
+            return mysterybox;
         }
 
         private Control DisplayNothing()
