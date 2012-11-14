@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Crash.Audio
 {
-    public sealed class SoundChunk : EntryChunk
+    public sealed class SoundChunk : Chunk
     {
         private List<SoundEntry> entries;
         private int unknown1;
@@ -27,12 +27,23 @@ namespace Crash.Audio
 
         public override byte[] Save()
         {
-            Entry[] entries = new Entry [this.entries.Count];
-            for (int i = 0;i < this.entries.Count;i++)
+            byte[] data = new byte [Length];
+            BitConv.ToHalf(data,0,Magic);
+            BitConv.ToHalf(data,2,Type);
+            BitConv.ToWord(data,4,unknown1);
+            BitConv.ToWord(data,8,entries.Count);
+            BitConv.ToWord(data,12,unknown2);
+            int offset = 20 + entries.Count * 4;
+            offset += offset % 8; // Sounds must be 8-byte aligned
+            BitConv.ToWord(data,16,offset);
+            for (int i = 0;i < entries.Count;i++)
             {
-                entries[i] = this.entries[i];
+                byte[] entrydata = entries[i].Save();
+                entrydata.CopyTo(data,offset);
+                offset += entrydata.Length;
+                BitConv.ToWord(data,20 + i * 4,offset);
             }
-            return Save(entries,unknown1,unknown2);
+            return data;
         }
     }
 }
