@@ -32,26 +32,40 @@ namespace Crash.Game
                 throw new System.Exception();
             }
             EntityField[] fields = new EntityField [fieldcount];
+            ushort? lastend = null;
             for (int i = 0;i < fieldcount;i++)
             {
                 short type = BitConv.FromHalf(data,16 + i * 8);
-                ushort offset = (ushort)BitConv.FromHalf(data,18 + i * 8);
+                int offset = (ushort)BitConv.FromHalf(data,18 + i * 8) + 12;
                 byte unknown1 = data[20 + i * 8];
                 byte elementsize = data[21 + i * 8];
                 short unknown2 = BitConv.FromHalf(data,22 + i * 8);
-                if (data.Length < offset + 16)
+                if (data.Length < offset + 4)
                 {
                     throw new System.Exception();
                 }
-                short elementcount = BitConv.FromHalf(data,offset + 12);
-                short unknown3 = BitConv.FromHalf(data,offset + 14);
-                if (data.Length < offset + 16 + elementcount * elementsize)
+                short elementcount = BitConv.FromHalf(data,offset);
+                short unknown3 = BitConv.FromHalf(data,offset + 2);
+                if (data.Length < offset + 4 + elementcount * elementsize)
                 {
                     throw new System.Exception();
                 }
                 byte[] fielddata = new byte [elementsize * elementcount];
-                System.Array.Copy(data,offset + 16,fielddata,0,elementsize * elementcount);
+                System.Array.Copy(data,offset + 4,fielddata,0,elementsize * elementcount);
                 fields[i] = new EntityField(type,unknown1,elementsize,unknown2,elementcount,unknown3,fielddata);
+                if (lastend != null)
+                {
+                    byte[] lastextradata = new byte [offset - (int)lastend];
+                    System.Array.Copy(data,(int)lastend,lastextradata,0,lastextradata.Length);
+                    fields[i - 1].ExtraData = lastextradata;
+                }
+                lastend = (ushort)(offset + 4 + fielddata.Length);
+                if (i == fieldcount - 1)
+                {
+                    byte[] extradata = new byte [data.Length - (int)lastend];
+                    System.Array.Copy(data,(int)lastend,extradata,0,extradata.Length);
+                    fields[i].ExtraData = extradata;
+                }
             }
             return new Entity(fields);
         }
@@ -78,12 +92,10 @@ namespace Crash.Game
             int length = 16 + 8 * fields.Count;
             for (int i = 0;i < fields.Count;i++)
             {
-                length += 4 + fields[i].ElementSize * fields[i].ElementCount;
-                if (length % 4 != 0)
-                {
-                    length -= length % 4;
-                    length += 4;
-                }
+                length += 4;
+                length += fields[i].ElementSize * fields[i].ElementCount;
+                length += fields[i].ExtraData.Length;
+                length += length % 4;
             }
             byte[] data = new byte [length];
             BitConv.ToWord(data,0,length);
@@ -101,13 +113,12 @@ namespace Crash.Game
                 BitConv.ToHalf(data,16 + 8 * i + 6,field.Unknown2);
                 BitConv.ToHalf(data,offset + 0,field.ElementCount);
                 BitConv.ToHalf(data,offset + 2,field.Unknown3);
-                field.Data.CopyTo(data,offset + 4);
-                offset += 4 + field.ElementCount * field.ElementSize;
-                if (offset % 4 != 0)
-                {
-                    offset -= offset % 4;
-                    offset += 4;
-                }
+                offset += 4;
+                field.Data.CopyTo(data,offset);
+                offset += field.ElementCount * field.ElementSize;
+                field.ExtraData.CopyTo(data,offset);
+                offset += field.ExtraData.Length;
+                offset += offset % 4;
             }
             if (offset != length)
             {

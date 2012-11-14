@@ -1,6 +1,6 @@
 namespace Crash.Game
 {
-    //[EntryType(7)]
+    [EntryType(7)]
     public sealed class EntityEntryLoader : EntryLoader
     {
         public override Entry Load(byte[][] items,int unknown)

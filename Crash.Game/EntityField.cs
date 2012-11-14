@@ -9,6 +9,7 @@ namespace Crash.Game
         private short elementcount;
         private short unknown3;
         private byte[] data;
+        private byte[] extradata;
 
         public EntityField(short type,byte unknown1,byte elementsize,short unknown2,short elementcount,short unknown3,byte[] data)
         {
@@ -19,6 +20,7 @@ namespace Crash.Game
             this.elementcount = elementcount;
             this.unknown3 = unknown3;
             this.data = data;
+            this.extradata = null;
         }
 
         public short Type
@@ -54,6 +56,12 @@ namespace Crash.Game
         public byte[] Data
         {
             get { return data; }
+        }
+
+        public byte[] ExtraData
+        {
+            get { return extradata; }
+            set { extradata = value; }
         }
     }
 }
