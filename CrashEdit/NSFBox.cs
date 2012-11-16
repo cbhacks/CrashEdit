@@ -190,7 +190,7 @@ namespace CrashEdit
         {
             TreeNode node = Populate(chunk.Entry);
             node.Tag = chunk;
-            node.Text = "T4 Chunk";
+            node.Text = string.Format("T4 Chunk ({0})",chunk.Entry.ID);
             node.ImageKey = "trv_t4chunk";
             node.SelectedImageKey = "trv_t4chunk";
             return node;
@@ -376,7 +376,7 @@ namespace CrashEdit
         {
             TreeNode node = new TreeNode();
             node.Tag = entry;
-            node.Text = "T14 Entry";
+            node.Text = string.Format("T14 Entry ({0})",entry.ID);
             node.ImageKey = "trv_t14entry";
             node.SelectedImageKey = "trv_t14entry";
             return node;
