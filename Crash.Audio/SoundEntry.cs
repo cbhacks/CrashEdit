@@ -30,7 +30,7 @@ namespace Crash.Audio
             }
             byte[][] items = new byte [1][];
             items[0] = data;
-            return Save(items);
+            return Save(items,8);
         }
     }
 }
