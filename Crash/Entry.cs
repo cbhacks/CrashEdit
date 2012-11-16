@@ -94,22 +94,31 @@ namespace Crash
 
         protected byte[] Save(IList<byte[]> items)
         {
+            return Save(items,4);
+        }
+
+        protected byte[] Save(IList<byte[]> items,int align)
+        {
             int length = 20 + items.Count * 4;
             foreach (byte[] item in items)
             {
+                length += length % align;
                 length += item.Length;
             }
+            length += length % align;
             byte[] data = new byte [length];
             BitConv.ToWord(data,0,Magic);
             BitConv.ToWord(data,4,Unknown);
             BitConv.ToWord(data,8,Type);
             BitConv.ToWord(data,12,items.Count);
             int offset = 20 + items.Count * 4;
+            offset += offset % align;
             BitConv.ToWord(data,16,offset);
             for (int i = 0;i < items.Count;i++)
             {
                 items[i].CopyTo(data,offset);
                 offset += items[i].Length;
+                offset += offset % align;
                 BitConv.ToWord(data,20 + i * 4,offset);
             }
             return data;
