@@ -79,7 +79,17 @@ namespace Crash.Game
 
         public string Name
         {
-            get { return "???"; }
+            get
+            {
+                foreach (EntityField field in fields)
+                {
+                    if (field.Type == 0x2C)
+                    {
+                        return System.Text.Encoding.UTF8.GetString(field.Data,0,field.ElementCount - 1);
+                    }
+                }
+                return null;
+            }
         }
 
         public IList<EntityField> Fields
