@@ -3,7 +3,6 @@ using Crash.Game;
 using Crash.Graphics;
 using Crash.Audio;
 using Crash.Unknown0;
-using Crash.Unknown4;
 using Crash.Unknown5;
 using System.Drawing;
 using System.Windows.Forms;

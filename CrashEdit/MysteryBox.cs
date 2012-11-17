@@ -3,7 +3,6 @@ using Crash.Game;
 using Crash.Graphics;
 using Crash.Audio;
 using Crash.Unknown0;
-using Crash.Unknown4;
 using Crash.Unknown5;
 using System.Windows.Forms;
 
@@ -13,7 +12,6 @@ namespace CrashEdit
 {
     [EditorControl(typeof(TextureChunk))]
     [EditorControl(typeof(UnknownChunk))]
-    [EditorControl(typeof(T14Entry))]
     [EditorControl(typeof(T15Entry))]
     [EditorControl(typeof(DemoEntry))]
     [EditorControl(typeof(T20Entry))]

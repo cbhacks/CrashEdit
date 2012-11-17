@@ -1,7 +1,7 @@
-namespace Crash.Unknown4
+namespace Crash.Audio
 {
     [ChunkType(4)]
-    public sealed class T4ChunkLoader : EntryChunkLoader
+    public sealed class WavebankChunkLoader : EntryChunkLoader
     {
         public override Chunk Load(Entry[] entries,int unknown1,int unknown2)
         {
@@ -9,11 +9,11 @@ namespace Crash.Unknown4
             {
                 throw new System.Exception();
             }
-            if (!(entries[0] is T14Entry))
+            if (!(entries[0] is WavebankEntry))
             {
                 throw new System.Exception();
             }
-            return new T4Chunk((T14Entry)entries[0],unknown1,unknown2);
+            return new WavebankChunk((WavebankEntry)entries[0],unknown1,unknown2);
         }
     }
 }

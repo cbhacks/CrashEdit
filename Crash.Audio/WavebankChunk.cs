@@ -1,12 +1,12 @@
-namespace Crash.Unknown4
+namespace Crash.Audio
 {
-    public sealed class T4Chunk : EntryChunk
+    public sealed class WavebankChunk : EntryChunk
     {
-        private T14Entry entry;
+        private WavebankEntry entry;
         private int unknown1;
         private int unknown2;
 
-        public T4Chunk(T14Entry entry,int unknown1,int unknown2)
+        public WavebankChunk(WavebankEntry entry,int unknown1,int unknown2)
         {
             this.entry = entry;
             this.unknown1 = unknown1;
@@ -18,7 +18,7 @@ namespace Crash.Unknown4
             get { return 4; }
         }
 
-        public T14Entry Entry
+        public WavebankEntry Entry
         {
             get { return entry; }
         }

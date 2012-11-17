@@ -55,10 +55,6 @@
       <Project>{6E451534-597D-489D-9D97-BD479FEEA587}</Project>
       <Name>Crash.Unknown0</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Crash.Unknown4\Crash.Unknown4.csproj">
-      <Project>{59F3F938-85D6-4965-A87E-A0DEEC32BC9E}</Project>
-      <Name>Crash.Unknown4</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Crash.Unknown5\Crash.Unknown5.csproj">
       <Project>{B5E04A9B-6336-41F6-A4C6-3AECC9BE6B61}</Project>
       <Name>Crash.Unknown5</Name>

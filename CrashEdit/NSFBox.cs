@@ -3,7 +3,6 @@ using Crash.Game;
 using Crash.Graphics;
 using Crash.Audio;
 using Crash.Unknown0;
-using Crash.Unknown4;
 using Crash.Unknown5;
 using System.Drawing;
 using System.Windows.Forms;
@@ -26,7 +25,7 @@ namespace CrashEdit
                 imglist.Images.Add("trv_normalchunk",Resources.YellowJournalIcon);
                 imglist.Images.Add("trv_texturechunk",Resources.ImageIcon);
                 imglist.Images.Add("trv_soundchunk",Resources.BlueJournalIcon);
-                imglist.Images.Add("trv_t4chunk",Resources.MusicIcon);
+                imglist.Images.Add("trv_wavebankchunk",Resources.MusicIcon);
                 imglist.Images.Add("trv_t5chunk",Resources.WhiteJournalIcon);
                 imglist.Images.Add("trv_unknownchunk",Resources.FileIcon);
                 imglist.Images.Add("trv_t1entry",Resources.ThingIcon);
@@ -37,7 +36,7 @@ namespace CrashEdit
                 imglist.Images.Add("trv_t11entry",Resources.ThingIcon);
                 imglist.Images.Add("trv_soundentry",Resources.ThingIcon);
                 imglist.Images.Add("trv_t13entry",Resources.MusicIcon);
-                imglist.Images.Add("trv_t14entry",Resources.MusicIcon);
+                imglist.Images.Add("trv_wavebankentry",Resources.MusicIcon);
                 imglist.Images.Add("trv_t15entry",Resources.ThingIcon);
                 imglist.Images.Add("trv_t17entry",Resources.ThingIcon);
                 imglist.Images.Add("trv_demoentry",Resources.ThingIcon);
@@ -130,9 +129,9 @@ namespace CrashEdit
             {
                 return Populate((SoundChunk)chunk);
             }
-            else if (chunk is T4Chunk)
+            else if (chunk is WavebankChunk)
             {
-                return Populate((T4Chunk)chunk);
+                return Populate((WavebankChunk)chunk);
             }
             else if (chunk is T5Chunk)
             {
@@ -186,13 +185,13 @@ namespace CrashEdit
             return node;
         }
 
-        private TreeNode Populate(T4Chunk chunk)
+        private TreeNode Populate(WavebankChunk chunk)
         {
             TreeNode node = Populate(chunk.Entry);
             node.Tag = chunk;
-            node.Text = string.Format("T4 Chunk ({0})",chunk.Entry.ID);
-            node.ImageKey = "trv_t4chunk";
-            node.SelectedImageKey = "trv_t4chunk";
+            node.Text = string.Format("Wavebank Chunk ({0})",chunk.Entry.ID);
+            node.ImageKey = "trv_wavebankchunk";
+            node.SelectedImageKey = "trv_wavebankchunk";
             return node;
         }
 
@@ -254,9 +253,9 @@ namespace CrashEdit
             {
                 return Populate((T13Entry)entry);
             }
-            else if (entry is T14Entry)
+            else if (entry is WavebankEntry)
             {
-                return Populate((T14Entry)entry);
+                return Populate((WavebankEntry)entry);
             }
             else if (entry is T15Entry)
             {
@@ -372,13 +371,13 @@ namespace CrashEdit
             return node;
         }
 
-        private TreeNode Populate(T14Entry entry)
+        private TreeNode Populate(WavebankEntry entry)
         {
             TreeNode node = new TreeNode();
             node.Tag = entry;
-            node.Text = string.Format("T14 Entry ({0})",entry.ID);
-            node.ImageKey = "trv_t14entry";
-            node.SelectedImageKey = "trv_t14entry";
+            node.Text = string.Format("Wavebank Entry ({0})",entry.ID);
+            node.ImageKey = "trv_wavebankentry";
+            node.SelectedImageKey = "trv_wavebankentry";
             return node;
         }
 
@@ -467,9 +466,9 @@ namespace CrashEdit
                 control.Dock = DockStyle.Fill;
                 return control;
             }
-            else if (obj is T4Chunk)
+            else if (obj is WavebankChunk)
             {
-                return Display(((T4Chunk)obj).Entry);
+                return Display(((WavebankChunk)obj).Entry);
             }
             else
             {

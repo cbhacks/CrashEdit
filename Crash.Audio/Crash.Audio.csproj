@@ -51,5 +51,9 @@
     <Compile Include="SoundChunkLoader.cs" />
     <Compile Include="SoundEntry.cs" />
     <Compile Include="SoundEntryLoader.cs" />
+    <Compile Include="WavebankChunk.cs" />
+    <Compile Include="WavebankChunkLoader.cs" />
+    <Compile Include="WavebankEntry.cs" />
+    <Compile Include="WavebankEntryLoader.cs" />
   </ItemGroup>
 </Project>

@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrashEdit", "CrashEdit\Cras
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crash.Unknown0", "Crash.Unknown0\Crash.Unknown0.csproj", "{6E451534-597D-489D-9D97-BD479FEEA587}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crash.Unknown4", "Crash.Unknown4\Crash.Unknown4.csproj", "{59F3F938-85D6-4965-A87E-A0DEEC32BC9E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crash.Unknown5", "Crash.Unknown5\Crash.Unknown5.csproj", "{B5E04A9B-6336-41F6-A4C6-3AECC9BE6B61}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crash.Game", "Crash.Game\Crash.Game.csproj", "{A9FA7B81-317B-4072-ADB3-5656ECC797AC}"
@@ -35,10 +33,6 @@ Global
 		{6E451534-597D-489D-9D97-BD479FEEA587}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E451534-597D-489D-9D97-BD479FEEA587}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E451534-597D-489D-9D97-BD479FEEA587}.Release|Any CPU.Build.0 = Release|Any CPU
-		{59F3F938-85D6-4965-A87E-A0DEEC32BC9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{59F3F938-85D6-4965-A87E-A0DEEC32BC9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{59F3F938-85D6-4965-A87E-A0DEEC32BC9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{59F3F938-85D6-4965-A87E-A0DEEC32BC9E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B5E04A9B-6336-41F6-A4C6-3AECC9BE6B61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B5E04A9B-6336-41F6-A4C6-3AECC9BE6B61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5E04A9B-6336-41F6-A4C6-3AECC9BE6B61}.Release|Any CPU.ActiveCfg = Release|Any CPU
