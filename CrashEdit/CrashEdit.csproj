@@ -65,6 +65,9 @@
     <Compile Include="EntityBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="EntityEntryBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="HexBox.cs">
       <SubType>Component</SubType>
     </Compile>
