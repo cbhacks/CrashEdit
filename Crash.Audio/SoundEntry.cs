@@ -4,11 +4,11 @@ namespace Crash.Audio
 {
     public sealed class SoundEntry : Entry
     {
-        private List<SampleLine> samplelines;
+        private SampleSet samples;
 
-        public SoundEntry(IEnumerable<SampleLine> samplelines,int unknown) : base(unknown)
+        public SoundEntry(SampleSet samples,int unknown) : base(unknown)
         {
-            this.samplelines = new List<SampleLine>(samplelines);
+            this.samples = samples;
         }
 
         public override int Type
@@ -16,20 +16,15 @@ namespace Crash.Audio
             get { return 12; }
         }
 
-        public IList<SampleLine> SampleLines
+        public SampleSet Samples
         {
-            get { return samplelines; }
+            get { return samples; }
         }
 
         public override byte[] Save()
         {
-            byte[] data = new byte [(samplelines.Count + 1) * 16];
-            for (int i = 0;i < samplelines.Count;i++)
-            {
-                samplelines[i].Save().CopyTo(data,(i + 1) * 16);
-            }
             byte[][] items = new byte [1][];
-            items[0] = data;
+            items[0] = samples.Save();
             return Save(items,8);
         }
     }

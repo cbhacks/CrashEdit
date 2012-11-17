@@ -5,12 +5,12 @@ namespace Crash.Audio
     public sealed class WavebankEntry : Entry
     {
         private int id;
-        private List<SampleLine> samplelines;
+        private SampleSet samples;
 
-        public WavebankEntry(int id,IEnumerable<SampleLine> samplelines,int unknown) : base(unknown)
+        public WavebankEntry(int id,SampleSet samples,int unknown) : base(unknown)
         {
             this.id = id;
-            this.samplelines = new List<SampleLine>(samplelines);
+            this.samples = samples;
         }
 
         public override int Type
@@ -23,21 +23,17 @@ namespace Crash.Audio
             get { return id; }
         }
 
-        public IList<SampleLine> SampleLines
+        public SampleSet Samples
         {
-            get { return samplelines; }
+            get { return samples; }
         }
 
         public override byte[] Save()
         {
             byte[] info = new byte [8];
-            byte[] data = new byte [(samplelines.Count + 1) * 16];
+            byte[] data = samples.Save();
             BitConv.ToWord(info,0,id);
             BitConv.ToWord(info,4,data.Length);
-            for (int i = 0;i < samplelines.Count;i++)
-            {
-                samplelines[i].Save().CopyTo(data,(i + 1) * 16);
-            }
             byte[][] items = new byte [2][];
             items[0] = info;
             items[1] = data;
