@@ -35,7 +35,7 @@ namespace CrashEdit
                 imglist.Images.Add("trv_entityentry",Resources.ThingIcon);
                 imglist.Images.Add("trv_t11entry",Resources.ThingIcon);
                 imglist.Images.Add("trv_soundentry",Resources.ThingIcon);
-                imglist.Images.Add("trv_t13entry",Resources.MusicIcon);
+                imglist.Images.Add("trv_musicentry",Resources.MusicIcon);
                 imglist.Images.Add("trv_wavebankentry",Resources.MusicIcon);
                 imglist.Images.Add("trv_t15entry",Resources.ThingIcon);
                 imglist.Images.Add("trv_t17entry",Resources.ThingIcon);
@@ -249,9 +249,9 @@ namespace CrashEdit
             {
                 return Populate((SoundEntry)entry);
             }
-            else if (entry is T13Entry)
+            else if (entry is MusicEntry)
             {
-                return Populate((T13Entry)entry);
+                return Populate((MusicEntry)entry);
             }
             else if (entry is WavebankEntry)
             {
@@ -361,13 +361,13 @@ namespace CrashEdit
             return node;
         }
 
-        private TreeNode Populate(T13Entry entry)
+        private TreeNode Populate(MusicEntry entry)
         {
             TreeNode node = new TreeNode();
             node.Tag = entry;
-            node.Text = "T13 Entry";
-            node.ImageKey = "trv_t13entry";
-            node.SelectedImageKey = "trv_t13entry";
+            node.Text = "Music Entry";
+            node.ImageKey = "trv_musicentry";
+            node.SelectedImageKey = "trv_musicentry";
             return node;
         }
 

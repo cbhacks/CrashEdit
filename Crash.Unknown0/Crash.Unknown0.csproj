@@ -47,8 +47,6 @@
   <ItemGroup>
     <Compile Include="T11Entry.cs" />
     <Compile Include="T11EntryLoader.cs" />
-    <Compile Include="T13Entry.cs" />
-    <Compile Include="T13EntryLoader.cs" />
     <Compile Include="T15Entry.cs" />
     <Compile Include="T15EntryLoader.cs" />
     <Compile Include="T17Entry.cs" />

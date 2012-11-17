@@ -1,7 +1,7 @@
-namespace Crash.Unknown0
+namespace Crash.Audio
 {
     [EntryType(13)]
-    public sealed class T13EntryLoader : EntryLoader
+    public sealed class MusicEntryLoader : EntryLoader
     {
         public override Entry Load(byte[][] items,int unknown)
         {
@@ -9,7 +9,7 @@ namespace Crash.Unknown0
             {
                 throw new System.Exception();
             }
-            return new T13Entry(items,unknown);
+            return new MusicEntry(items[0],items[1],items[2],unknown);
         }
     }
 }

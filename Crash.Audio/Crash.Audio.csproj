@@ -45,6 +45,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MusicEntry.cs" />
+    <Compile Include="MusicEntryLoader.cs" />
     <Compile Include="SampleLine.cs" />
     <Compile Include="SampleLineType.cs" />
     <Compile Include="SoundChunk.cs" />
