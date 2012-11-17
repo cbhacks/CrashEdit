@@ -3,7 +3,6 @@ using Crash.Game;
 using Crash.Graphics;
 using Crash.Audio;
 using Crash.Unknown0;
-using Crash.Unknown5;
 using System.Windows.Forms;
 
 using IO = System.IO;
@@ -14,7 +13,6 @@ namespace CrashEdit
     [EditorControl(typeof(UnknownChunk))]
     [EditorControl(typeof(T15Entry))]
     [EditorControl(typeof(DemoEntry))]
-    [EditorControl(typeof(T20Entry))]
     public sealed class MysteryBox : UserControl
     {
         private byte[] data;

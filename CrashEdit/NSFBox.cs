@@ -3,7 +3,6 @@ using Crash.Game;
 using Crash.Graphics;
 using Crash.Audio;
 using Crash.Unknown0;
-using Crash.Unknown5;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -26,7 +25,7 @@ namespace CrashEdit
                 imglist.Images.Add("trv_texturechunk",Resources.ImageIcon);
                 imglist.Images.Add("trv_soundchunk",Resources.BlueJournalIcon);
                 imglist.Images.Add("trv_wavebankchunk",Resources.MusicIcon);
-                imglist.Images.Add("trv_t5chunk",Resources.WhiteJournalIcon);
+                imglist.Images.Add("trv_speechchunk",Resources.WhiteJournalIcon);
                 imglist.Images.Add("trv_unknownchunk",Resources.FileIcon);
                 imglist.Images.Add("trv_t1entry",Resources.ThingIcon);
                 imglist.Images.Add("trv_t2entry",Resources.ThingIcon);
@@ -40,7 +39,7 @@ namespace CrashEdit
                 imglist.Images.Add("trv_t15entry",Resources.ThingIcon);
                 imglist.Images.Add("trv_t17entry",Resources.ThingIcon);
                 imglist.Images.Add("trv_demoentry",Resources.ThingIcon);
-                imglist.Images.Add("trv_t20entry",Resources.ThingIcon);
+                imglist.Images.Add("trv_speechentry",Resources.ThingIcon);
                 imglist.Images.Add("trv_t21entry",Resources.ThingIcon);
                 imglist.Images.Add("trv_unknownentry",Resources.ThingIcon);
                 imglist.Images.Add("trv_entity",Resources.ArrowIcon);
@@ -133,9 +132,9 @@ namespace CrashEdit
             {
                 return Populate((WavebankChunk)chunk);
             }
-            else if (chunk is T5Chunk)
+            else if (chunk is SpeechChunk)
             {
-                return Populate((T5Chunk)chunk);
+                return Populate((SpeechChunk)chunk);
             }
             else if (chunk is UnknownChunk)
             {
@@ -195,14 +194,14 @@ namespace CrashEdit
             return node;
         }
 
-        private TreeNode Populate(T5Chunk chunk)
+        private TreeNode Populate(SpeechChunk chunk)
         {
             TreeNode node = new TreeNode();
             node.Tag = chunk;
-            node.Text = "T5 Chunk";
-            node.ImageKey = "trv_t5chunk";
-            node.SelectedImageKey = "trv_t5chunk";
-            foreach (T20Entry entry in chunk.Entries)
+            node.Text = "Speech Chunk";
+            node.ImageKey = "trv_speechchunk";
+            node.SelectedImageKey = "trv_speechchunk";
+            foreach (SpeechEntry entry in chunk.Entries)
             {
                 node.Nodes.Add(Populate(entry));
             }
@@ -269,9 +268,9 @@ namespace CrashEdit
             {
                 return Populate((DemoEntry)entry);
             }
-            else if (entry is T20Entry)
+            else if (entry is SpeechEntry)
             {
-                return Populate((T20Entry)entry);
+                return Populate((SpeechEntry)entry);
             }
             else if (entry is T21Entry)
             {
@@ -411,13 +410,13 @@ namespace CrashEdit
             return node;
         }
 
-        private TreeNode Populate(T20Entry entry)
+        private TreeNode Populate(SpeechEntry entry)
         {
             TreeNode node = new TreeNode();
             node.Tag = entry;
-            node.Text = "T20 Entry";
-            node.ImageKey = "trv_t20entry";
-            node.SelectedImageKey = "trv_t20entry";
+            node.Text = "Speech Entry";
+            node.ImageKey = "trv_speechentry";
+            node.SelectedImageKey = "trv_speechentry";
             return node;
         }
 

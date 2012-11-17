@@ -54,6 +54,10 @@
     <Compile Include="SoundChunkLoader.cs" />
     <Compile Include="SoundEntry.cs" />
     <Compile Include="SoundEntryLoader.cs" />
+    <Compile Include="SpeechChunk.cs" />
+    <Compile Include="SpeechChunkLoader.cs" />
+    <Compile Include="SpeechEntry.cs" />
+    <Compile Include="SpeechEntryLoader.cs" />
     <Compile Include="WavebankChunk.cs" />
     <Compile Include="WavebankChunkLoader.cs" />
     <Compile Include="WavebankEntry.cs" />

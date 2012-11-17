@@ -1,25 +1,25 @@
 using System.Collections.Generic;
 
-namespace Crash.Unknown5
+namespace Crash.Audio
 {
     [ChunkType(5)]
-    public sealed class T5ChunkLoader : EntryChunkLoader
+    public sealed class SpeechChunkLoader : EntryChunkLoader
     {
         public override Chunk Load(Entry[] entries,int unknown1,int unknown2)
         {
-            List<T20Entry> t20entries = new List<T20Entry>();
+            List<SpeechEntry> speechentries = new List<SpeechEntry>();
             foreach (Entry entry in entries)
             {
-                if (entry is T20Entry)
+                if (entry is SpeechEntry)
                 {
-                    t20entries.Add((T20Entry)entry);
+                    speechentries.Add((SpeechEntry)entry);
                 }
                 else
                 {
                     throw new System.Exception();
                 }
             }
-            return new T5Chunk(t20entries,unknown1,unknown2);
+            return new SpeechChunk(speechentries,unknown1,unknown2);
         }
     }
 }

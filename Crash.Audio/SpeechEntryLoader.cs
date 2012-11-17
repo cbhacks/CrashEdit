@@ -1,7 +1,7 @@
-namespace Crash.Unknown5
+namespace Crash.Audio
 {
     [EntryType(20)]
-    public sealed class T20EntryLoader : EntryLoader
+    public sealed class SpeechEntryLoader : EntryLoader
     {
         public override Entry Load(byte[][] items,int unknown)
         {
@@ -9,7 +9,7 @@ namespace Crash.Unknown5
             {
                 throw new System.Exception();
             }
-            return new T20Entry(items[0],unknown);
+            return new SpeechEntry(SampleSet.Load(items[0]),unknown);
         }
     }
 }
