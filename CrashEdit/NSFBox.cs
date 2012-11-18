@@ -96,6 +96,10 @@ namespace CrashEdit
             {
                 control = DisplayNothing();
             }
+            foreach (Control c in pnSplit.Panel2.Controls)
+            {
+                c.Dispose();
+            }
             pnSplit.Panel2.Controls.Clear();
             pnSplit.Panel2.Controls.Add(control);
         }
