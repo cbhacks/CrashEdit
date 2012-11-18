@@ -62,5 +62,6 @@
     <Compile Include="WavebankChunkLoader.cs" />
     <Compile Include="WavebankEntry.cs" />
     <Compile Include="WavebankEntryLoader.cs" />
+    <Compile Include="WaveConv.cs" />
   </ItemGroup>
 </Project>
