@@ -115,6 +115,7 @@ namespace CrashEdit
             nsftab.Controls.Add(nsfbox);
 
             tbcTabs.TabPages.Add(nsftab);
+            tbcTabs.SelectedTab = nsftab;
         }
 
         public void SaveNSF()
