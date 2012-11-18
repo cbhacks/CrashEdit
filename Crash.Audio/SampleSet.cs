@@ -42,5 +42,21 @@ namespace Crash.Audio
             }
             return data;
         }
+
+        public byte[] ToPCM()
+        {
+            double s0 = 0;
+            double s1 = 0;
+            List<byte> data = new List<byte>();
+            foreach (SampleLine line in samplelines)
+            {
+                if (line.Type == SampleLineType.Terminator)
+                {
+                    break;
+                }
+                data.AddRange(line.ToPCM(ref s0,ref s1));
+            }
+            return data.ToArray();
+        }
     }
 }
