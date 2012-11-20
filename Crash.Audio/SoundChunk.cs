@@ -20,6 +20,16 @@ namespace Crash.Audio
             get { return 3; }
         }
 
+        public int Unknown1
+        {
+            get { return unknown1; }
+        }
+
+        public int Unknown2
+        {
+            get { return unknown2; }
+        }
+
         public IList<SoundEntry> Entries
         {
             get { return entries; }

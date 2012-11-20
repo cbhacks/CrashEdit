@@ -18,6 +18,16 @@ namespace Crash.Audio
             get { return 4; }
         }
 
+        public int Unknown1
+        {
+            get { return unknown1; }
+        }
+
+        public int Unknown2
+        {
+            get { return unknown2; }
+        }
+
         public WavebankEntry Entry
         {
             get { return entry; }

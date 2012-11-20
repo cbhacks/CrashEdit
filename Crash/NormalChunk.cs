@@ -20,6 +20,16 @@ namespace Crash
             get { return 0; }
         }
 
+        public int Unknown1
+        {
+            get { return unknown1; }
+        }
+
+        public int Unknown2
+        {
+            get { return unknown2; }
+        }
+
         public IList<Entry> Entries
         {
             get { return entries; }
