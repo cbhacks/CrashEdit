@@ -50,11 +50,17 @@ namespace Crash.Audio
             List<byte> data = new List<byte>();
             foreach (SampleLine line in samplelines)
             {
-                if (line.Type == SampleLineType.Terminator)
+                switch (line.Type)
                 {
-                    break;
+                    case SampleLineType.Normal:
+                        data.AddRange(line.ToPCM(ref s0,ref s1));
+                        break;
+                    case SampleLineType.Terminator:
+                        return data.ToArray();
+                    default:
+                        data.AddRange(line.ToPCM(ref s0,ref s1));
+                        break;
                 }
-                data.AddRange(line.ToPCM(ref s0,ref s1));
             }
             return data.ToArray();
         }
