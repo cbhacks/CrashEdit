@@ -45,6 +45,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PixelConv.cs" />
     <Compile Include="TextureChunk.cs" />
     <Compile Include="TextureChunkLoader.cs" />
   </ItemGroup>

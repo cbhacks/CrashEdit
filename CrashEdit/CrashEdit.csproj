@@ -61,6 +61,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TextureChunkBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="EditorControlAttribute.cs" />
     <Compile Include="EntityBox.cs">
       <SubType>UserControl</SubType>

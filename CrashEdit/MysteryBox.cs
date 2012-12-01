@@ -9,7 +9,6 @@ using IO = System.IO;
 
 namespace CrashEdit
 {
-    [EditorControl(typeof(TextureChunk))]
     [EditorControl(typeof(UnknownChunk))]
     [EditorControl(typeof(T15Entry))]
     [EditorControl(typeof(DemoEntry))]
