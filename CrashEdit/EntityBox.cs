@@ -27,22 +27,15 @@ namespace CrashEdit
                 list.Items.Add(string.Format("Unknown 2: {0}",field.Unknown2));
                 list.Items.Add(string.Format("Element Count: {0}",field.ElementCount));
                 list.Items.Add(string.Format("Unknown 3: {0}",field.Unknown3));
-                if (field.ExtraData.Length != 0)
-                {
-                    MysteryBox mysterybox = new MysteryBox(field.ExtraData);
-                    mysterybox.Dock = DockStyle.Fill;
-                    SplitContainer split = new SplitContainer();
-                    split.Dock = DockStyle.Fill;
-                    split.Orientation = Orientation.Horizontal;
-                    split.SplitterDistance = 20;
-                    split.Panel1.Controls.Add(list);
-                    split.Panel2.Controls.Add(mysterybox);
-                    tab.Controls.Add(split);
-                }
-                else
-                {
-                    tab.Controls.Add(list);
-                }
+                MysteryBox mysterybox = new MysteryBox(field.Data);
+                mysterybox.Dock = DockStyle.Fill;
+                SplitContainer split = new SplitContainer();
+                split.Dock = DockStyle.Fill;
+                split.Orientation = Orientation.Horizontal;
+                split.SplitterDistance = 20;
+                split.Panel1.Controls.Add(list);
+                split.Panel2.Controls.Add(mysterybox);
+                tab.Controls.Add(split);
                 tbcTabs.TabPages.Add(tab);
             }
 
