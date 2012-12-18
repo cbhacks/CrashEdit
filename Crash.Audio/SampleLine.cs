@@ -42,6 +42,8 @@ namespace Crash.Audio
             return result;
         }
 
+        // Based on code by bITmASTER and nextvolume
+        // http://psxsdk.googlecode.com/svn-history/r13/trunk/tools/vag2wav.c
         public byte[] ToPCM(ref double s0,ref double s1)
         {
             double[] f0 = {0.0,60.0 / 64.0,115.0 / 64.0,98.0 / 64.0,122.0 / 64.0};
