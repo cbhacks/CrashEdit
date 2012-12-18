@@ -1,10 +1,4 @@
 using Crash;
-using System.Collections.Generic;
-
-using IO = System.IO;
-using Reflection = System.Reflection;
-
-using Activator = System.Activator;
 using Application = System.Windows.Forms.Application;
 
 namespace CrashEdit
@@ -14,11 +8,11 @@ namespace CrashEdit
         [System.STAThread]
         internal static void Main(string[] args)
         {
-            RegisterAssembly("Crash");
-            RegisterAssembly("Crash.Game");
-            RegisterAssembly("Crash.Graphics");
-            RegisterAssembly("Crash.Audio");
-            RegisterAssembly("Crash.Unknown0");
+            Registrar.RegisterAssembly("Crash");
+            Registrar.RegisterAssembly("Crash.Game");
+            Registrar.RegisterAssembly("Crash.Graphics");
+            Registrar.RegisterAssembly("Crash.Audio");
+            Registrar.RegisterAssembly("Crash.Unknown0");
             using (MainForm mainform = new MainForm())
             {
                 foreach (string arg in args)
@@ -26,34 +20,6 @@ namespace CrashEdit
                     mainform.OpenNSF(arg);
                 }
                 Application.Run(mainform);
-            }
-        }
-
-        private static void RegisterAssembly(string name)
-        {
-            Reflection.Assembly assembly = Reflection.Assembly.Load(name);
-            RegisterAssembly(assembly);
-        }
-
-        private static void RegisterAssembly(Reflection.Assembly assembly)
-        {
-            foreach (System.Type type in assembly.GetTypes())
-            {
-                RegisterType(type);
-            }
-        }
-
-        private static void RegisterType(System.Type type)
-        {
-            foreach (ChunkTypeAttribute attribute in type.GetCustomAttributes(typeof(ChunkTypeAttribute),false))
-            {
-                ChunkLoader loader = (ChunkLoader)Activator.CreateInstance(type);
-                Chunk.AddLoader(attribute.Type,loader);
-            }
-            foreach (EntryTypeAttribute attribute in type.GetCustomAttributes(typeof(EntryTypeAttribute),false))
-            {
-                EntryLoader loader = (EntryLoader)Activator.CreateInstance(type);
-                Entry.AddLoader(attribute.Type,loader);
             }
         }
     }

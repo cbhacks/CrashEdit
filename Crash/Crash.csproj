@@ -48,6 +48,7 @@
     <Compile Include="Entry.cs" />
     <Compile Include="IMysteryMultiItemEntry.cs" />
     <Compile Include="IMysteryUniItemEntry.cs" />
+    <Compile Include="Registrar.cs" />
     <Compile Include="UnknownEntry.cs" />
     <Compile Include="EntryChunkLoader.cs" />
     <Compile Include="EntryLoader.cs" />
