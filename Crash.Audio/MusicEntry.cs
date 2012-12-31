@@ -4,13 +4,13 @@ namespace Crash.Audio
     {
         private byte[] unknown1;
         private byte[] vab;
-        private byte[] seq;
+        private SEP sep;
 
-        public MusicEntry(byte[] unknown1,byte[] vab,byte[] seq,int unknown) : base(unknown)
+        public MusicEntry(byte[] unknown1,byte[] vab,SEP sep,int unknown) : base(unknown)
         {
             this.unknown1 = unknown1;
             this.vab = vab;
-            this.seq = seq;
+            this.sep = sep;
         }
 
         public override int Type
@@ -28,9 +28,9 @@ namespace Crash.Audio
             get { return vab; }
         }
 
-        public byte[] SEQ
+        public SEP SEP
         {
-            get { return seq; }
+            get { return sep; }
         }
 
         public override byte[] Save()
@@ -38,7 +38,7 @@ namespace Crash.Audio
             byte[][] items = new byte [3][];
             items[0] = unknown1;
             items[1] = vab;
-            items[2] = seq;
+            items[2] = sep.Save();
             return Save(items);
         }
     }

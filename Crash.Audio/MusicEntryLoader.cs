@@ -9,7 +9,11 @@ namespace Crash.Audio
             {
                 throw new System.Exception();
             }
-            return new MusicEntry(items[0],items[1],items[2],unknown);
+            byte[] unknown1 = items[0];
+            int seqcount = BitConv.FromWord(unknown1,0);
+            byte[] vab = items[1];
+            SEP sep = SEP.Load(items[2],seqcount);
+            return new MusicEntry(unknown1,vab,sep,unknown);
         }
     }
 }

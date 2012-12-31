@@ -45,11 +45,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SEP.cs" />
     <Compile Include="MusicEntry.cs" />
     <Compile Include="MusicEntryLoader.cs" />
     <Compile Include="SampleLine.cs" />
     <Compile Include="SampleLineType.cs" />
     <Compile Include="SampleSet.cs" />
+    <Compile Include="SEQ.cs" />
     <Compile Include="SoundChunk.cs" />
     <Compile Include="SoundChunkLoader.cs" />
     <Compile Include="SoundEntry.cs" />
