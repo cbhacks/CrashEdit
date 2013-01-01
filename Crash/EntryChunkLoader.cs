@@ -6,6 +6,10 @@ namespace Crash
     {
         public sealed override Chunk Load(byte[] data)
         {
+            if (data == null)
+                throw new System.ArgumentNullException("Data cannot be null.");
+            if (data.Length != Chunk.Length)
+                throw new System.ArgumentException("Data must be 65536 bytes long.");
             int unknown1 = BitConv.FromWord(data,4);
             int entrycount = BitConv.FromWord(data,8);
             int unknown2 = BitConv.FromWord(data,12);

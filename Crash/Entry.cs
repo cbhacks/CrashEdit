@@ -15,6 +15,8 @@ namespace Crash
 
         public static Entry Load(byte[] data)
         {
+            if (data == null)
+                throw new System.ArgumentNullException("Data cannot be null.");
             if (data.Length < 16)
             {
                 throw new System.Exception();
@@ -70,6 +72,8 @@ namespace Crash
 
         public static void AddLoader(int type,EntryLoader loader)
         {
+            if (loader == null)
+                throw new System.ArgumentNullException("Loader cannot be null.");
             loaders.Add(type,loader);
         }
 
@@ -99,6 +103,12 @@ namespace Crash
 
         protected byte[] Save(IList<byte[]> items,int align)
         {
+            if (items == null)
+                throw new System.ArgumentNullException("Items cannot be null.");
+            if (align < 0)
+                throw new System.ArgumentOutOfRangeException("Align cannot be negative.");
+            if (align == 0)
+                throw new System.ArgumentOutOfRangeException("Align cannot be zero.");
             int length = 20 + items.Count * 4;
             foreach (byte[] item in items)
             {

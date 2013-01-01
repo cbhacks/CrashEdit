@@ -5,6 +5,8 @@ namespace Crash
     {
         public override Chunk Load(Entry[] entries,int unknown1,int unknown2)
         {
+            if (entries == null)
+                throw new System.ArgumentNullException("Entries cannot be null.");
             return new NormalChunk(entries,unknown1,unknown2);
         }
     }

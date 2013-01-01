@@ -6,6 +6,8 @@ namespace Crash
     {
         public static NSF Load(byte[] data)
         {
+            if (data == null)
+                throw new System.ArgumentNullException("Data cannot be null.");
             if (data.Length % Chunk.Length != 0)
             {
                 throw new System.Exception();
@@ -25,6 +27,8 @@ namespace Crash
 
         public NSF(IEnumerable<Chunk> chunks)
         {
+            if (chunks == null)
+                throw new System.ArgumentNullException("Chunks cannot be null.");
             this.chunks = new List<Chunk>(chunks);
         }
 

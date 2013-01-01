@@ -16,10 +16,10 @@ namespace Crash
 
         public static Chunk Load(byte[] data)
         {
+            if (data == null)
+                throw new System.ArgumentNullException("Data cannot be null.");
             if (data.Length != Length)
-            {
-                throw new System.Exception();
-            }
+                throw new System.ArgumentException("Data must be 65536 bytes long.");
             short magic = BitConv.FromHalf(data,0);
             short type = BitConv.FromHalf(data,2);
             if (magic != Magic)
@@ -38,6 +38,8 @@ namespace Crash
 
         public static void AddLoader(short type,ChunkLoader loader)
         {
+            if (loader == null)
+                throw new System.ArgumentNullException("Loader cannot be null.");
             loaders.Add(type,loader);
         }
 

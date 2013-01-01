@@ -11,6 +11,12 @@ namespace Crash
 
         protected byte[] Save(IList<Entry> entries,int unknown1,int unknown2,int align)
         {
+            if (entries == null)
+                throw new System.ArgumentNullException("Entries cannot be null.");
+            if (align < 0)
+                throw new System.ArgumentOutOfRangeException("Align cannot be negative.");
+            if (align == 0)
+                throw new System.ArgumentOutOfRangeException("Align cannot be zero.");
             byte[] data = new byte [Length];
             BitConv.ToHalf(data,0,Magic);
             BitConv.ToHalf(data,2,Type);

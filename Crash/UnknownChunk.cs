@@ -6,6 +6,8 @@ namespace Crash
 
         public UnknownChunk(byte[] data)
         {
+            if (data == null)
+                throw new System.ArgumentNullException("Data cannot be null.");
             this.data = data;
         }
 
