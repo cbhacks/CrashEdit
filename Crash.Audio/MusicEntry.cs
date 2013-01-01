@@ -3,19 +3,19 @@ namespace Crash.Audio
     public sealed class MusicEntry : Entry
     {
         private byte[] unknown1;
-        private byte[] vab;
+        private byte[] vh;
         private SEP sep;
 
-        public MusicEntry(byte[] unknown1,byte[] vab,SEP sep,int unknown) : base(unknown)
+        public MusicEntry(byte[] unknown1,byte[] vh,SEP sep,int unknown) : base(unknown)
         {
             if (unknown1 == null)
                 throw new System.ArgumentNullException("Unknown1 cannot be null.");
-            if (vab == null)
-                throw new System.ArgumentNullException("VAB cannot be null.");
+            if (vh == null)
+                throw new System.ArgumentNullException("VH cannot be null.");
             if (sep == null)
                 throw new System.ArgumentNullException("SEP cannot be null.");
             this.unknown1 = unknown1;
-            this.vab = vab;
+            this.vh = vh;
             this.sep = sep;
         }
 
@@ -29,9 +29,9 @@ namespace Crash.Audio
             get { return unknown1; }
         }
 
-        public byte[] VAB
+        public byte[] VH
         {
-            get { return vab; }
+            get { return vh; }
         }
 
         public SEP SEP
@@ -43,7 +43,7 @@ namespace Crash.Audio
         {
             byte[][] items = new byte [3][];
             items[0] = unknown1;
-            items[1] = vab;
+            items[1] = vh;
             items[2] = sep.Save();
             return Save(items);
         }

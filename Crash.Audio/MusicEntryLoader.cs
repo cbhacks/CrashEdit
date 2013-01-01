@@ -13,9 +13,9 @@ namespace Crash.Audio
             }
             byte[] unknown1 = items[0];
             int seqcount = BitConv.FromWord(unknown1,0);
-            byte[] vab = items[1];
+            byte[] vh = items[1];
             SEP sep = SEP.Load(items[2],seqcount);
-            return new MusicEntry(unknown1,vab,sep,unknown);
+            return new MusicEntry(unknown1,vh,sep,unknown);
         }
     }
 }
