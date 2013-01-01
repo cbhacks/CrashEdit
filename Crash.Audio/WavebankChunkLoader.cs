@@ -5,6 +5,8 @@ namespace Crash.Audio
     {
         public override Chunk Load(Entry[] entries,int unknown1,int unknown2)
         {
+            if (entries == null)
+                throw new System.ArgumentNullException("Entries cannot be null.");
             if (entries.Length != 1)
             {
                 throw new System.Exception();

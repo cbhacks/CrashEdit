@@ -7,6 +7,8 @@ namespace Crash.Audio
     {
         public override Chunk Load(Entry[] entries,int unknown1,int unknown2)
         {
+            if (entries == null)
+                throw new System.ArgumentNullException("Entries cannot be null.");
             List<SoundEntry> soundentries = new List<SoundEntry>();
             foreach (Entry entry in entries)
             {

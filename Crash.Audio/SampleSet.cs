@@ -6,6 +6,8 @@ namespace Crash.Audio
     {
         public static SampleSet Load(byte[] data)
         {
+            if (data == null)
+                throw new System.ArgumentNullException("Data cannot be null.");
             if (data.Length % 16 != 0)
             {
                 throw new System.Exception();
@@ -25,6 +27,8 @@ namespace Crash.Audio
 
         public SampleSet(IEnumerable<SampleLine> samplelines)
         {
+            if (samplelines == null)
+                throw new System.ArgumentNullException("SampleLines cannot be null.");
             this.samplelines = new List<SampleLine>(samplelines);
         }
 

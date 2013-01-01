@@ -4,6 +4,8 @@ namespace Crash.Audio
     {
         public static byte[] ToWave(byte[] data,int samplerate)
         {
+            if (data == null)
+                throw new System.ArgumentNullException("Data cannot be null.");
             int headerlen = 8 + 4 + 8 + 16 + 8;
             int wavelen = headerlen + data.Length;
             byte[] wave = new byte [wavelen];

@@ -8,6 +8,8 @@ namespace Crash.Audio
 
         public WavebankChunk(WavebankEntry entry,int unknown1,int unknown2)
         {
+            if (entry == null)
+                throw new System.ArgumentNullException("Entry cannot be null.");
             this.entry = entry;
             this.unknown1 = unknown1;
             this.unknown2 = unknown2;

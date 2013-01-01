@@ -6,6 +6,8 @@ namespace Crash.Audio
 
         public static SEQ Load(byte[] data)
         {
+            if (data == null)
+                throw new System.ArgumentNullException("Data cannot be null.");
             throw new System.NotImplementedException();
         }
 
@@ -16,6 +18,10 @@ namespace Crash.Audio
 
         public SEQ(short resolution,int tempo,short rhythm,byte[] data)
         {
+            if ((tempo & 0xFF000000) != 0)
+                throw new System.ArgumentOutOfRangeException("Tempo must be in the range 0 to 0xFFFFFF inclusive.");
+            if (data == null)
+                throw new System.ArgumentNullException("Data cannot be null.");
             this.resolution = resolution;
             this.tempo = tempo;
             this.rhythm = rhythm;

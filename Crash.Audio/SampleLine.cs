@@ -4,10 +4,10 @@ namespace Crash.Audio
     {
         public static SampleLine Load(byte[] data)
         {
+            if (data == null)
+                throw new System.ArgumentNullException("Data cannot be null.");
             if (data.Length != 16)
-            {
-                throw new System.Exception();
-            }
+                throw new System.ArgumentException("Data must be 16 bytes long.");
             byte[] newdata = new byte [14];
             System.Array.Copy(data,2,newdata,0,14);
             return new SampleLine(data[0],(SampleLineType)data[1],newdata);
@@ -19,6 +19,8 @@ namespace Crash.Audio
 
         public SampleLine(byte info,SampleLineType type,byte[] data)
         {
+            if (data == null)
+                throw new System.ArgumentNullException("Data cannot be null.");
             if (data.Length != 14)
             {
                 throw new System.Exception();

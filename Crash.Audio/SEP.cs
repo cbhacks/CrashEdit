@@ -8,6 +8,10 @@ namespace Crash.Audio
 
         public static SEP Load(byte[] data,int seqcount)
         {
+            if (data == null)
+                throw new System.ArgumentNullException("Data cannot be null.");
+            if (seqcount < 0)
+                throw new System.ArgumentOutOfRangeException("SEQCount cannot be negative.");
             // All SEP/SEQ stuff is big-endian, like MIDI
             if (data.Length < 6)
             {
@@ -63,6 +67,8 @@ namespace Crash.Audio
 
         public SEP(IEnumerable<SEQ> seqs)
         {
+            if (seqs == null)
+                throw new System.ArgumentNullException("SEQs cannot be null.");
             this.seqs = new List<SEQ>(seqs);
         }
 

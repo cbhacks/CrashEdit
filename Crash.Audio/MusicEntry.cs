@@ -8,6 +8,12 @@ namespace Crash.Audio
 
         public MusicEntry(byte[] unknown1,byte[] vab,SEP sep,int unknown) : base(unknown)
         {
+            if (unknown1 == null)
+                throw new System.ArgumentNullException("Unknown1 cannot be null.");
+            if (vab == null)
+                throw new System.ArgumentNullException("VAB cannot be null.");
+            if (sep == null)
+                throw new System.ArgumentNullException("SEP cannot be null.");
             this.unknown1 = unknown1;
             this.vab = vab;
             this.sep = sep;

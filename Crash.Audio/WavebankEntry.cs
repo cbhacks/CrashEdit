@@ -9,6 +9,8 @@ namespace Crash.Audio
 
         public WavebankEntry(int id,SampleSet samples,int unknown) : base(unknown)
         {
+            if (samples == null)
+                throw new System.ArgumentNullException("Samples cannot be null.");
             this.id = id;
             this.samples = samples;
         }

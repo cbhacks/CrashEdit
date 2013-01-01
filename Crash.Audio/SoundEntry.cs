@@ -8,6 +8,8 @@ namespace Crash.Audio
 
         public SoundEntry(SampleSet samples,int unknown) : base(unknown)
         {
+            if (samples == null)
+                throw new System.ArgumentNullException("Samples cannot be null.");
             this.samples = samples;
         }
 

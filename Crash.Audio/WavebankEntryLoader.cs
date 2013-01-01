@@ -5,6 +5,8 @@ namespace Crash.Audio
     {
         public override Entry Load(byte[][] items,int unknown)
         {
+            if (items == null)
+                throw new System.ArgumentNullException("Items cannot be null.");
             if (items.Length != 2)
             {
                 throw new System.Exception();
