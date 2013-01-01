@@ -19,7 +19,7 @@ namespace Crash.Audio
         public SEQ(short resolution,int tempo,short rhythm,byte[] data)
         {
             if ((tempo & 0xFF000000) != 0)
-                throw new System.ArgumentOutOfRangeException("Tempo must be in the range 0 to 0xFFFFFF inclusive.");
+                throw new System.ArgumentOutOfRangeException("Tempo must be in the range 0 to 0x00FFFFFF inclusive.");
             if (data == null)
                 throw new System.ArgumentNullException("Data cannot be null.");
             this.resolution = resolution;
