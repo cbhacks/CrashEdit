@@ -29,10 +29,10 @@ namespace CrashEdit
             }
             for (int i = 0;i < entry.SEP.SEQs.Count;i++)
             {
-                MysteryBox mystery = new MysteryBox(entry.SEP.SEQs[i].Data);
-                mystery.Dock = DockStyle.Fill;
+                SEQBox seqbox = new SEQBox(entry.SEP.SEQs[i]);
+                seqbox.Dock = DockStyle.Fill;
                 TabPage page = new TabPage(string.Format("SEQ {0}",i));
-                page.Controls.Add(mystery);
+                page.Controls.Add(seqbox);
                 tbcTabs.TabPages.Add(page);
             }
             Controls.Add(tbcTabs);

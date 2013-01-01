@@ -4,6 +4,11 @@ namespace Crash.Audio
     {
         public const int Magic = 0x70514553;
 
+        public static SEQ Load(byte[] data)
+        {
+            throw new System.NotImplementedException();
+        }
+
         private short resolution;
         private int tempo;
         private short rhythm;
@@ -35,6 +40,20 @@ namespace Crash.Audio
         public byte[] Data
         {
             get { return data; }
+        }
+
+        public byte[] Save()
+        {
+            byte[] result = new byte [15 + data.Length];
+            BitConv.ToIntBE(result,0,Magic);
+            BitConv.ToIntBE(result,4,0);
+            BitConv.ToIntBE(result,9,tempo);
+            // tempo is 3 (yes, three) bytes
+            // write it before resolution, so resolution overwrites the extra byte
+            BitConv.ToShortBE(result,8,resolution);
+            BitConv.ToShortBE(result,13,rhythm);
+            data.CopyTo(result,15);
+            return result;
         }
     }
 }
