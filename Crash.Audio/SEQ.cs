@@ -53,10 +53,8 @@ namespace Crash.Audio
             byte[] result = new byte [15 + data.Length];
             BitConv.ToIntBE(result,0,Magic);
             BitConv.ToIntBE(result,4,0);
-            BitConv.ToIntBE(result,9,tempo);
-            // tempo is 3 (yes, three) bytes
-            // write it before resolution, so resolution overwrites the extra byte
             BitConv.ToShortBE(result,8,resolution);
+            MIDIConv.To3BE(result,10,tempo);
             BitConv.ToShortBE(result,13,rhythm);
             data.CopyTo(result,15);
             return result;

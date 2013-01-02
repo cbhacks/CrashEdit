@@ -38,8 +38,7 @@ namespace Crash.Audio
                 short seqid = BitConv.FromShortBE(data,offset);
                 short resolution = BitConv.FromShortBE(data,offset + 2);
                 // tempo is 3 (yes, three) bytes
-                int tempo = BitConv.FromIntBE(data,offset + 3);
-                tempo &= 0xFFFFFF;
+                int tempo = MIDIConv.From3BE(data,offset + 4);
                 short rhythm = BitConv.FromShortBE(data,offset + 7);
                 int length = BitConv.FromIntBE(data,offset + 9);
                 if (seqid != i)
@@ -93,10 +92,8 @@ namespace Crash.Audio
             {
                 SEQ seq = seqs[i];
                 BitConv.ToShortBE(data,offset,(short)i);
-                // tempo is 3 (yes, three) bytes
-                // write it before resolution, so resolution overwrites the extra byte
-                BitConv.ToIntBE(data,offset + 3,seq.Tempo);
                 BitConv.ToShortBE(data,offset + 2,seq.Resolution);
+                MIDIConv.To3BE(data,offset + 4,seq.Tempo);
                 BitConv.ToShortBE(data,offset + 7,seq.Rhythm);
                 BitConv.ToIntBE(data,offset + 9,seq.Data.Length);
                 offset += 13;

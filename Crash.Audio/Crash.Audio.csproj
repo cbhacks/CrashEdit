@@ -45,6 +45,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MIDIConv.cs" />
     <Compile Include="SEP.cs" />
     <Compile Include="MusicEntry.cs" />
     <Compile Include="MusicEntryLoader.cs" />
