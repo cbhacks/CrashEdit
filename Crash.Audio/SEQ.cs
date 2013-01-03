@@ -8,7 +8,27 @@ namespace Crash.Audio
         {
             if (data == null)
                 throw new System.ArgumentNullException("Data cannot be null.");
-            throw new System.NotImplementedException();
+            // All SEP/SEQ stuff is big-endian, like MIDI
+            if (data.Length < 15)
+            {
+                throw new System.Exception();
+            }
+            int magic = BitConv.FromIntBE(data,0);
+            int version = BitConv.FromIntBE(data,4);
+            if (magic != Magic)
+            {
+                throw new System.Exception();
+            }
+            if (version != 1)
+            {
+                throw new System.Exception();
+            }
+            short resolution = BitConv.FromShortBE(data,8);
+            int tempo = MIDIConv.From3BE(data,10);
+            short rhythm = BitConv.FromShortBE(data,13);
+            byte[] scoredata = new byte [data.Length - 15];
+            System.Array.Copy(data,15,scoredata,0,scoredata.Length);
+            return new SEQ(resolution,tempo,rhythm,scoredata);
         }
 
         private short resolution;
