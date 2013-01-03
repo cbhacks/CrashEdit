@@ -114,6 +114,7 @@
     <Content Include="Resources\Icons\Music.gif" />
     <Content Include="Resources\Icons\Open.gif" />
     <Content Include="Resources\Icons\Save.gif" />
+    <Content Include="Resources\Icons\Speaker.gif" />
     <Content Include="Resources\Icons\Thing.gif" />
   </ItemGroup>
   <ItemGroup>

@@ -33,6 +33,9 @@
 	<data name="SaveIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
 		Resources/Icons/Save.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
 	</data>
+	<data name="SpeakerIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Icons/Speaker.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
 	<data name="ThingIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
 		Resources/Icons/Thing.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
 	</data>

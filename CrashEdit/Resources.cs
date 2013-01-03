@@ -69,6 +69,14 @@ namespace CrashEdit
             }
         }
 
+        public static Image SpeakerIcon
+        {
+            get
+            {
+                return (Image)manager.GetObject("SpeakerIcon");
+            }
+        }
+
         public static Image ThingIcon
         {
             get

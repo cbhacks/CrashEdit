@@ -33,13 +33,13 @@ namespace CrashEdit
                 imglist.Images.Add("trv_t4entry",Resources.ThingIcon);
                 imglist.Images.Add("trv_entityentry",Resources.ThingIcon);
                 imglist.Images.Add("trv_t11entry",Resources.ThingIcon);
-                imglist.Images.Add("trv_soundentry",Resources.ThingIcon);
+                imglist.Images.Add("trv_soundentry",Resources.SpeakerIcon);
                 imglist.Images.Add("trv_musicentry",Resources.MusicIcon);
                 imglist.Images.Add("trv_wavebankentry",Resources.MusicIcon);
                 imglist.Images.Add("trv_t15entry",Resources.ThingIcon);
                 imglist.Images.Add("trv_t17entry",Resources.ThingIcon);
                 imglist.Images.Add("trv_demoentry",Resources.ThingIcon);
-                imglist.Images.Add("trv_speechentry",Resources.ThingIcon);
+                imglist.Images.Add("trv_speechentry",Resources.SpeakerIcon);
                 imglist.Images.Add("trv_t21entry",Resources.ThingIcon);
                 imglist.Images.Add("trv_unknownentry",Resources.ThingIcon);
                 imglist.Images.Add("trv_entity",Resources.ArrowIcon);
