@@ -32,10 +32,21 @@ namespace CrashEdit
         {
             using (SaveFileDialog dialog = new SaveFileDialog())
             {
-                dialog.Filter = "PS1 Sequence Files (*.seq)|*.seq|All Files (*.*)|*.*";
+                dialog.Filter = "PS1 Sequence Files (*.seq)|*.seq|MIDI Files (*.mid)|*.mid|All Files (*.*)|*.*";
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    IO.File.WriteAllBytes(dialog.FileName,seq.Save());
+                    switch (dialog.FilterIndex)
+                    {
+                        case 1:
+                        case 3:
+                            IO.File.WriteAllBytes(dialog.FileName,seq.Save());
+                            break;
+                        case 2:
+                            IO.File.WriteAllBytes(dialog.FileName,seq.ToMIDI());
+                            break;
+                        default:
+                            throw new System.Exception();
+                    }
                 }
             }
         }

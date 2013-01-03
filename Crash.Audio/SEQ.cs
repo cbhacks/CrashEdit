@@ -59,5 +59,37 @@ namespace Crash.Audio
             data.CopyTo(result,15);
             return result;
         }
+
+        public byte[] ToMIDI()
+        {
+            byte[] midi = new byte [37 + data.Length];
+            midi[0] = (byte)'M';
+            midi[1] = (byte)'T';
+            midi[2] = (byte)'h';
+            midi[3] = (byte)'d';
+            BitConv.ToIntBE(midi,4,6);
+            BitConv.ToShortBE(midi,8,0);
+            BitConv.ToShortBE(midi,10,1);
+            BitConv.ToShortBE(midi,12,resolution);
+            midi[14] = (byte)'M';
+            midi[15] = (byte)'T';
+            midi[16] = (byte)'r';
+            midi[17] = (byte)'k';
+            BitConv.ToIntBE(midi,18,15 + data.Length);
+            midi[22] = 0;
+            midi[23] = 0xFF;
+            midi[24] = 0x51;
+            midi[25] = 0x03;
+            MIDIConv.To3BE(midi,26,tempo);
+            midi[29] = 0;
+            midi[30] = 0xFF;
+            midi[31] = 0x58;
+            midi[32] = 0x04;
+            BitConv.ToShortBE(midi,33,rhythm);
+            midi[35] = 0x18;
+            midi[36] = 0x08;
+            data.CopyTo(midi,37);
+            return midi;
+        }
     }
 }
