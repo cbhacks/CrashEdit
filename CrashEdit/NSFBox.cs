@@ -163,7 +163,7 @@ namespace CrashEdit
             return node;
         }
 
-        public TreeNode Populate(Chunk chunk)
+        private TreeNode Populate(Chunk chunk)
         {
             if (chunk is NormalChunk)
             {
@@ -195,7 +195,7 @@ namespace CrashEdit
             }
         }
 
-        public TreeNode Populate(NormalChunk chunk)
+        private TreeNode Populate(NormalChunk chunk)
         {
             TreeNode node = new TreeNode();
             node.Tag = chunk;
