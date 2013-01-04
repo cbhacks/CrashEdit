@@ -27,14 +27,6 @@ namespace CrashEdit
                 page.Controls.Add(mystery);
                 tbcTabs.TabPages.Add(page);
             }
-            for (int i = 0;i < entry.SEP.SEQs.Count;i++)
-            {
-                SEQBox seqbox = new SEQBox(entry.SEP.SEQs[i]);
-                seqbox.Dock = DockStyle.Fill;
-                TabPage page = new TabPage(string.Format("SEQ {0}",i));
-                page.Controls.Add(seqbox);
-                tbcTabs.TabPages.Add(page);
-            }
             Controls.Add(tbcTabs);
         }
     }

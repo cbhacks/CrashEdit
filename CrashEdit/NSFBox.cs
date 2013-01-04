@@ -43,6 +43,7 @@ namespace CrashEdit
                 imglist.Images.Add("trv_t21entry",Resources.ThingIcon);
                 imglist.Images.Add("trv_unknownentry",Resources.ThingIcon);
                 imglist.Images.Add("trv_entity",Resources.ArrowIcon);
+                imglist.Images.Add("trv_seq",Resources.ArrowIcon);
             }
             catch
             {
@@ -416,6 +417,10 @@ namespace CrashEdit
             node.Text = "Music Entry";
             node.ImageKey = "trv_musicentry";
             node.SelectedImageKey = "trv_musicentry";
+            for (int i = 0;i < entry.SEP.SEQs.Count;i++)
+            {
+                node.Nodes.Add(Populate(entry.SEP.SEQs[i],i));
+            }
             return node;
         }
 
@@ -503,6 +508,16 @@ namespace CrashEdit
             }
             node.ImageKey = "trv_entity";
             node.SelectedImageKey = "trv_entity";
+            return node;
+        }
+
+        private TreeNode Populate(SEQ seq,int id)
+        {
+            TreeNode node = new TreeNode();
+            node.Tag = seq;
+            node.Text = string.Format("SEQ ({0})",id);
+            node.ImageKey = "trv_seq";
+            node.SelectedImageKey = "trv_seq";
             return node;
         }
 

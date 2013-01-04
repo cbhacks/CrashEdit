@@ -6,6 +6,7 @@ using IO = System.IO;
 
 namespace CrashEdit
 {
+    [EditorControl(typeof(SEQ))]
     public sealed class SEQBox : UserControl
     {
         private SEQ seq;
