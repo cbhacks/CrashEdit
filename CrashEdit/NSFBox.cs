@@ -60,12 +60,16 @@ namespace CrashEdit
 
         private NSF nsf;
 
+        private List<TreeNode> searchresults;
+
         private SplitContainer pnSplit;
         private TreeView trvMain;
 
         public NSFBox(NSF nsf)
         {
             this.nsf = nsf;
+
+            this.searchresults = new List<TreeNode>();
 
             TreeNode rootnode = Populate(nsf);
             rootnode.Expand();
@@ -85,6 +89,11 @@ namespace CrashEdit
             this.Controls.Add(pnSplit);
         }
 
+        public NSF NSF
+        {
+            get { return nsf; }
+        }
+
         void trvMain_AfterSelect(object sender,TreeViewEventArgs e)
         {
             Control control;
@@ -102,6 +111,42 @@ namespace CrashEdit
             }
             pnSplit.Panel2.Controls.Clear();
             pnSplit.Panel2.Controls.Add(control);
+        }
+
+        public void Find(string term)
+        {
+            term = term.ToUpper();
+            searchresults.Clear();
+            foreach (TreeNode node in trvMain.Nodes)
+            {
+                FindNode(term,node);
+            }
+            FindNext();
+        }
+
+        public void FindNext()
+        {
+            if (searchresults.Count > 0)
+            {
+                trvMain.SelectedNode = searchresults[0];
+                searchresults.RemoveAt(0);
+            }
+            else
+            {
+                MessageBox.Show("No results found.");
+            }
+        }
+
+        private void FindNode(string term,TreeNode node)
+        {
+            if (node.Text.ToUpper().Contains(term))
+            {
+                searchresults.Add(node);
+            }
+            foreach (TreeNode childnode in node.Nodes)
+            {
+                FindNode(term,childnode);
+            }
         }
 
         private TreeNode Populate(NSF nsf)

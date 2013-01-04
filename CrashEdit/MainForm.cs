@@ -18,6 +18,8 @@ namespace CrashEdit
                 imglist.Images.Add("tb_open",Resources.OpenIcon);
                 imglist.Images.Add("tb_save",Resources.SaveIcon);
                 imglist.Images.Add("tb_close",Resources.FolderIcon);
+                imglist.Images.Add("tb_find",Resources.BinocularsIcon);
+                imglist.Images.Add("tb_findnext",Resources.BinocularsNextIcon);
             }
             catch
             {
@@ -29,6 +31,9 @@ namespace CrashEdit
         private ToolStripButton tbbOpen;
         private ToolStripButton tbbSave;
         private ToolStripButton tbbClose;
+        private ToolStripSeparator tbsSeparator;
+        private ToolStripButton tbbFind;
+        private ToolStripButton tbbFindNext;
         private TabControl tbcTabs;
 
         public MainForm()
@@ -51,12 +56,29 @@ namespace CrashEdit
             tbbClose.TextImageRelation = TextImageRelation.ImageAboveText;
             tbbClose.Click += new System.EventHandler(tbbClose_Click);
 
+            tbsSeparator = new ToolStripSeparator();
+
+            tbbFind = new ToolStripButton();
+            tbbFind.Text = "Find";
+            tbbFind.ImageKey = "tb_find";
+            tbbFind.TextImageRelation = TextImageRelation.ImageAboveText;
+            tbbFind.Click += new System.EventHandler(tbbFind_Click);
+
+            tbbFindNext = new ToolStripButton();
+            tbbFindNext.Text = "Find Next";
+            tbbFindNext.ImageKey = "tb_findnext";
+            tbbFindNext.TextImageRelation = TextImageRelation.ImageAboveText;
+            tbbFindNext.Click += new System.EventHandler(tbbFindNext_Click);
+
             tsToolbar = new ToolStrip();
             tsToolbar.Dock = DockStyle.Top;
             tsToolbar.ImageList = imglist;
             tsToolbar.Items.Add(tbbOpen);
             tsToolbar.Items.Add(tbbSave);
             tsToolbar.Items.Add(tbbClose);
+            tsToolbar.Items.Add(tbsSeparator);
+            tsToolbar.Items.Add(tbbFind);
+            tsToolbar.Items.Add(tbbFindNext);
 
             tbcTabs = new TabControl();
             tbcTabs.Dock = DockStyle.Fill;
@@ -80,6 +102,16 @@ namespace CrashEdit
         void tbbClose_Click(object sender,System.EventArgs e)
         {
             CloseNSF();
+        }
+
+        void tbbFind_Click(object sender,System.EventArgs e)
+        {
+            Find();
+        }
+
+        void tbbFindNext_Click(object sender,System.EventArgs e)
+        {
+            FindNext();
         }
 
         public void OpenNSF()
@@ -111,7 +143,7 @@ namespace CrashEdit
             nsfbox.Dock = DockStyle.Fill;
 
             TabPage nsftab = new TabPage(filename);
-            nsftab.Tag = nsf;
+            nsftab.Tag = nsfbox;
             nsftab.Controls.Add(nsfbox);
 
             tbcTabs.TabPages.Add(nsftab);
@@ -123,8 +155,8 @@ namespace CrashEdit
             if (tbcTabs.SelectedTab != null)
             {
                 string filename = tbcTabs.SelectedTab.Text;
-                NSF nsf = (NSF)tbcTabs.SelectedTab.Tag;
-                SaveNSF(filename,nsf);
+                NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
+                SaveNSF(filename,nsfbox.NSF);
             }
         }
 
@@ -142,6 +174,30 @@ namespace CrashEdit
             if (tbcTabs.SelectedTab != null)
             {
                 tbcTabs.TabPages.Remove(tbcTabs.SelectedTab);
+            }
+        }
+
+        public void Find()
+        {
+            if (tbcTabs.SelectedTab != null)
+            {
+                NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
+                using (InputWindow inputwindow = new InputWindow())
+                {
+                    if (inputwindow.ShowDialog() == DialogResult.OK)
+                    {
+                        nsfbox.Find(inputwindow.Input);
+                    }
+                }
+            }
+        }
+
+        public void FindNext()
+        {
+            if (tbcTabs.SelectedTab != null)
+            {
+                NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
+                nsfbox.FindNext();
             }
         }
     }

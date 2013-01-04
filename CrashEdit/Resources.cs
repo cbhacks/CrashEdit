@@ -21,6 +21,22 @@ namespace CrashEdit
             }
         }
 
+        public static Image BinocularsIcon
+        {
+            get
+            {
+                return (Image)manager.GetObject("BinocularsIcon");
+            }
+        }
+
+        public static Image BinocularsNextIcon
+        {
+            get
+            {
+                return (Image)manager.GetObject("BinocularsNextIcon");
+            }
+        }
+
         public static Image FileIcon
         {
             get
