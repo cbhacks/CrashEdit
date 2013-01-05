@@ -5,6 +5,8 @@ namespace Crash.Unknown0
     {
         public override Entry Load(byte[][] items,int unknown)
         {
+            if (items == null)
+                throw new System.ArgumentNullException("Items cannot be null.");
             return new T1Entry(items,unknown);
         }
     }

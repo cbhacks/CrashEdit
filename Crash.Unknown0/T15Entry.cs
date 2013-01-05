@@ -6,6 +6,8 @@ namespace Crash.Unknown0
 
         public T15Entry(byte[] data,int unknown) : base(unknown)
         {
+            if (data == null)
+                throw new System.ArgumentNullException("Data cannot be null.");
             this.data = data;
         }
 
