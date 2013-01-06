@@ -44,6 +44,7 @@ namespace CrashEdit
                 imglist.Images.Add("trv_unknownentry",Resources.ThingIcon);
                 imglist.Images.Add("trv_entity",Resources.ArrowIcon);
                 imglist.Images.Add("trv_seq",Resources.ArrowIcon);
+                imglist.Images.Add("trv_t4item",Resources.ArrowIcon);
             }
             catch
             {
@@ -373,6 +374,10 @@ namespace CrashEdit
             node.Text = "T4 Entry";
             node.ImageKey = "trv_t4entry";
             node.SelectedImageKey = "trv_t4entry";
+            for (int i = 0;i < entry.T4Items.Count;i++)
+            {
+                node.Nodes.Add(Populate(entry.T4Items[i],i));
+            }
             return node;
         }
 
@@ -518,6 +523,16 @@ namespace CrashEdit
             node.Text = string.Format("SEQ ({0})",id);
             node.ImageKey = "trv_seq";
             node.SelectedImageKey = "trv_seq";
+            return node;
+        }
+
+        private TreeNode Populate(T4Item t4item,int id)
+        {
+            TreeNode node = new TreeNode();
+            node.Tag = t4item;
+            node.Text = string.Format("Item ({0})",id);
+            node.ImageKey = "trv_t4item";
+            node.SelectedImageKey = "trv_t4item";
             return node;
         }
 

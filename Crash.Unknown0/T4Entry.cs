@@ -2,15 +2,15 @@ using System.Collections.Generic;
 
 namespace Crash.Unknown0
 {
-    public sealed class T4Entry : Entry,IMysteryMultiItemEntry
+    public sealed class T4Entry : Entry
     {
-        private List<byte[]> items;
+        private List<T4Item> t4items;
 
-        public T4Entry(IEnumerable<byte[]> items,int unknown) : base(unknown)
+        public T4Entry(IEnumerable<T4Item> t4items,int unknown) : base(unknown)
         {
-            if (items == null)
+            if (t4items == null)
                 throw new System.ArgumentNullException("Items cannot be null.");
-            this.items = new List<byte[]>(items);
+            this.t4items = new List<T4Item>(t4items);
         }
 
         public override int Type
@@ -18,13 +18,18 @@ namespace Crash.Unknown0
             get { return 4; }
         }
 
-        public IList<byte[]> Items
+        public IList<T4Item> T4Items
         {
-            get { return items; }
+            get { return t4items; }
         }
 
         public override byte[] Save()
         {
+            byte[][] items = new byte [t4items.Count][];
+            for (int i = 0;i < t4items.Count;i++)
+            {
+                items[i] = t4items[i].Save();
+            }
             return Save(items);
         }
     }

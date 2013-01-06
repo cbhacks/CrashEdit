@@ -60,6 +60,7 @@
     <Compile Include="T3Entry.cs" />
     <Compile Include="T3EntryLoader.cs" />
     <Compile Include="T4Entry.cs" />
+    <Compile Include="T4Item.cs" />
     <Compile Include="T4EntryLoader.cs" />
   </ItemGroup>
 </Project>

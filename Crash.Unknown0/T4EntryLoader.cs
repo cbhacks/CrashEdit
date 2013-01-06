@@ -7,7 +7,12 @@ namespace Crash.Unknown0
         {
             if (items == null)
                 throw new System.ArgumentNullException("Items cannot be null.");
-            return new T4Entry(items,unknown);
+            T4Item[] t4items = new T4Item [items.Length];
+            for (int i = 0;i < items.Length;i++)
+            {
+                t4items[i] = T4Item.Load(items[i]);
+            }
+            return new T4Entry(t4items,unknown);
         }
     }
 }

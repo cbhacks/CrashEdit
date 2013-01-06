@@ -11,7 +11,6 @@ namespace CrashEdit
     [EditorControl(typeof(T1Entry))]
     [EditorControl(typeof(T2Entry))]
     [EditorControl(typeof(T3Entry))]
-    [EditorControl(typeof(T4Entry))]
     [EditorControl(typeof(T11Entry))]
     [EditorControl(typeof(T17Entry))]
     [EditorControl(typeof(T21Entry))]
