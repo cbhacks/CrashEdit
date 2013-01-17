@@ -50,7 +50,7 @@
     <Compile Include="MusicEntry.cs" />
     <Compile Include="MusicEntryLoader.cs" />
     <Compile Include="SampleLine.cs" />
-    <Compile Include="SampleLineType.cs" />
+    <Compile Include="SampleLineFlags.cs" />
     <Compile Include="SampleSet.cs" />
     <Compile Include="SEQ.cs" />
     <Compile Include="SoundChunk.cs" />

@@ -10,14 +10,14 @@ namespace Crash.Audio
                 throw new System.ArgumentException("Data must be 16 bytes long.");
             byte[] newdata = new byte [14];
             System.Array.Copy(data,2,newdata,0,14);
-            return new SampleLine(data[0],(SampleLineType)data[1],newdata);
+            return new SampleLine(data[0],(SampleLineFlags)data[1],newdata);
         }
 
         private byte info;
-        private SampleLineType type;
+        private SampleLineFlags flags;
         private byte[] data;
 
-        public SampleLine(byte info,SampleLineType type,byte[] data)
+        public SampleLine(byte info,SampleLineFlags flags,byte[] data)
         {
             if (data == null)
                 throw new System.ArgumentNullException("Data cannot be null.");
@@ -26,20 +26,20 @@ namespace Crash.Audio
                 throw new System.Exception();
             }
             this.info = info;
-            this.type = type;
+            this.flags = flags;
             this.data = data;
         }
 
-        public SampleLineType Type
+        public SampleLineFlags Flags
         {
-            get { return type; }
+            get { return flags; }
         }
 
         public byte[] Save()
         {
             byte[] result = new byte [16];
             result[0] = info;
-            result[1] = (byte)type;
+            result[1] = (byte)flags;
             data.CopyTo(result,2);
             return result;
         }
