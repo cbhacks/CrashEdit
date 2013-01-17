@@ -11,6 +11,10 @@ namespace Crash.Unknown0
             for (int i = 0;i < items.Length;i++)
             {
                 t4items[i] = T4Item.Load(items[i]);
+                if (t4items[i].Unknown1 != ((i == 0 || i == items.Length - 1) ? 0 : 1))
+                {
+                    throw new System.Exception();
+                }
             }
             return new T4Entry(t4items,unknown);
         }
