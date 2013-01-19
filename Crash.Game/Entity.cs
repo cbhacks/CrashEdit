@@ -97,6 +97,18 @@ namespace Crash.Game
             get { return fields; }
         }
 
+        public EntityField FindField(short type)
+        {
+            foreach (EntityField field in fields)
+            {
+                if (field.Type == type)
+                {
+                    return field;
+                }
+            }
+            throw new System.Exception();
+        }
+
         public byte[] Save()
         {
             int length = 16 + 8 * fields.Count;
