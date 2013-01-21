@@ -13,115 +13,115 @@ namespace CrashEdit
             manager = new ResourceManager("CrashEdit.Resources",Assembly.GetExecutingAssembly());
         }
 
-        public static Image ArrowIcon
+        public static Image ArrowImage
         {
             get
             {
-                return (Image)manager.GetObject("ArrowIcon");
+                return (Image)manager.GetObject("ArrowImage");
             }
         }
 
-        public static Image BinocularsIcon
+        public static Image BinocularsImage
         {
             get
             {
-                return (Image)manager.GetObject("BinocularsIcon");
+                return (Image)manager.GetObject("BinocularsImage");
             }
         }
 
-        public static Image BinocularsNextIcon
+        public static Image BinocularsNextImage
         {
             get
             {
-                return (Image)manager.GetObject("BinocularsNextIcon");
+                return (Image)manager.GetObject("BinocularsNextImage");
             }
         }
 
-        public static Image FileIcon
+        public static Image FileImage
         {
             get
             {
-                return (Image)manager.GetObject("FileIcon");
+                return (Image)manager.GetObject("FileImage");
             }
         }
 
-        public static Image FolderIcon
+        public static Image FolderImage
         {
             get
             {
-                return (Image)manager.GetObject("FolderIcon");
+                return (Image)manager.GetObject("FolderImage");
             }
         }
 
-        public static Image ImageIcon
+        public static Image ImageImage
         {
             get
             {
-                return (Image)manager.GetObject("ImageIcon");
+                return (Image)manager.GetObject("ImageImage");
             }
         }
 
-        public static Image MusicIcon
+        public static Image MusicImage
         {
             get
             {
-                return (Image)manager.GetObject("MusicIcon");
+                return (Image)manager.GetObject("MusicImage");
             }
         }
 
-        public static Image OpenIcon
+        public static Image OpenImage
         {
             get
             {
-                return (Image)manager.GetObject("OpenIcon");
+                return (Image)manager.GetObject("OpenImage");
             }
         }
 
-        public static Image SaveIcon
+        public static Image SaveImage
         {
             get
             {
-                return (Image)manager.GetObject("SaveIcon");
+                return (Image)manager.GetObject("SaveImage");
             }
         }
 
-        public static Image SpeakerIcon
+        public static Image SpeakerImage
         {
             get
             {
-                return (Image)manager.GetObject("SpeakerIcon");
+                return (Image)manager.GetObject("SpeakerImage");
             }
         }
 
-        public static Image ThingIcon
+        public static Image ThingImage
         {
             get
             {
-                return (Image)manager.GetObject("ThingIcon");
+                return (Image)manager.GetObject("ThingImage");
             }
         }
 
-        public static Image BlueJournalIcon
+        public static Image BlueJournalImage
         {
             get
             {
-                return (Image)manager.GetObject("BlueJournalIcon");
+                return (Image)manager.GetObject("BlueJournalImage");
             }
         }
 
-        public static Image WhiteJournalIcon
+        public static Image WhiteJournalImage
         {
             get
             {
-                return (Image)manager.GetObject("WhiteJournalIcon");
+                return (Image)manager.GetObject("WhiteJournalImage");
             }
         }
 
-        public static Image YellowJournalIcon
+        public static Image YellowJournalImage
         {
             get
             {
-                return (Image)manager.GetObject("YellowJournalIcon");
+                return (Image)manager.GetObject("YellowJournalImage");
             }
         }
     }

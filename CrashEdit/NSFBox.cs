@@ -21,32 +21,32 @@ namespace CrashEdit
             imglist = new ImageList();
             try
             {
-                imglist.Images.Add("default",Resources.FileIcon);
-                imglist.Images.Add("trv_nsf",Resources.FileIcon);
-                imglist.Images.Add("trv_normalchunk",Resources.YellowJournalIcon);
-                imglist.Images.Add("trv_texturechunk",Resources.ImageIcon);
-                imglist.Images.Add("trv_soundchunk",Resources.BlueJournalIcon);
-                imglist.Images.Add("trv_wavebankchunk",Resources.MusicIcon);
-                imglist.Images.Add("trv_speechchunk",Resources.WhiteJournalIcon);
-                imglist.Images.Add("trv_unknownchunk",Resources.FileIcon);
-                imglist.Images.Add("trv_t1entry",Resources.ThingIcon);
-                imglist.Images.Add("trv_t2entry",Resources.ThingIcon);
-                imglist.Images.Add("trv_t3entry",Resources.ThingIcon);
-                imglist.Images.Add("trv_t4entry",Resources.ThingIcon);
-                imglist.Images.Add("trv_entityentry",Resources.ThingIcon);
-                imglist.Images.Add("trv_t11entry",Resources.ThingIcon);
-                imglist.Images.Add("trv_soundentry",Resources.SpeakerIcon);
-                imglist.Images.Add("trv_musicentry",Resources.MusicIcon);
-                imglist.Images.Add("trv_wavebankentry",Resources.MusicIcon);
-                imglist.Images.Add("trv_t15entry",Resources.ThingIcon);
-                imglist.Images.Add("trv_t17entry",Resources.ThingIcon);
-                imglist.Images.Add("trv_demoentry",Resources.ThingIcon);
-                imglist.Images.Add("trv_speechentry",Resources.SpeakerIcon);
-                imglist.Images.Add("trv_t21entry",Resources.ThingIcon);
-                imglist.Images.Add("trv_unknownentry",Resources.ThingIcon);
-                imglist.Images.Add("trv_entity",Resources.ArrowIcon);
-                imglist.Images.Add("trv_seq",Resources.ArrowIcon);
-                imglist.Images.Add("trv_t4item",Resources.ArrowIcon);
+                imglist.Images.Add("default",Resources.FileImage);
+                imglist.Images.Add("trv_nsf",Resources.FileImage);
+                imglist.Images.Add("trv_normalchunk",Resources.YellowJournalImage);
+                imglist.Images.Add("trv_texturechunk",Resources.ImageImage);
+                imglist.Images.Add("trv_soundchunk",Resources.BlueJournalImage);
+                imglist.Images.Add("trv_wavebankchunk",Resources.MusicImage);
+                imglist.Images.Add("trv_speechchunk",Resources.WhiteJournalImage);
+                imglist.Images.Add("trv_unknownchunk",Resources.FileImage);
+                imglist.Images.Add("trv_t1entry",Resources.ThingImage);
+                imglist.Images.Add("trv_t2entry",Resources.ThingImage);
+                imglist.Images.Add("trv_t3entry",Resources.ThingImage);
+                imglist.Images.Add("trv_t4entry",Resources.ThingImage);
+                imglist.Images.Add("trv_entityentry",Resources.ThingImage);
+                imglist.Images.Add("trv_t11entry",Resources.ThingImage);
+                imglist.Images.Add("trv_soundentry",Resources.SpeakerImage);
+                imglist.Images.Add("trv_musicentry",Resources.MusicImage);
+                imglist.Images.Add("trv_wavebankentry",Resources.MusicImage);
+                imglist.Images.Add("trv_t15entry",Resources.ThingImage);
+                imglist.Images.Add("trv_t17entry",Resources.ThingImage);
+                imglist.Images.Add("trv_demoentry",Resources.ThingImage);
+                imglist.Images.Add("trv_speechentry",Resources.SpeakerImage);
+                imglist.Images.Add("trv_t21entry",Resources.ThingImage);
+                imglist.Images.Add("trv_unknownentry",Resources.ThingImage);
+                imglist.Images.Add("trv_entity",Resources.ArrowImage);
+                imglist.Images.Add("trv_seq",Resources.ArrowImage);
+                imglist.Images.Add("trv_t4item",Resources.ArrowImage);
             }
             catch
             {

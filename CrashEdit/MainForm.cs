@@ -14,12 +14,12 @@ namespace CrashEdit
             imglist = new ImageList();
             try
             {
-                imglist.Images.Add("default",Resources.FileIcon);
-                imglist.Images.Add("tb_open",Resources.OpenIcon);
-                imglist.Images.Add("tb_save",Resources.SaveIcon);
-                imglist.Images.Add("tb_close",Resources.FolderIcon);
-                imglist.Images.Add("tb_find",Resources.BinocularsIcon);
-                imglist.Images.Add("tb_findnext",Resources.BinocularsNextIcon);
+                imglist.Images.Add("default",Resources.FileImage);
+                imglist.Images.Add("tb_open",Resources.OpenImage);
+                imglist.Images.Add("tb_save",Resources.SaveImage);
+                imglist.Images.Add("tb_close",Resources.FolderImage);
+                imglist.Images.Add("tb_find",Resources.BinocularsImage);
+                imglist.Images.Add("tb_findnext",Resources.BinocularsNextImage);
             }
             catch
             {

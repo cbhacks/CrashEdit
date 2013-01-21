@@ -113,20 +113,20 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Icons\Arrow.gif" />
-    <Content Include="Resources\Icons\Binoculars.gif" />
-    <Content Include="Resources\Icons\BinocularsNext.gif" />
-    <Content Include="Resources\Icons\File.gif" />
-    <Content Include="Resources\Icons\Folder.gif" />
-    <Content Include="Resources\Icons\Image.gif" />
-    <Content Include="Resources\Icons\Journals\Blue.gif" />
-    <Content Include="Resources\Icons\Journals\White.gif" />
-    <Content Include="Resources\Icons\Journals\Yellow.gif" />
-    <Content Include="Resources\Icons\Music.gif" />
-    <Content Include="Resources\Icons\Open.gif" />
-    <Content Include="Resources\Icons\Save.gif" />
-    <Content Include="Resources\Icons\Speaker.gif" />
-    <Content Include="Resources\Icons\Thing.gif" />
+    <Content Include="Resources\Images\Arrow.gif" />
+    <Content Include="Resources\Images\Binoculars.gif" />
+    <Content Include="Resources\Images\BinocularsNext.gif" />
+    <Content Include="Resources\Images\File.gif" />
+    <Content Include="Resources\Images\Folder.gif" />
+    <Content Include="Resources\Images\Image.gif" />
+    <Content Include="Resources\Images\Journals\Blue.gif" />
+    <Content Include="Resources\Images\Journals\White.gif" />
+    <Content Include="Resources\Images\Journals\Yellow.gif" />
+    <Content Include="Resources\Images\Music.gif" />
+    <Content Include="Resources\Images\Open.gif" />
+    <Content Include="Resources\Images\Save.gif" />
+    <Content Include="Resources\Images\Speaker.gif" />
+    <Content Include="Resources\Images\Thing.gif" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="InputWindow.resx">
