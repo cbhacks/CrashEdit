@@ -3,7 +3,9 @@ using Crash.Game;
 using Crash.Graphics;
 using Crash.Audio;
 using Crash.Unknown0;
+using System;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
@@ -12,7 +14,7 @@ namespace CrashEdit
     public sealed class NSFBox : UserControl
     {
         private static ImageList imglist;
-        private static Dictionary<System.Type,System.Type> editorcontrols;
+        private static Dictionary<Type,Type> editorcontrols;
 
         static NSFBox()
         {
@@ -50,8 +52,8 @@ namespace CrashEdit
             {
                 imglist.Images.Clear();
             }
-            editorcontrols = new Dictionary<System.Type,System.Type>();
-            foreach (System.Type editorcontrol in System.Reflection.Assembly.GetExecutingAssembly().GetTypes())
+            editorcontrols = new Dictionary<Type,Type>();
+            foreach (Type editorcontrol in Assembly.GetExecutingAssembly().GetTypes())
             {
                 foreach (EditorControlAttribute attribute in editorcontrol.GetCustomAttributes(typeof(EditorControlAttribute),false))
                 {
@@ -193,7 +195,7 @@ namespace CrashEdit
             }
             else
             {
-                throw new System.Exception();
+                throw new Exception();
             }
         }
 
@@ -333,7 +335,7 @@ namespace CrashEdit
             }
             else
             {
-                throw new System.Exception();
+                throw new Exception();
             }
         }
 
@@ -540,7 +542,7 @@ namespace CrashEdit
         {
             if (editorcontrols.ContainsKey(obj.GetType()))
             {
-                Control control = (Control)System.Activator.CreateInstance(editorcontrols[obj.GetType()],obj);
+                Control control = (Control)Activator.CreateInstance(editorcontrols[obj.GetType()],obj);
                 control.Dock = DockStyle.Fill;
                 return control;
             }

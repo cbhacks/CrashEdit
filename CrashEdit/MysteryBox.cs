@@ -3,9 +3,9 @@ using Crash.Game;
 using Crash.Graphics;
 using Crash.Audio;
 using Crash.Unknown0;
+using System;
+using System.IO;
 using System.Windows.Forms;
-
-using IO = System.IO;
 
 namespace CrashEdit
 {
@@ -26,7 +26,7 @@ namespace CrashEdit
 
             tbbExport = new ToolStripButton();
             tbbExport.Text = "Export";
-            tbbExport.Click += new System.EventHandler(tbbExport_Click);
+            tbbExport.Click += new EventHandler(tbbExport_Click);
 
             tsToolbar = new ToolStrip();
             tsToolbar.Dock = DockStyle.Top;
@@ -52,14 +52,14 @@ namespace CrashEdit
         {
         }
 
-        void tbbExport_Click(object sender,System.EventArgs e)
+        void tbbExport_Click(object sender,EventArgs e)
         {
             using (SaveFileDialog dialog = new SaveFileDialog())
             {
                 dialog.Filter = "All Files (*.*)|*.*";
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    IO.File.WriteAllBytes(dialog.FileName,data);
+                    File.WriteAllBytes(dialog.FileName,data);
                 }
             }
         }

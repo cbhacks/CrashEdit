@@ -1,3 +1,5 @@
+using System;
+
 namespace Crash.Audio
 {
     public sealed class SampleLine
@@ -5,11 +7,11 @@ namespace Crash.Audio
         public static SampleLine Load(byte[] data)
         {
             if (data == null)
-                throw new System.ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("Data cannot be null.");
             if (data.Length != 16)
-                throw new System.ArgumentException("Data must be 16 bytes long.");
+                throw new ArgumentException("Data must be 16 bytes long.");
             byte[] newdata = new byte [14];
-            System.Array.Copy(data,2,newdata,0,14);
+            Array.Copy(data,2,newdata,0,14);
             return new SampleLine(data[0],(SampleLineFlags)data[1],newdata);
         }
 
@@ -20,10 +22,10 @@ namespace Crash.Audio
         public SampleLine(byte info,SampleLineFlags flags,byte[] data)
         {
             if (data == null)
-                throw new System.ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("Data cannot be null.");
             if (data.Length != 14)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             this.info = info;
             this.flags = flags;

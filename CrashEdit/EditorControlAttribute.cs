@@ -1,16 +1,18 @@
+using System;
+
 namespace CrashEdit
 {
-    [System.AttributeUsage(System.AttributeTargets.Class,AllowMultiple = true)]
-    public sealed class EditorControlAttribute : System.Attribute
+    [AttributeUsage(AttributeTargets.Class,AllowMultiple = true)]
+    public sealed class EditorControlAttribute : Attribute
     {
-        private System.Type type;
+        private Type type;
 
-        public EditorControlAttribute(System.Type type)
+        public EditorControlAttribute(Type type)
         {
             this.type = type;
         }
 
-        public System.Type Type
+        public Type Type
         {
             get { return type; }
         }

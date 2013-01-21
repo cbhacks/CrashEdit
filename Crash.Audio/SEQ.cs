@@ -1,3 +1,5 @@
+using System;
+
 namespace Crash.Audio
 {
     public sealed class SEQ
@@ -7,27 +9,27 @@ namespace Crash.Audio
         public static SEQ Load(byte[] data)
         {
             if (data == null)
-                throw new System.ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("Data cannot be null.");
             // All SEP/SEQ stuff is big-endian, like MIDI
             if (data.Length < 15)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             int magic = BitConv.FromIntBE(data,0);
             int version = BitConv.FromIntBE(data,4);
             if (magic != Magic)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             if (version != 1)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             short resolution = BitConv.FromShortBE(data,8);
             int tempo = MIDIConv.From3BE(data,10);
             short rhythm = BitConv.FromShortBE(data,13);
             byte[] scoredata = new byte [data.Length - 15];
-            System.Array.Copy(data,15,scoredata,0,scoredata.Length);
+            Array.Copy(data,15,scoredata,0,scoredata.Length);
             return new SEQ(resolution,tempo,rhythm,scoredata);
         }
 
@@ -39,9 +41,9 @@ namespace Crash.Audio
         public SEQ(short resolution,int tempo,short rhythm,byte[] data)
         {
             if ((tempo & 0xFF000000) != 0)
-                throw new System.ArgumentOutOfRangeException("Tempo must be in the range 0 to 0x00FFFFFF inclusive.");
+                throw new ArgumentOutOfRangeException("Tempo must be in the range 0 to 0x00FFFFFF inclusive.");
             if (data == null)
-                throw new System.ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("Data cannot be null.");
             this.resolution = resolution;
             this.tempo = tempo;
             this.rhythm = rhythm;

@@ -1,10 +1,10 @@
 using Crash;
 using Crash.Audio;
+using System;
+using System.IO;
 using System.Media;
 using System.Drawing;
 using System.Windows.Forms;
-
-using IO = System.IO;
 
 namespace CrashEdit
 {
@@ -32,7 +32,7 @@ namespace CrashEdit
 
             tbbExport = new ToolStripButton();
             tbbExport.Text = "Export";
-            tbbExport.Click += new System.EventHandler(tbbExport_Click);
+            tbbExport.Click += new EventHandler(tbbExport_Click);
 
             tsToolbar = new ToolStrip();
             tsToolbar.Dock = DockStyle.Top;
@@ -41,22 +41,22 @@ namespace CrashEdit
             cmdPlay11025 = new Button();
             cmdPlay11025.Dock = DockStyle.Fill;
             cmdPlay11025.Text = "Play (11025 Hz)";
-            cmdPlay11025.Click += new System.EventHandler(cmdPlay11025_Click);
+            cmdPlay11025.Click += new EventHandler(cmdPlay11025_Click);
 
             cmdPlay22050 = new Button();
             cmdPlay22050.Dock = DockStyle.Fill;
             cmdPlay22050.Text = "Play (22050 Hz)";
-            cmdPlay22050.Click += new System.EventHandler(cmdPlay22050_Click);
+            cmdPlay22050.Click += new EventHandler(cmdPlay22050_Click);
 
             cmdExport11025 = new Button();
             cmdExport11025.Dock = DockStyle.Fill;
             cmdExport11025.Text = "Export Wave (11025 Hz)";
-            cmdExport11025.Click += new System.EventHandler(cmdExport11025_Click);
+            cmdExport11025.Click += new EventHandler(cmdExport11025_Click);
 
             cmdExport22050 = new Button();
             cmdExport22050.Dock = DockStyle.Fill;
             cmdExport22050.Text = "Export Wave (22050 Hz)";
-            cmdExport22050.Click += new System.EventHandler(cmdExport22050_Click);
+            cmdExport22050.Click += new EventHandler(cmdExport22050_Click);
 
             pnOptions = new TableLayoutPanel();
             pnOptions.Dock = DockStyle.Fill;
@@ -75,22 +75,22 @@ namespace CrashEdit
             Controls.Add(tsToolbar);
         }
 
-        void cmdPlay11025_Click(object sender,System.EventArgs e)
+        void cmdPlay11025_Click(object sender,EventArgs e)
         {
             Play(11025);
         }
 
-        void cmdPlay22050_Click(object sender,System.EventArgs e)
+        void cmdPlay22050_Click(object sender,EventArgs e)
         {
             Play(22050);
         }
 
-        void cmdExport11025_Click(object sender,System.EventArgs e)
+        void cmdExport11025_Click(object sender,EventArgs e)
         {
             ExportWave(11025);
         }
 
-        void cmdExport22050_Click(object sender,System.EventArgs e)
+        void cmdExport22050_Click(object sender,EventArgs e)
         {
             ExportWave(22050);
         }
@@ -103,14 +103,14 @@ namespace CrashEdit
         {
         }
 
-        void tbbExport_Click(object sender,System.EventArgs e)
+        void tbbExport_Click(object sender,EventArgs e)
         {
             using (SaveFileDialog dialog = new SaveFileDialog())
             {
                 dialog.Filter = "All Files (*.*)|*.*";
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    IO.File.WriteAllBytes(dialog.FileName,samples.Save());
+                    File.WriteAllBytes(dialog.FileName,samples.Save());
                 }
             }
         }
@@ -119,7 +119,7 @@ namespace CrashEdit
         {
             byte[] wave = WaveConv.ToWave(samples.ToPCM(),samplerate);
             spPlayer.Stop();
-            spPlayer.Stream = new IO.MemoryStream(wave);
+            spPlayer.Stream = new MemoryStream(wave);
             spPlayer.Play();
         }
 
@@ -131,7 +131,7 @@ namespace CrashEdit
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     byte[] wave = WaveConv.ToWave(samples.ToPCM(),samplerate);
-                    IO.File.WriteAllBytes(dialog.FileName,wave);
+                    File.WriteAllBytes(dialog.FileName,wave);
                 }
             }
         }

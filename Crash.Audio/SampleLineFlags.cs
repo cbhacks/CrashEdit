@@ -1,6 +1,8 @@
+using System;
+
 namespace Crash.Audio
 {
-    [System.Flags]
+    [Flags]
     public enum SampleLineFlags : byte
     {
         None = 0,

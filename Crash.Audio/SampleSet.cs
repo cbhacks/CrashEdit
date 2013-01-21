@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Crash.Audio
@@ -7,17 +8,17 @@ namespace Crash.Audio
         public static SampleSet Load(byte[] data)
         {
             if (data == null)
-                throw new System.ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("Data cannot be null.");
             if (data.Length % 16 != 0)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             int samplelinecount = (data.Length / 16) - 1;
             SampleLine[] samplelines = new SampleLine [samplelinecount];
             for (int i = 0;i < samplelinecount;i++)
             {
                 byte[] linedata = new byte [16];
-                System.Array.Copy(data,(i + 1) * 16,linedata,0,16);
+                Array.Copy(data,(i + 1) * 16,linedata,0,16);
                 samplelines[i] = SampleLine.Load(linedata);
             }
             return new SampleSet(samplelines);
@@ -28,7 +29,7 @@ namespace Crash.Audio
         public SampleSet(IEnumerable<SampleLine> samplelines)
         {
             if (samplelines == null)
-                throw new System.ArgumentNullException("SampleLines cannot be null.");
+                throw new ArgumentNullException("SampleLines cannot be null.");
             this.samplelines = new List<SampleLine>(samplelines);
         }
 

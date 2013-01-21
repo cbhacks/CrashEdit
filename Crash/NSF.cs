@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Crash
@@ -7,17 +8,17 @@ namespace Crash
         public static NSF Load(byte[] data)
         {
             if (data == null)
-                throw new System.ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("Data cannot be null.");
             if (data.Length % Chunk.Length != 0)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             Chunk[] chunks = new Chunk[data.Length / Chunk.Length];
             byte[] chunkdata;
             for (int i = 0;i < data.Length;i += Chunk.Length)
             {
                 chunkdata = new byte [Chunk.Length];
-                System.Array.Copy(data,i,chunkdata,0,Chunk.Length);
+                Array.Copy(data,i,chunkdata,0,Chunk.Length);
                 chunks[i / Chunk.Length] = Chunk.Load(chunkdata);
             }
             return new NSF(chunks);
@@ -28,7 +29,7 @@ namespace Crash
         public NSF(IEnumerable<Chunk> chunks)
         {
             if (chunks == null)
-                throw new System.ArgumentNullException("Chunks cannot be null.");
+                throw new ArgumentNullException("Chunks cannot be null.");
             this.chunks = new List<Chunk>(chunks);
         }
 

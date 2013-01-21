@@ -1,3 +1,5 @@
+using System;
+
 namespace Crash.Graphics
 {
     public static class PixelConv
@@ -5,13 +7,13 @@ namespace Crash.Graphics
         public static short Pack1555(byte a1,byte b5,byte c5,byte d5)
         {
             if ((a1 & 0xFE) != 0)
-                throw new System.ArgumentOutOfRangeException("A1 must be 1-bit.");
+                throw new ArgumentOutOfRangeException("A1 must be 1-bit.");
             if ((b5 & 0xE0) != 0)
-                throw new System.ArgumentOutOfRangeException("B5 must be 5-bit.");
+                throw new ArgumentOutOfRangeException("B5 must be 5-bit.");
             if ((c5 & 0xE0) != 0)
-                throw new System.ArgumentOutOfRangeException("C5 must be 5-bit.");
+                throw new ArgumentOutOfRangeException("C5 must be 5-bit.");
             if ((d5 & 0xE0) != 0)
-                throw new System.ArgumentOutOfRangeException("D5 must be 5-bit.");
+                throw new ArgumentOutOfRangeException("D5 must be 5-bit.");
             return (short)(a1 << 15 | b5 << 10 | c5 << 5 | d5);
         }
 

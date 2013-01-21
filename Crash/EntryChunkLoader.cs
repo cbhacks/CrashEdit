@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Crash
@@ -7,20 +8,20 @@ namespace Crash
         public sealed override Chunk Load(byte[] data)
         {
             if (data == null)
-                throw new System.ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("Data cannot be null.");
             if (data.Length != Chunk.Length)
-                throw new System.ArgumentException("Data must be 65536 bytes long.");
+                throw new ArgumentException("Data must be 65536 bytes long.");
             int unknown1 = BitConv.FromWord(data,4);
             int entrycount = BitConv.FromWord(data,8);
             int unknown2 = BitConv.FromWord(data,12);
             int headersize = 20 + entrycount * 4;
             if (entrycount < 0)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             if (headersize > data.Length)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             Entry[] entries = new Entry [entrycount];
             byte[] entrydata;
@@ -30,19 +31,19 @@ namespace Crash
                 int entryend = BitConv.FromWord(data,20 + i * 4);
                 if (entrystart < 0)
                 {
-                    throw new System.Exception();
+                    throw new Exception();
                 }
                 if (entryend < entrystart)
                 {
-                    throw new System.Exception();
+                    throw new Exception();
                 }
                 if (entryend > data.Length)
                 {
-                    throw new System.Exception();
+                    throw new Exception();
                 }
                 int entrysize = entryend - entrystart;
                 entrydata = new byte [entrysize];
-                System.Array.Copy(data,entrystart,entrydata,0,entrysize);
+                Array.Copy(data,entrystart,entrydata,0,entrysize);
                 entries[i] = Entry.Load(entrydata);
             }
             return Load(entries,unknown1,unknown2);

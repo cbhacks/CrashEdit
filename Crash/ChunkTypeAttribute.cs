@@ -1,7 +1,9 @@
+using System;
+
 namespace Crash
 {
-    [System.AttributeUsage(System.AttributeTargets.Class)]
-    public sealed class ChunkTypeAttribute : System.Attribute
+    [AttributeUsage(AttributeTargets.Class)]
+    public sealed class ChunkTypeAttribute : Attribute
     {
         private short type;
 

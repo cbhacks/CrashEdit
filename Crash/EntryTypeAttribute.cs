@@ -1,7 +1,9 @@
+using System;
+
 namespace Crash
 {
-    [System.AttributeUsage(System.AttributeTargets.Class)]
-    public sealed class EntryTypeAttribute : System.Attribute
+    [AttributeUsage(AttributeTargets.Class)]
+    public sealed class EntryTypeAttribute : Attribute
     {
         private int type;
 

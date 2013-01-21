@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Crash
@@ -10,7 +11,7 @@ namespace Crash
         public UnknownEntry(byte[][] items,int unknown,int type) : base(unknown)
         {
             if (items == null)
-                throw new System.ArgumentNullException("Items cannot be null.");
+                throw new ArgumentNullException("Items cannot be null.");
             this.items = items;
             this.type = type;
         }

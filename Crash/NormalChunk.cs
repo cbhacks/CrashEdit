@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Crash
@@ -11,7 +12,7 @@ namespace Crash
         public NormalChunk(IEnumerable<Entry> entries,int unknown1,int unknown2)
         {
             if (entries == null)
-                throw new System.ArgumentNullException("Entries cannot be null.");
+                throw new ArgumentNullException("Entries cannot be null.");
             this.entries = new List<Entry>(entries);
             this.unknown1 = unknown1;
             this.unknown2 = unknown2;

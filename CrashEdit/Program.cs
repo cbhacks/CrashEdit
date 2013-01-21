@@ -1,11 +1,12 @@
 using Crash;
-using Application = System.Windows.Forms.Application;
+using System;
+using System.Windows.Forms;
 
 namespace CrashEdit
 {
     internal static class Program
     {
-        [System.STAThread]
+        [STAThread]
         internal static void Main(string[] args)
         {
             Registrar.RegisterAssembly("Crash");

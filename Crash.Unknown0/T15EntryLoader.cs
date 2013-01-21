@@ -1,3 +1,5 @@
+using System;
+
 namespace Crash.Unknown0
 {
     [EntryType(15)]
@@ -6,10 +8,10 @@ namespace Crash.Unknown0
         public override Entry Load(byte[][] items,int unknown)
         {
             if (items == null)
-                throw new System.ArgumentNullException("Items cannot be null.");
+                throw new ArgumentNullException("Items cannot be null.");
             if (items.Length != 1)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             return new T15Entry(items[0],unknown);
         }

@@ -1,3 +1,5 @@
+using System;
+
 namespace Crash.Game
 {
     [EntryType(19)]
@@ -7,7 +9,7 @@ namespace Crash.Game
         {
             if (items.Length != 1)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             return new DemoEntry(items[0],unknown);
         }

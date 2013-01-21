@@ -1,3 +1,5 @@
+using System;
+
 namespace Crash.Game
 {
     [EntryType(7)]
@@ -7,7 +9,7 @@ namespace Crash.Game
         {
             if (items.Length < 2)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             byte[] unknown1 = items[0];
             byte[] unknown2 = items[1];

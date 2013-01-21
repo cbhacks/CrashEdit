@@ -1,3 +1,5 @@
+using System;
+
 namespace Crash.Audio
 {
     public sealed class MusicEntry : Entry
@@ -9,11 +11,11 @@ namespace Crash.Audio
         public MusicEntry(byte[] unknown1,byte[] vh,SEP sep,int unknown) : base(unknown)
         {
             if (unknown1 == null)
-                throw new System.ArgumentNullException("Unknown1 cannot be null.");
+                throw new ArgumentNullException("Unknown1 cannot be null.");
             if (vh == null)
-                throw new System.ArgumentNullException("VH cannot be null.");
+                throw new ArgumentNullException("VH cannot be null.");
             if (sep == null)
-                throw new System.ArgumentNullException("SEP cannot be null.");
+                throw new ArgumentNullException("SEP cannot be null.");
             this.unknown1 = unknown1;
             this.vh = vh;
             this.sep = sep;

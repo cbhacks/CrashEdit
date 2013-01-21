@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Crash.Audio
@@ -8,7 +9,7 @@ namespace Crash.Audio
         public override Chunk Load(Entry[] entries,int unknown1,int unknown2)
         {
             if (entries == null)
-                throw new System.ArgumentNullException("Entries cannot be null.");
+                throw new ArgumentNullException("Entries cannot be null.");
             List<SpeechEntry> speechentries = new List<SpeechEntry>();
             foreach (Entry entry in entries)
             {
@@ -18,7 +19,7 @@ namespace Crash.Audio
                 }
                 else
                 {
-                    throw new System.Exception();
+                    throw new Exception();
                 }
             }
             return new SpeechChunk(speechentries,unknown1,unknown2);

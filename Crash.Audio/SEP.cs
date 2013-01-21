@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Crash.Audio
@@ -9,23 +10,23 @@ namespace Crash.Audio
         public static SEP Load(byte[] data,int seqcount)
         {
             if (data == null)
-                throw new System.ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("Data cannot be null.");
             if (seqcount < 0)
-                throw new System.ArgumentOutOfRangeException("SEQCount cannot be negative.");
+                throw new ArgumentOutOfRangeException("SEQCount cannot be negative.");
             // All SEP/SEQ stuff is big-endian, like MIDI
             if (data.Length < 6)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             int magic = BitConv.FromIntBE(data,0);
             short version = BitConv.FromShortBE(data,4);
             if (magic != Magic)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             if (version != 0)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             int offset = 6;
             SEQ[] seqs = new SEQ [seqcount];
@@ -33,7 +34,7 @@ namespace Crash.Audio
             {
                 if (data.Length < offset + 13)
                 {
-                    throw new System.Exception();
+                    throw new Exception();
                 }
                 short seqid = BitConv.FromShortBE(data,offset);
                 short resolution = BitConv.FromShortBE(data,offset + 2);
@@ -43,19 +44,19 @@ namespace Crash.Audio
                 int length = BitConv.FromIntBE(data,offset + 9);
                 if (seqid != i)
                 {
-                    throw new System.Exception();
+                    throw new Exception();
                 }
                 if (length < 0)
                 {
-                    throw new System.Exception();
+                    throw new Exception();
                 }
                 offset += 13;
                 if (data.Length < offset + length)
                 {
-                    throw new System.Exception();
+                    throw new Exception();
                 }
                 byte[] seqdata = new byte [length];
-                System.Array.Copy(data,offset,seqdata,0,length);
+                Array.Copy(data,offset,seqdata,0,length);
                 seqs[i] = new SEQ(resolution,tempo,rhythm,seqdata);
                 offset += length;
             }
@@ -67,7 +68,7 @@ namespace Crash.Audio
         public SEP(IEnumerable<SEQ> seqs)
         {
             if (seqs == null)
-                throw new System.ArgumentNullException("SEQs cannot be null.");
+                throw new ArgumentNullException("SEQs cannot be null.");
             this.seqs = new List<SEQ>(seqs);
         }
 

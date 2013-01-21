@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Crash.Unknown0
@@ -7,20 +8,20 @@ namespace Crash.Unknown0
         public static T4Item Load(byte[] data)
         {
             if (data == null)
-                throw new System.ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("Data cannot be null.");
             if (data.Length < 4)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             short count = BitConv.FromHalf(data,0);
             short unknown1 = BitConv.FromHalf(data,2);
             if (count < 0)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             if (data.Length < 4 + 2 * count)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             short[] values = new short [count];
             for (int i = 0;i < count;i++)
@@ -36,7 +37,7 @@ namespace Crash.Unknown0
         public T4Item(short unknown1,IEnumerable<short> values)
         {
             if (values == null)
-                throw new System.ArgumentNullException("Values cannot be null.");
+                throw new ArgumentNullException("Values cannot be null.");
             this.unknown1 = unknown1;
             this.values = new List<short>(values);
         }
@@ -56,7 +57,7 @@ namespace Crash.Unknown0
             byte[] data = new byte [4 + values.Count * 2];
             if (values.Count > short.MaxValue)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             BitConv.ToHalf(data,0,(short)values.Count);
             BitConv.ToHalf(data,2,unknown1);

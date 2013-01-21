@@ -1,7 +1,7 @@
 using Crash;
+using System;
+using System.IO;
 using System.Windows.Forms;
-
-using IO = System.IO;
 
 namespace CrashEdit
 {
@@ -42,19 +42,19 @@ namespace CrashEdit
             tbbOpen.Text = "Open";
             tbbOpen.ImageKey = "tb_open";
             tbbOpen.TextImageRelation = TextImageRelation.ImageAboveText;
-            tbbOpen.Click += new System.EventHandler(tbbOpen_Click);
+            tbbOpen.Click += new EventHandler(tbbOpen_Click);
 
             tbbSave = new ToolStripButton();
             tbbSave.Text = "Save";
             tbbSave.ImageKey = "tb_save";
             tbbSave.TextImageRelation = TextImageRelation.ImageAboveText;
-            tbbSave.Click += new System.EventHandler(tbbSave_Click);
+            tbbSave.Click += new EventHandler(tbbSave_Click);
 
             tbbClose = new ToolStripButton();
             tbbClose.Text = "Close";
             tbbClose.ImageKey = "tb_close";
             tbbClose.TextImageRelation = TextImageRelation.ImageAboveText;
-            tbbClose.Click += new System.EventHandler(tbbClose_Click);
+            tbbClose.Click += new EventHandler(tbbClose_Click);
 
             tbsSeparator = new ToolStripSeparator();
 
@@ -62,13 +62,13 @@ namespace CrashEdit
             tbbFind.Text = "Find";
             tbbFind.ImageKey = "tb_find";
             tbbFind.TextImageRelation = TextImageRelation.ImageAboveText;
-            tbbFind.Click += new System.EventHandler(tbbFind_Click);
+            tbbFind.Click += new EventHandler(tbbFind_Click);
 
             tbbFindNext = new ToolStripButton();
             tbbFindNext.Text = "Find Next";
             tbbFindNext.ImageKey = "tb_findnext";
             tbbFindNext.TextImageRelation = TextImageRelation.ImageAboveText;
-            tbbFindNext.Click += new System.EventHandler(tbbFindNext_Click);
+            tbbFindNext.Click += new EventHandler(tbbFindNext_Click);
 
             tsToolbar = new ToolStrip();
             tsToolbar.Dock = DockStyle.Top;
@@ -89,27 +89,27 @@ namespace CrashEdit
             this.Controls.Add(tsToolbar);
         }
 
-        void tbbOpen_Click(object sender,System.EventArgs e)
+        void tbbOpen_Click(object sender,EventArgs e)
         {
             OpenNSF();
         }
 
-        void tbbSave_Click(object sender,System.EventArgs e)
+        void tbbSave_Click(object sender,EventArgs e)
         {
             SaveNSF();
         }
 
-        void tbbClose_Click(object sender,System.EventArgs e)
+        void tbbClose_Click(object sender,EventArgs e)
         {
             CloseNSF();
         }
 
-        void tbbFind_Click(object sender,System.EventArgs e)
+        void tbbFind_Click(object sender,EventArgs e)
         {
             Find();
         }
 
-        void tbbFindNext_Click(object sender,System.EventArgs e)
+        void tbbFindNext_Click(object sender,EventArgs e)
         {
             FindNext();
         }
@@ -132,7 +132,7 @@ namespace CrashEdit
 
         public void OpenNSF(string filename)
         {
-            byte[] nsfdata = IO.File.ReadAllBytes(filename);
+            byte[] nsfdata = File.ReadAllBytes(filename);
             NSF nsf = NSF.Load(nsfdata);
             OpenNSF(filename,nsf);
         }
@@ -165,7 +165,7 @@ namespace CrashEdit
             byte[] nsfdata = nsf.Save();
             if (MessageBox.Show("Saving can (and in most cases will) produce an NSF file partially unusable by the game.\n\nContinue anyway?","Save Confirmation Prompt",MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                IO.File.WriteAllBytes(filename,nsfdata);
+                File.WriteAllBytes(filename,nsfdata);
             }
         }
 

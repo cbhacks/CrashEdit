@@ -1,3 +1,5 @@
+using System;
+
 namespace Crash
 {
     public static class BitConv
@@ -15,11 +17,11 @@ namespace Crash
         public static short FromShortLE(byte[] str,int offset)
         {
             if (str == null)
-                throw new System.ArgumentNullException("String cannot be null.");
+                throw new ArgumentNullException("String cannot be null.");
             if (offset < 0)
-                throw new System.ArgumentException("Offset cannot be negative.");
+                throw new ArgumentException("Offset cannot be negative.");
             if (offset + 2 > str.Length)
-                throw new System.ArgumentOutOfRangeException("Offset exceeds string bounds.");
+                throw new ArgumentOutOfRangeException("Offset exceeds string bounds.");
             int result = 0;
             result |= str[offset + 0] << 8 * 0;
             result |= str[offset + 1] << 8 * 1;
@@ -29,11 +31,11 @@ namespace Crash
         public static int FromIntLE(byte[] str,int offset)
         {
             if (str == null)
-                throw new System.ArgumentNullException("String cannot be null.");
+                throw new ArgumentNullException("String cannot be null.");
             if (offset < 0)
-                throw new System.ArgumentException("Offset cannot be negative.");
+                throw new ArgumentException("Offset cannot be negative.");
             if (offset + 4 > str.Length)
-                throw new System.ArgumentOutOfRangeException("Offset exceeds string bounds.");
+                throw new ArgumentOutOfRangeException("Offset exceeds string bounds.");
             int result = 0;
             result |= str[offset + 0] << 8 * 0;
             result |= str[offset + 1] << 8 * 1;
@@ -45,11 +47,11 @@ namespace Crash
         public static short FromShortBE(byte[] str,int offset)
         {
             if (str == null)
-                throw new System.ArgumentNullException("String cannot be null.");
+                throw new ArgumentNullException("String cannot be null.");
             if (offset < 0)
-                throw new System.ArgumentException("Offset cannot be negative.");
+                throw new ArgumentException("Offset cannot be negative.");
             if (offset + 2 > str.Length)
-                throw new System.ArgumentOutOfRangeException("Offset exceeds string bounds.");
+                throw new ArgumentOutOfRangeException("Offset exceeds string bounds.");
             int result = 0;
             result |= str[offset + 0] << 8 * 1;
             result |= str[offset + 1] << 8 * 0;
@@ -59,11 +61,11 @@ namespace Crash
         public static int FromIntBE(byte[] str,int offset)
         {
             if (str == null)
-                throw new System.ArgumentNullException("String cannot be null.");
+                throw new ArgumentNullException("String cannot be null.");
             if (offset < 0)
-                throw new System.ArgumentException("Offset cannot be negative.");
+                throw new ArgumentException("Offset cannot be negative.");
             if (offset + 4 > str.Length)
-                throw new System.ArgumentOutOfRangeException("Offset exceeds string bounds.");
+                throw new ArgumentOutOfRangeException("Offset exceeds string bounds.");
             int result = 0;
             result |= str[offset + 0] << 8 * 3;
             result |= str[offset + 1] << 8 * 2;
@@ -90,11 +92,11 @@ namespace Crash
         public static void ToShortLE(byte[] str,int offset,short value)
         {
             if (str == null)
-                throw new System.ArgumentNullException("String cannot be null.");
+                throw new ArgumentNullException("String cannot be null.");
             if (offset < 0)
-                throw new System.ArgumentException("Offset cannot be negative.");
+                throw new ArgumentException("Offset cannot be negative.");
             if (offset + 2 > str.Length)
-                throw new System.ArgumentOutOfRangeException("Offset exceeds string bounds.");
+                throw new ArgumentOutOfRangeException("Offset exceeds string bounds.");
             str[offset + 0] = (byte)((value >> 8 * 0) & 0xFF);
             str[offset + 1] = (byte)((value >> 8 * 1) & 0xFF);
         }
@@ -102,11 +104,11 @@ namespace Crash
         public static void ToIntLE(byte[] str,int offset,int value)
         {
             if (str == null)
-                throw new System.ArgumentNullException("String cannot be null.");
+                throw new ArgumentNullException("String cannot be null.");
             if (offset < 0)
-                throw new System.ArgumentException("Offset cannot be negative.");
+                throw new ArgumentException("Offset cannot be negative.");
             if (offset + 4 > str.Length)
-                throw new System.ArgumentOutOfRangeException("Offset exceeds string bounds.");
+                throw new ArgumentOutOfRangeException("Offset exceeds string bounds.");
             str[offset + 0] = (byte)((value >> 8 * 0) & 0xFF);
             str[offset + 1] = (byte)((value >> 8 * 1) & 0xFF);
             str[offset + 2] = (byte)((value >> 8 * 2) & 0xFF);
@@ -116,11 +118,11 @@ namespace Crash
         public static void ToShortBE(byte[] str,int offset,short value)
         {
             if (str == null)
-                throw new System.ArgumentNullException("String cannot be null.");
+                throw new ArgumentNullException("String cannot be null.");
             if (offset < 0)
-                throw new System.ArgumentException("Offset cannot be negative.");
+                throw new ArgumentException("Offset cannot be negative.");
             if (offset + 2 > str.Length)
-                throw new System.ArgumentOutOfRangeException("Offset exceeds string bounds.");
+                throw new ArgumentOutOfRangeException("Offset exceeds string bounds.");
             str[offset + 0] = (byte)((value >> 8 * 1) & 0xFF);
             str[offset + 1] = (byte)((value >> 8 * 0) & 0xFF);
         }
@@ -128,11 +130,11 @@ namespace Crash
         public static void ToIntBE(byte[] str,int offset,int value)
         {
             if (str == null)
-                throw new System.ArgumentNullException("String cannot be null.");
+                throw new ArgumentNullException("String cannot be null.");
             if (offset < 0)
-                throw new System.ArgumentException("Offset cannot be negative.");
+                throw new ArgumentException("Offset cannot be negative.");
             if (offset + 4 > str.Length)
-                throw new System.ArgumentOutOfRangeException("Offset exceeds string bounds.");
+                throw new ArgumentOutOfRangeException("Offset exceeds string bounds.");
             str[offset + 0] = (byte)((value >> 8 * 3) & 0xFF);
             str[offset + 1] = (byte)((value >> 8 * 2) & 0xFF);
             str[offset + 2] = (byte)((value >> 8 * 1) & 0xFF);

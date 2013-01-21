@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Crash.Game
@@ -8,7 +9,7 @@ namespace Crash.Game
         {
             if (data.Length < 16)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             int length = BitConv.FromWord(data,0);
             int blank1 = BitConv.FromWord(data,4);
@@ -16,19 +17,19 @@ namespace Crash.Game
             int fieldcount = BitConv.FromWord(data,12);
             if (length != data.Length)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             if (blank1 != 0 || blank2 != 0)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             if (fieldcount < 0)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             if (data.Length < 16 + fieldcount * 8)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             EntityField[] fields = new EntityField [fieldcount];
             ushort? lastend = null;
@@ -41,28 +42,28 @@ namespace Crash.Game
                 short unknown2 = BitConv.FromHalf(data,22 + i * 8);
                 if (data.Length < offset + 4)
                 {
-                    throw new System.Exception();
+                    throw new Exception();
                 }
                 short elementcount = BitConv.FromHalf(data,offset);
                 short unknown3 = BitConv.FromHalf(data,offset + 2);
                 if (data.Length < offset + 4 + elementcount * elementsize)
                 {
-                    throw new System.Exception();
+                    throw new Exception();
                 }
                 byte[] fielddata = new byte [elementsize * elementcount];
-                System.Array.Copy(data,offset + 4,fielddata,0,elementsize * elementcount);
+                Array.Copy(data,offset + 4,fielddata,0,elementsize * elementcount);
                 fields[i] = new EntityField(type,unknown1,elementsize,unknown2,elementcount,unknown3,fielddata);
                 if (lastend != null)
                 {
                     byte[] lastextradata = new byte [offset - (int)lastend];
-                    System.Array.Copy(data,(int)lastend,lastextradata,0,lastextradata.Length);
+                    Array.Copy(data,(int)lastend,lastextradata,0,lastextradata.Length);
                     fields[i - 1].ExtraData = lastextradata;
                 }
                 lastend = (ushort)(offset + 4 + fielddata.Length);
                 if (i == fieldcount - 1)
                 {
                     byte[] extradata = new byte [data.Length - (int)lastend];
-                    System.Array.Copy(data,(int)lastend,extradata,0,extradata.Length);
+                    Array.Copy(data,(int)lastend,extradata,0,extradata.Length);
                     fields[i].ExtraData = extradata;
                 }
             }
@@ -105,7 +106,7 @@ namespace Crash.Game
                     return field;
                 }
             }
-            throw new System.Exception();
+            throw new Exception();
         }
 
         public byte[] Save()
@@ -143,7 +144,7 @@ namespace Crash.Game
             }
             if (offset != length)
             {
-                throw new System.Exception();
+                throw new Exception();
             }
             return data;
         }

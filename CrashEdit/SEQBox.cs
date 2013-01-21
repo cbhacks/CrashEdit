@@ -1,8 +1,8 @@
 using Crash;
 using Crash.Audio;
+using System;
+using System.IO;
 using System.Windows.Forms;
-
-using IO = System.IO;
 
 namespace CrashEdit
 {
@@ -20,7 +20,7 @@ namespace CrashEdit
 
             tbbExport = new ToolStripButton();
             tbbExport.Text = "Export";
-            tbbExport.Click += new System.EventHandler(tbbExport_Click);
+            tbbExport.Click += new EventHandler(tbbExport_Click);
 
             tsToolbar = new ToolStrip();
             tsToolbar.Dock = DockStyle.Top;
@@ -29,7 +29,7 @@ namespace CrashEdit
             this.Controls.Add(tsToolbar);
         }
 
-        void tbbExport_Click(object sender,System.EventArgs e)
+        void tbbExport_Click(object sender,EventArgs e)
         {
             using (SaveFileDialog dialog = new SaveFileDialog())
             {
@@ -40,13 +40,13 @@ namespace CrashEdit
                     {
                         case 1:
                         case 3:
-                            IO.File.WriteAllBytes(dialog.FileName,seq.Save());
+                            File.WriteAllBytes(dialog.FileName,seq.Save());
                             break;
                         case 2:
-                            IO.File.WriteAllBytes(dialog.FileName,seq.ToMIDI());
+                            File.WriteAllBytes(dialog.FileName,seq.ToMIDI());
                             break;
                         default:
-                            throw new System.Exception();
+                            throw new Exception();
                     }
                 }
             }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Crash.Unknown0
@@ -9,7 +10,7 @@ namespace Crash.Unknown0
         public T4Entry(IEnumerable<T4Item> t4items,int unknown) : base(unknown)
         {
             if (t4items == null)
-                throw new System.ArgumentNullException("Items cannot be null.");
+                throw new ArgumentNullException("Items cannot be null.");
             this.t4items = new List<T4Item>(t4items);
         }
 

@@ -1,3 +1,5 @@
+using System;
+
 namespace Crash.Graphics
 {
     public sealed class TextureChunk : Chunk
@@ -7,7 +9,7 @@ namespace Crash.Graphics
         public TextureChunk(byte[] data)
         {
             if (data == null)
-                throw new System.ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("Data cannot be null.");
             this.data = data;
         }
 

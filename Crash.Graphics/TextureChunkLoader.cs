@@ -1,3 +1,5 @@
+using System;
+
 namespace Crash.Graphics
 {
     [ChunkType(1)]
@@ -6,7 +8,7 @@ namespace Crash.Graphics
         public override Chunk Load(byte[] data)
         {
             if (data == null)
-                throw new System.ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("Data cannot be null.");
             return new TextureChunk(data);
         }
     }
