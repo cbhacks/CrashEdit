@@ -81,14 +81,15 @@ namespace Crash.Game
         {
             get
             {
-                foreach (EntityField field in fields)
+                EntityField field = FindField(0x2C);
+                if (field != null)
                 {
-                    if (field.Type == 0x2C)
-                    {
-                        return System.Text.Encoding.UTF8.GetString(field.Data,0,field.ElementCount - 1);
-                    }
+                    return System.Text.Encoding.UTF8.GetString(field.Data,0,field.ElementCount - 1);
                 }
-                return null;
+                else
+                {
+                    return null;
+                }
             }
         }
 
@@ -106,7 +107,7 @@ namespace Crash.Game
                     return field;
                 }
             }
-            throw new Exception();
+            return null;
         }
 
         public byte[] Save()
