@@ -11,7 +11,7 @@ namespace Crash.Audio
                 throw new ArgumentNullException("Items cannot be null.");
             if (items.Length != 3)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             byte[] unknown1 = items[0];
             int seqcount = BitConv.FromWord(unknown1,0);

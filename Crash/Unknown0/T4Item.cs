@@ -11,17 +11,17 @@ namespace Crash.Unknown0
                 throw new ArgumentNullException("Data cannot be null.");
             if (data.Length < 4)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             short count = BitConv.FromHalf(data,0);
             short unknown1 = BitConv.FromHalf(data,2);
             if (count < 0)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             if (data.Length < 4 + 2 * count)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             short[] values = new short [count];
             for (int i = 0;i < count;i++)

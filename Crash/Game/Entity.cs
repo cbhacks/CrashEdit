@@ -9,7 +9,7 @@ namespace Crash.Game
         {
             if (data.Length < 16)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             int length = BitConv.FromWord(data,0);
             int blank1 = BitConv.FromWord(data,4);
@@ -17,19 +17,19 @@ namespace Crash.Game
             int fieldcount = BitConv.FromWord(data,12);
             if (length != data.Length)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             if (blank1 != 0 || blank2 != 0)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             if (fieldcount < 0)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             if (data.Length < 16 + fieldcount * 8)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             EntityField[] fields = new EntityField [fieldcount];
             ushort? lastend = null;
@@ -42,13 +42,13 @@ namespace Crash.Game
                 short unknown2 = BitConv.FromHalf(data,22 + i * 8);
                 if (data.Length < offset + 4)
                 {
-                    throw new Exception();
+                    throw new LoadException();
                 }
                 short elementcount = BitConv.FromHalf(data,offset);
                 short unknown3 = BitConv.FromHalf(data,offset + 2);
                 if (data.Length < offset + 4 + elementcount * elementsize)
                 {
-                    throw new Exception();
+                    throw new LoadException();
                 }
                 byte[] fielddata = new byte [elementsize * elementcount];
                 Array.Copy(data,offset + 4,fielddata,0,elementsize * elementcount);

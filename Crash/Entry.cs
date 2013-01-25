@@ -20,7 +20,7 @@ namespace Crash
                 throw new ArgumentNullException("Data cannot be null.");
             if (data.Length < 16)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             int magic = BitConv.FromWord(data,0);
             int unknown = BitConv.FromWord(data,4);
@@ -28,15 +28,15 @@ namespace Crash
             int itemcount = BitConv.FromWord(data,12);
             if (magic != Magic)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             if (itemcount < 0)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             if (data.Length < 20 + itemcount * 4)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             byte[][] items = new byte [itemcount][];
             byte[] itemdata;
@@ -46,15 +46,15 @@ namespace Crash
                 int itemend = BitConv.FromWord(data,20 + i * 4);
                 if (itemstart < 0)
                 {
-                    throw new Exception();
+                    throw new LoadException();
                 }
                 if (itemend < itemstart)
                 {
-                    throw new Exception();
+                    throw new LoadException();
                 }
                 if (itemend > data.Length)
                 {
-                    throw new Exception();
+                    throw new LoadException();
                 }
                 int itemsize = itemend - itemstart;
                 itemdata = new byte [itemsize];

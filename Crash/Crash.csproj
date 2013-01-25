@@ -78,6 +78,7 @@
     <Compile Include="Graphics\TextureChunkLoader.cs" />
     <Compile Include="IMysteryMultiItemEntry.cs" />
     <Compile Include="IMysteryUniItemEntry.cs" />
+    <Compile Include="LoadException.cs" />
     <Compile Include="Registrar.cs" />
     <Compile Include="Unknown0\T11Entry.cs" />
     <Compile Include="Unknown0\T11EntryLoader.cs" />

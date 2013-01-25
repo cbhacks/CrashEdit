@@ -11,7 +11,7 @@ namespace Crash
                 throw new ArgumentNullException("Data cannot be null.");
             if (data.Length % Chunk.Length != 0)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             Chunk[] chunks = new Chunk[data.Length / Chunk.Length];
             byte[] chunkdata;

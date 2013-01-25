@@ -25,7 +25,7 @@ namespace Crash
             short type = BitConv.FromHalf(data,2);
             if (magic != Magic)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             if (loaders.ContainsKey(type))
             {

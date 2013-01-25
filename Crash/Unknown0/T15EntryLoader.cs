@@ -11,7 +11,7 @@ namespace Crash.Unknown0
                 throw new ArgumentNullException("Items cannot be null.");
             if (items.Length != 1)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             return new T15Entry(items[0],unknown);
         }

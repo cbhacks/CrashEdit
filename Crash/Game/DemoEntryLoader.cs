@@ -9,7 +9,7 @@ namespace Crash.Game
         {
             if (items.Length != 1)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             return new DemoEntry(items[0],unknown);
         }

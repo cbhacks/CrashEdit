@@ -17,11 +17,11 @@ namespace Crash
             int headersize = 20 + entrycount * 4;
             if (entrycount < 0)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             if (headersize > data.Length)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             Entry[] entries = new Entry [entrycount];
             byte[] entrydata;
@@ -31,15 +31,15 @@ namespace Crash
                 int entryend = BitConv.FromWord(data,20 + i * 4);
                 if (entrystart < 0)
                 {
-                    throw new Exception();
+                    throw new LoadException();
                 }
                 if (entryend < entrystart)
                 {
-                    throw new Exception();
+                    throw new LoadException();
                 }
                 if (entryend > data.Length)
                 {
-                    throw new Exception();
+                    throw new LoadException();
                 }
                 int entrysize = entryend - entrystart;
                 entrydata = new byte [entrysize];

@@ -16,17 +16,17 @@ namespace Crash.Audio
             // All SEP/SEQ stuff is big-endian, like MIDI
             if (data.Length < 6)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             int magic = BitConv.FromIntBE(data,0);
             short version = BitConv.FromShortBE(data,4);
             if (magic != Magic)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             if (version != 0)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             int offset = 6;
             SEQ[] seqs = new SEQ [seqcount];
@@ -34,7 +34,7 @@ namespace Crash.Audio
             {
                 if (data.Length < offset + 13)
                 {
-                    throw new Exception();
+                    throw new LoadException();
                 }
                 short seqid = BitConv.FromShortBE(data,offset);
                 short resolution = BitConv.FromShortBE(data,offset + 2);
@@ -44,16 +44,16 @@ namespace Crash.Audio
                 int length = BitConv.FromIntBE(data,offset + 9);
                 if (seqid != i)
                 {
-                    throw new Exception();
+                    throw new LoadException();
                 }
                 if (length < 0)
                 {
-                    throw new Exception();
+                    throw new LoadException();
                 }
                 offset += 13;
                 if (data.Length < offset + length)
                 {
-                    throw new Exception();
+                    throw new LoadException();
                 }
                 byte[] seqdata = new byte [length];
                 Array.Copy(data,offset,seqdata,0,length);

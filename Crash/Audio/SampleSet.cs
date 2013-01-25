@@ -11,7 +11,7 @@ namespace Crash.Audio
                 throw new ArgumentNullException("Data cannot be null.");
             if (data.Length % 16 != 0)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             int samplelinecount = (data.Length / 16) - 1;
             SampleLine[] samplelines = new SampleLine [samplelinecount];

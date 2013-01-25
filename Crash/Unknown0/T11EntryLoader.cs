@@ -11,11 +11,11 @@ namespace Crash.Unknown0
                 throw new ArgumentNullException("Items cannot be null.");
             if (items.Length < 3)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             if (items[0].Length != 24)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             return new T11Entry(items,unknown);
         }

@@ -13,17 +13,17 @@ namespace Crash.Audio
             // All SEP/SEQ stuff is big-endian, like MIDI
             if (data.Length < 15)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             int magic = BitConv.FromIntBE(data,0);
             int version = BitConv.FromIntBE(data,4);
             if (magic != Magic)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             if (version != 1)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             short resolution = BitConv.FromShortBE(data,8);
             int tempo = MIDIConv.From3BE(data,10);

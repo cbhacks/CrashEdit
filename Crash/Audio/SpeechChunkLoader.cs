@@ -19,7 +19,7 @@ namespace Crash.Audio
                 }
                 else
                 {
-                    throw new Exception();
+                    throw new LoadException();
                 }
             }
             return new SpeechChunk(speechentries,unknown1,unknown2);

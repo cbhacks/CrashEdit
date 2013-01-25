@@ -11,11 +11,11 @@ namespace Crash.Audio
                 throw new ArgumentNullException("Entries cannot be null.");
             if (entries.Length != 1)
             {
-                throw new Exception();
+                throw new LoadException();
             }
             if (!(entries[0] is WavebankEntry))
             {
-                throw new Exception();
+                throw new LoadException();
             }
             return new WavebankChunk((WavebankEntry)entries[0],unknown1,unknown2);
         }
