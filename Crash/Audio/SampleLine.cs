@@ -24,9 +24,7 @@ namespace Crash.Audio
             if (data == null)
                 throw new ArgumentNullException("Data cannot be null.");
             if (data.Length != 14)
-            {
-                throw new Exception();
-            }
+                throw new ArgumentException("Data must be 14 bytes long.");
             this.info = info;
             this.flags = flags;
             this.data = data;
