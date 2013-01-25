@@ -74,11 +74,6 @@ namespace Crash
             return result;
         }
 
-        public static string FromASCII(byte[] str,int offset,int length)
-        {
-            return System.Text.Encoding.ASCII.GetString(str,offset,length);
-        }
-
         public static void ToHalf(byte[] str,int offset,short value)
         {
             ToShortLE(str,offset,value);
