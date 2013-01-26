@@ -27,7 +27,7 @@ You will need Microsoft .NET Framework 2.0 or an alternative such as Mono __(unt
 * System.Windows.Forms
 
 ## Installation ##
-Just unzip into a directory an run the exe.
+Just unzip into a directory and run the exe.
 
 ## Where To Get ##
 Source repo: https://github.com/ughman/CrashEdit  
