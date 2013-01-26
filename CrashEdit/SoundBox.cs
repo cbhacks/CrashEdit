@@ -127,7 +127,7 @@ namespace CrashEdit
         {
             using (SaveFileDialog dialog = new SaveFileDialog())
             {
-                dialog.Filter = "Wave Files (*.wav)|*.wav|All Files (*.*)|*.*";
+                dialog.Filter = "Wave Files (*.wav)|*.wav";
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     byte[] wave = WaveConv.ToWave(samples.ToPCM(),samplerate);
