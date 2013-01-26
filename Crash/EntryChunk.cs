@@ -30,6 +30,10 @@ namespace Crash
             for (int i = 0;i < entries.Count;i++)
             {
                 byte[] entrydata = entries[i].Save();
+                if (offset + entrydata.Length > Length)
+                {
+                    throw new Exception();
+                }
                 entrydata.CopyTo(data,offset);
                 offset += entrydata.Length;
                 offset += offset % align;
