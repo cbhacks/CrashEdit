@@ -42,6 +42,9 @@
     <Compile Include="Audio\MIDIConv.cs" />
     <Compile Include="Audio\MusicEntry.cs" />
     <Compile Include="Audio\MusicEntryLoader.cs" />
+    <Compile Include="Audio\RIFF.cs" />
+    <Compile Include="Audio\RIFFData.cs" />
+    <Compile Include="Audio\RIFFItem.cs" />
     <Compile Include="Audio\SampleLine.cs" />
     <Compile Include="Audio\SampleLineFlags.cs" />
     <Compile Include="Audio\SampleSet.cs" />
