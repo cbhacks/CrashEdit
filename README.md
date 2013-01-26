@@ -4,10 +4,10 @@ This program is intended to be a tool for modifying the game files of the origin
 ## Supported Games ##
 * (SCUS-94154) Crash Bandicoot 2: Cortex Strikes Back
 * (SCES-?????) Crash Bandicoot 2: Cortex Strikes Back __(untested)__
-* (SCPS-10047) クラッシュバンティクー　2:　コルテックスのぎゃくしゅう！
+* (SCPS-10047) クラッシュバンディクー　2:　コルテックスのぎゃくしゅう！
 * (SCUS-94244) Crash Bandicoot: Warped
 * (SCES-?????) Crash Bandicoot 3: Warped __(untested)__
-* (????-?????) クラッシュバンティクー　3:　ブッとび！　世界一周 __(untested)__
+* (????-?????) クラッシュバンディクー　3:　ブッとび！　世界一周 __(untested)__
 
 The first game (crash 1) is not currently supported.
 
