@@ -27,8 +27,8 @@ namespace Crash.Audio
                 throw new ArgumentException("Offset cannot be negative.");
             if (offset + 3 > str.Length)
                 throw new ArgumentOutOfRangeException("Offset exceeds string bounds.");
-            if ((value & 0xFF000000) != 0)
-                throw new ArgumentOutOfRangeException("Value must be in the range 0 to 0x00FFFFFF inclusive.");
+            if ((value & 0xFFFFFF) != value)
+                throw new ArgumentOutOfRangeException("Value must be 24-bit.");
             str[offset + 0] = (byte)((value >> 8 * 2) & 0xFF);
             str[offset + 1] = (byte)((value >> 8 * 1) & 0xFF);
             str[offset + 2] = (byte)((value >> 8 * 0) & 0xFF);
