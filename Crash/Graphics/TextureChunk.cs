@@ -9,7 +9,7 @@ namespace Crash.Graphics
         public TextureChunk(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("data");
             this.data = data;
         }
 

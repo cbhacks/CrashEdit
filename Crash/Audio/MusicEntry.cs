@@ -11,11 +11,11 @@ namespace Crash.Audio
         public MusicEntry(byte[] unknown1,byte[] vh,SEP sep,int unknown) : base(unknown)
         {
             if (unknown1 == null)
-                throw new ArgumentNullException("Unknown1 cannot be null.");
+                throw new ArgumentNullException("unknown1");
             if (vh == null)
-                throw new ArgumentNullException("VH cannot be null.");
+                throw new ArgumentNullException("vh");
             if (sep == null)
-                throw new ArgumentNullException("SEP cannot be null.");
+                throw new ArgumentNullException("sep");
             this.unknown1 = unknown1;
             this.vh = vh;
             this.sep = sep;

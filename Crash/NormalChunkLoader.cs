@@ -8,7 +8,7 @@ namespace Crash
         public override Chunk Load(Entry[] entries,int unknown1,int unknown2)
         {
             if (entries == null)
-                throw new ArgumentNullException("Entries cannot be null.");
+                throw new ArgumentNullException("entries");
             return new NormalChunk(entries,unknown1,unknown2);
         }
     }

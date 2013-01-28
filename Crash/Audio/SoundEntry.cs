@@ -10,7 +10,7 @@ namespace Crash.Audio
         public SoundEntry(SampleSet samples,int unknown) : base(unknown)
         {
             if (samples == null)
-                throw new ArgumentNullException("Samples cannot be null.");
+                throw new ArgumentNullException("samples");
             this.samples = samples;
         }
 

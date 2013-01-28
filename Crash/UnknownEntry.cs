@@ -11,7 +11,7 @@ namespace Crash
         public UnknownEntry(byte[][] items,int unknown,int type) : base(unknown)
         {
             if (items == null)
-                throw new ArgumentNullException("Items cannot be null.");
+                throw new ArgumentNullException("items");
             this.items = items;
             this.type = type;
         }

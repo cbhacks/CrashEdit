@@ -12,7 +12,7 @@ namespace Crash.Audio
         public SpeechChunk(IEnumerable<SpeechEntry> entries,int unknown1,int unknown2)
         {
             if (entries == null)
-                throw new ArgumentNullException("Entries cannot be null.");
+                throw new ArgumentNullException("entries");
             this.entries = new List<SpeechEntry>(entries);
             this.unknown1 = unknown1;
             this.unknown2 = unknown2;

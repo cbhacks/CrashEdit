@@ -10,7 +10,7 @@ namespace Crash.Unknown0
         public T4Entry(IEnumerable<T4Item> t4items,int unknown) : base(unknown)
         {
             if (t4items == null)
-                throw new ArgumentNullException("Items cannot be null.");
+                throw new ArgumentNullException("t4items");
             this.t4items = new List<T4Item>(t4items);
         }
 

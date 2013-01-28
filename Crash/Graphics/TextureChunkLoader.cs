@@ -8,7 +8,7 @@ namespace Crash.Graphics
         public override Chunk Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("data");
             return new TextureChunk(data);
         }
     }

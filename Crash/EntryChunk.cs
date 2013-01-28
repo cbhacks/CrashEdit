@@ -13,7 +13,7 @@ namespace Crash
         protected byte[] Save(IList<Entry> entries,int unknown1,int unknown2,int align)
         {
             if (entries == null)
-                throw new ArgumentNullException("Entries cannot be null.");
+                throw new ArgumentNullException("entries");
             if (align < 0)
                 throw new ArgumentOutOfRangeException("Align cannot be negative.");
             if (align == 0)

@@ -8,7 +8,7 @@ namespace Crash.Unknown0
         public override Entry Load(byte[][] items,int unknown)
         {
             if (items == null)
-                throw new ArgumentNullException("Items cannot be null.");
+                throw new ArgumentNullException("items");
             if (items.Length < 5)
             {
                 throw new LoadException();

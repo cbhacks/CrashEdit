@@ -8,7 +8,7 @@ namespace Crash.Unknown0
         public static T4Item Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("data");
             if (data.Length < 4)
             {
                 throw new LoadException();
@@ -37,7 +37,7 @@ namespace Crash.Unknown0
         public T4Item(short unknown1,IEnumerable<short> values)
         {
             if (values == null)
-                throw new ArgumentNullException("Values cannot be null.");
+                throw new ArgumentNullException("values");
             this.unknown1 = unknown1;
             this.values = new List<short>(values);
         }

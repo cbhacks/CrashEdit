@@ -10,7 +10,7 @@ namespace Crash.Audio
         public RIFF(string name) : base(name)
         {
             if (name == null)
-                throw new ArgumentNullException("Name cannot be null.");
+                throw new ArgumentNullException("name");
             items = new List<RIFFItem>();
         }
 

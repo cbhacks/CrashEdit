@@ -9,7 +9,7 @@ namespace Crash.Audio
         public static SEQ Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("data");
             // All SEP/SEQ stuff is big-endian, like MIDI
             if (data.Length < 15)
             {
@@ -43,7 +43,7 @@ namespace Crash.Audio
             if ((tempo & 0xFF000000) != 0)
                 throw new ArgumentOutOfRangeException("Tempo must be in the range 0 to 0x00FFFFFF inclusive.");
             if (data == null)
-                throw new ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("data");
             this.resolution = resolution;
             this.tempo = tempo;
             this.rhythm = rhythm;

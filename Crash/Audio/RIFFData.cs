@@ -9,9 +9,9 @@ namespace Crash.Audio
         public RIFFData(string name,byte[] data) : base(name)
         {
             if (name == null)
-                throw new ArgumentNullException("Name cannot be null.");
+                throw new ArgumentNullException("name");
             if (data == null)
-                throw new ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("data");
             this.data = data;
         }
 

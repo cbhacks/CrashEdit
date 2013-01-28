@@ -8,7 +8,7 @@ namespace Crash
         public static NSF Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("data");
             if (data.Length % Chunk.Length != 0)
             {
                 throw new LoadException();
@@ -29,7 +29,7 @@ namespace Crash
         public NSF(IEnumerable<Chunk> chunks)
         {
             if (chunks == null)
-                throw new ArgumentNullException("Chunks cannot be null.");
+                throw new ArgumentNullException("chunks");
             this.chunks = new List<Chunk>(chunks);
         }
 

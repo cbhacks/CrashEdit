@@ -7,7 +7,7 @@ namespace Crash.Audio
         public static int From3BE(byte[] str,int offset)
         {
             if (str == null)
-                throw new ArgumentNullException("String cannot be null.");
+                throw new ArgumentNullException("str");
             if (offset < 0)
                 throw new ArgumentException("Offset cannot be negative.");
             if (offset + 3 > str.Length)
@@ -22,7 +22,7 @@ namespace Crash.Audio
         public static void To3BE(byte[] str,int offset,int value)
         {
             if (str == null)
-                throw new ArgumentNullException("String cannot be null.");
+                throw new ArgumentNullException("str");
             if (offset < 0)
                 throw new ArgumentException("Offset cannot be negative.");
             if (offset + 3 > str.Length)

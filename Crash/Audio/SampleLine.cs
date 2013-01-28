@@ -7,7 +7,7 @@ namespace Crash.Audio
         public static SampleLine Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("data");
             if (data.Length != 16)
                 throw new ArgumentException("Data must be 16 bytes long.");
             byte[] newdata = new byte [14];
@@ -22,7 +22,7 @@ namespace Crash.Audio
         public SampleLine(byte info,SampleLineFlags flags,byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("data");
             if (data.Length != 14)
                 throw new ArgumentException("Data must be 14 bytes long.");
             this.info = info;

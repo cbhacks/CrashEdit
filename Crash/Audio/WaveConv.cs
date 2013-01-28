@@ -7,7 +7,7 @@ namespace Crash.Audio
         public static byte[] ToWave(byte[] data,int samplerate)
         {
             if (data == null)
-                throw new ArgumentNullException("Data cannot be null.");
+                throw new ArgumentNullException("data");
             byte[] format = new byte [16];
             BitConv.ToShortLE(format,0,1);
             BitConv.ToShortLE(format,2,1);

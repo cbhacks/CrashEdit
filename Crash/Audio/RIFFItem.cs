@@ -9,7 +9,7 @@ namespace Crash.Audio
         public RIFFItem(string name)
         {
             if (name == null)
-                throw new ArgumentNullException("Name cannot be null.");
+                throw new ArgumentNullException("name");
             if (name.Length != 4)
                 throw new ArgumentException("Name must be 4 characters long.");
             this.name = name;

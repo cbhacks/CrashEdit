@@ -17,7 +17,7 @@ namespace Crash
         public static short FromShortLE(byte[] str,int offset)
         {
             if (str == null)
-                throw new ArgumentNullException("String cannot be null.");
+                throw new ArgumentNullException("str");
             if (offset < 0)
                 throw new ArgumentException("Offset cannot be negative.");
             if (offset + 2 > str.Length)
@@ -31,7 +31,7 @@ namespace Crash
         public static int FromIntLE(byte[] str,int offset)
         {
             if (str == null)
-                throw new ArgumentNullException("String cannot be null.");
+                throw new ArgumentNullException("str");
             if (offset < 0)
                 throw new ArgumentException("Offset cannot be negative.");
             if (offset + 4 > str.Length)
@@ -47,7 +47,7 @@ namespace Crash
         public static short FromShortBE(byte[] str,int offset)
         {
             if (str == null)
-                throw new ArgumentNullException("String cannot be null.");
+                throw new ArgumentNullException("str");
             if (offset < 0)
                 throw new ArgumentException("Offset cannot be negative.");
             if (offset + 2 > str.Length)
@@ -61,7 +61,7 @@ namespace Crash
         public static int FromIntBE(byte[] str,int offset)
         {
             if (str == null)
-                throw new ArgumentNullException("String cannot be null.");
+                throw new ArgumentNullException("str");
             if (offset < 0)
                 throw new ArgumentException("Offset cannot be negative.");
             if (offset + 4 > str.Length)
@@ -87,7 +87,7 @@ namespace Crash
         public static void ToShortLE(byte[] str,int offset,short value)
         {
             if (str == null)
-                throw new ArgumentNullException("String cannot be null.");
+                throw new ArgumentNullException("str");
             if (offset < 0)
                 throw new ArgumentException("Offset cannot be negative.");
             if (offset + 2 > str.Length)
@@ -99,7 +99,7 @@ namespace Crash
         public static void ToIntLE(byte[] str,int offset,int value)
         {
             if (str == null)
-                throw new ArgumentNullException("String cannot be null.");
+                throw new ArgumentNullException("str");
             if (offset < 0)
                 throw new ArgumentException("Offset cannot be negative.");
             if (offset + 4 > str.Length)
@@ -113,7 +113,7 @@ namespace Crash
         public static void ToShortBE(byte[] str,int offset,short value)
         {
             if (str == null)
-                throw new ArgumentNullException("String cannot be null.");
+                throw new ArgumentNullException("str");
             if (offset < 0)
                 throw new ArgumentException("Offset cannot be negative.");
             if (offset + 2 > str.Length)
@@ -125,7 +125,7 @@ namespace Crash
         public static void ToIntBE(byte[] str,int offset,int value)
         {
             if (str == null)
-                throw new ArgumentNullException("String cannot be null.");
+                throw new ArgumentNullException("str");
             if (offset < 0)
                 throw new ArgumentException("Offset cannot be negative.");
             if (offset + 4 > str.Length)

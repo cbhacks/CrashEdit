@@ -9,7 +9,7 @@ namespace Crash.Audio
         public override Chunk Load(Entry[] entries,int unknown1,int unknown2)
         {
             if (entries == null)
-                throw new ArgumentNullException("Entries cannot be null.");
+                throw new ArgumentNullException("entries");
             List<SpeechEntry> speechentries = new List<SpeechEntry>();
             foreach (Entry entry in entries)
             {
