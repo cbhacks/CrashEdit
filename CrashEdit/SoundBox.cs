@@ -105,14 +105,7 @@ namespace CrashEdit
 
         void tbbExport_Click(object sender,EventArgs e)
         {
-            using (SaveFileDialog dialog = new SaveFileDialog())
-            {
-                dialog.Filter = "All Files (*.*)|*.*";
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    File.WriteAllBytes(dialog.FileName,samples.Save());
-                }
-            }
+            FileUtil.SaveFile(samples.Save(),FileUtil.AnyFilter);
         }
 
         private void Play(int samplerate)
@@ -125,15 +118,8 @@ namespace CrashEdit
 
         private void ExportWave(int samplerate)
         {
-            using (SaveFileDialog dialog = new SaveFileDialog())
-            {
-                dialog.Filter = "Wave Files (*.wav)|*.wav";
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    byte[] wave = WaveConv.ToWave(samples.ToPCM(),samplerate);
-                    File.WriteAllBytes(dialog.FileName,wave);
-                }
-            }
+            byte[] wave = WaveConv.ToWave(samples.ToPCM(),samplerate);
+            FileUtil.SaveFile(wave,FileUtil.WaveFilter + "|" + FileUtil.AnyFilter);
         }
 
         protected override void Dispose(bool disposing)

@@ -54,14 +54,7 @@ namespace CrashEdit
 
         void tbbExport_Click(object sender,EventArgs e)
         {
-            using (SaveFileDialog dialog = new SaveFileDialog())
-            {
-                dialog.Filter = "All Files (*.*)|*.*";
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    File.WriteAllBytes(dialog.FileName,data);
-                }
-            }
+            FileUtil.SaveFile(data,FileUtil.AnyFilter);
         }
     }
 }

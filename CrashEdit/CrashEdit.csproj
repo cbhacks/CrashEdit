@@ -45,6 +45,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileUtil.cs" />
     <Compile Include="InputWindow.cs">
       <SubType>Form</SubType>
     </Compile>

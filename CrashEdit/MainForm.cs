@@ -118,7 +118,7 @@ namespace CrashEdit
         {
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
-                dialog.Filter = "NSF Files (*.nsf)|*.nsf|All Files (*.*)|*.*";
+                dialog.Filter = FileUtil.NSFFilter + "|" + FileUtil.AnyFilter;
                 dialog.Multiselect = true;
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
