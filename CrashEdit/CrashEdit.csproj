@@ -45,6 +45,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VHBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="FileUtil.cs" />
     <Compile Include="InputWindow.cs">
       <SubType>Form</SubType>

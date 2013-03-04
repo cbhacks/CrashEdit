@@ -21,10 +21,13 @@ namespace CrashEdit
                 tbcTabs.TabPages.Add(page);
             }
             {
-                //MysteryBox mystery = new MysteryBox(entry.VH);
-                //mystery.Dock = DockStyle.Fill;
                 TabPage page = new TabPage("VH");
-                //page.Controls.Add(mystery);
+                if (entry.VH != null)
+                {
+                    VHBox vhbox = new VHBox(entry.VH);
+                    vhbox.Dock = DockStyle.Fill;
+                    page.Controls.Add(vhbox);
+                }
                 tbcTabs.TabPages.Add(page);
             }
             Controls.Add(tbcTabs);
