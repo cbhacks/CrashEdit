@@ -25,7 +25,7 @@ namespace Crash
             BitConv.ToWord(data,8,entries.Count);
             BitConv.ToWord(data,12,unknown2);
             int offset = 20 + entries.Count * 4;
-            offset += offset % align;
+            Aligner.Align(ref offset,align);
             BitConv.ToWord(data,16,offset);
             for (int i = 0;i < entries.Count;i++)
             {
@@ -36,7 +36,7 @@ namespace Crash
                 }
                 entrydata.CopyTo(data,offset);
                 offset += entrydata.Length;
-                offset += offset % align;
+                Aligner.Align(ref offset,align);
                 BitConv.ToWord(data,20 + i * 4,offset);
             }
             return data;

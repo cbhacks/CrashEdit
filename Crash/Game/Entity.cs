@@ -118,7 +118,7 @@ namespace Crash.Game
                 length += 4;
                 length += fields[i].ElementSize * fields[i].ElementCount;
                 length += fields[i].ExtraData.Length;
-                length += length % 4;
+                Aligner.Align(ref length,4);
             }
             byte[] data = new byte [length];
             BitConv.ToWord(data,0,length);
@@ -141,7 +141,7 @@ namespace Crash.Game
                 offset += field.ElementCount * field.ElementSize;
                 field.ExtraData.CopyTo(data,offset);
                 offset += field.ExtraData.Length;
-                offset += offset % 4;
+                Aligner.Align(ref offset,4);
             }
             if (offset != length)
             {

@@ -39,6 +39,7 @@
   </Target>
   -->
   <ItemGroup>
+    <Compile Include="Aligner.cs" />
     <Compile Include="Audio\ADPCMConv.cs" />
     <Compile Include="Audio\MIDIConv.cs" />
     <Compile Include="Audio\MusicEntry.cs" />
