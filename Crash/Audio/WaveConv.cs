@@ -4,7 +4,7 @@ namespace Crash.Audio
 {
     public static class WaveConv
     {
-        public static byte[] ToWave(byte[] data,int samplerate)
+        public static RIFF ToWave(byte[] data,int samplerate)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
@@ -18,7 +18,7 @@ namespace Crash.Audio
             RIFF wave = new RIFF("WAVE");
             wave.Items.Add(new RIFFData("fmt ",format));
             wave.Items.Add(new RIFFData("data",data));
-            return wave.Save();
+            return wave;
         }
     }
 }

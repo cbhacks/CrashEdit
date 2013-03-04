@@ -110,7 +110,7 @@ namespace CrashEdit
 
         private void Play(int samplerate)
         {
-            byte[] wave = WaveConv.ToWave(samples.ToPCM(),samplerate);
+            byte[] wave = WaveConv.ToWave(samples.ToPCM(),samplerate).Save();
             spPlayer.Stop();
             spPlayer.Stream = new MemoryStream(wave);
             spPlayer.Play();
@@ -118,7 +118,7 @@ namespace CrashEdit
 
         private void ExportWave(int samplerate)
         {
-            byte[] wave = WaveConv.ToWave(samples.ToPCM(),samplerate);
+            byte[] wave = WaveConv.ToWave(samples.ToPCM(),samplerate).Save();
             FileUtil.SaveFile(wave,FileUtil.WaveFilter + "|" + FileUtil.AnyFilter);
         }
 
