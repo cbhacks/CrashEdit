@@ -24,6 +24,18 @@ namespace Crash.Audio
             {
                 throw new LoadException();
             }
+            if (reserved1 != 0xFF)
+            {
+                throw new LoadException();
+            }
+            if (reserved2 != -1)
+            {
+                throw new LoadException();
+            }
+            if (reserved3 != -1)
+            {
+                throw new LoadException();
+            }
             VHTone[] tones = new VHTone [tonecount];
             for (int i = 0;i < tonecount;i++)
             {
@@ -31,17 +43,14 @@ namespace Crash.Audio
                 Array.Copy(tonedata,i * 32,thistonedata,0,32);
                 tones[i] = VHTone.Load(thistonedata);
             }
-            return new VHProgram(volume,priority,mode,panning,reserved1,attribute,reserved2,reserved2,tones);
+            return new VHProgram(volume,priority,mode,panning,attribute,tones);
         }
 
         private byte volume;
         private byte priority;
         private byte mode;
         private byte panning;
-        private byte reserved1;
         private short attribute;
-        private int reserved2;
-        private int reserved3;
         private List<VHTone> tones;
 
         public VHProgram()
@@ -50,14 +59,11 @@ namespace Crash.Audio
             this.priority = 255;
             this.mode = 255;
             this.panning = 64;
-            this.reserved1 = 255;
             this.attribute = 0;
-            this.reserved2 = -1;
-            this.reserved3 = -1;
             this.tones = new List<VHTone>();
         }
 
-        public VHProgram(byte volume,byte priority,byte mode,byte panning,byte reserved1,short attribute,int reserved2,int reserved3,IEnumerable<VHTone> tones)
+        public VHProgram(byte volume,byte priority,byte mode,byte panning,short attribute,IEnumerable<VHTone> tones)
         {
             if (tones == null)
                 throw new ArgumentNullException("tones");
@@ -65,10 +71,7 @@ namespace Crash.Audio
             this.priority = priority;
             this.mode = mode;
             this.panning = panning;
-            this.reserved1 = reserved1;
             this.attribute = attribute;
-            this.reserved2 = reserved2;
-            this.reserved3 = reserved3;
             this.tones = new List<VHTone>(tones);
         }
 
@@ -92,24 +95,9 @@ namespace Crash.Audio
             get { return panning; }
         }
 
-        public byte Reserved1
-        {
-            get { return reserved1; }
-        }
-
         public short Attribute
         {
             get { return attribute; }
-        }
-
-        public int Reserved2
-        {
-            get { return reserved2; }
-        }
-
-        public int Reserved3
-        {
-            get { return reserved3; }
         }
         
         public IList<VHTone> Tones
@@ -125,10 +113,10 @@ namespace Crash.Audio
             data[2] = priority;
             data[3] = mode;
             data[4] = panning;
-            data[5] = reserved1;
+            data[5] = 0xFF;
             BitConv.ToHalf(data,6,attribute);
-            BitConv.ToWord(data,8,reserved2);
-            BitConv.ToWord(data,12,reserved3);
+            BitConv.ToWord(data,8,-1);
+            BitConv.ToWord(data,12,-1);
             return data;
         }
     }

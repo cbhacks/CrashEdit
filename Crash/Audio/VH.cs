@@ -48,6 +48,10 @@ namespace Crash.Audio
                 throw new LoadException();
             }
             int vbsize = (size - data.Length) / 16;
+            if (reserved1 != -0x1112)
+            {
+                throw new LoadException();
+            }
             if (programcount < 0)
             {
                 throw new LoadException();
@@ -61,6 +65,10 @@ namespace Crash.Audio
                 throw new LoadException();
             }
             if (wavecount > 254)
+            {
+                throw new LoadException();
+            }
+            if (reserved2 != -1)
             {
                 throw new LoadException();
             }
@@ -87,32 +95,28 @@ namespace Crash.Audio
                 }
                 waves[i] = wave / 2;
             }
-            return new VH(vbsize,reserved1,volume,panning,attribute1,attribute2,reserved2,programs,waves);
+            return new VH(vbsize,volume,panning,attribute1,attribute2,programs,waves);
         }
 
         private int vbsize;
-        private short reserved1;
         private byte volume;
         private byte panning;
         private byte attribute1;
         private byte attribute2;
-        private int reserved2;
         private List<VHProgram> programs;
         private List<int> waves;
 
-        public VH(int vbsize,short reserved1,byte volume,byte panning,byte attribute1,byte attribute2,int reserved2,IEnumerable<VHProgram> programs,IEnumerable<int> waves)
+        public VH(int vbsize,byte volume,byte panning,byte attribute1,byte attribute2,IEnumerable<VHProgram> programs,IEnumerable<int> waves)
         {
             if (programs == null)
                 throw new ArgumentNullException("programs");
             if (waves == null)
                 throw new ArgumentNullException("waves");
             this.vbsize = vbsize;
-            this.reserved1 = reserved1;
             this.volume = volume;
             this.panning = panning;
             this.attribute1 = attribute1;
             this.attribute2 = attribute2;
-            this.reserved2 = reserved2;
             this.programs = new List<VHProgram>(programs);
             this.waves = new List<int>(waves);
         }
@@ -120,11 +124,6 @@ namespace Crash.Audio
         public int VBSize
         {
             get { return vbsize; }
-        }
-
-        public short Reserved1
-        {
-            get { return reserved1; }
         }
 
         public byte Volume
@@ -147,11 +146,6 @@ namespace Crash.Audio
             get { return attribute2; }
         }
 
-        public int Reserved2
-        {
-            get { return reserved2; }
-        }
-
         public IList<VHProgram> Programs
         {
             get { return programs; }
@@ -169,7 +163,7 @@ namespace Crash.Audio
             BitConv.ToWord(data,4,Version);
             BitConv.ToWord(data,8,0);
             BitConv.ToWord(data,12,data.Length + vbsize * 16);
-            BitConv.ToHalf(data,16,reserved1);
+            BitConv.ToHalf(data,16,-0x1112);
             int tonecount = 0;
             foreach (VHProgram program in programs)
             {
@@ -182,7 +176,7 @@ namespace Crash.Audio
             data[25] = panning;
             data[26] = attribute1;
             data[27] = attribute2;
-            BitConv.ToWord(data,28,reserved2);
+            BitConv.ToWord(data,28,-1);
             for (int i = 0;i < 128;i++)
             {
                 if (i < programs.Count)

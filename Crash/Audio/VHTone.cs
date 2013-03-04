@@ -32,7 +32,31 @@ namespace Crash.Audio
             short reserved4 = BitConv.FromHalf(data,26);
             short reserved5 = BitConv.FromHalf(data,28);
             short reserved6 = BitConv.FromHalf(data,30);
-            return new VHTone(priority,mode,volume,panning,centernote,pitchshift,minimumnote,maximumnote,vibratowidth,vibratotime,portamentowidth,portamentotime,pitchbendminimum,pitchbendmaximum,reserved1,reserved2,adsr1,adsr2,wave,reserved3,reserved4,reserved5,reserved6);
+            if (reserved1 != 0xB1)
+            {
+                throw new LoadException();
+            }
+            if (reserved2 != 0xB2)
+            {
+                throw new LoadException();
+            }
+            if (reserved3 != 0xC0)
+            {
+                throw new LoadException();
+            }
+            if (reserved4 != 0xC1)
+            {
+                throw new LoadException();
+            }
+            if (reserved5 != 0xC2)
+            {
+                throw new LoadException();
+            }
+            if (reserved6 != 0xC3)
+            {
+                throw new LoadException();
+            }
+            return new VHTone(priority,mode,volume,panning,centernote,pitchshift,minimumnote,maximumnote,vibratowidth,vibratotime,portamentowidth,portamentotime,pitchbendminimum,pitchbendmaximum,adsr1,adsr2,wave);
         }
 
         private byte priority;
@@ -49,15 +73,9 @@ namespace Crash.Audio
         private byte portamentotime;
         private byte pitchbendminimum;
         private byte pitchbendmaximum;
-        private byte reserved1;
-        private byte reserved2;
         private short adsr1;
         private short adsr2;
         private short wave;
-        private short reserved3;
-        private short reserved4;
-        private short reserved5;
-        private short reserved6;
         
         public VHTone()
         {
@@ -75,22 +93,16 @@ namespace Crash.Audio
             this.portamentotime = 0;
             this.pitchbendminimum = 0;
             this.pitchbendmaximum = 0;
-            this.reserved1 = 0xB1;
-            this.reserved2 = 0xB2;
             unchecked 
             {
                 this.adsr1 = (short)0x80FF;
                 this.adsr2 = (short)0x5FDF;
             }
             this.wave = 0;
-            this.reserved3 = 0xC0;
-            this.reserved4 = 0xC1;
-            this.reserved5 = 0xC2;
-            this.reserved6 = 0xC3;
         }
 
         // This is ridiculous! There has to be a better way.
-        public VHTone(byte priority,byte mode,byte volume,byte panning,byte centernote,byte pitchshift,byte minimumnote,byte maximumnote,byte vibratowidth,byte vibratotime,byte portamentowidth,byte portamentotime,byte pitchbendminimum,byte pitchbendmaximum,byte reserved1,byte reserved2,short adsr1,short adsr2,short wave,short reserved3,short reserved4,short reserved5,short reserved6)
+        public VHTone(byte priority,byte mode,byte volume,byte panning,byte centernote,byte pitchshift,byte minimumnote,byte maximumnote,byte vibratowidth,byte vibratotime,byte portamentowidth,byte portamentotime,byte pitchbendminimum,byte pitchbendmaximum,short adsr1,short adsr2,short wave)
         {
             this.priority = priority;
             this.mode = mode;
@@ -106,15 +118,9 @@ namespace Crash.Audio
             this.portamentotime = portamentotime;
             this.pitchbendminimum = pitchbendminimum;
             this.pitchbendmaximum = pitchbendmaximum;
-            this.reserved1 = reserved1;
-            this.reserved2 = reserved2;
             this.adsr1 = adsr1;
             this.adsr2 = adsr2;
             this.wave = wave;
-            this.reserved3 = reserved3;
-            this.reserved4 = reserved4;
-            this.reserved5 = reserved5;
-            this.reserved6 = reserved6;
         }
 
         public byte Priority
@@ -187,16 +193,6 @@ namespace Crash.Audio
             get { return pitchbendmaximum; }
         }
 
-        public byte Reserved1
-        {
-            get { return reserved1; }
-        }
-
-        public byte Reserved2
-        {
-            get { return reserved2; }
-        }
-
         public short ADSR1
         {
             get { return adsr1; }
@@ -210,26 +206,6 @@ namespace Crash.Audio
         public short Wave
         {
             get { return wave; }
-        }
-
-        public short Reserved3
-        {
-            get { return reserved3; }
-        }
-
-        public short Reserved4
-        {
-            get { return reserved4; }
-        }
-
-        public short Reserved5
-        {
-            get { return reserved5; }
-        }
-
-        public short Reserved6
-        {
-            get { return reserved6; }
         }
 
         public byte[] Save(int program)
@@ -249,16 +225,16 @@ namespace Crash.Audio
             data[11] = portamentotime;
             data[12] = pitchbendminimum;
             data[13] = pitchbendmaximum;
-            data[14] = reserved1;
-            data[15] = reserved2;
+            data[14] = 0xB1;
+            data[15] = 0xB2;
             BitConv.ToHalf(data,16,adsr1);
             BitConv.ToHalf(data,18,adsr2);
             BitConv.ToHalf(data,20,(short)program);
             BitConv.ToHalf(data,22,wave);
-            BitConv.ToHalf(data,24,reserved3);
-            BitConv.ToHalf(data,26,reserved4);
-            BitConv.ToHalf(data,28,reserved5);
-            BitConv.ToHalf(data,30,reserved6);
+            BitConv.ToHalf(data,24,0xC0);
+            BitConv.ToHalf(data,26,0xC1);
+            BitConv.ToHalf(data,28,0xC2);
+            BitConv.ToHalf(data,30,0xC3);
             return data;
         }
     }
