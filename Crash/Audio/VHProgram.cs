@@ -59,6 +59,8 @@ namespace Crash.Audio
 
         public VHProgram(byte volume,byte priority,byte mode,byte panning,byte reserved1,short attribute,int reserved2,int reserved3,IEnumerable<VHTone> tones)
         {
+            if (tones == null)
+                throw new ArgumentNullException("tones");
             this.volume = volume;
             this.priority = priority;
             this.mode = mode;

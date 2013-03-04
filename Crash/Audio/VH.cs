@@ -101,6 +101,10 @@ namespace Crash.Audio
 
         public VH(int vbsize,short reserved1,byte volume,byte panning,byte attribute1,byte attribute2,int reserved2,IEnumerable<VHProgram> programs,IEnumerable<int> waves)
         {
+            if (programs == null)
+                throw new ArgumentNullException("programs");
+            if (waves == null)
+                throw new ArgumentNullException("waves");
             this.vbsize = vbsize;
             this.reserved1 = reserved1;
             this.volume = volume;
