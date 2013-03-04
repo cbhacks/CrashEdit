@@ -5,15 +5,13 @@ namespace Crash.Audio
     public sealed class MusicEntry : Entry
     {
         private byte[] unknown1;
-        private byte[] vh;
+        private VH vh;
         private SEP sep;
 
-        public MusicEntry(byte[] unknown1,byte[] vh,SEP sep,int unknown) : base(unknown)
+        public MusicEntry(byte[] unknown1,VH vh,SEP sep,int unknown) : base(unknown)
         {
             if (unknown1 == null)
                 throw new ArgumentNullException("unknown1");
-            if (vh == null)
-                throw new ArgumentNullException("vh");
             if (sep == null)
                 throw new ArgumentNullException("sep");
             this.unknown1 = unknown1;
@@ -31,7 +29,7 @@ namespace Crash.Audio
             get { return unknown1; }
         }
 
-        public byte[] VH
+        public VH VH
         {
             get { return vh; }
         }
@@ -45,7 +43,14 @@ namespace Crash.Audio
         {
             byte[][] items = new byte [3][];
             items[0] = unknown1;
-            items[1] = vh;
+            if (vh != null)
+            {
+                items[1] = vh.Save();
+            }
+            else
+            {
+                items[1] = new byte [0];
+            }
             items[2] = sep.Save();
             return Save(items);
         }

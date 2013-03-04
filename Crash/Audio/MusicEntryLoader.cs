@@ -21,7 +21,15 @@ namespace Crash.Audio
                 throw new LoadException();
             if (BitConv.FromWord(unknown1,32) != 0x6396347F)
                 throw new LoadException();
-            byte[] vh = items[1];
+            VH vh;
+            if (items[1].Length != 0)
+            {
+                vh = VH.Load(items[1]);
+            }
+            else
+            {
+                vh = null;
+            }
             SEP sep = SEP.Load(items[2],seqcount);
             return new MusicEntry(unknown1,vh,sep,unknown);
         }

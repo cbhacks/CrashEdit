@@ -21,10 +21,10 @@ namespace CrashEdit
                 tbcTabs.TabPages.Add(page);
             }
             {
-                MysteryBox mystery = new MysteryBox(entry.VH);
-                mystery.Dock = DockStyle.Fill;
+                //MysteryBox mystery = new MysteryBox(entry.VH);
+                //mystery.Dock = DockStyle.Fill;
                 TabPage page = new TabPage("VH");
-                page.Controls.Add(mystery);
+                //page.Controls.Add(mystery);
                 tbcTabs.TabPages.Add(page);
             }
             Controls.Add(tbcTabs);
