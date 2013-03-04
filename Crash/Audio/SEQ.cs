@@ -5,6 +5,7 @@ namespace Crash.Audio
     public sealed class SEQ
     {
         public const int Magic = 0x70514553;
+        public const int Version = 1;
 
         public static SEQ Load(byte[] data)
         {
@@ -21,7 +22,7 @@ namespace Crash.Audio
             {
                 throw new LoadException();
             }
-            if (version != 1)
+            if (version != Version)
             {
                 throw new LoadException();
             }
@@ -74,7 +75,7 @@ namespace Crash.Audio
         {
             byte[] result = new byte [15 + data.Length];
             BitConv.ToIntBE(result,0,Magic);
-            BitConv.ToIntBE(result,4,1);
+            BitConv.ToIntBE(result,4,Version);
             BitConv.ToShortBE(result,8,resolution);
             MIDIConv.To3BE(result,10,tempo);
             BitConv.ToShortBE(result,13,rhythm);

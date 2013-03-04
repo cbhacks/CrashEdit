@@ -6,6 +6,7 @@ namespace Crash.Audio
     public sealed class VH
     {
         public const int Magic = 0x56414270;
+        public const int Version = 7;
 
         public static VH Load(byte[] data)
         {
@@ -19,7 +20,7 @@ namespace Crash.Audio
             {
                 throw new LoadException();
             }
-            if (version != 7)
+            if (version != Version)
             {
                 throw new LoadException();
             }
@@ -165,7 +166,7 @@ namespace Crash.Audio
         {
             byte[] data = new byte [2592 + 32 * 16 * programs.Count];
             BitConv.ToWord(data,0,Magic);
-            BitConv.ToWord(data,4,7);
+            BitConv.ToWord(data,4,Version);
             BitConv.ToWord(data,8,0);
             BitConv.ToWord(data,12,data.Length + vbsize * 16);
             BitConv.ToHalf(data,16,reserved1);

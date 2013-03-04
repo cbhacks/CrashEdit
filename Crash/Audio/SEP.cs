@@ -6,6 +6,7 @@ namespace Crash.Audio
     public sealed class SEP
     {
         public const int Magic = SEQ.Magic;
+        public const short Version = 0;
 
         public static SEP Load(byte[] data,int seqcount)
         {
@@ -24,7 +25,7 @@ namespace Crash.Audio
             {
                 throw new LoadException();
             }
-            if (version != 0)
+            if (version != Version)
             {
                 throw new LoadException();
             }
@@ -87,7 +88,7 @@ namespace Crash.Audio
             }
             byte[] data = new byte [length];
             BitConv.ToIntBE(data,0,Magic);
-            BitConv.ToShortBE(data,4,0);
+            BitConv.ToShortBE(data,4,Version);
             int offset = 6;
             for (int i = 0;i < seqs.Count;i++)
             {
