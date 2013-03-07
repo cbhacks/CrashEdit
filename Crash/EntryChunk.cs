@@ -15,9 +15,7 @@ namespace Crash
             if (entries == null)
                 throw new ArgumentNullException("entries");
             if (align < 0)
-                throw new ArgumentOutOfRangeException("Align cannot be negative.");
-            if (align == 0)
-                throw new ArgumentOutOfRangeException("Align cannot be zero.");
+                throw new ArgumentOutOfRangeException("align");
             if (alignoffset < 0 || alignoffset >= align)
                 throw new ArgumentOutOfRangeException("alignoffset");
             byte[] data = new byte [Length];

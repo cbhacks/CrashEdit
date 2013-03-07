@@ -11,7 +11,7 @@ namespace Crash.Audio
             if (name == null)
                 throw new ArgumentNullException("name");
             if (name.Length != 4)
-                throw new ArgumentException("Name must be 4 characters long.");
+                throw new ArgumentException("Value must be 4 characters long.","name");
             this.name = name;
         }
 
@@ -21,7 +21,7 @@ namespace Crash.Audio
             set
             {
                 if (name.Length != 4)
-                    throw new ArgumentException("Name must be 4 characters long.");
+                    throw new ArgumentException("Value must be 4 characters long.","name");
                 name = value;
             }
         }

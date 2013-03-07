@@ -15,12 +15,12 @@ namespace Crash.Audio
             }
             byte[] unknown1 = items[0];
             int seqcount = BitConv.FromWord(unknown1,0);
-            if (BitConv.FromWord(unknown1,24) != 0x6396347F)
+            if (BitConv.FromWord(unknown1,24) != 0x6396347F ||
+                BitConv.FromWord(unknown1,28) != 0x6396347F ||
+                BitConv.FromWord(unknown1,32) != 0x6396347F)
+            {
                 throw new LoadException();
-            if (BitConv.FromWord(unknown1,28) != 0x6396347F)
-                throw new LoadException();
-            if (BitConv.FromWord(unknown1,32) != 0x6396347F)
-                throw new LoadException();
+            }
             VH vh;
             if (items[1].Length != 0)
             {

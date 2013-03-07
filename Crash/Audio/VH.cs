@@ -52,19 +52,15 @@ namespace Crash.Audio
             {
                 throw new LoadException();
             }
-            if (programcount < 0)
+            if (programcount < 0 || programcount > 128)
             {
                 throw new LoadException();
             }
-            if (tonecount < 0)
+            if (tonecount < 0 || tonecount > 2048)
             {
                 throw new LoadException();
             }
-            if (wavecount < 0)
-            {
-                throw new LoadException();
-            }
-            if (wavecount > 254)
+            if (wavecount < 0 || wavecount > 254)
             {
                 throw new LoadException();
             }

@@ -42,7 +42,7 @@ namespace Crash.Audio
         public SEQ(short resolution,int tempo,short rhythm,byte[] data)
         {
             if ((tempo & 0xFF000000) != 0)
-                throw new ArgumentOutOfRangeException("Tempo must be in the range 0 to 0x00FFFFFF inclusive.");
+                throw new ArgumentOutOfRangeException("tempo");
             if (data == null)
                 throw new ArgumentNullException("data");
             this.resolution = resolution;

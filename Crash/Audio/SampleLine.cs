@@ -9,7 +9,7 @@ namespace Crash.Audio
             if (data == null)
                 throw new ArgumentNullException("data");
             if (data.Length != 16)
-                throw new ArgumentException("Data must be 16 bytes long.");
+                throw new ArgumentException("Value must be 16 bytes long.","data");
             byte[] newdata = new byte [14];
             Array.Copy(data,2,newdata,0,14);
             return new SampleLine(data[0],(SampleLineFlags)data[1],newdata);
@@ -24,7 +24,7 @@ namespace Crash.Audio
             if (data == null)
                 throw new ArgumentNullException("data");
             if (data.Length != 14)
-                throw new ArgumentException("Data must be 14 bytes long.");
+                throw new ArgumentException("Value must be 14 bytes long.","data");
             this.info = info;
             this.flags = flags;
             this.data = data;

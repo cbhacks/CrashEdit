@@ -9,9 +9,9 @@ namespace Crash.Audio
             if (str == null)
                 throw new ArgumentNullException("str");
             if (offset < 0)
-                throw new ArgumentException("Offset cannot be negative.");
+                throw new ArgumentOutOfRangeException("offset");
             if (offset + 3 > str.Length)
-                throw new ArgumentOutOfRangeException("Offset exceeds string bounds.");
+                throw new ArgumentOutOfRangeException("offset");
             int result = 0;
             result |= str[offset + 0] << 8 * 2;
             result |= str[offset + 1] << 8 * 1;
@@ -24,11 +24,11 @@ namespace Crash.Audio
             if (str == null)
                 throw new ArgumentNullException("str");
             if (offset < 0)
-                throw new ArgumentException("Offset cannot be negative.");
+                throw new ArgumentOutOfRangeException("offset");
             if (offset + 3 > str.Length)
-                throw new ArgumentOutOfRangeException("Offset exceeds string bounds.");
+                throw new ArgumentOutOfRangeException("offset");
             if ((value & 0xFFFFFF) != value)
-                throw new ArgumentOutOfRangeException("Value must be 24-bit.");
+                throw new ArgumentOutOfRangeException("value");
             str[offset + 0] = (byte)((value >> 8 * 2) & 0xFF);
             str[offset + 1] = (byte)((value >> 8 * 1) & 0xFF);
             str[offset + 2] = (byte)((value >> 8 * 0) & 0xFF);

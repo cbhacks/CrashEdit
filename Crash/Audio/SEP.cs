@@ -13,7 +13,7 @@ namespace Crash.Audio
             if (data == null)
                 throw new ArgumentNullException("data");
             if (seqcount < 0)
-                throw new ArgumentOutOfRangeException("SEQCount cannot be negative.");
+                throw new ArgumentOutOfRangeException("seqcount");
             // All SEP/SEQ stuff is big-endian, like MIDI
             if (data.Length < 6)
             {

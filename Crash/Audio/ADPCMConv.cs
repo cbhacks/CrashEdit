@@ -12,13 +12,13 @@ namespace Crash.Audio
         public static short FromADPCM(int sample,int factor,int predict,ref double s0,ref double s1)
         {
             if ((sample & 0xF) != sample)
-                throw new ArgumentOutOfRangeException("Sample must be 4-bit.");
+                throw new ArgumentOutOfRangeException("sample");
             if ((factor & 0xF) != factor)
-                throw new ArgumentOutOfRangeException("Factor must be 4-bit.");
+                throw new ArgumentOutOfRangeException("factor");
             if ((predict & 0xF) != predict)
-                throw new ArgumentOutOfRangeException("Predict must be 4-bit.");
+                throw new ArgumentOutOfRangeException("predict");
             if (predict >= 5)
-                throw new ArgumentOutOfRangeException("Predict must be less than 5.");
+                throw new ArgumentOutOfRangeException("predict");
             sample <<= 12;
             sample = (short)sample; // Sign extend
             sample >>= factor;
