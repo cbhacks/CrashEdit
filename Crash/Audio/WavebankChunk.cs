@@ -41,7 +41,7 @@ namespace Crash.Audio
         {
             Entry[] entries = new Entry [1];
             entries[0] = entry;
-            return Save(entries,unknown1,unknown2);
+            return Save(entries,unknown1,unknown2,16,4);
         }
     }
 }

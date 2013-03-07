@@ -45,7 +45,7 @@ namespace Crash.Audio
             {
                 entries[i] = this.entries[i];
             }
-            return Save(entries,unknown1,unknown2);
+            return Save(entries,unknown1,unknown2,16,8);
         }
     }
 }

@@ -6,13 +6,22 @@ namespace Crash
     {
         public static void Align(ref int position,int alignment)
         {
+            Align(ref position,alignment,0);
+        }
+
+        public static void Align(ref int position,int alignment,int offset)
+        {
             if (position < 0)
                 throw new ArgumentOutOfRangeException("position");
             if (alignment <= 0)
                 throw new ArgumentOutOfRangeException("alignment");
-            if (position % alignment != 0)
+            if (offset < 0 || offset >= alignment)
+                throw new ArgumentOutOfRangeException("offset");
+            while (position % alignment != offset)
             {
-                position += alignment - position % alignment;
+                // Ugly hack
+                // Change this to an if and use proper math some day
+                position++;
             }
         }
     }

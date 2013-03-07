@@ -28,7 +28,7 @@ namespace Crash.Audio
         {
             byte[][] items = new byte [1][];
             items[0] = samples.Save();
-            return Save(items,8);
+            return Save(items);
         }
     }
 }

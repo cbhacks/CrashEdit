@@ -13,12 +13,12 @@ namespace Crash.Audio
             {
                 throw new LoadException();
             }
-            int samplelinecount = (data.Length / 16) - 1;
+            int samplelinecount = data.Length / 16;
             SampleLine[] samplelines = new SampleLine [samplelinecount];
             for (int i = 0;i < samplelinecount;i++)
             {
                 byte[] linedata = new byte [16];
-                Array.Copy(data,(i + 1) * 16,linedata,0,16);
+                Array.Copy(data,i * 16,linedata,0,16);
                 samplelines[i] = SampleLine.Load(linedata);
             }
             return new SampleSet(samplelines);
@@ -40,10 +40,10 @@ namespace Crash.Audio
 
         public byte[] Save()
         {
-            byte[] data = new byte [(samplelines.Count + 1) * 16];
+            byte[] data = new byte [samplelines.Count * 16];
             for (int i = 0;i < samplelines.Count;i++)
             {
-                samplelines[i].Save().CopyTo(data,(i + 1) * 16);
+                samplelines[i].Save().CopyTo(data,i * 16);
             }
             return data;
         }

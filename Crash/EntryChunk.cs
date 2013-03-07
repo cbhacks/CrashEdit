@@ -7,10 +7,10 @@ namespace Crash
     {
         protected byte[] Save(IList<Entry> entries,int unknown1,int unknown2)
         {
-            return Save(entries,unknown1,unknown2,4);
+            return Save(entries,unknown1,unknown2,4,0);
         }
 
-        protected byte[] Save(IList<Entry> entries,int unknown1,int unknown2,int align)
+        protected byte[] Save(IList<Entry> entries,int unknown1,int unknown2,int align,int alignoffset)
         {
             if (entries == null)
                 throw new ArgumentNullException("entries");
@@ -18,6 +18,8 @@ namespace Crash
                 throw new ArgumentOutOfRangeException("Align cannot be negative.");
             if (align == 0)
                 throw new ArgumentOutOfRangeException("Align cannot be zero.");
+            if (alignoffset < 0 || alignoffset >= align)
+                throw new ArgumentOutOfRangeException("alignoffset");
             byte[] data = new byte [Length];
             BitConv.ToHalf(data,0,Magic);
             BitConv.ToHalf(data,2,Type);
@@ -25,7 +27,7 @@ namespace Crash
             BitConv.ToWord(data,8,entries.Count);
             BitConv.ToWord(data,12,unknown2);
             int offset = 20 + entries.Count * 4;
-            Aligner.Align(ref offset,align);
+            Aligner.Align(ref offset,align,alignoffset);
             BitConv.ToWord(data,16,offset);
             for (int i = 0;i < entries.Count;i++)
             {
@@ -36,7 +38,11 @@ namespace Crash
                 }
                 entrydata.CopyTo(data,offset);
                 offset += entrydata.Length;
-                Aligner.Align(ref offset,align);
+                if (i < entries.Count - 1)
+                {
+                    // Ugly hack
+                    Aligner.Align(ref offset,align,alignoffset);
+                }
                 BitConv.ToWord(data,20 + i * 4,offset);
             }
             return data;
