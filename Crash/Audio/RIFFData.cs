@@ -15,6 +15,11 @@ namespace Crash.Audio
             this.data = data;
         }
 
+        public override int Length
+        {
+            get { return data.Length + 8; }
+        }
+
         public override byte[] Save()
         {
             byte[] result = new byte [8 + data.Length];

@@ -237,5 +237,37 @@ namespace Crash.Audio
             BitConv.ToInt16(data,30,0xC3);
             return data;
         }
+
+        public RIFF ToDLSRegion()
+        {
+            RIFF rgn = new RIFF("rgn ");
+            byte[] rgnh = new byte [12];
+            BitConv.ToShortLE(rgnh,0,minimumnote);
+            BitConv.ToShortLE(rgnh,2,maximumnote);
+            BitConv.ToShortLE(rgnh,4,0);
+            BitConv.ToShortLE(rgnh,6,127);
+            BitConv.ToShortLE(rgnh,8,0);
+            BitConv.ToShortLE(rgnh,10,0);
+            rgn.Items.Add(new RIFFData("rgnh",rgnh));
+            byte[] wsmp = new byte [20 /* 36 */];
+            BitConv.ToIntLE(wsmp,0,20);
+            BitConv.ToShortLE(wsmp,4,centernote);
+            BitConv.ToShortLE(wsmp,6,pitchshift);
+            BitConv.ToIntLE(wsmp,8,volume - 64 << 18);
+            BitConv.ToIntLE(wsmp,12,0);
+            BitConv.ToIntLE(wsmp,16,0 /* 1 */);
+            /*BitConv.ToIntLE(wsmp,20,16);
+            BitConv.ToIntLE(wsmp,24,0);
+            BitConv.ToIntLE(wsmp,28,LOOPSTART);
+            BitConv.ToIntLE(wsmp,28,LOOPLENGTH);*/
+            rgn.Items.Add(new RIFFData("wsmp",wsmp));
+            byte[] wlnk = new byte [12];
+            BitConv.ToShortLE(wlnk,0,0);
+            BitConv.ToShortLE(wlnk,2,0);
+            BitConv.ToIntLE(wlnk,4,3); // ???
+            BitConv.ToIntLE(wlnk,8,wave - 1);
+            rgn.Items.Add(new RIFFData("wlnk",wlnk));
+            return rgn;
+        }
     }
 }

@@ -60,6 +60,7 @@
     <Compile Include="Audio\SpeechChunkLoader.cs" />
     <Compile Include="Audio\SpeechEntry.cs" />
     <Compile Include="Audio\SpeechEntryLoader.cs" />
+    <Compile Include="Audio\VAB.cs" />
     <Compile Include="Audio\VH.cs" />
     <Compile Include="Audio\VHProgram.cs" />
     <Compile Include="Audio\VHTone.cs" />

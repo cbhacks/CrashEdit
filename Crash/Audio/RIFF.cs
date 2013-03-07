@@ -19,6 +19,19 @@ namespace Crash.Audio
             get { return items; }
         }
 
+        public override int Length
+        {
+            get
+            {
+                int result = 12;
+                foreach (RIFFItem item in items)
+                {
+                    result += item.Length;
+                }
+                return result;
+            }
+        }
+
         public override byte[] Save()
         {
             List<byte> data = new List<byte>();

@@ -26,6 +26,11 @@ namespace Crash.Audio
             }
         }
 
+        public abstract int Length
+        {
+            get;
+        }
+
         public abstract byte[] Save();
     }
 }
