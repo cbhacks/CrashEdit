@@ -34,7 +34,7 @@ namespace Crash
                 byte[] entrydata = entries[i].Save();
                 if (offset + entrydata.Length > Length)
                 {
-                    throw new Exception();
+                    throw new PackingException();
                 }
                 entrydata.CopyTo(data,offset);
                 offset += entrydata.Length;
