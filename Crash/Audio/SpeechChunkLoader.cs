@@ -6,7 +6,7 @@ namespace Crash.Audio
     [ChunkType(5)]
     public sealed class SpeechChunkLoader : EntryChunkLoader
     {
-        public override Chunk Load(Entry[] entries,int unknown1,int unknown2)
+        public override Chunk Load(Entry[] entries,int unknown2)
         {
             if (entries == null)
                 throw new ArgumentNullException("entries");
@@ -22,7 +22,7 @@ namespace Crash.Audio
                     throw new LoadException();
                 }
             }
-            return new SpeechChunk(speechentries,unknown1,unknown2);
+            return new SpeechChunk(speechentries,unknown2);
         }
     }
 }

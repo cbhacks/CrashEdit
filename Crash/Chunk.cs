@@ -15,7 +15,7 @@ namespace Crash
             loaders = new Dictionary<short,ChunkLoader>();
         }
 
-        public static Chunk Load(byte[] data)
+        public static Chunk Load(int chunkid,byte[] data)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
@@ -29,7 +29,7 @@ namespace Crash
             }
             if (loaders.ContainsKey(type))
             {
-                return loaders[type].Load(data);
+                return loaders[type].Load(chunkid,data);
             }
             else
             {
@@ -49,6 +49,6 @@ namespace Crash
             get;
         }
 
-        public abstract byte[] Save();
+        public abstract byte[] Save(int chunkid);
     }
 }

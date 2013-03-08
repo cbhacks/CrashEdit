@@ -13,13 +13,14 @@ namespace Crash
             {
                 throw new LoadException();
             }
-            Chunk[] chunks = new Chunk[data.Length / Chunk.Length];
+            int chunkcount = data.Length / Chunk.Length;
+            Chunk[] chunks = new Chunk[chunkcount];
             byte[] chunkdata;
-            for (int i = 0;i < data.Length;i += Chunk.Length)
+            for (int i = 0;i < chunkcount;i++)
             {
                 chunkdata = new byte [Chunk.Length];
-                Array.Copy(data,i,chunkdata,0,Chunk.Length);
-                chunks[i / Chunk.Length] = Chunk.Load(chunkdata);
+                Array.Copy(data,i * Chunk.Length,chunkdata,0,Chunk.Length);
+                chunks[i] = Chunk.Load(i * 2 + 1,chunkdata);
             }
             return new NSF(chunks);
         }
@@ -43,7 +44,7 @@ namespace Crash
             byte[] data = new byte [chunks.Count * Chunk.Length];
             for (int i = 0;i < chunks.Count;i++)
             {
-                chunks[i].Save().CopyTo(data,i * Chunk.Length);
+                chunks[i].Save(i * 2 + 1).CopyTo(data,i * Chunk.Length);
             }
             return data;
         }

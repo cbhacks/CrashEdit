@@ -5,12 +5,12 @@ namespace Crash
 {
     public abstract class EntryChunk : Chunk
     {
-        protected byte[] Save(IList<Entry> entries,int unknown1,int unknown2)
+        protected byte[] Save(int chunkid,IList<Entry> entries,int unknown2)
         {
-            return Save(entries,unknown1,unknown2,4,0);
+            return Save(chunkid,entries,unknown2,4,0);
         }
 
-        protected byte[] Save(IList<Entry> entries,int unknown1,int unknown2,int align,int alignoffset)
+        protected byte[] Save(int chunkid,IList<Entry> entries,int unknown2,int align,int alignoffset)
         {
             if (entries == null)
                 throw new ArgumentNullException("entries");
@@ -21,7 +21,7 @@ namespace Crash
             byte[] data = new byte [Length];
             BitConv.ToHalf(data,0,Magic);
             BitConv.ToHalf(data,2,Type);
-            BitConv.ToWord(data,4,unknown1);
+            BitConv.ToWord(data,4,chunkid);
             BitConv.ToWord(data,8,entries.Count);
             BitConv.ToWord(data,12,unknown2);
             int offset = 20 + entries.Count * 4;

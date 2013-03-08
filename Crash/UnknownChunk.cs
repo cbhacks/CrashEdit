@@ -23,7 +23,7 @@ namespace Crash
             get { return data; }
         }
 
-        public override byte[] Save()
+        public override byte[] Save(int chunkid)
         {
             return data;
         }
