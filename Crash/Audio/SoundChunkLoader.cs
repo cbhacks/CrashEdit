@@ -10,19 +10,7 @@ namespace Crash.Audio
         {
             if (entries == null)
                 throw new ArgumentNullException("entries");
-            List<SoundEntry> soundentries = new List<SoundEntry>();
-            foreach (Entry entry in entries)
-            {
-                if (entry is SoundEntry)
-                {
-                    soundentries.Add((SoundEntry)entry);
-                }
-                else
-                {
-                    throw new LoadException();
-                }
-            }
-            return new SoundChunk(soundentries,unknown2);
+            return new SoundChunk(entries,unknown2);
         }
     }
 }

@@ -9,15 +9,7 @@ namespace Crash.Audio
         {
             if (entries == null)
                 throw new ArgumentNullException("entries");
-            if (entries.Length != 1)
-            {
-                throw new LoadException();
-            }
-            if (!(entries[0] is WavebankEntry))
-            {
-                throw new LoadException();
-            }
-            return new WavebankChunk((WavebankEntry)entries[0],unknown2);
+            return new WavebankChunk(entries,unknown2);
         }
     }
 }

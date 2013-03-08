@@ -5,9 +5,40 @@ namespace Crash
 {
     public abstract class EntryChunk : Chunk
     {
+        private List<Entry> entries;
+        private int unknown2;
+
+        public EntryChunk(IEnumerable<Entry> entries,int unknown2)
+        {
+            if (entries == null)
+                throw new ArgumentNullException("entries");
+            this.entries = new List<Entry>(entries);
+            this.unknown2 = unknown2;
+        }
+
+        public IList<Entry> Entries
+        {
+            get { return entries; }
+        }
+
+        protected abstract int Alignment
+        {
+            get;
+        }
+
+        protected abstract int AlignmentOffset
+        {
+            get;
+        }
+
+        public override byte[] Save(int chunkid)
+        {
+            return Save(chunkid,entries,unknown2);
+        }
+
         protected byte[] Save(int chunkid,IList<Entry> entries,int unknown2)
         {
-            return Save(chunkid,entries,unknown2,4,0);
+            return Save(chunkid,entries,unknown2,Alignment,AlignmentOffset);
         }
 
         protected byte[] Save(int chunkid,IList<Entry> entries,int unknown2,int align,int alignoffset)

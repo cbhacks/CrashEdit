@@ -1,18 +1,11 @@
-using System;
+using System.Collections.Generic;
 
 namespace Crash.Audio
 {
     public sealed class WavebankChunk : EntryChunk
     {
-        private WavebankEntry entry;
-        private int unknown2;
-
-        public WavebankChunk(WavebankEntry entry,int unknown2)
+        public WavebankChunk(IEnumerable<Entry> entries,int unknown2) : base(entries,unknown2)
         {
-            if (entry == null)
-                throw new ArgumentNullException("entry");
-            this.entry = entry;
-            this.unknown2 = unknown2;
         }
 
         public override short Type
@@ -20,21 +13,14 @@ namespace Crash.Audio
             get { return 4; }
         }
 
-        public int Unknown2
+        protected override int Alignment
         {
-            get { return unknown2; }
+            get { return 16; }
         }
 
-        public WavebankEntry Entry
+        protected override int AlignmentOffset
         {
-            get { return entry; }
-        }
-
-        public override byte[] Save(int chunkid)
-        {
-            Entry[] entries = new Entry [1];
-            entries[0] = entry;
-            return Save(chunkid,entries,unknown2,16,4);
+            get { return 4; }
         }
     }
 }

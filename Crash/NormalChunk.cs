@@ -1,19 +1,11 @@
-using System;
 using System.Collections.Generic;
 
 namespace Crash
 {
     public sealed class NormalChunk : EntryChunk
     {
-        private List<Entry> entries;
-        private int unknown2;
-
-        public NormalChunk(IEnumerable<Entry> entries,int unknown2)
+        public NormalChunk(IEnumerable<Entry> entries,int unknown2) : base(entries,unknown2)
         {
-            if (entries == null)
-                throw new ArgumentNullException("entries");
-            this.entries = new List<Entry>(entries);
-            this.unknown2 = unknown2;
         }
 
         public override short Type
@@ -21,19 +13,14 @@ namespace Crash
             get { return 0; }
         }
 
-        public int Unknown2
+        protected override int Alignment
         {
-            get { return unknown2; }
+            get { return 4; }
         }
 
-        public IList<Entry> Entries
+        protected override int AlignmentOffset
         {
-            get { return entries; }
-        }
-
-        public override byte[] Save(int chunkid)
-        {
-            return Save(chunkid,entries,unknown2);
+            get { return 0; }
         }
     }
 }
