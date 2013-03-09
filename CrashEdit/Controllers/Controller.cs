@@ -59,6 +59,10 @@ namespace CrashEdit
 
         public virtual void Dispose()
         {
+            foreach (TreeNode subnode in node.Nodes)
+            {
+                ((IDisposable)subnode.Tag).Dispose();
+            }
             node.Remove();
             contextmenu.Dispose();
             editor.Dispose();

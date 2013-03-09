@@ -3,6 +3,7 @@ using Crash.Game;
 using Crash.Graphics;
 using Crash.Audio;
 using Crash.Unknown0;
+using System;
 
 namespace CrashEdit
 {
@@ -32,7 +33,7 @@ namespace CrashEdit
                 }
                 else if (chunk is WavebankChunk)
                 {
-                    AddNode(new LegacyController(chunk));
+                    AddNode(new WavebankChunkController(this,(WavebankChunk)chunk));
                 }
                 else if (chunk is SpeechChunk)
                 {
@@ -43,6 +44,47 @@ namespace CrashEdit
                     AddNode(new ErrorController());
                 }
             }
+            AddMenu("Add Chunk - Normal",Menu_Add_NormalChunk);
+            AddMenu("Add Chunk - Sound",Menu_Add_SoundChunk);
+            AddMenu("Add Chunk - Wavebank",Menu_Add_WavebankChunk);
+            AddMenu("Add Chunk - Speech",Menu_Add_SpeechChunk);
+        }
+
+        public NSF NSF
+        {
+            get { return nsf; }
+        }
+
+        private void Menu_Add_NormalChunk(object source,EventArgs e)
+        {
+            NormalChunk chunk = new NormalChunk();
+            nsf.Chunks.Add(chunk);
+            NormalChunkController controller = new NormalChunkController(this,chunk);
+            AddNode(controller);
+        }
+
+        private void Menu_Add_SoundChunk(object source,EventArgs e)
+        {
+            SoundChunk chunk = new SoundChunk();
+            nsf.Chunks.Add(chunk);
+            SoundChunkController controller = new SoundChunkController(this,chunk);
+            AddNode(controller);
+        }
+
+        private void Menu_Add_WavebankChunk(object source,EventArgs e)
+        {
+            WavebankChunk chunk = new WavebankChunk();
+            nsf.Chunks.Add(chunk);
+            WavebankChunkController controller = new WavebankChunkController(this,chunk);
+            AddNode(controller);
+        }
+
+        private void Menu_Add_SpeechChunk(object source,EventArgs e)
+        {
+            SpeechChunk chunk = new SpeechChunk();
+            nsf.Chunks.Add(chunk);
+            SpeechChunkController controller = new SpeechChunkController(this,chunk);
+            AddNode(controller);
         }
     }
 }

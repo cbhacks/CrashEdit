@@ -3,22 +3,21 @@ using Crash.Audio;
 
 namespace CrashEdit
 {
-    public sealed class SpeechChunkController : Controller
+    public sealed class SpeechChunkController : EntryChunkController
     {
-        private NSFController nsfcontroller;
-        private SpeechChunk chunk;
+        private SpeechChunk speechchunk;
 
-        public SpeechChunkController(NSFController nsfcontroller,SpeechChunk chunk)
+        public SpeechChunkController(NSFController nsfcontroller,SpeechChunk speechchunk) : base(nsfcontroller,speechchunk)
         {
-            this.nsfcontroller = nsfcontroller;
-            this.chunk = chunk;
+            this.speechchunk = speechchunk;
             Node.Text = "Speech Chunk";
             Node.ImageKey = "speechchunk";
             Node.SelectedImageKey = "speechchunk";
-            foreach (SpeechEntry entry in chunk.Entries)
-            {
-                AddNode(new LegacyController(entry));
-            }
+        }
+
+        public SpeechChunk SpeechChunk
+        {
+            get { return speechchunk; }
         }
     }
 }

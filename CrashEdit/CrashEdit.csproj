@@ -45,7 +45,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ChunkController.cs" />
     <Compile Include="Controllers\Controller.cs" />
+    <Compile Include="Controllers\WavebankChunkController.cs" />
+    <Compile Include="Controllers\EntryChunkController.cs" />
+    <Compile Include="Controllers\EntryController.cs" />
+    <Compile Include="Controllers\SEQController.cs" />
     <Compile Include="Controllers\MusicEntryController.cs" />
     <Compile Include="Controllers\NormalChunkController.cs" />
     <Compile Include="Controllers\SoundChunkController.cs" />

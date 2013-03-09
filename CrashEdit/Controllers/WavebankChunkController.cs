@@ -1,0 +1,23 @@
+using Crash;
+using Crash.Audio;
+
+namespace CrashEdit
+{
+    public sealed class WavebankChunkController : EntryChunkController
+    {
+        private WavebankChunk wavebankchunk;
+
+        public WavebankChunkController(NSFController nsfcontroller,WavebankChunk wavebankchunk) : base(nsfcontroller,wavebankchunk)
+        {
+            this.wavebankchunk = wavebankchunk;
+            Node.Text = "Wavebank Chunk";
+            Node.ImageKey = "wavebankchunk";
+            Node.SelectedImageKey = "wavebankchunk";
+        }
+
+        public WavebankChunk WavebankChunk
+        {
+            get { return wavebankchunk; }
+        }
+    }
+}

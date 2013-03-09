@@ -3,22 +3,25 @@ using Crash.Audio;
 
 namespace CrashEdit
 {
-    public sealed class MusicEntryController : Controller
+    public sealed class MusicEntryController : EntryController
     {
-        private NormalChunkController chunkcontroller;
-        private MusicEntry entry;
+        private MusicEntry musicentry;
 
-        public MusicEntryController(NormalChunkController chunkcontroller,MusicEntry entry)
+        public MusicEntryController(EntryChunkController entrychunkcontroller,MusicEntry musicentry) : base(entrychunkcontroller,musicentry)
         {
-            this.chunkcontroller = chunkcontroller;
-            this.entry = entry;
+            this.musicentry = musicentry;
             Node.Text = "Music Entry";
             Node.ImageKey = "musicentry";
             Node.SelectedImageKey = "musicentry";
-            foreach (SEQ seq in entry.SEP.SEQs)
+            foreach (SEQ seq in musicentry.SEP.SEQs)
             {
-                AddNode(new LegacyController(seq));
+                AddNode(new SEQController(this,seq));
             }
+        }
+
+        public MusicEntry MusicEntry
+        {
+            get { return musicentry; }
         }
     }
 }

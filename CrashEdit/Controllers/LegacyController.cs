@@ -57,36 +57,14 @@ namespace CrashEdit
 
         private static TreeNode Populate(Chunk chunk)
         {
-            if (chunk is NormalChunk)
-            {
-                return Populate((NormalChunk)chunk);
-            }
-            else if (chunk is TextureChunk)
+            if (chunk is TextureChunk)
             {
                 return Populate((TextureChunk)chunk);
-            }
-            else if (chunk is WavebankChunk)
-            {
-                return Populate((WavebankChunk)chunk);
             }
             else
             {
                 throw new Exception();
             }
-        }
-
-        private static TreeNode Populate(NormalChunk chunk)
-        {
-            TreeNode node = new TreeNode();
-            node.Tag = chunk;
-            node.Text = "Normal Chunk";
-            node.ImageKey = "normalchunk";
-            node.SelectedImageKey = "normalchunk";
-            foreach (Entry entry in chunk.Entries)
-            {
-                node.Nodes.Add(Populate(entry));
-            }
-            return node;
         }
 
         private static TreeNode Populate(TextureChunk chunk)
@@ -96,16 +74,6 @@ namespace CrashEdit
             node.Text = "Texture Chunk";
             node.ImageKey = "texturechunk";
             node.SelectedImageKey = "texturechunk";
-            return node;
-        }
-
-        private static TreeNode Populate(WavebankChunk chunk)
-        {
-            TreeNode node = Populate(chunk.Entry);
-            node.Tag = chunk;
-            node.Text = string.Format("Wavebank Chunk ({0})",chunk.Entry.ID);
-            node.ImageKey = "wavebankchunk";
-            node.SelectedImageKey = "wavebankchunk";
             return node;
         }
 
@@ -138,10 +106,6 @@ namespace CrashEdit
             else if (entry is SoundEntry)
             {
                 return Populate((SoundEntry)entry);
-            }
-            else if (entry is MusicEntry)
-            {
-                return Populate((MusicEntry)entry);
             }
             else if (entry is WavebankEntry)
             {
@@ -251,20 +215,6 @@ namespace CrashEdit
             return node;
         }
 
-        private static TreeNode Populate(MusicEntry entry)
-        {
-            TreeNode node = new TreeNode();
-            node.Tag = entry;
-            node.Text = "Music Entry";
-            node.ImageKey = "musicentry";
-            node.SelectedImageKey = "musicentry";
-            for (int i = 0;i < entry.SEP.SEQs.Count;i++)
-            {
-                node.Nodes.Add(Populate(entry.SEP.SEQs[i],i));
-            }
-            return node;
-        }
-
         private static TreeNode Populate(WavebankEntry entry)
         {
             TreeNode node = new TreeNode();
@@ -369,10 +319,6 @@ namespace CrashEdit
                 Control control = (Control)Activator.CreateInstance(editorcontrols[obj.GetType()],obj);
                 control.Dock = DockStyle.Fill;
                 return control;
-            }
-            else if (obj is WavebankChunk)
-            {
-                return Display(((WavebankChunk)obj).Entry);
             }
             else
             {
