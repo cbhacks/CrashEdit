@@ -16,6 +16,7 @@ namespace CrashEdit
             Node.Text = "SEQ";
             Node.ImageKey = "seq";
             Node.SelectedImageKey = "seq";
+            AddMenu("Replace SEQ",Menu_Replace_SEQ);
             AddMenu("Delete SEQ",Menu_Delete_SEQ);
         }
 
@@ -27,6 +28,17 @@ namespace CrashEdit
         public SEQ SEQ
         {
             get { return seq; }
+        }
+
+        private void Menu_Replace_SEQ(object sender,EventArgs e)
+        {
+            int i = musicentrycontroller.MusicEntry.SEP.SEQs.IndexOf(seq);
+            byte[] data = FileUtil.OpenFile(FileUtil.SEQFilter + "|" + FileUtil.AnyFilter);
+            if (data != null)
+            {
+                seq = SEQ.Load(data);
+                musicentrycontroller.MusicEntry.SEP.SEQs[i] = seq;
+            }
         }
 
         private void Menu_Delete_SEQ(object sender,EventArgs e)
