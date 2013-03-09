@@ -4,6 +4,10 @@ namespace Crash.Audio
 {
     public sealed class SoundChunk : EntryChunk
     {
+        public SoundChunk()
+        {
+        }
+
         public SoundChunk(IEnumerable<Entry> entries,int unknown2) : base(entries,unknown2)
         {
         }

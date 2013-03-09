@@ -8,6 +8,12 @@ namespace Crash
         private List<Entry> entries;
         private int unknown2;
 
+        public EntryChunk()
+        {
+            this.entries = new List<Entry>();
+            this.unknown2 = -1;
+        }
+
         public EntryChunk(IEnumerable<Entry> entries,int unknown2)
         {
             if (entries == null)

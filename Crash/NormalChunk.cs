@@ -4,6 +4,10 @@ namespace Crash
 {
     public sealed class NormalChunk : EntryChunk
     {
+        public NormalChunk()
+        {
+        }
+
         public NormalChunk(IEnumerable<Entry> entries,int unknown2) : base(entries,unknown2)
         {
         }

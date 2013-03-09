@@ -4,6 +4,10 @@ namespace Crash.Audio
 {
     public sealed class WavebankChunk : EntryChunk
     {
+        public WavebankChunk()
+        {
+        }
+
         public WavebankChunk(IEnumerable<Entry> entries,int unknown2) : base(entries,unknown2)
         {
         }
