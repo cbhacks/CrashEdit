@@ -76,7 +76,11 @@ namespace CrashEdit
             trvMain.HideSelection = false;
             trvMain.Nodes.Add(controller.Node);
             trvMain.SelectedNode = controller.Node;
+            trvMain.AllowDrop = true;
             trvMain.AfterSelect += new TreeViewEventHandler(trvMain_AfterSelect);
+            trvMain.ItemDrag += new ItemDragEventHandler(trvMain_ItemDrag);
+            trvMain.DragOver += new DragEventHandler(trvMain_DragOver);
+            trvMain.DragDrop += new DragEventHandler(trvMain_DragDrop);
 
             pnSplit = new SplitContainer();
             pnSplit.Dock = DockStyle.Fill;
@@ -90,7 +94,7 @@ namespace CrashEdit
             get { return nsf; }
         }
 
-        void trvMain_AfterSelect(object sender,TreeViewEventArgs e)
+        private void trvMain_AfterSelect(object sender,TreeViewEventArgs e)
         {
             pnSplit.Panel2.Controls.Clear();
             if (e.Node != null)
@@ -101,6 +105,57 @@ namespace CrashEdit
                     pnSplit.Panel2.Controls.Add(((Controller)tag).Editor);
                 }
             }
+        }
+
+        private void trvMain_ItemDrag(object sender,ItemDragEventArgs e)
+        {
+            DoDragDrop(e.Item,DragDropEffects.All);
+        }
+
+        private void trvMain_DragOver(object sender,DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(typeof(TreeNode)))
+            {
+                e.Effect = DragDropEffects.None;
+                return;
+            }
+            TreeNode node = (TreeNode)e.Data.GetData(typeof(TreeNode));
+            Controller item = (Controller)node.Tag;
+            Point droppoint = trvMain.PointToClient(new Point(e.X,e.Y));
+            TreeNode dropnode = trvMain.GetNodeAt(droppoint);
+            if (dropnode == null)
+            {
+                e.Effect = DragDropEffects.None;
+                return;
+            }
+            if (node.TreeView != dropnode.TreeView)
+            {
+                e.Effect = DragDropEffects.None;
+                return;
+            }
+            Controller destination = (Controller)dropnode.Tag;
+            if (item.Move(destination,false))
+            {
+                e.Effect = DragDropEffects.Move;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void trvMain_DragDrop(object sender,DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(typeof(TreeNode)))
+            {
+                return;
+            }
+            TreeNode node = (TreeNode)e.Data.GetData(typeof(TreeNode));
+            Controller item = (Controller)node.Tag;
+            Point droppoint = trvMain.PointToClient(new Point(e.X,e.Y));
+            TreeNode dropnode = trvMain.GetNodeAt(droppoint);
+            Controller destination = (Controller)dropnode.Tag;
+            item.Move(destination,true);
         }
 
         public void Find(string term)

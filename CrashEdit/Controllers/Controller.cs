@@ -57,6 +57,11 @@ namespace CrashEdit
             }
         }
 
+        public virtual bool Move(Controller newcontroller,bool commit)
+        {
+            return false;
+        }
+
         public virtual void Dispose()
         {
             foreach (TreeNode subnode in node.Nodes)

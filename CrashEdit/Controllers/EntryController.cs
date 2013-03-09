@@ -25,6 +25,26 @@ namespace CrashEdit
             get { return entry; }
         }
 
+        public override bool Move(Controller newcontroller,bool commit)
+        {
+            if (newcontroller is EntryChunkController)
+            {
+                if (commit)
+                {
+                    entrychunkcontroller.EntryChunk.Entries.Remove(entry);
+                    Node.Remove();
+                    entrychunkcontroller = (EntryChunkController)newcontroller;
+                    entrychunkcontroller.EntryChunk.Entries.Add(entry);
+                    entrychunkcontroller.Node.Nodes.Add(Node);
+                }
+                return true;
+            }
+            else
+            {
+                return base.Move(newcontroller,commit);
+            }
+        }
+
         private void Menu_Delete_Entry(object sender,EventArgs e)
         {
             entrychunkcontroller.EntryChunk.Entries.Remove(entry);
