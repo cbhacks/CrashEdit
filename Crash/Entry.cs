@@ -99,23 +99,14 @@ namespace Crash
 
         protected byte[] Save(IList<byte[]> items)
         {
-            return Save(items,4);
-        }
-
-        protected byte[] Save(IList<byte[]> items,int align)
-        {
             if (items == null)
                 throw new ArgumentNullException("items");
-            if (align < 0)
-                throw new ArgumentOutOfRangeException("Align cannot be negative.");
-            if (align == 0)
-                throw new ArgumentOutOfRangeException("Align cannot be zero.");
             int length = 20 + items.Count * 4;
-            Aligner.Align(ref length,align);
+            Aligner.Align(ref length,4);
             foreach (byte[] item in items)
             {
                 length += item.Length;
-                Aligner.Align(ref length,align);
+                Aligner.Align(ref length,4);
             }
             byte[] data = new byte [length];
             BitConv.ToWord(data,0,Magic);
@@ -123,13 +114,13 @@ namespace Crash
             BitConv.ToWord(data,8,Type);
             BitConv.ToWord(data,12,items.Count);
             int offset = 20 + items.Count * 4;
-            Aligner.Align(ref offset,align);
+            Aligner.Align(ref offset,4);
             BitConv.ToWord(data,16,offset);
             for (int i = 0;i < items.Count;i++)
             {
                 items[i].CopyTo(data,offset);
                 offset += items[i].Length;
-                Aligner.Align(ref offset,align);
+                Aligner.Align(ref offset,4);
                 BitConv.ToWord(data,20 + i * 4,offset);
             }
             return data;
