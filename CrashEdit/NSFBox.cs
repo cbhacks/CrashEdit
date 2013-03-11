@@ -134,6 +134,11 @@ namespace CrashEdit
                 return;
             }
             Controller destination = (Controller)dropnode.Tag;
+            if (item == destination)
+            {
+                e.Effect = DragDropEffects.None;
+                return;
+            }
             if (item.Move(destination,false))
             {
                 e.Effect = DragDropEffects.Move;
@@ -154,7 +159,19 @@ namespace CrashEdit
             Controller item = (Controller)node.Tag;
             Point droppoint = trvMain.PointToClient(new Point(e.X,e.Y));
             TreeNode dropnode = trvMain.GetNodeAt(droppoint);
+            if (dropnode == null)
+            {
+                return;
+            }
+            if (node.TreeView != dropnode.TreeView)
+            {
+                return;
+            }
             Controller destination = (Controller)dropnode.Tag;
+            if (item == destination)
+            {
+                return;
+            }
             item.Move(destination,true);
         }
 
