@@ -31,10 +31,12 @@ namespace CrashEdit
 
         protected void AddMenu(string text,EventHandler handler)
         {
-            MenuItem menuitem = new MenuItem();
-            menuitem.Text = text;
-            menuitem.Click += handler;
-            contextmenu.MenuItems.Add(menuitem);
+            contextmenu.MenuItems.Add(text,handler);
+        }
+
+        protected void AddMenuSeparator()
+        {
+            contextmenu.MenuItems.Add("-");
         }
 
         public TreeNode Node
