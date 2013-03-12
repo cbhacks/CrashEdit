@@ -41,10 +41,6 @@ namespace CrashEdit
             {
                 return Populate((T4Item)obj,-1);
             }
-            else if (obj is SEQ)
-            {
-                return Populate((SEQ)obj,-1);
-            }
             else if (obj is Entity)
             {
                 return Populate((Entity)obj);
@@ -79,29 +75,13 @@ namespace CrashEdit
 
         private static TreeNode Populate(Entry entry)
         {
-            if (entry is T1Entry)
-            {
-                return Populate((T1Entry)entry);
-            }
-            else if (entry is T2Entry)
-            {
-                return Populate((T2Entry)entry);
-            }
-            else if (entry is T3Entry)
-            {
-                return Populate((T3Entry)entry);
-            }
-            else if (entry is T4Entry)
+            if (entry is T4Entry)
             {
                 return Populate((T4Entry)entry);
             }
             else if (entry is EntityEntry)
             {
                 return Populate((EntityEntry)entry);
-            }
-            else if (entry is T11Entry)
-            {
-                return Populate((T11Entry)entry);
             }
             else if (entry is SoundEntry)
             {
@@ -111,60 +91,14 @@ namespace CrashEdit
             {
                 return Populate((WavebankEntry)entry);
             }
-            else if (entry is T15Entry)
-            {
-                return Populate((T15Entry)entry);
-            }
-            else if (entry is T17Entry)
-            {
-                return Populate((T17Entry)entry);
-            }
-            else if (entry is DemoEntry)
-            {
-                return Populate((DemoEntry)entry);
-            }
             else if (entry is SpeechEntry)
             {
                 return Populate((SpeechEntry)entry);
-            }
-            else if (entry is T21Entry)
-            {
-                return Populate((T21Entry)entry);
             }
             else
             {
                 throw new Exception();
             }
-        }
-
-        private static TreeNode Populate(T1Entry entry)
-        {
-            TreeNode node = new TreeNode();
-            node.Tag = entry;
-            node.Text = "T1 Entry";
-            node.ImageKey = "t1entry";
-            node.SelectedImageKey = "t1entry";
-            return node;
-        }
-
-        private static TreeNode Populate(T2Entry entry)
-        {
-            TreeNode node = new TreeNode();
-            node.Tag = entry;
-            node.Text = "T2 Entry";
-            node.ImageKey = "t2entry";
-            node.SelectedImageKey = "t2entry";
-            return node;
-        }
-
-        private static TreeNode Populate(T3Entry entry)
-        {
-            TreeNode node = new TreeNode();
-            node.Tag = entry;
-            node.Text = "T3 Entry";
-            node.ImageKey = "t3entry";
-            node.SelectedImageKey = "t3entry";
-            return node;
         }
 
         private static TreeNode Populate(T4Entry entry)
@@ -195,16 +129,6 @@ namespace CrashEdit
             return node;
         }
 
-        private static TreeNode Populate(T11Entry entry)
-        {
-            TreeNode node = new TreeNode();
-            node.Tag = entry;
-            node.Text = "T11 Entry";
-            node.ImageKey = "t11entry";
-            node.SelectedImageKey = "t11entry";
-            return node;
-        }
-
         private static TreeNode Populate(SoundEntry entry)
         {
             TreeNode node = new TreeNode();
@@ -225,36 +149,6 @@ namespace CrashEdit
             return node;
         }
 
-        private static TreeNode Populate(T15Entry entry)
-        {
-            TreeNode node = new TreeNode();
-            node.Tag = entry;
-            node.Text = "T15 Entry";
-            node.ImageKey = "t15entry";
-            node.SelectedImageKey = "t15entry";
-            return node;
-        }
-
-        private static TreeNode Populate(T17Entry entry)
-        {
-            TreeNode node = new TreeNode();
-            node.Tag = entry;
-            node.Text = "T17 Entry";
-            node.ImageKey = "t17entry";
-            node.SelectedImageKey = "t17entry";
-            return node;
-        }
-
-        private static TreeNode Populate(DemoEntry entry)
-        {
-            TreeNode node = new TreeNode();
-            node.Tag = entry;
-            node.Text = "Demo Entry";
-            node.ImageKey = "demoentry";
-            node.SelectedImageKey = "demoentry";
-            return node;
-        }
-
         private static TreeNode Populate(SpeechEntry entry)
         {
             TreeNode node = new TreeNode();
@@ -262,16 +156,6 @@ namespace CrashEdit
             node.Text = "Speech Entry";
             node.ImageKey = "speechentry";
             node.SelectedImageKey = "speechentry";
-            return node;
-        }
-
-        private static TreeNode Populate(T21Entry entry)
-        {
-            TreeNode node = new TreeNode();
-            node.Tag = entry;
-            node.Text = "T21 Entry";
-            node.ImageKey = "t21entry";
-            node.SelectedImageKey = "t21entry";
             return node;
         }
 
@@ -289,16 +173,6 @@ namespace CrashEdit
             }
             node.ImageKey = "entity";
             node.SelectedImageKey = "entity";
-            return node;
-        }
-
-        private static TreeNode Populate(SEQ seq,int id)
-        {
-            TreeNode node = new TreeNode();
-            node.Tag = seq;
-            node.Text = string.Format("SEQ ({0})",id);
-            node.ImageKey = "seq";
-            node.SelectedImageKey = "seq";
             return node;
         }
 

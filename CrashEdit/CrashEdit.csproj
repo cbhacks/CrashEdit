@@ -47,6 +47,16 @@
   <ItemGroup>
     <Compile Include="Controllers\ChunkController.cs" />
     <Compile Include="Controllers\Controller.cs" />
+    <Compile Include="Controllers\DemoEntryController.cs" />
+    <Compile Include="Controllers\T15EntryController.cs" />
+    <Compile Include="Controllers\T21EntryController.cs" />
+    <Compile Include="Controllers\T17EntryController.cs" />
+    <Compile Include="Controllers\T2EntryController.cs" />
+    <Compile Include="Controllers\T3EntryController.cs" />
+    <Compile Include="Controllers\T11EntryController.cs" />
+    <Compile Include="Controllers\MysteryMultiItemEntryController.cs" />
+    <Compile Include="Controllers\MysteryUniItemEntryController.cs" />
+    <Compile Include="Controllers\T1EntryController.cs" />
     <Compile Include="Controllers\WavebankChunkController.cs" />
     <Compile Include="Controllers\EntryChunkController.cs" />
     <Compile Include="Controllers\EntryController.cs" />

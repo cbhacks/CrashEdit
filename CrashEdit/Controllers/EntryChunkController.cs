@@ -17,15 +17,15 @@ namespace CrashEdit
             {
                 if (entry is T1Entry)
                 {
-                    AddNode(new LegacyController(entry));
+                    AddNode(new T1EntryController(this,(T1Entry)entry));
                 }
                 else if (entry is T2Entry)
                 {
-                    AddNode(new LegacyController(entry));
+                    AddNode(new T2EntryController(this,(T2Entry)entry));
                 }
                 else if (entry is T3Entry)
                 {
-                    AddNode(new LegacyController(entry));
+                    AddNode(new T3EntryController(this,(T3Entry)entry));
                 }
                 else if (entry is T4Entry)
                 {
@@ -37,7 +37,7 @@ namespace CrashEdit
                 }
                 else if (entry is T11Entry)
                 {
-                    AddNode(new LegacyController(entry));
+                    AddNode(new T11EntryController(this,(T11Entry)entry));
                 }
                 else if (entry is SoundEntry)
                 {
@@ -53,15 +53,15 @@ namespace CrashEdit
                 }
                 else if (entry is T15Entry)
                 {
-                    AddNode(new LegacyController(entry));
+                    AddNode(new T15EntryController(this,(T15Entry)entry));
                 }
                 else if (entry is T17Entry)
                 {
-                    AddNode(new LegacyController(entry));
+                    AddNode(new T17EntryController(this,(T17Entry)entry));
                 }
                 else if (entry is DemoEntry)
                 {
-                    AddNode(new LegacyController(entry));
+                    AddNode(new DemoEntryController(this,(DemoEntry)entry));
                 }
                 else if (entry is SpeechEntry)
                 {
@@ -69,7 +69,7 @@ namespace CrashEdit
                 }
                 else if (entry is T21Entry)
                 {
-                    AddNode(new LegacyController(entry));
+                    AddNode(new T21EntryController(this,(T21Entry)entry));
                 }
                 else
                 {
