@@ -48,7 +48,7 @@ namespace CrashEdit
         {
         }
 
-        public MysteryBox(IMysteryUniItemEntry entry) : this(entry.Data)
+        public MysteryBox(MysteryUniItemEntry entry) : this(entry.Data)
         {
         }
 

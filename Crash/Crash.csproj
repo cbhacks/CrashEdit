@@ -85,8 +85,8 @@
     <Compile Include="Graphics\PixelConv.cs" />
     <Compile Include="Graphics\TextureChunk.cs" />
     <Compile Include="Graphics\TextureChunkLoader.cs" />
-    <Compile Include="IMysteryMultiItemEntry.cs" />
-    <Compile Include="IMysteryUniItemEntry.cs" />
+    <Compile Include="MysteryMultiItemEntry.cs" />
+    <Compile Include="MysteryUniItemEntry.cs" />
     <Compile Include="LoadException.cs" />
     <Compile Include="Registrar.cs" />
     <Compile Include="Unknown0\T11Entry.cs" />

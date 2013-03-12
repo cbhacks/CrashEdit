@@ -3,30 +3,15 @@ using System.Collections.Generic;
 
 namespace Crash.Unknown0
 {
-    public sealed class T3Entry : Entry,IMysteryMultiItemEntry
+    public sealed class T3Entry : MysteryMultiItemEntry
     {
-        private List<byte[]> items;
-
-        public T3Entry(IEnumerable<byte[]> items,int unknown) : base(unknown)
+        public T3Entry(IEnumerable<byte[]> items,int unknown) : base(items,unknown)
         {
-            if (items == null)
-                throw new ArgumentNullException("items");
-            this.items = new List<byte[]>(items);
         }
 
         public override int Type
         {
             get { return 3; }
-        }
-
-        public IList<byte[]> Items
-        {
-            get { return items; }
-        }
-
-        public override byte[] Save()
-        {
-            return Save(items);
         }
     }
 }

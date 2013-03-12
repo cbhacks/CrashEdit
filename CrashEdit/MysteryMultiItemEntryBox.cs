@@ -19,7 +19,7 @@ namespace CrashEdit
     {
         private TabControl tbcTabs;
 
-        public MysteryMultiItemEntryBox(IMysteryMultiItemEntry entry)
+        public MysteryMultiItemEntryBox(MysteryMultiItemEntry entry)
         {
             tbcTabs = new TabControl();
             tbcTabs.Dock = DockStyle.Fill;
