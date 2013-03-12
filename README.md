@@ -5,6 +5,7 @@ This program is intended to be a tool for modifying the game files of the origin
 * (SCUS-94154) Crash Bandicoot 2: Cortex Strikes Back
 * (SCES-?????) Crash Bandicoot 2: Cortex Strikes Back __(untested)__
 * (SCPS-10047) クラッシュバンディクー　2:　コルテックスのぎゃくしゅう！
+* (PAL BETA 97/09/14) Crash Bandicoot 2: Cortex Strikes Back __(read only)__
 * (SCUS-94244) Crash Bandicoot: Warped
 * (SCES-?????) Crash Bandicoot 3: Warped __(untested)__
 * (????-?????) クラッシュバンディクー　3:　ブッとび！　世界一周 __(untested)__
