@@ -32,6 +32,7 @@ namespace Crash.Audio
         public VH VH
         {
             get { return vh; }
+            set { vh = value; }
         }
 
         public SEP SEP

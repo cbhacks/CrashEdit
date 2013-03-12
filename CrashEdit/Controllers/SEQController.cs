@@ -19,7 +19,7 @@ namespace CrashEdit
             AddMenu("Replace SEQ",Menu_Replace_SEQ);
             AddMenu("Delete SEQ",Menu_Delete_SEQ);
             AddMenuSeparator();
-            AddMenu("Export SEQ - SEQ",Menu_Export_SEQ_SEQ);
+            AddMenu("Export SEQ - SEQ",Menu_Export_SEQ);
             AddMenu("Export SEQ - MIDI",Menu_Export_SEQ_MIDI);
         }
 
@@ -50,7 +50,7 @@ namespace CrashEdit
             Dispose();
         }
 
-        private void Menu_Export_SEQ_SEQ(object sender,EventArgs e)
+        private void Menu_Export_SEQ(object sender,EventArgs e)
         {
             byte[] data = seq.Save();
             FileUtil.SaveFile(data,FileUtil.SEQFilter + "|" + FileUtil.AnyFilter);
