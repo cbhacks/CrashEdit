@@ -204,6 +204,7 @@ namespace CrashEdit
             Pen borderpen = Pens.Black;
             Brush brush = Brushes.Navy;
             Brush backbrush = Brushes.White;
+            Brush hibackbrush = Brushes.LightGreen;
             Brush selbrush = Brushes.White;
             Brush selbackbrush = Brushes.Navy;
             Brush deadselbackbrush = Brushes.DarkGray;
@@ -246,7 +247,7 @@ namespace CrashEdit
                     {
                         curfont = font;
                         curbrush = brush;
-                        curbackbrush = backbrush;
+                        curbackbrush = (data[x + (offset + y) * 16] != 0) ? hibackbrush : backbrush;
                         curformat = format;
                     }
                     else
