@@ -19,9 +19,9 @@ namespace Crash
             if (str == null)
                 throw new ArgumentNullException("str");
             if (offset < 0)
-                throw new ArgumentException("Offset cannot be negative.");
+                throw new ArgumentOutOfRangeException("offset");
             if (offset + 2 > str.Length)
-                throw new ArgumentOutOfRangeException("Offset exceeds string bounds.");
+                throw new ArgumentOutOfRangeException("offset");
             int result = 0;
             result |= str[offset + 0] << 8 * 0;
             result |= str[offset + 1] << 8 * 1;
@@ -33,9 +33,9 @@ namespace Crash
             if (str == null)
                 throw new ArgumentNullException("str");
             if (offset < 0)
-                throw new ArgumentException("Offset cannot be negative.");
+                throw new ArgumentOutOfRangeException("offset");
             if (offset + 4 > str.Length)
-                throw new ArgumentOutOfRangeException("Offset exceeds string bounds.");
+                throw new ArgumentOutOfRangeException("offset");
             int result = 0;
             result |= str[offset + 0] << 8 * 0;
             result |= str[offset + 1] << 8 * 1;
@@ -49,9 +49,9 @@ namespace Crash
             if (str == null)
                 throw new ArgumentNullException("str");
             if (offset < 0)
-                throw new ArgumentException("Offset cannot be negative.");
+                throw new ArgumentOutOfRangeException("offset");
             if (offset + 2 > str.Length)
-                throw new ArgumentOutOfRangeException("Offset exceeds string bounds.");
+                throw new ArgumentOutOfRangeException("offset");
             int result = 0;
             result |= str[offset + 0] << 8 * 1;
             result |= str[offset + 1] << 8 * 0;
@@ -63,9 +63,9 @@ namespace Crash
             if (str == null)
                 throw new ArgumentNullException("str");
             if (offset < 0)
-                throw new ArgumentException("Offset cannot be negative.");
+                throw new ArgumentOutOfRangeException("offset");
             if (offset + 4 > str.Length)
-                throw new ArgumentOutOfRangeException("Offset exceeds string bounds.");
+                throw new ArgumentOutOfRangeException("offset");
             int result = 0;
             result |= str[offset + 0] << 8 * 3;
             result |= str[offset + 1] << 8 * 2;
@@ -89,9 +89,9 @@ namespace Crash
             if (str == null)
                 throw new ArgumentNullException("str");
             if (offset < 0)
-                throw new ArgumentException("Offset cannot be negative.");
+                throw new ArgumentOutOfRangeException("offset");
             if (offset + 2 > str.Length)
-                throw new ArgumentOutOfRangeException("Offset exceeds string bounds.");
+                throw new ArgumentOutOfRangeException("offset");
             str[offset + 0] = (byte)((value >> 8 * 0) & 0xFF);
             str[offset + 1] = (byte)((value >> 8 * 1) & 0xFF);
         }
@@ -101,9 +101,9 @@ namespace Crash
             if (str == null)
                 throw new ArgumentNullException("str");
             if (offset < 0)
-                throw new ArgumentException("Offset cannot be negative.");
+                throw new ArgumentOutOfRangeException("offset");
             if (offset + 4 > str.Length)
-                throw new ArgumentOutOfRangeException("Offset exceeds string bounds.");
+                throw new ArgumentOutOfRangeException("offset");
             str[offset + 0] = (byte)((value >> 8 * 0) & 0xFF);
             str[offset + 1] = (byte)((value >> 8 * 1) & 0xFF);
             str[offset + 2] = (byte)((value >> 8 * 2) & 0xFF);
@@ -115,9 +115,9 @@ namespace Crash
             if (str == null)
                 throw new ArgumentNullException("str");
             if (offset < 0)
-                throw new ArgumentException("Offset cannot be negative.");
+                throw new ArgumentOutOfRangeException("offset");
             if (offset + 2 > str.Length)
-                throw new ArgumentOutOfRangeException("Offset exceeds string bounds.");
+                throw new ArgumentOutOfRangeException("offset");
             str[offset + 0] = (byte)((value >> 8 * 1) & 0xFF);
             str[offset + 1] = (byte)((value >> 8 * 0) & 0xFF);
         }
@@ -127,9 +127,9 @@ namespace Crash
             if (str == null)
                 throw new ArgumentNullException("str");
             if (offset < 0)
-                throw new ArgumentException("Offset cannot be negative.");
+                throw new ArgumentOutOfRangeException("offset");
             if (offset + 4 > str.Length)
-                throw new ArgumentOutOfRangeException("Offset exceeds string bounds.");
+                throw new ArgumentOutOfRangeException("offset");
             str[offset + 0] = (byte)((value >> 8 * 3) & 0xFF);
             str[offset + 1] = (byte)((value >> 8 * 2) & 0xFF);
             str[offset + 2] = (byte)((value >> 8 * 1) & 0xFF);

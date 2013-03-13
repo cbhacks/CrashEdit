@@ -8,9 +8,9 @@ namespace Crash.Audio
         public static VHProgram Load(byte[] data,byte[] tonedata)
         {
             if (data.Length != 16)
-                throw new ArgumentException("Value must be 16 bytes.","data");
+                throw new ArgumentException("Value must be 16 bytes long.","data");
             if (tonedata.Length != 32 * 16)
-                throw new ArgumentException("Value must be 512 bytes.","tonedata");
+                throw new ArgumentException("Value must be 512 bytes long.","tonedata");
             byte tonecount = data[0];
             byte volume = data[1];
             byte priority = data[2];
