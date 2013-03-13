@@ -9,9 +9,6 @@ using System.Windows.Forms;
 
 namespace CrashEdit
 {
-    [EditorControl(typeof(UnknownChunk))]
-    [EditorControl(typeof(T15Entry))]
-    [EditorControl(typeof(DemoEntry))]
     public sealed class MysteryBox : UserControl
     {
         private byte[] data;
