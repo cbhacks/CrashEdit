@@ -72,6 +72,7 @@
     <Compile Include="Chunk.cs" />
     <Compile Include="ChunkLoader.cs" />
     <Compile Include="ChunkTypeAttribute.cs" />
+    <Compile Include="BEBitConv.cs" />
     <Compile Include="PackingException.cs" />
     <Compile Include="EntryChunk.cs" />
     <Compile Include="EntryTypeAttribute.cs" />
