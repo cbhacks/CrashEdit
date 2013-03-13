@@ -11,9 +11,9 @@ namespace Crash
                 throw new ArgumentNullException("data");
             if (data.Length != Chunk.Length)
                 throw new ArgumentException("Data must be 65536 bytes long.");
-            int id = BitConv.FromWord(data,4);
-            int entrycount = BitConv.FromWord(data,8);
-            int unknown2 = BitConv.FromWord(data,12);
+            int id = BitConv.FromInt32(data,4);
+            int entrycount = BitConv.FromInt32(data,8);
+            int unknown2 = BitConv.FromInt32(data,12);
             int headersize = 20 + entrycount * 4;
             if (id != chunkid)
             {
@@ -31,8 +31,8 @@ namespace Crash
             byte[] entrydata;
             for (int i = 0;i < entrycount;i++)
             {
-                int entrystart = BitConv.FromWord(data,16 + i * 4);
-                int entryend = BitConv.FromWord(data,20 + i * 4);
+                int entrystart = BitConv.FromInt32(data,16 + i * 4);
+                int entryend = BitConv.FromInt32(data,20 + i * 4);
                 if (entrystart < 0)
                 {
                     throw new LoadException();

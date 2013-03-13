@@ -24,14 +24,14 @@ namespace Crash.Audio
             byte pitchbendmaximum = data[13];
             byte reserved1 = data[14];
             byte reserved2 = data[15];
-            short adsr1 = BitConv.FromHalf(data,16);
-            short adsr2 = BitConv.FromHalf(data,18);
+            short adsr1 = BitConv.FromInt16(data,16);
+            short adsr2 = BitConv.FromInt16(data,18);
             // Unused 2 bytes here
-            short wave = BitConv.FromHalf(data,22);
-            short reserved3 = BitConv.FromHalf(data,24);
-            short reserved4 = BitConv.FromHalf(data,26);
-            short reserved5 = BitConv.FromHalf(data,28);
-            short reserved6 = BitConv.FromHalf(data,30);
+            short wave = BitConv.FromInt16(data,22);
+            short reserved3 = BitConv.FromInt16(data,24);
+            short reserved4 = BitConv.FromInt16(data,26);
+            short reserved5 = BitConv.FromInt16(data,28);
+            short reserved6 = BitConv.FromInt16(data,30);
             if (reserved1 != 0xB1)
             {
                 throw new LoadException();
@@ -227,14 +227,14 @@ namespace Crash.Audio
             data[13] = pitchbendmaximum;
             data[14] = 0xB1;
             data[15] = 0xB2;
-            BitConv.ToHalf(data,16,adsr1);
-            BitConv.ToHalf(data,18,adsr2);
-            BitConv.ToHalf(data,20,(short)program);
-            BitConv.ToHalf(data,22,wave);
-            BitConv.ToHalf(data,24,0xC0);
-            BitConv.ToHalf(data,26,0xC1);
-            BitConv.ToHalf(data,28,0xC2);
-            BitConv.ToHalf(data,30,0xC3);
+            BitConv.ToInt16(data,16,adsr1);
+            BitConv.ToInt16(data,18,adsr2);
+            BitConv.ToInt16(data,20,(short)program);
+            BitConv.ToInt16(data,22,wave);
+            BitConv.ToInt16(data,24,0xC0);
+            BitConv.ToInt16(data,26,0xC1);
+            BitConv.ToInt16(data,28,0xC2);
+            BitConv.ToInt16(data,30,0xC3);
             return data;
         }
     }

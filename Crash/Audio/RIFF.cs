@@ -43,7 +43,7 @@ namespace Crash.Audio
             result[1] = (byte)'I';
             result[2] = (byte)'F';
             result[3] = (byte)'F';
-            BitConv.ToIntLE(result,4,data.Count);
+            BitConv.ToInt32(result,4,data.Count);
             data.CopyTo(result,8);
             return result;
         }

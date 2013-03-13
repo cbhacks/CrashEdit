@@ -22,10 +22,10 @@ namespace Crash
             {
                 throw new LoadException();
             }
-            int magic = BitConv.FromWord(data,0);
-            int unknown = BitConv.FromWord(data,4);
-            int type = BitConv.FromWord(data,8);
-            int itemcount = BitConv.FromWord(data,12);
+            int magic = BitConv.FromInt32(data,0);
+            int unknown = BitConv.FromInt32(data,4);
+            int type = BitConv.FromInt32(data,8);
+            int itemcount = BitConv.FromInt32(data,12);
             if (magic != Magic)
             {
                 throw new LoadException();
@@ -42,8 +42,8 @@ namespace Crash
             byte[] itemdata;
             for (int i = 0;i < itemcount;i++)
             {
-                int itemstart = BitConv.FromWord(data,16 + i * 4);
-                int itemend = BitConv.FromWord(data,20 + i * 4);
+                int itemstart = BitConv.FromInt32(data,16 + i * 4);
+                int itemend = BitConv.FromInt32(data,20 + i * 4);
                 if (itemstart < 0)
                 {
                     throw new LoadException();
@@ -109,19 +109,19 @@ namespace Crash
                 Aligner.Align(ref length,4);
             }
             byte[] data = new byte [length];
-            BitConv.ToWord(data,0,Magic);
-            BitConv.ToWord(data,4,Unknown);
-            BitConv.ToWord(data,8,Type);
-            BitConv.ToWord(data,12,items.Count);
+            BitConv.ToInt32(data,0,Magic);
+            BitConv.ToInt32(data,4,Unknown);
+            BitConv.ToInt32(data,8,Type);
+            BitConv.ToInt32(data,12,items.Count);
             int offset = 20 + items.Count * 4;
             Aligner.Align(ref offset,4);
-            BitConv.ToWord(data,16,offset);
+            BitConv.ToInt32(data,16,offset);
             for (int i = 0;i < items.Count;i++)
             {
                 items[i].CopyTo(data,offset);
                 offset += items[i].Length;
                 Aligner.Align(ref offset,4);
-                BitConv.ToWord(data,20 + i * 4,offset);
+                BitConv.ToInt32(data,20 + i * 4,offset);
             }
             return data;
         }

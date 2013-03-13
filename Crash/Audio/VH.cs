@@ -14,8 +14,8 @@ namespace Crash.Audio
             {
                 throw new LoadException();
             }
-            int magic = BitConv.FromWord(data,0);
-            int version = BitConv.FromWord(data,4);
+            int magic = BitConv.FromInt32(data,0);
+            int version = BitConv.FromInt32(data,4);
             if (magic != Magic)
             {
                 throw new LoadException();
@@ -24,17 +24,17 @@ namespace Crash.Audio
             {
                 throw new LoadException();
             }
-            int id = BitConv.FromWord(data,8);
-            int size = BitConv.FromWord(data,12);
-            short reserved1 = BitConv.FromHalf(data,16);
-            short programcount = BitConv.FromHalf(data,18);
-            short tonecount = BitConv.FromHalf(data,20);
-            short wavecount = BitConv.FromHalf(data,22);
+            int id = BitConv.FromInt32(data,8);
+            int size = BitConv.FromInt32(data,12);
+            short reserved1 = BitConv.FromInt16(data,16);
+            short programcount = BitConv.FromInt16(data,18);
+            short tonecount = BitConv.FromInt16(data,20);
+            short wavecount = BitConv.FromInt16(data,22);
             byte volume = data[24];
             byte panning = data[25];
             byte attribute1 = data[26];
             byte attribute2 = data[27];
-            int reserved2 = BitConv.FromWord(data,28);
+            int reserved2 = BitConv.FromInt32(data,28);
             if (id != 0)
             {
                 throw new LoadException();
@@ -84,7 +84,7 @@ namespace Crash.Audio
             int[] waves = new int [wavecount];
             for (int i = 0;i < wavecount;i++)
             {
-                int wave = BitConv.FromHalf(data,32 + 16 * 128 + 32 * 16 * programcount + 2 + i * 2);
+                int wave = BitConv.FromInt16(data,32 + 16 * 128 + 32 * 16 * programcount + 2 + i * 2);
                 if (wave % 2 != 0)
                 {
                     throw new LoadException();
@@ -155,24 +155,24 @@ namespace Crash.Audio
         public byte[] Save()
         {
             byte[] data = new byte [2592 + 32 * 16 * programs.Count];
-            BitConv.ToWord(data,0,Magic);
-            BitConv.ToWord(data,4,Version);
-            BitConv.ToWord(data,8,0);
-            BitConv.ToWord(data,12,data.Length + vbsize * 16);
-            BitConv.ToHalf(data,16,-0x1112);
+            BitConv.ToInt32(data,0,Magic);
+            BitConv.ToInt32(data,4,Version);
+            BitConv.ToInt32(data,8,0);
+            BitConv.ToInt32(data,12,data.Length + vbsize * 16);
+            BitConv.ToInt16(data,16,-0x1112);
             int tonecount = 0;
             foreach (VHProgram program in programs)
             {
                 tonecount += program.Tones.Count;
             }
-            BitConv.ToHalf(data,18,(short)programs.Count);
-            BitConv.ToHalf(data,20,(short)tonecount);
-            BitConv.ToHalf(data,22,(short)waves.Count);
+            BitConv.ToInt16(data,18,(short)programs.Count);
+            BitConv.ToInt16(data,20,(short)tonecount);
+            BitConv.ToInt16(data,22,(short)waves.Count);
             data[24] = volume;
             data[25] = panning;
             data[26] = attribute1;
             data[27] = attribute2;
-            BitConv.ToWord(data,28,-1);
+            BitConv.ToInt32(data,28,-1);
             for (int i = 0;i < 128;i++)
             {
                 if (i < programs.Count)
@@ -201,7 +201,7 @@ namespace Crash.Audio
             }
             for (int i = 0;i < waves.Count;i++)
             {
-                BitConv.ToHalf(data,2080 + 32 * 16 * programs.Count + 2 + i * 2,(short)(waves[i] * 2));
+                BitConv.ToInt16(data,2080 + 32 * 16 * programs.Count + 2 + i * 2,(short)(waves[i] * 2));
             }
             return data;
         }

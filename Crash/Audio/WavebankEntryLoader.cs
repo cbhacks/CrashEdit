@@ -17,8 +17,8 @@ namespace Crash.Audio
             {
                 throw new LoadException();
             }
-            int id = BitConv.FromWord(items[0],0);
-            int length = BitConv.FromWord(items[0],4);
+            int id = BitConv.FromInt32(items[0],0);
+            int length = BitConv.FromInt32(items[0],4);
             if (id < 0 || id > 3)
             {
                 throw new LoadException();

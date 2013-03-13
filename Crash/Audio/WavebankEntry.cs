@@ -35,8 +35,8 @@ namespace Crash.Audio
         {
             byte[] info = new byte [8];
             byte[] data = samples.Save();
-            BitConv.ToWord(info,0,id);
-            BitConv.ToWord(info,4,data.Length);
+            BitConv.ToInt32(info,0,id);
+            BitConv.ToInt32(info,4,data.Length);
             byte[][] items = new byte [2][];
             items[0] = info;
             items[1] = data;

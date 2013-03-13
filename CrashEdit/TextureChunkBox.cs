@@ -61,7 +61,7 @@ namespace CrashEdit
                     {
                         for (int x = 0;x < 256;x++)
                         {
-                            short color = BitConv.FromHalf(chunk.Data,x * 2 + y * 512);
+                            short color = BitConv.FromInt16(chunk.Data,x * 2 + y * 512);
                             byte alpha;
                             byte red;
                             byte green;

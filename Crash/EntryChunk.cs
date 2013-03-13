@@ -56,14 +56,14 @@ namespace Crash
             if (alignoffset < 0 || alignoffset >= align)
                 throw new ArgumentOutOfRangeException("alignoffset");
             byte[] data = new byte [Length];
-            BitConv.ToHalf(data,0,Magic);
-            BitConv.ToHalf(data,2,Type);
-            BitConv.ToWord(data,4,chunkid);
-            BitConv.ToWord(data,8,entries.Count);
-            BitConv.ToWord(data,12,unknown2);
+            BitConv.ToInt16(data,0,Magic);
+            BitConv.ToInt16(data,2,Type);
+            BitConv.ToInt32(data,4,chunkid);
+            BitConv.ToInt32(data,8,entries.Count);
+            BitConv.ToInt32(data,12,unknown2);
             int offset = 20 + entries.Count * 4;
             Aligner.Align(ref offset,align,alignoffset);
-            BitConv.ToWord(data,16,offset);
+            BitConv.ToInt32(data,16,offset);
             for (int i = 0;i < entries.Count;i++)
             {
                 byte[] entrydata = entries[i].Save();
@@ -78,7 +78,7 @@ namespace Crash
                     // Ugly hack
                     Aligner.Align(ref offset,align,alignoffset);
                 }
-                BitConv.ToWord(data,20 + i * 4,offset);
+                BitConv.ToInt32(data,20 + i * 4,offset);
             }
             return data;
         }

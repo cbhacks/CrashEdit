@@ -11,10 +11,10 @@ namespace Crash.Game
             {
                 throw new LoadException();
             }
-            int length = BitConv.FromWord(data,0);
-            int blank1 = BitConv.FromWord(data,4);
-            int blank2 = BitConv.FromWord(data,8);
-            int fieldcount = BitConv.FromWord(data,12);
+            int length = BitConv.FromInt32(data,0);
+            int blank1 = BitConv.FromInt32(data,4);
+            int blank2 = BitConv.FromInt32(data,8);
+            int fieldcount = BitConv.FromInt32(data,12);
             if (length != data.Length)
             {
                 throw new LoadException();
@@ -35,17 +35,17 @@ namespace Crash.Game
             ushort? lastend = null;
             for (int i = 0;i < fieldcount;i++)
             {
-                short type = BitConv.FromHalf(data,16 + i * 8);
-                int offset = (ushort)BitConv.FromHalf(data,18 + i * 8) + 12;
+                short type = BitConv.FromInt16(data,16 + i * 8);
+                int offset = (ushort)BitConv.FromInt16(data,18 + i * 8) + 12;
                 byte unknown1 = data[20 + i * 8];
                 byte elementsize = data[21 + i * 8];
-                short unknown2 = BitConv.FromHalf(data,22 + i * 8);
+                short unknown2 = BitConv.FromInt16(data,22 + i * 8);
                 if (data.Length < offset + 4)
                 {
                     throw new LoadException();
                 }
-                short elementcount = BitConv.FromHalf(data,offset);
-                short unknown3 = BitConv.FromHalf(data,offset + 2);
+                short elementcount = BitConv.FromInt16(data,offset);
+                short unknown3 = BitConv.FromInt16(data,offset + 2);
                 if (data.Length < offset + 4 + elementcount * elementsize)
                 {
                     throw new LoadException();
@@ -121,21 +121,21 @@ namespace Crash.Game
                 Aligner.Align(ref length,4);
             }
             byte[] data = new byte [length];
-            BitConv.ToWord(data,0,length);
-            BitConv.ToWord(data,4,0);
-            BitConv.ToWord(data,8,0);
-            BitConv.ToWord(data,12,fields.Count);
+            BitConv.ToInt32(data,0,length);
+            BitConv.ToInt32(data,4,0);
+            BitConv.ToInt32(data,8,0);
+            BitConv.ToInt32(data,12,fields.Count);
             int offset = 16 + 8 * fields.Count;
             for (int i = 0;i < fields.Count;i++)
             {
                 EntityField field = fields[i];
-                BitConv.ToHalf(data,16 + 8 * i + 0,field.Type);
-                BitConv.ToHalf(data,16 + 8 * i + 2,(short)(offset - 12));
+                BitConv.ToInt16(data,16 + 8 * i + 0,field.Type);
+                BitConv.ToInt16(data,16 + 8 * i + 2,(short)(offset - 12));
                 data[16 + 8 * i + 4] = field.Unknown1;
                 data[16 + 8 * i + 5] = field.ElementSize;
-                BitConv.ToHalf(data,16 + 8 * i + 6,field.Unknown2);
-                BitConv.ToHalf(data,offset + 0,field.ElementCount);
-                BitConv.ToHalf(data,offset + 2,field.Unknown3);
+                BitConv.ToInt16(data,16 + 8 * i + 6,field.Unknown2);
+                BitConv.ToInt16(data,offset + 0,field.ElementCount);
+                BitConv.ToInt16(data,offset + 2,field.Unknown3);
                 offset += 4;
                 field.Data.CopyTo(data,offset);
                 offset += field.ElementCount * field.ElementSize;

@@ -22,7 +22,7 @@ namespace Crash.Audio
             result[1] = (byte)Name[1];
             result[2] = (byte)Name[2];
             result[3] = (byte)Name[3];
-            BitConv.ToIntLE(result,4,data.Length);
+            BitConv.ToInt32(result,4,data.Length);
             data.CopyTo(result,8);
             return result;
         }

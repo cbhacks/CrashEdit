@@ -17,9 +17,9 @@ namespace Crash.Audio
             byte mode = data[3];
             byte panning = data[4];
             byte reserved1 = data[5];
-            short attribute = BitConv.FromHalf(data,6);
-            int reserved2 = BitConv.FromWord(data,8);
-            int reserved3 = BitConv.FromWord(data,12);
+            short attribute = BitConv.FromInt16(data,6);
+            int reserved2 = BitConv.FromInt32(data,8);
+            int reserved3 = BitConv.FromInt32(data,12);
             if (tonecount < 0 || tonecount > 16)
             {
                 throw new LoadException();
@@ -114,9 +114,9 @@ namespace Crash.Audio
             data[3] = mode;
             data[4] = panning;
             data[5] = 0xFF;
-            BitConv.ToHalf(data,6,attribute);
-            BitConv.ToWord(data,8,-1);
-            BitConv.ToWord(data,12,-1);
+            BitConv.ToInt16(data,6,attribute);
+            BitConv.ToInt32(data,8,-1);
+            BitConv.ToInt32(data,12,-1);
             return data;
         }
     }

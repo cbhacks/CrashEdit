@@ -57,8 +57,8 @@ namespace Crash.Audio
                 int adh = (data[i] & 0xF0) >> 4;
                 short l = ADPCMConv.FromADPCM(adl,factor,predict,ref s0,ref s1);
                 short h = ADPCMConv.FromADPCM(adh,factor,predict,ref s0,ref s1);
-                BitConv.ToShortLE(result,i * 4 + 0,l);
-                BitConv.ToShortLE(result,i * 4 + 2,h);
+                BitConv.ToInt16(result,i * 4 + 0,l);
+                BitConv.ToInt16(result,i * 4 + 2,h);
             }
             return result;
         }

@@ -13,8 +13,8 @@ namespace Crash.Unknown0
             {
                 throw new LoadException();
             }
-            short count = BitConv.FromHalf(data,0);
-            short unknown1 = BitConv.FromHalf(data,2);
+            short count = BitConv.FromInt16(data,0);
+            short unknown1 = BitConv.FromInt16(data,2);
             if (count < 0)
             {
                 throw new LoadException();
@@ -26,7 +26,7 @@ namespace Crash.Unknown0
             short[] values = new short [count];
             for (int i = 0;i < count;i++)
             {
-                values[i] = BitConv.FromHalf(data,4 + i * 2);
+                values[i] = BitConv.FromInt16(data,4 + i * 2);
             }
             return new T4Item(unknown1,values);
         }
@@ -59,11 +59,11 @@ namespace Crash.Unknown0
             {
                 throw new Exception();
             }
-            BitConv.ToHalf(data,0,(short)values.Count);
-            BitConv.ToHalf(data,2,unknown1);
+            BitConv.ToInt16(data,0,(short)values.Count);
+            BitConv.ToInt16(data,2,unknown1);
             for (int i = 0;i < values.Count;i++)
             {
-                BitConv.ToHalf(data,4 + i * 2,values[i]);
+                BitConv.ToInt16(data,4 + i * 2,values[i]);
             }
             return data;
         }

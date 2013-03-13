@@ -19,8 +19,8 @@ namespace Crash.Audio
             {
                 throw new LoadException();
             }
-            int magic = BitConv.FromIntBE(data,0);
-            short version = BitConv.FromShortBE(data,4);
+            int magic = BEBitConv.FromInt32(data,0);
+            short version = BEBitConv.FromInt16(data,4);
             if (magic != Magic)
             {
                 throw new LoadException();
@@ -37,12 +37,12 @@ namespace Crash.Audio
                 {
                     throw new LoadException();
                 }
-                short seqid = BitConv.FromShortBE(data,offset);
-                short resolution = BitConv.FromShortBE(data,offset + 2);
+                short seqid = BEBitConv.FromInt16(data,offset);
+                short resolution = BEBitConv.FromInt16(data,offset + 2);
                 // tempo is 3 (yes, three) bytes
                 int tempo = MIDIConv.From3BE(data,offset + 4);
-                short rhythm = BitConv.FromShortBE(data,offset + 7);
-                int length = BitConv.FromIntBE(data,offset + 9);
+                short rhythm = BEBitConv.FromInt16(data,offset + 7);
+                int length = BEBitConv.FromInt32(data,offset + 9);
                 if (seqid != i)
                 {
                     throw new LoadException();
@@ -87,17 +87,17 @@ namespace Crash.Audio
                 length += seq.Data.Length;
             }
             byte[] data = new byte [length];
-            BitConv.ToIntBE(data,0,Magic);
-            BitConv.ToShortBE(data,4,Version);
+            BEBitConv.ToInt32(data,0,Magic);
+            BEBitConv.ToInt16(data,4,Version);
             int offset = 6;
             for (int i = 0;i < seqs.Count;i++)
             {
                 SEQ seq = seqs[i];
-                BitConv.ToShortBE(data,offset,(short)i);
-                BitConv.ToShortBE(data,offset + 2,seq.Resolution);
+                BEBitConv.ToInt16(data,offset,(short)i);
+                BEBitConv.ToInt16(data,offset + 2,seq.Resolution);
                 MIDIConv.To3BE(data,offset + 4,seq.Tempo);
-                BitConv.ToShortBE(data,offset + 7,seq.Rhythm);
-                BitConv.ToIntBE(data,offset + 9,seq.Data.Length);
+                BEBitConv.ToInt16(data,offset + 7,seq.Rhythm);
+                BEBitConv.ToInt32(data,offset + 9,seq.Data.Length);
                 offset += 13;
                 seq.Data.CopyTo(data,offset);
                 offset += seq.Data.Length;
