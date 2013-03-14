@@ -85,6 +85,7 @@ namespace CrashEdit
 
             this.Width = 640;
             this.Height = 480;
+            this.Text = "CrashEdit";
             this.Controls.Add(tbcTabs);
             this.Controls.Add(tsToolbar);
         }
