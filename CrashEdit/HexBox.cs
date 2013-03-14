@@ -7,8 +7,8 @@ namespace CrashEdit
 {
     public sealed class HexBox : Control
     {
-        int offset;
-        int position;
+        private int offset;
+        private int position;
         private List<byte> data;
 
         public HexBox()
