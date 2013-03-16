@@ -23,8 +23,8 @@ namespace CrashEdit
             AddMenu("Import VH",Menu_Import_VH);
             AddMenu("Import SEQ",Menu_Import_SEQ);
             AddMenuSeparator();
-            AddMenu("Export VH - VH",Menu_Export_VH);
-            AddMenu("Export SEP - SEP",Menu_Export_SEP);
+            AddMenu("Export VH",Menu_Export_VH);
+            AddMenu("Export SEP",Menu_Export_SEP);
         }
 
         public MusicEntry MusicEntry

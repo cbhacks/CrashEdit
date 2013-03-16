@@ -19,8 +19,8 @@ namespace CrashEdit
             AddMenu("Replace SEQ",Menu_Replace_SEQ);
             AddMenu("Delete SEQ",Menu_Delete_SEQ);
             AddMenuSeparator();
-            AddMenu("Export SEQ - SEQ",Menu_Export_SEQ);
-            AddMenu("Export SEQ - MIDI",Menu_Export_SEQ_MIDI);
+            AddMenu("Export SEQ",Menu_Export_SEQ);
+            AddMenu("Export SEQ as MIDI",Menu_Export_SEQ_MIDI);
         }
 
         public MusicEntryController MusicEntryController
