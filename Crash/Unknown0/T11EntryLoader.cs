@@ -5,7 +5,7 @@ namespace Crash.Unknown0
     [EntryType(11)]
     public sealed class T11EntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int unknown)
+        public override Entry Load(byte[][] items,int eid)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -17,7 +17,7 @@ namespace Crash.Unknown0
             {
                 throw new LoadException();
             }
-            return new T11Entry(items,unknown);
+            return new T11Entry(items,eid);
         }
     }
 }

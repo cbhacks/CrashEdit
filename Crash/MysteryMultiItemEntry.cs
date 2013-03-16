@@ -7,7 +7,7 @@ namespace Crash
     {
         private List<byte[]> items;
 
-        public MysteryMultiItemEntry(IEnumerable<byte[]> items,int unknown) : base(unknown)
+        public MysteryMultiItemEntry(IEnumerable<byte[]> items,int eid) : base(eid)
         {
             if (items == null)
                 throw new ArgumentNullException("items");

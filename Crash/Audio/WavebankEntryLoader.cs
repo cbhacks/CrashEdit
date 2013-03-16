@@ -5,7 +5,7 @@ namespace Crash.Audio
     [EntryType(14)]
     public sealed class WavebankEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int unknown)
+        public override Entry Load(byte[][] items,int eid)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -27,7 +27,7 @@ namespace Crash.Audio
             {
                 throw new LoadException();
             }
-            return new WavebankEntry(id,SampleSet.Load(items[1]),unknown);
+            return new WavebankEntry(id,SampleSet.Load(items[1]),eid);
         }
     }
 }

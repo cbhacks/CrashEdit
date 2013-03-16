@@ -8,7 +8,7 @@ namespace Crash.Audio
         private VH vh;
         private SEP sep;
 
-        public MusicEntry(byte[] unknown1,VH vh,SEP sep,int unknown) : base(unknown)
+        public MusicEntry(byte[] unknown1,VH vh,SEP sep,int eid) : base(eid)
         {
             if (unknown1 == null)
                 throw new ArgumentNullException("unknown1");

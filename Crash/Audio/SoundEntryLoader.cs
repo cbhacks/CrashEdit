@@ -5,7 +5,7 @@ namespace Crash.Audio
     [EntryType(12)]
     public sealed class SoundEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int unknown)
+        public override Entry Load(byte[][] items,int eid)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -13,7 +13,7 @@ namespace Crash.Audio
             {
                 throw new LoadException();
             }
-            return new SoundEntry(SampleSet.Load(items[0]),unknown);
+            return new SoundEntry(SampleSet.Load(items[0]),eid);
         }
     }
 }

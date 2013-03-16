@@ -7,7 +7,7 @@ namespace Crash.Unknown0
     {
         private List<T4Item> t4items;
 
-        public T4Entry(IEnumerable<T4Item> t4items,int unknown) : base(unknown)
+        public T4Entry(IEnumerable<T4Item> t4items,int eid) : base(eid)
         {
             if (t4items == null)
                 throw new ArgumentNullException("t4items");

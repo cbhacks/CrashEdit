@@ -5,7 +5,7 @@ namespace Crash.Game
     [EntryType(7)]
     public sealed class EntityEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int unknown)
+        public override Entry Load(byte[][] items,int eid)
         {
             if (items.Length < 2)
             {
@@ -18,7 +18,7 @@ namespace Crash.Game
             {
                 entities[i - 2] = Entity.Load(items[i]);
             }
-            return new EntityEntry(unknown1,unknown2,entities,unknown);
+            return new EntityEntry(unknown1,unknown2,entities,eid);
         }
     }
 }

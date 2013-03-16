@@ -5,7 +5,7 @@ namespace Crash.Unknown0
 {
     public sealed class T1Entry : MysteryMultiItemEntry
     {
-        public T1Entry(IEnumerable<byte[]> items,int unknown) : base(items,unknown)
+        public T1Entry(IEnumerable<byte[]> items,int eid) : base(items,eid)
         {
         }
 

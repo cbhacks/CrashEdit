@@ -23,7 +23,7 @@ namespace Crash
                 throw new LoadException();
             }
             int magic = BitConv.FromInt32(data,0);
-            int unknown = BitConv.FromInt32(data,4);
+            int eid = BitConv.FromInt32(data,4);
             int type = BitConv.FromInt32(data,8);
             int itemcount = BitConv.FromInt32(data,12);
             if (magic != Magic)
@@ -63,11 +63,11 @@ namespace Crash
             }
             if (loaders.ContainsKey(type))
             {
-                return loaders[type].Load(items,unknown);
+                return loaders[type].Load(items,eid);
             }
             else
             {
-                return new UnknownEntry(items,unknown,type);
+                return new UnknownEntry(items,eid,type);
             }
         }
 
@@ -78,11 +78,11 @@ namespace Crash
             loaders.Add(type,loader);
         }
 
-        private int unknown;
+        private int eid;
 
-        public Entry(int unknown)
+        public Entry(int eid)
         {
-            this.unknown = unknown;
+            this.eid = eid;
         }
 
         public abstract int Type
@@ -90,9 +90,9 @@ namespace Crash
             get;
         }
 
-        public int Unknown
+        public int EID
         {
-            get { return unknown; }
+            get { return eid; }
         }
 
         public abstract byte[] Save();
@@ -110,7 +110,7 @@ namespace Crash
             }
             byte[] data = new byte [length];
             BitConv.ToInt32(data,0,Magic);
-            BitConv.ToInt32(data,4,Unknown);
+            BitConv.ToInt32(data,4,eid);
             BitConv.ToInt32(data,8,Type);
             BitConv.ToInt32(data,12,items.Count);
             int offset = 20 + items.Count * 4;

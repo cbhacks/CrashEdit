@@ -7,7 +7,7 @@ namespace Crash
     {
         private int type;
 
-        public UnknownEntry(IEnumerable<byte[]> items,int unknown,int type) : base(items,unknown)
+        public UnknownEntry(IEnumerable<byte[]> items,int eid,int type) : base(items,eid)
         {
             this.type = type;
         }

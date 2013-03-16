@@ -6,7 +6,7 @@ namespace Crash
     {
         private byte[] data;
 
-        public MysteryUniItemEntry(byte[] data,int unknown) : base(unknown)
+        public MysteryUniItemEntry(byte[] data,int eid) : base(eid)
         {
             if (data == null)
                 throw new ArgumentNullException("data");

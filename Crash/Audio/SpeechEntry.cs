@@ -6,7 +6,7 @@ namespace Crash.Audio
     {
         private SampleSet samples;
 
-        public SpeechEntry(SampleSet samples,int unknown) : base(unknown)
+        public SpeechEntry(SampleSet samples,int eid) : base(eid)
         {
             if (samples == null)
                 throw new ArgumentNullException("samples");

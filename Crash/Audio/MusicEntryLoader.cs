@@ -5,7 +5,7 @@ namespace Crash.Audio
     [EntryType(13)]
     public sealed class MusicEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int unknown)
+        public override Entry Load(byte[][] items,int eid)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -31,7 +31,7 @@ namespace Crash.Audio
                 vh = null;
             }
             SEP sep = SEP.Load(items[2],seqcount);
-            return new MusicEntry(unknown1,vh,sep,unknown);
+            return new MusicEntry(unknown1,vh,sep,eid);
         }
     }
 }

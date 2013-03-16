@@ -5,7 +5,7 @@ namespace Crash.Unknown0
     [EntryType(15)]
     public sealed class T15EntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int unknown)
+        public override Entry Load(byte[][] items,int eid)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -13,7 +13,7 @@ namespace Crash.Unknown0
             {
                 throw new LoadException();
             }
-            return new T15Entry(items[0],unknown);
+            return new T15Entry(items[0],eid);
         }
     }
 }

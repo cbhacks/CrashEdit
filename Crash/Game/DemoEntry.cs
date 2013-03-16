@@ -2,7 +2,7 @@ namespace Crash.Game
 {
     public sealed class DemoEntry : MysteryUniItemEntry
     {
-        public DemoEntry(byte[] data,int unknown) : base(data,unknown)
+        public DemoEntry(byte[] data,int eid) : base(data,eid)
         {
         }
 

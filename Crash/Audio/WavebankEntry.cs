@@ -8,7 +8,7 @@ namespace Crash.Audio
         private int id;
         private SampleSet samples;
 
-        public WavebankEntry(int id,SampleSet samples,int unknown) : base(unknown)
+        public WavebankEntry(int id,SampleSet samples,int eid) : base(eid)
         {
             if (samples == null)
                 throw new ArgumentNullException("samples");
