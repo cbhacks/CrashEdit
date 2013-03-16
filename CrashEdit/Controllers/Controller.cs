@@ -13,14 +13,10 @@ namespace CrashEdit
 
         public Controller()
         {
-            Label label = new Label();
-            label.Dock = DockStyle.Fill;
-            label.TextAlign = ContentAlignment.MiddleCenter;
-            label.Text = "No options available";
             this.node = new TreeNode();
             this.node.Tag = this;
             this.contextmenu = new ContextMenu();
-            this.editor = label;
+            this.editor = null;
             this.node.ContextMenu = contextmenu;
         }
 
@@ -39,6 +35,15 @@ namespace CrashEdit
             contextmenu.MenuItems.Add("-");
         }
 
+        protected virtual Control CreateEditor()
+        {
+            Label label = new Label();
+            label.Dock = DockStyle.Fill;
+            label.TextAlign = ContentAlignment.MiddleCenter;
+            label.Text = "No options available";
+            return label;
+        }
+
         public TreeNode Node
         {
             get { return node; }
@@ -51,11 +56,13 @@ namespace CrashEdit
 
         public Control Editor
         {
-            get { return editor; }
-            protected set
+            get
             {
-                editor.Dispose();
-                editor = value;
+                if (editor == null)
+                {
+                    editor = CreateEditor();
+                }
+                return editor;
             }
         }
 
@@ -72,7 +79,10 @@ namespace CrashEdit
             }
             node.Remove();
             contextmenu.Dispose();
-            editor.Dispose();
+            if (editor != null)
+            {
+                editor.Dispose();
+            }
         }
     }
 }

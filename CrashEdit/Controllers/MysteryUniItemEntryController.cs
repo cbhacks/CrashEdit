@@ -11,9 +11,13 @@ namespace CrashEdit
         public MysteryUniItemEntryController(EntryChunkController entrychunkcontroller,MysteryUniItemEntry mysteryentry) : base(entrychunkcontroller,mysteryentry)
         {
             this.mysteryentry = mysteryentry;
+        }
+
+        protected override Control CreateEditor()
+        {
             MysteryBox box = new MysteryBox(mysteryentry);
             box.Dock = DockStyle.Fill;
-            Editor = box;
+            return box;
         }
 
         public MysteryUniItemEntry MysteryEntry

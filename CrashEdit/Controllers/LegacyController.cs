@@ -216,8 +216,11 @@ namespace CrashEdit
             return label;
         }
 
+        private object obj;
+
         public LegacyController(object obj)
         {
+            this.obj = obj;
             TreeNode legacynode = Populate(obj);
             Node.Text = legacynode.Text;
             Node.ImageKey = legacynode.ImageKey;
@@ -226,7 +229,11 @@ namespace CrashEdit
             {
                 Node.Nodes.Add(new LegacyController(subnode.Tag).Node);
             }
-            Editor = Display(obj);
+        }
+
+        protected override Control CreateEditor()
+        {
+            return Display(obj);
         }
     }
 }
