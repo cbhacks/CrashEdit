@@ -4,17 +4,23 @@ namespace Crash.Audio
 {
     public sealed class MusicEntry : Entry
     {
-        private byte[] unknown1;
+        private int vheid;
+        private int vb0eid;
+        private int vb1eid;
+        private int vb2eid;
+        private int vb3eid;
         private VH vh;
         private SEP sep;
 
-        public MusicEntry(byte[] unknown1,VH vh,SEP sep,int eid) : base(eid)
+        public MusicEntry(int vheid,int vb0eid,int vb1eid,int vb2eid,int vb3eid,VH vh,SEP sep,int eid) : base(eid)
         {
-            if (unknown1 == null)
-                throw new ArgumentNullException("unknown1");
             if (sep == null)
                 throw new ArgumentNullException("sep");
-            this.unknown1 = unknown1;
+            this.vheid = vheid;
+            this.vb0eid = vb0eid;
+            this.vb1eid = vb1eid;
+            this.vb2eid = vb2eid;
+            this.vb3eid = vb3eid;
             this.vh = vh;
             this.sep = sep;
         }
@@ -24,9 +30,29 @@ namespace Crash.Audio
             get { return 13; }
         }
 
-        public byte[] Unknown1
+        public int VHEID
         {
-            get { return unknown1; }
+            get { return vheid; }
+        }
+
+        public int VB0EID
+        {
+            get { return vb0eid; }
+        }
+
+        public int VB1EID
+        {
+            get { return vb1eid; }
+        }
+
+        public int VB2EID
+        {
+            get { return vb2eid; }
+        }
+
+        public int VB3EID
+        {
+            get { return vb3eid; }
         }
 
         public VH VH
@@ -43,7 +69,16 @@ namespace Crash.Audio
         public override byte[] Save()
         {
             byte[][] items = new byte [3][];
-            items[0] = unknown1;
+            items[0] = new byte [36];
+            BitConv.ToInt32(items[0],0,SEP.SEQs.Count);
+            BitConv.ToInt32(items[0],4,vheid);
+            BitConv.ToInt32(items[0],8,vb0eid);
+            BitConv.ToInt32(items[0],12,vb1eid);
+            BitConv.ToInt32(items[0],16,vb2eid);
+            BitConv.ToInt32(items[0],20,vb3eid);
+            BitConv.ToInt32(items[0],24,0x6396347F);
+            BitConv.ToInt32(items[0],28,0x6396347F);
+            BitConv.ToInt32(items[0],32,0x6396347F);
             if (vh != null)
             {
                 items[1] = vh.Save();
