@@ -14,6 +14,7 @@ namespace CrashEdit
         public const string VABFilter = "VAB Files (*.vab)|*.vab";
         public const string SEQFilter = "PS1 Sequence Files (*.seq)|*.seq";
         public const string SEPFilter = "PS1 Sequence Packages (*.sep)|*.sep";
+        public const string DLSFilter = "Downloadable Sounds Files (*.dls)|*.dls";
         public const string MIDIFilter = "MIDI Files (*.mid)|*.mid";
 
         private static OpenFileDialog openfiledlg;
