@@ -43,13 +43,11 @@ namespace CrashEdit
             MusicEntry vhentry = FindEID<MusicEntry>(musicentry.VHEID);
             if (vhentry == null)
             {
-                MessageBox.Show("The linked music entry could not be found.","Export Linked VH");
-                return null;
+                throw new GUIException("The linked music entry could not be found.");
             }
             if (vhentry.VH == null)
             {
-                MessageBox.Show("The linked music entry was found but does not contain a VH file.");
-                return null;
+                throw new GUIException("The linked music entry was found but does not contain a VH file.");
             }
             return vhentry.VH;
         }
@@ -62,8 +60,7 @@ namespace CrashEdit
             WavebankEntry vb3entry = FindEID<WavebankEntry>(musicentry.VB3EID);
             if (vb0entry == null || vb1entry == null || vb2entry == null || vb3entry == null)
             {
-                MessageBox.Show("One or more of the linked wavebank entries could not be found.");
-                return null;
+                throw new GUIException("One or more of the linked wavebank entries could not be found.");
             }
             List<SampleLine> samples = new List<SampleLine>();
             samples.AddRange(vb0entry.Samples.SampleLines);
@@ -76,11 +73,7 @@ namespace CrashEdit
         private VAB FindLinkedVAB()
         {
             VH vh = FindLinkedVH();
-            if (vh == null)
-                return null;
             SampleLine[] vb = FindLinkedVB();
-            if (vb == null)
-                return null;
             return VAB.Join(vh,vb);
         }
 
@@ -115,8 +108,7 @@ namespace CrashEdit
         {
             if (musicentry.VH == null)
             {
-                MessageBox.Show("This music entry does not contain a VH file.","Export VH");
-                return;
+                throw new GUIException("This music entry does not contain a VH file.");
             }
             byte[] data = musicentry.VH.Save();
             FileUtil.SaveFile(data,FileUtil.VHFilter + "|" + FileUtil.AnyFilter);
@@ -131,8 +123,6 @@ namespace CrashEdit
         private void Menu_Export_Linked_VH()
         {
             VH vh = FindLinkedVH();
-            if (vh == null)
-                return;
             byte[] data = vh.Save();
             FileUtil.SaveFile(data,FileUtil.VHFilter + "|" + FileUtil.AnyFilter);
         }
@@ -140,15 +130,13 @@ namespace CrashEdit
         private void Menu_Export_Linked_VB()
         {
             SampleLine[] vb = FindLinkedVB();
-            if (vb == null)
-                return;
             byte[] data = new SampleSet(vb).Save();
             FileUtil.SaveFile(data,FileUtil.VBFilter + "|" + FileUtil.AnyFilter);
         }
 
         private void Menu_Export_Linked_VAB()
         {
-            MessageBox.Show("Not implemented yet. Export VH and VB seperately.");
+            throw new GUIException("Not implemented yet.");
         }
 
         private void Menu_Export_Linked_VAB_DLS()
@@ -158,8 +146,6 @@ namespace CrashEdit
                 return;
             }
             VAB vab = FindLinkedVAB();
-            if (vab == null)
-                return;
             byte[] data = vab.ToDLS().Save();
             FileUtil.SaveFile(data,FileUtil.DLSFilter + "|" + FileUtil.AnyFilter);
         }

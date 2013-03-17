@@ -29,7 +29,14 @@ namespace CrashEdit
         {
             EventHandler handler = delegate(object sender,EventArgs e)
             {
-                proc();
+                try
+                {
+                    proc();
+                }
+                catch (GUIException ex)
+                {
+                    MessageBox.Show(ex.Message,text,MessageBoxButtons.OK,MessageBoxIcon.Error);
+                }
             };
             contextmenu.MenuItems.Add(text,handler);
         }

@@ -76,6 +76,7 @@
     <Compile Include="InputWindow.Designer.cs">
       <DependentUpon>InputWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUIException.cs" />
     <Compile Include="T4ItemBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
