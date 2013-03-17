@@ -56,17 +56,8 @@ namespace Crash
 
         protected byte[] Save(int chunkid,IList<Entry> entries,int unknown2)
         {
-            return Save(chunkid,entries,unknown2,Alignment,AlignmentOffset);
-        }
-
-        protected byte[] Save(int chunkid,IList<Entry> entries,int unknown2,int align,int alignoffset)
-        {
             if (entries == null)
                 throw new ArgumentNullException("entries");
-            if (align < 0)
-                throw new ArgumentOutOfRangeException("align");
-            if (alignoffset < 0 || alignoffset >= align)
-                throw new ArgumentOutOfRangeException("alignoffset");
             byte[] data = new byte [Length];
             BitConv.ToInt16(data,0,Magic);
             BitConv.ToInt16(data,2,Type);
@@ -74,7 +65,7 @@ namespace Crash
             BitConv.ToInt32(data,8,entries.Count);
             BitConv.ToInt32(data,12,unknown2);
             int offset = 20 + entries.Count * 4;
-            Aligner.Align(ref offset,align,alignoffset);
+            Aligner.Align(ref offset,Alignment,AlignmentOffset);
             BitConv.ToInt32(data,16,offset);
             for (int i = 0;i < entries.Count;i++)
             {
@@ -88,7 +79,7 @@ namespace Crash
                 if (i < entries.Count - 1)
                 {
                     // Ugly hack
-                    Aligner.Align(ref offset,align,alignoffset);
+                    Aligner.Align(ref offset,Alignment,AlignmentOffset);
                 }
                 BitConv.ToInt32(data,20 + i * 4,offset);
             }
