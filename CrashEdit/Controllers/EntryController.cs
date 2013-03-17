@@ -50,7 +50,7 @@ namespace CrashEdit
             return entrychunkcontroller.NSFController.NSF.FindEID<T>(eid);
         }
 
-        private void Menu_Delete_Entry(object sender,EventArgs e)
+        private void Menu_Delete_Entry()
         {
             entrychunkcontroller.EntryChunk.Entries.Remove(entry);
             Dispose();

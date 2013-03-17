@@ -55,7 +55,7 @@ namespace CrashEdit
             get { return nsf; }
         }
 
-        private void Menu_Add_NormalChunk(object source,EventArgs e)
+        private void Menu_Add_NormalChunk()
         {
             NormalChunk chunk = new NormalChunk();
             nsf.Chunks.Add(chunk);
@@ -63,7 +63,7 @@ namespace CrashEdit
             AddNode(controller);
         }
 
-        private void Menu_Add_SoundChunk(object source,EventArgs e)
+        private void Menu_Add_SoundChunk()
         {
             SoundChunk chunk = new SoundChunk();
             nsf.Chunks.Add(chunk);
@@ -71,7 +71,7 @@ namespace CrashEdit
             AddNode(controller);
         }
 
-        private void Menu_Add_WavebankChunk(object source,EventArgs e)
+        private void Menu_Add_WavebankChunk()
         {
             WavebankChunk chunk = new WavebankChunk();
             nsf.Chunks.Add(chunk);
@@ -79,7 +79,7 @@ namespace CrashEdit
             AddNode(controller);
         }
 
-        private void Menu_Add_SpeechChunk(object source,EventArgs e)
+        private void Menu_Add_SpeechChunk()
         {
             SpeechChunk chunk = new SpeechChunk();
             nsf.Chunks.Add(chunk);

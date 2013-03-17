@@ -25,7 +25,7 @@ namespace CrashEdit
             get { return chunk; }
         }
 
-        private void Menu_Delete_Chunk(object sender,EventArgs e)
+        private void Menu_Delete_Chunk()
         {
             nsfcontroller.NSF.Chunks.Remove(chunk);
             Dispose();

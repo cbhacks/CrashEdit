@@ -84,7 +84,7 @@ namespace CrashEdit
             return VAB.Join(vh,vb);
         }
 
-        private void Menu_Import_VH(object sender,EventArgs e)
+        private void Menu_Import_VH()
         {
             if (musicentry.VH != null)
             {
@@ -100,7 +100,7 @@ namespace CrashEdit
             }
         }
 
-        private void Menu_Import_SEQ(object sender,EventArgs e)
+        private void Menu_Import_SEQ()
         {
             byte[] data = FileUtil.OpenFile(FileUtil.SEQFilter + "|" + FileUtil.AnyFilter);
             if (data != null)
@@ -111,7 +111,7 @@ namespace CrashEdit
             }
         }
 
-        private void Menu_Export_VH(object sender,EventArgs e)
+        private void Menu_Export_VH()
         {
             if (musicentry.VH == null)
             {
@@ -122,13 +122,13 @@ namespace CrashEdit
             FileUtil.SaveFile(data,FileUtil.VHFilter + "|" + FileUtil.AnyFilter);
         }
 
-        private void Menu_Export_SEP(object sender,EventArgs e)
+        private void Menu_Export_SEP()
         {
             byte[] data = musicentry.SEP.Save();
             FileUtil.SaveFile(data,FileUtil.SEPFilter + "|" + FileUtil.AnyFilter);
         }
 
-        private void Menu_Export_Linked_VH(object sender,EventArgs e)
+        private void Menu_Export_Linked_VH()
         {
             VH vh = FindLinkedVH();
             if (vh == null)
@@ -137,7 +137,7 @@ namespace CrashEdit
             FileUtil.SaveFile(data,FileUtil.VHFilter + "|" + FileUtil.AnyFilter);
         }
 
-        private void Menu_Export_Linked_VB(object sender,EventArgs e)
+        private void Menu_Export_Linked_VB()
         {
             SampleLine[] vb = FindLinkedVB();
             if (vb == null)
@@ -146,12 +146,12 @@ namespace CrashEdit
             FileUtil.SaveFile(data,FileUtil.VBFilter + "|" + FileUtil.AnyFilter);
         }
 
-        private void Menu_Export_Linked_VAB(object sender,EventArgs e)
+        private void Menu_Export_Linked_VAB()
         {
             MessageBox.Show("Not implemented yet. Export VH and VB seperately.");
         }
 
-        private void Menu_Export_Linked_VAB_DLS(object sender,EventArgs e)
+        private void Menu_Export_Linked_VAB_DLS()
         {
             if (MessageBox.Show("Exporting to DLS is experimental.\n\nContinue anyway?","Export Linked VAB as DLS",MessageBoxButtons.YesNo) != DialogResult.Yes)
             {

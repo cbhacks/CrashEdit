@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Controllers\ChunkController.cs" />
     <Compile Include="Controllers\Controller.cs" />
+    <Compile Include="Controllers\ControllerMenuDelegate.cs" />
     <Compile Include="Controllers\DemoEntryController.cs" />
     <Compile Include="Controllers\T15EntryController.cs" />
     <Compile Include="Controllers\T21EntryController.cs" />

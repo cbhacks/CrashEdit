@@ -25,8 +25,12 @@ namespace CrashEdit
             node.Nodes.Add(controller.node);
         }
 
-        protected void AddMenu(string text,EventHandler handler)
+        protected void AddMenu(string text,ControllerMenuDelegate proc)
         {
+            EventHandler handler = delegate(object sender,EventArgs e)
+            {
+                proc();
+            };
             contextmenu.MenuItems.Add(text,handler);
         }
 
