@@ -136,7 +136,9 @@ namespace CrashEdit
 
         private void Menu_Export_Linked_VAB()
         {
-            throw new GUIException("Not implemented yet.");
+            VAB vab = FindLinkedVAB();
+            byte[] data = vab.Save();
+            FileUtil.SaveFile(data,FileUtil.VABFilter + "|" + FileUtil.AnyFilter);
         }
 
         private void Menu_Export_Linked_VAB_DLS()

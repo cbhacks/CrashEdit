@@ -52,6 +52,33 @@ namespace Crash.Audio
             this.waves = new List<SampleSet>(waves);
         }
 
+        public void Split(out VH vh,out SampleLine[] vb)
+        {
+            List<SampleLine> samples = new List<SampleLine>();
+            List<int> wavelengths = new List<int>();
+            foreach (SampleSet wave in waves)
+            {
+                samples.AddRange(wave.SampleLines);
+                wavelengths.Add(wave.SampleLines.Count);
+            }
+            vh = new VH(samples.Count,volume,panning,attribute1,attribute2,programs,wavelengths);
+            vb = samples.ToArray();
+        }
+
+        public byte[] Save()
+        {
+            VH vh;
+            SampleLine[] vb;
+            Split(out vh,out vb);
+            List<byte> result = new List<byte>();
+            result.AddRange(vh.Save());
+            foreach (SampleLine line in vb)
+            {
+                result.AddRange(line.Save());
+            }
+            return result.ToArray();
+        }
+
         public RIFF ToDLS()
         {
             RIFF dls = new RIFF("DLS ");
