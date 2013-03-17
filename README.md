@@ -21,11 +21,13 @@ Currently, this program is not capable of modifying any game files. The current 
 * Extracting most data in a binary format
 
 ## Requirements ##
-You will need Microsoft .NET Framework 2.0 or an alternative such as Mono __(untested)__. In the case of Mono, you will need the following referenced assemblies:
+You will need Microsoft .NET Framework 2.0 or an alternative such as Mono. In the case of Mono, you will need the following referenced assemblies:
 
 * System
 * System.Drawing
 * System.Windows.Forms
+
+If you use Mono, you may need to comment out `[EditorControl(typeof(TextureChunk))]` in CrashEdit/TextureChunkBox.cs and recompile. __Note: doing so will disable the texture viewer.__
 
 ## Installation ##
 Just unzip into a directory and run the exe.
