@@ -16,6 +16,10 @@ namespace CrashEdit
             Node.Text = "Music Entry";
             Node.ImageKey = "musicentry";
             Node.SelectedImageKey = "musicentry";
+            if (musicentry.VH != null)
+            {
+                AddNode(new VHController(this,musicentry.VH));
+            }
             foreach (SEQ seq in musicentry.SEP.SEQs)
             {
                 AddNode(new SEQController(this,seq));
@@ -24,7 +28,6 @@ namespace CrashEdit
             AddMenu("Import VH",Menu_Import_VH);
             AddMenu("Import SEQ",Menu_Import_SEQ);
             AddMenuSeparator();
-            AddMenu("Export VH",Menu_Export_VH);
             AddMenu("Export SEP",Menu_Export_SEP);
             AddMenuSeparator();
             AddMenu("Export Linked VH",Menu_Export_Linked_VH);
@@ -81,15 +84,14 @@ namespace CrashEdit
         {
             if (musicentry.VH != null)
             {
-                if (MessageBox.Show("This music entry already contains a VH file. This operation will replace the VH file.","Import VH",MessageBoxButtons.OKCancel) != DialogResult.OK)
-                {
-                    return;
-                }
+                throw new GUIException("This music entry already contains a VH file.");
             }
             byte[] data = FileUtil.OpenFile(FileUtil.VHFilter + "|" + FileUtil.VABFilter + "|" + FileUtil.AnyFilter);
             if (data != null)
             {
-                musicentry.VH = VH.Load(data);
+                VH vh = VH.Load(data);
+                musicentry.VH = vh;
+                InsertNode(0,new VHController(this,vh));
             }
         }
 
@@ -102,16 +104,6 @@ namespace CrashEdit
                 musicentry.SEP.SEQs.Add(seq);
                 AddNode(new SEQController(this,seq));
             }
-        }
-
-        private void Menu_Export_VH()
-        {
-            if (musicentry.VH == null)
-            {
-                throw new GUIException("This music entry does not contain a VH file.");
-            }
-            byte[] data = musicentry.VH.Save();
-            FileUtil.SaveFile(data,FileUtil.VHFilter + "|" + FileUtil.AnyFilter);
         }
 
         private void Menu_Export_SEP()

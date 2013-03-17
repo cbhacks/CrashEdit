@@ -44,6 +44,7 @@ namespace CrashEdit
                 imglist.Images.Add("t21entry",Resources.ThingImage);
                 imglist.Images.Add("unknownentry",Resources.ThingImage);
                 imglist.Images.Add("entity",Resources.ArrowImage);
+                imglist.Images.Add("vh",Resources.ArrowImage);
                 imglist.Images.Add("seq",Resources.ArrowImage);
                 imglist.Images.Add("t4item",Resources.ArrowImage);
             }
