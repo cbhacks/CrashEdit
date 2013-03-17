@@ -45,6 +45,11 @@ namespace CrashEdit
             }
         }
 
+        protected T FindEID<T>(int eid) where T : Entry
+        {
+            return entrychunkcontroller.NSFController.NSF.FindEID<T>(eid);
+        }
+
         private void Menu_Delete_Entry(object sender,EventArgs e)
         {
             entrychunkcontroller.EntryChunk.Entries.Remove(entry);
