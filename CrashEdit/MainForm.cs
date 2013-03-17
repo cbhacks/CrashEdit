@@ -163,10 +163,17 @@ namespace CrashEdit
 
         public void SaveNSF(string filename,NSF nsf)
         {
-            byte[] nsfdata = nsf.Save();
-            if (MessageBox.Show("Are you sure you want to overwrite this file?","Save Confirmation Prompt",MessageBoxButtons.YesNo) == DialogResult.Yes)
+            try
             {
-                File.WriteAllBytes(filename,nsfdata);
+                byte[] nsfdata = nsf.Save();
+                if (MessageBox.Show("Are you sure you want to overwrite this file?","Save Confirmation Prompt",MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    File.WriteAllBytes(filename,nsfdata);
+                }
+            }
+            catch (PackingException)
+            {
+                MessageBox.Show("A packing error occurred. One of the entry-containing chunks contains over 64 KB of data.","Save",MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
         }
 
