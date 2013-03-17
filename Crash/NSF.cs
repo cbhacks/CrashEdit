@@ -39,6 +39,23 @@ namespace Crash
             get { return chunks; }
         }
 
+        public T FindEID<T>(int eid) where T : Entry
+        {
+            foreach (Chunk chunk in chunks)
+            {
+                if (chunk is EntryChunk)
+                {
+                    EntryChunk entrychunk = (EntryChunk)chunk;
+                    T entry = entrychunk.FindEID<T>(eid);
+                    if (entry != null)
+                    {
+                        return entry;
+                    }
+                }
+            }
+            return null;
+        }
+
         public byte[] Save()
         {
             byte[] data = new byte [chunks.Count * Chunk.Length];

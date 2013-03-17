@@ -37,6 +37,18 @@ namespace Crash
             get;
         }
 
+        public T FindEID<T>(int eid) where T : Entry
+        {
+            foreach (Entry entry in entries)
+            {
+                if (entry.EID == eid && entry is T)
+                {
+                    return (T)entry;
+                }
+            }
+            return null;
+        }
+
         public override byte[] Save(int chunkid)
         {
             return Save(chunkid,entries,unknown2);
