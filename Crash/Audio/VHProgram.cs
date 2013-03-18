@@ -124,9 +124,9 @@ namespace Crash.Audio
         {
             RIFF ins = new RIFF("ins ");
             byte[] insh = new byte [12];
-            BitConv.ToIntLE(insh,0,tones.Count);
-            BitConv.ToIntLE(insh,4,drumkit ? (1 << 31) : 0);
-            BitConv.ToIntLE(insh,8,programnumber);
+            BitConv.ToInt32(insh,0,tones.Count);
+            BitConv.ToInt32(insh,4,drumkit ? (1 << 31) : 0);
+            BitConv.ToInt32(insh,8,programnumber);
             ins.Items.Add(new RIFFData("insh",insh));
             RIFF lrgn = new RIFF("lrgn");
             foreach (VHTone tone in tones)

@@ -83,7 +83,7 @@ namespace Crash.Audio
         {
             RIFF dls = new RIFF("DLS ");
             byte[] colh = new byte [4];
-            BitConv.ToIntLE(colh,0,programs.Count * 2);
+            BitConv.ToInt32(colh,0,programs.Count * 2);
             dls.Items.Add(new RIFFData("colh",colh));
             RIFF lins = new RIFF("lins");
             for (int i = 0;i < programs.Count;i++)
@@ -127,11 +127,11 @@ namespace Crash.Audio
             }
             int waveoffset = 0;
             byte[] ptbl = new byte [8 + 4 * waves.Count];
-            BitConv.ToIntLE(ptbl,0,8);
-            BitConv.ToIntLE(ptbl,4,waves.Count);
+            BitConv.ToInt32(ptbl,0,8);
+            BitConv.ToInt32(ptbl,4,waves.Count);
             for (int i = 0;i < waves.Count;i++)
             {
-                BitConv.ToIntLE(ptbl,8 + i * 4,waveoffset);
+                BitConv.ToInt32(ptbl,8 + i * 4,waveoffset);
                 waveoffset += wvpl.Items[i].Length;
             }
             dls.Items.Add(new RIFFData("ptbl",ptbl));
