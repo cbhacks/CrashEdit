@@ -8,8 +8,6 @@ using System.Windows.Forms;
 
 namespace CrashEdit
 {
-    [EditorControl(typeof(SoundEntry))]
-    [EditorControl(typeof(SpeechEntry))]
     public sealed class SoundBox : UserControl
     {
         private SampleSet samples;

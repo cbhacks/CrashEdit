@@ -29,11 +29,11 @@ namespace CrashEdit
                 }
                 else if (entry is T4Entry)
                 {
-                    AddNode(new LegacyController(entry));
+                    AddNode(new T4EntryController(this,(T4Entry)entry));
                 }
                 else if (entry is EntityEntry)
                 {
-                    AddNode(new LegacyController(entry));
+                    AddNode(new EntityEntryController(this,(EntityEntry)entry));
                 }
                 else if (entry is T11Entry)
                 {
@@ -41,7 +41,7 @@ namespace CrashEdit
                 }
                 else if (entry is SoundEntry)
                 {
-                    AddNode(new LegacyController(entry));
+                    AddNode(new SoundEntryController(this,(SoundEntry)entry));
                 }
                 else if (entry is MusicEntry)
                 {
@@ -49,7 +49,7 @@ namespace CrashEdit
                 }
                 else if (entry is WavebankEntry)
                 {
-                    AddNode(new LegacyController(entry));
+                    AddNode(new WavebankEntryController(this,(WavebankEntry)entry));
                 }
                 else if (entry is T15Entry)
                 {
@@ -65,7 +65,7 @@ namespace CrashEdit
                 }
                 else if (entry is SpeechEntry)
                 {
-                    AddNode(new LegacyController(entry));
+                    AddNode(new SpeechEntryController(this,(SpeechEntry)entry));
                 }
                 else if (entry is T21Entry)
                 {

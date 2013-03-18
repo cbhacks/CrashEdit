@@ -48,6 +48,12 @@
     <Compile Include="Controllers\ChunkController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\ControllerMenuDelegate.cs" />
+    <Compile Include="Controllers\WavebankEntryController.cs" />
+    <Compile Include="Controllers\SpeechEntryController.cs" />
+    <Compile Include="Controllers\SoundEntryController.cs" />
+    <Compile Include="Controllers\EntityController.cs" />
+    <Compile Include="Controllers\EntityEntryController.cs" />
+    <Compile Include="Controllers\T4EntryController.cs" />
     <Compile Include="Controllers\VHController.cs" />
     <Compile Include="Controllers\DemoEntryController.cs" />
     <Compile Include="Controllers\T15EntryController.cs" />

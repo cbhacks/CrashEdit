@@ -33,17 +33,9 @@ namespace CrashEdit
             {
                 return Populate((Chunk)obj);
             }
-            else if (obj is Entry)
-            {
-                return Populate((Entry)obj);
-            }
             else if (obj is T4Item)
             {
                 return Populate((T4Item)obj,-1);
-            }
-            else if (obj is Entity)
-            {
-                return Populate((Entity)obj);
             }
             else
             {
@@ -70,109 +62,6 @@ namespace CrashEdit
             node.Text = "Texture Chunk";
             node.ImageKey = "texturechunk";
             node.SelectedImageKey = "texturechunk";
-            return node;
-        }
-
-        private static TreeNode Populate(Entry entry)
-        {
-            if (entry is T4Entry)
-            {
-                return Populate((T4Entry)entry);
-            }
-            else if (entry is EntityEntry)
-            {
-                return Populate((EntityEntry)entry);
-            }
-            else if (entry is SoundEntry)
-            {
-                return Populate((SoundEntry)entry);
-            }
-            else if (entry is WavebankEntry)
-            {
-                return Populate((WavebankEntry)entry);
-            }
-            else if (entry is SpeechEntry)
-            {
-                return Populate((SpeechEntry)entry);
-            }
-            else
-            {
-                throw new Exception();
-            }
-        }
-
-        private static TreeNode Populate(T4Entry entry)
-        {
-            TreeNode node = new TreeNode();
-            node.Tag = entry;
-            node.Text = "T4 Entry";
-            node.ImageKey = "t4entry";
-            node.SelectedImageKey = "t4entry";
-            for (int i = 0;i < entry.T4Items.Count;i++)
-            {
-                node.Nodes.Add(Populate(entry.T4Items[i],i));
-            }
-            return node;
-        }
-
-        private static TreeNode Populate(EntityEntry entry)
-        {
-            TreeNode node = new TreeNode();
-            node.Tag = entry;
-            node.Text = "Entity Entry";
-            node.ImageKey = "entityentry";
-            node.SelectedImageKey = "entityentry";
-            foreach (Entity entity in entry.Entities)
-            {
-                node.Nodes.Add(Populate(entity));
-            }
-            return node;
-        }
-
-        private static TreeNode Populate(SoundEntry entry)
-        {
-            TreeNode node = new TreeNode();
-            node.Tag = entry;
-            node.Text = "Sound Entry";
-            node.ImageKey = "soundentry";
-            node.SelectedImageKey = "soundentry";
-            return node;
-        }
-
-        private static TreeNode Populate(WavebankEntry entry)
-        {
-            TreeNode node = new TreeNode();
-            node.Tag = entry;
-            node.Text = string.Format("Wavebank Entry ({0})",entry.ID);
-            node.ImageKey = "wavebankentry";
-            node.SelectedImageKey = "wavebankentry";
-            return node;
-        }
-
-        private static TreeNode Populate(SpeechEntry entry)
-        {
-            TreeNode node = new TreeNode();
-            node.Tag = entry;
-            node.Text = "Speech Entry";
-            node.ImageKey = "speechentry";
-            node.SelectedImageKey = "speechentry";
-            return node;
-        }
-
-        private static TreeNode Populate(Entity entity)
-        {
-            TreeNode node = new TreeNode();
-            node.Tag = entity;
-            if (entity.Name != null)
-            {
-                node.Text = string.Format("Entity ({0})",entity.Name);
-            }
-            else
-            {
-                node.Text = "Unnamed Entity";
-            }
-            node.ImageKey = "entity";
-            node.SelectedImageKey = "entity";
             return node;
         }
 

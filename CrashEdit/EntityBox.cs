@@ -4,7 +4,6 @@ using System.Windows.Forms;
 
 namespace CrashEdit
 {
-    [EditorControl(typeof(Entity))]
     public sealed class EntityBox : UserControl
     {
         private Entity entity;
