@@ -90,7 +90,6 @@
     <Compile Include="MysteryMultiItemEntry.cs" />
     <Compile Include="MysteryUniItemEntry.cs" />
     <Compile Include="LoadException.cs" />
-    <Compile Include="Registrar.cs" />
     <Compile Include="Unknown0\T11Entry.cs" />
     <Compile Include="Unknown0\T11EntryLoader.cs" />
     <Compile Include="Unknown0\T15Entry.cs" />

@@ -9,7 +9,6 @@ namespace CrashEdit
         [STAThread]
         internal static void Main(string[] args)
         {
-            Registrar.RegisterAssembly("Crash");
             using (MainForm mainform = new MainForm())
             {
                 foreach (string arg in args)

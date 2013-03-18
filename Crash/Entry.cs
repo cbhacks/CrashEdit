@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 
 namespace Crash
@@ -12,6 +13,14 @@ namespace Crash
         static Entry()
         {
             loaders = new Dictionary<int,EntryLoader>();
+            foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
+            {
+                foreach (EntryTypeAttribute attribute in type.GetCustomAttributes(typeof(EntryTypeAttribute),false))
+                {
+                    EntryLoader loader = (EntryLoader)Activator.CreateInstance(type);
+                    loaders.Add(attribute.Type,loader);
+                }
+            }
         }
 
         public static Entry Load(byte[] data)
@@ -69,13 +78,6 @@ namespace Crash
             {
                 return new UnknownEntry(items,eid,type);
             }
-        }
-
-        public static void AddLoader(int type,EntryLoader loader)
-        {
-            if (loader == null)
-                throw new ArgumentNullException("loader");
-            loaders.Add(type,loader);
         }
 
         private int eid;

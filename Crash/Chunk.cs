@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 
 namespace Crash
@@ -13,6 +14,14 @@ namespace Crash
         static Chunk()
         {
             loaders = new Dictionary<short,ChunkLoader>();
+            foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
+            {
+                foreach (ChunkTypeAttribute attribute in type.GetCustomAttributes(typeof(ChunkTypeAttribute),false))
+                {
+                    ChunkLoader loader = (ChunkLoader)Activator.CreateInstance(type);
+                    loaders.Add(attribute.Type,loader);
+                }
+            }
         }
 
         public static Chunk Load(int chunkid,byte[] data)
@@ -35,13 +44,6 @@ namespace Crash
             {
                 return new UnknownChunk(data);
             }
-        }
-
-        public static void AddLoader(short type,ChunkLoader loader)
-        {
-            if (loader == null)
-                throw new ArgumentNullException("loader");
-            loaders.Add(type,loader);
         }
 
         public abstract short Type
