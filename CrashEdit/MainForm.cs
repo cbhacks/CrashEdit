@@ -2,6 +2,7 @@ using Crash;
 using System;
 using System.IO;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace CrashEdit
 {
@@ -17,6 +18,7 @@ namespace CrashEdit
                 imglist.Images.Add("default",Resources.FileImage);
                 imglist.Images.Add("tb_open",Resources.OpenImage);
                 imglist.Images.Add("tb_save",Resources.SaveImage);
+                imglist.Images.Add("tb_patchnsd",Resources.SaveImage);
                 imglist.Images.Add("tb_close",Resources.FolderImage);
                 imglist.Images.Add("tb_find",Resources.BinocularsImage);
                 imglist.Images.Add("tb_findnext",Resources.BinocularsNextImage);
@@ -30,6 +32,7 @@ namespace CrashEdit
         private ToolStrip tsToolbar;
         private ToolStripButton tbbOpen;
         private ToolStripButton tbbSave;
+        private ToolStripButton tbbPatchNSD;
         private ToolStripButton tbbClose;
         private ToolStripSeparator tbsSeparator;
         private ToolStripButton tbbFind;
@@ -49,6 +52,12 @@ namespace CrashEdit
             tbbSave.ImageKey = "tb_save";
             tbbSave.TextImageRelation = TextImageRelation.ImageAboveText;
             tbbSave.Click += new EventHandler(tbbSave_Click);
+
+            tbbPatchNSD = new ToolStripButton();
+            tbbPatchNSD.Text = "Patch NSD";
+            tbbPatchNSD.ImageKey = "tb_patchnsd";
+            tbbPatchNSD.TextImageRelation = TextImageRelation.ImageAboveText;
+            tbbPatchNSD.Click += new EventHandler(tbbPatchNSD_Click);
 
             tbbClose = new ToolStripButton();
             tbbClose.Text = "Close";
@@ -75,6 +84,7 @@ namespace CrashEdit
             tsToolbar.ImageList = imglist;
             tsToolbar.Items.Add(tbbOpen);
             tsToolbar.Items.Add(tbbSave);
+            tsToolbar.Items.Add(tbbPatchNSD);
             tsToolbar.Items.Add(tbbClose);
             tsToolbar.Items.Add(tbsSeparator);
             tsToolbar.Items.Add(tbbFind);
@@ -98,6 +108,11 @@ namespace CrashEdit
         void tbbSave_Click(object sender,EventArgs e)
         {
             SaveNSF();
+        }
+
+        void tbbPatchNSD_Click(object sender,EventArgs e)
+        {
+            PatchNSD();
         }
 
         void tbbClose_Click(object sender,EventArgs e)
@@ -174,6 +189,70 @@ namespace CrashEdit
             catch (PackingException)
             {
                 MessageBox.Show("A packing error occurred. One of the entry-containing chunks contains over 64 KB of data.","Save",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
+        }
+
+        public void PatchNSD()
+        {
+            if (tbcTabs.SelectedTab != null)
+            {
+                string filename = tbcTabs.SelectedTab.Text;
+                if (filename.EndsWith("F"))
+                {
+                    filename = filename.Remove(filename.Length - 1);
+                    filename += "D";
+                }
+                else if (filename.EndsWith("f"))
+                {
+                    filename = filename.Remove(filename.Length - 1);
+                    filename += "d";
+                }
+                else
+                {
+                    string message = string.Format("Can't figure out NSD filename.\n\nFOO.NSF -> FOO.NSD\n\n{0} -> ???",filename);
+                    MessageBox.Show(message,"Patch NSD",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    return;
+                }
+                NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
+                PatchNSD(filename,nsfbox.NSF);
+            }
+        }
+
+        public void PatchNSD(string filename,NSF nsf)
+        {
+            byte[] data = File.ReadAllBytes(filename);
+            NSD nsd = NSD.Load(data);
+            nsd.ChunkCount = nsf.Chunks.Count;
+            Dictionary<int,int> newindex = new Dictionary<int,int>();
+            for (int i = 0;i < nsf.Chunks.Count;i++)
+            {
+                if (nsf.Chunks[i] is EntryChunk)
+                {
+                    foreach (Entry entry in ((EntryChunk)nsf.Chunks[i]).Entries)
+                    {
+                        newindex.Add(entry.EID,i * 2 + 1);
+                    }
+                }
+            }
+            foreach (NSDLink link in nsd.Index)
+            {
+                if (newindex.ContainsKey(link.EntryID))
+                {
+                    link.ChunkID = newindex[link.EntryID];
+                    newindex.Remove(link.EntryID);
+                }
+                else
+                {
+                    // ???
+                }
+            }
+            foreach (KeyValuePair<int,int> link in newindex)
+            {
+                // ???
+            }
+            if (MessageBox.Show("Are you sure you want to overwrite the NSD file?","Save Confirmation Prompt",MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                File.WriteAllBytes(filename,nsd.Save());
             }
         }
 
