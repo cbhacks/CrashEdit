@@ -18,9 +18,7 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            SoundBox box = new SoundBox(soundentry);
-            box.Dock = DockStyle.Fill;
-            return box;
+            return new SoundBox(soundentry);
         }
 
         public SoundEntry SoundEntry

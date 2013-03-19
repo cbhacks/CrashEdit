@@ -15,9 +15,7 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            MysteryBox box = new MysteryBox(mysteryentry);
-            box.Dock = DockStyle.Fill;
-            return box;
+            return new MysteryBox(mysteryentry);
         }
 
         public MysteryUniItemEntry MysteryEntry

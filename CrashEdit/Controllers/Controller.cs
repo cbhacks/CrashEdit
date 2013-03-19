@@ -54,7 +54,6 @@ namespace CrashEdit
         protected virtual Control CreateEditor()
         {
             Label label = new Label();
-            label.Dock = DockStyle.Fill;
             label.TextAlign = ContentAlignment.MiddleCenter;
             label.Text = "No options available";
             return label;
@@ -77,6 +76,7 @@ namespace CrashEdit
                 if (editor == null)
                 {
                     editor = CreateEditor();
+                    editor.Dock = DockStyle.Fill;
                 }
                 return editor;
             }

@@ -27,9 +27,7 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            EntityBox box = new EntityBox(entity);
-            box.Dock = DockStyle.Fill;
-            return box;
+            return new EntityBox(entity);
         }
 
         public EntityEntryController EntityEntryController
