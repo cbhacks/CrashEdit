@@ -174,6 +174,8 @@ namespace CrashEdit
                 return;
             }
             item.Move(destination,true);
+            item.Node.EnsureVisible();
+            trvMain.SelectedNode = item.Node;
         }
 
         public void Find(string term)
