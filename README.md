@@ -18,13 +18,14 @@ The current feature set includes:
 ### General ###
 * Loading NSF files
 * Saving NSF files
-* Creating Normal Chunks __(no nsd update)__
-* Creating Sound Chunks __(no nsd update)__
-* Creating Wavebank Chunks __(no nsd update)__
-* Creating Speech Chunks __(no nsd update)__
-* Deleting Chunks __(incomplete)__ __(no nsd update)__
-* Moving Entries __(incomplete)__ __(no nsd update)__
-* Deleting Entries __(incomplete)__ __(no nsd update)__
+* Updating NSD files
+* Creating Normal Chunks
+* Creating Sound Chunks
+* Creating Wavebank Chunks
+* Creating Speech Chunks
+* Deleting Chunks __(incomplete)__
+* Moving Entries __(incomplete)__
+* Deleting Entries __(incomplete)__
 
 ### Importing and Exporting ###
 * Sound: PSX ADPCM Format __(export only)__
