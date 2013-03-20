@@ -29,7 +29,7 @@ namespace Crash
             if (data == null)
                 throw new ArgumentNullException("data");
             if (data.Length != Length)
-                throw new ArgumentException("Data must be 65536 bytes long.");
+                throw new ArgumentException("Value must be 65536 bytes long.","data");
             short magic = BitConv.FromInt16(data,0);
             short type = BitConv.FromInt16(data,2);
             if (magic != Magic)
