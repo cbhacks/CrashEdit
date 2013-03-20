@@ -5,11 +5,11 @@ namespace Crash.Audio
     [ChunkType(4)]
     public sealed class WavebankChunkLoader : EntryChunkLoader
     {
-        public override Chunk Load(Entry[] entries,int unknown2)
+        public override Chunk Load(Entry[] entries)
         {
             if (entries == null)
                 throw new ArgumentNullException("entries");
-            return new WavebankChunk(entries,unknown2);
+            return new WavebankChunk(entries);
         }
     }
 }

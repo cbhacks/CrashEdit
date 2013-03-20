@@ -8,7 +8,7 @@ namespace Crash
         {
         }
 
-        public NormalChunk(IEnumerable<Entry> entries,int unknown2) : base(entries,unknown2)
+        public NormalChunk(IEnumerable<Entry> entries) : base(entries)
         {
         }
 

@@ -8,7 +8,7 @@ namespace Crash.Audio
         {
         }
 
-        public WavebankChunk(IEnumerable<Entry> entries,int unknown2) : base(entries,unknown2)
+        public WavebankChunk(IEnumerable<Entry> entries) : base(entries)
         {
         }
 

@@ -6,20 +6,17 @@ namespace Crash
     public abstract class EntryChunk : Chunk
     {
         private List<Entry> entries;
-        private int unknown2;
 
         public EntryChunk()
         {
             this.entries = new List<Entry>();
-            this.unknown2 = -1;
         }
 
-        public EntryChunk(IEnumerable<Entry> entries,int unknown2)
+        public EntryChunk(IEnumerable<Entry> entries)
         {
             if (entries == null)
                 throw new ArgumentNullException("entries");
             this.entries = new List<Entry>(entries);
-            this.unknown2 = unknown2;
         }
 
         public IList<Entry> Entries
@@ -51,10 +48,10 @@ namespace Crash
 
         public override byte[] Save(int chunkid)
         {
-            return Save(chunkid,entries,unknown2);
+            return Save(chunkid,entries);
         }
 
-        protected byte[] Save(int chunkid,IList<Entry> entries,int unknown2)
+        protected byte[] Save(int chunkid,IList<Entry> entries)
         {
             if (entries == null)
                 throw new ArgumentNullException("entries");
@@ -63,7 +60,7 @@ namespace Crash
             BitConv.ToInt16(data,2,Type);
             BitConv.ToInt32(data,4,chunkid);
             BitConv.ToInt32(data,8,entries.Count);
-            BitConv.ToInt32(data,12,unknown2);
+            // Checksum is here, but calculated later
             int offset = 20 + entries.Count * 4;
             Aligner.Align(ref offset,Alignment,AlignmentOffset);
             BitConv.ToInt32(data,16,offset);
@@ -83,6 +80,7 @@ namespace Crash
                 }
                 BitConv.ToInt32(data,20 + i * 4,offset);
             }
+            CalculateChecksum(data);
             return data;
         }
     }

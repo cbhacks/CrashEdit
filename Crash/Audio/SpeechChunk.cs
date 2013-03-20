@@ -8,7 +8,7 @@ namespace Crash.Audio
         {
         }
 
-        public SpeechChunk(IEnumerable<Entry> entries,int unknown2) : base(entries,unknown2)
+        public SpeechChunk(IEnumerable<Entry> entries) : base(entries)
         {
         }
 

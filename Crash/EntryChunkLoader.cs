@@ -13,7 +13,7 @@ namespace Crash
                 throw new ArgumentException("Data must be 65536 bytes long.");
             int id = BitConv.FromInt32(data,4);
             int entrycount = BitConv.FromInt32(data,8);
-            int unknown2 = BitConv.FromInt32(data,12);
+            // Checksum is here, ignore it
             int headersize = 20 + entrycount * 4;
             if (id != chunkid)
             {
@@ -50,9 +50,9 @@ namespace Crash
                 Array.Copy(data,entrystart,entrydata,0,entrysize);
                 entries[i] = Entry.Load(entrydata);
             }
-            return Load(entries,unknown2);
+            return Load(entries);
         }
 
-        public abstract Chunk Load(Entry[] entries,int unknown2);
+        public abstract Chunk Load(Entry[] entries);
     }
 }

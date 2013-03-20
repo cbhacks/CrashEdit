@@ -52,5 +52,21 @@ namespace Crash
         }
 
         public abstract byte[] Save(int chunkid);
+
+        protected void CalculateChecksum(byte[] data)
+        {
+            if (data == null)
+                throw new ArgumentNullException("data");
+            if (data.Length != Length)
+                throw new ArgumentException("Value must be 65536 bytes long.","data");
+            BitConv.ToInt32(data,12,0);
+            uint checksum = 0x12345678;
+            for (int i = 0;i < Length;i++)
+            {
+                checksum += data[i];
+                checksum = checksum << 3 | checksum >> 29;
+            }
+            BitConv.ToInt32(data,12,(int)checksum);
+        }
     }
 }

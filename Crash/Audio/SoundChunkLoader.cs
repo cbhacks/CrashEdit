@@ -6,11 +6,11 @@ namespace Crash.Audio
     [ChunkType(3)]
     public sealed class SoundChunkLoader : EntryChunkLoader
     {
-        public override Chunk Load(Entry[] entries,int unknown2)
+        public override Chunk Load(Entry[] entries)
         {
             if (entries == null)
                 throw new ArgumentNullException("entries");
-            return new SoundChunk(entries,unknown2);
+            return new SoundChunk(entries);
         }
     }
 }
