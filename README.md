@@ -68,5 +68,5 @@ I can be contacted in various ways:
 * As `chekwob` on YouTube (this is the best way, I check it very often)
 * As `chekwob@yahoo.com` via email (english only; I discard non-english email as spam)
 * As `chekwob` on the XeNTaX forum
-* As `chekwob` on the crash mania forum (hpzr.proboards.com)
+* As `chekwob` on the CM forum (hpzr.proboards.com)
 * As `ughman` on github
