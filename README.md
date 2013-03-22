@@ -2,6 +2,9 @@
 This program is intended to be a tool for modifying the game files of the original Crash Bandicoot games. In its current state, it is very incomplete.
 
 ## Supported Games ##
+* (SCUS-94900) Crash Bandicoot __(read only)__ __(experimental)__
+* (SCES-?????) Crash Bandicoot __(read only)__ __(experimental)__ __(untested)__
+* (????-?????) クラッシュバンディクー __(read only)__ __(experimental)__ __(untested)__
 * (SCUS-94154) Crash Bandicoot 2: Cortex Strikes Back
 * (SCES-?????) Crash Bandicoot 2: Cortex Strikes Back
 * (SCPS-10047) クラッシュバンディクー　2:　コルテックスのぎゃくしゅう！
@@ -9,8 +12,6 @@ This program is intended to be a tool for modifying the game files of the origin
 * (SCUS-94244) Crash Bandicoot: Warped
 * (SCES-?????) Crash Bandicoot 3: Warped __(untested)__
 * (????-?????) クラッシュバンディクー　3:　ブッとび！　世界一周 __(untested)__
-
-The first game (crash 1) is not currently supported.
 
 ## Features ##
 The current feature set includes:
