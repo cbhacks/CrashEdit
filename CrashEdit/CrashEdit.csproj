@@ -53,6 +53,7 @@
     <Compile Include="Controllers\Audio\SoundEntryController.cs" />
     <Compile Include="Controllers\Game\EntityController.cs" />
     <Compile Include="Controllers\Game\EntityEntryController.cs" />
+    <Compile Include="Controllers\UnknownEntryController.cs" />
     <Compile Include="Controllers\Unknown0\T4EntryController.cs" />
     <Compile Include="Controllers\Audio\VHController.cs" />
     <Compile Include="Controllers\Game\DemoEntryController.cs" />
