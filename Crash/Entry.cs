@@ -72,7 +72,14 @@ namespace Crash
             }
             if (loaders.ContainsKey(type))
             {
-                return loaders[type].Load(items,eid);
+                try
+                {
+                    return loaders[type].Load(items,eid);
+                }
+                catch (LoadException)
+                {
+                    return new WeirdEntry(items,eid,type);
+                }
             }
             else
             {

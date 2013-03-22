@@ -133,8 +133,15 @@ namespace Crash
             while (offset < data.Length)
             {
                 byte[] chunkdata = ReadChunk(data,ref offset);
-                Chunk chunk = Chunk.Load(chunks.Count * 2 + 1,chunkdata);
-                chunks.Add(chunk);
+                try
+                {
+                    Chunk chunk = Chunk.Load(chunks.Count * 2 + 1,chunkdata);
+                    chunks.Add(chunk);
+                }
+                catch (LoadException)
+                {
+                    chunks.Add(new BadChunk(chunkdata));
+                }
             }
             return new NSF(chunks);
         }

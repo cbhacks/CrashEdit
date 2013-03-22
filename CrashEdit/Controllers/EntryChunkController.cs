@@ -76,6 +76,10 @@ namespace CrashEdit
                 {
                     AddNode(new UnknownEntryController(this,(UnknownEntry)entry));
                 }
+                else if (entry is WeirdEntry)
+                {
+                    AddNode(new WeirdEntryController(this,(WeirdEntry)entry));
+                }
                 else
                 {
                     throw new NotImplementedException();
