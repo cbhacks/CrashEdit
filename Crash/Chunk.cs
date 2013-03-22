@@ -8,6 +8,7 @@ namespace Crash
     {
         public const int Length = 65536;
         public const short Magic = 0x1234;
+        public const short CompressedMagic = 0x1235;
 
         private static Dictionary<short,ChunkLoader> loaders;
 
