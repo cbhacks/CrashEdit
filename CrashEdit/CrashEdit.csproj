@@ -72,7 +72,6 @@
     <Compile Include="Controllers\Audio\MusicEntryController.cs" />
     <Compile Include="Controllers\NormalChunkController.cs" />
     <Compile Include="Controllers\Audio\SoundChunkController.cs" />
-    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\LegacyController.cs" />
     <Compile Include="Controllers\NSFController.cs" />
     <Compile Include="Controllers\Audio\SpeechChunkController.cs" />

@@ -3,6 +3,7 @@ using Crash.Game;
 using Crash.Graphics;
 using Crash.Audio;
 using Crash.Unknown0;
+using System;
 
 namespace CrashEdit
 {
@@ -73,7 +74,7 @@ namespace CrashEdit
                 }
                 else
                 {
-                    AddNode(new ErrorController());
+                    throw new NotImplementedException();
                 }
             }
         }

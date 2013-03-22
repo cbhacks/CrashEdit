@@ -41,7 +41,7 @@ namespace CrashEdit
                 }
                 else
                 {
-                    AddNode(new ErrorController());
+                    throw new NotImplementedException();
                 }
             }
             AddMenu("Add Chunk - Normal",Menu_Add_NormalChunk);
