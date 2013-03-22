@@ -22,7 +22,7 @@ namespace CrashEdit
             get { return unknownentry; }
         }
 
-        protected override System.Windows.Forms.Control CreateEditor()
+        protected override Control CreateEditor()
         {
             Control tabs = base.CreateEditor();
             tabs.Dock = DockStyle.Fill;
