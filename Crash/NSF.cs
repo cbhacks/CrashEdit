@@ -164,6 +164,14 @@ namespace Crash
         {
             foreach (Chunk chunk in chunks)
             {
+                if (chunk is IEntry)
+                {
+                    IEntry entry = (IEntry)chunk;
+                    if (entry.EID == eid && entry is T)
+                    {
+                        return (T)entry;
+                    }
+                }
                 if (chunk is EntryChunk)
                 {
                     EntryChunk entrychunk = (EntryChunk)chunk;
