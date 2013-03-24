@@ -226,6 +226,11 @@ namespace CrashEdit
             Dictionary<int,int> newindex = new Dictionary<int,int>();
             for (int i = 0;i < nsf.Chunks.Count;i++)
             {
+                if (nsf.Chunks[i] is IEntry)
+                {
+                    IEntry entry = (IEntry)nsf.Chunks[i];
+                    newindex.Add(entry.EID,i * 2 + 1);
+                }
                 if (nsf.Chunks[i] is EntryChunk)
                 {
                     foreach (Entry entry in ((EntryChunk)nsf.Chunks[i]).Entries)
