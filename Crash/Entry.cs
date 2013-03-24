@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Crash
 {
-    public abstract class Entry
+    public abstract class Entry : IEntry
     {
         public const int Magic = 0x100FFFF;
 

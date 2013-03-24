@@ -70,6 +70,7 @@
     <Compile Include="Audio\WavebankEntryLoader.cs" />
     <Compile Include="Audio\WaveConv.cs" />
     <Compile Include="BadChunk.cs" />
+    <Compile Include="IEntry.cs" />
     <Compile Include="WeirdEntry.cs" />
     <Compile Include="BitConv.cs" />
     <Compile Include="Chunk.cs" />
