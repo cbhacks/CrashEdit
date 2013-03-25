@@ -12,7 +12,7 @@ namespace CrashEdit
         public WeirdEntryController(EntryChunkController entrychunkcontroller,WeirdEntry weirdentry) : base(entrychunkcontroller,weirdentry)
         {
             this.weirdentry = weirdentry;
-            Node.Text = "Weird Entry";
+            Node.Text = string.Format("Weird Entry (T{0})",weirdentry.Type);
             Node.ImageKey = "weirdentry";
             Node.SelectedImageKey = "weirdentry";
         }

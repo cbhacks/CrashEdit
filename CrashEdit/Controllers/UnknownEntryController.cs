@@ -12,7 +12,7 @@ namespace CrashEdit
         public UnknownEntryController(EntryChunkController entrychunkcontroller,UnknownEntry unknownentry) : base(entrychunkcontroller,unknownentry)
         {
             this.unknownentry = unknownentry;
-            Node.Text = "Unknown Entry";
+            Node.Text = string.Format("Unknown Entry (T{0})",unknownentry.Type);
             Node.ImageKey = "unknownentry";
             Node.SelectedImageKey = "unknownentry";
         }
