@@ -47,6 +47,7 @@ namespace CrashEdit
                 imglist.Images.Add("vh",Resources.ArrowImage);
                 imglist.Images.Add("seq",Resources.ArrowImage);
                 imglist.Images.Add("t4item",Resources.ArrowImage);
+                imglist.Images.Add("item",Resources.ArrowImage);
             }
             catch
             {

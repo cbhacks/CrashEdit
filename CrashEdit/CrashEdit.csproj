@@ -52,6 +52,7 @@
     <Compile Include="Controllers\Audio\WavebankEntryController.cs" />
     <Compile Include="Controllers\Audio\SpeechEntryController.cs" />
     <Compile Include="Controllers\Audio\SoundEntryController.cs" />
+    <Compile Include="Controllers\ItemController.cs" />
     <Compile Include="Controllers\WeirdEntryController.cs" />
     <Compile Include="Controllers\Game\EntityController.cs" />
     <Compile Include="Controllers\Game\EntityEntryController.cs" />
@@ -106,9 +107,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MysteryBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MysteryMultiItemEntryBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="NSFBox.cs">

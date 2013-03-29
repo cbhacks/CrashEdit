@@ -11,11 +11,10 @@ namespace CrashEdit
         public MysteryMultiItemEntryController(EntryChunkController entrychunkcontroller,MysteryMultiItemEntry mysteryentry) : base(entrychunkcontroller,mysteryentry)
         {
             this.mysteryentry = mysteryentry;
-        }
-
-        protected override Control CreateEditor()
-        {
-            return new MysteryMultiItemEntryBox(mysteryentry);
+            foreach (byte[] item in mysteryentry.Items)
+            {
+                AddNode(new ItemController(this,item));
+            }
         }
 
         public MysteryMultiItemEntry MysteryEntry
