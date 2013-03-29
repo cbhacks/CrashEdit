@@ -17,6 +17,11 @@ namespace CrashEdit
             Node.SelectedImageKey = "unknownchunk";
         }
 
+        protected override Control CreateEditor()
+        {
+            return new MysteryBox(unknownchunk.Data);
+        }
+
         public UnknownChunk UnknownChunk
         {
             get { return unknownchunk; }
