@@ -28,6 +28,7 @@ namespace CrashEdit
                 imglist.Images.Add("wavebankchunk",Resources.MusicImage);
                 imglist.Images.Add("speechchunk",Resources.WhiteJournalImage);
                 imglist.Images.Add("unknownchunk",Resources.FileImage);
+                imglist.Images.Add("badchunk",Resources.FileImage);
                 imglist.Images.Add("t1entry",Resources.ThingImage);
                 imglist.Images.Add("t2entry",Resources.ThingImage);
                 imglist.Images.Add("t3entry",Resources.ThingImage);
@@ -43,6 +44,7 @@ namespace CrashEdit
                 imglist.Images.Add("speechentry",Resources.SpeakerImage);
                 imglist.Images.Add("t21entry",Resources.ThingImage);
                 imglist.Images.Add("unknownentry",Resources.ThingImage);
+                imglist.Images.Add("weirdentry",Resources.ThingImage);
                 imglist.Images.Add("entity",Resources.ArrowImage);
                 imglist.Images.Add("vh",Resources.ArrowImage);
                 imglist.Images.Add("seq",Resources.ArrowImage);
