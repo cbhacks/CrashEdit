@@ -21,19 +21,5 @@ namespace CrashEdit
         {
             get { return weirdentry; }
         }
-
-        protected override Control CreateEditor()
-        {
-            Control tabs = base.CreateEditor();
-            tabs.Dock = DockStyle.Fill;
-            Label type = new Label();
-            type.Dock = DockStyle.Top;
-            type.AutoSize = true;
-            type.Text = string.Format("Type = {0} (0x{0:X})",weirdentry.Type);
-            Panel panel = new Panel();
-            panel.Controls.Add(tabs);
-            panel.Controls.Add(type);
-            return panel;
-        }
     }
 }
