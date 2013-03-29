@@ -39,6 +39,10 @@ namespace CrashEdit
                 {
                     AddNode(new SpeechChunkController(this,(SpeechChunk)chunk));
                 }
+                else if (chunk is UnknownChunk)
+                {
+                    AddNode(new UnknownChunkController(this,(UnknownChunk)chunk));
+                }
                 else if (chunk is BadChunk)
                 {
                     AddNode(new BadChunkController(this,(BadChunk)chunk));

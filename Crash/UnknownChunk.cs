@@ -15,7 +15,7 @@ namespace Crash
 
         public override short Type
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get { return BitConv.FromInt16(data,2); }
         }
 
         public byte[] Data
