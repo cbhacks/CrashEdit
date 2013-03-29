@@ -15,7 +15,7 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            return new MysteryBox(mysteryentry);
+            return new MysteryBox(mysteryentry.Data);
         }
 
         public MysteryUniItemEntry MysteryEntry

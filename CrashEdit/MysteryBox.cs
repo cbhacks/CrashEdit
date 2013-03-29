@@ -37,18 +37,6 @@ namespace CrashEdit
             Controls.Add(tsToolbar);
         }
 
-        public MysteryBox(TextureChunk chunk) : this(chunk.Data)
-        {
-        }
-
-        public MysteryBox(UnknownChunk chunk) : this(chunk.Data)
-        {
-        }
-
-        public MysteryBox(MysteryUniItemEntry entry) : this(entry.Data)
-        {
-        }
-
         void tbbExport_Click(object sender,EventArgs e)
         {
             FileUtil.SaveFile(data,FileUtil.AnyFilter);
