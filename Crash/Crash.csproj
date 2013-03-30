@@ -71,6 +71,8 @@
     <Compile Include="Audio\WaveConv.cs" />
     <Compile Include="BadChunk.cs" />
     <Compile Include="IEntry.cs" />
+    <Compile Include="Unknown2\T2Chunk.cs" />
+    <Compile Include="Unknown2\T2ChunkLoader.cs" />
     <Compile Include="WeirdEntry.cs" />
     <Compile Include="BitConv.cs" />
     <Compile Include="Chunk.cs" />

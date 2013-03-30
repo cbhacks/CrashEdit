@@ -3,6 +3,7 @@ using Crash.Game;
 using Crash.Graphics;
 using Crash.Audio;
 using Crash.Unknown0;
+using Crash.Unknown2;
 using System;
 
 namespace CrashEdit
@@ -26,6 +27,10 @@ namespace CrashEdit
                 else if (chunk is TextureChunk)
                 {
                     AddNode(new LegacyController(chunk));
+                }
+                else if (chunk is T2Chunk)
+                {
+                    AddNode(new T2ChunkController(this,(T2Chunk)chunk));
                 }
                 else if (chunk is SoundChunk)
                 {
