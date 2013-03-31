@@ -253,7 +253,7 @@ namespace Crash.Audio
             BitConv.ToInt32(wsmp,0,20);
             BitConv.ToInt16(wsmp,4,centernote);
             BitConv.ToInt16(wsmp,6,pitchshift);
-            BitConv.ToInt32(wsmp,8,volume - 64 << 18);
+            BitConv.ToInt32(wsmp,8,volume - 64 << 16);
             BitConv.ToInt32(wsmp,12,0);
             BitConv.ToInt32(wsmp,16,0 /* 1 */);
             /*BitConv.ToInt32(wsmp,20,16);
