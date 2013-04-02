@@ -46,12 +46,12 @@
 		Resources/Images/Thing.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
 	</data>
 	<data name="BlueJournalImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-		Resources/Images/Journals/Blue.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+		Resources/Images/BlueJournal.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
 	</data>
 	<data name="WhiteJournalImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-		Resources/Images/Journals/White.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+		Resources/Images/WhiteJournal.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
 	</data>
 	<data name="YellowJournalImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-		Resources/Images/Journals/Yellow.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+		Resources/Images/YellowJournal.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
 	</data>
 </root>

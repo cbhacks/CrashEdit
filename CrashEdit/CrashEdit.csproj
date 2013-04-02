@@ -132,9 +132,9 @@
     <Content Include="Resources\Images\File.gif" />
     <Content Include="Resources\Images\Folder.gif" />
     <Content Include="Resources\Images\Image.gif" />
-    <Content Include="Resources\Images\Journals\Blue.gif" />
-    <Content Include="Resources\Images\Journals\White.gif" />
-    <Content Include="Resources\Images\Journals\Yellow.gif" />
+    <Content Include="Resources\Images\BlueJournal.gif" />
+    <Content Include="Resources\Images\WhiteJournal.gif" />
+    <Content Include="Resources\Images\YellowJournal.gif" />
     <Content Include="Resources\Images\Music.gif" />
     <Content Include="Resources\Images\Open.gif" />
     <Content Include="Resources\Images\Save.gif" />
