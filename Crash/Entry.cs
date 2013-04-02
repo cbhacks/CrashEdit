@@ -76,9 +76,9 @@ namespace Crash
                 {
                     return loaders[type].Load(items,eid);
                 }
-                catch (LoadException)
+                catch (LoadException ex)
                 {
-                    return new WeirdEntry(items,eid,type);
+                    return new WeirdEntry(items,eid,type,ex);
                 }
             }
             else
