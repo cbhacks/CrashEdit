@@ -17,6 +17,15 @@ namespace CrashEdit
             Node.SelectedImageKey = "weirdentry";
         }
 
+        protected override Control CreateEditor()
+        {
+            TextBox box = new TextBox();
+            box.ReadOnly = true;
+            box.Multiline = true;
+            box.Text = weirdentry.Exception.ToString();
+            return box;
+        }
+
         public WeirdEntry WeirdEntry
         {
             get { return weirdentry; }
