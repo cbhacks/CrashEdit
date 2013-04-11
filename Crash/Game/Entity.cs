@@ -93,6 +93,38 @@ namespace Crash.Game
             }
         }
 
+        public int? Type
+        {
+            get
+            {
+                EntityField field = FindField(0xA9);
+                if (field != null)
+                {
+                    return BitConv.FromInt32(field.Data,0);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        public int? Subtype
+        {
+            get
+            {
+                EntityField field = FindField(0xAA);
+                if (field != null)
+                {
+                    return BitConv.FromInt32(field.Data,0);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
         public IList<EntityField> Fields
         {
             get { return fields; }
