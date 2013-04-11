@@ -163,6 +163,7 @@ namespace CrashEdit
                 case Keys.PageDown:
                 case Keys.Home:
                 case Keys.End:
+                case Keys.Space:
                     return true;
                 default:
                     return base.IsInputKey(keyData);
@@ -271,6 +272,10 @@ namespace CrashEdit
                     {
                         MoveEndLine();
                     }
+                    break;
+                case Keys.Space:
+                    data[position] = 0;
+                    Invalidate();
                     break;
             }
         }
