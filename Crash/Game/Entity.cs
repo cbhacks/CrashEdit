@@ -93,6 +93,26 @@ namespace Crash.Game
             }
         }
 
+        public IList<EntityPosition> Positions
+        {
+            get
+            {
+                List<EntityPosition> result = new List<EntityPosition>();
+                EntityField field = FindField(0x4B);
+                if (field != null)
+                {
+                    for (int i = 0;i < field.ElementCount;i++)
+                    {
+                        short x = BitConv.FromInt16(field.Data,6 * i + 0);
+                        short y = BitConv.FromInt16(field.Data,6 * i + 2);
+                        short z = BitConv.FromInt16(field.Data,6 * i + 4);
+                        result.Add(new EntityPosition(x,y,z));
+                    }
+                }
+                return result;
+            }
+        }
+
         public int? Type
         {
             get

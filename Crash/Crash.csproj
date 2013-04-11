@@ -70,6 +70,7 @@
     <Compile Include="Audio\WavebankEntryLoader.cs" />
     <Compile Include="Audio\WaveConv.cs" />
     <Compile Include="BadChunk.cs" />
+    <Compile Include="Game\EntityPosition.cs" />
     <Compile Include="IEntry.cs" />
     <Compile Include="Unknown2\T2Chunk.cs" />
     <Compile Include="Unknown2\T2ChunkLoader.cs" />
