@@ -160,7 +160,7 @@ namespace Crash
             get { return chunks; }
         }
 
-        public T FindEID<T>(int eid) where T : Entry
+        public T FindEID<T>(int eid) where T : class,IEntry
         {
             foreach (Chunk chunk in chunks)
             {

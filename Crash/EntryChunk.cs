@@ -34,13 +34,13 @@ namespace Crash
             get;
         }
 
-        public T FindEID<T>(int eid) where T : Entry
+        public T FindEID<T>(int eid) where T : class,IEntry
         {
             foreach (Entry entry in entries)
             {
                 if (entry.EID == eid && entry is T)
                 {
-                    return (T)entry;
+                    return (T)(object)entry;
                 }
             }
             return null;
