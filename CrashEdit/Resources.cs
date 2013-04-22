@@ -133,6 +133,14 @@ namespace CrashEdit
             }
         }
 
+        public static Bitmap AppleTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("AppleTexture");
+            }
+        }
+
         public static Bitmap AppleBoxTexture
         {
             get
@@ -205,11 +213,27 @@ namespace CrashEdit
             }
         }
 
+        public static Bitmap LifeTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("LifeTexture");
+            }
+        }
+
         public static Bitmap LifeBoxTexture
         {
             get
             {
                 return (Bitmap)manager.GetObject("LifeBoxTexture");
+            }
+        }
+
+        public static Bitmap MaskTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("MaskTexture");
             }
         }
 
@@ -274,6 +298,14 @@ namespace CrashEdit
             get
             {
                 return (Bitmap)manager.GetObject("UnknownBoxTopTexture");
+            }
+        }
+
+        public static Bitmap UnknownPickupTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("UnknownPickupTexture");
             }
         }
     }

@@ -57,6 +57,9 @@
 	<data name="ActivatorBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
 		Resources/Textures/ActivatorBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
 	</data>
+	<data name="AppleTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/Apple.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
 	<data name="AppleBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
 		Resources/Textures/AppleBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
 	</data>
@@ -84,8 +87,14 @@
 	<data name="IronBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
 		Resources/Textures/IronBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
 	</data>
+	<data name="LifeTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/Life.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
 	<data name="LifeBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
 		Resources/Textures/LifeBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="MaskTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/Mask.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
 	</data>
 	<data name="MaskBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
 		Resources/Textures/MaskBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
@@ -110,5 +119,8 @@
 	</data>
 	<data name="UnknownBoxTopTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
 		Resources/Textures/UnknownBoxTop.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="UnknownPickupTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/UnknownPickup.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
 	</data>
 </root>

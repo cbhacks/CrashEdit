@@ -168,10 +168,11 @@ namespace CrashEdit
                 GL.Translate(position.X,position.Y,position.Z);
                 switch (entity.Type)
                 {
+                    case 0x3:
+                        RenderPickup(entity.Subtype.Value);
+                        break;
                     case 0x22:
                         RenderBox(entity.Subtype.Value);
-                        break;
-                    case null:
                         break;
                     default:
                         GL.PointSize(5);
@@ -194,6 +195,28 @@ namespace CrashEdit
                 }
                 GL.End();
             }
+        }
+
+        private void RenderPickup(int subtype)
+        {
+            GL.Enable(EnableCap.Texture2D);
+            GL.Color3(Color.White);
+            LoadPickupTexture(subtype);
+            GL.PushMatrix();
+            GL.Rotate(-rotx,0,1,0);
+            GL.Rotate(-roty,1,0,0);
+            GL.Begin(BeginMode.Quads);
+            GL.TexCoord2(0,0);
+            GL.Vertex2(-50,+50);
+            GL.TexCoord2(1,0);
+            GL.Vertex2(+50,+50);
+            GL.TexCoord2(1,1);
+            GL.Vertex2(+50,-50);
+            GL.TexCoord2(0,1);
+            GL.Vertex2(-50,-50);
+            GL.End();
+            GL.PopMatrix();
+            GL.Disable(EnableCap.Texture2D);
         }
 
         private void RenderBox(int subtype)
@@ -247,6 +270,25 @@ namespace CrashEdit
             finally
             {
                 image.UnlockBits(data);
+            }
+        }
+
+        private void LoadPickupTexture(int subtype)
+        {
+            switch (subtype)
+            {
+                case 5: // Life
+                    LoadTexture(Resources.LifeTexture);
+                    break;
+                case 6: // Mask
+                    LoadTexture(Resources.MaskTexture);
+                    break;
+                case 16: // Apple
+                    LoadTexture(Resources.AppleTexture);
+                    break;
+                default:
+                    LoadTexture(Resources.UnknownPickupTexture);
+                    break;
             }
         }
 

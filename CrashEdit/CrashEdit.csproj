@@ -142,6 +142,7 @@
     <Content Include="Resources\Images\Save.gif" />
     <Content Include="Resources\Images\Speaker.gif" />
     <Content Include="Resources\Images\Thing.gif" />
+    <Content Include="Resources\Textures\Apple.png" />
     <Content Include="Resources\Textures\AppleBox.png" />
     <Content Include="Resources\Textures\ArrowBox.png" />
     <Content Include="Resources\Textures\BodyslamBox.png" />
@@ -152,7 +153,9 @@
     <Content Include="Resources\Textures\ActivatorBox.png" />
     <Content Include="Resources\Textures\IronArrowBox.png" />
     <Content Include="Resources\Textures\IronBox.png" />
+    <Content Include="Resources\Textures\Life.png" />
     <Content Include="Resources\Textures\LifeBox.png" />
+    <Content Include="Resources\Textures\Mask.png" />
     <Content Include="Resources\Textures\MaskBox.png" />
     <Content Include="Resources\Textures\Nitro.png" />
     <Content Include="Resources\Textures\NitroTop.png" />
@@ -161,6 +164,7 @@
     <Content Include="Resources\Textures\TNTTop.png" />
     <Content Include="Resources\Textures\UnknownBox.png" />
     <Content Include="Resources\Textures\UnknownBoxTop.png" />
+    <Content Include="Resources\Textures\UnknownPickup.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="InputWindow.resx">
