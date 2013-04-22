@@ -1,5 +1,6 @@
 using Crash;
 using Crash.Game;
+using System.Windows.Forms;
 
 namespace CrashEdit
 {
@@ -19,6 +20,11 @@ namespace CrashEdit
             {
                 AddNode(new EntityController(this,entity));
             }
+        }
+
+        protected override Control CreateEditor()
+        {
+            return new EntityEntryViewer(entityentry);
         }
 
         public EntityEntry EntityEntry

@@ -81,6 +81,9 @@
     <Compile Include="Controllers\LegacyController.cs" />
     <Compile Include="Controllers\NSFController.cs" />
     <Compile Include="Controllers\Audio\SpeechChunkController.cs" />
+    <Compile Include="EntityEntryViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="FileUtil.cs" />
     <Compile Include="InputWindow.cs">
       <SubType>Form</SubType>
@@ -118,6 +121,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
+    <Reference Include="OpenTK.GLControl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -137,6 +142,25 @@
     <Content Include="Resources\Images\Save.gif" />
     <Content Include="Resources\Images\Speaker.gif" />
     <Content Include="Resources\Images\Thing.gif" />
+    <Content Include="Resources\Textures\AppleBox.png" />
+    <Content Include="Resources\Textures\ArrowBox.png" />
+    <Content Include="Resources\Textures\BodyslamBox.png" />
+    <Content Include="Resources\Textures\Box.png" />
+    <Content Include="Resources\Textures\Checkpoint.png" />
+    <Content Include="Resources\Textures\DetonatorBox.png" />
+    <Content Include="Resources\Textures\DetonatorBoxTop.png" />
+    <Content Include="Resources\Textures\ActivatorBox.png" />
+    <Content Include="Resources\Textures\IronArrowBox.png" />
+    <Content Include="Resources\Textures\IronBox.png" />
+    <Content Include="Resources\Textures\LifeBox.png" />
+    <Content Include="Resources\Textures\MaskBox.png" />
+    <Content Include="Resources\Textures\Nitro.png" />
+    <Content Include="Resources\Textures\NitroTop.png" />
+    <Content Include="Resources\Textures\QuestionMarkBox.png" />
+    <Content Include="Resources\Textures\TNT.png" />
+    <Content Include="Resources\Textures\TNTTop.png" />
+    <Content Include="Resources\Textures\UnknownBox.png" />
+    <Content Include="Resources\Textures\UnknownBoxTop.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="InputWindow.resx">

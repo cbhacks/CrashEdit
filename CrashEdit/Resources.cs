@@ -124,5 +124,157 @@ namespace CrashEdit
                 return (Image)manager.GetObject("YellowJournalImage");
             }
         }
+
+        public static Bitmap ActivatorBoxTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("ActivatorBoxTexture");
+            }
+        }
+
+        public static Bitmap AppleBoxTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("AppleBoxTexture");
+            }
+        }
+
+        public static Bitmap ArrowBoxTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("ArrowBoxTexture");
+            }
+        }
+
+        public static Bitmap BodyslamBoxTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("BodyslamBoxTexture");
+            }
+        }
+
+        public static Bitmap BoxTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("BoxTexture");
+            }
+        }
+
+        public static Bitmap CheckpointTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("CheckpointTexture");
+            }
+        }
+
+        public static Bitmap DetonatorBoxTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("DetonatorBoxTexture");
+            }
+        }
+
+        public static Bitmap DetonatorBoxTopTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("DetonatorBoxTopTexture");
+            }
+        }
+
+        public static Bitmap IronArrowBoxTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("IronArrowBoxTexture");
+            }
+        }
+
+        public static Bitmap IronBoxTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("IronBoxTexture");
+            }
+        }
+
+        public static Bitmap LifeBoxTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("LifeBoxTexture");
+            }
+        }
+
+        public static Bitmap MaskBoxTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("MaskBoxTexture");
+            }
+        }
+
+        public static Bitmap NitroTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("NitroTexture");
+            }
+        }
+
+        public static Bitmap NitroTopTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("NitroTopTexture");
+            }
+        }
+
+        public static Bitmap QuestionMarkBoxTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("QuestionMarkBoxTexture");
+            }
+        }
+
+        public static Bitmap TNTTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("TNTTexture");
+            }
+        }
+
+        public static Bitmap TNTTopTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("TNTTopTexture");
+            }
+        }
+
+        public static Bitmap UnknownBoxTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("UnknownBoxTexture");
+            }
+        }
+
+        public static Bitmap UnknownBoxTopTexture
+        {
+            get
+            {
+                return (Bitmap)manager.GetObject("UnknownBoxTopTexture");
+            }
+        }
     }
 }
