@@ -320,7 +320,7 @@ namespace CrashEdit
                     rect.Width = hstep - 1;
                     rect.Height = vstep - 1;
                     string text;
-                    if (x == xsel && y + offset == ysel)
+                    if (x == xsel && y + offset == ysel && x + y * 16 < data.Length)
                     {
                         curfont = selfont;
                         curbrush = selbrush;
