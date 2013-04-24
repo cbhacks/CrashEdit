@@ -190,6 +190,10 @@ namespace CrashEdit
             {
                 MessageBox.Show("A packing error occurred. One of the entry-containing chunks contains over 64 KB of data.","Save",MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
+            catch (IOException ex)
+            {
+                MessageBox.Show("An IO error occurred.\n\n" + ex.Message,"Save",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
         }
 
         public void PatchNSD()
