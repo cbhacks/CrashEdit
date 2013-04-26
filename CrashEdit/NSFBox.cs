@@ -20,7 +20,7 @@ namespace CrashEdit
                 imglist.Images.Add("nsf",Resources.FileImage);
                 imglist.Images.Add("normalchunk",Resources.YellowJournalImage);
                 imglist.Images.Add("texturechunk",Resources.ImageImage);
-                imglist.Images.Add("t2chunk",Resources.FileImage);
+                imglist.Images.Add("oldsoundchunk",Resources.BlueJournalImage);
                 imglist.Images.Add("soundchunk",Resources.BlueJournalImage);
                 imglist.Images.Add("wavebankchunk",Resources.MusicImage);
                 imglist.Images.Add("speechchunk",Resources.WhiteJournalImage);

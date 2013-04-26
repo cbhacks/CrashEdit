@@ -1,15 +1,15 @@
 using System;
 
-namespace Crash.Unknown2
+namespace Crash.Audio
 {
     [ChunkType(2)]
-    public sealed class T2ChunkLoader : EntryChunkLoader
+    public sealed class OldSoundChunkLoader : EntryChunkLoader
     {
         public override Chunk Load(Entry[] entries)
         {
             if (entries == null)
                 throw new ArgumentNullException("entries");
-            return new T2Chunk(entries);
+            return new OldSoundChunk(entries);
         }
     }
 }

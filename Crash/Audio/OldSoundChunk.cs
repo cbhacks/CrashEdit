@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 
-namespace Crash.Unknown2
+namespace Crash.Audio
 {
-    public sealed class T2Chunk : EntryChunk
+    public sealed class OldSoundChunk : EntryChunk
     {
-        public T2Chunk()
+        public OldSoundChunk()
         {
         }
 
-        public T2Chunk(IEnumerable<Entry> entries) : base(entries)
+        public OldSoundChunk(IEnumerable<Entry> entries) : base(entries)
         {
         }
 
@@ -19,12 +19,12 @@ namespace Crash.Unknown2
 
         protected override int Alignment
         {
-            get { return 4; }
+            get { return 16; }
         }
 
         protected override int AlignmentOffset
         {
-            get { return 0; }
+            get { return 8; }
         }
     }
 }
