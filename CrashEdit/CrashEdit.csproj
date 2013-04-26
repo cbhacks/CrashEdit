@@ -65,7 +65,7 @@
     <Compile Include="Controllers\Unknown0\T15EntryController.cs" />
     <Compile Include="Controllers\Unknown0\T21EntryController.cs" />
     <Compile Include="Controllers\Unknown0\T17EntryController.cs" />
-    <Compile Include="Controllers\Unknown0\T2EntryController.cs" />
+    <Compile Include="Controllers\Graphics\ModelEntryController.cs" />
     <Compile Include="Controllers\Unknown0\T3EntryController.cs" />
     <Compile Include="Controllers\Unknown0\T11EntryController.cs" />
     <Compile Include="Controllers\MysteryMultiItemEntryController.cs" />
@@ -174,8 +174,5 @@
     <EmbeddedResource Include="Resources.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\Graphics\" />
   </ItemGroup>
 </Project>

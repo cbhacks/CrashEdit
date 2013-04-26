@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 
-namespace Crash.Unknown0
+namespace Crash.Graphics
 {
-    public sealed class T2Entry : MysteryMultiItemEntry
+    public sealed class ModelEntry : MysteryMultiItemEntry
     {
-        public T2Entry(IEnumerable<byte[]> items,int eid) : base(items,eid)
+        public ModelEntry(IEnumerable<byte[]> items,int eid) : base(items,eid)
         {
         }
 

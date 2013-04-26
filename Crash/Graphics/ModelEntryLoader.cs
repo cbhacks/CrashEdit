@@ -1,15 +1,15 @@
 using System;
 
-namespace Crash.Unknown0
+namespace Crash.Graphics
 {
     [EntryType(2)]
-    public sealed class T2EntryLoader : EntryLoader
+    public sealed class ModelEntryLoader : EntryLoader
     {
         public override Entry Load(byte[][] items,int eid)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
-            if (items.Length < 5)
+            if (items.Length != 5 && items.Length != 6)
             {
                 throw new LoadException();
             }
@@ -17,7 +17,7 @@ namespace Crash.Unknown0
             {
                 throw new LoadException();
             }
-            return new T2Entry(items,eid);
+            return new ModelEntry(items,eid);
         }
     }
 }

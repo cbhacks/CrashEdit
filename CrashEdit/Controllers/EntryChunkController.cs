@@ -20,9 +20,9 @@ namespace CrashEdit
                 {
                     AddNode(new T1EntryController(this,(T1Entry)entry));
                 }
-                else if (entry is T2Entry)
+                else if (entry is ModelEntry)
                 {
-                    AddNode(new T2EntryController(this,(T2Entry)entry));
+                    AddNode(new ModelEntryController(this,(ModelEntry)entry));
                 }
                 else if (entry is T3Entry)
                 {

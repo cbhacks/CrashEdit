@@ -27,7 +27,7 @@ namespace CrashEdit
                 imglist.Images.Add("unknownchunk",Resources.FileImage);
                 imglist.Images.Add("badchunk",Resources.FileImage);
                 imglist.Images.Add("t1entry",Resources.ThingImage);
-                imglist.Images.Add("t2entry",Resources.ThingImage);
+                imglist.Images.Add("modelentry",Resources.ThingImage);
                 imglist.Images.Add("t3entry",Resources.ThingImage);
                 imglist.Images.Add("t4entry",Resources.ThingImage);
                 imglist.Images.Add("entityentry",Resources.ThingImage);

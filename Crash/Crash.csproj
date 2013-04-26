@@ -108,8 +108,8 @@
     <Compile Include="Unknown0\T1EntryLoader.cs" />
     <Compile Include="Unknown0\T21Entry.cs" />
     <Compile Include="Unknown0\T21EntryLoader.cs" />
-    <Compile Include="Unknown0\T2Entry.cs" />
-    <Compile Include="Unknown0\T2EntryLoader.cs" />
+    <Compile Include="Graphics\ModelEntry.cs" />
+    <Compile Include="Graphics\ModelEntryLoader.cs" />
     <Compile Include="Unknown0\T3Entry.cs" />
     <Compile Include="Unknown0\T3EntryLoader.cs" />
     <Compile Include="Unknown0\T4Entry.cs" />
