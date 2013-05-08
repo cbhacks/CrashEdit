@@ -274,7 +274,20 @@ namespace CrashEdit
                     }
                     break;
                 case Keys.Space:
-                    data[position] = 0;
+                    if (e.Control)
+                    {
+                        if (MessageBox.Show("Are you sure?","Nullify",MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            for (int i = 0;i < data.Length;i++)
+                            {
+                                data[i] = 0;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        data[position] = 0;
+                    }
                     Invalidate();
                     break;
             }
