@@ -59,6 +59,25 @@ namespace CrashEdit
             return label;
         }
 
+        protected void InvalidateEditor()
+        {
+            if (editor != null)
+            {
+                Control container = editor.Parent;
+                if (container != null)
+                {
+                    container.Controls.Remove(editor);
+                }
+                editor.Dispose();
+                editor = null;
+                if (node.IsSelected)
+                {
+                    node.TreeView.SelectedNode = null;
+                    node.TreeView.SelectedNode = node;
+                }
+            }
+        }
+
         public TreeNode Node
         {
             get { return node; }
