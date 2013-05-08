@@ -47,11 +47,8 @@ The current feature set includes:
 * Modifying most unknown data using a built-in hex editor
 
 ## Requirements ##
-You will need Microsoft .NET Framework 2.0 or an alternative such as Mono. In the case of Mono, you will need the following referenced assemblies:
-
-* System
-* System.Drawing
-* System.Windows.Forms
+* .NET Framework 2.0 or Mono
+* OpenTK 1.0
 
 If you use Mono, you may need to comment out `[EditorControl(typeof(TextureChunk))]` in CrashEdit/TextureChunkBox.cs and recompile. __Note: doing so will disable the texture viewer.__
 
