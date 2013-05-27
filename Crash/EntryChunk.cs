@@ -80,7 +80,8 @@ namespace Crash
                 }
                 BitConv.ToInt32(data,20 + i * 4,offset);
             }
-            CalculateChecksum(data);
+            int checksum = CalculateChecksum(data);
+            BitConv.ToInt32(data,12,checksum);
             return data;
         }
     }
