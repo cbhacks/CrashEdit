@@ -7,6 +7,7 @@ namespace Crash
     public abstract class Entry : IEntry
     {
         public const int Magic = 0x100FFFF;
+        public const int NullEID = 0x6396347F;
 
         private static Dictionary<int,EntryLoader> loaders;
 

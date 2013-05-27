@@ -23,9 +23,9 @@ namespace Crash.Audio
             int vb1eid = BitConv.FromInt32(items[0],12);
             int vb2eid = BitConv.FromInt32(items[0],16);
             int vb3eid = BitConv.FromInt32(items[0],20);
-            if (BitConv.FromInt32(items[0],24) != 0x6396347F ||
-                BitConv.FromInt32(items[0],28) != 0x6396347F ||
-                BitConv.FromInt32(items[0],32) != 0x6396347F)
+            if (BitConv.FromInt32(items[0],24) != Entry.NullEID ||
+                BitConv.FromInt32(items[0],28) != Entry.NullEID ||
+                BitConv.FromInt32(items[0],32) != Entry.NullEID)
             {
                 throw new LoadException();
             }
