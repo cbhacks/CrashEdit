@@ -51,7 +51,12 @@ namespace Crash
                 throw new ArgumentException("Value must be 65536 bytes long.","data");
             short magic = BitConv.FromInt16(data,0);
             short type = BitConv.FromInt16(data,2);
+            int checksum = BitConv.FromInt32(data,12);
             if (magic != Magic)
+            {
+                throw new LoadException();
+            }
+            if (checksum != CalculateChecksum(data))
             {
                 throw new LoadException();
             }
