@@ -7,4 +7,6 @@ http://freeiconsweb.com/gif_icons.htm
 directly off of some code from nextvolume's psxsdk (vag2wav.c), which claims
 it's "Based on VAG-Depack 0.1 by bITmASTER".
 
+This program is sometimes packaged with OpenTK, in which case the license for OpenTK will be included in a separate file.
+
 Aside from that, whatever.
