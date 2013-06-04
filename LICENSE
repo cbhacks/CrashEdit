@@ -1,9 +1,10 @@
 The icons were obtained from "free icons web", with no license information
-provided other than "free":
-http://freeiconsweb.com/gif_icons.htm
+provided other than "free": 
+http://freeiconsweb.com/gif_icons.htm 
+(Link is dead, can't find a replacement, sorry)
 
-``Crash.Audio.SampleLine::ToPCM'' and ``Crash.Audio.ADPCMConv'' are
-based directly off of some code from nextvolume's psxsdk (vag2wav.c), which
-claims it's "Based on VAG-Depack 0.1 by bITmASTER".
+`Crash.Audio.SampleLine::ToPCM` and `Crash.Audio.ADPCMConv` are based
+directly off of some code from nextvolume's psxsdk (vag2wav.c), which claims
+it's "Based on VAG-Depack 0.1 by bITmASTER".
 
 Aside from that, whatever.
