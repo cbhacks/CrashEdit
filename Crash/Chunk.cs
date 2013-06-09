@@ -10,7 +10,7 @@ namespace Crash
         public const short Magic = 0x1234;
         public const short CompressedMagic = 0x1235;
 
-        private static Dictionary<short,ChunkLoader> loaders;
+        internal static Dictionary<short,ChunkLoader> loaders;
 
         static Chunk()
         {
@@ -43,7 +43,7 @@ namespace Crash
             return (int)checksum;
         }
 
-        public static Chunk Load(int chunkid,byte[] data)
+        public static UnprocessedChunk Load(byte[] data)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
@@ -60,14 +60,7 @@ namespace Crash
             {
                 throw new LoadException();
             }
-            if (loaders.ContainsKey(type))
-            {
-                return loaders[type].Load(chunkid,data);
-            }
-            else
-            {
-                return new UnknownChunk(data);
-            }
+            return new UnprocessedChunk(data);
         }
 
         public abstract short Type
@@ -75,6 +68,11 @@ namespace Crash
             get;
         }
 
-        public abstract byte[] Save(int chunkid);
+        public abstract UnprocessedChunk Unprocess(int chunkid);
+
+        public virtual byte[] Save(int chunkid)
+        {
+            return Unprocess(chunkid).Save(chunkid);
+        }
     }
 }

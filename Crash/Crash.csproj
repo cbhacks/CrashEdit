@@ -69,12 +69,11 @@
     <Compile Include="Audio\WavebankEntry.cs" />
     <Compile Include="Audio\WavebankEntryLoader.cs" />
     <Compile Include="Audio\WaveConv.cs" />
-    <Compile Include="BadChunk.cs" />
+    <Compile Include="UnprocessedEntry.cs" />
     <Compile Include="Game\EntityPosition.cs" />
     <Compile Include="IEntry.cs" />
     <Compile Include="Audio\OldSoundChunk.cs" />
     <Compile Include="Audio\OldSoundChunkLoader.cs" />
-    <Compile Include="WeirdEntry.cs" />
     <Compile Include="BitConv.cs" />
     <Compile Include="Chunk.cs" />
     <Compile Include="ChunkLoader.cs" />
@@ -115,12 +114,11 @@
     <Compile Include="Unknown0\T4Entry.cs" />
     <Compile Include="Unknown0\T4EntryLoader.cs" />
     <Compile Include="Unknown0\T4Item.cs" />
-    <Compile Include="UnknownEntry.cs" />
     <Compile Include="EntryChunkLoader.cs" />
     <Compile Include="EntryLoader.cs" />
     <Compile Include="NSF.cs" />
     <Compile Include="NormalChunk.cs" />
     <Compile Include="NormalChunkLoader.cs" />
-    <Compile Include="UnknownChunk.cs" />
+    <Compile Include="UnprocessedChunk.cs" />
   </ItemGroup>
 </Project>

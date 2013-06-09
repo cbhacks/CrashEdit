@@ -46,15 +46,8 @@ namespace Crash
             return null;
         }
 
-        public override byte[] Save(int chunkid)
+        public override UnprocessedChunk Unprocess(int chunkid)
         {
-            return Save(chunkid,entries);
-        }
-
-        protected byte[] Save(int chunkid,IList<Entry> entries)
-        {
-            if (entries == null)
-                throw new ArgumentNullException("entries");
             byte[] data = new byte [Length];
             BitConv.ToInt16(data,0,Magic);
             BitConv.ToInt16(data,2,Type);
@@ -82,7 +75,7 @@ namespace Crash
             }
             int checksum = CalculateChecksum(data);
             BitConv.ToInt32(data,12,checksum);
-            return data;
+            return new UnprocessedChunk(data);
         }
     }
 }

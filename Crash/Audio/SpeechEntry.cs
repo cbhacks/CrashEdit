@@ -23,11 +23,11 @@ namespace Crash.Audio
             get { return samples; }
         }
 
-        public override byte[] Save()
+        public override UnprocessedEntry Unprocess()
         {
             byte[][] items = new byte [1][];
             items[0] = samples.Save();;
-            return Save(items);
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }

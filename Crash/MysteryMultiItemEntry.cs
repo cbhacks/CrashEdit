@@ -19,9 +19,9 @@ namespace Crash
             get { return items; }
         }
 
-        public sealed override byte[] Save()
+        public override UnprocessedEntry Unprocess()
         {
-            return Save(items);
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }

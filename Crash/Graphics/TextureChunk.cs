@@ -28,9 +28,9 @@ namespace Crash.Graphics
             get { return data; }
         }
 
-        public override byte[] Save(int chunkid)
+        public override UnprocessedChunk Unprocess(int chunkid)
         {
-            return data;
+            return new UnprocessedChunk(data);
         }
     }
 }

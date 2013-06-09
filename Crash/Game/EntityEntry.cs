@@ -35,7 +35,7 @@ namespace Crash.Game
             get { return entities; }
         }
 
-        public override byte[] Save()
+        public override UnprocessedEntry Unprocess()
         {
             byte[][] items = new byte [2 + entities.Count][];
             items[0] = unknown1;
@@ -44,7 +44,7 @@ namespace Crash.Game
             {
                 items[2 + i] = entities[i].Save();
             }
-            return Save(items);
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }

@@ -66,7 +66,7 @@ namespace Crash.Audio
             get { return sep; }
         }
 
-        public override byte[] Save()
+        public override UnprocessedEntry Unprocess()
         {
             byte[][] items = new byte [3][];
             items[0] = new byte [36];
@@ -88,7 +88,7 @@ namespace Crash.Audio
                 items[1] = new byte [0];
             }
             items[2] = sep.Save();
-            return Save(items);
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }

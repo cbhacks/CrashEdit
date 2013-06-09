@@ -18,11 +18,11 @@ namespace Crash
             get { return data; }
         }
 
-        public sealed override byte[] Save()
+        public override UnprocessedEntry Unprocess()
         {
             byte[][] items = new byte [1][];
             items[0] = data;
-            return Save(items);
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }

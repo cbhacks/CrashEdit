@@ -9,7 +9,7 @@ namespace Crash
         public const int Magic = 0x100FFFF;
         public const int NullEID = 0x6396347F;
 
-        private static Dictionary<int,EntryLoader> loaders;
+        internal static Dictionary<int,EntryLoader> loaders;
 
         static Entry()
         {
@@ -24,7 +24,7 @@ namespace Crash
             }
         }
 
-        public static Entry Load(byte[] data)
+        public static UnprocessedEntry Load(byte[] data)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
@@ -71,21 +71,7 @@ namespace Crash
                 Array.Copy(data,itemstart,itemdata,0,itemsize);
                 items[i] = itemdata;
             }
-            if (loaders.ContainsKey(type))
-            {
-                try
-                {
-                    return loaders[type].Load(items,eid);
-                }
-                catch (LoadException ex)
-                {
-                    return new WeirdEntry(items,eid,type,ex);
-                }
-            }
-            else
-            {
-                return new UnknownEntry(items,eid,type);
-            }
+            return new UnprocessedEntry(items,eid,type);
         }
 
         private int eid;
@@ -105,35 +91,11 @@ namespace Crash
             get { return eid; }
         }
 
-        public abstract byte[] Save();
+        public abstract UnprocessedEntry Unprocess();
 
-        protected byte[] Save(IList<byte[]> items)
+        public virtual byte[] Save()
         {
-            if (items == null)
-                throw new ArgumentNullException("items");
-            int length = 20 + items.Count * 4;
-            Aligner.Align(ref length,4);
-            foreach (byte[] item in items)
-            {
-                length += item.Length;
-                Aligner.Align(ref length,4);
-            }
-            byte[] data = new byte [length];
-            BitConv.ToInt32(data,0,Magic);
-            BitConv.ToInt32(data,4,eid);
-            BitConv.ToInt32(data,8,Type);
-            BitConv.ToInt32(data,12,items.Count);
-            int offset = 20 + items.Count * 4;
-            Aligner.Align(ref offset,4);
-            BitConv.ToInt32(data,16,offset);
-            for (int i = 0;i < items.Count;i++)
-            {
-                items[i].CopyTo(data,offset);
-                offset += items[i].Length;
-                Aligner.Align(ref offset,4);
-                BitConv.ToInt32(data,20 + i * 4,offset);
-            }
-            return data;
+            return Unprocess().Save();
         }
     }
 }

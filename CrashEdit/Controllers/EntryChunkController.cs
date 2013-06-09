@@ -72,13 +72,9 @@ namespace CrashEdit
                 {
                     AddNode(new T21EntryController(this,(T21Entry)entry));
                 }
-                else if (entry is UnknownEntry)
+                else if (entry is UnprocessedEntry)
                 {
-                    AddNode(new UnknownEntryController(this,(UnknownEntry)entry));
-                }
-                else if (entry is WeirdEntry)
-                {
-                    AddNode(new WeirdEntryController(this,(WeirdEntry)entry));
+                    AddNode(new UnprocessedEntryController(this,(UnprocessedEntry)entry));
                 }
                 else
                 {

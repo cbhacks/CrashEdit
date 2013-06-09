@@ -49,6 +49,13 @@ namespace Crash
                 entrydata = new byte [entrysize];
                 Array.Copy(data,entrystart,entrydata,0,entrysize);
                 entries[i] = Entry.Load(entrydata);
+                try
+                {
+                    entries[i] = ((UnprocessedEntry)entries[i]).Process();
+                }
+                catch (LoadException)
+                {
+                }
             }
             return Load(entries);
         }

@@ -24,14 +24,14 @@ namespace Crash.Unknown0
             get { return t4items; }
         }
 
-        public override byte[] Save()
+        public override UnprocessedEntry Unprocess()
         {
             byte[][] items = new byte [t4items.Count][];
             for (int i = 0;i < t4items.Count;i++)
             {
                 items[i] = t4items[i].Save();
             }
-            return Save(items);
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }
