@@ -54,11 +54,11 @@ namespace Crash
             int checksum = BitConv.FromInt32(data,12);
             if (magic != Magic)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("Chunk: Magic number is wrong");
             }
             if (checksum != CalculateChecksum(data))
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("Chunk: Checksum is wrong");
             }
             return new UnprocessedChunk(data);
         }

@@ -11,11 +11,11 @@ namespace Crash.Audio
                 throw new ArgumentNullException("items");
             if (items.Length != 3)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("MusicEntry: Wrong number of items");
             }
             if (items[0].Length != 36)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("MusicEntry: First item length is wrong");
             }
             int seqcount = BitConv.FromInt32(items[0],0);
             int vheid = BitConv.FromInt32(items[0],4);
@@ -27,7 +27,7 @@ namespace Crash.Audio
                 BitConv.FromInt32(items[0],28) != Entry.NullEID ||
                 BitConv.FromInt32(items[0],32) != Entry.NullEID)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("MusicEntry: Unused wavebank references are not null");
             }
             VH vh;
             if (items[1].Length != 0)

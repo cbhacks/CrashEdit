@@ -33,7 +33,8 @@ namespace Crash
             }
             else
             {
-                throw new LoadException();
+                ErrorManager.SignalError("UnprocessedChunk: Unknown chunk type");
+                return null;
             }
         }
 

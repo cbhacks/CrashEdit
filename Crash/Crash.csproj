@@ -69,6 +69,12 @@
     <Compile Include="Audio\WavebankEntry.cs" />
     <Compile Include="Audio\WavebankEntryLoader.cs" />
     <Compile Include="Audio\WaveConv.cs" />
+    <Compile Include="LoadAbortedException.cs" />
+    <Compile Include="ErrorManager.cs" />
+    <Compile Include="ErrorResponse.cs" />
+    <Compile Include="ErrorSignalEventArgs.cs" />
+    <Compile Include="ErrorSignalEventHandler.cs" />
+    <Compile Include="LoadSkippedException.cs" />
     <Compile Include="UnprocessedEntry.cs" />
     <Compile Include="Game\EntityPosition.cs" />
     <Compile Include="IEntry.cs" />
@@ -96,7 +102,6 @@
     <Compile Include="Graphics\TextureChunkLoader.cs" />
     <Compile Include="MysteryMultiItemEntry.cs" />
     <Compile Include="MysteryUniItemEntry.cs" />
-    <Compile Include="LoadException.cs" />
     <Compile Include="Unknown0\T11Entry.cs" />
     <Compile Include="Unknown0\T11EntryLoader.cs" />
     <Compile Include="Unknown0\T15Entry.cs" />

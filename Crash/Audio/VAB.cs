@@ -13,7 +13,7 @@ namespace Crash.Audio
                 throw new ArgumentNullException("vb");
             if (vh.VBSize != vb.Length)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("VAB: VB size field mismatch");
             }
             SampleSet[] waves = new SampleSet [vh.Waves.Count];
             int offset = 0;
@@ -22,7 +22,7 @@ namespace Crash.Audio
                 int wavelength = vh.Waves[i];
                 if (offset + wavelength > vb.Length)
                 {
-                    throw new LoadException();
+                    ErrorManager.SignalError("VAB: Wave ends out of bounds");
                 }
                 SampleLine[] wavelines = new SampleLine[wavelength];
                 for (int j = 0;j < wavelength;j++)

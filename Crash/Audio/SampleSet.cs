@@ -11,7 +11,7 @@ namespace Crash.Audio
                 throw new ArgumentNullException("data");
             if (data.Length % 16 != 0)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("SampleSet: Length is invalid");
             }
             int samplelinecount = data.Length / 16;
             SampleLine[] samplelines = new SampleLine [samplelinecount];

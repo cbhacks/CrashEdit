@@ -11,7 +11,7 @@ namespace Crash
                 throw new ArgumentNullException("data");
             if (data.Length < 1312)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("NSD: Data is too short");
             }
             int[] unknown1 = new int [256];
             for (int i = 0;i < 256;i++)
@@ -27,15 +27,15 @@ namespace Crash
             }
             if (chunkcount < 0)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("NSD: Chunk count is negative");
             }
             if (entrycount < 0)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("NSD: Entry count is negative");
             }
             if (data.Length < 1312 + 8 * entrycount)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("NSD: Data is too short");
             }
             NSDLink[] index = new NSDLink [entrycount];
             for (int i = 0;i < entrycount;i++)

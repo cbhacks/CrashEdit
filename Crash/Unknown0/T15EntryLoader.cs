@@ -11,7 +11,7 @@ namespace Crash.Unknown0
                 throw new ArgumentNullException("items");
             if (items.Length != 1)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("T15Entry: Wrong number of items");
             }
             return new T15Entry(items[0],eid);
         }

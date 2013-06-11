@@ -11,17 +11,17 @@ namespace Crash.Unknown0
                 throw new ArgumentNullException("data");
             if (data.Length < 4)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("T4Item: Data is too short");
             }
             short count = BitConv.FromInt16(data,0);
             short unknown1 = BitConv.FromInt16(data,2);
             if (count < 0)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("T4Item: Value count is negative");
             }
             if (data.Length < 4 + 2 * count)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("T4Item: Data is too short");
             }
             short[] values = new short [count];
             for (int i = 0;i < count;i++)

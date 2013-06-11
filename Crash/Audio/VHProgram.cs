@@ -22,19 +22,19 @@ namespace Crash.Audio
             int reserved3 = BitConv.FromInt32(data,12);
             if (tonecount < 0 || tonecount > 16)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("VHProgram: Tone count is wrong");
             }
             if (reserved1 != 0xFF)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("VHProgram: Reserved value 1 is wrong");
             }
             if (reserved2 != -1)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("VHProgram: Reserved value 2 is wrong");
             }
             if (reserved3 != -1)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("VHProgram: Reserved value 3 is wrong");
             }
             VHTone[] tones = new VHTone [tonecount];
             for (int i = 0;i < tonecount;i++)

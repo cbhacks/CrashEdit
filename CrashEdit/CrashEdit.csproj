@@ -82,6 +82,12 @@
     <Compile Include="EntityEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="ErrorReporter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ErrorReporter.Designer.cs">
+      <DependentUpon>ErrorReporter.cs</DependentUpon>
+    </Compile>
     <Compile Include="FileUtil.cs" />
     <Compile Include="InputWindow.cs">
       <SubType>Form</SubType>
@@ -165,6 +171,10 @@
     <Content Include="Resources\Textures\UnknownPickup.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ErrorReporter.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ErrorReporter.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="InputWindow.resx">
       <SubType>Designer</SubType>
       <DependentUpon>InputWindow.cs</DependentUpon>

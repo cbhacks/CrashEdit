@@ -17,17 +17,17 @@ namespace Crash.Audio
             // All SEP/SEQ stuff is big-endian, like MIDI
             if (data.Length < 6)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("SEP: Data is too short");
             }
             int magic = BEBitConv.FromInt32(data,0);
             short version = BEBitConv.FromInt16(data,4);
             if (magic != Magic)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("SEP: Magic number is wrong");
             }
             if (version != Version)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("SEP: Version number is wrong");
             }
             int offset = 6;
             SEQ[] seqs = new SEQ [seqcount];
@@ -35,7 +35,7 @@ namespace Crash.Audio
             {
                 if (data.Length < offset + 13)
                 {
-                    throw new LoadException();
+                    ErrorManager.SignalError("SEP: Data is too short");
                 }
                 short seqid = BEBitConv.FromInt16(data,offset);
                 short resolution = BEBitConv.FromInt16(data,offset + 2);
@@ -45,16 +45,16 @@ namespace Crash.Audio
                 int length = BEBitConv.FromInt32(data,offset + 9);
                 if (seqid != i)
                 {
-                    throw new LoadException();
+                    ErrorManager.SignalIgnorableError("SEP: Track number is wrong");
                 }
                 if (length < 0)
                 {
-                    throw new LoadException();
+                    ErrorManager.SignalError("SEP: Track length is negative");
                 }
                 offset += 13;
                 if (data.Length < offset + length)
                 {
-                    throw new LoadException();
+                    ErrorManager.SignalError("SEP: Data is too short");
                 }
                 byte[] seqdata = new byte [length];
                 Array.Copy(data,offset,seqdata,0,length);

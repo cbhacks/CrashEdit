@@ -25,7 +25,8 @@ namespace Crash
             }
             else
             {
-                throw new LoadException();
+                ErrorManager.SignalError("UnprocessedEntry: Unknown entry type");
+                return null;
             }
         }
 

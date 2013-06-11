@@ -11,21 +11,21 @@ namespace Crash.Audio
                 throw new ArgumentNullException("items");
             if (items.Length != 2)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("WavebankEntry: Wrong number of items");
             }
             if (items[0].Length != 8)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("WavebankEntry: First item length is wrong");
             }
             int id = BitConv.FromInt32(items[0],0);
             int length = BitConv.FromInt32(items[0],4);
             if (id < 0 || id > 3)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("WavebankEntry: ID is invalid");
             }
             if (length != items[1].Length)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("WavebankEntry: Length field mismatch");
             }
             return new WavebankEntry(id,SampleSet.Load(items[1]),eid);
         }

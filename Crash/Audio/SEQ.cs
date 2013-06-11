@@ -14,17 +14,17 @@ namespace Crash.Audio
             // All SEP/SEQ stuff is big-endian, like MIDI
             if (data.Length < 15)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("SEQ: Data is too short");
             }
             int magic = BEBitConv.FromInt32(data,0);
             int version = BEBitConv.FromInt32(data,4);
             if (magic != Magic)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("SEQ: Magic number is wrong");
             }
             if (version != Version)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("SEQ: Version number is wrong");
             }
             short resolution = BEBitConv.FromInt16(data,8);
             int tempo = MIDIConv.From3BE(data,10);

@@ -9,7 +9,7 @@ namespace Crash.Game
         {
             if (items.Length < 2)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("EntityEntry: Wrong number of items");
             }
             byte[] unknown1 = items[0];
             byte[] unknown2 = items[1];

@@ -12,17 +12,17 @@ namespace Crash.Audio
         {
             if (data.Length < 2592)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("VH: Data is too short");
             }
             int magic = BitConv.FromInt32(data,0);
             int version = BitConv.FromInt32(data,4);
             if (magic != Magic)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("VH: Magic number is wrong");
             }
             if (version != Version)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("VH: Version number is wrong");
             }
             int id = BitConv.FromInt32(data,8);
             int size = BitConv.FromInt32(data,12);
@@ -37,40 +37,40 @@ namespace Crash.Audio
             int reserved2 = BitConv.FromInt32(data,28);
             if (id != 0)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("VH: ID is wrong");
             }
             if (size < data.Length)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("VH: Size field mismatch");
             }
             if ((size - data.Length) % 16 != 0)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("VH: Size field is invalid");
             }
             int vbsize = (size - data.Length) / 16;
             if (reserved1 != -0x1112)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("VH: Reserved value 1 is wrong");
             }
             if (programcount < 0 || programcount > 128)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("VH: Program count is invalid");
             }
             if (tonecount < 0 || tonecount > 2048)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("VH: Tone count is invalid");
             }
             if (wavecount < 0 || wavecount > 254)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("VH: Wave count is invalid");
             }
             if (reserved2 != -1)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("VH: Reserved value 2 is wrong");
             }
             if (data.Length < 2592 + 32 * 16 * programcount)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("VH: Data is too short");
             }
             VHProgram[] programs = new VHProgram [programcount];
             for (int i = 0;i < programcount;i++)
@@ -87,7 +87,7 @@ namespace Crash.Audio
                 int wave = BitConv.FromInt16(data,32 + 16 * 128 + 32 * 16 * programcount + 2 + i * 2);
                 if (wave % 2 != 0)
                 {
-                    throw new LoadException();
+                    ErrorManager.SignalError("VH: Wave size is invalid");
                 }
                 waves[i] = wave / 2;
             }

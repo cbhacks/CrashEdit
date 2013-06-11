@@ -11,11 +11,11 @@ namespace Crash.Graphics
                 throw new ArgumentNullException("items");
             if (items.Length != 5 && items.Length != 6)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("ModelEntry: Wrong number of items");
             }
             if (items[0].Length != 80)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("ModelEntry: First item length is wrong");
             }
             return new ModelEntry(items,eid);
         }

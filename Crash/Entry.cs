@@ -30,7 +30,7 @@ namespace Crash
                 throw new ArgumentNullException("data");
             if (data.Length < 16)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("Entry: Data is too short");
             }
             int magic = BitConv.FromInt32(data,0);
             int eid = BitConv.FromInt32(data,4);
@@ -38,15 +38,15 @@ namespace Crash
             int itemcount = BitConv.FromInt32(data,12);
             if (magic != Magic)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("Entry: Magic number is wrong");
             }
             if (itemcount < 0)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("Entry: Item count is negative");
             }
             if (data.Length < 20 + itemcount * 4)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("Entry: Data is too short");
             }
             byte[][] items = new byte [itemcount][];
             byte[] itemdata;
@@ -56,15 +56,15 @@ namespace Crash
                 int itemend = BitConv.FromInt32(data,20 + i * 4);
                 if (itemstart < 0)
                 {
-                    throw new LoadException();
+                    ErrorManager.SignalError("Entry: Item begins out of bounds");
                 }
                 if (itemend < itemstart)
                 {
-                    throw new LoadException();
+                    ErrorManager.SignalError("Entry: Item ends before it begins");
                 }
                 if (itemend > data.Length)
                 {
-                    throw new LoadException();
+                    ErrorManager.SignalError("Entry: Item ends out of bounds");
                 }
                 int itemsize = itemend - itemstart;
                 itemdata = new byte [itemsize];

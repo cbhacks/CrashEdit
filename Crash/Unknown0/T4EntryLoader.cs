@@ -15,7 +15,7 @@ namespace Crash.Unknown0
                 t4items[i] = T4Item.Load(items[i]);
                 if (t4items[i].Unknown1 != ((i == 0 || i == items.Length - 1) ? 0 : 1))
                 {
-                    throw new LoadException();
+                    ErrorManager.SignalIgnorableError("T4Entry: Item unknown field is wrong");
                 }
             }
             return new T4Entry(t4items,eid);

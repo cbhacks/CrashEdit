@@ -13,7 +13,7 @@ namespace Crash
                 throw new ArgumentOutOfRangeException("offset");
             if (data.Length < offset + 2)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
             }
             byte[] result = new byte [Chunk.Length];
             short magic = BitConv.FromInt16(data,offset);
@@ -21,7 +21,7 @@ namespace Crash
             {
                 if (data.Length < offset + Chunk.Length)
                 {
-                    throw new LoadException();
+                    ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
                 }
                 Array.Copy(data,offset,result,0,Chunk.Length);
                 offset += Chunk.Length;
@@ -31,29 +31,29 @@ namespace Crash
                 int pos = 0;
                 if (data.Length < offset + 12)
                 {
-                    throw new LoadException();
+                    ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
                 }
                 short zero = BitConv.FromInt16(data,offset + 2);
                 int length = BitConv.FromInt32(data,offset + 4);
                 int skip = BitConv.FromInt32(data,offset + 8);
                 if (zero != 0)
                 {
-                    throw new LoadException();
+                    ErrorManager.SignalIgnorableError("NSF.ReadChunk: Zero value is wrong");
                 }
                 if (length < 0 || length > Chunk.Length)
                 {
-                    throw new LoadException();
+                    ErrorManager.SignalError("NSF.ReadChunk: Length field is invalid");
                 }
                 if (skip < 0)
                 {
-                    throw new LoadException();
+                    ErrorManager.SignalError("NSF.ReadChunk: Skip value is negative");
                 }
                 offset += 12;
                 while (pos < length)
                 {
                     if (data.Length < offset + 1)
                     {
-                        throw new LoadException();
+                        ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
                     }
                     byte prefix = data[offset];
                     offset++;
@@ -62,7 +62,7 @@ namespace Crash
                         prefix &= 0x7F;
                         if (data.Length < offset + 1)
                         {
-                            throw new LoadException();
+                            ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
                         }
                         int seek = data[offset];
                         offset++;
@@ -79,11 +79,11 @@ namespace Crash
                         }
                         if (pos - seek < 0)
                         {
-                            throw new LoadException();
+                            ErrorManager.SignalError("NSF.ReadChunk: Repeat begins out of bounds");
                         }
                         if (pos + span > Chunk.Length)
                         {
-                            throw new LoadException();
+                            ErrorManager.SignalError("NSF.ReadChunk: Repeat ends out of bounds");
                         }
                         // Do NOT use Array.Copy
                         // due to possible overlap
@@ -98,7 +98,7 @@ namespace Crash
                     {
                         if (data.Length < offset + prefix)
                         {
-                            throw new LoadException();
+                            ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
                         }
                         Array.Copy(data,offset,result,pos,prefix);
                         offset += prefix;
@@ -107,19 +107,19 @@ namespace Crash
                 }
                 if (data.Length < offset + skip)
                 {
-                    throw new LoadException();
+                    ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
                 }
                 offset += skip;
                 if (data.Length < offset + (Chunk.Length - length))
                 {
-                    throw new LoadException();
+                    ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
                 }
                 Array.Copy(data,offset,result,pos,Chunk.Length - length);
                 offset += (Chunk.Length - length);
             }
             else
             {
-                throw new LoadException();
+                ErrorManager.SignalError("NSF.ReadChunk: Unknown magic number");
             }
             return result;
         }
@@ -134,12 +134,17 @@ namespace Crash
             {
                 byte[] chunkdata = ReadChunk(data,ref offset);
                 Chunk chunk = Chunk.Load(chunkdata);
+                ErrorManager.EnterSkipRegion();
                 try
                 {
                     chunk = ((UnprocessedChunk)chunk).Process(chunks.Count * 2 + 1);
                 }
-                catch (LoadException)
+                catch (LoadSkippedException)
                 {
+                }
+                finally
+                {
+                    ErrorManager.ExitSkipRegion();
                 }
                 chunks.Add(chunk);
             }

@@ -9,7 +9,7 @@ namespace Crash.Game
         {
             if (data.Length < 16)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("Entity: Data is too short");
             }
             int length = BitConv.FromInt32(data,0);
             int blank1 = BitConv.FromInt32(data,4);
@@ -17,19 +17,19 @@ namespace Crash.Game
             int fieldcount = BitConv.FromInt32(data,12);
             if (length != data.Length)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("Entity: Length field mismatch");
             }
             if (blank1 != 0 || blank2 != 0)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("Entity: Blank value is wrong");
             }
             if (fieldcount < 0)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("Entity: Field count is negative");
             }
             if (data.Length < 16 + fieldcount * 8)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("Entity: Data is too short");
             }
             EntityField[] fields = new EntityField [fieldcount];
             ushort? lastend = null;
@@ -42,13 +42,13 @@ namespace Crash.Game
                 short unknown2 = BitConv.FromInt16(data,22 + i * 8);
                 if (data.Length < offset + 4)
                 {
-                    throw new LoadException();
+                    ErrorManager.SignalError("Entity: Field begins out of bounds");
                 }
                 short elementcount = BitConv.FromInt16(data,offset);
                 short unknown3 = BitConv.FromInt16(data,offset + 2);
                 if (data.Length < offset + 4 + elementcount * elementsize)
                 {
-                    throw new LoadException();
+                    ErrorManager.SignalError("Entity: Field ends out of bounds");
                 }
                 byte[] fielddata = new byte [elementsize * elementcount];
                 Array.Copy(data,offset + 4,fielddata,0,elementsize * elementcount);

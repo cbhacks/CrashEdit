@@ -11,7 +11,7 @@ namespace Crash.Audio
                 throw new ArgumentNullException("items");
             if (items.Length != 1)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("SpeechEntry: Wrong number of items");
             }
             return new SpeechEntry(SampleSet.Load(items[0]),eid);
         }

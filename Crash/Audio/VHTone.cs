@@ -34,27 +34,27 @@ namespace Crash.Audio
             short reserved6 = BitConv.FromInt16(data,30);
             if (reserved1 != 0xB1)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("VHTone: Reserved value 1 is wrong");
             }
             if (reserved2 != 0xB2)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("VHTone: Reserved value 2 is wrong");
             }
             if (reserved3 != 0xC0)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("VHTone: Reserved value 3 is wrong");
             }
             if (reserved4 != 0xC1)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("VHTone: Reserved value 4 is wrong");
             }
             if (reserved5 != 0xC2)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("VHTone: Reserved value 5 is wrong");
             }
             if (reserved6 != 0xC3)
             {
-                throw new LoadException();
+                ErrorManager.SignalIgnorableError("VHTone: Reserved value 6 is wrong");
             }
             return new VHTone(priority,mode,volume,panning,centernote,pitchshift,minimumnote,maximumnote,vibratowidth,vibratotime,portamentowidth,portamentotime,pitchbendminimum,pitchbendmaximum,adsr1,adsr2,wave);
         }

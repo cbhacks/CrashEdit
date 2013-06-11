@@ -11,11 +11,11 @@ namespace Crash.Unknown0
                 throw new ArgumentNullException("items");
             if (items.Length != 7)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("T3Entry: Wrong number of items");
             }
             if (items[0].Length != 76)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("T3Entry: First item length is wrong");
             }
             return new T3Entry(items,eid);
         }

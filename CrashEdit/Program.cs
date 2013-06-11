@@ -9,6 +9,7 @@ namespace CrashEdit
         [STAThread]
         internal static void Main(string[] args)
         {
+            using (ErrorReporter errorform = new ErrorReporter())
             using (MainForm mainform = new MainForm())
             {
                 foreach (string arg in args)

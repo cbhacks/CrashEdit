@@ -9,7 +9,7 @@ namespace Crash.Game
         {
             if (items.Length != 1)
             {
-                throw new LoadException();
+                ErrorManager.SignalError("DemoEntry: Wrong number of items");
             }
             return new DemoEntry(items[0],eid);
         }
