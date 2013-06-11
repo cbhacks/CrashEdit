@@ -11,7 +11,7 @@ namespace Crash
                 throw new ArgumentNullException("data");
             if (offset < 0 || offset > data.Length)
                 throw new ArgumentOutOfRangeException("offset");
-            if (data.Length < 2)
+            if (data.Length < offset + 2)
             {
                 throw new LoadException();
             }
@@ -29,7 +29,7 @@ namespace Crash
             else if (magic == Chunk.CompressedMagic)
             {
                 int pos = 0;
-                if (data.Length < 12)
+                if (data.Length < offset + 12)
                 {
                     throw new LoadException();
                 }
