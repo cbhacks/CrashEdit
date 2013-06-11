@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace CrashEdit
 {
     [Serializable]
-    public class GUIException : Exception,ISerializable
+    public class GUIException : Exception
     {
         public GUIException(string message) : base(message)
         {

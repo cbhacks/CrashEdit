@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Crash
 {
     [Serializable]
-    public class PackingException : Exception,ISerializable
+    public class PackingException : Exception
     {
         public PackingException() : base("The data to be saved was too large to fit into its parent container.")
         {
