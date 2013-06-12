@@ -13,7 +13,7 @@ namespace Crash
                 throw new ArgumentException("Data must be 65536 bytes long.");
             int id = BitConv.FromInt32(data,4);
             int entrycount = BitConv.FromInt32(data,8);
-            // Checksum is here, ignore it
+            int checksum = BitConv.FromInt32(data,12);
             int headersize = 20 + entrycount * 4;
             if (id != chunkid)
             {
@@ -22,6 +22,10 @@ namespace Crash
             if (entrycount < 0)
             {
                 ErrorManager.SignalError("EntryChunk: Entry count is negative");
+            }
+            if (checksum != Chunk.CalculateChecksum(data))
+            {
+                ErrorManager.SignalIgnorableError("Chunk: Checksum is wrong");
             }
             if (headersize > data.Length)
             {

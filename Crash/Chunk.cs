@@ -25,7 +25,7 @@ namespace Crash
             }
         }
 
-        protected static int CalculateChecksum(byte[] data)
+        public static int CalculateChecksum(byte[] data)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
@@ -50,15 +50,9 @@ namespace Crash
             if (data.Length != Length)
                 throw new ArgumentException("Value must be 65536 bytes long.","data");
             short magic = BitConv.FromInt16(data,0);
-            short type = BitConv.FromInt16(data,2);
-            int checksum = BitConv.FromInt32(data,12);
             if (magic != Magic)
             {
                 ErrorManager.SignalIgnorableError("Chunk: Magic number is wrong");
-            }
-            if (checksum != CalculateChecksum(data))
-            {
-                ErrorManager.SignalIgnorableError("Chunk: Checksum is wrong");
             }
             return new UnprocessedChunk(data);
         }
