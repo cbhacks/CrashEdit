@@ -1,5 +1,4 @@
 using Crash;
-using Crash.Unknown0;
 using System.Windows.Forms;
 
 namespace CrashEdit
