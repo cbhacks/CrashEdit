@@ -48,17 +48,17 @@
     <Compile Include="Controllers\ChunkController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\ControllerMenuDelegate.cs" />
-    <Compile Include="Controllers\WavebankEntryController.cs" />
-    <Compile Include="Controllers\SpeechEntryController.cs" />
-    <Compile Include="Controllers\SoundEntryController.cs" />
-    <Compile Include="Controllers\OldSoundChunkController.cs" />
-    <Compile Include="Controllers\UnprocessedChunkController.cs" />
+    <Compile Include="Controllers\Wavebank\WavebankEntryController.cs" />
+    <Compile Include="Controllers\Speech\SpeechEntryController.cs" />
+    <Compile Include="Controllers\Sound\SoundEntryController.cs" />
+    <Compile Include="Controllers\Sound\OldSoundChunkController.cs" />
+    <Compile Include="Controllers\Unprocessed\UnprocessedChunkController.cs" />
     <Compile Include="Controllers\ItemController.cs" />
-    <Compile Include="Controllers\EntityController.cs" />
-    <Compile Include="Controllers\EntityEntryController.cs" />
-    <Compile Include="Controllers\UnprocessedEntryController.cs" />
+    <Compile Include="Controllers\Entity\EntityController.cs" />
+    <Compile Include="Controllers\Entity\EntityEntryController.cs" />
+    <Compile Include="Controllers\Unprocessed\UnprocessedEntryController.cs" />
     <Compile Include="Controllers\T4EntryController.cs" />
-    <Compile Include="Controllers\VHController.cs" />
+    <Compile Include="Controllers\Music\VHController.cs" />
     <Compile Include="Controllers\DemoEntryController.cs" />
     <Compile Include="Controllers\T15EntryController.cs" />
     <Compile Include="Controllers\T21EntryController.cs" />
@@ -66,20 +66,20 @@
     <Compile Include="Controllers\ModelEntryController.cs" />
     <Compile Include="Controllers\T3EntryController.cs" />
     <Compile Include="Controllers\T11EntryController.cs" />
-    <Compile Include="Controllers\MysteryMultiItemEntryController.cs" />
-    <Compile Include="Controllers\MysteryUniItemEntryController.cs" />
+    <Compile Include="Controllers\Mystery\MysteryMultiItemEntryController.cs" />
+    <Compile Include="Controllers\Mystery\MysteryUniItemEntryController.cs" />
     <Compile Include="Controllers\T1EntryController.cs" />
-    <Compile Include="Controllers\WavebankChunkController.cs" />
+    <Compile Include="Controllers\Wavebank\WavebankChunkController.cs" />
     <Compile Include="Controllers\EntryChunkController.cs" />
     <Compile Include="Controllers\EntryController.cs" />
-    <Compile Include="Controllers\SEQController.cs" />
-    <Compile Include="Controllers\MusicEntryController.cs" />
+    <Compile Include="Controllers\Music\SEQController.cs" />
+    <Compile Include="Controllers\Music\MusicEntryController.cs" />
     <Compile Include="Controllers\NormalChunkController.cs" />
-    <Compile Include="Controllers\SoundChunkController.cs" />
+    <Compile Include="Controllers\Sound\SoundChunkController.cs" />
     <Compile Include="Controllers\LegacyController.cs" />
     <Compile Include="Controllers\NSFController.cs" />
-    <Compile Include="Controllers\SpeechChunkController.cs" />
-    <Compile Include="EntityEntryViewer.cs">
+    <Compile Include="Controllers\Speech\SpeechChunkController.cs" />
+    <Compile Include="Controls\EntityEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ErrorReporter.cs">
@@ -96,14 +96,14 @@
       <DependentUpon>InputWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="GUIException.cs" />
-    <Compile Include="T4ItemBox.cs">
+    <Compile Include="Controls\T4ItemBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TextureChunkBox.cs">
+    <Compile Include="Controls\TextureChunkBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="EditorControlAttribute.cs" />
-    <Compile Include="EntityBox.cs">
+    <Compile Include="Controls\EntityBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="HexBox.cs">
@@ -112,15 +112,15 @@
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MysteryBox.cs">
+    <Compile Include="Controls\MysteryBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="NSFBox.cs">
+    <Compile Include="Controls\NSFBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Resources.cs" />
-    <Compile Include="SoundBox.cs">
+    <Compile Include="Controls\SoundBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>
