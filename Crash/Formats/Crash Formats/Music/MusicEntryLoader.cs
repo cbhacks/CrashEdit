@@ -23,12 +23,9 @@ namespace Crash
             int vb1eid = BitConv.FromInt32(items[0],12);
             int vb2eid = BitConv.FromInt32(items[0],16);
             int vb3eid = BitConv.FromInt32(items[0],20);
-            if (BitConv.FromInt32(items[0],24) != Entry.NullEID ||
-                BitConv.FromInt32(items[0],28) != Entry.NullEID ||
-                BitConv.FromInt32(items[0],32) != Entry.NullEID)
-            {
-                ErrorManager.SignalIgnorableError("MusicEntry: Unused wavebank references are not null");
-            }
+            int vb4eid = BitConv.FromInt32(items[0],24);
+            int vb5eid = BitConv.FromInt32(items[0],28);
+            int vb6eid = BitConv.FromInt32(items[0],32);
             VH vh;
             if (items[1].Length != 0)
             {
@@ -39,7 +36,7 @@ namespace Crash
                 vh = null;
             }
             SEP sep = SEP.Load(items[2],seqcount);
-            return new MusicEntry(vheid,vb0eid,vb1eid,vb2eid,vb3eid,vh,sep,eid);
+            return new MusicEntry(vheid,vb0eid,vb1eid,vb2eid,vb3eid,vb4eid,vb5eid,vb6eid,vh,sep,eid);
         }
     }
 }

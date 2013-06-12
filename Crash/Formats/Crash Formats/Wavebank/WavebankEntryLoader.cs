@@ -19,7 +19,7 @@ namespace Crash
             }
             int id = BitConv.FromInt32(items[0],0);
             int length = BitConv.FromInt32(items[0],4);
-            if (id < 0 || id > 3)
+            if (id < 0 || id > 6)
             {
                 ErrorManager.SignalIgnorableError("WavebankEntry: ID is invalid");
             }

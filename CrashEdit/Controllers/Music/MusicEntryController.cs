@@ -56,19 +56,28 @@ namespace CrashEdit
 
         private SampleLine[] FindLinkedVB()
         {
+            List<SampleLine> samples = new List<SampleLine>();
             WavebankEntry vb0entry = FindEID<WavebankEntry>(musicentry.VB0EID);
             WavebankEntry vb1entry = FindEID<WavebankEntry>(musicentry.VB1EID);
             WavebankEntry vb2entry = FindEID<WavebankEntry>(musicentry.VB2EID);
             WavebankEntry vb3entry = FindEID<WavebankEntry>(musicentry.VB3EID);
-            if (vb0entry == null || vb1entry == null || vb2entry == null || vb3entry == null)
-            {
-                throw new GUIException("One or more of the linked wavebank entries could not be found.");
-            }
-            List<SampleLine> samples = new List<SampleLine>();
-            samples.AddRange(vb0entry.Samples.SampleLines);
-            samples.AddRange(vb1entry.Samples.SampleLines);
-            samples.AddRange(vb2entry.Samples.SampleLines);
-            samples.AddRange(vb3entry.Samples.SampleLines);
+            WavebankEntry vb4entry = FindEID<WavebankEntry>(musicentry.VB4EID);
+            WavebankEntry vb5entry = FindEID<WavebankEntry>(musicentry.VB5EID);
+            WavebankEntry vb6entry = FindEID<WavebankEntry>(musicentry.VB6EID);
+            if (vb0entry != null)
+                samples.AddRange(vb0entry.Samples.SampleLines);
+            if (vb1entry != null)
+                samples.AddRange(vb1entry.Samples.SampleLines);
+            if (vb2entry != null)
+                samples.AddRange(vb2entry.Samples.SampleLines);
+            if (vb3entry != null)
+                samples.AddRange(vb3entry.Samples.SampleLines);
+            if (vb4entry != null)
+                samples.AddRange(vb4entry.Samples.SampleLines);
+            if (vb5entry != null)
+                samples.AddRange(vb5entry.Samples.SampleLines);
+            if (vb6entry != null)
+                samples.AddRange(vb6entry.Samples.SampleLines);
             return samples.ToArray();
         }
 
