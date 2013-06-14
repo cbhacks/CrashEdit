@@ -39,16 +39,16 @@ namespace Crash
         private byte panning;
         private byte attribute1;
         private byte attribute2;
-        private List<VHProgram> programs;
+        private Dictionary<int,VHProgram> programs;
         private List<SampleSet> waves;
 
-        public VAB(byte volume,byte panning,byte attribute1,byte attribute2,IEnumerable<VHProgram> programs,IEnumerable<SampleSet> waves)
+        public VAB(byte volume,byte panning,byte attribute1,byte attribute2,IDictionary<int,VHProgram> programs,IEnumerable<SampleSet> waves)
         {
             this.volume = volume;
             this.panning = panning;
             this.attribute1 = attribute1;
             this.attribute2 = attribute2;
-            this.programs = new List<VHProgram>(programs);
+            this.programs = new Dictionary<int,VHProgram>(programs);
             this.waves = new List<SampleSet>(waves);
         }
 
@@ -86,10 +86,13 @@ namespace Crash
             BitConv.ToInt32(colh,0,programs.Count * 2);
             dls.Items.Add(new RIFFData("colh",colh));
             RIFF lins = new RIFF("lins");
-            for (int i = 0;i < programs.Count;i++)
+            for (int i = 0;i < 128;i++)
             {
-                lins.Items.Add(programs[i].ToDLSInstrument(i,false));
-                lins.Items.Add(programs[i].ToDLSInstrument(i,true));
+                if (programs.ContainsKey(i))
+                {
+                    lins.Items.Add(programs[i].ToDLSInstrument(i,false));
+                    lins.Items.Add(programs[i].ToDLSInstrument(i,true));
+                }
             }
             dls.Items.Add(lins);
             RIFF wvpl = new RIFF("wvpl");
