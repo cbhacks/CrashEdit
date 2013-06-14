@@ -11,6 +11,7 @@ namespace CrashEdit
         private int position;
         private int? input;
         private byte[] data;
+        private int viewbit;
 
         public HexBox()
         {
@@ -18,6 +19,7 @@ namespace CrashEdit
             position = 0;
             input = null;
             data = new byte [0];
+            viewbit = 8;
             TabStop = true;
             SetStyle(ControlStyles.Selectable,true);
             DoubleBuffered = true;
@@ -202,6 +204,16 @@ namespace CrashEdit
                 case Keys.D6:
                 case Keys.D7:
                 case Keys.D8:
+                    if (e.Control)
+                    {
+                        viewbit = e.KeyCode - Keys.D0;
+                        Invalidate();
+                    }
+                    else
+                    {
+                        InputNibble(e.KeyCode - Keys.D0);
+                    }
+                    break;
                 case Keys.D9:
                     InputNibble(e.KeyCode - Keys.D0);
                     break;
@@ -214,6 +226,16 @@ namespace CrashEdit
                 case Keys.NumPad6:
                 case Keys.NumPad7:
                 case Keys.NumPad8:
+                    if (e.Control)
+                    {
+                        viewbit = e.KeyCode - Keys.NumPad0;
+                        Invalidate();
+                    }
+                    else
+                    {
+                        InputNibble(e.KeyCode - Keys.NumPad0);
+                    }
+                    break;
                 case Keys.NumPad9:
                     InputNibble(e.KeyCode - Keys.NumPad0);
                     break;
@@ -300,6 +322,7 @@ namespace CrashEdit
             Brush brush = Brushes.Navy;
             Brush backbrush = Brushes.White;
             Brush hibackbrush = Brushes.LightGreen;
+            Brush bithibackbrush = Brushes.LightCoral;
             Brush selbrush = Brushes.White;
             Brush selbackbrush = Brushes.Navy;
             Brush deadselbackbrush = Brushes.DarkGray;
@@ -353,7 +376,14 @@ namespace CrashEdit
                     {
                         curfont = font;
                         curbrush = brush;
-                        curbackbrush = (data[x + (offset + y) * 16] != 0) ? hibackbrush : backbrush;
+                        if (viewbit != 8)
+                        {
+                            curbackbrush = ((data[x + (offset + y) * 16] & 1 << viewbit) != 0) ? bithibackbrush : backbrush;
+                        }
+                        else
+                        {
+                            curbackbrush = (data[x + (offset + y) * 16] != 0) ? hibackbrush : backbrush;
+                        }
                         curformat = format;
                         text = data[x + (offset + y) * 16].ToString("X2");
                     }
