@@ -85,34 +85,28 @@ namespace Crash
 
         public byte[] ToMIDI()
         {
-            byte[] midi = new byte [37 + data.Length];
-            midi[0] = (byte)'M';
-            midi[1] = (byte)'T';
-            midi[2] = (byte)'h';
-            midi[3] = (byte)'d';
-            BEBitConv.ToInt32(midi,4,6);
-            BEBitConv.ToInt16(midi,8,0);
-            BEBitConv.ToInt16(midi,10,1);
-            BEBitConv.ToInt16(midi,12,resolution);
-            midi[14] = (byte)'M';
-            midi[15] = (byte)'T';
-            midi[16] = (byte)'r';
-            midi[17] = (byte)'k';
-            BEBitConv.ToInt32(midi,18,15 + data.Length);
-            midi[22] = 0;
-            midi[23] = 0xFF;
-            midi[24] = 0x51;
-            midi[25] = 0x03;
-            MIDIConv.To3BE(midi,26,tempo);
-            midi[29] = 0;
-            midi[30] = 0xFF;
-            midi[31] = 0x58;
-            midi[32] = 0x04;
-            BEBitConv.ToInt16(midi,33,rhythm);
-            midi[35] = 0x18;
-            midi[36] = 0x08;
-            data.CopyTo(midi,37);
-            return midi;
+            RIFF riff = new RIFF("MIDI");
+            byte[] mthd = new byte [6];
+            BEBitConv.ToInt16(mthd,0,0);
+            BEBitConv.ToInt16(mthd,2,1);
+            BEBitConv.ToInt16(mthd,4,resolution);
+            riff.Items.Add(new RIFFData("MThd",mthd));
+            byte[] mtrk = new byte [15 + data.Length];
+            mtrk[0] = 0;
+            mtrk[1] = 0xFF;
+            mtrk[2] = 0x51;
+            mtrk[3] = 0x03;
+            MIDIConv.To3BE(mtrk,4,tempo);
+            mtrk[7] = 0;
+            mtrk[8] = 0xFF;
+            mtrk[9] = 0x58;
+            mtrk[10] = 0x04;
+            BEBitConv.ToInt16(mtrk,11,rhythm);
+            mtrk[13] = 0x18;
+            mtrk[14] = 0x08;
+            data.CopyTo(mtrk,15);
+            riff.Items.Add(new RIFFData("MTrk",mtrk));
+            return riff.SaveBody(Endianness.BigEndian);
         }
     }
 }
