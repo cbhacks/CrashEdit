@@ -31,6 +31,11 @@ namespace Crash
             get;
         }
 
-        public abstract byte[] Save();
+        public byte[] Save()
+        {
+            return Save(Endianness.LittleEndian);
+        }
+
+        public abstract byte[] Save(Endianness endianness);
     }
 }

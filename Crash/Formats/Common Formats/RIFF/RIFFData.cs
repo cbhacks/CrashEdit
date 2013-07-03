@@ -20,14 +20,14 @@ namespace Crash
             get { return data.Length + 8; }
         }
 
-        public override byte[] Save()
+        public override byte[] Save(Endianness endianness)
         {
             byte[] result = new byte [8 + data.Length];
             result[0] = (byte)Name[0];
             result[1] = (byte)Name[1];
             result[2] = (byte)Name[2];
             result[3] = (byte)Name[3];
-            BitConv.ToInt32(result,4,data.Length);
+            AutoBitConv.ToInt32(endianness,result,4,data.Length);
             data.CopyTo(result,8);
             return result;
         }

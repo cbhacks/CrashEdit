@@ -32,16 +32,29 @@ namespace Crash
             }
         }
 
-        public override byte[] Save()
+        public override byte[] Save(Endianness endianness)
+        {
+            byte[] data = SaveBody(endianness);
+            byte[] result = new byte [12 + data.Length];
+            result[0] = (byte)'R';
+            result[1] = (byte)'I';
+            result[2] = (byte)'F';
+            result[3] = (byte)'F';
+            AutoBitConv.ToInt32(endianness,result,4,data.Length + 4);
+            result[8] = (byte)Name[0];
+            result[9] = (byte)Name[1];
+            result[10] = (byte)Name[2];
+            result[11] = (byte)Name[3];
+            data.CopyTo(result,12);
+            return result;
+        }
+
+        public byte[] SaveBody(Endianness endianness)
         {
             List<byte> data = new List<byte>();
-            data.Add((byte)Name[0]);
-            data.Add((byte)Name[1]);
-            data.Add((byte)Name[2]);
-            data.Add((byte)Name[3]);
             foreach (RIFFItem item in items)
             {
-                byte[] itemdata = item.Save();
+                byte[] itemdata = item.Save(endianness);
                 if (item is RIFF)
                 {
                     itemdata[0] = (byte)'L';
@@ -51,14 +64,7 @@ namespace Crash
                 }
                 data.AddRange(itemdata);
             }
-            byte[] result = new byte [8 + data.Count];
-            result[0] = (byte)'R';
-            result[1] = (byte)'I';
-            result[2] = (byte)'F';
-            result[3] = (byte)'F';
-            BitConv.ToInt32(result,4,data.Count);
-            data.CopyTo(result,8);
-            return result;
+            return data.ToArray();
         }
     }
 }
