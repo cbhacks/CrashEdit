@@ -39,6 +39,8 @@
   </Target>
   -->
   <ItemGroup>
+    <Compile Include="Formats\Crash Formats\Entity\EntityUnknownProperty.cs" />
+    <Compile Include="Formats\Crash Formats\Entity\EntityProperty.cs" />
     <Compile Include="Utility\Aligner.cs" />
     <Compile Include="Utility\ADPCMConv.cs" />
     <Compile Include="Utility\AutoBitConv.cs" />
@@ -98,7 +100,6 @@
     <Compile Include="Formats\Crash Formats\Entity\Entity.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityEntry.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityEntryLoader.cs" />
-    <Compile Include="Formats\Crash Formats\Entity\EntityField.cs" />
     <Compile Include="Utility\PixelConv.cs" />
     <Compile Include="Formats\Crash Formats\Texture\TextureChunk.cs" />
     <Compile Include="Formats\Crash Formats\Texture\TextureChunkLoader.cs" />

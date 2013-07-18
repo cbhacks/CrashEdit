@@ -14,7 +14,7 @@ namespace Crash
             int length = BitConv.FromInt32(data,0);
             int blank1 = BitConv.FromInt32(data,4);
             int blank2 = BitConv.FromInt32(data,8);
-            int fieldcount = BitConv.FromInt32(data,12);
+            int propertycount = BitConv.FromInt32(data,12);
             if (length != data.Length)
             {
                 ErrorManager.SignalIgnorableError("Entity: Length field mismatch");
@@ -23,70 +23,67 @@ namespace Crash
             {
                 ErrorManager.SignalIgnorableError("Entity: Blank value is wrong");
             }
-            if (fieldcount < 0)
+            if (propertycount < 0)
             {
-                ErrorManager.SignalError("Entity: Field count is negative");
+                ErrorManager.SignalError("Entity: Property count is negative");
             }
-            if (data.Length < 16 + fieldcount * 8)
+            if (data.Length < 16 + propertycount * 8)
             {
                 ErrorManager.SignalError("Entity: Data is too short");
             }
-            EntityField[] fields = new EntityField [fieldcount];
-            ushort? lastend = null;
-            for (int i = 0;i < fieldcount;i++)
+            Dictionary<short,EntityProperty> properties = new Dictionary<short,EntityProperty>();
+            for (int i = 0;i < propertycount;i++)
             {
-                short type = BitConv.FromInt16(data,16 + i * 8);
+                short id = BitConv.FromInt16(data,16 + i * 8);
                 int offset = (ushort)BitConv.FromInt16(data,18 + i * 8) + 12;
-                byte unknown1 = data[20 + i * 8];
+                int nextoffset = (i == propertycount - 1) ? data.Length : ((ushort)BitConv.FromInt16(data,26 + i * 8) + 12);
+                byte type = data[20 + i * 8];
                 byte elementsize = data[21 + i * 8];
-                short unknown2 = BitConv.FromInt16(data,22 + i * 8);
-                if (data.Length < offset + 4)
+                short unknown = BitConv.FromInt16(data,22 + i * 8);
+                if (offset > data.Length)
                 {
-                    ErrorManager.SignalError("Entity: Field begins out of bounds");
+                    ErrorManager.SignalError("Entity: Property begins out of bounds");
                 }
-                short elementcount = BitConv.FromInt16(data,offset);
-                short unknown3 = BitConv.FromInt16(data,offset + 2);
-                if (data.Length < offset + 4 + elementcount * elementsize)
+                if (nextoffset < offset)
                 {
-                    ErrorManager.SignalError("Entity: Field ends out of bounds");
+                    ErrorManager.SignalError("Entity: Property ends before it begins");
                 }
-                byte[] fielddata = new byte [elementsize * elementcount];
-                Array.Copy(data,offset + 4,fielddata,0,elementsize * elementcount);
-                fields[i] = new EntityField(type,unknown1,elementsize,unknown2,elementcount,unknown3,fielddata);
-                if (lastend != null)
+                if (nextoffset > data.Length)
                 {
-                    byte[] lastextradata = new byte [offset - (int)lastend];
-                    Array.Copy(data,(int)lastend,lastextradata,0,lastextradata.Length);
-                    fields[i - 1].ExtraData = lastextradata;
+                    ErrorManager.SignalError("Entity: Property ends out of bounds");
                 }
-                lastend = (ushort)(offset + 4 + fielddata.Length);
-                if (i == fieldcount - 1)
+                if (properties.ContainsKey(id))
                 {
-                    byte[] extradata = new byte [data.Length - (int)lastend];
-                    Array.Copy(data,(int)lastend,extradata,0,extradata.Length);
-                    fields[i].ExtraData = extradata;
+                    ErrorManager.SignalIgnorableError("Entity: Duplicate property");
+                }
+                else
+                {
+                    byte[] propertydata = new byte [nextoffset - offset];
+                    Array.Copy(data,offset,propertydata,0,propertydata.Length);
+                    EntityProperty property = EntityProperty.Load(type,elementsize,unknown,i == propertycount - 1,propertydata);
+                    properties.Add(id,property);
                 }
             }
-            return new Entity(fields);
+            return new Entity(properties);
         }
 
-        private List<EntityField> fields;
+        private Dictionary<short,EntityProperty> properties;
 
-        public Entity(IEnumerable<EntityField> fields)
+        public Entity(IDictionary<short,EntityProperty> properties)
         {
-            this.fields = new List<EntityField>(fields);
+            this.properties = new Dictionary<short,EntityProperty>(properties);
         }
 
         public string Name
         {
             get
             {
-                EntityField field = FindField(0x2C);
+                /*EntityField field = FindField(0x2C);
                 if (field != null)
                 {
                     return System.Text.Encoding.UTF8.GetString(field.Data,0,field.ElementCount - 1);
                 }
-                else
+                else*/
                 {
                     return null;
                 }
@@ -98,7 +95,7 @@ namespace Crash
             get
             {
                 List<EntityPosition> result = new List<EntityPosition>();
-                EntityField field = FindField(0x4B);
+                /*EntityField field = FindField(0x4B);
                 if (field != null)
                 {
                     for (int i = 0;i < field.ElementCount;i++)
@@ -108,7 +105,7 @@ namespace Crash
                         short z = BitConv.FromInt16(field.Data,6 * i + 4);
                         result.Add(new EntityPosition(x,y,z));
                     }
-                }
+                }*/
                 return result;
             }
         }
@@ -117,12 +114,12 @@ namespace Crash
         {
             get
             {
-                EntityField field = FindField(0xA9);
+                /*EntityField field = FindField(0xA9);
                 if (field != null)
                 {
                     return BitConv.FromInt32(field.Data,0);
                 }
-                else
+                else*/
                 {
                     return null;
                 }
@@ -133,73 +130,51 @@ namespace Crash
         {
             get
             {
-                EntityField field = FindField(0xAA);
+                /*EntityField field = FindField(0xAA);
                 if (field != null)
                 {
                     return BitConv.FromInt32(field.Data,0);
                 }
-                else
+                else*/
                 {
                     return null;
                 }
             }
         }
 
-        public IList<EntityField> Fields
+        public IDictionary<short,EntityProperty> Properties
         {
-            get { return fields; }
-        }
-
-        public EntityField FindField(short type)
-        {
-            foreach (EntityField field in fields)
-            {
-                if (field.Type == type)
-                {
-                    return field;
-                }
-            }
-            return null;
+            get { return properties; }
         }
 
         public byte[] Save()
         {
-            int length = 16 + 8 * fields.Count;
-            for (int i = 0;i < fields.Count;i++)
+            byte[] header = new byte [16 + 8 * properties.Count];
+            List<byte> result = new List<byte>();
+            int i = 0;
+            int offset = header.Length - 12;
+            foreach (KeyValuePair<short,EntityProperty> pair in properties)
             {
-                length += 4;
-                length += fields[i].ElementSize * fields[i].ElementCount;
-                length += fields[i].ExtraData.Length;
-                Aligner.Align(ref length,4);
+                EntityProperty property = pair.Value;
+                BitConv.ToInt16(header,16 + 8 * i + 0,pair.Key);
+                unchecked
+                {
+                    BitConv.ToInt16(header,16 + 8 * i + 2,(short)offset);
+                }
+                header[16 + 8 * i + 4] = (byte)(property.Type | ((i == properties.Count - 1) ? 128 : 0));
+                header[16 + 8 * i + 5] = property.ElementSize;
+                BitConv.ToInt16(header,16 + 8 * i + 6,property.Unknown);
+                byte[] propertydata = property.Save();
+                i++;
+                offset += propertydata.Length;
+                result.AddRange(propertydata);
             }
-            byte[] data = new byte [length];
-            BitConv.ToInt32(data,0,length);
-            BitConv.ToInt32(data,4,0);
-            BitConv.ToInt32(data,8,0);
-            BitConv.ToInt32(data,12,fields.Count);
-            int offset = 16 + 8 * fields.Count;
-            for (int i = 0;i < fields.Count;i++)
-            {
-                EntityField field = fields[i];
-                BitConv.ToInt16(data,16 + 8 * i + 0,field.Type);
-                BitConv.ToInt16(data,16 + 8 * i + 2,(short)(offset - 12));
-                data[16 + 8 * i + 4] = field.Unknown1;
-                data[16 + 8 * i + 5] = field.ElementSize;
-                BitConv.ToInt16(data,16 + 8 * i + 6,field.Unknown2);
-                BitConv.ToInt16(data,offset + 0,field.ElementCount);
-                BitConv.ToInt16(data,offset + 2,field.Unknown3);
-                offset += 4;
-                field.Data.CopyTo(data,offset);
-                offset += field.ElementCount * field.ElementSize;
-                field.ExtraData.CopyTo(data,offset);
-                offset += field.ExtraData.Length;
-                Aligner.Align(ref offset,4);
-            }
-            if (offset != length)
-            {
-                throw new Exception();
-            }
-            return data;
+            BitConv.ToInt32(header,0,offset + 12);
+            BitConv.ToInt32(header,4,0);
+            BitConv.ToInt32(header,8,0);
+            BitConv.ToInt32(header,12,properties.Count);
+            result.InsertRange(0,header);
+            return result.ToArray();
         }
     }
 }
