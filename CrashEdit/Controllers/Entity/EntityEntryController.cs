@@ -23,7 +23,7 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            return new EntityEntryViewer(entityentry);
+            return new UndockableControl(new EntityEntryViewer(entityentry));
         }
 
         public EntityEntry EntityEntry

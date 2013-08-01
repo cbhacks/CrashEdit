@@ -82,6 +82,9 @@
     <Compile Include="Controls\EntityEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Controls\UndockableControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="ErrorReporter.cs">
       <SubType>Form</SubType>
     </Compile>

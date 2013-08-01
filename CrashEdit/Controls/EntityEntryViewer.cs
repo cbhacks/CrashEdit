@@ -22,6 +22,7 @@ namespace CrashEdit
         private bool mouseright;
         private int mousex;
         private int mousey;
+        private Timer timer;
 
         public EntityEntryViewer(EntityEntry entry)
         {
@@ -29,6 +30,13 @@ namespace CrashEdit
             ZoomAll();
             this.mouseleft = false;
             this.mouseright = false;
+            timer = new Timer();
+            timer.Interval = 100;
+            timer.Enabled = true;
+            timer.Tick += delegate (object sender,EventArgs e)
+            {
+                Invalidate();
+            };
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -413,6 +421,12 @@ namespace CrashEdit
             range += 400;
             rotx = 0;
             roty = 0;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            timer.Dispose();
+            base.Dispose(disposing);
         }
     }
 }
