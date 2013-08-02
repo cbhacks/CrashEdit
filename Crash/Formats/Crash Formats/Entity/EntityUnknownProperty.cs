@@ -30,6 +30,11 @@ namespace Crash
             get { return unknown; }
         }
 
+        public byte[] Data
+        {
+            get { return data; }
+        }
+
         public override byte[] Save()
         {
             return data;
