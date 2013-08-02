@@ -201,6 +201,14 @@ namespace CrashEdit
                     GL.Vertex3(position.X,position.Y,position.Z);
                 }
                 GL.End();
+                GL.PointSize(5);
+                GL.Color3(Color.Red);
+                GL.Begin(BeginMode.Points);
+                foreach (EntityPosition position in entity.Positions)
+                {
+                    GL.Vertex3(position.X,position.Y,position.Z);
+                }
+                GL.End();
             }
         }
 
