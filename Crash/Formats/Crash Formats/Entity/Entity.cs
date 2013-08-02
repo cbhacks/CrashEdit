@@ -1,10 +1,26 @@
 using System;
+using System.Text;
+using System.Reflection;
 using System.Collections.Generic;
 
 namespace Crash
 {
     public sealed class Entity
     {
+        private static Dictionary<short,FieldInfo> propertyfields;
+
+        static Entity()
+        {
+            propertyfields = new Dictionary<short,FieldInfo>();
+            foreach (FieldInfo field in typeof(Entity).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+            {
+                foreach (EntityPropertyFieldAttribute attribute in field.GetCustomAttributes(typeof(EntityPropertyFieldAttribute),false))
+                {
+                    propertyfields.Add(attribute.ID,field);
+                }
+            }
+        }
+
         public static Entity Load(byte[] data)
         {
             if (data.Length < 16)
@@ -67,88 +83,206 @@ namespace Crash
             return new Entity(properties);
         }
 
-        private Dictionary<short,EntityProperty> properties;
+        [EntityPropertyField(0x2C)]
+        private string name;
+        [EntityPropertyField(0x4B)]
+        private List<EntityPosition> positions;
+        [EntityPropertyField(0xA9)]
+        private int? type;
+        [EntityPropertyField(0xAA)]
+        private int? subtype;
+        private Dictionary<short,EntityProperty> extraproperties;
 
         public Entity(IDictionary<short,EntityProperty> properties)
         {
-            this.properties = new Dictionary<short,EntityProperty>(properties);
+            extraproperties = new Dictionary<short,EntityProperty>(properties);
+            foreach (KeyValuePair<short,FieldInfo> pair in propertyfields)
+            {
+                short id = pair.Key;
+                FieldInfo field = pair.Value;
+                if (field.FieldType.IsGenericType && field.FieldType.GetGenericTypeDefinition() == typeof(List<>))
+                {
+                    field.SetValue(this,Activator.CreateInstance(field.FieldType));
+                }
+                else
+                {
+                    field.SetValue(this,null);
+                }
+                if (extraproperties.ContainsKey(id))
+                {
+                    EntityProperty property = extraproperties[id];
+                    if (property.Unknown == 1)
+                    {
+                        if (field.FieldType == typeof(int?))
+                        {
+                            if (property is EntityInt32Property)
+                            {
+                                EntityInt32Property p = (EntityInt32Property)property;
+                                if (p.ElementCount == 1)
+                                {
+                                    field.SetValue(this,p.Values[0,0]);
+                                    extraproperties.Remove(id);
+                                }
+                                else
+                                {
+                                    ErrorManager.SignalIgnorableError("Entity: Property has more values than expected");
+                                }
+                            }
+                            else
+                            {
+                                ErrorManager.SignalIgnorableError("Entity: Property type mismatch");
+                            }
+                        }
+                        else if (field.FieldType == typeof(List<int>))
+                        {
+                            if (property is EntityInt32Property)
+                            {
+                                EntityInt32Property p = (EntityInt32Property)property;
+                                for (int i = 0;i < p.ElementCount;i++)
+                                {
+                                    ((List<int>)field.GetValue(this)).Add(p.Values[0,i]);
+                                }
+                                extraproperties.Remove(id);
+                            }
+                            else
+                            {
+                                ErrorManager.SignalIgnorableError("Entity: Property type mismatch");
+                            }
+                        }
+                        else if (field.FieldType == typeof(List<EntityPosition>))
+                        {
+                            if (property is EntityPositionProperty)
+                            {
+                                EntityPositionProperty p = (EntityPositionProperty)property;
+                                for (int i = 0;i < p.ElementCount;i++)
+                                {
+                                    ((List<EntityPosition>)field.GetValue(this)).Add(p.Values[0,i]);
+                                }
+                                extraproperties.Remove(id);
+                            }
+                            else
+                            {
+                                ErrorManager.SignalIgnorableError("Entity: Property type mismatch");
+                            }
+                        }
+                        else if (field.FieldType == typeof(string))
+                        {
+                            if (property is EntityUInt8Property)
+                            {
+                                EntityUInt8Property p = (EntityUInt8Property)property;
+                                byte[] str = new byte [p.ElementCount];
+                                for (int i = 0;i < str.Length;i++)
+                                {
+                                    str[i] = p.Values[0,i];
+                                }
+                                field.SetValue(this,Encoding.UTF8.GetString(str));
+                                extraproperties.Remove(id);
+                                // TODO :: Error handling on invalid UTF8 data
+                            }
+                            else
+                            {
+                                ErrorManager.SignalIgnorableError("Entity: Property type mismatch");
+                            }
+                        }
+                        else
+                        {
+                            throw new NotSupportedException();
+                        }
+                    }
+                    else
+                    {
+                        ErrorManager.SignalIgnorableError("Entity: Property is too wide");
+                    }
+                }
+            }
         }
 
         public string Name
         {
-            get
-            {
-                /*EntityField field = FindField(0x2C);
-                if (field != null)
-                {
-                    return System.Text.Encoding.UTF8.GetString(field.Data,0,field.ElementCount - 1);
-                }
-                else*/
-                {
-                    return null;
-                }
-            }
+            get { return name; }
+            set { name = value; }
         }
 
         public IList<EntityPosition> Positions
         {
-            get
-            {
-                List<EntityPosition> result = new List<EntityPosition>();
-                /*EntityField field = FindField(0x4B);
-                if (field != null)
-                {
-                    for (int i = 0;i < field.ElementCount;i++)
-                    {
-                        short x = BitConv.FromInt16(field.Data,6 * i + 0);
-                        short y = BitConv.FromInt16(field.Data,6 * i + 2);
-                        short z = BitConv.FromInt16(field.Data,6 * i + 4);
-                        result.Add(new EntityPosition(x,y,z));
-                    }
-                }*/
-                return result;
-            }
+            get { return positions; }
         }
 
         public int? Type
         {
-            get
-            {
-                /*EntityField field = FindField(0xA9);
-                if (field != null)
-                {
-                    return BitConv.FromInt32(field.Data,0);
-                }
-                else*/
-                {
-                    return null;
-                }
-            }
+            get { return type; }
+            set { type = value; }
         }
 
         public int? Subtype
         {
-            get
-            {
-                /*EntityField field = FindField(0xAA);
-                if (field != null)
-                {
-                    return BitConv.FromInt32(field.Data,0);
-                }
-                else*/
-                {
-                    return null;
-                }
-            }
+            get { return subtype; }
+            set { subtype = value; }
         }
 
-        public IDictionary<short,EntityProperty> Properties
+        public IDictionary<short,EntityProperty> ExtraProperties
         {
-            get { return properties; }
+            get { return extraproperties; }
         }
 
         public byte[] Save()
         {
+            SortedDictionary<short,EntityProperty> properties = new SortedDictionary<short,EntityProperty>(extraproperties);
+            foreach (KeyValuePair<short,FieldInfo> pair in propertyfields)
+            {
+                short id = pair.Key;
+                FieldInfo field = pair.Value;
+                if (field.FieldType == typeof(int?))
+                {
+                    int? value = (int?)field.GetValue(this);
+                    if (value != null)
+                    {
+                        int[,] values = new int [1,1];
+                        values[0,0] = value.Value;
+                        properties.Add(id,new EntityInt32Property(values));
+                    }
+                }
+                else if (field.FieldType == typeof(List<int>))
+                {
+                    List<int> list = (List<int>)field.GetValue(this);
+                    if (list.Count > 0)
+                    {
+                        int[,] values = new int [1,list.Count];
+                        for (int j = 0;j < list.Count;j++)
+                        {
+                            values[0,j] = list[j];
+                        }
+                        properties.Add(id,new EntityInt32Property(values));
+                    }
+                }
+                else if (field.FieldType == typeof(List<EntityPosition>))
+                {
+                    List<EntityPosition> list = (List<EntityPosition>)field.GetValue(this);
+                    if (list.Count > 0)
+                    {
+                        EntityPosition[,] values = new EntityPosition [1,list.Count];
+                        for (int j = 0;j < list.Count;j++)
+                        {
+                            values[0,j] = list[j];
+                        }
+                        properties.Add(id,new EntityPositionProperty(values));
+                    }
+                }
+                else if (field.FieldType == typeof(string))
+                {
+                    string value = (string)field.GetValue(this);
+                    if (value != null)
+                    {
+                        byte[] stringdata = Encoding.UTF8.GetBytes(value);
+                        byte[,] values = new byte [1,stringdata.Length];
+                        for (int j = 0;j < stringdata.Length;j++)
+                        {
+                            values[0,j] = stringdata[j];
+                        }
+                        properties.Add(id,new EntityUInt8Property(values));
+                    }
+                }
+            }
             byte[] header = new byte [16 + 8 * properties.Count];
             List<byte> result = new List<byte>();
             int i = 0;
@@ -175,6 +309,22 @@ namespace Crash
             BitConv.ToInt32(header,12,properties.Count);
             result.InsertRange(0,header);
             return result.ToArray();
+        }
+
+        [AttributeUsage(AttributeTargets.Field)]
+        private class EntityPropertyFieldAttribute : Attribute
+        {
+            private short id;
+
+            public EntityPropertyFieldAttribute(short id)
+            {
+                this.id = id;
+            }
+
+            public short ID
+            {
+                get { return id; }
+            }
         }
     }
 }
