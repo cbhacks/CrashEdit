@@ -176,10 +176,16 @@ namespace CrashEdit
                 switch (entity.Type)
                 {
                     case 0x3:
-                        RenderPickup(entity.Subtype.Value);
+                        if (entity.Subtype.HasValue)
+                        {
+                            RenderPickup(entity.Subtype.Value);
+                        }
                         break;
                     case 0x22:
-                        RenderBox(entity.Subtype.Value);
+                        if (entity.Subtype.HasValue)
+                        {
+                            RenderBox(entity.Subtype.Value);
+                        }
                         break;
                     default:
                         GL.PointSize(5);
