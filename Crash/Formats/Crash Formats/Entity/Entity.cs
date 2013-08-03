@@ -170,12 +170,21 @@ namespace Crash
                             if (property is EntityUInt8Property)
                             {
                                 EntityUInt8Property p = (EntityUInt8Property)property;
-                                byte[] str = new byte [p.ElementCount];
-                                for (int i = 0;i < str.Length;i++)
+                                byte[] strdata = new byte [p.ElementCount];
+                                for (int i = 0;i < strdata.Length;i++)
                                 {
-                                    str[i] = p.Values[0,i];
+                                    strdata[i] = p.Values[0,i];
                                 }
-                                field.SetValue(this,Encoding.UTF8.GetString(str));
+                                string str = Encoding.UTF8.GetString(strdata);
+                                if (str.EndsWith("\0"))
+                                {
+                                    str = str.Remove(str.Length - 1);
+                                }
+                                else
+                                {
+                                    ErrorManager.SignalIgnorableError("Entity: String is not null-terminated");
+                                }
+                                field.SetValue(this,str);
                                 extraproperties.Remove(id);
                                 // TODO :: Error handling on invalid UTF8 data
                             }
@@ -273,7 +282,7 @@ namespace Crash
                     string value = (string)field.GetValue(this);
                     if (value != null)
                     {
-                        byte[] stringdata = Encoding.UTF8.GetBytes(value);
+                        byte[] stringdata = Encoding.UTF8.GetBytes(value + (char)0);
                         byte[,] values = new byte [1,stringdata.Length];
                         for (int j = 0;j < stringdata.Length;j++)
                         {
