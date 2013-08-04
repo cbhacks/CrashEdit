@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Formats\Crash Formats\Entity\EntityBasicProperty.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityBasicPropertyLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Entity\EntityID.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityPositionProperty.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityPositionPropertyLoader.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityInt32Property.cs" />

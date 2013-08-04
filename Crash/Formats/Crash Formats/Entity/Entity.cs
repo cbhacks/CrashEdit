@@ -87,6 +87,8 @@ namespace Crash
         private string name;
         [EntityPropertyField(0x4B)]
         private List<EntityPosition> positions;
+        [EntityPropertyField(0x9F)]
+        private EntityID? id;
         [EntityPropertyField(0xA9)]
         private int? type;
         [EntityPropertyField(0xAA)]
@@ -111,7 +113,39 @@ namespace Crash
                 if (extraproperties.ContainsKey(id))
                 {
                     EntityProperty property = extraproperties[id];
-                    if (property.Unknown == 1)
+                    if (field.FieldType == typeof(EntityID?))
+                    {
+                        if (property is EntityInt32Property)
+                        {
+                            EntityInt32Property p = (EntityInt32Property)property;
+                            if (p.ElementCount == 1)
+                            {
+                                if (p.Unknown == 1)
+                                {
+                                    field.SetValue(this,new EntityID(p.Values[0,0]));
+                                    extraproperties.Remove(id);
+                                }
+                                else if (p.Unknown == 2)
+                                {
+                                    field.SetValue(this,new EntityID(p.Values[0,0],p.Values[1,0]));
+                                    extraproperties.Remove(id);
+                                }
+                                else
+                                {
+                                    ErrorManager.SignalIgnorableError("Entity: Property is too wide");
+                                }
+                            }
+                            else
+                            {
+                                ErrorManager.SignalIgnorableError("Entity: Property has more values than expected");
+                            }
+                        }
+                        else
+                        {
+                            ErrorManager.SignalIgnorableError("Entity: Property type mismatch");
+                        }
+                    }
+                    else if (property.Unknown == 1)
                     {
                         if (field.FieldType == typeof(int?))
                         {
@@ -217,6 +251,52 @@ namespace Crash
             get { return positions; }
         }
 
+        public int? ID
+        {
+            get { return id.HasValue ? (int?)id.Value.ID : null; }
+            set
+            {
+                if (value != null)
+                {
+                    if (id.HasValue)
+                    {
+                        id = new EntityID(value.Value,id.Value.AlternateID);
+                    }
+                    else
+                    {
+                        id = new EntityID(value.Value);
+                    }
+                }
+                else
+                {
+                    if (id.HasValue && id.Value.AlternateID.HasValue)
+                    {
+                        throw new InvalidOperationException();
+                    }
+                    else
+                    {
+                        id = null;
+                    }
+                }
+            }
+        }
+
+        public int? AlternateID
+        {
+            get { return id.HasValue ? id.Value.AlternateID : null; }
+            set
+            {
+                if (id != null)
+                {
+                    id = new EntityID(id.Value.ID,value);
+                }
+                else
+                {
+                    throw new InvalidOperationException();
+                }
+            }
+        }
+
         public int? Type
         {
             get { return type; }
@@ -289,6 +369,25 @@ namespace Crash
                             values[0,j] = stringdata[j];
                         }
                         properties.Add(id,new EntityUInt8Property(values));
+                    }
+                }
+                else if (field.FieldType == typeof(EntityID?))
+                {
+                    EntityID? value = (EntityID?)field.GetValue(this);
+                    if (value != null)
+                    {
+                        int[,] values;
+                        if (value.Value.AlternateID.HasValue)
+                        {
+                            values = new int [2,1];
+                            values[1,0] = value.Value.AlternateID.Value;
+                        }
+                        else
+                        {
+                            values = new int [1,1];
+                        }
+                        values[0,0] = value.Value.ID;
+                        properties.Add(id,new EntityInt32Property(values));
                     }
                 }
             }
