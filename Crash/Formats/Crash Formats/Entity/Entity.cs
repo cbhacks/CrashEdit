@@ -89,6 +89,8 @@ namespace Crash
         private List<EntityPosition> positions;
         [EntityPropertyField(0x9F)]
         private EntityID? id;
+        [EntityPropertyField(0xA4)]
+        private List<EntitySetting> settings;
         [EntityPropertyField(0xA9)]
         private int? type;
         [EntityPropertyField(0xAA)]
@@ -199,6 +201,22 @@ namespace Crash
                                 ErrorManager.SignalIgnorableError("Entity: Property type mismatch");
                             }
                         }
+                        else if (field.FieldType == typeof(List<EntitySetting>))
+                        {
+                            if (property is EntitySettingProperty)
+                            {
+                                EntitySettingProperty p = (EntitySettingProperty)property;
+                                for (int i = 0;i < p.ElementCount;i++)
+                                {
+                                    ((List<EntitySetting>)field.GetValue(this)).Add(p.Values[0,i]);
+                                }
+                                extraproperties.Remove(id);
+                            }
+                            else
+                            {
+                                ErrorManager.SignalIgnorableError("Entity: Property type mismatch");
+                            }
+                        }
                         else if (field.FieldType == typeof(string))
                         {
                             if (property is EntityUInt8Property)
@@ -297,6 +315,11 @@ namespace Crash
             }
         }
 
+        public IList<EntitySetting> Settings
+        {
+            get { return settings; }
+        }
+
         public int? Type
         {
             get { return type; }
@@ -355,6 +378,19 @@ namespace Crash
                             values[0,j] = list[j];
                         }
                         properties.Add(id,new EntityPositionProperty(values));
+                    }
+                }
+                else if (field.FieldType == typeof(List<EntitySetting>))
+                {
+                    List<EntitySetting> list = (List<EntitySetting>)field.GetValue(this);
+                    if (list.Count > 0)
+                    {
+                        EntitySetting[,] values = new EntitySetting [1,list.Count];
+                        for (int j = 0;j < list.Count;j++)
+                        {
+                            values[0,j] = list[j];
+                        }
+                        properties.Add(id,new EntitySettingProperty(values));
                     }
                 }
                 else if (field.FieldType == typeof(string))

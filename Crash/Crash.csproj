@@ -48,6 +48,9 @@
     <Compile Include="Formats\Crash Formats\Entity\EntityInt32PropertyLoader.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityPropertyLoader.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityPropertyTypeAttribute.cs" />
+    <Compile Include="Formats\Crash Formats\Entity\EntitySetting.cs" />
+    <Compile Include="Formats\Crash Formats\Entity\EntitySettingProperty.cs" />
+    <Compile Include="Formats\Crash Formats\Entity\EntitySettingPropertyLoader.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityUInt8Property.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityUInt8PropertyLoader.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityUnknownProperty.cs" />
