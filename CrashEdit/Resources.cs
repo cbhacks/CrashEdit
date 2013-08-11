@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Drawing;
 using System.Resources;
 using System.Reflection;
@@ -6,18 +8,173 @@ namespace CrashEdit
 {
     internal static class Resources
     {
-        private static ResourceManager manager;
+        [Resource("ArrowImage")]
+        private static Image arrowimage;
+
+        [Resource("BinocularsImage")]
+        private static Image binocularsimage;
+
+        [Resource("BinocularsNextImage")]
+        private static Image binocularsnextimage;
+
+        [Resource("FileImage")]
+        private static Image fileimage;
+
+        [Resource("FolderImage")]
+        private static Image folderimage;
+
+        [Resource("ImageImage")]
+        private static Image imageimage;
+
+        [Resource("MusicImage")]
+        private static Image musicimage;
+
+        [Resource("OpenImage")]
+        private static Image openimage;
+
+        [Resource("SaveImage")]
+        private static Image saveimage;
+
+        [Resource("SpeakerImage")]
+        private static Image speakerimage;
+
+        [Resource("ThingImage")]
+        private static Image thingimage;
+
+        [Resource("BlueJournalImage")]
+        private static Image bluejournalimage;
+
+        [Resource("WhiteJournalImage")]
+        private static Image whitejournalimage;
+
+        [Resource("YellowJournalImage")]
+        private static Image yellowjournalimage;
+
+        [Resource("ActivatorBoxTexture")]
+        [ExternalTexture(2,1)]
+        private static Bitmap activatorboxtexture;
+
+        [Resource("AppleTexture")]
+        private static Bitmap appletexture;
+
+        [Resource("AppleBoxTexture")]
+        [ExternalTexture(4,0)]
+        private static Bitmap appleboxtexture;
+
+        [Resource("ArrowBoxTexture")]
+        [ExternalTexture(5,0)]
+        private static Bitmap arrowboxtexture;
+
+        [Resource("BodyslamBoxTexture")]
+        [ExternalTexture(0,1)]
+        private static Bitmap bodyslamboxtexture;
+
+        [Resource("BoxTexture")]
+        [ExternalTexture(0,0)]
+        private static Bitmap boxtexture;
+
+        [Resource("CheckpointTexture")]
+        [ExternalTexture(6,0)]
+        private static Bitmap checkpointtexture;
+
+        [Resource("DetonatorBoxTexture")]
+        [ExternalTexture(3,1)]
+        private static Bitmap detonatorboxtexture;
+
+        [Resource("DetonatorBoxTopTexture")]
+        private static Bitmap detonatorboxtoptexture;
+
+        [Resource("IronArrowBoxTexture")]
+        [ExternalTexture(4,1)]
+        private static Bitmap ironarrowboxtexture;
+
+        [Resource("IronBoxTexture")]
+        [ExternalTexture(1,1)]
+        private static Bitmap ironboxtexture;
+
+        [Resource("LifeTexture")]
+        private static Bitmap lifetexture;
+
+        [Resource("LifeBoxTexture")]
+        [ExternalTexture(3,0)]
+        private static Bitmap lifeboxtexture;
+
+        [Resource("MaskTexture")]
+        private static Bitmap masktexture;
+
+        [Resource("MaskBoxTexture")]
+        [ExternalTexture(2,0)]
+        private static Bitmap maskboxtexture;
+
+        [Resource("NitroTexture")]
+        [ExternalTexture(7,1)]
+        private static Bitmap nitrotexture;
+
+        [Resource("NitroTopTexture")]
+        [ExternalTexture(6,1)]
+        private static Bitmap nitrotoptexture;
+
+        [Resource("QuestionMarkBoxTexture")]
+        [ExternalTexture(1,0)]
+        private static Bitmap questionmarkboxtexture;
+
+        [Resource("TNTTexture")]
+        [ExternalTexture(8,0)]
+        private static Bitmap tnttexture;
+
+        [Resource("TNTTopTexture")]
+        [ExternalTexture(7,0)]
+        private static Bitmap tnttoptexture;
+
+        [Resource("UnknownBoxTexture")]
+        private static Bitmap unknownboxtexture;
+
+        [Resource("UnknownBoxTopTexture")]
+        private static Bitmap unknownboxtoptexture;
+
+        [Resource("UnknownPickupTexture")]
+        private static Bitmap unknownpickuptexture;
 
         static Resources()
         {
-            manager = new ResourceManager("CrashEdit.Resources",Assembly.GetExecutingAssembly());
+            ResourceManager manager = new ResourceManager("CrashEdit.Resources",Assembly.GetExecutingAssembly());
+            foreach (FieldInfo field in typeof(Resources).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+            {
+                foreach (ResourceAttribute attribute in field.GetCustomAttributes(typeof(ResourceAttribute),false))
+                {
+                    field.SetValue(null,manager.GetObject(attribute.Name));
+                }
+            }
+            string exefilename = Assembly.GetExecutingAssembly().GetName().CodeBase;
+            string exedirname = Path.GetDirectoryName(exefilename);
+            string texturespngfilename = Path.Combine(exedirname,"Textures.png");
+            if (File.Exists("Textures.png"))
+            {
+                using (Image texturespng = Image.FromFile("Textures.png"))
+                {
+                    foreach (FieldInfo field in typeof(Resources).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+                    {
+                        foreach (ExternalTextureAttribute attribute in field.GetCustomAttributes(typeof(ExternalTextureAttribute),false))
+                        {
+                            Bitmap texture = new Bitmap(32,32);
+                            int x = attribute.X * 33;
+                            int y = attribute.Y * 33;
+                            using (Graphics g = Graphics.FromImage(texture))
+                            {
+                                g.DrawImage(texturespng,new Rectangle(0,0,32,32),new Rectangle(x,y,32,32),GraphicsUnit.Pixel);
+                            }
+                            field.SetValue(null,texture);
+                        }
+                    }
+                }
+            }
         }
 
         public static Image ArrowImage
         {
             get
             {
-                return (Image)manager.GetObject("ArrowImage");
+                return arrowimage;
             }
         }
 
@@ -25,7 +182,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Image)manager.GetObject("BinocularsImage");
+                return binocularsimage;
             }
         }
 
@@ -33,7 +190,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Image)manager.GetObject("BinocularsNextImage");
+                return binocularsnextimage;
             }
         }
 
@@ -41,7 +198,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Image)manager.GetObject("FileImage");
+                return fileimage;
             }
         }
 
@@ -49,7 +206,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Image)manager.GetObject("FolderImage");
+                return folderimage;
             }
         }
 
@@ -57,7 +214,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Image)manager.GetObject("ImageImage");
+                return imageimage;
             }
         }
 
@@ -65,7 +222,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Image)manager.GetObject("MusicImage");
+                return musicimage;
             }
         }
 
@@ -73,7 +230,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Image)manager.GetObject("OpenImage");
+                return openimage;
             }
         }
 
@@ -81,7 +238,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Image)manager.GetObject("SaveImage");
+                return saveimage;
             }
         }
 
@@ -89,7 +246,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Image)manager.GetObject("SpeakerImage");
+                return speakerimage;
             }
         }
 
@@ -97,7 +254,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Image)manager.GetObject("ThingImage");
+                return thingimage;
             }
         }
 
@@ -105,7 +262,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Image)manager.GetObject("BlueJournalImage");
+                return bluejournalimage;
             }
         }
 
@@ -113,7 +270,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Image)manager.GetObject("WhiteJournalImage");
+                return whitejournalimage;
             }
         }
 
@@ -121,7 +278,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Image)manager.GetObject("YellowJournalImage");
+                return yellowjournalimage;
             }
         }
 
@@ -129,7 +286,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("ActivatorBoxTexture");
+                return activatorboxtexture;
             }
         }
 
@@ -137,7 +294,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("AppleTexture");
+                return appletexture;
             }
         }
 
@@ -145,7 +302,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("AppleBoxTexture");
+                return appleboxtexture;
             }
         }
 
@@ -153,7 +310,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("ArrowBoxTexture");
+                return arrowboxtexture;
             }
         }
 
@@ -161,7 +318,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("BodyslamBoxTexture");
+                return bodyslamboxtexture;
             }
         }
 
@@ -169,7 +326,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("BoxTexture");
+                return boxtexture;
             }
         }
 
@@ -177,7 +334,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("CheckpointTexture");
+                return checkpointtexture;
             }
         }
 
@@ -185,7 +342,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("DetonatorBoxTexture");
+                return detonatorboxtexture;
             }
         }
 
@@ -193,7 +350,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("DetonatorBoxTopTexture");
+                return detonatorboxtoptexture;
             }
         }
 
@@ -201,7 +358,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("IronArrowBoxTexture");
+                return ironarrowboxtexture;
             }
         }
 
@@ -209,7 +366,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("IronBoxTexture");
+                return ironboxtexture;
             }
         }
 
@@ -217,7 +374,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("LifeTexture");
+                return lifetexture;
             }
         }
 
@@ -225,7 +382,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("LifeBoxTexture");
+                return lifeboxtexture;
             }
         }
 
@@ -233,7 +390,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("MaskTexture");
+                return masktexture;
             }
         }
 
@@ -241,7 +398,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("MaskBoxTexture");
+                return maskboxtexture;
             }
         }
 
@@ -249,7 +406,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("NitroTexture");
+                return nitrotexture;
             }
         }
 
@@ -257,7 +414,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("NitroTopTexture");
+                return nitrotoptexture;
             }
         }
 
@@ -265,7 +422,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("QuestionMarkBoxTexture");
+                return questionmarkboxtexture;
             }
         }
 
@@ -273,7 +430,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("TNTTexture");
+                return tnttexture;
             }
         }
 
@@ -281,7 +438,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("TNTTopTexture");
+                return tnttoptexture;
             }
         }
 
@@ -289,7 +446,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("UnknownBoxTexture");
+                return unknownboxtexture;
             }
         }
 
@@ -297,7 +454,7 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("UnknownBoxTopTexture");
+                return unknownboxtoptexture;
             }
         }
 
@@ -305,7 +462,46 @@ namespace CrashEdit
         {
             get
             {
-                return (Bitmap)manager.GetObject("UnknownPickupTexture");
+                return unknownpickuptexture;
+            }
+        }
+
+        [AttributeUsage(AttributeTargets.Field)]
+        private class ResourceAttribute : Attribute
+        {
+            private string name;
+
+            public ResourceAttribute(string name)
+            {
+                this.name = name;
+            }
+
+            public string Name
+            {
+                get { return name; }
+            }
+        }
+
+        [AttributeUsage(AttributeTargets.Field)]
+        private class ExternalTextureAttribute : Attribute
+        {
+            private int x;
+            private int y;
+
+            public ExternalTextureAttribute(int x,int y)
+            {
+                this.x = x;
+                this.y = y;
+            }
+
+            public int X
+            {
+                get { return x; }
+            }
+
+            public int Y
+            {
+                get { return y; }
             }
         }
     }
