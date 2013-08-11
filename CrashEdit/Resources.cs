@@ -145,12 +145,12 @@ namespace CrashEdit
                     field.SetValue(null,manager.GetObject(attribute.Name));
                 }
             }
-            string exefilename = Assembly.GetExecutingAssembly().GetName().CodeBase;
+            string exefilename = Assembly.GetExecutingAssembly().Location;
             string exedirname = Path.GetDirectoryName(exefilename);
             string texturespngfilename = Path.Combine(exedirname,"Textures.png");
-            if (File.Exists("Textures.png"))
+            if (File.Exists(texturespngfilename))
             {
-                using (Image texturespng = Image.FromFile("Textures.png"))
+                using (Image texturespng = Image.FromFile(texturespngfilename))
                 {
                     foreach (FieldInfo field in typeof(Resources).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
                     {
