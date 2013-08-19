@@ -13,6 +13,10 @@ namespace CrashEdit
             this.entrychunkcontroller = entrychunkcontroller;
             this.entry = entry;
             AddMenu("Delete Entry",Menu_Delete_Entry);
+            if (!(this is UnprocessedEntryController))
+            {
+                AddMenu("Unprocess Entry",Menu_Unprocess_Entry);
+            }
         }
 
         public EntryChunkController EntryChunkController
@@ -53,6 +57,20 @@ namespace CrashEdit
         private void Menu_Delete_Entry()
         {
             entrychunkcontroller.EntryChunk.Entries.Remove(entry);
+            Dispose();
+        }
+
+        private void Menu_Unprocess_Entry()
+        {
+            int index = entrychunkcontroller.EntryChunk.Entries.IndexOf(entry);
+            UnprocessedEntry unprocessedentry = entry.Unprocess();
+            entrychunkcontroller.EntryChunk.Entries[index] = unprocessedentry;
+            UnprocessedEntryController unprocessedentrycontroller = new UnprocessedEntryController(entrychunkcontroller,unprocessedentry);
+            entrychunkcontroller.InsertNode(index,unprocessedentrycontroller);
+            if (Node.IsSelected)
+            {
+                Node.TreeView.SelectedNode = unprocessedentrycontroller.Node;
+            }
             Dispose();
         }
     }

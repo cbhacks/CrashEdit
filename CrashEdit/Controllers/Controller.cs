@@ -20,12 +20,12 @@ namespace CrashEdit
             this.node.ContextMenu = contextmenu;
         }
 
-        protected void AddNode(Controller controller)
+        public void AddNode(Controller controller)
         {
             node.Nodes.Add(controller.node);
         }
 
-        protected void InsertNode(int index,Controller controller)
+        public void InsertNode(int index,Controller controller)
         {
             node.Nodes.Insert(index,controller.node);
         }

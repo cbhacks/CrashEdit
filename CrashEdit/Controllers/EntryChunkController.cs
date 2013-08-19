@@ -12,76 +12,81 @@ namespace CrashEdit
             this.entrychunk = entrychunk;
             foreach (Entry entry in entrychunk.Entries)
             {
-                if (entry is T1Entry)
-                {
-                    AddNode(new T1EntryController(this,(T1Entry)entry));
-                }
-                else if (entry is ModelEntry)
-                {
-                    AddNode(new ModelEntryController(this,(ModelEntry)entry));
-                }
-                else if (entry is T3Entry)
-                {
-                    AddNode(new T3EntryController(this,(T3Entry)entry));
-                }
-                else if (entry is T4Entry)
-                {
-                    AddNode(new T4EntryController(this,(T4Entry)entry));
-                }
-                else if (entry is EntityEntry)
-                {
-                    AddNode(new EntityEntryController(this,(EntityEntry)entry));
-                }
-                else if (entry is T11Entry)
-                {
-                    AddNode(new T11EntryController(this,(T11Entry)entry));
-                }
-                else if (entry is SoundEntry)
-                {
-                    AddNode(new SoundEntryController(this,(SoundEntry)entry));
-                }
-                else if (entry is MusicEntry)
-                {
-                    AddNode(new MusicEntryController(this,(MusicEntry)entry));
-                }
-                else if (entry is WavebankEntry)
-                {
-                    AddNode(new WavebankEntryController(this,(WavebankEntry)entry));
-                }
-                else if (entry is T15Entry)
-                {
-                    AddNode(new T15EntryController(this,(T15Entry)entry));
-                }
-                else if (entry is T17Entry)
-                {
-                    AddNode(new T17EntryController(this,(T17Entry)entry));
-                }
-                else if (entry is DemoEntry)
-                {
-                    AddNode(new DemoEntryController(this,(DemoEntry)entry));
-                }
-                else if (entry is SpeechEntry)
-                {
-                    AddNode(new SpeechEntryController(this,(SpeechEntry)entry));
-                }
-                else if (entry is T21Entry)
-                {
-                    AddNode(new T21EntryController(this,(T21Entry)entry));
-                }
-                else if (entry is UnprocessedEntry)
-                {
-                    AddNode(new UnprocessedEntryController(this,(UnprocessedEntry)entry));
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
+                AddNode(CreateEntryController(entry));
             }
         }
 
         public EntryChunk EntryChunk
         {
             get { return entrychunk; }
+        }
+
+        internal EntryController CreateEntryController(Entry entry)
+        {
+            if (entry is T1Entry)
+            {
+                return new T1EntryController(this,(T1Entry)entry);
+            }
+            else if (entry is ModelEntry)
+            {
+                return new ModelEntryController(this,(ModelEntry)entry);
+            }
+            else if (entry is T3Entry)
+            {
+                return new T3EntryController(this,(T3Entry)entry);
+            }
+            else if (entry is T4Entry)
+            {
+                return new T4EntryController(this,(T4Entry)entry);
+            }
+            else if (entry is EntityEntry)
+            {
+                return new EntityEntryController(this,(EntityEntry)entry);
+            }
+            else if (entry is T11Entry)
+            {
+                return new T11EntryController(this,(T11Entry)entry);
+            }
+            else if (entry is SoundEntry)
+            {
+                return new SoundEntryController(this,(SoundEntry)entry);
+            }
+            else if (entry is MusicEntry)
+            {
+                return new MusicEntryController(this,(MusicEntry)entry);
+            }
+            else if (entry is WavebankEntry)
+            {
+                return new WavebankEntryController(this,(WavebankEntry)entry);
+            }
+            else if (entry is T15Entry)
+            {
+                return new T15EntryController(this,(T15Entry)entry);
+            }
+            else if (entry is T17Entry)
+            {
+                return new T17EntryController(this,(T17Entry)entry);
+            }
+            else if (entry is DemoEntry)
+            {
+                return new DemoEntryController(this,(DemoEntry)entry);
+            }
+            else if (entry is SpeechEntry)
+            {
+                return new SpeechEntryController(this,(SpeechEntry)entry);
+            }
+            else if (entry is T21Entry)
+            {
+                return new T21EntryController(this,(T21Entry)entry);
+            }
+            else if (entry is UnprocessedEntry)
+            {
+                return new UnprocessedEntryController(this,(UnprocessedEntry)entry);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }
