@@ -138,6 +138,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Icons\NSD.ico" />
+    <Content Include="Resources\Icons\NSF.ico" />
     <Content Include="Resources\Images\Arrow.gif" />
     <Content Include="Resources\Images\Binoculars.gif" />
     <Content Include="Resources\Images\BinocularsNext.gif" />

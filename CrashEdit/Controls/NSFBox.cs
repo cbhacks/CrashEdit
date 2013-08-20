@@ -17,7 +17,7 @@ namespace CrashEdit
             try
             {
                 imglist.Images.Add("default",Resources.FileImage);
-                imglist.Images.Add("nsf",Resources.FileImage);
+                imglist.Images.Add("nsf",new Icon(Resources.NSFIcon,16,16));
                 imglist.Images.Add("normalchunk",Resources.YellowJournalImage);
                 imglist.Images.Add("texturechunk",Resources.ImageImage);
                 imglist.Images.Add("oldsoundchunk",Resources.BlueJournalImage);

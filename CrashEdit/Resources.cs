@@ -8,6 +8,12 @@ namespace CrashEdit
 {
     internal static class Resources
     {
+        [Resource("NSDIcon")]
+        private static Icon nsdicon;
+
+        [Resource("NSFIcon")]
+        private static Icon nsficon;
+
         [Resource("ArrowImage")]
         private static Image arrowimage;
 
@@ -168,6 +174,16 @@ namespace CrashEdit
                     }
                 }
             }
+        }
+
+        public static Icon NSDIcon
+        {
+            get { return nsdicon; }
+        }
+
+        public static Icon NSFIcon
+        {
+            get { return nsficon; }
         }
 
         public static Image ArrowImage
