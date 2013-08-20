@@ -62,7 +62,6 @@ namespace CrashEdit
 
         protected override bool ProcessCmdKey(ref Message msg,Keys keyData)
         {
-            // TODO :: Test this for mono compatibility
             if (IsInputKey((Keys)msg.WParam))
             {
                 OnKeyDown(new KeyEventArgs((Keys)msg.WParam));
