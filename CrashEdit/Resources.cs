@@ -188,298 +188,187 @@ namespace CrashEdit
 
         public static Image ArrowImage
         {
-            get
-            {
-                return arrowimage;
-            }
+            get { return arrowimage; }
         }
 
         public static Image BinocularsImage
         {
-            get
-            {
-                return binocularsimage;
-            }
+            get { return binocularsimage; }
         }
 
         public static Image BinocularsNextImage
         {
-            get
-            {
-                return binocularsnextimage;
-            }
+            get { return binocularsnextimage; }
         }
 
         public static Image FileImage
         {
-            get
-            {
-                return fileimage;
-            }
+            get { return fileimage; }
         }
 
         public static Image FolderImage
         {
-            get
-            {
-                return folderimage;
-            }
+            get { return folderimage;}
         }
 
         public static Image ImageImage
         {
-            get
-            {
-                return imageimage;
-            }
+            get { return imageimage; }
         }
 
         public static Image MusicImage
         {
-            get
-            {
-                return musicimage;
-            }
+            get { return musicimage; }
         }
 
         public static Image OpenImage
         {
-            get
-            {
-                return openimage;
-            }
+            get { return openimage; }
         }
 
         public static Image SaveImage
         {
-            get
-            {
-                return saveimage;
-            }
+            get { return saveimage; }
         }
 
         public static Image SpeakerImage
         {
-            get
-            {
-                return speakerimage;
-            }
+            get { return speakerimage; }
         }
 
         public static Image ThingImage
         {
-            get
-            {
-                return thingimage;
-            }
+            get { return thingimage; }
         }
 
         public static Image BlueJournalImage
         {
-            get
-            {
-                return bluejournalimage;
-            }
+            get { return bluejournalimage; }
         }
 
         public static Image WhiteJournalImage
         {
-            get
-            {
-                return whitejournalimage;
-            }
+            get { return whitejournalimage; }
         }
 
         public static Image YellowJournalImage
         {
-            get
-            {
-                return yellowjournalimage;
-            }
+            get { return yellowjournalimage; }
         }
 
         public static Bitmap ActivatorBoxTexture
         {
-            get
-            {
-                return activatorboxtexture;
-            }
+            get { return activatorboxtexture; }
         }
 
         public static Bitmap AppleTexture
         {
-            get
-            {
-                return appletexture;
-            }
+            get { return appletexture; }
         }
 
         public static Bitmap AppleBoxTexture
         {
-            get
-            {
-                return appleboxtexture;
-            }
+            get { return appleboxtexture; }
         }
 
         public static Bitmap ArrowBoxTexture
         {
-            get
-            {
-                return arrowboxtexture;
-            }
+            get { return arrowboxtexture; }
         }
 
         public static Bitmap BodyslamBoxTexture
         {
-            get
-            {
-                return bodyslamboxtexture;
-            }
+            get { return bodyslamboxtexture; }
         }
 
         public static Bitmap BoxTexture
         {
-            get
-            {
-                return boxtexture;
-            }
+            get { return boxtexture; }
         }
 
         public static Bitmap CheckpointTexture
         {
-            get
-            {
-                return checkpointtexture;
-            }
+            get { return checkpointtexture; }
         }
 
         public static Bitmap DetonatorBoxTexture
         {
-            get
-            {
-                return detonatorboxtexture;
-            }
+            get { return detonatorboxtexture; }
         }
 
         public static Bitmap DetonatorBoxTopTexture
         {
-            get
-            {
-                return detonatorboxtoptexture;
-            }
+            get { return detonatorboxtoptexture; }
         }
 
         public static Bitmap IronArrowBoxTexture
         {
-            get
-            {
-                return ironarrowboxtexture;
-            }
+            get { return ironarrowboxtexture; }
         }
 
         public static Bitmap IronBoxTexture
         {
-            get
-            {
-                return ironboxtexture;
-            }
+            get { return ironboxtexture; }
         }
 
         public static Bitmap LifeTexture
         {
-            get
-            {
-                return lifetexture;
-            }
+            get { return lifetexture; }
         }
 
         public static Bitmap LifeBoxTexture
         {
-            get
-            {
-                return lifeboxtexture;
-            }
+            get { return lifeboxtexture; }
         }
 
         public static Bitmap MaskTexture
         {
-            get
-            {
-                return masktexture;
-            }
+            get { return masktexture; }
         }
 
         public static Bitmap MaskBoxTexture
         {
-            get
-            {
-                return maskboxtexture;
-            }
+            get { return maskboxtexture; }
         }
 
         public static Bitmap NitroTexture
         {
-            get
-            {
-                return nitrotexture;
-            }
+            get { return nitrotexture; }
         }
 
         public static Bitmap NitroTopTexture
         {
-            get
-            {
-                return nitrotoptexture;
-            }
+            get { return nitrotoptexture; }
         }
 
         public static Bitmap QuestionMarkBoxTexture
         {
-            get
-            {
-                return questionmarkboxtexture;
-            }
+            get { return questionmarkboxtexture; }
         }
 
         public static Bitmap TNTTexture
         {
-            get
-            {
-                return tnttexture;
-            }
+            get { return tnttexture; }
         }
 
         public static Bitmap TNTTopTexture
         {
-            get
-            {
-                return tnttoptexture;
-            }
+            get { return tnttoptexture; }
         }
 
         public static Bitmap UnknownBoxTexture
         {
-            get
-            {
-                return unknownboxtexture;
-            }
+            get { return unknownboxtexture; }
         }
 
         public static Bitmap UnknownBoxTopTexture
         {
-            get
-            {
-                return unknownboxtoptexture;
-            }
+            get { return unknownboxtoptexture; }
         }
 
         public static Bitmap UnknownPickupTexture
         {
-            get
-            {
-                return unknownpickuptexture;
-            }
+            get { return unknownpickuptexture; }
         }
 
         [AttributeUsage(AttributeTargets.Field)]
