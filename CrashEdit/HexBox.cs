@@ -121,7 +121,10 @@ namespace CrashEdit
             }
             else
             {
-                data[position] = (byte)((input << 4) | value);
+                if (position < data.Length)
+                {
+                    data[position] = (byte)((input << 4) | value);
+                }
                 input = null;
             }
             Invalidate();
