@@ -65,6 +65,9 @@ namespace CrashEdit
             this.fraName = new System.Windows.Forms.GroupBox();
             this.txtName = new System.Windows.Forms.TextBox();
             this.chkName = new System.Windows.Forms.CheckBox();
+            this.tbcTabs = new System.Windows.Forms.TabControl();
+            this.tabGeneral = new System.Windows.Forms.TabPage();
+            this.tabSpecial = new System.Windows.Forms.TabPage();
             this.fraVictims = new System.Windows.Forms.GroupBox();
             this.numVictim = new System.Windows.Forms.NumericUpDown();
             this.cmdRemoveVictim = new System.Windows.Forms.Button();
@@ -86,6 +89,9 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numSettingB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingA)).BeginInit();
             this.fraName.SuspendLayout();
+            this.tbcTabs.SuspendLayout();
+            this.tabGeneral.SuspendLayout();
+            this.tabSpecial.SuspendLayout();
             this.fraVictims.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numVictim)).BeginInit();
             this.SuspendLayout();
@@ -560,6 +566,44 @@ namespace CrashEdit
             this.chkName.UseVisualStyleBackColor = true;
             this.chkName.CheckedChanged += new System.EventHandler(this.chkName_CheckedChanged);
             // 
+            // tbcTabs
+            // 
+            this.tbcTabs.Controls.Add(this.tabGeneral);
+            this.tbcTabs.Controls.Add(this.tabSpecial);
+            this.tbcTabs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbcTabs.Location = new System.Drawing.Point(0,0);
+            this.tbcTabs.Name = "tbcTabs";
+            this.tbcTabs.SelectedIndex = 0;
+            this.tbcTabs.Size = new System.Drawing.Size(398,454);
+            this.tbcTabs.TabIndex = 7;
+            // 
+            // tabGeneral
+            // 
+            this.tabGeneral.AutoScroll = true;
+            this.tabGeneral.Controls.Add(this.fraName);
+            this.tabGeneral.Controls.Add(this.fraType);
+            this.tabGeneral.Controls.Add(this.fraSubtype);
+            this.tabGeneral.Controls.Add(this.fraSettings);
+            this.tabGeneral.Controls.Add(this.fraPosition);
+            this.tabGeneral.Controls.Add(this.fraID);
+            this.tabGeneral.Location = new System.Drawing.Point(4,22);
+            this.tabGeneral.Name = "tabGeneral";
+            this.tabGeneral.Size = new System.Drawing.Size(390,428);
+            this.tabGeneral.TabIndex = 0;
+            this.tabGeneral.Text = "General";
+            this.tabGeneral.UseVisualStyleBackColor = true;
+            // 
+            // tabSpecial
+            // 
+            this.tabSpecial.AutoScroll = true;
+            this.tabSpecial.Controls.Add(this.fraVictims);
+            this.tabSpecial.Location = new System.Drawing.Point(4,22);
+            this.tabSpecial.Name = "tabSpecial";
+            this.tabSpecial.Size = new System.Drawing.Size(390,428);
+            this.tabSpecial.TabIndex = 1;
+            this.tabSpecial.Text = "Special";
+            this.tabSpecial.UseVisualStyleBackColor = true;
+            // 
             // fraVictims
             // 
             this.fraVictims.Controls.Add(this.numVictim);
@@ -567,10 +611,10 @@ namespace CrashEdit
             this.fraVictims.Controls.Add(this.cmdAddVictim);
             this.fraVictims.Controls.Add(this.cmdNextVictim);
             this.fraVictims.Controls.Add(this.cmdPreviousVictim);
-            this.fraVictims.Location = new System.Drawing.Point(209,285);
+            this.fraVictims.Location = new System.Drawing.Point(3,3);
             this.fraVictims.Name = "fraVictims";
             this.fraVictims.Size = new System.Drawing.Size(132,104);
-            this.fraVictims.TabIndex = 6;
+            this.fraVictims.TabIndex = 7;
             this.fraVictims.TabStop = false;
             this.fraVictims.Text = "Victims";
             this.fraVictims.Visible = false;
@@ -632,16 +676,9 @@ namespace CrashEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoScroll = true;
-            this.Controls.Add(this.fraVictims);
-            this.Controls.Add(this.fraName);
-            this.Controls.Add(this.fraSettings);
-            this.Controls.Add(this.fraID);
-            this.Controls.Add(this.fraPosition);
-            this.Controls.Add(this.fraSubtype);
-            this.Controls.Add(this.fraType);
+            this.Controls.Add(this.tbcTabs);
             this.Name = "EntityBox";
-            this.Size = new System.Drawing.Size(346,394);
+            this.Size = new System.Drawing.Size(398,454);
             ((System.ComponentModel.ISupportInitialize)(this.numType)).EndInit();
             this.fraType.ResumeLayout(false);
             this.fraType.PerformLayout();
@@ -663,6 +700,9 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numSettingA)).EndInit();
             this.fraName.ResumeLayout(false);
             this.fraName.PerformLayout();
+            this.tbcTabs.ResumeLayout(false);
+            this.tabGeneral.ResumeLayout(false);
+            this.tabSpecial.ResumeLayout(false);
             this.fraVictims.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numVictim)).EndInit();
             this.ResumeLayout(false);
@@ -708,11 +748,14 @@ namespace CrashEdit
         private System.Windows.Forms.GroupBox fraName;
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.CheckBox chkName;
+        private System.Windows.Forms.TabControl tbcTabs;
+        private System.Windows.Forms.TabPage tabGeneral;
+        private System.Windows.Forms.TabPage tabSpecial;
         private System.Windows.Forms.GroupBox fraVictims;
+        private System.Windows.Forms.NumericUpDown numVictim;
         private System.Windows.Forms.Button cmdRemoveVictim;
         private System.Windows.Forms.Button cmdAddVictim;
         private System.Windows.Forms.Button cmdNextVictim;
         private System.Windows.Forms.Button cmdPreviousVictim;
-        private System.Windows.Forms.NumericUpDown numVictim;
     }
 }
