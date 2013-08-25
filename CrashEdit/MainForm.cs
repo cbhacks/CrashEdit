@@ -1,6 +1,7 @@
 using Crash;
 using System;
 using System.IO;
+using System.Globalization;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
@@ -22,6 +23,7 @@ namespace CrashEdit
                 imglist.Images.Add("tb_close",Resources.FolderImage);
                 imglist.Images.Add("tb_find",Resources.BinocularsImage);
                 imglist.Images.Add("tb_findnext",Resources.BinocularsNextImage);
+                imglist.Images.Add("tb_goto",Resources.ArrowImage);
             }
             catch
             {
@@ -37,6 +39,7 @@ namespace CrashEdit
         private ToolStripSeparator tbsSeparator;
         private ToolStripButton tbbFind;
         private ToolStripButton tbbFindNext;
+        private ToolStripButton tbbGoto;
         private TabControl tbcTabs;
 
         public MainForm()
@@ -79,6 +82,12 @@ namespace CrashEdit
             tbbFindNext.TextImageRelation = TextImageRelation.ImageAboveText;
             tbbFindNext.Click += new EventHandler(tbbFindNext_Click);
 
+            tbbGoto = new ToolStripButton();
+            tbbGoto.Text = "Goto EID";
+            tbbGoto.ImageKey = "tb_goto";
+            tbbGoto.TextImageRelation = TextImageRelation.ImageAboveText;
+            tbbGoto.Click += new EventHandler(tbbGoto_Click);
+
             tsToolbar = new ToolStrip();
             tsToolbar.Dock = DockStyle.Top;
             tsToolbar.ImageList = imglist;
@@ -89,6 +98,7 @@ namespace CrashEdit
             tsToolbar.Items.Add(tbsSeparator);
             tsToolbar.Items.Add(tbbFind);
             tsToolbar.Items.Add(tbbFindNext);
+            tsToolbar.Items.Add(tbbGoto);
 
             tbcTabs = new TabControl();
             tbcTabs.Dock = DockStyle.Fill;
@@ -128,6 +138,11 @@ namespace CrashEdit
         void tbbFindNext_Click(object sender,EventArgs e)
         {
             FindNext();
+        }
+
+        void tbbGoto_Click(object sender,EventArgs e)
+        {
+            GotoEID();
         }
 
         public void OpenNSF()
@@ -306,6 +321,32 @@ namespace CrashEdit
             {
                 NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
                 nsfbox.FindNext();
+            }
+        }
+
+        public void GotoEID()
+        {
+            if (tbcTabs.SelectedTab != null)
+            {
+                NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
+                using (InputWindow inputwindow = new InputWindow())
+                {
+                    if (inputwindow.ShowDialog() == DialogResult.OK)
+                    {
+                        try
+                        {
+                            nsfbox.GotoEID((int)uint.Parse(inputwindow.Input,NumberStyles.HexNumber));
+                        }
+                        catch (FormatException)
+                        {
+                            MessageBox.Show("Invalid EID.\nMust be specified in hexadecmical without leading '0x' or trailing 'h'.","Goto EID",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                        }
+                        catch (OverflowException)
+                        {
+                            MessageBox.Show("Invalid EID.\nMust be in range 0 to FFFFFFFF","Goto EID",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                        }
+                    }
+                }
             }
         }
     }

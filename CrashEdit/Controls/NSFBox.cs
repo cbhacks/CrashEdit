@@ -212,6 +212,40 @@ namespace CrashEdit
             }
         }
 
+        public void GotoEID(int eid)
+        {
+            TreeNode node = FindEID(eid,controller.Node);
+            if (node != null)
+            {
+                node.EnsureVisible();
+                trvMain.SelectedNode = node;
+            }
+            else
+            {
+                MessageBox.Show("No results found.");
+            }
+        }
+
+        private TreeNode FindEID(int eid,TreeNode node)
+        {
+            if (node.Tag is EntryController)
+            {
+                if (((EntryController)node.Tag).Entry.EID == eid)
+                {
+                    return node;
+                }
+            }
+            foreach (TreeNode childnode in node.Nodes)
+            {
+                TreeNode result = FindEID(eid,childnode);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+            return null;
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
