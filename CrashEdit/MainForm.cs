@@ -215,6 +215,10 @@ namespace CrashEdit
             {
                 MessageBox.Show("An IO error occurred.\n\n" + ex.Message,"Save",MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
+            catch (UnauthorizedAccessException ex)
+            {
+                MessageBox.Show("An unauthorized access error occurred.\n\n" + ex.Message,"Save",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
         }
 
         public void PatchNSD()
