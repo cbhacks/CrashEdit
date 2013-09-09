@@ -31,9 +31,9 @@ namespace CrashEdit
             {
                 return new ModelEntryController(this,(ModelEntry)entry);
             }
-            else if (entry is T3Entry)
+            else if (entry is SceneryEntry)
             {
-                return new T3EntryController(this,(T3Entry)entry);
+                return new SceneryEntryController(this,(SceneryEntry)entry);
             }
             else if (entry is T4Entry)
             {

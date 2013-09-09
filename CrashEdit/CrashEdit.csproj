@@ -64,7 +64,7 @@
     <Compile Include="Controllers\T21EntryController.cs" />
     <Compile Include="Controllers\T17EntryController.cs" />
     <Compile Include="Controllers\ModelEntryController.cs" />
-    <Compile Include="Controllers\T3EntryController.cs" />
+    <Compile Include="Controllers\SceneryEntryController.cs" />
     <Compile Include="Controllers\T11EntryController.cs" />
     <Compile Include="Controllers\Mystery\MysteryMultiItemEntryController.cs" />
     <Compile Include="Controllers\Mystery\MysteryUniItemEntryController.cs" />

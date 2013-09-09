@@ -133,8 +133,8 @@
     <Compile Include="Formats\Crash Formats\T21\T21EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Models\ModelEntry.cs" />
     <Compile Include="Formats\Crash Formats\Models\ModelEntryLoader.cs" />
-    <Compile Include="Formats\Crash Formats\T3\T3Entry.cs" />
-    <Compile Include="Formats\Crash Formats\T3\T3EntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Scenery\SceneryEntry.cs" />
+    <Compile Include="Formats\Crash Formats\Scenery\SceneryEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T4\T4Entry.cs" />
     <Compile Include="Formats\Crash Formats\T4\T4EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T4\T4Item.cs" />
