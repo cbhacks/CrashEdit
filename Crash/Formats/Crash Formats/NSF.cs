@@ -85,9 +85,9 @@ namespace Crash
                         {
                             ErrorManager.SignalError("NSF.ReadChunk: Repeat ends out of bounds");
                         }
-                        // Do NOT use Array.Copy
-                        // due to possible overlap
-                        // this requires memmove semantics
+                        // Do NOT use Array.Copy as
+                        // overlap is possible i.e. span
+                        // may be greater than seek
                         for (int i = 0;i < span;i++)
                         {
                             result[pos + i] = result[pos - seek + i];
