@@ -12,34 +12,49 @@ namespace CrashEdit
 {
     public sealed class OldSceneryEntryViewer : ThreeDimensionalViewer
     {
-        private OldSceneryEntry entry;
+        private List<OldSceneryEntry> entries;
 
         public OldSceneryEntryViewer(OldSceneryEntry entry)
         {
-            this.entry = entry;
+            this.entries = new List<OldSceneryEntry>();
+            this.entries.Add(entry);
+        }
+
+        public OldSceneryEntryViewer(IEnumerable<OldSceneryEntry> entries)
+        {
+            this.entries = new List<OldSceneryEntry>(entries);
         }
 
         protected override IEnumerable<IPosition> CorePositions
         {
             get
             {
-                foreach (OldSceneryVertex vertex in entry.Vertices)
+                foreach (OldSceneryEntry entry in entries)
                 {
-                    yield return vertex;
+                    foreach (OldSceneryVertex vertex in entry.Vertices)
+                    {
+                        yield return vertex;
+                    }
                 }
             }
         }
 
         protected override void RenderObjects()
         {
-            GL.Begin(BeginMode.Triangles);
-            foreach (OldSceneryPolygon polygon in entry.Polygons)
+            foreach (OldSceneryEntry entry in entries)
             {
-                RenderVertex(entry.Vertices[polygon.VertexA]);
-                RenderVertex(entry.Vertices[polygon.VertexB]);
-                RenderVertex(entry.Vertices[polygon.VertexC]);
+                GL.PushMatrix();
+                // TODO :: Translate
+                GL.Begin(BeginMode.Triangles);
+                foreach (OldSceneryPolygon polygon in entry.Polygons)
+                {
+                    RenderVertex(entry.Vertices[polygon.VertexA]);
+                    RenderVertex(entry.Vertices[polygon.VertexB]);
+                    RenderVertex(entry.Vertices[polygon.VertexC]);
+                }
+                GL.End();
+                GL.PopMatrix();
             }
-            GL.End();
         }
 
         private void RenderVertex(OldSceneryVertex vertex)
