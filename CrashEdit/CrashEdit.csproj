@@ -48,6 +48,7 @@
     <Compile Include="Controllers\ChunkController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\ControllerMenuDelegate.cs" />
+    <Compile Include="Controllers\Scenery\OldSceneryEntryController.cs" />
     <Compile Include="Controllers\Wavebank\WavebankEntryController.cs" />
     <Compile Include="Controllers\Speech\SpeechEntryController.cs" />
     <Compile Include="Controllers\Sound\SoundEntryController.cs" />
@@ -64,7 +65,7 @@
     <Compile Include="Controllers\T21EntryController.cs" />
     <Compile Include="Controllers\T17EntryController.cs" />
     <Compile Include="Controllers\ModelEntryController.cs" />
-    <Compile Include="Controllers\SceneryEntryController.cs" />
+    <Compile Include="Controllers\Scenery\SceneryEntryController.cs" />
     <Compile Include="Controllers\T11EntryController.cs" />
     <Compile Include="Controllers\Mystery\MysteryMultiItemEntryController.cs" />
     <Compile Include="Controllers\Mystery\MysteryUniItemEntryController.cs" />

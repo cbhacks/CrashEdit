@@ -31,6 +31,10 @@ namespace CrashEdit
             {
                 return new ModelEntryController(this,(ModelEntry)entry);
             }
+            else if (entry is OldSceneryEntry)
+            {
+                return new OldSceneryEntryController(this,(OldSceneryEntry)entry);
+            }
             else if (entry is SceneryEntry)
             {
                 return new SceneryEntryController(this,(SceneryEntry)entry);
