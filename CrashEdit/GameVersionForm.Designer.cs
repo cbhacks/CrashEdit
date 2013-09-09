@@ -199,6 +199,7 @@ namespace CrashEdit
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "GameVersionForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CrashEdit Game Version Selection";
             this.fraVersions.ResumeLayout(false);
             this.fraVersions.PerformLayout();
