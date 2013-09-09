@@ -80,6 +80,9 @@
     <Compile Include="Controllers\LegacyController.cs" />
     <Compile Include="Controllers\NSFController.cs" />
     <Compile Include="Controllers\Speech\SpeechChunkController.cs" />
+    <Compile Include="Controls\ThreeDimensionalViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\EntityBox.cs">
       <SubType>UserControl</SubType>
     </Compile>

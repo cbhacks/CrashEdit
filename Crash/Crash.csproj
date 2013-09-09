@@ -90,6 +90,7 @@
     <Compile Include="Formats\Crash Formats\Wavebank\WavebankChunkLoader.cs" />
     <Compile Include="Formats\Crash Formats\Wavebank\WavebankEntry.cs" />
     <Compile Include="Formats\Crash Formats\Wavebank\WavebankEntryLoader.cs" />
+    <Compile Include="Utility\IPosition.cs" />
     <Compile Include="Utility\WaveConv.cs" />
     <Compile Include="Error System\LoadAbortedException.cs" />
     <Compile Include="Error System\ErrorManager.cs" />

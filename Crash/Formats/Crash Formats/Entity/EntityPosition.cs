@@ -1,6 +1,6 @@
 namespace Crash
 {
-    public struct EntityPosition
+    public struct EntityPosition : IPosition
     {
         private short x;
         private short y;
@@ -24,6 +24,21 @@ namespace Crash
         }
 
         public short Z
+        {
+            get { return z; }
+        }
+
+        double IPosition.X
+        {
+            get { return x; }
+        }
+
+        double IPosition.Y
+        {
+            get { return y; }
+        }
+
+        double IPosition.Z
         {
             get { return z; }
         }
