@@ -59,6 +59,8 @@
     <Compile Include="Configuration System\GameVersion.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\OldSceneryEntry.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\OldSceneryEntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Scenery\OldSceneryPolygon.cs" />
+    <Compile Include="Formats\Crash Formats\Scenery\OldSceneryVertex.cs" />
     <Compile Include="Utility\Aligner.cs" />
     <Compile Include="Utility\ADPCMConv.cs" />
     <Compile Include="Utility\AutoBitConv.cs" />

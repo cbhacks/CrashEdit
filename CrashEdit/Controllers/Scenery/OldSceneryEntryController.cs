@@ -1,8 +1,9 @@
 using Crash;
+using System.Windows.Forms;
 
 namespace CrashEdit
 {
-    public sealed class OldSceneryEntryController : MysteryMultiItemEntryController
+    public sealed class OldSceneryEntryController : EntryController
     {
         private OldSceneryEntry oldsceneryentry;
 
@@ -12,6 +13,11 @@ namespace CrashEdit
             Node.Text = "Old Scenery Entry";
             Node.ImageKey = "oldsceneryentry";
             Node.SelectedImageKey = "oldsceneryentry";
+        }
+
+        protected override Control CreateEditor()
+        {
+            return new UndockableControl(new OldSceneryEntryViewer(oldsceneryentry));
         }
 
         public OldSceneryEntry OldSceneryEntry

@@ -15,7 +15,29 @@ namespace Crash
             {
                 ErrorManager.SignalError("OldSceneryEntry: Wrong number of items");
             }
-            return new OldSceneryEntry(items,eid);
+            if (items[1].Length % 8 != 0)
+            {
+                ErrorManager.SignalError("OldSceneryEntry: Second item (polygons) length is invalid");
+            }
+            OldSceneryPolygon[] polygons = new OldSceneryPolygon [items[1].Length / 8];
+            for (int i = 0;i < polygons.Length;i++)
+            {
+                byte[] polygondata = new byte [8];
+                Array.Copy(items[1],i * 8,polygondata,0,8);
+                polygons[i] = OldSceneryPolygon.Load(polygondata);
+            }
+            if (items[2].Length % 8 != 0)
+            {
+                ErrorManager.SignalError("OldSceneryEntry: Third item (vertices) length is invalid");
+            }
+            OldSceneryVertex[] vertices = new OldSceneryVertex [items[2].Length / 8];
+            for (int i = 0;i < vertices.Length;i++)
+            {
+                byte[] vertexdata = new byte [8];
+                Array.Copy(items[2],i * 8,vertexdata,0,8);
+                vertices[i] = OldSceneryVertex.Load(vertexdata);
+            }
+            return new OldSceneryEntry(items[0],polygons,vertices,eid);
         }
     }
 }
