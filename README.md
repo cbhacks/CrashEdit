@@ -65,7 +65,7 @@ If you don't know which you want, you want "Binary releases".
 ## Author Contact Info ##
 I can be contacted in various ways:
 
-* As `chekwob` on YouTube (this is the best way, I check it very often)
+* As `chekwob` on YouTube
 * As `chekwob@yahoo.com` via email (english only; I discard non-english email as spam)
 * As `chekwob` on the XeNTaX forum
 * As `chekwob` on the CM forum (hpzr.proboards.com)
