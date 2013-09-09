@@ -14,14 +14,6 @@ namespace Crash
         static Entry()
         {
             loaders = new Dictionary<int,EntryLoader>();
-            foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
-            {
-                foreach (EntryTypeAttribute attribute in type.GetCustomAttributes(typeof(EntryTypeAttribute),false))
-                {
-                    EntryLoader loader = (EntryLoader)Activator.CreateInstance(type);
-                    loaders.Add(attribute.Type,loader);
-                }
-            }
         }
 
         public static UnprocessedEntry Load(byte[] data)

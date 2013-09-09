@@ -2,7 +2,8 @@ using System;
 
 namespace Crash
 {
-    [EntryType(7)]
+    [EntryType(7,GameVersion.Crash2)]
+    [EntryType(7,GameVersion.Crash3)]
     public sealed class EntityEntryLoader : EntryLoader
     {
         public override Entry Load(byte[][] items,int eid)

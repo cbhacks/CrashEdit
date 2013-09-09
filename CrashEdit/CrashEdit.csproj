@@ -98,6 +98,12 @@
       <DependentUpon>ErrorReporter.cs</DependentUpon>
     </Compile>
     <Compile Include="FileUtil.cs" />
+    <Compile Include="GameVersionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameVersionForm.Designer.cs">
+      <DependentUpon>GameVersionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="InputWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -186,6 +192,10 @@
     <EmbeddedResource Include="ErrorReporter.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ErrorReporter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameVersionForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>GameVersionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InputWindow.resx">
       <SubType>Designer</SubType>

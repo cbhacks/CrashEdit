@@ -2,7 +2,10 @@ using System;
 
 namespace Crash
 {
-    [EntryType(13)]
+    [EntryType(13,GameVersion.Crash1BetaMAY11)]
+    [EntryType(13,GameVersion.Crash1)]
+    [EntryType(13,GameVersion.Crash2)]
+    [EntryType(13,GameVersion.Crash3)]
     public sealed class MusicEntryLoader : EntryLoader
     {
         public override Entry Load(byte[][] items,int eid)

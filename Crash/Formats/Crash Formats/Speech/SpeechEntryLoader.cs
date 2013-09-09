@@ -2,7 +2,8 @@ using System;
 
 namespace Crash
 {
-    [EntryType(20)]
+    [EntryType(20,GameVersion.Crash2)]
+    [EntryType(20,GameVersion.Crash3)]
     public sealed class SpeechEntryLoader : EntryLoader
     {
         public override Entry Load(byte[][] items,int eid)

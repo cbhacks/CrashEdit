@@ -9,6 +9,14 @@ namespace CrashEdit
         [STAThread]
         internal static void Main(string[] args)
         {
+            using (GameVersionForm versionform = new GameVersionForm())
+            {
+                if (versionform.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+                Configuration.GameVersion = versionform.GameVersion;
+            }
             using (ErrorReporter errorform = new ErrorReporter())
             using (MainForm mainform = new MainForm())
             {

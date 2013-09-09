@@ -39,6 +39,7 @@
   </Target>
   -->
   <ItemGroup>
+    <Compile Include="Configuration System\Configuration.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityBasicProperty.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityBasicPropertyLoader.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityID.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Formats\Crash Formats\Entity\EntityUInt8PropertyLoader.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityUnknownProperty.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityProperty.cs" />
+    <Compile Include="Configuration System\GameVersion.cs" />
     <Compile Include="Utility\Aligner.cs" />
     <Compile Include="Utility\ADPCMConv.cs" />
     <Compile Include="Utility\AutoBitConv.cs" />
