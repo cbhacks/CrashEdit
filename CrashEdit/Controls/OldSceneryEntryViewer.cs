@@ -33,7 +33,7 @@ namespace CrashEdit
                 {
                     foreach (OldSceneryVertex vertex in entry.Vertices)
                     {
-                        yield return vertex;
+                        yield return new Position(vertex.X + entry.XOffset,vertex.Y + entry.YOffset,vertex.Z + entry.ZOffset);
                     }
                 }
             }
@@ -44,7 +44,7 @@ namespace CrashEdit
             foreach (OldSceneryEntry entry in entries)
             {
                 GL.PushMatrix();
-                // TODO :: Translate
+                GL.Translate(entry.XOffset,entry.YOffset,entry.ZOffset);
                 GL.Begin(BeginMode.Triangles);
                 foreach (OldSceneryPolygon polygon in entry.Polygons)
                 {
