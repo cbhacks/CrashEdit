@@ -59,7 +59,7 @@ namespace CrashEdit
 
         private void RenderVertex(OldSceneryVertex vertex)
         {
-            GL.Color3(vertex.F0,vertex.F1,vertex.F2);
+            GL.Color3(vertex.Red,vertex.Green,vertex.Blue);
             GL.Vertex3(vertex.X,vertex.Y,vertex.Z);
         }
     }

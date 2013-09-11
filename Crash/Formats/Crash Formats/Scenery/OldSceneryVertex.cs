@@ -18,32 +18,32 @@ namespace Crash
             short z = (short)(zhigh << 13 | zmid << 11 | zlow << 3);
             // Sign extend!
             z >>= 3;
-            byte f0 = data[0];
-            byte f1 = data[1];
-            byte f2 = data[2];
+            byte red = data[0];
+            byte green = data[1];
+            byte blue = data[2];
             if ((data[4] & 1) != 0)
             {
                 // FIXME
                 //ErrorManager.SignalIgnorableError("OldSceneryVertex: Unknown bit is set");
             }
-            return new OldSceneryVertex(x,y,z,f0,f1,f2);
+            return new OldSceneryVertex(x,y,z,red,green,blue);
         }
 
         private short x;
         private short y;
         private short z;
-        private byte f0;
-        private byte f1;
-        private byte f2;
+        private byte red;
+        private byte green;
+        private byte blue;
 
-        public OldSceneryVertex(short x,short y,short z,byte f0,byte f1,byte f2)
+        public OldSceneryVertex(short x,short y,short z,byte red,byte green,byte blue)
         {
             this.x = x;
             this.y = y;
             this.z = z;
-            this.f0 = f0;
-            this.f1 = f1;
-            this.f2 = f2;
+            this.red = red;
+            this.green = green;
+            this.blue = blue;
         }
 
         public short X
@@ -61,19 +61,19 @@ namespace Crash
             get { return z; }
         }
 
-        public byte F0
+        public byte Red
         {
-            get { return f0; }
+            get { return red; }
         }
 
-        public byte F1
+        public byte Green
         {
-            get { return f1; }
+            get { return green; }
         }
 
-        public byte F2
+        public byte Blue
         {
-            get { return f2; }
+            get { return blue; }
         }
 
         double IPosition.X
