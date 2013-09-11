@@ -10,14 +10,12 @@ namespace Crash
                 throw new ArgumentNullException("data");
             if (data.Length != 8)
                 throw new ArgumentException("Value must be 8 bytes long.","data");
-            short x = (short)(BitConv.FromInt16(data,4) >> 3);
-            short y = (short)(BitConv.FromInt16(data,6) >> 3);
+            short x = (short)(BitConv.FromInt16(data,4) & 0xFFF8);
+            short y = (short)(BitConv.FromInt16(data,6) & 0xFFF8);
             int zhigh = data[6] & 7;
             int zmid = (data[4] & 6) >> 1;
             int zlow = data[3];
             short z = (short)(zhigh << 13 | zmid << 11 | zlow << 3);
-            // Sign extend!
-            z >>= 3;
             byte red = data[0];
             byte green = data[1];
             byte blue = data[2];
@@ -38,6 +36,12 @@ namespace Crash
 
         public OldSceneryVertex(short x,short y,short z,byte red,byte green,byte blue)
         {
+            if ((x & 0x7) != 0)
+                throw new ArgumentException("Value must be a multiple of 8.","x");
+            if ((y & 0x7) != 0)
+                throw new ArgumentException("Value must be a multiple of 8.","y");
+            if ((z & 0x7) != 0)
+                throw new ArgumentException("Value must be a multiple of 8.","z");
             this.x = x;
             this.y = y;
             this.z = z;

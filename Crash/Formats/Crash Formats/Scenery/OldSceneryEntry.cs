@@ -28,17 +28,17 @@ namespace Crash
 
         public int XOffset
         {
-            get { return BitConv.FromInt32(info,0) / 8; }
+            get { return BitConv.FromInt32(info,0); }
         }
 
         public int YOffset
         {
-            get { return BitConv.FromInt32(info,4) / 8; }
+            get { return BitConv.FromInt32(info,4); }
         }
 
         public int ZOffset
         {
-            get { return BitConv.FromInt32(info,8) / 8; }
+            get { return BitConv.FromInt32(info,8); }
         }
 
         public IList<OldSceneryPolygon> Polygons
