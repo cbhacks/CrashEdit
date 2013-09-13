@@ -188,12 +188,12 @@ namespace CrashEdit
 
         public void ResetCamera()
         {
-            int minx = short.MaxValue;
-            int miny = short.MaxValue;
-            int minz = short.MaxValue;
-            int maxx = short.MinValue;
-            int maxy = short.MinValue;
-            int maxz = short.MinValue;
+            int minx = int.MaxValue;
+            int miny = int.MaxValue;
+            int minz = int.MaxValue;
+            int maxx = int.MinValue;
+            int maxy = int.MinValue;
+            int maxz = int.MinValue;
             foreach (IPosition position in CorePositions)
             {
                 minx = Math.Min(minx,(int)position.X);
