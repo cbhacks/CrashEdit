@@ -19,12 +19,8 @@ namespace Crash
             byte red = data[0];
             byte green = data[1];
             byte blue = data[2];
-            if ((data[4] & 1) != 0)
-            {
-                // FIXME
-                //ErrorManager.SignalIgnorableError("OldSceneryVertex: Unknown bit is set");
-            }
-            return new OldSceneryVertex(x,y,z,red,green,blue);
+            bool lightingflag = ((data[4] & 1) != 0);
+            return new OldSceneryVertex(x,y,z,red,green,blue,lightingflag);
         }
 
         private short x;
@@ -33,8 +29,9 @@ namespace Crash
         private byte red;
         private byte green;
         private byte blue;
+        private bool lightingflag;
 
-        public OldSceneryVertex(short x,short y,short z,byte red,byte green,byte blue)
+        public OldSceneryVertex(short x,short y,short z,byte red,byte green,byte blue,bool lightingflag)
         {
             if ((x & 0x7) != 0)
                 throw new ArgumentException("Value must be a multiple of 8.","x");
@@ -48,6 +45,7 @@ namespace Crash
             this.red = red;
             this.green = green;
             this.blue = blue;
+            this.lightingflag = lightingflag;
         }
 
         public short X
@@ -78,6 +76,11 @@ namespace Crash
         public byte Blue
         {
             get { return blue; }
+        }
+
+        public bool LightingFlag
+        {
+            get { return lightingflag; }
         }
 
         double IPosition.X
