@@ -27,6 +27,10 @@ namespace CrashEdit
             {
                 return new T1EntryController(this,(T1Entry)entry);
             }
+            else if (entry is OldModelEntry)
+            {
+                return new OldModelEntryController(this,(OldModelEntry)entry);
+            }
             else if (entry is ModelEntry)
             {
                 return new ModelEntryController(this,(ModelEntry)entry);

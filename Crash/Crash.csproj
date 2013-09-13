@@ -57,6 +57,8 @@
     <Compile Include="Formats\Crash Formats\Entity\EntityUnknownProperty.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityProperty.cs" />
     <Compile Include="Configuration System\GameVersion.cs" />
+    <Compile Include="Formats\Crash Formats\Models\OldModelEntry.cs" />
+    <Compile Include="Formats\Crash Formats\Models\OldModelEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\OldSceneryEntry.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\OldSceneryEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\OldSceneryPolygon.cs" />
