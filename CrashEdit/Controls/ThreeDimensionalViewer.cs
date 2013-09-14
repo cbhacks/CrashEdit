@@ -36,18 +36,60 @@ namespace CrashEdit
         protected int roty;
         private bool mouseleft;
         private bool mouseright;
+        private bool keyup;
+        private bool keydown;
+        private bool keyleft;
+        private bool keyright;
+        private bool keya;
+        private bool keyz;
         private int mousex;
         private int mousey;
-        private Timer timer;
+        private Timer inputtimer;
+        private Timer refreshtimer;
 
         public ThreeDimensionalViewer()
         {
             mouseleft = false;
             mouseright = false;
-            timer = new Timer();
-            timer.Interval = 100;
-            timer.Enabled = true;
-            timer.Tick += delegate (object sender,EventArgs e)
+            keyup = false;
+            keydown = false;
+            keyleft = false;
+            keyright = false;
+            keya = false;
+            keyz = false;
+            inputtimer = new Timer();
+            inputtimer.Interval = 15;
+            inputtimer.Enabled = true;
+            inputtimer.Tick += delegate (object sender,EventArgs e)
+            {
+                int speed = 100;
+                int changex = 0;
+                int changey = 0;
+                int changez = 0;
+                if (keyup)
+                    changez -= 1;
+                if (keydown)
+                    changez += 1;
+                if (keyleft)
+                    changex -= 1;
+                if (keyright)
+                    changex += 1;
+                if (keya)
+                    changey += 1;
+                if (keyz)
+                    changey -= 1;
+                midx += changex * speed;
+                midy += changey * speed;
+                midz += changez * speed;
+                if ((changex | changey | changez) != 0)
+                {
+                    Invalidate();
+                }
+            };
+            refreshtimer = new Timer();
+            refreshtimer.Interval = 100;
+            refreshtimer.Enabled = true;
+            refreshtimer.Tick += delegate (object sender,EventArgs e)
             {
                 Invalidate();
             };
@@ -136,30 +178,54 @@ namespace CrashEdit
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            const int speed = 16;
             base.OnKeyDown(e);
             switch (e.KeyCode)
             {
                 case Keys.Up:
-                    midz -= speed;
+                    keyup = true;
                     break;
                 case Keys.Down:
-                    midz += speed;
+                    keydown = true;
                     break;
                 case Keys.Left:
-                    midx -= speed;
+                    keyleft = true;
                     break;
                 case Keys.Right:
-                    midx += speed;
+                    keyright = true;
                     break;
                 case Keys.A:
-                    midy += speed;
+                    keya = true;
                     break;
                 case Keys.Z:
-                    midy -= speed;
+                    keyz = true;
                     break;
             }
-            Invalidate();
+        }
+
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
+            base.OnKeyUp(e);
+            switch (e.KeyCode)
+            {
+                case Keys.Up:
+                    keyup = false;
+                    break;
+                case Keys.Down:
+                    keydown = false;
+                    break;
+                case Keys.Left:
+                    keyleft = false;
+                    break;
+                case Keys.Right:
+                    keyright = false;
+                    break;
+                case Keys.A:
+                    keya = false;
+                    break;
+                case Keys.Z:
+                    keyz = false;
+                    break;
+            }
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -220,7 +286,8 @@ namespace CrashEdit
 
         protected override void Dispose(bool disposing)
         {
-            timer.Dispose();
+            inputtimer.Dispose();
+            refreshtimer.Dispose();
             base.Dispose(disposing);
         }
     }
