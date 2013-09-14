@@ -39,9 +39,9 @@ namespace Crash
             {
                 ErrorManager.SignalIgnorableError("Entity: Blank value is wrong");
             }
-            if (propertycount < 0)
+            if (propertycount < 0 || propertycount > ushort.MaxValue)
             {
-                ErrorManager.SignalError("Entity: Property count is negative");
+                ErrorManager.SignalError("Entity: Property count is invalid");
             }
             if (data.Length < 16 + propertycount * 8)
             {
