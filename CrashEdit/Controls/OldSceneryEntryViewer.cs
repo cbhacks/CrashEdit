@@ -13,16 +13,19 @@ namespace CrashEdit
     public sealed class OldSceneryEntryViewer : ThreeDimensionalViewer
     {
         private List<OldSceneryEntry> entries;
+        private int displaylist;
 
         public OldSceneryEntryViewer(OldSceneryEntry entry)
         {
             this.entries = new List<OldSceneryEntry>();
             this.entries.Add(entry);
+            this.displaylist = 0;
         }
 
         public OldSceneryEntryViewer(IEnumerable<OldSceneryEntry> entries)
         {
             this.entries = new List<OldSceneryEntry>(entries);
+            this.displaylist = 0;
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -41,26 +44,39 @@ namespace CrashEdit
 
         protected override void RenderObjects()
         {
-            foreach (OldSceneryEntry entry in entries)
+            if (displaylist == 0)
             {
-                GL.PushMatrix();
-                GL.Translate(entry.XOffset,entry.YOffset,entry.ZOffset);
+                displaylist = GL.GenLists(1);
+                GL.NewList(displaylist,ListMode.CompileAndExecute);
                 GL.Begin(BeginMode.Triangles);
-                foreach (OldSceneryPolygon polygon in entry.Polygons)
+                foreach (OldSceneryEntry entry in entries)
                 {
-                    RenderVertex(entry.Vertices[polygon.VertexA]);
-                    RenderVertex(entry.Vertices[polygon.VertexB]);
-                    RenderVertex(entry.Vertices[polygon.VertexC]);
+                    foreach (OldSceneryPolygon polygon in entry.Polygons)
+                    {
+                        RenderVertex(entry,entry.Vertices[polygon.VertexA]);
+                        RenderVertex(entry,entry.Vertices[polygon.VertexB]);
+                        RenderVertex(entry,entry.Vertices[polygon.VertexC]);
+                    }
                 }
                 GL.End();
-                GL.PopMatrix();
+                GL.EndList();
+            }
+            else
+            {
+                GL.CallList(displaylist);
             }
         }
 
-        private void RenderVertex(OldSceneryVertex vertex)
+        private void RenderVertex(OldSceneryEntry entry,OldSceneryVertex vertex)
         {
             GL.Color3(vertex.Red,vertex.Green,vertex.Blue);
-            GL.Vertex3(vertex.X,vertex.Y,vertex.Z);
+            GL.Vertex3(entry.XOffset + vertex.X,entry.YOffset + vertex.Y,entry.ZOffset + vertex.Z);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            GL.DeleteLists(displaylist,1);
+            base.Dispose(disposing);
         }
     }
 }
