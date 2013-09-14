@@ -31,6 +31,7 @@ namespace CrashEdit
         private int midy;
         private int midz;
         private int range;
+        private int fullrange;
         protected int rotx;
         protected int roty;
         private bool mouseleft;
@@ -109,7 +110,7 @@ namespace CrashEdit
             }
             else if (mouseright)
             {
-                range -= e.Y - mousey;
+                range -= (e.Y - mousey) * fullrange / 500;
                 if (range < 1)
                     range = 1;
                 Invalidate();
@@ -213,6 +214,7 @@ namespace CrashEdit
             range += 400;
             rotx = 0;
             roty = 0;
+            fullrange = range;
         }
 
         protected override void Dispose(bool disposing)
