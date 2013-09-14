@@ -215,6 +215,7 @@ namespace CrashEdit
             rotx = 0;
             roty = 0;
             fullrange = range;
+            Invalidate();
         }
 
         protected override void Dispose(bool disposing)
