@@ -53,7 +53,19 @@ namespace Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            throw new NotImplementedException();
+            byte[][] items = new byte [3][];
+            items[0] = info;
+            items[1] = new byte [polygons.Count * 8];
+            for (int i = 0;i < polygons.Count;i++)
+            {
+                polygons[i].Save().CopyTo(items[1],i * 8);
+            }
+            items[2] = new byte [vertices.Count * 8];
+            for (int i = 0;i < vertices.Count;i++)
+            {
+                vertices[i].Save().CopyTo(items[2],i * 8);
+            }
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }

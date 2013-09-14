@@ -97,5 +97,26 @@ namespace Crash
         {
             get { return z; }
         }
+
+        public byte[] Save()
+        {
+            int zlow = (z >> 3) & 0xFF;
+            int zmid = (z >> 11) & 0x3;
+            int zhigh = (z >> 13) & 0x7;
+            byte[] data = new byte [8];
+            data[0] = red;
+            data[1] = green;
+            data[2] = blue;
+            data[3] = (byte)zlow;
+            BitConv.ToInt16(data,4,x);
+            data[4] |= (byte)(zmid << 1);
+            BitConv.ToInt16(data,6,y);
+            data[6] |= (byte)(zhigh);
+            if (lightingflag)
+            {
+                data[4] |= 1;
+            }
+            return data;
+        }
     }
 }
