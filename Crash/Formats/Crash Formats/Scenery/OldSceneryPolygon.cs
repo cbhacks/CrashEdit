@@ -61,6 +61,21 @@ namespace Crash
             get { return vertexc; }
         }
 
+        public int Unknown1
+        {
+            get { return unknown1; }
+        }
+
+        public byte Unknown2
+        {
+            get { return unknown2; }
+        }
+
+        public byte Unknown3
+        {
+            get { return unknown3; }
+        }
+
         public byte[] Save()
         {
             int worda = 0;
