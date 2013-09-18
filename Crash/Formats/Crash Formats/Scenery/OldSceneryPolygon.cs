@@ -12,9 +12,9 @@ namespace Crash
                 throw new ArgumentException("Value must be 8 bytes long.","data");
             int worda = BitConv.FromInt32(data,0);
             int wordb = BitConv.FromInt32(data,4);
-            int vertexa = (wordb >> 20) & 0xFFF;
+            int vertexa = (worda >> 20) & 0xFFF;
             int vertexb = (wordb >> 8) & 0xFFF;
-            int vertexc = (worda >> 20) & 0xFFF;
+            int vertexc = (wordb >> 20) & 0xFFF;
             int unknown1 = (worda >> 8) & 0xFFF;
             byte unknown2 = (byte)(worda & 0xFF);
             byte unknown3 = (byte)(wordb & 0xFF);
@@ -80,9 +80,9 @@ namespace Crash
         {
             int worda = 0;
             int wordb = 0;
-            wordb |= vertexa << 20;
+            worda |= vertexa << 20;
             wordb |= vertexb << 8;
-            worda |= vertexc << 20;
+            wordb |= vertexc << 20;
             worda |= unknown1 << 8;
             worda |= unknown2;
             wordb |= unknown3;
