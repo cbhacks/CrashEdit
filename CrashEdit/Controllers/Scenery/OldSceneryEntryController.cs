@@ -33,7 +33,7 @@ namespace CrashEdit
             {
                 return;
             }
-            FileUtil.SaveFile(oldsceneryentry.ToOBJ(),FileFilters.OBJ + "|" + FileFilters.Any);
+            FileUtil.SaveFile(oldsceneryentry.ToOBJ(),FileFilters.OBJ,FileFilters.Any);
         }
     }
 }

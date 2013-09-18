@@ -94,7 +94,7 @@ namespace CrashEdit
             {
                 throw new GUIException("This music entry already contains a VH file.");
             }
-            byte[] data = FileUtil.OpenFile(FileFilters.VH + "|" + FileFilters.VAB + "|" + FileFilters.Any);
+            byte[] data = FileUtil.OpenFile(FileFilters.VH,FileFilters.VAB,FileFilters.Any);
             if (data != null)
             {
                 VH vh = VH.Load(data);
@@ -105,7 +105,7 @@ namespace CrashEdit
 
         private void Menu_Import_SEQ()
         {
-            byte[] data = FileUtil.OpenFile(FileFilters.SEQ + "|" + FileFilters.Any);
+            byte[] data = FileUtil.OpenFile(FileFilters.SEQ,FileFilters.Any);
             if (data != null)
             {
                 SEQ seq = SEQ.Load(data);
@@ -117,28 +117,28 @@ namespace CrashEdit
         private void Menu_Export_SEP()
         {
             byte[] data = musicentry.SEP.Save();
-            FileUtil.SaveFile(data,FileFilters.SEP + "|" + FileFilters.Any);
+            FileUtil.SaveFile(data,FileFilters.SEP,FileFilters.Any);
         }
 
         private void Menu_Export_Linked_VH()
         {
             VH vh = FindLinkedVH();
             byte[] data = vh.Save();
-            FileUtil.SaveFile(data,FileFilters.VH + "|" + FileFilters.Any);
+            FileUtil.SaveFile(data,FileFilters.VH,FileFilters.Any);
         }
 
         private void Menu_Export_Linked_VB()
         {
             SampleLine[] vb = FindLinkedVB();
             byte[] data = new SampleSet(vb).Save();
-            FileUtil.SaveFile(data,FileFilters.VB + "|" + FileFilters.Any);
+            FileUtil.SaveFile(data,FileFilters.VB,FileFilters.Any);
         }
 
         private void Menu_Export_Linked_VAB()
         {
             VAB vab = FindLinkedVAB();
             byte[] data = vab.Save();
-            FileUtil.SaveFile(data,FileFilters.VAB + "|" + FileFilters.Any);
+            FileUtil.SaveFile(data,FileFilters.VAB,FileFilters.Any);
         }
 
         private void Menu_Export_Linked_VAB_DLS()
@@ -149,7 +149,7 @@ namespace CrashEdit
             }
             VAB vab = FindLinkedVAB();
             byte[] data = vab.ToDLS().Save();
-            FileUtil.SaveFile(data,FileFilters.DLS + "|" + FileFilters.Any);
+            FileUtil.SaveFile(data,FileFilters.DLS,FileFilters.Any);
         }
     }
 }

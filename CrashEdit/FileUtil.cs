@@ -15,11 +15,9 @@ namespace CrashEdit
             savefiledlg = new SaveFileDialog();
         }
 
-        public static byte[] OpenFile(string filter)
+        public static byte[] OpenFile(params string[] filters)
         {
-            if (filter == null)
-                throw new ArgumentNullException("filter");
-            openfiledlg.Filter = filter;
+            openfiledlg.Filter = string.Join("|",filters);
             openfiledlg.Multiselect = false;
             if (openfiledlg.ShowDialog() == DialogResult.OK)
             {
@@ -31,11 +29,9 @@ namespace CrashEdit
             }
         }
 
-        public static byte[][] OpenFiles(string filter)
+        public static byte[][] OpenFiles(params string[] filters)
         {
-            if (filter == null)
-                throw new ArgumentNullException("filter");
-            openfiledlg.Filter = filter;
+            openfiledlg.Filter = string.Join("|",filters);
             openfiledlg.Multiselect = true;
             if (openfiledlg.ShowDialog() == DialogResult.OK)
             {
@@ -52,13 +48,11 @@ namespace CrashEdit
             }
         }
 
-        public static bool SaveFile(byte[] data,string filter)
+        public static bool SaveFile(byte[] data,params string[] filters)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
-            if (filter == null)
-                throw new ArgumentNullException("filter");
-            savefiledlg.Filter = filter;
+            savefiledlg.Filter = string.Join("|",filters);
             if (savefiledlg.ShowDialog() == DialogResult.OK)
             {
                 File.WriteAllBytes(savefiledlg.FileName,data);

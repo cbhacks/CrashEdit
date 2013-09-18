@@ -116,7 +116,7 @@ namespace CrashEdit
         private void ExportWave(int samplerate)
         {
             byte[] wave = WaveConv.ToWave(samples.ToPCM(),samplerate).Save();
-            FileUtil.SaveFile(wave,FileFilters.Wave + "|" + FileFilters.Any);
+            FileUtil.SaveFile(wave,FileFilters.Wave,FileFilters.Any);
         }
 
         protected override void Dispose(bool disposing)
