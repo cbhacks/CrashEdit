@@ -10,7 +10,7 @@ namespace CrashEdit
         public EntityEntryController(EntryChunkController entrychunkcontroller,EntityEntry entityentry) : base(entrychunkcontroller,entityentry)
         {
             this.entityentry = entityentry;
-            Node.Text = "Entity Entry";
+            Node.Text = string.Format("Entity Entry ({0})",entityentry.EIDString);
             Node.ImageKey = "entityentry";
             Node.SelectedImageKey = "entityentry";
             AddNode(new ItemController(null,entityentry.Unknown1));

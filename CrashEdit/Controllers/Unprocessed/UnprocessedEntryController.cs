@@ -11,7 +11,7 @@ namespace CrashEdit
         public UnprocessedEntryController(EntryChunkController entrychunkcontroller,UnprocessedEntry unprocessedentry) : base(entrychunkcontroller,unprocessedentry)
         {
             this.unprocessedentry = unprocessedentry;
-            Node.Text = string.Format("Unprocessed Entry (T{0})",unprocessedentry.Type);
+            Node.Text = string.Format("Unprocessed T{0} Entry ({1})",unprocessedentry.Type,unprocessedentry.EIDString);
             Node.ImageKey = "unprocessedentry";
             Node.SelectedImageKey = "unprocessedentry";
             AddMenu("Process Entry",Menu_Process_Entry);

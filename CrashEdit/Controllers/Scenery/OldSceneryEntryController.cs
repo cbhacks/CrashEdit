@@ -10,7 +10,7 @@ namespace CrashEdit
         public OldSceneryEntryController(EntryChunkController entrychunkcontroller,OldSceneryEntry oldsceneryentry) : base(entrychunkcontroller,oldsceneryentry)
         {
             this.oldsceneryentry = oldsceneryentry;
-            Node.Text = "Old Scenery Entry";
+            Node.Text = string.Format("Old Scenery Entry ({0})",oldsceneryentry.EIDString);
             Node.ImageKey = "oldsceneryentry";
             Node.SelectedImageKey = "oldsceneryentry";
         }

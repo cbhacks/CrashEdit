@@ -9,7 +9,7 @@ namespace CrashEdit
         public OldEntityEntryController(EntryChunkController entrychunkcontroller,OldEntityEntry oldentityentry) : base(entrychunkcontroller,oldentityentry)
         {
             this.oldentityentry = oldentityentry;
-            Node.Text = "Old Entity Entry";
+            Node.Text = string.Format("Old Entity Entry ({0})",oldentityentry.EIDString);
             Node.ImageKey = "oldentityentry";
             Node.SelectedImageKey = "oldentityentry";
         }

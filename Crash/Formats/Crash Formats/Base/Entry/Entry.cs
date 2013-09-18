@@ -8,6 +8,7 @@ namespace Crash
     {
         public const int Magic = 0x100FFFF;
         public const int NullEID = 0x6396347F;
+        public const string EIDStringCharacterSet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_!";
 
         internal static Dictionary<int,EntryLoader> loaders;
 
@@ -66,6 +67,18 @@ namespace Crash
             return new UnprocessedEntry(items,eid,type);
         }
 
+        public static string EIDToString(int eid)
+        {
+            char[] str = new char [5];
+            eid >>= 1;
+            for (int i = 0;i < 5;i++)
+            {
+                str[i] = EIDStringCharacterSet[eid & 0x3F];
+                eid >>= 6;
+            }
+            return new string(str);
+        }
+
         private int eid;
 
         public Entry(int eid)
@@ -81,6 +94,11 @@ namespace Crash
         public int EID
         {
             get { return eid; }
+        }
+
+        public string EIDString
+        {
+            get { return EIDToString(eid); }
         }
 
         public abstract UnprocessedEntry Unprocess();

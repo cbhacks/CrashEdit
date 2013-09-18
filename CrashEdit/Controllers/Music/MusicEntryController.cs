@@ -12,7 +12,7 @@ namespace CrashEdit
         public MusicEntryController(EntryChunkController entrychunkcontroller,MusicEntry musicentry) : base(entrychunkcontroller,musicentry)
         {
             this.musicentry = musicentry;
-            Node.Text = "Music Entry";
+            Node.Text = string.Format("Music Entry ({0})",musicentry.EIDString);
             Node.ImageKey = "musicentry";
             Node.SelectedImageKey = "musicentry";
             if (musicentry.VH != null)

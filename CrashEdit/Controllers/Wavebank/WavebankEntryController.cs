@@ -10,7 +10,7 @@ namespace CrashEdit
         public WavebankEntryController(EntryChunkController entrychunkcontroller,WavebankEntry wavebankentry) : base(entrychunkcontroller,wavebankentry)
         {
             this.wavebankentry = wavebankentry;
-            Node.Text = "Wavebank Entry";
+            Node.Text = string.Format("Wavebank Entry ({0})",wavebankentry.EIDString);
             Node.ImageKey = "wavebankentry";
             Node.SelectedImageKey = "wavebankentry";
         }

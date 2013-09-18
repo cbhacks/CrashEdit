@@ -10,7 +10,7 @@ namespace CrashEdit
         public SoundEntryController(EntryChunkController entrychunkcontroller,SoundEntry soundentry) : base(entrychunkcontroller,soundentry)
         {
             this.soundentry = soundentry;
-            Node.Text = "Sound Entry";
+            Node.Text = string.Format("Sound Entry ({0})",soundentry.EIDString);
             Node.ImageKey = "soundentry";
             Node.SelectedImageKey = "soundentry";
         }

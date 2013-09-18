@@ -9,7 +9,7 @@ namespace CrashEdit
         public T21EntryController(EntryChunkController entrychunkcontroller,T21Entry t21entry) : base(entrychunkcontroller,t21entry)
         {
             this.t21entry = t21entry;
-            Node.Text = "T21 Entry";
+            Node.Text = string.Format("T21 Entry ({0})",t21entry.EIDString);
             Node.ImageKey = "t21entry";
             Node.SelectedImageKey = "t21entry";
         }

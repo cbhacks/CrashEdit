@@ -9,7 +9,7 @@ namespace CrashEdit
         public DemoEntryController(EntryChunkController entrychunkcontroller,DemoEntry demoentry) : base(entrychunkcontroller,demoentry)
         {
             this.demoentry = demoentry;
-            Node.Text = "Demo Entry";
+            Node.Text = string.Format("Demo Entry ({0})",demoentry.EIDString);
             Node.ImageKey = "demoentry";
             Node.SelectedImageKey = "demoentry";
         }
