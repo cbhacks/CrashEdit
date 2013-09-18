@@ -9,137 +9,137 @@ namespace CrashEdit
     internal static class Resources
     {
         [Resource("NSDIcon")]
-        private static Icon nsdicon;
+        private static Icon nsdicon = null;
 
         [Resource("NSFIcon")]
-        private static Icon nsficon;
+        private static Icon nsficon = null;
 
         [Resource("ArrowImage")]
-        private static Image arrowimage;
+        private static Image arrowimage = null;
 
         [Resource("BinocularsImage")]
-        private static Image binocularsimage;
+        private static Image binocularsimage = null;
 
         [Resource("BinocularsNextImage")]
-        private static Image binocularsnextimage;
+        private static Image binocularsnextimage = null;
 
         [Resource("FileImage")]
-        private static Image fileimage;
+        private static Image fileimage = null;
 
         [Resource("FolderImage")]
-        private static Image folderimage;
+        private static Image folderimage = null;
 
         [Resource("ImageImage")]
-        private static Image imageimage;
+        private static Image imageimage = null;
 
         [Resource("MusicImage")]
-        private static Image musicimage;
+        private static Image musicimage = null;
 
         [Resource("OpenImage")]
-        private static Image openimage;
+        private static Image openimage = null;
 
         [Resource("SaveImage")]
-        private static Image saveimage;
+        private static Image saveimage = null;
 
         [Resource("SpeakerImage")]
-        private static Image speakerimage;
+        private static Image speakerimage = null;
 
         [Resource("ThingImage")]
-        private static Image thingimage;
+        private static Image thingimage = null;
 
         [Resource("BlueJournalImage")]
-        private static Image bluejournalimage;
+        private static Image bluejournalimage = null;
 
         [Resource("WhiteJournalImage")]
-        private static Image whitejournalimage;
+        private static Image whitejournalimage = null;
 
         [Resource("YellowJournalImage")]
-        private static Image yellowjournalimage;
+        private static Image yellowjournalimage = null;
 
         [Resource("ActivatorBoxTexture")]
         [ExternalTexture(2,1)]
-        private static Bitmap activatorboxtexture;
+        private static Bitmap activatorboxtexture = null;
 
         [Resource("AppleTexture")]
-        private static Bitmap appletexture;
+        private static Bitmap appletexture = null;
 
         [Resource("AppleBoxTexture")]
         [ExternalTexture(4,0)]
-        private static Bitmap appleboxtexture;
+        private static Bitmap appleboxtexture = null;
 
         [Resource("ArrowBoxTexture")]
         [ExternalTexture(5,0)]
-        private static Bitmap arrowboxtexture;
+        private static Bitmap arrowboxtexture = null;
 
         [Resource("BodyslamBoxTexture")]
         [ExternalTexture(0,1)]
-        private static Bitmap bodyslamboxtexture;
+        private static Bitmap bodyslamboxtexture = null;
 
         [Resource("BoxTexture")]
         [ExternalTexture(0,0)]
-        private static Bitmap boxtexture;
+        private static Bitmap boxtexture = null;
 
         [Resource("CheckpointTexture")]
         [ExternalTexture(6,0)]
-        private static Bitmap checkpointtexture;
+        private static Bitmap checkpointtexture = null;
 
         [Resource("DetonatorBoxTexture")]
         [ExternalTexture(3,1)]
-        private static Bitmap detonatorboxtexture;
+        private static Bitmap detonatorboxtexture = null;
 
         [Resource("DetonatorBoxTopTexture")]
-        private static Bitmap detonatorboxtoptexture;
+        private static Bitmap detonatorboxtoptexture = null;
 
         [Resource("IronArrowBoxTexture")]
         [ExternalTexture(4,1)]
-        private static Bitmap ironarrowboxtexture;
+        private static Bitmap ironarrowboxtexture = null;
 
         [Resource("IronBoxTexture")]
         [ExternalTexture(1,1)]
-        private static Bitmap ironboxtexture;
+        private static Bitmap ironboxtexture = null;
 
         [Resource("LifeTexture")]
-        private static Bitmap lifetexture;
+        private static Bitmap lifetexture = null;
 
         [Resource("LifeBoxTexture")]
         [ExternalTexture(3,0)]
-        private static Bitmap lifeboxtexture;
+        private static Bitmap lifeboxtexture = null;
 
         [Resource("MaskTexture")]
-        private static Bitmap masktexture;
+        private static Bitmap masktexture = null;
 
         [Resource("MaskBoxTexture")]
         [ExternalTexture(2,0)]
-        private static Bitmap maskboxtexture;
+        private static Bitmap maskboxtexture = null;
 
         [Resource("NitroTexture")]
         [ExternalTexture(7,1)]
-        private static Bitmap nitrotexture;
+        private static Bitmap nitrotexture = null;
 
         [Resource("NitroTopTexture")]
         [ExternalTexture(6,1)]
-        private static Bitmap nitrotoptexture;
+        private static Bitmap nitrotoptexture = null;
 
         [Resource("QuestionMarkBoxTexture")]
         [ExternalTexture(1,0)]
-        private static Bitmap questionmarkboxtexture;
+        private static Bitmap questionmarkboxtexture = null;
 
         [Resource("TNTTexture")]
         [ExternalTexture(8,0)]
-        private static Bitmap tnttexture;
+        private static Bitmap tnttexture = null;
 
         [Resource("TNTTopTexture")]
         [ExternalTexture(7,0)]
-        private static Bitmap tnttoptexture;
+        private static Bitmap tnttoptexture = null;
 
         [Resource("UnknownBoxTexture")]
-        private static Bitmap unknownboxtexture;
+        private static Bitmap unknownboxtexture = null;
 
         [Resource("UnknownBoxTopTexture")]
-        private static Bitmap unknownboxtoptexture;
+        private static Bitmap unknownboxtoptexture = null;
 
         [Resource("UnknownPickupTexture")]
-        private static Bitmap unknownpickuptexture;
+        private static Bitmap unknownpickuptexture = null;
 
         static Resources()
         {
