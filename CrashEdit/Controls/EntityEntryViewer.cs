@@ -188,12 +188,14 @@ namespace CrashEdit
                     break;
                 case 2: // Normal
                 case 3: // Arrow
-                case 4: // Checkpoint
                 case 6: // Apple
                 case 8: // Life
                 case 9: // Mask
                 case 10: // Question Mark
                     LoadTexture(Resources.BoxTexture);
+                    break;
+                case 4: // Checkpoint
+                    LoadTexture(Resources.CheckpointTexture);
                     break;
                 case 5: // Iron
                 case 7: // Activator
