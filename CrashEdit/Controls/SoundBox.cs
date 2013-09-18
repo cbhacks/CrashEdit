@@ -102,7 +102,7 @@ namespace CrashEdit
 
         void tbbExport_Click(object sender,EventArgs e)
         {
-            FileUtil.SaveFile(samples.Save(),FileUtil.AnyFilter);
+            FileUtil.SaveFile(samples.Save(),FileFilters.Any);
         }
 
         private void Play(int samplerate)
@@ -116,7 +116,7 @@ namespace CrashEdit
         private void ExportWave(int samplerate)
         {
             byte[] wave = WaveConv.ToWave(samples.ToPCM(),samplerate).Save();
-            FileUtil.SaveFile(wave,FileUtil.WaveFilter + "|" + FileUtil.AnyFilter);
+            FileUtil.SaveFile(wave,FileFilters.Wave + "|" + FileFilters.Any);
         }
 
         protected override void Dispose(bool disposing)

@@ -149,7 +149,7 @@ namespace CrashEdit
         {
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
-                dialog.Filter = FileUtil.NSFFilter + "|" + FileUtil.AnyFilter;
+                dialog.Filter = FileFilters.NSF + "|" + FileFilters.Any;
                 dialog.Multiselect = true;
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {

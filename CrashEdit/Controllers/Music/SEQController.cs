@@ -35,7 +35,7 @@ namespace CrashEdit
         private void Menu_Replace_SEQ()
         {
             int i = musicentrycontroller.MusicEntry.SEP.SEQs.IndexOf(seq);
-            byte[] data = FileUtil.OpenFile(FileUtil.SEQFilter + "|" + FileUtil.AnyFilter);
+            byte[] data = FileUtil.OpenFile(FileFilters.SEQ + "|" + FileFilters.Any);
             if (data != null)
             {
                 seq = SEQ.Load(data);
@@ -52,13 +52,13 @@ namespace CrashEdit
         private void Menu_Export_SEQ()
         {
             byte[] data = seq.Save();
-            FileUtil.SaveFile(data,FileUtil.SEQFilter + "|" + FileUtil.AnyFilter);
+            FileUtil.SaveFile(data,FileFilters.SEQ + "|" + FileFilters.Any);
         }
 
         private void Menu_Export_SEQ_MIDI()
         {
             byte[] data = seq.ToMIDI();
-            FileUtil.SaveFile(data,FileUtil.MIDIFilter + "|" + FileUtil.AnyFilter);
+            FileUtil.SaveFile(data,FileFilters.MIDI + "|" + FileFilters.Any);
         }
     }
 }

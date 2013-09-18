@@ -35,7 +35,7 @@ namespace CrashEdit
 
         void tbbExport_Click(object sender,EventArgs e)
         {
-            FileUtil.SaveFile(data,FileUtil.AnyFilter);
+            FileUtil.SaveFile(data,FileFilters.Any);
         }
     }
 }

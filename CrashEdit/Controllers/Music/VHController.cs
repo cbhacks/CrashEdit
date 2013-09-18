@@ -33,7 +33,7 @@ namespace CrashEdit
 
         private void Menu_Replace_VH()
         {
-            byte[] data = FileUtil.OpenFile(FileUtil.VHFilter + "|" + FileUtil.AnyFilter);
+            byte[] data = FileUtil.OpenFile(FileFilters.VH + "|" + FileFilters.Any);
             if (data != null)
             {
                 vh = VH.Load(data);
@@ -50,7 +50,7 @@ namespace CrashEdit
         private void Menu_Export_VH()
         {
             byte[] data = vh.Save();
-            FileUtil.SaveFile(data,FileUtil.VHFilter + "|" + FileUtil.AnyFilter);
+            FileUtil.SaveFile(data,FileFilters.VH + "|" + FileFilters.Any);
         }
     }
 }

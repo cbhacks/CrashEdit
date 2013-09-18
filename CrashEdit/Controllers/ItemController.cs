@@ -39,7 +39,7 @@ namespace CrashEdit
         private void Menu_Replace_Item()
         {
             int i = mysteryentrycontroller.MysteryEntry.Items.IndexOf(item);
-            byte[] data = FileUtil.OpenFile(FileUtil.AnyFilter);
+            byte[] data = FileUtil.OpenFile(FileFilters.Any);
             if (data != null)
             {
                 item = data;
