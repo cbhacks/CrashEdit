@@ -9,6 +9,7 @@ namespace CrashEdit
         public const string AnyFilter = "All Files (*.*)|*.*";
         public const string NSFFilter = "NSF Files (*.nsf)|*.nsf";
         public const string WaveFilter = "Wave Files (*.wav)|*.wav";
+        public const string OBJFilter = "Wavefront OBJ Files (*.obj)|*.obj";
         public const string VHFilter = "VAB Header Files (*.vh)|*.vh";
         public const string VBFilter = "VAB Body Files (*.vb)|*.vb";
         public const string VABFilter = "VAB Files (*.vab)|*.vab";

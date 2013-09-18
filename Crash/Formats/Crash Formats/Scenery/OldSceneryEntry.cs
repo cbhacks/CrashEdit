@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 
 namespace Crash
@@ -66,6 +67,28 @@ namespace Crash
                 vertices[i].Save().CopyTo(items[2],i * 8);
             }
             return new UnprocessedEntry(items,EID,Type);
+        }
+
+        public byte[] ToOBJ()
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                using (StreamWriter obj = new StreamWriter(stream))
+                {
+                    obj.WriteLine("# Vertices");
+                    foreach (OldSceneryVertex vertex in vertices)
+                    {
+                        obj.WriteLine("v {0} {1} {2}",vertex.X,vertex.Y,vertex.Z);
+                    }
+                    obj.WriteLine();
+                    obj.WriteLine("# Polygons");
+                    foreach (OldSceneryPolygon polygon in polygons)
+                    {
+                        obj.WriteLine("f {0} {1} {2}",polygon.VertexA + 1,polygon.VertexB + 1,polygon.VertexC + 1);
+                    }
+                }
+                return stream.ToArray();
+            }
         }
     }
 }
