@@ -8,6 +8,7 @@ namespace CrashEdit
         public const string NSF = "NSF Files (*.nsf)|*.nsf";
         public const string Wave = "Wave Files (*.wav)|*.wav";
         public const string OBJ = "Wavefront OBJ Files (*.obj)|*.obj";
+        public const string COLLADA = "COLLADA Files (*.dae)|*.dae";
         public const string VH = "VAB Header Files (*.vh)|*.vh";
         public const string VB = "VAB Body Files (*.vb)|*.vb";
         public const string VAB = "VAB Files (*.vab)|*.vab";
