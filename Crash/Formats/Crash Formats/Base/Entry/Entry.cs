@@ -73,7 +73,7 @@ namespace Crash
             eid >>= 1;
             for (int i = 0;i < 5;i++)
             {
-                str[i] = EIDStringCharacterSet[eid & 0x3F];
+                str[4 - i] = EIDStringCharacterSet[eid & 0x3F];
                 eid >>= 6;
             }
             return new string(str);
