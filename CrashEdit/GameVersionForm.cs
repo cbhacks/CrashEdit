@@ -46,9 +46,9 @@ namespace CrashEdit
                 {
                     return GameVersion.Crash1BetaMAR08;
                 }
-                else if (optCrash1MAR08.Checked)
+                else if (optCrash1MAY11.Checked)
                 {
-                    return GameVersion.Crash1BetaMAR08;
+                    return GameVersion.Crash1BetaMAY11;
                 }
                 else if (optCrash2Beta.Checked)
                 {
