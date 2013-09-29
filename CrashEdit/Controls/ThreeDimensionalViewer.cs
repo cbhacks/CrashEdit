@@ -171,6 +171,7 @@ namespace CrashEdit
                 case Keys.Right:
                 case Keys.A:
                 case Keys.Z:
+                case Keys.R:
                     return true;
             }
             return base.IsInputKey(keyData);
@@ -198,6 +199,9 @@ namespace CrashEdit
                     break;
                 case Keys.Z:
                     keyz = true;
+                    break;
+                case Keys.R:
+                    ResetCamera();
                     break;
             }
         }
