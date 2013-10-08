@@ -75,6 +75,10 @@ namespace CrashEdit
             {
                 return new T15EntryController(this,(T15Entry)entry);
             }
+            else if (entry is OldT17Entry)
+            {
+                return new OldT17EntryController(this,(OldT17Entry)entry);
+            }
             else if (entry is T17Entry)
             {
                 return new T17EntryController(this,(T17Entry)entry);
