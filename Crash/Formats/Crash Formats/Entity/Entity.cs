@@ -86,11 +86,11 @@ namespace Crash
         [EntityPropertyField(0x2C)]
         private string name;
         [EntityPropertyField(0x4B)]
-        private List<EntityPosition> positions;
+        private List<EntityPosition> positions = null;
         [EntityPropertyField(0x9F)]
         private EntityID? id;
         [EntityPropertyField(0xA4)]
-        private List<EntitySetting> settings;
+        private List<EntitySetting> settings = null;
         [EntityPropertyField(0xA9)]
         private int? type;
         [EntityPropertyField(0xAA)]
