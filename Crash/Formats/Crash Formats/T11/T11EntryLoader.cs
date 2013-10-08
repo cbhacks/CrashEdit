@@ -13,7 +13,7 @@ namespace Crash
         {
             if (items == null)
                 throw new ArgumentNullException("items");
-            if (items.Length < 3)
+            if (items.Length != 3 && items.Length != 5 && items.Length != 6)
             {
                 ErrorManager.SignalError("T11Entry: Wrong number of items");
             }
