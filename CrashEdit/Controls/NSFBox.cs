@@ -36,6 +36,7 @@ namespace CrashEdit
                 imglist.Images.Add("entityentry",Resources.ThingImage);
                 imglist.Images.Add("t11entry",Resources.ThingImage);
                 imglist.Images.Add("soundentry",Resources.SpeakerImage);
+                imglist.Images.Add("oldmusicentry",Resources.MusicImage);
                 imglist.Images.Add("musicentry",Resources.MusicImage);
                 imglist.Images.Add("wavebankentry",Resources.MusicImage);
                 imglist.Images.Add("oldt15entry",Resources.ThingImage);

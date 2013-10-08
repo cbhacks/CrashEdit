@@ -67,6 +67,10 @@ namespace CrashEdit
             {
                 return new SoundEntryController(this,(SoundEntry)entry);
             }
+            else if (entry is OldMusicEntry)
+            {
+                return new OldMusicEntryController(this,(OldMusicEntry)entry);
+            }
             else if (entry is MusicEntry)
             {
                 return new MusicEntryController(this,(MusicEntry)entry);

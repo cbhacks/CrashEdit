@@ -61,6 +61,8 @@
     <Compile Include="Formats\Crash Formats\Entity\OldEntityEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Models\OldModelEntry.cs" />
     <Compile Include="Formats\Crash Formats\Models\OldModelEntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Music\OldMusicEntry.cs" />
+    <Compile Include="Formats\Crash Formats\Music\OldMusicEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\OldSceneryEntry.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\OldSceneryEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\OldSceneryPolygon.cs" />
