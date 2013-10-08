@@ -48,6 +48,7 @@
     <Compile Include="Controllers\ChunkController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\ControllerMenuDelegate.cs" />
+    <Compile Include="Controllers\OldT15EntryController.cs" />
     <Compile Include="Controllers\OldT17EntryController.cs" />
     <Compile Include="Controllers\Entity\OldEntityEntryController.cs" />
     <Compile Include="Controllers\Model\OldModelEntryController.cs" />
