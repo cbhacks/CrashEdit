@@ -47,6 +47,10 @@ namespace CrashEdit
             {
                 return new T4EntryController(this,(T4Entry)entry);
             }
+            else if (entry is T6Entry)
+            {
+                return new T6EntryController(this,(T6Entry)entry);
+            }
             else if (entry is OldEntityEntry)
             {
                 return new OldEntityEntryController(this,(OldEntityEntry)entry);
