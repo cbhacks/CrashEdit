@@ -9,7 +9,7 @@ namespace Crash
         {
             if (items == null)
                 throw new ArgumentNullException("items");
-            return new T1Entry(items,eid);
+            return new T18Entry(items,eid);
         }
     }
 }
