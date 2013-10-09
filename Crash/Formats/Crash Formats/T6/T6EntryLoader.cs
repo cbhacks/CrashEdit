@@ -3,6 +3,7 @@ using System;
 namespace Crash
 {
     [EntryType(6,GameVersion.Crash1BetaMAR08)]
+    [EntryType(6,GameVersion.Crash1BetaMAY11)]
     public sealed class T6EntryLoader : EntryLoader
     {
         public override Entry Load(byte[][] items,int eid)
