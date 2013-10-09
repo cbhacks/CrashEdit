@@ -45,6 +45,7 @@ namespace CrashEdit
                 imglist.Images.Add("t17entry",Resources.ThingImage);
                 imglist.Images.Add("t18entry",Resources.ThingImage);
                 imglist.Images.Add("demoentry",Resources.ThingImage);
+                imglist.Images.Add("t20entry",Resources.ThingImage);
                 imglist.Images.Add("speechentry",Resources.SpeakerImage);
                 imglist.Images.Add("t21entry",Resources.ThingImage);
                 imglist.Images.Add("unprocessedentry",Resources.ThingImage);

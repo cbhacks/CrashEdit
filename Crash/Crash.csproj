@@ -73,6 +73,8 @@
     <Compile Include="Formats\Crash Formats\T17\OldT17EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T18\T18Entry.cs" />
     <Compile Include="Formats\Crash Formats\T18\T18EntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\T20\T20Entry.cs" />
+    <Compile Include="Formats\Crash Formats\T20\T20EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T6\T6Entry.cs" />
     <Compile Include="Formats\Crash Formats\T6\T6EntryLoader.cs" />
     <Compile Include="Utility\Aligner.cs" />

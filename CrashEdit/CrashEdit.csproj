@@ -48,6 +48,7 @@
     <Compile Include="Controllers\ChunkController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\ControllerMenuDelegate.cs" />
+    <Compile Include="Controllers\T20EntryController.cs" />
     <Compile Include="Controllers\Music\OldSEQController.cs" />
     <Compile Include="Controllers\Music\OldVHController.cs" />
     <Compile Include="Controllers\Music\OldMusicEntryController.cs" />

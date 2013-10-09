@@ -103,6 +103,10 @@ namespace CrashEdit
             {
                 return new DemoEntryController(this,(DemoEntry)entry);
             }
+            else if (entry is T20Entry)
+            {
+                return new T20EntryController(this,(T20Entry)entry);
+            }
             else if (entry is SpeechEntry)
             {
                 return new SpeechEntryController(this,(SpeechEntry)entry);
