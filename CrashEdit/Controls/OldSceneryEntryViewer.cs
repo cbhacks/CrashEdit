@@ -19,13 +19,13 @@ namespace CrashEdit
         {
             this.entries = new List<OldSceneryEntry>();
             this.entries.Add(entry);
-            this.displaylist = 0;
+            this.displaylist = -1;
         }
 
         public OldSceneryEntryViewer(IEnumerable<OldSceneryEntry> entries)
         {
             this.entries = new List<OldSceneryEntry>(entries);
-            this.displaylist = 0;
+            this.displaylist = -1;
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -44,7 +44,7 @@ namespace CrashEdit
 
         protected override void RenderObjects()
         {
-            if (displaylist == 0)
+            if (displaylist == -1)
             {
                 displaylist = GL.GenLists(1);
                 GL.NewList(displaylist,ListMode.CompileAndExecute);
@@ -75,7 +75,10 @@ namespace CrashEdit
 
         protected override void Dispose(bool disposing)
         {
-            GL.DeleteLists(displaylist,1);
+            if (displaylist != -1)
+            {
+                GL.DeleteLists(displaylist,1);
+            }
             base.Dispose(disposing);
         }
     }
