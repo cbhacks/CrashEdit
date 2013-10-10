@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 
 namespace Crash
@@ -40,6 +41,7 @@ namespace Crash
         {
             ErrorSignalEventArgs e = new ErrorSignalEventArgs(message);
             SignalErrorWithArgs(e);
+            throw new InvalidOperationException();
         }
 
         public static void SignalIgnorableError(string message)
