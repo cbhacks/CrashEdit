@@ -5,7 +5,6 @@ using System.Windows.Forms;
 
 namespace CrashEdit
 {
-    [EditorControl(typeof(TextureChunk))]
     public sealed class TextureChunkBox : UserControl
     {
         private TabControl tbcTabs;

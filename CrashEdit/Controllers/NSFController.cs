@@ -21,7 +21,7 @@ namespace CrashEdit
                 }
                 else if (chunk is TextureChunk)
                 {
-                    AddNode(new LegacyController(chunk));
+                    AddNode(new TextureChunkController(this,(TextureChunk)chunk));
                 }
                 else if (chunk is OldSoundChunk)
                 {

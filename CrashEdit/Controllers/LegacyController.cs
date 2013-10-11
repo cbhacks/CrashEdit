@@ -25,11 +25,7 @@ namespace CrashEdit
 
         private static TreeNode Populate(object obj)
         {
-            if (obj is Chunk)
-            {
-                return Populate((Chunk)obj);
-            }
-            else if (obj is T4Item)
+            if (obj is T4Item)
             {
                 return Populate((T4Item)obj,-1);
             }
@@ -37,28 +33,6 @@ namespace CrashEdit
             {
                 throw new Exception();
             }
-        }
-
-        private static TreeNode Populate(Chunk chunk)
-        {
-            if (chunk is TextureChunk)
-            {
-                return Populate((TextureChunk)chunk);
-            }
-            else
-            {
-                throw new Exception();
-            }
-        }
-
-        private static TreeNode Populate(TextureChunk chunk)
-        {
-            TreeNode node = new TreeNode();
-            node.Tag = chunk;
-            node.Text = "Texture Chunk";
-            node.ImageKey = "texturechunk";
-            node.SelectedImageKey = "texturechunk";
-            return node;
         }
 
         private static TreeNode Populate(T4Item t4item,int id)
