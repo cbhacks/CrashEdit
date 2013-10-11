@@ -14,7 +14,7 @@ namespace CrashEdit
             Node.SelectedImageKey = "t4entry";
             foreach (T4Item t4item in t4entry.T4Items)
             {
-                AddNode(new LegacyController(t4item));
+                AddNode(new T4ItemController(this,t4item));
             }
         }
 

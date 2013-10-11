@@ -3,7 +3,6 @@ using System.Windows.Forms;
 
 namespace CrashEdit
 {
-    [EditorControl(typeof(T4Item))]
     public sealed class T4ItemBox : UserControl
     {
         private ListBox lstValues;

@@ -48,6 +48,7 @@
     <Compile Include="Controllers\ChunkController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\ControllerMenuDelegate.cs" />
+    <Compile Include="Controllers\T4\T4ItemController.cs" />
     <Compile Include="Controllers\TextureChunkController.cs" />
     <Compile Include="Controllers\T20EntryController.cs" />
     <Compile Include="Controllers\Music\OldSEQController.cs" />
@@ -69,7 +70,7 @@
     <Compile Include="Controllers\Entity\EntityController.cs" />
     <Compile Include="Controllers\Entity\EntityEntryController.cs" />
     <Compile Include="Controllers\Unprocessed\UnprocessedEntryController.cs" />
-    <Compile Include="Controllers\T4EntryController.cs" />
+    <Compile Include="Controllers\T4\T4EntryController.cs" />
     <Compile Include="Controllers\Music\VHController.cs" />
     <Compile Include="Controllers\DemoEntryController.cs" />
     <Compile Include="Controllers\T15EntryController.cs" />
@@ -88,7 +89,6 @@
     <Compile Include="Controllers\Music\MusicEntryController.cs" />
     <Compile Include="Controllers\NormalChunkController.cs" />
     <Compile Include="Controllers\Sound\SoundChunkController.cs" />
-    <Compile Include="Controllers\LegacyController.cs" />
     <Compile Include="Controllers\NSFController.cs" />
     <Compile Include="Controllers\Speech\SpeechChunkController.cs" />
     <Compile Include="Controls\OldSceneryEntryViewer.cs">
@@ -136,7 +136,6 @@
     <Compile Include="Controls\TextureChunkBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="EditorControlAttribute.cs" />
     <Compile Include="HexBox.cs">
       <SubType>Component</SubType>
     </Compile>
