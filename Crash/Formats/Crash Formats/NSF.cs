@@ -129,26 +129,54 @@ namespace Crash
             if (data == null)
                 throw new ArgumentNullException("data");
             int offset = 0;
+            int? firstid = null;
+            List<UnprocessedChunk> prelude = null;
             List<Chunk> chunks = new List<Chunk>();
             while (offset < data.Length)
             {
                 byte[] chunkdata = ReadChunk(data,ref offset);
-                Chunk chunk = Chunk.Load(chunkdata);
-                ErrorManager.EnterSkipRegion();
-                try
+                UnprocessedChunk chunk = Chunk.Load(chunkdata);
+                if (firstid == null)
                 {
-                    chunk = ((UnprocessedChunk)chunk).Process(chunks.Count * 2 + 1);
+                    firstid = chunk.ID;
                 }
-                catch (LoadSkippedException)
+                else if (firstid == chunk.ID)
                 {
+                    if (prelude != null)
+                    {
+                        ErrorManager.SignalError("NSF: Double prelude");
+                    }
+                    prelude = new List<UnprocessedChunk>();
+                    foreach (UnprocessedChunk unprocessedchunk in chunks)
+                    {
+                        prelude.Add(unprocessedchunk);
+                    }
+                    chunks.Clear();
                 }
-                finally
+                if (prelude != null && chunks.Count < prelude.Count)
                 {
-                    ErrorManager.ExitSkipRegion();
+                    for (int i = 0;i < Chunk.Length;i++)
+                    {
+                        if (prelude[chunks.Count].Data[i] != chunk.Data[i])
+                        {
+                            ErrorManager.SignalIgnorableError("NSF: Prelude data mismatch");
+                            break;
+                        }
+                    }
                 }
                 chunks.Add(chunk);
             }
-            return new NSF(chunks);
+            if (prelude != null && chunks.Count < prelude.Count)
+            {
+                ErrorManager.SignalIgnorableError("NSF: Prelude is longer than actual data");
+            }
+            if (prelude != null)
+            {
+                ErrorManager.SignalIgnorableError("NSF: Prelude saving is not yet implemented");
+            }
+            NSF nsf = new NSF(chunks);
+            nsf.ProcessChunks();
+            return nsf;
         }
 
         private List<Chunk> chunks;
@@ -163,6 +191,28 @@ namespace Crash
         public IList<Chunk> Chunks
         {
             get { return chunks; }
+        }
+
+        private void ProcessChunks()
+        {
+            for (int i = 0;i < chunks.Count;i++)
+            {
+                ErrorManager.EnterSkipRegion();
+                try
+                {
+                    if (chunks[i] is UnprocessedChunk)
+                    {
+                        chunks[i] = ((UnprocessedChunk)chunks[i]).Process(i * 2 + 1);
+                    }
+                }
+                catch (LoadSkippedException)
+                {
+                }
+                finally
+                {
+                    ErrorManager.ExitSkipRegion();
+                }
+            }
         }
 
         public T FindEID<T>(int eid) where T : class,IEntry

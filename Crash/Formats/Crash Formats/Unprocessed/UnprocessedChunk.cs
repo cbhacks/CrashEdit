@@ -25,6 +25,11 @@ namespace Crash
             get { return data; }
         }
 
+        public int ID
+        {
+            get { return BitConv.FromInt32(data,4); }
+        }
+
         public Chunk Process(int chunkid)
         {
             if (loaders.ContainsKey(Type))
