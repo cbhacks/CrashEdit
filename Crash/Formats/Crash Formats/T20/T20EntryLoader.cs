@@ -4,6 +4,7 @@ namespace Crash
 {
     [EntryType(20,GameVersion.Crash1BetaMAR08)]
     [EntryType(20,GameVersion.Crash1BetaMAY11)]
+    [EntryType(20,GameVersion.Crash1)]
     public sealed class T20EntryLoader : EntryLoader
     {
         public override Entry Load(byte[][] items,int eid)
