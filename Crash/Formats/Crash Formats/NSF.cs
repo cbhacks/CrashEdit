@@ -5,7 +5,7 @@ namespace Crash
 {
     public sealed class NSF
     {
-        private static byte[] ReadChunk(byte[] data,ref int offset)
+        private static byte[] ReadChunk(byte[] data,ref int offset,out bool compressed)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
@@ -19,6 +19,7 @@ namespace Crash
             short magic = BitConv.FromInt16(data,offset);
             if (magic == Chunk.Magic)
             {
+                compressed = false;
                 if (data.Length < offset + Chunk.Length)
                 {
                     ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
@@ -28,6 +29,7 @@ namespace Crash
             }
             else if (magic == Chunk.CompressedMagic)
             {
+                compressed = true;
                 int pos = 0;
                 if (data.Length < offset + 12)
                 {
@@ -119,6 +121,7 @@ namespace Crash
             }
             else
             {
+                compressed = false; // Fixes a stupid compile error
                 ErrorManager.SignalError("NSF.ReadChunk: Unknown magic number");
             }
             return result;
@@ -132,9 +135,12 @@ namespace Crash
             int? firstid = null;
             List<UnprocessedChunk> prelude = null;
             List<Chunk> chunks = new List<Chunk>();
+            List<bool> preludecompression = null;
+            List<bool> chunkcompression = new List<bool>();
             while (offset < data.Length)
             {
-                byte[] chunkdata = ReadChunk(data,ref offset);
+                bool compressed;
+                byte[] chunkdata = ReadChunk(data,ref offset,out compressed);
                 UnprocessedChunk chunk = Chunk.Load(chunkdata);
                 if (firstid == null)
                 {
@@ -152,7 +158,10 @@ namespace Crash
                         prelude.Add(unprocessedchunk);
                     }
                     chunks.Clear();
+                    preludecompression = chunkcompression;
+                    chunkcompression = new List<bool>();
                 }
+                chunkcompression.Add(compressed);
                 if (prelude != null && chunks.Count < prelude.Count)
                 {
                     for (int i = 0;i < Chunk.Length;i++)
@@ -173,6 +182,13 @@ namespace Crash
             if (prelude != null)
             {
                 ErrorManager.SignalIgnorableError("NSF: Prelude saving is not yet implemented");
+            }
+            foreach (bool compressed in chunkcompression)
+            {
+                if (compressed)
+                {
+                    ErrorManager.SignalIgnorableError("NSF: Non-prelude chunk was compressed");
+                }
             }
             NSF nsf = new NSF(chunks);
             nsf.ProcessChunks();
