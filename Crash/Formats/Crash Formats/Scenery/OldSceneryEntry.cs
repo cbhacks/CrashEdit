@@ -14,6 +14,8 @@ namespace Crash
 
         public OldSceneryEntry(byte[] info,IEnumerable<OldSceneryPolygon> polygons,IEnumerable<OldSceneryVertex> vertices,byte[] extradata,int eid) : base(eid)
         {
+            if (info == null)
+                throw new ArgumentNullException("info");
             this.info = info;
             this.polygons = new List<OldSceneryPolygon>(polygons);
             this.vertices = new List<OldSceneryVertex>(vertices);
