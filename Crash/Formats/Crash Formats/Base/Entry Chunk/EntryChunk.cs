@@ -29,11 +29,6 @@ namespace Crash
             get;
         }
 
-        protected abstract int AlignmentOffset
-        {
-            get;
-        }
-
         public T FindEID<T>(int eid) where T : class,IEntry
         {
             foreach (Entry entry in entries)
@@ -55,24 +50,22 @@ namespace Crash
             BitConv.ToInt32(data,8,entries.Count);
             // Checksum is here, but calculated later
             int offset = 20 + entries.Count * 4;
-            Aligner.Align(ref offset,Alignment,AlignmentOffset);
-            BitConv.ToInt32(data,16,offset);
             for (int i = 0;i < entries.Count;i++)
             {
-                byte[] entrydata = entries[i].Save();
+                UnprocessedEntry entry = entries[i].Unprocess();
+                byte[] entrydata = entry.Save();
+                offset += entry.HeaderLength;
+                Aligner.Align(ref offset,Alignment);
+                offset -= entry.HeaderLength;
                 if (offset + entrydata.Length > Length)
                 {
                     throw new PackingException();
                 }
+                BitConv.ToInt32(data,16 + i * 4,offset);
                 entrydata.CopyTo(data,offset);
                 offset += entrydata.Length;
-                if (i < entries.Count - 1)
-                {
-                    // Ugly hack
-                    Aligner.Align(ref offset,Alignment,AlignmentOffset);
-                }
-                BitConv.ToInt32(data,20 + i * 4,offset);
             }
+            BitConv.ToInt32(data,16 + entries.Count * 4,offset);
             int checksum = CalculateChecksum(data);
             BitConv.ToInt32(data,12,checksum);
             return new UnprocessedChunk(data);

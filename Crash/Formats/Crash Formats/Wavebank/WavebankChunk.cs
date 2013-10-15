@@ -21,10 +21,5 @@ namespace Crash
         {
             get { return 16; }
         }
-
-        protected override int AlignmentOffset
-        {
-            get { return 4; }
-        }
     }
 }

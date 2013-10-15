@@ -17,6 +17,11 @@ namespace Crash
             get { return type; }
         }
 
+        public int HeaderLength
+        {
+            get { return 20 + Items.Count * 4; }
+        }
+
         public Entry Process()
         {
             if (loaders.ContainsKey(type))
