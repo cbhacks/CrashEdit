@@ -77,7 +77,8 @@ namespace CrashEdit
         {
             if (displaylist != -1)
             {
-                GL.DeleteLists(displaylist,1);
+                // Crashes when closing the program
+                //GL.DeleteLists(displaylist,1);
             }
             base.Dispose(disposing);
         }
