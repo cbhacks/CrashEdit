@@ -11,7 +11,7 @@ namespace Crash
         {
             if (items == null)
                 throw new ArgumentNullException("items");
-            if (items.Length != 3)
+            if (items.Length != 3 && items.Length != 4)
             {
                 ErrorManager.SignalError("OldSceneryEntry: Wrong number of items");
             }
@@ -37,7 +37,12 @@ namespace Crash
                 Array.Copy(items[2],i * 8,vertexdata,0,8);
                 vertices[i] = OldSceneryVertex.Load(vertexdata);
             }
-            return new OldSceneryEntry(items[0],polygons,vertices,eid);
+            byte[] extradata = null;
+            if (items.Length >= 4)
+            {
+                extradata = items[3];
+            }
+            return new OldSceneryEntry(items[0],polygons,vertices,extradata,eid);
         }
     }
 }

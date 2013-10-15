@@ -10,12 +10,14 @@ namespace Crash
         private byte[] info;
         private List<OldSceneryPolygon> polygons;
         private List<OldSceneryVertex> vertices;
+        private byte[] extradata;
 
-        public OldSceneryEntry(byte[] info,IEnumerable<OldSceneryPolygon> polygons,IEnumerable<OldSceneryVertex> vertices,int eid) : base(eid)
+        public OldSceneryEntry(byte[] info,IEnumerable<OldSceneryPolygon> polygons,IEnumerable<OldSceneryVertex> vertices,byte[] extradata,int eid) : base(eid)
         {
             this.info = info;
             this.polygons = new List<OldSceneryPolygon>(polygons);
             this.vertices = new List<OldSceneryVertex>(vertices);
+            this.extradata = extradata;
         }
 
         public override int Type
@@ -26,6 +28,11 @@ namespace Crash
         public byte[] Info
         {
             get { return info; }
+        }
+
+        public byte[] ExtraData
+        {
+            get { return extradata; }
         }
 
         public int XOffset
@@ -55,7 +62,7 @@ namespace Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte [3][];
+            byte[][] items = new byte [extradata == null ? 3 : 4][];
             items[0] = info;
             items[1] = new byte [polygons.Count * 8];
             for (int i = 0;i < polygons.Count;i++)
@@ -66,6 +73,10 @@ namespace Crash
             for (int i = 0;i < vertices.Count;i++)
             {
                 vertices[i].Save().CopyTo(items[2],i * 8);
+            }
+            if (extradata != null)
+            {
+                items[3] = extradata;
             }
             return new UnprocessedEntry(items,EID,Type);
         }
