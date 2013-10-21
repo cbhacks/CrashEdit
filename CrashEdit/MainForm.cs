@@ -166,7 +166,7 @@ namespace CrashEdit
             try
             {
                 byte[] nsfdata = File.ReadAllBytes(filename);
-                NSF nsf = NSF.LoadAndProcess(nsfdata);
+                NSF nsf = NSF.LoadAndProcess(nsfdata,Configuration.GameVersion);
                 OpenNSF(filename,nsf);
             }
             catch (LoadAbortedException)

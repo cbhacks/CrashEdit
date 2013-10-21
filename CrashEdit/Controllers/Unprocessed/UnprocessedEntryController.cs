@@ -27,7 +27,7 @@ namespace CrashEdit
             Entry processedentry;
             try
             {
-                processedentry = unprocessedentry.Process();
+                processedentry = unprocessedentry.Process(Configuration.GameVersion);
             }
             catch (LoadAbortedException)
             {

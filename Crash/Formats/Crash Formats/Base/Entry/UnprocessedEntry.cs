@@ -22,9 +22,9 @@ namespace Crash
             get { return 20 + Items.Count * 4; }
         }
 
-        public Entry Process()
+        public Entry Process(GameVersion gameversion)
         {
-            Dictionary<int,EntryLoader> loaders = GetLoaders(Configuration.GameVersion);
+            Dictionary<int,EntryLoader> loaders = GetLoaders(gameversion);
             if (loaders.ContainsKey(type))
             {
                 return loaders[type].Load(((List<byte[]>)Items).ToArray(),EID);

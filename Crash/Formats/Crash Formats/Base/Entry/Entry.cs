@@ -17,25 +17,25 @@ namespace Crash
             loadersets = new Dictionary<GameVersion,Dictionary<int,EntryLoader>>();
         }
 
-        internal static Dictionary<int,EntryLoader> GetLoaders(GameVersion version)
+        internal static Dictionary<int,EntryLoader> GetLoaders(GameVersion gameversion)
         {
-            if (!loadersets.ContainsKey(version))
+            if (!loadersets.ContainsKey(gameversion))
             {
                 Dictionary<int,EntryLoader> loaders = new Dictionary<int,EntryLoader>();
                 foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
                 {
                     foreach (EntryTypeAttribute attribute in type.GetCustomAttributes(typeof(EntryTypeAttribute),false))
                     {
-                        if (attribute.GameVersion == version)
+                        if (attribute.GameVersion == gameversion)
                         {
                             EntryLoader loader = (EntryLoader)Activator.CreateInstance(type);
                             loaders.Add(attribute.Type,loader);
                         }
                     }
                 }
-                loadersets.Add(version,loaders);
+                loadersets.Add(gameversion,loaders);
             }
-            return loadersets[version];
+            return loadersets[gameversion];
         }
 
         public static UnprocessedEntry Load(byte[] data)

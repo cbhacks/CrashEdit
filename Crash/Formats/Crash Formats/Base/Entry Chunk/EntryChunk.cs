@@ -29,7 +29,7 @@ namespace Crash
             get;
         }
 
-        public void ProcessAll()
+        public void ProcessAll(GameVersion gameversion)
         {
             for (int i = 0;i < entries.Count;i++)
             {
@@ -38,7 +38,7 @@ namespace Crash
                     ErrorManager.EnterSkipRegion();
                     try
                     {
-                        entries[i] = ((UnprocessedEntry)entries[i]).Process();
+                        entries[i] = ((UnprocessedEntry)entries[i]).Process(gameversion);
                     }
                     catch (LoadSkippedException)
                     {

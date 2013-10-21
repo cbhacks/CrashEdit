@@ -193,10 +193,10 @@ namespace Crash
             return new NSF(chunks);
         }
 
-        public static NSF LoadAndProcess(byte[] data)
+        public static NSF LoadAndProcess(byte[] data,GameVersion gameversion)
         {
             NSF nsf = Load(data);
-            nsf.ProcessAll();
+            nsf.ProcessAll(gameversion);
             return nsf;
         }
 
@@ -214,7 +214,7 @@ namespace Crash
             get { return chunks; }
         }
 
-        public void ProcessAll()
+        public void ProcessAll(GameVersion gameversion)
         {
             for (int i = 0;i < chunks.Count;i++)
             {
@@ -235,7 +235,7 @@ namespace Crash
                 }
                 if (chunks[i] is EntryChunk)
                 {
-                    ((EntryChunk)chunks[i]).ProcessAll();
+                    ((EntryChunk)chunks[i]).ProcessAll(gameversion);
                 }
             }
         }
