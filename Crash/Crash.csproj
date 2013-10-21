@@ -117,7 +117,7 @@
     <Compile Include="Error System\ErrorSignalEventArgs.cs" />
     <Compile Include="Error System\ErrorSignalEventHandler.cs" />
     <Compile Include="Error System\LoadSkippedException.cs" />
-    <Compile Include="Formats\Crash Formats\Unprocessed\UnprocessedEntry.cs" />
+    <Compile Include="Formats\Crash Formats\Base\Entry\UnprocessedEntry.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityPosition.cs" />
     <Compile Include="Formats\Crash Formats\Base\Entry\IEntry.cs" />
     <Compile Include="Formats\Crash Formats\Sound\OldSoundChunk.cs" />
@@ -165,7 +165,7 @@
     <Compile Include="Formats\Crash Formats\NSF.cs" />
     <Compile Include="Formats\Crash Formats\Normal\NormalChunk.cs" />
     <Compile Include="Formats\Crash Formats\Normal\NormalChunkLoader.cs" />
-    <Compile Include="Formats\Crash Formats\Unprocessed\UnprocessedChunk.cs" />
+    <Compile Include="Formats\Crash Formats\Base\Chunk\UnprocessedChunk.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
