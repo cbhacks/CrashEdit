@@ -6,6 +6,7 @@ namespace Crash
     public sealed class VH
     {
         public const int Magic = 0x56414270;
+        public const int OldVersion = 6;
         public const int Version = 7;
 
         public static VH Load(byte[] data)
@@ -20,9 +21,20 @@ namespace Crash
             {
                 ErrorManager.SignalIgnorableError("VH: Magic number is wrong");
             }
-            if (version != Version)
+            bool isoldversion;
+            if (version == Version)
+            {
+                isoldversion = false;
+            }
+            else if (version == OldVersion)
+            {
+                ErrorManager.SignalIgnorableError("VH: VABv6 (crash 1) is not fully supported");
+                isoldversion = true;
+            }
+            else
             {
                 ErrorManager.SignalIgnorableError("VH: Version number is wrong");
+                isoldversion = true;
             }
             int id = BitConv.FromInt32(data,8);
             int size = BitConv.FromInt32(data,12);
@@ -87,7 +99,7 @@ namespace Crash
                 }
                 byte[] tonedata = new byte [32 * 16];
                 Array.Copy(data,32 + 16 * 128 + 32 * 16 * programs.Count,tonedata,0,32 * 16);
-                programs.Add(i,VHProgram.Load(programdata,tonedata));
+                programs.Add(i,VHProgram.Load(programdata,tonedata,isoldversion));
             }
             if (programs.Count != programcount)
             {
@@ -103,9 +115,10 @@ namespace Crash
                 }
                 waves[i] = wave / 2;
             }
-            return new VH(vbsize,volume,panning,attribute1,attribute2,programs,waves);
+            return new VH(isoldversion,vbsize,volume,panning,attribute1,attribute2,programs,waves);
         }
 
+        private bool isoldversion;
         private int vbsize;
         private byte volume;
         private byte panning;
@@ -114,12 +127,13 @@ namespace Crash
         private Dictionary<int,VHProgram> programs;
         private List<int> waves;
 
-        public VH(int vbsize,byte volume,byte panning,byte attribute1,byte attribute2,IDictionary<int,VHProgram> programs,IEnumerable<int> waves)
+        public VH(bool isoldversion,int vbsize,byte volume,byte panning,byte attribute1,byte attribute2,IDictionary<int,VHProgram> programs,IEnumerable<int> waves)
         {
             if (programs == null)
                 throw new ArgumentNullException("programs");
             if (waves == null)
                 throw new ArgumentNullException("waves");
+            this.isoldversion = isoldversion;
             this.vbsize = vbsize;
             this.volume = volume;
             this.panning = panning;
@@ -127,6 +141,11 @@ namespace Crash
             this.attribute2 = attribute2;
             this.programs = new Dictionary<int,VHProgram>(programs);
             this.waves = new List<int>(waves);
+        }
+
+        public bool IsOldVersion
+        {
+            get { return isoldversion; }
         }
 
         public int VBSize
@@ -168,7 +187,7 @@ namespace Crash
         {
             byte[] data = new byte [2592 + 32 * 16 * programs.Count];
             BitConv.ToInt32(data,0,Magic);
-            BitConv.ToInt32(data,4,Version);
+            BitConv.ToInt32(data,4,isoldversion ? OldVersion : Version);
             BitConv.ToInt32(data,8,0);
             BitConv.ToInt32(data,12,data.Length + vbsize * 16);
             BitConv.ToInt16(data,16,-0x1112);
@@ -193,21 +212,22 @@ namespace Crash
                 }
                 else
                 {
-                    new VHProgram().Save().CopyTo(data,32 + 16 * i);
+                    new VHProgram(isoldversion).Save().CopyTo(data,32 + 16 * i);
                 }
             }
             int ii = 0;
-            foreach (VHProgram program in programs.Values)
+            foreach (KeyValuePair<int,VHProgram> kvp in programs)
             {
+                VHProgram program = kvp.Value;
                 for (int j = 0;j < 16;j++)
                 {
                     if (j < program.Tones.Count)
                     {
-                        program.Tones[j].Save(ii).CopyTo(data,2080 + 32 * 16 * ii + 32 * j);
+                        program.Tones[j].Save(kvp.Key).CopyTo(data,2080 + 32 * 16 * ii + 32 * j);
                     }
                     else
                     {
-                        new VHTone().Save(ii).CopyTo(data,2080 + 32 * 16 * ii + 32 * j);
+                        new VHTone(isoldversion).Save(kvp.Key).CopyTo(data,2080 + 32 * 16 * ii + 32 * j);
                     }
                 }
                 ii++;

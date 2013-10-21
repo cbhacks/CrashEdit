@@ -32,9 +32,10 @@ namespace Crash
                 offset += wavelength;
                 waves[i] = new SampleSet(wavelines);
             }
-            return new VAB(vh.Volume,vh.Panning,vh.Attribute1,vh.Attribute2,vh.Programs,waves);
+            return new VAB(vh.IsOldVersion,vh.Volume,vh.Panning,vh.Attribute1,vh.Attribute2,vh.Programs,waves);
         }
 
+        private bool isoldversion;
         private byte volume;
         private byte panning;
         private byte attribute1;
@@ -42,8 +43,9 @@ namespace Crash
         private Dictionary<int,VHProgram> programs;
         private List<SampleSet> waves;
 
-        public VAB(byte volume,byte panning,byte attribute1,byte attribute2,IDictionary<int,VHProgram> programs,IEnumerable<SampleSet> waves)
+        public VAB(bool isoldversion,byte volume,byte panning,byte attribute1,byte attribute2,IDictionary<int,VHProgram> programs,IEnumerable<SampleSet> waves)
         {
+            this.isoldversion = isoldversion;
             this.volume = volume;
             this.panning = panning;
             this.attribute1 = attribute1;
@@ -61,7 +63,7 @@ namespace Crash
                 samples.AddRange(wave.SampleLines);
                 wavelengths.Add(wave.SampleLines.Count);
             }
-            vh = new VH(samples.Count,volume,panning,attribute1,attribute2,programs,wavelengths);
+            vh = new VH(isoldversion,samples.Count,volume,panning,attribute1,attribute2,programs,wavelengths);
             vb = samples.ToArray();
         }
 

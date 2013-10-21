@@ -77,26 +77,51 @@ namespace Crash
         private short adsr2;
         private short wave;
         
-        public VHTone()
+        public VHTone(bool isoldversion)
         {
-            this.priority = 0;
-            this.mode = 0;
-            this.volume = 80;
-            this.panning = 64;
-            this.centernote = 64;
-            this.pitchshift = 0;
-            this.minimumnote = 64;
-            this.maximumnote = 64;
-            this.vibratowidth = 0;
-            this.vibratotime = 0;
-            this.portamentowidth = 0;
-            this.portamentotime = 0;
-            this.pitchbendminimum = 0;
-            this.pitchbendmaximum = 0;
-            unchecked 
+            if (isoldversion)
             {
-                this.adsr1 = (short)0x80FF;
-                this.adsr2 = (short)0x5FDF;
+                this.priority = 0;
+                this.mode = 0;
+                this.volume = 0;
+                this.panning = 0;
+                this.centernote = 0;
+                this.pitchshift = 0;
+                this.minimumnote = 0;
+                this.maximumnote = 0;
+                this.vibratowidth = 0;
+                this.vibratotime = 0;
+                this.portamentowidth = 0;
+                this.portamentotime = 0;
+                this.pitchbendminimum = 0;
+                this.pitchbendmaximum = 0;
+                unchecked
+                {
+                    this.adsr1 = (short)0x80FF;
+                    this.adsr2 = (short)0x5FDF;
+                }
+            }
+            else
+            {
+                this.priority = 0;
+                this.mode = 0;
+                this.volume = 80;
+                this.panning = 64;
+                this.centernote = 64;
+                this.pitchshift = 0;
+                this.minimumnote = 64;
+                this.maximumnote = 64;
+                this.vibratowidth = 0;
+                this.vibratotime = 0;
+                this.portamentowidth = 0;
+                this.portamentotime = 0;
+                this.pitchbendminimum = 0;
+                this.pitchbendmaximum = 0;
+                unchecked
+                {
+                    this.adsr1 = (short)0x80FF;
+                    this.adsr2 = (short)0x5FDF;
+                }
             }
             this.wave = 0;
         }

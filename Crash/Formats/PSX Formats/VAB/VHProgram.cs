@@ -5,7 +5,7 @@ namespace Crash
 {
     public sealed class VHProgram
     {
-        public static VHProgram Load(byte[] data,byte[] tonedata)
+        public static VHProgram Load(byte[] data,byte[] tonedata,bool isoldversion)
         {
             if (data.Length != 16)
                 throw new ArgumentException("Value must be 16 bytes long.","data");
@@ -24,7 +24,7 @@ namespace Crash
             {
                 ErrorManager.SignalError("VHProgram: Tone count is wrong");
             }
-            if (reserved1 != 0xFF)
+            if (reserved1 != (isoldversion ? 0x00 : 0xFF))
             {
                 ErrorManager.SignalIgnorableError("VHProgram: Reserved value 1 is wrong");
             }
@@ -43,9 +43,10 @@ namespace Crash
                 Array.Copy(tonedata,i * 32,thistonedata,0,32);
                 tones[i] = VHTone.Load(thistonedata);
             }
-            return new VHProgram(volume,priority,mode,panning,attribute,tones);
+            return new VHProgram(isoldversion,volume,priority,mode,panning,attribute,tones);
         }
 
+        private bool isoldversion;
         private byte volume;
         private byte priority;
         private byte mode;
@@ -53,26 +54,44 @@ namespace Crash
         private short attribute;
         private List<VHTone> tones;
 
-        public VHProgram()
+        public VHProgram(bool isoldversion)
         {
-            this.volume = 127;
-            this.priority = 255;
-            this.mode = 255;
-            this.panning = 64;
-            this.attribute = 0;
+            this.isoldversion = isoldversion;
+            if (isoldversion)
+            {
+                this.volume = 0;
+                this.priority = 0;
+                this.mode = 0x1A;
+                this.panning = 0;
+                this.attribute = 0;
+            }
+            else
+            {
+                this.volume = 127;
+                this.priority = 255;
+                this.mode = 255;
+                this.panning = 64;
+                this.attribute = 0;
+            }
             this.tones = new List<VHTone>();
         }
 
-        public VHProgram(byte volume,byte priority,byte mode,byte panning,short attribute,IEnumerable<VHTone> tones)
+        public VHProgram(bool isoldversion,byte volume,byte priority,byte mode,byte panning,short attribute,IEnumerable<VHTone> tones)
         {
             if (tones == null)
                 throw new ArgumentNullException("tones");
+            this.isoldversion = isoldversion;
             this.volume = volume;
             this.priority = priority;
             this.mode = mode;
             this.panning = panning;
             this.attribute = attribute;
             this.tones = new List<VHTone>(tones);
+        }
+
+        public bool IsOldVersion
+        {
+            get { return isoldversion; }
         }
 
         public byte Volume
@@ -113,7 +132,7 @@ namespace Crash
             data[2] = priority;
             data[3] = mode;
             data[4] = panning;
-            data[5] = 0xFF;
+            data[5] = isoldversion ? (byte)0x00 : (byte)0xFF;
             BitConv.ToInt16(data,6,attribute);
             BitConv.ToInt32(data,8,-1);
             BitConv.ToInt32(data,12,-1);
