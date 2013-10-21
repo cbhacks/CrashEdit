@@ -190,7 +190,12 @@ namespace Crash
                     ErrorManager.SignalIgnorableError("NSF: Non-prelude chunk was compressed");
                 }
             }
-            NSF nsf = new NSF(chunks);
+            return new NSF(chunks);
+        }
+
+        public static NSF LoadAndProcess(byte[] data)
+        {
+            NSF nsf = Load(data);
             nsf.ProcessAll();
             return nsf;
         }
