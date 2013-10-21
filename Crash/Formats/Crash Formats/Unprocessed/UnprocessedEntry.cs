@@ -24,6 +24,7 @@ namespace Crash
 
         public Entry Process()
         {
+            Dictionary<int,EntryLoader> loaders = GetLoaders(Configuration.GameVersion);
             if (loaders.ContainsKey(type))
             {
                 return loaders[type].Load(((List<byte[]>)Items).ToArray(),EID);

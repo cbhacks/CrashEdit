@@ -15,22 +15,7 @@ namespace Crash
         public static GameVersion GameVersion
         {
             get { return gameversion; }
-            set
-            {
-                Entry.loaders.Clear();
-                foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
-                {
-                    foreach (EntryTypeAttribute attribute in type.GetCustomAttributes(typeof(EntryTypeAttribute),false))
-                    {
-                        if (attribute.GameVersion == value)
-                        {
-                            EntryLoader loader = (EntryLoader)Activator.CreateInstance(type);
-                            Entry.loaders.Add(attribute.Type,loader);
-                        }
-                    }
-                }
-                gameversion = value;
-            }
+            set { gameversion = value; }
         }
     }
 }

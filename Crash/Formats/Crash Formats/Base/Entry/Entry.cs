@@ -10,11 +10,32 @@ namespace Crash
         public const int NullEID = 0x6396347F;
         public const string EIDStringCharacterSet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_!";
 
-        internal static Dictionary<int,EntryLoader> loaders;
+        internal static Dictionary<GameVersion,Dictionary<int,EntryLoader>> loadersets;
 
         static Entry()
         {
-            loaders = new Dictionary<int,EntryLoader>();
+            loadersets = new Dictionary<GameVersion,Dictionary<int,EntryLoader>>();
+        }
+
+        internal static Dictionary<int,EntryLoader> GetLoaders(GameVersion version)
+        {
+            if (!loadersets.ContainsKey(version))
+            {
+                Dictionary<int,EntryLoader> loaders = new Dictionary<int,EntryLoader>();
+                foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
+                {
+                    foreach (EntryTypeAttribute attribute in type.GetCustomAttributes(typeof(EntryTypeAttribute),false))
+                    {
+                        if (attribute.GameVersion == version)
+                        {
+                            EntryLoader loader = (EntryLoader)Activator.CreateInstance(type);
+                            loaders.Add(attribute.Type,loader);
+                        }
+                    }
+                }
+                loadersets.Add(version,loaders);
+            }
+            return loadersets[version];
         }
 
         public static UnprocessedEntry Load(byte[] data)
