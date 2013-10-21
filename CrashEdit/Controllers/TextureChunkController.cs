@@ -15,6 +15,8 @@ namespace CrashEdit
             Node.SelectedImageKey = "texturechunk";
         }
 
+        // MONO USERS
+        // Comment out this function
         protected override Control CreateEditor()
         {
             return new TextureChunkBox(texturechunk);
