@@ -41,6 +41,7 @@ namespace CrashEdit
         private ToolStripButton tbbFindNext;
         private ToolStripButton tbbGoto;
         private TabControl tbcTabs;
+        private GameVersionForm dlgGameVersion;
 
         public MainForm()
         {
@@ -102,6 +103,8 @@ namespace CrashEdit
 
             tbcTabs = new TabControl();
             tbcTabs.Dock = DockStyle.Fill;
+
+            dlgGameVersion = new GameVersionForm();
 
             this.Width = 640;
             this.Height = 480;
@@ -166,13 +169,10 @@ namespace CrashEdit
             try
             {
                 byte[] nsfdata = File.ReadAllBytes(filename);
-                using (GameVersionForm versionform = new GameVersionForm())
+                if (dlgGameVersion.ShowDialog() == DialogResult.OK)
                 {
-                    if (versionform.ShowDialog() == DialogResult.OK)
-                    {
-                        NSF nsf = NSF.LoadAndProcess(nsfdata,versionform.GameVersion);
-                        OpenNSF(filename,nsf,versionform.GameVersion);
-                    }
+                    NSF nsf = NSF.LoadAndProcess(nsfdata,dlgGameVersion.GameVersion);
+                    OpenNSF(filename,nsf,dlgGameVersion.GameVersion);
                 }
             }
             catch (LoadAbortedException)
