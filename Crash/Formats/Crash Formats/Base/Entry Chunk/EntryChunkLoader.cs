@@ -53,18 +53,6 @@ namespace Crash
                 entrydata = new byte [entrysize];
                 Array.Copy(data,entrystart,entrydata,0,entrysize);
                 entries[i] = Entry.Load(entrydata);
-                ErrorManager.EnterSkipRegion();
-                try
-                {
-                    entries[i] = ((UnprocessedEntry)entries[i]).Process();
-                }
-                catch (LoadSkippedException)
-                {
-                }
-                finally
-                {
-                    ErrorManager.ExitSkipRegion();
-                }
             }
             return Load(entries);
         }

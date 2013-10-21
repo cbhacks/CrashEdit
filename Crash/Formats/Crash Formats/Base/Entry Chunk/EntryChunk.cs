@@ -29,6 +29,28 @@ namespace Crash
             get;
         }
 
+        public void ProcessAll()
+        {
+            for (int i = 0;i < entries.Count;i++)
+            {
+                if (entries[i] is UnprocessedEntry)
+                {
+                    ErrorManager.EnterSkipRegion();
+                    try
+                    {
+                        entries[i] = ((UnprocessedEntry)entries[i]).Process();
+                    }
+                    catch (LoadSkippedException)
+                    {
+                    }
+                    finally
+                    {
+                        ErrorManager.ExitSkipRegion();
+                    }
+                }
+            }
+        }
+
         public T FindEID<T>(int eid) where T : class,IEntry
         {
             foreach (Entry entry in entries)

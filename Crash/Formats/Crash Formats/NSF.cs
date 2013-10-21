@@ -191,7 +191,7 @@ namespace Crash
                 }
             }
             NSF nsf = new NSF(chunks);
-            nsf.ProcessChunks();
+            nsf.ProcessAll();
             return nsf;
         }
 
@@ -209,24 +209,28 @@ namespace Crash
             get { return chunks; }
         }
 
-        private void ProcessChunks()
+        public void ProcessAll()
         {
             for (int i = 0;i < chunks.Count;i++)
             {
-                ErrorManager.EnterSkipRegion();
-                try
+                if (chunks[i] is UnprocessedChunk)
                 {
-                    if (chunks[i] is UnprocessedChunk)
+                    ErrorManager.EnterSkipRegion();
+                    try
                     {
                         chunks[i] = ((UnprocessedChunk)chunks[i]).Process(i * 2 + 1);
                     }
+                    catch (LoadSkippedException)
+                    {
+                    }
+                    finally
+                    {
+                        ErrorManager.ExitSkipRegion();
+                    }
                 }
-                catch (LoadSkippedException)
+                if (chunks[i] is EntryChunk)
                 {
-                }
-                finally
-                {
-                    ErrorManager.ExitSkipRegion();
+                    ((EntryChunk)chunks[i]).ProcessAll();
                 }
             }
         }
