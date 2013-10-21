@@ -39,7 +39,6 @@
   </Target>
   -->
   <ItemGroup>
-    <Compile Include="Configuration System\Configuration.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityBasicProperty.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityBasicPropertyLoader.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityID.cs" />

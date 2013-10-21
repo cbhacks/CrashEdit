@@ -166,8 +166,14 @@ namespace CrashEdit
             try
             {
                 byte[] nsfdata = File.ReadAllBytes(filename);
-                NSF nsf = NSF.LoadAndProcess(nsfdata,Configuration.GameVersion);
-                OpenNSF(filename,nsf,Configuration.GameVersion);
+                using (GameVersionForm versionform = new GameVersionForm())
+                {
+                    if (versionform.ShowDialog() == DialogResult.OK)
+                    {
+                        NSF nsf = NSF.LoadAndProcess(nsfdata,versionform.GameVersion);
+                        OpenNSF(filename,nsf,versionform.GameVersion);
+                    }
+                }
             }
             catch (LoadAbortedException)
             {
