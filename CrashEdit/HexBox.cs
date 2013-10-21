@@ -1,3 +1,4 @@
+using Crash;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -12,6 +13,7 @@ namespace CrashEdit
         private int? input;
         private byte[] data;
         private int viewbit;
+        private bool eidview;
 
         public HexBox()
         {
@@ -20,6 +22,7 @@ namespace CrashEdit
             input = null;
             data = new byte [0];
             viewbit = 8;
+            eidview = false;
             TabStop = true;
             SetStyle(ControlStyles.Selectable,true);
             DoubleBuffered = true;
@@ -160,6 +163,7 @@ namespace CrashEdit
                 case Keys.D:
                 case Keys.E:
                 case Keys.F:
+                case Keys.Z:
                 case Keys.Up:
                 case Keys.Down:
                 case Keys.Left:
@@ -260,6 +264,10 @@ namespace CrashEdit
                 case Keys.F:
                     InputNibble(0xF);
                     break;
+                case Keys.Z:
+                    eidview = !eidview;
+                    Invalidate();
+                    break;
                 case Keys.Up:
                     MoveUp();
                     break;
@@ -321,7 +329,7 @@ namespace CrashEdit
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            Pen borderpen = Pens.Black;
+            Brush borderbrush = Brushes.Black;
             Brush brush = Brushes.Navy;
             Brush backbrush = Brushes.White;
             Brush hibackbrush = Brushes.LightGreen;
@@ -330,6 +338,7 @@ namespace CrashEdit
             Brush selbackbrush = Brushes.Navy;
             Brush deadselbackbrush = Brushes.DarkGray;
             Brush inputselbackbrush = Brushes.Red;
+            Brush eidbackbrush = Brushes.Chocolate;
             Brush voidbrush = Brushes.DarkMagenta;
             Font font = new Font(FontFamily.GenericMonospace,8);
             Font selfont = new Font(FontFamily.GenericMonospace,10);
@@ -345,10 +354,12 @@ namespace CrashEdit
             int height = vstep * 16;
             int xsel = position % 16;
             int ysel = position / 16;
+            e.Graphics.FillRectangle(borderbrush,0,0,width + 1,height + 1);
             for (int y = 0;y < 16;y++)
             {
                 for (int x = 0;x < 16;x++)
                 {
+                    int i = x + (offset + y) * 16;
                     Font curfont;
                     Brush curbrush;
                     Brush curbackbrush;
@@ -359,6 +370,19 @@ namespace CrashEdit
                     rect.Width = hstep - 1;
                     rect.Height = vstep - 1;
                     string text;
+                    if (eidview && x % 4 == 0 && i + 3 < data.Length && (data[i] & 1) != 0 && (data[i + 3] & 128) == 0)
+                    {
+                        curfont = font;
+                        curbrush = selbrush;
+                        curbackbrush = eidbackbrush;
+                        curformat = format;
+                        rect.Width = hstep * 4 - 1;
+                        int eid = BitConv.FromInt32(data,i);
+                        e.Graphics.FillRectangle(curbackbrush,rect);
+                        e.Graphics.DrawString(Entry.EIDToString(eid),curfont,curbrush,rect,curformat);
+                        x += 3;
+                        continue;
+                    }
                     if (x == xsel && y + offset == ysel && x + y * 16 < data.Length)
                     {
                         curfont = selfont;
@@ -405,11 +429,14 @@ namespace CrashEdit
                     }
                 }
             }
-            for (int i = 0; i < 17; i++)
+            /*for (int i = 0;i < 17;i += eidview ? 4 : 1)
             {
                 e.Graphics.DrawLine(borderpen,hstep * i,0,hstep * i,height);
-                e.Graphics.DrawLine(borderpen,0,vstep * i,width,vstep * i);
             }
+            for (int i = 0;i < 17;i++)
+            {
+                e.Graphics.DrawLine(borderpen,0,vstep * i,width,vstep * i);
+            }*/
         }
     }
 }
