@@ -6,10 +6,12 @@ namespace CrashEdit
     public sealed class NSFController : Controller
     {
         private NSF nsf;
+        private GameVersion gameversion;
 
-        public NSFController(NSF nsf)
+        public NSFController(NSF nsf,GameVersion gameversion)
         {
             this.nsf = nsf;
+            this.gameversion = gameversion;
             Node.Text = "NSF File";
             Node.ImageKey = "nsf";
             Node.SelectedImageKey = "nsf";
@@ -57,6 +59,11 @@ namespace CrashEdit
         public NSF NSF
         {
             get { return nsf; }
+        }
+
+        public GameVersion GameVersion
+        {
+            get { return gameversion; }
         }
 
         private void Menu_Add_NormalChunk()

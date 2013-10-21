@@ -27,7 +27,7 @@ namespace CrashEdit
             Entry processedentry;
             try
             {
-                processedentry = unprocessedentry.Process(Configuration.GameVersion);
+                processedentry = unprocessedentry.Process(EntryChunkController.NSFController.GameVersion);
             }
             catch (LoadAbortedException)
             {

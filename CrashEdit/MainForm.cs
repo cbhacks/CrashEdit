@@ -167,16 +167,16 @@ namespace CrashEdit
             {
                 byte[] nsfdata = File.ReadAllBytes(filename);
                 NSF nsf = NSF.LoadAndProcess(nsfdata,Configuration.GameVersion);
-                OpenNSF(filename,nsf);
+                OpenNSF(filename,nsf,Configuration.GameVersion);
             }
             catch (LoadAbortedException)
             {
             }
         }
 
-        public void OpenNSF(string filename,NSF nsf)
+        public void OpenNSF(string filename,NSF nsf,GameVersion gameversion)
         {
-            NSFBox nsfbox = new NSFBox(nsf);
+            NSFBox nsfbox = new NSFBox(nsf,gameversion);
             nsfbox.Dock = DockStyle.Fill;
 
             TabPage nsftab = new TabPage(filename);

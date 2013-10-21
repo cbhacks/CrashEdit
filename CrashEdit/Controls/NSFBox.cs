@@ -69,10 +69,10 @@ namespace CrashEdit
         private SplitContainer pnSplit;
         private TreeView trvMain;
 
-        public NSFBox(NSF nsf)
+        public NSFBox(NSF nsf,GameVersion gameversion)
         {
             this.nsf = nsf;
-            this.controller = new NSFController(nsf);
+            this.controller = new NSFController(nsf,gameversion);
 
             this.searchresults = new List<TreeNode>();
 
