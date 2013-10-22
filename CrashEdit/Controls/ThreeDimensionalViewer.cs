@@ -95,6 +95,11 @@ namespace CrashEdit
             };
         }
 
+        protected virtual int CameraRangeMargin
+        {
+            get { return 400; }
+        }
+
         protected abstract IEnumerable<IPosition> CorePositions
         {
             get;
@@ -281,7 +286,7 @@ namespace CrashEdit
             range = Math.Max(range,midx - minx);
             range = Math.Max(range,midy - miny);
             range = Math.Max(range,midz - minz);
-            range += 400;
+            range += CameraRangeMargin;
             rotx = 0;
             roty = 0;
             fullrange = range;

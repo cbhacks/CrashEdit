@@ -41,6 +41,11 @@ namespace CrashEdit
             this.linkedentries = linkedentries;
         }
 
+        protected override int CameraRangeMargin
+        {
+            get { return 1600; }
+        }
+
         protected override IEnumerable<IPosition> CorePositions
         {
             get
