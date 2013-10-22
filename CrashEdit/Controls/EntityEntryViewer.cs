@@ -12,24 +12,52 @@ namespace CrashEdit
 {
     public sealed class EntityEntryViewer : ThreeDimensionalViewer
     {
-        private EntityEntry entry;
+        private static byte[] stipple;
 
-        public EntityEntryViewer(EntityEntry entry)
+        static EntityEntryViewer()
+        {
+            stipple = new byte [128];
+            for (int i = 0;i < 128;i += 8)
+            {
+                const byte stipple1 = 0x55;
+                const byte stipple2 = 0xAA;
+                stipple[i + 0] = stipple1;
+                stipple[i + 1] = stipple1;
+                stipple[i + 2] = stipple1;
+                stipple[i + 3] = stipple1;
+                stipple[i + 4] = stipple2;
+                stipple[i + 5] = stipple2;
+                stipple[i + 6] = stipple2;
+                stipple[i + 7] = stipple2;
+            }
+        }
+
+        private EntityEntry entry;
+        private EntityEntry[] linkedentries;
+
+        public EntityEntryViewer(EntityEntry entry,EntityEntry[] linkedentries)
         {
             this.entry = entry;
+            this.linkedentries = linkedentries;
         }
 
         protected override IEnumerable<IPosition> CorePositions
         {
             get
             {
+                int xoffset = BitConv.FromInt32(entry.Unknown2,0);
+                int yoffset = BitConv.FromInt32(entry.Unknown2,4);
+                int zoffset = BitConv.FromInt32(entry.Unknown2,8);
                 foreach (Entity entity in entry.Entities)
                 {
                     if (entity.Name != null)
                     {
                         foreach (EntityPosition position in entity.Positions)
                         {
-                            yield return position;
+                            int x = position.X * 4 + xoffset;
+                            int y = position.Y * 4 + yoffset;
+                            int z = position.Z * 4 + zoffset;
+                            yield return new Position(x,y,z);
                         }
                     }
                 }
@@ -38,6 +66,24 @@ namespace CrashEdit
 
         protected override void RenderObjects()
         {
+            RenderEntry(entry);
+            GL.Enable(EnableCap.PolygonStipple);
+            GL.PolygonStipple(stipple);
+            foreach (EntityEntry linkedentry in linkedentries)
+            {
+                RenderEntry(linkedentry);
+            }
+            GL.Disable(EnableCap.PolygonStipple);
+        }
+
+        private void RenderEntry(EntityEntry entry)
+        {
+            int xoffset = BitConv.FromInt32(entry.Unknown2,0);
+            int yoffset = BitConv.FromInt32(entry.Unknown2,4);
+            int zoffset = BitConv.FromInt32(entry.Unknown2,8);
+            GL.PushMatrix();
+            GL.Translate(xoffset,yoffset,zoffset);
+            GL.Scale(4,4,4);
             foreach (Entity entity in entry.Entities)
             {
                 if (entity.Name != null)
@@ -45,6 +91,7 @@ namespace CrashEdit
                     RenderEntity(entity);
                 }
             }
+            GL.PopMatrix();
         }
 
         private void RenderEntity(Entity entity)

@@ -23,7 +23,13 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            return new UndockableControl(new EntityEntryViewer(entityentry));
+            int linkedentityentrycount = BitConv.FromInt32(entityentry.Unknown1,400);
+            EntityEntry[] linkedentityentries = new EntityEntry [linkedentityentrycount];
+            for (int i = 0;i < linkedentityentrycount;i++)
+            {
+                linkedentityentries[i] = FindEID<EntityEntry>(BitConv.FromInt32(entityentry.Unknown1,404 + i * 4));
+            }
+            return new UndockableControl(new EntityEntryViewer(entityentry,linkedentityentries));
         }
 
         public EntityEntry EntityEntry
