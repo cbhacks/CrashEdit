@@ -76,6 +76,8 @@ namespace CrashEdit
             GL.PolygonStipple(stipple);
             foreach (EntityEntry linkedentry in linkedentries)
             {
+                if (linkedentry == entry)
+                    continue;
                 RenderEntry(linkedentry);
             }
             GL.Disable(EnableCap.PolygonStipple);
