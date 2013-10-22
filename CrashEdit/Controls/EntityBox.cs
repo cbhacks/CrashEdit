@@ -27,6 +27,7 @@ namespace CrashEdit
             UpdateID();
             UpdateType();
             UpdateSubtype();
+            UpdateBoxCount();
             positionindex = 0;
         }
 
@@ -373,6 +374,34 @@ namespace CrashEdit
         private void numSubtype_ValueChanged(object sender,EventArgs e)
         {
             entity.Subtype = (int)numSubtype.Value;
+        }
+
+        private void UpdateBoxCount()
+        {
+            if (entity.BoxCount.HasValue)
+            {
+                numBoxCount.Value = entity.BoxCount.Value.ValueB;
+            }
+            numBoxCount.Enabled = entity.BoxCount.HasValue;
+            chkBoxCount.Checked = entity.BoxCount.HasValue;
+        }
+
+        private void chkBoxCount_CheckedChanged(object sender,EventArgs e)
+        {
+            numBoxCount.Enabled = chkBoxCount.Checked;
+            if (chkBoxCount.Checked)
+            {
+                entity.BoxCount = new EntitySetting(0,(int)numBoxCount.Value);
+            }
+            else
+            {
+                entity.BoxCount = null;
+            }
+        }
+
+        private void numBoxCount_ValueChanged(object sender,EventArgs e)
+        {
+            entity.BoxCount = new EntitySetting(0,(int)numBoxCount.Value);
         }
     }
 }

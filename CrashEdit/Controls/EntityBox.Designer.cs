@@ -74,6 +74,9 @@ namespace CrashEdit
             this.cmdAddVictim = new System.Windows.Forms.Button();
             this.cmdNextVictim = new System.Windows.Forms.Button();
             this.cmdPreviousVictim = new System.Windows.Forms.Button();
+            this.fraBoxCount = new System.Windows.Forms.GroupBox();
+            this.chkBoxCount = new System.Windows.Forms.CheckBox();
+            this.numBoxCount = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -94,6 +97,8 @@ namespace CrashEdit
             this.tabSpecial.SuspendLayout();
             this.fraVictims.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numVictim)).BeginInit();
+            this.fraBoxCount.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numBoxCount)).BeginInit();
             this.SuspendLayout();
             // 
             // chkType
@@ -596,6 +601,7 @@ namespace CrashEdit
             // tabSpecial
             // 
             this.tabSpecial.AutoScroll = true;
+            this.tabSpecial.Controls.Add(this.fraBoxCount);
             this.tabSpecial.Controls.Add(this.fraVictims);
             this.tabSpecial.Location = new System.Drawing.Point(4,22);
             this.tabSpecial.Name = "tabSpecial";
@@ -672,6 +678,46 @@ namespace CrashEdit
             this.cmdPreviousVictim.Text = "Previous";
             this.cmdPreviousVictim.UseVisualStyleBackColor = true;
             // 
+            // fraBoxCount
+            // 
+            this.fraBoxCount.Controls.Add(this.chkBoxCount);
+            this.fraBoxCount.Controls.Add(this.numBoxCount);
+            this.fraBoxCount.Location = new System.Drawing.Point(3,113);
+            this.fraBoxCount.Name = "fraBoxCount";
+            this.fraBoxCount.Size = new System.Drawing.Size(132,72);
+            this.fraBoxCount.TabIndex = 8;
+            this.fraBoxCount.TabStop = false;
+            this.fraBoxCount.Text = "Box Count";
+            // 
+            // chkBoxCount
+            // 
+            this.chkBoxCount.AutoSize = true;
+            this.chkBoxCount.Location = new System.Drawing.Point(6,19);
+            this.chkBoxCount.Name = "chkBoxCount";
+            this.chkBoxCount.Size = new System.Drawing.Size(65,17);
+            this.chkBoxCount.TabIndex = 0;
+            this.chkBoxCount.Text = "Enabled";
+            this.chkBoxCount.UseVisualStyleBackColor = true;
+            this.chkBoxCount.CheckedChanged += new System.EventHandler(this.chkBoxCount_CheckedChanged);
+            // 
+            // numBoxCount
+            // 
+            this.numBoxCount.Location = new System.Drawing.Point(6,42);
+            this.numBoxCount.Maximum = new decimal(new int[] {
+            8388607,
+            0,
+            0,
+            0});
+            this.numBoxCount.Minimum = new decimal(new int[] {
+            8388608,
+            0,
+            0,
+            -2147483648});
+            this.numBoxCount.Name = "numBoxCount";
+            this.numBoxCount.Size = new System.Drawing.Size(120,20);
+            this.numBoxCount.TabIndex = 1;
+            this.numBoxCount.ValueChanged += new System.EventHandler(this.numBoxCount_ValueChanged);
+            // 
             // EntityBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
@@ -705,6 +751,9 @@ namespace CrashEdit
             this.tabSpecial.ResumeLayout(false);
             this.fraVictims.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numVictim)).EndInit();
+            this.fraBoxCount.ResumeLayout(false);
+            this.fraBoxCount.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numBoxCount)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -757,5 +806,8 @@ namespace CrashEdit
         private System.Windows.Forms.Button cmdAddVictim;
         private System.Windows.Forms.Button cmdNextVictim;
         private System.Windows.Forms.Button cmdPreviousVictim;
+        private System.Windows.Forms.GroupBox fraBoxCount;
+        private System.Windows.Forms.CheckBox chkBoxCount;
+        private System.Windows.Forms.NumericUpDown numBoxCount;
     }
 }

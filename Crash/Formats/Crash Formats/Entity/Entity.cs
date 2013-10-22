@@ -95,6 +95,8 @@ namespace Crash
         private int? type;
         [EntityPropertyField(0xAA)]
         private int? subtype;
+        [EntityPropertyField(0x28B)]
+        private EntitySetting? boxcount = null;
         private Dictionary<short,EntityProperty> extraproperties;
 
         public Entity(IDictionary<short,EntityProperty> properties)
@@ -195,6 +197,26 @@ namespace Crash
                                     ((List<EntityPosition>)field.GetValue(this)).Add(p.Values[0,i]);
                                 }
                                 extraproperties.Remove(id);
+                            }
+                            else
+                            {
+                                ErrorManager.SignalIgnorableError("Entity: Property type mismatch");
+                            }
+                        }
+                        else if (field.FieldType == typeof(EntitySetting?))
+                        {
+                            if (property is EntitySettingProperty)
+                            {
+                                EntitySettingProperty p = (EntitySettingProperty)property;
+                                if (p.ElementCount == 1)
+                                {
+                                    field.SetValue(this,p.Values[0,0]);
+                                    extraproperties.Remove(id);
+                                }
+                                else
+                                {
+                                    ErrorManager.SignalIgnorableError("Entity: Property has more values than expected");
+                                }
                             }
                             else
                             {
@@ -332,6 +354,12 @@ namespace Crash
             set { subtype = value; }
         }
 
+        public EntitySetting? BoxCount
+        {
+            get { return boxcount; }
+            set { boxcount = value; }
+        }
+
         public IDictionary<short,EntityProperty> ExtraProperties
         {
             get { return extraproperties; }
@@ -378,6 +406,16 @@ namespace Crash
                             values[0,j] = list[j];
                         }
                         properties.Add(id,new EntityPositionProperty(values));
+                    }
+                }
+                else if (field.FieldType == typeof(EntitySetting?))
+                {
+                    EntitySetting? value = (EntitySetting?)field.GetValue(this);
+                    if (value != null)
+                    {
+                        EntitySetting[,] values = new EntitySetting [1,1];
+                        values[0,0] = value.Value;
+                        properties.Add(id,new EntitySettingProperty(values));
                     }
                 }
                 else if (field.FieldType == typeof(List<EntitySetting>))
