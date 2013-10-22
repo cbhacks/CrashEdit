@@ -22,7 +22,7 @@ _For users acquainted with Microsoft Windows, "directories" are commonly referre
 
 Some basic knowledge of how Crash Bandicoot game files are laid out is necessary to use this application. CrashEdit is not designed to work directly on disc images (aka ISO's), but instead on files with the "NSF" file format. This is a custom format created by Naughty Dog and used in the original Crash Bandicoot Trilogy (not including CTR).
 
-First, a Crash Bandicoot game CD will have a root directory with the contents similar to the following:
+First, a Crash Bandicoot game CD will have a root directory with contents similar to the following:
 
 * `S0` _(directory)_
 * `S1` _(directory)_
@@ -41,12 +41,12 @@ Within the S0/S1/etc directories you will find files named similar to the follow
 * `S0000015.NSF` _(nsf file)_
 * ...
 
-Notice how each filename has an NSD/NSF pair. Each pair corresponds to a specific level in the game, and these files contain the game data for the level. The last two characters before the .NSD or .NSF extension are the "level ID" for that specific level. An an example, the level titled _The Lost City_ has the level ID `20`, and its file pair is the following, found in the `S2` directory:
+Notice how each filename has an NSD/NSF pair. Each pair corresponds to a specific level in the game, and these files contain the game data for that level. The last two characters before the .NSD or .NSF extension are the "level ID" for that specific level. As an example, the level titled _The Lost City_ has the level ID `20`, and its file pair is the following, found in the `S2` directory:
 
 * `S0000020.NSD` _(nsd file)_
 * `S0000020.NSF` _(nsf file)_
 
-A complete list of the level ID's and their associated levels can be found here:
+A complete list of level ID's and their associated levels can be found here:
 
 https://sites.google.com/site/crashpsxsite/structure
 
