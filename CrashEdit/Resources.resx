@@ -111,6 +111,9 @@
 	<data name="NitroTopTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
 		Resources/Textures/NitroTop.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
 	</data>
+	<data name="PointTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/Point.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
 	<data name="QuestionMarkBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
 		Resources/Textures/QuestionMarkBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
 	</data>

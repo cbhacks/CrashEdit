@@ -120,6 +120,9 @@ namespace CrashEdit
         [ExternalTexture(6,1)]
         private static Bitmap nitrotoptexture = null;
 
+        [Resource("PointTexture")]
+        private static Bitmap pointtexture = null;
+
         [Resource("QuestionMarkBoxTexture")]
         [ExternalTexture(1,0)]
         private static Bitmap questionmarkboxtexture = null;
@@ -339,6 +342,11 @@ namespace CrashEdit
         public static Bitmap NitroTopTexture
         {
             get { return nitrotoptexture; }
+        }
+
+        public static Bitmap PointTexture
+        {
+            get { return pointtexture; }
         }
 
         public static Bitmap QuestionMarkBoxTexture

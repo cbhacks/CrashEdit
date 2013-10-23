@@ -195,6 +195,7 @@
     <Content Include="Resources\Textures\MaskBox.png" />
     <Content Include="Resources\Textures\Nitro.png" />
     <Content Include="Resources\Textures\NitroTop.png" />
+    <Content Include="Resources\Textures\Point.png" />
     <Content Include="Resources\Textures\QuestionMarkBox.png" />
     <Content Include="Resources\Textures\TNT.png" />
     <Content Include="Resources\Textures\TNTTop.png" />

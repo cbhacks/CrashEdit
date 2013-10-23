@@ -123,18 +123,15 @@ namespace CrashEdit
                         }
                         break;
                     default:
-                        GL.PointSize(5);
                         GL.Color3(Color.White);
-                        GL.Begin(BeginMode.Points);
-                        GL.Vertex3(0,0,0);
-                        GL.End();
+                        LoadTexture(Resources.PointTexture);
+                        RenderSprite();
                         break;
                 }
                 GL.PopMatrix();
             }
             else
             {
-                GL.LineWidth(3);
                 GL.Color3(Color.Blue);
                 GL.Begin(BeginMode.LineStrip);
                 foreach (EntityPosition position in entity.Positions)
@@ -142,22 +139,22 @@ namespace CrashEdit
                     GL.Vertex3(position.X,position.Y,position.Z);
                 }
                 GL.End();
-                GL.PointSize(5);
                 GL.Color3(Color.Red);
-                GL.Begin(BeginMode.Points);
                 foreach (EntityPosition position in entity.Positions)
                 {
-                    GL.Vertex3(position.X,position.Y,position.Z);
+                    GL.Color3(Color.Red);
+                    LoadTexture(Resources.PointTexture);
+                    GL.PushMatrix();
+                    GL.Translate(position.X,position.Y,position.Z);
+                    RenderSprite();
+                    GL.PopMatrix();
                 }
-                GL.End();
             }
         }
 
-        private void RenderPickup(int subtype)
+        private void RenderSprite()
         {
             GL.Enable(EnableCap.Texture2D);
-            GL.Color3(Color.White);
-            LoadPickupTexture(subtype);
             GL.PushMatrix();
             GL.Rotate(-rotx,0,1,0);
             GL.Rotate(-roty,1,0,0);
@@ -173,6 +170,13 @@ namespace CrashEdit
             GL.End();
             GL.PopMatrix();
             GL.Disable(EnableCap.Texture2D);
+        }
+
+        private void RenderPickup(int subtype)
+        {
+            GL.Color3(Color.White);
+            LoadPickupTexture(subtype);
+            RenderSprite();
         }
 
         private void RenderBox(int subtype)
