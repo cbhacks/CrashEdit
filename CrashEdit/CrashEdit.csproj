@@ -48,6 +48,8 @@
     <Compile Include="Controllers\ChunkController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\ControllerMenuDelegate.cs" />
+    <Compile Include="Controllers\Animation\OldAnimationEntryController.cs" />
+    <Compile Include="Controllers\Animation\OldFrameController.cs" />
     <Compile Include="Controllers\T4\T4ItemController.cs" />
     <Compile Include="Controllers\TextureChunkController.cs" />
     <Compile Include="Controllers\T20EntryController.cs" />
@@ -91,6 +93,9 @@
     <Compile Include="Controllers\Sound\SoundChunkController.cs" />
     <Compile Include="Controllers\NSFController.cs" />
     <Compile Include="Controllers\Speech\SpeechChunkController.cs" />
+    <Compile Include="Controls\OldAnimationEntryViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\OldSceneryEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>

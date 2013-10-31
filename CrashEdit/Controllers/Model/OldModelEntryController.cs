@@ -2,7 +2,7 @@ using Crash;
 
 namespace CrashEdit
 {
-    public sealed class OldModelEntryController : MysteryMultiItemEntryController
+    public sealed class OldModelEntryController : EntryController
     {
         private OldModelEntry oldmodelentry;
 

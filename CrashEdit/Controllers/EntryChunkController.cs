@@ -23,7 +23,11 @@ namespace CrashEdit
 
         internal EntryController CreateEntryController(Entry entry)
         {
-            if (entry is T1Entry)
+            if (entry is OldAnimationEntry)
+            {
+                return new OldAnimationEntryController(this,(OldAnimationEntry)entry);
+            }
+            else if (entry is T1Entry)
             {
                 return new T1EntryController(this,(T1Entry)entry);
             }
