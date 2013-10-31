@@ -62,7 +62,7 @@ namespace CrashEdit
             inputtimer.Enabled = true;
             inputtimer.Tick += delegate (object sender,EventArgs e)
             {
-                int speed = 100;
+                int speed = fullrange / 100;
                 int changex = 0;
                 int changey = 0;
                 int changez = 0;
