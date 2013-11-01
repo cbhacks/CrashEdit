@@ -14,6 +14,10 @@ namespace Crash
                 ErrorManager.SignalError("OldFrame: Data is too short");
             }
             int vertexcount = BitConv.FromInt32(data,0);
+            if (vertexcount < 0 || vertexcount > Chunk.Length / 6)
+            {
+                ErrorManager.SignalError("OldFrame: Vertex count is invalid");
+            }
             if (data.Length < 56 + vertexcount * 6)
             {
                 ErrorManager.SignalError("OldFrame: Data is too short");
