@@ -20,7 +20,7 @@ _Note that CrashEdit does not work directly with ISO's, but rather with the NSF 
 ## Usage ##
 _For users acquainted with Microsoft Windows, "directories" are commonly referred to as "folders" on windows. When the term "directory" is used here, think "folder"._
 
-Some basic knowledge of how Crash Bandicoot game files are laid out is necessary to use this application. CrashEdit is not designed to work directly on disc images (aka ISO's), but instead on files with the "NSF" file format. This is a custom format created by Naughty Dog and used in the original Crash Bandicoot Trilogy (not including CTR).
+Some basic knowledge of how Crash Bandicoot game files are laid out is necessary to use this application. CrashEdit is not designed to work directly on disc images (aka ISO's), but instead on files with the "NSF" file format. This is a custom format created by Naughty Dog and used in the original Crash Bandicoot trilogy (not including CTR).
 
 First, a Crash Bandicoot game CD will have a root directory with contents similar to the following:
 
