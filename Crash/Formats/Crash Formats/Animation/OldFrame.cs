@@ -18,7 +18,7 @@ namespace Crash
             {
                 ErrorManager.SignalError("OldFrame: Vertex count is invalid");
             }
-            if (data.Length < 56 + vertexcount * 6 + 4)
+            if (data.Length < 56 + vertexcount * 6 + 2)
             {
                 ErrorManager.SignalError("OldFrame: Data is too short");
             }
@@ -42,7 +42,7 @@ namespace Crash
                 Array.Copy(data,56 + i * 6,vertexdata,0,vertexdata.Length);
                 vertices[i] = OldFrameVertex.Load(vertexdata);
             }
-            int unknown = BitConv.FromInt32(data,56 + vertexcount * 6);
+            short unknown = BitConv.FromInt16(data,56 + vertexcount * 6);
             return new OldFrame(modeleid,xoffset,yoffset,zoffset,x1,y1,z1,x2,y2,z2,xglobal,yglobal,zglobal,vertices,unknown);
         }
 
@@ -60,9 +60,9 @@ namespace Crash
         private int yglobal;
         private int zglobal;
         private List<OldFrameVertex> vertices;
-        private int unknown;
+        private short unknown;
 
-        public OldFrame(int modeleid,int xoffset,int yoffset,int zoffset,int x1,int y1,int z1,int x2,int y2,int z2,int xglobal,int yglobal,int zglobal,IEnumerable<OldFrameVertex> vertices,int unknown)
+        public OldFrame(int modeleid,int xoffset,int yoffset,int zoffset,int x1,int y1,int z1,int x2,int y2,int z2,int xglobal,int yglobal,int zglobal,IEnumerable<OldFrameVertex> vertices,short unknown)
         {
             this.modeleid = modeleid;
             this.xoffset = xoffset;
@@ -151,9 +151,14 @@ namespace Crash
             get { return vertices; }
         }
 
+        public short Unknown
+        {
+            get { return unknown; }
+        }
+
         public byte[] Save()
         {
-            byte[] data = new byte [56 + vertices.Count * 6 + 4];
+            byte[] data = new byte [56 + vertices.Count * 6 + 2];
             BitConv.ToInt32(data,0,vertices.Count);
             BitConv.ToInt32(data,4,modeleid);
             BitConv.ToInt32(data,8,xoffset);
@@ -172,7 +177,7 @@ namespace Crash
             {
                 vertices[i].Save().CopyTo(data,56 + i * 6);
             }
-            BitConv.ToInt32(data,56 + vertices.Count * 6,unknown);
+            BitConv.ToInt16(data,56 + vertices.Count * 6,unknown);
             return data;
         }
     }
