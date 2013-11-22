@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 
 namespace Crash
@@ -179,6 +180,43 @@ namespace Crash
             }
             BitConv.ToInt16(data,56 + vertices.Count * 6,unknown);
             return data;
+        }
+
+        public byte[] ToOBJ(OldModelEntry model)
+        {
+            long xorigin = 0;
+            long yorigin = 0;
+            long zorigin = 0;
+            foreach (OldFrameVertex vertex in vertices)
+            {
+                xorigin += vertex.X;
+                yorigin += vertex.Y;
+                zorigin += vertex.Z;
+            }
+            xorigin /= vertices.Count;
+            yorigin /= vertices.Count;
+            zorigin /= vertices.Count;
+            xorigin -= xoffset;
+            yorigin -= yoffset;
+            zorigin -= zoffset;
+            using (MemoryStream stream = new MemoryStream())
+            {
+                using (StreamWriter obj = new StreamWriter(stream))
+                {
+                    obj.WriteLine("# Vertices");
+                    foreach (OldFrameVertex vertex in vertices)
+                    {
+                        obj.WriteLine("v {0} {1} {2}",vertex.X - xorigin,vertex.Y - yorigin,vertex.Z - zorigin);
+                    }
+                    obj.WriteLine();
+                    obj.WriteLine("# Polygons");
+                    foreach (OldModelPolygon polygon in model.Polygons)
+                    {
+                        obj.WriteLine("f {0} {1} {2}",polygon.VertexA / 6 + 1,polygon.VertexB / 6 + 1,polygon.VertexC / 6 + 1);
+                    }
+                }
+                return stream.ToArray();
+            }
         }
     }
 }
