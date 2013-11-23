@@ -184,6 +184,7 @@ namespace CrashEdit
 
         private void RenderPickup(int subtype)
         {
+            GL.Translate(0,50,0);
             GL.Color3(Color.White);
             LoadPickupTexture(subtype);
             RenderSprite();
@@ -191,6 +192,7 @@ namespace CrashEdit
 
         private void RenderBox(int subtype)
         {
+            GL.Translate(0,50,0);
             GL.Enable(EnableCap.Texture2D);
             GL.Color3(Color.White);
             LoadBoxSideTexture(subtype);
