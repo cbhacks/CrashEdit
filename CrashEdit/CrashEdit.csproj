@@ -93,6 +93,9 @@
     <Compile Include="Controllers\Sound\SoundChunkController.cs" />
     <Compile Include="Controllers\NSFController.cs" />
     <Compile Include="Controllers\Speech\SpeechChunkController.cs" />
+    <Compile Include="Controls\SceneryEntryViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\OldAnimationEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
