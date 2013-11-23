@@ -10,32 +10,40 @@ using OpenTK.Graphics.OpenGL;
 
 namespace CrashEdit
 {
-    public sealed class EntityEntryViewer : ThreeDimensionalViewer
+    public sealed class EntityEntryViewer : SceneryEntryViewer
     {
-        private static byte[] stipple;
+        private static byte[] stipplea;
+        private static byte[] stippleb;
 
         static EntityEntryViewer()
         {
-            stipple = new byte [128];
+            stipplea = new byte [128];
+            stippleb = new byte [128];
             for (int i = 0;i < 128;i += 8)
             {
-                const byte stipple1 = 0x55;
-                const byte stipple2 = 0xAA;
-                stipple[i + 0] = stipple1;
-                stipple[i + 1] = stipple1;
-                stipple[i + 2] = stipple1;
-                stipple[i + 3] = stipple1;
-                stipple[i + 4] = stipple2;
-                stipple[i + 5] = stipple2;
-                stipple[i + 6] = stipple2;
-                stipple[i + 7] = stipple2;
+                stipplea[i + 0] = 0x55;
+                stipplea[i + 1] = 0x55;
+                stipplea[i + 2] = 0x55;
+                stipplea[i + 3] = 0x55;
+                stipplea[i + 4] = 0xAA;
+                stipplea[i + 5] = 0xAA;
+                stipplea[i + 6] = 0xAA;
+                stipplea[i + 7] = 0xAA;
+                stippleb[i + 0] = 0xAA;
+                stippleb[i + 1] = 0xAA;
+                stippleb[i + 2] = 0xAA;
+                stippleb[i + 3] = 0xAA;
+                stippleb[i + 4] = 0x55;
+                stippleb[i + 5] = 0x55;
+                stippleb[i + 6] = 0x55;
+                stippleb[i + 7] = 0x55;
             }
         }
 
         private EntityEntry entry;
         private EntityEntry[] linkedentries;
 
-        public EntityEntryViewer(EntityEntry entry,EntityEntry[] linkedentries)
+        public EntityEntryViewer(EntityEntry entry,SceneryEntry[] linkedsceneryentries,EntityEntry[] linkedentries) : base(linkedsceneryentries)
         {
             this.entry = entry;
             this.linkedentries = linkedentries;
@@ -73,7 +81,9 @@ namespace CrashEdit
         {
             RenderEntry(entry);
             GL.Enable(EnableCap.PolygonStipple);
-            GL.PolygonStipple(stipple);
+            GL.PolygonStipple(stipplea);
+            base.RenderObjects();
+            GL.PolygonStipple(stippleb);
             foreach (EntityEntry linkedentry in linkedentries)
             {
                 if (linkedentry == entry)

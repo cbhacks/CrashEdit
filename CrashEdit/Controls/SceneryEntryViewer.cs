@@ -10,7 +10,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace CrashEdit
 {
-    public sealed class SceneryEntryViewer : ThreeDimensionalViewer
+    public class SceneryEntryViewer : ThreeDimensionalViewer
     {
         private List<SceneryEntry> entries;
         private int displaylist;
@@ -36,7 +36,7 @@ namespace CrashEdit
                 {
                     foreach (SceneryVertex vertex in entry.Vertices)
                     {
-                        yield return new Position(entry.XOffset + vertex.X,entry.YOffset + vertex.Y,entry.ZOffset + vertex.Z);
+                        yield return new Position(entry.XOffset + vertex.X * 16,entry.YOffset + vertex.Y * 16,entry.ZOffset + vertex.Z * 16);
                     }
                 }
             }
@@ -75,7 +75,7 @@ namespace CrashEdit
 
         private void RenderVertex(SceneryEntry entry,SceneryVertex vertex)
         {
-            GL.Vertex3(entry.XOffset + vertex.X,entry.YOffset + vertex.Y,entry.ZOffset + vertex.Z);
+            GL.Vertex3(entry.XOffset + vertex.X * 16,entry.YOffset + vertex.Y * 16,entry.ZOffset + vertex.Z * 16);
         }
 
         protected override void Dispose(bool disposing)
