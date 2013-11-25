@@ -67,6 +67,7 @@
     <Compile Include="Formats\Crash Formats\Models\OldModelPolygon.cs" />
     <Compile Include="Formats\Crash Formats\Music\OldMusicEntry.cs" />
     <Compile Include="Formats\Crash Formats\Music\OldMusicEntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Scenery\SceneryColor.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\SceneryVertex.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\OldSceneryEntry.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\OldSceneryEntryLoader.cs" />

@@ -40,7 +40,19 @@ namespace Crash
                 Array.Copy(items[3],i * 8,polygondata,0,polygondata.Length);
                 polygons[i] = SceneryPolygon.Load(polygondata);
             }
-            return new SceneryEntry(items[0],vertices,items[2],polygons,items[4],items[5],items[6],eid);
+            // TODO :: Get colorcount from info
+            int colorcount = items[5].Length / 4;
+            // TODO :: Check color list size
+            SceneryColor[] colors = new SceneryColor [colorcount];
+            for (int i = 0;i < colorcount;i++)
+            {
+                byte red = items[5][i * 4];
+                byte green = items[5][i * 4 + 1];
+                byte blue = items[5][i * 4 + 2];
+                byte extra = items[5][i * 4 + 3];
+                colors[i] = new SceneryColor(red,green,blue,extra);
+            }
+            return new SceneryEntry(items[0],vertices,items[2],polygons,items[4],colors,items[6],eid);
         }
     }
 }

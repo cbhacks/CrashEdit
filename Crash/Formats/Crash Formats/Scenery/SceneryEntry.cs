@@ -10,17 +10,17 @@ namespace Crash
         private byte[] item2;
         private List<SceneryPolygon> polygons;
         private byte[] item4;
-        private byte[] item5;
+        private List<SceneryColor> colors;
         private byte[] item6;
 
-        public SceneryEntry(byte[] info,IEnumerable<SceneryVertex> vertices,byte[] item2,IEnumerable<SceneryPolygon> polygons,byte[] item4,byte[] item5,byte[] item6,int eid) : base(eid)
+        public SceneryEntry(byte[] info,IEnumerable<SceneryVertex> vertices,byte[] item2,IEnumerable<SceneryPolygon> polygons,byte[] item4,IEnumerable<SceneryColor> colors,byte[] item6,int eid) : base(eid)
         {
             this.info = info;
             this.vertices = new List<SceneryVertex>(vertices);
             this.item2 = item2;
             this.polygons = new List<SceneryPolygon>(polygons);
             this.item4 = item4;
-            this.item5 = item5;
+            this.colors = new List<SceneryColor>(colors);
             this.item6 = item6;
         }
 
@@ -54,9 +54,9 @@ namespace Crash
             get { return item4; }
         }
 
-        public byte[] Item5
+        public IList<SceneryColor> Colors
         {
-            get { return item5; }
+            get { return colors; }
         }
 
         public byte[] Item6
@@ -96,7 +96,14 @@ namespace Crash
                 polygons[i].Save().CopyTo(items[3],i * 8);
             }
             items[4] = item4;
-            items[5] = item5;
+            items[5] = new byte [colors.Count * 4];
+            for (int i = 0;i < colors.Count;i++)
+            {
+                items[5][i * 4 + 0] = colors[i].Red;
+                items[5][i * 4 + 1] = colors[i].Green;
+                items[5][i * 4 + 2] = colors[i].Blue;
+                items[5][i * 4 + 3] = colors[i].Extra;
+            }
             items[6] = item6;
             return new UnprocessedEntry(items,EID,Type);
         }
