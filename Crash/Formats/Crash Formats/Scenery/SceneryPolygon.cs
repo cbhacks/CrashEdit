@@ -64,7 +64,7 @@ namespace Crash
 
         public int Unknown1
         {
-            get { return Unknown1; }
+            get { return unknown1; }
         }
 
         public byte Unknown2
