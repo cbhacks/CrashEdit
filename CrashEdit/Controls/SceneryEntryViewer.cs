@@ -52,11 +52,13 @@ namespace CrashEdit
                 {
                     foreach (SceneryPolygon polygon in entry.Polygons)
                     {
-                        GL.Begin(BeginMode.Triangles);
+                        GL.Begin(BeginMode.Quads);
                         if (polygon.VertexA < entry.Vertices.Count)
                             RenderVertex(entry,entry.Vertices[polygon.VertexA]);
                         if (polygon.VertexB < entry.Vertices.Count)
                             RenderVertex(entry,entry.Vertices[polygon.VertexB]);
+                        if (polygon.Unknown1 < entry.Vertices.Count)
+                            RenderVertex(entry,entry.Vertices[polygon.Unknown1]);
                         if (polygon.VertexC < entry.Vertices.Count)
                             RenderVertex(entry,entry.Vertices[polygon.VertexC]);
                         GL.End();
