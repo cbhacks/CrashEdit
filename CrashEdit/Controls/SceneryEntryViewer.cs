@@ -53,13 +53,10 @@ namespace CrashEdit
                     foreach (SceneryPolygon polygon in entry.Polygons)
                     {
                         GL.Begin(BeginMode.Triangles);
-                        GL.Color3(Color.Red);
                         if (polygon.VertexA < entry.Vertices.Count)
                             RenderVertex(entry,entry.Vertices[polygon.VertexA]);
-                        GL.Color3(Color.Green);
                         if (polygon.VertexB < entry.Vertices.Count)
                             RenderVertex(entry,entry.Vertices[polygon.VertexB]);
-                        GL.Color3(Color.Blue);
                         if (polygon.VertexC < entry.Vertices.Count)
                             RenderVertex(entry,entry.Vertices[polygon.VertexC]);
                         GL.End();
@@ -75,6 +72,15 @@ namespace CrashEdit
 
         private void RenderVertex(SceneryEntry entry,SceneryVertex vertex)
         {
+            if (vertex.Color < entry.Colors.Count)
+            {
+                SceneryColor color = entry.Colors[vertex.Color];
+                GL.Color3(color.Red,color.Green,color.Blue);
+            }
+            else
+            {
+                GL.Color3(Color.Fuchsia);
+            }
             GL.Vertex3(entry.XOffset + vertex.X * 16,entry.YOffset + vertex.Y * 16,entry.ZOffset + vertex.Z * 16);
         }
 

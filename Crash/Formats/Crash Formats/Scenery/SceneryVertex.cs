@@ -87,6 +87,11 @@ namespace Crash
             get { return unknownz; }
         }
 
+        public int Color
+        {
+            get { return (unknowny & 0x3) << 8 | unknownx << 4 | unknownz; }
+        }
+
         double IPosition.X
         {
             get { return x; }
