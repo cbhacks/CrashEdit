@@ -88,6 +88,8 @@ namespace CrashEdit
             {
                 if (linkedentry == entry)
                     continue;
+                if (linkedentry == null)
+                    continue;
                 RenderEntry(linkedentry);
             }
             GL.Disable(EnableCap.PolygonStipple);
