@@ -104,12 +104,20 @@ namespace Crash
 
         public byte[] SaveXY()
         {
-            throw new NotImplementedException();
+            byte[] data = new byte [4];
+            int xdata = (x << 4) | unknownx;
+            int ydata = (y << 4) | unknowny;
+            BitConv.ToInt16(data,0,(short)xdata);
+            BitConv.ToInt16(data,2,(short)ydata);
+            return data;
         }
 
         public byte[] SaveZ()
         {
-            throw new NotImplementedException();
+            byte[] data = new byte [2];
+            int zdata = (z << 4) | unknownz;
+            BitConv.ToInt16(data,0,(short)zdata);
+            return data;
         }
     }
 }

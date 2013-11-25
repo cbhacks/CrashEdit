@@ -76,5 +76,15 @@ namespace Crash
         {
             get { return unknown3; }
         }
+
+        public byte[] Save()
+        {
+            byte[] data = new byte [8];
+            int worda = (vertexa << 8) | (vertexb << 20) | unknown2;
+            int wordb = (vertexc << 8) | (unknown1 << 20) | unknown3;
+            BitConv.ToInt32(data,0,worda);
+            BitConv.ToInt32(data,4,wordb);
+            return data;
+        }
     }
 }
