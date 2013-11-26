@@ -50,6 +50,17 @@ namespace CrashEdit
                 GL.NewList(displaylist,ListMode.CompileAndExecute);
                 foreach (SceneryEntry entry in entries)
                 {
+                    foreach (SceneryTriangle triangle in entry.Triangles)
+                    {
+                        GL.Begin(BeginMode.Triangles);
+                        if (triangle.VertexA < entry.Vertices.Count)
+                            RenderVertex(entry,entry.Vertices[triangle.VertexA]);
+                        if (triangle.VertexB < entry.Vertices.Count)
+                            RenderVertex(entry,entry.Vertices[triangle.VertexB]);
+                        if (triangle.VertexC < entry.Vertices.Count)
+                            RenderVertex(entry,entry.Vertices[triangle.VertexC]);
+                        GL.End();
+                    }
                     foreach (SceneryPolygon polygon in entry.Polygons)
                     {
                         GL.Begin(BeginMode.Quads);

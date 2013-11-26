@@ -7,17 +7,17 @@ namespace Crash
     {
         private byte[] info;
         private List<SceneryVertex> vertices;
-        private byte[] item2;
+        private List<SceneryTriangle> triangles;
         private List<SceneryPolygon> polygons;
         private byte[] item4;
         private List<SceneryColor> colors;
         private byte[] item6;
 
-        public SceneryEntry(byte[] info,IEnumerable<SceneryVertex> vertices,byte[] item2,IEnumerable<SceneryPolygon> polygons,byte[] item4,IEnumerable<SceneryColor> colors,byte[] item6,int eid) : base(eid)
+        public SceneryEntry(byte[] info,IEnumerable<SceneryVertex> vertices,IEnumerable<SceneryTriangle> triangles,IEnumerable<SceneryPolygon> polygons,byte[] item4,IEnumerable<SceneryColor> colors,byte[] item6,int eid) : base(eid)
         {
             this.info = info;
             this.vertices = new List<SceneryVertex>(vertices);
-            this.item2 = item2;
+            this.triangles = new List<SceneryTriangle>(triangles);
             this.polygons = new List<SceneryPolygon>(polygons);
             this.item4 = item4;
             this.colors = new List<SceneryColor>(colors);
@@ -39,9 +39,9 @@ namespace Crash
             get { return vertices; }
         }
 
-        public byte[] Item2
+        public IList<SceneryTriangle> Triangles
         {
-            get { return item2; }
+            get { return triangles; }
         }
 
         public IList<SceneryPolygon> Polygons
@@ -89,7 +89,12 @@ namespace Crash
                 vertices[i].SaveXY().CopyTo(items[1],(vertices.Count - 1 - i) * 4);
                 vertices[i].SaveZ().CopyTo(items[1],vertices.Count * 4 + i * 2);
             }
-            items[2] = item2;
+            items[2] = new byte [triangles.Count * 6];
+            for (int i = 0;i < triangles.Count;i++)
+            {
+                triangles[i].SaveA().CopyTo(items[2],(triangles.Count - 1 - i) * 4);
+                triangles[i].SaveB().CopyTo(items[2],triangles.Count * 4 + i * 2);
+            }
             items[3] = new byte [polygons.Count * 8];
             for (int i = 0;i < polygons.Count;i++)
             {

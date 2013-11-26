@@ -30,6 +30,18 @@ namespace Crash
                 Array.Copy(items[1],vertexcount * 4 + i * 2,zdata,0,zdata.Length);
                 vertices[i] = SceneryVertex.Load(xydata,zdata);
             }
+            // TODO :: Get trianglecount from info
+            int trianglecount = items[2].Length / 6;
+            // TODO :: Check triangle list size
+            SceneryTriangle[] triangles = new SceneryTriangle [trianglecount];
+            for (int i = 0;i < trianglecount;i++)
+            {
+                byte[] adata = new byte [4];
+                byte[] bdata = new byte [2];
+                Array.Copy(items[2],(trianglecount - 1 - i) * 4,adata,0,adata.Length);
+                Array.Copy(items[2],trianglecount * 4 + i * 2,bdata,0,bdata.Length);
+                triangles[i] = SceneryTriangle.Load(adata,bdata);
+            }
             // TODO :: Get polygoncount from info
             int polygoncount = items[3].Length / 8;
             // TODO :: Check polygon list size
@@ -52,7 +64,7 @@ namespace Crash
                 byte extra = items[5][i * 4 + 3];
                 colors[i] = new SceneryColor(red,green,blue,extra);
             }
-            return new SceneryEntry(items[0],vertices,items[2],polygons,items[4],colors,items[6],eid);
+            return new SceneryEntry(items[0],vertices,triangles,polygons,items[4],colors,items[6],eid);
         }
     }
 }
