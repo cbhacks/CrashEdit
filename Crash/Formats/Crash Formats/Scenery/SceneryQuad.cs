@@ -3,9 +3,9 @@ using System;
 
 namespace Crash
 {
-    public struct SceneryPolygon
+    public struct SceneryQuad
     {
-        public static SceneryPolygon Load(byte[] data)
+        public static SceneryQuad Load(byte[] data)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
@@ -19,7 +19,7 @@ namespace Crash
             int unknown1 = (wordb >> 20) & 0xFFF;
             byte unknown2 = (byte)worda;
             byte unknown3 = (byte)wordb;
-            return new SceneryPolygon(vertexa,vertexb,vertexc,unknown1,unknown2,unknown3);
+            return new SceneryQuad(vertexa,vertexb,vertexc,unknown1,unknown2,unknown3);
         }
 
         private int vertexa;
@@ -29,7 +29,7 @@ namespace Crash
         private byte unknown2;
         private byte unknown3;
 
-        public SceneryPolygon(int vertexa,int vertexb,int vertexc,int unknown1,byte unknown2,byte unknown3)
+        public SceneryQuad(int vertexa,int vertexb,int vertexc,int unknown1,byte unknown2,byte unknown3)
         {
             if (vertexa < 0 || vertexa > 0xFFF)
                 throw new ArgumentOutOfRangeException("vertexa");

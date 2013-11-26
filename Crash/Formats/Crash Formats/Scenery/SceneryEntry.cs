@@ -8,17 +8,17 @@ namespace Crash
         private byte[] info;
         private List<SceneryVertex> vertices;
         private List<SceneryTriangle> triangles;
-        private List<SceneryPolygon> polygons;
+        private List<SceneryQuad> quads;
         private byte[] item4;
         private List<SceneryColor> colors;
         private byte[] item6;
 
-        public SceneryEntry(byte[] info,IEnumerable<SceneryVertex> vertices,IEnumerable<SceneryTriangle> triangles,IEnumerable<SceneryPolygon> polygons,byte[] item4,IEnumerable<SceneryColor> colors,byte[] item6,int eid) : base(eid)
+        public SceneryEntry(byte[] info,IEnumerable<SceneryVertex> vertices,IEnumerable<SceneryTriangle> triangles,IEnumerable<SceneryQuad> quads,byte[] item4,IEnumerable<SceneryColor> colors,byte[] item6,int eid) : base(eid)
         {
             this.info = info;
             this.vertices = new List<SceneryVertex>(vertices);
             this.triangles = new List<SceneryTriangle>(triangles);
-            this.polygons = new List<SceneryPolygon>(polygons);
+            this.quads = new List<SceneryQuad>(quads);
             this.item4 = item4;
             this.colors = new List<SceneryColor>(colors);
             this.item6 = item6;
@@ -44,9 +44,9 @@ namespace Crash
             get { return triangles; }
         }
 
-        public IList<SceneryPolygon> Polygons
+        public IList<SceneryQuad> Quads
         {
-            get { return polygons; }
+            get { return quads; }
         }
 
         public byte[] Item4
@@ -95,10 +95,10 @@ namespace Crash
                 triangles[i].SaveA().CopyTo(items[2],(triangles.Count - 1 - i) * 4);
                 triangles[i].SaveB().CopyTo(items[2],triangles.Count * 4 + i * 2);
             }
-            items[3] = new byte [polygons.Count * 8];
-            for (int i = 0;i < polygons.Count;i++)
+            items[3] = new byte [quads.Count * 8];
+            for (int i = 0;i < quads.Count;i++)
             {
-                polygons[i].Save().CopyTo(items[3],i * 8);
+                quads[i].Save().CopyTo(items[3],i * 8);
             }
             items[4] = item4;
             items[5] = new byte [colors.Count * 4];

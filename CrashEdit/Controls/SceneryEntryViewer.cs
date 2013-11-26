@@ -61,17 +61,17 @@ namespace CrashEdit
                             RenderVertex(entry,entry.Vertices[triangle.VertexC]);
                         GL.End();
                     }
-                    foreach (SceneryPolygon polygon in entry.Polygons)
+                    foreach (SceneryQuad quad in entry.Quads)
                     {
                         GL.Begin(BeginMode.Quads);
-                        if (polygon.VertexA < entry.Vertices.Count)
-                            RenderVertex(entry,entry.Vertices[polygon.VertexA]);
-                        if (polygon.VertexB < entry.Vertices.Count)
-                            RenderVertex(entry,entry.Vertices[polygon.VertexB]);
-                        if (polygon.Unknown1 < entry.Vertices.Count)
-                            RenderVertex(entry,entry.Vertices[polygon.Unknown1]);
-                        if (polygon.VertexC < entry.Vertices.Count)
-                            RenderVertex(entry,entry.Vertices[polygon.VertexC]);
+                        if (quad.VertexA < entry.Vertices.Count)
+                            RenderVertex(entry,entry.Vertices[quad.VertexA]);
+                        if (quad.VertexB < entry.Vertices.Count)
+                            RenderVertex(entry,entry.Vertices[quad.VertexB]);
+                        if (quad.Unknown1 < entry.Vertices.Count)
+                            RenderVertex(entry,entry.Vertices[quad.Unknown1]);
+                        if (quad.VertexC < entry.Vertices.Count)
+                            RenderVertex(entry,entry.Vertices[quad.VertexC]);
                         GL.End();
                     }
                 }

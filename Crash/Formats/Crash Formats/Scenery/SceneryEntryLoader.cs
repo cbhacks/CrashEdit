@@ -42,15 +42,15 @@ namespace Crash
                 Array.Copy(items[2],trianglecount * 4 + i * 2,bdata,0,bdata.Length);
                 triangles[i] = SceneryTriangle.Load(adata,bdata);
             }
-            // TODO :: Get polygoncount from info
-            int polygoncount = items[3].Length / 8;
-            // TODO :: Check polygon list size
-            SceneryPolygon[] polygons = new SceneryPolygon [polygoncount];
-            for (int i = 0;i < polygoncount;i++)
+            // TODO :: Get quadcount from info
+            int quadcount = items[3].Length / 8;
+            // TODO :: Check quad list size
+            SceneryQuad[] quads = new SceneryQuad [quadcount];
+            for (int i = 0;i < quadcount;i++)
             {
-                byte[] polygondata = new byte [8];
-                Array.Copy(items[3],i * 8,polygondata,0,polygondata.Length);
-                polygons[i] = SceneryPolygon.Load(polygondata);
+                byte[] quaddata = new byte [8];
+                Array.Copy(items[3],i * 8,quaddata,0,quaddata.Length);
+                quads[i] = SceneryQuad.Load(quaddata);
             }
             // TODO :: Get colorcount from info
             int colorcount = items[5].Length / 4;
@@ -64,7 +64,7 @@ namespace Crash
                 byte extra = items[5][i * 4 + 3];
                 colors[i] = new SceneryColor(red,green,blue,extra);
             }
-            return new SceneryEntry(items[0],vertices,triangles,polygons,items[4],colors,items[6],eid);
+            return new SceneryEntry(items[0],vertices,triangles,quads,items[4],colors,items[6],eid);
         }
     }
 }
