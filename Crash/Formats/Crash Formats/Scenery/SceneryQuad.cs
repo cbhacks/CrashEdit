@@ -15,21 +15,21 @@ namespace Crash
             int wordb = BitConv.FromInt32(data,4);
             int vertexa = (worda >> 8) & 0xFFF;
             int vertexb = (worda >> 20) & 0xFFF;
-            int vertexc = (wordb >> 8) & 0xFFF;
-            int unknown1 = (wordb >> 20) & 0xFFF;
+            int vertexd = (wordb >> 8) & 0xFFF;
+            int vertexc = (wordb >> 20) & 0xFFF;
             byte unknown2 = (byte)worda;
             byte unknown3 = (byte)wordb;
-            return new SceneryQuad(vertexa,vertexb,vertexc,unknown1,unknown2,unknown3);
+            return new SceneryQuad(vertexa,vertexb,vertexc,vertexd,unknown2,unknown3);
         }
 
         private int vertexa;
         private int vertexb;
         private int vertexc;
-        private int unknown1;
+        private int vertexd;
         private byte unknown2;
         private byte unknown3;
 
-        public SceneryQuad(int vertexa,int vertexb,int vertexc,int unknown1,byte unknown2,byte unknown3)
+        public SceneryQuad(int vertexa,int vertexb,int vertexc,int vertexd,byte unknown2,byte unknown3)
         {
             if (vertexa < 0 || vertexa > 0xFFF)
                 throw new ArgumentOutOfRangeException("vertexa");
@@ -37,12 +37,12 @@ namespace Crash
                 throw new ArgumentOutOfRangeException("vertexb");
             if (vertexc < 0 || vertexc > 0xFFF)
                 throw new ArgumentOutOfRangeException("vertexc");
-            if (unknown1 < 0 || unknown1 > 0xFFF)
-                throw new ArgumentOutOfRangeException("unknown1");
+            if (vertexd < 0 || vertexd > 0xFFF)
+                throw new ArgumentOutOfRangeException("vertexd");
             this.vertexa = vertexa;
             this.vertexb = vertexb;
             this.vertexc = vertexc;
-            this.unknown1 = unknown1;
+            this.vertexd = vertexd;
             this.unknown2 = unknown2;
             this.unknown3 = unknown3;
         }
@@ -62,9 +62,9 @@ namespace Crash
             get { return vertexc; }
         }
 
-        public int Unknown1
+        public int VertexD
         {
-            get { return unknown1; }
+            get { return vertexd; }
         }
 
         public byte Unknown2
@@ -81,7 +81,7 @@ namespace Crash
         {
             byte[] data = new byte [8];
             int worda = (vertexa << 8) | (vertexb << 20) | unknown2;
-            int wordb = (vertexc << 8) | (unknown1 << 20) | unknown3;
+            int wordb = (vertexd << 8) | (vertexc << 20) | unknown3;
             BitConv.ToInt32(data,0,worda);
             BitConv.ToInt32(data,4,wordb);
             return data;

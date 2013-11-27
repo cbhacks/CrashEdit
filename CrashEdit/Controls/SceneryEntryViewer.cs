@@ -68,10 +68,10 @@ namespace CrashEdit
                             RenderVertex(entry,entry.Vertices[quad.VertexA]);
                         if (quad.VertexB < entry.Vertices.Count)
                             RenderVertex(entry,entry.Vertices[quad.VertexB]);
-                        if (quad.Unknown1 < entry.Vertices.Count)
-                            RenderVertex(entry,entry.Vertices[quad.Unknown1]);
                         if (quad.VertexC < entry.Vertices.Count)
                             RenderVertex(entry,entry.Vertices[quad.VertexC]);
+                        if (quad.VertexD < entry.Vertices.Count)
+                            RenderVertex(entry,entry.Vertices[quad.VertexD]);
                         GL.End();
                     }
                 }
