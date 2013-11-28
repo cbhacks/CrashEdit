@@ -95,6 +95,8 @@ namespace Crash
         private int? type;
         [EntityPropertyField(0xAA)]
         private int? subtype;
+        [EntityPropertyField(0x287)]
+        private List<short> victims = null;
         [EntityPropertyField(0x28B)]
         private EntitySetting? boxcount = null;
         private Dictionary<short,EntityProperty> extraproperties;
@@ -165,6 +167,22 @@ namespace Crash
                                 {
                                     ErrorManager.SignalIgnorableError("Entity: Property has more values than expected");
                                 }
+                            }
+                            else
+                            {
+                                ErrorManager.SignalIgnorableError("Entity: Property type mismatch");
+                            }
+                        }
+                        else if (field.FieldType == typeof(List<short>))
+                        {
+                            if (property is EntityInt16Property)
+                            {
+                                EntityInt16Property p = (EntityInt16Property)property;
+                                for (int i = 0;i < p.ElementCount;i++)
+                                {
+                                    ((List<short>)field.GetValue(this)).Add(p.Values[0,i]);
+                                }
+                                extraproperties.Remove(id);
                             }
                             else
                             {
@@ -354,6 +372,11 @@ namespace Crash
             set { subtype = value; }
         }
 
+        public IList<short> Victims
+        {
+            get { return victims; }
+        }
+
         public EntitySetting? BoxCount
         {
             get { return boxcount; }
@@ -380,6 +403,19 @@ namespace Crash
                         int[,] values = new int [1,1];
                         values[0,0] = value.Value;
                         properties.Add(id,new EntityInt32Property(values));
+                    }
+                }
+                else if (field.FieldType == typeof(List<short>))
+                {
+                    List<short> list = (List<short>)field.GetValue(this);
+                    if (list.Count > 0)
+                    {
+                        short[,] values = new short [1,list.Count];
+                        for (int j = 0;j < list.Count;j++)
+                        {
+                            values[0,j] = list[j];
+                        }
+                        properties.Add(id,new EntityInt16Property(values));
                     }
                 }
                 else if (field.FieldType == typeof(List<int>))

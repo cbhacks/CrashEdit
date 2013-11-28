@@ -39,6 +39,8 @@
   </Target>
   -->
   <ItemGroup>
+    <Compile Include="Formats\Crash Formats\Entity\EntityInt16Property.cs" />
+    <Compile Include="Formats\Crash Formats\Entity\EntityInt16PropertyLoader.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityBasicProperty.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityBasicPropertyLoader.cs" />
     <Compile Include="Formats\Crash Formats\Entity\EntityID.cs" />
