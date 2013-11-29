@@ -23,27 +23,7 @@ namespace Crash
             get { return (short)rows.Count; }
         }
 
-        public List<EntityPropertyRow<T>> Rows
-        {
-            get { return rows; }
-        }
-
-        public bool HasMetaValues
-        {
-            get
-            {
-                foreach (EntityPropertyRow<T> row in rows)
-                {
-                    if (row.MetaValue != 0)
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-
-        public bool IsSparse
+        public override bool IsSparse
         {
             get
             {
@@ -66,13 +46,33 @@ namespace Crash
             }
         }
 
+        public override bool HasMetaValues
+        {
+            get
+            {
+                foreach (EntityPropertyRow<T> row in rows)
+                {
+                    if (row.MetaValue.HasValue)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
+        public List<EntityPropertyRow<T>> Rows
+        {
+            get { return rows; }
+        }
+
         internal override void LoadToField(object obj,FieldInfo field)
         {
             if (field.FieldType == typeof(T?))
             {
                 if (rows.Count == 1)
                 {
-                    if (rows[0].MetaValue == 0)
+                    if (rows[0].MetaValue == null)
                     {
                         if (rows[0].Values.Count == 1)
                         {
@@ -97,7 +97,7 @@ namespace Crash
             {
                 if (rows.Count == 1)
                 {
-                    if (rows[0].MetaValue == 0)
+                    if (rows[0].MetaValue == null)
                     {
                         List<T> list = new List<T>();
                         list.AddRange(rows[0].Values);
@@ -165,7 +165,11 @@ namespace Crash
             {
                 foreach (EntityPropertyRow<T> row in rows)
                 {
-                    BitConv.ToInt16(data,offset,(short)row.Values.Count);
+                    if (!row.MetaValue.HasValue)
+                    {
+                        throw new InvalidOperationException("EntityPropertyRow MetaValues must be consistently present or non-present.");
+                    }
+                    BitConv.ToInt16(data,offset,row.MetaValue.Value);
                     offset += 2;
                 }
             }

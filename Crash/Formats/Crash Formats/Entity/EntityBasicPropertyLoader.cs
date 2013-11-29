@@ -5,10 +5,8 @@ namespace Crash
 {
     public abstract class EntityBasicPropertyLoader<T> : EntityPropertyLoader where T : struct
     {
-        public sealed override EntityProperty Load(byte elementsize,short unknown,byte[] data)
+        public sealed override EntityProperty Load(byte elementsize,short unknown,bool issparse,bool hasmetavalues,byte[] data)
         {
-            bool issparse = false;
-            bool hasmetavalues = false;
             if (elementsize != ElementSize)
             {
                 ErrorManager.SignalError("EntityProperty: Element size is wrong");

@@ -27,14 +27,16 @@ namespace Crash
             {
                 ErrorManager.SignalIgnorableError("EntityProperty: Flag 128 has an unexpected value");
             }
-            type &= 127;
+            bool issparse = (type & 64) != 0;
+            bool hasmetavalues = (type & 32) != 0;
+            type &= 31;
             if (loaders.ContainsKey(type))
             {
-                return loaders[type].Load(elementsize,unknown,data);
+                return loaders[type].Load(elementsize,unknown,issparse,hasmetavalues,data);
             }
             else
             {
-                return new EntityUnknownProperty(type,elementsize,unknown,data);
+                return new EntityUnknownProperty(type,elementsize,unknown,issparse,hasmetavalues,data);
             }
         }
 
@@ -149,6 +151,16 @@ namespace Crash
         }
 
         public abstract short Unknown
+        {
+            get;
+        }
+
+        public abstract bool IsSparse
+        {
+            get;
+        }
+
+        public abstract bool HasMetaValues
         {
             get;
         }

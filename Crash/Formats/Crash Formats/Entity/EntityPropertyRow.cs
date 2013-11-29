@@ -4,16 +4,16 @@ namespace Crash
 {
     public sealed class EntityPropertyRow<T>
     {
-        private short metavalue;
+        private short? metavalue;
         private List<T> values;
 
         public EntityPropertyRow()
         {
-            this.metavalue = 0;
+            this.metavalue = null;
             this.values = new List<T>();
         }
 
-        public short MetaValue
+        public short? MetaValue
         {
             get { return metavalue; }
             set { metavalue = value; }

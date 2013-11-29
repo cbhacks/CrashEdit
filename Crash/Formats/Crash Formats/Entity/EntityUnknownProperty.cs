@@ -5,13 +5,17 @@ namespace Crash
         private byte type;
         private byte elementsize;
         private short unknown;
+        private bool issparse;
+        private bool hasmetavalues;
         private byte[] data;
 
-        public EntityUnknownProperty(byte type,byte elementsize,short unknown,byte[] data)
+        public EntityUnknownProperty(byte type,byte elementsize,short unknown,bool issparse,bool hasmetavalues,byte[] data)
         {
             this.type = type;
             this.elementsize = elementsize;
             this.unknown = unknown;
+            this.issparse = issparse;
+            this.hasmetavalues = hasmetavalues;
             this.data = data;
         }
 
@@ -28,6 +32,16 @@ namespace Crash
         public override short Unknown
         {
             get { return unknown; }
+        }
+
+        public override bool IsSparse
+        {
+            get { return issparse; }
+        }
+
+        public override bool HasMetaValues
+        {
+            get { return hasmetavalues; }
         }
 
         public byte[] Data

@@ -29,7 +29,7 @@ namespace Crash
             {
                 if (Rows.Count == 1)
                 {
-                    if (Rows[0].MetaValue == 0)
+                    if (Rows[0].MetaValue == null)
                     {
                         if (Rows[0].Values.Count == 1)
                         {
@@ -47,7 +47,7 @@ namespace Crash
                 }
                 else if (Rows.Count == 2)
                 {
-                    if (Rows[0].MetaValue == 0)
+                    if (Rows[0].MetaValue == null && Rows[1].MetaValue == null)
                     {
                         if (Rows[0].Values.Count == 1 && Rows[1].Values.Count == 1)
                         {

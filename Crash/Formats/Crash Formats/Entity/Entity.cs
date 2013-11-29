@@ -240,7 +240,7 @@ namespace Crash
                 {
                     BitConv.ToInt16(header,16 + 8 * i + 2,(short)offset);
                 }
-                header[16 + 8 * i + 4] = (byte)(property.Type | ((i == properties.Count - 1) ? 128 : 0));
+                header[16 + 8 * i + 4] = (byte)(property.Type | ((i == properties.Count - 1) ? 128 : 0) | (property.IsSparse ? 64 : 0) | (property.HasMetaValues ? 32 : 0));
                 header[16 + 8 * i + 5] = property.ElementSize;
                 BitConv.ToInt16(header,16 + 8 * i + 6,property.Unknown);
                 byte[] propertydata = property.Save();

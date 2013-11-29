@@ -29,7 +29,7 @@ namespace Crash
             {
                 if (Rows.Count == 1)
                 {
-                    if (Rows[0].MetaValue == 0)
+                    if (Rows[0].MetaValue == null)
                     {
                         byte[] bytestr = new byte [Rows[0].Values.Count];
                         for (int i = 0;i < bytestr.Length;i++)
