@@ -113,7 +113,7 @@ namespace Crash
                     ErrorManager.SignalError("EntityProperty: Property has more rows than expected");
                 }
             }
-            else if (field.FieldType == typeof(EntityBasicProperty<T>))
+            else if (field.FieldType == GetType())
             {
                 field.SetValue(obj,this);
             }
