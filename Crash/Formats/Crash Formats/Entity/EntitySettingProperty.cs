@@ -1,8 +1,14 @@
+using System.Collections.Generic;
+
 namespace Crash
 {
     public sealed class EntitySettingProperty : EntityBasicProperty<EntitySetting>
     {
-        public EntitySettingProperty(EntitySetting[,] values) : base(values)
+        public EntitySettingProperty()
+        {
+        }
+
+        public EntitySettingProperty(IEnumerable<EntityPropertyRow<EntitySetting>> rows) : base(rows)
         {
         }
 

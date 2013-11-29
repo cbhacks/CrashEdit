@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Crash
 {
     [EntityPropertyType(1)]
@@ -13,9 +15,9 @@ namespace Crash
             return data[0];
         }
 
-        protected override EntityProperty Load(byte[,] values)
+        protected override EntityProperty Load(IEnumerable<EntityPropertyRow<byte>> rows)
         {
-            return new EntityUInt8Property(values);
+            return new EntityUInt8Property(rows);
         }
     }
 }

@@ -1,8 +1,14 @@
+using System.Collections.Generic;
+
 namespace Crash
 {
     public sealed class EntityInt16Property : EntityBasicProperty<short>
     {
-        public EntityInt16Property(short[,] values) : base(values)
+        public EntityInt16Property()
+        {
+        }
+
+        public EntityInt16Property(IEnumerable<EntityPropertyRow<short>> rows) : base(rows)
         {
         }
 

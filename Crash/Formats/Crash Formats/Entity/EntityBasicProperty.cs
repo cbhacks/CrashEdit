@@ -1,44 +1,181 @@
 using System;
+using System.Reflection;
+using System.Collections.Generic;
 
 namespace Crash
 {
-    public abstract class EntityBasicProperty<T> : EntityProperty
+    public abstract class EntityBasicProperty<T> : EntityProperty where T : struct
     {
-        private T[,] values;
+        private List<EntityPropertyRow<T>> rows;
 
-        public EntityBasicProperty(T[,] values)
+        public EntityBasicProperty()
         {
-            this.values = values;
+            this.rows = new List<EntityPropertyRow<T>>();
+        }
+
+        public EntityBasicProperty(IEnumerable<EntityPropertyRow<T>> rows)
+        {
+            this.rows = new List<EntityPropertyRow<T>>(rows);
         }
 
         public override sealed short Unknown
         {
-            get { return (short)values.GetLength(0); }
+            get { return (short)rows.Count; }
         }
 
-        public short ElementCount
+        public List<EntityPropertyRow<T>> Rows
         {
-            get { return (short)values.GetLength(1); }
+            get { return rows; }
         }
 
-        public T[,] Values
+        public bool HasMetaValues
         {
-            get { return values; }
+            get
+            {
+                foreach (EntityPropertyRow<T> row in rows)
+                {
+                    if (row.MetaValue != 0)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
+        public bool IsSparse
+        {
+            get
+            {
+                int? lastcount = null;
+                foreach (EntityPropertyRow<T> row in rows)
+                {
+                    if (!lastcount.HasValue)
+                    {
+                        lastcount = row.Values.Count;
+                    }
+                    else
+                    {
+                        if (lastcount.Value != row.Values.Count)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+
+        internal override void LoadToField(object obj,FieldInfo field)
+        {
+            if (field.FieldType == typeof(T?))
+            {
+                if (rows.Count == 1)
+                {
+                    if (rows[0].MetaValue == 0)
+                    {
+                        if (rows[0].Values.Count == 1)
+                        {
+                            field.SetValue(obj,rows[0].Values[0]);
+                        }
+                        else
+                        {
+                            ErrorManager.SignalError("EntityProperty: Property has more values than expected");
+                        }
+                    }
+                    else
+                    {
+                        ErrorManager.SignalError("EntityProperty: Property has an unexpected metavalue");
+                    }
+                }
+                else
+                {
+                    ErrorManager.SignalError("EntityProperty: Property has more rows than expected");
+                }
+            }
+            else if (field.FieldType == typeof(List<T>))
+            {
+                if (rows.Count == 1)
+                {
+                    if (rows[0].MetaValue == 0)
+                    {
+                        List<T> list = new List<T>();
+                        list.AddRange(rows[0].Values);
+                        field.SetValue(obj,list);
+                    }
+                    else
+                    {
+                        ErrorManager.SignalError("EntityProperty: Property has an unexpected metavalue");
+                    }
+                }
+                else
+                {
+                    ErrorManager.SignalError("EntityProperty: Property has more rows than expected");
+                }
+            }
+            else if (field.FieldType == typeof(EntityBasicProperty<T>))
+            {
+                field.SetValue(obj,this);
+            }
+            else
+            {
+                base.LoadToField(obj,field);
+            }
         }
 
         public override byte[] Save()
         {
-            int length = 4 + ElementSize * values.Length;
+            if (rows.Count == 0)
+                return new byte [0];
+            int length;
+            if (IsSparse)
+            {
+                length = rows.Count * 2;
+            }
+            else
+            {
+                length = 2;
+            }
+            if (HasMetaValues)
+            {
+                length += rows.Count * 2;
+            }
+            Aligner.Align(ref length,4);
+            foreach (EntityPropertyRow<T> row in rows)
+            {
+                length += row.Values.Count * ElementSize;
+            }
             Aligner.Align(ref length,4);
             byte[] data = new byte [length];
-            BitConv.ToInt16(data,0,ElementCount);
-            int offset = 4;
-            for (int i = 0;i < Unknown;i++)
+            int offset = 0;
+            if (IsSparse)
             {
-                for (int j = 0;j < ElementCount;j++)
+                foreach (EntityPropertyRow<T> row in rows)
                 {
-                    byte[] elementdata = new byte [ElementSize];
-                    SaveElement(elementdata,values[i,j]);
+                    BitConv.ToInt16(data,offset,(short)row.Values.Count);
+                    offset += 2;
+                }
+            }
+            else
+            {
+                BitConv.ToInt16(data,offset,(short)rows[0].Values.Count);
+                offset += 2;
+            }
+            if (HasMetaValues)
+            {
+                foreach (EntityPropertyRow<T> row in rows)
+                {
+                    BitConv.ToInt16(data,offset,(short)row.Values.Count);
+                    offset += 2;
+                }
+            }
+            Aligner.Align(ref offset,4);
+            byte[] elementdata = new byte [ElementSize];
+            foreach (EntityPropertyRow<T> row in rows)
+            {
+                foreach (T value in row.Values)
+                {
+                    SaveElement(elementdata,value);
                     elementdata.CopyTo(data,offset);
                     offset += ElementSize;
                 }

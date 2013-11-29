@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Crash
 {
     [EntityPropertyType(19)]
@@ -13,9 +15,9 @@ namespace Crash
             return BitConv.FromInt32(data,0);
         }
         
-        protected override EntityProperty Load(int[,] values)
+        protected override EntityProperty Load(IEnumerable<EntityPropertyRow<int>> rows)
         {
-            return new EntityInt32Property(values);
+            return new EntityInt32Property(rows);
         }
     }
 }

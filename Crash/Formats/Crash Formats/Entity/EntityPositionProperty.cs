@@ -1,8 +1,14 @@
+using System.Collections.Generic;
+
 namespace Crash
 {
     public sealed class EntityPositionProperty : EntityBasicProperty<EntityPosition>
     {
-        public EntityPositionProperty(EntityPosition[,] values) : base(values)
+        public EntityPositionProperty()
+        {
+        }
+
+        public EntityPositionProperty(IEnumerable<EntityPropertyRow<EntityPosition>> rows) : base(rows)
         {
         }
 

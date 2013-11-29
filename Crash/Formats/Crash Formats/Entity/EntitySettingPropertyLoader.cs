@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Crash
 {
     [EntityPropertyType(5)]
@@ -15,9 +17,9 @@ namespace Crash
             return new EntitySetting(a,b);
         }
 
-        protected override EntityProperty Load(EntitySetting[,] values)
+        protected override EntityProperty Load(IEnumerable<EntityPropertyRow<EntitySetting>> rows)
         {
-            return new EntitySettingProperty(values);
+            return new EntitySettingProperty(rows);
         }
     }
 }

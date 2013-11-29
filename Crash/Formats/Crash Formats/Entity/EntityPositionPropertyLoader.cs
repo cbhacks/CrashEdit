@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Crash
 {
     [EntityPropertyType(6)]
@@ -16,9 +18,9 @@ namespace Crash
             return new EntityPosition(x,y,z);
         }
 
-        protected override EntityProperty Load(EntityPosition[,] values)
+        protected override EntityProperty Load(IEnumerable<EntityPropertyRow<EntityPosition>> rows)
         {
-            return new EntityPositionProperty(values);
+            return new EntityPositionProperty(rows);
         }
     }
 }
