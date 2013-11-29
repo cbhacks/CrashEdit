@@ -95,6 +95,10 @@ namespace Crash
         private int? type;
         [EntityPropertyField(0xAA)]
         private int? subtype;
+        [EntityPropertyField(0x13B)]
+        private EntityInt32Property drawlista = null;
+        [EntityPropertyField(0x13C)]
+        private EntityInt32Property drawlistb = null;
         [EntityPropertyField(0x287)]
         private List<short> victims = null;
         [EntityPropertyField(0x28B)]
@@ -197,6 +201,16 @@ namespace Crash
         {
             get { return subtype; }
             set { subtype = value; }
+        }
+
+        public EntityInt32Property DrawListA
+        {
+            get { return drawlista; }
+        }
+
+        public EntityInt32Property DrawListB
+        {
+            get { return drawlistb; }
         }
 
         public IList<short> Victims
