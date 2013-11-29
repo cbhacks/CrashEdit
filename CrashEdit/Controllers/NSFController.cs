@@ -57,6 +57,7 @@ namespace CrashEdit
             AddMenu("Add Chunk - Speech",Menu_Add_SpeechChunk);
             AddMenuSeparator();
             AddMenu("Fix Nitro Detonators",Menu_Fix_Detonator);
+            AddMenu("Fix Box Count",Menu_Fix_BoxCount);
         }
 
         public NSF NSF
@@ -137,6 +138,52 @@ namespace CrashEdit
                 foreach (Entity nitro in nitros)
                 {
                     detonator.Victims.Add((short)nitro.ID.Value);
+                }
+            }
+        }
+
+        private void Menu_Fix_BoxCount()
+        {
+            int boxcount = 0;
+            List<Entity> willys = new List<Entity>();
+            foreach (Chunk chunk in nsf.Chunks)
+            {
+                if (chunk is EntryChunk)
+                {
+                    foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                    {
+                        if (entry is EntityEntry)
+                        {
+                            foreach (Entity entity in ((EntityEntry)entry).Entities)
+                            {
+                                if (entity.Type == 0 && entity.Subtype == 0)
+                                {
+                                    willys.Add(entity);
+                                }
+                                else if (entity.Type == 34)
+                                {
+                                    switch (entity.Subtype)
+                                    {
+                                        case 5:
+                                        case 7:
+                                        case 15:
+                                        case 24:
+                                            break;
+                                        default:
+                                            boxcount++;
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            foreach (Entity willy in willys)
+            {
+                if (willy.BoxCount.HasValue)
+                {
+                    willy.BoxCount = new EntitySetting(0,boxcount);
                 }
             }
         }
