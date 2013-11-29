@@ -1,5 +1,6 @@
 using Crash;
 using System;
+using System.Collections.Generic;
 
 namespace CrashEdit
 {
@@ -54,6 +55,8 @@ namespace CrashEdit
             AddMenu("Add Chunk - Sound",Menu_Add_SoundChunk);
             AddMenu("Add Chunk - Wavebank",Menu_Add_WavebankChunk);
             AddMenu("Add Chunk - Speech",Menu_Add_SpeechChunk);
+            AddMenuSeparator();
+            AddMenu("Fix Nitro Detonators",Menu_Fix_Detonator);
         }
 
         public NSF NSF
@@ -96,6 +99,46 @@ namespace CrashEdit
             nsf.Chunks.Add(chunk);
             SpeechChunkController controller = new SpeechChunkController(this,chunk);
             AddNode(controller);
+        }
+
+        private void Menu_Fix_Detonator()
+        {
+            List<Entity> nitros = new List<Entity>();
+            List<Entity> detonators = new List<Entity>();
+            foreach (Chunk chunk in nsf.Chunks)
+            {
+                if (chunk is EntryChunk)
+                {
+                    foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                    {
+                        if (entry is EntityEntry)
+                        {
+                            foreach (Entity entity in ((EntityEntry)entry).Entities)
+                            {
+                                if (entity.Type == 34)
+                                {
+                                    if (entity.Subtype == 18 && entity.ID.HasValue)
+                                    {
+                                        nitros.Add(entity);
+                                    }
+                                    else if (entity.Subtype == 24)
+                                    {
+                                        detonators.Add(entity);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            foreach (Entity detonator in detonators)
+            {
+                detonator.Victims.Clear();
+                foreach (Entity nitro in nitros)
+                {
+                    detonator.Victims.Add((short)nitro.ID.Value);
+                }
+            }
         }
     }
 }
