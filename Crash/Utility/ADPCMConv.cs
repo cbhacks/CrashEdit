@@ -6,8 +6,8 @@ namespace Crash
 {
     public static class ADPCMConv
     {
-        private static int[] f0 = {0,60,115,98,122};
-        private static int[] f1 = {0,0,-52,-55,-60};
+        private static int[] f0 = {0,60,115,98,122,0,0,0,0,0,0,0,0,0,0,0};
+        private static int[] f1 = {0,0,-52,-55,-60,0,0,0,0,0,0,0,0,0,0,0};
 
         public static short FromADPCM(int sample,int factor,int predict,ref double s0,ref double s1)
         {
@@ -17,7 +17,7 @@ namespace Crash
                 throw new ArgumentOutOfRangeException("factor");
             if ((predict & 0xF) != predict)
                 throw new ArgumentOutOfRangeException("predict");
-            if (predict >= 5)
+            if (predict >= 16)
                 throw new ArgumentOutOfRangeException("predict");
             sample <<= 12;
             sample = (short)sample; // Sign extend
