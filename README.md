@@ -52,7 +52,9 @@ https://sites.google.com/site/crashpsxsite/structure
 
 The NSF file contains the actual game data for the level and is what CrashEdit is designed to read and manipulate. An NSF file consists of __entries__. Each entry has a 5-character name, and represents a game asset such as a sound effect or 3d model. The following entry types are recognized and supported by CrashEdit:
 
-* __Old Scenery Entry:__ _(For crash 1)_ One section of the level's scenery 3D model.
+* __Animation Entry:__ One animation used by a game object. Each frame is a full set of vertices.
+* __Model Entry:__ One model used by a game object. Polygon data is stored in a Model Entry, but vertex data is stored in an Animation Entry.
+* __Scenery Entry:__ One section of the 3D model for a level's scenery.
 * __Entity Entry:__ Describes one level "zone", including objects in that zone as well as the zone's camera configuration.
 * __Sound Entry:__ A sound effect. This entry only contains the raw sound data without any metadata such as the sample rate.
 * __Music Entry:__ A set of music tracks in SEQ format (very similar to MIDI format), and possibly the associated VH file (wavebank header file). Each level zone will refer to a single music entry which will be used for playback while the camera is in that zone.
@@ -87,6 +89,8 @@ _These issues have no significant effect on the operation of the program, but ar
 
 ### Bugs ###
 * __All Games:__ Zooming in completely on a 3d viewer will cause intense Z-fighting.
+* __All Games:__ Exporting VABs in DLS format is currently broken. The workaround is to open and resave the DLS file with _Awave Studio_.
+* __Crash 1 _All_:__ Exporting to COLLADA format is currently broken. However, these files can be opened without issue in _Noesis_.
 
 ### Broken Game Files ###
 * __Crash 1 _All_:__ `S0000002.NSF`, if present, is an older-format file which is not supported.
@@ -117,7 +121,6 @@ https://github.com/ughman/CrashEdit
 I can be contacted in various ways:
 
 * As `chekwob@yahoo.com` via email __(If your email is not in english, please include "CrashEdit" in the email subject line so I know it's not spam)__
-* As `chekwob` on YouTube
 * As `chekwob` on the XeNTaX forum
 * As `chekwob` on the CM forum (hpzr.proboards.com)
 * As `ughman` on github (this is not checked very often)
