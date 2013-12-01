@@ -99,6 +99,10 @@ namespace Crash
         private EntityInt32Property drawlista = null;
         [EntityPropertyField(0x13C)]
         private EntityInt32Property drawlistb = null;
+        [EntityPropertyField(0x208)]
+        private EntityT4Property loadlista = null;
+        [EntityPropertyField(0x209)]
+        private EntityT4Property loadlistb = null;
         [EntityPropertyField(0x287)]
         private List<short> victims = null;
         [EntityPropertyField(0x28B)]
@@ -211,6 +215,16 @@ namespace Crash
         public EntityInt32Property DrawListB
         {
             get { return drawlistb; }
+        }
+
+        public EntityT4Property LoadListA
+        {
+            get { return loadlista; }
+        }
+
+        public EntityT4Property LoadListB
+        {
+            get { return loadlistb; }
         }
 
         public IList<short> Victims
