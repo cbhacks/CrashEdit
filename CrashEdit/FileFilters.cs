@@ -6,6 +6,7 @@ namespace CrashEdit
     {
         public const string Any = "All Files (*.*)|*.*";
         public const string NSF = "NSF Files (*.nsf)|*.nsf";
+        public const string NSEntry = "NSF Entries (*.nsentry)|*.nsentry";
         public const string Wave = "Wave Files (*.wav)|*.wav";
         public const string OBJ = "Wavefront OBJ Files (*.obj)|*.obj";
         public const string COLLADA = "COLLADA Files (*.dae)|*.dae";

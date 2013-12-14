@@ -12,6 +12,7 @@ namespace CrashEdit
         {
             this.entrychunkcontroller = entrychunkcontroller;
             this.entry = entry;
+            AddMenu("Export Entry",Menu_Export_Entry);
             AddMenu("Delete Entry",Menu_Delete_Entry);
             if (!(this is UnprocessedEntryController))
             {
@@ -52,6 +53,11 @@ namespace CrashEdit
         protected T FindEID<T>(int eid) where T : Entry
         {
             return entrychunkcontroller.NSFController.NSF.FindEID<T>(eid);
+        }
+
+        private void Menu_Export_Entry()
+        {
+            FileUtil.SaveFile(entry.Save(),FileFilters.NSEntry,FileFilters.Any);
         }
 
         private void Menu_Delete_Entry()

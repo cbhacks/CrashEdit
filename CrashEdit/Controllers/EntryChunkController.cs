@@ -14,6 +14,7 @@ namespace CrashEdit
             {
                 AddNode(CreateEntryController(entry));
             }
+            AddMenu("Import Entry",Menu_Import_Entry);
         }
 
         public EntryChunk EntryChunk
@@ -126,6 +127,22 @@ namespace CrashEdit
             else
             {
                 throw new NotImplementedException();
+            }
+        }
+
+        private void Menu_Import_Entry()
+        {
+            byte[] data = FileUtil.OpenFile(FileFilters.NSEntry,FileFilters.Any);
+            if (data == null)
+                return;
+            try
+            {
+                UnprocessedEntry entry = Entry.Load(data);
+                entrychunk.Entries.Add(entry);
+                AddNode(new UnprocessedEntryController(this,entry));
+            }
+            catch (LoadAbortedException)
+            {
             }
         }
     }
