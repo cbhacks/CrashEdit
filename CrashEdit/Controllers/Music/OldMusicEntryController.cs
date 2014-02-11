@@ -12,9 +12,6 @@ namespace CrashEdit
         public OldMusicEntryController(EntryChunkController entrychunkcontroller,OldMusicEntry oldmusicentry) : base(entrychunkcontroller,oldmusicentry)
         {
             this.oldmusicentry = oldmusicentry;
-            Node.Text = string.Format("Old Music Entry ({0})",oldmusicentry.EIDString);
-            Node.ImageKey = "oldmusicentry";
-            Node.SelectedImageKey = "oldmusicentry";
             AddNode(new OldVHController(this,oldmusicentry.VH));
             foreach (SEQ seq in oldmusicentry.SEP.SEQs)
             {
@@ -28,6 +25,14 @@ namespace CrashEdit
             AddMenu("Export Linked VB",Menu_Export_Linked_VB);
             AddMenu("Export Linked VAB",Menu_Export_Linked_VAB);
             AddMenu("Export Linked VAB as DLS",Menu_Export_Linked_VAB_DLS);
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
+            Node.Text = string.Format("Old Music Entry ({0})",oldmusicentry.EIDString);
+            Node.ImageKey = "oldmusicentry";
+            Node.SelectedImageKey = "oldmusicentry";
         }
 
         public OldMusicEntry OldMusicEntry

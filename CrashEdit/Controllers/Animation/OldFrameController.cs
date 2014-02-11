@@ -13,6 +13,11 @@ namespace CrashEdit
         {
             this.oldanimationentrycontroller = oldanimationentrycontroller;
             this.oldframe = oldframe;
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
             Node.Text = "Frame";
             Node.ImageKey = "oldframe";
             Node.SelectedImageKey = "oldframe";

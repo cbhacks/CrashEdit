@@ -9,6 +9,11 @@ namespace CrashEdit
         public NormalChunkController(NSFController nsfcontroller,NormalChunk normalchunk) : base(nsfcontroller,normalchunk)
         {
             this.normalchunk = normalchunk;
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
             Node.Text = "Normal Chunk";
             Node.ImageKey = "normalchunk";
             Node.SelectedImageKey = "normalchunk";

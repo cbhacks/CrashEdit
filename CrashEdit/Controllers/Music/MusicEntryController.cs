@@ -12,9 +12,6 @@ namespace CrashEdit
         public MusicEntryController(EntryChunkController entrychunkcontroller,MusicEntry musicentry) : base(entrychunkcontroller,musicentry)
         {
             this.musicentry = musicentry;
-            Node.Text = string.Format("Music Entry ({0})",musicentry.EIDString);
-            Node.ImageKey = "musicentry";
-            Node.SelectedImageKey = "musicentry";
             if (musicentry.VH != null)
             {
                 AddNode(new VHController(this,musicentry.VH));
@@ -33,6 +30,14 @@ namespace CrashEdit
             AddMenu("Export Linked VB",Menu_Export_Linked_VB);
             AddMenu("Export Linked VAB",Menu_Export_Linked_VAB);
             AddMenu("Export Linked VAB as DLS",Menu_Export_Linked_VAB_DLS);
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
+            Node.Text = string.Format("Music Entry ({0})",musicentry.EIDString);
+            Node.ImageKey = "musicentry";
+            Node.SelectedImageKey = "musicentry";
         }
 
         public MusicEntry MusicEntry

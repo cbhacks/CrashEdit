@@ -11,6 +11,11 @@ namespace CrashEdit
         public UnprocessedChunkController(NSFController nsfcontroller,UnprocessedChunk unprocessedchunk) : base(nsfcontroller,unprocessedchunk)
         {
             this.unprocessedchunk = unprocessedchunk;
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
             Node.Text = string.Format("Unprocessed Chunk (T{0})",unprocessedchunk.Type);
             Node.ImageKey = "unprocessedchunk";
             Node.SelectedImageKey = "unprocessedchunk";

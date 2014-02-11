@@ -10,6 +10,7 @@ namespace CrashEdit
 {
     public partial class EntityBox : UserControl
     {
+        private EntityController controller;
         private Entity entity;
 
         private bool positiondirty;
@@ -17,9 +18,10 @@ namespace CrashEdit
         private bool settingdirty;
         private int settingindex;
 
-        public EntityBox(Entity entity)
+        public EntityBox(EntityController controller)
         {
-            this.entity = entity;
+            this.controller = controller;
+            this.entity = controller.Entity;
             InitializeComponent();
             UpdateName();
             UpdatePosition();
@@ -29,6 +31,11 @@ namespace CrashEdit
             UpdateSubtype();
             UpdateBoxCount();
             positionindex = 0;
+        }
+
+        private void InvalidateNodes()
+        {
+            controller.InvalidateNode();
         }
 
         private void UpdateName()
@@ -56,11 +63,13 @@ namespace CrashEdit
             {
                 entity.Name = null;
             }
+            InvalidateNodes();
         }
 
         private void txtName_TextChanged(object sender,EventArgs e)
         {
             entity.Name = txtName.Text;
+            InvalidateNodes();
         }
 
         private void UpdatePosition()
@@ -128,12 +137,14 @@ namespace CrashEdit
         {
             entity.Positions.Insert(positionindex,entity.Positions[positionindex]);
             UpdatePosition();
+            InvalidateNodes();
         }
 
         private void cmdRemovePosition_Click(object sender,EventArgs e)
         {
             entity.Positions.RemoveAt(positionindex);
             UpdatePosition();
+            InvalidateNodes();
         }
 
         private void cmdAppendPosition_Click(object sender,EventArgs e)
@@ -148,6 +159,7 @@ namespace CrashEdit
                 entity.Positions.Add(new EntityPosition(0,0,0));
             }
             UpdatePosition();
+            InvalidateNodes();
         }
 
         private void numX_ValueChanged(object sender,EventArgs e)
@@ -235,12 +247,14 @@ namespace CrashEdit
         {
             entity.Settings.Add(new EntitySetting(0,0));
             UpdateSettings();
+            InvalidateNodes();
         }
 
         private void cmdRemoveSetting_Click(object sender,EventArgs e)
         {
             entity.Settings.RemoveAt(settingindex);
             UpdateSettings();
+            InvalidateNodes();
         }
 
         private void numSettingA_ValueChanged(object sender,EventArgs e)
@@ -295,6 +309,7 @@ namespace CrashEdit
                 chkID2.Checked = false;
                 entity.ID = null;
             }
+            InvalidateNodes();
         }
 
         private void numID_ValueChanged(object sender,EventArgs e)
@@ -313,6 +328,7 @@ namespace CrashEdit
             {
                 entity.AlternateID = null;
             }
+            InvalidateNodes();
         }
 
         private void numID2_ValueChanged(object sender,EventArgs e)
@@ -341,6 +357,7 @@ namespace CrashEdit
             {
                 entity.Type = null;
             }
+            InvalidateNodes();
         }
 
         private void numType_ValueChanged(object sender,EventArgs e)
@@ -369,6 +386,7 @@ namespace CrashEdit
             {
                 entity.Subtype = null;
             }
+            InvalidateNodes();
         }
 
         private void numSubtype_ValueChanged(object sender,EventArgs e)
@@ -397,6 +415,7 @@ namespace CrashEdit
             {
                 entity.BoxCount = null;
             }
+            InvalidateNodes();
         }
 
         private void numBoxCount_ValueChanged(object sender,EventArgs e)

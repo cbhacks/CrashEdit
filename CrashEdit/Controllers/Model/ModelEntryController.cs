@@ -9,6 +9,11 @@ namespace CrashEdit
         public ModelEntryController(EntryChunkController entrychunkcontroller,ModelEntry modelentry) : base(entrychunkcontroller,modelentry)
         {
             this.modelentry = modelentry;
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
             Node.Text = string.Format("Model Entry ({0})",modelentry.EIDString);
             Node.ImageKey = "modelentry";
             Node.SelectedImageKey = "modelentry";

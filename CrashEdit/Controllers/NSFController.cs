@@ -13,9 +13,6 @@ namespace CrashEdit
         {
             this.nsf = nsf;
             this.gameversion = gameversion;
-            Node.Text = "NSF File";
-            Node.ImageKey = "nsf";
-            Node.SelectedImageKey = "nsf";
             foreach (Chunk chunk in nsf.Chunks)
             {
                 if (chunk is NormalChunk)
@@ -58,6 +55,14 @@ namespace CrashEdit
             AddMenuSeparator();
             AddMenu("Fix Nitro Detonators",Menu_Fix_Detonator);
             AddMenu("Fix Box Count",Menu_Fix_BoxCount);
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
+            Node.Text = "NSF File";
+            Node.ImageKey = "nsf";
+            Node.SelectedImageKey = "nsf";
         }
 
         public NSF NSF

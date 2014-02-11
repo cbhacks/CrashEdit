@@ -9,6 +9,11 @@ namespace CrashEdit
         public SpeechChunkController(NSFController nsfcontroller,SpeechChunk speechchunk) : base(nsfcontroller,speechchunk)
         {
             this.speechchunk = speechchunk;
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
             Node.Text = "Speech Chunk";
             Node.ImageKey = "speechchunk";
             Node.SelectedImageKey = "speechchunk";

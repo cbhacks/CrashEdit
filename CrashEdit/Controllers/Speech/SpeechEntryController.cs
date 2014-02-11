@@ -10,6 +10,11 @@ namespace CrashEdit
         public SpeechEntryController(EntryChunkController entrychunkcontroller,SpeechEntry speechentry) : base(entrychunkcontroller,speechentry)
         {
             this.speechentry = speechentry;
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
             Node.Text = string.Format("Speech Entry ({0})",speechentry.EIDString);
             Node.ImageKey = "speechentry";
             Node.SelectedImageKey = "speechentry";

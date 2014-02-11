@@ -13,6 +13,11 @@ namespace CrashEdit
         {
             this.t4entrycontroller = t4entrycontroller;
             this.t4item = t4item;
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
             Node.Text = "Item";
             Node.ImageKey = "t4item";
             Node.SelectedImageKey = "t4item";

@@ -12,13 +12,18 @@ namespace CrashEdit
         {
             this.musicentrycontroller = musicentrycontroller;
             this.vh = vh;
-            Node.Text = "VH";
-            Node.ImageKey = "vh";
-            Node.SelectedImageKey = "vh";
             AddMenu("Replace VH",Menu_Replace_VH);
             AddMenu("Delete VH",Menu_Delete_VH);
             AddMenuSeparator();
             AddMenu("Export VH",Menu_Export_VH);
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
+            Node.Text = "VH";
+            Node.ImageKey = "vh";
+            Node.SelectedImageKey = "vh";
         }
 
         public MusicEntryController MusicEntryController

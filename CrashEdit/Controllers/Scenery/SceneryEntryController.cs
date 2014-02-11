@@ -10,6 +10,11 @@ namespace CrashEdit
         public SceneryEntryController(EntryChunkController entrychunkcontroller,SceneryEntry sceneryentry) : base(entrychunkcontroller,sceneryentry)
         {
             this.sceneryentry = sceneryentry;
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
             Node.Text = string.Format("Scenery Entry ({0})",sceneryentry.EIDString);
             Node.ImageKey = "sceneryentry";
             Node.SelectedImageKey = "sceneryentry";

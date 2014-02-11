@@ -10,9 +10,6 @@ namespace CrashEdit
         public OldSceneryEntryController(EntryChunkController entrychunkcontroller,OldSceneryEntry oldsceneryentry) : base(entrychunkcontroller,oldsceneryentry)
         {
             this.oldsceneryentry = oldsceneryentry;
-            Node.Text = string.Format("Old Scenery Entry ({0})",oldsceneryentry.EIDString);
-            Node.ImageKey = "oldsceneryentry";
-            Node.SelectedImageKey = "oldsceneryentry";
             if (oldsceneryentry.ExtraData != null)
             {
                 AddNode(new ItemController(null,oldsceneryentry.ExtraData));
@@ -20,6 +17,14 @@ namespace CrashEdit
             AddMenuSeparator();
             AddMenu("Export as OBJ",Menu_Export_OBJ);
             AddMenu("Export as COLLADA",Menu_Export_COLLADA);
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
+            Node.Text = string.Format("Old Scenery Entry ({0})",oldsceneryentry.EIDString);
+            Node.ImageKey = "oldsceneryentry";
+            Node.SelectedImageKey = "oldsceneryentry";
         }
 
         protected override Control CreateEditor()

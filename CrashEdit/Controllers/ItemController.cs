@@ -11,14 +11,19 @@ namespace CrashEdit
         {
             this.mysteryentrycontroller = mysteryentrycontroller;
             this.item = item;
-            Node.Text = "Item";
-            Node.ImageKey = "item";
-            Node.SelectedImageKey = "item";
             if (mysteryentrycontroller != null)
             {
                 AddMenu("Replace Item",Menu_Replace_Item);
                 AddMenu("Delete Item",Menu_Delete_Item);
             }
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
+            Node.Text = "Item";
+            Node.ImageKey = "item";
+            Node.SelectedImageKey = "item";
         }
 
         protected override Control CreateEditor()

@@ -13,6 +13,12 @@ namespace CrashEdit
         {
             this.entityentrycontroller = entityentrycontroller;
             this.entity = entity;
+            AddMenu("Duplicate Entity",Menu_Duplicate);
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
             if (entity.Name != null)
             {
                 Node.Text = string.Format("Entity ({0})",entity.Name);
@@ -23,12 +29,11 @@ namespace CrashEdit
             }
             Node.ImageKey = "entity";
             Node.SelectedImageKey = "entity";
-            AddMenu("Duplicate Entity",Menu_Duplicate);
         }
 
         protected override Control CreateEditor()
         {
-            return new EntityBox(entity);
+            return new EntityBox(this);
         }
 
         public EntityEntryController EntityEntryController

@@ -9,6 +9,11 @@ namespace CrashEdit
         public T17EntryController(EntryChunkController entrychunkcontroller,T17Entry t17entry) : base(entrychunkcontroller,t17entry)
         {
             this.t17entry = t17entry;
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
             Node.Text = string.Format("T17 Entry ({0})",t17entry.EIDString);
             Node.ImageKey = "t17entry";
             Node.SelectedImageKey = "t17entry";

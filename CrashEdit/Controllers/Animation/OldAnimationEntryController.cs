@@ -10,13 +10,18 @@ namespace CrashEdit
         public OldAnimationEntryController(EntryChunkController entrychunkcontroller,OldAnimationEntry oldanimationentry) : base(entrychunkcontroller,oldanimationentry)
         {
             this.oldanimationentry = oldanimationentry;
-            Node.Text = string.Format("Old Animation Entry ({0})",oldanimationentry.EIDString);
-            Node.ImageKey = "oldanimationentry";
-            Node.SelectedImageKey = "oldanimationentry";
             foreach (OldFrame frame in oldanimationentry.Frames)
             {
                 AddNode(new OldFrameController(this,frame));
             }
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
+            Node.Text = string.Format("Old Animation Entry ({0})",oldanimationentry.EIDString);
+            Node.ImageKey = "oldanimationentry";
+            Node.SelectedImageKey = "oldanimationentry";
         }
 
         protected override Control CreateEditor()

@@ -51,6 +51,8 @@ namespace CrashEdit
             contextmenu.MenuItems.Add("-");
         }
 
+        public abstract void InvalidateNode();
+
         protected virtual Control CreateEditor()
         {
             Label label = new Label();

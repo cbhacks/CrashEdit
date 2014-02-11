@@ -10,6 +10,11 @@ namespace CrashEdit
         public TextureChunkController(NSFController nsfcontroller,TextureChunk texturechunk) : base(nsfcontroller,texturechunk)
         {
             this.texturechunk = texturechunk;
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
             Node.Text = string.Format("Texture Chunk ({0})",Entry.EIDToString(texturechunk.EID));
             Node.ImageKey = "texturechunk";
             Node.SelectedImageKey = "texturechunk";

@@ -12,14 +12,19 @@ namespace CrashEdit
         {
             this.musicentrycontroller = musicentrycontroller;
             this.seq = seq;
-            Node.Text = "SEQ";
-            Node.ImageKey = "seq";
-            Node.SelectedImageKey = "seq";
             AddMenu("Replace SEQ",Menu_Replace_SEQ);
             AddMenu("Delete SEQ",Menu_Delete_SEQ);
             AddMenuSeparator();
             AddMenu("Export SEQ",Menu_Export_SEQ);
             AddMenu("Export SEQ as MIDI",Menu_Export_SEQ_MIDI);
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
+            Node.Text = "SEQ";
+            Node.ImageKey = "seq";
+            Node.SelectedImageKey = "seq";
         }
 
         public MusicEntryController MusicEntryController

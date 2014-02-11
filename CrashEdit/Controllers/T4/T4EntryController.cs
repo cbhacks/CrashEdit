@@ -9,13 +9,18 @@ namespace CrashEdit
         public T4EntryController(EntryChunkController entrychunkcontroller,T4Entry t4entry) : base(entrychunkcontroller,t4entry)
         {
             this.t4entry = t4entry;
-            Node.Text = string.Format("T4 Entry ({0})",t4entry.EIDString);
-            Node.ImageKey = "t4entry";
-            Node.SelectedImageKey = "t4entry";
             foreach (T4Item t4item in t4entry.T4Items)
             {
                 AddNode(new T4ItemController(this,t4item));
             }
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
+            Node.Text = string.Format("T4 Entry ({0})",t4entry.EIDString);
+            Node.ImageKey = "t4entry";
+            Node.SelectedImageKey = "t4entry";
         }
 
         public T4Entry T4Entry

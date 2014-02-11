@@ -9,6 +9,11 @@ namespace CrashEdit
         public WavebankChunkController(NSFController nsfcontroller,WavebankChunk wavebankchunk) : base(nsfcontroller,wavebankchunk)
         {
             this.wavebankchunk = wavebankchunk;
+            InvalidateNode();
+        }
+
+        public override void InvalidateNode()
+        {
             Node.Text = "Wavebank Chunk";
             Node.ImageKey = "wavebankchunk";
             Node.SelectedImageKey = "wavebankchunk";
