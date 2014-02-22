@@ -304,9 +304,11 @@ namespace CrashEdit
 
         public void CloseNSF()
         {
-            if (tbcTabs.SelectedTab != null)
+            TabPage tab = tbcTabs.SelectedTab;
+            if (tab != null)
             {
-                tbcTabs.TabPages.Remove(tbcTabs.SelectedTab);
+                tbcTabs.TabPages.Remove(tab);
+                tab.Dispose();
             }
         }
 
