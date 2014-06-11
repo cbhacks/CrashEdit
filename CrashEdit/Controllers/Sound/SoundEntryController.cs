@@ -15,7 +15,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Sound Entry ({0})",soundentry.EIDString);
+            Node.Text = string.Format("Sound Entry ({0})",soundentry.EName);
             Node.ImageKey = "soundentry";
             Node.SelectedImageKey = "soundentry";
         }

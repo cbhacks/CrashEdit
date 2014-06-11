@@ -15,7 +15,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Wavebank Entry ({0})",wavebankentry.EIDString);
+            Node.Text = string.Format("Wavebank Entry ({0})",wavebankentry.EName);
             Node.ImageKey = "wavebankentry";
             Node.SelectedImageKey = "wavebankentry";
         }

@@ -379,7 +379,7 @@ namespace CrashEdit
                         rect.Width = hstep * 4 - 1;
                         int eid = BitConv.FromInt32(data,i);
                         e.Graphics.FillRectangle(curbackbrush,rect);
-                        e.Graphics.DrawString(Entry.EIDToString(eid),curfont,curbrush,rect,curformat);
+                        e.Graphics.DrawString(Entry.EIDToEName(eid),curfont,curbrush,rect,curformat);
                         x += 3;
                         continue;
                     }

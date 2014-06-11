@@ -14,7 +14,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Old Entity Entry ({0})",oldentityentry.EIDString);
+            Node.Text = string.Format("Old Entity Entry ({0})",oldentityentry.EName);
             Node.ImageKey = "oldentityentry";
             Node.SelectedImageKey = "oldentityentry";
         }

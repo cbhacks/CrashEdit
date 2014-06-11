@@ -35,7 +35,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Music Entry ({0})",musicentry.EIDString);
+            Node.Text = string.Format("Music Entry ({0})",musicentry.EName);
             Node.ImageKey = "musicentry";
             Node.SelectedImageKey = "musicentry";
         }
