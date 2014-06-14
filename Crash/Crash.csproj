@@ -95,7 +95,10 @@
     <Compile Include="Utility\Aligner.cs" />
     <Compile Include="Utility\ADPCMConv.cs" />
     <Compile Include="Utility\AutoBitConv.cs" />
+    <Compile Include="Utility\EvListEventHandler.cs" />
     <Compile Include="Utility\Endianness.cs" />
+    <Compile Include="Utility\EvList.cs" />
+    <Compile Include="Utility\EvListEventArgs.cs" />
     <Compile Include="Utility\MIDIConv.cs" />
     <Compile Include="Formats\Crash Formats\Music\MusicEntry.cs" />
     <Compile Include="Formats\Crash Formats\Music\MusicEntryLoader.cs" />

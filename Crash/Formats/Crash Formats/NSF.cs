@@ -200,16 +200,16 @@ namespace Crash
             return nsf;
         }
 
-        private List<Chunk> chunks;
+        private EvList<Chunk> chunks;
 
         public NSF(IEnumerable<Chunk> chunks)
         {
             if (chunks == null)
                 throw new ArgumentNullException("chunks");
-            this.chunks = new List<Chunk>(chunks);
+            this.chunks = new EvList<Chunk>(chunks);
         }
 
-        public IList<Chunk> Chunks
+        public EvList<Chunk> Chunks
         {
             get { return chunks; }
         }

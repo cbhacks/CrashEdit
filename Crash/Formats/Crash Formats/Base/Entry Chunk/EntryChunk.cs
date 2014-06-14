@@ -5,21 +5,21 @@ namespace Crash
 {
     public abstract class EntryChunk : Chunk
     {
-        private List<Entry> entries;
+        private EvList<Entry> entries;
 
         public EntryChunk()
         {
-            this.entries = new List<Entry>();
+            this.entries = new EvList<Entry>();
         }
 
         public EntryChunk(IEnumerable<Entry> entries)
         {
             if (entries == null)
                 throw new ArgumentNullException("entries");
-            this.entries = new List<Entry>(entries);
+            this.entries = new EvList<Entry>(entries);
         }
 
-        public IList<Entry> Entries
+        public EvList<Entry> Entries
         {
             get { return entries; }
         }
