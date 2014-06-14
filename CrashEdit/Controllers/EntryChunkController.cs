@@ -56,13 +56,13 @@ namespace CrashEdit
             {
                 return new T6EntryController(this,(T6Entry)entry);
             }
-            else if (entry is OldEntityEntry)
+            else if (entry is OldZoneEntry)
             {
-                return new OldEntityEntryController(this,(OldEntityEntry)entry);
+                return new OldZoneEntryController(this,(OldZoneEntry)entry);
             }
-            else if (entry is EntityEntry)
+            else if (entry is ZoneEntry)
             {
-                return new EntityEntryController(this,(EntityEntry)entry);
+                return new ZoneEntryController(this,(ZoneEntry)entry);
             }
             else if (entry is T11Entry)
             {

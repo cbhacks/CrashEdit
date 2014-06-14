@@ -10,12 +10,12 @@ using OpenTK.Graphics.OpenGL;
 
 namespace CrashEdit
 {
-    public sealed class EntityEntryViewer : SceneryEntryViewer
+    public sealed class ZoneEntryViewer : SceneryEntryViewer
     {
         private static byte[] stipplea;
         private static byte[] stippleb;
 
-        static EntityEntryViewer()
+        static ZoneEntryViewer()
         {
             stipplea = new byte [128];
             stippleb = new byte [128];
@@ -40,10 +40,10 @@ namespace CrashEdit
             }
         }
 
-        private EntityEntry entry;
-        private EntityEntry[] linkedentries;
+        private ZoneEntry entry;
+        private ZoneEntry[] linkedentries;
 
-        public EntityEntryViewer(EntityEntry entry,SceneryEntry[] linkedsceneryentries,EntityEntry[] linkedentries) : base(linkedsceneryentries)
+        public ZoneEntryViewer(ZoneEntry entry,SceneryEntry[] linkedsceneryentries,ZoneEntry[] linkedentries) : base(linkedsceneryentries)
         {
             this.entry = entry;
             this.linkedentries = linkedentries;
@@ -84,7 +84,7 @@ namespace CrashEdit
             GL.PolygonStipple(stipplea);
             base.RenderObjects();
             GL.PolygonStipple(stippleb);
-            foreach (EntityEntry linkedentry in linkedentries)
+            foreach (ZoneEntry linkedentry in linkedentries)
             {
                 if (linkedentry == entry)
                     continue;
@@ -95,7 +95,7 @@ namespace CrashEdit
             GL.Disable(EnableCap.PolygonStipple);
         }
 
-        private void RenderEntry(EntityEntry entry)
+        private void RenderEntry(ZoneEntry entry)
         {
             int xoffset = BitConv.FromInt32(entry.Unknown2,0);
             int yoffset = BitConv.FromInt32(entry.Unknown2,4);

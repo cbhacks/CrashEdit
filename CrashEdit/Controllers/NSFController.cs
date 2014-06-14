@@ -117,9 +117,9 @@ namespace CrashEdit
                 {
                     foreach (Entry entry in ((EntryChunk)chunk).Entries)
                     {
-                        if (entry is EntityEntry)
+                        if (entry is ZoneEntry)
                         {
-                            foreach (Entity entity in ((EntityEntry)entry).Entities)
+                            foreach (Entity entity in ((ZoneEntry)entry).Entities)
                             {
                                 if (entity.Type == 34)
                                 {
@@ -157,9 +157,9 @@ namespace CrashEdit
                 {
                     foreach (Entry entry in ((EntryChunk)chunk).Entries)
                     {
-                        if (entry is EntityEntry)
+                        if (entry is ZoneEntry)
                         {
-                            foreach (Entity entity in ((EntityEntry)entry).Entities)
+                            foreach (Entity entity in ((ZoneEntry)entry).Entities)
                             {
                                 if (entity.Type == 0 && entity.Subtype == 0)
                                 {

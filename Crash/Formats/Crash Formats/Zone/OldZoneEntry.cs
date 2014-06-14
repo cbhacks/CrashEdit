@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Crash
 {
-    public sealed class OldEntityEntry : MysteryMultiItemEntry
+    public sealed class OldZoneEntry : MysteryMultiItemEntry
     {
-        public OldEntityEntry(IEnumerable<byte[]> items,int eid) : base(items,eid)
+        public OldZoneEntry(IEnumerable<byte[]> items,int eid) : base(items,eid)
         {
         }
 

@@ -6,12 +6,12 @@ namespace CrashEdit
 {
     public sealed class EntityController : Controller
     {
-        private EntityEntryController entityentrycontroller;
+        private ZoneEntryController zoneentrycontroller;
         private Entity entity;
 
-        public EntityController(EntityEntryController entityentrycontroller,Entity entity)
+        public EntityController(ZoneEntryController zoneentrycontroller,Entity entity)
         {
-            this.entityentrycontroller = entityentrycontroller;
+            this.zoneentrycontroller = zoneentrycontroller;
             this.entity = entity;
             AddMenu("Duplicate Entity",Menu_Duplicate);
             InvalidateNode();
@@ -36,9 +36,9 @@ namespace CrashEdit
             return new EntityBox(this);
         }
 
-        public EntityEntryController EntityEntryController
+        public ZoneEntryController ZoneEntryController
         {
-            get { return entityentrycontroller; }
+            get { return zoneentrycontroller; }
         }
 
         public Entity Entity
@@ -54,15 +54,15 @@ namespace CrashEdit
             }
             int maxid = 1;
             List<EntityPropertyRow<int>> drawlists = new List<EntityPropertyRow<int>>();
-            foreach (Chunk chunk in entityentrycontroller.EntryChunkController.NSFController.NSF.Chunks)
+            foreach (Chunk chunk in zoneentrycontroller.EntryChunkController.NSFController.NSF.Chunks)
             {
                 if (chunk is EntryChunk)
                 {
                     foreach (Entry entry in ((EntryChunk)chunk).Entries)
                     {
-                        if (entry is EntityEntry)
+                        if (entry is ZoneEntry)
                         {
-                            foreach (Entity otherentity in ((EntityEntry)entry).Entities)
+                            foreach (Entity otherentity in ((ZoneEntry)entry).Entities)
                             {
                                 if (otherentity.ID.HasValue)
                                 {
@@ -89,15 +89,15 @@ namespace CrashEdit
                 }
             }
             maxid++;
-            int newindex = entityentrycontroller.EntityEntry.Entities.Count;
-            newindex -= BitConv.FromInt32(entityentrycontroller.EntityEntry.Unknown1,0x188);
-            int entitycount = BitConv.FromInt32(entityentrycontroller.EntityEntry.Unknown1,0x18C);
-            BitConv.ToInt32(entityentrycontroller.EntityEntry.Unknown1,0x18C,entitycount + 1);
+            int newindex = zoneentrycontroller.ZoneEntry.Entities.Count;
+            newindex -= BitConv.FromInt32(zoneentrycontroller.ZoneEntry.Unknown1,0x188);
+            int entitycount = BitConv.FromInt32(zoneentrycontroller.ZoneEntry.Unknown1,0x18C);
+            BitConv.ToInt32(zoneentrycontroller.ZoneEntry.Unknown1,0x18C,entitycount + 1);
             Entity newentity = Entity.Load(entity.Save());
             newentity.ID = maxid;
             newentity.AlternateID = null;
-            entityentrycontroller.EntityEntry.Entities.Add(newentity);
-            entityentrycontroller.AddNode(new EntityController(entityentrycontroller,newentity));
+            zoneentrycontroller.ZoneEntry.Entities.Add(newentity);
+            zoneentrycontroller.AddNode(new EntityController(zoneentrycontroller,newentity));
             foreach (EntityPropertyRow<int> drawlist in drawlists)
             {
                 foreach (int value in drawlist.Values)

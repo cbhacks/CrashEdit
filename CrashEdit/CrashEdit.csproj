@@ -60,7 +60,7 @@
     <Compile Include="Controllers\T6EntryController.cs" />
     <Compile Include="Controllers\OldT15EntryController.cs" />
     <Compile Include="Controllers\OldT17EntryController.cs" />
-    <Compile Include="Controllers\Entity\OldEntityEntryController.cs" />
+    <Compile Include="Controllers\Zone\OldZoneEntryController.cs" />
     <Compile Include="Controllers\Model\OldModelEntryController.cs" />
     <Compile Include="Controllers\Scenery\OldSceneryEntryController.cs" />
     <Compile Include="Controllers\Wavebank\WavebankEntryController.cs" />
@@ -69,8 +69,8 @@
     <Compile Include="Controllers\Sound\OldSoundChunkController.cs" />
     <Compile Include="Controllers\Unprocessed\UnprocessedChunkController.cs" />
     <Compile Include="Controllers\ItemController.cs" />
-    <Compile Include="Controllers\Entity\EntityController.cs" />
-    <Compile Include="Controllers\Entity\EntityEntryController.cs" />
+    <Compile Include="Controllers\Zone\EntityController.cs" />
+    <Compile Include="Controllers\Zone\ZoneEntryController.cs" />
     <Compile Include="Controllers\Unprocessed\UnprocessedEntryController.cs" />
     <Compile Include="Controllers\T4\T4EntryController.cs" />
     <Compile Include="Controllers\Music\VHController.cs" />
@@ -111,7 +111,7 @@
     <Compile Include="Controls\EntityBox.Designer.cs">
       <DependentUpon>EntityBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\EntityEntryViewer.cs">
+    <Compile Include="Controls\ZoneEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\UndockableControl.cs">

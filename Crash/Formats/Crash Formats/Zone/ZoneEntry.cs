@@ -2,13 +2,13 @@ using System.Collections.Generic;
 
 namespace Crash
 {
-    public sealed class EntityEntry : Entry
+    public sealed class ZoneEntry : Entry
     {
         private byte[] unknown1;
         private byte[] unknown2;
         private List<Entity> entities;
 
-        public EntityEntry(byte[] unknown1,byte[] unknown2,IEnumerable<Entity> entities,int eid) : base(eid)
+        public ZoneEntry(byte[] unknown1,byte[] unknown2,IEnumerable<Entity> entities,int eid) : base(eid)
         {
             this.unknown1 = unknown1;
             this.unknown2 = unknown2;
