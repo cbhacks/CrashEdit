@@ -1,4 +1,5 @@
 using Crash;
+using Crash.UI;
 using System;
 using System.IO;
 using System.Globalization;
@@ -171,8 +172,8 @@ namespace CrashEdit
                 byte[] nsfdata = File.ReadAllBytes(filename);
                 if (dlgGameVersion.ShowDialog() == DialogResult.OK)
                 {
-                    NSF nsf = NSF.LoadAndProcess(nsfdata,dlgGameVersion.GameVersion);
-                    OpenNSF(filename,nsf,dlgGameVersion.GameVersion);
+                    NSF nsf = NSF.LoadAndProcess(nsfdata,dlgGameVersion.SelectedVersion);
+                    OpenNSF(filename,nsf,dlgGameVersion.SelectedVersion);
                 }
             }
             catch (LoadAbortedException)

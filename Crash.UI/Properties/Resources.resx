@@ -117,11 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="Controller_NoOptionsAvailable" xml:space="preserve">
     <value>No options available.</value>
   </data>
   <data name="DemoEntryController_Text" xml:space="preserve">
     <value>Demo ({0})</value>
+  </data>
+  <data name="GameVersionForm_Message" xml:space="preserve">
+    <value>Select a game version from the list below. NTSC-U, NTSC-J, and PAL are all supported.</value>
+  </data>
+  <data name="GameVersionForm_Prerelease" xml:space="preserve">
+    <value>Prerelease Versions</value>
+  </data>
+  <data name="GameVersionForm_Release" xml:space="preserve">
+    <value>Release Versions</value>
+  </data>
+  <data name="GameVersionForm_Text" xml:space="preserve">
+    <value>Game Version Selection</value>
   </data>
   <data name="ModelEntryController_Text" xml:space="preserve">
     <value>Model ({0})</value>

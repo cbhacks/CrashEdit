@@ -61,6 +61,15 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No options available..
         /// </summary>
         internal static string Controller_NoOptionsAvailable {
@@ -75,6 +84,42 @@ namespace Crash.UI.Properties {
         internal static string DemoEntryController_Text {
             get {
                 return ResourceManager.GetString("DemoEntryController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a game version from the list below. NTSC-U, NTSC-J, and PAL are all supported..
+        /// </summary>
+        internal static string GameVersionForm_Message {
+            get {
+                return ResourceManager.GetString("GameVersionForm_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prerelease Versions.
+        /// </summary>
+        internal static string GameVersionForm_Prerelease {
+            get {
+                return ResourceManager.GetString("GameVersionForm_Prerelease", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release Versions.
+        /// </summary>
+        internal static string GameVersionForm_Release {
+            get {
+                return ResourceManager.GetString("GameVersionForm_Release", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game Version Selection.
+        /// </summary>
+        internal static string GameVersionForm_Text {
+            get {
+                return ResourceManager.GetString("GameVersionForm_Text", resourceCulture);
             }
         }
         

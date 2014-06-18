@@ -88,6 +88,12 @@
     </Compile>
       <DependentUpon>EntryChunkControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\GameVersionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GameVersionForm.Designer.cs">
+      <DependentUpon>GameVersionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -102,6 +108,10 @@
   <ItemGroup>
       <SubType>Designer</SubType>
       <DependentUpon>EntryChunkControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GameVersionForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>GameVersionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
