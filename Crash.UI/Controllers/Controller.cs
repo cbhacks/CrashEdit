@@ -13,6 +13,7 @@ namespace Crash.UI
         public Controller()
         {
             this.subcontrollers = new EvList<Controller>();
+            this.subcontrollers.ItemRemoved += new EvListEventHandler<Controller>(Subcontrollers_ItemRemoved);
         }
 
         public virtual string ImageKey
@@ -60,6 +61,11 @@ namespace Crash.UI
             {
                 subcontroller.Dispose();
             }
+        }
+
+        private void Subcontrollers_ItemRemoved(object sender,EvListEventArgs<Controller> e)
+        {
+            e.Item.Dispose();
         }
     }
 }
