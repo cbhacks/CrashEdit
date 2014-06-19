@@ -151,5 +151,16 @@ namespace Crash
                 ItemRemoved(this,e);
             }
         }
+
+        public void Populate(EvListEventHandler<T> method)
+        {
+            for (int i = 0;i < Count;i++)
+            {
+                EvListEventArgs<T> e = new EvListEventArgs<T>();
+                e.Item = this[i];
+                e.Index = i;
+                method(this,e);
+            }
+        }
     }
 }

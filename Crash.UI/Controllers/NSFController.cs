@@ -13,13 +13,7 @@ namespace Crash.UI
             this.nsf = nsf;
             this.nsf.Chunks.ItemAdded += new EvListEventHandler<Chunk>(Chunks_ItemAdded);
             this.nsf.Chunks.ItemRemoved += new EvListEventHandler<Chunk>(Chunks_ItemRemoved);
-            for (int i = 0;i < nsf.Chunks.Count;i++)
-            {
-                EvListEventArgs<Chunk> e = new EvListEventArgs<Chunk>();
-                e.Index = i;
-                e.Item = nsf.Chunks[i];
-                Chunks_ItemAdded(null,e);
-            }
+            this.nsf.Chunks.Populate(Chunks_ItemAdded);
         }
 
         public NSF NSF

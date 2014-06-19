@@ -13,13 +13,7 @@ namespace Crash.UI
             this.chunk = chunk;
             this.chunk.Entries.ItemAdded += new EvListEventHandler<Entry>(Entries_ItemAdded);
             this.chunk.Entries.ItemRemoved += new EvListEventHandler<Entry>(Entries_ItemRemoved);
-            for (int i = 0;i < chunk.Entries.Count;i++)
-            {
-                EvListEventArgs<Entry> e = new EvListEventArgs<Entry>();
-                e.Index = i;
-                e.Item = chunk.Entries[i];
-                Entries_ItemAdded(null,e);
-            }
+            this.chunk.Entries.Populate(Entries_ItemAdded);
         }
 
         public new EntryChunk Chunk
