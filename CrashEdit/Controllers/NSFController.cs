@@ -168,6 +168,7 @@ namespace CrashEdit
                                         case 7:
                                         case 15:
                                         case 24:
+                                        case 28:
                                             break;
                                         default:
                                             boxcount++;
