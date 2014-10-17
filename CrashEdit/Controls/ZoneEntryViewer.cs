@@ -119,7 +119,11 @@ namespace CrashEdit
             {
                 EntityPosition position = entity.Positions[0];
                 GL.PushMatrix();
+                if (entity.ExtraProperties.ContainsKey(0x30E))
+                    GL.Scale(0.25,0.25,0.25);
                 GL.Translate(position.X,position.Y,position.Z);
+                if (entity.ExtraProperties.ContainsKey(0x30E))
+                    GL.Scale(4,4,4);
                 switch (entity.Type)
                 {
                     case 0x3:
@@ -145,6 +149,9 @@ namespace CrashEdit
             else
             {
                 GL.Color3(Color.Blue);
+                GL.PushMatrix();
+                if (entity.ExtraProperties.ContainsKey(0x30E))
+                        GL.Scale(0.25,0.25,0.25);
                 GL.Begin(BeginMode.LineStrip);
                 foreach (EntityPosition position in entity.Positions)
                 {
@@ -158,9 +165,12 @@ namespace CrashEdit
                     LoadTexture(Resources.PointTexture);
                     GL.PushMatrix();
                     GL.Translate(position.X,position.Y,position.Z);
+                    if (entity.ExtraProperties.ContainsKey(0x30E))
+                        GL.Scale(4,4,4);
                     RenderSprite();
                     GL.PopMatrix();
                 }
+                GL.PopMatrix();
             }
         }
 
