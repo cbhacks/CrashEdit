@@ -214,9 +214,9 @@ namespace CrashEdit
                     File.WriteAllBytes(filename,nsfdata);
                 }
             }
-            catch (PackingException)
+            catch (PackingException ex)
             {
-                MessageBox.Show("A packing error occurred. One of the entry-containing chunks contains over 64 KB of data.","Save",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show(string.Format("A packing error occurred. The chunk containing entry '{0}' has over 64 KB of data.",Entry.EIDToEName(ex.EID)),"Save",MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
             catch (IOException ex)
             {
