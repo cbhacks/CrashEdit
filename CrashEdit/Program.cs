@@ -10,13 +10,13 @@ namespace CrashEdit
         internal static void Main(string[] args)
         {
             using (ErrorReporter errorform = new ErrorReporter())
-            using (MainForm mainform = new MainForm())
+            using (OldMainForm oldmainform = new OldMainForm())
             {
                 foreach (string arg in args)
                 {
-                    mainform.OpenNSF(arg);
+                    oldmainform.OpenNSF(arg);
                 }
-                Application.Run(mainform);
+                Application.Run(oldmainform);
             }
         }
     }

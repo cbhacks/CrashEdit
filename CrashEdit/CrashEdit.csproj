@@ -145,7 +145,7 @@
     <Compile Include="HexBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="MainForm.cs">
+    <Compile Include="OldMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\MysteryBox.cs">

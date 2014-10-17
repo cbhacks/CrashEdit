@@ -8,11 +8,11 @@ using System.Collections.Generic;
 
 namespace CrashEdit
 {
-    public sealed class MainForm : Form
+    public sealed class OldMainForm : Form
     {
         private static ImageList imglist;
 
-        static MainForm()
+        static OldMainForm()
         {
             imglist = new ImageList();
             try
@@ -44,7 +44,7 @@ namespace CrashEdit
         private TabControl tbcTabs;
         private GameVersionForm dlgGameVersion;
 
-        public MainForm()
+        public OldMainForm()
         {
             tbbOpen = new ToolStripButton();
             tbbOpen.Text = "Open";
