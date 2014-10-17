@@ -59,7 +59,7 @@ namespace Crash
             if (ItemAdded != null)
             {
                 EvListEventArgs<T> e = new EvListEventArgs<T>();
-                e.Index = list.Count;
+                e.Index = list.Count - 1;
                 e.Item = item;
                 ItemAdded(this,e);
             }
