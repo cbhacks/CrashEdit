@@ -140,7 +140,7 @@ namespace CrashEdit
                         break;
                     default:
                         GL.Color3(Color.White);
-                        LoadTexture(Resources.PointTexture);
+                        LoadTexture(OldResources.PointTexture);
                         RenderSprite();
                         break;
                 }
@@ -162,7 +162,7 @@ namespace CrashEdit
                 foreach (EntityPosition position in entity.Positions)
                 {
                     GL.Color3(Color.Red);
-                    LoadTexture(Resources.PointTexture);
+                    LoadTexture(OldResources.PointTexture);
                     GL.PushMatrix();
                     GL.Translate(position.X,position.Y,position.Z);
                     if (entity.ExtraProperties.ContainsKey(0x30E))
@@ -247,16 +247,16 @@ namespace CrashEdit
             switch (subtype)
             {
                 case 5: // Life
-                    LoadTexture(Resources.LifeTexture);
+                    LoadTexture(OldResources.LifeTexture);
                     break;
                 case 6: // Mask
-                    LoadTexture(Resources.MaskTexture);
+                    LoadTexture(OldResources.MaskTexture);
                     break;
                 case 16: // Apple
-                    LoadTexture(Resources.AppleTexture);
+                    LoadTexture(OldResources.AppleTexture);
                     break;
                 default:
-                    LoadTexture(Resources.UnknownPickupTexture);
+                    LoadTexture(OldResources.UnknownPickupTexture);
                     break;
             }
         }
@@ -266,7 +266,7 @@ namespace CrashEdit
             switch (subtype)
             {
                 case 0: // TNT
-                    LoadTexture(Resources.TNTTopTexture);
+                    LoadTexture(OldResources.TNTTopTexture);
                     break;
                 case 2: // Normal
                 case 3: // Arrow
@@ -274,27 +274,27 @@ namespace CrashEdit
                 case 8: // Life
                 case 9: // Mask
                 case 10: // Question Mark
-                    LoadTexture(Resources.BoxTexture);
+                    LoadTexture(OldResources.BoxTexture);
                     break;
                 case 4: // Checkpoint
-                    LoadTexture(Resources.CheckpointTexture);
+                    LoadTexture(OldResources.CheckpointTexture);
                     break;
                 case 5: // Iron
                 case 7: // Activator
                 case 15: // Iron Arrow
-                    LoadTexture(Resources.IronBoxTexture);
+                    LoadTexture(OldResources.IronBoxTexture);
                     break;
                 case 18: // Nitro
-                    LoadTexture(Resources.NitroTopTexture);
+                    LoadTexture(OldResources.NitroTopTexture);
                     break;
                 case 23: // Bodyslam
-                    LoadTexture(Resources.BodyslamBoxTexture);
+                    LoadTexture(OldResources.BodyslamBoxTexture);
                     break;
                 case 24: // Detonator
-                    LoadTexture(Resources.DetonatorBoxTopTexture);
+                    LoadTexture(OldResources.DetonatorBoxTopTexture);
                     break;
                 default:
-                    LoadTexture(Resources.UnknownBoxTopTexture);
+                    LoadTexture(OldResources.UnknownBoxTopTexture);
                     break;
             }
         }
@@ -304,49 +304,49 @@ namespace CrashEdit
             switch (subtype)
             {
                 case 0: // TNT
-                    LoadTexture(Resources.TNTTexture);
+                    LoadTexture(OldResources.TNTTexture);
                     break;
                 case 2: // Normal
-                    LoadTexture(Resources.BoxTexture);
+                    LoadTexture(OldResources.BoxTexture);
                     break;
                 case 3: // Arrow
-                    LoadTexture(Resources.ArrowBoxTexture);
+                    LoadTexture(OldResources.ArrowBoxTexture);
                     break;
                 case 4: // Checkpoint
-                    LoadTexture(Resources.CheckpointTexture);
+                    LoadTexture(OldResources.CheckpointTexture);
                     break;
                 case 5: // Iron
-                    LoadTexture(Resources.IronBoxTexture);
+                    LoadTexture(OldResources.IronBoxTexture);
                     break;
                 case 6: // Apple
-                    LoadTexture(Resources.AppleBoxTexture);
+                    LoadTexture(OldResources.AppleBoxTexture);
                     break;
                 case 7: // Activator
-                    LoadTexture(Resources.ActivatorBoxTexture);
+                    LoadTexture(OldResources.ActivatorBoxTexture);
                     break;
                 case 8: // Life
-                    LoadTexture(Resources.LifeBoxTexture);
+                    LoadTexture(OldResources.LifeBoxTexture);
                     break;
                 case 9: // Mask
-                    LoadTexture(Resources.MaskBoxTexture);
+                    LoadTexture(OldResources.MaskBoxTexture);
                     break;
                 case 10: // Question Mark
-                    LoadTexture(Resources.QuestionMarkBoxTexture);
+                    LoadTexture(OldResources.QuestionMarkBoxTexture);
                     break;
                 case 15: // Iron Arrow
-                    LoadTexture(Resources.IronArrowBoxTexture);
+                    LoadTexture(OldResources.IronArrowBoxTexture);
                     break;
                 case 18: // Nitro
-                    LoadTexture(Resources.NitroTexture);
+                    LoadTexture(OldResources.NitroTexture);
                     break;
                 case 23: // Bodyslam
-                    LoadTexture(Resources.BodyslamBoxTexture);
+                    LoadTexture(OldResources.BodyslamBoxTexture);
                     break;
                 case 24: // Detonator
-                    LoadTexture(Resources.DetonatorBoxTexture);
+                    LoadTexture(OldResources.DetonatorBoxTexture);
                     break;
                 default:
-                    LoadTexture(Resources.UnknownBoxTexture);
+                    LoadTexture(OldResources.UnknownBoxTexture);
                     break;
             }
         }

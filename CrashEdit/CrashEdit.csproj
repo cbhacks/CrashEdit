@@ -155,7 +155,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="Resources.cs" />
+    <Compile Include="OldResources.cs" />
     <Compile Include="Controls\SoundBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -222,7 +222,7 @@
       <SubType>Designer</SubType>
       <DependentUpon>InputWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.resx">
+    <EmbeddedResource Include="OldResources.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

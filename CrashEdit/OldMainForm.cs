@@ -17,14 +17,14 @@ namespace CrashEdit
             imglist = new ImageList();
             try
             {
-                imglist.Images.Add("default",Resources.FileImage);
-                imglist.Images.Add("tb_open",Resources.OpenImage);
-                imglist.Images.Add("tb_save",Resources.SaveImage);
-                imglist.Images.Add("tb_patchnsd",Resources.SaveImage);
-                imglist.Images.Add("tb_close",Resources.FolderImage);
-                imglist.Images.Add("tb_find",Resources.BinocularsImage);
-                imglist.Images.Add("tb_findnext",Resources.BinocularsNextImage);
-                imglist.Images.Add("tb_goto",Resources.ArrowImage);
+                imglist.Images.Add("default",OldResources.FileImage);
+                imglist.Images.Add("tb_open",OldResources.OpenImage);
+                imglist.Images.Add("tb_save",OldResources.SaveImage);
+                imglist.Images.Add("tb_patchnsd",OldResources.SaveImage);
+                imglist.Images.Add("tb_close",OldResources.FolderImage);
+                imglist.Images.Add("tb_find",OldResources.BinocularsImage);
+                imglist.Images.Add("tb_findnext",OldResources.BinocularsNextImage);
+                imglist.Images.Add("tb_goto",OldResources.ArrowImage);
             }
             catch
             {

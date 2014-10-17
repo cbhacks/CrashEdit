@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace CrashEdit
 {
-    internal static class Resources
+    internal static class OldResources
     {
         [Resource("NSDIcon")]
         private static Icon nsdicon = null;
@@ -144,10 +144,10 @@ namespace CrashEdit
         [Resource("UnknownPickupTexture")]
         private static Bitmap unknownpickuptexture = null;
 
-        static Resources()
+        static OldResources()
         {
-            ResourceManager manager = new ResourceManager("CrashEdit.Resources",Assembly.GetExecutingAssembly());
-            foreach (FieldInfo field in typeof(Resources).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+            ResourceManager manager = new ResourceManager("CrashEdit.OldResources",Assembly.GetExecutingAssembly());
+            foreach (FieldInfo field in typeof(OldResources).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
             {
                 foreach (ResourceAttribute attribute in field.GetCustomAttributes(typeof(ResourceAttribute),false))
                 {
@@ -161,7 +161,7 @@ namespace CrashEdit
             {
                 using (Image texturespng = Image.FromFile(texturespngfilename))
                 {
-                    foreach (FieldInfo field in typeof(Resources).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+                    foreach (FieldInfo field in typeof(OldResources).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
                     {
                         foreach (ExternalTextureAttribute attribute in field.GetCustomAttributes(typeof(ExternalTextureAttribute),false))
                         {
