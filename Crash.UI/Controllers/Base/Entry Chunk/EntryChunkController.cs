@@ -132,7 +132,6 @@ namespace Crash.UI
 
         private void Entries_ItemRemoved(object sender,EvListEventArgs<Entry> e)
         {
-            Subcontrollers[e.Index].Dispose();
             Subcontrollers.RemoveAt(e.Index);
             Invalidate();
         }

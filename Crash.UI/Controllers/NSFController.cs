@@ -64,7 +64,6 @@ namespace Crash.UI
 
         private void Chunks_ItemRemoved(object sender,EvListEventArgs<Chunk> e)
         {
-            Subcontrollers[e.Index].Dispose();
             Subcontrollers.RemoveAt(e.Index);
         }
 
