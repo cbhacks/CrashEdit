@@ -145,6 +145,12 @@
     <Compile Include="HexBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="OldMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -159,6 +165,11 @@
     <Compile Include="Controls\SoundBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
@@ -168,6 +179,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Computer_File_064.gif" />
+    <None Include="Resources\Computer_File_063.gif" />
     <Content Include="Resources\Icons\NSD.ico" />
     <Content Include="Resources\Icons\NSF.ico" />
     <Content Include="Resources\Images\Arrow.gif" />
@@ -184,6 +197,13 @@
     <Content Include="Resources\Images\Save.gif" />
     <Content Include="Resources\Images\Speaker.gif" />
     <Content Include="Resources\Images\Thing.gif" />
+    <None Include="Resources\objects_029.gif" />
+    <None Include="Resources\objects_036.gif" />
+    <None Include="Resources\objects_037.gif" />
+    <None Include="Resources\objects_028.gif" />
+    <None Include="Resources\objects_079.gif" />
+    <None Include="Resources\objects_020.gif" />
+    <None Include="Resources\objects_070.gif" />
     <Content Include="Resources\Textures\Apple.png" />
     <Content Include="Resources\Textures\AppleBox.png" />
     <Content Include="Resources\Textures\ArrowBox.png" />
@@ -222,8 +242,17 @@
       <SubType>Designer</SubType>
       <DependentUpon>InputWindow.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="OldResources.resx">
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 </Project>
