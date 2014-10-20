@@ -145,6 +145,12 @@
     <Compile Include="HexBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="MainControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MainControl.Designer.cs">
+      <DependentUpon>MainControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -181,6 +187,8 @@
   <ItemGroup>
     <None Include="Resources\Computer_File_064.gif" />
     <None Include="Resources\Computer_File_063.gif" />
+    <None Include="Resources\Computer_File_068.gif" />
+    <None Include="Resources\Computer_File_053.gif" />
     <Content Include="Resources\Icons\NSD.ico" />
     <Content Include="Resources\Icons\NSF.ico" />
     <Content Include="Resources\Images\Arrow.gif" />
@@ -204,6 +212,24 @@
     <None Include="Resources\objects_079.gif" />
     <None Include="Resources\objects_020.gif" />
     <None Include="Resources\objects_070.gif" />
+    <None Include="Resources\objects_012.gif" />
+    <None Include="Resources\objects_012_blue.gif" />
+    <None Include="Resources\objects_012_gray.gif" />
+    <None Include="Resources\objects_012_lime.gif" />
+    <None Include="Resources\objects_012_crimson.gif" />
+    <None Include="Resources\objects_053_blue.gif" />
+    <None Include="Resources\People_014.gif" />
+    <None Include="Resources\People_017.gif" />
+    <None Include="Resources\People_020.gif" />
+    <None Include="Resources\People_020_cyan.gif" />
+    <None Include="Resources\People_020_red.gif" />
+    <None Include="Resources\objects_053_white.gif" />
+    <None Include="Resources\objects_006.gif" />
+    <None Include="Resources\objects_006_red.gif" />
+    <None Include="Resources\objects_006_yellow.gif" />
+    <None Include="Resources\objects_012_violet.gif" />
+    <None Include="Resources\objects_012_code.gif" />
+    <None Include="Resources\People_020_code.gif" />
     <Content Include="Resources\Textures\Apple.png" />
     <Content Include="Resources\Textures\AppleBox.png" />
     <Content Include="Resources\Textures\ArrowBox.png" />
@@ -241,6 +267,10 @@
     <EmbeddedResource Include="InputWindow.resx">
       <SubType>Designer</SubType>
       <DependentUpon>InputWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainControl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MainControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <SubType>Designer</SubType>

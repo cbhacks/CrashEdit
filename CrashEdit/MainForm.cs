@@ -82,17 +82,42 @@ namespace CrashEdit
             sbiProgress.Visible = false;
             if (uxTabs.SelectedIndex == -1)
                 return;
-            if (uxTabs.SelectedTab.Tag is NSFBox)
+            if (uxTabs.SelectedTab.Tag is MainControl)
             {
                 foreach (ToolStripItem stripitem in syncstripitems)
                 {
                     stripitem.Enabled = true;
                 }
             }
+            else if (uxTabs.SelectedTab.Tag is NSFBox)
+            {
+                mniFileClose.Enabled = true;
+                tbiClose.Enabled = true;
+            }
+        }
+
+        private void MainControl_SyncMasterUI(object sender,EventArgs e)
+        {
+            SyncUI();
         }
 
         private void uxTabs_Selected(object sender,TabControlEventArgs e)
         {
+            switch (e.Action)
+            {
+                case TabControlAction.Selected:
+                    if (e.TabPage.Tag is MainControl)
+                    {
+                        ((MainControl)e.TabPage.Tag).SyncMasterUI += MainControl_SyncMasterUI;
+                    }
+                    break;
+                case TabControlAction.Deselected:
+                    if (e.TabPage.Tag is MainControl)
+                    {
+                        ((MainControl)e.TabPage.Tag).SyncMasterUI -= MainControl_SyncMasterUI;
+                    }
+                    break;
+            }
             SyncUI();
         }
 
@@ -123,14 +148,18 @@ namespace CrashEdit
                 }
                 foreach (string filename in dlgOpenNSF.FileNames)
                 {
-                    byte[] data = File.ReadAllBytes(filename);
-                    NSF nsf = NSF.LoadAndProcess(data,gameversion);
-                    NSFBox nsfbox = new NSFBox(nsf,gameversion);
-                    nsfbox.Dock = DockStyle.Fill;
+                    MainControl control = new MainControl(new FileInfo(filename),gameversion);
+                    control.Dock = DockStyle.Fill;
                     TabPage tab = new TabPage(filename);
-                    tab.Tag = nsfbox;
-                    tab.Controls.Add(nsfbox);
+                    tab.Tag = control;
+                    tab.Controls.Add(control);
                     uxTabs.TabPages.Add(tab);
+                    NSFBox nsfbox = new NSFBox(control.NSFController.NSF,gameversion);
+                    nsfbox.Dock = DockStyle.Fill;
+                    TabPage oldtab = new TabPage("[OLD] " + filename);
+                    oldtab.Tag = nsfbox;
+                    oldtab.Controls.Add(nsfbox);
+                    uxTabs.TabPages.Add(oldtab);
                     uxTabs.SelectedTab = tab;
                 }
             }
