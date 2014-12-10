@@ -84,10 +84,6 @@
     <Compile Include="Controllers\Base\Entry Chunk\EntryChunkController.cs" />
     <Compile Include="Controllers\Texture\TextureChunkController.cs" />
     <Compile Include="Controllers\NSFController.cs" />
-      <SubType>UserControl</SubType>
-    </Compile>
-      <DependentUpon>EntryChunkControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\GameVersionForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -106,9 +102,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-      <SubType>Designer</SubType>
-      <DependentUpon>EntryChunkControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\GameVersionForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>GameVersionForm.cs</DependentUpon>
