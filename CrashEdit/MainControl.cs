@@ -17,7 +17,7 @@ namespace CrashEdit
         private Dictionary<Crash.UI.Controller,ControllerData> controllers;
         private Crash.UI.NSFController nsfc;
         private ControllerData nsfcd;
-        private Control activecontrol;
+        private ControllerData activecd;
 
         public event EventHandler SyncMasterUI;
 
@@ -36,7 +36,7 @@ namespace CrashEdit
             nsfc.DeepItemAdded += nsfc_DeepItemAdded;
             nsfc.DeepItemRemoved += nsfc_DeepItemRemoved;
             nsfc.DeepPopulate(nsfc_DeepItemAdded);
-            this.activecontrol = null;
+            this.activecd = null;
             uxImageList.Images.Add("NSFController",Properties.Resources.Computer_File_053);
             uxImageList.Images.Add("NormalChunkController",Properties.Resources.People_014);
             uxImageList.Images.Add("TextureChunkController",Properties.Resources.Computer_File_068);
@@ -140,6 +140,16 @@ namespace CrashEdit
                 }
             }
 
+            public void Show()
+            {
+                maincontrol.uxSplit.Panel2.Controls.Add(Control);
+            }
+
+            public void Hide()
+            {
+                maincontrol.uxSplit.Panel2.Controls.Remove(Control);
+            }
+
             public void Dispose()
             {
                 if (control != null)
@@ -177,13 +187,20 @@ namespace CrashEdit
 
         private void uxTree_AfterSelect(object sender,TreeViewEventArgs e)
         {
-            if (activecontrol != null)
+            if (activecd != null)
             {
-                uxSplit.Panel2.Controls.Remove(activecontrol);
-                activecontrol = null;
+                activecd.Hide();
+                activecd = null;
             }
-            activecontrol = ((ControllerData)e.Node.Tag).Control;
-            uxSplit.Panel2.Controls.Add(activecontrol);
+            if (uxTree.SelectedNode != null)
+            {
+                activecd = (ControllerData)uxTree.SelectedNode.Tag;
+                if (activecd != null)
+                {
+                    activecd.Show();
+                }
+            }
+            SyncUI();
         }
     }
 }
