@@ -15,6 +15,11 @@ namespace Crash.UI
             this.chunk = chunk;
         }
 
+        public NSFController Up
+        {
+            get { return up; }
+        }
+
         public Chunk Chunk
         {
             get { return chunk; }

@@ -430,6 +430,15 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Process Chunk.
+        /// </summary>
+        internal static string UnprocessedChunkController_AcProcess {
+            get {
+                return ResourceManager.GetString("UnprocessedChunkController_AcProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unprocessed Chunk.
         /// </summary>
         internal static string UnprocessedChunkController_Text {
