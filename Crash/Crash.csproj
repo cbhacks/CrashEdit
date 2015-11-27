@@ -39,6 +39,8 @@
   </Target>
   -->
   <ItemGroup>
+    <Compile Include="Action System\Command.cs" />
+    <Compile Include="Action System\CommandManager.cs" />
     <Compile Include="Formats\Crash Formats\Zone\EntityUInt32Property.cs" />
     <Compile Include="Formats\Crash Formats\Zone\EntityUInt32PropertyLoader.cs" />
     <Compile Include="Formats\Crash Formats\Zone\EntityT4Property.cs" />

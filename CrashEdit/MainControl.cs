@@ -18,6 +18,7 @@ namespace CrashEdit
         private Crash.UI.NSFController nsfc;
         private ControllerData nsfcd;
         private ControllerData activecd;
+        private CommandManager commandmanager;
 
         public event EventHandler SyncMasterUI;
 
@@ -37,6 +38,8 @@ namespace CrashEdit
             nsfc.DeepItemRemoved += nsfc_DeepItemRemoved;
             nsfc.DeepPopulate(nsfc_DeepItemAdded);
             this.activecd = null;
+            this.commandmanager = new CommandManager();
+            commandmanager.CommandExecuted += new EventHandler(commandmanager_CommandExecuted);
             uxImageList.Images.Add("NSFController",Properties.Resources.Computer_File_053);
             uxImageList.Images.Add("NormalChunkController",Properties.Resources.People_014);
             uxImageList.Images.Add("TextureChunkController",Properties.Resources.Computer_File_068);
@@ -81,6 +84,21 @@ namespace CrashEdit
         public Crash.UI.NSFController NSFController
         {
             get { return nsfc; }
+        }
+
+        public Crash.UI.Controller SelectedController
+        {
+            get
+            {
+                if (uxTree.SelectedNode == null)
+                    return null;
+                return ((ControllerData)uxTree.SelectedNode.Tag).Controller;
+            }
+        }
+
+        public CommandManager CommandManager
+        {
+            get { return commandmanager; }
         }
 
         private void SyncUI()
@@ -200,6 +218,11 @@ namespace CrashEdit
                     activecd.Show();
                 }
             }
+            SyncUI();
+        }
+
+        private void commandmanager_CommandExecuted(object sender,EventArgs e)
+        {
             SyncUI();
         }
     }
