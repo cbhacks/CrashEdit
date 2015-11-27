@@ -54,7 +54,7 @@
     <Compile Include="Controllers\Speech\SpeechEntryController.cs" />
     <Compile Include="Controllers\T20\T20EntryController.cs" />
     <Compile Include="Controllers\Demo\DemoEntryController.cs" />
-    <Compile Include="Controllers\T18\T18EntryController.cs" />
+    <Compile Include="Controllers\Palette\PaletteEntryController.cs" />
     <Compile Include="Controllers\T17\T17EntryController.cs" />
     <Compile Include="Controllers\T17\OldT17EntryController.cs" />
     <Compile Include="Controllers\T15\OldT15EntryController.cs" />

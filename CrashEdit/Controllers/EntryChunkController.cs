@@ -100,9 +100,9 @@ namespace CrashEdit
             {
                 return new T17EntryController(this,(T17Entry)entry);
             }
-            else if (entry is T18Entry)
+            else if (entry is PaletteEntry)
             {
-                return new T18EntryController(this,(T18Entry)entry);
+                return new PaletteEntryController(this,(PaletteEntry)entry);
             }
             else if (entry is DemoEntry)
             {

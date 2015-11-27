@@ -60,7 +60,7 @@
     <Compile Include="Controllers\Music\OldSEQController.cs" />
     <Compile Include="Controllers\Music\OldVHController.cs" />
     <Compile Include="Controllers\Music\OldMusicEntryController.cs" />
-    <Compile Include="Controllers\T18EntryController.cs" />
+    <Compile Include="Controllers\PaletteEntryController.cs" />
     <Compile Include="Controllers\T6EntryController.cs" />
     <Compile Include="Controllers\OldT15EntryController.cs" />
     <Compile Include="Controllers\OldT17EntryController.cs" />

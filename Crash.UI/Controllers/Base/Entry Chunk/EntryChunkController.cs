@@ -99,9 +99,9 @@ namespace Crash.UI
             {
                 Subcontrollers.Insert(e.Index,new T17EntryController(this,(T17Entry)e.Item));
             }
-            else if (e.Item is T18Entry)
+            else if (e.Item is PaletteEntry)
             {
-                Subcontrollers.Insert(e.Index,new T18EntryController(this,(T18Entry)e.Item));
+                Subcontrollers.Insert(e.Index,new PaletteEntryController(this,(PaletteEntry)e.Item));
             }
             else if (e.Item is DemoEntry)
             {

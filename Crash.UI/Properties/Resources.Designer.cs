@@ -232,6 +232,15 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Palette ({0}).
+        /// </summary>
+        internal static string PaletteEntryController_Text {
+            get {
+                return ResourceManager.GetString("PaletteEntryController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scenery ({0}).
         /// </summary>
         internal static string SceneryEntryController_Text {
@@ -300,15 +309,6 @@ namespace Crash.UI.Properties {
         internal static string T17EntryController_Text {
             get {
                 return ResourceManager.GetString("T17EntryController_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to T18 ({0}).
-        /// </summary>
-        internal static string T18EntryController_Text {
-            get {
-                return ResourceManager.GetString("T18EntryController_Text", resourceCulture);
             }
         }
         
