@@ -24,5 +24,18 @@ namespace Crash.UI
         {
             get { return entry; }
         }
+
+        private sealed class AcDelete : Action<EntryController>
+        {
+            protected override string GetText(EntryController c)
+            {
+                return string.Format(Properties.Resources.EntryController_AcDelete,c.Entry.EName);
+            }
+
+            protected override Command Activate(EntryController c)
+            {
+                return c.up.Chunk.Entries.CmRemove(c.Entry);
+            }
+        }
     }
 }

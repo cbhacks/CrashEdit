@@ -88,6 +88,15 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete Entry &quot;{0}&quot;.
+        /// </summary>
+        internal static string EntryController_AcDelete {
+            get {
+                return ResourceManager.GetString("EntryController_AcDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a game version from the list below. NTSC-U, NTSC-J, and PAL are all supported..
         /// </summary>
         internal static string GameVersionForm_Message {

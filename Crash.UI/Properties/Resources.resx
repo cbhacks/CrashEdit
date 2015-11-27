@@ -126,6 +126,9 @@
   <data name="DemoEntryController_Text" xml:space="preserve">
     <value>Demo ({0})</value>
   </data>
+  <data name="EntryController_AcDelete" xml:space="preserve">
+    <value>Delete Entry "{0}"</value>
+  </data>
   <data name="GameVersionForm_Message" xml:space="preserve">
     <value>Select a game version from the list below. NTSC-U, NTSC-J, and PAL are all supported.</value>
   </data>
