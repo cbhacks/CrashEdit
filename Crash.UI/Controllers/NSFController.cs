@@ -73,5 +73,18 @@ namespace Crash.UI
             nsf.Chunks.ItemRemoved -= Chunks_ItemRemoved;
             base.Dispose();
         }
+
+        private sealed class AcAddNormalChunk : Action<NSFController>
+        {
+            protected override string GetText(NSFController c)
+            {
+                return Properties.Resources.NSFController_AcAddNormalChunk;
+            }
+
+            protected override Command Activate(NSFController c)
+            {
+                return c.NSF.Chunks.CmAdd(new NormalChunk());
+            }
+        }
     }
 }

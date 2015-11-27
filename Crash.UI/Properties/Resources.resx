@@ -150,6 +150,9 @@
   <data name="NormalChunkController_Text" xml:space="preserve">
     <value>Chunk</value>
   </data>
+  <data name="NSFController_AcAddNormalChunk" xml:space="preserve">
+    <value>Add Chunk</value>
+  </data>
   <data name="NSFController_Text" xml:space="preserve">
     <value>NSF File</value>
   </data>

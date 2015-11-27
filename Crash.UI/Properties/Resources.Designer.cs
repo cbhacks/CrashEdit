@@ -160,6 +160,15 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Chunk.
+        /// </summary>
+        internal static string NSFController_AcAddNormalChunk {
+            get {
+                return ResourceManager.GetString("NSFController_AcAddNormalChunk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to NSF File.
         /// </summary>
         internal static string NSFController_Text {
