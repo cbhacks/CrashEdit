@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace Crash.UI
 {
-    public abstract class EntryController : Controller
+    public abstract class EntryController : Controller,IEntryController
     {
         private EntryChunkController up;
         private Entry entry;
@@ -16,6 +16,11 @@ namespace Crash.UI
         }
 
         public Entry Entry
+        {
+            get { return entry; }
+        }
+
+        IEntry IEntryController.Entry
         {
             get { return entry; }
         }

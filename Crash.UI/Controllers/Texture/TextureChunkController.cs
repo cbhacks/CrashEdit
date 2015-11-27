@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace Crash.UI
 {
-    public sealed class TextureChunkController : ChunkController
+    public sealed class TextureChunkController : ChunkController,IEntryController
     {
         private TextureChunk chunk;
 
@@ -14,6 +14,11 @@ namespace Crash.UI
         }
 
         public new TextureChunk Chunk
+        {
+            get { return chunk; }
+        }
+
+        IEntry IEntryController.Entry
         {
             get { return chunk; }
         }
