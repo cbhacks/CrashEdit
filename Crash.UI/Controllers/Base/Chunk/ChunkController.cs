@@ -19,5 +19,26 @@ namespace Crash.UI
         {
             get { return chunk; }
         }
+
+        private sealed class AcDelete : Action<ChunkController>
+        {
+            protected override string GetText(ChunkController c)
+            {
+                if (c is IEntryController)
+                {
+                    return string.Format(Properties.Resources.ChunkController_AcDeleteWithEName,
+                        Entry.EIDToEName(((IEntryController) c).Entry.EID));
+                }
+                else
+                {
+                    return Properties.Resources.ChunkController_AcDelete;
+                }
+            }
+
+            protected override Command Activate(ChunkController c)
+            {
+                return c.up.NSF.Chunks.CmRemove(c.Chunk);
+            }
+        }
     }
 }

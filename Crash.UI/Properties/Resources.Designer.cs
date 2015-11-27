@@ -70,6 +70,24 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete Chunk.
+        /// </summary>
+        internal static string ChunkController_AcDelete {
+            get {
+                return ResourceManager.GetString("ChunkController_AcDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Chunk &quot;{0}&quot;.
+        /// </summary>
+        internal static string ChunkController_AcDeleteWithEName {
+            get {
+                return ResourceManager.GetString("ChunkController_AcDeleteWithEName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No options available..
         /// </summary>
         internal static string Controller_NoOptionsAvailable {

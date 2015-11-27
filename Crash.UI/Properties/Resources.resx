@@ -120,6 +120,12 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="ChunkController_AcDelete" xml:space="preserve">
+    <value>Delete Chunk</value>
+  </data>
+  <data name="ChunkController_AcDeleteWithEName" xml:space="preserve">
+    <value>Delete Chunk "{0}"</value>
+  </data>
   <data name="Controller_NoOptionsAvailable" xml:space="preserve">
     <value>No options available.</value>
   </data>
