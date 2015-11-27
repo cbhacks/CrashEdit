@@ -88,6 +88,24 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deprocess Chunk.
+        /// </summary>
+        internal static string ChunkController_AcDeprocess {
+            get {
+                return ResourceManager.GetString("ChunkController_AcDeprocess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deprocess Chunk &quot;{0}&quot;.
+        /// </summary>
+        internal static string ChunkController_AcDeprocessWithEName {
+            get {
+                return ResourceManager.GetString("ChunkController_AcDeprocessWithEName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No options available..
         /// </summary>
         internal static string Controller_NoOptionsAvailable {

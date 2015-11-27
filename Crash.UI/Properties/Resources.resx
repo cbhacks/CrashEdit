@@ -126,6 +126,12 @@
   <data name="ChunkController_AcDeleteWithEName" xml:space="preserve">
     <value>Delete Chunk "{0}"</value>
   </data>
+  <data name="ChunkController_AcDeprocess" xml:space="preserve">
+    <value>Deprocess Chunk</value>
+  </data>
+  <data name="ChunkController_AcDeprocessWithEName" xml:space="preserve">
+    <value>Deprocess Chunk "{0}"</value>
+  </data>
   <data name="Controller_NoOptionsAvailable" xml:space="preserve">
     <value>No options available.</value>
   </data>
