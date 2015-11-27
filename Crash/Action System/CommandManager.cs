@@ -9,6 +9,7 @@ namespace Crash
         private Stack<Command> redochain;
         private Stack<string> undostrchain;
         private Stack<string> redostrchain;
+        private int? cleanoffset;
 
         public event EventHandler CommandExecuted;
 
@@ -18,6 +19,7 @@ namespace Crash
             this.redochain = new Stack<Command>();
             this.undostrchain = new Stack<string>();
             this.redostrchain = new Stack<string>();
+            this.cleanoffset = 0;
         }
 
         public int UndoDepth
@@ -40,10 +42,24 @@ namespace Crash
             get { return redostrchain; }
         }
 
+        public bool Dirty
+        {
+            get { return cleanoffset != 0; }
+        }
+
+        public void MarkClean()
+        {
+            cleanoffset = 0;
+        }
+
         public void Undo()
         {
             if (undochain.Count == 0)
                 throw new InvalidOperationException();
+            if (cleanoffset.HasValue)
+            {
+                cleanoffset--;
+            }
             redochain.Push(undochain.Pop().Run());
             redostrchain.Push(undostrchain.Pop());
             if (CommandExecuted != null)
@@ -70,6 +86,10 @@ namespace Crash
         {
             if (redochain.Count == 0)
                 throw new InvalidOperationException();
+            if (cleanoffset.HasValue)
+            {
+                cleanoffset++;
+            }
             undochain.Push(redochain.Pop().Run());
             undostrchain.Push(redostrchain.Pop());
             if (CommandExecuted != null)
@@ -94,6 +114,10 @@ namespace Crash
 
         public void Submit(Command command,string str)
         {
+            if (cleanoffset.HasValue && cleanoffset.Value < 0)
+            {
+                cleanoffset = null;
+            }
             redochain.Clear();
             redochain.Push(command);
             redostrchain.Clear();

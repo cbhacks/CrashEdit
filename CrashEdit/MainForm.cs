@@ -254,6 +254,19 @@ namespace CrashEdit
         private void mniFileClose_Click(object sender,EventArgs e)
         {
             TabPage tab = uxTabs.SelectedTab;
+            if (tab.Tag is MainControl)
+            {
+                MainControl maincontrol = (MainControl)tab.Tag;
+                if (maincontrol.CommandManager.Dirty)
+                {
+                    if (MessageBox.Show(this,string.Format(Properties.Resources.Text_CloseDirtyFilePrompt,
+                        maincontrol.FileInfo.FullName),"CrashEdit",MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question) != DialogResult.Yes)
+                    {
+                        return;
+                    }
+                }
+            }
             uxTabs.TabPages.RemoveAt(uxTabs.SelectedIndex);
             tab.Dispose();
         }

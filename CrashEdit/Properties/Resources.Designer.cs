@@ -444,6 +444,15 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The file &quot;{0}&quot; has not been saved since it was last modified. Continue anyway?.
+        /// </summary>
+        internal static string Text_CloseDirtyFilePrompt {
+            get {
+                return ResourceManager.GetString("Text_CloseDirtyFilePrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         internal static string Toolbar_Close {
