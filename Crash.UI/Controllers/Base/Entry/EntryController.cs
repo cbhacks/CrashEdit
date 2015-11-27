@@ -37,5 +37,26 @@ namespace Crash.UI
                 return c.up.Chunk.Entries.CmRemove(c.Entry);
             }
         }
+
+        private sealed class AcDeprocess : Action<EntryController>
+        {
+            protected override bool CheckCompatibility(EntryController c)
+            {
+                if (c is UnprocessedEntryController)
+                    return false;
+                return true;
+            }
+
+            protected override string GetText(EntryController c)
+            {
+                return string.Format(Properties.Resources.EntryController_AcDeprocess,c.Entry.EName);
+            }
+
+            protected override Command Activate(EntryController c)
+            {
+                UnprocessedEntry unprocessedentry = c.entry.Unprocess();
+                return c.up.Chunk.Entries.CmSet(c.up.Chunk.Entries.IndexOf(c.entry),unprocessedentry);
+            }
+        }
     }
 }
