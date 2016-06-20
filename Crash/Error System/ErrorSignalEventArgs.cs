@@ -12,9 +12,9 @@ namespace Crash
         public ErrorSignalEventArgs(string message)
         {
             this.message = message;
-            this.response = ErrorResponse.Abort;
-            this.canskip = false;
-            this.canignore = false;
+            response = ErrorResponse.Abort;
+            canskip = false;
+            canignore = false;
         }
 
         public string Message

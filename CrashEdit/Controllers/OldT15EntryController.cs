@@ -14,9 +14,9 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Old T15 Entry ({0})",oldt15entry.EName);
-            Node.ImageKey = "oldt15entry";
-            Node.SelectedImageKey = "oldt15entry";
+            Node.Text = string.Format("Old T15 ({0})",oldt15entry.EName);
+            Node.ImageKey = "image";
+            Node.SelectedImageKey = "image";
         }
 
         public OldT15Entry OldT15Entry

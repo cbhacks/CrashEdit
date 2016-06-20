@@ -28,7 +28,6 @@ namespace Crash
             }
             else if (version == OldVersion)
             {
-                ErrorManager.SignalIgnorableError("VH: VABv6 (crash 1) is not fully supported");
                 isoldversion = true;
             }
             else

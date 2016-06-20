@@ -22,9 +22,9 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Old Scenery Entry ({0})",oldsceneryentry.EName);
-            Node.ImageKey = "oldsceneryentry";
-            Node.SelectedImageKey = "oldsceneryentry";
+            Node.Text = string.Format("Old Scenery ({0})",oldsceneryentry.EName);
+            Node.ImageKey = "thing";
+            Node.SelectedImageKey = "thing";
         }
 
         protected override Control CreateEditor()

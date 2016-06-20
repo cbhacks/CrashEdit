@@ -22,6 +22,7 @@ namespace Crash
         {
             byte[][] items = new byte [1][];
             items[0] = data;
+            int size = data.Length;
             return new UnprocessedEntry(items,EID,Type);
         }
     }

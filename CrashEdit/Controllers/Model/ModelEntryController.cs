@@ -1,8 +1,8 @@
-using Crash;
+/*using Crash;
 
 namespace CrashEdit
 {
-    public sealed class ModelEntryController : MysteryMultiItemEntryController
+    public sealed class ModelEntryController : EntryController
     {
         private ModelEntry modelentry;
 
@@ -14,9 +14,9 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Model Entry ({0})",modelentry.EName);
-            Node.ImageKey = "modelentry";
-            Node.SelectedImageKey = "modelentry";
+            Node.Text = string.Format("Model ({0})",modelentry.EName);
+            Node.ImageKey = "thing";
+            Node.SelectedImageKey = "thing";
         }
 
         public ModelEntry ModelEntry
@@ -24,4 +24,4 @@ namespace CrashEdit
             get { return modelentry; }
         }
     }
-}
+}*/

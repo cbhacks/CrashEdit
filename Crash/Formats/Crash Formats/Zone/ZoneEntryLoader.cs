@@ -1,9 +1,6 @@
-using System;
-
 namespace Crash
 {
     [EntryType(7,GameVersion.Crash2)]
-    [EntryType(7,GameVersion.Crash3)]
     public sealed class ZoneEntryLoader : EntryLoader
     {
         public override Entry Load(byte[][] items,int eid)

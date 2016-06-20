@@ -1,10 +1,6 @@
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-
 namespace Crash.UI
 {
-    public sealed class OldZoneEntryController : MysteryMultiItemEntryController
+    public sealed class OldZoneEntryController : EntryController
     {
         private OldZoneEntry entry;
 

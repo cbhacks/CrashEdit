@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using System.Reflection;
 using System.Collections.Generic;
 
@@ -104,9 +103,11 @@ namespace Crash
         [EntityPropertyField(0x209)]
         private EntityT4Property loadlistb = null;
         [EntityPropertyField(0x287)]
-        private List<short> victims = null;
+        private List<EntityVictim> victims = null;
         [EntityPropertyField(0x28B)]
         private EntitySetting? boxcount = null;
+        [EntityPropertyField(0x30E)]
+        private int? scaling;
         private Dictionary<short,EntityProperty> extraproperties;
 
         public Entity(IDictionary<short,EntityProperty> properties)
@@ -227,7 +228,7 @@ namespace Crash
             get { return loadlistb; }
         }
 
-        public IList<short> Victims
+        public List<EntityVictim> Victims
         {
             get { return victims; }
         }
@@ -236,6 +237,12 @@ namespace Crash
         {
             get { return boxcount; }
             set { boxcount = value; }
+        }
+
+        public int? Scaling
+        {
+            get { return scaling; }
+            set { scaling = value; }
         }
 
         public IDictionary<short,EntityProperty> ExtraProperties

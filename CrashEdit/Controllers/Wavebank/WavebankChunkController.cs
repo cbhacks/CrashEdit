@@ -14,9 +14,9 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = "Wavebank Chunk";
-            Node.ImageKey = "wavebankchunk";
-            Node.SelectedImageKey = "wavebankchunk";
+            Node.Text = string.Format("Wavebank Chunk {0}", NSFController.chunkid);
+            Node.ImageKey = "music";
+            Node.SelectedImageKey = "music";
         }
 
         public WavebankChunk WavebankChunk

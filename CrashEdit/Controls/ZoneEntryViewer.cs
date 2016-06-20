@@ -1,11 +1,6 @@
 using Crash;
-using System;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Windows.Forms;
 using System.Collections.Generic;
-using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
 namespace CrashEdit
@@ -17,9 +12,9 @@ namespace CrashEdit
 
         static ZoneEntryViewer()
         {
-            stipplea = new byte [128];
-            stippleb = new byte [128];
-            for (int i = 0;i < 128;i += 8)
+            stipplea = new byte[128];
+            stippleb = new byte[128];
+            for (int i = 0; i < 128; i += 8)
             {
                 stipplea[i + 0] = 0x55;
                 stipplea[i + 1] = 0x55;
@@ -43,7 +38,8 @@ namespace CrashEdit
         private ZoneEntry entry;
         private ZoneEntry[] linkedentries;
 
-        public ZoneEntryViewer(ZoneEntry entry,SceneryEntry[] linkedsceneryentries,ZoneEntry[] linkedentries) : base(linkedsceneryentries)
+        public ZoneEntryViewer(ZoneEntry entry,SceneryEntry[] linkedsceneryentries,ZoneEntry[] linkedentries)
+            : base(linkedsceneryentries)
         {
             this.entry = entry;
             this.linkedentries = linkedentries;
@@ -80,9 +76,11 @@ namespace CrashEdit
         protected override void RenderObjects()
         {
             RenderEntry(entry);
-            GL.Enable(EnableCap.PolygonStipple);
-            GL.PolygonStipple(stipplea);
+            int xoffset = BitConv.FromInt32(entry.Unknown2,0);
+            int yoffset = BitConv.FromInt32(entry.Unknown2,4);
+            int zoffset = BitConv.FromInt32(entry.Unknown2,8);
             base.RenderObjects();
+            GL.Enable(EnableCap.PolygonStipple);
             GL.PolygonStipple(stippleb);
             foreach (ZoneEntry linkedentry in linkedentries)
             {
@@ -90,7 +88,7 @@ namespace CrashEdit
                     continue;
                 if (linkedentry == null)
                     continue;
-                RenderEntry(linkedentry);
+                RenderLinkedEntry(linkedentry);
             }
             GL.Disable(EnableCap.PolygonStipple);
         }
@@ -103,11 +101,61 @@ namespace CrashEdit
             GL.PushMatrix();
             GL.Translate(xoffset,yoffset,zoffset);
             GL.Scale(4,4,4);
+            int xdepth = BitConv.FromInt32(entry.Unknown2,12);
+            int ydepth = BitConv.FromInt32(entry.Unknown2,16);
+            int zdepth = BitConv.FromInt32(entry.Unknown2,20);
+            GL.Color3(Color.White);
+            GL.Begin(PrimitiveType.LineStrip);
+            GL.Vertex3(0,0,0);
+            GL.Vertex3(xdepth / 4,0,0);
+            GL.Vertex3(xdepth / 4,ydepth / 4,0);
+            GL.Vertex3(0,ydepth / 4,0);
+            GL.Vertex3(0,0,0);
+            GL.Vertex3(0,0,zdepth / 4);
+            GL.Vertex3(xdepth / 4,0,zdepth / 4);
+            GL.Vertex3(xdepth / 4,ydepth / 4,zdepth / 4);
+            GL.Vertex3(0,ydepth / 4,zdepth / 4);
+            GL.Vertex3(0,0,zdepth / 4);
+            GL.Vertex3(xdepth / 4,0,zdepth / 4);
+            GL.Vertex3(xdepth / 4,0,0);
+            GL.Vertex3(xdepth / 4,ydepth / 4,0);
+            GL.Vertex3(xdepth / 4,ydepth / 4,zdepth / 4);
+            GL.Vertex3(0,ydepth / 4,zdepth / 4);
+            GL.Vertex3(0,ydepth / 4,0);
+            GL.End();
             foreach (Entity entity in entry.Entities)
             {
-                if (entity.Name != null)
+                if (entity.Name != null && entity.ID != null)
+                {
+                    GL.PolygonStipple(stippleb);
+                    RenderEntity(entity);
+                }
+                else if (entity.Name == null && entity.ID == null && entity.Positions.Count != 0)
+                {
+                    GL.PolygonStipple(stipplea);
+                    RenderCamera(entity);
+                }
+            }
+            GL.PopMatrix();
+        }
+
+        private void RenderLinkedEntry(ZoneEntry entry)
+        {
+            int xoffset = BitConv.FromInt32(entry.Unknown2,0);
+            int yoffset = BitConv.FromInt32(entry.Unknown2,4);
+            int zoffset = BitConv.FromInt32(entry.Unknown2,8);
+            GL.PushMatrix();
+            GL.Translate(xoffset,yoffset,zoffset);
+            GL.Scale(4,4,4);
+            foreach (Entity entity in entry.Entities)
+            {
+                if (entity.Name != null && entity.ID != null)
                 {
                     RenderEntity(entity);
+                }
+                else if (entity.Name == null && entity.ID == null && entity.Positions.Count != 0)
+                {
+                    RenderCamera(entity);
                 }
             }
             GL.PopMatrix();
@@ -119,11 +167,7 @@ namespace CrashEdit
             {
                 EntityPosition position = entity.Positions[0];
                 GL.PushMatrix();
-                if (entity.ExtraProperties.ContainsKey(0x30E))
-                    GL.Scale(0.25,0.25,0.25);
                 GL.Translate(position.X,position.Y,position.Z);
-                if (entity.ExtraProperties.ContainsKey(0x30E))
-                    GL.Scale(4,4,4);
                 switch (entity.Type)
                 {
                     case 0x3:
@@ -150,23 +194,53 @@ namespace CrashEdit
             {
                 GL.Color3(Color.Blue);
                 GL.PushMatrix();
-                if (entity.ExtraProperties.ContainsKey(0x30E))
-                        GL.Scale(0.25,0.25,0.25);
-                GL.Begin(BeginMode.LineStrip);
+                GL.Begin(PrimitiveType.LineStrip);
                 foreach (EntityPosition position in entity.Positions)
                 {
                     GL.Vertex3(position.X,position.Y,position.Z);
                 }
                 GL.End();
                 GL.Color3(Color.Red);
+                LoadTexture(OldResources.PointTexture);
                 foreach (EntityPosition position in entity.Positions)
                 {
-                    GL.Color3(Color.Red);
-                    LoadTexture(OldResources.PointTexture);
                     GL.PushMatrix();
                     GL.Translate(position.X,position.Y,position.Z);
-                    if (entity.ExtraProperties.ContainsKey(0x30E))
-                        GL.Scale(4,4,4);
+                    RenderSprite();
+                    GL.PopMatrix();
+                }
+                GL.PopMatrix();
+            }
+        }
+
+        private void RenderCamera(Entity entity)
+        {
+            if (entity.Positions.Count == 1)
+            {
+                EntityPosition position = entity.Positions[0];
+                GL.PushMatrix();
+                GL.Translate(position.X / 4, position.Y / 4, position.Z / 4);
+                GL.Color3(Color.Yellow);
+                LoadTexture(OldResources.PointTexture);
+                RenderSprite();
+                GL.PopMatrix();
+            }
+            else
+            {
+                GL.Color3(Color.Blue);
+                GL.PushMatrix();
+                GL.Begin(PrimitiveType.LineStrip);
+                foreach (EntityPosition position in entity.Positions)
+                {
+                    GL.Vertex3(position.X / 4, position.Y / 4, position.Z / 4);
+                }
+                GL.End();
+                GL.Color3(Color.Yellow);
+                LoadTexture(OldResources.PointTexture);
+                foreach (EntityPosition position in entity.Positions)
+                {
+                    GL.PushMatrix();
+                    GL.Translate(position.X / 4, position.Y / 4, position.Z / 4);
                     RenderSprite();
                     GL.PopMatrix();
                 }
@@ -180,7 +254,7 @@ namespace CrashEdit
             GL.PushMatrix();
             GL.Rotate(-rotx,0,1,0);
             GL.Rotate(-roty,1,0,0);
-            GL.Begin(BeginMode.Quads);
+            GL.Begin(PrimitiveType.Quads);
             GL.TexCoord2(0,0);
             GL.Vertex2(-50,+50);
             GL.TexCoord2(1,0);
@@ -219,10 +293,9 @@ namespace CrashEdit
             GL.PopMatrix();
             LoadBoxTopTexture(subtype);
             GL.PushMatrix();
-            RenderBoxFace();
             GL.Rotate(90,1,0,0);
             RenderBoxFace();
-            GL.Rotate(-180,1,0,0);
+            GL.Rotate(180,1,0,0);
             RenderBoxFace();
             GL.PopMatrix();
             GL.Disable(EnableCap.Texture2D);
@@ -230,7 +303,7 @@ namespace CrashEdit
 
         private void RenderBoxFace()
         {
-            GL.Begin(BeginMode.Quads);
+            GL.Begin(PrimitiveType.Quads);
             GL.TexCoord2(0,0);
             GL.Vertex3(-50,+50,50);
             GL.TexCoord2(1,0);

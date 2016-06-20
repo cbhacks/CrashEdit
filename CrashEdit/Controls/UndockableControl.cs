@@ -1,4 +1,3 @@
-using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -12,10 +11,10 @@ namespace CrashEdit
         public UndockableControl(Control control)
         {
             this.control = control;
-            this.form = null;
+            form = null;
             Dock = control.Dock;
             control.Dock = DockStyle.Fill;
-            this.Controls.Add(control);
+            Controls.Add(control);
             BackColor = SystemColors.AppWorkspace;
         }
 
@@ -42,12 +41,12 @@ namespace CrashEdit
                         form.Width = Width;
                         form.Height = Height;
                         form.FormBorderStyle = FormBorderStyle.SizableToolWindow;
-                        this.Controls.Remove(control);
+                        Controls.Remove(control);
                         form.Controls.Add(control);
                         form.FormClosed += delegate (object sender,FormClosedEventArgs ee)
                         {
                             form.Controls.Remove(control);
-                            this.Controls.Add(control);
+                            Controls.Add(control);
                             form = null;
                         };
                         form.Show();

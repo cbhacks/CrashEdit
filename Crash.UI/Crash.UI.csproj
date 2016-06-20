@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -12,6 +12,12 @@
     <AssemblyName>Crash.UI</AssemblyName>
     <StartupObject>
     </StartupObject>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,8 +51,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Action System\Action.cs" />
-    <Compile Include="Controllers\Base\Entry\IEntryController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\Base\Chunk\ChunkController.cs" />
     <Compile Include="Controllers\Mystery\MysteryUniItemEntryController.cs" />
@@ -54,11 +58,11 @@
     <Compile Include="Controllers\Base\Entry\UnprocessedEntryController.cs" />
     <Compile Include="Controllers\T21\T21EntryController.cs" />
     <Compile Include="Controllers\Speech\SpeechEntryController.cs" />
-    <Compile Include="Controllers\T20\T20EntryController.cs" />
+    <Compile Include="Controllers\Animation\CutsceneAnimationEntryController.cs" />
     <Compile Include="Controllers\Demo\DemoEntryController.cs" />
-    <Compile Include="Controllers\Palette\PaletteEntryController.cs" />
-    <Compile Include="Controllers\T17\T17EntryController.cs" />
-    <Compile Include="Controllers\T17\OldT17EntryController.cs" />
+    <Compile Include="Controllers\T18\T18EntryController.cs" />
+    <Compile Include="Controllers\T18\T17\T17EntryController.cs" />
+    <Compile Include="Controllers\T18\T17\OldT17EntryController.cs" />
     <Compile Include="Controllers\T15\OldT15EntryController.cs" />
     <Compile Include="Controllers\T15\T15EntryController.cs" />
     <Compile Include="Controllers\Wavebank\WavebankEntryController.cs" />
@@ -66,6 +70,7 @@
     <Compile Include="Controllers\Music\OldMusicEntryController.cs" />
     <Compile Include="Controllers\Sound\SoundEntryController.cs" />
     <Compile Include="Controllers\T11\T11EntryController.cs" />
+    <Compile Include="Controllers\Zone\ProtoZoneEntryController.cs" />
     <Compile Include="Controllers\Zone\ZoneEntryController.cs" />
     <Compile Include="Controllers\Zone\OldZoneEntryController.cs" />
     <Compile Include="Controllers\T6\T6EntryController.cs" />
@@ -86,6 +91,10 @@
     <Compile Include="Controllers\Base\Entry Chunk\EntryChunkController.cs" />
     <Compile Include="Controllers\Texture\TextureChunkController.cs" />
     <Compile Include="Controllers\NSFController.cs" />
+    <!--<SubType>UserControl</SubType>
+    </Compile>
+      <DependentUpon>EntryChunkControl.cs</DependentUpon>
+    </Compile>-->
     <Compile Include="Forms\GameVersionForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,6 +113,9 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <!--<SubType>Designer</SubType>
+      <DependentUpon>EntryChunkControl.cs</DependentUpon>
+    </EmbeddedResource>-->
     <EmbeddedResource Include="Forms\GameVersionForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>GameVersionForm.cs</DependentUpon>

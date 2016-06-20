@@ -1,5 +1,3 @@
-using System;
-
 namespace Crash
 {
     [EntryType(19,GameVersion.Crash1BetaMAY11)]

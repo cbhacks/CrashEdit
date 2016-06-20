@@ -101,6 +101,30 @@ namespace Crash
             return new string(str);
         }
 
+        // Special thanks to NeoKesha for this
+        public static int str2eid(string str)
+        {
+            int EID = 1;
+            int len = (str.Length > 5) ? 5 : str.Length;
+            for (byte I = 0; I <= len; I++)
+            {
+                byte chr_id = SeekCharId(str[I]);
+                EID = EID | (chr_id << (1 + 6 * I));
+            }
+            return EID;
+        }
+
+        // And this
+        public static byte SeekCharId(char chr)
+        {
+            byte I = 0;
+            while (!(chr == ENameCharacterSet[I]))
+            {
+                I += 1;
+            }
+            return I;
+        }
+
         private int eid;
 
         public Entry(int eid)

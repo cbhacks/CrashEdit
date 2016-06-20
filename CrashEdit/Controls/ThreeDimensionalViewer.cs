@@ -1,12 +1,11 @@
 using Crash;
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
-using System.Collections.Generic;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
 
 namespace CrashEdit
 {
@@ -242,15 +241,14 @@ namespace CrashEdit
             MakeCurrent();
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.AlphaTest);
-            GL.DepthFunc(DepthFunction.Less);
+            GL.DepthFunc(DepthFunction.Lequal);
             GL.AlphaFunc(AlphaFunction.Greater,0);
             GL.Viewport(Location,Size);
             GL.ClearColor(Color.Black);
-            GL.ClearDepth(short.MaxValue);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
-            GL.Frustum(-0.0001,+0.0001,-0.0001,+0.0001,0.0001,short.MaxValue);
+            GL.Frustum(-0.01,+0.01,-0.01,+0.01,0.01,ushort.MaxValue);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
             GL.Translate(0,0,-1);
@@ -260,6 +258,8 @@ namespace CrashEdit
             GL.Translate(-midx,-midy,-midz);
             RenderObjects();
             SwapBuffers();
+            GL.Disable(EnableCap.DepthTest);
+            GL.Disable(EnableCap.AlphaTest);
         }
 
         public void ResetCamera()

@@ -9,11 +9,13 @@ namespace CrashEdit
         private ZoneEntryController zoneentrycontroller;
         private Entity entity;
 
-        public EntityController(ZoneEntryController zoneentrycontroller,Entity entity)
+        public EntityController(ZoneEntryController zoneentrycontroller, Entity entity)
         {
             this.zoneentrycontroller = zoneentrycontroller;
             this.entity = entity;
-            AddMenu("Duplicate Entity",Menu_Duplicate);
+            AddMenu("Duplicate Entity", Menu_Duplicate);
+            Node.ImageKey = "arrow";
+            Node.SelectedImageKey = "arrow";
             InvalidateNode();
         }
 
@@ -21,14 +23,12 @@ namespace CrashEdit
         {
             if (entity.Name != null)
             {
-                Node.Text = string.Format("Entity ({0})",entity.Name);
+                Node.Text = string.Format("{0}", entity.Name, entity.ID);
             }
             else
             {
                 Node.Text = "Entity";
             }
-            Node.ImageKey = "entity";
-            Node.SelectedImageKey = "entity";
         }
 
         protected override Control CreateEditor()
@@ -90,14 +90,14 @@ namespace CrashEdit
             }
             maxid++;
             int newindex = zoneentrycontroller.ZoneEntry.Entities.Count;
-            newindex -= BitConv.FromInt32(zoneentrycontroller.ZoneEntry.Unknown1,0x188);
-            int entitycount = BitConv.FromInt32(zoneentrycontroller.ZoneEntry.Unknown1,0x18C);
-            BitConv.ToInt32(zoneentrycontroller.ZoneEntry.Unknown1,0x18C,entitycount + 1);
+            newindex -= BitConv.FromInt32(zoneentrycontroller.ZoneEntry.Unknown1, 0x188);
+            int entitycount = BitConv.FromInt32(zoneentrycontroller.ZoneEntry.Unknown1, 0x18C);
+            BitConv.ToInt32(zoneentrycontroller.ZoneEntry.Unknown1, 0x18C, entitycount + 1);
             Entity newentity = Entity.Load(entity.Save());
             newentity.ID = maxid;
             newentity.AlternateID = null;
             zoneentrycontroller.ZoneEntry.Entities.Add(newentity);
-            zoneentrycontroller.AddNode(new EntityController(zoneentrycontroller,newentity));
+            zoneentrycontroller.AddNode(new EntityController(zoneentrycontroller, newentity));
             foreach (EntityPropertyRow<int> drawlist in drawlists)
             {
                 foreach (int value in drawlist.Values)

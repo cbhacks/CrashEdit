@@ -8,13 +8,16 @@ namespace CrashEdit
     {
         private NSF nsf;
         private GameVersion gameversion;
+        public short chunkid;
 
         public NSFController(NSF nsf,GameVersion gameversion)
         {
             this.nsf = nsf;
             this.gameversion = gameversion;
+            chunkid = -1;
             foreach (Chunk chunk in nsf.Chunks)
             {
+                chunkid += 2; 
                 if (chunk is NormalChunk)
                 {
                     AddNode(new NormalChunkController(this,(NormalChunk)chunk));
@@ -81,6 +84,7 @@ namespace CrashEdit
             nsf.Chunks.Add(chunk);
             NormalChunkController controller = new NormalChunkController(this,chunk);
             AddNode(controller);
+            chunkid += 2;
         }
 
         private void Menu_Add_SoundChunk()
@@ -89,6 +93,7 @@ namespace CrashEdit
             nsf.Chunks.Add(chunk);
             SoundChunkController controller = new SoundChunkController(this,chunk);
             AddNode(controller);
+            chunkid += 2;
         }
 
         private void Menu_Add_WavebankChunk()
@@ -97,6 +102,7 @@ namespace CrashEdit
             nsf.Chunks.Add(chunk);
             WavebankChunkController controller = new WavebankChunkController(this,chunk);
             AddNode(controller);
+            chunkid += 2;
         }
 
         private void Menu_Add_SpeechChunk()
@@ -105,6 +111,7 @@ namespace CrashEdit
             nsf.Chunks.Add(chunk);
             SpeechChunkController controller = new SpeechChunkController(this,chunk);
             AddNode(controller);
+            chunkid += 2;
         }
 
         private void Menu_Fix_Detonator()
@@ -117,6 +124,23 @@ namespace CrashEdit
                 {
                     foreach (Entry entry in ((EntryChunk)chunk).Entries)
                     {
+                        if (entry is NewZoneEntry)
+                        {
+                            foreach (Entity entity in ((NewZoneEntry)entry).Entities)
+                            {
+                                if (entity.Type == 34)
+                                {
+                                    if (entity.Subtype == 18 && entity.ID.HasValue)
+                                    {
+                                        nitros.Add(entity);
+                                    }
+                                    else if (entity.Subtype == 24)
+                                    {
+                                        detonators.Add(entity);
+                                    }
+                                }
+                            }
+                        }
                         if (entry is ZoneEntry)
                         {
                             foreach (Entity entity in ((ZoneEntry)entry).Entities)
@@ -142,7 +166,7 @@ namespace CrashEdit
                 detonator.Victims.Clear();
                 foreach (Entity nitro in nitros)
                 {
-                    detonator.Victims.Add((short)nitro.ID.Value);
+                    detonator.Victims.Add(new EntityVictim((short)nitro.ID.Value));
                 }
             }
         }
@@ -157,9 +181,9 @@ namespace CrashEdit
                 {
                     foreach (Entry entry in ((EntryChunk)chunk).Entries)
                     {
-                        if (entry is ZoneEntry)
+                        if (entry is NewZoneEntry)
                         {
-                            foreach (Entity entity in ((ZoneEntry)entry).Entities)
+                            foreach (Entity entity in ((NewZoneEntry)entry).Entities)
                             {
                                 if (entity.Type == 0 && entity.Subtype == 0)
                                 {
@@ -177,6 +201,38 @@ namespace CrashEdit
                                         default:
                                             boxcount++;
                                             break;
+                                    }
+                                }
+                            }
+                        }
+                        if (entry is ZoneEntry)
+                        {
+                            foreach (Entity entity in ((ZoneEntry)entry).Entities)
+                            {
+                                if (entity.Type == 0 && entity.Subtype == 0)
+                                {
+                                    willys.Add(entity);
+                                }
+                                else if (entity.Type == 34)
+                                {
+                                    switch (entity.Subtype)
+                                    {
+                                        case 5:
+                                        case 7:
+                                        case 15:
+                                        case 24:
+                                        case 28:
+                                            break;
+                                        default:
+                                            boxcount++;
+                                            break;
+                                    }
+                                }
+                                else if (entity.Type == 36)
+                                {
+                                    if (entity.Subtype == 1)
+                                    {
+                                        boxcount++;
                                     }
                                 }
                             }

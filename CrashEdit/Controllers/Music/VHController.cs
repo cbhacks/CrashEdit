@@ -1,5 +1,4 @@
 using Crash;
-using System;
 
 namespace CrashEdit
 {
@@ -22,8 +21,8 @@ namespace CrashEdit
         public override void InvalidateNode()
         {
             Node.Text = "VH";
-            Node.ImageKey = "vh";
-            Node.SelectedImageKey = "vh";
+            Node.ImageKey = "arrow";
+            Node.SelectedImageKey = "arrow";
         }
 
         public MusicEntryController MusicEntryController

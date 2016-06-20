@@ -1,10 +1,6 @@
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-
 namespace Crash.UI
 {
-    public sealed class TextureChunkController : ChunkController,IEntryController
+    public sealed class TextureChunkController : ChunkController
     {
         private TextureChunk chunk;
 
@@ -14,11 +10,6 @@ namespace Crash.UI
         }
 
         public new TextureChunk Chunk
-        {
-            get { return chunk; }
-        }
-
-        IEntry IEntryController.Entry
         {
             get { return chunk; }
         }

@@ -9,7 +9,7 @@ namespace Crash
         {
             if (data.Length != 16)
                 throw new ArgumentException("Value must be 16 bytes long.","data");
-            if (tonedata.Length != 32 * 16)
+            if (tonedata.Length != 512)
                 throw new ArgumentException("Value must be 512 bytes long.","tonedata");
             byte tonecount = data[0];
             byte volume = data[1];
@@ -59,21 +59,21 @@ namespace Crash
             this.isoldversion = isoldversion;
             if (isoldversion)
             {
-                this.volume = 0;
-                this.priority = 0;
-                this.mode = 0x1A;
-                this.panning = 0;
-                this.attribute = 0;
+                volume = 0;
+                priority = 0;
+                mode = 0x1A;
+                panning = 0;
+                attribute = 0;
             }
             else
             {
-                this.volume = 127;
-                this.priority = 255;
-                this.mode = 255;
-                this.panning = 64;
-                this.attribute = 0;
+                volume = 127;
+                priority = 255;
+                mode = 255;
+                panning = 64;
+                attribute = 0;
             }
-            this.tones = new List<VHTone>();
+            tones = new List<VHTone>();
         }
 
         public VHProgram(bool isoldversion,byte volume,byte priority,byte mode,byte panning,short attribute,IEnumerable<VHTone> tones)

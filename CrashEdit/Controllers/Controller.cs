@@ -1,6 +1,5 @@
 using System;
 using System.Drawing;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -13,11 +12,11 @@ namespace CrashEdit
 
         public Controller()
         {
-            this.node = new TreeNode();
-            this.node.Tag = this;
-            this.contextmenu = new ContextMenu();
-            this.editor = null;
-            this.node.ContextMenu = contextmenu;
+            node = new TreeNode();
+            node.Tag = this;
+            contextmenu = new ContextMenu();
+            editor = null;
+            node.ContextMenu = contextmenu;
         }
 
         public void AddNode(Controller controller)
@@ -110,10 +109,6 @@ namespace CrashEdit
 
         public virtual void Dispose()
         {
-            foreach (TreeNode subnode in node.Nodes)
-            {
-                ((IDisposable)subnode.Tag).Dispose();
-            }
             node.Remove();
             contextmenu.Dispose();
             if (editor != null)

@@ -14,9 +14,9 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = "Speech Chunk";
-            Node.ImageKey = "speechchunk";
-            Node.SelectedImageKey = "speechchunk";
+            Node.Text = string.Format("Speech Chunk {0}", NSFController.chunkid);
+            Node.ImageKey = "whitej";
+            Node.SelectedImageKey = "whitej";
         }
 
         public SpeechChunk SpeechChunk

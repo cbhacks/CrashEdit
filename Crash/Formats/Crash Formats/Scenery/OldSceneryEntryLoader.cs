@@ -2,6 +2,7 @@ using System;
 
 namespace Crash
 {
+    [EntryType(3,GameVersion.Crash1Beta1995)]
     [EntryType(3,GameVersion.Crash1BetaMAR08)]
     [EntryType(3,GameVersion.Crash1BetaMAY11)]
     [EntryType(3,GameVersion.Crash1)]

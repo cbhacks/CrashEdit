@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Crash
 {
-    public sealed class OldFrame
+    public class OldFrame
     {
         public static OldFrame Load(byte[] data)
         {
@@ -90,61 +90,73 @@ namespace Crash
         public int XOffset
         {
             get { return xoffset; }
+            set { xoffset = value; }
         }
 
         public int YOffset
         {
             get { return yoffset; }
+            set { yoffset = value; }
         }
 
         public int ZOffset
         {
             get { return zoffset; }
+            set { zoffset = value; }
         }
 
         public int X1
         {
             get { return x1; }
+            set { x1 = value; }
         }
 
         public int Y1
         {
             get { return y1; }
+            set { y1 = value; }
         }
 
         public int Z1
         {
             get { return z1; }
+            set { z1 = value; }
         }
 
         public int X2
         {
             get { return x2; }
+            set { x2 = value; }
         }
 
         public int Y2
         {
             get { return y2; }
+            set { y2 = value; }
         }
 
         public int Z2
         {
             get { return z2; }
+            set { z2 = value; }
         }
 
         public int XGlobal
         {
             get { return xglobal; }
+            set { xglobal = value; }
         }
 
         public int YGlobal
         {
             get { return yglobal; }
+            set { yglobal = value; }
         }
 
         public int ZGlobal
         {
             get { return zglobal; }
+            set { zglobal = value; }
         }
 
         public IList<OldFrameVertex> Vertices
@@ -155,6 +167,7 @@ namespace Crash
         public short Unknown
         {
             get { return unknown; }
+            set { unknown = value; }
         }
 
         public byte[] Save()

@@ -2,7 +2,6 @@ using Crash;
 using Crash.UI;
 using System;
 using System.IO;
-using System.Globalization;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
@@ -11,10 +10,12 @@ namespace CrashEdit
     public sealed class OldMainForm : Form
     {
         private static ImageList imglist;
+        private static GameVersion version;
 
         static OldMainForm()
         {
             imglist = new ImageList();
+            version = new GameVersion();
             try
             {
                 imglist.Images.Add("default",OldResources.FileImage);
@@ -24,7 +25,6 @@ namespace CrashEdit
                 imglist.Images.Add("tb_close",OldResources.FolderImage);
                 imglist.Images.Add("tb_find",OldResources.BinocularsImage);
                 imglist.Images.Add("tb_findnext",OldResources.BinocularsNextImage);
-                imglist.Images.Add("tb_goto",OldResources.ArrowImage);
             }
             catch
             {
@@ -40,7 +40,6 @@ namespace CrashEdit
         private ToolStripSeparator tbsSeparator;
         private ToolStripButton tbbFind;
         private ToolStripButton tbbFindNext;
-        private ToolStripButton tbbGoto;
         private TabControl tbcTabs;
         private GameVersionForm dlgGameVersion;
 
@@ -84,12 +83,6 @@ namespace CrashEdit
             tbbFindNext.TextImageRelation = TextImageRelation.ImageAboveText;
             tbbFindNext.Click += new EventHandler(tbbFindNext_Click);
 
-            tbbGoto = new ToolStripButton();
-            tbbGoto.Text = "Goto EID";
-            tbbGoto.ImageKey = "tb_goto";
-            tbbGoto.TextImageRelation = TextImageRelation.ImageAboveText;
-            tbbGoto.Click += new EventHandler(tbbGoto_Click);
-
             tsToolbar = new ToolStrip();
             tsToolbar.Dock = DockStyle.Top;
             tsToolbar.ImageList = imglist;
@@ -100,18 +93,17 @@ namespace CrashEdit
             tsToolbar.Items.Add(tbsSeparator);
             tsToolbar.Items.Add(tbbFind);
             tsToolbar.Items.Add(tbbFindNext);
-            tsToolbar.Items.Add(tbbGoto);
 
             tbcTabs = new TabControl();
             tbcTabs.Dock = DockStyle.Fill;
 
             dlgGameVersion = new GameVersionForm();
 
-            this.Width = 640;
-            this.Height = 480;
-            this.Text = "CrashEdit";
-            this.Controls.Add(tbcTabs);
-            this.Controls.Add(tsToolbar);
+            Width = 640;
+            Height = 480;
+            Text = "CrashEdit";
+            Controls.Add(tbcTabs);
+            Controls.Add(tsToolbar);
         }
 
         void tbbOpen_Click(object sender,EventArgs e)
@@ -142,11 +134,6 @@ namespace CrashEdit
         void tbbFindNext_Click(object sender,EventArgs e)
         {
             FindNext();
-        }
-
-        void tbbGoto_Click(object sender,EventArgs e)
-        {
-            GotoEID();
         }
 
         public void OpenNSF()
@@ -256,50 +243,85 @@ namespace CrashEdit
 
         public void PatchNSD(string filename,NSF nsf)
         {
-            try
+            if (dlgGameVersion.SelectedVersion == GameVersion.Crash2)
             {
-                byte[] data = File.ReadAllBytes(filename);
-                NSD nsd = NSD.Load(data);
-                nsd.ChunkCount = nsf.Chunks.Count;
-                Dictionary<int,int> newindex = new Dictionary<int,int>();
-                for (int i = 0;i < nsf.Chunks.Count;i++)
+                try
                 {
-                    if (nsf.Chunks[i] is IEntry)
+                    byte[] data = File.ReadAllBytes(filename);
+                    NSD nsd = NSD.Load(data);
+                    nsd.ChunkCount = nsf.Chunks.Count;
+                    Dictionary<int, int> newindex = new Dictionary<int, int>();
+                    for (int i = 0; i < nsf.Chunks.Count; i++)
                     {
-                        IEntry entry = (IEntry)nsf.Chunks[i];
-                        newindex.Add(entry.EID,i * 2 + 1);
-                    }
-                    if (nsf.Chunks[i] is EntryChunk)
-                    {
-                        foreach (Entry entry in ((EntryChunk)nsf.Chunks[i]).Entries)
+                        if (nsf.Chunks[i] is IEntry)
                         {
-                            newindex.Add(entry.EID,i * 2 + 1);
+                            IEntry entry = (IEntry)nsf.Chunks[i];
+                            newindex.Add(entry.EID, i * 2 + 1);
+                        }
+                        if (nsf.Chunks[i] is EntryChunk)
+                        {
+                            foreach (Entry entry in ((EntryChunk)nsf.Chunks[i]).Entries)
+                            {
+                                newindex.Add(entry.EID, i * 2 + 1);
+                            }
                         }
                     }
-                }
-                foreach (NSDLink link in nsd.Index)
-                {
-                    if (newindex.ContainsKey(link.EntryID))
+                    foreach (NSDLink link in nsd.Index)
                     {
-                        link.ChunkID = newindex[link.EntryID];
-                        newindex.Remove(link.EntryID);
+                        if (newindex.ContainsKey(link.EntryID))
+                        {
+                            link.ChunkID = newindex[link.EntryID];
+                            newindex.Remove(link.EntryID);
+                        }
                     }
-                    else
+                    if (MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
-                        // ???
+                        File.WriteAllBytes(filename, nsd.Save());
                     }
                 }
-                foreach (KeyValuePair<int,int> link in newindex)
+                catch (LoadAbortedException)
                 {
-                    // ???
-                }
-                if (MessageBox.Show("Are you sure you want to overwrite the NSD file?","Save Confirmation Prompt",MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    File.WriteAllBytes(filename,nsd.Save());
                 }
             }
-            catch (LoadAbortedException)
+            if (dlgGameVersion.SelectedVersion == GameVersion.Crash1)
             {
+                try
+                {
+                    byte[] data = File.ReadAllBytes(filename);
+                    OldNSD nsd = OldNSD.Load(data);
+                    nsd.ChunkCount = nsf.Chunks.Count;
+                    Dictionary<int, int> newindex = new Dictionary<int, int>();
+                    for (int i = 0; i < nsf.Chunks.Count; i++)
+                    {
+                        if (nsf.Chunks[i] is IEntry)
+                        {
+                            IEntry entry = (IEntry)nsf.Chunks[i];
+                            newindex.Add(entry.EID, i * 2 + 1);
+                        }
+                        if (nsf.Chunks[i] is EntryChunk)
+                        {
+                            foreach (Entry entry in ((EntryChunk)nsf.Chunks[i]).Entries)
+                            {
+                                newindex.Add(entry.EID, i * 2 + 1);
+                            }
+                        }
+                    }
+                    foreach (NSDLink link in nsd.Index)
+                    {
+                        if (newindex.ContainsKey(link.EntryID))
+                        {
+                            link.ChunkID = newindex[link.EntryID];
+                            newindex.Remove(link.EntryID);
+                        }
+                    }
+                    if (MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        File.WriteAllBytes(filename, nsd.Save());
+                    }
+                }
+                catch (LoadAbortedException)
+                {
+                }
             }
         }
 
@@ -334,32 +356,6 @@ namespace CrashEdit
             {
                 NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
                 nsfbox.FindNext();
-            }
-        }
-
-        public void GotoEID()
-        {
-            if (tbcTabs.SelectedTab != null)
-            {
-                NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
-                using (InputWindow inputwindow = new InputWindow())
-                {
-                    if (inputwindow.ShowDialog() == DialogResult.OK)
-                    {
-                        try
-                        {
-                            nsfbox.GotoEID((int)uint.Parse(inputwindow.Input,NumberStyles.HexNumber));
-                        }
-                        catch (FormatException)
-                        {
-                            MessageBox.Show("Invalid EID.\nMust be specified in hexadecmical without leading '0x' or trailing 'h'.","Goto EID",MessageBoxButtons.OK,MessageBoxIcon.Error);
-                        }
-                        catch (OverflowException)
-                        {
-                            MessageBox.Show("Invalid EID.\nMust be in range 0 to FFFFFFFF","Goto EID",MessageBoxButtons.OK,MessageBoxIcon.Error);
-                        }
-                    }
-                }
             }
         }
     }

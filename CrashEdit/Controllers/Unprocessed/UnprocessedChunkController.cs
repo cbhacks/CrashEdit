@@ -1,5 +1,4 @@
 using Crash;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -17,8 +16,8 @@ namespace CrashEdit
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Unprocessed Chunk (T{0})",unprocessedchunk.Type);
-            Node.ImageKey = "unprocessedchunk";
-            Node.SelectedImageKey = "unprocessedchunk";
+            Node.ImageKey = "yellowj";
+            Node.SelectedImageKey = "yellowj";
         }
 
         protected override Control CreateEditor()

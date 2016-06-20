@@ -8,7 +8,7 @@ namespace Crash
         public EntityID(int id)
         {
             this.id = id;
-            this.alternateid = null;
+            alternateid = null;
         }
 
         public EntityID(int id,int? alternateid)

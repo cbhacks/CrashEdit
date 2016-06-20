@@ -1,5 +1,4 @@
 using Crash;
-using System;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -19,8 +18,8 @@ namespace CrashEdit
         public override void InvalidateNode()
         {
             Node.Text = "Item";
-            Node.ImageKey = "t4item";
-            Node.SelectedImageKey = "t4item";
+            Node.ImageKey = "arrow";
+            Node.SelectedImageKey = "arrow";
         }
 
         protected override Control CreateEditor()

@@ -127,7 +127,7 @@ namespace Crash
             EntityProperty property;
             if (
                 LoadFromFieldOf<byte>(out property,obj,typeof(EntityUInt8Property)) ||
-                LoadFromFieldOf<short>(out property,obj,typeof(EntityInt16Property)) ||
+                LoadFromFieldOf<EntityVictim>(out property,obj,typeof(EntityVictimProperty)) ||
                 LoadFromFieldOf<int>(out property,obj,typeof(EntityInt32Property)) ||
                 LoadFromFieldOf<EntitySetting>(out property,obj,typeof(EntitySettingProperty)) ||
                 LoadFromFieldOf<EntityPosition>(out property,obj,typeof(EntityPositionProperty)))

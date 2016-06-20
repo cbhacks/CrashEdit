@@ -1,10 +1,7 @@
 using Crash;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace CrashEdit
 {
@@ -17,11 +14,13 @@ namespace CrashEdit
         private int positionindex;
         private bool settingdirty;
         private int settingindex;
+        private bool victimdirty;
+        private int victimindex;
 
         public EntityBox(EntityController controller)
         {
             this.controller = controller;
-            this.entity = controller.Entity;
+            entity = controller.Entity;
             InitializeComponent();
             UpdateName();
             UpdatePosition();
@@ -30,7 +29,10 @@ namespace CrashEdit
             UpdateType();
             UpdateSubtype();
             UpdateBoxCount();
+            UpdateVictim();
+            //UpdateDrawLists();
             positionindex = 0;
+            victimindex = 0;
         }
 
         private void InvalidateNodes()
@@ -94,6 +96,7 @@ namespace CrashEdit
                 cmdNextPosition.Enabled = false;
                 cmdInsertPosition.Enabled = false;
                 cmdRemovePosition.Enabled = false;
+                cmdNextAndRemove.Enabled = false;
                 lblX.Enabled = false;
                 lblY.Enabled = false;
                 lblZ.Enabled = false;
@@ -108,6 +111,7 @@ namespace CrashEdit
                 cmdNextPosition.Enabled = (positionindex < entity.Positions.Count - 1);
                 cmdInsertPosition.Enabled = true;
                 cmdRemovePosition.Enabled = true;
+                cmdNextAndRemove.Enabled = (positionindex < entity.Positions.Count - 1);
                 lblX.Enabled = true;
                 lblY.Enabled = true;
                 lblZ.Enabled = true;
@@ -137,14 +141,14 @@ namespace CrashEdit
         {
             entity.Positions.Insert(positionindex,entity.Positions[positionindex]);
             UpdatePosition();
-            InvalidateNodes();
         }
 
         private void cmdRemovePosition_Click(object sender,EventArgs e)
         {
             entity.Positions.RemoveAt(positionindex);
             UpdatePosition();
-            InvalidateNodes();
+            if (entity.Positions.Count == 0)
+                InvalidateNodes();
         }
 
         private void cmdAppendPosition_Click(object sender,EventArgs e)
@@ -159,7 +163,8 @@ namespace CrashEdit
                 entity.Positions.Add(new EntityPosition(0,0,0));
             }
             UpdatePosition();
-            InvalidateNodes();
+            if (entity.Positions.Count == 1)
+                InvalidateNodes();
         }
 
         private void numX_ValueChanged(object sender,EventArgs e)
@@ -247,14 +252,12 @@ namespace CrashEdit
         {
             entity.Settings.Add(new EntitySetting(0,0));
             UpdateSettings();
-            InvalidateNodes();
         }
 
         private void cmdRemoveSetting_Click(object sender,EventArgs e)
         {
             entity.Settings.RemoveAt(settingindex);
             UpdateSettings();
-            InvalidateNodes();
         }
 
         private void numSettingA_ValueChanged(object sender,EventArgs e)
@@ -422,5 +425,287 @@ namespace CrashEdit
         {
             entity.BoxCount = new EntitySetting(0,(int)numBoxCount.Value);
         }
+
+        private void cmdClearAllVictims_Click(object sender,EventArgs e)
+        {
+            entity.Victims.Clear();
+            UpdateVictim();
+        }
+
+        private void UpdateVictim()
+        {
+            victimdirty = true;
+            if (victimindex >= entity.Victims.Count)
+            {
+                victimindex = entity.Victims.Count - 1;
+            }
+            // Do not make this else if,
+            // sometimes both will run.
+            // (this is intentional)
+            if (victimindex < 0)
+            {
+                victimindex = 0;
+            }
+            if (victimindex >= entity.Victims.Count)
+            {
+                lblVictimIndex.Text = "-- / --";
+                cmdPreviousVictim.Enabled = false;
+                cmdNextVictim.Enabled = false;
+                cmdInsertVictim.Enabled = false;
+                cmdAppendVictim.Enabled = true;
+                cmdRemoveVictim.Enabled = false;
+                numVictimID.Enabled = false;
+            }
+            else
+            {
+                lblVictimIndex.Text = string.Format("{0} / {1}",victimindex + 1,entity.Victims.Count);
+                cmdPreviousVictim.Enabled = (victimindex > 0);
+                cmdNextVictim.Enabled = (victimindex < entity.Victims.Count - 1);
+                cmdInsertVictim.Enabled = true;
+                cmdRemoveVictim.Enabled = true;
+                cmdAppendVictim.Enabled = false;
+                numVictimID.Enabled = true;
+                numVictimID.Value = entity.Victims[victimindex].VictimID;
+            }
+            victimdirty = false;
+        }
+
+        private void cmdPreviousVictim_Click(object sender,EventArgs e)
+        {
+            victimindex--;
+            UpdateVictim();
+        }
+
+        private void cmdNextVictim_Click(object sender,EventArgs e)
+        {
+            victimindex++;
+            UpdateVictim();
+        }
+
+        private void cmdInsertVictim_Click(object sender,EventArgs e)
+        {
+            entity.Victims.Insert(victimindex,entity.Victims[victimindex]);
+            UpdateVictim();
+        }
+
+        private void cmdAppendVictim_Click(object sender,EventArgs e)
+        {
+            entity.Victims.Add(new EntityVictim(0));
+            UpdateVictim();
+        }
+
+        private void cmdRemoveVictim_Click(object sender,EventArgs e)
+        {
+            entity.Victims.RemoveAt(victimindex);
+            UpdateVictim();
+        }
+
+        private void numVictimID_ValueChanged(object sender,EventArgs e)
+        {
+            if (!victimdirty)
+            {
+                entity.Victims[victimindex] = new EntityVictim((short)numVictimID.Value);
+            }
+        }
+
+        private void cmdNextAndRemove_Click(object sender, EventArgs e)
+        {
+            positionindex++;
+            entity.Positions.RemoveAt(positionindex);
+            UpdatePosition();
+            if (entity.Positions.Count == 0)
+                InvalidateNodes();
+
+        }
+
+        /*private void UpdateLoadListA()
+        {
+            loadlistadirty = true;
+            if (loadlistaindex >= entity.LoadListA.Count)
+            {
+                loadlistaindex = entity.LoadListA.Count - 1;
+            }
+            // Do not make this else if,
+            // sometimes both will run.
+            // (this is intentional)
+            if (loadlistaindex < 0)
+            {
+                loadlistaindex = 0;
+            }
+            // Do not remove this either
+            if (loadlistaindex >= entity.LoadListA.Count)
+            {
+                lblEIDIndexA.Text = "-- / --";
+                cmdPrevEIDA.Enabled = false;
+                cmdNextEIDA.Enabled = false;
+                cmdInsertEIDA.Enabled = false;
+                cmdRemoveEIDA.Enabled = false;
+                txtEIDA.Enabled = false;
+            }
+            else
+            {
+                lblEIDIndexA.Text = string.Format("{0} / {1}", loadlistaindex + 1, entity.LoadListA.Count);
+                cmdPrevEIDA.Enabled = (loadlistaindex > 0);
+                cmdNextEIDA.Enabled = (loadlistaindex < entity.LoadListA.Count - 1);
+                cmdInsertEIDA.Enabled = true;
+                cmdRemoveEIDA.Enabled = true;
+                cmdNextAndRemove.Enabled = (loadlistaindex < entity.LoadListA.Count - 1);
+                txtEIDA.Enabled = true;
+                txtEIDA.Text = Entry.EIDToEName(entity.LoadListA[loadlistaindex]);
+            }
+            loadlistadirty = false;
+        }
+
+        private void UpdateLoadListB()
+        {
+            loadlistbdirty = true;
+            if (loadlistbindex >= entity.LoadListB.Count)
+            {
+                loadlistbindex = entity.LoadListB.Count - 1;
+            }
+            // Do not make this else if,
+            // sometimes both will run.
+            // (this is intentional)
+            if (loadlistbindex < 0)
+            {
+                loadlistbindex = 0;
+            }
+            // Do not remove this either
+            if (loadlistbindex >= entity.LoadListB.Count)
+            {
+                lblEIDIndexA.Text = "-- / --";
+                cmdPrevEIDB.Enabled = false;
+                cmdNextEIDB.Enabled = false;
+                cmdInsertEIDB.Enabled = false;
+                cmdRemoveEIDB.Enabled = false;
+                txtEIDB.Enabled = false;
+            }
+            else
+            {
+                lblEIDIndexA.Text = string.Format("{0} / {1}", loadlistbindex + 1, entity.LoadListB.Count);
+                cmdPrevEIDB.Enabled = (loadlistbindex > 0);
+                cmdNextEIDB.Enabled = (loadlistbindex < entity.LoadListB.Count - 1);
+                cmdInsertEIDB.Enabled = true;
+                cmdRemoveEIDB.Enabled = true;
+                cmdNextAndRemove.Enabled = (loadlistbindex < entity.LoadListB.Count - 1);
+                txtEIDB.Enabled = true;
+                txtEIDB.Text = Entry.EIDToEName(entity.LoadListB[loadlistbindex]);
+            }
+            loadlistbdirty = false;
+        }
+
+        private void cmdPrevEIDA_Click(object sender, EventArgs e)
+        {
+            loadlistaindex--;
+            UpdateLoadListA();
+        }
+
+        private void cmdPrevEIDB_Click(object sender, EventArgs e)
+        {
+            loadlistbindex--;
+            UpdateLoadListB();
+        }
+
+        private void cmdNextEIDA_Click(object sender, EventArgs e)
+        {
+            loadlistaindex++;
+            UpdateLoadListA();
+        }
+
+        private void cmdNextEIDB_Click(object sender, EventArgs e)
+        {
+            loadlistbindex++;
+            UpdateLoadListB();
+        }
+
+        private void cmdRemoveEIDA_Click(object sender, EventArgs e)
+        {
+            entity.LoadListA.RemoveAt(loadlistaindex);
+            UpdateLoadListA();
+        }
+
+        private void cmdRemoveEIDB_Click(object sender, EventArgs e)
+        {
+            entity.LoadListB.RemoveAt(loadlistbindex);
+            UpdateLoadListB();
+        }
+
+        private void cmdInsertEIDA_Click(object sender, EventArgs e)
+        {
+            entity.LoadListA.Insert(loadlistaindex,entity.LoadListA[loadlistaindex]);
+            UpdateLoadListA();
+        }
+
+        private void cmdInsertEIDB_Click(object sender, EventArgs e)
+        {
+            entity.LoadListA.Insert(loadlistaindex, entity.LoadListA[loadlistaindex]);
+            UpdateLoadListA();
+        }
+
+        private void cmdClearEIDA_Click(object sender, EventArgs e)
+        {
+            entity.LoadListA.Clear();
+            UpdateLoadListA();
+        }
+
+        private void cmdClearEIDB_Click(object sender, EventArgs e)
+        {
+            entity.LoadListB.Clear();
+            UpdateLoadListB();
+        }
+
+        private void cmdAppendEIDA_Click(object sender, EventArgs e)
+        {
+            loadlistaindex = entity.LoadListA.Count;
+            if (entity.LoadListA.Count > 0)
+            {
+                entity.LoadListA.Add(entity.LoadListA[loadlistaindex - 1]);
+            }
+            else
+            {
+                entity.LoadListA.Add(new int());
+            }
+            UpdateLoadListA();
+            if (entity.LoadListA.Count == 1)
+                InvalidateNodes();
+        }
+
+        private void cmdAppendEIDB_Click(object sender, EventArgs e)
+        {
+            loadlistbindex = entity.LoadListB.Count;
+            if (entity.LoadListB.Count > 0)
+            {
+                entity.LoadListB.Add(entity.LoadListB[loadlistbindex - 1]);
+            }
+            else
+            {
+                entity.LoadListB.Add(new int());
+            }
+            UpdateLoadListB();
+            if (entity.LoadListB.Count == 1)
+                InvalidateNodes();
+        }*/
+
+        /*private void UpdateDrawLists()
+        {
+            foreach (EntityPropertyRow<int> drawlist in entity.DrawListA)
+            {
+                foreach (int value in drawlist.Values)
+                {
+                    if ((value & 0xFFFF00) >> 8 == entity.ID.Value)
+                    {
+                        unchecked
+                        {
+                            drawlist.Values.Add((value & 0xFF) | (maxid << 8) | (newindex << 24));
+                        }
+                        break;
+                    }
+                }
+                if (drawlist.Values.Contains(entity.ID.Value))
+                {
+                    drawlist.Values.Add(maxid);
+                }
+            }
+        }*/
     }
 }

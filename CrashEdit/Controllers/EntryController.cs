@@ -1,5 +1,4 @@
 using Crash;
-using System;
 
 namespace CrashEdit
 {

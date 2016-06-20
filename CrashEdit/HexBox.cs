@@ -2,7 +2,6 @@ using Crash;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Collections.Generic;
 
 namespace CrashEdit
 {
@@ -173,6 +172,7 @@ namespace CrashEdit
                 case Keys.Home:
                 case Keys.End:
                 case Keys.Space:
+                case Keys.N:
                     return true;
                 default:
                     return base.IsInputKey(keyData);
@@ -263,6 +263,20 @@ namespace CrashEdit
                     break;
                 case Keys.F:
                     InputNibble(0xF);
+                    break;
+                case Keys.N:
+                    InputNibble(0x7);
+                    InputNibble(0xF);
+                    MoveRight();
+                    InputNibble(0x3);
+                    InputNibble(0x4);
+                    MoveRight();
+                    InputNibble(0x9);
+                    InputNibble(0x6);
+                    MoveRight();
+                    InputNibble(0x6);
+                    InputNibble(0x3);
+                    MoveRight();
                     break;
                 case Keys.Z:
                     eidview = !eidview;
@@ -429,14 +443,6 @@ namespace CrashEdit
                     }
                 }
             }
-            /*for (int i = 0;i < 17;i += eidview ? 4 : 1)
-            {
-                e.Graphics.DrawLine(borderpen,hstep * i,0,hstep * i,height);
-            }
-            for (int i = 0;i < 17;i++)
-            {
-                e.Graphics.DrawLine(borderpen,0,vstep * i,width,vstep * i);
-            }*/
         }
     }
 }

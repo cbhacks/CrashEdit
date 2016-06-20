@@ -119,6 +119,16 @@ namespace Crash
                 Array.Copy(data,offset,result,pos,Chunk.Length - length);
                 offset += (Chunk.Length - length);
             }
+            else if (magic == 0) // Fixes some sort of read error
+            {
+                compressed = false;
+                if (data.Length < offset + Chunk.Length)
+                {
+                    ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
+                }
+                Array.Copy(data, offset, result, 0, Chunk.Length);
+                offset += Chunk.Length;
+            }
             else
             {
                 compressed = false; // Fixes a stupid compile error

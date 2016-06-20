@@ -24,6 +24,10 @@ namespace CrashEdit
 
         internal EntryController CreateEntryController(Entry entry)
         {
+            if (entry is ProtoAnimationEntry)
+            {
+                return new ProtoAnimationEntryController(this, (ProtoAnimationEntry)entry);
+            }
             if (entry is OldAnimationEntry)
             {
                 return new OldAnimationEntryController(this,(OldAnimationEntry)entry);
@@ -32,13 +36,25 @@ namespace CrashEdit
             {
                 return new T1EntryController(this,(T1Entry)entry);
             }
+            else if (entry is AnimationEntry)
+            {
+                return new AnimationEntryController(this, (AnimationEntry)entry);
+            }
             else if (entry is OldModelEntry)
             {
                 return new OldModelEntryController(this,(OldModelEntry)entry);
             }
-            else if (entry is ModelEntry)
+            /*else if (entry is ModelEntry)
             {
                 return new ModelEntryController(this,(ModelEntry)entry);
+            }*/
+            else if (entry is NewModelEntry)
+            {
+                return new NewModelEntryController(this, (NewModelEntry)entry);
+            }
+            else if (entry is ProtoSceneryEntry)
+            {
+                return new ProtoSceneryEntryController(this,(ProtoSceneryEntry)entry);
             }
             else if (entry is OldSceneryEntry)
             {
@@ -48,6 +64,10 @@ namespace CrashEdit
             {
                 return new SceneryEntryController(this,(SceneryEntry)entry);
             }
+            else if (entry is NewSceneryEntry)
+            {
+                return new NewSceneryEntryController(this,(NewSceneryEntry)entry);
+            }
             else if (entry is T4Entry)
             {
                 return new T4EntryController(this,(T4Entry)entry);
@@ -56,6 +76,10 @@ namespace CrashEdit
             {
                 return new T6EntryController(this,(T6Entry)entry);
             }
+            else if (entry is ProtoZoneEntry)
+            {
+                return new ProtoZoneEntryController(this,(ProtoZoneEntry)entry);
+            }
             else if (entry is OldZoneEntry)
             {
                 return new OldZoneEntryController(this,(OldZoneEntry)entry);
@@ -63,6 +87,10 @@ namespace CrashEdit
             else if (entry is ZoneEntry)
             {
                 return new ZoneEntryController(this,(ZoneEntry)entry);
+            }
+            else if (entry is NewZoneEntry)
+            {
+                return new NewZoneEntryController(this,(NewZoneEntry)entry);
             }
             else if (entry is T11Entry)
             {
@@ -100,17 +128,17 @@ namespace CrashEdit
             {
                 return new T17EntryController(this,(T17Entry)entry);
             }
-            else if (entry is PaletteEntry)
+            else if (entry is T18Entry)
             {
-                return new PaletteEntryController(this,(PaletteEntry)entry);
+                return new T18EntryController(this,(T18Entry)entry);
             }
             else if (entry is DemoEntry)
             {
                 return new DemoEntryController(this,(DemoEntry)entry);
             }
-            else if (entry is T20Entry)
+            else if (entry is CutsceneAnimationEntry)
             {
-                return new T20EntryController(this,(T20Entry)entry);
+                return new CutsceneAnimationEntryController(this,(CutsceneAnimationEntry)entry);
             }
             else if (entry is SpeechEntry)
             {

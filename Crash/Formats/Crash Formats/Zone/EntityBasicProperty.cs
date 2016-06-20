@@ -10,7 +10,7 @@ namespace Crash
 
         public EntityBasicProperty()
         {
-            this.rows = new List<EntityPropertyRow<T>>();
+            rows = new List<EntityPropertyRow<T>>();
         }
 
         public EntityBasicProperty(IEnumerable<EntityPropertyRow<T>> rows)

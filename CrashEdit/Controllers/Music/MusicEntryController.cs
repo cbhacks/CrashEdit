@@ -1,5 +1,4 @@
 using Crash;
-using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
@@ -35,9 +34,9 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Music Entry ({0})",musicentry.EName);
-            Node.ImageKey = "musicentry";
-            Node.SelectedImageKey = "musicentry";
+            Node.Text = string.Format("Music ({0})",musicentry.EName);
+            Node.ImageKey = "music";
+            Node.SelectedImageKey = "music";
         }
 
         public MusicEntry MusicEntry

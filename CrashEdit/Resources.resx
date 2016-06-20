@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<resheader name="resmimetype">
+		text/microsoft-resx
+	</resheader>
+	<resheader name="version">
+		2.0
+	</resheader>
+	<resheader name="reader">
+		System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+	</resheader>
+	<resheader name="writer">
+		System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+	</resheader>
+	<data name="NSDIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Icons/NSD.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="NSFIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Icons/NSF.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="ArrowImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Images/Arrow.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="BinocularsImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Images/Binoculars.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="BinocularsNextImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Images/BinocularsNext.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="FileImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Images/File.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="FolderImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Images/Folder.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="ImageImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Images/Image.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="MusicImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Images/Music.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="OpenImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Images/Open.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="SaveImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Images/Save.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="SpeakerImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Images/Speaker.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="ThingImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Images/Thing.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="BlueJournalImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Images/BlueJournal.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="WhiteJournalImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Images/WhiteJournal.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="YellowJournalImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Images/YellowJournal.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="ActivatorBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/ActivatorBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="AppleTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/Apple.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="AppleBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/AppleBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="ArrowBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/ArrowBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="BodyslamBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/BodyslamBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="BoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/Box.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="CheckpointTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/Checkpoint.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="DetonatorBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/DetonatorBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="DetonatorBoxTopTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/DetonatorBoxTop.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="IronArrowBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/IronArrowBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="IronBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/IronBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="LifeTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/Life.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="LifeBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/LifeBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="MaskTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/Mask.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="MaskBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/MaskBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="NitroTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/Nitro.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="NitroTopTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/NitroTop.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="PointTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/Point.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="QuestionMarkBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/QuestionMarkBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="TNTTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/TNT.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="TNTTopTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/TNTTop.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="UnknownBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/UnknownBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="UnknownBoxTopTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/UnknownBoxTop.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+	<data name="UnknownPickupTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		Resources/Textures/UnknownPickup.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral
+	</data>
+</root>

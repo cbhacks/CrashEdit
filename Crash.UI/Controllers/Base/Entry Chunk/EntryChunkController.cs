@@ -1,6 +1,4 @@
 using System;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace Crash.UI
 {
@@ -35,10 +33,10 @@ namespace Crash.UI
             {
                 Subcontrollers.Insert(e.Index,new OldModelEntryController(this,(OldModelEntry)e.Item));
             }
-            else if (e.Item is ModelEntry)
+            /*else if (e.Item is NewModelEntry)
             {
-                Subcontrollers.Insert(e.Index,new ModelEntryController(this,(ModelEntry)e.Item));
-            }
+                Subcontrollers.Insert(e.Index,new NewModelEntryController(this,(NewModelEntry)e.Item));
+            }*/
             else if (e.Item is OldSceneryEntry)
             {
                 Subcontrollers.Insert(e.Index,new OldSceneryEntryController(this,(OldSceneryEntry)e.Item));
@@ -59,9 +57,9 @@ namespace Crash.UI
             {
                 Subcontrollers.Insert(e.Index,new OldZoneEntryController(this,(OldZoneEntry)e.Item));
             }
-            else if (e.Item is ZoneEntry)
+            else if (e.Item is NewZoneEntry)
             {
-                Subcontrollers.Insert(e.Index,new ZoneEntryController(this,(ZoneEntry)e.Item));
+                Subcontrollers.Insert(e.Index,new ZoneEntryController(this,(NewZoneEntry)e.Item));
             }
             else if (e.Item is T11Entry)
             {
@@ -99,17 +97,17 @@ namespace Crash.UI
             {
                 Subcontrollers.Insert(e.Index,new T17EntryController(this,(T17Entry)e.Item));
             }
-            else if (e.Item is PaletteEntry)
+            else if (e.Item is T18Entry)
             {
-                Subcontrollers.Insert(e.Index,new PaletteEntryController(this,(PaletteEntry)e.Item));
+                Subcontrollers.Insert(e.Index,new T18EntryController(this,(T18Entry)e.Item));
             }
             else if (e.Item is DemoEntry)
             {
                 Subcontrollers.Insert(e.Index,new DemoEntryController(this,(DemoEntry)e.Item));
             }
-            else if (e.Item is T20Entry)
+            else if (e.Item is CutsceneAnimationEntry)
             {
-                Subcontrollers.Insert(e.Index,new T20EntryController(this,(T20Entry)e.Item));
+                Subcontrollers.Insert(e.Index,new CutsceneAnimationEntryController(this,(CutsceneAnimationEntry)e.Item));
             }
             else if (e.Item is SpeechEntry)
             {

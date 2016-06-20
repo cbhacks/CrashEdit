@@ -3,7 +3,6 @@ using System;
 namespace Crash
 {
     [EntryType(3,GameVersion.Crash2)]
-    [EntryType(3,GameVersion.Crash3)]
     public sealed class SceneryEntryLoader : EntryLoader
     {
         public override Entry Load(byte[][] items,int eid)
@@ -64,7 +63,12 @@ namespace Crash
                 byte extra = items[5][i * 4 + 3];
                 colors[i] = new SceneryColor(red,green,blue,extra);
             }
-            return new SceneryEntry(items[0],vertices,triangles,quads,items[4],colors,items[6],eid);
+            SceneryColorList[] colorlist = new SceneryColorList[1];
+            for (int i = 0; i < 1; i++)
+            {
+                colorlist[i] = SceneryColorList.Load(items[5]);
+            }
+            return new SceneryEntry(items[0],vertices,triangles,quads,items[4],colors,colorlist,items[6],eid);
         }
     }
 }

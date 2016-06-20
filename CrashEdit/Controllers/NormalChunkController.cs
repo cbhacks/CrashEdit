@@ -14,9 +14,9 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = "Normal Chunk";
-            Node.ImageKey = "normalchunk";
-            Node.SelectedImageKey = "normalchunk";
+            Node.Text = string.Format("Normal Chunk {0}",NSFController.chunkid);
+            Node.ImageKey = "yellowj";
+            Node.SelectedImageKey = "yellowj";
         }
         
         public NormalChunk NormalChunk

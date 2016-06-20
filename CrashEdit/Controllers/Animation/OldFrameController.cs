@@ -1,5 +1,4 @@
 using Crash;
-using System;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -8,6 +7,7 @@ namespace CrashEdit
     {
         private OldAnimationEntryController oldanimationentrycontroller;
         private OldFrame oldframe;
+        private TabControl tbcTabs;
 
         public OldFrameController(OldAnimationEntryController oldanimationentrycontroller,OldFrame oldframe)
         {
@@ -19,15 +19,32 @@ namespace CrashEdit
         public override void InvalidateNode()
         {
             Node.Text = "Frame";
-            Node.ImageKey = "oldframe";
-            Node.SelectedImageKey = "oldframe";
+            Node.ImageKey = "arrow";
+            Node.SelectedImageKey = "arrow";
             AddMenu("Export as OBJ",Menu_Export_OBJ);
         }
 
         protected override Control CreateEditor()
         {
+            tbcTabs = new TabControl();
+            tbcTabs.Dock = DockStyle.Fill;
             OldModelEntry modelentry = OldAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(oldframe.ModelEID);
-            return new OldAnimationEntryViewer(oldframe,modelentry);
+
+            OldFrameBox framebox = new OldFrameBox(this);
+            framebox.Dock = DockStyle.Fill;
+            OldAnimationEntryViewer viewerbox = new OldAnimationEntryViewer(oldframe,modelentry);
+            viewerbox.Dock = DockStyle.Fill;
+
+            TabPage edittab = new TabPage("Editor");
+            edittab.Controls.Add(framebox);
+            TabPage viewertab = new TabPage("Viewer");
+            viewertab.Controls.Add(viewerbox);
+
+            tbcTabs.TabPages.Add(edittab);
+            tbcTabs.TabPages.Add(viewertab);
+            tbcTabs.SelectedTab = edittab;
+
+            return tbcTabs;
         }
 
         public OldAnimationEntryController OldAnimationEntryController

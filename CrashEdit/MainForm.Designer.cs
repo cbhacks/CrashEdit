@@ -71,7 +71,6 @@ namespace CrashEdit
             this.mniUndoRedo = new System.Windows.Forms.ToolStripMenuItem();
             this.mniUndoUndo = new System.Windows.Forms.ToolStripMenuItem();
             this.dlgOpenNSF = new System.Windows.Forms.OpenFileDialog();
-            this.mnuEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.uxTabs.SuspendLayout();
             this.uxToolbar.SuspendLayout();
             this.uxStatusbar.SuspendLayout();
@@ -160,7 +159,6 @@ namespace CrashEdit
             // 
             this.uxMenubar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuFile,
-            this.mnuEdit,
             this.mnuFind,
             this.mnuUndo});
             this.uxMenubar.Location = new System.Drawing.Point(0,0);
@@ -450,12 +448,6 @@ namespace CrashEdit
             this.dlgOpenNSF.Filter = "NSF Files (*.nsf)|*.nsf|All Files (*.*)|*.*";
             this.dlgOpenNSF.Multiselect = true;
             // 
-            // mnuEdit
-            // 
-            this.mnuEdit.Name = "mnuEdit";
-            this.mnuEdit.Size = new System.Drawing.Size(59,20);
-            this.mnuEdit.Text = "<EDIT>";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
@@ -525,6 +517,5 @@ namespace CrashEdit
         private System.Windows.Forms.ToolStripProgressBar sbiProgress;
         private System.Windows.Forms.TabPage uxStartPage;
         private System.Windows.Forms.OpenFileDialog dlgOpenNSF;
-        private System.Windows.Forms.ToolStripMenuItem mnuEdit;
     }
 }

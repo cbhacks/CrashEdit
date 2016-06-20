@@ -19,9 +19,9 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Old Animation Entry ({0})",oldanimationentry.EName);
-            Node.ImageKey = "oldanimationentry";
-            Node.SelectedImageKey = "oldanimationentry";
+            Node.Text = string.Format("Old Animation ({0})",oldanimationentry.EName);
+            Node.ImageKey = "thing";
+            Node.SelectedImageKey = "thing";
         }
 
         protected override Control CreateEditor()

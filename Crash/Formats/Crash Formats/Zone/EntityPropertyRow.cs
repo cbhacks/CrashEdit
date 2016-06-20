@@ -9,8 +9,8 @@ namespace Crash
 
         public EntityPropertyRow()
         {
-            this.metavalue = null;
-            this.values = new List<T>();
+            metavalue = null;
+            values = new List<T>();
         }
 
         public short? MetaValue

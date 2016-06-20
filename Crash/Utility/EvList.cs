@@ -13,14 +13,14 @@ namespace Crash
 
         public EvList()
         {
-            this.list = new List<T>();
+            list = new List<T>();
         }
 
         public EvList(IEnumerable<T> collection)
         {
             if (collection == null)
                 throw new ArgumentNullException("collection");
-            this.list = new List<T>(collection);
+            list = new List<T>(collection);
         }
 
         public int Count
@@ -53,13 +53,6 @@ namespace Crash
             }
         }
 
-        public Command CmSet(int i,T item)
-        {
-            if (i < 0 || i >= list.Count)
-                throw new ArgumentOutOfRangeException("i");
-            return new SetCommand(this,i,item);
-        }
-
         public void Add(T item)
         {
             list.Add(item);
@@ -70,11 +63,6 @@ namespace Crash
                 e.Item = item;
                 ItemAdded(this,e);
             }
-        }
-
-        public Command CmAdd(T item)
-        {
-            return new InsertCommand(this,list.Count,item);
         }
 
         public void Clear()
@@ -130,13 +118,6 @@ namespace Crash
             }
         }
 
-        public Command CmInsert(int i,T item)
-        {
-            if (i < 0 || i > list.Count)
-                throw new ArgumentOutOfRangeException("i");
-            return new InsertCommand(this,i,item);
-        }
-
         public bool Remove(T item)
         {
             int i = list.IndexOf(item);
@@ -158,19 +139,6 @@ namespace Crash
             }
         }
 
-        public Command CmRemove(T item)
-        {
-            int i = list.IndexOf(item);
-            if (i != -1)
-            {
-                return new RemoveCommand(this,i);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
         public void RemoveAt(int i)
         {
             T item = list[i];
@@ -184,13 +152,6 @@ namespace Crash
             }
         }
 
-        public Command CmRemoveAt(int i)
-        {
-            if (i < 0 || i >= list.Count)
-                throw new ArgumentOutOfRangeException("i");
-            return new RemoveCommand(this,i);
-        }
-
         public void Populate(EvListEventHandler<T> method)
         {
             for (int i = 0;i < Count;i++)
@@ -199,66 +160,6 @@ namespace Crash
                 e.Item = this[i];
                 e.Index = i;
                 method(this,e);
-            }
-        }
-
-        private sealed class SetCommand : Command
-        {
-            EvList<T> list;
-            int i;
-            T item;
-
-            public SetCommand(EvList<T> list,int i,T item)
-            {
-                this.list = list;
-                this.i = i;
-                this.item = item;
-            }
-
-            protected override Command RunImpl()
-            {
-                T olditem = list[i];
-                list[i] = item;
-                return new SetCommand(list,i,olditem);
-            }
-        }
-
-        private sealed class InsertCommand : Command
-        {
-            EvList<T> list;
-            int i;
-            T item;
-
-            public InsertCommand(EvList<T> list,int i,T item)
-            {
-                this.list = list;
-                this.i = i;
-                this.item = item;
-            }
-
-            protected override Command RunImpl()
-            {
-                list.Insert(i,item);
-                return new RemoveCommand(list,i);
-            }
-        }
-
-        private sealed class RemoveCommand : Command
-        {
-            EvList<T> list;
-            int i;
-
-            public RemoveCommand(EvList<T> list,int i)
-            {
-                this.list = list;
-                this.i = i;
-            }
-
-            protected override Command RunImpl()
-            {
-                T item = list[i];
-                list.RemoveAt(i);
-                return new InsertCommand(list,i,item);
             }
         }
     }

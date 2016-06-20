@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,8 +10,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CrashEdit</RootNamespace>
     <AssemblyName>CrashEdit</AssemblyName>
-    <StartupObject>
-    </StartupObject>
+    <StartupObject>CrashEdit.Program</StartupObject>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,6 +34,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -49,21 +58,39 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\Animation\CutsceneFrameController.cs" />
+    <Compile Include="Controllers\Animation\Animation1EntryController.cs" />
+    <Compile Include="Controllers\Animation\FrameController.cs" />
+    <Compile Include="Controllers\Animation\ProtoAnimationEntryController.cs" />
+    <Compile Include="Controllers\Animation\ProtoFrameController.cs" />
     <Compile Include="Controllers\ChunkController.cs" />
+    <Compile Include="Controllers\CodeEntryController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\ControllerMenuDelegate.cs" />
     <Compile Include="Controllers\Animation\OldAnimationEntryController.cs" />
     <Compile Include="Controllers\Animation\OldFrameController.cs" />
+    <Compile Include="Controllers\Model\ModelEntryController.cs" />
+    <Compile Include="Controllers\Scenery\NewSceneryEntryController.cs" />
+    <Compile Include="Controllers\Scenery\SceneryColorListController.cs" />
+    <Compile Include="Controllers\Scenery\ProtoSceneryEntryController.cs" />
     <Compile Include="Controllers\T4\T4ItemController.cs" />
+    <Compile Include="Controllers\T4\T4Item1Controller.cs" />
+    <Compile Include="Controllers\T4\T4Item0Controller.cs" />
     <Compile Include="Controllers\TextureChunkController.cs" />
-    <Compile Include="Controllers\T20EntryController.cs" />
+    <Compile Include="Controllers\Animation\CutsceneAnimationEntryController.cs" />
     <Compile Include="Controllers\Music\OldSEQController.cs" />
     <Compile Include="Controllers\Music\OldVHController.cs" />
     <Compile Include="Controllers\Music\OldMusicEntryController.cs" />
-    <Compile Include="Controllers\PaletteEntryController.cs" />
+    <Compile Include="Controllers\T18EntryController.cs" />
     <Compile Include="Controllers\T6EntryController.cs" />
     <Compile Include="Controllers\OldT15EntryController.cs" />
     <Compile Include="Controllers\OldT17EntryController.cs" />
+    <Compile Include="Controllers\Zone\NewEntityController.cs" />
+    <Compile Include="Controllers\Zone\ProtoCameraController.cs" />
+    <Compile Include="Controllers\Zone\OldCameraController.cs" />
+    <Compile Include="Controllers\Zone\ProtoZoneEntryController.cs" />
+    <Compile Include="Controllers\Zone\ProtoEntityController.cs" />
+    <Compile Include="Controllers\Zone\OldEntityController.cs" />
     <Compile Include="Controllers\Zone\OldZoneEntryController.cs" />
     <Compile Include="Controllers\Model\OldModelEntryController.cs" />
     <Compile Include="Controllers\Scenery\OldSceneryEntryController.cs" />
@@ -74,6 +101,7 @@
     <Compile Include="Controllers\Unprocessed\UnprocessedChunkController.cs" />
     <Compile Include="Controllers\ItemController.cs" />
     <Compile Include="Controllers\Zone\EntityController.cs" />
+    <Compile Include="Controllers\Zone\NewZoneEntryController.cs" />
     <Compile Include="Controllers\Zone\ZoneEntryController.cs" />
     <Compile Include="Controllers\Unprocessed\UnprocessedEntryController.cs" />
     <Compile Include="Controllers\T4\T4EntryController.cs" />
@@ -82,9 +110,8 @@
     <Compile Include="Controllers\T15EntryController.cs" />
     <Compile Include="Controllers\T21EntryController.cs" />
     <Compile Include="Controllers\T17EntryController.cs" />
-    <Compile Include="Controllers\Model\ModelEntryController.cs" />
+    <Compile Include="Controllers\Model\NewModelEntryController.cs" />
     <Compile Include="Controllers\Scenery\SceneryEntryController.cs" />
-    <Compile Include="Controllers\T11EntryController.cs" />
     <Compile Include="Controllers\Mystery\MysteryMultiItemEntryController.cs" />
     <Compile Include="Controllers\Mystery\MysteryUniItemEntryController.cs" />
     <Compile Include="Controllers\T1EntryController.cs" />
@@ -97,6 +124,63 @@
     <Compile Include="Controllers\Sound\SoundChunkController.cs" />
     <Compile Include="Controllers\NSFController.cs" />
     <Compile Include="Controllers\Speech\SpeechChunkController.cs" />
+    <Compile Include="Controls\NewEntityBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\NewEntityBox.Designer.cs">
+      <DependentUpon>NewEntityBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AnimationEntryViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ProtoAnimationEntryViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\OldFrameBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\OldFrameBox.Designer.cs">
+      <DependentUpon>OldFrameBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SceneryColorListBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SceneryColorListBox.Designer.cs">
+      <DependentUpon>SceneryColorListBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProtoCameraBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ProtoCameraBox.Designer.cs">
+      <DependentUpon>ProtoCameraBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OldCameraBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\OldCameraBox.Designer.cs">
+      <DependentUpon>OldCameraBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProtoZoneEntryViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ProtoSceneryEntryViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ProtoEntityBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ProtoEntityBox.Designer.cs">
+      <DependentUpon>ProtoEntityBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OldEntityBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\OldEntityBox.Designer.cs">
+      <DependentUpon>OldEntityBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NewSceneryEntryViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\SceneryEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -104,6 +188,18 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\OldSceneryEntryViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SoundBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\T4Item0Box.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\T4ItemBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\T4Item1Box.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ThreeDimensionalViewer.cs">
@@ -114,6 +210,12 @@
     </Compile>
     <Compile Include="Controls\EntityBox.Designer.cs">
       <DependentUpon>EntityBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OldZoneEntryViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\NewZoneEntryViewer.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ZoneEntryViewer.cs">
       <SubType>UserControl</SubType>
@@ -136,20 +238,11 @@
       <DependentUpon>InputWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="GUIException.cs" />
-    <Compile Include="Controls\T4ItemBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Controls\TextureChunkBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="HexBox.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="MainControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MainControl.Designer.cs">
-      <DependentUpon>MainControl.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -168,9 +261,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="OldResources.cs" />
-    <Compile Include="Controls\SoundBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -178,8 +268,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
-    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\OpenTK\1.1\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\OpenTK\1.1\Binaries\OpenTK\Release\OpenTK.GLControl.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -187,8 +283,6 @@
   <ItemGroup>
     <None Include="Resources\Computer_File_064.gif" />
     <None Include="Resources\Computer_File_063.gif" />
-    <None Include="Resources\Computer_File_068.gif" />
-    <None Include="Resources\Computer_File_053.gif" />
     <Content Include="Resources\Icons\NSD.ico" />
     <Content Include="Resources\Icons\NSF.ico" />
     <Content Include="Resources\Images\Arrow.gif" />
@@ -212,24 +306,6 @@
     <None Include="Resources\objects_079.gif" />
     <None Include="Resources\objects_020.gif" />
     <None Include="Resources\objects_070.gif" />
-    <None Include="Resources\objects_012.gif" />
-    <None Include="Resources\objects_012_blue.gif" />
-    <None Include="Resources\objects_012_gray.gif" />
-    <None Include="Resources\objects_012_lime.gif" />
-    <None Include="Resources\objects_012_crimson.gif" />
-    <None Include="Resources\objects_053_blue.gif" />
-    <None Include="Resources\People_014.gif" />
-    <None Include="Resources\People_017.gif" />
-    <None Include="Resources\People_020.gif" />
-    <None Include="Resources\People_020_cyan.gif" />
-    <None Include="Resources\People_020_red.gif" />
-    <None Include="Resources\objects_053_white.gif" />
-    <None Include="Resources\objects_006.gif" />
-    <None Include="Resources\objects_006_red.gif" />
-    <None Include="Resources\objects_006_yellow.gif" />
-    <None Include="Resources\objects_012_violet.gif" />
-    <None Include="Resources\objects_012_code.gif" />
-    <None Include="Resources\People_020_code.gif" />
     <Content Include="Resources\Textures\Apple.png" />
     <Content Include="Resources\Textures\AppleBox.png" />
     <Content Include="Resources\Textures\ArrowBox.png" />
@@ -256,9 +332,40 @@
     <Content Include="Resources\Textures\UnknownPickup.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\NewEntityBox.resx">
+      <DependentUpon>NewEntityBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\OldFrameBox.resx">
+      <DependentUpon>OldFrameBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SceneryColorListBox.resx">
+      <DependentUpon>SceneryColorListBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ProtoCameraBox.resx">
+      <DependentUpon>ProtoCameraBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\OldCameraBox.resx">
+      <DependentUpon>OldCameraBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ProtoEntityBox.resx">
+      <DependentUpon>ProtoEntityBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\OldEntityBox.resx">
+      <DependentUpon>OldEntityBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\EntityBox.resx">
       <SubType>Designer</SubType>
       <DependentUpon>EntityBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SoundBox.resx">
+      <DependentUpon>SoundBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ErrorReporter.resx">
       <SubType>Designer</SubType>
@@ -267,10 +374,6 @@
     <EmbeddedResource Include="InputWindow.resx">
       <SubType>Designer</SubType>
       <DependentUpon>InputWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainControl.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MainControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <SubType>Designer</SubType>

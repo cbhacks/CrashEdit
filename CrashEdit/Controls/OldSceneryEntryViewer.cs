@@ -1,31 +1,25 @@
 using Crash;
-using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Windows.Forms;
 using System.Collections.Generic;
-using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
 namespace CrashEdit
 {
-    public sealed class OldSceneryEntryViewer : ThreeDimensionalViewer
+    public class OldSceneryEntryViewer : ThreeDimensionalViewer
     {
         private List<OldSceneryEntry> entries;
         private int displaylist;
 
         public OldSceneryEntryViewer(OldSceneryEntry entry)
         {
-            this.entries = new List<OldSceneryEntry>();
-            this.entries.Add(entry);
-            this.displaylist = -1;
+            entries = new List<OldSceneryEntry>();
+            entries.Add(entry);
+            displaylist = -1;
         }
 
         public OldSceneryEntryViewer(IEnumerable<OldSceneryEntry> entries)
         {
             this.entries = new List<OldSceneryEntry>(entries);
-            this.displaylist = -1;
+            displaylist = -1;
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -36,7 +30,7 @@ namespace CrashEdit
                 {
                     foreach (OldSceneryVertex vertex in entry.Vertices)
                     {
-                        yield return new Position(vertex.X + entry.XOffset,vertex.Y + entry.YOffset,vertex.Z + entry.ZOffset);
+                        yield return new Position(entry.XOffset + vertex.X,entry.YOffset + vertex.Y,entry.ZOffset + vertex.Z);
                     }
                 }
             }
@@ -48,17 +42,23 @@ namespace CrashEdit
             {
                 displaylist = GL.GenLists(1);
                 GL.NewList(displaylist,ListMode.CompileAndExecute);
-                GL.Begin(BeginMode.Triangles);
                 foreach (OldSceneryEntry entry in entries)
                 {
-                    foreach (OldSceneryPolygon polygon in entry.Polygons)
+                    if (entry != null)
                     {
-                        RenderVertex(entry,entry.Vertices[polygon.VertexA]);
-                        RenderVertex(entry,entry.Vertices[polygon.VertexB]);
-                        RenderVertex(entry,entry.Vertices[polygon.VertexC]);
+                        foreach (OldSceneryPolygon polygon in entry.Polygons)
+                        {
+                            GL.Begin(PrimitiveType.Triangles);
+                            if (polygon.VertexA < entry.Vertices.Count)
+                                RenderVertex(entry,entry.Vertices[polygon.VertexA]);
+                            if (polygon.VertexB < entry.Vertices.Count)
+                                RenderVertex(entry,entry.Vertices[polygon.VertexB]);
+                            if (polygon.VertexC < entry.Vertices.Count)
+                                RenderVertex(entry,entry.Vertices[polygon.VertexC]);
+                            GL.End();
+                        }
                     }
                 }
-                GL.End();
                 GL.EndList();
             }
             else
@@ -75,11 +75,6 @@ namespace CrashEdit
 
         protected override void Dispose(bool disposing)
         {
-            if (displaylist != -1)
-            {
-                // Crashes when closing the program
-                //GL.DeleteLists(displaylist,1);
-            }
             base.Dispose(disposing);
         }
     }

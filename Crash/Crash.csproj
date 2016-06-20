@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -12,6 +12,12 @@
     <AssemblyName>Crash</AssemblyName>
     <StartupObject>
     </StartupObject>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,14 +45,46 @@
   </Target>
   -->
   <ItemGroup>
-    <Compile Include="Action System\Command.cs" />
-    <Compile Include="Action System\CommandManager.cs" />
+    <Compile Include="Formats\Crash Formats\Animation\AnimationEntry.cs" />
+    <Compile Include="Formats\Crash Formats\Animation\AnimationEntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Animation\Frame1.cs" />
+    <Compile Include="Formats\Crash Formats\Animation\FrameVertex.cs" />
+    <Compile Include="Formats\Crash Formats\Animation\ProtoAnimationEntry.cs" />
+    <Compile Include="Formats\Crash Formats\Animation\ProtoAnimationEntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Animation\ProtoFrame.cs" />
+    <Compile Include="Formats\Crash Formats\Animation\T1Entry.cs" />
+    <Compile Include="Formats\Crash Formats\Animation\T1EntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Models\ModelEntry.cs" />
+    <Compile Include="Formats\Crash Formats\NSD\OldNSD.cs" />
+    <Compile Include="Formats\Crash Formats\NSD\NSDSpawnPoint.cs" />
+    <Compile Include="Formats\Crash Formats\Scenery\NewSceneryEntry.cs" />
+    <Compile Include="Formats\Crash Formats\Scenery\NewSceneryVertex.cs" />
+    <Compile Include="Formats\Crash Formats\Scenery\NewSceneryEntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Scenery\SceneryColorList.cs" />
+    <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryEntry.cs" />
+    <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryEntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryPolygon.cs" />
+    <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryVertex.cs" />
+    <Compile Include="Formats\Crash Formats\T4\T4Item.cs" />
+    <Compile Include="Formats\Crash Formats\T4\T4PolygonID.cs" />
+    <Compile Include="Formats\Crash Formats\T4\T4Item0.cs" />
+    <Compile Include="Formats\Crash Formats\T4\T4Item1.cs" />
+    <Compile Include="Formats\Crash Formats\Zone\ProtoEntityPosition.cs" />
+    <Compile Include="Formats\Crash Formats\Zone\ProtoZoneEntry.cs" />
+    <Compile Include="Formats\Crash Formats\Zone\ProtoZoneEntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Zone\ProtoEntity.cs" />
+    <Compile Include="Formats\Crash Formats\Zone\OldEntityID.cs" />
+    <Compile Include="Formats\Crash Formats\Zone\EntityVictim.cs" />
+    <Compile Include="Formats\Crash Formats\Zone\OldCamera.cs" />
+    <Compile Include="Formats\Crash Formats\Zone\OldCameraPosition.cs" />
+    <Compile Include="Formats\Crash Formats\Zone\OldEntityPosition.cs" />
+    <Compile Include="Formats\Crash Formats\Zone\OldEntity.cs" />
     <Compile Include="Formats\Crash Formats\Zone\EntityUInt32Property.cs" />
     <Compile Include="Formats\Crash Formats\Zone\EntityUInt32PropertyLoader.cs" />
     <Compile Include="Formats\Crash Formats\Zone\EntityT4Property.cs" />
     <Compile Include="Formats\Crash Formats\Zone\EntityT4PropertyLoader.cs" />
-    <Compile Include="Formats\Crash Formats\Zone\EntityInt16Property.cs" />
-    <Compile Include="Formats\Crash Formats\Zone\EntityInt16PropertyLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Zone\EntityVictimProperty.cs" />
+    <Compile Include="Formats\Crash Formats\Zone\EntityVictimPropertyLoader.cs" />
     <Compile Include="Formats\Crash Formats\Zone\EntityBasicProperty.cs" />
     <Compile Include="Formats\Crash Formats\Zone\EntityBasicPropertyLoader.cs" />
     <Compile Include="Formats\Crash Formats\Zone\EntityID.cs" />
@@ -88,12 +126,14 @@
     <Compile Include="Formats\Crash Formats\T15\OldT15EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T17\OldT17Entry.cs" />
     <Compile Include="Formats\Crash Formats\T17\OldT17EntryLoader.cs" />
-    <Compile Include="Formats\Crash Formats\Palette\PaletteEntry.cs" />
-    <Compile Include="Formats\Crash Formats\Palette\PaletteEntryLoader.cs" />
-    <Compile Include="Formats\Crash Formats\T20\T20Entry.cs" />
-    <Compile Include="Formats\Crash Formats\T20\T20EntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\T18\T18Entry.cs" />
+    <Compile Include="Formats\Crash Formats\T18\T18EntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Animation\CutsceneAnimationEntry.cs" />
+    <Compile Include="Formats\Crash Formats\Animation\CutsceneAnimationEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T6\T6Entry.cs" />
     <Compile Include="Formats\Crash Formats\T6\T6EntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Zone\NewZoneEntry.cs" />
+    <Compile Include="Formats\Crash Formats\Zone\NewZoneEntryLoader.cs" />
     <Compile Include="Utility\Aligner.cs" />
     <Compile Include="Utility\ADPCMConv.cs" />
     <Compile Include="Utility\AutoBitConv.cs" />
@@ -163,23 +203,20 @@
     <Compile Include="Formats\Crash Formats\Texture\TextureChunkLoader.cs" />
     <Compile Include="Formats\Crash Formats\Mystery\MysteryMultiItemEntry.cs" />
     <Compile Include="Formats\Crash Formats\Mystery\MysteryUniItemEntry.cs" />
-    <Compile Include="Formats\Crash Formats\T11\T11Entry.cs" />
-    <Compile Include="Formats\Crash Formats\T11\T11EntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\T11\CodeEntry.cs" />
+    <Compile Include="Formats\Crash Formats\T11\CodeEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T15\T15Entry.cs" />
     <Compile Include="Formats\Crash Formats\T15\T15EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T17\T17Entry.cs" />
     <Compile Include="Formats\Crash Formats\T17\T17EntryLoader.cs" />
-    <Compile Include="Formats\Crash Formats\T1\T1Entry.cs" />
-    <Compile Include="Formats\Crash Formats\T1\T1EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T21\T21Entry.cs" />
     <Compile Include="Formats\Crash Formats\T21\T21EntryLoader.cs" />
-    <Compile Include="Formats\Crash Formats\Models\ModelEntry.cs" />
-    <Compile Include="Formats\Crash Formats\Models\ModelEntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Models\NewModelEntry.cs" />
+    <Compile Include="Formats\Crash Formats\Models\NewModelEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\SceneryEntry.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\SceneryEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T4\T4Entry.cs" />
     <Compile Include="Formats\Crash Formats\T4\T4EntryLoader.cs" />
-    <Compile Include="Formats\Crash Formats\T4\T4Item.cs" />
     <Compile Include="Formats\Crash Formats\Base\Entry Chunk\EntryChunkLoader.cs" />
     <Compile Include="Formats\Crash Formats\Base\Entry\EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\NSF.cs" />

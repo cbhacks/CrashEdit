@@ -1,6 +1,4 @@
 using Crash;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace CrashEdit
 {
@@ -18,8 +16,8 @@ namespace CrashEdit
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Unprocessed T{0} Entry ({1})",unprocessedentry.Type,unprocessedentry.EName);
-            Node.ImageKey = "unprocessedentry";
-            Node.SelectedImageKey = "unprocessedentry";
+            Node.ImageKey = "thing";
+            Node.SelectedImageKey = "thing";
         }
 
         public UnprocessedEntry UnprocessedEntry

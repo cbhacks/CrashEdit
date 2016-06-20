@@ -2,6 +2,7 @@ using System;
 
 namespace Crash
 {
+    [EntryType(6,GameVersion.Crash1Beta1995)]
     [EntryType(6,GameVersion.Crash1BetaMAR08)]
     [EntryType(6,GameVersion.Crash1BetaMAY11)]
     public sealed class T6EntryLoader : EntryLoader

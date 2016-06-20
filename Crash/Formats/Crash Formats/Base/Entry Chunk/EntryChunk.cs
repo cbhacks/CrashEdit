@@ -9,7 +9,7 @@ namespace Crash
 
         public EntryChunk()
         {
-            this.entries = new EvList<Entry>();
+            entries = new EvList<Entry>();
         }
 
         public EntryChunk(IEnumerable<Entry> entries)

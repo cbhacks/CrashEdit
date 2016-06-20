@@ -1,6 +1,3 @@
-using Crash;
-using System;
-
 namespace Crash
 {
     public struct SceneryColor

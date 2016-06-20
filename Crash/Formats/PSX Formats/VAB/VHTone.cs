@@ -81,49 +81,49 @@ namespace Crash
         {
             if (isoldversion)
             {
-                this.priority = 0;
-                this.mode = 0;
-                this.volume = 0;
-                this.panning = 0;
-                this.centernote = 0;
-                this.pitchshift = 0;
-                this.minimumnote = 0;
-                this.maximumnote = 0;
-                this.vibratowidth = 0;
-                this.vibratotime = 0;
-                this.portamentowidth = 0;
-                this.portamentotime = 0;
-                this.pitchbendminimum = 0;
-                this.pitchbendmaximum = 0;
+                priority = 0;
+                mode = 0;
+                volume = 0;
+                panning = 0;
+                centernote = 0;
+                pitchshift = 0;
+                minimumnote = 0;
+                maximumnote = 0;
+                vibratowidth = 0;
+                vibratotime = 0;
+                portamentowidth = 0;
+                portamentotime = 0;
+                pitchbendminimum = 0;
+                pitchbendmaximum = 0;
                 unchecked
                 {
-                    this.adsr1 = (short)0x80FF;
-                    this.adsr2 = (short)0x5FDF;
+                    adsr1 = (short)0x80DF;
+                    adsr2 = 0x5FDF;
                 }
             }
             else
             {
-                this.priority = 0;
-                this.mode = 0;
-                this.volume = 80;
-                this.panning = 64;
-                this.centernote = 64;
-                this.pitchshift = 0;
-                this.minimumnote = 64;
-                this.maximumnote = 64;
-                this.vibratowidth = 0;
-                this.vibratotime = 0;
-                this.portamentowidth = 0;
-                this.portamentotime = 0;
-                this.pitchbendminimum = 0;
-                this.pitchbendmaximum = 0;
+                priority = 0;
+                mode = 0;
+                volume = 80;
+                panning = 64;
+                centernote = 64;
+                pitchshift = 0;
+                minimumnote = 64;
+                maximumnote = 64;
+                vibratowidth = 0;
+                vibratotime = 0;
+                portamentowidth = 0;
+                portamentotime = 0;
+                pitchbendminimum = 0;
+                pitchbendmaximum = 0;
                 unchecked
                 {
-                    this.adsr1 = (short)0x80FF;
-                    this.adsr2 = (short)0x5FDF;
+                    adsr1 = (short)0x80DF;
+                    adsr2 = 0x5FDF;
                 }
             }
-            this.wave = 0;
+            wave = 0;
         }
 
         // This is ridiculous! There has to be a better way.

@@ -14,9 +14,9 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = "Sound Chunk";
-            Node.ImageKey = "soundchunk";
-            Node.SelectedImageKey = "soundchunk";
+            Node.Text = string.Format("Sound Chunk {0}", NSFController.chunkid);
+            Node.ImageKey = "bluej";
+            Node.SelectedImageKey = "bluej";
         }
 
         public SoundChunk SoundChunk

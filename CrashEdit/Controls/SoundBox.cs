@@ -2,7 +2,6 @@ using Crash;
 using System;
 using System.IO;
 using System.Media;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -16,10 +15,9 @@ namespace CrashEdit
         private ToolStrip tsToolbar;
         private ToolStripButton tbbExport;
         private TableLayoutPanel pnOptions;
-        private Button cmdPlay11025;
-        private Button cmdPlay22050;
-        private Button cmdExport11025;
-        private Button cmdExport22050;
+        private Button cmdPlay;
+        private Button cmdExport;
+        private NumericUpDown numSampleRate;
 
         public SoundBox(SampleSet samples)
         {
@@ -35,64 +33,58 @@ namespace CrashEdit
             tsToolbar.Dock = DockStyle.Top;
             tsToolbar.Items.Add(tbbExport);
 
-            cmdPlay11025 = new Button();
-            cmdPlay11025.Dock = DockStyle.Fill;
-            cmdPlay11025.Text = "Play (11025 Hz)";
-            cmdPlay11025.Click += new EventHandler(cmdPlay11025_Click);
+            cmdPlay = new Button();
+            cmdPlay.Dock = DockStyle.Fill;
+            cmdPlay.Text = "Play";
+            cmdPlay.Click += new EventHandler(cmdPlay_Click);
 
-            cmdPlay22050 = new Button();
-            cmdPlay22050.Dock = DockStyle.Fill;
-            cmdPlay22050.Text = "Play (22050 Hz)";
-            cmdPlay22050.Click += new EventHandler(cmdPlay22050_Click);
+            cmdExport = new Button();
+            cmdPlay.Dock = DockStyle.Fill;
+            cmdExport.Text = "Export";
+            cmdExport.Click += new EventHandler(cmdExport_Click);
 
-            cmdExport11025 = new Button();
-            cmdExport11025.Dock = DockStyle.Fill;
-            cmdExport11025.Text = "Export Wave (11025 Hz)";
-            cmdExport11025.Click += new EventHandler(cmdExport11025_Click);
-
-            cmdExport22050 = new Button();
-            cmdExport22050.Dock = DockStyle.Fill;
-            cmdExport22050.Text = "Export Wave (22050 Hz)";
-            cmdExport22050.Click += new EventHandler(cmdExport22050_Click);
+            numSampleRate = new NumericUpDown();
+            //numSampleRate.Value = 11025;
+            numSampleRate.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+            numSampleRate.Minimum = new decimal(new int[] {
+            32768,
+            0,
+            0,
+            -2147483648});
+            numSampleRate.Name = "numSampleRate";
 
             pnOptions = new TableLayoutPanel();
             pnOptions.Dock = DockStyle.Fill;
             pnOptions.ColumnCount = 2;
-            pnOptions.RowCount = 3;
+            pnOptions.RowCount = 1;
             pnOptions.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,50));
             pnOptions.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,50));
             pnOptions.RowStyles.Add(new RowStyle(SizeType.Percent,50));
             pnOptions.RowStyles.Add(new RowStyle(SizeType.Percent,50));
-            pnOptions.Controls.Add(cmdPlay11025,0,0);
-            pnOptions.Controls.Add(cmdPlay22050,0,1);
-            pnOptions.Controls.Add(cmdExport11025,1,0);
-            pnOptions.Controls.Add(cmdExport22050,1,1);
+            pnOptions.Controls.Add(cmdPlay,0,0);
+            pnOptions.Controls.Add(cmdExport,1,0);
+            pnOptions.Controls.Add(numSampleRate,0,1);
 
             Controls.Add(pnOptions);
             Controls.Add(tsToolbar);
         }
 
-        void cmdPlay11025_Click(object sender,EventArgs e)
+        void cmdPlay_Click(object sender, EventArgs e)
         {
-            Play(11025);
+            Play((int)numSampleRate.Value);
         }
 
-        void cmdPlay22050_Click(object sender,EventArgs e)
+        void cmdExport_Click(object sender, EventArgs e)
         {
-            Play(22050);
+            ExportWave((int)numSampleRate.Value);
         }
 
-        void cmdExport11025_Click(object sender,EventArgs e)
-        {
-            ExportWave(11025);
-        }
-
-        void cmdExport22050_Click(object sender,EventArgs e)
-        {
-            ExportWave(22050);
-        }
-
-        public SoundBox(SoundEntry entry) : this(entry.Samples)
+        public SoundBox(SoundEntry entry)
+            : this(entry.Samples)
         {
         }
 

@@ -1,7 +1,5 @@
 using Crash;
-using System;
 using System.Drawing;
-using System.Reflection;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
@@ -18,44 +16,14 @@ namespace CrashEdit
             {
                 imglist.Images.Add("default",OldResources.FileImage);
                 imglist.Images.Add("nsf",new Icon(OldResources.NSFIcon,16,16));
-                imglist.Images.Add("normalchunk",OldResources.YellowJournalImage);
-                imglist.Images.Add("texturechunk",OldResources.ImageImage);
-                imglist.Images.Add("oldsoundchunk",OldResources.BlueJournalImage);
-                imglist.Images.Add("soundchunk",OldResources.BlueJournalImage);
-                imglist.Images.Add("wavebankchunk",OldResources.MusicImage);
-                imglist.Images.Add("speechchunk",OldResources.WhiteJournalImage);
-                imglist.Images.Add("unprocessedchunk",OldResources.FileImage);
-                imglist.Images.Add("oldanimationentry",OldResources.ThingImage);
-                imglist.Images.Add("t1entry",OldResources.ThingImage);
-                imglist.Images.Add("oldmodelentry",OldResources.ThingImage);
-                imglist.Images.Add("modelentry",OldResources.ThingImage);
-                imglist.Images.Add("oldsceneryentry",OldResources.ThingImage);
-                imglist.Images.Add("sceneryentry",OldResources.ThingImage);
-                imglist.Images.Add("t4entry",OldResources.ThingImage);
-                imglist.Images.Add("t6entry",OldResources.ThingImage);
-                imglist.Images.Add("oldzoneentry",OldResources.ThingImage);
-                imglist.Images.Add("zoneentry",OldResources.ThingImage);
-                imglist.Images.Add("t11entry",OldResources.ThingImage);
-                imglist.Images.Add("soundentry",OldResources.SpeakerImage);
-                imglist.Images.Add("oldmusicentry",OldResources.MusicImage);
-                imglist.Images.Add("musicentry",OldResources.MusicImage);
-                imglist.Images.Add("wavebankentry",OldResources.MusicImage);
-                imglist.Images.Add("oldt15entry",OldResources.ThingImage);
-                imglist.Images.Add("t15entry",OldResources.ThingImage);
-                imglist.Images.Add("oldt17entry",OldResources.ThingImage);
-                imglist.Images.Add("t17entry",OldResources.ThingImage);
-                imglist.Images.Add("paletteentry",OldResources.ThingImage);
-                imglist.Images.Add("demoentry",OldResources.ThingImage);
-                imglist.Images.Add("t20entry",OldResources.ThingImage);
-                imglist.Images.Add("speechentry",OldResources.SpeakerImage);
-                imglist.Images.Add("t21entry",OldResources.ThingImage);
-                imglist.Images.Add("unprocessedentry",OldResources.ThingImage);
-                imglist.Images.Add("oldframe",OldResources.ArrowImage);
-                imglist.Images.Add("entity",OldResources.ArrowImage);
-                imglist.Images.Add("vh",OldResources.ArrowImage);
-                imglist.Images.Add("seq",OldResources.ArrowImage);
-                imglist.Images.Add("t4item",OldResources.ArrowImage);
-                imglist.Images.Add("item",OldResources.ArrowImage);
+                imglist.Images.Add("yellowj",OldResources.YellowJournalImage);
+                imglist.Images.Add("image",OldResources.ImageImage);
+                imglist.Images.Add("bluej",OldResources.BlueJournalImage);
+                imglist.Images.Add("music",OldResources.MusicImage);
+                imglist.Images.Add("whitej",OldResources.WhiteJournalImage);
+                imglist.Images.Add("thing",OldResources.ThingImage);
+                imglist.Images.Add("speaker",OldResources.SpeakerImage);
+                imglist.Images.Add("arrow",OldResources.ArrowImage);
             }
             catch
             {
@@ -74,9 +42,9 @@ namespace CrashEdit
         public NSFBox(NSF nsf,GameVersion gameversion)
         {
             this.nsf = nsf;
-            this.controller = new NSFController(nsf,gameversion);
+            controller = new NSFController(nsf,gameversion);
 
-            this.searchresults = new List<TreeNode>();
+            searchresults = new List<TreeNode>();
 
             controller.Node.Expand();
 
@@ -96,7 +64,7 @@ namespace CrashEdit
             pnSplit.Dock = DockStyle.Fill;
             pnSplit.Panel1.Controls.Add(trvMain);
 
-            this.Controls.Add(pnSplit);
+            Controls.Add(pnSplit);
         }
 
         public NSF NSF
