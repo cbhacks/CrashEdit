@@ -20,6 +20,7 @@ namespace CrashEdit
             syncstripitems.Add(mniFileSaveAs);
             syncstripitems.Add(mniFilePatchNSD);
             syncstripitems.Add(mniFileClose);
+            syncstripitems.Add(mnuEdit);
             syncstripitems.Add(mniFindFind);
             syncstripitems.Add(mniFindFindNext);
             syncstripitems.Add(mniFindEntryID);
@@ -40,6 +41,7 @@ namespace CrashEdit
             mniFilePatchNSD.Text = Properties.Resources.Menu_File_PatchNSD;
             mniFileClose.Text = Properties.Resources.Menu_File_Close;
             mniFileExit.Text = Properties.Resources.Menu_File_Exit;
+            mnuEdit.Text = Properties.Resources.Menu_Edit;
             mnuFind.Text = Properties.Resources.Menu_Find;
             mniFindFind.Text = Properties.Resources.Menu_Find_Find;
             mniFindFindNext.Text = Properties.Resources.Menu_Find_FindNext;
@@ -58,6 +60,14 @@ namespace CrashEdit
             tbiFindNext.Text = Properties.Resources.Toolbar_FindNext;
             tbiGotoEID.Text = Properties.Resources.Toolbar_GotoEID;
 
+            foreach (Crash.UI.Action action in Crash.UI.Action.AllActions)
+            {
+                ToolStripMenuItem tsi = new ToolStripMenuItem();
+                tsi.Tag = action;
+                tsi.Click += mniEditAction_Click;
+                mnuEdit.DropDownItems.Add(tsi);
+            }
+
             SyncUI();
         }
 
@@ -66,6 +76,15 @@ namespace CrashEdit
             foreach (ToolStripItem stripitem in syncstripitems)
             {
                 stripitem.Enabled = false;
+            }
+            for (int i = 0;i < mnuUndo.DropDownItems.Count;i++)
+            {
+                object tag = mnuUndo.DropDownItems[i].Tag;
+                if (tag is int && (int)tag != 1)
+                {
+                    mnuUndo.DropDownItems.RemoveAt(i);
+                    i--;
+                }
             }
             mniUndoUndo.Enabled = false;
             mniUndoUndo.Text = Properties.Resources.Menu_Undo_UndoNone;
@@ -79,17 +98,94 @@ namespace CrashEdit
             sbiProgress.Visible = false;
             if (uxTabs.SelectedIndex == -1)
                 return;
-            if (uxTabs.SelectedTab.Tag is NSFBox)
+            if (uxTabs.SelectedTab.Tag is MainControl)
             {
+                MainControl maincontrol = (MainControl)uxTabs.SelectedTab.Tag;
                 foreach (ToolStripItem stripitem in syncstripitems)
                 {
                     stripitem.Enabled = true;
                 }
+                foreach (ToolStripItem tsi in mnuEdit.DropDownItems)
+                {
+                    Crash.UI.Action action = (Crash.UI.Action)tsi.Tag;
+                    if (action.CheckCompatibility(maincontrol.SelectedController))
+                    {
+                        tsi.Text = action.GetText(maincontrol.SelectedController);
+                        tsi.Visible = true;
+                    }
+                    else
+                    {
+                        tsi.Visible = false;
+                    }
+                }
+                if (maincontrol.CommandManager.UndoDepth > 0)
+                {
+                    tbiUndo.Enabled = true;
+                    mniUndoUndo.Enabled = true;
+                    int i = 1;
+                    foreach (string action in maincontrol.CommandManager.UndoChain)
+                    {
+                        ToolStripItem tsi = mniUndoUndo;
+                        if (i > 1)
+                        {
+                            tsi = new ToolStripMenuItem();
+                            tsi.Click += mniUndoUndo_Click;
+                            mnuUndo.DropDownItems.Add(tsi);
+                        }
+                        tsi.Text = string.Format(Properties.Resources.Menu_Undo_UndoAction,action);
+                        tsi.Tag = i;
+                        i++;
+                    }
+                }
+                if (maincontrol.CommandManager.RedoDepth > 0)
+                {
+                    tbiRedo.Enabled = true;
+                    mniUndoRedo.Enabled = true;
+                    int i = 1;
+                    foreach (string action in maincontrol.CommandManager.RedoChain)
+                    {
+                        ToolStripItem tsi = mniUndoRedo;
+                        if (i > 1)
+                        {
+                            tsi = new ToolStripMenuItem();
+                            tsi.Click += mniUndoRedo_Click;
+                            mnuUndo.DropDownItems.Insert(0,tsi);
+                        }
+                        tsi.Text = string.Format(Properties.Resources.Menu_Undo_RedoAction,action);
+                        tsi.Tag = i;
+                        i++;
+                    }
+                }
             }
+            else if (uxTabs.SelectedTab.Tag is NSFBox)
+            {
+                mniFileClose.Enabled = true;
+                tbiClose.Enabled = true;
+            }
+        }
+
+        private void MainControl_SyncMasterUI(object sender,EventArgs e)
+        {
+            SyncUI();
         }
 
         private void uxTabs_Selected(object sender,TabControlEventArgs e)
         {
+            switch (e.Action)
+            {
+                case TabControlAction.Selected:
+                    if (e.TabPage.Tag is MainControl)
+                    {
+                        ((MainControl)e.TabPage.Tag).SyncMasterUI += MainControl_SyncMasterUI;
+                    }
+                    break;
+                case TabControlAction.Deselected:
+                    if (e.TabPage.Tag is MainControl)
+                    {
+                        ((MainControl)e.TabPage.Tag).SyncMasterUI -= MainControl_SyncMasterUI;
+                    }
+                    break;
+            }
             SyncUI();
         }
 
@@ -120,14 +216,18 @@ namespace CrashEdit
                 }
                 foreach (string filename in dlgOpenNSF.FileNames)
                 {
-                    byte[] data = File.ReadAllBytes(filename);
-                    NSF nsf = NSF.LoadAndProcess(data,gameversion);
-                    NSFBox nsfbox = new NSFBox(nsf,gameversion);
-                    nsfbox.Dock = DockStyle.Fill;
+                    MainControl control = new MainControl(new FileInfo(filename),gameversion);
+                    control.Dock = DockStyle.Fill;
                     TabPage tab = new TabPage(filename);
-                    tab.Tag = nsfbox;
-                    tab.Controls.Add(nsfbox);
+                    tab.Tag = control;
+                    tab.Controls.Add(control);
                     uxTabs.TabPages.Add(tab);
+                    NSFBox nsfbox = new NSFBox(control.NSFController.NSF,gameversion);
+                    nsfbox.Dock = DockStyle.Fill;
+                    TabPage oldtab = new TabPage("[OLD] " + filename);
+                    oldtab.Tag = nsfbox;
+                    oldtab.Controls.Add(nsfbox);
+                    uxTabs.TabPages.Add(oldtab);
                     uxTabs.SelectedTab = tab;
                 }
             }
@@ -151,6 +251,19 @@ namespace CrashEdit
         private void mniFileClose_Click(object sender,EventArgs e)
         {
             TabPage tab = uxTabs.SelectedTab;
+            if (tab.Tag is MainControl)
+            {
+                MainControl maincontrol = (MainControl)tab.Tag;
+                if (maincontrol.CommandManager.Dirty)
+                {
+                    if (MessageBox.Show(this,string.Format(Properties.Resources.Text_CloseDirtyFilePrompt,
+                        maincontrol.FileInfo.FullName),"CrashEdit",MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question) != DialogResult.Yes)
+                    {
+                        return;
+                    }
+                }
+            }
             uxTabs.TabPages.RemoveAt(uxTabs.SelectedIndex);
             tab.Dispose();
         }
@@ -158,6 +271,19 @@ namespace CrashEdit
         private void mniFileExit_Click(object sender,EventArgs e)
         {
             Close();
+        }
+
+        private void mniEditAction_Click(object sender,EventArgs e)
+        {
+            MainControl maincontrol = (MainControl)uxTabs.SelectedTab.Tag;
+            Crash.UI.Action action = (Crash.UI.Action)((ToolStripItem)sender).Tag;
+            Command command = action.Activate(maincontrol.SelectedController);
+            if (command == null)
+            {
+                // Action is read-only, e.g. model exports, etc
+                return;
+            }
+            maincontrol.CommandManager.Submit(command,action.GetText(maincontrol.SelectedController));
         }
 
         private void mniFindFind_Click(object sender,EventArgs e)
@@ -187,12 +313,14 @@ namespace CrashEdit
 
         private void mniUndoRedo_Click(object sender,EventArgs e)
         {
-            throw new NotImplementedException();
+            MainControl maincontrol = (MainControl)uxTabs.SelectedTab.Tag;
+            maincontrol.CommandManager.Redo((int)((ToolStripItem)(sender ?? mniUndoRedo)).Tag);
         }
 
         private void mniUndoUndo_Click(object sender,EventArgs e)
         {
-            throw new NotImplementedException();
+            MainControl maincontrol = (MainControl)uxTabs.SelectedTab.Tag;
+            maincontrol.CommandManager.Undo((int)((ToolStripItem)(sender ?? mniUndoUndo)).Tag);
         }
 
         private void tbiOpen_Click(object sender,EventArgs e)

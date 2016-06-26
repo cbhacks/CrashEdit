@@ -120,11 +120,29 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="ChunkController_AcDelete" xml:space="preserve">
+    <value>Delete Chunk</value>
+  </data>
+  <data name="ChunkController_AcDeleteWithEName" xml:space="preserve">
+    <value>Delete Chunk "{0}"</value>
+  </data>
+  <data name="ChunkController_AcDeprocess" xml:space="preserve">
+    <value>Deprocess Chunk</value>
+  </data>
+  <data name="ChunkController_AcDeprocessWithEName" xml:space="preserve">
+    <value>Deprocess Chunk "{0}"</value>
+  </data>
   <data name="Controller_NoOptionsAvailable" xml:space="preserve">
     <value>No options available.</value>
   </data>
   <data name="DemoEntryController_Text" xml:space="preserve">
     <value>Demo ({0})</value>
+  </data>
+  <data name="EntryController_AcDelete" xml:space="preserve">
+    <value>Delete Entry "{0}"</value>
+  </data>
+  <data name="EntryController_AcDeprocess" xml:space="preserve">
+    <value>Deprocess Entry "{0}"</value>
   </data>
   <data name="GameVersionForm_Message" xml:space="preserve">
     <value>Select a game version from the list below. NTSC-U, NTSC-J, and PAL are all supported.</value>
@@ -146,6 +164,9 @@
   </data>
   <data name="NormalChunkController_Text" xml:space="preserve">
     <value>Chunk</value>
+  </data>
+  <data name="NSFController_AcAddNormalChunk" xml:space="preserve">
+    <value>Add Chunk</value>
   </data>
   <data name="NSFController_Text" xml:space="preserve">
     <value>NSF File</value>
@@ -174,6 +195,9 @@
   <data name="OldZoneEntryController_Text" xml:space="preserve">
     <value>Old Zone ({0})</value>
   </data>
+  <data name="PaletteEntryController_Text" xml:space="preserve">
+    <value>Palette ({0})</value>
+  </data>
   <data name="SceneryEntryController_Text" xml:space="preserve">
     <value>Scenery ({0})</value>
   </data>
@@ -198,14 +222,11 @@
   <data name="T17EntryController_Text" xml:space="preserve">
     <value>T17 ({0})</value>
   </data>
-  <data name="T18EntryController_Text" xml:space="preserve">
-    <value>T18 ({0})</value>
-  </data>
   <data name="T1EntryController_Text" xml:space="preserve">
     <value>T1 ({0})</value>
   </data>
   <data name="CutsceneAnimationEntryController_Text" xml:space="preserve">
-    <value>T20 ({0})</value>
+    <value>Cutscene Animation ({0})</value>
   </data>
   <data name="T21EntryController_Text" xml:space="preserve">
     <value>T21 ({0})</value>
@@ -218,6 +239,9 @@
   </data>
   <data name="TextureChunkController_Text" xml:space="preserve">
     <value>Texture Chunk ({0})</value>
+  </data>
+  <data name="UnprocessedChunkController_AcProcess" xml:space="preserve">
+    <value>Process Chunk</value>
   </data>
   <data name="UnprocessedChunkController_Text" xml:space="preserve">
     <value>Unprocessed Chunk</value>
@@ -235,6 +259,6 @@
     <value>Zone ({0})</value>
   </data>
   <data name="ProtoZoneEntryController_Text" xml:space="preserve">
-    <value>Prototype Zone ({0})</value>
+    <value>Proto Zone ({0})</value>
   </data>
 </root>

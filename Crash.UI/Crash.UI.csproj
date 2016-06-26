@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -18,6 +18,22 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,6 +67,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Action System\Action.cs" />
+    <Compile Include="Controllers\Animation\CutsceneAnimationEntryController.cs" />
+    <Compile Include="Controllers\Base\Entry\IEntryController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\Base\Chunk\ChunkController.cs" />
     <Compile Include="Controllers\Mystery\MysteryUniItemEntryController.cs" />
@@ -58,11 +77,10 @@
     <Compile Include="Controllers\Base\Entry\UnprocessedEntryController.cs" />
     <Compile Include="Controllers\T21\T21EntryController.cs" />
     <Compile Include="Controllers\Speech\SpeechEntryController.cs" />
-    <Compile Include="Controllers\Animation\CutsceneAnimationEntryController.cs" />
     <Compile Include="Controllers\Demo\DemoEntryController.cs" />
-    <Compile Include="Controllers\T18\T18EntryController.cs" />
-    <Compile Include="Controllers\T18\T17\T17EntryController.cs" />
-    <Compile Include="Controllers\T18\T17\OldT17EntryController.cs" />
+    <Compile Include="Controllers\Palette\PaletteEntryController.cs" />
+    <Compile Include="Controllers\T17\T17EntryController.cs" />
+    <Compile Include="Controllers\T17\OldT17EntryController.cs" />
     <Compile Include="Controllers\T15\OldT15EntryController.cs" />
     <Compile Include="Controllers\T15\T15EntryController.cs" />
     <Compile Include="Controllers\Wavebank\WavebankEntryController.cs" />
@@ -91,10 +109,6 @@
     <Compile Include="Controllers\Base\Entry Chunk\EntryChunkController.cs" />
     <Compile Include="Controllers\Texture\TextureChunkController.cs" />
     <Compile Include="Controllers\NSFController.cs" />
-    <!--<SubType>UserControl</SubType>
-    </Compile>
-      <DependentUpon>EntryChunkControl.cs</DependentUpon>
-    </Compile>-->
     <Compile Include="Forms\GameVersionForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -113,9 +127,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <!--<SubType>Designer</SubType>
-      <DependentUpon>EntryChunkControl.cs</DependentUpon>
-    </EmbeddedResource>-->
     <EmbeddedResource Include="Forms\GameVersionForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>GameVersionForm.cs</DependentUpon>
@@ -125,5 +136,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
   </ItemGroup>
 </Project>

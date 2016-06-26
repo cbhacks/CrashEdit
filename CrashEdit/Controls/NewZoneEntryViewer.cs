@@ -2,6 +2,7 @@ using Crash;
 using System.Drawing;
 using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
+using System;
 
 namespace CrashEdit
 {
@@ -154,11 +155,16 @@ namespace CrashEdit
 
         private void RenderEntity(Entity entity)
         {
+            double scale = 1;
+            if (entity.Scaling.HasValue)
+            {
+                scale = Math.Pow(2, (double)entity.Scaling) / 4;
+            }
             if (entity.Positions.Count == 1)
             {
                 EntityPosition position = entity.Positions[0];
                 GL.PushMatrix();
-                GL.Translate(position.X / 4,position.Y / 4,position.Z / 4);
+                GL.Translate(position.X * scale,position.Y * scale,position.Z * scale);
                 switch (entity.Type)
                 {
                     case 0x3:
@@ -188,7 +194,7 @@ namespace CrashEdit
                 GL.Begin(PrimitiveType.LineStrip);
                 foreach (EntityPosition position in entity.Positions)
                 {
-                    GL.Vertex3(position.X / 4, position.Y / 4, position.Z / 4);
+                    GL.Vertex3(position.X * scale, position.Y * scale, position.Z * scale);
                 }
                 GL.End();
                 GL.Color3(Color.Red);
@@ -196,7 +202,7 @@ namespace CrashEdit
                 foreach (EntityPosition position in entity.Positions)
                 {
                     GL.PushMatrix();
-                    GL.Translate(position.X / 4, position.Y / 4, position.Z / 4);
+                    GL.Translate(position.X * scale, position.Y * scale, position.Z * scale);
                     RenderSprite();
                     GL.PopMatrix();
                 }

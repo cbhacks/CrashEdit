@@ -45,6 +45,8 @@
   </Target>
   -->
   <ItemGroup>
+    <Compile Include="Action System\Command.cs" />
+    <Compile Include="Action System\CommandManager.cs" />
     <Compile Include="Formats\Crash Formats\Animation\AnimationEntry.cs" />
     <Compile Include="Formats\Crash Formats\Animation\AnimationEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Animation\Frame1.cs" />
@@ -55,6 +57,7 @@
     <Compile Include="Formats\Crash Formats\Animation\T1Entry.cs" />
     <Compile Include="Formats\Crash Formats\Animation\T1EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Models\ModelEntry.cs" />
+    <Compile Include="Formats\Crash Formats\Models\ModelEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\NSD\OldNSD.cs" />
     <Compile Include="Formats\Crash Formats\NSD\NSDSpawnPoint.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\NewSceneryEntry.cs" />
@@ -126,8 +129,8 @@
     <Compile Include="Formats\Crash Formats\T15\OldT15EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T17\OldT17Entry.cs" />
     <Compile Include="Formats\Crash Formats\T17\OldT17EntryLoader.cs" />
-    <Compile Include="Formats\Crash Formats\T18\T18Entry.cs" />
-    <Compile Include="Formats\Crash Formats\T18\T18EntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Palette\PaletteEntry.cs" />
+    <Compile Include="Formats\Crash Formats\Palette\PaletteEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Animation\CutsceneAnimationEntry.cs" />
     <Compile Include="Formats\Crash Formats\Animation\CutsceneAnimationEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T6\T6Entry.cs" />
@@ -211,8 +214,6 @@
     <Compile Include="Formats\Crash Formats\T17\T17EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T21\T21Entry.cs" />
     <Compile Include="Formats\Crash Formats\T21\T21EntryLoader.cs" />
-    <Compile Include="Formats\Crash Formats\Models\NewModelEntry.cs" />
-    <Compile Include="Formats\Crash Formats\Models\NewModelEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\SceneryEntry.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\SceneryEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T4\T4Entry.cs" />

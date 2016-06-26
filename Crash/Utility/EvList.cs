@@ -13,14 +13,14 @@ namespace Crash
 
         public EvList()
         {
-            list = new List<T>();
+            this.list = new List<T>();
         }
 
         public EvList(IEnumerable<T> collection)
         {
             if (collection == null)
                 throw new ArgumentNullException("collection");
-            list = new List<T>(collection);
+            this.list = new List<T>(collection);
         }
 
         public int Count
@@ -44,13 +44,20 @@ namespace Crash
                 e.Item = value;
                 if (ItemRemoved != null)
                 {
-                    ItemRemoved(this,e);
+                    ItemRemoved(this, e);
                 }
                 if (ItemAdded != null)
                 {
-                    ItemAdded(this,e);
+                    ItemAdded(this, e);
                 }
             }
+        }
+
+        public Command CmSet(int i, T item)
+        {
+            if (i < 0 || i >= list.Count)
+                throw new ArgumentOutOfRangeException("i");
+            return new SetCommand(this, i, item);
         }
 
         public void Add(T item)
@@ -61,8 +68,13 @@ namespace Crash
                 EvListEventArgs<T> e = new EvListEventArgs<T>();
                 e.Index = list.Count - 1;
                 e.Item = item;
-                ItemAdded(this,e);
+                ItemAdded(this, e);
             }
+        }
+
+        public Command CmAdd(T item)
+        {
+            return new InsertCommand(this, list.Count, item);
         }
 
         public void Clear()
@@ -76,7 +88,7 @@ namespace Crash
                     EvListEventArgs<T> e = new EvListEventArgs<T>();
                     e.Index = 0;
                     e.Item = item;
-                    ItemRemoved(this,e);
+                    ItemRemoved(this, e);
                 }
             }
         }
@@ -86,9 +98,9 @@ namespace Crash
             return list.Contains(item);
         }
 
-        public void CopyTo(T[] array,int i)
+        public void CopyTo(T[] array, int i)
         {
-            list.CopyTo(array,i);
+            list.CopyTo(array, i);
         }
 
         public IEnumerator<T> GetEnumerator()
@@ -106,16 +118,23 @@ namespace Crash
             return list.IndexOf(item);
         }
 
-        public void Insert(int i,T item)
+        public void Insert(int i, T item)
         {
-            list.Insert(i,item);
+            list.Insert(i, item);
             if (ItemAdded != null)
             {
                 EvListEventArgs<T> e = new EvListEventArgs<T>();
                 e.Index = i;
                 e.Item = item;
-                ItemAdded(this,e);
+                ItemAdded(this, e);
             }
+        }
+
+        public Command CmInsert(int i, T item)
+        {
+            if (i < 0 || i > list.Count)
+                throw new ArgumentOutOfRangeException("i");
+            return new InsertCommand(this, i, item);
         }
 
         public bool Remove(T item)
@@ -128,7 +147,7 @@ namespace Crash
                     EvListEventArgs<T> e = new EvListEventArgs<T>();
                     e.Index = i;
                     e.Item = item;
-                    ItemRemoved(this,e);
+                    ItemRemoved(this, e);
                 }
                 list.RemoveAt(i);
                 return true;
@@ -136,6 +155,19 @@ namespace Crash
             else
             {
                 return false;
+            }
+        }
+
+        public Command CmRemove(T item)
+        {
+            int i = list.IndexOf(item);
+            if (i != -1)
+            {
+                return new RemoveCommand(this, i);
+            }
+            else
+            {
+                return null;
             }
         }
 
@@ -148,18 +180,85 @@ namespace Crash
                 EvListEventArgs<T> e = new EvListEventArgs<T>();
                 e.Index = i;
                 e.Item = item;
-                ItemRemoved(this,e);
+                ItemRemoved(this, e);
             }
+        }
+
+        public Command CmRemoveAt(int i)
+        {
+            if (i < 0 || i >= list.Count)
+                throw new ArgumentOutOfRangeException("i");
+            return new RemoveCommand(this, i);
         }
 
         public void Populate(EvListEventHandler<T> method)
         {
-            for (int i = 0;i < Count;i++)
+            for (int i = 0; i < Count; i++)
             {
                 EvListEventArgs<T> e = new EvListEventArgs<T>();
                 e.Item = this[i];
                 e.Index = i;
-                method(this,e);
+                method(this, e);
+            }
+        }
+
+        private sealed class SetCommand : Command
+        {
+            EvList<T> list;
+            int i;
+            T item;
+
+            public SetCommand(EvList<T> list, int i, T item)
+            {
+                this.list = list;
+                this.i = i;
+                this.item = item;
+            }
+
+            protected override Command RunImpl()
+            {
+                T olditem = list[i];
+                list[i] = item;
+                return new SetCommand(list, i, olditem);
+            }
+        }
+
+        private sealed class InsertCommand : Command
+        {
+            EvList<T> list;
+            int i;
+            T item;
+
+            public InsertCommand(EvList<T> list, int i, T item)
+            {
+                this.list = list;
+                this.i = i;
+                this.item = item;
+            }
+
+            protected override Command RunImpl()
+            {
+                list.Insert(i, item);
+                return new RemoveCommand(list, i);
+            }
+        }
+
+        private sealed class RemoveCommand : Command
+        {
+            EvList<T> list;
+            int i;
+
+            public RemoveCommand(EvList<T> list, int i)
+            {
+                this.list = list;
+                this.i = i;
+            }
+
+            protected override Command RunImpl()
+            {
+                T item = list[i];
+                list.RemoveAt(i);
+                return new InsertCommand(list, i, item);
             }
         }
     }

@@ -1,4 +1,6 @@
 using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace Crash.UI
 {
@@ -33,10 +35,10 @@ namespace Crash.UI
             {
                 Subcontrollers.Insert(e.Index,new OldModelEntryController(this,(OldModelEntry)e.Item));
             }
-            /*else if (e.Item is NewModelEntry)
+            else if (e.Item is ModelEntry)
             {
-                Subcontrollers.Insert(e.Index,new NewModelEntryController(this,(NewModelEntry)e.Item));
-            }*/
+                Subcontrollers.Insert(e.Index,new ModelEntryController(this,(ModelEntry)e.Item));
+            }
             else if (e.Item is OldSceneryEntry)
             {
                 Subcontrollers.Insert(e.Index,new OldSceneryEntryController(this,(OldSceneryEntry)e.Item));
@@ -57,9 +59,9 @@ namespace Crash.UI
             {
                 Subcontrollers.Insert(e.Index,new OldZoneEntryController(this,(OldZoneEntry)e.Item));
             }
-            else if (e.Item is NewZoneEntry)
+            else if (e.Item is ZoneEntry)
             {
-                Subcontrollers.Insert(e.Index,new ZoneEntryController(this,(NewZoneEntry)e.Item));
+                Subcontrollers.Insert(e.Index,new ZoneEntryController(this,(ZoneEntry)e.Item));
             }
             else if (e.Item is T11Entry)
             {
@@ -97,9 +99,9 @@ namespace Crash.UI
             {
                 Subcontrollers.Insert(e.Index,new T17EntryController(this,(T17Entry)e.Item));
             }
-            else if (e.Item is T18Entry)
+            else if (e.Item is PaletteEntry)
             {
-                Subcontrollers.Insert(e.Index,new T18EntryController(this,(T18Entry)e.Item));
+                Subcontrollers.Insert(e.Index,new PaletteEntryController(this,(PaletteEntry)e.Item));
             }
             else if (e.Item is DemoEntry)
             {

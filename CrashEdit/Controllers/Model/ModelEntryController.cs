@@ -1,4 +1,4 @@
-/*using Crash;
+using Crash;
 
 namespace CrashEdit
 {
@@ -24,4 +24,4 @@ namespace CrashEdit
             get { return modelentry; }
         }
     }
-}*/
+}

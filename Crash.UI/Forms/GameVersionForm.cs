@@ -1,4 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
 
 namespace Crash.UI
@@ -9,9 +13,9 @@ namespace Crash.UI
 
         public GameVersionForm()
         {
-            version = GameVersion.None;
+            this.version = GameVersion.None;
             InitializeComponent();
-            Text = Properties.Resources.GameVersionForm_Text;
+            this.Text = Properties.Resources.GameVersionForm_Text;
             lblMessage.Text = Properties.Resources.GameVersionForm_Message;
             fraRelease.Text = Properties.Resources.GameVersionForm_Release;
             fraPrerelease.Text = Properties.Resources.GameVersionForm_Prerelease;
@@ -41,7 +45,7 @@ namespace Crash.UI
             DialogResult = DialogResult.OK;
         }
 
-        private void cmdCrash1BetaMAR08_Click(object sender, EventArgs e)
+        private void cmdCrash1BetaMAR08_Click(object sender,EventArgs e)
         {
             version = GameVersion.Crash1BetaMAR08;
             DialogResult = DialogResult.OK;
@@ -62,12 +66,6 @@ namespace Crash.UI
         private void cmdCancel_Click(object sender,EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
-        }
-
-        private void cmdCrash1Beta1995_Click(object sender, EventArgs e)
-        {
-            version = GameVersion.Crash1Beta1995;
-            DialogResult = DialogResult.OK;
         }
     }
 }

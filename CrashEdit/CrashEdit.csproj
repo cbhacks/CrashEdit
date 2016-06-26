@@ -81,7 +81,7 @@
     <Compile Include="Controllers\Music\OldSEQController.cs" />
     <Compile Include="Controllers\Music\OldVHController.cs" />
     <Compile Include="Controllers\Music\OldMusicEntryController.cs" />
-    <Compile Include="Controllers\T18EntryController.cs" />
+    <Compile Include="Controllers\PaletteEntryController.cs" />
     <Compile Include="Controllers\T6EntryController.cs" />
     <Compile Include="Controllers\OldT15EntryController.cs" />
     <Compile Include="Controllers\OldT17EntryController.cs" />
@@ -110,7 +110,6 @@
     <Compile Include="Controllers\T15EntryController.cs" />
     <Compile Include="Controllers\T21EntryController.cs" />
     <Compile Include="Controllers\T17EntryController.cs" />
-    <Compile Include="Controllers\Model\NewModelEntryController.cs" />
     <Compile Include="Controllers\Scenery\SceneryEntryController.cs" />
     <Compile Include="Controllers\Mystery\MysteryMultiItemEntryController.cs" />
     <Compile Include="Controllers\Mystery\MysteryUniItemEntryController.cs" />
@@ -124,14 +123,14 @@
     <Compile Include="Controllers\Sound\SoundChunkController.cs" />
     <Compile Include="Controllers\NSFController.cs" />
     <Compile Include="Controllers\Speech\SpeechChunkController.cs" />
+    <Compile Include="Controls\AnimationEntryViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\NewEntityBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\NewEntityBox.Designer.cs">
       <DependentUpon>NewEntityBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\AnimationEntryViewer.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ProtoAnimationEntryViewer.cs">
       <SubType>UserControl</SubType>
@@ -224,10 +223,11 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="FileFilters.cs" />
-    <Compile Include="ErrorReporter.cs">
+    <Compile Include="Properties\Resources.Designer.cs" />
+    <Compile Include="Resources\ErrorReporter.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ErrorReporter.Designer.cs">
+    <Compile Include="Resources\ErrorReporter.Designer.cs">
       <DependentUpon>ErrorReporter.cs</DependentUpon>
     </Compile>
     <Compile Include="FileUtil.cs" />
@@ -243,6 +243,12 @@
     </Compile>
     <Compile Include="HexBox.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MainControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MainControl.Designer.cs">
+      <DependentUpon>MainControl.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -261,11 +267,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="OldResources.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
@@ -279,57 +280,6 @@
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Computer_File_064.gif" />
-    <None Include="Resources\Computer_File_063.gif" />
-    <Content Include="Resources\Icons\NSD.ico" />
-    <Content Include="Resources\Icons\NSF.ico" />
-    <Content Include="Resources\Images\Arrow.gif" />
-    <Content Include="Resources\Images\Binoculars.gif" />
-    <Content Include="Resources\Images\BinocularsNext.gif" />
-    <Content Include="Resources\Images\File.gif" />
-    <Content Include="Resources\Images\Folder.gif" />
-    <Content Include="Resources\Images\Image.gif" />
-    <Content Include="Resources\Images\BlueJournal.gif" />
-    <Content Include="Resources\Images\WhiteJournal.gif" />
-    <Content Include="Resources\Images\YellowJournal.gif" />
-    <Content Include="Resources\Images\Music.gif" />
-    <Content Include="Resources\Images\Open.gif" />
-    <Content Include="Resources\Images\Save.gif" />
-    <Content Include="Resources\Images\Speaker.gif" />
-    <Content Include="Resources\Images\Thing.gif" />
-    <None Include="Resources\objects_029.gif" />
-    <None Include="Resources\objects_036.gif" />
-    <None Include="Resources\objects_037.gif" />
-    <None Include="Resources\objects_028.gif" />
-    <None Include="Resources\objects_079.gif" />
-    <None Include="Resources\objects_020.gif" />
-    <None Include="Resources\objects_070.gif" />
-    <Content Include="Resources\Textures\Apple.png" />
-    <Content Include="Resources\Textures\AppleBox.png" />
-    <Content Include="Resources\Textures\ArrowBox.png" />
-    <Content Include="Resources\Textures\BodyslamBox.png" />
-    <Content Include="Resources\Textures\Box.png" />
-    <Content Include="Resources\Textures\Checkpoint.png" />
-    <Content Include="Resources\Textures\DetonatorBox.png" />
-    <Content Include="Resources\Textures\DetonatorBoxTop.png" />
-    <Content Include="Resources\Textures\ActivatorBox.png" />
-    <Content Include="Resources\Textures\IronArrowBox.png" />
-    <Content Include="Resources\Textures\IronBox.png" />
-    <Content Include="Resources\Textures\Life.png" />
-    <Content Include="Resources\Textures\LifeBox.png" />
-    <Content Include="Resources\Textures\Mask.png" />
-    <Content Include="Resources\Textures\MaskBox.png" />
-    <Content Include="Resources\Textures\Nitro.png" />
-    <Content Include="Resources\Textures\NitroTop.png" />
-    <Content Include="Resources\Textures\Point.png" />
-    <Content Include="Resources\Textures\QuestionMarkBox.png" />
-    <Content Include="Resources\Textures\TNT.png" />
-    <Content Include="Resources\Textures\TNTTop.png" />
-    <Content Include="Resources\Textures\UnknownBox.png" />
-    <Content Include="Resources\Textures\UnknownBoxTop.png" />
-    <Content Include="Resources\Textures\UnknownPickup.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\NewEntityBox.resx">
@@ -367,13 +317,17 @@
     <EmbeddedResource Include="Controls\SoundBox.resx">
       <DependentUpon>SoundBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ErrorReporter.resx">
+    <EmbeddedResource Include="Properties\Resources.resx" />
+    <EmbeddedResource Include="Resources\ErrorReporter.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ErrorReporter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InputWindow.resx">
       <SubType>Designer</SubType>
       <DependentUpon>InputWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainControl.resx">
+      <DependentUpon>MainControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <SubType>Designer</SubType>
@@ -382,10 +336,77 @@
     <EmbeddedResource Include="OldResources.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Computer_File_053.gif" />
+    <Content Include="Resources\Computer_File_063.gif" />
+    <Content Include="Resources\Computer_File_064.gif" />
+    <Content Include="Resources\Computer_File_068.gif" />
+    <Content Include="Resources\Icons\NSD.ico" />
+    <Content Include="Resources\Icons\NSF.ico" />
+    <Content Include="Resources\Images\Arrow.gif" />
+    <Content Include="Resources\Images\Binoculars.gif" />
+    <Content Include="Resources\Images\BinocularsNext.gif" />
+    <Content Include="Resources\Images\BlueJournal.gif" />
+    <Content Include="Resources\Images\File.gif" />
+    <Content Include="Resources\Images\Folder.gif" />
+    <Content Include="Resources\Images\Image.gif" />
+    <Content Include="Resources\Images\Music.gif" />
+    <Content Include="Resources\Images\Open.gif" />
+    <Content Include="Resources\Images\Save.gif" />
+    <Content Include="Resources\Images\Speaker.gif" />
+    <Content Include="Resources\Images\Thing.gif" />
+    <Content Include="Resources\Images\WhiteJournal.gif" />
+    <Content Include="Resources\Images\YellowJournal.gif" />
+    <Content Include="Resources\objects_006.gif" />
+    <Content Include="Resources\objects_006_red.gif" />
+    <Content Include="Resources\objects_006_yellow.gif" />
+    <Content Include="Resources\objects_012.gif" />
+    <Content Include="Resources\objects_012_blue.gif" />
+    <Content Include="Resources\objects_012_code.gif" />
+    <Content Include="Resources\objects_012_crimson.gif" />
+    <Content Include="Resources\objects_012_gray.gif" />
+    <Content Include="Resources\objects_012_lime.gif" />
+    <Content Include="Resources\objects_012_violet.gif" />
+    <Content Include="Resources\objects_020.gif" />
+    <Content Include="Resources\objects_028.gif" />
+    <Content Include="Resources\objects_029.gif" />
+    <Content Include="Resources\objects_036.gif" />
+    <Content Include="Resources\objects_037.gif" />
+    <Content Include="Resources\objects_053_blue.gif" />
+    <Content Include="Resources\objects_053_white.gif" />
+    <Content Include="Resources\objects_070.gif" />
+    <Content Include="Resources\objects_079.gif" />
+    <Content Include="Resources\People_014.gif" />
+    <Content Include="Resources\People_017.gif" />
+    <Content Include="Resources\People_020.gif" />
+    <Content Include="Resources\People_020_code.gif" />
+    <Content Include="Resources\People_020_cyan.gif" />
+    <Content Include="Resources\People_020_red.gif" />
+    <Content Include="Resources\Textures\ActivatorBox.png" />
+    <Content Include="Resources\Textures\Apple.png" />
+    <Content Include="Resources\Textures\AppleBox.png" />
+    <Content Include="Resources\Textures\ArrowBox.png" />
+    <Content Include="Resources\Textures\BodyslamBox.png" />
+    <Content Include="Resources\Textures\Box.png" />
+    <Content Include="Resources\Textures\Checkpoint.png" />
+    <Content Include="Resources\Textures\DetonatorBox.png" />
+    <Content Include="Resources\Textures\DetonatorBoxTop.png" />
+    <Content Include="Resources\Textures\IronArrowBox.png" />
+    <Content Include="Resources\Textures\IronBox.png" />
+    <Content Include="Resources\Textures\Life.png" />
+    <Content Include="Resources\Textures\LifeBox.png" />
+    <Content Include="Resources\Textures\Mask.png" />
+    <Content Include="Resources\Textures\MaskBox.png" />
+    <Content Include="Resources\Textures\Nitro.png" />
+    <Content Include="Resources\Textures\NitroTop.png" />
+    <Content Include="Resources\Textures\Point.png" />
+    <Content Include="Resources\Textures\QuestionMarkBox.png" />
+    <Content Include="Resources\Textures\TNT.png" />
+    <Content Include="Resources\Textures\TNTTop.png" />
+    <Content Include="Resources\Textures\UnknownBox.png" />
+    <Content Include="Resources\Textures\UnknownBoxTop.png" />
+    <Content Include="Resources\Textures\UnknownPickup.png" />
+  </ItemGroup>
+  <ItemGroup />
 </Project>

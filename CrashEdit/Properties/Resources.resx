@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Menu_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
   <data name="Menu_File" xml:space="preserve">
     <value>File</value>
   </data>
@@ -234,5 +237,71 @@
   </data>
   <data name="Toolbar_UndoNone" xml:space="preserve">
     <value>Undo</value>
+  </data>
+  <data name="Computer_File_053" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Computer_File_053.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Computer_File_068" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Computer_File_068.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="objects_006" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\objects_006.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="objects_006_red" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\objects_006_red.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="objects_006_yellow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\objects_006_yellow.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="objects_012" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\objects_012.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="objects_012_blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\objects_012_blue.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="objects_012_code" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\objects_012_code.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="objects_012_crimson" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\objects_012_crimson.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="objects_012_gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\objects_012_gray.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="objects_012_lime" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\objects_012_lime.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="objects_012_violet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\objects_012_violet.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="objects_053_blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\objects_053_blue.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="objects_053_white" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\objects_053_white.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="People_014" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\People_014.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="People_017" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\People_017.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="People_020" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\People_020.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="People_020_code" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\People_020_code.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="People_020_cyan" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\People_020_cyan.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="People_020_red" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\People_020_red.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Menu_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Text_CloseDirtyFilePrompt" xml:space="preserve">
+    <value>The file "{0}" has not been saved since it was last modified. Continue anyway?</value>
   </data>
 </root>

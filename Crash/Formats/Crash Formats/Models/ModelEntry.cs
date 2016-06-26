@@ -1,48 +1,17 @@
-/*using System;
 using System.Collections.Generic;
 
 namespace Crash
 {
-    public sealed class ModelEntry : Entry
+    public sealed class
+        ModelEntry : MysteryMultiItemEntry
     {
-        private byte[] info;
-        private List<ModelPolygon> polygons;
-
-        public ModelEntry(byte[] info,IEnumerable<ModelPolygon> polygons,int eid) : base(eid)
+        public ModelEntry(IEnumerable<byte[]> items, int eid) : base(items,eid)
         {
-            if (info == null)
-                throw new ArgumentNullException("info");
-            if (polygons == null)
-                throw new ArgumentNullException("polygons");
-            this.info = info;
-            this.polygons = new List<ModelPolygon>(polygons);
         }
 
         public override int Type
         {
             get { return 2; }
         }
-
-        public byte[] Info
-        {
-            get { return info; }
-        }
-
-        public IList<ModelPolygon> Polygons
-        {
-            get { return polygons; }
-        }
-
-        public override UnprocessedEntry Unprocess()
-        {
-            byte[][] items = new byte [2][];
-            items[0] = info;
-            items[1] = new byte [polygons.Count * 8];
-            for (int i = 0;i < polygons.Count;i++)
-            {
-                polygons[i].Save().CopyTo(items[1],i * 8);
-            }
-            return new UnprocessedEntry(items,EID,Type);
-        }
     }
-}*/
+}

@@ -1,15 +1,19 @@
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+
 namespace Crash.UI
 {
     public sealed class ZoneEntryController : EntryController
     {
-        private NewZoneEntry entry;
+        private ZoneEntry entry;
 
-        public ZoneEntryController(EntryChunkController up,NewZoneEntry entry) : base(up,entry)
+        public ZoneEntryController(EntryChunkController up,ZoneEntry entry) : base(up,entry)
         {
             this.entry = entry;
         }
 
-        public new NewZoneEntry Entry
+        public new ZoneEntry Entry
         {
             get { return entry; }
         }

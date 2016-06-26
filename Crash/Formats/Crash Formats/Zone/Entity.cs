@@ -27,16 +27,10 @@ namespace Crash
                 ErrorManager.SignalError("Entity: Data is too short");
             }
             int length = BitConv.FromInt32(data,0);
-            int blank1 = BitConv.FromInt32(data,4);
-            int blank2 = BitConv.FromInt32(data,8);
             int propertycount = BitConv.FromInt32(data,12);
             if (length != data.Length)
             {
                 ErrorManager.SignalIgnorableError("Entity: Length field mismatch");
-            }
-            if (blank1 != 0 || blank2 != 0)
-            {
-                ErrorManager.SignalIgnorableError("Entity: Blank value is wrong");
             }
             if (propertycount < 0 || propertycount > ushort.MaxValue)
             {
@@ -102,12 +96,19 @@ namespace Crash
         private EntityT4Property loadlista = null;
         [EntityPropertyField(0x209)]
         private EntityT4Property loadlistb = null;
+        [EntityPropertyField(0x277)]
+        private int? ddasettings = null;
         [EntityPropertyField(0x287)]
         private List<EntityVictim> victims = null;
+        [EntityPropertyField(0x288)]
+        private int? ddasection = null;
         [EntityPropertyField(0x28B)]
         private EntitySetting? boxcount = null;
         [EntityPropertyField(0x30E)]
-        private int? scaling;
+        private int? scaling = null;
+        [EntityPropertyField(0x337)]
+        private EntitySetting? bonusboxcount = null;
+
         private Dictionary<short,EntityProperty> extraproperties;
 
         public Entity(IDictionary<short,EntityProperty> properties)
@@ -228,9 +229,21 @@ namespace Crash
             get { return loadlistb; }
         }
 
+        public int? DDASettings
+        {
+            get { return ddasettings; }
+            set { ddasettings = value; }
+        }
+
         public List<EntityVictim> Victims
         {
             get { return victims; }
+        }
+
+        public int? DDASection
+        {
+            get { return ddasection; }
+            set { ddasection = value; }
         }
 
         public EntitySetting? BoxCount
@@ -243,6 +256,12 @@ namespace Crash
         {
             get { return scaling; }
             set { scaling = value; }
+        }
+
+        public EntitySetting? BonusBoxCount
+        {
+            get { return bonusboxcount; }
+            set { bonusboxcount = value; }
         }
 
         public IDictionary<short,EntityProperty> ExtraProperties

@@ -14,6 +14,8 @@ namespace CrashEdit
             this.zoneentrycontroller = zoneentrycontroller;
             this.entity = entity;
             AddMenu("Duplicate Entity",Menu_Duplicate);
+            Node.ImageKey = "arrow";
+            Node.SelectedImageKey = "arrow";
             InvalidateNode();
         }
 
@@ -27,8 +29,6 @@ namespace CrashEdit
             {
                 Node.Text = "Entity";
             }
-            Node.ImageKey = "arrow";
-            Node.SelectedImageKey = "arrow";
         }
 
         protected override Control CreateEditor()

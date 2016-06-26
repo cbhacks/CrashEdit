@@ -123,6 +123,7 @@ namespace CrashEdit
             GL.Vertex3(0,ydepth / 4,zdepth / 4);
             GL.Vertex3(0,ydepth / 4,0);
             GL.End();
+            int i = 0;
             foreach (Entity entity in entry.Entities)
             {
                 if (entity.Name != null && entity.ID != null)
@@ -130,10 +131,11 @@ namespace CrashEdit
                     GL.PolygonStipple(stippleb);
                     RenderEntity(entity);
                 }
-                else if (entity.Name == null && entity.ID == null && entity.Positions.Count != 0)
+                else if (entity.Name == null && entity.ID == null && entity.Positions.Count != 0 && i % 3 == 0)
                 {
                     GL.PolygonStipple(stipplea);
                     RenderCamera(entity);
+                    i++;
                 }
             }
             GL.PopMatrix();
