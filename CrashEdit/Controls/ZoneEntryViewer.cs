@@ -135,8 +135,8 @@ namespace CrashEdit
                 {
                     GL.PolygonStipple(stipplea);
                     RenderCamera(entity);
-                    i++;
                 }
+                i++;
             }
             GL.PopMatrix();
         }
@@ -149,16 +149,18 @@ namespace CrashEdit
             GL.PushMatrix();
             GL.Translate(xoffset,yoffset,zoffset);
             GL.Scale(4,4,4);
+            int i = 0;
             foreach (Entity entity in entry.Entities)
             {
                 if (entity.Name != null && entity.ID != null)
                 {
                     RenderEntity(entity);
                 }
-                else if (entity.Name == null && entity.ID == null && entity.Positions.Count != 0)
+                else if (entity.Name == null && entity.ID == null && entity.Positions.Count != 0 && i % 3 == 0)
                 {
                     RenderCamera(entity);
                 }
+                i++;
             }
             GL.PopMatrix();
         }
