@@ -60,15 +60,12 @@ namespace CrashEdit
                 int zoffset = BitConv.FromInt32(entry.Unknown2, 8);
                 foreach (Entity entity in entry.Entities)
                 {
-                    if (entity.Name != null)
+                    foreach (EntityPosition position in entity.Positions)
                     {
-                        foreach (EntityPosition position in entity.Positions)
-                        {
-                            int x = position.X * 4 + xoffset;
-                            int y = position.Y * 4 + yoffset;
-                            int z = position.Z * 4 + zoffset;
-                            yield return new Position(x, y, z);
-                        }
+                        int x = position.X * 4 + xoffset;
+                        int y = position.Y * 4 + yoffset;
+                        int z = position.Z * 4 + zoffset;
+                        yield return new Position(x, y, z);
                     }
                 }
             }
@@ -127,10 +124,7 @@ namespace CrashEdit
             GL.End();
             foreach (Entity entity in entry.Entities)
             {
-                if (entity.Name != null)
-                {
-                    RenderEntity(entity);
-                }
+                RenderEntity(entity);
             }
             GL.PopMatrix();
         }
@@ -145,10 +139,7 @@ namespace CrashEdit
             GL.Scale(4, 4, 4);
             foreach (Entity entity in entry.Entities)
             {
-                if (entity.Name != null)
-                {
-                    RenderEntity(entity);
-                }
+                RenderEntity(entity);
             }
             GL.PopMatrix();
         }

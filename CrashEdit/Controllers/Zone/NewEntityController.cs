@@ -21,9 +21,13 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            if (entity.Name != null)
+            if (entity.Name != null && entity.ID != null)
             {
-                Node.Text = string.Format("{0}",entity.Name);
+                Node.Text = string.Format("{0} - ID {1}", entity.Name, entity.ID);
+            }
+            else if (entity.ID != null)
+            {
+                Node.Text = string.Format("Entity ID {0}", entity.ID);
             }
             else
             {

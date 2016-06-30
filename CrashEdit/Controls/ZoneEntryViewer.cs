@@ -59,15 +59,12 @@ namespace CrashEdit
                 int zoffset = BitConv.FromInt32(entry.Unknown2,8);
                 foreach (Entity entity in entry.Entities)
                 {
-                    if (entity.Name != null)
+                    foreach (EntityPosition position in entity.Positions)
                     {
-                        foreach (EntityPosition position in entity.Positions)
-                        {
-                            int x = position.X * 4 + xoffset;
-                            int y = position.Y * 4 + yoffset;
-                            int z = position.Z * 4 + zoffset;
-                            yield return new Position(x,y,z);
-                        }
+                        int x = position.X * 4 + xoffset;
+                        int y = position.Y * 4 + yoffset;
+                        int z = position.Z * 4 + zoffset;
+                        yield return new Position(x, y, z);
                     }
                 }
             }
@@ -126,12 +123,12 @@ namespace CrashEdit
             int i = 0;
             foreach (Entity entity in entry.Entities)
             {
-                if (entity.Name != null && entity.ID != null)
+                if (entity.ID != null)
                 {
                     GL.PolygonStipple(stippleb);
                     RenderEntity(entity);
                 }
-                else if (entity.Name == null && entity.ID == null && entity.Positions.Count != 0 && i % 3 == 0)
+                else if (entity.ID == null && entity.Positions.Count != 0 && i % 3 == 0)
                 {
                     GL.PolygonStipple(stipplea);
                     RenderCamera(entity);
@@ -152,11 +149,11 @@ namespace CrashEdit
             int i = 0;
             foreach (Entity entity in entry.Entities)
             {
-                if (entity.Name != null && entity.ID != null)
+                if (entity.ID != null)
                 {
                     RenderEntity(entity);
                 }
-                else if (entity.Name == null && entity.ID == null && entity.Positions.Count != 0 && i % 3 == 0)
+                else if (entity.ID == null && entity.Positions.Count != 0 && i % 3 == 0)
                 {
                     RenderCamera(entity);
                 }
