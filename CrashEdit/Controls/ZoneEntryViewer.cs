@@ -125,12 +125,10 @@ namespace CrashEdit
             {
                 if (entity.ID != null)
                 {
-                    GL.PolygonStipple(stippleb);
                     RenderEntity(entity);
                 }
                 else if (entity.ID == null && entity.Positions.Count != 0 && i % 3 == 0)
                 {
-                    GL.PolygonStipple(stipplea);
                     RenderCamera(entity);
                 }
                 i++;
@@ -151,10 +149,12 @@ namespace CrashEdit
             {
                 if (entity.ID != null)
                 {
+                    GL.PolygonStipple(stippleb);
                     RenderEntity(entity);
                 }
                 else if (entity.ID == null && entity.Positions.Count != 0 && i % 3 == 0)
                 {
+                    GL.PolygonStipple(stipplea);
                     RenderCamera(entity);
                 }
                 i++;
