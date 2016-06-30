@@ -81,6 +81,8 @@ namespace CrashEdit
             this.chkDDASettings = new System.Windows.Forms.CheckBox();
             this.numDDASettings = new System.Windows.Forms.NumericUpDown();
             this.fraBoxCount = new System.Windows.Forms.GroupBox();
+            this.chkBonusBoxCount = new System.Windows.Forms.CheckBox();
+            this.numBonusBoxCount = new System.Windows.Forms.NumericUpDown();
             this.chkBoxCount = new System.Windows.Forms.CheckBox();
             this.numBoxCount = new System.Windows.Forms.NumericUpDown();
             this.fraVictims = new System.Windows.Forms.GroupBox();
@@ -107,8 +109,9 @@ namespace CrashEdit
             this.cmdNextEIDA = new System.Windows.Forms.Button();
             this.cmdPrevRowA = new System.Windows.Forms.Button();
             this.cmdNextRowA = new System.Windows.Forms.Button();
-            this.chkBonusBoxCount = new System.Windows.Forms.CheckBox();
-            this.numBonusBoxCount = new System.Windows.Forms.NumericUpDown();
+            this.fraOtherSettings = new System.Windows.Forms.GroupBox();
+            this.chkOtherSettings = new System.Windows.Forms.CheckBox();
+            this.numOtherSettings = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -134,6 +137,7 @@ namespace CrashEdit
             this.fraDDASettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numDDASettings)).BeginInit();
             this.fraBoxCount.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numBonusBoxCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numBoxCount)).BeginInit();
             this.fraVictims.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numVictimID)).BeginInit();
@@ -141,7 +145,8 @@ namespace CrashEdit
             this.fraLoadListA.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.fraEIDA.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numBonusBoxCount)).BeginInit();
+            this.fraOtherSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numOtherSettings)).BeginInit();
             this.SuspendLayout();
             // 
             // chkType
@@ -675,6 +680,7 @@ namespace CrashEdit
             // tabSpecial
             // 
             this.tabSpecial.AutoScroll = true;
+            this.tabSpecial.Controls.Add(this.fraOtherSettings);
             this.tabSpecial.Controls.Add(this.fraScaling);
             this.tabSpecial.Controls.Add(this.fraDDASection);
             this.tabSpecial.Controls.Add(this.fraDDASettings);
@@ -819,6 +825,35 @@ namespace CrashEdit
             this.fraBoxCount.TabIndex = 8;
             this.fraBoxCount.TabStop = false;
             this.fraBoxCount.Text = "Box Count";
+            // 
+            // chkBonusBoxCount
+            // 
+            this.chkBonusBoxCount.AutoSize = true;
+            this.chkBonusBoxCount.Location = new System.Drawing.Point(6, 68);
+            this.chkBonusBoxCount.Name = "chkBonusBoxCount";
+            this.chkBonusBoxCount.Size = new System.Drawing.Size(65, 17);
+            this.chkBonusBoxCount.TabIndex = 2;
+            this.chkBonusBoxCount.Text = "Enabled";
+            this.chkBonusBoxCount.UseVisualStyleBackColor = true;
+            this.chkBonusBoxCount.CheckedChanged += new System.EventHandler(this.chkBonusBoxCount_CheckedChanged);
+            // 
+            // numBonusBoxCount
+            // 
+            this.numBonusBoxCount.Location = new System.Drawing.Point(6, 91);
+            this.numBonusBoxCount.Maximum = new decimal(new int[] {
+            8388607,
+            0,
+            0,
+            0});
+            this.numBonusBoxCount.Minimum = new decimal(new int[] {
+            8388608,
+            0,
+            0,
+            -2147483648});
+            this.numBonusBoxCount.Name = "numBonusBoxCount";
+            this.numBonusBoxCount.Size = new System.Drawing.Size(120, 20);
+            this.numBonusBoxCount.TabIndex = 3;
+            this.numBonusBoxCount.ValueChanged += new System.EventHandler(this.numBonusBoxCount_ValueChanged);
             // 
             // chkBoxCount
             // 
@@ -1113,34 +1148,45 @@ namespace CrashEdit
             this.cmdNextRowA.Text = "Next";
             this.cmdNextRowA.UseVisualStyleBackColor = true;
             // 
-            // chkBonusBoxCount
+            // fraOtherSettings
             // 
-            this.chkBonusBoxCount.AutoSize = true;
-            this.chkBonusBoxCount.Location = new System.Drawing.Point(6, 68);
-            this.chkBonusBoxCount.Name = "chkBonusBoxCount";
-            this.chkBonusBoxCount.Size = new System.Drawing.Size(65, 17);
-            this.chkBonusBoxCount.TabIndex = 2;
-            this.chkBonusBoxCount.Text = "Enabled";
-            this.chkBonusBoxCount.UseVisualStyleBackColor = true;
-            this.chkBonusBoxCount.CheckedChanged += new System.EventHandler(this.chkBonusBoxCount_CheckedChanged);
+            this.fraOtherSettings.Controls.Add(this.chkOtherSettings);
+            this.fraOtherSettings.Controls.Add(this.numOtherSettings);
+            this.fraOtherSettings.Location = new System.Drawing.Point(141, 194);
+            this.fraOtherSettings.Name = "fraOtherSettings";
+            this.fraOtherSettings.Size = new System.Drawing.Size(132, 72);
+            this.fraOtherSettings.TabIndex = 10;
+            this.fraOtherSettings.TabStop = false;
+            this.fraOtherSettings.Text = "Other Settings";
             // 
-            // numBonusBoxCount
+            // chkOtherSettings
             // 
-            this.numBonusBoxCount.Location = new System.Drawing.Point(6, 91);
-            this.numBonusBoxCount.Maximum = new decimal(new int[] {
-            8388607,
+            this.chkOtherSettings.AutoSize = true;
+            this.chkOtherSettings.Location = new System.Drawing.Point(6, 19);
+            this.chkOtherSettings.Name = "chkOtherSettings";
+            this.chkOtherSettings.Size = new System.Drawing.Size(65, 17);
+            this.chkOtherSettings.TabIndex = 0;
+            this.chkOtherSettings.Text = "Enabled";
+            this.chkOtherSettings.UseVisualStyleBackColor = true;
+            this.chkOtherSettings.CheckedChanged += new System.EventHandler(this.chkOtherSettings_CheckedChanged);
+            // 
+            // numOtherSettings
+            // 
+            this.numOtherSettings.Location = new System.Drawing.Point(6, 42);
+            this.numOtherSettings.Maximum = new decimal(new int[] {
+            2147483647,
             0,
             0,
             0});
-            this.numBonusBoxCount.Minimum = new decimal(new int[] {
-            8388608,
+            this.numOtherSettings.Minimum = new decimal(new int[] {
+            -2147483648,
             0,
             0,
             -2147483648});
-            this.numBonusBoxCount.Name = "numBonusBoxCount";
-            this.numBonusBoxCount.Size = new System.Drawing.Size(120, 20);
-            this.numBonusBoxCount.TabIndex = 3;
-            this.numBonusBoxCount.ValueChanged += new System.EventHandler(this.numBonusBoxCount_ValueChanged);
+            this.numOtherSettings.Name = "numOtherSettings";
+            this.numOtherSettings.Size = new System.Drawing.Size(120, 20);
+            this.numOtherSettings.TabIndex = 1;
+            this.numOtherSettings.ValueChanged += new System.EventHandler(this.numOtherSettings_ValueChanged);
             // 
             // EntityBox
             // 
@@ -1184,6 +1230,7 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numDDASettings)).EndInit();
             this.fraBoxCount.ResumeLayout(false);
             this.fraBoxCount.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numBonusBoxCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numBoxCount)).EndInit();
             this.fraVictims.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numVictimID)).EndInit();
@@ -1193,7 +1240,9 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.fraEIDA.ResumeLayout(false);
             this.fraEIDA.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numBonusBoxCount)).EndInit();
+            this.fraOtherSettings.ResumeLayout(false);
+            this.fraOtherSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numOtherSettings)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1281,5 +1330,8 @@ namespace CrashEdit
         private System.Windows.Forms.NumericUpDown numScaling;
         private System.Windows.Forms.CheckBox chkBonusBoxCount;
         private System.Windows.Forms.NumericUpDown numBonusBoxCount;
+        private System.Windows.Forms.GroupBox fraOtherSettings;
+        private System.Windows.Forms.CheckBox chkOtherSettings;
+        private System.Windows.Forms.NumericUpDown numOtherSettings;
     }
 }

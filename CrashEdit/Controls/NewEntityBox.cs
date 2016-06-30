@@ -36,7 +36,9 @@ namespace CrashEdit
             UpdateDDASettings();
             UpdateDDASection();
             //UpdateDrawLists();
+            //UpdateLoadLists();
             UpdateScaling();
+            UpdateOtherSettings();
             positionindex = 0;
             victimindex = 0;
         }
@@ -324,6 +326,7 @@ namespace CrashEdit
         private void numID_ValueChanged(object sender,EventArgs e)
         {
             entity.ID = (int)numID.Value;
+            InvalidateNodes();
         }
 
         private void chkID2_CheckedChanged(object sender,EventArgs e)
@@ -337,7 +340,6 @@ namespace CrashEdit
             {
                 entity.AlternateID = null;
             }
-            InvalidateNodes();
         }
 
         private void numID2_ValueChanged(object sender,EventArgs e)
@@ -366,7 +368,6 @@ namespace CrashEdit
             {
                 entity.Type = null;
             }
-            InvalidateNodes();
         }
 
         private void numType_ValueChanged(object sender,EventArgs e)
@@ -395,7 +396,6 @@ namespace CrashEdit
             {
                 entity.Subtype = null;
             }
-            InvalidateNodes();
         }
 
         private void numSubtype_ValueChanged(object sender,EventArgs e)
@@ -430,7 +430,6 @@ namespace CrashEdit
             {
                 entity.BoxCount = null;
             }
-            InvalidateNodes();
         }
 
         private void numBoxCount_ValueChanged(object sender,EventArgs e)
@@ -449,7 +448,6 @@ namespace CrashEdit
             {
                 entity.BonusBoxCount = null;
             }
-            InvalidateNodes();
         }
 
         private void numBonusBoxCount_ValueChanged(object sender, EventArgs e)
@@ -746,7 +744,6 @@ namespace CrashEdit
             {
                 entity.DDASettings = null;
             }
-            InvalidateNodes();
         }
 
         private void numDDASettings_ValueChanged(object sender, EventArgs e)
@@ -775,7 +772,6 @@ namespace CrashEdit
             {
                 entity.DDASection = null;
             }
-            InvalidateNodes();
         }
 
         private void numDDASection_ValueChanged(object sender, EventArgs e)
@@ -804,12 +800,39 @@ namespace CrashEdit
             {
                 entity.Scaling = null;
             }
-            InvalidateNodes();
         }
 
         private void numScaling_ValueChanged(object sender, EventArgs e)
         {
             entity.Scaling = (int)numScaling.Value;
+        }
+
+        private void UpdateOtherSettings()
+        {
+            if (entity.OtherSettings.HasValue)
+            {
+                numOtherSettings.Value = entity.OtherSettings.Value;
+            }
+            numOtherSettings.Enabled = entity.OtherSettings.HasValue;
+            chkOtherSettings.Checked = entity.OtherSettings.HasValue;
+        }
+
+        private void chkOtherSettings_CheckedChanged(object sender, EventArgs e)
+        {
+            numOtherSettings.Enabled = chkOtherSettings.Checked;
+            if (chkOtherSettings.Checked)
+            {
+                entity.OtherSettings = (int)numOtherSettings.Value;
+            }
+            else
+            {
+                entity.OtherSettings = null;
+            }
+        }
+
+        private void numOtherSettings_ValueChanged(object sender, EventArgs e)
+        {
+            entity.OtherSettings = (int)numOtherSettings.Value;
         }
     }
 }

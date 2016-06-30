@@ -88,6 +88,8 @@ namespace Crash
         private int? type;
         [EntityPropertyField(0xAA)]
         private int? subtype;
+        [EntityPropertyField(0x118)]
+        private int? othersettings = null;
         [EntityPropertyField(0x13B)]
         private EntityInt32Property drawlista = null;
         [EntityPropertyField(0x13C)]
@@ -207,6 +209,12 @@ namespace Crash
         {
             get { return subtype; }
             set { subtype = value; }
+        }
+
+        public int? OtherSettings
+        {
+            get { return othersettings; }
+            set { othersettings = value; }
         }
 
         public EntityInt32Property DrawListA
