@@ -83,7 +83,7 @@ _These issues have no significant effect on the operation of the program, but ar
 * __Crash 1 _All_:__ Music entries containing VH data may be saved out with different data in unused sections.
 * __Crash 1 _Retail_:__ "Patch NSD" does not patch all of the NSD.
 * __Crash 2 _NTSC-J Retail_:__ A music entry in `S000003C.NSF` containing VH data may be saved out with different data in unused sections.
-* __Crash 2/3 _All_:__ Exporting scenery to OBJ format is not fully supported, so you have to save triangles and quads seperately.
+* __Crash 2/3 _All_:__ Exporting scenery to PLY format is not fully supported, as UV isn't supported yet.
 
 ### Bugs ###
 * __All Games:__ Don't completely zoom in while using the 3D viewer.
@@ -109,8 +109,7 @@ Just unzip into a directory and run the exe.
 _If you are working with the source code, it is a VS 2013 Edition solution which consists of three projects, "Crash", "Crash.UI" and "CrashEdit". You will need to set "CrashEdit" as the startup project to run the application._
 
 ## Where To Get ##
-Precompiled binary files (EXE files) can be acquired from a public dropbox directory here:  
-https://www.dropbox.com/sh/ed1ebw3d2k5y4vp/AAABdLTcI3R6snt5coRiNpPXa?dl=0
+Precompiled binary files (EXE files) are not available as of yet.
 
 The original source code is currently available as a git repository on github at:  
 https://github.com/ughman/CrashEdit (newgui branch)
