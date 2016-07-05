@@ -88,8 +88,12 @@ namespace Crash
         private int? type;
         [EntityPropertyField(0xAA)]
         private int? subtype;
+        [EntityPropertyField(0x103)]
+        private int? slst;
         [EntityPropertyField(0x118)]
         private int? othersettings = null;
+        [EntityPropertyField(0x131)]
+        private EntityVictimProperty camerathing = null;
         [EntityPropertyField(0x13B)]
         private EntityInt32Property drawlista = null;
         [EntityPropertyField(0x13C)]
@@ -211,10 +215,31 @@ namespace Crash
             set { subtype = value; }
         }
 
+        public string SLST
+        {
+            get
+            {
+                if (slst != null)
+                    return Entry.EIDToEName(slst);
+                else return null;
+            }
+            set
+            {
+                if (value != null)
+                    slst = BitConv.FromInt32(Entry.Str2EID(value));
+                else slst = null;
+            }
+        }
+
         public int? OtherSettings
         {
             get { return othersettings; }
             set { othersettings = value; }
+        }
+
+        public EntityVictimProperty CameraThing
+        {
+            get { return camerathing; }
         }
 
         public EntityInt32Property DrawListA

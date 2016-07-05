@@ -101,15 +101,26 @@ namespace Crash
             return new string(str);
         }
 
+        public static string EIDToEName(int? eid)
+        {
+            char[] str = new char[5];
+            eid >>= 1;
+            for (int i = 0; i < 5; i++)
+            {
+                str[4 - i] = ENameCharacterSet[(int)eid & 0x3F];
+                eid >>= 6;
+            }
+            return new string(str);
+        }
+
         // Special thanks to NeoKesha for this
-        public static int str2eid(string str)
+        public static int? Str2EID(string str)
         {
             int EID = 1;
-            int len = (str.Length > 5) ? 5 : str.Length;
-            for (byte I = 0; I <= len; I++)
+            for (byte i = 0; i < 5; i++)
             {
-                byte chr_id = SeekCharId(str[I]);
-                EID = EID | (chr_id << (1 + 6 * I));
+                byte chr_id = SeekCharId(str[i]);
+                EID = EID | (chr_id << (1 + 6 * i));
             }
             return EID;
         }
@@ -117,12 +128,12 @@ namespace Crash
         // And this
         public static byte SeekCharId(char chr)
         {
-            byte I = 0;
-            while (!(chr == ENameCharacterSet[I]))
+            byte i = 0;
+            while (i < 64 && !(chr == ENameCharacterSet[i]))
             {
-                I += 1;
+                i++;
             }
-            return I;
+            return i;
         }
 
         private int eid;

@@ -15,6 +15,7 @@ namespace CrashEdit
         private int settingindex;
         private bool victimdirty;
         private int victimindex;
+        private bool text;
         //private bool loadlistadirty;
         //private bool loadlistbdirty;
         //private int loadlistaindex;
@@ -39,6 +40,7 @@ namespace CrashEdit
             //UpdateLoadLists();
             UpdateScaling();
             UpdateOtherSettings();
+            UpdateSLST();
             positionindex = 0;
             victimindex = 0;
         }
@@ -46,6 +48,13 @@ namespace CrashEdit
         private void InvalidateNodes()
         {
             controller.InvalidateNode();
+        }
+
+        public static string Reverse(string str)
+        {
+            char[] charArray = str.ToCharArray();
+            Array.Reverse(charArray);
+            return new string(charArray);
         }
 
         private void UpdateName()
@@ -833,6 +842,107 @@ namespace CrashEdit
         private void numOtherSettings_ValueChanged(object sender, EventArgs e)
         {
             entity.OtherSettings = (int)numOtherSettings.Value;
+        }
+
+        private void UpdateSLST()
+        {
+            if (entity.SLST != null)
+            {
+                txtSLST.Text = entity.SLST;
+                chkSLST.Checked = true;
+            }
+            else
+            {
+                txtSLST.Enabled = false;
+                chkSLST.Checked = false;
+            }
+        }
+
+        private void chkSLST_CheckedChanged(object sender, EventArgs e)
+        {
+            txtSLST.Enabled = chkSLST.Checked;
+            if (chkSLST.Checked)
+            {
+                if (txtSLST.Text.Length == 5)
+                {
+                    text = true;
+                    lblSLST1.Visible = false;
+                }
+                else
+                {
+                    text = false;
+                    lblSLST1.Visible = true;
+                }
+                for (int i = 0;i < txtSLST.Text.Length;i++)
+                {
+                    int ii = 0;
+                    while (ii < 64 && !(txtSLST.Text[i] == Entry.ENameCharacterSet[ii]))
+                    {
+                        ii++;
+                    }
+                    if (ii == 64)
+                    {
+                        i = txtSLST.Text.Length;
+                        text = false;
+                        lblSLST2.Visible = true;
+                    }
+                    else
+                    {
+                        lblSLST2.Visible = false;
+                    }
+                }
+                if (text == true)
+                {
+                    entity.SLST = Reverse(txtSLST.Text);
+                    text = false;
+                }
+
+            }
+            else
+            {
+                entity.SLST = null;
+                lblSLST1.Visible = false;
+                lblSLST2.Visible = false;
+            }
+            InvalidateNodes();
+        }
+
+        private void txtSLST_TextChanged(object sender, EventArgs e)
+        {
+            if (txtSLST.Text.Length == 5)
+            {
+                text = true;
+                lblSLST1.Visible = false;
+            }
+            else
+            {
+                text = false;
+                lblSLST1.Visible = true;
+            }
+            for (int i = 0; i < txtSLST.Text.Length; i++)
+            {
+                int ii = 0;
+                while (ii < 64 && !(txtSLST.Text[i] == Entry.ENameCharacterSet[ii]))
+                {
+                    ii++;
+                }
+                if (ii == 64)
+                {
+                    i = txtSLST.Text.Length;
+                    text = false;
+                    lblSLST2.Visible = true;
+                }
+                else
+                {
+                    lblSLST2.Visible = false;
+                }
+            }
+            if (text == true)
+            {
+                entity.SLST = Reverse(txtSLST.Text);
+                text = false;
+            }
+            InvalidateNodes();
         }
     }
 }
