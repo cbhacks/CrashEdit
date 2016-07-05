@@ -64,8 +64,8 @@ namespace Crash
                 throw new ArgumentOutOfRangeException("offset");
             if (offset + 2 > str.Length)
                 throw new ArgumentOutOfRangeException("offset");
-            str[offset + 0] = (byte)((value >> 8 * 0) & 0xFF);
-            str[offset + 1] = (byte)((value >> 8 * 1) & 0xFF);
+            str[offset] = (byte)value;
+            str[offset + 1] = (byte)(value >> 8);
         }
 
         public static void ToInt24(byte[] str,int offset,int value)
@@ -78,9 +78,9 @@ namespace Crash
                 throw new ArgumentOutOfRangeException("offset");
             if (value < -8388608 || value > 8388607)
                 throw new ArgumentOutOfRangeException("value");
-            str[offset + 0] = (byte)((value >> 8 * 0) & 0xFF);
-            str[offset + 1] = (byte)((value >> 8 * 1) & 0xFF);
-            str[offset + 2] = (byte)((value >> 8 * 2) & 0xFF);
+            str[offset] = (byte)value;
+            str[offset + 1] = (byte)(value >> 8);
+            str[offset + 2] = (byte)(value >> 8 * 2);
         }
 
         public static void ToInt32(byte[] str,int offset,int value)
@@ -91,10 +91,23 @@ namespace Crash
                 throw new ArgumentOutOfRangeException("offset");
             if (offset + 4 > str.Length)
                 throw new ArgumentOutOfRangeException("offset");
-            str[offset + 0] = (byte)((value >> 8 * 0) & 0xFF);
-            str[offset + 1] = (byte)((value >> 8 * 1) & 0xFF);
-            str[offset + 2] = (byte)((value >> 8 * 2) & 0xFF);
-            str[offset + 3] = (byte)((value >> 8 * 3) & 0xFF);
+            str[offset] = (byte)value;
+            str[offset + 1] = (byte)(value >> 8);
+            str[offset + 2] = (byte)(value >> 8 * 2);
+            str[offset + 3] = (byte)(value >> 8 * 3);
+        }
+
+        public static int FromInt32(int? value)
+        {
+            if (value == null)
+                throw new ArgumentNullException("value");
+            byte [] str = BitConverter.GetBytes((int)value);
+            int result = 0;
+            result |= str[0];
+            result |= str[1] << 8;
+            result |= str[2] << 8 * 2;
+            result |= str[3] << 8 * 3;
+            return result;
         }
     }
 }

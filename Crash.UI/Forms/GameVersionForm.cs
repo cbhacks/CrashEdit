@@ -45,6 +45,12 @@ namespace Crash.UI
             DialogResult = DialogResult.OK;
         }
 
+        private void cmdCrash1Beta1995_Click(object sender, EventArgs e)
+        {
+            version = GameVersion.Crash1Beta1995;
+            DialogResult = DialogResult.OK;
+        }
+
         private void cmdCrash1BetaMAR08_Click(object sender,EventArgs e)
         {
             version = GameVersion.Crash1BetaMAR08;

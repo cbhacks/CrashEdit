@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 namespace Crash
 {
@@ -10,85 +11,88 @@ namespace Crash
                 throw new ArgumentNullException("data");
             if (data.Length != 12)
                 throw new ArgumentException("Value must be 12 bytes long.","data");
-            int worda = BitConv.FromInt32(data,4);
-            int wordb = BitConv.FromInt32(data,8);
-            int vertexa = (worda >> 20) & 0xFFF;
-            int vertexb = (wordb >> 8) & 0xFFF;
-            int vertexc = (wordb >> 20) & 0xFFF;
-            int unknown1 = (worda >> 8) & 0xFFF;
-            byte unknown2 = (byte)(worda & 0xFF);
-            byte unknown3 = (byte)(wordb & 0xFF);
-            return new ProtoSceneryPolygon(vertexa,vertexb,vertexc,unknown1,unknown2,unknown3);
+            int unknownint1 = BitConv.FromInt16(data, 0);
+            int unknownint2 = BitConv.FromInt32(data, 4);
+            short short1 = BitConv.FromInt16(data, 8);
+            short short2 = BitConv.FromInt16(data, 10);
+            byte[] vertexarray = new byte[4];
+            vertexarray[2] = (byte)(unknownint2 & 0x0F); //Most significant nibble
+            vertexarray[1] = (byte)(short2 & 0x0F);
+            vertexarray[0] = (byte)((short1 >> 12) & 0x0F); //Least significant nibble
+            short vertexa = (short)((((BitConverter.ToInt32(vertexarray, 0) & 0xFF00) >> 4) | vertexarray[0]) | (BitConverter.ToInt32(vertexarray,0) & 0xFF0000) >> 8);
+            //short vertexa = (short)(BitConverter.ToInt32(vertexarray, 0));
+            //short vertexa = (short)((unknownint2) & 0xFF07); //what
+            short vertexb = (short)(short1 & 0x7FF);
+            vertexarray[1] = (byte)((short2 >> 4) & 0x07);
+            vertexarray[0] = (byte)(short2 >> 8);
+            short vertexc = BitConverter.ToInt16(vertexarray, 0);
+            return new ProtoSceneryPolygon(vertexa, unknownint1, unknownint2, short1, short2, vertexb,vertexc);
         }
 
-        private int vertexa;
-        private int vertexb;
-        private int vertexc;
-        private int unknown1;
-        private byte unknown2;
-        private byte unknown3;
+        private short vertexa;
+        private int unknownint1;
+        private int unknownint2;
+        private short short1;
+        private short short2;
+        private short vertexb;
+        private short vertexc;
 
-        public ProtoSceneryPolygon(int vertexa,int vertexb,int vertexc,int unknown1,byte unknown2,byte unknown3)
+        public ProtoSceneryPolygon(short vertexa, int unknownint1, int unknownint2, short short1, short short2, short vertexb, short vertexc)
         {
-            if (vertexa < 0 || vertexa > 0xFFF)
-                throw new ArgumentOutOfRangeException("vertexa");
-            if (vertexb < 0 || vertexb > 0xFFF)
-                throw new ArgumentOutOfRangeException("vertexb");
-            if (vertexc < 0 || vertexc > 0xFFF)
-                throw new ArgumentOutOfRangeException("vertexc");
-            if (unknown1 < 0 || unknown1 > 0xFFF)
-                throw new ArgumentOutOfRangeException("unknown1");
             this.vertexa = vertexa;
+            this.unknownint1 = unknownint1;
+            this.unknownint2 = unknownint2;
+            this.short1 = short1;
+            this.short2 = short2;
             this.vertexb = vertexb;
             this.vertexc = vertexc;
-            this.unknown1 = unknown1;
-            this.unknown2 = unknown2;
-            this.unknown3 = unknown3;
         }
 
-        public int VertexA
+        public short VertexA
         {
             get { return vertexa; }
+            set { vertexa = value; }
         }
 
-        public int VertexB
+        public int UnknownInt1
+        {
+            get { return unknownint1; }
+        }
+
+        public int UnknownInt2
+        {
+            get { return unknownint2; }
+        }
+
+        public short Short1
+        {
+            get { return short1; }
+        }
+
+        public short Short2
+        {
+            get { return short2; }
+        }
+
+        public short VertexB
         {
             get { return vertexb; }
+            set { vertexb = value; }
         }
 
-        public int VertexC
+        public short VertexC
         {
             get { return vertexc; }
-        }
-
-        public int Unknown1
-        {
-            get { return unknown1; }
-        }
-
-        public byte Unknown2
-        {
-            get { return unknown2; }
-        }
-
-        public byte Unknown3
-        {
-            get { return unknown3; }
+            set { vertexc = value; }
         }
 
         public byte[] Save()
         {
-            int worda = 0;
-            int wordb = 0;
-            worda |= vertexa << 20;
-            wordb |= vertexb << 8;
-            wordb |= vertexc << 20;
-            worda |= unknown1 << 8;
-            worda |= unknown2;
-            wordb |= unknown3;
-            byte[] data = new byte [8];
-            BitConv.ToInt32(data,0,worda);
-            BitConv.ToInt32(data,4,wordb);
+            byte[] data = new byte [12];
+            BitConv.ToInt32(data,0,unknownint1);
+            BitConv.ToInt32(data, 4, unknownint2);
+            BitConv.ToInt16(data, 8, short1);
+            BitConv.ToInt16(data, 10, short2);
             return data;
         }
     }

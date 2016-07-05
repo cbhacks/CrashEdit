@@ -8,11 +8,11 @@ namespace Crash
         {
             if (data == null)
                 throw new ArgumentNullException("data");
-            if (data.Length != 4)
-                throw new ArgumentException("Value must be 4 bytes long.","data");
-            short x = (short)(data[0]);
-            short y = (short)(BitConv.FromInt16(data,1));
-            short z = (short)(data[3]);
+            if (data.Length != 6)
+                throw new ArgumentException("Value must be 6 bytes long.","data");
+            short x = BitConv.FromInt16(data, 0);
+            short y = BitConv.FromInt16(data, 2);
+            short z = BitConv.FromInt16(data, 4);
             return new ProtoSceneryVertex(x,y,z);
         }
 
@@ -22,12 +22,6 @@ namespace Crash
 
         public ProtoSceneryVertex(short x,short y,short z)
         {
-            if ((x & 0x7) != 0)
-                throw new ArgumentException("Value must be a multiple of 8.","x");
-            if ((y & 0x7) != 0)
-                throw new ArgumentException("Value must be a multiple of 8.","y");
-            if ((z & 0x7) != 0)
-                throw new ArgumentException("Value must be a multiple of 8.","z");
             this.x = x;
             this.y = y;
             this.z = z;
@@ -46,7 +40,9 @@ namespace Crash
         public short Z
         {
             get { return z; }
-        }double IPosition.X
+        }
+
+        double IPosition.X
         {
             get { return x; }
         }
@@ -63,8 +59,10 @@ namespace Crash
 
         public byte[] Save()
         {
-            byte[] result = new byte [4];
-            BitConv.ToInt16(result,0 & 0xFFF0,x);
+            byte[] result = new byte [6];
+            BitConv.ToInt16(result, 0, x);
+            BitConv.ToInt16(result, 2, y);
+            BitConv.ToInt16(result, 4, z);
             return result;
         }
     }

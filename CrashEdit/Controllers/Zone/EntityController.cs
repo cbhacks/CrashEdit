@@ -29,7 +29,7 @@ namespace CrashEdit
             {
                 Node.Text = string.Format("Entity ID {0}",entity.ID);
             }
-            else
+            else if (Node.Text != "Entity")
             {
                 Node.Text = "Entity";
             }

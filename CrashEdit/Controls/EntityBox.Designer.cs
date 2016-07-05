@@ -71,6 +71,9 @@ namespace CrashEdit
             this.tbcTabs = new System.Windows.Forms.TabControl();
             this.tabGeneral = new System.Windows.Forms.TabPage();
             this.tabSpecial = new System.Windows.Forms.TabPage();
+            this.fraOtherSettings = new System.Windows.Forms.GroupBox();
+            this.chkOtherSettings = new System.Windows.Forms.CheckBox();
+            this.numOtherSettings = new System.Windows.Forms.NumericUpDown();
             this.fraScaling = new System.Windows.Forms.GroupBox();
             this.chkScaling = new System.Windows.Forms.CheckBox();
             this.numScaling = new System.Windows.Forms.NumericUpDown();
@@ -93,6 +96,10 @@ namespace CrashEdit
             this.cmdPreviousVictim = new System.Windows.Forms.Button();
             this.lblVictimIndex = new System.Windows.Forms.Label();
             this.tabCamera = new System.Windows.Forms.TabPage();
+            this.fraSLST = new System.Windows.Forms.GroupBox();
+            this.txtSLST = new System.Windows.Forms.TextBox();
+            this.chkSLST = new System.Windows.Forms.CheckBox();
+            this.tabLoadLists = new System.Windows.Forms.TabPage();
             this.fraLoadListA = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
@@ -109,9 +116,8 @@ namespace CrashEdit
             this.cmdNextEIDA = new System.Windows.Forms.Button();
             this.cmdPrevRowA = new System.Windows.Forms.Button();
             this.cmdNextRowA = new System.Windows.Forms.Button();
-            this.fraOtherSettings = new System.Windows.Forms.GroupBox();
-            this.chkOtherSettings = new System.Windows.Forms.CheckBox();
-            this.numOtherSettings = new System.Windows.Forms.NumericUpDown();
+            this.lblSLST1 = new System.Windows.Forms.Label();
+            this.lblSLST2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -130,6 +136,8 @@ namespace CrashEdit
             this.tbcTabs.SuspendLayout();
             this.tabGeneral.SuspendLayout();
             this.tabSpecial.SuspendLayout();
+            this.fraOtherSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numOtherSettings)).BeginInit();
             this.fraScaling.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numScaling)).BeginInit();
             this.fraDDASection.SuspendLayout();
@@ -142,11 +150,11 @@ namespace CrashEdit
             this.fraVictims.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numVictimID)).BeginInit();
             this.tabCamera.SuspendLayout();
+            this.fraSLST.SuspendLayout();
+            this.tabLoadLists.SuspendLayout();
             this.fraLoadListA.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.fraEIDA.SuspendLayout();
-            this.fraOtherSettings.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numOtherSettings)).BeginInit();
             this.SuspendLayout();
             // 
             // chkType
@@ -654,6 +662,7 @@ namespace CrashEdit
             // 
             this.tbcTabs.Controls.Add(this.tabGeneral);
             this.tbcTabs.Controls.Add(this.tabSpecial);
+            this.tbcTabs.Controls.Add(this.tabCamera);
             this.tbcTabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbcTabs.Location = new System.Drawing.Point(0, 0);
             this.tbcTabs.Name = "tbcTabs";
@@ -692,6 +701,46 @@ namespace CrashEdit
             this.tabSpecial.TabIndex = 1;
             this.tabSpecial.Text = "Special";
             this.tabSpecial.UseVisualStyleBackColor = true;
+            // 
+            // fraOtherSettings
+            // 
+            this.fraOtherSettings.Controls.Add(this.chkOtherSettings);
+            this.fraOtherSettings.Controls.Add(this.numOtherSettings);
+            this.fraOtherSettings.Location = new System.Drawing.Point(141, 194);
+            this.fraOtherSettings.Name = "fraOtherSettings";
+            this.fraOtherSettings.Size = new System.Drawing.Size(132, 72);
+            this.fraOtherSettings.TabIndex = 10;
+            this.fraOtherSettings.TabStop = false;
+            this.fraOtherSettings.Text = "Other Settings";
+            // 
+            // chkOtherSettings
+            // 
+            this.chkOtherSettings.AutoSize = true;
+            this.chkOtherSettings.Location = new System.Drawing.Point(6, 19);
+            this.chkOtherSettings.Name = "chkOtherSettings";
+            this.chkOtherSettings.Size = new System.Drawing.Size(65, 17);
+            this.chkOtherSettings.TabIndex = 0;
+            this.chkOtherSettings.Text = "Enabled";
+            this.chkOtherSettings.UseVisualStyleBackColor = true;
+            this.chkOtherSettings.CheckedChanged += new System.EventHandler(this.chkOtherSettings_CheckedChanged);
+            // 
+            // numOtherSettings
+            // 
+            this.numOtherSettings.Location = new System.Drawing.Point(6, 42);
+            this.numOtherSettings.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.numOtherSettings.Minimum = new decimal(new int[] {
+            -2147483648,
+            0,
+            0,
+            -2147483648});
+            this.numOtherSettings.Name = "numOtherSettings";
+            this.numOtherSettings.Size = new System.Drawing.Size(120, 20);
+            this.numOtherSettings.TabIndex = 1;
+            this.numOtherSettings.ValueChanged += new System.EventHandler(this.numOtherSettings_ValueChanged);
             // 
             // fraScaling
             // 
@@ -971,7 +1020,7 @@ namespace CrashEdit
             // 
             // tabCamera
             // 
-            this.tabCamera.Controls.Add(this.fraLoadListA);
+            this.tabCamera.Controls.Add(this.fraSLST);
             this.tabCamera.Location = new System.Drawing.Point(4, 22);
             this.tabCamera.Name = "tabCamera";
             this.tabCamera.Padding = new System.Windows.Forms.Padding(3);
@@ -979,6 +1028,50 @@ namespace CrashEdit
             this.tabCamera.TabIndex = 2;
             this.tabCamera.Text = "Camera";
             this.tabCamera.UseVisualStyleBackColor = true;
+            // 
+            // fraSLST
+            // 
+            this.fraSLST.Controls.Add(this.lblSLST2);
+            this.fraSLST.Controls.Add(this.lblSLST1);
+            this.fraSLST.Controls.Add(this.txtSLST);
+            this.fraSLST.Controls.Add(this.chkSLST);
+            this.fraSLST.Location = new System.Drawing.Point(3, 3);
+            this.fraSLST.Name = "fraSLST";
+            this.fraSLST.Size = new System.Drawing.Size(298, 72);
+            this.fraSLST.TabIndex = 1;
+            this.fraSLST.TabStop = false;
+            this.fraSLST.Text = "SLST EID";
+            // 
+            // txtSLST
+            // 
+            this.txtSLST.Location = new System.Drawing.Point(6, 42);
+            this.txtSLST.MaxLength = 5;
+            this.txtSLST.Name = "txtSLST";
+            this.txtSLST.Size = new System.Drawing.Size(62, 20);
+            this.txtSLST.TabIndex = 1;
+            this.txtSLST.TextChanged += new System.EventHandler(this.txtSLST_TextChanged);
+            // 
+            // chkSLST
+            // 
+            this.chkSLST.AutoSize = true;
+            this.chkSLST.Location = new System.Drawing.Point(6, 19);
+            this.chkSLST.Name = "chkSLST";
+            this.chkSLST.Size = new System.Drawing.Size(65, 17);
+            this.chkSLST.TabIndex = 0;
+            this.chkSLST.Text = "Enabled";
+            this.chkSLST.UseVisualStyleBackColor = true;
+            this.chkSLST.CheckedChanged += new System.EventHandler(this.chkSLST_CheckedChanged);
+            // 
+            // tabLoadLists
+            // 
+            this.tabLoadLists.Controls.Add(this.fraLoadListA);
+            this.tabLoadLists.Location = new System.Drawing.Point(4, 22);
+            this.tabLoadLists.Name = "tabLoadLists";
+            this.tabLoadLists.Padding = new System.Windows.Forms.Padding(3);
+            this.tabLoadLists.Size = new System.Drawing.Size(390, 428);
+            this.tabLoadLists.TabIndex = 2;
+            this.tabLoadLists.Text = "LoadLists";
+            this.tabLoadLists.UseVisualStyleBackColor = true;
             // 
             // fraLoadListA
             // 
@@ -1148,45 +1241,25 @@ namespace CrashEdit
             this.cmdNextRowA.Text = "Next";
             this.cmdNextRowA.UseVisualStyleBackColor = true;
             // 
-            // fraOtherSettings
+            // lblSLST1
             // 
-            this.fraOtherSettings.Controls.Add(this.chkOtherSettings);
-            this.fraOtherSettings.Controls.Add(this.numOtherSettings);
-            this.fraOtherSettings.Location = new System.Drawing.Point(141, 194);
-            this.fraOtherSettings.Name = "fraOtherSettings";
-            this.fraOtherSettings.Size = new System.Drawing.Size(132, 72);
-            this.fraOtherSettings.TabIndex = 10;
-            this.fraOtherSettings.TabStop = false;
-            this.fraOtherSettings.Text = "Other Settings";
+            this.lblSLST1.AutoSize = true;
+            this.lblSLST1.Location = new System.Drawing.Point(79, 20);
+            this.lblSLST1.Name = "lblSLST1";
+            this.lblSLST1.Size = new System.Drawing.Size(206, 13);
+            this.lblSLST1.TabIndex = 2;
+            this.lblSLST1.Text = "WARNING: String is not 5 characters long";
+            this.lblSLST1.Visible = false;
             // 
-            // chkOtherSettings
+            // lblSLST2
             // 
-            this.chkOtherSettings.AutoSize = true;
-            this.chkOtherSettings.Location = new System.Drawing.Point(6, 19);
-            this.chkOtherSettings.Name = "chkOtherSettings";
-            this.chkOtherSettings.Size = new System.Drawing.Size(65, 17);
-            this.chkOtherSettings.TabIndex = 0;
-            this.chkOtherSettings.Text = "Enabled";
-            this.chkOtherSettings.UseVisualStyleBackColor = true;
-            this.chkOtherSettings.CheckedChanged += new System.EventHandler(this.chkOtherSettings_CheckedChanged);
-            // 
-            // numOtherSettings
-            // 
-            this.numOtherSettings.Location = new System.Drawing.Point(6, 42);
-            this.numOtherSettings.Maximum = new decimal(new int[] {
-            2147483647,
-            0,
-            0,
-            0});
-            this.numOtherSettings.Minimum = new decimal(new int[] {
-            -2147483648,
-            0,
-            0,
-            -2147483648});
-            this.numOtherSettings.Name = "numOtherSettings";
-            this.numOtherSettings.Size = new System.Drawing.Size(120, 20);
-            this.numOtherSettings.TabIndex = 1;
-            this.numOtherSettings.ValueChanged += new System.EventHandler(this.numOtherSettings_ValueChanged);
+            this.lblSLST2.AutoSize = true;
+            this.lblSLST2.Location = new System.Drawing.Point(79, 45);
+            this.lblSLST2.Name = "lblSLST2";
+            this.lblSLST2.Size = new System.Drawing.Size(199, 13);
+            this.lblSLST2.TabIndex = 3;
+            this.lblSLST2.Text = "WARNING: String has invalid characters";
+            this.lblSLST2.Visible = false;
             // 
             // EntityBox
             // 
@@ -1219,6 +1292,9 @@ namespace CrashEdit
             this.tbcTabs.ResumeLayout(false);
             this.tabGeneral.ResumeLayout(false);
             this.tabSpecial.ResumeLayout(false);
+            this.fraOtherSettings.ResumeLayout(false);
+            this.fraOtherSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numOtherSettings)).EndInit();
             this.fraScaling.ResumeLayout(false);
             this.fraScaling.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numScaling)).EndInit();
@@ -1235,14 +1311,14 @@ namespace CrashEdit
             this.fraVictims.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numVictimID)).EndInit();
             this.tabCamera.ResumeLayout(false);
+            this.fraSLST.ResumeLayout(false);
+            this.fraSLST.PerformLayout();
+            this.tabLoadLists.ResumeLayout(false);
             this.fraLoadListA.ResumeLayout(false);
             this.fraLoadListA.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.fraEIDA.ResumeLayout(false);
             this.fraEIDA.PerformLayout();
-            this.fraOtherSettings.ResumeLayout(false);
-            this.fraOtherSettings.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numOtherSettings)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1308,7 +1384,7 @@ namespace CrashEdit
         private System.Windows.Forms.GroupBox fraDDASection;
         private System.Windows.Forms.CheckBox chkDDASection;
         private System.Windows.Forms.NumericUpDown numDDASection;
-        private System.Windows.Forms.TabPage tabCamera;
+        private System.Windows.Forms.TabPage tabLoadLists;
         private System.Windows.Forms.GroupBox fraLoadListA;
         private System.Windows.Forms.Button cmdRemoveEIDA;
         private System.Windows.Forms.Button cmdInsertEIDA;
@@ -1333,5 +1409,11 @@ namespace CrashEdit
         private System.Windows.Forms.GroupBox fraOtherSettings;
         private System.Windows.Forms.CheckBox chkOtherSettings;
         private System.Windows.Forms.NumericUpDown numOtherSettings;
+        private System.Windows.Forms.GroupBox fraSLST;
+        private System.Windows.Forms.TextBox txtSLST;
+        private System.Windows.Forms.CheckBox chkSLST;
+        private System.Windows.Forms.TabPage tabCamera;
+        private System.Windows.Forms.Label lblSLST2;
+        private System.Windows.Forms.Label lblSLST1;
     }
 }

@@ -71,10 +71,10 @@ namespace Crash
             {
                 polygons[i].Save().CopyTo(items[1],i * 12);
             }
-            items[2] = new byte [vertices.Count * 8];
+            items[2] = new byte [vertices.Count * 6 + vertices.Count * 6 % 4];
             for (int i = 0;i < vertices.Count;i++)
             {
-                vertices[i].Save().CopyTo(items[2],i * 8);
+                vertices[i].Save().CopyTo(items[2],i * 6);
             }
             if (extradata != null)
             {
@@ -92,13 +92,13 @@ namespace Crash
                     obj.WriteLine("# Vertices");
                     foreach (ProtoSceneryVertex vertex in vertices)
                     {
-                        obj.WriteLine("v {0} {1} {2}",vertex.X,vertex.Y,vertex.Z);
+                        obj.WriteLine("v {0} {1} {2}",vertex.X + XOffset,vertex.Y + YOffset, vertex.Z + ZOffset);
                     }
                     obj.WriteLine();
                     obj.WriteLine("# Polygons");
                     foreach (ProtoSceneryPolygon polygon in polygons)
                     {
-                        obj.WriteLine("f {0} {1} {2}",polygon.VertexA + 1,polygon.VertexB + 1,polygon.VertexC + 1);
+                        obj.WriteLine("f {0} {1} {2}", polygon.VertexA + 1, polygon.VertexB + 1, polygon.VertexC + 1);
                     }
                 }
                 return stream.ToArray();
