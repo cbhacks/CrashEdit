@@ -243,7 +243,7 @@ namespace CrashEdit
 
         public void PatchNSD(string filename,NSF nsf)
         {
-            if (dlgGameVersion.SelectedVersion == GameVersion.Crash2)
+            if (dlgGameVersion.SelectedVersion == GameVersion.Crash1 || dlgGameVersion.SelectedVersion == GameVersion.Crash2 || dlgGameVersion.SelectedVersion == GameVersion.Crash3)
             {
                 try
                 {
@@ -283,46 +283,8 @@ namespace CrashEdit
                 {
                 }
             }
-            if (dlgGameVersion.SelectedVersion == GameVersion.Crash1)
-            {
-                try
-                {
-                    byte[] data = File.ReadAllBytes(filename);
-                    OldNSD nsd = OldNSD.Load(data);
-                    nsd.ChunkCount = nsf.Chunks.Count;
-                    Dictionary<int, int> newindex = new Dictionary<int, int>();
-                    for (int i = 0; i < nsf.Chunks.Count; i++)
-                    {
-                        if (nsf.Chunks[i] is IEntry)
-                        {
-                            IEntry entry = (IEntry)nsf.Chunks[i];
-                            newindex.Add(entry.EID, i * 2 + 1);
-                        }
-                        if (nsf.Chunks[i] is EntryChunk)
-                        {
-                            foreach (Entry entry in ((EntryChunk)nsf.Chunks[i]).Entries)
-                            {
-                                newindex.Add(entry.EID, i * 2 + 1);
-                            }
-                        }
-                    }
-                    foreach (NSDLink link in nsd.Index)
-                    {
-                        if (newindex.ContainsKey(link.EntryID))
-                        {
-                            link.ChunkID = newindex[link.EntryID];
-                            newindex.Remove(link.EntryID);
-                        }
-                    }
-                    if (MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    {
-                        File.WriteAllBytes(filename, nsd.Save());
-                    }
-                }
-                catch (LoadAbortedException)
-                {
-                }
-            }
+            else
+                throw new NotImplementedException("beta crash 1 nsd patch");
         }
 
         public void CloseNSF()
