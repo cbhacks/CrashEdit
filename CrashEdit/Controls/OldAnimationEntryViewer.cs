@@ -21,6 +21,7 @@ namespace CrashEdit
         private int xcol2;
         private int ycol2;
         private int zcol2;
+        private bool pal;
 
         public OldAnimationEntryViewer(OldFrame frame,OldModelEntry model)
         {
@@ -41,14 +42,20 @@ namespace CrashEdit
 
         public OldAnimationEntryViewer(IEnumerable<OldFrame> frames,OldModelEntry model)
         {
+            pal = false;
             this.frames = new List<OldFrame>(frames);
             this.model = model;
             frameid = 0;
             animatetimer = new Timer();
-            animatetimer.Interval = 1000/25;
+            animatetimer.Interval = 1000/30;
+            if (pal)
+                animatetimer.Interval = 1000/25;
             animatetimer.Enabled = true;
             animatetimer.Tick += delegate (object sender,EventArgs e)
             {
+                animatetimer.Interval = 1000 / 30;
+                if (pal)
+                    animatetimer.Interval = 1000 / 25;
                 frameid++;
                 if (frameid == this.frames.Count)
                 {
@@ -80,6 +87,28 @@ namespace CrashEdit
                         yield return new Position(x, y, z);
                     }
                 }
+            }
+        }
+
+        protected override bool IsInputKey(Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.F:
+                    return true;
+                default:
+                    return base.IsInputKey(keyData);
+            }
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            switch (e.KeyCode)
+            {
+                case Keys.F:
+                    pal = !pal;
+                    break;
             }
         }
 
