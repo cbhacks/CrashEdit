@@ -18,14 +18,14 @@ namespace CrashEdit
             stippleb = new byte[128];
             for (int i = 0; i < 128; i += 8)
             {
-                stipplea[i + 0] = 0xFF;
-                stipplea[i + 1] = 0xFF;
-                stipplea[i + 2] = 0xFF;
-                stipplea[i + 3] = 0xFF;
-                stipplea[i + 4] = 0xFF;
-                stipplea[i + 5] = 0xFF;
-                stipplea[i + 6] = 0xFF;
-                stipplea[i + 7] = 0xFF;
+                stipplea[i + 0] = 0x55;
+                stipplea[i + 1] = 0x55;
+                stipplea[i + 2] = 0x55;
+                stipplea[i + 3] = 0x55;
+                stipplea[i + 4] = 0xAA;
+                stipplea[i + 5] = 0xAA;
+                stipplea[i + 6] = 0xAA;
+                stipplea[i + 7] = 0xAA;
                 stippleb[i + 0] = 0xAA;
                 stippleb[i + 1] = 0xAA;
                 stippleb[i + 2] = 0xAA;
@@ -67,7 +67,7 @@ namespace CrashEdit
 
         protected override int CameraRangeMargin
         {
-            get { return 1600; }
+            get { return 3200; }
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -272,6 +272,7 @@ namespace CrashEdit
             GL.Translate(xoffset,yoffset,zoffset);
             if (allentries)
             {
+                GL.PolygonStipple(stippleb);
                 if (deletelists)
                 {
                     GL.DeleteLists(octreedisplaylist,1);

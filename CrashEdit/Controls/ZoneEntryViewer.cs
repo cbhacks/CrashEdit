@@ -266,6 +266,7 @@ namespace CrashEdit
             GL.Translate(xoffset,yoffset,zoffset);
             if (allentries)
             {
+                GL.PolygonStipple(stippleb);
                 if (deletelists)
                 {
                     GL.DeleteLists(octreedisplaylist, 1);
