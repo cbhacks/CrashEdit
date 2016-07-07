@@ -84,12 +84,15 @@ namespace CrashEdit
                 yield return new Position(x2 + xoffset, y2 + yoffset, z2 + zoffset);
                 foreach (Entity entity in entry.Entities)
                 {
-                    foreach (EntityPosition position in entity.Positions)
+                    if (entry.Entities.IndexOf(entity) % 3 == 0 || entity.ID != null)
                     {
-                        int x = position.X + xoffset;
-                        int y = position.Y + yoffset;
-                        int z = position.Z + zoffset;
-                        yield return new Position(x, y, z);
+                        foreach (EntityPosition position in entity.Positions)
+                        {
+                            int x = position.X + xoffset;
+                            int y = position.Y + yoffset;
+                            int z = position.Z + zoffset;
+                            yield return new Position(x, y, z);
+                        }
                     }
                 }
             }

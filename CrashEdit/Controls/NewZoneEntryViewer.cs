@@ -77,17 +77,25 @@ namespace CrashEdit
                 int xoffset = BitConv.FromInt32(entry.Unknown2,0);
                 int yoffset = BitConv.FromInt32(entry.Unknown2,4);
                 int zoffset = BitConv.FromInt32(entry.Unknown2,8);
+                yield return new Position(xoffset,yoffset,zoffset);
+                int x2 = BitConv.FromInt32(entry.Unknown2,12);
+                int y2 = BitConv.FromInt32(entry.Unknown2,16);
+                int z2 = BitConv.FromInt32(entry.Unknown2,20);
+                yield return new Position(x2 + xoffset,y2 + yoffset,z2 + zoffset);
                 foreach (Entity entity in entry.Entities)
                 {
-                    float scale = 1;
-                    if (entity.Scaling.HasValue)
-                        scale = (1 << entity.Scaling.Value) / 4.0f;
-                    foreach (EntityPosition position in entity.Positions)
+                    if (entry.Entities.IndexOf(entity) % 3 == 0 || entity.ID != null)
                     {
-                        float x = position.X * scale + xoffset;
-                        float y = position.Y * scale + yoffset;
-                        float z = position.Z * scale + zoffset;
-                        yield return new Position(x,y,z);
+                        float scale = 1;
+                        if (entity.Scaling.HasValue)
+                            scale = (1 << entity.Scaling.Value) / 4;
+                        foreach (EntityPosition position in entity.Positions)
+                        {
+                            float x = position.X * scale + xoffset;
+                            float y = position.Y * scale + yoffset;
+                            float z = position.Z * scale + zoffset;
+                            yield return new Position(x,y,z);
+                        }
                     }
                 }
             }
@@ -240,7 +248,14 @@ namespace CrashEdit
             GL.End();
             foreach (Entity entity in entry.Entities)
             {
-                RenderEntity(entity);
+                if (entity.ID != null)
+                {
+                    RenderEntity(entity,false);
+                }
+                else if (entry.Entities.IndexOf(entity) % 3 == 0)
+                {
+                    RenderEntity(entity,true);
+                }
             }
             GL.PopMatrix();
         }
@@ -289,7 +304,14 @@ namespace CrashEdit
             GL.Scale(4,4,4);
             foreach (Entity entity in entry.Entities)
             {
-                RenderEntity(entity);
+                if (entity.ID != null)
+                {
+                    RenderEntity(entity,false);
+                }
+                else if (entry.Entities.IndexOf(entity) % 3 == 0)
+                {
+                    RenderEntity(entity,true);
+                }
             }
             GL.PopMatrix();
         }
@@ -424,16 +446,24 @@ namespace CrashEdit
             }
         }
 
-        private void RenderEntity(Entity entity)
+        private void RenderEntity(Entity entity,bool camera)
         {
             float scale = 1;
             if (entity.Scaling.HasValue)
                 scale = (1 << entity.Scaling.Value) / 4.0f;
+            if (camera)
+                GL.PolygonStipple(stippleb);
+            else
+                GL.PolygonStipple(stipplea);
             if (entity.Positions.Count == 1)
             {
                 EntityPosition position = entity.Positions[0];
                 GL.PushMatrix();
+                if (camera)
+                    GL.Scale(0.25,0.25,0.25);
                 GL.Translate(position.X * scale,position.Y * scale,position.Z * scale);
+                if (camera)
+                    GL.Scale(4,4,4);
                 switch (entity.Type)
                 {
                     case 0x3:
@@ -449,7 +479,10 @@ namespace CrashEdit
                         }
                         break;
                     default:
-                        GL.Color3(Color.White);
+                        if (camera)
+                            GL.Color3(Color.Yellow);
+                        else
+                            GL.Color3(Color.White);
                         LoadTexture(OldResources.PointTexture);
                         RenderSprite();
                         break;
@@ -458,20 +491,30 @@ namespace CrashEdit
             }
             else
             {
-                GL.Color3(Color.Blue);
+                if (camera)
+                    GL.Color3(Color.Green);
+                else
+                    GL.Color3(Color.Blue);
                 GL.PushMatrix();
+                if (camera)
+                    GL.Scale(0.25,0.25,0.25);
                 GL.Begin(PrimitiveType.LineStrip);
                 foreach (EntityPosition position in entity.Positions)
                 {
                     GL.Vertex3(position.X * scale,position.Y * scale,position.Z * scale);
                 }
                 GL.End();
-                GL.Color3(Color.Red);
+                if (camera)
+                    GL.Color3(Color.Yellow);
+                else
+                    GL.Color3(Color.Red);
                 LoadTexture(OldResources.PointTexture);
                 foreach (EntityPosition position in entity.Positions)
                 {
                     GL.PushMatrix();
                     GL.Translate(position.X * scale,position.Y * scale,position.Z * scale);
+                    if (camera)
+                        GL.Scale(4,4,4);
                     RenderSprite();
                     GL.PopMatrix();
                 }
