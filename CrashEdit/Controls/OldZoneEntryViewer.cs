@@ -100,7 +100,7 @@ namespace CrashEdit
                 int x2 = BitConv.FromInt32(entry.Unknown2,12);
                 int y2 = BitConv.FromInt32(entry.Unknown2,16);
                 int z2 = BitConv.FromInt32(entry.Unknown2,20);
-                yield return new Position(x2 / 4, y2 / 4, z2 / 4);
+                yield return new Position(x2 + xoffset, y2 + yoffset, z2 + zoffset);
             }
         }
 

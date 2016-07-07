@@ -74,7 +74,10 @@ namespace CrashEdit
                 {
                     foreach (OldFrameVertex vertex in frame.Vertices)
                     {
-                        yield return vertex;
+                        int x = vertex.X + frame.XOffset;
+                        int y = vertex.Y + frame.YOffset;
+                        int z = vertex.Z + frame.ZOffset;
+                        yield return new Position(x, y, z);
                     }
                 }
             }
