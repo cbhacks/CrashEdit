@@ -231,8 +231,8 @@
   <data name="T21EntryController_Text" xml:space="preserve">
     <value>T21 ({0})</value>
   </data>
-  <data name="T4EntryController_Text" xml:space="preserve">
-    <value>T4 ({0})</value>
+  <data name="SLSTEntryController_Text" xml:space="preserve">
+    <value>SLST ({0})</value>
   </data>
   <data name="T6EntryController_Text" xml:space="preserve">
     <value>T6 ({0})</value>
