@@ -102,6 +102,22 @@ namespace CrashEdit
             this.txtSLST = new System.Windows.Forms.TextBox();
             this.chkSLST = new System.Windows.Forms.CheckBox();
             this.tabLoadLists = new System.Windows.Forms.TabPage();
+            this.fraLoadListB = new System.Windows.Forms.GroupBox();
+            this.lblMetavalueLoadB = new System.Windows.Forms.Label();
+            this.cmdRemoveRowB = new System.Windows.Forms.Button();
+            this.cmdInsertRowB = new System.Windows.Forms.Button();
+            this.numMetavalueLoadB = new System.Windows.Forms.NumericUpDown();
+            this.lblLoadListRowIndexB = new System.Windows.Forms.Label();
+            this.fraEIDB = new System.Windows.Forms.GroupBox();
+            this.txtEIDB = new System.Windows.Forms.TextBox();
+            this.lblEIDIndexB = new System.Windows.Forms.Label();
+            this.cmdAppendEIDB = new System.Windows.Forms.Button();
+            this.cmdRemoveEIDB = new System.Windows.Forms.Button();
+            this.cmdPrevEIDB = new System.Windows.Forms.Button();
+            this.cmdInsertEIDB = new System.Windows.Forms.Button();
+            this.cmdNextEIDB = new System.Windows.Forms.Button();
+            this.cmdPrevRowB = new System.Windows.Forms.Button();
+            this.cmdNextRowB = new System.Windows.Forms.Button();
             this.lblEID2 = new System.Windows.Forms.Label();
             this.lblEID1 = new System.Windows.Forms.Label();
             this.fraLoadListA = new System.Windows.Forms.GroupBox();
@@ -120,22 +136,41 @@ namespace CrashEdit
             this.cmdNextEIDA = new System.Windows.Forms.Button();
             this.cmdPrevRowA = new System.Windows.Forms.Button();
             this.cmdNextRowA = new System.Windows.Forms.Button();
-            this.fraLoadListB = new System.Windows.Forms.GroupBox();
-            this.lblMetavalueLoadB = new System.Windows.Forms.Label();
-            this.cmdRemoveRowB = new System.Windows.Forms.Button();
-            this.cmdInsertRowB = new System.Windows.Forms.Button();
-            this.numMetavalueLoadB = new System.Windows.Forms.NumericUpDown();
-            this.lblLoadListRowIndexB = new System.Windows.Forms.Label();
-            this.fraEIDB = new System.Windows.Forms.GroupBox();
-            this.txtEIDB = new System.Windows.Forms.TextBox();
-            this.lblEIDIndexB = new System.Windows.Forms.Label();
-            this.cmdAppendEIDB = new System.Windows.Forms.Button();
-            this.cmdRemoveEIDB = new System.Windows.Forms.Button();
-            this.cmdPrevEIDB = new System.Windows.Forms.Button();
-            this.cmdInsertEIDB = new System.Windows.Forms.Button();
-            this.cmdNextEIDB = new System.Windows.Forms.Button();
-            this.cmdPrevRowB = new System.Windows.Forms.Button();
-            this.cmdNextRowB = new System.Windows.Forms.Button();
+            this.tabDrawLists = new System.Windows.Forms.TabPage();
+            this.fraDrawListB = new System.Windows.Forms.GroupBox();
+            this.lblMetavalueDrawB = new System.Windows.Forms.Label();
+            this.cmdRemoveRowDrawB = new System.Windows.Forms.Button();
+            this.cmdInsertRowDrawB = new System.Windows.Forms.Button();
+            this.numMetavalueDrawB = new System.Windows.Forms.NumericUpDown();
+            this.lblDrawListRowIndexB = new System.Windows.Forms.Label();
+            this.fraEntityB = new System.Windows.Forms.GroupBox();
+            this.lblEntityB = new System.Windows.Forms.Label();
+            this.numEntityB = new System.Windows.Forms.NumericUpDown();
+            this.lblEntityIndexB = new System.Windows.Forms.Label();
+            this.cmdAppendEntityB = new System.Windows.Forms.Button();
+            this.cmdRemoveEntityB = new System.Windows.Forms.Button();
+            this.cmdPrevEntityB = new System.Windows.Forms.Button();
+            this.cmdInsertEntityB = new System.Windows.Forms.Button();
+            this.cmdNextEntityB = new System.Windows.Forms.Button();
+            this.cmdPrevRowDrawB = new System.Windows.Forms.Button();
+            this.cmdNextRowDrawB = new System.Windows.Forms.Button();
+            this.fraDrawListA = new System.Windows.Forms.GroupBox();
+            this.lblMetavalueDrawA = new System.Windows.Forms.Label();
+            this.cmdRemoveRowDrawA = new System.Windows.Forms.Button();
+            this.cmdInsertRowDrawA = new System.Windows.Forms.Button();
+            this.numMetavalueDrawA = new System.Windows.Forms.NumericUpDown();
+            this.lblDrawListRowIndexA = new System.Windows.Forms.Label();
+            this.fraEntityA = new System.Windows.Forms.GroupBox();
+            this.lblEntityA = new System.Windows.Forms.Label();
+            this.numEntityA = new System.Windows.Forms.NumericUpDown();
+            this.lblEntityIndexA = new System.Windows.Forms.Label();
+            this.cmdAppendEntityA = new System.Windows.Forms.Button();
+            this.cmdRemoveEntityA = new System.Windows.Forms.Button();
+            this.cmdPrevEntityA = new System.Windows.Forms.Button();
+            this.cmdInsertEntityA = new System.Windows.Forms.Button();
+            this.cmdNextEntityA = new System.Windows.Forms.Button();
+            this.cmdPrevRowDrawA = new System.Windows.Forms.Button();
+            this.cmdNextRowDrawA = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -170,12 +205,21 @@ namespace CrashEdit
             this.tabCamera.SuspendLayout();
             this.fraSLST.SuspendLayout();
             this.tabLoadLists.SuspendLayout();
-            this.fraLoadListA.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numMetavalueLoadA)).BeginInit();
-            this.fraEIDA.SuspendLayout();
             this.fraLoadListB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numMetavalueLoadB)).BeginInit();
             this.fraEIDB.SuspendLayout();
+            this.fraLoadListA.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMetavalueLoadA)).BeginInit();
+            this.fraEIDA.SuspendLayout();
+            this.tabDrawLists.SuspendLayout();
+            this.fraDrawListB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMetavalueDrawB)).BeginInit();
+            this.fraEntityB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numEntityB)).BeginInit();
+            this.fraDrawListA.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMetavalueDrawA)).BeginInit();
+            this.fraEntityA.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numEntityA)).BeginInit();
             this.SuspendLayout();
             // 
             // chkType
@@ -685,6 +729,7 @@ namespace CrashEdit
             this.tbcTabs.Controls.Add(this.tabSpecial);
             this.tbcTabs.Controls.Add(this.tabCamera);
             this.tbcTabs.Controls.Add(this.tabLoadLists);
+            this.tbcTabs.Controls.Add(this.tabDrawLists);
             this.tbcTabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbcTabs.Location = new System.Drawing.Point(0, 0);
             this.tbcTabs.Name = "tbcTabs";
@@ -1122,206 +1167,6 @@ namespace CrashEdit
             this.tabLoadLists.UseVisualStyleBackColor = true;
             this.tabLoadLists.Enter += new System.EventHandler(this.tabLoadLists_Enter);
             // 
-            // lblEID2
-            // 
-            this.lblEID2.AutoSize = true;
-            this.lblEID2.Location = new System.Drawing.Point(16, 335);
-            this.lblEID2.Name = "lblEID2";
-            this.lblEID2.Size = new System.Drawing.Size(199, 13);
-            this.lblEID2.TabIndex = 5;
-            this.lblEID2.Text = "WARNING: String has invalid characters";
-            this.lblEID2.Visible = false;
-            // 
-            // lblEID1
-            // 
-            this.lblEID1.AutoSize = true;
-            this.lblEID1.Location = new System.Drawing.Point(16, 310);
-            this.lblEID1.Name = "lblEID1";
-            this.lblEID1.Size = new System.Drawing.Size(206, 13);
-            this.lblEID1.TabIndex = 4;
-            this.lblEID1.Text = "WARNING: String is not 5 characters long";
-            this.lblEID1.Visible = false;
-            // 
-            // fraLoadListA
-            // 
-            this.fraLoadListA.Controls.Add(this.lblMetavalueLoadA);
-            this.fraLoadListA.Controls.Add(this.cmdRemoveRowA);
-            this.fraLoadListA.Controls.Add(this.cmdInsertRowA);
-            this.fraLoadListA.Controls.Add(this.numMetavalueLoadA);
-            this.fraLoadListA.Controls.Add(this.lblLoadListRowIndexA);
-            this.fraLoadListA.Controls.Add(this.fraEIDA);
-            this.fraLoadListA.Controls.Add(this.cmdPrevRowA);
-            this.fraLoadListA.Controls.Add(this.cmdNextRowA);
-            this.fraLoadListA.Location = new System.Drawing.Point(6, 6);
-            this.fraLoadListA.Name = "fraLoadListA";
-            this.fraLoadListA.Size = new System.Drawing.Size(143, 291);
-            this.fraLoadListA.TabIndex = 0;
-            this.fraLoadListA.TabStop = false;
-            this.fraLoadListA.Text = "Load List A";
-            // 
-            // lblMetavalueLoadA
-            // 
-            this.lblMetavalueLoadA.AutoSize = true;
-            this.lblMetavalueLoadA.Location = new System.Drawing.Point(6, 75);
-            this.lblMetavalueLoadA.Name = "lblMetavalueLoadA";
-            this.lblMetavalueLoadA.Size = new System.Drawing.Size(57, 13);
-            this.lblMetavalueLoadA.TabIndex = 20;
-            this.lblMetavalueLoadA.Text = "Metavalue";
-            // 
-            // cmdRemoveRowA
-            // 
-            this.cmdRemoveRowA.Location = new System.Drawing.Point(6, 99);
-            this.cmdRemoveRowA.Name = "cmdRemoveRowA";
-            this.cmdRemoveRowA.Size = new System.Drawing.Size(64, 23);
-            this.cmdRemoveRowA.TabIndex = 16;
-            this.cmdRemoveRowA.Text = "Remove";
-            this.cmdRemoveRowA.UseVisualStyleBackColor = true;
-            this.cmdRemoveRowA.Click += new System.EventHandler(this.cmdRemoveRowA_Click);
-            // 
-            // cmdInsertRowA
-            // 
-            this.cmdInsertRowA.Location = new System.Drawing.Point(74, 99);
-            this.cmdInsertRowA.Name = "cmdInsertRowA";
-            this.cmdInsertRowA.Size = new System.Drawing.Size(63, 23);
-            this.cmdInsertRowA.TabIndex = 17;
-            this.cmdInsertRowA.Text = "Insert";
-            this.cmdInsertRowA.UseVisualStyleBackColor = true;
-            this.cmdInsertRowA.Click += new System.EventHandler(this.cmdInsertRowA_Click);
-            // 
-            // numMetavalueLoadA
-            // 
-            this.numMetavalueLoadA.Location = new System.Drawing.Point(69, 73);
-            this.numMetavalueLoadA.Maximum = new decimal(new int[] {
-            32767,
-            0,
-            0,
-            0});
-            this.numMetavalueLoadA.Minimum = new decimal(new int[] {
-            32768,
-            0,
-            0,
-            -2147483648});
-            this.numMetavalueLoadA.Name = "numMetavalueLoadA";
-            this.numMetavalueLoadA.Size = new System.Drawing.Size(68, 20);
-            this.numMetavalueLoadA.TabIndex = 19;
-            this.numMetavalueLoadA.ValueChanged += new System.EventHandler(this.numMetavalueLoadA_ValueChanged);
-            // 
-            // lblLoadListRowIndexA
-            // 
-            this.lblLoadListRowIndexA.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLoadListRowIndexA.Location = new System.Drawing.Point(44, 45);
-            this.lblLoadListRowIndexA.Name = "lblLoadListRowIndexA";
-            this.lblLoadListRowIndexA.Size = new System.Drawing.Size(60, 23);
-            this.lblLoadListRowIndexA.TabIndex = 17;
-            this.lblLoadListRowIndexA.Text = "?? / ??";
-            this.lblLoadListRowIndexA.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // fraEIDA
-            // 
-            this.fraEIDA.Controls.Add(this.txtEIDA);
-            this.fraEIDA.Controls.Add(this.lblEIDIndexA);
-            this.fraEIDA.Controls.Add(this.cmdAppendEIDA);
-            this.fraEIDA.Controls.Add(this.cmdRemoveEIDA);
-            this.fraEIDA.Controls.Add(this.cmdPrevEIDA);
-            this.fraEIDA.Controls.Add(this.cmdInsertEIDA);
-            this.fraEIDA.Controls.Add(this.cmdNextEIDA);
-            this.fraEIDA.Location = new System.Drawing.Point(6, 132);
-            this.fraEIDA.Name = "fraEIDA";
-            this.fraEIDA.Size = new System.Drawing.Size(131, 153);
-            this.fraEIDA.TabIndex = 15;
-            this.fraEIDA.TabStop = false;
-            this.fraEIDA.Text = "Entries";
-            // 
-            // txtEIDA
-            // 
-            this.txtEIDA.Location = new System.Drawing.Point(7, 70);
-            this.txtEIDA.MaxLength = 5;
-            this.txtEIDA.Name = "txtEIDA";
-            this.txtEIDA.Size = new System.Drawing.Size(118, 20);
-            this.txtEIDA.TabIndex = 15;
-            this.txtEIDA.TextChanged += new System.EventHandler(this.txtEIDA_TextChanged);
-            this.txtEIDA.LostFocus += new System.EventHandler(this.txtEIDA_LostFocus);
-            // 
-            // lblEIDIndexA
-            // 
-            this.lblEIDIndexA.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEIDIndexA.Location = new System.Drawing.Point(38, 45);
-            this.lblEIDIndexA.Name = "lblEIDIndexA";
-            this.lblEIDIndexA.Size = new System.Drawing.Size(60, 23);
-            this.lblEIDIndexA.TabIndex = 14;
-            this.lblEIDIndexA.Text = "?? / ??";
-            this.lblEIDIndexA.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // cmdAppendEIDA
-            // 
-            this.cmdAppendEIDA.Location = new System.Drawing.Point(6, 125);
-            this.cmdAppendEIDA.Name = "cmdAppendEIDA";
-            this.cmdAppendEIDA.Size = new System.Drawing.Size(120, 23);
-            this.cmdAppendEIDA.TabIndex = 12;
-            this.cmdAppendEIDA.Text = "Append";
-            this.cmdAppendEIDA.UseVisualStyleBackColor = true;
-            this.cmdAppendEIDA.Click += new System.EventHandler(this.cmdAppendEIDA_Click);
-            // 
-            // cmdRemoveEIDA
-            // 
-            this.cmdRemoveEIDA.Location = new System.Drawing.Point(6, 96);
-            this.cmdRemoveEIDA.Name = "cmdRemoveEIDA";
-            this.cmdRemoveEIDA.Size = new System.Drawing.Size(58, 23);
-            this.cmdRemoveEIDA.TabIndex = 11;
-            this.cmdRemoveEIDA.Text = "Remove";
-            this.cmdRemoveEIDA.UseVisualStyleBackColor = true;
-            this.cmdRemoveEIDA.Click += new System.EventHandler(this.cmdRemoveEIDA_Click);
-            // 
-            // cmdPrevEIDA
-            // 
-            this.cmdPrevEIDA.Location = new System.Drawing.Point(6, 19);
-            this.cmdPrevEIDA.Name = "cmdPrevEIDA";
-            this.cmdPrevEIDA.Size = new System.Drawing.Size(58, 23);
-            this.cmdPrevEIDA.TabIndex = 8;
-            this.cmdPrevEIDA.Text = "Previous";
-            this.cmdPrevEIDA.UseVisualStyleBackColor = true;
-            this.cmdPrevEIDA.Click += new System.EventHandler(this.cmdPrevEIDA_Click);
-            // 
-            // cmdInsertEIDA
-            // 
-            this.cmdInsertEIDA.Location = new System.Drawing.Point(68, 96);
-            this.cmdInsertEIDA.Name = "cmdInsertEIDA";
-            this.cmdInsertEIDA.Size = new System.Drawing.Size(58, 23);
-            this.cmdInsertEIDA.TabIndex = 13;
-            this.cmdInsertEIDA.Text = "Insert";
-            this.cmdInsertEIDA.UseVisualStyleBackColor = true;
-            this.cmdInsertEIDA.Click += new System.EventHandler(this.cmdInsertEIDA_Click);
-            // 
-            // cmdNextEIDA
-            // 
-            this.cmdNextEIDA.Location = new System.Drawing.Point(68, 19);
-            this.cmdNextEIDA.Name = "cmdNextEIDA";
-            this.cmdNextEIDA.Size = new System.Drawing.Size(58, 23);
-            this.cmdNextEIDA.TabIndex = 9;
-            this.cmdNextEIDA.Text = "Next";
-            this.cmdNextEIDA.UseVisualStyleBackColor = true;
-            this.cmdNextEIDA.Click += new System.EventHandler(this.cmdNextEIDA_Click);
-            // 
-            // cmdPrevRowA
-            // 
-            this.cmdPrevRowA.Location = new System.Drawing.Point(6, 19);
-            this.cmdPrevRowA.Name = "cmdPrevRowA";
-            this.cmdPrevRowA.Size = new System.Drawing.Size(64, 23);
-            this.cmdPrevRowA.TabIndex = 15;
-            this.cmdPrevRowA.Text = "Previous";
-            this.cmdPrevRowA.UseVisualStyleBackColor = true;
-            this.cmdPrevRowA.Click += new System.EventHandler(this.cmdPrevRowA_Click);
-            // 
-            // cmdNextRowA
-            // 
-            this.cmdNextRowA.Location = new System.Drawing.Point(74, 19);
-            this.cmdNextRowA.Name = "cmdNextRowA";
-            this.cmdNextRowA.Size = new System.Drawing.Size(63, 23);
-            this.cmdNextRowA.TabIndex = 16;
-            this.cmdNextRowA.Text = "Next";
-            this.cmdNextRowA.UseVisualStyleBackColor = true;
-            this.cmdNextRowA.Click += new System.EventHandler(this.cmdNextRowA_Click);
-            // 
             // fraLoadListB
             // 
             this.fraLoadListB.Controls.Add(this.lblMetavalueLoadB);
@@ -1364,7 +1209,7 @@ namespace CrashEdit
             this.cmdInsertRowB.Name = "cmdInsertRowB";
             this.cmdInsertRowB.Size = new System.Drawing.Size(63, 23);
             this.cmdInsertRowB.TabIndex = 17;
-            this.cmdInsertRowB.Text = "Insert";
+            this.cmdInsertRowB.Text = "Add";
             this.cmdInsertRowB.UseVisualStyleBackColor = true;
             this.cmdInsertRowB.Click += new System.EventHandler(this.cmdInsertRowB_Click);
             // 
@@ -1502,6 +1347,615 @@ namespace CrashEdit
             this.cmdNextRowB.UseVisualStyleBackColor = true;
             this.cmdNextRowB.Click += new System.EventHandler(this.cmdNextRowB_Click);
             // 
+            // lblEID2
+            // 
+            this.lblEID2.AutoSize = true;
+            this.lblEID2.Location = new System.Drawing.Point(16, 335);
+            this.lblEID2.Name = "lblEID2";
+            this.lblEID2.Size = new System.Drawing.Size(190, 13);
+            this.lblEID2.TabIndex = 5;
+            this.lblEID2.Text = "WARNING: EID has invalid characters";
+            this.lblEID2.Visible = false;
+            // 
+            // lblEID1
+            // 
+            this.lblEID1.AutoSize = true;
+            this.lblEID1.Location = new System.Drawing.Point(16, 310);
+            this.lblEID1.Name = "lblEID1";
+            this.lblEID1.Size = new System.Drawing.Size(197, 13);
+            this.lblEID1.TabIndex = 4;
+            this.lblEID1.Text = "WARNING: EID is not 5 characters long";
+            this.lblEID1.Visible = false;
+            // 
+            // fraLoadListA
+            // 
+            this.fraLoadListA.Controls.Add(this.lblMetavalueLoadA);
+            this.fraLoadListA.Controls.Add(this.cmdRemoveRowA);
+            this.fraLoadListA.Controls.Add(this.cmdInsertRowA);
+            this.fraLoadListA.Controls.Add(this.numMetavalueLoadA);
+            this.fraLoadListA.Controls.Add(this.lblLoadListRowIndexA);
+            this.fraLoadListA.Controls.Add(this.fraEIDA);
+            this.fraLoadListA.Controls.Add(this.cmdPrevRowA);
+            this.fraLoadListA.Controls.Add(this.cmdNextRowA);
+            this.fraLoadListA.Location = new System.Drawing.Point(6, 6);
+            this.fraLoadListA.Name = "fraLoadListA";
+            this.fraLoadListA.Size = new System.Drawing.Size(143, 291);
+            this.fraLoadListA.TabIndex = 0;
+            this.fraLoadListA.TabStop = false;
+            this.fraLoadListA.Text = "Load List A";
+            // 
+            // lblMetavalueLoadA
+            // 
+            this.lblMetavalueLoadA.AutoSize = true;
+            this.lblMetavalueLoadA.Location = new System.Drawing.Point(6, 75);
+            this.lblMetavalueLoadA.Name = "lblMetavalueLoadA";
+            this.lblMetavalueLoadA.Size = new System.Drawing.Size(57, 13);
+            this.lblMetavalueLoadA.TabIndex = 20;
+            this.lblMetavalueLoadA.Text = "Metavalue";
+            // 
+            // cmdRemoveRowA
+            // 
+            this.cmdRemoveRowA.Location = new System.Drawing.Point(6, 99);
+            this.cmdRemoveRowA.Name = "cmdRemoveRowA";
+            this.cmdRemoveRowA.Size = new System.Drawing.Size(64, 23);
+            this.cmdRemoveRowA.TabIndex = 16;
+            this.cmdRemoveRowA.Text = "Remove";
+            this.cmdRemoveRowA.UseVisualStyleBackColor = true;
+            this.cmdRemoveRowA.Click += new System.EventHandler(this.cmdRemoveRowA_Click);
+            // 
+            // cmdInsertRowA
+            // 
+            this.cmdInsertRowA.Location = new System.Drawing.Point(74, 99);
+            this.cmdInsertRowA.Name = "cmdInsertRowA";
+            this.cmdInsertRowA.Size = new System.Drawing.Size(63, 23);
+            this.cmdInsertRowA.TabIndex = 17;
+            this.cmdInsertRowA.Text = "Add";
+            this.cmdInsertRowA.UseVisualStyleBackColor = true;
+            this.cmdInsertRowA.Click += new System.EventHandler(this.cmdInsertRowA_Click);
+            // 
+            // numMetavalueLoadA
+            // 
+            this.numMetavalueLoadA.Location = new System.Drawing.Point(69, 73);
+            this.numMetavalueLoadA.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+            this.numMetavalueLoadA.Minimum = new decimal(new int[] {
+            32768,
+            0,
+            0,
+            -2147483648});
+            this.numMetavalueLoadA.Name = "numMetavalueLoadA";
+            this.numMetavalueLoadA.Size = new System.Drawing.Size(68, 20);
+            this.numMetavalueLoadA.TabIndex = 19;
+            this.numMetavalueLoadA.ValueChanged += new System.EventHandler(this.numMetavalueLoadA_ValueChanged);
+            // 
+            // lblLoadListRowIndexA
+            // 
+            this.lblLoadListRowIndexA.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLoadListRowIndexA.Location = new System.Drawing.Point(44, 45);
+            this.lblLoadListRowIndexA.Name = "lblLoadListRowIndexA";
+            this.lblLoadListRowIndexA.Size = new System.Drawing.Size(60, 23);
+            this.lblLoadListRowIndexA.TabIndex = 17;
+            this.lblLoadListRowIndexA.Text = "?? / ??";
+            this.lblLoadListRowIndexA.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // fraEIDA
+            // 
+            this.fraEIDA.Controls.Add(this.txtEIDA);
+            this.fraEIDA.Controls.Add(this.lblEIDIndexA);
+            this.fraEIDA.Controls.Add(this.cmdAppendEIDA);
+            this.fraEIDA.Controls.Add(this.cmdRemoveEIDA);
+            this.fraEIDA.Controls.Add(this.cmdPrevEIDA);
+            this.fraEIDA.Controls.Add(this.cmdInsertEIDA);
+            this.fraEIDA.Controls.Add(this.cmdNextEIDA);
+            this.fraEIDA.Location = new System.Drawing.Point(6, 132);
+            this.fraEIDA.Name = "fraEIDA";
+            this.fraEIDA.Size = new System.Drawing.Size(131, 153);
+            this.fraEIDA.TabIndex = 15;
+            this.fraEIDA.TabStop = false;
+            this.fraEIDA.Text = "Entries";
+            // 
+            // txtEIDA
+            // 
+            this.txtEIDA.Location = new System.Drawing.Point(7, 70);
+            this.txtEIDA.MaxLength = 5;
+            this.txtEIDA.Name = "txtEIDA";
+            this.txtEIDA.Size = new System.Drawing.Size(118, 20);
+            this.txtEIDA.TabIndex = 15;
+            this.txtEIDA.TextChanged += new System.EventHandler(this.txtEIDA_TextChanged);
+            this.txtEIDA.LostFocus += new System.EventHandler(this.txtEIDA_LostFocus);
+            // 
+            // lblEIDIndexA
+            // 
+            this.lblEIDIndexA.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEIDIndexA.Location = new System.Drawing.Point(38, 45);
+            this.lblEIDIndexA.Name = "lblEIDIndexA";
+            this.lblEIDIndexA.Size = new System.Drawing.Size(60, 23);
+            this.lblEIDIndexA.TabIndex = 14;
+            this.lblEIDIndexA.Text = "?? / ??";
+            this.lblEIDIndexA.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // cmdAppendEIDA
+            // 
+            this.cmdAppendEIDA.Location = new System.Drawing.Point(6, 125);
+            this.cmdAppendEIDA.Name = "cmdAppendEIDA";
+            this.cmdAppendEIDA.Size = new System.Drawing.Size(120, 23);
+            this.cmdAppendEIDA.TabIndex = 12;
+            this.cmdAppendEIDA.Text = "Append";
+            this.cmdAppendEIDA.UseVisualStyleBackColor = true;
+            this.cmdAppendEIDA.Click += new System.EventHandler(this.cmdAppendEIDA_Click);
+            // 
+            // cmdRemoveEIDA
+            // 
+            this.cmdRemoveEIDA.Location = new System.Drawing.Point(6, 96);
+            this.cmdRemoveEIDA.Name = "cmdRemoveEIDA";
+            this.cmdRemoveEIDA.Size = new System.Drawing.Size(58, 23);
+            this.cmdRemoveEIDA.TabIndex = 11;
+            this.cmdRemoveEIDA.Text = "Remove";
+            this.cmdRemoveEIDA.UseVisualStyleBackColor = true;
+            this.cmdRemoveEIDA.Click += new System.EventHandler(this.cmdRemoveEIDA_Click);
+            // 
+            // cmdPrevEIDA
+            // 
+            this.cmdPrevEIDA.Location = new System.Drawing.Point(6, 19);
+            this.cmdPrevEIDA.Name = "cmdPrevEIDA";
+            this.cmdPrevEIDA.Size = new System.Drawing.Size(58, 23);
+            this.cmdPrevEIDA.TabIndex = 8;
+            this.cmdPrevEIDA.Text = "Previous";
+            this.cmdPrevEIDA.UseVisualStyleBackColor = true;
+            this.cmdPrevEIDA.Click += new System.EventHandler(this.cmdPrevEIDA_Click);
+            // 
+            // cmdInsertEIDA
+            // 
+            this.cmdInsertEIDA.Location = new System.Drawing.Point(68, 96);
+            this.cmdInsertEIDA.Name = "cmdInsertEIDA";
+            this.cmdInsertEIDA.Size = new System.Drawing.Size(58, 23);
+            this.cmdInsertEIDA.TabIndex = 13;
+            this.cmdInsertEIDA.Text = "Insert";
+            this.cmdInsertEIDA.UseVisualStyleBackColor = true;
+            this.cmdInsertEIDA.Click += new System.EventHandler(this.cmdInsertEIDA_Click);
+            // 
+            // cmdNextEIDA
+            // 
+            this.cmdNextEIDA.Location = new System.Drawing.Point(68, 19);
+            this.cmdNextEIDA.Name = "cmdNextEIDA";
+            this.cmdNextEIDA.Size = new System.Drawing.Size(58, 23);
+            this.cmdNextEIDA.TabIndex = 9;
+            this.cmdNextEIDA.Text = "Next";
+            this.cmdNextEIDA.UseVisualStyleBackColor = true;
+            this.cmdNextEIDA.Click += new System.EventHandler(this.cmdNextEIDA_Click);
+            // 
+            // cmdPrevRowA
+            // 
+            this.cmdPrevRowA.Location = new System.Drawing.Point(6, 19);
+            this.cmdPrevRowA.Name = "cmdPrevRowA";
+            this.cmdPrevRowA.Size = new System.Drawing.Size(64, 23);
+            this.cmdPrevRowA.TabIndex = 15;
+            this.cmdPrevRowA.Text = "Previous";
+            this.cmdPrevRowA.UseVisualStyleBackColor = true;
+            this.cmdPrevRowA.Click += new System.EventHandler(this.cmdPrevRowA_Click);
+            // 
+            // cmdNextRowA
+            // 
+            this.cmdNextRowA.Location = new System.Drawing.Point(74, 19);
+            this.cmdNextRowA.Name = "cmdNextRowA";
+            this.cmdNextRowA.Size = new System.Drawing.Size(63, 23);
+            this.cmdNextRowA.TabIndex = 16;
+            this.cmdNextRowA.Text = "Next";
+            this.cmdNextRowA.UseVisualStyleBackColor = true;
+            this.cmdNextRowA.Click += new System.EventHandler(this.cmdNextRowA_Click);
+            // 
+            // tabDrawLists
+            // 
+            this.tabDrawLists.Controls.Add(this.fraDrawListB);
+            this.tabDrawLists.Controls.Add(this.fraDrawListA);
+            this.tabDrawLists.Location = new System.Drawing.Point(4, 22);
+            this.tabDrawLists.Name = "tabDrawLists";
+            this.tabDrawLists.Padding = new System.Windows.Forms.Padding(3);
+            this.tabDrawLists.Size = new System.Drawing.Size(390, 428);
+            this.tabDrawLists.TabIndex = 3;
+            this.tabDrawLists.Text = "Draw Lists";
+            this.tabDrawLists.UseVisualStyleBackColor = true;
+            this.tabDrawLists.Enter += new System.EventHandler(this.tabDrawLists_Enter);
+            // 
+            // fraDrawListB
+            // 
+            this.fraDrawListB.Controls.Add(this.lblMetavalueDrawB);
+            this.fraDrawListB.Controls.Add(this.cmdRemoveRowDrawB);
+            this.fraDrawListB.Controls.Add(this.cmdInsertRowDrawB);
+            this.fraDrawListB.Controls.Add(this.numMetavalueDrawB);
+            this.fraDrawListB.Controls.Add(this.lblDrawListRowIndexB);
+            this.fraDrawListB.Controls.Add(this.fraEntityB);
+            this.fraDrawListB.Controls.Add(this.cmdPrevRowDrawB);
+            this.fraDrawListB.Controls.Add(this.cmdNextRowDrawB);
+            this.fraDrawListB.Location = new System.Drawing.Point(241, 6);
+            this.fraDrawListB.Name = "fraDrawListB";
+            this.fraDrawListB.Size = new System.Drawing.Size(143, 291);
+            this.fraDrawListB.TabIndex = 21;
+            this.fraDrawListB.TabStop = false;
+            this.fraDrawListB.Text = "Draw List A";
+            // 
+            // lblMetavalueDrawB
+            // 
+            this.lblMetavalueDrawB.AutoSize = true;
+            this.lblMetavalueDrawB.Location = new System.Drawing.Point(6, 75);
+            this.lblMetavalueDrawB.Name = "lblMetavalueDrawB";
+            this.lblMetavalueDrawB.Size = new System.Drawing.Size(57, 13);
+            this.lblMetavalueDrawB.TabIndex = 20;
+            this.lblMetavalueDrawB.Text = "Metavalue";
+            // 
+            // cmdRemoveRowDrawB
+            // 
+            this.cmdRemoveRowDrawB.Location = new System.Drawing.Point(6, 99);
+            this.cmdRemoveRowDrawB.Name = "cmdRemoveRowDrawB";
+            this.cmdRemoveRowDrawB.Size = new System.Drawing.Size(64, 23);
+            this.cmdRemoveRowDrawB.TabIndex = 16;
+            this.cmdRemoveRowDrawB.Text = "Remove";
+            this.cmdRemoveRowDrawB.UseVisualStyleBackColor = true;
+            this.cmdRemoveRowDrawB.Click += new System.EventHandler(this.cmdRemoveRowDrawB_Click);
+            // 
+            // cmdInsertRowDrawB
+            // 
+            this.cmdInsertRowDrawB.Location = new System.Drawing.Point(74, 99);
+            this.cmdInsertRowDrawB.Name = "cmdInsertRowDrawB";
+            this.cmdInsertRowDrawB.Size = new System.Drawing.Size(63, 23);
+            this.cmdInsertRowDrawB.TabIndex = 17;
+            this.cmdInsertRowDrawB.Text = "Add";
+            this.cmdInsertRowDrawB.UseVisualStyleBackColor = true;
+            this.cmdInsertRowDrawB.Click += new System.EventHandler(this.cmdInsertRowDrawB_Click);
+            // 
+            // numMetavalueDrawB
+            // 
+            this.numMetavalueDrawB.Location = new System.Drawing.Point(69, 73);
+            this.numMetavalueDrawB.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+            this.numMetavalueDrawB.Minimum = new decimal(new int[] {
+            32768,
+            0,
+            0,
+            -2147483648});
+            this.numMetavalueDrawB.Name = "numMetavalueDrawB";
+            this.numMetavalueDrawB.Size = new System.Drawing.Size(68, 20);
+            this.numMetavalueDrawB.TabIndex = 19;
+            this.numMetavalueDrawB.ValueChanged += new System.EventHandler(numMetavalueDrawB_ValueChanged);
+            // 
+            // lblDrawListRowIndexB
+            // 
+            this.lblDrawListRowIndexB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDrawListRowIndexB.Location = new System.Drawing.Point(44, 45);
+            this.lblDrawListRowIndexB.Name = "lblDrawListRowIndexB";
+            this.lblDrawListRowIndexB.Size = new System.Drawing.Size(60, 23);
+            this.lblDrawListRowIndexB.TabIndex = 17;
+            this.lblDrawListRowIndexB.Text = "?? / ??";
+            this.lblDrawListRowIndexB.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // fraEntityB
+            // 
+            this.fraEntityB.Controls.Add(this.lblEntityB);
+            this.fraEntityB.Controls.Add(this.numEntityB);
+            this.fraEntityB.Controls.Add(this.lblEntityIndexB);
+            this.fraEntityB.Controls.Add(this.cmdAppendEntityB);
+            this.fraEntityB.Controls.Add(this.cmdRemoveEntityB);
+            this.fraEntityB.Controls.Add(this.cmdPrevEntityB);
+            this.fraEntityB.Controls.Add(this.cmdInsertEntityB);
+            this.fraEntityB.Controls.Add(this.cmdNextEntityB);
+            this.fraEntityB.Location = new System.Drawing.Point(6, 132);
+            this.fraEntityB.Name = "fraEntityB";
+            this.fraEntityB.Size = new System.Drawing.Size(131, 153);
+            this.fraEntityB.TabIndex = 15;
+            this.fraEntityB.TabStop = false;
+            this.fraEntityB.Text = "Entities";
+            // 
+            // lblEntityB
+            // 
+            this.lblEntityB.AutoSize = true;
+            this.lblEntityB.Location = new System.Drawing.Point(3, 73);
+            this.lblEntityB.Name = "lblEntityB";
+            this.lblEntityB.Size = new System.Drawing.Size(18, 13);
+            this.lblEntityB.TabIndex = 22;
+            this.lblEntityB.Text = "ID";
+            // 
+            // numEntityB
+            // 
+            this.numEntityB.Location = new System.Drawing.Point(27, 71);
+            this.numEntityB.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+            this.numEntityB.Minimum = new decimal(new int[] {
+            32768,
+            0,
+            0,
+            -2147483648});
+            this.numEntityB.Name = "numEntityB";
+            this.numEntityB.Size = new System.Drawing.Size(99, 20);
+            this.numEntityB.TabIndex = 21;
+            this.numEntityB.ValueChanged += new System.EventHandler(numEntityB_ValueChanged);
+            // 
+            // lblEntityIndexB
+            // 
+            this.lblEntityIndexB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEntityIndexB.Location = new System.Drawing.Point(38, 45);
+            this.lblEntityIndexB.Name = "lblEntityIndexB";
+            this.lblEntityIndexB.Size = new System.Drawing.Size(60, 23);
+            this.lblEntityIndexB.TabIndex = 14;
+            this.lblEntityIndexB.Text = "?? / ??";
+            this.lblEntityIndexB.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // cmdAppendEntityB
+            // 
+            this.cmdAppendEntityB.Location = new System.Drawing.Point(6, 125);
+            this.cmdAppendEntityB.Name = "cmdAppendEntityB";
+            this.cmdAppendEntityB.Size = new System.Drawing.Size(120, 23);
+            this.cmdAppendEntityB.TabIndex = 12;
+            this.cmdAppendEntityB.Text = "Append";
+            this.cmdAppendEntityB.UseVisualStyleBackColor = true;
+            this.cmdAppendEntityB.Click += new System.EventHandler(this.cmdAppendEntityB_Click);
+            // 
+            // cmdRemoveEntityB
+            // 
+            this.cmdRemoveEntityB.Location = new System.Drawing.Point(6, 96);
+            this.cmdRemoveEntityB.Name = "cmdRemoveEntityB";
+            this.cmdRemoveEntityB.Size = new System.Drawing.Size(58, 23);
+            this.cmdRemoveEntityB.TabIndex = 11;
+            this.cmdRemoveEntityB.Text = "Remove";
+            this.cmdRemoveEntityB.UseVisualStyleBackColor = true;
+            this.cmdRemoveEntityB.Click += new System.EventHandler(this.cmdRemoveEntityB_Click);
+            // 
+            // cmdPrevEntityB
+            // 
+            this.cmdPrevEntityB.Location = new System.Drawing.Point(6, 19);
+            this.cmdPrevEntityB.Name = "cmdPrevEntityB";
+            this.cmdPrevEntityB.Size = new System.Drawing.Size(58, 23);
+            this.cmdPrevEntityB.TabIndex = 8;
+            this.cmdPrevEntityB.Text = "Previous";
+            this.cmdPrevEntityB.UseVisualStyleBackColor = true;
+            this.cmdPrevEntityB.Click += new System.EventHandler(this.cmdPrevEntityB_Click);
+            // 
+            // cmdInsertEntityB
+            // 
+            this.cmdInsertEntityB.Location = new System.Drawing.Point(68, 96);
+            this.cmdInsertEntityB.Name = "cmdInsertEntityB";
+            this.cmdInsertEntityB.Size = new System.Drawing.Size(58, 23);
+            this.cmdInsertEntityB.TabIndex = 13;
+            this.cmdInsertEntityB.Text = "Insert";
+            this.cmdInsertEntityB.UseVisualStyleBackColor = true;
+            this.cmdInsertEntityB.Click += new System.EventHandler(this.cmdInsertEntityB_Click);
+            // 
+            // cmdNextEntityB
+            // 
+            this.cmdNextEntityB.Location = new System.Drawing.Point(68, 19);
+            this.cmdNextEntityB.Name = "cmdNextEntityB";
+            this.cmdNextEntityB.Size = new System.Drawing.Size(58, 23);
+            this.cmdNextEntityB.TabIndex = 9;
+            this.cmdNextEntityB.Text = "Next";
+            this.cmdNextEntityB.UseVisualStyleBackColor = true;
+            this.cmdNextEntityB.Click += new System.EventHandler(this.cmdNextEntityB_Click);
+            // 
+            // cmdPrevRowDrawB
+            // 
+            this.cmdPrevRowDrawB.Location = new System.Drawing.Point(6, 19);
+            this.cmdPrevRowDrawB.Name = "cmdPrevRowDrawB";
+            this.cmdPrevRowDrawB.Size = new System.Drawing.Size(64, 23);
+            this.cmdPrevRowDrawB.TabIndex = 15;
+            this.cmdPrevRowDrawB.Text = "Previous";
+            this.cmdPrevRowDrawB.UseVisualStyleBackColor = true;
+            this.cmdPrevRowDrawB.Click += new System.EventHandler(this.cmdPrevRowDrawB_Click);
+            // 
+            // cmdNextRowDrawB
+            // 
+            this.cmdNextRowDrawB.Location = new System.Drawing.Point(74, 19);
+            this.cmdNextRowDrawB.Name = "cmdNextRowDrawB";
+            this.cmdNextRowDrawB.Size = new System.Drawing.Size(63, 23);
+            this.cmdNextRowDrawB.TabIndex = 16;
+            this.cmdNextRowDrawB.Text = "Next";
+            this.cmdNextRowDrawB.UseVisualStyleBackColor = true;
+            this.cmdNextRowDrawB.Click += new System.EventHandler(this.cmdNextRowDrawB_Click);
+            // 
+            // fraDrawListA
+            // 
+            this.fraDrawListA.Controls.Add(this.lblMetavalueDrawA);
+            this.fraDrawListA.Controls.Add(this.cmdRemoveRowDrawA);
+            this.fraDrawListA.Controls.Add(this.cmdInsertRowDrawA);
+            this.fraDrawListA.Controls.Add(this.numMetavalueDrawA);
+            this.fraDrawListA.Controls.Add(this.lblDrawListRowIndexA);
+            this.fraDrawListA.Controls.Add(this.fraEntityA);
+            this.fraDrawListA.Controls.Add(this.cmdPrevRowDrawA);
+            this.fraDrawListA.Controls.Add(this.cmdNextRowDrawA);
+            this.fraDrawListA.Location = new System.Drawing.Point(6, 6);
+            this.fraDrawListA.Name = "fraDrawListA";
+            this.fraDrawListA.Size = new System.Drawing.Size(143, 291);
+            this.fraDrawListA.TabIndex = 1;
+            this.fraDrawListA.TabStop = false;
+            this.fraDrawListA.Text = "Draw List A";
+            // 
+            // lblMetavalueDrawA
+            // 
+            this.lblMetavalueDrawA.AutoSize = true;
+            this.lblMetavalueDrawA.Location = new System.Drawing.Point(6, 75);
+            this.lblMetavalueDrawA.Name = "lblMetavalueDrawA";
+            this.lblMetavalueDrawA.Size = new System.Drawing.Size(57, 13);
+            this.lblMetavalueDrawA.TabIndex = 20;
+            this.lblMetavalueDrawA.Text = "Metavalue";
+            // 
+            // cmdRemoveRowDrawA
+            // 
+            this.cmdRemoveRowDrawA.Location = new System.Drawing.Point(6, 99);
+            this.cmdRemoveRowDrawA.Name = "cmdRemoveRowDrawA";
+            this.cmdRemoveRowDrawA.Size = new System.Drawing.Size(64, 23);
+            this.cmdRemoveRowDrawA.TabIndex = 16;
+            this.cmdRemoveRowDrawA.Text = "Remove";
+            this.cmdRemoveRowDrawA.UseVisualStyleBackColor = true;
+            this.cmdRemoveRowDrawA.Click += new System.EventHandler(this.cmdRemoveRowDrawA_Click);
+            // 
+            // cmdInsertRowDrawA
+            // 
+            this.cmdInsertRowDrawA.Location = new System.Drawing.Point(74, 99);
+            this.cmdInsertRowDrawA.Name = "cmdInsertRowDrawA";
+            this.cmdInsertRowDrawA.Size = new System.Drawing.Size(63, 23);
+            this.cmdInsertRowDrawA.TabIndex = 17;
+            this.cmdInsertRowDrawA.Text = "Add";
+            this.cmdInsertRowDrawA.UseVisualStyleBackColor = true;
+            this.cmdInsertRowDrawA.Click += new System.EventHandler(this.cmdInsertRowDrawA_Click);
+            // 
+            // numMetavalueDrawA
+            // 
+            this.numMetavalueDrawA.Location = new System.Drawing.Point(69, 73);
+            this.numMetavalueDrawA.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+            this.numMetavalueDrawA.Minimum = new decimal(new int[] {
+            32768,
+            0,
+            0,
+            -2147483648});
+            this.numMetavalueDrawA.Name = "numMetavalueDrawA";
+            this.numMetavalueDrawA.Size = new System.Drawing.Size(68, 20);
+            this.numMetavalueDrawA.TabIndex = 19;
+            this.numMetavalueDrawA.ValueChanged += new System.EventHandler(this.numMetavalueDrawA_ValueChanged);
+            // 
+            // lblDrawListRowIndexA
+            // 
+            this.lblDrawListRowIndexA.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDrawListRowIndexA.Location = new System.Drawing.Point(44, 45);
+            this.lblDrawListRowIndexA.Name = "lblDrawListRowIndexA";
+            this.lblDrawListRowIndexA.Size = new System.Drawing.Size(60, 23);
+            this.lblDrawListRowIndexA.TabIndex = 17;
+            this.lblDrawListRowIndexA.Text = "?? / ??";
+            this.lblDrawListRowIndexA.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // fraEntityA
+            // 
+            this.fraEntityA.Controls.Add(this.lblEntityA);
+            this.fraEntityA.Controls.Add(this.numEntityA);
+            this.fraEntityA.Controls.Add(this.lblEntityIndexA);
+            this.fraEntityA.Controls.Add(this.cmdAppendEntityA);
+            this.fraEntityA.Controls.Add(this.cmdRemoveEntityA);
+            this.fraEntityA.Controls.Add(this.cmdPrevEntityA);
+            this.fraEntityA.Controls.Add(this.cmdInsertEntityA);
+            this.fraEntityA.Controls.Add(this.cmdNextEntityA);
+            this.fraEntityA.Location = new System.Drawing.Point(6, 132);
+            this.fraEntityA.Name = "fraEntityA";
+            this.fraEntityA.Size = new System.Drawing.Size(131, 153);
+            this.fraEntityA.TabIndex = 15;
+            this.fraEntityA.TabStop = false;
+            this.fraEntityA.Text = "Entities";
+            // 
+            // lblEntityA
+            // 
+            this.lblEntityA.AutoSize = true;
+            this.lblEntityA.Location = new System.Drawing.Point(3, 73);
+            this.lblEntityA.Name = "lblEntityA";
+            this.lblEntityA.Size = new System.Drawing.Size(18, 13);
+            this.lblEntityA.TabIndex = 22;
+            this.lblEntityA.Text = "ID";
+            // 
+            // numEntityA
+            // 
+            this.numEntityA.Location = new System.Drawing.Point(27, 71);
+            this.numEntityA.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+            this.numEntityA.Minimum = new decimal(new int[] {
+            32768,
+            0,
+            0,
+            -2147483648});
+            this.numEntityA.Name = "numEntityA";
+            this.numEntityA.Size = new System.Drawing.Size(99, 20);
+            this.numEntityA.TabIndex = 21;
+            this.numEntityA.ValueChanged += new System.EventHandler(this.numEntityA_ValueChanged);
+            // 
+            // lblEntityIndexA
+            // 
+            this.lblEntityIndexA.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEntityIndexA.Location = new System.Drawing.Point(38, 45);
+            this.lblEntityIndexA.Name = "lblEntityIndexA";
+            this.lblEntityIndexA.Size = new System.Drawing.Size(60, 23);
+            this.lblEntityIndexA.TabIndex = 14;
+            this.lblEntityIndexA.Text = "?? / ??";
+            this.lblEntityIndexA.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // cmdAppendEntityA
+            // 
+            this.cmdAppendEntityA.Location = new System.Drawing.Point(6, 125);
+            this.cmdAppendEntityA.Name = "cmdAppendEntityA";
+            this.cmdAppendEntityA.Size = new System.Drawing.Size(120, 23);
+            this.cmdAppendEntityA.TabIndex = 12;
+            this.cmdAppendEntityA.Text = "Append";
+            this.cmdAppendEntityA.UseVisualStyleBackColor = true;
+            this.cmdAppendEntityA.Click += new System.EventHandler(this.cmdAppendEntityA_Click);
+            // 
+            // cmdRemoveEntityA
+            // 
+            this.cmdRemoveEntityA.Location = new System.Drawing.Point(6, 96);
+            this.cmdRemoveEntityA.Name = "cmdRemoveEntityA";
+            this.cmdRemoveEntityA.Size = new System.Drawing.Size(58, 23);
+            this.cmdRemoveEntityA.TabIndex = 11;
+            this.cmdRemoveEntityA.Text = "Remove";
+            this.cmdRemoveEntityA.UseVisualStyleBackColor = true;
+            this.cmdRemoveEntityA.Click += new System.EventHandler(this.cmdRemoveEntityA_Click);
+            // 
+            // cmdPrevEntityA
+            // 
+            this.cmdPrevEntityA.Location = new System.Drawing.Point(6, 19);
+            this.cmdPrevEntityA.Name = "cmdPrevEntityA";
+            this.cmdPrevEntityA.Size = new System.Drawing.Size(58, 23);
+            this.cmdPrevEntityA.TabIndex = 8;
+            this.cmdPrevEntityA.Text = "Previous";
+            this.cmdPrevEntityA.UseVisualStyleBackColor = true;
+            this.cmdPrevEntityA.Click += new System.EventHandler(this.cmdPrevEntityA_Click);
+            // 
+            // cmdInsertEntityA
+            // 
+            this.cmdInsertEntityA.Location = new System.Drawing.Point(68, 96);
+            this.cmdInsertEntityA.Name = "cmdInsertEntityA";
+            this.cmdInsertEntityA.Size = new System.Drawing.Size(58, 23);
+            this.cmdInsertEntityA.TabIndex = 13;
+            this.cmdInsertEntityA.Text = "Insert";
+            this.cmdInsertEntityA.UseVisualStyleBackColor = true;
+            this.cmdInsertEntityA.Click += new System.EventHandler(this.cmdInsertEntityA_Click);
+            // 
+            // cmdNextEntityA
+            // 
+            this.cmdNextEntityA.Location = new System.Drawing.Point(68, 19);
+            this.cmdNextEntityA.Name = "cmdNextEntityA";
+            this.cmdNextEntityA.Size = new System.Drawing.Size(58, 23);
+            this.cmdNextEntityA.TabIndex = 9;
+            this.cmdNextEntityA.Text = "Next";
+            this.cmdNextEntityA.UseVisualStyleBackColor = true;
+            this.cmdNextEntityA.Click += new System.EventHandler(this.cmdNextEntityA_Click);
+            // 
+            // cmdPrevRowDrawA
+            // 
+            this.cmdPrevRowDrawA.Location = new System.Drawing.Point(6, 19);
+            this.cmdPrevRowDrawA.Name = "cmdPrevRowDrawA";
+            this.cmdPrevRowDrawA.Size = new System.Drawing.Size(64, 23);
+            this.cmdPrevRowDrawA.TabIndex = 15;
+            this.cmdPrevRowDrawA.Text = "Previous";
+            this.cmdPrevRowDrawA.UseVisualStyleBackColor = true;
+            this.cmdPrevRowDrawA.Click += new System.EventHandler(this.cmdPrevRowDrawA_Click);
+            // 
+            // cmdNextRowDrawA
+            // 
+            this.cmdNextRowDrawA.Location = new System.Drawing.Point(74, 19);
+            this.cmdNextRowDrawA.Name = "cmdNextRowDrawA";
+            this.cmdNextRowDrawA.Size = new System.Drawing.Size(63, 23);
+            this.cmdNextRowDrawA.TabIndex = 16;
+            this.cmdNextRowDrawA.Text = "Next";
+            this.cmdNextRowDrawA.UseVisualStyleBackColor = true;
+            this.cmdNextRowDrawA.Click += new System.EventHandler(this.cmdNextRowDrawA_Click);
+            // 
             // EntityBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1556,16 +2010,29 @@ namespace CrashEdit
             this.fraSLST.PerformLayout();
             this.tabLoadLists.ResumeLayout(false);
             this.tabLoadLists.PerformLayout();
-            this.fraLoadListA.ResumeLayout(false);
-            this.fraLoadListA.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numMetavalueLoadA)).EndInit();
-            this.fraEIDA.ResumeLayout(false);
-            this.fraEIDA.PerformLayout();
             this.fraLoadListB.ResumeLayout(false);
             this.fraLoadListB.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numMetavalueLoadB)).EndInit();
             this.fraEIDB.ResumeLayout(false);
             this.fraEIDB.PerformLayout();
+            this.fraLoadListA.ResumeLayout(false);
+            this.fraLoadListA.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMetavalueLoadA)).EndInit();
+            this.fraEIDA.ResumeLayout(false);
+            this.fraEIDA.PerformLayout();
+            this.tabDrawLists.ResumeLayout(false);
+            this.fraDrawListB.ResumeLayout(false);
+            this.fraDrawListB.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMetavalueDrawB)).EndInit();
+            this.fraEntityB.ResumeLayout(false);
+            this.fraEntityB.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numEntityB)).EndInit();
+            this.fraDrawListA.ResumeLayout(false);
+            this.fraDrawListA.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMetavalueDrawA)).EndInit();
+            this.fraEntityA.ResumeLayout(false);
+            this.fraEntityA.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numEntityA)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1680,5 +2147,40 @@ namespace CrashEdit
         private System.Windows.Forms.Button cmdNextEIDB;
         private System.Windows.Forms.Button cmdPrevRowB;
         private System.Windows.Forms.Button cmdNextRowB;
+        private System.Windows.Forms.TabPage tabDrawLists;
+        private System.Windows.Forms.GroupBox fraDrawListA;
+        private System.Windows.Forms.Label lblMetavalueDrawA;
+        private System.Windows.Forms.Button cmdRemoveRowDrawA;
+        private System.Windows.Forms.Button cmdInsertRowDrawA;
+        private System.Windows.Forms.NumericUpDown numMetavalueDrawA;
+        private System.Windows.Forms.Label lblDrawListRowIndexA;
+        private System.Windows.Forms.GroupBox fraEntityA;
+        private System.Windows.Forms.Label lblEntityIndexA;
+        private System.Windows.Forms.Button cmdAppendEntityA;
+        private System.Windows.Forms.Button cmdRemoveEntityA;
+        private System.Windows.Forms.Button cmdPrevEntityA;
+        private System.Windows.Forms.Button cmdInsertEntityA;
+        private System.Windows.Forms.Button cmdNextEntityA;
+        private System.Windows.Forms.Button cmdPrevRowDrawA;
+        private System.Windows.Forms.Button cmdNextRowDrawA;
+        private System.Windows.Forms.Label lblEntityA;
+        private System.Windows.Forms.NumericUpDown numEntityA;
+        private System.Windows.Forms.GroupBox fraDrawListB;
+        private System.Windows.Forms.Label lblMetavalueDrawB;
+        private System.Windows.Forms.Button cmdRemoveRowDrawB;
+        private System.Windows.Forms.Button cmdInsertRowDrawB;
+        private System.Windows.Forms.NumericUpDown numMetavalueDrawB;
+        private System.Windows.Forms.Label lblDrawListRowIndexB;
+        private System.Windows.Forms.GroupBox fraEntityB;
+        private System.Windows.Forms.Label lblEntityB;
+        private System.Windows.Forms.NumericUpDown numEntityB;
+        private System.Windows.Forms.Label lblEntityIndexB;
+        private System.Windows.Forms.Button cmdAppendEntityB;
+        private System.Windows.Forms.Button cmdRemoveEntityB;
+        private System.Windows.Forms.Button cmdPrevEntityB;
+        private System.Windows.Forms.Button cmdInsertEntityB;
+        private System.Windows.Forms.Button cmdNextEntityB;
+        private System.Windows.Forms.Button cmdPrevRowDrawB;
+        private System.Windows.Forms.Button cmdNextRowDrawB;
     }
 }

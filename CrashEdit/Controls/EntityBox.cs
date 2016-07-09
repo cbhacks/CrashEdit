@@ -20,6 +20,10 @@ namespace CrashEdit
         private int loadlistaeidindex;
         private int loadlistbrowindex;
         private int loadlistbeidindex;
+        private int drawlistarowindex;
+        private int drawlistaentityindex;
+        private int drawlistbrowindex;
+        private int drawlistbentityindex;
 
         public EntityBox(EntityController controller)
         {
@@ -38,6 +42,10 @@ namespace CrashEdit
             loadlistaeidindex = 0;
             loadlistbrowindex = 0;
             loadlistbeidindex = 0;
+            drawlistarowindex = 0;
+            drawlistaentityindex = 0;
+            drawlistbrowindex = 0;
+            drawlistbentityindex = 0;
         }
 
         private void InvalidateNodes()
@@ -921,6 +929,322 @@ namespace CrashEdit
             entity.LoadListB.Rows[loadlistbrowindex].MetaValue = (short)numMetavalueLoadB.Value;
         }
 
+        private void UpdateDrawListA()
+        {
+            if (entity.DrawListA != null && entity.DrawListA.Unknown != 0)
+            {
+                if (drawlistarowindex + 1 > entity.DrawListA.Unknown)
+                    drawlistarowindex = entity.DrawListA.Unknown - 1;
+                lblMetavalueDrawA.Enabled = true;
+                numMetavalueDrawA.Enabled = true;
+                lblDrawListRowIndexA.Text = string.Format("{0} / {1}", drawlistarowindex + 1, entity.DrawListA.Unknown);
+                numMetavalueDrawA.Value = entity.DrawListA.Rows[drawlistarowindex].MetaValue.Value;
+                cmdPrevRowDrawA.Enabled = (drawlistarowindex > 0);
+                cmdNextRowDrawA.Enabled = (drawlistarowindex + 1 < entity.DrawListA.Unknown);
+                cmdRemoveRowDrawA.Enabled = true;
+                if (entity.DrawListA.Rows[drawlistarowindex].Values.Count > 0)
+                {
+                    if (drawlistaentityindex + 1 > entity.DrawListA.Rows[drawlistarowindex].Values.Count)
+                        drawlistaentityindex = entity.DrawListA.Rows[drawlistarowindex].Values.Count - 1;
+                    cmdInsertEntityA.Enabled = true;
+                    cmdRemoveEntityA.Enabled = true;
+                    lblEntityA.Enabled = true;
+                    numEntityA.Enabled = true;
+                    cmdPrevEntityA.Enabled = (drawlistaentityindex > 0);
+                    cmdNextEntityA.Enabled = (drawlistaentityindex + 1 < entity.DrawListA.Rows[drawlistarowindex].Values.Count);
+                    lblEntityIndexA.Text = string.Format("{0} / {1}", drawlistaentityindex + 1, entity.DrawListA.Rows[drawlistarowindex].Values.Count);
+                    numEntityA.Value = entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] >> 8 & 0xFFFF;
+                }
+                else
+                {
+                    cmdAppendEntityA.Enabled = true;
+                    cmdInsertEntityA.Enabled = false;
+                    cmdRemoveEntityA.Enabled = false;
+                    lblEntityA.Enabled = false;
+                    numEntityA.Enabled = false;
+                    cmdPrevEntityA.Enabled = false;
+                    cmdNextEntityA.Enabled = false;
+                    lblEntityIndexA.Text = "-- / --";
+                }
+            }
+            else
+            {
+                entity.DrawListA = null;
+                lblDrawListRowIndexA.Text = "-- / --";
+                lblEntityIndexA.Text = "-- / --";
+                lblMetavalueDrawA.Enabled = false;
+                numMetavalueDrawA.Enabled = false;
+                cmdPrevRowDrawA.Enabled = false;
+                cmdNextRowDrawA.Enabled = false;
+                cmdRemoveRowDrawA.Enabled = false;
+                lblEntityA.Enabled = false;
+                numEntityA.Enabled = false;
+                cmdPrevEntityA.Enabled = false;
+                cmdNextEntityA.Enabled = false;
+                cmdRemoveEntityA.Enabled = false;
+                cmdInsertEntityA.Enabled = false;
+                cmdAppendEntityA.Enabled = false;
+            }
+        }
+
+        private void cmdPrevEntityA_Click(object sender, EventArgs e)
+        {
+            drawlistaentityindex--;
+            UpdateDrawListA();
+        }
+
+        private void cmdNextEntityA_Click(object sender, EventArgs e)
+        {
+            drawlistaentityindex++;
+            UpdateDrawListA();
+        }
+
+        private void cmdPrevRowDrawA_Click(object sender, EventArgs e)
+        {
+            drawlistarowindex--;
+            UpdateDrawListA();
+        }
+
+        private void cmdNextRowDrawA_Click(object sender, EventArgs e)
+        {
+            drawlistarowindex++;
+            UpdateDrawListA();
+        }
+
+        private void cmdRemoveEntityA_Click(object sender, EventArgs e)
+        {
+            entity.DrawListA.Rows[drawlistarowindex].Values.RemoveAt(drawlistaentityindex);
+            UpdateDrawListA();
+        }
+
+        private void cmdInsertEntityA_Click(object sender, EventArgs e)
+        {
+            entity.DrawListA.Rows[drawlistarowindex].Values.Insert(drawlistaentityindex, entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex]);
+            UpdateDrawListA();
+        }
+
+        private void cmdAppendEntityA_Click(object sender, EventArgs e)
+        {
+            drawlistaentityindex = entity.DrawListA.Rows[drawlistarowindex].Values.Count;
+            if (entity.DrawListA.Rows[drawlistarowindex].Values.Count > 0)
+            {
+                entity.DrawListA.Rows[drawlistarowindex].Values.Add(entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex - 1]);
+            }
+            else
+            {
+                entity.DrawListA.Rows[drawlistarowindex].Values.Add(new int());
+            }
+            UpdateDrawListA();
+        }
+
+        private void numEntityA_ValueChanged(object sender, EventArgs e)
+        {
+            foreach (Chunk chunk in controller.ZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
+            {
+                if (chunk is EntryChunk)
+                {
+                    foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                    {
+                        if (entry is ZoneEntry)
+                        {
+                            foreach (Entity otherentity in ((ZoneEntry)entry).Entities)
+                            {
+                                if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityA.Value)
+                                {
+                                    for (int i = 0; i < controller.ZoneEntryController.ZoneEntry.Unknown1[0x190];i++)
+                                    {
+                                        if (entry.EName == Entry.EIDToEName(BitConv.FromInt32(controller.ZoneEntryController.ZoneEntry.Unknown1,0x194 + i * 4)))
+                                        {
+                                            entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] = (int)(i | (otherentity.ID << 8) | ((((ZoneEntry)entry).Entities.IndexOf(otherentity) - BitConv.FromInt32(((ZoneEntry)entry).Unknown1, 0x188)) << 24));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            UpdateDrawListA();
+        }
+
+        private void cmdRemoveRowDrawA_Click(object sender, EventArgs e)
+        {
+            entity.DrawListA.Rows.RemoveAt(drawlistarowindex);
+            UpdateDrawListA();
+        }
+
+        private void cmdInsertRowDrawA_Click(object sender, EventArgs e)
+        {
+            if (entity.DrawListA == null)
+                entity.DrawListA = new EntityInt32Property();
+            entity.DrawListA.Rows.Add(new EntityPropertyRow<int>());
+            entity.DrawListA.Rows[entity.DrawListA.Unknown - 1].MetaValue = 0;
+            UpdateDrawListA();
+        }
+
+        private void numMetavalueDrawA_ValueChanged(object sender, EventArgs e)
+        {
+            entity.DrawListA.Rows[drawlistarowindex].MetaValue = (short)numMetavalueDrawA.Value;
+        }
+
+        private void UpdateDrawListB()
+        {
+            if (entity.DrawListB != null && entity.DrawListB.Unknown != 0)
+            {
+                if (drawlistbrowindex + 1 > entity.DrawListB.Unknown)
+                    drawlistbrowindex = entity.DrawListB.Unknown - 1;
+                lblMetavalueDrawB.Enabled = true;
+                numMetavalueDrawB.Enabled = true;
+                lblDrawListRowIndexB.Text = string.Format("{0} / {1}", drawlistbrowindex + 1, entity.DrawListB.Unknown);
+                numMetavalueDrawB.Value = entity.DrawListB.Rows[drawlistbrowindex].MetaValue.Value;
+                cmdPrevRowDrawB.Enabled = (drawlistbrowindex > 0);
+                cmdNextRowDrawB.Enabled = (drawlistbrowindex + 1 < entity.DrawListB.Unknown);
+                cmdRemoveRowDrawB.Enabled = true;
+                if (entity.DrawListB.Rows[drawlistbrowindex].Values.Count > 0)
+                {
+                    if (drawlistbentityindex + 1 > entity.DrawListB.Rows[drawlistbrowindex].Values.Count)
+                        drawlistbentityindex = entity.DrawListB.Rows[drawlistbrowindex].Values.Count - 1;
+                    cmdInsertEntityB.Enabled = true;
+                    cmdRemoveEntityB.Enabled = true;
+                    lblEntityB.Enabled = true;
+                    numEntityB.Enabled = true;
+                    cmdPrevEntityB.Enabled = (drawlistbentityindex > 0);
+                    cmdNextEntityB.Enabled = (drawlistbentityindex + 1 < entity.DrawListB.Rows[drawlistbrowindex].Values.Count);
+                    lblEntityIndexB.Text = string.Format("{0} / {1}", drawlistbentityindex + 1, entity.DrawListB.Rows[drawlistbrowindex].Values.Count);
+                    numEntityB.Value = entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] >> 8 & 0xFFFF;
+                }
+                else
+                {
+                    cmdAppendEntityB.Enabled = true;
+                    cmdInsertEntityB.Enabled = false;
+                    cmdRemoveEntityB.Enabled = false;
+                    lblEntityB.Enabled = false;
+                    numEntityB.Enabled = false;
+                    cmdPrevEntityB.Enabled = false;
+                    cmdNextEntityB.Enabled = false;
+                    lblEntityIndexB.Text = "-- / --";
+                }
+            }
+            else
+            {
+                entity.DrawListB = null;
+                lblDrawListRowIndexB.Text = "-- / --";
+                lblEntityIndexB.Text = "-- / --";
+                lblMetavalueDrawB.Enabled = false;
+                numMetavalueDrawB.Enabled = false;
+                cmdPrevRowDrawB.Enabled = false;
+                cmdNextRowDrawB.Enabled = false;
+                cmdRemoveRowDrawB.Enabled = false;
+                lblEntityB.Enabled = false;
+                numEntityB.Enabled = false;
+                cmdPrevEntityB.Enabled = false;
+                cmdNextEntityB.Enabled = false;
+                cmdRemoveEntityB.Enabled = false;
+                cmdInsertEntityB.Enabled = false;
+                cmdAppendEntityB.Enabled = false;
+            }
+        }
+
+        private void cmdPrevEntityB_Click(object sender, EventArgs e)
+        {
+            drawlistbentityindex--;
+            UpdateDrawListB();
+        }
+
+        private void cmdNextEntityB_Click(object sender, EventArgs e)
+        {
+            drawlistbentityindex++;
+            UpdateDrawListB();
+        }
+
+        private void cmdPrevRowDrawB_Click(object sender, EventArgs e)
+        {
+            drawlistbrowindex--;
+            UpdateDrawListB();
+        }
+
+        private void cmdNextRowDrawB_Click(object sender, EventArgs e)
+        {
+            drawlistbrowindex++;
+            UpdateDrawListB();
+        }
+
+        private void cmdRemoveEntityB_Click(object sender, EventArgs e)
+        {
+            entity.DrawListB.Rows[drawlistbrowindex].Values.RemoveAt(drawlistbentityindex);
+            UpdateDrawListB();
+        }
+
+        private void cmdInsertEntityB_Click(object sender, EventArgs e)
+        {
+            entity.DrawListB.Rows[drawlistbrowindex].Values.Insert(drawlistbentityindex, entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex]);
+            UpdateDrawListB();
+        }
+
+        private void cmdAppendEntityB_Click(object sender, EventArgs e)
+        {
+            drawlistbentityindex = entity.DrawListB.Rows[drawlistbrowindex].Values.Count;
+            if (entity.DrawListB.Rows[drawlistbrowindex].Values.Count > 0)
+            {
+                entity.DrawListB.Rows[drawlistbrowindex].Values.Add(entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex - 1]);
+            }
+            else
+            {
+                entity.DrawListB.Rows[drawlistbrowindex].Values.Add(new int());
+            }
+            UpdateDrawListB();
+        }
+
+        private void numEntityB_ValueChanged(object sender, EventArgs e)
+        {
+            foreach (Chunk chunk in controller.ZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
+            {
+                if (chunk is EntryChunk)
+                {
+                    foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                    {
+                        if (entry is ZoneEntry)
+                        {
+                            foreach (Entity otherentity in ((ZoneEntry)entry).Entities)
+                            {
+                                if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityB.Value)
+                                {
+                                    for (int i = 0; i < controller.ZoneEntryController.ZoneEntry.Unknown1[0x190]; i++)
+                                    {
+                                        if (entry.EName == Entry.EIDToEName(BitConv.FromInt32(controller.ZoneEntryController.ZoneEntry.Unknown1, 0x194 + i * 4)))
+                                        {
+                                            entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] = (int)(i | (otherentity.ID << 8) | ((((ZoneEntry)entry).Entities.IndexOf(otherentity) - BitConv.FromInt32(((ZoneEntry)entry).Unknown1, 0x188)) << 24));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            UpdateDrawListB();
+        }
+
+        private void cmdRemoveRowDrawB_Click(object sender, EventArgs e)
+        {
+            entity.DrawListB.Rows.RemoveAt(drawlistbrowindex);
+            UpdateDrawListB();
+        }
+
+        private void cmdInsertRowDrawB_Click(object sender, EventArgs e)
+        {
+            if (entity.DrawListB == null)
+                entity.DrawListB = new EntityInt32Property();
+            entity.DrawListB.Rows.Add(new EntityPropertyRow<int>());
+            entity.DrawListB.Rows[entity.DrawListB.Unknown - 1].MetaValue = 0;
+            UpdateDrawListB();
+        }
+
+        private void numMetavalueDrawB_ValueChanged(object sender, EventArgs e)
+        {
+            entity.DrawListB.Rows[drawlistbrowindex].MetaValue = (short)numMetavalueDrawB.Value;
+        }
+
         private void UpdateDDASettings()
         {
             if (entity.DDASettings.HasValue)
@@ -1163,6 +1487,12 @@ namespace CrashEdit
         {
             UpdateLoadListA();
             UpdateLoadListB();
+        }
+
+        private void tabDrawLists_Enter(object sender, EventArgs e)
+        {
+            UpdateDrawListA();
+            UpdateDrawListB();
         }
 
         private void txtEIDA_LostFocus(object sender, EventArgs e)

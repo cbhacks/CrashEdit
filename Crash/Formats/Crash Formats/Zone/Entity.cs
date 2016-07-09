@@ -245,11 +245,13 @@ namespace Crash
         public EntityInt32Property DrawListA
         {
             get { return drawlista; }
+            set { drawlista = value; }
         }
 
         public EntityInt32Property DrawListB
         {
             get { return drawlistb; }
+            set { drawlistb = value; }
         }
 
         public EntityT4Property LoadListA
