@@ -92,7 +92,7 @@
     <Compile Include="Controllers\Zone\ZoneEntryController.cs" />
     <Compile Include="Controllers\Zone\OldZoneEntryController.cs" />
     <Compile Include="Controllers\T6\T6EntryController.cs" />
-    <Compile Include="Controllers\T4\T4EntryController.cs" />
+    <Compile Include="Controllers\SLST\SLSTEntryController.cs" />
     <Compile Include="Controllers\Scenery\SceneryEntryController.cs" />
     <Compile Include="Controllers\Scenery\OldSceneryEntryController.cs" />
     <Compile Include="Controllers\Models\ModelEntryController.cs" />

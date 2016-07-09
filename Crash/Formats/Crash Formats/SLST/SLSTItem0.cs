@@ -3,45 +3,45 @@ using System.Collections.Generic;
 
 namespace Crash
 {
-    public sealed class T4Item0
+    public sealed class SLSTItem0
     {
-        public static T4Item0 Load(byte[] data)
+        public static SLSTItem0 Load(byte[] data)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
             if (data.Length < 4)
             {
-                ErrorManager.SignalError("T4Item: Data is too short");
+                ErrorManager.SignalError("SLSTItem: Data is too short");
             }
             short count = BitConv.FromInt16(data,0);
             short unknown1 = BitConv.FromInt16(data, 2);
             if (count < 0)
             {
-                ErrorManager.SignalError("T4Item: Value count is negative");
+                ErrorManager.SignalError("SLSTItem: Value count is negative");
             }
             if (data.Length < 4 + 2 * count)
             {
-                ErrorManager.SignalError("T4Item: Data is too short");
+                ErrorManager.SignalError("SLSTItem: Data is too short");
             }
-            T4PolygonID[] values = new T4PolygonID[count];
+            SLSTPolygonID[] values = new SLSTPolygonID[count];
             for (int i = 0;i < count;i++)
             {
                 short id = (short)(BitConv.FromInt16(data,4 + i * 2) & 0x0FFF);
                 short world = (short)((BitConv.FromInt16(data,4 + i * 2) & 0xF000) / 4096);
-                values[i] = new T4PolygonID(id,world);
+                values[i] = new SLSTPolygonID(id,world);
             }
-            return new T4Item0(unknown1,values);
+            return new SLSTItem0(unknown1,values);
         }
 
         private short unknown1;
-        private List<T4PolygonID> values;
+        private List<SLSTPolygonID> values;
 
-        public T4Item0(short unknown1,IEnumerable<T4PolygonID> values)
+        public SLSTItem0(short unknown1,IEnumerable<SLSTPolygonID> values)
         {
             if (values == null)
                 throw new ArgumentNullException("values");
             this.unknown1 = unknown1;
-            this.values = new List<T4PolygonID>(values);
+            this.values = new List<SLSTPolygonID>(values);
         }
 
         public short Unknown1
@@ -49,7 +49,7 @@ namespace Crash
             get { return unknown1; }
         }
 
-        public IList<T4PolygonID> Values
+        public IList<SLSTPolygonID> Values
         {
             get { return values; }
         }

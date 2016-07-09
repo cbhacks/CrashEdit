@@ -1,11 +1,7 @@
 using Crash;
-using Crash.UI;
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -54,7 +50,7 @@ namespace CrashEdit
             uxImageList.Images.Add("ModelEntryController",Properties.Resources.objects_012_violet);
             uxImageList.Images.Add("OldSceneryEntryController",Properties.Resources.objects_012_lime);
             uxImageList.Images.Add("SceneryEntryController",Properties.Resources.objects_012_lime);
-            uxImageList.Images.Add("T4EntryController",Properties.Resources.objects_012_gray);
+            uxImageList.Images.Add("SLSTEntryController",Properties.Resources.objects_012_gray);
             uxImageList.Images.Add("T6EntryController",Properties.Resources.objects_012_gray);
             uxImageList.Images.Add("OldZoneEntryController",Properties.Resources.objects_012_blue);
             uxImageList.Images.Add("ZoneEntryController",Properties.Resources.objects_012_blue);

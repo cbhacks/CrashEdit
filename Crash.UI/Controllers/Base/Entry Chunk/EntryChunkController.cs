@@ -47,9 +47,9 @@ namespace Crash.UI
             {
                 Subcontrollers.Insert(e.Index,new SceneryEntryController(this,(SceneryEntry)e.Item));
             }
-            else if (e.Item is T4Entry)
+            else if (e.Item is SLSTEntry)
             {
-                Subcontrollers.Insert(e.Index,new T4EntryController(this,(T4Entry)e.Item));
+                Subcontrollers.Insert(e.Index,new SLSTEntryController(this,(SLSTEntry)e.Item));
             }
             else if (e.Item is T6Entry)
             {

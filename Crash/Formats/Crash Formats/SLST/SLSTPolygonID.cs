@@ -1,11 +1,11 @@
 namespace Crash
 {
-    public struct T4PolygonID
+    public struct SLSTPolygonID
     {
         private short id;
         private short world;
 
-        public T4PolygonID(short id,short world)
+        public SLSTPolygonID(short id,short world)
         {
             this.id = id;
             this.world = world;

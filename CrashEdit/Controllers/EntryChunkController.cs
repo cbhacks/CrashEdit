@@ -64,9 +64,9 @@ namespace CrashEdit
             {
                 return new NewSceneryEntryController(this,(NewSceneryEntry)entry);
             }
-            else if (entry is T4Entry)
+            else if (entry is SLSTEntry)
             {
-                return new T4EntryController(this,(T4Entry)entry);
+                return new SLSTEntryController(this,(SLSTEntry)entry);
             }
             else if (entry is T6Entry)
             {

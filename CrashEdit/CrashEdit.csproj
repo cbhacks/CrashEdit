@@ -73,9 +73,9 @@
     <Compile Include="Controllers\Scenery\NewSceneryEntryController.cs" />
     <Compile Include="Controllers\Scenery\SceneryColorListController.cs" />
     <Compile Include="Controllers\Scenery\ProtoSceneryEntryController.cs" />
-    <Compile Include="Controllers\T4\T4ItemController.cs" />
-    <Compile Include="Controllers\T4\T4Item1Controller.cs" />
-    <Compile Include="Controllers\T4\T4Item0Controller.cs" />
+    <Compile Include="Controllers\SLST\SLSTItemController.cs" />
+    <Compile Include="Controllers\SLST\SLSTItem1Controller.cs" />
+    <Compile Include="Controllers\SLST\SLSTItem0Controller.cs" />
     <Compile Include="Controllers\TextureChunkController.cs" />
     <Compile Include="Controllers\Animation\CutsceneAnimationEntryController.cs" />
     <Compile Include="Controllers\Music\OldSEQController.cs" />
@@ -104,7 +104,7 @@
     <Compile Include="Controllers\Zone\NewZoneEntryController.cs" />
     <Compile Include="Controllers\Zone\ZoneEntryController.cs" />
     <Compile Include="Controllers\Unprocessed\UnprocessedEntryController.cs" />
-    <Compile Include="Controllers\T4\T4EntryController.cs" />
+    <Compile Include="Controllers\SLST\SLSTEntryController.cs" />
     <Compile Include="Controllers\Music\VHController.cs" />
     <Compile Include="Controllers\DemoEntryController.cs" />
     <Compile Include="Controllers\T15EntryController.cs" />
@@ -192,13 +192,13 @@
     <Compile Include="Controls\SoundBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\T4Item0Box.cs">
+    <Compile Include="Controls\SLSTItem0Box.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\T4ItemBox.cs">
+    <Compile Include="Controls\SLSTItemBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\T4Item1Box.cs">
+    <Compile Include="Controls\SLSTItem1Box.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ThreeDimensionalViewer.cs">

@@ -331,6 +331,15 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SLST ({0}).
+        /// </summary>
+        internal static string SLSTEntryController_Text {
+            get {
+                return ResourceManager.GetString("SLSTEntryController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sound Chunk.
         /// </summary>
         internal static string SoundChunkController_Text {
@@ -408,15 +417,6 @@ namespace Crash.UI.Properties {
         internal static string T21EntryController_Text {
             get {
                 return ResourceManager.GetString("T21EntryController_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to T4 ({0}).
-        /// </summary>
-        internal static string T4EntryController_Text {
-            get {
-                return ResourceManager.GetString("T4EntryController_Text", resourceCulture);
             }
         }
         

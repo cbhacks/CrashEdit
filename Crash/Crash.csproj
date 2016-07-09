@@ -68,10 +68,10 @@
     <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryPolygon.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryVertex.cs" />
-    <Compile Include="Formats\Crash Formats\T4\T4Item.cs" />
-    <Compile Include="Formats\Crash Formats\T4\T4PolygonID.cs" />
-    <Compile Include="Formats\Crash Formats\T4\T4Item0.cs" />
-    <Compile Include="Formats\Crash Formats\T4\T4Item1.cs" />
+    <Compile Include="Formats\Crash Formats\SLST\SLSTItem.cs" />
+    <Compile Include="Formats\Crash Formats\SLST\SLSTPolygonID.cs" />
+    <Compile Include="Formats\Crash Formats\SLST\SLSTItem0.cs" />
+    <Compile Include="Formats\Crash Formats\SLST\SLSTItem1.cs" />
     <Compile Include="Formats\Crash Formats\Zone\ProtoEntityPosition.cs" />
     <Compile Include="Formats\Crash Formats\Zone\ProtoZoneEntry.cs" />
     <Compile Include="Formats\Crash Formats\Zone\ProtoZoneEntryLoader.cs" />
@@ -216,8 +216,8 @@
     <Compile Include="Formats\Crash Formats\T21\T21EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\SceneryEntry.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\SceneryEntryLoader.cs" />
-    <Compile Include="Formats\Crash Formats\T4\T4Entry.cs" />
-    <Compile Include="Formats\Crash Formats\T4\T4EntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\SLST\SLSTEntry.cs" />
+    <Compile Include="Formats\Crash Formats\SLST\SLSTEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Base\Entry Chunk\EntryChunkLoader.cs" />
     <Compile Include="Formats\Crash Formats\Base\Entry\EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\NSF.cs" />
