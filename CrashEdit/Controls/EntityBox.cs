@@ -16,10 +16,10 @@ namespace CrashEdit
         private bool victimdirty;
         private int victimindex;
         private bool text;
-        //private bool loadlistadirty;
-        //private bool loadlistbdirty;
-        //private int loadlistaindex;
-        //private int loadlistbindex;
+        private int loadlistarowindex;
+        private int loadlistaeidindex;
+        private int loadlistbrowindex;
+        private int loadlistbeidindex;
 
         public EntityBox(EntityController controller)
         {
@@ -28,21 +28,16 @@ namespace CrashEdit
             InitializeComponent();
             UpdateName();
             UpdatePosition();
-            UpdateSettings();
-            UpdateID();
             UpdateType();
             UpdateSubtype();
-            UpdateBoxCount();
-            UpdateVictim();
-            UpdateDDASettings();
-            UpdateDDASection();
-            //UpdateDrawLists();
-            //UpdateLoadLists();
-            UpdateScaling();
-            UpdateOtherSettings();
-            UpdateSLST();
+            UpdateSettings();
+            UpdateID();
             positionindex = 0;
             victimindex = 0;
+            loadlistarowindex = 0;
+            loadlistaeidindex = 0;
+            loadlistbrowindex = 0;
+            loadlistbeidindex = 0;
         }
 
         private void InvalidateNodes()
@@ -556,181 +551,375 @@ namespace CrashEdit
 
         }
 
-        //private void UpdateLoadListA()
-        //{
-        //    loadlistadirty = true;
-        //    if (loadlistaindex >= entity.LoadListA.Count)
-        //    {
-        //        loadlistaindex = entity.LoadListA.Count - 1;
-        //    }
-        //    Do not make this else if,
-        //     sometimes both will run.
-        //     (this is intentional)
-        //    if (loadlistaindex < 0)
-        //    {
-        //        loadlistaindex = 0;
-        //    }
-        //    Do not remove this either
-        //    if (loadlistaindex >= entity.LoadListA.Count)
-        //    {
-        //        lblEIDIndexA.Text = "-- / --";
-        //        cmdPrevEIDA.Enabled = false;
-        //        cmdNextEIDA.Enabled = false;
-        //        cmdInsertEIDA.Enabled = false;
-        //        cmdRemoveEIDA.Enabled = false;
-        //        txtEIDA.Enabled = false;
-        //    }
-        //    else
-        //    {
-        //        lblEIDIndexA.Text = string.Format("{0} / {1}", loadlistaindex + 1, entity.LoadListA.Count);
-        //        cmdPrevEIDA.Enabled = (loadlistaindex > 0);
-        //        cmdNextEIDA.Enabled = (loadlistaindex < entity.LoadListA.Count - 1);
-        //        cmdInsertEIDA.Enabled = true;
-        //        cmdRemoveEIDA.Enabled = true;
-        //        txtEIDA.Enabled = true;
-        //        txtEIDA.Text = Entry.EIDToEName(entity.LoadListA[loadlistaindex]);
-        //    }
-        //    loadlistadirty = false;
-        //}
-
-        //private void UpdateLoadListB()
-        //{
-        //    loadlistbdirty = true;
-        //    if (loadlistbindex >= entity.LoadListB.Count)
-        //    {
-        //        loadlistbindex = entity.LoadListB.Count - 1;
-        //    }
-        //    Do not make this else if,
-        //     sometimes both will run.
-        //     (this is intentional)
-        //    if (loadlistbindex < 0)
-        //    {
-        //        loadlistbindex = 0;
-        //    }
-        //    Do not remove this either
-        //    if (loadlistbindex >= entity.LoadListB.Count)
-        //    {
-        //        lblEIDIndexB.Text = "-- / --";
-        //        cmdPrevEIDB.Enabled = false;
-        //        cmdNextEIDB.Enabled = false;
-        //        cmdInsertEIDB.Enabled = false;
-        //        cmdRemoveEIDB.Enabled = false;
-        //        txtEIDB.Enabled = false;
-        //    }
-        //    else
-        //    {
-        //        lblEIDIndexB.Text = string.Format("{0} / {1}", loadlistbindex + 1, entity.LoadListB.Count);
-        //        cmdPrevEIDB.Enabled = (loadlistbindex > 0);
-        //        cmdNextEIDB.Enabled = (loadlistbindex < entity.LoadListB.Count - 1);
-        //        cmdInsertEIDB.Enabled = true;
-        //        cmdRemoveEIDB.Enabled = true;
-        //        txtEIDB.Enabled = true;
-        //        txtEIDB.Text = Entry.EIDToEName(entity.LoadListB[loadlistbindex]);
-        //    }
-        //    loadlistbdirty = false;
-        //}
-
-        //private void cmdPrevEIDA_Click(object sender, EventArgs e)
-        //{
-        //    loadlistaindex--;
-        //    UpdateLoadListA();
-        //}
-
-        //private void cmdPrevEIDB_Click(object sender, EventArgs e)
-        //{
-        //    loadlistbindex--;
-        //    UpdateLoadListB();
-        //}
-
-        //private void cmdNextEIDA_Click(object sender, EventArgs e)
-        //{
-        //    loadlistaindex++;
-        //    UpdateLoadListA();
-        //}
-
-        //private void cmdNextEIDB_Click(object sender, EventArgs e)
-        //{
-        //    loadlistbindex++;
-        //    UpdateLoadListB();
-        //}
-
-        //private void cmdRemoveEIDA_Click(object sender, EventArgs e)
-        //{
-        //    entity.LoadListA.RemoveAt(loadlistaindex);
-        //    UpdateLoadListA();
-        //}
-
-        //private void cmdRemoveEIDB_Click(object sender, EventArgs e)
-        //{
-        //    entity.LoadListB.RemoveAt(loadlistbindex);
-        //    UpdateLoadListB();
-        //}
-
-        //private void cmdInsertEIDA_Click(object sender, EventArgs e)
-        //{
-        //    entity.LoadListA.Insert(loadlistaindex, entity.LoadListA[loadlistaindex]);
-        //    UpdateLoadListA();
-        //}
-
-        //private void cmdInsertEIDB_Click(object sender, EventArgs e)
-        //{
-        //    entity.LoadListA.Insert(loadlistaindex, entity.LoadListA[loadlistaindex]);
-        //    UpdateLoadListA();
-        //}
-
-        //private void cmdAppendEIDA_Click(object sender, EventArgs e)
-        //{
-        //    loadlistaindex = entity.LoadListA.Count;
-        //    if (entity.LoadListA.Count > 0)
-        //    {
-        //        entity.LoadListA.Add(entity.LoadListA[loadlistaindex - 1]);
-        //    }
-        //    else
-        //    {
-        //        entity.LoadListA.Add(new EntityT4Property());
-        //    }
-        //    UpdateLoadListA();
-        //    if (entity.LoadListA.Count == 1)
-        //        InvalidateNodes();
-        //}
-
-        //private void cmdAppendEIDB_Click(object sender, EventArgs e)
-        //{
-        //    loadlistbindex = entity.LoadListB.Count;
-        //    if (entity.LoadListB.Count > 0)
-        //    {
-        //        entity.LoadListB.Add(entity.LoadListB[loadlistbindex - 1]);
-        //    }
-        //    else
-        //    {
-        //        entity.LoadListB.Add(new EntityT4Property());
-        //    }
-        //    UpdateLoadListB();
-        //    if (entity.LoadListB.Count == 1)
-        //        InvalidateNodes();
-        //}
-
-        /*private void UpdateDrawLists()
+        private void UpdateLoadListA()
         {
-            foreach (EntityPropertyRow<int> drawlist in entity.DrawListA)
+            if (entity.LoadListA != null && entity.LoadListA.Unknown != 0)
             {
-                foreach (int value in drawlist.Values)
+                if (loadlistarowindex + 1 > entity.LoadListA.Unknown)
+                    loadlistarowindex = entity.LoadListA.Unknown - 1;
+                lblMetavalueLoadA.Enabled = true;
+                numMetavalueLoadA.Enabled = true;
+                lblLoadListRowIndexA.Text = string.Format("{0} / {1}", loadlistarowindex + 1,entity.LoadListA.Unknown);
+                numMetavalueLoadA.Value = entity.LoadListA.Rows[loadlistarowindex].MetaValue.Value;
+                cmdPrevRowA.Enabled = (loadlistarowindex > 0);
+                cmdNextRowA.Enabled = (loadlistarowindex + 1 < entity.LoadListA.Unknown);
+                cmdRemoveRowA.Enabled = true;
+                if (entity.LoadListA.Rows[loadlistarowindex].Values.Count > 0)
                 {
-                    if ((value & 0xFFFF00) >> 8 == entity.ID.Value)
-                    {
-                        unchecked
-                        {
-                            drawlist.Values.Add((value & 0xFF) | (maxid << 8) | (newindex << 24));
-                        }
-                        break;
-                    }
+                    if (loadlistaeidindex + 1 > entity.LoadListA.Rows[loadlistarowindex].Values.Count)
+                        loadlistaeidindex = entity.LoadListA.Rows[loadlistarowindex].Values.Count - 1;
+                    cmdInsertEIDA.Enabled = true;
+                    cmdRemoveEIDA.Enabled = true;
+                    txtEIDA.Enabled = true;
+                    cmdPrevEIDA.Enabled = (loadlistaeidindex > 0);
+                    cmdNextEIDA.Enabled = (loadlistaeidindex + 1 < entity.LoadListA.Rows[loadlistarowindex].Values.Count);
+                    lblEIDIndexA.Text = string.Format("{0} / {1}", loadlistaeidindex + 1, entity.LoadListA.Rows[loadlistarowindex].Values.Count);
+                    txtEIDA.Text = Entry.EIDToEName(entity.LoadListA.Rows[loadlistarowindex].Values[loadlistaeidindex]);
                 }
-                if (drawlist.Values.Contains(entity.ID.Value))
+                else
                 {
-                    drawlist.Values.Add(maxid);
+                    cmdAppendEIDA.Enabled = true;
+                    cmdInsertEIDA.Enabled = false;
+                    cmdRemoveEIDA.Enabled = false;
+                    txtEIDA.Enabled = false;
+                    cmdPrevEIDA.Enabled = false;
+                    cmdNextEIDA.Enabled = false;
+                    lblEIDIndexA.Text = "-- / --";
                 }
             }
-        }*/
+            else
+            {
+                entity.LoadListA = null;
+                lblLoadListRowIndexA.Text = "-- / --";
+                lblEIDIndexA.Text = "-- / --";
+                lblMetavalueLoadA.Enabled = false;
+                numMetavalueLoadA.Enabled = false;
+                cmdPrevRowA.Enabled = false;
+                cmdNextRowA.Enabled = false;
+                cmdRemoveRowA.Enabled = false;
+                txtEIDA.Enabled = false;
+                cmdPrevEIDA.Enabled = false;
+                cmdNextEIDA.Enabled = false;
+                cmdRemoveEIDA.Enabled = false;
+                cmdInsertEIDA.Enabled = false;
+                cmdAppendEIDA.Enabled = false;
+            }
+        }
+
+        private void cmdPrevEIDA_Click(object sender, EventArgs e)
+        {
+            loadlistaeidindex--;
+            UpdateLoadListA();
+        }
+
+        private void cmdNextEIDA_Click(object sender, EventArgs e)
+        {
+            loadlistaeidindex++;
+            UpdateLoadListA();
+        }
+
+        private void cmdPrevRowA_Click(object sender, EventArgs e)
+        {
+            loadlistarowindex--;
+            UpdateLoadListA();
+        }
+
+        private void cmdNextRowA_Click(object sender, EventArgs e)
+        {
+            loadlistarowindex++;
+            UpdateLoadListA();
+        }
+
+        private void cmdRemoveEIDA_Click(object sender, EventArgs e)
+        {
+            entity.LoadListA.Rows[loadlistarowindex].Values.RemoveAt(loadlistaeidindex);
+            UpdateLoadListA();
+        }
+
+        private void cmdInsertEIDA_Click(object sender, EventArgs e)
+        {
+            entity.LoadListA.Rows[loadlistarowindex].Values.Insert(loadlistaeidindex, entity.LoadListA.Rows[loadlistarowindex].Values[loadlistaeidindex]);
+            UpdateLoadListA();
+        }
+
+        private void cmdAppendEIDA_Click(object sender, EventArgs e)
+        {
+            loadlistaeidindex = entity.LoadListA.Rows[loadlistarowindex].Values.Count;
+            if (entity.LoadListA.Rows[loadlistarowindex].Values.Count > 0)
+            {
+                entity.LoadListA.Rows[loadlistarowindex].Values.Add(entity.LoadListA.Rows[loadlistarowindex].Values[loadlistaeidindex - 1]);
+            }
+            else
+            {
+                entity.LoadListA.Rows[loadlistarowindex].Values.Add(new int());
+            }
+            UpdateLoadListA();
+        }
+
+        private void txtEIDA_TextChanged(object sender, EventArgs e)
+        {
+            text = true;
+            if (txtEIDB.Text.Length == 5 && txtEIDA.Text.Length == 5)
+            {
+                lblEID1.Visible = false;
+            }
+            else
+            {
+                text = false;
+                lblEID1.Visible = true;
+            }
+            for (int i = 0; i < txtEIDA.Text.Length; i++)
+            {
+                int ii = 0;
+                while (ii < 64 && !(txtEIDA.Text[i] == Entry.ENameCharacterSet[ii]))
+                {
+                    ii++;
+                }
+                if (ii == 64)
+                {
+                    text = false;
+                    lblEID2.Visible = true;
+                    break;
+                }
+                else
+                {
+                    lblEID2.Visible = false;
+                }
+            }
+            if (!lblEID2.Visible)
+            {
+                for (int i = 0; i < txtEIDB.Text.Length; i++)
+                {
+                    int ii = 0;
+                    while (ii < 64 && !(txtEIDB.Text[i] == Entry.ENameCharacterSet[ii]))
+                    {
+                        ii++;
+                    }
+                    if (ii == 64)
+                    {
+                        text = false;
+                        lblEID2.Visible = true;
+                        break;
+                    }
+                    else
+                    {
+                        lblEID2.Visible = false;
+                    }
+                }
+            }
+            if (text == true)
+            {
+                entity.LoadListA.Rows[loadlistarowindex].Values[loadlistaeidindex] = BitConv.FromInt32(Entry.Str2EID(Reverse(txtEIDA.Text)));
+                text = false;
+            }
+        }
+
+        private void cmdRemoveRowA_Click(object sender, EventArgs e)
+        {
+            entity.LoadListA.Rows.RemoveAt(loadlistarowindex);
+            UpdateLoadListA();
+        }
+
+        private void cmdInsertRowA_Click(object sender, EventArgs e)
+        {
+            if (entity.LoadListA == null)
+                entity.LoadListA = new EntityT4Property();
+            entity.LoadListA.Rows.Add(new EntityPropertyRow<int>());
+            entity.LoadListA.Rows[entity.LoadListA.Unknown - 1].MetaValue = 0;
+            loadlistarowindex = 0;
+            loadlistaeidindex = 0;
+            UpdateLoadListA();
+        }
+
+        private void numMetavalueLoadA_ValueChanged(object sender, EventArgs e)
+        {
+            entity.LoadListA.Rows[loadlistarowindex].MetaValue = (short)numMetavalueLoadA.Value;
+        }
+        
+        private void UpdateLoadListB()
+        {
+            if (entity.LoadListB != null && entity.LoadListB.Unknown != 0)
+            {
+                if (loadlistbrowindex + 1 > entity.LoadListB.Unknown)
+                    loadlistbrowindex = entity.LoadListB.Unknown - 1;
+                lblMetavalueLoadB.Enabled = true;
+                numMetavalueLoadB.Enabled = true;
+                lblLoadListRowIndexB.Text = string.Format("{0} / {1}", loadlistbrowindex + 1, entity.LoadListB.Unknown);
+                numMetavalueLoadB.Value = entity.LoadListB.Rows[loadlistbrowindex].MetaValue.Value;
+                cmdPrevRowB.Enabled = (loadlistbrowindex > 0);
+                cmdNextRowB.Enabled = (loadlistbrowindex + 1 < entity.LoadListB.Unknown);
+                cmdRemoveRowB.Enabled = true;
+                if (entity.LoadListB.Rows[loadlistbrowindex].Values.Count > 0)
+                {
+                    if (loadlistbeidindex + 1 > entity.LoadListB.Rows[loadlistbrowindex].Values.Count)
+                        loadlistbeidindex = entity.LoadListB.Rows[loadlistbrowindex].Values.Count - 1;
+                    cmdInsertEIDB.Enabled = true;
+                    cmdRemoveEIDB.Enabled = true;
+                    txtEIDB.Enabled = true;
+                    cmdPrevEIDB.Enabled = (loadlistbeidindex > 0);
+                    cmdNextEIDB.Enabled = (loadlistbeidindex + 1 < entity.LoadListB.Rows[loadlistbrowindex].Values.Count);
+                    lblEIDIndexB.Text = string.Format("{0} / {1}", loadlistbeidindex + 1, entity.LoadListB.Rows[loadlistbrowindex].Values.Count);
+                    txtEIDB.Text = Entry.EIDToEName(entity.LoadListB.Rows[loadlistbrowindex].Values[loadlistbeidindex]);
+                }
+                else
+                {
+                    cmdAppendEIDB.Enabled = true;
+                    cmdInsertEIDB.Enabled = false;
+                    cmdRemoveEIDB.Enabled = false;
+                    txtEIDB.Enabled = false;
+                    cmdPrevEIDB.Enabled = false;
+                    cmdNextEIDB.Enabled = false;
+                    lblEIDIndexB.Text = "-- / --";
+                }
+            }
+            else
+            {
+                entity.LoadListB = null;
+                lblLoadListRowIndexB.Text = "-- / --";
+                lblEIDIndexB.Text = "-- / --";
+                lblMetavalueLoadB.Enabled = false;
+                numMetavalueLoadB.Enabled = false;
+                cmdPrevRowB.Enabled = false;
+                cmdNextRowB.Enabled = false;
+                cmdRemoveRowB.Enabled = false;
+                txtEIDB.Enabled = false;
+                cmdPrevEIDB.Enabled = false;
+                cmdNextEIDB.Enabled = false;
+                cmdRemoveEIDB.Enabled = false;
+                cmdInsertEIDB.Enabled = false;
+                cmdAppendEIDB.Enabled = false;
+            }
+        }
+
+        private void cmdPrevEIDB_Click(object sender, EventArgs e)
+        {
+            loadlistbeidindex--;
+            UpdateLoadListB();
+        }
+
+        private void cmdNextEIDB_Click(object sender, EventArgs e)
+        {
+            loadlistbeidindex++;
+            UpdateLoadListB();
+        }
+
+        private void cmdPrevRowB_Click(object sender, EventArgs e)
+        {
+            loadlistbrowindex--;
+            UpdateLoadListB();
+        }
+
+        private void cmdNextRowB_Click(object sender, EventArgs e)
+        {
+            loadlistbrowindex++;
+            UpdateLoadListB();
+        }
+
+        private void cmdRemoveEIDB_Click(object sender, EventArgs e)
+        {
+            entity.LoadListB.Rows[loadlistbrowindex].Values.RemoveAt(loadlistbeidindex);
+            UpdateLoadListB();
+        }
+
+        private void cmdInsertEIDB_Click(object sender, EventArgs e)
+        {
+            entity.LoadListB.Rows[loadlistbrowindex].Values.Insert(loadlistbeidindex, entity.LoadListB.Rows[loadlistbrowindex].Values[loadlistbeidindex]);
+            UpdateLoadListB();
+        }
+
+        private void cmdAppendEIDB_Click(object sender, EventArgs e)
+        {
+            loadlistbeidindex = entity.LoadListB.Rows[loadlistbrowindex].Values.Count;
+            if (entity.LoadListB.Rows[loadlistbrowindex].Values.Count > 0)
+            {
+                entity.LoadListB.Rows[loadlistbrowindex].Values.Add(entity.LoadListB.Rows[loadlistbrowindex].Values[loadlistbeidindex - 1]);
+            }
+            else
+            {
+                entity.LoadListB.Rows[loadlistbrowindex].Values.Add(new int());
+            }
+            UpdateLoadListB();
+        }
+
+        private void txtEIDB_TextChanged(object sender, EventArgs e)
+        {
+            text = true;
+            if (txtEIDB.Text.Length == 5 && txtEIDA.Text.Length == 5)
+            {
+                lblEID1.Visible = false;
+            }
+            else
+            {
+                text = false;
+                lblEID1.Visible = true;
+            }
+            for (int i = 0; i < txtEIDA.Text.Length; i++)
+            {
+                int ii = 0;
+                while (ii < 64 && !(txtEIDA.Text[i] == Entry.ENameCharacterSet[ii]))
+                {
+                    ii++;
+                }
+                if (ii == 64)
+                {
+                    text = false;
+                    lblEID2.Visible = true;
+                    break;
+                }
+                else
+                {
+                    lblEID2.Visible = false;
+                }
+            }
+            if (!lblEID2.Visible)
+            {
+                for (int i = 0; i < txtEIDB.Text.Length; i++)
+                {
+                    int ii = 0;
+                    while (ii < 64 && !(txtEIDB.Text[i] == Entry.ENameCharacterSet[ii]))
+                    {
+                        ii++;
+                    }
+                    if (ii == 64)
+                    {
+                        text = false;
+                        lblEID2.Visible = true;
+                        break;
+                    }
+                    else
+                    {
+                        lblEID2.Visible = false;
+                    }
+                }
+            }
+            if (text == true)
+            {
+                entity.LoadListB.Rows[loadlistbrowindex].Values[loadlistbeidindex] = BitConv.FromInt32(Entry.Str2EID(Reverse(txtEIDB.Text)));
+                text = false;
+            }
+        }
+
+        private void cmdRemoveRowB_Click(object sender, EventArgs e)
+        {
+            entity.LoadListB.Rows.RemoveAt(loadlistbrowindex);
+            UpdateLoadListB();
+        }
+
+        private void cmdInsertRowB_Click(object sender, EventArgs e)
+        {
+            if (entity.LoadListB == null)
+                entity.LoadListB = new EntityT4Property();
+            entity.LoadListB.Rows.Add(new EntityPropertyRow<int>());
+            entity.LoadListB.Rows[entity.LoadListB.Unknown - 1].MetaValue = 0;
+            loadlistbrowindex = 0;
+            loadlistbeidindex = 0;
+            UpdateLoadListB();
+        }
+
+        private void numMetavalueLoadB_ValueChanged(object sender, EventArgs e)
+        {
+            entity.LoadListB.Rows[loadlistbrowindex].MetaValue = (short)numMetavalueLoadB.Value;
+        }
 
         private void UpdateDDASettings()
         {
@@ -943,6 +1132,47 @@ namespace CrashEdit
                 text = false;
             }
             InvalidateNodes();
+        }
+
+        private void tabGeneral_Enter(object sender, EventArgs e)
+        {
+            UpdateName();
+            UpdatePosition();
+            UpdateType();
+            UpdateSubtype();
+            UpdateSettings();
+            UpdateID();
+        }
+
+        private void tabSpecial_Enter(object sender, EventArgs e)
+        {
+            UpdateVictim();
+            UpdateScaling();
+            UpdateBoxCount();
+            UpdateDDASection();
+            UpdateDDASettings();
+            UpdateOtherSettings();
+        }
+
+        private void tabCamera_Enter(object sender, EventArgs e)
+        {
+            UpdateSLST();
+        }
+
+        private void tabLoadLists_Enter(object sender, EventArgs e)
+        {
+            UpdateLoadListA();
+            UpdateLoadListB();
+        }
+
+        private void txtEIDA_LostFocus(object sender, EventArgs e)
+        {
+            UpdateLoadListA();
+        }
+
+        private void txtEIDB_LostFocus(object sender, EventArgs e)
+        {
+            UpdateLoadListB();
         }
     }
 }

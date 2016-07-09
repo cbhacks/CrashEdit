@@ -255,11 +255,13 @@ namespace Crash
         public EntityT4Property LoadListA
         {
             get { return loadlista; }
+            set { loadlista = value; }
         }
 
         public EntityT4Property LoadListB
         {
             get { return loadlistb; }
+            set { loadlistb = value; }
         }
 
         public int? DDASettings
@@ -304,6 +306,10 @@ namespace Crash
 
         public byte[] Save()
         {
+            if (LoadListA != null ^ LoadListB != null)
+                ErrorManager.SignalError("Entity: Entity contains one load list but not the other");
+            if (DrawListA != null ^ DrawListB != null)
+                ErrorManager.SignalError("Entity: Entity contains one draw list but not the other");
             SortedDictionary<short,EntityProperty> properties = new SortedDictionary<short,EntityProperty>(extraproperties);
             foreach (KeyValuePair<short,FieldInfo> pair in propertyfields)
             {

@@ -97,15 +97,19 @@ namespace CrashEdit
             this.lblVictimIndex = new System.Windows.Forms.Label();
             this.tabCamera = new System.Windows.Forms.TabPage();
             this.fraSLST = new System.Windows.Forms.GroupBox();
+            this.lblSLST2 = new System.Windows.Forms.Label();
+            this.lblSLST1 = new System.Windows.Forms.Label();
             this.txtSLST = new System.Windows.Forms.TextBox();
             this.chkSLST = new System.Windows.Forms.CheckBox();
             this.tabLoadLists = new System.Windows.Forms.TabPage();
+            this.lblEID2 = new System.Windows.Forms.Label();
+            this.lblEID1 = new System.Windows.Forms.Label();
             this.fraLoadListA = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.lblRowIndexA = new System.Windows.Forms.Label();
+            this.lblMetavalueLoadA = new System.Windows.Forms.Label();
+            this.cmdRemoveRowA = new System.Windows.Forms.Button();
+            this.cmdInsertRowA = new System.Windows.Forms.Button();
+            this.numMetavalueLoadA = new System.Windows.Forms.NumericUpDown();
+            this.lblLoadListRowIndexA = new System.Windows.Forms.Label();
             this.fraEIDA = new System.Windows.Forms.GroupBox();
             this.txtEIDA = new System.Windows.Forms.TextBox();
             this.lblEIDIndexA = new System.Windows.Forms.Label();
@@ -116,8 +120,22 @@ namespace CrashEdit
             this.cmdNextEIDA = new System.Windows.Forms.Button();
             this.cmdPrevRowA = new System.Windows.Forms.Button();
             this.cmdNextRowA = new System.Windows.Forms.Button();
-            this.lblSLST1 = new System.Windows.Forms.Label();
-            this.lblSLST2 = new System.Windows.Forms.Label();
+            this.fraLoadListB = new System.Windows.Forms.GroupBox();
+            this.lblMetavalueLoadB = new System.Windows.Forms.Label();
+            this.cmdRemoveRowB = new System.Windows.Forms.Button();
+            this.cmdInsertRowB = new System.Windows.Forms.Button();
+            this.numMetavalueLoadB = new System.Windows.Forms.NumericUpDown();
+            this.lblLoadListRowIndexB = new System.Windows.Forms.Label();
+            this.fraEIDB = new System.Windows.Forms.GroupBox();
+            this.txtEIDB = new System.Windows.Forms.TextBox();
+            this.lblEIDIndexB = new System.Windows.Forms.Label();
+            this.cmdAppendEIDB = new System.Windows.Forms.Button();
+            this.cmdRemoveEIDB = new System.Windows.Forms.Button();
+            this.cmdPrevEIDB = new System.Windows.Forms.Button();
+            this.cmdInsertEIDB = new System.Windows.Forms.Button();
+            this.cmdNextEIDB = new System.Windows.Forms.Button();
+            this.cmdPrevRowB = new System.Windows.Forms.Button();
+            this.cmdNextRowB = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -153,8 +171,11 @@ namespace CrashEdit
             this.fraSLST.SuspendLayout();
             this.tabLoadLists.SuspendLayout();
             this.fraLoadListA.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMetavalueLoadA)).BeginInit();
             this.fraEIDA.SuspendLayout();
+            this.fraLoadListB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMetavalueLoadB)).BeginInit();
+            this.fraEIDB.SuspendLayout();
             this.SuspendLayout();
             // 
             // chkType
@@ -663,6 +684,7 @@ namespace CrashEdit
             this.tbcTabs.Controls.Add(this.tabGeneral);
             this.tbcTabs.Controls.Add(this.tabSpecial);
             this.tbcTabs.Controls.Add(this.tabCamera);
+            this.tbcTabs.Controls.Add(this.tabLoadLists);
             this.tbcTabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbcTabs.Location = new System.Drawing.Point(0, 0);
             this.tbcTabs.Name = "tbcTabs";
@@ -685,6 +707,7 @@ namespace CrashEdit
             this.tabGeneral.TabIndex = 0;
             this.tabGeneral.Text = "General";
             this.tabGeneral.UseVisualStyleBackColor = true;
+            this.tabGeneral.Enter += new System.EventHandler(this.tabGeneral_Enter);
             // 
             // tabSpecial
             // 
@@ -701,6 +724,7 @@ namespace CrashEdit
             this.tabSpecial.TabIndex = 1;
             this.tabSpecial.Text = "Special";
             this.tabSpecial.UseVisualStyleBackColor = true;
+            this.tabSpecial.Enter += new System.EventHandler(this.tabSpecial_Enter);
             // 
             // fraOtherSettings
             // 
@@ -1028,6 +1052,7 @@ namespace CrashEdit
             this.tabCamera.TabIndex = 2;
             this.tabCamera.Text = "Camera";
             this.tabCamera.UseVisualStyleBackColor = true;
+            this.tabCamera.Enter += new System.EventHandler(this.tabCamera_Enter);
             // 
             // fraSLST
             // 
@@ -1041,6 +1066,26 @@ namespace CrashEdit
             this.fraSLST.TabIndex = 1;
             this.fraSLST.TabStop = false;
             this.fraSLST.Text = "SLST EID";
+            // 
+            // lblSLST2
+            // 
+            this.lblSLST2.AutoSize = true;
+            this.lblSLST2.Location = new System.Drawing.Point(79, 45);
+            this.lblSLST2.Name = "lblSLST2";
+            this.lblSLST2.Size = new System.Drawing.Size(199, 13);
+            this.lblSLST2.TabIndex = 3;
+            this.lblSLST2.Text = "WARNING: String has invalid characters";
+            this.lblSLST2.Visible = false;
+            // 
+            // lblSLST1
+            // 
+            this.lblSLST1.AutoSize = true;
+            this.lblSLST1.Location = new System.Drawing.Point(79, 20);
+            this.lblSLST1.Name = "lblSLST1";
+            this.lblSLST1.Size = new System.Drawing.Size(206, 13);
+            this.lblSLST1.TabIndex = 2;
+            this.lblSLST1.Text = "WARNING: String is not 5 characters long";
+            this.lblSLST1.Visible = false;
             // 
             // txtSLST
             // 
@@ -1064,22 +1109,46 @@ namespace CrashEdit
             // 
             // tabLoadLists
             // 
+            this.tabLoadLists.Controls.Add(this.fraLoadListB);
+            this.tabLoadLists.Controls.Add(this.lblEID2);
+            this.tabLoadLists.Controls.Add(this.lblEID1);
             this.tabLoadLists.Controls.Add(this.fraLoadListA);
             this.tabLoadLists.Location = new System.Drawing.Point(4, 22);
             this.tabLoadLists.Name = "tabLoadLists";
             this.tabLoadLists.Padding = new System.Windows.Forms.Padding(3);
             this.tabLoadLists.Size = new System.Drawing.Size(390, 428);
             this.tabLoadLists.TabIndex = 2;
-            this.tabLoadLists.Text = "LoadLists";
+            this.tabLoadLists.Text = "Load Lists";
             this.tabLoadLists.UseVisualStyleBackColor = true;
+            this.tabLoadLists.Enter += new System.EventHandler(this.tabLoadLists_Enter);
+            // 
+            // lblEID2
+            // 
+            this.lblEID2.AutoSize = true;
+            this.lblEID2.Location = new System.Drawing.Point(16, 335);
+            this.lblEID2.Name = "lblEID2";
+            this.lblEID2.Size = new System.Drawing.Size(199, 13);
+            this.lblEID2.TabIndex = 5;
+            this.lblEID2.Text = "WARNING: String has invalid characters";
+            this.lblEID2.Visible = false;
+            // 
+            // lblEID1
+            // 
+            this.lblEID1.AutoSize = true;
+            this.lblEID1.Location = new System.Drawing.Point(16, 310);
+            this.lblEID1.Name = "lblEID1";
+            this.lblEID1.Size = new System.Drawing.Size(206, 13);
+            this.lblEID1.TabIndex = 4;
+            this.lblEID1.Text = "WARNING: String is not 5 characters long";
+            this.lblEID1.Visible = false;
             // 
             // fraLoadListA
             // 
-            this.fraLoadListA.Controls.Add(this.label1);
-            this.fraLoadListA.Controls.Add(this.button1);
-            this.fraLoadListA.Controls.Add(this.button2);
-            this.fraLoadListA.Controls.Add(this.numericUpDown1);
-            this.fraLoadListA.Controls.Add(this.lblRowIndexA);
+            this.fraLoadListA.Controls.Add(this.lblMetavalueLoadA);
+            this.fraLoadListA.Controls.Add(this.cmdRemoveRowA);
+            this.fraLoadListA.Controls.Add(this.cmdInsertRowA);
+            this.fraLoadListA.Controls.Add(this.numMetavalueLoadA);
+            this.fraLoadListA.Controls.Add(this.lblLoadListRowIndexA);
             this.fraLoadListA.Controls.Add(this.fraEIDA);
             this.fraLoadListA.Controls.Add(this.cmdPrevRowA);
             this.fraLoadListA.Controls.Add(this.cmdNextRowA);
@@ -1090,59 +1159,62 @@ namespace CrashEdit
             this.fraLoadListA.TabStop = false;
             this.fraLoadListA.Text = "Load List A";
             // 
-            // label1
+            // lblMetavalueLoadA
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 75);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(57, 13);
-            this.label1.TabIndex = 20;
-            this.label1.Text = "Metavalue";
+            this.lblMetavalueLoadA.AutoSize = true;
+            this.lblMetavalueLoadA.Location = new System.Drawing.Point(6, 75);
+            this.lblMetavalueLoadA.Name = "lblMetavalueLoadA";
+            this.lblMetavalueLoadA.Size = new System.Drawing.Size(57, 13);
+            this.lblMetavalueLoadA.TabIndex = 20;
+            this.lblMetavalueLoadA.Text = "Metavalue";
             // 
-            // button1
+            // cmdRemoveRowA
             // 
-            this.button1.Location = new System.Drawing.Point(6, 99);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(64, 23);
-            this.button1.TabIndex = 16;
-            this.button1.Text = "Remove";
-            this.button1.UseVisualStyleBackColor = true;
+            this.cmdRemoveRowA.Location = new System.Drawing.Point(6, 99);
+            this.cmdRemoveRowA.Name = "cmdRemoveRowA";
+            this.cmdRemoveRowA.Size = new System.Drawing.Size(64, 23);
+            this.cmdRemoveRowA.TabIndex = 16;
+            this.cmdRemoveRowA.Text = "Remove";
+            this.cmdRemoveRowA.UseVisualStyleBackColor = true;
+            this.cmdRemoveRowA.Click += new System.EventHandler(this.cmdRemoveRowA_Click);
             // 
-            // button2
+            // cmdInsertRowA
             // 
-            this.button2.Location = new System.Drawing.Point(74, 99);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(63, 23);
-            this.button2.TabIndex = 17;
-            this.button2.Text = "Insert";
-            this.button2.UseVisualStyleBackColor = true;
+            this.cmdInsertRowA.Location = new System.Drawing.Point(74, 99);
+            this.cmdInsertRowA.Name = "cmdInsertRowA";
+            this.cmdInsertRowA.Size = new System.Drawing.Size(63, 23);
+            this.cmdInsertRowA.TabIndex = 17;
+            this.cmdInsertRowA.Text = "Insert";
+            this.cmdInsertRowA.UseVisualStyleBackColor = true;
+            this.cmdInsertRowA.Click += new System.EventHandler(this.cmdInsertRowA_Click);
             // 
-            // numericUpDown1
+            // numMetavalueLoadA
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(69, 73);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
+            this.numMetavalueLoadA.Location = new System.Drawing.Point(69, 73);
+            this.numMetavalueLoadA.Maximum = new decimal(new int[] {
             32767,
             0,
             0,
             0});
-            this.numericUpDown1.Minimum = new decimal(new int[] {
+            this.numMetavalueLoadA.Minimum = new decimal(new int[] {
             32768,
             0,
             0,
             -2147483648});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(68, 20);
-            this.numericUpDown1.TabIndex = 19;
+            this.numMetavalueLoadA.Name = "numMetavalueLoadA";
+            this.numMetavalueLoadA.Size = new System.Drawing.Size(68, 20);
+            this.numMetavalueLoadA.TabIndex = 19;
+            this.numMetavalueLoadA.ValueChanged += new System.EventHandler(this.numMetavalueLoadA_ValueChanged);
             // 
-            // lblRowIndexA
+            // lblLoadListRowIndexA
             // 
-            this.lblRowIndexA.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblRowIndexA.Location = new System.Drawing.Point(44, 45);
-            this.lblRowIndexA.Name = "lblRowIndexA";
-            this.lblRowIndexA.Size = new System.Drawing.Size(60, 23);
-            this.lblRowIndexA.TabIndex = 17;
-            this.lblRowIndexA.Text = "?? / ??";
-            this.lblRowIndexA.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblLoadListRowIndexA.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLoadListRowIndexA.Location = new System.Drawing.Point(44, 45);
+            this.lblLoadListRowIndexA.Name = "lblLoadListRowIndexA";
+            this.lblLoadListRowIndexA.Size = new System.Drawing.Size(60, 23);
+            this.lblLoadListRowIndexA.TabIndex = 17;
+            this.lblLoadListRowIndexA.Text = "?? / ??";
+            this.lblLoadListRowIndexA.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // fraEIDA
             // 
@@ -1167,6 +1239,8 @@ namespace CrashEdit
             this.txtEIDA.Name = "txtEIDA";
             this.txtEIDA.Size = new System.Drawing.Size(118, 20);
             this.txtEIDA.TabIndex = 15;
+            this.txtEIDA.TextChanged += new System.EventHandler(this.txtEIDA_TextChanged);
+            this.txtEIDA.LostFocus += new System.EventHandler(this.txtEIDA_LostFocus);
             // 
             // lblEIDIndexA
             // 
@@ -1186,6 +1260,7 @@ namespace CrashEdit
             this.cmdAppendEIDA.TabIndex = 12;
             this.cmdAppendEIDA.Text = "Append";
             this.cmdAppendEIDA.UseVisualStyleBackColor = true;
+            this.cmdAppendEIDA.Click += new System.EventHandler(this.cmdAppendEIDA_Click);
             // 
             // cmdRemoveEIDA
             // 
@@ -1195,6 +1270,7 @@ namespace CrashEdit
             this.cmdRemoveEIDA.TabIndex = 11;
             this.cmdRemoveEIDA.Text = "Remove";
             this.cmdRemoveEIDA.UseVisualStyleBackColor = true;
+            this.cmdRemoveEIDA.Click += new System.EventHandler(this.cmdRemoveEIDA_Click);
             // 
             // cmdPrevEIDA
             // 
@@ -1204,6 +1280,7 @@ namespace CrashEdit
             this.cmdPrevEIDA.TabIndex = 8;
             this.cmdPrevEIDA.Text = "Previous";
             this.cmdPrevEIDA.UseVisualStyleBackColor = true;
+            this.cmdPrevEIDA.Click += new System.EventHandler(this.cmdPrevEIDA_Click);
             // 
             // cmdInsertEIDA
             // 
@@ -1213,6 +1290,7 @@ namespace CrashEdit
             this.cmdInsertEIDA.TabIndex = 13;
             this.cmdInsertEIDA.Text = "Insert";
             this.cmdInsertEIDA.UseVisualStyleBackColor = true;
+            this.cmdInsertEIDA.Click += new System.EventHandler(this.cmdInsertEIDA_Click);
             // 
             // cmdNextEIDA
             // 
@@ -1222,6 +1300,7 @@ namespace CrashEdit
             this.cmdNextEIDA.TabIndex = 9;
             this.cmdNextEIDA.Text = "Next";
             this.cmdNextEIDA.UseVisualStyleBackColor = true;
+            this.cmdNextEIDA.Click += new System.EventHandler(this.cmdNextEIDA_Click);
             // 
             // cmdPrevRowA
             // 
@@ -1231,6 +1310,7 @@ namespace CrashEdit
             this.cmdPrevRowA.TabIndex = 15;
             this.cmdPrevRowA.Text = "Previous";
             this.cmdPrevRowA.UseVisualStyleBackColor = true;
+            this.cmdPrevRowA.Click += new System.EventHandler(this.cmdPrevRowA_Click);
             // 
             // cmdNextRowA
             // 
@@ -1240,26 +1320,187 @@ namespace CrashEdit
             this.cmdNextRowA.TabIndex = 16;
             this.cmdNextRowA.Text = "Next";
             this.cmdNextRowA.UseVisualStyleBackColor = true;
+            this.cmdNextRowA.Click += new System.EventHandler(this.cmdNextRowA_Click);
             // 
-            // lblSLST1
+            // fraLoadListB
             // 
-            this.lblSLST1.AutoSize = true;
-            this.lblSLST1.Location = new System.Drawing.Point(79, 20);
-            this.lblSLST1.Name = "lblSLST1";
-            this.lblSLST1.Size = new System.Drawing.Size(206, 13);
-            this.lblSLST1.TabIndex = 2;
-            this.lblSLST1.Text = "WARNING: String is not 5 characters long";
-            this.lblSLST1.Visible = false;
+            this.fraLoadListB.Controls.Add(this.lblMetavalueLoadB);
+            this.fraLoadListB.Controls.Add(this.cmdRemoveRowB);
+            this.fraLoadListB.Controls.Add(this.cmdInsertRowB);
+            this.fraLoadListB.Controls.Add(this.numMetavalueLoadB);
+            this.fraLoadListB.Controls.Add(this.lblLoadListRowIndexB);
+            this.fraLoadListB.Controls.Add(this.fraEIDB);
+            this.fraLoadListB.Controls.Add(this.cmdPrevRowB);
+            this.fraLoadListB.Controls.Add(this.cmdNextRowB);
+            this.fraLoadListB.Location = new System.Drawing.Point(241, 6);
+            this.fraLoadListB.Name = "fraLoadListB";
+            this.fraLoadListB.Size = new System.Drawing.Size(143, 291);
+            this.fraLoadListB.TabIndex = 21;
+            this.fraLoadListB.TabStop = false;
+            this.fraLoadListB.Text = "Load List B";
             // 
-            // lblSLST2
+            // lblMetavalueLoadB
             // 
-            this.lblSLST2.AutoSize = true;
-            this.lblSLST2.Location = new System.Drawing.Point(79, 45);
-            this.lblSLST2.Name = "lblSLST2";
-            this.lblSLST2.Size = new System.Drawing.Size(199, 13);
-            this.lblSLST2.TabIndex = 3;
-            this.lblSLST2.Text = "WARNING: String has invalid characters";
-            this.lblSLST2.Visible = false;
+            this.lblMetavalueLoadB.AutoSize = true;
+            this.lblMetavalueLoadB.Location = new System.Drawing.Point(6, 75);
+            this.lblMetavalueLoadB.Name = "lblMetavalueLoadB";
+            this.lblMetavalueLoadB.Size = new System.Drawing.Size(57, 13);
+            this.lblMetavalueLoadB.TabIndex = 20;
+            this.lblMetavalueLoadB.Text = "Metavalue";
+            // 
+            // cmdRemoveRowB
+            // 
+            this.cmdRemoveRowB.Location = new System.Drawing.Point(6, 99);
+            this.cmdRemoveRowB.Name = "cmdRemoveRowB";
+            this.cmdRemoveRowB.Size = new System.Drawing.Size(64, 23);
+            this.cmdRemoveRowB.TabIndex = 16;
+            this.cmdRemoveRowB.Text = "Remove";
+            this.cmdRemoveRowB.UseVisualStyleBackColor = true;
+            this.cmdRemoveRowB.Click += new System.EventHandler(this.cmdRemoveRowB_Click);
+            // 
+            // cmdInsertRowB
+            // 
+            this.cmdInsertRowB.Location = new System.Drawing.Point(74, 99);
+            this.cmdInsertRowB.Name = "cmdInsertRowB";
+            this.cmdInsertRowB.Size = new System.Drawing.Size(63, 23);
+            this.cmdInsertRowB.TabIndex = 17;
+            this.cmdInsertRowB.Text = "Insert";
+            this.cmdInsertRowB.UseVisualStyleBackColor = true;
+            this.cmdInsertRowB.Click += new System.EventHandler(this.cmdInsertRowB_Click);
+            // 
+            // numMetavalueLoadB
+            // 
+            this.numMetavalueLoadB.Location = new System.Drawing.Point(69, 73);
+            this.numMetavalueLoadB.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+            this.numMetavalueLoadB.Minimum = new decimal(new int[] {
+            32768,
+            0,
+            0,
+            -2147483648});
+            this.numMetavalueLoadB.Name = "numMetavalueLoadB";
+            this.numMetavalueLoadB.Size = new System.Drawing.Size(68, 20);
+            this.numMetavalueLoadB.TabIndex = 19;
+            this.numMetavalueLoadB.ValueChanged += new System.EventHandler(this.numMetavalueLoadB_ValueChanged);
+            // 
+            // lblLoadListRowIndexB
+            // 
+            this.lblLoadListRowIndexB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLoadListRowIndexB.Location = new System.Drawing.Point(44, 45);
+            this.lblLoadListRowIndexB.Name = "lblLoadListRowIndexB";
+            this.lblLoadListRowIndexB.Size = new System.Drawing.Size(60, 23);
+            this.lblLoadListRowIndexB.TabIndex = 17;
+            this.lblLoadListRowIndexB.Text = "?? / ??";
+            this.lblLoadListRowIndexB.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // fraEIDB
+            // 
+            this.fraEIDB.Controls.Add(this.txtEIDB);
+            this.fraEIDB.Controls.Add(this.lblEIDIndexB);
+            this.fraEIDB.Controls.Add(this.cmdAppendEIDB);
+            this.fraEIDB.Controls.Add(this.cmdRemoveEIDB);
+            this.fraEIDB.Controls.Add(this.cmdPrevEIDB);
+            this.fraEIDB.Controls.Add(this.cmdInsertEIDB);
+            this.fraEIDB.Controls.Add(this.cmdNextEIDB);
+            this.fraEIDB.Location = new System.Drawing.Point(6, 132);
+            this.fraEIDB.Name = "fraEIDB";
+            this.fraEIDB.Size = new System.Drawing.Size(131, 153);
+            this.fraEIDB.TabIndex = 15;
+            this.fraEIDB.TabStop = false;
+            this.fraEIDB.Text = "Entries";
+            // 
+            // txtEIDB
+            // 
+            this.txtEIDB.Location = new System.Drawing.Point(7, 70);
+            this.txtEIDB.MaxLength = 5;
+            this.txtEIDB.Name = "txtEIDB";
+            this.txtEIDB.Size = new System.Drawing.Size(118, 20);
+            this.txtEIDB.TabIndex = 15;
+            this.txtEIDB.TextChanged += new System.EventHandler(this.txtEIDB_TextChanged);
+            this.txtEIDB.LostFocus += new System.EventHandler(this.txtEIDB_LostFocus);
+            // 
+            // lblEIDIndexB
+            // 
+            this.lblEIDIndexB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEIDIndexB.Location = new System.Drawing.Point(38, 45);
+            this.lblEIDIndexB.Name = "lblEIDIndexB";
+            this.lblEIDIndexB.Size = new System.Drawing.Size(60, 23);
+            this.lblEIDIndexB.TabIndex = 14;
+            this.lblEIDIndexB.Text = "?? / ??";
+            this.lblEIDIndexB.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // cmdAppendEIDB
+            // 
+            this.cmdAppendEIDB.Location = new System.Drawing.Point(6, 125);
+            this.cmdAppendEIDB.Name = "cmdAppendEIDB";
+            this.cmdAppendEIDB.Size = new System.Drawing.Size(120, 23);
+            this.cmdAppendEIDB.TabIndex = 12;
+            this.cmdAppendEIDB.Text = "Append";
+            this.cmdAppendEIDB.UseVisualStyleBackColor = true;
+            this.cmdAppendEIDB.Click += new System.EventHandler(this.cmdAppendEIDB_Click);
+            // 
+            // cmdRemoveEIDB
+            // 
+            this.cmdRemoveEIDB.Location = new System.Drawing.Point(6, 96);
+            this.cmdRemoveEIDB.Name = "cmdRemoveEIDB";
+            this.cmdRemoveEIDB.Size = new System.Drawing.Size(58, 23);
+            this.cmdRemoveEIDB.TabIndex = 11;
+            this.cmdRemoveEIDB.Text = "Remove";
+            this.cmdRemoveEIDB.UseVisualStyleBackColor = true;
+            this.cmdRemoveEIDB.Click += new System.EventHandler(this.cmdRemoveEIDB_Click);
+            // 
+            // cmdPrevEIDB
+            // 
+            this.cmdPrevEIDB.Location = new System.Drawing.Point(6, 19);
+            this.cmdPrevEIDB.Name = "cmdPrevEIDB";
+            this.cmdPrevEIDB.Size = new System.Drawing.Size(58, 23);
+            this.cmdPrevEIDB.TabIndex = 8;
+            this.cmdPrevEIDB.Text = "Previous";
+            this.cmdPrevEIDB.UseVisualStyleBackColor = true;
+            this.cmdPrevEIDB.Click += new System.EventHandler(this.cmdPrevEIDB_Click);
+            // 
+            // cmdInsertEIDB
+            // 
+            this.cmdInsertEIDB.Location = new System.Drawing.Point(68, 96);
+            this.cmdInsertEIDB.Name = "cmdInsertEIDB";
+            this.cmdInsertEIDB.Size = new System.Drawing.Size(58, 23);
+            this.cmdInsertEIDB.TabIndex = 13;
+            this.cmdInsertEIDB.Text = "Insert";
+            this.cmdInsertEIDB.UseVisualStyleBackColor = true;
+            this.cmdInsertEIDB.Click += new System.EventHandler(this.cmdInsertEIDB_Click);
+            // 
+            // cmdNextEIDB
+            // 
+            this.cmdNextEIDB.Location = new System.Drawing.Point(68, 19);
+            this.cmdNextEIDB.Name = "cmdNextEIDB";
+            this.cmdNextEIDB.Size = new System.Drawing.Size(58, 23);
+            this.cmdNextEIDB.TabIndex = 9;
+            this.cmdNextEIDB.Text = "Next";
+            this.cmdNextEIDB.UseVisualStyleBackColor = true;
+            this.cmdNextEIDB.Click += new System.EventHandler(this.cmdNextEIDB_Click);
+            // 
+            // cmdPrevRowB
+            // 
+            this.cmdPrevRowB.Location = new System.Drawing.Point(6, 19);
+            this.cmdPrevRowB.Name = "cmdPrevRowB";
+            this.cmdPrevRowB.Size = new System.Drawing.Size(64, 23);
+            this.cmdPrevRowB.TabIndex = 15;
+            this.cmdPrevRowB.Text = "Previous";
+            this.cmdPrevRowB.UseVisualStyleBackColor = true;
+            this.cmdPrevRowB.Click += new System.EventHandler(this.cmdPrevRowB_Click);
+            // 
+            // cmdNextRowB
+            // 
+            this.cmdNextRowB.Location = new System.Drawing.Point(74, 19);
+            this.cmdNextRowB.Name = "cmdNextRowB";
+            this.cmdNextRowB.Size = new System.Drawing.Size(63, 23);
+            this.cmdNextRowB.TabIndex = 16;
+            this.cmdNextRowB.Text = "Next";
+            this.cmdNextRowB.UseVisualStyleBackColor = true;
+            this.cmdNextRowB.Click += new System.EventHandler(this.cmdNextRowB_Click);
             // 
             // EntityBox
             // 
@@ -1314,11 +1555,17 @@ namespace CrashEdit
             this.fraSLST.ResumeLayout(false);
             this.fraSLST.PerformLayout();
             this.tabLoadLists.ResumeLayout(false);
+            this.tabLoadLists.PerformLayout();
             this.fraLoadListA.ResumeLayout(false);
             this.fraLoadListA.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMetavalueLoadA)).EndInit();
             this.fraEIDA.ResumeLayout(false);
             this.fraEIDA.PerformLayout();
+            this.fraLoadListB.ResumeLayout(false);
+            this.fraLoadListB.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMetavalueLoadB)).EndInit();
+            this.fraEIDB.ResumeLayout(false);
+            this.fraEIDB.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1392,15 +1639,15 @@ namespace CrashEdit
         private System.Windows.Forms.Button cmdPrevEIDA;
         private System.Windows.Forms.Label lblEIDIndexA;
         private System.Windows.Forms.Button cmdAppendEIDA;
-        private System.Windows.Forms.Label lblRowIndexA;
+        private System.Windows.Forms.Label lblLoadListRowIndexA;
         private System.Windows.Forms.GroupBox fraEIDA;
         private System.Windows.Forms.Button cmdPrevRowA;
         private System.Windows.Forms.Button cmdNextRowA;
         private System.Windows.Forms.TextBox txtEIDA;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button cmdRemoveRowA;
+        private System.Windows.Forms.Button cmdInsertRowA;
+        private System.Windows.Forms.NumericUpDown numMetavalueLoadA;
+        private System.Windows.Forms.Label lblMetavalueLoadA;
         private System.Windows.Forms.GroupBox fraScaling;
         private System.Windows.Forms.CheckBox chkScaling;
         private System.Windows.Forms.NumericUpDown numScaling;
@@ -1415,5 +1662,23 @@ namespace CrashEdit
         private System.Windows.Forms.TabPage tabCamera;
         private System.Windows.Forms.Label lblSLST2;
         private System.Windows.Forms.Label lblSLST1;
+        private System.Windows.Forms.Label lblEID2;
+        private System.Windows.Forms.Label lblEID1;
+        private System.Windows.Forms.GroupBox fraLoadListB;
+        private System.Windows.Forms.Label lblMetavalueLoadB;
+        private System.Windows.Forms.Button cmdRemoveRowB;
+        private System.Windows.Forms.Button cmdInsertRowB;
+        private System.Windows.Forms.NumericUpDown numMetavalueLoadB;
+        private System.Windows.Forms.Label lblLoadListRowIndexB;
+        private System.Windows.Forms.GroupBox fraEIDB;
+        private System.Windows.Forms.TextBox txtEIDB;
+        private System.Windows.Forms.Label lblEIDIndexB;
+        private System.Windows.Forms.Button cmdAppendEIDB;
+        private System.Windows.Forms.Button cmdRemoveEIDB;
+        private System.Windows.Forms.Button cmdPrevEIDB;
+        private System.Windows.Forms.Button cmdInsertEIDB;
+        private System.Windows.Forms.Button cmdNextEIDB;
+        private System.Windows.Forms.Button cmdPrevRowB;
+        private System.Windows.Forms.Button cmdNextRowB;
     }
 }
