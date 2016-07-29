@@ -44,7 +44,6 @@ namespace CrashEdit
             cmdExport.Click += new EventHandler(cmdExport_Click);
 
             numSampleRate = new NumericUpDown();
-            //numSampleRate.Value = 11025;
             numSampleRate.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -56,6 +55,7 @@ namespace CrashEdit
             0,
             -2147483648});
             numSampleRate.Name = "numSampleRate";
+            numSampleRate.Value = 11025;
 
             pnOptions = new TableLayoutPanel();
             pnOptions.Dock = DockStyle.Fill;
