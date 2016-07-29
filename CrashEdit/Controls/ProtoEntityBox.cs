@@ -29,9 +29,9 @@ namespace CrashEdit
 
         private void UpdatePosition()
         {
-            numX.Value = entity.StartX.Value;
-            numY.Value = entity.StartY.Value;
-            numZ.Value = entity.StartZ.Value;
+            numX.Value = entity.StartX;
+            numY.Value = entity.StartY;
+            numZ.Value = entity.StartZ;
         }
 
         private void numX_ValueChanged(object sender,EventArgs e)
@@ -51,12 +51,12 @@ namespace CrashEdit
 
         private void UpdateID()
         {
-            numID.Value = entity.ID.Value;
+            numID.Value = entity.ID;
         }
 
         private void numID_ValueChanged(object sender,EventArgs e)
         {
-            if (entity.ID.Value > -32768 && entity.ID.Value < 32767)
+            if (entity.ID > -32768 && entity.ID < 32767)
                 entity.ID = (short)numID.Value;
             else
                 throw new ArgumentOutOfRangeException("id");
@@ -64,7 +64,7 @@ namespace CrashEdit
 
         private void UpdateType()
         {
-            numType.Value = entity.Type.Value;
+            numType.Value = entity.Type;
         }
 
         private void numType_ValueChanged(object sender,EventArgs e)
@@ -75,7 +75,7 @@ namespace CrashEdit
 
         private void UpdateSubtype()
         {
-            numSubtype.Value = entity.Subtype.Value;
+            numSubtype.Value = entity.Subtype;
         }
 
         private void numSubtype_ValueChanged(object sender,EventArgs e)
@@ -85,10 +85,10 @@ namespace CrashEdit
 
         private void UpdateSettings()
         {
-            numA.Value = entity.SettingA.Value;
-            numB.Value = entity.SettingB.Value;
-            numC.Value = entity.SettingC.Value;
-            numD.Value = entity.SettingD.Value;
+            numA.Value = entity.SettingA;
+            numB.Value = entity.SettingB;
+            numC.Value = entity.SettingC;
+            numD.Value = entity.SettingD;
         }
 
         private void numA_ValueChanged(object sender, EventArgs e)
