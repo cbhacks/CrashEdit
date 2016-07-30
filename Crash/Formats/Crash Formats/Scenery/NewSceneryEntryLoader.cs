@@ -5,7 +5,7 @@ namespace Crash
     [EntryType(3,GameVersion.Crash3)]
     public sealed class NewSceneryEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,int size)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -63,7 +63,7 @@ namespace Crash
                 byte extra = items[5][i * 4 + 3];
                 colors[i] = new SceneryColor(red,green,blue,extra);
             }
-            return new NewSceneryEntry(items[0],vertices,triangles,quads,items[4],colors,items[6],eid);
+            return new NewSceneryEntry(items[0],vertices,triangles,quads,items[4],colors,items[6],eid,size);
         }
     }
 }

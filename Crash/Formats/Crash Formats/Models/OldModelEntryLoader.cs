@@ -8,7 +8,7 @@ namespace Crash
     [EntryType(2,GameVersion.Crash1)]
     public sealed class OldModelEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,int size)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -28,7 +28,7 @@ namespace Crash
                 Array.Copy(items[1],i * 8,polygondata,0,polygondata.Length);
                 polygons[i] = OldModelPolygon.Load(polygondata);
             }
-            return new OldModelEntry(items[0],polygons,eid);
+            return new OldModelEntry(items[0],polygons,eid,size);
         }
     }
 }

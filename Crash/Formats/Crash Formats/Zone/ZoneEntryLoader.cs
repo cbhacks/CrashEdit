@@ -3,7 +3,7 @@ namespace Crash
     [EntryType(7,GameVersion.Crash2)]
     public sealed class ZoneEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,int size)
         {
             if (items.Length < 2)
             {
@@ -16,7 +16,7 @@ namespace Crash
             {
                 entities[i - 2] = Entity.Load(items[i]);
             }
-            return new ZoneEntry(unknown1,unknown2,entities,eid);
+            return new ZoneEntry(unknown1,unknown2,entities,eid,size);
         }
     }
 }

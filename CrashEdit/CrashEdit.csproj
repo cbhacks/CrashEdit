@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\Animation\CutsceneFrameController.cs" />
-    <Compile Include="Controllers\Animation\Animation1EntryController.cs" />
+    <Compile Include="Controllers\Animation\AnimationEntryController.cs" />
     <Compile Include="Controllers\Animation\FrameController.cs" />
     <Compile Include="Controllers\Animation\ProtoAnimationEntryController.cs" />
     <Compile Include="Controllers\Animation\ProtoFrameController.cs" />
@@ -70,6 +70,7 @@
     <Compile Include="Controllers\Animation\OldAnimationEntryController.cs" />
     <Compile Include="Controllers\Animation\OldFrameController.cs" />
     <Compile Include="Controllers\Model\ModelEntryController.cs" />
+    <Compile Include="Controllers\Model\T2EntryController.cs" />
     <Compile Include="Controllers\Scenery\NewSceneryEntryController.cs" />
     <Compile Include="Controllers\Scenery\SceneryColorListController.cs" />
     <Compile Include="Controllers\Scenery\ProtoSceneryEntryController.cs" />
@@ -187,6 +188,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\OldSceneryEntryViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\EntryChunkBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\SoundBox.cs">
@@ -313,6 +317,9 @@
     <EmbeddedResource Include="Controls\EntityBox.resx">
       <SubType>Designer</SubType>
       <DependentUpon>EntityBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\EntryChunkBox.resx">
+      <DependentUpon>EntryChunkBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SoundBox.resx">
       <DependentUpon>SoundBox.cs</DependentUpon>

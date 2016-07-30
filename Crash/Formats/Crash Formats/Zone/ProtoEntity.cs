@@ -12,7 +12,7 @@ namespace Crash
             int garbage = BitConv.FromInt32(data,0);
             short settinga = BitConv.FromInt16(data,4);
             short unknown = BitConv.FromInt16(data,6);
-            OldEntityID id = new OldEntityID(BitConv.FromInt16(data,8));
+            short id = BitConv.FromInt16(data,8);
             short positioncount = BitConv.FromInt16(data,10);
             short startx = BitConv.FromInt16(data,12);
             short starty = BitConv.FromInt16(data,14);
@@ -22,8 +22,11 @@ namespace Crash
             ProtoEntityPosition[] index = new ProtoEntityPosition [positioncount];
             for (int i = 0;i < positioncount - 1;i++)
             {
-                int position = BitConv.FromInt16(data,26 + 4 * i);
-                index[i] = new ProtoEntityPosition(position);
+                sbyte global = (sbyte)data[26 + 4 * i];
+                sbyte x = (sbyte)data[27 + 4 * i];
+                sbyte y = (sbyte)data[28 + 4 * i];
+                sbyte z = (sbyte)data[29 + 4 * i];
+                index[i] = new ProtoEntityPosition(global,x,y,z);
             }
             short settingb = BitConv.FromInt16(data,18);
             short settingc = BitConv.FromInt16(data,20);
@@ -33,26 +36,26 @@ namespace Crash
             if (positioncount <= 0)
                 ErrorManager.SignalError("ProtoEntity: Position count is negative or zero");
             short nullfield1 = BitConv.FromInt16(data,20 + positioncount * 4);
-            return new ProtoEntity(garbage,settinga,unknown,(OldEntityID)id,positioncount,startx,starty,startz,settingb,settingc,settingd,type,subtype,index,nullfield1);
+            return new ProtoEntity(garbage,settinga,unknown,id,positioncount,startx,starty,startz,settingb,settingc,settingd,type,subtype,index,nullfield1);
         }
 
         private int garbage;
         private short unknown;
-        private short? settinga;
-        private OldEntityID? id;
+        private short settinga;
+        private short id;
         private short positioncount;
-        private short? startx;
-        private short? starty;
-        private short? startz;
-        private short? settingb;
-        private short? settingc;
-        private short? settingd;
-        private byte? type;
-        private byte? subtype;
+        private short startx;
+        private short starty;
+        private short startz;
+        private short settingb;
+        private short settingc;
+        private short settingd;
+        private byte type;
+        private byte subtype;
         private List<ProtoEntityPosition> index = null;
         private short nullfield1;
 
-        public ProtoEntity(int garbage,short unknown,short settinga,OldEntityID id,short positioncount,short startx,short starty,short startz,short settingb,short settingc,short settingd,byte type,byte subtype,IEnumerable<ProtoEntityPosition> index,short nullfield1)
+        public ProtoEntity(int garbage,short unknown,short settinga,short id,short positioncount,short startx,short starty,short startz,short settingb,short settingc,short settingd,byte type,byte subtype,IEnumerable<ProtoEntityPosition> index,short nullfield1)
         {
             if (index == null)
                 throw new ArgumentNullException("index");
@@ -79,7 +82,7 @@ namespace Crash
             set { unknown = value; }
         }
 
-        public short? SettingA
+        public short SettingA
         {
             get { return settinga; }
             set { settinga = value; }
@@ -90,22 +93,10 @@ namespace Crash
             get { return garbage; }
         }
 
-        public short? ID
+        public short ID
         {
-            get { return id.HasValue ? (short?)id.Value.ID : null; }
-            set
-            {
-                if (value != null)
-                    if (id.HasValue)
-                        id = new OldEntityID(value.Value);
-                    else
-                        id = new OldEntityID(value.Value);
-                else
-                    if (id.HasValue)
-                        throw new InvalidOperationException();
-                    else
-                        id = null;
-            }
+            get { return id; }
+            set { id = value; }
         }
 
         public short PositionCount
@@ -113,31 +104,31 @@ namespace Crash
             get { return positioncount; }
         }
 
-        public short? SettingB
+        public short SettingB
         {
             get { return settinga; }
             set { settinga = value; }
         }
 
-        public short? SettingC
+        public short SettingC
         {
             get { return settingc; }
             set { settingc = value; }
         }
 
-        public short? SettingD
+        public short SettingD
         {
             get { return settingd; }
             set { settingd = value; }
         }
 
-        public byte? Type
+        public byte Type
         {
             get { return type; }
             set { type = value; }
         }
 
-        public byte? Subtype
+        public byte Subtype
         {
             get { return subtype; }
             set { subtype = value; }
@@ -153,19 +144,19 @@ namespace Crash
             get { return nullfield1; }
         }
 
-        public short? StartX
+        public short StartX
         {
             get { return startx; }
             set { startx = value; }
         }
 
-        public short? StartY
+        public short StartY
         {
             get { return starty; }
             set { starty = value; }
         }
 
-        public short? StartZ
+        public short StartZ
         {
             get { return startz; }
             set { startz = value; }
@@ -176,21 +167,24 @@ namespace Crash
             positioncount = (short)Index.Count;
             byte[] result = new byte [28 + 4 * (positioncount - 1)];
             BitConv.ToInt32(result,0,garbage);
-            BitConv.ToInt16(result,4,SettingA.Value);
+            BitConv.ToInt16(result,4,SettingA);
             BitConv.ToInt16(result,6,unknown);
-            BitConv.ToInt16(result,8,ID.Value);
+            BitConv.ToInt16(result,8,ID);
             BitConv.ToInt16(result,10,positioncount);
-            BitConv.ToInt16(result,12,StartX.Value);
-            BitConv.ToInt16(result,14,StartY.Value);
-            BitConv.ToInt16(result,16,StartZ.Value);
-            BitConv.ToInt16(result,18,SettingB.Value);
-            BitConv.ToInt16(result,20,SettingC.Value);
-            BitConv.ToInt16(result,22,SettingD.Value);
-            result[24] = Type.Value;
-            result[25] = Subtype.Value;
+            BitConv.ToInt16(result,12,StartX);
+            BitConv.ToInt16(result,14,StartY);
+            BitConv.ToInt16(result,16,StartZ);
+            BitConv.ToInt16(result,18,SettingB);
+            BitConv.ToInt16(result,20,SettingC);
+            BitConv.ToInt16(result,22,SettingD);
+            result[24] = Type;
+            result[25] = Subtype;
             for (int i = 0; i < positioncount - 1; i++)
             {
-                BitConv.ToInt32(result,26 + i * 4,index[i].Position);
+                result[26 + i * 4] = (byte)index[i].Global;
+                result[27 + i * 4] = (byte)index[i].X;
+                result[28 + i * 4] = (byte)index[i].Y;
+                result[29 + i * 4] = (byte)index[i].Z;
             }
             return result;
         }

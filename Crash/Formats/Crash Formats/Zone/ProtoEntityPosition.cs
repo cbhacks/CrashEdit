@@ -2,16 +2,37 @@ namespace Crash
 {
     public struct ProtoEntityPosition
     {
-        private int position;
+        private sbyte global;
+        private sbyte x;
+        private sbyte y;
+        private sbyte z;
 
-        public ProtoEntityPosition(int position)
+        public ProtoEntityPosition(sbyte global,sbyte x,sbyte y,sbyte z)
         {
-            this.position = position;
+            this.global = global;
+            this.x = x;
+            this.y = y;
+            this.z = z;
         }
 
-        public int Position
+        public sbyte Global
         {
-            get { return position; }
+            get { return global; }
+        }
+
+        public sbyte X
+        {
+            get { return x; }
+        }
+
+        public sbyte Y
+        {
+            get { return y; }
+        }
+
+        public sbyte Z
+        {
+            get { return z; }
         }
     }
 }

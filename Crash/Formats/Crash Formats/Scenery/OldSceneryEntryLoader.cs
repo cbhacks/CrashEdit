@@ -7,7 +7,7 @@ namespace Crash
     [EntryType(3,GameVersion.Crash1)]
     public sealed class OldSceneryEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,int size)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -42,7 +42,7 @@ namespace Crash
             {
                 extradata = items[3];
             }
-            return new OldSceneryEntry(items[0],polygons,vertices,extradata,eid);
+            return new OldSceneryEntry(items[0],polygons,vertices,extradata,eid,size);
         }
     }
 }

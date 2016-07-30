@@ -19,15 +19,15 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Animation Type 1 ({0})",animationentry.EName);
+            Node.Text = string.Format("Animation ({0})",animationentry.EName);
             Node.ImageKey = "thing";
             Node.SelectedImageKey = "thing";
         }
 
         protected override Control CreateEditor()
         {
-            //ModelEntry modelentry = EntryChunkController.NSFController.NSF.FindEID<ModelEntry>(animationentry.Frames[0].ModelEID);
-            return new AnimationEntryViewer(animationentry.Frames/*,modelentry*/);
+            ModelEntry modelentry = EntryChunkController.NSFController.NSF.FindEID<ModelEntry>(animationentry.Frames[0].ModelEID);
+            return new AnimationEntryViewer(animationentry.Frames,modelentry);
         }
 
         public AnimationEntry AnimationEntry

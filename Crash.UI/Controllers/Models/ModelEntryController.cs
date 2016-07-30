@@ -1,6 +1,6 @@
 namespace Crash.UI
 {
-    public sealed class ModelEntryController : MysteryMultiItemEntryController
+    public sealed class ModelEntryController : EntryController
     {
         private ModelEntry entry;
 

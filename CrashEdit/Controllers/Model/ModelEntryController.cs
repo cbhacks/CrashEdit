@@ -1,4 +1,5 @@
 using Crash;
+using System.Windows.Forms;
 
 namespace CrashEdit
 {
@@ -18,6 +19,11 @@ namespace CrashEdit
             Node.ImageKey = "thing";
             Node.SelectedImageKey = "thing";
         }
+
+        //protected override Control CreateEditor()
+        //{
+        //    return new ModelBox(modelentry);
+        //}
 
         public ModelEntry ModelEntry
         {

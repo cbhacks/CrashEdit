@@ -9,7 +9,7 @@ namespace Crash
         private List<SLSTItem> slstitems;
         //private SLSTItem0 slstitemlast;
 
-        public SLSTEntry(IEnumerable<SLSTItem> slstitems,int eid) : base(eid)
+        public SLSTEntry(IEnumerable<SLSTItem> slstitems,int eid,int size) : base(eid,size)
         {
             if (slstitems == null)
                 throw new ArgumentNullException("slstitems");
@@ -37,7 +37,7 @@ namespace Crash
                 items[i] = slstitems[i].Save();
             }
             //items[slstitems.Count + 1] = slstitemlast.Save();
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items,EID,Type,Size);
         }
     }
 }

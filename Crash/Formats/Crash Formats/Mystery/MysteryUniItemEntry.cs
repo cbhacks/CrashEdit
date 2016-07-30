@@ -6,7 +6,7 @@ namespace Crash
     {
         private byte[] data;
 
-        public MysteryUniItemEntry(byte[] data,int eid) : base(eid)
+        public MysteryUniItemEntry(byte[] data,int eid, int size) : base(eid, size)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
@@ -23,7 +23,7 @@ namespace Crash
             byte[][] items = new byte [1][];
             items[0] = data;
             int size = data.Length;
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items,EID,Type,Size);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Crash
         private VH vh;
         private SEP sep;
 
-        public MusicEntry(int vheid,int vb0eid,int vb1eid,int vb2eid,int vb3eid,int vb4eid,int vb5eid,int vb6eid,VH vh,SEP sep,int eid) : base(eid)
+        public MusicEntry(int vheid,int vb0eid,int vb1eid,int vb2eid,int vb3eid,int vb4eid,int vb5eid,int vb6eid,VH vh,SEP sep,int eid, int size) : base(eid, size)
         {
             if (sep == null)
                 throw new ArgumentNullException("sep");
@@ -109,7 +109,7 @@ namespace Crash
                 items[1] = new byte [0];
             }
             items[2] = sep.Save();
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items,EID,Type,Size);
         }
     }
 }

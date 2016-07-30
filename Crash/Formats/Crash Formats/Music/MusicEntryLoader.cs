@@ -8,7 +8,7 @@ namespace Crash
     [EntryType(13,GameVersion.Crash3)]
     public sealed class MusicEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,int size)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -39,7 +39,7 @@ namespace Crash
                 vh = null;
             }
             SEP sep = SEP.Load(items[2],seqcount);
-            return new MusicEntry(vheid,vb0eid,vb1eid,vb2eid,vb3eid,vb4eid,vb5eid,vb6eid,vh,sep,eid);
+            return new MusicEntry(vheid,vb0eid,vb1eid,vb2eid,vb3eid,vb4eid,vb5eid,vb6eid,vh,sep,eid,size);
         }
     }
 }

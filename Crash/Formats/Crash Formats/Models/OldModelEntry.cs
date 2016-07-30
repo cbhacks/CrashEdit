@@ -8,7 +8,7 @@ namespace Crash
         private byte[] info;
         private List<OldModelPolygon> polygons;
 
-        public OldModelEntry(byte[] info,IEnumerable<OldModelPolygon> polygons,int eid) : base(eid)
+        public OldModelEntry(byte[] info,IEnumerable<OldModelPolygon> polygons,int eid, int size) : base(eid, size)
         {
             if (info == null)
                 throw new ArgumentNullException("info");
@@ -42,7 +42,7 @@ namespace Crash
             {
                 polygons[i].Save().CopyTo(items[1],i * 8);
             }
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items,EID,Type,Size);
         }
     }
 }

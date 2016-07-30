@@ -7,7 +7,7 @@ namespace Crash
     [EntryType(1,GameVersion.Crash1)]
     public sealed class OldAnimationEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid, int size)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -16,7 +16,7 @@ namespace Crash
             {
                 frames[i] = OldFrame.Load(items[i]);
             }
-            return new OldAnimationEntry(frames,eid);
+            return new OldAnimationEntry(frames,eid,size);
         }
     }
 }

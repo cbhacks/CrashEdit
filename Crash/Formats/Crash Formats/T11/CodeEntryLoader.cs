@@ -10,7 +10,7 @@ namespace Crash
     [EntryType(11,GameVersion.Crash3)]
     public sealed class T11EntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,int size)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -22,7 +22,7 @@ namespace Crash
             {
                 ErrorManager.SignalError("T11Entry: First item length is wrong");
             }
-            return new T11Entry(items,eid);
+            return new T11Entry(items,eid,size);
         }
     }
 }

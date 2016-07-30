@@ -1,5 +1,6 @@
 using Crash;
 using System;
+using System.Windows.Forms;
 
 namespace CrashEdit
 {
@@ -22,23 +23,24 @@ namespace CrashEdit
             get { return entrychunk; }
         }
 
+        protected override Control CreateEditor()
+        {
+            return new EntryChunkBox(this);
+        }
+
         internal EntryController CreateEntryController(Entry entry)
         {
             if (entry is ProtoAnimationEntry)
             {
                 return new ProtoAnimationEntryController(this, (ProtoAnimationEntry)entry);
             }
-            if (entry is OldAnimationEntry)
+            else if (entry is OldAnimationEntry)
             {
                 return new OldAnimationEntryController(this,(OldAnimationEntry)entry);
             }
             else if (entry is T1Entry)
             {
                 return new T1EntryController(this,(T1Entry)entry);
-            }
-            else if (entry is AnimationEntry)
-            {
-                return new AnimationEntryController(this, (AnimationEntry)entry);
             }
             else if (entry is OldModelEntry)
             {
@@ -47,6 +49,10 @@ namespace CrashEdit
             else if (entry is ModelEntry)
             {
                 return new ModelEntryController(this, (ModelEntry)entry);
+            }
+            else if (entry is AnimationEntry)
+            {
+                return new AnimationEntryController(this, (AnimationEntry)entry);
             }
             else if (entry is ProtoSceneryEntry)
             {
@@ -143,6 +149,10 @@ namespace CrashEdit
             else if (entry is T21Entry)
             {
                 return new T21EntryController(this,(T21Entry)entry);
+            }
+            else if (entry is T2Entry)
+            {
+                return new T2EntryController(this, (T2Entry)entry);
             }
             else if (entry is UnprocessedEntry)
             {

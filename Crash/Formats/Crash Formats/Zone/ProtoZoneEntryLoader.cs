@@ -5,7 +5,7 @@ namespace Crash
     {
         private int camcount;
         
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,int size)
         {
             if (items.Length < 2)
             {
@@ -25,7 +25,7 @@ namespace Crash
                 entities[i - 2 - camcount] = ProtoEntity.Load(items[i]);
             }
             
-            return new ProtoZoneEntry(unknown1,unknown2,cameras,entities,camcount,eid);
+            return new ProtoZoneEntry(unknown1,unknown2,cameras,entities,camcount,eid,size);
         }
     }
 }

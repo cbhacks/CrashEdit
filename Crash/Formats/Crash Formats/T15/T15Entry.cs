@@ -2,7 +2,7 @@ namespace Crash
 {
     public sealed class T15Entry : MysteryUniItemEntry
     {
-        public T15Entry(byte[] data,int eid) : base(data,eid)
+        public T15Entry(byte[] data,int eid,int size) : base(data,eid,size)
         {
         }
 

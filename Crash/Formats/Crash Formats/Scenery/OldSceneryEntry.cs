@@ -12,7 +12,7 @@ namespace Crash
         private List<OldSceneryVertex> vertices;
         private byte[] extradata;
 
-        public OldSceneryEntry(byte[] info,IEnumerable<OldSceneryPolygon> polygons,IEnumerable<OldSceneryVertex> vertices,byte[] extradata,int eid) : base(eid)
+        public OldSceneryEntry(byte[] info,IEnumerable<OldSceneryPolygon> polygons,IEnumerable<OldSceneryVertex> vertices,byte[] extradata,int eid, int size) : base(eid, size)
         {
             if (info == null)
                 throw new ArgumentNullException("info");
@@ -80,7 +80,7 @@ namespace Crash
             {
                 items[3] = extradata;
             }
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items,EID,Type,Size);
         }
 
         public byte[] ToOBJ()

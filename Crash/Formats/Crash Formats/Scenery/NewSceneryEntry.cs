@@ -13,7 +13,7 @@ namespace Crash
         private List<SceneryColor> colors;
         private byte[] item6;
 
-        public NewSceneryEntry(byte[] info,IEnumerable<NewSceneryVertex> vertices,IEnumerable<SceneryTriangle> triangles,IEnumerable<SceneryQuad> quads,byte[] item4,IEnumerable<SceneryColor> colors,byte[] item6,int eid) : base(eid)
+        public NewSceneryEntry(byte[] info,IEnumerable<NewSceneryVertex> vertices,IEnumerable<SceneryTriangle> triangles,IEnumerable<SceneryQuad> quads,byte[] item4,IEnumerable<SceneryColor> colors,byte[] item6,int eid, int size) : base(eid, size)
         {
             this.info = info;
             this.vertices = new List<NewSceneryVertex>(vertices);
@@ -110,7 +110,7 @@ namespace Crash
                 items[5][i * 4 + 3] = colors[i].Extra;
             }
             items[6] = item6;
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items,EID,Type,Size);
         }
 
         public byte[] ToOBJ()

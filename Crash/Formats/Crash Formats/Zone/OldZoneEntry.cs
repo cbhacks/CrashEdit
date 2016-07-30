@@ -10,8 +10,8 @@ namespace Crash
         private List<OldEntity> entities;
         private int camcount;
 
-        public OldZoneEntry(byte[] unknown1,byte[] unknown2,IEnumerable<OldCamera> cameras,IEnumerable<OldEntity> entities,int camcount,int eid)
-            : base(eid)
+        public OldZoneEntry(byte[] unknown1,byte[] unknown2,IEnumerable<OldCamera> cameras,IEnumerable<OldEntity> entities,int camcount,int eid,int size)
+            : base(eid,size)
         {
             this.unknown1 = unknown1;
             this.unknown2 = unknown2;
@@ -64,7 +64,7 @@ namespace Crash
             {
                 items[2 + camcount + i] = entities[i].Save();
             }
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items,EID,Type,Size);
         }
     }
 }

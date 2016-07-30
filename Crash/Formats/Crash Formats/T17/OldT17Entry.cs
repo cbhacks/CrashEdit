@@ -4,7 +4,7 @@ namespace Crash
 {
     public sealed class OldT17Entry : MysteryMultiItemEntry
     {
-        public OldT17Entry(IEnumerable<byte[]> items,int eid) : base(items,eid)
+        public OldT17Entry(IEnumerable<byte[]> items,int eid,int size) : base(items,eid,size)
         {
         }
 

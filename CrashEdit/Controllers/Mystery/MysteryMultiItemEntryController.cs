@@ -26,7 +26,8 @@ namespace CrashEdit
         {
             byte[] data = FileUtil.OpenFile(FileFilters.Any);
             mysteryentry.Items.Add(data);
-            AddNode(new ItemController(this,data));
+            if (data != null)
+                AddNode(new ItemController(this,data));
         }
     }
 }

@@ -86,7 +86,8 @@ namespace Crash
                 Array.Copy(data,itemstart,itemdata,0,itemsize);
                 items[i] = itemdata;
             }
-            return new UnprocessedEntry(items,eid,type);
+            int size = data.Length;
+            return new UnprocessedEntry(items,eid,type,size);
         }
 
         public static string EIDToEName(int eid)
@@ -137,10 +138,12 @@ namespace Crash
         }
 
         private int eid;
+        private int size;
 
-        public Entry(int eid)
+        public Entry(int eid,int size)
         {
             this.eid = eid;
+            this.size = size;
         }
 
         public abstract int Type
@@ -156,6 +159,11 @@ namespace Crash
         public string EName
         {
             get { return EIDToEName(eid); }
+        }
+
+        public int Size
+        {
+            get { return size; }
         }
 
         public abstract UnprocessedEntry Unprocess();

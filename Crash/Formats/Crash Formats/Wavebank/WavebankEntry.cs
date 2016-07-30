@@ -7,7 +7,7 @@ namespace Crash
         private int id;
         private SampleSet samples;
 
-        public WavebankEntry(int id,SampleSet samples,int eid) : base(eid)
+        public WavebankEntry(int id,SampleSet samples,int eid,int size) : base(eid,size)
         {
             if (samples == null)
                 throw new ArgumentNullException("samples");
@@ -39,7 +39,7 @@ namespace Crash
             byte[][] items = new byte [2][];
             items[0] = info;
             items[1] = data;
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items,EID,Type,Size);
         }
     }
 }

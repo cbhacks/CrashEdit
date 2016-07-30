@@ -6,7 +6,7 @@ namespace Crash
     {
         private SampleSet samples;
 
-        public SpeechEntry(SampleSet samples,int eid) : base(eid)
+        public SpeechEntry(SampleSet samples,int eid,int size) : base(eid,size)
         {
             if (samples == null)
                 throw new ArgumentNullException("samples");
@@ -27,7 +27,7 @@ namespace Crash
         {
             byte[][] items = new byte [1][];
             items[0] = samples.Save();;
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items,EID,Type,Size);
         }
     }
 }

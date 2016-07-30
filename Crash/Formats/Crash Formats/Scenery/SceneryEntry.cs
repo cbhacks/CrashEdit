@@ -14,8 +14,8 @@ namespace Crash
         private List<SceneryColorList> colorlist;
         private byte[] item6;
 
-        public SceneryEntry(byte[] info,IEnumerable<SceneryVertex> vertices,IEnumerable<SceneryTriangle> triangles,IEnumerable<SceneryQuad> quads,byte[] item4,IEnumerable<SceneryColor> colors,IEnumerable<SceneryColorList> colorlist,byte[] item6,int eid)
-            : base(eid)
+        public SceneryEntry(byte[] info,IEnumerable<SceneryVertex> vertices,IEnumerable<SceneryTriangle> triangles,IEnumerable<SceneryQuad> quads,byte[] item4,IEnumerable<SceneryColor> colors,IEnumerable<SceneryColorList> colorlist,byte[] item6,int eid,int size)
+            : base(eid,size)
         {
             this.info = info;
             this.vertices = new List<SceneryVertex>(vertices);
@@ -114,7 +114,7 @@ namespace Crash
             items[4] = item4;
             items[5] = colorlist[0].Save();
             items[6] = item6;
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items,EID,Type,Size);
         }
 
         public byte[] ToOBJ()

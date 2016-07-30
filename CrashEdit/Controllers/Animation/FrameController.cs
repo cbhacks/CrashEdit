@@ -20,14 +20,12 @@ namespace CrashEdit
             Node.Text = "Frame";
             Node.ImageKey = "arrow";
             Node.SelectedImageKey = "arrow";
-            //AddMenu("Export as OBJ",Menu_Export_OBJ);
         }
 
         protected override Control CreateEditor()
         {
-            //ModelEntry modelentry = AnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<ModelEntry>(frame.ModelEID);
-            return new AnimationEntryViewer(frame/*,modelentry*/);
-            //return new FrameBox(this);
+            ModelEntry modelentry = AnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<ModelEntry>(frame.ModelEID);
+            return new AnimationEntryViewer(frame,modelentry);
         }
 
         public AnimationEntryController AnimationEntryController
@@ -39,19 +37,5 @@ namespace CrashEdit
         {
             get { return frame; }
         }
-
-        /*private void Menu_Export_OBJ()
-        {
-            ModelEntry modelentry = AnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<OModelEntry>(frame.ModelEID);
-            if (modelentry == null)
-            {
-                throw new GUIException("The linked model entry could not be found.");
-            }
-            if (MessageBox.Show("Texture and color information will not be exported.\n\nContinue anyway?","Export as OBJ",MessageBoxButtons.YesNo) != DialogResult.Yes)
-            {
-                return;
-            }
-            FileUtil.SaveFile(frame.ToOBJ(modelentry),FileFilters.OBJ,FileFilters.Any);
-        }*/
     }
 }

@@ -9,7 +9,7 @@ namespace Crash
             if (data == null)
                 throw new ArgumentNullException("data");
             if (data.Length != 3)
-                throw new ArgumentException("Value must be 6 bytes long.","data");
+                throw new ArgumentException("Value must be 3 bytes long.","data");
             byte x = data[0];
             byte y = data[1];
             byte z = data[2];

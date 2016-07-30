@@ -12,7 +12,7 @@ namespace Crash
         private List<ProtoSceneryVertex> vertices;
         private byte[] extradata;
 
-        public ProtoSceneryEntry(byte[] info,IEnumerable<ProtoSceneryPolygon> polygons,IEnumerable<ProtoSceneryVertex> vertices,byte[] extradata,int eid) : base(eid)
+        public ProtoSceneryEntry(byte[] info,IEnumerable<ProtoSceneryPolygon> polygons,IEnumerable<ProtoSceneryVertex> vertices,byte[] extradata,int eid,int size) : base(eid,size)
         {
             if (info == null)
                 throw new ArgumentNullException("info");
@@ -80,7 +80,7 @@ namespace Crash
             {
                 items[3] = extradata;
             }
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items,EID,Type,Size);
         }
 
         public byte[] ToOBJ()

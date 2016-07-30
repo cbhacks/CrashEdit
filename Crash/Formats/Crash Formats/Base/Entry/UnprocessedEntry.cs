@@ -6,7 +6,7 @@ namespace Crash
     {
         private int type;
 
-        public UnprocessedEntry(IEnumerable<byte[]> items,int eid,int type) : base(items,eid)
+        public UnprocessedEntry(IEnumerable<byte[]> items,int eid,int type,int size) : base(items,eid,size)
         {
             this.type = type;
         }
@@ -26,7 +26,7 @@ namespace Crash
             Dictionary<int,EntryLoader> loaders = GetLoaders(gameversion);
             if (loaders.ContainsKey(type))
             {
-                return loaders[type].Load(((List<byte[]>)Items).ToArray(),EID);
+                return loaders[type].Load(((List<byte[]>)Items).ToArray(),EID,Size);
             }
             else
             {

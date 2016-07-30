@@ -10,7 +10,7 @@ namespace Crash
     [EntryType(12,GameVersion.Crash3)]
     public sealed class SoundEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,int size)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -18,7 +18,7 @@ namespace Crash
             {
                 ErrorManager.SignalError("SoundEntry: Wrong number of items");
             }
-            return new SoundEntry(SampleSet.Load(items[0]),eid);
+            return new SoundEntry(SampleSet.Load(items[0]),eid,size);
         }
     }
 }
