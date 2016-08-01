@@ -34,20 +34,17 @@ namespace CrashEdit
         {
             this.frames = new List<Frame>();
             this.model = model;
+            frameid = 0;
             if (model.Positions != null)
             {
                 foreach (Frame frame in frames)
                 {
                     this.frames.Add(UncompressFrame(frame));
+                    frameid++;
                 }
             }
             else
-            {
-                foreach (Frame frame in frames)
-                {
-                    this.frames.Add(frame);
-                }
-            }
+                this.frames = new List<Frame>(frames);
             frameid = 0;
             animatetimer = new Timer();
             animatetimer.Interval = 1000/30;
@@ -59,9 +56,24 @@ namespace CrashEdit
             };
         }
 
+        public AnimationEntryViewer(ModelEntry model)
+        {
+            frames = new List<Frame>();
+            frames.Add(ModelToFrame(model));
+            this.model = model;
+            xoffset = 0;
+            yoffset = 0;
+            zoffset = 0;
+            frameid = 0;
+        }
+
         protected override int CameraRangeMargin
         {
-            get { return 400; }
+            get
+            {
+                int i = Math.Max(BitConv.FromInt32(model.Info,0) * 256,BitConv.FromInt32(model.Info,4) * 256);
+                return Math.Max(i,BitConv.FromInt32(model.Info,8) * 256);
+            }
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -72,7 +84,10 @@ namespace CrashEdit
                 {
                     foreach (FrameVertex vertex in frame.Vertices)
                     {
-                        yield return vertex;
+                        int x = vertex.X * BitConv.FromInt32(model.Info,0) + frame.XOffset;
+                        int y = vertex.Y * BitConv.FromInt32(model.Info,4) + frame.YOffset;
+                        int z = vertex.Z * BitConv.FromInt32(model.Info,8) + frame.ZOffset;
+                        yield return new Position(x,y,z);
                     }
                 }
             }
@@ -110,7 +125,7 @@ namespace CrashEdit
 
         private void RenderVertex(FrameVertex vertex)
         {
-            GL.Vertex3(vertex.X,vertex.Y,vertex.Z);
+            GL.Vertex3(vertex.X * BitConv.FromInt32(model.Info,0),vertex.Y * BitConv.FromInt32(model.Info,4),vertex.Z * BitConv.FromInt32(model.Info,8));
         }
 
         private Frame UncompressFrame(Frame frame)
@@ -133,20 +148,6 @@ namespace CrashEdit
                     vertexx -= (sbyte)(1 << model.Positions[i].XBits);
                 }
                 bit++;
-                byte modelz = model.Positions[i].Z;
-                if (model.Positions[i].ZBits == 7)
-                    modelz = 0;
-                sbyte vertexz = 0;
-                for (int ii = 0; ii < model.Positions[i].ZBits; ii++)
-                {
-                    vertexz |= (sbyte)(Convert.ToByte(frame.Temporals[bit]) << ii);
-                    bit++;
-                }
-                if (frame.Temporals[bit] == true)
-                {
-                    vertexz -= (sbyte)(1 << model.Positions[i].ZBits);
-                }
-                bit++;
                 byte modely = model.Positions[i].Y;
                 if (model.Positions[i].YBits == 7)
                     modely = 0;
@@ -161,12 +162,49 @@ namespace CrashEdit
                     vertexy -= (sbyte)(1 << model.Positions[i].YBits);
                 }
                 bit++;
-                byte finalx = (byte)((modelx + vertexx) % 256);
-                byte finalz = (byte)((modelz + vertexz) % 256);
-                byte finaly = (byte)((modely + vertexy) % 256);
+                byte modelz = model.Positions[i].Z;
+                if (model.Positions[i].ZBits == 7)
+                    modelz = 0;
+                sbyte vertexz = 0;
+                for (int ii = 0; ii < model.Positions[i].ZBits; ii++)
+                {
+                    vertexz |= (sbyte)(Convert.ToByte(frame.Temporals[bit]) << ii);
+                    bit++;
+                }
+                if (frame.Temporals[bit] == true)
+                {
+                    vertexz -= (sbyte)(1 << model.Positions[i].ZBits);
+                }
+                bit++;
+                byte finalx = 0;
+                byte finaly = 0;
+                byte finalz = 0;
+                if (frameid != 0)
+                {
+                    finalx = (byte)((modelx + vertexx + frames[frameid - 1].Vertices[i].X) % 256);
+                    finaly = (byte)((modely + vertexy + frames[frameid - 1].Vertices[i].Y) % 256);
+                    finalz = (byte)((modelz + vertexz + frames[frameid - 1].Vertices[i].Z) % 256);
+                }
+                else
+                {
+                    finalx = (byte)((modelx + vertexx) % 256);
+                    finaly = (byte)((modely + vertexy) % 256);
+                    finalz = (byte)((modelz + vertexz) % 256);
+                }
                 frame.Vertices[i] = new FrameVertex(finalx,finaly,finalz);
             }
             //Frame uncompressedframe = new Frame(xoffset,yoffset,zoffset,frame.Unknown,frame.VertexCount,frame.Collision,frame.ModelEID,frame.HeaderSize,frame.Settings);
+            return frame;
+        }
+
+        private Frame ModelToFrame(ModelEntry model)
+        {
+            List<FrameVertex> vertices = new List<FrameVertex>();
+            for (int i = 0; i < model.Positions.Count; i++)
+            {
+                vertices.Add(new FrameVertex(model.Positions[i].X,model.Positions[i].Y,model.Positions[i].Z));
+            }
+            Frame frame = new Frame(0,0,0,0,BitConv.FromInt32(model.Info,0x38),1,model.EID,24,null,vertices,null);
             return frame;
         }
 

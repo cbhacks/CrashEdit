@@ -20,10 +20,18 @@ namespace CrashEdit
             Node.SelectedImageKey = "thing";
         }
 
-        //protected override Control CreateEditor()
-        //{
-        //    return new ModelBox(modelentry);
-        //}
+        protected override Control CreateEditor()
+        {
+            if (modelentry.Positions != null)
+                return new AnimationEntryViewer(modelentry);
+            else
+            {
+                Label label = new Label();
+                label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+                label.Text = "No options available";
+                return label;
+            }
+        }
 
         public ModelEntry ModelEntry
         {
