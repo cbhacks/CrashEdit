@@ -132,67 +132,82 @@ namespace CrashEdit
         {
             //FrameVertex[] uncompressedvertices = new FrameVertex[frame.VertexCount];
             int bit = 0;
+            System.IO.StreamWriter file = new System.IO.StreamWriter("C:\\Games\\Crash 2 Levels - US\\S1\\cr10v-" + frameid + ".txt");
             for (int i = 0;i < model.Positions.Count;i++)
             {
                 byte modelx = (byte)(model.Positions[i].X * 2);
                 if (model.Positions[i].XBits == 7)
                     modelx = 0;
                 sbyte vertexx = 0;
-                for (int ii = 0; ii < model.Positions[i].XBits; ii++)
-                {
-                    vertexx |= (sbyte)(Convert.ToByte(frame.Temporals[bit]) << ii);
-                    bit++;
-                }
                 if (frame.Temporals[bit] == true)
                 {
                     vertexx -= (sbyte)(1 << model.Positions[i].XBits);
                 }
-                bit++;
-                byte modely = model.Positions[i].Y;
-                if (model.Positions[i].YBits == 7)
-                    modely = 0;
-                sbyte vertexy = 0;
-                for (int ii = 0; ii < model.Positions[i].YBits; ii++)
+                bit += model.Positions[i].XBits;
+                for (int ii = 0; ii < model.Positions[i].XBits; ii++)
                 {
-                    vertexy |= (sbyte)(Convert.ToByte(frame.Temporals[bit]) << ii);
-                    bit++;
+                    vertexx |= (sbyte)(Convert.ToByte(frame.Temporals[bit]) << ii);
+                    bit--;
                 }
-                if (frame.Temporals[bit] == true)
-                {
-                    vertexy -= (sbyte)(1 << model.Positions[i].YBits);
-                }
-                bit++;
+                bit += model.Positions[i].XBits + 1;
                 byte modelz = model.Positions[i].Z;
                 if (model.Positions[i].ZBits == 7)
                     modelz = 0;
                 sbyte vertexz = 0;
-                for (int ii = 0; ii < model.Positions[i].ZBits; ii++)
-                {
-                    vertexz |= (sbyte)(Convert.ToByte(frame.Temporals[bit]) << ii);
-                    bit++;
-                }
                 if (frame.Temporals[bit] == true)
                 {
                     vertexz -= (sbyte)(1 << model.Positions[i].ZBits);
                 }
-                bit++;
+                bit += model.Positions[i].ZBits;
+                for (int ii = 0; ii < model.Positions[i].ZBits; ii++)
+                {
+                    vertexz |= (sbyte)(Convert.ToByte(frame.Temporals[bit]) << ii);
+                    bit--;
+                }
+                bit += model.Positions[i].ZBits + 1;
+                byte modely = model.Positions[i].Y;
+                if (model.Positions[i].YBits == 7)
+                    modely = 0;
+                sbyte vertexy = 0;
+                if (frame.Temporals[bit] == true)
+                {
+                    vertexy -= (sbyte)(1 << model.Positions[i].YBits);
+                }
+                bit += model.Positions[i].YBits;
+                for (int ii = 0; ii < model.Positions[i].YBits; ii++)
+                {
+                    vertexy |= (sbyte)(Convert.ToByte(frame.Temporals[bit]) << ii);
+                    bit--;
+                }
+                bit += model.Positions[i].YBits + 1;
                 byte finalx = 0;
                 byte finaly = 0;
                 byte finalz = 0;
+                byte tempx = (byte)((vertexx + 256) % 256);
+                byte tempy = (byte)((vertexy + 256) % 256);
+                byte tempz = (byte)((vertexz + 256) % 256);
                 if (frameid != 0)
                 {
-                    finalx = (byte)((modelx + vertexx + frames[frameid - 1].Vertices[i].X) % 256);
-                    finaly = (byte)((modely + vertexy + frames[frameid - 1].Vertices[i].Y) % 256);
-                    finalz = (byte)((modelz + vertexz + frames[frameid - 1].Vertices[i].Z) % 256);
+                    finalx = (byte)((((modelx + tempx) + 256) % 256 + frames[frameid - 1].Vertices[i].X) % 256);
+                    finalz = (byte)((((modelz + tempz) + 256) % 256 + frames[frameid - 1].Vertices[i].Z) % 256);
+                    finaly = (byte)((((modely + tempy) + 256) % 256 + frames[frameid - 1].Vertices[i].Y) % 256);
                 }
                 else
                 {
-                    finalx = (byte)((modelx + vertexx) % 256);
-                    finaly = (byte)((modely + vertexy) % 256);
-                    finalz = (byte)((modelz + vertexz) % 256);
+                    finalx = (byte)(((modelx + tempx) + 256) % 256);
+                    finalz = (byte)(((modelz + tempz) + 256) % 256);
+                    finaly = (byte)(((modely + tempy) + 256) % 256);
                 }
+                file.WriteLine("POSITION " + i);
+                file.WriteLine("x: " + 2 * modelx + " y: " + modely + " z: " + modelz);
+                file.WriteLine("xbits: " + model.Positions[i].XBits + " ybits: " + model.Positions[i].YBits + " zbits: " + model.Positions[i].ZBits);
+                file.WriteLine("temporalx: " + vertexx + " temporaly: " + vertexy + " temporalz: " + vertexz);
+                file.WriteLine("finalx: " + finalx + " finaly: " + finaly + " finalz: " + finalz);
+                file.WriteLine();
                 frame.Vertices[i] = new FrameVertex(finalx,finaly,finalz);
             }
+            file.WriteLine("bitend: " + bit);
+            file.Close();
             //Frame uncompressedframe = new Frame(xoffset,yoffset,zoffset,frame.Unknown,frame.VertexCount,frame.Collision,frame.ModelEID,frame.HeaderSize,frame.Settings);
             return frame;
         }

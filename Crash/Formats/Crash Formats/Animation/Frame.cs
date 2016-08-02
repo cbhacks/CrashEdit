@@ -54,7 +54,7 @@ namespace Crash
                     int val = BitConv.FromInt32(data,headersize + i * 4);
                     for (int ii = 0;ii < 32;ii++)
                     {
-                        temporals[i * 32 + ii] = (((val >> ii) & 0x1) == 1);
+                        temporals[i * 32 + ii] = (((val >> (31 - ii)) & 0x1) == 1);
                     }
                 }
             }
@@ -190,7 +190,7 @@ namespace Crash
                     int val = 0;
                     for (short ii = 0; ii < 32; ii++)
                     {
-                        val |= Convert.ToByte(Temporals[i * 32 + ii]) << ii;
+                        val |= Convert.ToByte(Temporals[i * 32 + ii]) << (31 - ii);
                     }
                     BitConv.ToInt32(result,headersize + i * 4,val);
                 }
