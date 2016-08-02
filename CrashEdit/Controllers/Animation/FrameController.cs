@@ -22,11 +22,11 @@ namespace CrashEdit
             Node.SelectedImageKey = "arrow";
         }
 
-        //protected override Control CreateEditor()
-        //{
-        //    ModelEntry modelentry = AnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<ModelEntry>(frame.ModelEID);
-        //    return new AnimationEntryViewer(frame,modelentry);
-        //}
+        protected override Control CreateEditor()
+        {
+            ModelEntry modelentry = AnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<ModelEntry>(frame.ModelEID);
+            return new AnimationEntryViewer(frame, modelentry);
+        }
 
         public AnimationEntryController AnimationEntryController
         {
