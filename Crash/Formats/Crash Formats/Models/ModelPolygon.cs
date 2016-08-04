@@ -33,13 +33,15 @@ namespace Crash
             colorslot = ((structure & 0xFFFF0000) == 0);
             animated = ((structure >> 8) == 1);
             textureindex = (byte)structure;
-            colorindex = (byte)((structure >> 9) & 0x7FFF);
+            colorindex = (byte)((structure >> 9) & 0x7F);
             pointer = (byte)(structure >> 16);
-            tritype = (byte)(structure >> 28);
-            structtype = (byte)((structure >> 24) & 0xF);
+            tritype = (byte)((structure >> 28) & 0xF); //AA, BB, CC
+            structtype = (byte)((structure >> 24) & 0xF); //Original or duplicate
+            //Colorslot
             colorflags = (byte)(structure & 0x3);
             colora = (byte)((structure >> 2) & 0x7F);
             colorb = (byte)((structure >> 9) & 0x7F);
+            //Footer
             footer = ((uint)structure == 0xFFFFFFFF);
             this.structure = structure;
         }
@@ -59,42 +61,42 @@ namespace Crash
             get { return colorslot; }
         }
 
-        private byte ColorFlags
+        public byte ColorFlags
         {
             get { return colorflags; }
         }
 
-        private byte ColorA
+        public byte ColorA
         {
             get { return colora; }
         }
 
-        private byte ColorB
+        public byte ColorB
         {
             get { return colorb; }
         }
 
-        private byte TextureIndex
+        public byte TextureIndex
         {
             get { return textureindex; }
         }
 
-        private byte ColorIndex
+        public byte ColorIndex
         {
             get { return colorindex; }
         }
 
-        private byte Pointer
+        public byte Pointer
         {
             get { return pointer; }
         }
 
-        private byte TriType
+        public byte TriType
         {
             get { return tritype; }
         }
 
-        private byte StructType
+        public byte StructType
         {
             get { return structtype; }
         }

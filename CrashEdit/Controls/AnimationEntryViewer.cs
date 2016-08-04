@@ -1,5 +1,6 @@
 using Crash;
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
@@ -12,9 +13,9 @@ namespace CrashEdit
         private ModelEntry model;
         private int frameid;
         private Timer animatetimer;
-        private int xoffset;
-        private int yoffset;
-        private int zoffset;
+        private short xoffset;
+        private short yoffset;
+        private short zoffset;
 
         public AnimationEntryViewer(Frame frame,ModelEntry model)
         {
@@ -24,9 +25,9 @@ namespace CrashEdit
                 frames.Add(UncompressFrame(frame));
             else
                 frames.Add(frame);
-            xoffset = frame.XOffset;
-            yoffset = frame.YOffset;
-            zoffset = frame.ZOffset;
+            xoffset = 0; //frame.XOffset;
+            yoffset = 0; //frame.YOffset;
+            zoffset = 0; //frame.ZOffset;
             frameid = 0;
         }
 
@@ -52,6 +53,13 @@ namespace CrashEdit
             animatetimer.Tick += delegate (object sender,EventArgs e)
             {
                 frameid++;
+                if (frameid == this.frames.Count)
+                {
+                    frameid = 0;
+                }
+                xoffset = 0; //this.frames[frameid].XOffset;
+                yoffset = 0; //this.frames[frameid].YOffset;
+                zoffset = 0; //this.frames[frameid].ZOffset;
                 Refresh();
             };
         }
@@ -71,8 +79,8 @@ namespace CrashEdit
         {
             get
             {
-                int i = Math.Max(BitConv.FromInt32(model.Info,0) * 128,BitConv.FromInt32(model.Info,4) * 128);
-                return Math.Max(i,BitConv.FromInt32(model.Info,8) * 128);
+                int i = Math.Max(BitConv.FromInt32(model.Info,0) * 64,BitConv.FromInt32(model.Info,4) * 64);
+                return Math.Max(i,BitConv.FromInt32(model.Info,8) * 64);
             }
         }
 
@@ -84,9 +92,9 @@ namespace CrashEdit
                 {
                     foreach (FrameVertex vertex in frame.Vertices)
                     {
-                        int x = vertex.X * BitConv.FromInt32(model.Info,0) + frame.XOffset;
-                        int y = vertex.Z * BitConv.FromInt32(model.Info,4) + frame.ZOffset;
-                        int z = vertex.Y * BitConv.FromInt32(model.Info,8) + frame.YOffset;
+                        int x = (vertex.X + 0000 / 4) * BitConv.FromInt32(model.Info,0);
+                        int y = (vertex.Z + 0000 / 4) * BitConv.FromInt32(model.Info,4);
+                        int z = (vertex.Y + 0000 / 4) * BitConv.FromInt32(model.Info,8);
                         yield return new Position(x,y,z);
                     }
                 }
@@ -100,19 +108,221 @@ namespace CrashEdit
 
         private void RenderFrame(Frame frame)
         {
-            //if (model != null)
-            //{
-            //    GL.Begin(PrimitiveType.Triangles);
-            //    foreach (ModelPolygon polygon in model.Polygons)
-            //    {
-            //        if (!polygon.ColorSlot)
-            //        {
-
-            //        }
-            //    }
-            //    GL.End();
-            //}
-            //else
+            if (model != null)
+            {
+                int i = 0;
+                int ii = 0;
+                int vertexid = 0; //BitConv.FromInt32(model.Info,0x4C);
+                int tris = 0;
+                for (int iii = 0;iii < model.Polygons.Count;iii++)
+                {
+                    if (!model.Polygons[iii].ColorSlot && !model.Polygons[iii].Footer) tris++;
+                }
+                int[] indexes = new int[tris];
+                GL.Begin(PrimitiveType.Triangles);
+                foreach (ModelPolygon polygon in model.Polygons)
+                {
+                    if (!polygon.ColorSlot && !polygon.Footer)
+                    {
+                        if ((polygon.StructType & 0x4) == 0)
+                        {
+                            indexes[ii] = vertexid;
+                            vertexid++;
+                        }
+                        else
+                        {
+                            int j = 1;
+                            while (model.Polygons[i - j].Pointer != polygon.Pointer || model.Polygons[i - j].Pointer == 0x57 || ((model.Polygons[i - j].StructType & 4) == 4) || model.Polygons[i - j].ColorSlot)
+                            {
+                                j++;
+                            }
+                            int k = 0;
+                            int l = 0;
+                            while (i - j - l > -1)
+                            {
+                                if (model.Polygons[i - j - l].ColorSlot) k++;
+                                l++;
+                            }
+                            indexes[ii] = indexes[i - j - k];
+                        }
+                        ii++;
+                    }
+                    i++;
+                }
+                i = 0;
+                ii = 0;
+                byte invalid = 0;
+                foreach (ModelPolygon polygon in model.Polygons)
+                {
+                    byte r = 0;
+                    byte g = 0;
+                    byte b = 0;
+                    int vertexa = 0;
+                    int vertexb = 0;
+                    int vertexc = 0;
+                    if (!polygon.ColorSlot && !polygon.Footer)
+                    {
+                        GL.Color3(Color.Fuchsia);
+                        vertexa = indexes[ii];
+                        //Vertex IDs
+                        if (polygon.TriType < 4) //AA
+                        {
+                            vertexb = indexes[ii - 1];
+                            vertexc = indexes[ii - 2];
+                        }
+                        else if (polygon.TriType < 8) //BB
+                        {
+                            vertexb = indexes[ii - 1];
+                            int j = 1;
+                            while ((model.Polygons[i - j].TriType > 3 && model.Polygons[i - j].TriType < 8) || model.Polygons[i - j].ColorSlot)
+                            {
+                                j++;
+                            }
+                            int k = 0;
+                            int l = 0;
+                            while (i - j - l > -1)
+                            {
+                                if (model.Polygons[i - j - l].ColorSlot) k++;
+                                l++;
+                            }
+                            if (model.Polygons[i - j].TriType < 4) //AA
+                                vertexc = indexes[i - j - k - 2];
+                            else if (invalid == 0) //CC
+                                vertexc = indexes[i - j - k];
+                            else
+                                vertexc = 0;
+                        }
+                        else if (invalid == 0) //CC
+                        {
+                            vertexb = indexes[ii + 1];
+                            vertexc = indexes[ii + 2];
+                            invalid = 2;
+                        }
+                        else //Invalid CC
+                        {
+                            vertexa = 0;
+                            vertexb = 0;
+                            vertexc = 0;
+                            invalid--;
+                        }
+                        //Vertex Colors
+                        //Vertex A
+                        //AA
+                        //BB
+                        //CC
+                        r = model.Colors[polygon.ColorIndex].Red;
+                        g = model.Colors[polygon.ColorIndex].Green;
+                        b = model.Colors[polygon.ColorIndex].Blue;
+                        GL.Color3(r,g,b);
+                        RenderVertex(frame.Vertices[vertexa]);
+                        GL.Color3(Color.Fuchsia);
+                        //Vertex B
+                        //AA
+                        //BB
+                        if (polygon.TriType < 8)
+                        {
+                            if (model.Polygons[i - 1].ColorSlot)
+                            {
+                                r = model.Colors[model.Polygons[i - 1].ColorA].Red;
+                                g = model.Colors[model.Polygons[i - 1].ColorA].Green;
+                                b = model.Colors[model.Polygons[i - 1].ColorA].Blue;
+                            }
+                            else
+                            {
+                                r = model.Colors[polygon.ColorIndex].Red;
+                                g = model.Colors[polygon.ColorIndex].Green;
+                                b = model.Colors[polygon.ColorIndex].Blue;
+                            }
+                        }
+                        //CC
+                        else
+                        {
+                            if (model.Colors.Count < (polygon.ColorIndex + 1))
+                            {
+                                r = model.Colors[(polygon.ColorIndex + 1)].Red;
+                                g = model.Colors[(polygon.ColorIndex + 1)].Green;
+                                b = model.Colors[(polygon.ColorIndex + 1)].Blue;
+                            }
+                        }
+                        GL.Color3(r,g,b);
+                        RenderVertex(frame.Vertices[vertexb]);
+                        GL.Color3(Color.Fuchsia);
+                        //Vertex C
+                        //AA
+                        if (polygon.TriType < 4)
+                        {
+                            if (model.Polygons[i - 2].ColorSlot)
+                            {
+                                r = model.Colors[model.Polygons[i - 2].ColorA].Red;
+                                g = model.Colors[model.Polygons[i - 2].ColorA].Green;
+                                b = model.Colors[model.Polygons[i - 2].ColorA].Blue;
+                            }
+                            else if (model.Polygons[i - 1].ColorSlot)
+                            {
+                                r = model.Colors[model.Polygons[i - 1].ColorB].Red;
+                                g = model.Colors[model.Polygons[i - 1].ColorB].Green;
+                                b = model.Colors[model.Polygons[i - 1].ColorB].Blue;
+                            }
+                            else
+                            {
+                                r = model.Colors[polygon.ColorIndex].Red;
+                                g = model.Colors[polygon.ColorIndex].Green;
+                                b = model.Colors[polygon.ColorIndex].Blue;
+                            }
+                        }
+                        //BB
+                        else if (polygon.TriType < 8)
+                        {
+                            if (model.Polygons[i - 1].TriType > 7 || model.Polygons[i - 1].TriType < 4)
+                            {
+                                if (model.Polygons[i - 3].ColorSlot) //Scenario 1
+                                {
+                                    r = model.Colors[model.Polygons[i - 3].ColorA].Red;
+                                    g = model.Colors[model.Polygons[i - 3].ColorA].Green;
+                                    b = model.Colors[model.Polygons[i - 3].ColorA].Blue;
+                                }
+                                else if (model.Polygons[i - 2].ColorSlot) //Scenario 2
+                                {
+                                    r = model.Colors[model.Polygons[i - 2].ColorB].Red;
+                                    g = model.Colors[model.Polygons[i - 2].ColorB].Green;
+                                    b = model.Colors[model.Polygons[i - 2].ColorB].Blue;
+                                }
+                                else //Scenario 3
+                                {
+                                    r = model.Colors[polygon.ColorIndex].Red;
+                                    g = model.Colors[polygon.ColorIndex].Green;
+                                    b = model.Colors[polygon.ColorIndex].Blue;
+                                }
+                            }
+                            else //Scenario 4
+                            {
+                                short j = 3;
+                                while (model.Polygons[i - j].TriType > 3 && model.Polygons[i - j].TriType < 8 && model.Polygons[i - j].ColorSlot)
+                                    j++;
+                                r = model.Colors[model.Polygons[i - j + 1].ColorB].Red;
+                                g = model.Colors[model.Polygons[i - j + 1].ColorB].Green;
+                                b = model.Colors[model.Polygons[i - j + 1].ColorB].Blue;
+                            }
+                        }
+                        //CC
+                        else
+                        {
+                            if (model.Colors.Count < polygon.ColorIndex + 1)
+                            {
+                                r = model.Colors[polygon.ColorIndex + 1].Red;
+                                g = model.Colors[polygon.ColorIndex + 1].Green;
+                                b = model.Colors[polygon.ColorIndex + 1].Blue;
+                            }
+                        }
+                        GL.Color3(r,g,b);
+                        RenderVertex(frame.Vertices[vertexc]);
+                        ii++;
+                    }
+                    i++;
+                }
+                GL.End();
+            }
+            else
             {
                 GL.Begin(PrimitiveType.Points);
                 foreach (FrameVertex vertex in frame.Vertices)
@@ -125,7 +335,7 @@ namespace CrashEdit
 
         private void RenderVertex(FrameVertex vertex)
         {
-            GL.Vertex3(vertex.X * BitConv.FromInt32(model.Info,0),vertex.Z * BitConv.FromInt32(model.Info,4),vertex.Y * BitConv.FromInt32(model.Info,8));
+            GL.Vertex3((vertex.X + xoffset / 4) * BitConv.FromInt32(model.Info,0),(vertex.Z + zoffset / 4) * BitConv.FromInt32(model.Info,4),(vertex.Y + yoffset / 4) * BitConv.FromInt32(model.Info,8));
         }
 
         private Frame UncompressFrame(Frame frame)
