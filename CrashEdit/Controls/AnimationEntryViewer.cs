@@ -196,14 +196,12 @@ namespace CrashEdit
                         {
                             vertexb = indexes[ii + 1];
                             vertexc = indexes[ii + 2];
-                            invalid = 2;
                         }
                         else //Invalid CC
                         {
                             vertexa = 0;
                             vertexb = 0;
                             vertexc = 0;
-                            invalid--;
                         }
                         //Vertex Colors
                         //Vertex A
@@ -229,19 +227,25 @@ namespace CrashEdit
                             }
                             else
                             {
-                                r = model.Colors[polygon.ColorIndex].Red;
-                                g = model.Colors[polygon.ColorIndex].Green;
-                                b = model.Colors[polygon.ColorIndex].Blue;
+                                r = model.Colors[model.Polygons[i - 1].ColorIndex].Red;
+                                g = model.Colors[model.Polygons[i - 1].ColorIndex].Green;
+                                b = model.Colors[model.Polygons[i - 1].ColorIndex].Blue;
                             }
                         }
                         //CC
-                        else
+                        else if(invalid == 0)
                         {
-                            if (model.Colors.Count < (polygon.ColorIndex + 1))
+                            if (!model.Polygons[i + 1].ColorSlot)
                             {
-                                r = model.Colors[(polygon.ColorIndex + 1)].Red;
-                                g = model.Colors[(polygon.ColorIndex + 1)].Green;
-                                b = model.Colors[(polygon.ColorIndex + 1)].Blue;
+                                r = model.Colors[model.Polygons[i + 1].ColorIndex].Red;
+                                g = model.Colors[model.Polygons[i + 1].ColorIndex].Green;
+                                b = model.Colors[model.Polygons[i + 1].ColorIndex].Blue;
+                            }
+                            else
+                            {
+                                r = model.Colors[polygon.ColorIndex].Red;
+                                g = model.Colors[polygon.ColorIndex].Green;
+                                b = model.Colors[polygon.ColorIndex].Blue;
                             }
                         }
                         GL.Color3(r,g,b);
@@ -251,72 +255,92 @@ namespace CrashEdit
                         //AA
                         if (polygon.TriType < 4)
                         {
-                            if (model.Polygons[i - 2].ColorSlot)
-                            {
-                                r = model.Colors[model.Polygons[i - 2].ColorA].Red;
-                                g = model.Colors[model.Polygons[i - 2].ColorA].Green;
-                                b = model.Colors[model.Polygons[i - 2].ColorA].Blue;
-                            }
-                            else if (model.Polygons[i - 1].ColorSlot)
+                            if (model.Polygons[i - 1].ColorSlot)
                             {
                                 r = model.Colors[model.Polygons[i - 1].ColorB].Red;
                                 g = model.Colors[model.Polygons[i - 1].ColorB].Green;
                                 b = model.Colors[model.Polygons[i - 1].ColorB].Blue;
                             }
+                            else if (model.Polygons[i - 2].ColorSlot)
+                            {
+                                r = model.Colors[model.Polygons[i - 2].ColorA].Red;
+                                g = model.Colors[model.Polygons[i - 2].ColorA].Green;
+                                b = model.Colors[model.Polygons[i - 2].ColorA].Blue;
+                            }
+                            //else
+                            //{
+                            //    r = model.Colors[polygon.ColorIndex].Red;
+                            //    g = model.Colors[polygon.ColorIndex].Green;
+                            //    b = model.Colors[polygon.ColorIndex].Blue;
+                            //}
                             else
                             {
-                                r = model.Colors[polygon.ColorIndex].Red;
-                                g = model.Colors[polygon.ColorIndex].Green;
-                                b = model.Colors[polygon.ColorIndex].Blue;
+                                int j = 2;
+                                while (model.Polygons[i - j].ColorSlot)
+                                    j++;
+                                r = model.Colors[model.Polygons[i - j].ColorIndex].Red;
+                                g = model.Colors[model.Polygons[i - j].ColorIndex].Green;
+                                b = model.Colors[model.Polygons[i - j].ColorIndex].Blue;
                             }
                         }
                         //BB
                         else if (polygon.TriType < 8)
                         {
-                            if (model.Polygons[i - 1].TriType > 7 || model.Polygons[i - 1].TriType < 4)
+                            int j = 1;
+                            while (model.Polygons[i - j].TriType > 3 && model.Polygons[i - j].TriType < 8)
+                                j++;
+                            int k = 1;
+                            while (!model.Polygons[i - k].ColorSlot)
+                                k++;
+                            if (j + 2 < k) //Scenario 3
                             {
-                                if (model.Polygons[i - 3].ColorSlot) //Scenario 1
-                                {
-                                    r = model.Colors[model.Polygons[i - 3].ColorA].Red;
-                                    g = model.Colors[model.Polygons[i - 3].ColorA].Green;
-                                    b = model.Colors[model.Polygons[i - 3].ColorA].Blue;
-                                }
-                                else if (model.Polygons[i - 2].ColorSlot) //Scenario 2
-                                {
-                                    r = model.Colors[model.Polygons[i - 2].ColorB].Red;
-                                    g = model.Colors[model.Polygons[i - 2].ColorB].Green;
-                                    b = model.Colors[model.Polygons[i - 2].ColorB].Blue;
-                                }
-                                else //Scenario 3
-                                {
-                                    r = model.Colors[polygon.ColorIndex].Red;
-                                    g = model.Colors[polygon.ColorIndex].Green;
-                                    b = model.Colors[polygon.ColorIndex].Blue;
-                                }
+                                r = model.Colors[model.Polygons[i - j - 2].ColorIndex].Red;
+                                g = model.Colors[model.Polygons[i - j - 2].ColorIndex].Green;
+                                b = model.Colors[model.Polygons[i - j - 2].ColorIndex].Blue;
                             }
-                            else //Scenario 4
+                            if (j + 2 == k) //Scenario 1
                             {
-                                short j = 3;
-                                while (model.Polygons[i - j].TriType > 3 && model.Polygons[i - j].TriType < 8 && model.Polygons[i - j].ColorSlot)
-                                    j++;
-                                r = model.Colors[model.Polygons[i - j + 1].ColorB].Red;
-                                g = model.Colors[model.Polygons[i - j + 1].ColorB].Green;
-                                b = model.Colors[model.Polygons[i - j + 1].ColorB].Blue;
+                                r = model.Colors[model.Polygons[i - k].ColorA].Red;
+                                g = model.Colors[model.Polygons[i - k].ColorA].Green;
+                                b = model.Colors[model.Polygons[i - k].ColorA].Blue;
+                            }
+                            if (j + 1 == k) //Scenario 2
+                            {
+                                r = model.Colors[model.Polygons[i - k].ColorB].Red;
+                                g = model.Colors[model.Polygons[i - k].ColorB].Green;
+                                b = model.Colors[model.Polygons[i - k].ColorB].Blue;
+                            }
+                            if (j + 2 > k) //Scenario 4
+                            {
+                                r = model.Colors[model.Polygons[i - k].ColorB].Red;
+                                g = model.Colors[model.Polygons[i - k].ColorB].Green;
+                                b = model.Colors[model.Polygons[i - k].ColorB].Blue;
                             }
                         }
                         //CC
-                        else
+                        else if (invalid == 0)
                         {
-                            if (model.Colors.Count < polygon.ColorIndex + 1)
+                            r = model.Colors[polygon.ColorIndex].Red;
+                            g = model.Colors[polygon.ColorIndex].Green;
+                            b = model.Colors[polygon.ColorIndex].Blue;
+                            if (!model.Polygons[i + 2].ColorSlot)
                             {
-                                r = model.Colors[polygon.ColorIndex + 1].Red;
-                                g = model.Colors[polygon.ColorIndex + 1].Green;
-                                b = model.Colors[polygon.ColorIndex + 1].Blue;
+                                r = model.Colors[model.Polygons[i + 2].ColorIndex].Red;
+                                g = model.Colors[model.Polygons[i + 2].ColorIndex].Green;
+                                b = model.Colors[model.Polygons[i + 2].ColorIndex].Blue;
+                            }
+                            else if (!model.Polygons[i + 1].ColorSlot)
+                            {
+                                r = model.Colors[model.Polygons[i + 1].ColorIndex].Red;
+                                g = model.Colors[model.Polygons[i + 1].ColorIndex].Green;
+                                b = model.Colors[model.Polygons[i + 1].ColorIndex].Blue;
                             }
                         }
                         GL.Color3(r,g,b);
                         RenderVertex(frame.Vertices[vertexc]);
                         ii++;
+                        if (invalid > 0) invalid--;
+                        else if (polygon.TriType > 7) invalid = 2;
                     }
                     i++;
                 }
