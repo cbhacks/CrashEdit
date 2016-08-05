@@ -37,9 +37,9 @@ namespace Crash
             }
             FrameVertex[] vertices = new FrameVertex [vertexcount];
             bool[] temporals = new bool[(data.Length - headersize) * 8];
-            if (data.Length >= headersize + vertexcount * 3)
+            if (data.Length >= vertexcount * 3 + 24 + collision * 40)
             {
-                for (int i = 0; i < vertexcount; i++)
+                for (int i = 0; i < vertexcount - ((headersize - 24 - collision * 40) / 3); i++)
                 {
                     byte[] vertexdata = new byte[3];
                     Array.Copy(data,headersize + i * 3,vertexdata,0,vertexdata.Length);
@@ -163,7 +163,7 @@ namespace Crash
             {
                 bytesize = Temporals.Length / 8;
             }
-            byte[] result = new byte [headersize + bytesize];
+            byte[] result = new byte [24 + collision * 40 + bytesize];
             BitConv.ToInt16(result,0,xoffset);
             BitConv.ToInt16(result,2,yoffset);
             BitConv.ToInt16(result,4,zoffset);
@@ -180,7 +180,7 @@ namespace Crash
             {
                 for (int i = 0; i < vertices.Count; i++)
                 {
-                    vertices[i].Save().CopyTo(result, headersize + i * 3);
+                    vertices[i].Save().CopyTo(result, 24 + collision * 40 + i * 3);
                 }
             }
             else

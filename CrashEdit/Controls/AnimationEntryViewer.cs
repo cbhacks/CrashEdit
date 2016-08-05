@@ -25,9 +25,9 @@ namespace CrashEdit
                 frames.Add(UncompressFrame(frame));
             else
                 frames.Add(frame);
-            xoffset = 0; //frame.XOffset;
-            yoffset = 0; //frame.YOffset;
-            zoffset = 0; //frame.ZOffset;
+            xoffset = frame.XOffset;
+            yoffset = frame.YOffset;
+            zoffset = frame.ZOffset;
             frameid = 0;
         }
 
@@ -47,6 +47,9 @@ namespace CrashEdit
             else
                 this.frames = new List<Frame>(frames);
             frameid = 0;
+            xoffset = this.frames[frameid].XOffset;
+            yoffset = this.frames[frameid].YOffset;
+            zoffset = this.frames[frameid].ZOffset;
             animatetimer = new Timer();
             animatetimer.Interval = 1000/30;
             animatetimer.Enabled = true;
@@ -57,9 +60,9 @@ namespace CrashEdit
                 {
                     frameid = 0;
                 }
-                xoffset = 0; //this.frames[frameid].XOffset;
-                yoffset = 0; //this.frames[frameid].YOffset;
-                zoffset = 0; //this.frames[frameid].ZOffset;
+                xoffset = this.frames[frameid].XOffset;
+                yoffset = this.frames[frameid].YOffset;
+                zoffset = this.frames[frameid].ZOffset;
                 Refresh();
             };
         }
@@ -92,9 +95,9 @@ namespace CrashEdit
                 {
                     foreach (FrameVertex vertex in frame.Vertices)
                     {
-                        int x = (vertex.X + 0000 / 4) * BitConv.FromInt32(model.Info,0);
-                        int y = (vertex.Z + 0000 / 4) * BitConv.FromInt32(model.Info,4);
-                        int z = (vertex.Y + 0000 / 4) * BitConv.FromInt32(model.Info,8);
+                        int x = (vertex.X + frame.XOffset / 4) * BitConv.FromInt32(model.Info,0);
+                        int y = (vertex.Z + frame.YOffset / 4) * BitConv.FromInt32(model.Info,4);
+                        int z = (vertex.Y + frame.ZOffset / 4) * BitConv.FromInt32(model.Info,8);
                         yield return new Position(x,y,z);
                     }
                 }
@@ -112,7 +115,7 @@ namespace CrashEdit
             {
                 int i = 0;
                 int ii = 0;
-                int vertexid = 0; //BitConv.FromInt32(model.Info,0x4C);
+                int vertexid = 0;
                 int tris = 0;
                 for (int iii = 0;iii < model.Polygons.Count;iii++)
                 {
@@ -359,7 +362,7 @@ namespace CrashEdit
 
         private void RenderVertex(FrameVertex vertex)
         {
-            GL.Vertex3((vertex.X + xoffset / 4) * BitConv.FromInt32(model.Info,0),(vertex.Z + zoffset / 4) * BitConv.FromInt32(model.Info,4),(vertex.Y + yoffset / 4) * BitConv.FromInt32(model.Info,8));
+            GL.Vertex3((vertex.X + xoffset / 4) * BitConv.FromInt32(model.Info,0),(vertex.Z + yoffset / 4) * BitConv.FromInt32(model.Info,4),(vertex.Y + zoffset / 4) * BitConv.FromInt32(model.Info,8));
         }
 
         private Frame UncompressFrame(Frame frame)
