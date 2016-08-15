@@ -25,9 +25,11 @@ namespace CrashEdit
         private void Menu_Add_Item()
         {
             byte[] data = FileUtil.OpenFile(FileFilters.Any);
-            mysteryentry.Items.Add(data);
             if (data != null)
-                AddNode(new ItemController(this,data));
+            {
+                mysteryentry.Items.Add(data);
+                AddNode(new ItemController(this, data));
+            }
         }
     }
 }

@@ -30,12 +30,12 @@ namespace Crash
             {
                 ErrorManager.SignalError("Frame: Header size value is invalid");
             }
-            int[] settings = new int[(headersize - 24) / 4];
-            for (int i = 0;i < (headersize - 24) / 4;i++)
+            byte[] settings = new byte[headersize - 24];
+            for (int i = 0;i < settings.Length; i++)
             {
-                settings[i] = BitConv.FromInt32(data,24 + i * 4);
+                settings[i] = data[24 + i];
             }
-            FrameVertex[] vertices = new FrameVertex [vertexcount];
+            FrameVertex[] vertices = new FrameVertex [vertexcount - ((headersize - 24 - collision * 40) / 3)];
             bool[] temporals = new bool[(data.Length - headersize) * 8];
             if (data.Length >= vertexcount * 3 + 24 + collision * 40)
             {
@@ -69,11 +69,11 @@ namespace Crash
         private int collision;
         private int modeleid;
         private int headersize;
-        private int[] settings;
+        private byte[] settings;
         private List<FrameVertex> vertices;
         private bool[] temporals;
 
-        public Frame(short xoffset,short yoffset,short zoffset,short unknown,int vertexcount,int collision,int modeleid,int headersize,int[] settings,IEnumerable<FrameVertex> vertices,bool[] temporals)
+        public Frame(short xoffset,short yoffset,short zoffset,short unknown,int vertexcount,int collision,int modeleid,int headersize,byte[] settings,IEnumerable<FrameVertex> vertices,bool[] temporals)
         {
             this.xoffset = xoffset;
             this.yoffset = yoffset;
@@ -96,34 +96,29 @@ namespace Crash
         public short XOffset
         {
             get { return xoffset; }
-            set { xoffset = value; }
         }
 
         public short YOffset
         {
             get { return yoffset; }
-            set { yoffset = value; }
         }
 
         public short ZOffset
         {
             get { return zoffset; }
-            set { zoffset = value; }
         }
 
         public int Collision
         {
             get { return collision; }
-            set { collision = value; }
         }
 
         public int HeaderSize
         {
             get { return headersize; }
-            set { headersize = value; }
         }
 
-        public int[] Settings
+        public byte[] Settings
         {
             get { return settings; }
         }
@@ -131,7 +126,6 @@ namespace Crash
         public int VertexCount
         {
             get { return vertexcount; }
-            set { vertexcount = value; }
         }
 
         public IList<FrameVertex> Vertices
@@ -147,7 +141,6 @@ namespace Crash
         public short Unknown
         {
             get { return unknown; }
-            set { unknown = value; }
         }
 
         public byte[] Save()
@@ -155,15 +148,15 @@ namespace Crash
             int bytesize = 0;
             if (Temporals == null)
             {
-                bytesize = vertices.Count * 3 + 4 - ((vertices.Count * 3) % 4);
-                if ((vertices.Count * 3) % 4 == 0)
+                bytesize = ((headersize + Vertices.Count * 3) + 4 - ((headersize + Vertices.Count * 3) % 4)) - headersize;
+                if ((headersize + Vertices.Count * 3) % 4 == 0)
                     bytesize -= 4;
             }
             else
             {
                 bytesize = Temporals.Length / 8;
             }
-            byte[] result = new byte [24 + collision * 40 + bytesize];
+            byte[] result = new byte [headersize + bytesize];
             BitConv.ToInt16(result,0,xoffset);
             BitConv.ToInt16(result,2,yoffset);
             BitConv.ToInt16(result,4,zoffset);
@@ -172,15 +165,15 @@ namespace Crash
             BitConv.ToInt32(result,12,collision);
             BitConv.ToInt32(result,16,modeleid);
             BitConv.ToInt32(result,20,headersize);
-            for (int i = 0; i < (headersize - 24) / 4; i++)
+            for (int i = 0; i < settings.Length; i++)
             {
-                BitConv.ToInt32(result,24 + i * 4,settings[i]);
+                BitConv.ToInt32(result,24 + i,settings[i]);
             }
             if (Temporals == null)
             {
                 for (int i = 0; i < vertices.Count; i++)
                 {
-                    vertices[i].Save().CopyTo(result, 24 + collision * 40 + i * 3);
+                    vertices[i].Save().CopyTo(result,headersize + i * 3);
                 }
             }
             else
