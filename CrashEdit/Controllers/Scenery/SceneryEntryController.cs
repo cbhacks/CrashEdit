@@ -10,6 +10,7 @@ namespace CrashEdit
         public SceneryEntryController(EntryChunkController entrychunkcontroller,SceneryEntry sceneryentry) : base(entrychunkcontroller,sceneryentry)
         {
             this.sceneryentry = sceneryentry;
+            AddMenuSeparator();
             AddMenu("Export as Wavefront OBJ", Menu_Export_OBJ);
             AddMenu("Export as Stanford PLY", Menu_Export_PLY);
             //AddMenu("Export as COLLADA",Menu_Export_COLLADA);
@@ -44,7 +45,7 @@ namespace CrashEdit
 
         private void Menu_Export_PLY()
         {
-            if (MessageBox.Show("Exporting to Stanford PLY (.ply) is experimental.\nTexture information will not be exported.\n\nContinue anyway?", "Export as OBJ", MessageBoxButtons.YesNo) != DialogResult.Yes)
+            if (MessageBox.Show("Exporting to Stanford PLY (.ply) is experimental.\nTexture information will not be exported.\n\nContinue anyway?", "Export as PLY", MessageBoxButtons.YesNo) != DialogResult.Yes)
             {
                 return;
             }

@@ -45,17 +45,13 @@ namespace Crash
                     Array.Copy(data,headersize + i * 3,vertexdata,0,vertexdata.Length);
                     vertices[i] = FrameVertex.Load(vertexdata);
                 }
-                temporals = null;
             }
-            else
+            for (int i = 0;i < (data.Length - headersize) / 4; i++)
             {
-                for (int i = 0;i < (data.Length - headersize) / 4; i++)
+                int val = BitConv.FromInt32(data,headersize + i * 4);
+                for (int ii = 0;ii < 32;ii++)
                 {
-                    int val = BitConv.FromInt32(data,headersize + i * 4);
-                    for (int ii = 0;ii < 32;ii++)
-                    {
-                        temporals[i * 32 + ii] = (((val >> (31 - ii)) & 0x1) == 1);
-                    }
+                    temporals[i * 32 + ii] = (((val >> (31 - ii)) & 0x1) == 1);
                 }
             }
             return new Frame(xoffset,yoffset,zoffset,unknown,vertexcount,collision,modeleid,headersize,settings,vertices,temporals);
@@ -145,18 +141,7 @@ namespace Crash
 
         public byte[] Save()
         {
-            int bytesize = 0;
-            if (Temporals == null)
-            {
-                bytesize = ((headersize + Vertices.Count * 3) + 4 - ((headersize + Vertices.Count * 3) % 4)) - headersize;
-                if ((headersize + Vertices.Count * 3) % 4 == 0)
-                    bytesize -= 4;
-            }
-            else
-            {
-                bytesize = Temporals.Length / 8;
-            }
-            byte[] result = new byte [headersize + bytesize];
+            byte[] result = new byte [headersize + Temporals.Length / 8];
             BitConv.ToInt16(result,0,xoffset);
             BitConv.ToInt16(result,2,yoffset);
             BitConv.ToInt16(result,4,zoffset);
@@ -169,24 +154,14 @@ namespace Crash
             {
                 BitConv.ToInt32(result,24 + i,settings[i]);
             }
-            if (Temporals == null)
+            for (short i = 0; i < Temporals.Length / 32; i++)
             {
-                for (int i = 0; i < vertices.Count; i++)
+                int val = 0;
+                for (short ii = 0; ii < 32; ii++)
                 {
-                    vertices[i].Save().CopyTo(result,headersize + i * 3);
+                    val |= Convert.ToByte(Temporals[i * 32 + ii]) << (31 - ii);
                 }
-            }
-            else
-            {
-                for (short i = 0; i < Temporals.Length / 32; i++)
-                {
-                    int val = 0;
-                    for (short ii = 0; ii < 32; ii++)
-                    {
-                        val |= Convert.ToByte(Temporals[i * 32 + ii]) << (31 - ii);
-                    }
-                    BitConv.ToInt32(result,headersize + i * 4,val);
-                }
+                BitConv.ToInt32(result,headersize + i * 4,val);
             }
             return result;
         }

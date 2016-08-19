@@ -232,8 +232,7 @@ namespace CrashEdit
                 }
                 else
                 {
-                    string message = string.Format("Can't figure out NSD filename.\n\nFOO.NSF -> FOO.NSD\n\n{0} -> ???",filename);
-                    MessageBox.Show(message,"Patch NSD",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    MessageBox.Show(string.Format("Can't figure out NSD filename.\n\nFOO.NSF -> FOO.NSD\n\n{0} -> ???", filename), "Patch NSD",MessageBoxButtons.OK,MessageBoxIcon.Error);
                     return;
                 }
                 NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;

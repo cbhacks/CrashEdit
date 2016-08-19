@@ -367,7 +367,6 @@ namespace CrashEdit
 
         private Frame UncompressFrame(Frame frame)
         {
-            //FrameVertex[] uncompressedvertices = new FrameVertex[frame.VertexCount];
             int bit = 0;
             int modelxcum = 0;
             int modelycum = 0;
@@ -429,7 +428,6 @@ namespace CrashEdit
                 modelzcum += (byte)(modelz + vertexz);
                 frame.Vertices[i] = new FrameVertex(finalx,finaly,finalz);
             }
-            //Frame uncompressedframe = new Frame(xoffset,yoffset,zoffset,frame.Unknown,frame.VertexCount,frame.Collision,frame.ModelEID,frame.HeaderSize,frame.Settings);
             return frame;
         }
 

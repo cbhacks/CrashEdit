@@ -1575,7 +1575,7 @@ namespace CrashEdit
             this.fraDrawListB.Size = new System.Drawing.Size(143, 291);
             this.fraDrawListB.TabIndex = 21;
             this.fraDrawListB.TabStop = false;
-            this.fraDrawListB.Text = "Draw List A";
+            this.fraDrawListB.Text = "Draw List B";
             // 
             // lblMetavalueDrawB
             // 
@@ -1622,7 +1622,7 @@ namespace CrashEdit
             this.numMetavalueDrawB.Name = "numMetavalueDrawB";
             this.numMetavalueDrawB.Size = new System.Drawing.Size(68, 20);
             this.numMetavalueDrawB.TabIndex = 19;
-            this.numMetavalueDrawB.ValueChanged += new System.EventHandler(numMetavalueDrawB_ValueChanged);
+            this.numMetavalueDrawB.ValueChanged += new System.EventHandler(this.numMetavalueDrawB_ValueChanged);
             // 
             // lblDrawListRowIndexB
             // 
@@ -1676,7 +1676,7 @@ namespace CrashEdit
             this.numEntityB.Name = "numEntityB";
             this.numEntityB.Size = new System.Drawing.Size(99, 20);
             this.numEntityB.TabIndex = 21;
-            this.numEntityB.ValueChanged += new System.EventHandler(numEntityB_ValueChanged);
+            this.numEntityB.ValueChanged += new System.EventHandler(this.numEntityB_ValueChanged);
             // 
             // lblEntityIndexB
             // 
