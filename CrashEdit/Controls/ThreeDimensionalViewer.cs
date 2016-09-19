@@ -250,7 +250,7 @@ namespace CrashEdit
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
-            GL.Frustum(-0.0001,+0.0001,-0.0001,+0.0001,0.0001,short.MaxValue);
+            GL.Frustum(-0.1,+0.1,-0.1,+0.1,0.1,short.MaxValue);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
             GL.Translate(0,0,-1);
