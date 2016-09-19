@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 
 namespace Crash
@@ -111,6 +112,39 @@ namespace Crash
             }
             items[6] = item6;
             return new UnprocessedEntry(items,EID,Type);
+        }
+
+        public byte[] ToOBJ()
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                using (StreamWriter obj = new StreamWriter(stream))
+                {
+                    obj.WriteLine("# Vertices");
+
+                    foreach (SceneryVertex vertex in vertices)
+                    {
+                        obj.WriteLine("v {0} {1} {2}", vertex.X + XOffset, vertex.Y + YOffset, vertex.Z + ZOffset);
+                    }
+
+                    obj.WriteLine();
+                    obj.WriteLine("# Triangles");
+
+                    foreach (SceneryTriangle triangle in triangles)
+                    {
+                        obj.WriteLine("f {0} {1} {2}", triangle.VertexA + 1, triangle.VertexB + 1, triangle.VertexC + 1);
+                    }
+
+                    obj.WriteLine("# Quads");
+
+                    foreach (SceneryQuad quad in quads)
+                    {
+                        obj.WriteLine("f {0} {1} {2} {3}", quad.VertexA + 1, quad.VertexB + 1, quad.VertexC + 1, quad.VertexD + 1);
+                    }
+                }
+
+                return stream.ToArray();
+            }
         }
     }
 }
