@@ -3,3 +3,5 @@
 *.user
 bin
 obj
+Backup[0-9]*
+UpgradeLog.htm
