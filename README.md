@@ -5,8 +5,8 @@ This program is an application designed for modifying the game files of the orig
 _Note that CrashEdit does not work directly with ISO's, but rather with the NSF files stored on the game discs._
 
 * `SCUS-94900` Crash Bandicoot __(read only)__ __(experimental)__
-* `SCES-?????` Crash Bandicoot __(read only)__ __(experimental)__ __(untested)__
-* `????-?????` クラッシュバンディクー __(read only)__ __(experimental)__ __(untested)__
+* `SCES-00344` Crash Bandicoot __(read only)__ __(experimental)__ __(untested)__
+* `SCPS-10031` クラッシュバンディクー __(read only)__ __(experimental)__ __(untested)__
 * `US BETA 96/03/08` Crash Bandicoot _"Prototype"_ __(no nsd patching)__ __(experimental)__
 * `US BETA 96/05/11` Crash Bandicoot _"E3 Demo"_ __(no nsd patching)__ __(experimental)__
 * `SCUS-94154` Crash Bandicoot 2: Cortex Strikes Back
@@ -14,8 +14,8 @@ _Note that CrashEdit does not work directly with ISO's, but rather with the NSF 
 * `SCPS-10047` クラッシュバンディクー　2:　コルテックスのぎゃくしゅう！ __(incomplete support)__
 * `EU BETA 97/09/14` Crash Bandicoot 2: Cortex Strikes Back _"Review Copy"_
 * `SCUS-94244` Crash Bandicoot: Warped
-* `SCES-?????` Crash Bandicoot 3: Warped __(untested)__
-* `????-?????` クラッシュバンディクー　3:　ブッとび！　世界一周 __(untested)__
+* `SCES-01420` Crash Bandicoot 3: Warped __(untested)__
+* `SCPS-10073` クラッシュバンディクー　3:　ブッとび！　世界一周 __(untested)__
 
 ## Usage ##
 _For users acquainted with Microsoft Windows, "directories" are commonly referred to as "folders" on windows. When the term "directory" is used here, think "folder"._
