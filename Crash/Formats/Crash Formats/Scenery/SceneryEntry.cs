@@ -129,11 +129,11 @@ namespace Crash
                         if (vertex.Color < Colors.Count)
                         {
                             SceneryColor color = Colors[vertex.Color];
-                            obj.WriteLine("v {0} {1} {2} {3} {4} {5}", vertex.X + XOffset / 16, vertex.Y + YOffset / 16, vertex.Z + ZOffset / 16, color.Red / 255.0, color.Green / 255.0, color.Blue / 255.0);
+                            obj.WriteLine("v {0} {1} {2} {3} {4} {5}", vertex.X + XOffset / 4, vertex.Y + YOffset / 4, vertex.Z + ZOffset / 4, color.Red / 255.0, color.Green / 255.0, color.Blue / 255.0);
                         }
                         else
                         {
-                            obj.WriteLine("v {0} {1} {2}", vertex.X + XOffset / 16, vertex.Y + YOffset / 16, vertex.Z + ZOffset / 16);
+                            obj.WriteLine("v {0} {1} {2}", vertex.X + XOffset / 4, vertex.Y + YOffset / 4, vertex.Z + ZOffset / 4);
                         }
                     }
                     obj.WriteLine();
@@ -162,11 +162,11 @@ namespace Crash
                     int polycount = 0;
                     foreach (SceneryTriangle triangle in triangles)
                     {
-                        if (triangle.VertexA < vertices.Count - 1)
+                        if (triangle.VertexA < vertices.Count)
                         {
-                            if (triangle.VertexB < vertices.Count - 1)
+                            if (triangle.VertexB < vertices.Count)
                             {
-                                if (triangle.VertexC < vertices.Count - 1)
+                                if (triangle.VertexC < vertices.Count)
                                 {
                                     polycount++;
                                 }
@@ -175,13 +175,13 @@ namespace Crash
                     }
                     foreach (SceneryQuad quad in quads)
                     {
-                        if (quad.VertexA < vertices.Count - 1)
+                        if (quad.VertexA < vertices.Count)
                         {
-                            if (quad.VertexB < vertices.Count - 1)
+                            if (quad.VertexB < vertices.Count)
                             {
-                                if (quad.VertexC < vertices.Count - 1)
+                                if (quad.VertexC < vertices.Count)
                                 {
-                                    if (quad.VertexD < vertices.Count - 1)
+                                    if (quad.VertexD < vertices.Count)
                                     {
                                         polycount++;
                                     }
@@ -206,20 +206,20 @@ namespace Crash
                         if (vertex.Color < Colors.Count)
                         {
                             SceneryColor color = Colors[vertex.Color];
-                            ply.WriteLine("{0} {1} {2} {3} {4} {5}", vertex.X + XOffset / 16, vertex.Y + YOffset / 16, vertex.Z + ZOffset / 16, color.Red, color.Green, color.Blue);
+                            ply.WriteLine("{0} {1} {2} {3} {4} {5}", vertex.X + XOffset / 4, vertex.Y + YOffset / 4, vertex.Z + ZOffset / 4, color.Red, color.Green, color.Blue);
                         }
                         else
                         {
-                            ply.WriteLine("{0} {1} {2} 255 0 255", vertex.X + XOffset / 16, vertex.Y + YOffset / 16, vertex.Z + ZOffset / 16);
+                            ply.WriteLine("{0} {1} {2} 255 0 255", vertex.X + XOffset / 4, vertex.Y + YOffset / 4, vertex.Z + ZOffset / 4);
                         }
                     }
                     foreach (SceneryTriangle triangle in triangles)
                     {
-                        if (triangle.VertexA < vertices.Count - 1)
+                        if (triangle.VertexA < vertices.Count)
                         {
-                            if (triangle.VertexB < vertices.Count - 1)
+                            if (triangle.VertexB < vertices.Count)
                             {
-                                if (triangle.VertexC < vertices.Count - 1)
+                                if (triangle.VertexC < vertices.Count)
                                 {
                                     ply.WriteLine("3 {0} {1} {2}", triangle.VertexA, triangle.VertexB, triangle.VertexC);
                                 }
@@ -228,13 +228,13 @@ namespace Crash
                     }
                     foreach (SceneryQuad quad in quads)
                     {
-                        if (quad.VertexA < vertices.Count - 1)
+                        if (quad.VertexA < vertices.Count)
                         {
-                            if (quad.VertexB < vertices.Count - 1)
+                            if (quad.VertexB < vertices.Count)
                             {
-                                if (quad.VertexC < vertices.Count - 1)
+                                if (quad.VertexC < vertices.Count)
                                 {
-                                    if (quad.VertexD < vertices.Count - 1)
+                                    if (quad.VertexD < vertices.Count)
                                     {
                                         ply.WriteLine("4 {0} {1} {2} {3}", quad.VertexA, quad.VertexB, quad.VertexC, quad.VertexD);
                                     }
@@ -268,11 +268,11 @@ namespace Crash
                     xmlwriter.WriteAttributeString("count", (vertices.Count * 3).ToString());
                     foreach (NewSceneryVertex vertex in vertices)
                     {
-                        xmlwriter.WriteValue(vertex.X + XOffset / 16);
+                        xmlwriter.WriteValue(vertex.X + XOffset / 4);
                         xmlwriter.WriteWhitespace(" ");
-                        xmlwriter.WriteValue(vertex.Y + YOffset / 16);
+                        xmlwriter.WriteValue(vertex.Y + YOffset / 4);
                         xmlwriter.WriteWhitespace(" ");
-                        xmlwriter.WriteValue(vertex.Z + ZOffset / 16);
+                        xmlwriter.WriteValue(vertex.Z + ZOffset / 4);
                         xmlwriter.WriteWhitespace(" ");
                     }
                     xmlwriter.WriteEndElement();
