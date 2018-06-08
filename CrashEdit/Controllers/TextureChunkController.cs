@@ -10,6 +10,7 @@ namespace CrashEdit
         public TextureChunkController(NSFController nsfcontroller,TextureChunk texturechunk) : base(nsfcontroller,texturechunk)
         {
             this.texturechunk = texturechunk;
+            AddMenu("Recalculate Checksum",Menu_Recalculate_Checksum);
             InvalidateNode();
         }
 
@@ -30,6 +31,19 @@ namespace CrashEdit
         public TextureChunk TextureChunk
         {
             get { return texturechunk; }
+        }
+
+        private void Menu_Recalculate_Checksum()
+        {
+            int current_checksum = BitConv.FromInt32(texturechunk.Data, 12);
+            int correct_checksum = Chunk.CalculateChecksum(texturechunk.Data);
+            if (current_checksum == correct_checksum)
+            {
+                MessageBox.Show("Checksum was already correct.");
+                return;
+            }
+            BitConv.ToInt32(texturechunk.Data, 12, correct_checksum);
+            MessageBox.Show("Checksum was incorrect and has been corrected.");
         }
     }
 }
