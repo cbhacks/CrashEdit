@@ -250,6 +250,7 @@ namespace CrashEdit
                     NSD nsd = NSD.Load(data);
                     nsd.ChunkCount = nsf.Chunks.Count;
                     Dictionary<int, int> newindex = new Dictionary<int, int>();
+                    List<int> eids = new List<int>();
                     for (int i = 0; i < nsf.Chunks.Count; i++)
                     {
                         if (nsf.Chunks[i] is IEntry)
@@ -267,6 +268,7 @@ namespace CrashEdit
                     }
                     foreach (NSDLink link in nsd.Index)
                     {
+                        eids.Add(link.EntryID);
                         if (newindex.ContainsKey(link.EntryID))
                         {
                             link.ChunkID = newindex[link.EntryID];
@@ -276,6 +278,69 @@ namespace CrashEdit
                     if (MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
                         File.WriteAllBytes(filename, nsd.Save());
+                    }
+                    if (MessageBox.Show("Do you want to sort all Crash 2 and Crash 3 loadlists according to the NSD?", "Loadlist autosorter", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        foreach (Chunk chunk in nsf.Chunks)
+                        {
+                            if (!(chunk is EntryChunk))
+                                continue;
+                            foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                            {
+                                if (entry is ZoneEntry)
+                                {
+                                    foreach (Entity ent in ((ZoneEntry)entry).Entities)
+                                    {
+                                        if (ent.LoadListA != null)
+                                        {
+                                            foreach (EntityPropertyRow<int> row in ent.LoadListA.Rows)
+                                            {
+                                                List<int> values = (List<int>)row.Values;
+                                                values.Sort(delegate (int a,int b) {
+                                                    return eids.IndexOf(a) - eids.IndexOf(b);
+                                                });
+                                            }
+                                        }
+                                        if (ent.LoadListB != null)
+                                        {
+                                            foreach (EntityPropertyRow<int> row in ent.LoadListB.Rows)
+                                            {
+                                                List<int> values = (List<int>)row.Values;
+                                                values.Sort(delegate (int a,int b) {
+                                                    return eids.IndexOf(a) - eids.IndexOf(b);
+                                                });
+                                            }
+                                        }
+                                    }
+                                }
+                                else if (entry is NewZoneEntry)
+                                {
+                                    foreach (Entity ent in ((NewZoneEntry)entry).Entities)
+                                    {
+                                        if (ent.LoadListA != null)
+                                        {
+                                            foreach (EntityPropertyRow<int> row in ent.LoadListA.Rows)
+                                            {
+                                                List<int> values = (List<int>)row.Values;
+                                                values.Sort(delegate (int a,int b) {
+                                                    return eids.IndexOf(a) - eids.IndexOf(b);
+                                                });
+                                            }
+                                        }
+                                        if (ent.LoadListB != null)
+                                        {
+                                            foreach (EntityPropertyRow<int> row in ent.LoadListB.Rows)
+                                            {
+                                                List<int> values = (List<int>)row.Values;
+                                                values.Sort(delegate (int a,int b) {
+                                                    return eids.IndexOf(a) - eids.IndexOf(b);
+                                                });
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 catch (LoadAbortedException)
