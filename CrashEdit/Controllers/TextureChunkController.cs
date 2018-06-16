@@ -1,4 +1,5 @@
 using Crash;
+using System;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -21,10 +22,11 @@ namespace CrashEdit
             Node.SelectedImageKey = "image";
         }
 
-        // MONO USERS
-        // Comment out this function
         protected override Control CreateEditor()
         {
+            // Hack for Mono so it doesn't crash.
+            if (Type.GetType("Mono.Runtime") != null)
+                return base.CreateEditor();
             return new TextureChunkBox(texturechunk);
         }
 
