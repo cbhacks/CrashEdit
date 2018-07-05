@@ -19,7 +19,7 @@ after_build:
   - copy .\OpenTK.GLControl.dll pkg
   - copy .\OpenTK-License.txt pkg
   - 7z a CrashEdit.7z .\pkg\*
-  - move CrashEdit.7z ..\CrashEdit-%APPVEYOR_BUILD_NUMBER%-%APPVEYOR_REPO_COMMIT%.7z
+  - move CrashEdit.7z CrashEdit-%APPVEYOR_BUILD_NUMBER%-%APPVEYOR_REPO_COMMIT%.7z
 test: off
 artifacts:
   - path: CrashEdit-$(APPVEYOR_BUILD_NUMBER)-$(APPVEYOR_REPO_COMMIT).7z
