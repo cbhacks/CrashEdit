@@ -1,0 +1,37 @@
+version: appveyor-{build}
+image: Visual Studio 2017
+shallow_clone: true
+#environment:
+#  CRASHEDIT_S3DEPLOY_ACCESSKEY_ID:
+#    secure: FIXME
+#  CRASHEDIT_S3DEPLOY_ACCESSKEY_SECRET:
+#    secure: FIXME
+configuration: Debug
+platform: Any CPU
+build_script:
+  - msbuild CrashEdit.sln
+after_build:
+  - mkdir pkg
+  - copy .\CrashEdit\bin\Debug\Crash.dll pkg
+  - copy .\CrashEdit\bin\Debug\Crash.UI.dll pkg
+  - copy .\CrashEdit\bin\Debug\CrashEdit.exe pkg
+  - copy .\OpenTK.dll pkg
+  - copy .\OpenTK.GLControl.dll pkg
+  - copy .\OpenTK-License.txt pkg
+  - 7z a CrashEdit.7z .\pkg\*
+  - move CrashEdit.7z ..\CrashEdit-%APPVEYOR_BUILD_NUMBER%-%APPVEYOR_REPO_COMMIT%.7z
+test: off
+artifacts:
+  - path: CrashEdit-$(APPVEYOR_BUILD_NUMBER)-$(APPVEYOR_REPO_COMMIT).7z
+    name: CRASHEDIT-FULL7Z
+#deploy:
+#  - provider: S3
+#    access_key_id: $(CRASHEDIT_S3DEPLOY_ACCESSKEY_ID)
+#    secret_access_key: $(CRASHEDIT_S3DEPLOY_ACCESSKEY_SECRET)
+#    bucket: builds.crashedit.cbhacks.com
+#    region: us-east-1
+#    folder: appveyor/build-$(APPVEYOR_BUILD_NUMBER)
+#    max_error_retry: 2
+#    artifact: CRASHEDIT-FULL7Z
+#    on:
+#      branch: deprecate
