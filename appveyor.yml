@@ -1,11 +1,11 @@
 version: appveyor-{build}
 image: Visual Studio 2017
 shallow_clone: true
-#environment:
-#  CRASHEDIT_S3DEPLOY_ACCESSKEY_ID:
-#    secure: FIXME
-#  CRASHEDIT_S3DEPLOY_ACCESSKEY_SECRET:
-#    secure: FIXME
+environment:
+  CRASHEDIT_S3DEPLOY_ACCESSKEY_ID:
+    secure: vm68Yr9iFdgnH98tSRvqx1Kg6pX49e2cm9685GwH554=
+  CRASHEDIT_S3DEPLOY_ACCESSKEY_SECRET:
+    secure: i2KP8L+z+Txf6sYqGwZ8d7I+kDxQfLRBfLimncCKu8xPv3oF6hFsvVKFRVh/Tnd+
 configuration: Debug
 platform: Any CPU
 build_script:
@@ -24,14 +24,14 @@ test: off
 artifacts:
   - path: CrashEdit-$(APPVEYOR_BUILD_NUMBER)-$(APPVEYOR_REPO_COMMIT).7z
     name: CRASHEDIT-FULL7Z
-#deploy:
-#  - provider: S3
-#    access_key_id: $(CRASHEDIT_S3DEPLOY_ACCESSKEY_ID)
-#    secret_access_key: $(CRASHEDIT_S3DEPLOY_ACCESSKEY_SECRET)
-#    bucket: builds.crashedit.cbhacks.com
-#    region: us-east-1
-#    folder: appveyor/build-$(APPVEYOR_BUILD_NUMBER)
-#    max_error_retry: 2
-#    artifact: CRASHEDIT-FULL7Z
-#    on:
-#      branch: deprecate
+deploy:
+  - provider: S3
+    access_key_id: $(CRASHEDIT_S3DEPLOY_ACCESSKEY_ID)
+    secret_access_key: $(CRASHEDIT_S3DEPLOY_ACCESSKEY_SECRET)
+    bucket: builds.crashedit.cbhacks.com
+    region: us-east-1
+    folder: appveyor/build-$(APPVEYOR_BUILD_NUMBER)
+    max_error_retry: 2
+    artifact: CRASHEDIT-FULL7Z
+    on:
+      branch: deprecate
