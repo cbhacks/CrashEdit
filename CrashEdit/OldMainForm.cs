@@ -37,9 +37,11 @@ namespace CrashEdit
         private ToolStripButton tbbSave;
         private ToolStripButton tbbPatchNSD;
         private ToolStripButton tbbClose;
-        private ToolStripSeparator tbsSeparator;
         private ToolStripButton tbbFind;
         private ToolStripButton tbbFindNext;
+        private ToolStripMenuItem tbxConvertVHVB;
+        private ToolStripMenuItem tbxConvertVAB;
+        private ToolStripDropDownButton tbbExtra;
         private TabControl tbcTabs;
         private GameVersionForm dlgGameVersion;
 
@@ -69,8 +71,6 @@ namespace CrashEdit
             tbbClose.TextImageRelation = TextImageRelation.ImageAboveText;
             tbbClose.Click += new EventHandler(tbbClose_Click);
 
-            tbsSeparator = new ToolStripSeparator();
-
             tbbFind = new ToolStripButton();
             tbbFind.Text = "Find";
             tbbFind.ImageKey = "tb_find";
@@ -83,6 +83,20 @@ namespace CrashEdit
             tbbFindNext.TextImageRelation = TextImageRelation.ImageAboveText;
             tbbFindNext.Click += new EventHandler(tbbFindNext_Click);
 
+            tbxConvertVHVB = new ToolStripMenuItem();
+            tbxConvertVHVB.Text = "Convert VH+VB to DLS";
+            tbxConvertVHVB.Click += new EventHandler(tbxConvertVHVB_Click);
+
+            tbxConvertVAB = new ToolStripMenuItem();
+            tbxConvertVAB.Text = "Convert VAB to DLS";
+            tbxConvertVAB.Click += new EventHandler(tbxConvertVAB_Click);
+
+            tbbExtra = new ToolStripDropDownButton();
+            tbbExtra.Text = "Extra Features";
+            tbbExtra.DropDown = new ToolStripDropDown();
+            tbbExtra.DropDown.Items.Add(tbxConvertVHVB);
+            tbbExtra.DropDown.Items.Add(tbxConvertVAB);
+
             tsToolbar = new ToolStrip();
             tsToolbar.Dock = DockStyle.Top;
             tsToolbar.ImageList = imglist;
@@ -90,9 +104,11 @@ namespace CrashEdit
             tsToolbar.Items.Add(tbbSave);
             tsToolbar.Items.Add(tbbPatchNSD);
             tsToolbar.Items.Add(tbbClose);
-            tsToolbar.Items.Add(tbsSeparator);
+            tsToolbar.Items.Add(new ToolStripSeparator());
             tsToolbar.Items.Add(tbbFind);
             tsToolbar.Items.Add(tbbFindNext);
+            tsToolbar.Items.Add(new ToolStripSeparator());
+            tsToolbar.Items.Add(tbbExtra);
 
             tbcTabs = new TabControl();
             tbcTabs.Dock = DockStyle.Fill;
@@ -382,6 +398,67 @@ namespace CrashEdit
             {
                 NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
                 nsfbox.FindNext();
+            }
+        }
+
+        void tbxConvertVHVB_Click(object sender,EventArgs e)
+        {
+            try
+            {
+                byte[] vh_data = FileUtil.OpenFile(FileFilters.VH, FileFilters.Any);
+                byte[] vb_data = FileUtil.OpenFile(FileFilters.VB, FileFilters.Any);
+
+                VH vh = VH.Load(vh_data);
+
+                if (vb_data.Length / 16 != vh.VBSize)
+                {
+                    ErrorManager.SignalIgnorableError("extra feature: VB size does not match size specified in VH");
+                }
+                SampleLine[] vb = new SampleLine [vb_data.Length / 16];
+                byte[] line_data = new byte[16];
+                for (int i = 0; i < vb.Length; i++)
+                {
+                    Array.Copy(vb_data, i * 16, line_data, 0, 16);
+                    vb[i] = SampleLine.Load(line_data);
+                }
+
+                VAB vab = VAB.Join(vh, vb);
+
+                FileUtil.SaveFile(vab.ToDLS().Save(), FileFilters.DLS, FileFilters.Any);
+            }
+            catch (LoadAbortedException)
+            {
+            }
+        }
+
+        void tbxConvertVAB_Click(object sender,EventArgs e)
+        {
+            try
+            {
+                byte[] vab_data = FileUtil.OpenFile(FileFilters.VAB, FileFilters.Any);
+
+                VH vh = VH.Load(vab_data);
+
+                int vb_offset = 2592+32*16*vh.Programs.Count;
+                if ((vab_data.Length - vb_offset) % 16 != 0)
+                {
+                    ErrorManager.SignalIgnorableError("extra feature: VB size is invalid");
+                }
+                vh.VBSize = (vab_data.Length - vb_offset) / 16;
+                SampleLine[] vb = new SampleLine [vh.VBSize];
+                byte[] line_data = new byte[16];
+                for (int i = 0; i < vb.Length; i++)
+                {
+                    Array.Copy(vab_data, vb_offset + i * 16, line_data, 0, 16);
+                    vb[i] = SampleLine.Load(line_data);
+                }
+
+                VAB vab = VAB.Join(vh, vb);
+
+                FileUtil.SaveFile(vab.ToDLS().Save(), FileFilters.DLS, FileFilters.Any);
+            }
+            catch (LoadAbortedException)
+            {
             }
         }
     }
