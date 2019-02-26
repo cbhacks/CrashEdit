@@ -291,6 +291,28 @@ namespace CrashEdit
                             newindex.Remove(link.EntryID);
                         }
                     }
+                    if (newindex.Count > 0)
+                    {
+                        List<string> neweids = new List<string>();
+                        foreach (KeyValuePair<int, int> kvp in newindex)
+                        {
+                            neweids.Add(Entry.EIDToEName(kvp.Key));
+                        }
+                        string question = "The NSD is missing some entry ID's:\n\n";
+                        foreach (string eid in neweids)
+                        {
+                            question += eid + "\n";
+                        }
+                        question += "\nDo you want to add these to the end of the NSD's entry index?";
+                        if (MessageBox.Show(question, "Patch NSD - New EID's", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            foreach (KeyValuePair<int, int> kvp in newindex)
+                            {
+                                nsd.Index.Add(new NSDLink(kvp.Value, kvp.Key));
+                                nsd.EntryCount++;
+                            }
+                        }
+                    }
                     if (MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
                         File.WriteAllBytes(filename, nsd.Save());
