@@ -17,6 +17,8 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -72,7 +74,6 @@
     <Compile Include="Controllers\Model\ModelEntryController.cs" />
     <Compile Include="Controllers\Model\T2EntryController.cs" />
     <Compile Include="Controllers\Scenery\NewSceneryEntryController.cs" />
-    <Compile Include="Controllers\Scenery\SceneryColorListController.cs" />
     <Compile Include="Controllers\Scenery\ProtoSceneryEntryController.cs" />
     <Compile Include="Controllers\SLST\SLSTItemController.cs" />
     <Compile Include="Controllers\SLST\SLSTItem1Controller.cs" />
@@ -141,12 +142,6 @@
     </Compile>
     <Compile Include="Controls\OldFrameBox.Designer.cs">
       <DependentUpon>OldFrameBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SceneryColorListBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\SceneryColorListBox.Designer.cs">
-      <DependentUpon>SceneryColorListBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProtoCameraBox.cs">
       <SubType>UserControl</SubType>
@@ -294,10 +289,6 @@
       <DependentUpon>OldFrameBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\SceneryColorListBox.resx">
-      <DependentUpon>SceneryColorListBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ProtoCameraBox.resx">
       <DependentUpon>ProtoCameraBox.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -415,5 +406,10 @@
     <Content Include="Resources\Textures\UnknownBoxTop.png" />
     <Content Include="Resources\Textures\UnknownPickup.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
 </Project>

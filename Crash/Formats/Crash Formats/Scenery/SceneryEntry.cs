@@ -9,22 +9,20 @@ namespace Crash
         private List<SceneryVertex> vertices;
         private List<SceneryTriangle> triangles;
         private List<SceneryQuad> quads;
-        private byte[] item4;
+        private List<ModelTexture> textures;
         private List<SceneryColor> colors;
-        private List<SceneryColorList> colorlist;
-        private byte[] item6;
+        private List<ModelAnimatedTexture> animatedtextures;
 
-        public SceneryEntry(byte[] info,IEnumerable<SceneryVertex> vertices,IEnumerable<SceneryTriangle> triangles,IEnumerable<SceneryQuad> quads,byte[] item4,IEnumerable<SceneryColor> colors,IEnumerable<SceneryColorList> colorlist,byte[] item6,int eid,int size)
+        public SceneryEntry(byte[] info,IEnumerable<SceneryVertex> vertices,IEnumerable<SceneryTriangle> triangles,IEnumerable<SceneryQuad> quads,IEnumerable<ModelTexture> textures,IEnumerable<SceneryColor> colors,IEnumerable<ModelAnimatedTexture> animatedtextures,int eid,int size)
             : base(eid,size)
         {
             this.info = info;
             this.vertices = new List<SceneryVertex>(vertices);
             this.triangles = new List<SceneryTriangle>(triangles);
             this.quads = new List<SceneryQuad>(quads);
-            this.item4 = item4;
+            this.textures = new List<ModelTexture>(textures);
             this.colors = new List<SceneryColor>(colors);
-            this.colorlist = new List<SceneryColorList>(colorlist);
-            this.item6 = item6;
+            this.animatedtextures = new List<ModelAnimatedTexture>(animatedtextures);
         }
 
         public override int Type
@@ -52,9 +50,9 @@ namespace Crash
             get { return quads; }
         }
 
-        public byte[] Item4
+        public IList<ModelTexture> Textures
         {
-            get { return item4; }
+            get { return textures; }
         }
 
         public IList<SceneryColor> Colors
@@ -62,14 +60,9 @@ namespace Crash
             get { return colors; }
         }
 
-        public IList<SceneryColorList> ColorList
+        public IList<ModelAnimatedTexture> AnimatedTextures
         {
-            get { return colorlist; }
-        }
-
-        public byte[] Item6
-        {
-            get { return item6; }
+            get { return animatedtextures; }
         }
 
         public int XOffset
@@ -111,9 +104,24 @@ namespace Crash
             {
                 quads[i].Save().CopyTo(items[3],i * 8);
             }
-            items[4] = item4;
-            items[5] = colorlist[0].Save();
-            items[6] = item6;
+            items[4] = new byte[textures.Count * 12];
+            for (int i = 0; i < textures.Count; i++)
+            {
+                textures[i].Save().CopyTo(items[4], i * 12);
+            }
+            items[5] = new byte[colors.Count * 4];
+            for (int i = 0; i < colors.Count; i++)
+            {
+                items[5][i * 4] = Colors[i].Red;
+                items[5][i * 4 + 1] = Colors[i].Green;
+                items[5][i * 4 + 2] = Colors[i].Blue;
+                items[5][i * 4 + 3] = Colors[i].Extra;
+            }
+            items[6] = new byte[animatedtextures.Count * 4];
+            for (int i = 0; i < animatedtextures.Count; i++)
+            {
+                animatedtextures[i].Save().CopyTo(items[6], i * 4);
+            }
             return new UnprocessedEntry(items,EID,Type,Size);
         }
 
@@ -228,18 +236,9 @@ namespace Crash
                     }
                     foreach (SceneryQuad quad in quads)
                     {
-                        if (quad.VertexA < vertices.Count)
+                        if (quad.VertexA < vertices.Count && quad.VertexB < vertices.Count && quad.VertexC < vertices.Count && quad.VertexD < vertices.Count)
                         {
-                            if (quad.VertexB < vertices.Count)
-                            {
-                                if (quad.VertexC < vertices.Count)
-                                {
-                                    if (quad.VertexD < vertices.Count)
-                                    {
-                                        ply.WriteLine("4 {0} {1} {2} {3}", quad.VertexA, quad.VertexB, quad.VertexC, quad.VertexD);
-                                    }
-                                }
-                            }
+                            ply.WriteLine("4 {0} {1} {2} {3}", quad.VertexA, quad.VertexB, quad.VertexC, quad.VertexD);
                         }
                     }
                 }

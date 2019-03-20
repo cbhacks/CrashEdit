@@ -7,18 +7,20 @@ namespace Crash
     public class PackingException : Exception
     {
         int eid;
+        int size;
 
-        public PackingException(int eid) : base("The data to be saved was too large to fit into its parent container.")
+        public PackingException(int eid,int size) : base("The data to be saved was too large to fit into its parent container.")
+        {
+            this.eid = eid;
+            this.size = size;
+        }
+
+        public PackingException(int eid,int size,string message) : base(message)
         {
             this.eid = eid;
         }
 
-        public PackingException(int eid,string message) : base(message)
-        {
-            this.eid = eid;
-        }
-
-        public PackingException(int eid,string message,Exception inner) : base(message,inner)
+        public PackingException(int eid,int size,string message,Exception inner) : base(message,inner)
         {
             this.eid = eid;
         }
@@ -30,6 +32,11 @@ namespace Crash
         public int EID
         {
             get { return eid; }
+        }
+
+        public int Size
+        {
+            get { return size; }
         }
     }
 }

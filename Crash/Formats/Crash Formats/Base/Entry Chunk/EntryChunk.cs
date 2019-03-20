@@ -81,7 +81,7 @@ namespace Crash
                 offset -= entry.HeaderLength;
                 if (offset + entrydata.Length > Length)
                 {
-                    throw new PackingException(entry.EID);
+                    throw new PackingException(entry.EID,entrydata.Length + offset);
                 }
                 BitConv.ToInt32(data,16 + i * 4,offset);
                 entrydata.CopyTo(data,offset);
