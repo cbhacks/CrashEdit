@@ -74,10 +74,6 @@ namespace CrashEdit
                                     {
                                         maxid = otherentity.ID.Value;
                                     }
-                                    if (otherentity.AlternateID.HasValue && otherentity.AlternateID.Value > maxid)
-                                    {
-                                        maxid = otherentity.AlternateID.Value;
-                                    }
                                 }
                                 if (otherentity.DrawListA != null)
                                 {
