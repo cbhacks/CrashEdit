@@ -125,8 +125,6 @@ namespace Crash
 
         public override byte[] Save()
         {
-            if (rows.Count == 0)
-                return new byte [0];
             int length;
             if (IsSparse)
             {
@@ -155,6 +153,11 @@ namespace Crash
                     BitConv.ToInt16(data,offset,(short)row.Values.Count);
                     offset += 2;
                 }
+            }
+            else if (rows.Count == 0)
+            {
+                BitConv.ToInt16(data,offset,0);
+                offset += 2;
             }
             else
             {
