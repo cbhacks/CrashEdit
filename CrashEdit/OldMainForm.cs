@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using DiscUtils.Iso9660;
 
 namespace CrashEdit
 {
@@ -39,11 +40,18 @@ namespace CrashEdit
         private ToolStripButton tbbClose;
         private ToolStripButton tbbFind;
         private ToolStripButton tbbFindNext;
+        private ToolStripMenuItem tbxMakeBIN;
+        private ToolStripMenuItem tbxMakeBINUSA;
+        private ToolStripMenuItem tbxMakeBINEUR;
+        private ToolStripMenuItem tbxMakeBINJAP;
         private ToolStripMenuItem tbxConvertVHVB;
         private ToolStripMenuItem tbxConvertVAB;
         private ToolStripDropDownButton tbbExtra;
         private TabControl tbcTabs;
         private GameVersionForm dlgGameVersion;
+
+        private FolderBrowserDialog dlgMakeBINDir = new FolderBrowserDialog();
+        private SaveFileDialog dlgMakeBINFile = new SaveFileDialog();
 
         public OldMainForm()
         {
@@ -83,6 +91,25 @@ namespace CrashEdit
             tbbFindNext.TextImageRelation = TextImageRelation.ImageAboveText;
             tbbFindNext.Click += new EventHandler(tbbFindNext_Click);
 
+            tbxMakeBIN = new ToolStripMenuItem();
+            tbxMakeBIN.Text = "Make BIN (no region)";
+            tbxMakeBIN.Click += new EventHandler(tbxMakeBIN_Click);
+
+            tbxMakeBINUSA = new ToolStripMenuItem();
+            tbxMakeBINUSA.Text = "Make BIN (NTSC-U/C)";
+            tbxMakeBINUSA.Click += new EventHandler(tbxMakeBIN_Click);
+            tbxMakeBINUSA.Enabled = false;
+
+            tbxMakeBINEUR = new ToolStripMenuItem();
+            tbxMakeBINEUR.Text = "Make BIN (PAL)";
+            tbxMakeBINEUR.Click += new EventHandler(tbxMakeBIN_Click);
+            tbxMakeBINEUR.Enabled = false;
+
+            tbxMakeBINJAP = new ToolStripMenuItem();
+            tbxMakeBINJAP.Text = "Make BIN (NTSC-J)";
+            tbxMakeBINJAP.Click += new EventHandler(tbxMakeBIN_Click);
+            tbxMakeBINJAP.Enabled = false;
+
             tbxConvertVHVB = new ToolStripMenuItem();
             tbxConvertVHVB.Text = "Convert VH+VB to DLS";
             tbxConvertVHVB.Click += new EventHandler(tbxConvertVHVB_Click);
@@ -94,6 +121,11 @@ namespace CrashEdit
             tbbExtra = new ToolStripDropDownButton();
             tbbExtra.Text = "Extra Features";
             tbbExtra.DropDown = new ToolStripDropDown();
+            tbbExtra.DropDown.Items.Add(tbxMakeBIN);
+            tbbExtra.DropDown.Items.Add(tbxMakeBINUSA);
+            tbbExtra.DropDown.Items.Add(tbxMakeBINEUR);
+            tbbExtra.DropDown.Items.Add(tbxMakeBINJAP);
+            tbbExtra.DropDown.Items.Add(new ToolStripSeparator());
             tbbExtra.DropDown.Items.Add(tbxConvertVHVB);
             tbbExtra.DropDown.Items.Add(tbxConvertVAB);
 
@@ -120,6 +152,8 @@ namespace CrashEdit
             Text = "CrashEdit";
             Controls.Add(tbcTabs);
             Controls.Add(tsToolbar);
+
+            dlgMakeBINFile.Filter = "Playstation Disc Images (*.bin)|*.bin";
         }
 
         void tbbOpen_Click(object sender,EventArgs e)
@@ -420,6 +454,41 @@ namespace CrashEdit
             {
                 NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
                 nsfbox.FindNext();
+            }
+        }
+
+        void AddDirectoryToISO(CDBuilder fs, string prefix, DirectoryInfo dir)
+        {
+            foreach (DirectoryInfo subdir in dir.GetDirectories()) {
+                AddDirectoryToISO(fs, $"{prefix}{subdir.Name}\\", subdir);
+            }
+            foreach (FileInfo file in dir.GetFiles()) {
+                fs.AddFile($"{prefix}{file.Name};1", file.FullName);
+            }
+        }
+
+        void tbxMakeBIN_Click(object sender,EventArgs e)
+        {
+            if (dlgMakeBINDir.ShowDialog() != DialogResult.OK)
+                return;
+
+            string cnffile = Path.Combine(dlgMakeBINDir.SelectedPath, "SYSTEM.CNF");
+            string exefile = Path.Combine(dlgMakeBINDir.SelectedPath, "PSX.EXE");
+
+            if (!File.Exists(cnffile) && !File.Exists(exefile)) {
+                if (MessageBox.Show("The selected drive or folder does not contain SYSTEM.CNF or PSX.EXE. At least one of these is required for a bootable PSX CD image. Continue anyway?", "Make BIN", MessageBoxButtons.YesNo, MessageBoxIcon.Stop) != DialogResult.Yes)
+                    return;
+            }
+
+            if (dlgMakeBINFile.ShowDialog() != DialogResult.OK)
+                return;
+
+            var fs = new CDBuilder();
+            AddDirectoryToISO(fs, "", new DirectoryInfo(dlgMakeBINDir.SelectedPath));
+
+            using (var bin = new FileStream(dlgMakeBINFile.FileName, FileMode.Create, FileAccess.Write))
+            using (var iso = fs.Build()) {
+                ISO2PSX.Run(iso, bin);
             }
         }
 
