@@ -2,8 +2,10 @@ using Crash;
 using Crash.UI;
 using System;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Diagnostics;
 using DiscUtils.Iso9660;
 
 namespace CrashEdit
@@ -98,17 +100,14 @@ namespace CrashEdit
             tbxMakeBINUSA = new ToolStripMenuItem();
             tbxMakeBINUSA.Text = "Make BIN (NTSC-U/C)";
             tbxMakeBINUSA.Click += new EventHandler(tbxMakeBIN_Click);
-            tbxMakeBINUSA.Enabled = false;
 
             tbxMakeBINEUR = new ToolStripMenuItem();
             tbxMakeBINEUR.Text = "Make BIN (PAL)";
             tbxMakeBINEUR.Click += new EventHandler(tbxMakeBIN_Click);
-            tbxMakeBINEUR.Enabled = false;
 
             tbxMakeBINJAP = new ToolStripMenuItem();
             tbxMakeBINJAP.Text = "Make BIN (NTSC-J)";
             tbxMakeBINJAP.Click += new EventHandler(tbxMakeBIN_Click);
-            tbxMakeBINJAP.Enabled = false;
 
             tbxConvertVHVB = new ToolStripMenuItem();
             tbxConvertVHVB.Text = "Convert VH+VB to DLS";
@@ -469,6 +468,8 @@ namespace CrashEdit
 
         void tbxMakeBIN_Click(object sender,EventArgs e)
         {
+            var log = new StringBuilder();
+
             if (dlgMakeBINDir.ShowDialog() != DialogResult.OK)
                 return;
 
@@ -490,6 +491,68 @@ namespace CrashEdit
             using (var iso = fs.Build()) {
                 ISO2PSX.Run(iso, bin);
             }
+
+            log.AppendLine("Created BIN file without region OK.");
+            log.AppendLine();
+
+            string cueFilename = Path.ChangeExtension(dlgMakeBINFile.FileName, ".cue");
+            if (!File.Exists(cueFilename)) {
+                try {
+                    using (var cue = new StreamWriter(cueFilename)) {
+                        cue.WriteLine($"FILE \"{Path.GetFileName(dlgMakeBINFile.FileName)}\" BINARY");
+                        cue.WriteLine("  TRACK 01 MODE2/2352");
+                        cue.WriteLine("    INDEX 01 00:00:00");
+                    }
+                    log.AppendLine("Created matching CUE file.");
+                    log.AppendLine();
+                } catch (IOException ex) {
+                    log.AppendLine($"Failed to create CUE file: {ex}");
+                    log.AppendLine();
+                }
+            } else {
+                log.AppendLine("CUE file already exists, will not be modified.");
+                log.AppendLine();
+            }
+
+            string imprintOpt;
+            if (sender == tbxMakeBINUSA) {
+                imprintOpt = ":cdxa-imprint --psx-scea";
+            } else if (sender == tbxMakeBINEUR) {
+                imprintOpt = ":cdxa-imprint --psx-scee";
+            } else if (sender == tbxMakeBINJAP) {
+                imprintOpt = ":cdxa-imprint --psx-scei";
+            } else {
+                log.Append("Done.");
+                MessageBox.Show(log.ToString());
+                return;
+            }
+
+            log.AppendLine("Launching DRNSF to apply selected region...");
+            var cePath = System.Reflection.Assembly.GetEntryAssembly().Location;
+            var ceDir = Path.GetDirectoryName(cePath);
+            var psi = new ProcessStartInfo(Path.Combine(ceDir, "drnsf"));
+            psi.Arguments = $"{imprintOpt} -- \"{dlgMakeBINFile.FileName}\"";
+            psi.UseShellExecute = false;
+            try {
+                using (var drnsf = Process.Start(psi)) {
+                    drnsf.WaitForExit();
+                    if (drnsf.ExitCode != 0) {
+                        log.AppendLine("DRNSF returned an error. No region has been applied.");
+                        log.AppendLine();
+                    } else {
+                        log.AppendLine("Region applied successfully.");
+                        log.AppendLine();
+                    }
+                }
+            } catch (FileNotFoundException) {
+                log.AppendLine("Could not find DRNSF exe. Please place this in the same directory as CrashEdit.");
+                log.AppendLine();
+            } catch (Exception ex) {
+                log.AppendLine($"Failed to launch DRNSF. Reason: {ex}");
+                log.AppendLine();
+            }
+            log.Append("Done.");
+            MessageBox.Show(log.ToString());
         }
 
         void tbxConvertVHVB_Click(object sender,EventArgs e)
