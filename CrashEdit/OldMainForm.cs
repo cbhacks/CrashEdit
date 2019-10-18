@@ -5,7 +5,6 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using System.Diagnostics;
 using DiscUtils.Iso9660;
 
 namespace CrashEdit
@@ -528,21 +527,13 @@ namespace CrashEdit
             }
 
             log.AppendLine("Launching DRNSF to apply selected region...");
-            var cePath = System.Reflection.Assembly.GetEntryAssembly().Location;
-            var ceDir = Path.GetDirectoryName(cePath);
-            var psi = new ProcessStartInfo(Path.Combine(ceDir, "drnsf"));
-            psi.Arguments = $"{imprintOpt} -- \"{dlgMakeBINFile.FileName}\"";
-            psi.UseShellExecute = false;
             try {
-                using (var drnsf = Process.Start(psi)) {
-                    drnsf.WaitForExit();
-                    if (drnsf.ExitCode != 0) {
-                        log.AppendLine("DRNSF returned an error. No region has been applied.");
-                        log.AppendLine();
-                    } else {
-                        log.AppendLine("Region applied successfully.");
-                        log.AppendLine();
-                    }
+                if (DRNSF.Invoke($"{imprintOpt} -- \"{dlgMakeBINFile.FileName}\"") != 0) {
+                    log.AppendLine("DRNSF returned an error. No region has been applied.");
+                    log.AppendLine();
+                } else {
+                    log.AppendLine("Region applied successfully.");
+                    log.AppendLine();
                 }
             } catch (FileNotFoundException) {
                 log.AppendLine("Could not find DRNSF exe. Please place this in the same directory as CrashEdit.");

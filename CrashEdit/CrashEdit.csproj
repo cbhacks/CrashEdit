@@ -58,6 +58,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DRNSF.cs" />
     <Compile Include="ISO2PSX.cs" />
     <Compile Include="Controllers\Animation\CutsceneFrameController.cs" />
     <Compile Include="Controllers\Animation\AnimationEntryController.cs" />
