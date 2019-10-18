@@ -21,12 +21,12 @@ after_build:
   - copy .\OpenTK-License.txt pkg
   - copy .\DiscUtils.dll pkg
   - copy .\DiscUtils-License.txt pkg
-  - 7z a CrashEdit.7z .\pkg\*
-  - move CrashEdit.7z CrashEdit-%APPVEYOR_BUILD_NUMBER%-%APPVEYOR_REPO_COMMIT%.7z
+  - 7z a CrashEdit.zip .\pkg\*
+  - move CrashEdit.zip CrashEdit-%APPVEYOR_BUILD_NUMBER%-%APPVEYOR_REPO_COMMIT%.zip
 test: off
 artifacts:
-  - path: CrashEdit-$(APPVEYOR_BUILD_NUMBER)-$(APPVEYOR_REPO_COMMIT).7z
-    name: CRASHEDIT-FULL7Z
+  - path: CrashEdit-$(APPVEYOR_BUILD_NUMBER)-$(APPVEYOR_REPO_COMMIT).zip
+    name: CRASHEDIT-FULLZIP
 deploy:
   - provider: S3
     access_key_id: $(CRASHEDIT_S3DEPLOY_ACCESSKEY_ID)
@@ -35,6 +35,6 @@ deploy:
     region: us-east-1
     folder: appveyor/build-$(APPVEYOR_BUILD_NUMBER)
     max_error_retry: 2
-    artifact: CRASHEDIT-FULL7Z
+    artifact: CRASHEDIT-FULLZIP
     on:
       branch: deprecate
