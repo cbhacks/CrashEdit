@@ -3,7 +3,7 @@ namespace CrashEdit
     public static class FileFilters
     {
         public const string Any = "All Files (*.*)|*.*";
-        public const string NSF = "Naughty Dog Software Files (*.nsf)|*.nsf";
+        public const string NSF = "Naughty Dog Software Files (*.nsf)|*.nsf;*.NSF";
         public const string NSEntry = "Naughty Dog Software Entry (*.nsentry)|*.nsentry";
         public const string Wave = "Wave Files (*.wav)|*.wav";
         public const string OBJ = "Wavefront OBJ Files (*.obj)|*.obj";
