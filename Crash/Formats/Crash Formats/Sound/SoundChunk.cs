@@ -12,14 +12,7 @@ namespace Crash
         {
         }
 
-        public override short Type
-        {
-            get { return 3; }
-        }
-
-        protected override int Alignment
-        {
-            get { return 16; }
-        }
+        public override short Type => 3;
+        protected override int Alignment => 16;
     }
 }
