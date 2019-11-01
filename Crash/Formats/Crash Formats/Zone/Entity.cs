@@ -220,13 +220,13 @@ namespace Crash
             get
             {
                 if (slst != null)
-                    return Entry.EIDToEName(slst);
+                    return Entry.EIDToEName((int)slst);
                 else return null;
             }
             set
             {
                 if (value != null)
-                    slst = BitConv.FromInt32(Entry.ENameToEID(value));
+                    slst = BitConv.FlipInt32(Entry.ENameToEID(value));
                 else slst = null;
             }
         }
