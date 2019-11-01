@@ -4,25 +4,18 @@ namespace Crash
 {
     public abstract class MysteryUniItemEntry : Entry
     {
-        private byte[] data;
-
         public MysteryUniItemEntry(byte[] data,int eid, int size) : base(eid, size)
         {
-            if (data == null)
-                throw new ArgumentNullException("data");
-            this.data = data;
+            Data = data ?? throw new ArgumentNullException("data");
         }
 
-        public byte[] Data
-        {
-            get { return data; }
-        }
+        public byte[] Data { get; }
 
         public override UnprocessedEntry Unprocess()
         {
             byte[][] items = new byte [1][];
-            items[0] = data;
-            int size = data.Length;
+            items[0] = Data;
+            int size = Data.Length;
             return new UnprocessedEntry(items,EID,Type,Size);
         }
     }
