@@ -77,9 +77,11 @@
     <Compile Include="Controllers\Model\T2EntryController.cs" />
     <Compile Include="Controllers\Scenery\NewSceneryEntryController.cs" />
     <Compile Include="Controllers\Scenery\ProtoSceneryEntryController.cs" />
-    <Compile Include="Controllers\SLST\SLSTItemController.cs" />
-    <Compile Include="Controllers\SLST\SLSTItem1Controller.cs" />
-    <Compile Include="Controllers\SLST\SLSTItem0Controller.cs" />
+    <Compile Include="Controllers\SLST\OldSLSTDeltaController.cs" />
+    <Compile Include="Controllers\SLST\SLSTDeltaController.cs" />
+    <Compile Include="Controllers\SLST\OldSLSTEntryController.cs" />
+    <Compile Include="Controllers\SLST\OldSLSTSourceController.cs" />
+    <Compile Include="Controllers\SLST\SLSTSourceController.cs" />
     <Compile Include="Controllers\TextureChunkController.cs" />
     <Compile Include="Controllers\Animation\CutsceneAnimationEntryController.cs" />
     <Compile Include="Controllers\Music\OldSEQController.cs" />
@@ -190,16 +192,19 @@
     <Compile Include="Controls\EntryChunkBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Controls\OldSLSTDeltaBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\OldSLSTSourceBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\SoundBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\SLSTItem0Box.cs">
+    <Compile Include="Controls\SLSTSourceBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\SLSTItemBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\SLSTItem1Box.cs">
+    <Compile Include="Controls\SLSTDeltaBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ThreeDimensionalViewer.cs">

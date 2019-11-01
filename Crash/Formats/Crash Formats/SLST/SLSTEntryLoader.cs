@@ -2,10 +2,6 @@ using System;
 
 namespace Crash
 {
-    [EntryType(4,GameVersion.Crash1Beta1995)]
-    [EntryType(4,GameVersion.Crash1BetaMAR08)]
-    [EntryType(4,GameVersion.Crash1BetaMAY11)]
-    [EntryType(4,GameVersion.Crash1)]
     [EntryType(4,GameVersion.Crash2)]
     [EntryType(4,GameVersion.Crash3)]
     public sealed class SLSTEntryLoader : EntryLoader
@@ -16,18 +12,14 @@ namespace Crash
                 throw new ArgumentNullException("items");
             if (items.Length < 2)
                 ErrorManager.SignalError("SLSTEntry: Item count is wrong");
-            //SLSTItem0 slstitemfirst = SLSTItem0.Load(items[0]);
-            SLSTItem[] slstitems = new SLSTItem [items.Length];
-            for (int i = 0;i < items.Length;i++)
+            SLSTSource sourcestart = SLSTSource.Load(items[0]);
+            SLSTDelta[] deltas = new SLSTDelta[items.Length - 2];
+            for (int i = 0; i < items.Length - 2; i++)
             {
-                slstitems[i] = SLSTItem.Load(items[i]);
-                /*if (slstitems[i].Unknown1 != 1)
-                {
-                    ErrorManager.SignalIgnorableError("SLSTEntry: Item unknown field is wrong");
-                }*/
+                deltas[i] = SLSTDelta.Load(items[i+1]);
             }
-            //SLSTItem0 slstitemlast = SLSTItem0.Load(items[items.Length - 1]);
-            return new SLSTEntry(slstitems,eid,size);
+            SLSTSource sourceend = SLSTSource.Load(items[items.Length - 1]);
+            return new SLSTEntry(sourcestart, sourceend, deltas, eid, size);
         }
     }
 }
