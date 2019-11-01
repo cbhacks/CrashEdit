@@ -10,12 +10,10 @@ namespace CrashEdit
     public sealed class OldMainForm : Form
     {
         private static ImageList imglist;
-        private static GameVersion version;
 
         static OldMainForm()
         {
             imglist = new ImageList();
-            version = new GameVersion();
             try
             {
                 imglist.Images.Add("default",OldResources.FileImage);
@@ -45,47 +43,61 @@ namespace CrashEdit
 
         public OldMainForm()
         {
-            tbbOpen = new ToolStripButton();
-            tbbOpen.Text = "Open";
-            tbbOpen.ImageKey = "tb_open";
-            tbbOpen.TextImageRelation = TextImageRelation.ImageAboveText;
+            tbbOpen = new ToolStripButton
+            {
+                Text = "Open",
+                ImageKey = "tb_open",
+                TextImageRelation = TextImageRelation.ImageAboveText
+            };
             tbbOpen.Click += new EventHandler(tbbOpen_Click);
 
-            tbbSave = new ToolStripButton();
-            tbbSave.Text = "Save";
-            tbbSave.ImageKey = "tb_save";
-            tbbSave.TextImageRelation = TextImageRelation.ImageAboveText;
+            tbbSave = new ToolStripButton
+            {
+                Text = "Save",
+                ImageKey = "tb_save",
+                TextImageRelation = TextImageRelation.ImageAboveText
+            };
             tbbSave.Click += new EventHandler(tbbSave_Click);
 
-            tbbPatchNSD = new ToolStripButton();
-            tbbPatchNSD.Text = "Patch NSD";
-            tbbPatchNSD.ImageKey = "tb_patchnsd";
-            tbbPatchNSD.TextImageRelation = TextImageRelation.ImageAboveText;
+            tbbPatchNSD = new ToolStripButton
+            {
+                Text = "Patch NSD",
+                ImageKey = "tb_patchnsd",
+                TextImageRelation = TextImageRelation.ImageAboveText
+            };
             tbbPatchNSD.Click += new EventHandler(tbbPatchNSD_Click);
 
-            tbbClose = new ToolStripButton();
-            tbbClose.Text = "Close";
-            tbbClose.ImageKey = "tb_close";
-            tbbClose.TextImageRelation = TextImageRelation.ImageAboveText;
+            tbbClose = new ToolStripButton
+            {
+                Text = "Close",
+                ImageKey = "tb_close",
+                TextImageRelation = TextImageRelation.ImageAboveText
+            };
             tbbClose.Click += new EventHandler(tbbClose_Click);
 
             tbsSeparator = new ToolStripSeparator();
 
-            tbbFind = new ToolStripButton();
-            tbbFind.Text = "Find";
-            tbbFind.ImageKey = "tb_find";
-            tbbFind.TextImageRelation = TextImageRelation.ImageAboveText;
+            tbbFind = new ToolStripButton
+            {
+                Text = "Find",
+                ImageKey = "tb_find",
+                TextImageRelation = TextImageRelation.ImageAboveText
+            };
             tbbFind.Click += new EventHandler(tbbFind_Click);
 
-            tbbFindNext = new ToolStripButton();
-            tbbFindNext.Text = "Find Next";
-            tbbFindNext.ImageKey = "tb_findnext";
-            tbbFindNext.TextImageRelation = TextImageRelation.ImageAboveText;
+            tbbFindNext = new ToolStripButton
+            {
+                Text = "Find Next",
+                ImageKey = "tb_findnext",
+                TextImageRelation = TextImageRelation.ImageAboveText
+            };
             tbbFindNext.Click += new EventHandler(tbbFindNext_Click);
 
-            tsToolbar = new ToolStrip();
-            tsToolbar.Dock = DockStyle.Top;
-            tsToolbar.ImageList = imglist;
+            tsToolbar = new ToolStrip
+            {
+                Dock = DockStyle.Top,
+                ImageList = imglist
+            };
             tsToolbar.Items.Add(tbbOpen);
             tsToolbar.Items.Add(tbbSave);
             tsToolbar.Items.Add(tbbPatchNSD);
@@ -94,8 +106,10 @@ namespace CrashEdit
             tsToolbar.Items.Add(tbbFind);
             tsToolbar.Items.Add(tbbFindNext);
 
-            tbcTabs = new TabControl();
-            tbcTabs.Dock = DockStyle.Fill;
+            tbcTabs = new TabControl
+            {
+                Dock = DockStyle.Fill
+            };
 
             dlgGameVersion = new GameVersionForm();
 
@@ -149,6 +163,7 @@ namespace CrashEdit
                         OpenNSF(filename);
                     }
                 }
+                dialog.Dispose();
             }
         }
 
@@ -170,11 +185,15 @@ namespace CrashEdit
 
         public void OpenNSF(string filename,NSF nsf,GameVersion gameversion)
         {
-            NSFBox nsfbox = new NSFBox(nsf,gameversion);
-            nsfbox.Dock = DockStyle.Fill;
+            NSFBox nsfbox = new NSFBox(nsf, gameversion)
+            {
+                Dock = DockStyle.Fill
+            };
 
-            TabPage nsftab = new TabPage(filename);
-            nsftab.Tag = nsfbox;
+            TabPage nsftab = new TabPage(filename)
+            {
+                Tag = nsfbox
+            };
             nsftab.Controls.Add(nsfbox);
 
             tbcTabs.TabPages.Add(nsftab);
@@ -232,7 +251,7 @@ namespace CrashEdit
                 }
                 else
                 {
-                    MessageBox.Show(string.Format("Can't figure out NSD filename.\n\nFOO.NSF -> FOO.NSD\n\n{0} -> ???", filename), "Patch NSD",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    MessageBox.Show(string.Format("Can't figure out NSD filename. Make sure NSF file ends in \"f\" (case-insensitive)!\n\nFOO.NSF -> FOO.NSD\n\n{0} -> ???", filename), "Patch NSD",MessageBoxButtons.OK,MessageBoxIcon.Error);
                     return;
                 }
                 NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
@@ -252,10 +271,9 @@ namespace CrashEdit
                     Dictionary<int, int> newindex = new Dictionary<int, int>();
                     for (int i = 0; i < nsf.Chunks.Count; i++)
                     {
-                        if (nsf.Chunks[i] is IEntry)
+                        if (nsf.Chunks[i] is IEntry ientry)
                         {
-                            IEntry entry = (IEntry)nsf.Chunks[i];
-                            newindex.Add(entry.EID, i * 2 + 1);
+                            newindex.Add(ientry.EID, i * 2 + 1);
                         }
                         if (nsf.Chunks[i] is EntryChunk)
                         {

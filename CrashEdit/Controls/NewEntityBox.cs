@@ -717,7 +717,7 @@ namespace CrashEdit
             }
             if (text == true)
             {
-                entity.LoadListA.Rows[loadlistarowindex].Values[loadlistaeidindex] = BitConv.FromInt32(Entry.Str2EID(Reverse(txtEIDA.Text)));
+                entity.LoadListA.Rows[loadlistarowindex].Values[loadlistaeidindex] = BitConv.FromInt32(Entry.ENameToEID(Reverse(txtEIDA.Text)));
                 text = false;
             }
         }
@@ -902,7 +902,7 @@ namespace CrashEdit
             }
             if (text == true)
             {
-                entity.LoadListB.Rows[loadlistbrowindex].Values[loadlistbeidindex] = BitConv.FromInt32(Entry.Str2EID(Reverse(txtEIDB.Text)));
+                entity.LoadListB.Rows[loadlistbrowindex].Values[loadlistbeidindex] = BitConv.FromInt32(Entry.ENameToEID(Reverse(txtEIDB.Text)));
                 text = false;
             }
         }

@@ -65,7 +65,7 @@ namespace Crash
             }
             byte[][] items = new byte [itemcount][];
             byte[] itemdata;
-            for (int i = 0;i < itemcount;i++)
+            for (int i = 0;i < itemcount;++i)
             {
                 int itemstart = BitConv.FromInt32(data,16 + i * 4);
                 int itemend = BitConv.FromInt32(data,20 + i * 4);
@@ -102,26 +102,26 @@ namespace Crash
             return new string(str);
         }
 
-        public static string EIDToEName(int? eid)
-        {
-            char[] str = new char[5];
-            eid >>= 1;
-            for (int i = 0; i < 5; i++)
-            {
-                str[4 - i] = ENameCharacterSet[(int)eid & 0x3F];
-                eid >>= 6;
-            }
-            return new string(str);
-        }
+        //public static string EIDToEName(int? eid)
+        //{
+        //    char[] str = new char[5];
+        //    eid >>= 1;
+        //    for (int i = 0; i < 5; i++)
+        //    {
+        //        str[4 - i] = ENameCharacterSet[(int)eid & 0x3F];
+        //        eid >>= 6;
+        //    }
+        //    return new string(str);
+        //}
 
-        // Special thanks to NeoKesha for this
-        public static int? Str2EID(string str)
+        // thanks to NeoKesha for this
+        public static int ENameToEID(string str)
         {
             int EID = 1;
             for (byte i = 0; i < 5; i++)
             {
                 byte chr_id = SeekCharId(str[i]);
-                EID = EID | (chr_id << (1 + 6 * i));
+                EID |= chr_id << (1 + 6 * i);
             }
             return EID;
         }
@@ -130,20 +130,17 @@ namespace Crash
         public static byte SeekCharId(char chr)
         {
             byte i = 0;
-            while (i < 64 && !(chr == ENameCharacterSet[i]))
+            for (; i < 64; ++i)
             {
-                i++;
+                if (ENameCharacterSet[i] == chr) return i;
             }
-            return i;
+            throw new ArgumentException("Entry: invalid character for EName");
         }
-
-        private int eid;
-        private int size;
 
         public Entry(int eid,int size)
         {
-            this.eid = eid;
-            this.size = size;
+            EID = eid;
+            Size = size;
         }
 
         public abstract int Type
@@ -151,20 +148,14 @@ namespace Crash
             get;
         }
 
-        public int EID
-        {
-            get { return eid; }
-        }
+        public int EID { get; }
 
         public string EName
         {
-            get { return EIDToEName(eid); }
+            get { return EIDToEName(EID); }
         }
 
-        public int Size
-        {
-            get { return size; }
-        }
+        public int Size { get; }
 
         public abstract UnprocessedEntry Unprocess();
 

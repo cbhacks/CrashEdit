@@ -55,7 +55,7 @@ namespace Crash
             BitConv.ToInt32(data,8,Type);
             BitConv.ToInt32(data,12,Items.Count);
             int offset = 20 + Items.Count * 4;
-            Aligner.Align(ref offset,4);
+            //Aligner.Align(ref offset,4);
             BitConv.ToInt32(data,16,offset);
             for (int i = 0;i < Items.Count;i++)
             {

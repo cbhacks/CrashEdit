@@ -226,7 +226,7 @@ namespace Crash
             set
             {
                 if (value != null)
-                    slst = BitConv.FromInt32(Entry.Str2EID(value));
+                    slst = BitConv.FromInt32(Entry.ENameToEID(value));
                 else slst = null;
             }
         }
