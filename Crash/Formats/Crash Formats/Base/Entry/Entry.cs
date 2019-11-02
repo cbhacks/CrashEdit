@@ -121,7 +121,7 @@ namespace Crash
             for (byte i = 0; i < 5; i++)
             {
                 byte chr_id = SeekCharId(str[i]);
-                EID |= chr_id << (1 + 6 * i);
+                EID |= chr_id << (25 - 6 * i);
             }
             return EID;
         }

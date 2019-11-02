@@ -717,7 +717,7 @@ namespace CrashEdit
             }
             if (text == true)
             {
-                entity.LoadListA.Rows[loadlistarowindex].Values[loadlistaeidindex] = BitConv.FlipInt32(Entry.ENameToEID(Reverse(txtEIDA.Text)));
+                entity.LoadListA.Rows[loadlistarowindex].Values[loadlistaeidindex] = Entry.ENameToEID(txtEIDA.Text);
                 text = false;
             }
         }
@@ -902,7 +902,7 @@ namespace CrashEdit
             }
             if (text == true)
             {
-                entity.LoadListB.Rows[loadlistbrowindex].Values[loadlistbeidindex] = BitConv.FlipInt32(Entry.ENameToEID(Reverse(txtEIDB.Text)));
+                entity.LoadListB.Rows[loadlistbrowindex].Values[loadlistbeidindex] = Entry.ENameToEID(txtEIDB.Text);
                 text = false;
             }
         }
@@ -1406,7 +1406,7 @@ namespace CrashEdit
                 }
                 if (text == true)
                 {
-                    entity.SLST = Reverse(txtSLST.Text);
+                    entity.SLST = txtSLST.Text;
                     text = false;
                 }
 
@@ -1452,7 +1452,7 @@ namespace CrashEdit
             }
             if (text == true)
             {
-                entity.SLST = Reverse(txtSLST.Text);
+                entity.SLST = txtSLST.Text;
                 text = false;
             }
             InvalidateNodes();
