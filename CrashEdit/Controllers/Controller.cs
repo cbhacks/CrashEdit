@@ -101,7 +101,23 @@ namespace CrashEdit
 
         public virtual void Dispose()
         {
-            Node.Remove();
+            TreeNode[] nodes = new TreeNode[Node.Nodes.Count];
+            int i = 0;
+            foreach(TreeNode node in Node.Nodes)
+            {
+                nodes[i++] = node;
+            }
+            for (i = 0; i < nodes.Length; ++i)
+            {
+                if (nodes[i].Tag != null)
+                {
+                    if (nodes[i].Tag is Controller t)
+                    {
+                        t.Dispose();
+                    }
+                }
+            }
+            Node.Remove(); // <-- this line makes the TreeNodeCollection volatile, so the node references must be copies onto a separate list beforehand
             ContextMenu.Dispose();
             if (editor != null)
             {
