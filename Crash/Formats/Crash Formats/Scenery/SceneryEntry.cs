@@ -5,7 +5,6 @@ namespace Crash
 {
     public sealed class SceneryEntry : Entry
     {
-        private byte[] info;
         private List<SceneryVertex> vertices;
         private List<SceneryTriangle> triangles;
         private List<SceneryQuad> quads;
@@ -16,7 +15,7 @@ namespace Crash
         public SceneryEntry(byte[] info,IEnumerable<SceneryVertex> vertices,IEnumerable<SceneryTriangle> triangles,IEnumerable<SceneryQuad> quads,IEnumerable<ModelTexture> textures,IEnumerable<SceneryColor> colors,IEnumerable<ModelAnimatedTexture> animatedtextures,int eid,int size)
             : base(eid,size)
         {
-            this.info = info;
+            Info = info;
             this.vertices = new List<SceneryVertex>(vertices);
             this.triangles = new List<SceneryTriangle>(triangles);
             this.quads = new List<SceneryQuad>(quads);
@@ -25,68 +24,37 @@ namespace Crash
             this.animatedtextures = new List<ModelAnimatedTexture>(animatedtextures);
         }
 
-        public override int Type
-        {
-            get { return 3; }
-        }
-
-        public byte[] Info
-        {
-            get { return info; }
-        }
-
-        public IList<SceneryVertex> Vertices
-        {
-            get { return vertices; }
-        }
-
-        public IList<SceneryTriangle> Triangles
-        {
-            get { return triangles; }
-        }
-
-        public IList<SceneryQuad> Quads
-        {
-            get { return quads; }
-        }
-
-        public IList<ModelTexture> Textures
-        {
-            get { return textures; }
-        }
-
-        public IList<SceneryColor> Colors
-        {
-            get { return colors; }
-        }
-
-        public IList<ModelAnimatedTexture> AnimatedTextures
-        {
-            get { return animatedtextures; }
-        }
+        public override int Type => 3;
+        public byte[] Info { get; }
+        public IList<SceneryVertex> Vertices => vertices;
+        public IList<SceneryTriangle> Triangles => triangles;
+        public IList<SceneryQuad> Quads => quads;
+        public IList<ModelTexture> Textures => textures;
+        public IList<SceneryColor> Colors => colors;
+        public IList<ModelAnimatedTexture> AnimatedTextures => animatedtextures;
 
         public int XOffset
         {
-            get { return BitConv.FromInt32(info,0); }
-            set { BitConv.ToInt32(info,0,value); }
+            get => BitConv.FromInt32(Info,0);
+            set => BitConv.ToInt32(Info,0,value);
         }
 
         public int YOffset
         {
-            get { return BitConv.FromInt32(info,4); }
-            set { BitConv.ToInt32(info,4,value); }
+            get => BitConv.FromInt32(Info,4);
+            set => BitConv.ToInt32(Info,4,value);
         }
 
         public int ZOffset
         {
-            get { return BitConv.FromInt32(info,8); }
-            set { BitConv.ToInt32(info,8,value); }
+            get => BitConv.FromInt32(Info,8);
+            set => BitConv.ToInt32(Info,8,value);
         }
 
         public override UnprocessedEntry Unprocess()
         {
             byte[][] items = new byte [7][];
-            items[0] = info;
+            items[0] = Info;
             items[1] = new byte [vertices.Count * 6];
             for (int i = 0;i < vertices.Count;i++)
             {
@@ -170,31 +138,16 @@ namespace Crash
                     int polycount = 0;
                     foreach (SceneryTriangle triangle in triangles)
                     {
-                        if (triangle.VertexA < vertices.Count)
+                        if (triangle.VertexA < vertices.Count - 1 && triangle.VertexB < vertices.Count - 1 && triangle.VertexC < vertices.Count - 1)
                         {
-                            if (triangle.VertexB < vertices.Count)
-                            {
-                                if (triangle.VertexC < vertices.Count)
-                                {
-                                    polycount++;
-                                }
-                            }
+                            ++polycount;
                         }
                     }
                     foreach (SceneryQuad quad in quads)
                     {
-                        if (quad.VertexA < vertices.Count)
+                        if (quad.VertexA < vertices.Count - 1 && quad.VertexB < vertices.Count - 1 && quad.VertexC < vertices.Count - 1 && quad.VertexD < vertices.Count - 1)
                         {
-                            if (quad.VertexB < vertices.Count)
-                            {
-                                if (quad.VertexC < vertices.Count)
-                                {
-                                    if (quad.VertexD < vertices.Count)
-                                    {
-                                        polycount++;
-                                    }
-                                }
-                            }
+                            ++polycount;
                         }
                     }
                     ply.WriteLine("ply");
@@ -223,20 +176,14 @@ namespace Crash
                     }
                     foreach (SceneryTriangle triangle in triangles)
                     {
-                        if (triangle.VertexA < vertices.Count)
+                        if (triangle.VertexA < vertices.Count - 1 && triangle.VertexB < vertices.Count - 1 && triangle.VertexC < vertices.Count - 1)
                         {
-                            if (triangle.VertexB < vertices.Count)
-                            {
-                                if (triangle.VertexC < vertices.Count)
-                                {
-                                    ply.WriteLine("3 {0} {1} {2}", triangle.VertexA, triangle.VertexB, triangle.VertexC);
-                                }
-                            }
+                            ply.WriteLine("3 {0} {1} {2}", triangle.VertexA, triangle.VertexB, triangle.VertexC);
                         }
                     }
                     foreach (SceneryQuad quad in quads)
                     {
-                        if (quad.VertexA < vertices.Count && quad.VertexB < vertices.Count && quad.VertexC < vertices.Count && quad.VertexD < vertices.Count)
+                        if (quad.VertexA < vertices.Count - 1 && quad.VertexB < vertices.Count - 1 && quad.VertexC < vertices.Count - 1 && quad.VertexD < vertices.Count - 1)
                         {
                             ply.WriteLine("4 {0} {1} {2} {3}", quad.VertexA, quad.VertexB, quad.VertexC, quad.VertexD);
                         }

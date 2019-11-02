@@ -69,7 +69,6 @@
     <Compile Include="Formats\Crash Formats\Scenery\NewSceneryEntry.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\NewSceneryVertex.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\NewSceneryEntryLoader.cs" />
-    <Compile Include="Formats\Crash Formats\Scenery\SceneryColorList.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryEntry.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryPolygon.cs" />
