@@ -13,9 +13,18 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Model ({0})",ModelEntry.EName);
-            Node.ImageKey = "crimsonb";
-            Node.SelectedImageKey = "crimsonb";
+            if (ModelEntry.Positions == null)
+            {
+                Node.Text = string.Format("Model ({0})", ModelEntry.EName);
+                Node.ImageKey = "crimsonb";
+                Node.SelectedImageKey = "crimsonb";
+            }
+            else
+            {
+                Node.Text = string.Format("Compressed Model ({0})", ModelEntry.EName);
+                Node.ImageKey = "crimsonb"; // would prefer red but whatever
+                Node.SelectedImageKey = "crimsonb";
+            }
         }
 
         protected override Control CreateEditor()
