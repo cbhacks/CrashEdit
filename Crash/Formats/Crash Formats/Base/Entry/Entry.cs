@@ -143,19 +143,10 @@ namespace Crash
             Size = size;
         }
 
-        public abstract int Type
-        {
-            get;
-        }
-
+        public abstract int Type { get; }
         public int EID { get; }
-
-        public string EName
-        {
-            get { return EIDToEName(EID); }
-        }
-
         public int Size { get; }
+        public string EName => EIDToEName(EID);
 
         public abstract UnprocessedEntry Unprocess();
 

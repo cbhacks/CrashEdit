@@ -11,15 +11,8 @@ namespace Crash
             this.type = type;
         }
 
-        public override int Type
-        {
-            get { return type; }
-        }
-
-        public int HeaderLength
-        {
-            get { return 20 + Items.Count * 4; }
-        }
+        public override int Type => type;
+        public int HeaderLength => 20 + Items.Count * 4;
 
         public Entry Process(GameVersion gameversion)
         {
