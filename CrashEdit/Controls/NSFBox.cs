@@ -81,9 +81,10 @@ namespace CrashEdit
             if (e.Node != null)
             {
                 object tag = e.Node.Tag;
-                if (tag is Controller)
+                if (tag is Controller t)
                 {
-                    pnSplit.Panel2.Controls.Add(((Controller)tag).Editor);
+                    pnSplit.Panel2.Controls.Add(t.Editor);
+                    t.Editor.Invalidate();
                 }
             }
         }
