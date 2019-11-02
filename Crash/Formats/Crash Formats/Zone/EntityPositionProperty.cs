@@ -12,15 +12,8 @@ namespace Crash
         {
         }
 
-        public override byte Type
-        {
-            get { return 6; }
-        }
-
-        public override byte ElementSize
-        {
-            get { return 6; }
-        }
+        public override byte Type => 6;
+        public override byte ElementSize => 6;
 
         protected override void SaveElement(byte[] data,EntityPosition value)
         {

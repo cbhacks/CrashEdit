@@ -85,7 +85,6 @@
     <Compile Include="Formats\Crash Formats\Zone\ProtoZoneEntry.cs" />
     <Compile Include="Formats\Crash Formats\Zone\ProtoZoneEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Zone\ProtoEntity.cs" />
-    <Compile Include="Formats\Crash Formats\Zone\OldEntityID.cs" />
     <Compile Include="Formats\Crash Formats\Zone\EntityVictim.cs" />
     <Compile Include="Formats\Crash Formats\Zone\OldCamera.cs" />
     <Compile Include="Formats\Crash Formats\Zone\OldCameraPosition.cs" />

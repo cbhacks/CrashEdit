@@ -5,10 +5,7 @@ namespace Crash
     [EntityPropertyType(1)]
     public sealed class EntityUInt8PropertyLoader : EntityBasicPropertyLoader<byte>
     {
-        protected override byte ElementSize
-        {
-            get { return 1; }
-        }
+        protected override byte ElementSize => 1;
 
         protected override byte LoadElement(byte[] data)
         {

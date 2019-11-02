@@ -2,45 +2,18 @@ namespace Crash
 {
     public struct EntityPosition : IPosition
     {
-        private short x;
-        private short y;
-        private short z;
-
         public EntityPosition(short x,short y,short z)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+            X = x;
+            Y = y;
+            Z = z;
         }
 
-        public short X
-        {
-            get { return x; }
-        }
-
-        public short Y
-        {
-            get { return y; }
-        }
-
-        public short Z
-        {
-            get { return z; }
-        }
-
-        double IPosition.X
-        {
-            get { return x; }
-        }
-
-        double IPosition.Y
-        {
-            get { return y; }
-        }
-
-        double IPosition.Z
-        {
-            get { return z; }
-        }
+        public short X { get; }
+        public short Y { get; }
+        public short Z { get; }
+        double IPosition.X => X;
+        double IPosition.Y => Y;
+        double IPosition.Z => Z;
     }
 }

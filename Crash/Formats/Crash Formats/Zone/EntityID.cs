@@ -2,29 +2,19 @@ namespace Crash
 {
     public struct EntityID
     {
-        private int id;
-        private int? alternateid;
-
         public EntityID(int id)
         {
-            this.id = id;
-            alternateid = null;
+            ID = id;
+            AlternateID = null;
         }
 
         public EntityID(int id,int? alternateid)
         {
-            this.id = id;
-            this.alternateid = alternateid;
+            ID = id;
+            AlternateID = alternateid;
         }
 
-        public int ID
-        {
-            get { return id; }
-        }
-
-        public int? AlternateID
-        {
-            get { return alternateid; }
-        }
+        public int ID { get; }
+        public int? AlternateID { get; }
     }
 }

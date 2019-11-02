@@ -4,24 +4,15 @@ namespace Crash
 {
     public sealed class EntityPropertyRow<T>
     {
-        private short? metavalue;
         private List<T> values;
 
         public EntityPropertyRow()
         {
-            metavalue = null;
+            MetaValue = null;
             values = new List<T>();
         }
 
-        public short? MetaValue
-        {
-            get { return metavalue; }
-            set { metavalue = value; }
-        }
-
-        public IList<T> Values
-        {
-            get { return values; }
-        }
+        public short? MetaValue { get; set; }
+        public IList<T> Values => values;
     }
 }

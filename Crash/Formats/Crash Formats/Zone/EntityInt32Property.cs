@@ -13,15 +13,8 @@ namespace Crash
         {
         }
 
-        public override byte Type
-        {
-            get { return 19; }
-        }
-
-        public override byte ElementSize
-        {
-            get { return 4; }
-        }
+        public override byte Type => 19;
+        public override byte ElementSize => 4;
 
         internal override void LoadToField(object obj,FieldInfo field)
         {
