@@ -4,24 +4,19 @@ namespace CrashEdit
 {
     public sealed class DemoEntryController : MysteryUniItemEntryController
     {
-        private DemoEntry demoentry;
-
         public DemoEntryController(EntryChunkController entrychunkcontroller,DemoEntry demoentry) : base(entrychunkcontroller,demoentry)
         {
-            this.demoentry = demoentry;
+            DemoEntry = demoentry;
             InvalidateNode();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Demo ({0})",demoentry.EName);
+            Node.Text = string.Format("Demo ({0})",DemoEntry.EName);
             Node.ImageKey = "thing";
             Node.SelectedImageKey = "thing";
         }
 
-        public DemoEntry DemoEntry
-        {
-            get { return demoentry; }
-        }
+        public DemoEntry DemoEntry { get; }
     }
 }

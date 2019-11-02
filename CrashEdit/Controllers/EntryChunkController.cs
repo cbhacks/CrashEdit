@@ -6,11 +6,9 @@ namespace CrashEdit
 {
     public abstract class EntryChunkController : ChunkController
     {
-        private EntryChunk entrychunk;
-
         public EntryChunkController(NSFController nsfcontroller,EntryChunk entrychunk) : base(nsfcontroller,entrychunk)
         {
-            this.entrychunk = entrychunk;
+            EntryChunk = entrychunk;
             foreach (Entry entry in entrychunk.Entries)
             {
                 AddNode(CreateEntryController(entry));
@@ -18,10 +16,7 @@ namespace CrashEdit
             AddMenu("Import Entry",Menu_Import_Entry);
         }
 
-        public EntryChunk EntryChunk
-        {
-            get { return entrychunk; }
-        }
+        public EntryChunk EntryChunk { get; }
 
         protected override Control CreateEditor()
         {
@@ -176,7 +171,7 @@ namespace CrashEdit
             try
             {
                 UnprocessedEntry entry = Entry.Load(data);
-                entrychunk.Entries.Add(entry);
+                EntryChunk.Entries.Add(entry);
                 AddNode(new UnprocessedEntryController(this,entry));
             }
             catch (LoadAbortedException)

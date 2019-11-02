@@ -4,11 +4,9 @@ namespace CrashEdit
 {
     public sealed class NormalChunkController : EntryChunkController
     {
-        private NormalChunk normalchunk;
-
         public NormalChunkController(NSFController nsfcontroller,NormalChunk normalchunk) : base(nsfcontroller,normalchunk)
         {
-            this.normalchunk = normalchunk;
+            NormalChunk = normalchunk;
             InvalidateNode();
         }
 
@@ -18,10 +16,7 @@ namespace CrashEdit
             Node.ImageKey = "yellowj";
             Node.SelectedImageKey = "yellowj";
         }
-        
-        public NormalChunk NormalChunk
-        {
-            get { return normalchunk; }
-        }
+
+        public NormalChunk NormalChunk { get; }
     }
 }

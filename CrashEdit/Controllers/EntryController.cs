@@ -4,13 +4,10 @@ namespace CrashEdit
 {
     public abstract class EntryController : Controller
     {
-        private EntryChunkController entrychunkcontroller;
-        private Entry entry;
-
         public EntryController(EntryChunkController entrychunkcontroller,Entry entry)
         {
-            this.entrychunkcontroller = entrychunkcontroller;
-            this.entry = entry;
+            this.EntryChunkController = entrychunkcontroller;
+            this.Entry = entry;
             AddMenu("Export Entry",Menu_Export_Entry);
             AddMenu("Delete Entry",Menu_Delete_Entry);
             if (!(this is UnprocessedEntryController))
@@ -19,15 +16,8 @@ namespace CrashEdit
             }
         }
 
-        public EntryChunkController EntryChunkController
-        {
-            get { return entrychunkcontroller; }
-        }
-
-        public Entry Entry
-        {
-            get { return entry; }
-        }
+        public EntryChunkController EntryChunkController { get; private set; }
+        public Entry Entry { get; }
 
         public override bool Move(Controller newcontroller,bool commit)
         {
@@ -35,11 +25,11 @@ namespace CrashEdit
             {
                 if (commit)
                 {
-                    entrychunkcontroller.EntryChunk.Entries.Remove(entry);
+                    EntryChunkController.EntryChunk.Entries.Remove(Entry);
                     Node.Remove();
-                    entrychunkcontroller = (EntryChunkController)newcontroller;
-                    entrychunkcontroller.EntryChunk.Entries.Add(entry);
-                    entrychunkcontroller.Node.Nodes.Add(Node);
+                    EntryChunkController = (EntryChunkController)newcontroller;
+                    EntryChunkController.EntryChunk.Entries.Add(Entry);
+                    EntryChunkController.Node.Nodes.Add(Node);
                 }
                 return true;
             }
@@ -51,27 +41,27 @@ namespace CrashEdit
 
         protected T FindEID<T>(int eid) where T : Entry
         {
-            return entrychunkcontroller.NSFController.NSF.FindEID<T>(eid);
+            return EntryChunkController.NSFController.NSF.FindEID<T>(eid);
         }
 
         private void Menu_Export_Entry()
         {
-            FileUtil.SaveFile(entry.Save(),FileFilters.NSEntry,FileFilters.Any);
+            FileUtil.SaveFile(Entry.Save(),FileFilters.NSEntry,FileFilters.Any);
         }
 
         private void Menu_Delete_Entry()
         {
-            entrychunkcontroller.EntryChunk.Entries.Remove(entry);
+            EntryChunkController.EntryChunk.Entries.Remove(Entry);
             Dispose();
         }
 
         private void Menu_Unprocess_Entry()
         {
-            int index = entrychunkcontroller.EntryChunk.Entries.IndexOf(entry);
-            UnprocessedEntry unprocessedentry = entry.Unprocess();
-            entrychunkcontroller.EntryChunk.Entries[index] = unprocessedentry;
-            UnprocessedEntryController unprocessedentrycontroller = new UnprocessedEntryController(entrychunkcontroller,unprocessedentry);
-            entrychunkcontroller.InsertNode(index,unprocessedentrycontroller);
+            int index = EntryChunkController.EntryChunk.Entries.IndexOf(Entry);
+            UnprocessedEntry unprocessedentry = Entry.Unprocess();
+            EntryChunkController.EntryChunk.Entries[index] = unprocessedentry;
+            UnprocessedEntryController unprocessedentrycontroller = new UnprocessedEntryController(EntryChunkController,unprocessedentry);
+            EntryChunkController.InsertNode(index,unprocessedentrycontroller);
             if (Node.IsSelected)
             {
                 Node.TreeView.SelectedNode = unprocessedentrycontroller.Node;

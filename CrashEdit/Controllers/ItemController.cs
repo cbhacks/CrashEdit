@@ -4,13 +4,10 @@ namespace CrashEdit
 {
     public sealed class ItemController : Controller
     {
-        private MysteryMultiItemEntryController mysteryentrycontroller;
-        private byte[] item;
-        
         public ItemController(MysteryMultiItemEntryController mysteryentrycontroller,byte[] item)
         {
-            this.mysteryentrycontroller = mysteryentrycontroller;
-            this.item = item;
+            MysteryEntryController = mysteryentrycontroller;
+            Item = item;
             if (mysteryentrycontroller != null)
             {
                 AddMenu("Replace Item",Menu_Replace_Item);
@@ -28,34 +25,27 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            return new MysteryBox(item);
+            return new MysteryBox(Item);
         }
 
-        public MysteryMultiItemEntryController MysteryEntryController
-        {
-            get { return mysteryentrycontroller; }
-        }
-
-        public byte[] Item
-        {
-            get { return item; }
-        }
+        public MysteryMultiItemEntryController MysteryEntryController { get; }
+        public byte[] Item { get; private set; }
 
         private void Menu_Replace_Item()
         {
-            int i = mysteryentrycontroller.MysteryEntry.Items.IndexOf(item);
+            int i = MysteryEntryController.MysteryEntry.Items.IndexOf(Item);
             byte[] data = FileUtil.OpenFile(FileFilters.Any);
             if (data != null)
             {
-                item = data;
-                mysteryentrycontroller.MysteryEntry.Items[i] = data;
+                Item = data;
+                MysteryEntryController.MysteryEntry.Items[i] = data;
                 InvalidateEditor();
             }
         }
 
         private void Menu_Delete_Item()
         {
-            mysteryentrycontroller.MysteryEntry.Items.Remove(item);
+            MysteryEntryController.MysteryEntry.Items.Remove(Item);
             Dispose();
         }
     }
