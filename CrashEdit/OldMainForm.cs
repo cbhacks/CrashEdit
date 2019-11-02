@@ -569,7 +569,9 @@ namespace CrashEdit
             try
             {
                 byte[] vh_data = FileUtil.OpenFile(FileFilters.VH, FileFilters.Any);
+                if (vh_data == null) throw new LoadAbortedException();
                 byte[] vb_data = FileUtil.OpenFile(FileFilters.VB, FileFilters.Any);
+                if (vb_data == null) throw new LoadAbortedException();
 
                 VH vh = VH.Load(vh_data);
 
@@ -599,6 +601,8 @@ namespace CrashEdit
             try
             {
                 byte[] vab_data = FileUtil.OpenFile(FileFilters.VAB, FileFilters.Any);
+
+                if (vab_data == null) throw new LoadAbortedException();
 
                 VH vh = VH.Load(vab_data);
 
