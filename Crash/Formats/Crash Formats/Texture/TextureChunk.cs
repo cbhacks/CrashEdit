@@ -9,16 +9,8 @@ namespace Crash
             Data = data ?? throw new ArgumentNullException("data");
         }
 
-        public override short Type
-        {
-            get { return 1; }
-        }
-
-        public int EID
-        {
-            get { return BitConv.FromInt32(Data,4); }
-        }
-
+        public override short Type => 1;
+        public int EID => BitConv.FromInt32(Data, 4);
         public byte[] Data { get; }
 
         public override UnprocessedChunk Unprocess(int chunkid)
