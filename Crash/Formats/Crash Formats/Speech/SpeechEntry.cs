@@ -9,11 +9,7 @@ namespace Crash
             Samples = samples ?? throw new ArgumentNullException("samples");
         }
 
-        public override int Type
-        {
-            get { return 20; }
-        }
-
+        public override int Type => 20;
         public SampleSet Samples { get; }
 
         public override UnprocessedEntry Unprocess()
