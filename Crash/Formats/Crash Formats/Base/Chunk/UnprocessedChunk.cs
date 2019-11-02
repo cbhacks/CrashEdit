@@ -13,11 +13,10 @@ namespace Crash
             Data = data;
         }
 
-        public override short Type { get => BitConv.FromInt16(Data, 2); }
+        public override short Type => BitConv.FromInt16(Data, 2);
+        public int ID => BitConv.FromInt32(Data, 4);
 
         public byte[] Data { get; }
-
-        public int ID { get => BitConv.FromInt32(Data,4); }
 
         public Chunk Process(int chunkid)
         {

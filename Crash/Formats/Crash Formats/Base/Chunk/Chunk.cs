@@ -45,11 +45,6 @@ namespace Crash
 
         public static UnprocessedChunk Load(byte[] data)
         {
-            // The UnprocessedChunk ctor already checks for these errors
-            //if (data == null)
-            //    throw new ArgumentNullException("data");
-            //if (data.Length != Length)
-            //    throw new ArgumentException("Value must be 65536 bytes long.","data");
             short magic = BitConv.FromInt16(data,0);
             if (magic != Magic)
             {
