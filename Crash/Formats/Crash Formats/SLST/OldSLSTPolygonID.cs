@@ -1,16 +1,16 @@
 namespace Crash
 {
-    public struct SLSTPolygonID
+    public struct OldSLSTPolygonID
     {
-        public SLSTPolygonID(short id, byte state, byte world)
+        public OldSLSTPolygonID(short id,byte world,byte copy)
         {
             ID = id;
-            State = state;
             World = world;
+            Copy = copy;
         }
 
         public short ID { get; }
-        public byte State { get; }
         public byte World { get; }
+        public byte Copy { get; }
     }
 }

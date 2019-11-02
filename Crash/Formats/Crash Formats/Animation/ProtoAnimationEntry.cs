@@ -11,15 +11,8 @@ namespace Crash
             this.frames = new List<ProtoFrame>(frames);
         }
 
-        public override int Type
-        {
-            get { return 1; }
-        }
-
-        public IList<ProtoFrame> Frames
-        {
-            get { return frames; }
-        }
+        public override int Type => 1;
+        public IList<ProtoFrame> Frames => frames;
 
         public override UnprocessedEntry Unprocess()
         {

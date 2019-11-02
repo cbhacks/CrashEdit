@@ -14,11 +14,8 @@ namespace Crash
 
         private static void SignalErrorWithArgs(ErrorSignalEventArgs e)
         {
-            e.CanSkip = (skipdepth > 0);
-            if (Signal != null)
-            {
-                Signal(null,e);
-            }
+            e.CanSkip = skipdepth > 0;
+            Signal?.Invoke(null, e);
             switch (e.Response)
             {
                 case ErrorResponse.Break:
@@ -53,12 +50,12 @@ namespace Crash
 
         public static void EnterSkipRegion()
         {
-            skipdepth++;
+            ++skipdepth;
         }
 
         public static void ExitSkipRegion()
         {
-            skipdepth--;
+            --skipdepth;
         }
     }
 }

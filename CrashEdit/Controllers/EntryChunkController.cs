@@ -74,6 +74,10 @@ namespace CrashEdit
             {
                 return new SLSTEntryController(this,(SLSTEntry)entry);
             }
+            else if (entry is OldSLSTEntry)
+            {
+                return new OldSLSTEntryController(this,(OldSLSTEntry)entry);
+            }
             else if (entry is T6Entry)
             {
                 return new T6EntryController(this,(T6Entry)entry);

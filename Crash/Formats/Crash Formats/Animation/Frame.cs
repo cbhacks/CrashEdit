@@ -5,7 +5,6 @@ namespace Crash
 {
     public class Frame
     {
-
         public static Frame Load(byte[] data)
         {
             if (data == null)
@@ -31,137 +30,110 @@ namespace Crash
                 ErrorManager.SignalError("Frame: Header size value is invalid");
             }
             byte[] settings = new byte[headersize - 24];
-            for (int i = 0;i < settings.Length; i++)
+            //for (int i = 0;i < settings.Length; i++)
+            //{
+            //    settings[i] = data[24 + i];
+            //}
+            Array.Copy(data, 24, settings, 0, settings.Length);
+            //FrameVertex[] vertices = new FrameVertex [vertexcount - ((headersize - 24 - collision * 40) / 3)];
+            FrameVertex[] vertices = new FrameVertex[vertexcount];
+            bool[] temporals;
+            if (data.Length >= vertexcount * 3 + headersize) // uncompressed
             {
-                settings[i] = data[24 + i];
-            }
-            FrameVertex[] vertices = new FrameVertex [vertexcount - ((headersize - 24 - collision * 40) / 3)];
-            bool[] temporals = new bool[(data.Length - headersize) * 8];
-            if (data.Length >= vertexcount * 3 + 24 + collision * 40)
-            {
-                for (int i = 0; i < vertexcount - ((headersize - 24 - collision * 40) / 3); i++)
+                temporals = null;
+                for (int i = 0; i < vertexcount; i++)
                 {
-                    byte[] vertexdata = new byte[3];
-                    Array.Copy(data,headersize + i * 3,vertexdata,0,vertexdata.Length);
-                    vertices[i] = FrameVertex.Load(vertexdata);
+                    vertices[i] = new FrameVertex(data[headersize+i*3+0], data[headersize+i*3+1], data[headersize+i*3+2]);
                 }
             }
-            for (int i = 0;i < (data.Length - headersize) / 4; i++)
+            else
             {
-                int val = BitConv.FromInt32(data,headersize + i * 4);
-                for (int ii = 0;ii < 32;ii++)
+                temporals = new bool[(data.Length - headersize) * 8];
+                for (int i = 0; i < data.Length - headersize; ++i)
                 {
-                    temporals[i * 32 + ii] = (((val >> (31 - ii)) & 0x1) == 1);
+                    for (int j = 0; j < 8;++j)
+                    {
+                        temporals[i * 8 + j] = ((data[headersize+i] >> (7 - j)) & 0x1) == 1;
+                    }
                 }
             }
             return new Frame(xoffset,yoffset,zoffset,unknown,vertexcount,collision,modeleid,headersize,settings,vertices,temporals);
         }
 
-        private short xoffset;
-        private short yoffset;
-        private short zoffset;
-        private short unknown;
-        private int vertexcount;
-        private int collision;
-        private int modeleid;
-        private int headersize;
-        private byte[] settings;
         private List<FrameVertex> vertices;
-        private bool[] temporals;
 
         public Frame(short xoffset,short yoffset,short zoffset,short unknown,int vertexcount,int collision,int modeleid,int headersize,byte[] settings,IEnumerable<FrameVertex> vertices,bool[] temporals)
         {
-            this.xoffset = xoffset;
-            this.yoffset = yoffset;
-            this.zoffset = zoffset;
-            this.unknown = unknown;
-            this.vertexcount = vertexcount;
-            this.collision = collision;
-            this.modeleid = modeleid;
-            this.headersize = headersize;
-            this.settings = settings;
+            XOffset = xoffset;
+            YOffset = yoffset;
+            ZOffset = zoffset;
+            Unknown = unknown;
+            VertexCount = vertexcount;
+            Collision = collision;
+            ModelEID = modeleid;
+            HeaderSize = headersize;
+            Settings = settings;
             this.vertices = new List<FrameVertex>(vertices);
-            this.temporals = temporals;
+            Temporals = temporals;
         }
 
-        public int ModelEID
-        {
-            get { return modeleid; }
-        }
-
-        public short XOffset
-        {
-            get { return xoffset; }
-        }
-
-        public short YOffset
-        {
-            get { return yoffset; }
-        }
-
-        public short ZOffset
-        {
-            get { return zoffset; }
-        }
-
-        public int Collision
-        {
-            get { return collision; }
-        }
-
-        public int HeaderSize
-        {
-            get { return headersize; }
-        }
-
-        public byte[] Settings
-        {
-            get { return settings; }
-        }
-
-        public int VertexCount
-        {
-            get { return vertexcount; }
-        }
-
-        public IList<FrameVertex> Vertices
-        {
-            get { return vertices; }
-        }
-
-        public bool[] Temporals
-        {
-            get { return temporals; }
-        }
-
-        public short Unknown
-        {
-            get { return unknown; }
-        }
+        public int ModelEID { get; }
+        public short XOffset { get; }
+        public short YOffset { get; }
+        public short ZOffset { get; }
+        public int Collision { get; }
+        public int HeaderSize { get; }
+        public byte[] Settings { get; }
+        public int VertexCount { get; }
+        public IList<FrameVertex> Vertices => vertices;
+        public bool[] Temporals { get; }
+        public short Unknown { get; }
 
         public byte[] Save()
         {
-            byte[] result = new byte [headersize + Temporals.Length / 8];
-            BitConv.ToInt16(result,0,xoffset);
-            BitConv.ToInt16(result,2,yoffset);
-            BitConv.ToInt16(result,4,zoffset);
-            BitConv.ToInt16(result,6,unknown);
-            BitConv.ToInt32(result,8,vertexcount);
-            BitConv.ToInt32(result,12,collision);
-            BitConv.ToInt32(result,16,modeleid);
-            BitConv.ToInt32(result,20,headersize);
-            for (int i = 0; i < settings.Length; i++)
+            int size = HeaderSize;
+            if (Temporals != null)
             {
-                BitConv.ToInt32(result,24 + i,settings[i]);
+                size += Temporals.Length / 8;
             }
-            for (short i = 0; i < Temporals.Length / 32; i++)
+            else
             {
-                int val = 0;
-                for (short ii = 0; ii < 32; ii++)
+                size += Vertices.Count * 3;
+            }
+            byte[] result = new byte [size];
+            BitConv.ToInt16(result,0,XOffset);
+            BitConv.ToInt16(result,2,YOffset);
+            BitConv.ToInt16(result,4,ZOffset);
+            BitConv.ToInt16(result,6,Unknown);
+            BitConv.ToInt32(result,8,VertexCount);
+            BitConv.ToInt32(result,12,Collision);
+            BitConv.ToInt32(result,16,ModelEID);
+            BitConv.ToInt32(result,20,HeaderSize);
+            //for (int i = 0; i < Settings.Length; i++)
+            //{
+            //    BitConv.ToInt32(result,24 + i,Settings[i]);
+            //}
+            Array.Copy(Settings, 0, result, 24, Settings.Length);
+            if (Temporals != null)
+            {
+                for (short i = 0; i < Temporals.Length / 8;++i)
                 {
-                    val |= Convert.ToByte(Temporals[i * 32 + ii]) << (31 - ii);
+                    byte val = 0;
+                    for (short j = 0; j < 8;++j)
+                    {
+                        val |= (byte)(Convert.ToByte(Temporals[i * 8 + j]) << (7 - j));
+                    }
+                    result[HeaderSize + i] = val;
                 }
-                BitConv.ToInt32(result,headersize + i * 4,val);
+            }
+            else
+            {
+                for (int i = 0; i < vertices.Count; ++i)
+                {
+                    result[HeaderSize + i * 3 + 0] = vertices[i].X;
+                    result[HeaderSize + i * 3 + 1] = vertices[i].Y;
+                    result[HeaderSize + i * 3 + 2] = vertices[i].Z;
+                }
             }
             return result;
         }

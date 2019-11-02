@@ -11,12 +11,14 @@
     <RootNamespace>CrashEdit</RootNamespace>
     <AssemblyName>CrashEdit</AssemblyName>
     <StartupObject>CrashEdit.Program</StartupObject>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,6 +28,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,6 +37,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>
@@ -74,11 +78,12 @@
     <Compile Include="Controllers\Model\ModelEntryController.cs" />
     <Compile Include="Controllers\Model\T2EntryController.cs" />
     <Compile Include="Controllers\Scenery\NewSceneryEntryController.cs" />
-    <Compile Include="Controllers\Scenery\SceneryColorListController.cs" />
     <Compile Include="Controllers\Scenery\ProtoSceneryEntryController.cs" />
-    <Compile Include="Controllers\SLST\SLSTItemController.cs" />
-    <Compile Include="Controllers\SLST\SLSTItem1Controller.cs" />
-    <Compile Include="Controllers\SLST\SLSTItem0Controller.cs" />
+    <Compile Include="Controllers\SLST\OldSLSTDeltaController.cs" />
+    <Compile Include="Controllers\SLST\SLSTDeltaController.cs" />
+    <Compile Include="Controllers\SLST\OldSLSTEntryController.cs" />
+    <Compile Include="Controllers\SLST\OldSLSTSourceController.cs" />
+    <Compile Include="Controllers\SLST\SLSTSourceController.cs" />
     <Compile Include="Controllers\TextureChunkController.cs" />
     <Compile Include="Controllers\Animation\CutsceneAnimationEntryController.cs" />
     <Compile Include="Controllers\Music\OldSEQController.cs" />
@@ -144,12 +149,6 @@
     <Compile Include="Controls\OldFrameBox.Designer.cs">
       <DependentUpon>OldFrameBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SceneryColorListBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\SceneryColorListBox.Designer.cs">
-      <DependentUpon>SceneryColorListBox.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\ProtoCameraBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -195,16 +194,19 @@
     <Compile Include="Controls\EntryChunkBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Controls\OldSLSTDeltaBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\OldSLSTSourceBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\SoundBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\SLSTItem0Box.cs">
+    <Compile Include="Controls\SLSTSourceBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\SLSTItemBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\SLSTItem1Box.cs">
+    <Compile Include="Controls\SLSTDeltaBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ThreeDimensionalViewer.cs">
@@ -298,10 +300,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\OldFrameBox.resx">
       <DependentUpon>OldFrameBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\SceneryColorListBox.resx">
-      <DependentUpon>SceneryColorListBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ProtoCameraBox.resx">
@@ -421,5 +419,10 @@
     <Content Include="Resources\Textures\UnknownBoxTop.png" />
     <Content Include="Resources\Textures\UnknownPickup.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
 </Project>

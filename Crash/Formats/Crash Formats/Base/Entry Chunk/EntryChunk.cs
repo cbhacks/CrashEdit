@@ -5,40 +5,32 @@ namespace Crash
 {
     public abstract class EntryChunk : Chunk
     {
-        private EvList<Entry> entries;
-
         public EntryChunk()
         {
-            entries = new EvList<Entry>();
+            Entries = new EvList<Entry>();
         }
 
         public EntryChunk(IEnumerable<Entry> entries)
         {
             if (entries == null)
                 throw new ArgumentNullException("entries");
-            this.entries = new EvList<Entry>(entries);
+            Entries = new EvList<Entry>(entries);
         }
 
-        public EvList<Entry> Entries
-        {
-            get { return entries; }
-        }
+        public EvList<Entry> Entries { get; }
 
-        protected abstract int Alignment
-        {
-            get;
-        }
+        protected abstract int Alignment { get; }
 
         public void ProcessAll(GameVersion gameversion)
         {
-            for (int i = 0;i < entries.Count;i++)
+            for (int i = 0;i < Entries.Count;i++)
             {
-                if (entries[i] is UnprocessedEntry)
+                if (Entries[i] is UnprocessedEntry)
                 {
                     ErrorManager.EnterSkipRegion();
                     try
                     {
-                        entries[i] = ((UnprocessedEntry)entries[i]).Process(gameversion);
+                        Entries[i] = ((UnprocessedEntry)Entries[i]).Process(gameversion);
                     }
                     catch (LoadSkippedException)
                     {
@@ -53,7 +45,7 @@ namespace Crash
 
         public T FindEID<T>(int eid) where T : class,IEntry
         {
-            foreach (Entry entry in entries)
+            foreach (Entry entry in Entries)
             {
                 if (entry.EID == eid && entry is T)
                 {
@@ -69,25 +61,25 @@ namespace Crash
             BitConv.ToInt16(data,0,Magic);
             BitConv.ToInt16(data,2,Type);
             BitConv.ToInt32(data,4,chunkid);
-            BitConv.ToInt32(data,8,entries.Count);
+            BitConv.ToInt32(data,8,Entries.Count);
             // Checksum is here, but calculated later
-            int offset = 20 + entries.Count * 4;
-            for (int i = 0;i < entries.Count;i++)
+            int offset = 20 + Entries.Count * 4;
+            for (int i = 0;i < Entries.Count;i++)
             {
-                UnprocessedEntry entry = entries[i].Unprocess();
+                UnprocessedEntry entry = Entries[i].Unprocess();
                 byte[] entrydata = entry.Save();
                 offset += entry.HeaderLength;
                 Aligner.Align(ref offset,Alignment);
                 offset -= entry.HeaderLength;
                 if (offset + entrydata.Length > Length)
                 {
-                    throw new PackingException(entry.EID);
+                    throw new PackingException(entry.EID,entrydata.Length + offset);
                 }
                 BitConv.ToInt32(data,16 + i * 4,offset);
                 entrydata.CopyTo(data,offset);
                 offset += entrydata.Length;
             }
-            BitConv.ToInt32(data,16 + entries.Count * 4,offset);
+            BitConv.ToInt32(data,16 + Entries.Count * 4,offset);
             int checksum = CalculateChecksum(data);
             BitConv.ToInt32(data,12,checksum);
             return new UnprocessedChunk(data);

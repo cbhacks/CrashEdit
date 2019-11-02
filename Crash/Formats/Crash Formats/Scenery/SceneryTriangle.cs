@@ -13,7 +13,7 @@ namespace Crash
             if (adata.Length != 4)
                 throw new ArgumentException("Value must be 4 bytes long.","adata");
             if (bdata.Length != 2)
-                throw new ArgumentException("Value must be 2 bytes long.","adata");
+                throw new ArgumentException("Value must be 2 bytes long.","bdata");
             int avalue = BitConv.FromInt32(adata,0);
             short bvalue = BitConv.FromInt16(bdata,0);
             int vertexa = (avalue >> 8) & 0xFFF;

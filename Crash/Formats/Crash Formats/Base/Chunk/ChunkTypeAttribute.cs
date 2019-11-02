@@ -5,16 +5,11 @@ namespace Crash
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class ChunkTypeAttribute : Attribute
     {
-        private short type;
-
         public ChunkTypeAttribute(short type)
         {
-            this.type = type;
+            Type = type;
         }
 
-        public short Type
-        {
-            get { return type; }
-        }
+        public short Type { get; }
     }
 }

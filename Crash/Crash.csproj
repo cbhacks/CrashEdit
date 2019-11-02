@@ -74,10 +74,14 @@
     <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryPolygon.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryVertex.cs" />
-    <Compile Include="Formats\Crash Formats\SLST\SLSTItem.cs" />
+    <Compile Include="Formats\Crash Formats\SLST\SLSTDelta.cs" />
+    <Compile Include="Formats\Crash Formats\SLST\OldSLSTEntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\SLST\OldSLSTEntry.cs" />
     <Compile Include="Formats\Crash Formats\SLST\SLSTPolygonID.cs" />
-    <Compile Include="Formats\Crash Formats\SLST\SLSTItem0.cs" />
-    <Compile Include="Formats\Crash Formats\SLST\SLSTItem1.cs" />
+    <Compile Include="Formats\Crash Formats\SLST\OldSLSTPolygonID.cs" />
+    <Compile Include="Formats\Crash Formats\SLST\SLSTSource.cs" />
+    <Compile Include="Formats\Crash Formats\SLST\OldSLSTSource.cs" />
+    <Compile Include="Formats\Crash Formats\SLST\OldSLSTDelta.cs" />
     <Compile Include="Formats\Crash Formats\Zone\ProtoEntityPosition.cs" />
     <Compile Include="Formats\Crash Formats\Zone\ProtoZoneEntry.cs" />
     <Compile Include="Formats\Crash Formats\Zone\ProtoZoneEntryLoader.cs" />

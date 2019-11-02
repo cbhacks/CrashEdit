@@ -14,10 +14,7 @@ namespace Crash
             this.items = new List<byte[]>(items);
         }
 
-        public IList<byte[]> Items
-        {
-            get { return items; }
-        }
+        public IList<byte[]> Items { get => items; }
 
         public override UnprocessedEntry Unprocess()
         {

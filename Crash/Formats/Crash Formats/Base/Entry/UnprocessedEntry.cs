@@ -11,15 +11,8 @@ namespace Crash
             this.type = type;
         }
 
-        public override int Type
-        {
-            get { return type; }
-        }
-
-        public int HeaderLength
-        {
-            get { return 20 + Items.Count * 4; }
-        }
+        public override int Type => type;
+        public int HeaderLength => 20 + Items.Count * 4;
 
         public Entry Process(GameVersion gameversion)
         {
@@ -55,7 +48,7 @@ namespace Crash
             BitConv.ToInt32(data,8,Type);
             BitConv.ToInt32(data,12,Items.Count);
             int offset = 20 + Items.Count * 4;
-            Aligner.Align(ref offset,4);
+            //Aligner.Align(ref offset,4);
             BitConv.ToInt32(data,16,offset);
             for (int i = 0;i < Items.Count;i++)
             {

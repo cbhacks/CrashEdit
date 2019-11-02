@@ -19,77 +19,36 @@ namespace Crash
             return new OldFrameVertex(x,y,z,normalx,normaly,normalz);
         }
 
-        private byte x;
-        private byte y;
-        private byte z;
-        private byte normalx;
-        private byte normaly;
-        private byte normalz;
-
         public OldFrameVertex(byte x,byte y,byte z,byte normalx,byte normaly,byte normalz)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.normalx = normalx;
-            this.normaly = normaly;
-            this.normalz = normalz;
+            X = x;
+            Y = y;
+            Z = z;
+            NormalX = normalx;
+            NormalY = normaly;
+            NormalZ = normalz;
         }
 
-        public byte X
-        {
-            get { return x; }
-        }
+        public byte X { get; }
+        public byte Y { get; }
+        public byte Z { get; }
+        public byte NormalX { get; }
+        public byte NormalY { get; }
+        public byte NormalZ { get; }
 
-        public byte Y
-        {
-            get { return y; }
-        }
-
-        public byte Z
-        {
-            get { return z; }
-        }
-
-        public byte NormalX
-        {
-            get { return normalx; }
-        }
-
-        public byte NormalY
-        {
-            get { return normaly; }
-        }
-
-        public byte NormalZ
-        {
-            get { return normalz; }
-        }
-
-        double IPosition.X
-        {
-            get { return x; }
-        }
-
-        double IPosition.Y
-        {
-            get { return y; }
-        }
-
-        double IPosition.Z
-        {
-            get { return z; }
-        }
+        double IPosition.X => X;
+        double IPosition.Y => Y;
+        double IPosition.Z => Z;
 
         public byte[] Save()
         {
             byte[] data = new byte [6];
-            data[0] = x;
-            data[1] = y;
-            data[2] = z;
-            data[3] = normalx;
-            data[4] = normaly;
-            data[5] = normalz;
+            data[0] = X;
+            data[1] = Y;
+            data[2] = Z;
+            data[3] = NormalX;
+            data[4] = NormalY;
+            data[5] = NormalZ;
             return data;
         }
     }

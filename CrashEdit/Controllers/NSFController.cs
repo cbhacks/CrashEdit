@@ -181,7 +181,7 @@ namespace CrashEdit
                 {
                     foreach (Entry entry in ((EntryChunk)chunk).Entries)
                     {
-                        if (entry is NewZoneEntry)
+                        if (entry is ZoneEntry)
                         {
                             foreach (Entity entity in ((NewZoneEntry)entry).Entities)
                             {
@@ -205,7 +205,7 @@ namespace CrashEdit
                                 }
                             }
                         }
-                        if (entry is ZoneEntry)
+                        if (entry is NewZoneEntry)
                         {
                             foreach (Entity entity in ((ZoneEntry)entry).Entities)
                             {
@@ -217,11 +217,12 @@ namespace CrashEdit
                                 {
                                     switch (entity.Subtype)
                                     {
-                                        case 5:
-                                        case 7:
-                                        case 15:
-                                        case 24:
-                                        case 28:
+                                        case 5: //iron
+                                        case 7: //action
+                                        case 15: //iron ghost
+                                        case 24: //nitro action
+                                        case 27: //iron continue
+                                        case 28: //clock
                                             break;
                                         default:
                                             boxcount++;

@@ -4,25 +4,16 @@ namespace Crash
 {
     public sealed class OldMusicEntry : Entry
     {
-        private int vb0eid;
-        private int vb1eid;
-        private int vb2eid;
-        private int vb3eid;
         private VH vh;
-        private SEP sep;
 
         public OldMusicEntry(int vb0eid,int vb1eid,int vb2eid,int vb3eid,VH vh,SEP sep,int eid, int size) : base(eid, size)
         {
-            if (vh == null)
-                throw new ArgumentNullException("vh");
-            if (sep == null)
-                throw new ArgumentNullException("sep");
-            this.vb0eid = vb0eid;
-            this.vb1eid = vb1eid;
-            this.vb2eid = vb2eid;
-            this.vb3eid = vb3eid;
-            this.vh = vh;
-            this.sep = sep;
+            this.vh = vh ?? throw new ArgumentNullException("vh");
+            SEP = sep ?? throw new ArgumentNullException("sep");
+            VB0EID = vb0eid;
+            VB1EID = vb1eid;
+            VB2EID = vb2eid;
+            VB3EID = vb3eid;
         }
 
         public override int Type
@@ -30,29 +21,17 @@ namespace Crash
             get { return 13; }
         }
 
-        public int VB0EID
-        {
-            get { return vb0eid; }
-        }
+        public int VB0EID { get; }
 
-        public int VB1EID
-        {
-            get { return vb1eid; }
-        }
+        public int VB1EID { get; }
 
-        public int VB2EID
-        {
-            get { return vb2eid; }
-        }
+        public int VB2EID { get; }
 
-        public int VB3EID
-        {
-            get { return vb3eid; }
-        }
+        public int VB3EID { get; }
 
         public VH VH
         {
-            get { return vh; }
+            get => vh;
             set
             {
                 if (vh == null)
@@ -61,22 +40,19 @@ namespace Crash
             }
         }
 
-        public SEP SEP
-        {
-            get { return sep; }
-        }
+        public SEP SEP { get; }
 
         public override UnprocessedEntry Unprocess()
         {
             byte[][] items = new byte [3][];
             items[0] = new byte [20];
             BitConv.ToInt32(items[0],0,SEP.SEQs.Count);
-            BitConv.ToInt32(items[0],4,vb0eid);
-            BitConv.ToInt32(items[0],8,vb1eid);
-            BitConv.ToInt32(items[0],12,vb2eid);
-            BitConv.ToInt32(items[0],16,vb3eid);
+            BitConv.ToInt32(items[0],4,VB0EID);
+            BitConv.ToInt32(items[0],8,VB1EID);
+            BitConv.ToInt32(items[0],12,VB2EID);
+            BitConv.ToInt32(items[0],16,VB3EID);
             items[1] = vh.Save();
-            items[2] = sep.Save();
+            items[2] = SEP.Save();
             return new UnprocessedEntry(items,EID,Type,Size);
         }
     }
