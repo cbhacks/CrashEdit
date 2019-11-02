@@ -6,27 +6,25 @@ namespace CrashEdit
 {
     public abstract class Controller : IDisposable
     {
-        private TreeNode node;
-        private ContextMenu contextmenu;
         private Control editor;
 
         public Controller()
         {
-            node = new TreeNode();
-            node.Tag = this;
-            contextmenu = new ContextMenu();
+            Node = new TreeNode();
+            Node.Tag = this;
+            ContextMenu = new ContextMenu();
             editor = null;
-            node.ContextMenu = contextmenu;
+            Node.ContextMenu = ContextMenu;
         }
 
         public void AddNode(Controller controller)
         {
-            node.Nodes.Add(controller.node);
+            Node.Nodes.Add(controller.Node);
         }
 
         public void InsertNode(int index,Controller controller)
         {
-            node.Nodes.Insert(index,controller.node);
+            Node.Nodes.Insert(index,controller.Node);
         }
 
         protected void AddMenu(string text,ControllerMenuDelegate proc)
@@ -42,12 +40,12 @@ namespace CrashEdit
                     MessageBox.Show(ex.Message,text,MessageBoxButtons.OK,MessageBoxIcon.Error);
                 }
             };
-            contextmenu.MenuItems.Add(text,handler);
+            ContextMenu.MenuItems.Add(text,handler);
         }
 
         protected void AddMenuSeparator()
         {
-            contextmenu.MenuItems.Add("-");
+            ContextMenu.MenuItems.Add("-");
         }
 
         public abstract void InvalidateNode();
@@ -71,23 +69,17 @@ namespace CrashEdit
                 }
                 editor.Dispose();
                 editor = null;
-                if (node.IsSelected)
+                if (Node.IsSelected)
                 {
-                    node.TreeView.SelectedNode = null;
-                    node.TreeView.SelectedNode = node;
+                    Node.TreeView.SelectedNode = null;
+                    Node.TreeView.SelectedNode = Node;
                 }
             }
         }
 
-        public TreeNode Node
-        {
-            get { return node; }
-        }
+        public TreeNode Node { get; }
 
-        public ContextMenu ContextMenu
-        {
-            get { return contextmenu; }
-        }
+        public ContextMenu ContextMenu { get; }
 
         public Control Editor
         {
@@ -109,8 +101,8 @@ namespace CrashEdit
 
         public virtual void Dispose()
         {
-            node.Remove();
-            contextmenu.Dispose();
+            Node.Remove();
+            ContextMenu.Dispose();
             if (editor != null)
             {
                 editor.Dispose();

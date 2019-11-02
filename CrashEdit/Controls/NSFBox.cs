@@ -31,7 +31,6 @@ namespace CrashEdit
             }
         }
 
-        private NSF nsf;
         private NSFController controller;
 
         private List<TreeNode> searchresults;
@@ -39,38 +38,36 @@ namespace CrashEdit
         private SplitContainer pnSplit;
         private TreeView trvMain;
 
-        public NSFBox(NSF nsf,GameVersion gameversion)
+        public NSFBox(NSF nsf, GameVersion gameversion)
         {
-            this.nsf = nsf;
-            controller = new NSFController(nsf,gameversion);
+            NSF = nsf;
+            controller = new NSFController(nsf, gameversion);
 
             searchresults = new List<TreeNode>();
 
             controller.Node.Expand();
 
-            trvMain = new TreeView();
-            trvMain.Dock = DockStyle.Fill;
-            trvMain.ImageList = imglist;
-            trvMain.HideSelection = false;
+            trvMain = new TreeView
+            {
+                Dock = DockStyle.Fill,
+                ImageList = imglist,
+                HideSelection = false,
+                SelectedNode = controller.Node,
+                AllowDrop = true
+            };
             trvMain.Nodes.Add(controller.Node);
-            trvMain.SelectedNode = controller.Node;
-            trvMain.AllowDrop = true;
             trvMain.AfterSelect += new TreeViewEventHandler(trvMain_AfterSelect);
             trvMain.ItemDrag += new ItemDragEventHandler(trvMain_ItemDrag);
             trvMain.DragOver += new DragEventHandler(trvMain_DragOver);
             trvMain.DragDrop += new DragEventHandler(trvMain_DragDrop);
 
-            pnSplit = new SplitContainer();
-            pnSplit.Dock = DockStyle.Fill;
+            pnSplit = new SplitContainer { Dock = DockStyle.Fill };
             pnSplit.Panel1.Controls.Add(trvMain);
 
             Controls.Add(pnSplit);
         }
 
-        public NSF NSF
-        {
-            get { return nsf; }
-        }
+        public NSF NSF { get; }
 
         private void trvMain_AfterSelect(object sender,TreeViewEventArgs e)
         {
