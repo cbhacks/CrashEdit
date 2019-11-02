@@ -5,13 +5,10 @@ namespace CrashEdit
 {
     public sealed class ProtoEntityController : Controller
     {
-        private ProtoZoneEntryController oldzoneentrycontroller;
-        private ProtoEntity entity;
-
         public ProtoEntityController(ProtoZoneEntryController oldzoneentrycontroller,ProtoEntity entity)
         {
-            this.oldzoneentrycontroller = oldzoneentrycontroller;
-            this.entity = entity;
+            ProtoZoneEntryController = oldzoneentrycontroller;
+            Entity = entity;
             AddMenu("Duplicate Entity",Menu_Duplicate);
             AddMenu("Delete Entity",Menu_Delete);
             InvalidateNode();
@@ -19,7 +16,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Proto Entity {0} ({1})",entity.ID,entity.Index.Count);
+            Node.Text = string.Format("Proto Entity {0} ({1})",Entity.ID,Entity.Index.Count);
             Node.ImageKey = "arrow";
             Node.SelectedImageKey = "arrow";
         }
@@ -29,20 +26,14 @@ namespace CrashEdit
             return new ProtoEntityBox(this);
         }
 
-        public ProtoZoneEntryController ProtoZoneEntryController
-        {
-            get { return oldzoneentrycontroller; }
-        }
+        public ProtoZoneEntryController ProtoZoneEntryController { get; }
 
-        public ProtoEntity Entity
-        {
-            get { return entity; }
-        }
+        public ProtoEntity Entity { get; }
 
         private void Menu_Duplicate()
         {
             short maxid = 1;
-            foreach (Chunk chunk in oldzoneentrycontroller.EntryChunkController.NSFController.NSF.Chunks)
+            foreach (Chunk chunk in ProtoZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
             {
                 if (chunk is EntryChunk)
                 {
@@ -62,21 +53,21 @@ namespace CrashEdit
                 }
             }
             maxid++;
-            int newindex = oldzoneentrycontroller.ZoneEntry.Entities.Count;
-            newindex -= BitConv.FromInt32(oldzoneentrycontroller.ZoneEntry.Unknown1,0x208);
-            int entitycount = BitConv.FromInt32(oldzoneentrycontroller.ZoneEntry.Unknown1,0x20C);
-            BitConv.ToInt32(oldzoneentrycontroller.ZoneEntry.Unknown1,0x20C,entitycount + 1);
-            ProtoEntity newentity = ProtoEntity.Load(entity.Save());
+            int newindex = ProtoZoneEntryController.ZoneEntry.Entities.Count;
+            newindex -= BitConv.FromInt32(ProtoZoneEntryController.ZoneEntry.Unknown1,0x208);
+            int entitycount = BitConv.FromInt32(ProtoZoneEntryController.ZoneEntry.Unknown1,0x20C);
+            BitConv.ToInt32(ProtoZoneEntryController.ZoneEntry.Unknown1,0x20C,entitycount + 1);
+            ProtoEntity newentity = ProtoEntity.Load(Entity.Save());
             newentity.ID = maxid;
-            oldzoneentrycontroller.ZoneEntry.Entities.Add(newentity);
-            oldzoneentrycontroller.AddNode(new ProtoEntityController(oldzoneentrycontroller,newentity));
+            ProtoZoneEntryController.ZoneEntry.Entities.Add(newentity);
+            ProtoZoneEntryController.AddNode(new ProtoEntityController(ProtoZoneEntryController,newentity));
         }
 
         private void Menu_Delete()
         {
-            int entitycount = BitConv.FromInt32(oldzoneentrycontroller.ZoneEntry.Unknown1,0x20C);
-            BitConv.ToInt32(oldzoneentrycontroller.ZoneEntry.Unknown1,0x20C,entitycount - 1);
-            oldzoneentrycontroller.ZoneEntry.Entities.Remove(entity);
+            int entitycount = BitConv.FromInt32(ProtoZoneEntryController.ZoneEntry.Unknown1,0x20C);
+            BitConv.ToInt32(ProtoZoneEntryController.ZoneEntry.Unknown1,0x20C,entitycount - 1);
+            ProtoZoneEntryController.ZoneEntry.Entities.Remove(Entity);
             Dispose();
         }
     }

@@ -5,13 +5,10 @@ namespace CrashEdit
 {
     public sealed class OldCameraController : Controller
     {
-        private OldZoneEntryController oldzoneentrycontroller;
-        private OldCamera camera;
-
         public OldCameraController(OldZoneEntryController oldzoneentrycontroller,OldCamera camera)
         {
-            this.oldzoneentrycontroller = oldzoneentrycontroller;
-            this.camera = camera;
+            OldZoneEntryController = oldzoneentrycontroller;
+            Camera = camera;
             InvalidateNode();
         }
 
@@ -27,14 +24,7 @@ namespace CrashEdit
             return new OldCameraBox(this);
         }
 
-        public OldZoneEntryController OldZoneEntryController
-        {
-            get { return oldzoneentrycontroller; }
-        }
-
-        public OldCamera Camera
-        {
-            get { return camera; }
-        }
+        public OldZoneEntryController OldZoneEntryController { get; }
+        public OldCamera Camera { get; }
     }
 }
