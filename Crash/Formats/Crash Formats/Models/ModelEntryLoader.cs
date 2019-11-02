@@ -71,17 +71,17 @@ namespace Crash
                 {
                     ErrorManager.SignalError("ModelEntry: Position count mismatch");
                 }
+                for (int i = 0; i < positioncount; i++)
+                {
+                    byte[] positiondata = new byte[4];
+                    Array.Copy(items[5], i * 4, positiondata, 0, positiondata.Length);
+                    positions[i] = ModelPosition.Load(positiondata);
+                }
             }
             else
             {
                 positioncount = 0;
                 positions = null;
-            }
-            for (int i = 0; i < positioncount; i++)
-            {
-                byte[] positiondata = new byte[4];
-                Array.Copy(items[5], i * 4, positiondata, 0, positiondata.Length);
-                positions[i] = ModelPosition.Load(positiondata);
             }
             return new ModelEntry(items[0],structs,colors,textures,animatedtextures,positions,eid,size);
         }

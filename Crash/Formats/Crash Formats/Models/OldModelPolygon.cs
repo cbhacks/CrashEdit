@@ -17,46 +17,26 @@ namespace Crash
             return new OldModelPolygon(vertexa,vertexb,vertexc,unknown);
         }
 
-        private short vertexa;
-        private short vertexb;
-        private short vertexc;
-        private short unknown;
-
         public OldModelPolygon(short vertexa,short vertexb,short vertexc,short unknown)
         {
-            this.vertexa = vertexa;
-            this.vertexb = vertexb;
-            this.vertexc = vertexc;
-            this.unknown = unknown;
+            VertexA = vertexa;
+            VertexB = vertexb;
+            VertexC = vertexc;
+            Unknown = unknown;
         }
 
-        public short VertexA
-        {
-            get { return vertexa; }
-        }
-
-        public short VertexB
-        {
-            get { return vertexb; }
-        }
-
-        public short VertexC
-        {
-            get { return vertexc; }
-        }
-
-        public short Unknown
-        {
-            get { return unknown; }
-        }
+        public short VertexA { get; }
+        public short VertexB { get; }
+        public short VertexC { get; }
+        public short Unknown { get; }
 
         public byte[] Save()
         {
             byte[] data = new byte [8];
-            BitConv.ToInt16(data,0,vertexa);
-            BitConv.ToInt16(data,2,vertexb);
-            BitConv.ToInt16(data,4,vertexc);
-            BitConv.ToInt16(data,6,unknown);
+            BitConv.ToInt16(data,0,VertexA);
+            BitConv.ToInt16(data,2,VertexB);
+            BitConv.ToInt16(data,4,VertexC);
+            BitConv.ToInt16(data,6,Unknown);
             return data;
         }
     }

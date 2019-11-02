@@ -5,7 +5,6 @@ namespace Crash
 {
     public sealed class ModelEntry : Entry
     {
-        private byte[] info;
         private List<ModelPolygon> polygons;
         private List<SceneryColor> colors;
         private List<ModelTexture> textures;
@@ -14,11 +13,9 @@ namespace Crash
 
         public ModelEntry(byte[] info,IEnumerable<ModelPolygon> polygons,IEnumerable<SceneryColor> colors,IEnumerable<ModelTexture> textures,IEnumerable<ModelAnimatedTexture> animatedtextures,IEnumerable<ModelPosition> positions,int eid,int size) : base(eid,size)
         {
-            if (info == null)
-                throw new ArgumentNullException("info");
             if (polygons == null)
                 throw new ArgumentNullException("polygons");
-            this.info = info;
+            Info = info ?? throw new ArgumentNullException("info");
             this.polygons = new List<ModelPolygon>(polygons);
             this.colors = new List<SceneryColor>(colors);
             this.textures = new List<ModelTexture>(textures);
@@ -29,40 +26,13 @@ namespace Crash
                 this.positions = null;
         }
 
-        public override int Type
-        {
-            get { return 2; }
-        }
-
-        public byte[] Info
-        {
-            get { return info; }
-        }
-
-        public IList<ModelPolygon> Polygons
-        {
-            get { return polygons; }
-        }
-
-        public IList<SceneryColor> Colors
-        {
-            get { return colors; }
-        }
-
-        public IList<ModelTexture> Textures
-        {
-            get { return textures; }
-        }
-
-        public IList<ModelAnimatedTexture> AnimatedTextures
-        {
-            get { return animatedtextures; }
-        }
-
-        public IList<ModelPosition> Positions
-        {
-            get { return positions; }
-        }
+        public override int Type => 2;
+        public byte[] Info { get; }
+        public IList<ModelPolygon> Polygons => polygons;
+        public IList<SceneryColor> Colors => colors;
+        public IList<ModelTexture> Textures => textures;
+        public IList<ModelAnimatedTexture> AnimatedTextures => animatedtextures;
+        public IList<ModelPosition> Positions => positions;
 
         public override UnprocessedEntry Unprocess()
         {
@@ -71,7 +41,7 @@ namespace Crash
             if (Positions != null)
                 itemcount = 6;
             byte[][] items = new byte [itemcount][];
-            items[0] = info;
+            items[0] = Info;
             items[1] = new byte [polygons.Count * 4];
             for (int i = 0;i < polygons.Count;i++)
             {

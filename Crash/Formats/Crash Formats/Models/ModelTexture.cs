@@ -27,124 +27,54 @@ namespace Crash
             return new ModelTexture(point1x, point1y,cluty1,clutx,cluty2, point2x, point2y,bitflag,blendmode,segment,textureoffset, point3x, point3y,unknown);
         }
 
-        private byte point1x;
-        private byte point1y;
-        private byte point2x;
-        private byte point2y;
-        private byte point3x;
-        private byte point3y;
-        private byte cluty1;
-        private byte clutx;
-        private byte cluty2;
-        private bool bitflag;
-        private byte blendmode;
-        private byte segment;
-        private byte textureoffset;
-        private short unknown;
-
         public ModelTexture(byte point1x, byte point1y, byte cluty1, byte clutx, byte cluty2, byte point2x, byte point2y, bool bitflag, byte blendmode, byte segment, byte textureoffset, byte point3x, byte point3y,short unknown)
         {
-            this.point1x = point1x;
-            this.point1y = point1y;
-            this.point2x = point2x;
-            this.point2y = point2y;
-            this.point3x = point3x;
-            this.point3y = point3y;
-            this.cluty1 = cluty1;
-            this.clutx = clutx;
-            this.cluty2 = cluty2;
-            this.bitflag = bitflag;
-            this.blendmode = blendmode;
-            this.segment = segment;
-            this.textureoffset = textureoffset;
-            this.unknown = unknown;
+            Point1X = point1x;
+            Point1Y = point1y;
+            Point2X = point2x;
+            Point2Y = point2y;
+            Point3X = point3x;
+            Point3Y = point3y;
+            ClutY1 = cluty1;
+            ClutX = clutx;
+            ClutY2 = cluty2;
+            BitFlag = bitflag;
+            BlendMode = blendmode;
+            Segment = segment;
+            TextureOffset = textureoffset;
+            Unknown = unknown;
         }
 
-        public bool BitFlag
-        {
-            get { return bitflag; }
-        }
-
-        public byte Point1X
-        {
-            get { return point1x; }
-        }
-
-        public byte Point1Y
-        {
-            get { return point1y; }
-        }
-
-        public byte Point2X
-        {
-            get { return point2x; }
-        }
-
-        public byte Point2Y
-        {
-            get { return point2y; }
-        }
-
-        public byte Point3X
-        {
-            get { return point3x; }
-        }
-
-        public byte Point3Y
-        {
-            get { return point3x; }
-        }
-
-        public byte ClutX
-        {
-            get { return clutx; }
-        }
-
-        public byte ClutY1
-        {
-            get { return cluty1; }
-        }
-
-        public byte ClutY2
-        {
-            get { return cluty2; }
-        }
-
-        public byte BlendMode
-        {
-            get { return blendmode; }
-        }
-
-        public byte Segment
-        {
-            get { return point1x; }
-        }
-
-        public byte TextureOffset
-        {
-            get { return textureoffset; }
-        }
-
-        public short Unknown
-        {
-            get { return unknown; }
-        }
+        public bool BitFlag { get; }
+        public byte Point1X { get; }
+        public byte Point1Y { get; }
+        public byte Point2X { get; }
+        public byte Point2Y { get; }
+        public byte Point3X { get; }
+        public byte Point3Y { get; }
+        public byte ClutX { get; }
+        public byte ClutY1 { get; }
+        public byte ClutY2 { get; }
+        public byte BlendMode { get; }
+        public byte Segment { get; }
+        public byte TextureOffset { get; }
+        public short Unknown { get; }
 
         public byte[] Save()
         {
             //ErrorManager.SignalError("ModelTexture cannot be saved.");
             byte[] result = new byte[12];
-            result[0] = point1x;
-            result[1] = point1y;
-            result[2] = (byte)((cluty1  << 4) | clutx);
-            result[3] = cluty2;
-            result[4] = point2x;
-            result[5] = point2y;
-            result[6] = (byte)((Convert.ToByte(bitflag) << 7) | (blendmode << 4) | segment);
-            result[7] = textureoffset;
-            result[8] = point3x;
-            result[9] = point3y;
-            BitConv.ToInt16(result, 10, unknown);
+            result[0] = Point1X;
+            result[1] = Point1Y;
+            result[2] = (byte)((ClutY1  << 4) | ClutX);
+            result[3] = ClutY2;
+            result[4] = Point2X;
+            result[5] = Point2Y;
+            result[6] = (byte)((Convert.ToByte(BitFlag) << 7) | (BlendMode << 4) | Segment);
+            result[7] = TextureOffset;
+            result[8] = Point3X;
+            result[9] = Point3Y;
+            BitConv.ToInt16(result, 10, Unknown);
             return result;
         }
     }
