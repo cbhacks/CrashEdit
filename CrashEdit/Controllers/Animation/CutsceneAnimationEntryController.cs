@@ -19,8 +19,8 @@ namespace CrashEdit
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Cutscene Animation ({0})",CutsceneAnimationEntry.EName);
-            Node.ImageKey = "thing";
-            Node.SelectedImageKey = "thing";
+            Node.ImageKey = "limeb";
+            Node.SelectedImageKey = "limeb";
         }
 
         protected override Control CreateEditor()

@@ -25,8 +25,8 @@ namespace CrashEdit
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Old Zone ({0})",ZoneEntry.EName);
-            Node.ImageKey = "thing";
-            Node.SelectedImageKey = "thing";
+            Node.ImageKey = "violetb";
+            Node.SelectedImageKey = "violetb";
         }
 
         protected override Control CreateEditor()

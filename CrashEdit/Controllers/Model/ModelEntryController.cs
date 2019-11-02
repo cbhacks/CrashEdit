@@ -14,8 +14,8 @@ namespace CrashEdit
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Model ({0})",ModelEntry.EName);
-            Node.ImageKey = "thing";
-            Node.SelectedImageKey = "thing";
+            Node.ImageKey = "crimsonb";
+            Node.SelectedImageKey = "crimsonb";
         }
 
         protected override Control CreateEditor()

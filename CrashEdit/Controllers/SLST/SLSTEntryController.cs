@@ -19,8 +19,8 @@ namespace CrashEdit
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Sort List ({0})",SLSTEntry.EName);
-            Node.ImageKey = "thing";
-            Node.SelectedImageKey = "thing";
+            Node.ImageKey = "greyb";
+            Node.SelectedImageKey = "greyb";
         }
 
         public SLSTEntry SLSTEntry { get; }

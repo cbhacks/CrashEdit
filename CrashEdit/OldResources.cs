@@ -144,6 +144,24 @@ namespace CrashEdit
         [Resource("UnknownPickupTexture")]
         private static Bitmap unknownpickuptexture = null;
 
+        [Resource("GreyBuckle")]
+        private static Image greybuckle = null;
+
+        [Resource("CodeBuckle")]
+        private static Image codebuckle = null;
+
+        [Resource("CrimsonBuckle")]
+        private static Image crimsonbuckle = null;
+
+        [Resource("LimeBuckle")]
+        private static Image limebuckle = null;
+
+        [Resource("BlueBuckle")]
+        private static Image bluebuckle = null;
+
+        [Resource("VioletBuckle")]
+        private static Image violetbuckle = null;
+
         static OldResources()
         {
             ResourceManager manager = new ResourceManager("CrashEdit.OldResources",Assembly.GetExecutingAssembly());
@@ -219,6 +237,12 @@ namespace CrashEdit
         public static Bitmap UnknownBoxTexture => unknownboxtexture;
         public static Bitmap UnknownBoxTopTexture => unknownboxtoptexture;
         public static Bitmap UnknownPickupTexture => unknownpickuptexture;
+        public static Image GreyBuckle => greybuckle;
+        public static Image CodeBuckle => codebuckle;
+        public static Image CrimsonBuckle => crimsonbuckle;
+        public static Image LimeBuckle => limebuckle;
+        public static Image BlueBuckle => bluebuckle;
+        public static Image VioletBuckle => violetbuckle;
 
         [AttributeUsage(AttributeTargets.Field)]
         private class ResourceAttribute : Attribute

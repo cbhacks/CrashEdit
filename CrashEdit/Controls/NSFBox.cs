@@ -24,6 +24,12 @@ namespace CrashEdit
                 imglist.Images.Add("thing",OldResources.ThingImage);
                 imglist.Images.Add("speaker",OldResources.SpeakerImage);
                 imglist.Images.Add("arrow",OldResources.ArrowImage);
+                imglist.Images.Add("greyb",OldResources.GreyBuckle);
+                imglist.Images.Add("codeb",OldResources.CodeBuckle);
+                imglist.Images.Add("crimsonb",OldResources.CrimsonBuckle);
+                imglist.Images.Add("limeb",OldResources.LimeBuckle);
+                imglist.Images.Add("blueb",OldResources.BlueBuckle);
+                imglist.Images.Add("violetb",OldResources.VioletBuckle);
             }
             catch
             {

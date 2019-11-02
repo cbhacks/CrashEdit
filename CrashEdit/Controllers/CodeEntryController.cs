@@ -13,8 +13,8 @@ namespace CrashEdit
         public override void InvalidateNode()
         {
             Node.Text = string.Format("GOOL ({0})",CodeEntry.EName);
-            Node.ImageKey = "thing";
-            Node.SelectedImageKey = "thing";
+            Node.ImageKey = "codeb";
+            Node.SelectedImageKey = "codeb";
         }
 
         public CodeEntry CodeEntry { get; }
