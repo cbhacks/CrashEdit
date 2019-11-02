@@ -39,138 +39,54 @@ namespace Crash
             return new ProtoEntity(garbage,settinga,unknown,id,positioncount,startx,starty,startz,settingb,settingc,settingd,type,subtype,index,nullfield1);
         }
 
-        private int garbage;
-        private short unknown;
-        private short settinga;
-        private short id;
-        private short positioncount;
-        private short startx;
-        private short starty;
-        private short startz;
-        private short settingb;
-        private short settingc;
-        private short settingd;
-        private byte type;
-        private byte subtype;
         private List<ProtoEntityPosition> index = null;
-        private short nullfield1;
 
         public ProtoEntity(int garbage,short unknown,short settinga,short id,short positioncount,short startx,short starty,short startz,short settingb,short settingc,short settingd,byte type,byte subtype,IEnumerable<ProtoEntityPosition> index,short nullfield1)
         {
             if (index == null)
                 throw new ArgumentNullException("index");
-            this.garbage = garbage;
-            this.unknown = unknown;
-            this.settinga = settinga;
+            Garbage = garbage;
+            Unknown = unknown;
+            SettingA = settinga;
             this.index = new List<ProtoEntityPosition>(index);
-            this.positioncount = positioncount;
-            this.id = id;
-            this.settingb = settingb;
-            this.settingc = settingc;
-            this.settingd = settingd;
-            this.type = type;
-            this.subtype = subtype;
-            this.nullfield1 = nullfield1;
-            this.startx = startx;
-            this.starty = starty;
-            this.startz = startz;
+            PositionCount = positioncount;
+            ID = id;
+            SettingB = settingb;
+            SettingC = settingc;
+            SettingD = settingd;
+            Type = type;
+            Subtype = subtype;
+            Nullfield1 = nullfield1;
+            StartX = startx;
+            StartY = starty;
+            StartZ = startz;
         }
 
-        public short Unknown
-        {
-            get { return unknown; }
-            set { unknown = value; }
-        }
-
-        public short SettingA
-        {
-            get { return settinga; }
-            set { settinga = value; }
-        }
-
-        public int Garbage
-        {
-            get { return garbage; }
-        }
-
-        public short ID
-        {
-            get { return id; }
-            set { id = value; }
-        }
-
-        public short PositionCount
-        {
-            get { return positioncount; }
-        }
-
-        public short SettingB
-        {
-            get { return settinga; }
-            set { settinga = value; }
-        }
-
-        public short SettingC
-        {
-            get { return settingc; }
-            set { settingc = value; }
-        }
-
-        public short SettingD
-        {
-            get { return settingd; }
-            set { settingd = value; }
-        }
-
-        public byte Type
-        {
-            get { return type; }
-            set { type = value; }
-        }
-
-        public byte Subtype
-        {
-            get { return subtype; }
-            set { subtype = value; }
-        }
-
-        public IList<ProtoEntityPosition> Index
-        {
-            get { return index; }
-        }
-
-        public short Nullfield1
-        {
-            get { return nullfield1; }
-        }
-
-        public short StartX
-        {
-            get { return startx; }
-            set { startx = value; }
-        }
-
-        public short StartY
-        {
-            get { return starty; }
-            set { starty = value; }
-        }
-
-        public short StartZ
-        {
-            get { return startz; }
-            set { startz = value; }
-        }
+        public short Unknown { get; set; }
+        public short SettingA { get; set; }
+        public int Garbage { get; }
+        public short ID { get; set; }
+        public short PositionCount { get; private set; }
+        public short SettingB { get; set; }
+        public short SettingC { get; set; }
+        public short SettingD { get; set; }
+        public byte Type { get; set; }
+        public byte Subtype { get; set; }
+        public IList<ProtoEntityPosition> Index => index;
+        public short Nullfield1 { get; }
+        public short StartX { get; set; }
+        public short StartY { get; set; }
+        public short StartZ { get; set; }
 
         public byte[] Save()
         {
-            positioncount = (short)Index.Count;
-            byte[] result = new byte [28 + 4 * (positioncount - 1)];
-            BitConv.ToInt32(result,0,garbage);
+            PositionCount = (short)Index.Count;
+            byte[] result = new byte [28 + 4 * (PositionCount - 1)];
+            BitConv.ToInt32(result,0,Garbage);
             BitConv.ToInt16(result,4,SettingA);
-            BitConv.ToInt16(result,6,unknown);
+            BitConv.ToInt16(result,6,Unknown);
             BitConv.ToInt16(result,8,ID);
-            BitConv.ToInt16(result,10,positioncount);
+            BitConv.ToInt16(result,10,PositionCount);
             BitConv.ToInt16(result,12,StartX);
             BitConv.ToInt16(result,14,StartY);
             BitConv.ToInt16(result,16,StartZ);
@@ -179,7 +95,7 @@ namespace Crash
             BitConv.ToInt16(result,22,SettingD);
             result[24] = Type;
             result[25] = Subtype;
-            for (int i = 0; i < positioncount - 1; i++)
+            for (int i = 0; i < PositionCount - 1; i++)
             {
                 result[26 + i * 4] = (byte)index[i].Global;
                 result[27 + i * 4] = (byte)index[i].X;
