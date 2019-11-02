@@ -28,19 +28,20 @@ namespace CrashHacks.Scripts.Scenery
         {
             if (value is SceneryEntry)
             {
-                SceneryEntry entry = (SceneryEntry)value;
-                if (entry.Item4.Length < 11)
+                UnprocessedEntry entry = ((SceneryEntry)value).Unprocess();
+                if (entry.Items[3].Length < 11)
                     return;
                 byte[] scrump = new byte [11];
-                for (int i = 0;i + 11 <= entry.Item4.Length;i += 11)
+                for (int i = 0;i + 11 <= entry.Items[3].Length;i += 11)
                 {
                     byte[] newscrump = new byte [11];
-                    Array.Copy(entry.Item4,i,newscrump,0,11);
+                    Array.Copy(entry.Items[3], i,newscrump,0,11);
                     if (i != 0)
-                        scrump.CopyTo(entry.Item4,i);
+                        scrump.CopyTo(entry.Items[3], i);
                     scrump = newscrump;
                 }
-                scrump.CopyTo(entry.Item4,0);
+                scrump.CopyTo(entry.Items[3], 0);
+                value = entry.Process(gameversion);
             }
         }
     }

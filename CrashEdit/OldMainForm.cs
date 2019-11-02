@@ -86,8 +86,6 @@ namespace CrashEdit
             };
             tbbClose.Click += new EventHandler(tbbClose_Click);
 
-            tbsSeparator = new ToolStripSeparator();
-
             tbbFind = new ToolStripButton
             {
                 Text = "Find",
