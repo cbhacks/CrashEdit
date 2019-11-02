@@ -114,7 +114,7 @@ namespace CrashEdit
             if (model != null)
             {
                 int i = 0;
-                int j = 0;
+                int ii = 0;
                 int vertexid = 0;
                 int tris = 0;
                 for (int iii = 0;iii < model.Polygons.Count;iii++)
@@ -129,7 +129,7 @@ namespace CrashEdit
                     {
                         if ((polygon.StructType & 0x4) == 0)
                         {
-                            indexes[j] = vertexid;
+                            indexes[ii] = vertexid;
                             vertexid++;
                         }
                         else
@@ -146,14 +146,14 @@ namespace CrashEdit
                                 if (model.Polygons[i - j - l].ColorSlot) k++;
                                 l++;
                             }
-                            indexes[j] = indexes[i - j - k];
+                            indexes[ii] = indexes[i - j - k];
                         }
-                        j++;
+                        ii++;
                     }
                     i++;
                 }
                 i = 0;
-                j = 0;
+                ii = 0;
                 byte invalid = 0;
                 foreach (ModelPolygon polygon in model.Polygons)
                 {
@@ -166,16 +166,16 @@ namespace CrashEdit
                     if (!polygon.ColorSlot && !polygon.Footer)
                     {
                         GL.Color3(Color.Fuchsia);
-                        vertexa = indexes[j];
+                        vertexa = indexes[ii];
                         //Vertex IDs
                         if (polygon.TriType < 4) //AA
                         {
-                            vertexb = indexes[j - 1];
-                            vertexc = indexes[j - 2];
+                            vertexb = indexes[ii - 1];
+                            vertexc = indexes[ii - 2];
                         }
                         else if (polygon.TriType < 8) //BB
                         {
-                            vertexb = indexes[j - 1];
+                            vertexb = indexes[ii - 1];
                             int j = 1;
                             while ((model.Polygons[i - j].TriType > 3 && model.Polygons[i - j].TriType < 8) || model.Polygons[i - j].ColorSlot)
                             {
@@ -197,8 +197,8 @@ namespace CrashEdit
                         }
                         else if (invalid == 0) //CC
                         {
-                            vertexb = indexes[j + 1];
-                            vertexc = indexes[j + 2];
+                            vertexb = indexes[ii + 1];
+                            vertexc = indexes[ii + 2];
                         }
                         else //Invalid CC
                         {
@@ -341,7 +341,7 @@ namespace CrashEdit
                         }
                         GL.Color3(r,g,b);
                         RenderVertex(frame.Vertices[vertexc]);
-                        j++;
+                        ii++;
                         if (invalid > 0) invalid--;
                         else if (polygon.TriType > 7) invalid = 2;
                     }
@@ -377,9 +377,9 @@ namespace CrashEdit
                 if (model.Positions[i].XBits == 7) { modelx = 0; modelxcum = 0; }
                 sbyte vertexx = 0;
                 bit += model.Positions[i].XBits;
-                for (int j = 0; j < model.Positions[i].XBits; j++)
+                for (int ii = 0; ii < model.Positions[i].XBits; ii++)
                 {
-                    vertexx |= (sbyte)(Convert.ToByte(frame.Temporals[bit]) << j);
+                    vertexx |= (sbyte)(Convert.ToByte(frame.Temporals[bit]) << ii);
                     bit--;
                 }
                 if (frame.Temporals[bit] == true)
@@ -391,9 +391,9 @@ namespace CrashEdit
                 if (model.Positions[i].ZBits == 7) { modelz = 0; modelzcum = 0; }
                 sbyte vertexz = 0;
                 bit += model.Positions[i].ZBits;
-                for (int j = 0; j < model.Positions[i].ZBits; j++)
+                for (int ii = 0; ii < model.Positions[i].ZBits; ii++)
                 {
-                    vertexz |= (sbyte)(Convert.ToByte(frame.Temporals[bit]) << j);
+                    vertexz |= (sbyte)(Convert.ToByte(frame.Temporals[bit]) << ii);
                     bit--;
                 }
                 if (frame.Temporals[bit] == true)
@@ -405,9 +405,9 @@ namespace CrashEdit
                 if (model.Positions[i].YBits == 7) { modely = 0; modelycum = 0; }
                 sbyte vertexy = 0;
                 bit += model.Positions[i].YBits;
-                for (int j = 0; j < model.Positions[i].YBits; j++)
+                for (int ii = 0; ii < model.Positions[i].YBits; ii++)
                 {
-                    vertexy |= (sbyte)(Convert.ToByte(frame.Temporals[bit]) << j);
+                    vertexy |= (sbyte)(Convert.ToByte(frame.Temporals[bit]) << ii);
                     bit--;
                 }
                 if (frame.Temporals[bit] == true)
