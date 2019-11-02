@@ -39,159 +39,76 @@ namespace Crash
             OldFrameVertex[] vertices = new OldFrameVertex [vertexcount];
             for (int i = 0;i < vertexcount;i++)
             {
-                byte[] vertexdata = new byte [6];
-                Array.Copy(data,56 + i * 6,vertexdata,0,vertexdata.Length);
-                vertices[i] = OldFrameVertex.Load(vertexdata);
+                //byte[] vertexdata = new byte [6];
+                //Array.Copy(data,56 + i * 6,vertexdata,0,vertexdata.Length);
+                //vertices[i] = OldFrameVertex.Load(vertexdata);
+                vertices[i] = new OldFrameVertex(data[0],data[1],data[2],data[3],data[4],data[5]);
             }
             short unknown = BitConv.FromInt16(data,56 + vertexcount * 6);
             return new OldFrame(modeleid,xoffset,yoffset,zoffset,x1,y1,z1,x2,y2,z2,xglobal,yglobal,zglobal,vertices,unknown);
         }
 
-        private int modeleid;
-        private int xoffset;
-        private int yoffset;
-        private int zoffset;
-        private int x1;
-        private int y1;
-        private int z1;
-        private int x2;
-        private int y2;
-        private int z2;
-        private int xglobal;
-        private int yglobal;
-        private int zglobal;
         private List<OldFrameVertex> vertices;
-        private short unknown;
 
         public OldFrame(int modeleid,int xoffset,int yoffset,int zoffset,int x1,int y1,int z1,int x2,int y2,int z2,int xglobal,int yglobal,int zglobal,IEnumerable<OldFrameVertex> vertices,short unknown)
         {
-            this.modeleid = modeleid;
-            this.xoffset = xoffset;
-            this.yoffset = yoffset;
-            this.zoffset = zoffset;
-            this.x1 = x1;
-            this.y1 = y1;
-            this.z1 = z1;
-            this.x2 = x2;
-            this.y2 = y2;
-            this.z2 = z2;
-            this.xglobal = xglobal;
-            this.yglobal = yglobal;
-            this.zglobal = zglobal;
             this.vertices = new List<OldFrameVertex>(vertices);
-            this.unknown = unknown;
+            ModelEID = modeleid;
+            XOffset = xoffset;
+            YOffset = yoffset;
+            ZOffset = zoffset;
+            X1 = x1;
+            Y1 = y1;
+            Z1 = z1;
+            X2 = x2;
+            Y2 = y2;
+            Z2 = z2;
+            XGlobal = xglobal;
+            YGlobal = yglobal;
+            ZGlobal = zglobal;
+            Unknown = unknown;
         }
 
-        public int ModelEID
-        {
-            get { return modeleid; }
-        }
+        public int ModelEID { get; }
+        public int XOffset { get; set; }
+        public int YOffset { get; set; }
+        public int ZOffset { get; set; }
+        public int X1 { get; set; }
+        public int Y1 { get; set; }
+        public int Z1 { get; set; }
+        public int X2 { get; set; }
+        public int Y2 { get; set; }
+        public int Z2 { get; set; }
+        public int XGlobal { get; set; }
+        public int YGlobal { get; set; }
+        public int ZGlobal { get; set; }
 
-        public int XOffset
-        {
-            get { return xoffset; }
-            set { xoffset = value; }
-        }
+        public IList<OldFrameVertex> Vertices => vertices;
 
-        public int YOffset
-        {
-            get { return yoffset; }
-            set { yoffset = value; }
-        }
-
-        public int ZOffset
-        {
-            get { return zoffset; }
-            set { zoffset = value; }
-        }
-
-        public int X1
-        {
-            get { return x1; }
-            set { x1 = value; }
-        }
-
-        public int Y1
-        {
-            get { return y1; }
-            set { y1 = value; }
-        }
-
-        public int Z1
-        {
-            get { return z1; }
-            set { z1 = value; }
-        }
-
-        public int X2
-        {
-            get { return x2; }
-            set { x2 = value; }
-        }
-
-        public int Y2
-        {
-            get { return y2; }
-            set { y2 = value; }
-        }
-
-        public int Z2
-        {
-            get { return z2; }
-            set { z2 = value; }
-        }
-
-        public int XGlobal
-        {
-            get { return xglobal; }
-            set { xglobal = value; }
-        }
-
-        public int YGlobal
-        {
-            get { return yglobal; }
-            set { yglobal = value; }
-        }
-
-        public int ZGlobal
-        {
-            get { return zglobal; }
-            set { zglobal = value; }
-        }
-
-        public IList<OldFrameVertex> Vertices
-        {
-            get { return vertices; }
-        }
-
-        public short Unknown
-        {
-            get { return unknown; }
-            set { unknown = value; }
-        }
+        public short Unknown { get; set; }
 
         public byte[] Save()
         {
             byte[] data = new byte [56 + vertices.Count * 6 + 2];
             BitConv.ToInt32(data,0,vertices.Count);
-            BitConv.ToInt32(data,4,modeleid);
-            BitConv.ToInt32(data,8,xoffset);
-            BitConv.ToInt32(data,12,yoffset);
-            BitConv.ToInt32(data,16,zoffset);
-            BitConv.ToInt32(data,20,x1);
-            BitConv.ToInt32(data,24,y1);
-            BitConv.ToInt32(data,28,z1);
-            BitConv.ToInt32(data,32,x2);
-            BitConv.ToInt32(data,36,y2);
-            BitConv.ToInt32(data,40,z2);
-            BitConv.ToInt32(data,44,xglobal);
-            BitConv.ToInt32(data,48,yglobal);
-            BitConv.ToInt32(data,52,zglobal);
+            BitConv.ToInt32(data,4,ModelEID);
+            BitConv.ToInt32(data,8,XOffset);
+            BitConv.ToInt32(data,12,YOffset);
+            BitConv.ToInt32(data,16,ZOffset);
+            BitConv.ToInt32(data,20,X1);
+            BitConv.ToInt32(data,24,Y1);
+            BitConv.ToInt32(data,28,Z1);
+            BitConv.ToInt32(data,32,X2);
+            BitConv.ToInt32(data,36,Y2);
+            BitConv.ToInt32(data,40,Z2);
+            BitConv.ToInt32(data,44,XGlobal);
+            BitConv.ToInt32(data,48,YGlobal);
+            BitConv.ToInt32(data,52,ZGlobal);
             for (int i = 0;i < vertices.Count;i++)
             {
                 vertices[i].Save().CopyTo(data,56 + i * 6);
             }
-            BitConv.ToInt16(data,56 + vertices.Count * 6,unknown);
+            BitConv.ToInt16(data,56 + vertices.Count * 6,Unknown);
             return data;
         }
 
@@ -200,18 +117,18 @@ namespace Crash
             long xorigin = 0;
             long yorigin = 0;
             long zorigin = 0;
-            foreach (OldFrameVertex vertex in vertices)
-            {
-                xorigin += vertex.X;
-                yorigin += vertex.Y;
-                zorigin += vertex.Z;
-            }
-            xorigin /= vertices.Count;
-            yorigin /= vertices.Count;
-            zorigin /= vertices.Count;
-            xorigin -= xoffset;
-            yorigin -= yoffset;
-            zorigin -= zoffset;
+            //foreach (OldFrameVertex vertex in vertices)
+            //{
+            //    xorigin += vertex.X;
+            //    yorigin += vertex.Y;
+            //    zorigin += vertex.Z;
+            //}
+            //xorigin /= vertices.Count;
+            //yorigin /= vertices.Count;
+            //zorigin /= vertices.Count;
+            xorigin -= XOffset;
+            yorigin -= YOffset;
+            zorigin -= ZOffset;
             using (MemoryStream stream = new MemoryStream())
             {
                 using (StreamWriter obj = new StreamWriter(stream))

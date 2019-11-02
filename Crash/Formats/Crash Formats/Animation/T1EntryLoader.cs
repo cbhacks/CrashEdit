@@ -2,7 +2,6 @@ using System;
 
 namespace Crash
 {
-    //[EntryType(1,GameVersion.Crash2)]
     [EntryType(1,GameVersion.Crash3)]
     public sealed class T1EntryLoader : EntryLoader
     {
