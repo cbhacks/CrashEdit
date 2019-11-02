@@ -6,11 +6,9 @@ namespace CrashEdit
 {
     public sealed class MusicEntryController : EntryController
     {
-        private MusicEntry musicentry;
-
         public MusicEntryController(EntryChunkController entrychunkcontroller,MusicEntry musicentry) : base(entrychunkcontroller,musicentry)
         {
-            this.musicentry = musicentry;
+            MusicEntry = musicentry;
             if (musicentry.VH != null)
             {
                 AddNode(new VHController(this,musicentry.VH));
@@ -34,19 +32,16 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Music ({0})",musicentry.EName);
+            Node.Text = string.Format("Music ({0})",MusicEntry.EName);
             Node.ImageKey = "music";
             Node.SelectedImageKey = "music";
         }
 
-        public MusicEntry MusicEntry
-        {
-            get { return musicentry; }
-        }
+        public MusicEntry MusicEntry { get; }
 
         private VH FindLinkedVH()
         {
-            MusicEntry vhentry = FindEID<MusicEntry>(musicentry.VHEID);
+            MusicEntry vhentry = FindEID<MusicEntry>(MusicEntry.VHEID);
             if (vhentry == null)
             {
                 throw new GUIException("The linked music entry could not be found.");
@@ -61,13 +56,13 @@ namespace CrashEdit
         private SampleLine[] FindLinkedVB()
         {
             List<SampleLine> samples = new List<SampleLine>();
-            WavebankEntry vb0entry = FindEID<WavebankEntry>(musicentry.VB0EID);
-            WavebankEntry vb1entry = FindEID<WavebankEntry>(musicentry.VB1EID);
-            WavebankEntry vb2entry = FindEID<WavebankEntry>(musicentry.VB2EID);
-            WavebankEntry vb3entry = FindEID<WavebankEntry>(musicentry.VB3EID);
-            WavebankEntry vb4entry = FindEID<WavebankEntry>(musicentry.VB4EID);
-            WavebankEntry vb5entry = FindEID<WavebankEntry>(musicentry.VB5EID);
-            WavebankEntry vb6entry = FindEID<WavebankEntry>(musicentry.VB6EID);
+            WavebankEntry vb0entry = FindEID<WavebankEntry>(MusicEntry.VB0EID);
+            WavebankEntry vb1entry = FindEID<WavebankEntry>(MusicEntry.VB1EID);
+            WavebankEntry vb2entry = FindEID<WavebankEntry>(MusicEntry.VB2EID);
+            WavebankEntry vb3entry = FindEID<WavebankEntry>(MusicEntry.VB3EID);
+            WavebankEntry vb4entry = FindEID<WavebankEntry>(MusicEntry.VB4EID);
+            WavebankEntry vb5entry = FindEID<WavebankEntry>(MusicEntry.VB5EID);
+            WavebankEntry vb6entry = FindEID<WavebankEntry>(MusicEntry.VB6EID);
             if (vb0entry != null)
                 samples.AddRange(vb0entry.Samples.SampleLines);
             if (vb1entry != null)
@@ -94,7 +89,7 @@ namespace CrashEdit
 
         private void Menu_Import_VH()
         {
-            if (musicentry.VH != null)
+            if (MusicEntry.VH != null)
             {
                 throw new GUIException("This music entry already contains a VH file.");
             }
@@ -102,7 +97,7 @@ namespace CrashEdit
             if (data != null)
             {
                 VH vh = VH.Load(data);
-                musicentry.VH = vh;
+                MusicEntry.VH = vh;
                 InsertNode(0,new VHController(this,vh));
             }
         }
@@ -113,14 +108,14 @@ namespace CrashEdit
             if (data != null)
             {
                 SEQ seq = SEQ.Load(data);
-                musicentry.SEP.SEQs.Add(seq);
+                MusicEntry.SEP.SEQs.Add(seq);
                 AddNode(new SEQController(this,seq));
             }
         }
 
         private void Menu_Export_SEP()
         {
-            byte[] data = musicentry.SEP.Save();
+            byte[] data = MusicEntry.SEP.Save();
             FileUtil.SaveFile(data,FileFilters.SEP,FileFilters.Any);
         }
 

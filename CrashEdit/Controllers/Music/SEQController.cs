@@ -4,13 +4,10 @@ namespace CrashEdit
 {
     public sealed class SEQController : Controller
     {
-        private MusicEntryController musicentrycontroller;
-        private SEQ seq;
-
         public SEQController(MusicEntryController musicentrycontroller,SEQ seq)
         {
-            this.musicentrycontroller = musicentrycontroller;
-            this.seq = seq;
+            MusicEntryController = musicentrycontroller;
+            SEQ = seq;
             AddMenu("Replace SEQ",Menu_Replace_SEQ);
             AddMenu("Delete SEQ",Menu_Delete_SEQ);
             AddMenuSeparator();
@@ -26,42 +23,35 @@ namespace CrashEdit
             Node.SelectedImageKey = "arrow";
         }
 
-        public MusicEntryController MusicEntryController
-        {
-            get { return musicentrycontroller; }
-        }
-
-        public SEQ SEQ
-        {
-            get { return seq; }
-        }
+        public MusicEntryController MusicEntryController { get; }
+        public SEQ SEQ { get; private set; }
 
         private void Menu_Replace_SEQ()
         {
-            int i = musicentrycontroller.MusicEntry.SEP.SEQs.IndexOf(seq);
+            int i = MusicEntryController.MusicEntry.SEP.SEQs.IndexOf(SEQ);
             byte[] data = FileUtil.OpenFile(FileFilters.SEQ,FileFilters.Any);
             if (data != null)
             {
-                seq = SEQ.Load(data);
-                musicentrycontroller.MusicEntry.SEP.SEQs[i] = seq;
+                SEQ = SEQ.Load(data);
+                MusicEntryController.MusicEntry.SEP.SEQs[i] = SEQ;
             }
         }
 
         private void Menu_Delete_SEQ()
         {
-            musicentrycontroller.MusicEntry.SEP.SEQs.Remove(seq);
+            MusicEntryController.MusicEntry.SEP.SEQs.Remove(SEQ);
             Dispose();
         }
 
         private void Menu_Export_SEQ()
         {
-            byte[] data = seq.Save();
+            byte[] data = SEQ.Save();
             FileUtil.SaveFile(data,FileFilters.SEQ,FileFilters.Any);
         }
 
         private void Menu_Export_SEQ_MIDI()
         {
-            byte[] data = seq.ToMIDI();
+            byte[] data = SEQ.ToMIDI();
             FileUtil.SaveFile(data,FileFilters.MIDI,FileFilters.Any);
         }
     }

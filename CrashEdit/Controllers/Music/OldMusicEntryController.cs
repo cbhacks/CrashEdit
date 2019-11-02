@@ -6,11 +6,9 @@ namespace CrashEdit
 {
     public sealed class OldMusicEntryController : EntryController
     {
-        private OldMusicEntry oldmusicentry;
-
         public OldMusicEntryController(EntryChunkController entrychunkcontroller,OldMusicEntry oldmusicentry) : base(entrychunkcontroller,oldmusicentry)
         {
-            this.oldmusicentry = oldmusicentry;
+            OldMusicEntry = oldmusicentry;
             AddNode(new OldVHController(this,oldmusicentry.VH));
             foreach (SEQ seq in oldmusicentry.SEP.SEQs)
             {
@@ -29,23 +27,20 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Old Music ({0})",oldmusicentry.EName);
+            Node.Text = string.Format("Old Music ({0})",OldMusicEntry.EName);
             Node.ImageKey = "music";
             Node.SelectedImageKey = "music";
         }
 
-        public OldMusicEntry OldMusicEntry
-        {
-            get { return oldmusicentry; }
-        }
+        public OldMusicEntry OldMusicEntry { get; }
 
         private SampleLine[] FindLinkedVB()
         {
             List<SampleLine> samples = new List<SampleLine>();
-            WavebankEntry vb0entry = FindEID<WavebankEntry>(oldmusicentry.VB0EID);
-            WavebankEntry vb1entry = FindEID<WavebankEntry>(oldmusicentry.VB1EID);
-            WavebankEntry vb2entry = FindEID<WavebankEntry>(oldmusicentry.VB2EID);
-            WavebankEntry vb3entry = FindEID<WavebankEntry>(oldmusicentry.VB3EID);
+            WavebankEntry vb0entry = FindEID<WavebankEntry>(OldMusicEntry.VB0EID);
+            WavebankEntry vb1entry = FindEID<WavebankEntry>(OldMusicEntry.VB1EID);
+            WavebankEntry vb2entry = FindEID<WavebankEntry>(OldMusicEntry.VB2EID);
+            WavebankEntry vb3entry = FindEID<WavebankEntry>(OldMusicEntry.VB3EID);
             if (vb0entry != null)
                 samples.AddRange(vb0entry.Samples.SampleLines);
             if (vb1entry != null)
@@ -60,7 +55,7 @@ namespace CrashEdit
         private VAB FindLinkedVAB()
         {
             SampleLine[] vb = FindLinkedVB();
-            return VAB.Join(oldmusicentry.VH,vb);
+            return VAB.Join(OldMusicEntry.VH,vb);
         }
 
         private void Menu_Import_SEQ()
@@ -69,14 +64,14 @@ namespace CrashEdit
             if (data != null)
             {
                 SEQ seq = SEQ.Load(data);
-                oldmusicentry.SEP.SEQs.Add(seq);
+                OldMusicEntry.SEP.SEQs.Add(seq);
                 AddNode(new OldSEQController(this,seq));
             }
         }
 
         private void Menu_Export_SEP()
         {
-            byte[] data = oldmusicentry.SEP.Save();
+            byte[] data = OldMusicEntry.SEP.Save();
             FileUtil.SaveFile(data,FileFilters.SEP,FileFilters.Any);
         }
 
