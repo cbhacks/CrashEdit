@@ -62,6 +62,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\Model\T2EntryController.cs" />
     <Compile Include="DRNSF.cs" />
     <Compile Include="ISO2PSX.cs" />
     <Compile Include="Controllers\Animation\CutsceneFrameController.cs" />
@@ -76,7 +77,6 @@
     <Compile Include="Controllers\Animation\OldAnimationEntryController.cs" />
     <Compile Include="Controllers\Animation\OldFrameController.cs" />
     <Compile Include="Controllers\Model\ModelEntryController.cs" />
-    <Compile Include="Controllers\Model\T2EntryController.cs" />
     <Compile Include="Controllers\Scenery\NewSceneryEntryController.cs" />
     <Compile Include="Controllers\Scenery\ProtoSceneryEntryController.cs" />
     <Compile Include="Controllers\SLST\OldSLSTDeltaController.cs" />
