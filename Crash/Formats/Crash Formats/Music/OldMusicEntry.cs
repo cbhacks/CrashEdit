@@ -16,17 +16,10 @@ namespace Crash
             VB3EID = vb3eid;
         }
 
-        public override int Type
-        {
-            get { return 13; }
-        }
-
+        public override int Type => 13;
         public int VB0EID { get; }
-
         public int VB1EID { get; }
-
         public int VB2EID { get; }
-
         public int VB3EID { get; }
 
         public VH VH

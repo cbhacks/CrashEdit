@@ -18,29 +18,16 @@ namespace Crash
             VH = vh;
         }
 
-        public override int Type
-        {
-            get { return 13; }
-        }
-
+        public override int Type => 13;
         public int VHEID { get; }
-
         public int VB0EID { get; }
-
         public int VB1EID { get; }
-
         public int VB2EID { get; }
-
         public int VB3EID { get; }
-
         public int VB4EID { get; }
-
         public int VB5EID { get; }
-
         public int VB6EID { get; }
-
         public VH VH { get; set; }
-
         public SEP SEP { get; }
 
         public override UnprocessedEntry Unprocess()
