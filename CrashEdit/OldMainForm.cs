@@ -133,7 +133,7 @@ namespace CrashEdit
             tbbExtra.DropDown.Items.Add(tbxMakeBINUSA);
             tbbExtra.DropDown.Items.Add(tbxMakeBINEUR);
             tbbExtra.DropDown.Items.Add(tbxMakeBINJAP);
-            tbbExtra.DropDown.Items.Add(new ToolStripSeparator());
+            tbbExtra.DropDown.Items.Add(new ToolStripSeparator()); // lol. FIXME
             tbbExtra.DropDown.Items.Add(tbxConvertVHVB);
             tbbExtra.DropDown.Items.Add(tbxConvertVAB);
 
