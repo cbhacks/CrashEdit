@@ -58,303 +58,114 @@ namespace Crash
             return new OldCamera(slsteid,garbage,neighborcount,relative1,parentzone1,pathitem1,relativeflag1,relative2,parentzone2,pathitem2,relativeflag2,relative3,parentzone3,pathitem3,relativeflag3,relative4,parentzone4,pathitem4,relativeflag4,entrypoint,exitpoint,pointcount,mode,avgdist,zoom,unk1,unk2,unk3,xdir,ydir,zdir,position);
         }
 
-        private int slsteid;
-        private int garbage;
-        private int? neighborcount;
-        private byte? relative1;
-        private byte? parentzone1;
-        private byte? pathitem1;
-        private byte? relativeflag1;
-        private byte? relative2;
-        private byte? parentzone2;
-        private byte? pathitem2;
-        private byte? relativeflag2;
-        private byte? relative3;
-        private byte? parentzone3;
-        private byte? pathitem3;
-        private byte? relativeflag3;
-        private byte? relative4;
-        private byte? parentzone4;
-        private byte? pathitem4;
-        private byte? relativeflag4;
-        private byte? entrypoint;
-        private byte? exitpoint;
-        private short pointcount;
-        private short? mode;
-        private short? avgdist;
-        private short? zoom;
-        private short unk1;
-        private short unk2;
-        private short unk3;
-        private short? xdir;
-        private short? ydir;
-        private short? zdir;
         private List<OldCameraPosition> position;
 
-        public OldCamera(int slsteid,int garbage,int? neighborcount,byte? relative1,byte? parentzone1,byte? pathitem1,byte? relativeflag1,byte? relative2,byte? parentzone2,byte? pathitem2,byte? relativeflag2,byte? relative3,byte? parentzone3,byte? pathitem3,byte? relativeflag3,byte? relative4,byte? parentzone4,byte? pathitem4,byte? relativeflag4,byte? entrypoint,byte? exitpoint,short pointcount,short? mode,short avgdist,short? zoom,short unk1,short unk2,short unk3,short? xdir,short? ydir,short? zdir,IEnumerable<OldCameraPosition> position)
+        public OldCamera(int slsteid,int garbage,int neighborcount,byte relative1,byte parentzone1,byte pathitem1,byte relativeflag1,byte relative2,byte parentzone2,byte pathitem2,byte relativeflag2,byte relative3,byte parentzone3,byte pathitem3,byte relativeflag3,byte relative4,byte parentzone4,byte pathitem4,byte relativeflag4,byte entrypoint,byte exitpoint,short pointcount,short mode,short avgdist,short zoom,short unk1,short unk2,short unk3,short xdir,short ydir,short zdir,IEnumerable<OldCameraPosition> position)
         {
             if (position == null)
                 throw new ArgumentNullException("position");
-            this.slsteid = slsteid;
-            this.garbage = garbage;
-            this.neighborcount = neighborcount;
-            this.relative1 = relative1;
-            this.parentzone1 = parentzone1;
-            this.pathitem1 = pathitem1;
-            this.relativeflag1 = relativeflag1;
-            this.relative2 = relative2;
-            this.parentzone2 = parentzone2;
-            this.pathitem2 = pathitem2;
-            this.relativeflag2 = relativeflag2;
-            this.relative3 = relative3;
-            this.parentzone3 = parentzone3;
-            this.pathitem3 = pathitem3;
-            this.relativeflag3 = relativeflag3;
-            this.relative4 = relative4;
-            this.parentzone4 = parentzone4;
-            this.pathitem4 = pathitem4;
-            this.relativeflag4 = relativeflag4;
-            this.entrypoint = entrypoint;
-            this.exitpoint = exitpoint;
-            this.pointcount = pointcount;
-            this.mode = mode;
-            this.avgdist = avgdist;
-            this.zoom = zoom;
-            this.unk1 = unk1;
-            this.unk2 = unk2;
-            this.unk3 = unk3;
-            this.xdir = xdir;
-            this.ydir = ydir;
-            this.zdir = zdir;
+            SLSTEID = slsteid;
+            Garbage = garbage;
+            NeighborCount = neighborcount;
+            Relative1 = relative1;
+            ParentZone1 = parentzone1;
+            PathItem1 = pathitem1;
+            RelativeFlag1 = relativeflag1;
+            Relative2 = relative2;
+            ParentZone2 = parentzone2;
+            PathItem2 = pathitem2;
+            RelativeFlag2 = relativeflag2;
+            Relative3 = relative3;
+            ParentZone3 = parentzone3;
+            PathItem3 = pathitem3;
+            RelativeFlag3 = relativeflag3;
+            Relative4 = relative4;
+            ParentZone4 = parentzone4;
+            PathItem4 = pathitem4;
+            RelativeFlag4 = relativeflag4;
+            EntryPoint = entrypoint;
+            ExitPoint = exitpoint;
+            PointCount = pointcount;
+            Mode = mode;
+            AvgDist = avgdist;
+            Zoom = zoom;
+            Unk1 = unk1;
+            Unk2 = unk2;
+            Unk3 = unk3;
+            XDir = xdir;
+            YDir = ydir;
+            ZDir = zdir;
             this.position = new List<OldCameraPosition>(position);
         }
 
-        public short Unk1
-        {
-            get { return unk1; }
-            set { unk1 = value; }
-        }
-
-        public short Unk2
-        {
-            get { return unk2; }
-            set { unk2 = value; }
-        }
-
-        public short Unk3
-        {
-            get { return unk3; }
-            set { unk3 = value; }
-        }
-
-        public int SLSTEID
-        {
-            get { return slsteid; }
-            set { slsteid = value; }
-        }
-
-        public int Garbage
-        {
-            get { return garbage; }
-            set { garbage = value; }
-        }
-
-        public int? NeighborCount
-        {
-            get { return neighborcount; }
-            set { neighborcount = value; }
-        }
-
-        public byte? Relative1
-        {
-            get { return relative1; }
-            set { relative1 = value; }
-        }
-
-        public byte? ParentZone1
-        {
-            get { return parentzone1; }
-            set { parentzone1 = value; }
-        }
-
-        public byte? PathItem1
-        {
-            get { return pathitem1; }
-            set { pathitem1 = value; }
-        }
-
-        public byte? RelativeFlag1
-        {
-            get { return relativeflag1; }
-            set { relativeflag1 = value; }
-        }
-
-        public byte? Relative2
-        {
-            get { return relative2; }
-            set { relative2 = value; }
-        }
-
-        public byte? ParentZone2
-        {
-            get { return parentzone2; }
-            set { parentzone2 = value; }
-        }
-
-        public byte? PathItem2
-        {
-            get { return pathitem2; }
-            set { pathitem2 = value; }
-        }
-
-        public byte? RelativeFlag2
-        {
-            get { return relativeflag2; }
-            set { relativeflag2 = value; }
-        }
-
-        public byte? Relative3
-        {
-            get { return relative3; }
-            set { relative3 = value; }
-        }
-
-        public byte? ParentZone3
-        {
-            get { return parentzone3; }
-            set { parentzone3 = value; }
-        }
-
-        public byte? PathItem3
-        {
-            get { return pathitem3; }
-            set { pathitem3 = value; }
-        }
-
-        public byte? RelativeFlag3
-        {
-            get { return relativeflag3; }
-            set { relativeflag3 = value; }
-        }
-
-        public byte? Relative4
-        {
-            get { return relative4; }
-            set { relative4 = value; }
-        }
-
-        public byte? ParentZone4
-        {
-            get { return parentzone4; }
-            set { parentzone4 = value; }
-        }
-
-        public byte? PathItem4
-        {
-            get { return pathitem4; }
-            set { pathitem4 = value; }
-        }
-
-        public byte? RelativeFlag4
-        {
-            get { return relativeflag4; }
-            set { relativeflag4 = value; }
-        }
-
-        public byte? EntryPoint
-        {
-            get { return entrypoint; }
-            set { entrypoint = value; }
-        }
-
-        public byte? ExitPoint
-        {
-            get { return exitpoint; }
-            set { exitpoint = value; }
-        }
-
-        public short PointCount
-        {
-            get { return pointcount; }
-            set { pointcount = value; }
-        }
-
-        public short? Mode
-        {
-            get { return mode; }
-            set { mode = value; }
-        }
-
-        public short? AvgDist
-        {
-            get { return avgdist; }
-            set { avgdist = value; }
-        }
-
-        public short? Zoom
-        {
-            get { return zoom; }
-            set { zoom = value; }
-        }
-
-        public short? XDir
-        {
-            get { return xdir; }
-            set { xdir = value; }
-        }
-
-        public short? YDir
-        {
-            get { return ydir; }
-            set { ydir = value; }
-        }
-
-        public short? ZDir
-        {
-            get { return zdir; }
-            set { zdir = value; }
-        }
-
-        public IList<OldCameraPosition> Positions
-        {
-            get { return position; }
-        }
+        public short Unk1 { get; set; }
+        public short Unk2 { get; set; }
+        public short Unk3 { get; set; }
+        public int SLSTEID { get; set; }
+        public int Garbage { get; set; }
+        public int NeighborCount { get; set; }
+        public byte Relative1 { get; set; }
+        public byte ParentZone1 { get; set; }
+        public byte PathItem1 { get; set; }
+        public byte RelativeFlag1 { get; set; }
+        public byte Relative2 { get; set; }
+        public byte ParentZone2 { get; set; }
+        public byte PathItem2 { get; set; }
+        public byte RelativeFlag2 { get; set; }
+        public byte Relative3 { get; set; }
+        public byte ParentZone3 { get; set; }
+        public byte PathItem3 { get; set; }
+        public byte RelativeFlag3 { get; set; }
+        public byte Relative4 { get; set; }
+        public byte ParentZone4 { get; set; }
+        public byte PathItem4 { get; set; }
+        public byte RelativeFlag4 { get; set; }
+        public byte EntryPoint { get; set; }
+        public byte ExitPoint { get; set; }
+        public short PointCount { get; set; }
+        public short Mode { get; set; }
+        public short AvgDist { get; set; }
+        public short Zoom { get; set; }
+        public short XDir { get; set; }
+        public short YDir { get; set; }
+        public short ZDir { get; set; }
+        public IList<OldCameraPosition> Positions => position;
 
         public byte[] Save()
         {
-            byte[] result = new byte [50 + (12 * pointcount)];
-            BitConv.ToInt32(result,0,slsteid);
-            BitConv.ToInt32(result,4,garbage);
-            BitConv.ToInt32(result,8,NeighborCount.Value);
-            result[12] = Relative1.Value;
-            result[13] = ParentZone1.Value;
-            result[14] = PathItem1.Value;
-            result[15] = RelativeFlag1.Value;
-            result[16] = Relative2.Value;
-            result[17] = ParentZone2.Value;
-            result[18] = PathItem2.Value;
-            result[19] = RelativeFlag2.Value;
-            result[20] = Relative3.Value;
-            result[21] = ParentZone3.Value;
-            result[22] = PathItem3.Value;
-            result[23] = RelativeFlag3.Value;
-            result[24] = Relative4.Value;
-            result[25] = ParentZone4.Value;
-            result[26] = PathItem4.Value;
-            result[27] = RelativeFlag4.Value;
-            result[28] = EntryPoint.Value;
-            result[29] = ExitPoint.Value;
-            BitConv.ToInt16(result,30,pointcount);
-            BitConv.ToInt16(result,32,Mode.Value);
-            BitConv.ToInt16(result,34,AvgDist.Value);
-            BitConv.ToInt16(result,36,Zoom.Value);
-            BitConv.ToInt16(result,38,unk1);
-            BitConv.ToInt16(result,40,unk2);
-            BitConv.ToInt16(result,42,unk3);
-            BitConv.ToInt16(result,44,XDir.Value);
-            BitConv.ToInt16(result,46,YDir.Value);
-            BitConv.ToInt16(result,48,ZDir.Value);
-            for (int i = 0; i < pointcount; i++)
+            byte[] result = new byte [50 + (12 * PointCount)];
+            BitConv.ToInt32(result,0,SLSTEID);
+            BitConv.ToInt32(result,4,Garbage);
+            BitConv.ToInt32(result,8,NeighborCount);
+            result[12] = Relative1;
+            result[13] = ParentZone1;
+            result[14] = PathItem1;
+            result[15] = RelativeFlag1;
+            result[16] = Relative2;
+            result[17] = ParentZone2;
+            result[18] = PathItem2;
+            result[19] = RelativeFlag2;
+            result[20] = Relative3;
+            result[21] = ParentZone3;
+            result[22] = PathItem3;
+            result[23] = RelativeFlag3;
+            result[24] = Relative4;
+            result[25] = ParentZone4;
+            result[26] = PathItem4;
+            result[27] = RelativeFlag4;
+            result[28] = EntryPoint;
+            result[29] = ExitPoint;
+            BitConv.ToInt16(result,30,PointCount);
+            BitConv.ToInt16(result,32,Mode);
+            BitConv.ToInt16(result,34,AvgDist);
+            BitConv.ToInt16(result,36,Zoom);
+            BitConv.ToInt16(result,38,Unk1);
+            BitConv.ToInt16(result,40,Unk2);
+            BitConv.ToInt16(result,42,Unk3);
+            BitConv.ToInt16(result,44,XDir);
+            BitConv.ToInt16(result,46,YDir);
+            BitConv.ToInt16(result,48,ZDir);
+            for (int i = 0; i < PointCount; i++)
             {
                 BitConv.ToInt16(result,50 + i * 12,position[i].X);
                 BitConv.ToInt16(result,52 + i * 12,position[i].Y);
