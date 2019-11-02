@@ -4,29 +4,19 @@ namespace CrashEdit
 {
     public abstract class ChunkController : Controller
     {
-        private NSFController nsfcontroller;
-        private Chunk chunk;
-
         public ChunkController(NSFController nsfcontroller,Chunk chunk)
         {
-            this.nsfcontroller = nsfcontroller;
-            this.chunk = chunk;
+            NSFController = nsfcontroller;
+            Chunk = chunk;
             AddMenu("Delete Chunk",Menu_Delete_Chunk);
         }
 
-        public NSFController NSFController
-        {
-            get { return nsfcontroller; }
-        }
-        
-        public Chunk Chunk
-        {
-            get { return chunk; }
-        }
+        public NSFController NSFController { get; }
+        public Chunk Chunk { get; }
 
         private void Menu_Delete_Chunk()
         {
-            nsfcontroller.NSF.Chunks.Remove(chunk);
+            NSFController.NSF.Chunks.Remove(Chunk);
             Dispose();
         }
     }

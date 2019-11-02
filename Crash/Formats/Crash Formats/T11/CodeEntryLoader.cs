@@ -16,13 +16,13 @@ namespace Crash
                 throw new ArgumentNullException("items");
             if (items.Length != 3 && items.Length != 5 && items.Length != 6)
             {
-                ErrorManager.SignalError("T11Entry: Wrong number of items");
+                ErrorManager.SignalError("CodeEntry: Wrong number of items");
             }
             if (items[0].Length != 24)
             {
-                ErrorManager.SignalError("T11Entry: First item length is wrong");
+                ErrorManager.SignalError("CodeEntry: First item length is wrong");
             }
-            return new T11Entry(items,eid,size);
+            return new CodeEntry(items,eid,size);
         }
     }
 }

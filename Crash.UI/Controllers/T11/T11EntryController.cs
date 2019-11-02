@@ -2,14 +2,14 @@ namespace Crash.UI
 {
     public sealed class T11EntryController : MysteryMultiItemEntryController
     {
-        private T11Entry entry;
+        private CodeEntry entry;
 
-        public T11EntryController(EntryChunkController up,T11Entry entry) : base(up,entry)
+        public T11EntryController(EntryChunkController up,CodeEntry entry) : base(up,entry)
         {
             this.entry = entry;
         }
 
-        public new T11Entry Entry
+        public new CodeEntry Entry
         {
             get { return entry; }
         }

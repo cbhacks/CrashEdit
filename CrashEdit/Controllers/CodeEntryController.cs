@@ -2,26 +2,21 @@ using Crash;
 
 namespace CrashEdit
 {
-    public sealed class T11EntryController : MysteryMultiItemEntryController
+    public sealed class CodeEntryController : MysteryMultiItemEntryController
     {
-        private T11Entry t11entry;
-
-        public T11EntryController(EntryChunkController entrychunkcontroller,T11Entry t11entry) : base(entrychunkcontroller,t11entry)
+        public CodeEntryController(EntryChunkController entrychunkcontroller,CodeEntry codeentry) : base(entrychunkcontroller,codeentry)
         {
-            this.t11entry = t11entry;
+            CodeEntry = codeentry;
             InvalidateNode();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("T11 ({0})",t11entry.EName);
+            Node.Text = string.Format("GOOL ({0})",CodeEntry.EName);
             Node.ImageKey = "thing";
             Node.SelectedImageKey = "thing";
         }
 
-        public T11Entry T11Entry
-        {
-            get { return t11entry; }
-        }
+        public CodeEntry CodeEntry { get; }
     }
 }

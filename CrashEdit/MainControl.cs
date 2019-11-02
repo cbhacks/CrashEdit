@@ -54,7 +54,7 @@ namespace CrashEdit
             uxImageList.Images.Add("T6EntryController",Properties.Resources.objects_012_gray);
             uxImageList.Images.Add("OldZoneEntryController",Properties.Resources.objects_012_blue);
             uxImageList.Images.Add("ZoneEntryController",Properties.Resources.objects_012_blue);
-            uxImageList.Images.Add("T11EntryController",Properties.Resources.objects_012_gray);
+            uxImageList.Images.Add("CodeEntryController",Properties.Resources.objects_012_gray);
             uxImageList.Images.Add("SoundEntryController",Properties.Resources.objects_053_blue);
             uxImageList.Images.Add("OldMusicEntryController",Properties.Resources.objects_006_yellow);
             uxImageList.Images.Add("MusicEntryController",Properties.Resources.objects_006);

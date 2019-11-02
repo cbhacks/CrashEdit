@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 namespace Crash
 {
-    public sealed class T11Entry : MysteryMultiItemEntry
+    public sealed class CodeEntry : MysteryMultiItemEntry
     {
-        public T11Entry(IEnumerable<byte[]> items,int eid,int size) : base(items,eid,size)
+        public CodeEntry(IEnumerable<byte[]> items,int eid,int size) : base(items,eid,size)
         {
         }
 

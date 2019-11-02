@@ -61,9 +61,9 @@ namespace Crash.UI
             {
                 Subcontrollers.Insert(e.Index,new ZoneEntryController(this,(ZoneEntry)e.Item));
             }
-            else if (e.Item is T11Entry)
+            else if (e.Item is CodeEntry)
             {
-                Subcontrollers.Insert(e.Index,new T11EntryController(this,(T11Entry)e.Item));
+                Subcontrollers.Insert(e.Index,new T11EntryController(this,(CodeEntry)e.Item));
             }
             else if (e.Item is SoundEntry)
             {
