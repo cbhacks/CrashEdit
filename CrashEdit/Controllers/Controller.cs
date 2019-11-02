@@ -10,11 +10,13 @@ namespace CrashEdit
 
         public Controller()
         {
-            Node = new TreeNode();
-            Node.Tag = this;
             ContextMenu = new ContextMenu();
+            Node = new TreeNode
+            {
+                Tag = this,
+                ContextMenu = ContextMenu
+            };
             editor = null;
-            Node.ContextMenu = ContextMenu;
         }
 
         public void AddNode(Controller controller)

@@ -179,243 +179,69 @@ namespace CrashEdit
             }
         }
 
-        public static Icon NSDIcon
-        {
-            get { return nsdicon; }
-        }
-
-        public static Icon NSFIcon
-        {
-            get { return nsficon; }
-        }
-
-        public static Image ArrowImage
-        {
-            get { return arrowimage; }
-        }
-
-        public static Image BinocularsImage
-        {
-            get { return binocularsimage; }
-        }
-
-        public static Image BinocularsNextImage
-        {
-            get { return binocularsnextimage; }
-        }
-
-        public static Image FileImage
-        {
-            get { return fileimage; }
-        }
-
-        public static Image FolderImage
-        {
-            get { return folderimage;}
-        }
-
-        public static Image ImageImage
-        {
-            get { return imageimage; }
-        }
-
-        public static Image MusicImage
-        {
-            get { return musicimage; }
-        }
-
-        public static Image OpenImage
-        {
-            get { return openimage; }
-        }
-
-        public static Image SaveImage
-        {
-            get { return saveimage; }
-        }
-
-        public static Image SpeakerImage
-        {
-            get { return speakerimage; }
-        }
-
-        public static Image ThingImage
-        {
-            get { return thingimage; }
-        }
-
-        public static Image BlueJournalImage
-        {
-            get { return bluejournalimage; }
-        }
-
-        public static Image WhiteJournalImage
-        {
-            get { return whitejournalimage; }
-        }
-
-        public static Image YellowJournalImage
-        {
-            get { return yellowjournalimage; }
-        }
-
-        public static Bitmap ActivatorBoxTexture
-        {
-            get { return activatorboxtexture; }
-        }
-
-        public static Bitmap AppleTexture
-        {
-            get { return appletexture; }
-        }
-
-        public static Bitmap AppleBoxTexture
-        {
-            get { return appleboxtexture; }
-        }
-
-        public static Bitmap ArrowBoxTexture
-        {
-            get { return arrowboxtexture; }
-        }
-
-        public static Bitmap BodyslamBoxTexture
-        {
-            get { return bodyslamboxtexture; }
-        }
-
-        public static Bitmap BoxTexture
-        {
-            get { return boxtexture; }
-        }
-
-        public static Bitmap CheckpointTexture
-        {
-            get { return checkpointtexture; }
-        }
-
-        public static Bitmap DetonatorBoxTexture
-        {
-            get { return detonatorboxtexture; }
-        }
-
-        public static Bitmap DetonatorBoxTopTexture
-        {
-            get { return detonatorboxtoptexture; }
-        }
-
-        public static Bitmap IronArrowBoxTexture
-        {
-            get { return ironarrowboxtexture; }
-        }
-
-        public static Bitmap IronBoxTexture
-        {
-            get { return ironboxtexture; }
-        }
-
-        public static Bitmap LifeTexture
-        {
-            get { return lifetexture; }
-        }
-
-        public static Bitmap LifeBoxTexture
-        {
-            get { return lifeboxtexture; }
-        }
-
-        public static Bitmap MaskTexture
-        {
-            get { return masktexture; }
-        }
-
-        public static Bitmap MaskBoxTexture
-        {
-            get { return maskboxtexture; }
-        }
-
-        public static Bitmap NitroTexture
-        {
-            get { return nitrotexture; }
-        }
-
-        public static Bitmap NitroTopTexture
-        {
-            get { return nitrotoptexture; }
-        }
-
-        public static Bitmap PointTexture
-        {
-            get { return pointtexture; }
-        }
-
-        public static Bitmap QuestionMarkBoxTexture
-        {
-            get { return questionmarkboxtexture; }
-        }
-
-        public static Bitmap TNTTexture
-        {
-            get { return tnttexture; }
-        }
-
-        public static Bitmap TNTTopTexture
-        {
-            get { return tnttoptexture; }
-        }
-
-        public static Bitmap UnknownBoxTexture
-        {
-            get { return unknownboxtexture; }
-        }
-
-        public static Bitmap UnknownBoxTopTexture
-        {
-            get { return unknownboxtoptexture; }
-        }
-
-        public static Bitmap UnknownPickupTexture
-        {
-            get { return unknownpickuptexture; }
-        }
+        public static Icon NSDIcon => nsdicon;
+        public static Icon NSFIcon => nsficon;
+        public static Image ArrowImage => arrowimage;
+        public static Image BinocularsImage => binocularsimage;
+        public static Image BinocularsNextImage => binocularsnextimage;
+        public static Image FileImage => fileimage;
+        public static Image FolderImage => folderimage;
+        public static Image ImageImage => imageimage;
+        public static Image MusicImage => musicimage;
+        public static Image OpenImage => openimage;
+        public static Image SaveImage => saveimage;
+        public static Image SpeakerImage => speakerimage;
+        public static Image ThingImage => thingimage;
+        public static Image BlueJournalImage => bluejournalimage;
+        public static Image WhiteJournalImage => whitejournalimage;
+        public static Image YellowJournalImage => yellowjournalimage;
+        public static Bitmap ActivatorBoxTexture => activatorboxtexture;
+        public static Bitmap AppleTexture => appletexture;
+        public static Bitmap AppleBoxTexture => appleboxtexture;
+        public static Bitmap ArrowBoxTexture => arrowboxtexture;
+        public static Bitmap BodyslamBoxTexture => bodyslamboxtexture;
+        public static Bitmap BoxTexture => boxtexture;
+        public static Bitmap CheckpointTexture => checkpointtexture;
+        public static Bitmap DetonatorBoxTexture => detonatorboxtexture;
+        public static Bitmap DetonatorBoxTopTexture => detonatorboxtoptexture;
+        public static Bitmap IronArrowBoxTexture => ironarrowboxtexture;
+        public static Bitmap IronBoxTexture => ironboxtexture;
+        public static Bitmap LifeTexture => lifetexture;
+        public static Bitmap LifeBoxTexture => lifeboxtexture;
+        public static Bitmap MaskTexture => masktexture;
+        public static Bitmap MaskBoxTexture => maskboxtexture;
+        public static Bitmap NitroTexture => nitrotexture;
+        public static Bitmap NitroTopTexture => nitrotoptexture;
+        public static Bitmap PointTexture => pointtexture;
+        public static Bitmap QuestionMarkBoxTexture => questionmarkboxtexture;
+        public static Bitmap TNTTexture => tnttexture;
+        public static Bitmap TNTTopTexture => tnttoptexture;
+        public static Bitmap UnknownBoxTexture => unknownboxtexture;
+        public static Bitmap UnknownBoxTopTexture => unknownboxtoptexture;
+        public static Bitmap UnknownPickupTexture => unknownpickuptexture;
 
         [AttributeUsage(AttributeTargets.Field)]
         private class ResourceAttribute : Attribute
         {
-            private string name;
-
             public ResourceAttribute(string name)
             {
-                this.name = name;
+                Name = name;
             }
 
-            public string Name
-            {
-                get { return name; }
-            }
+            public string Name { get; }
         }
 
         [AttributeUsage(AttributeTargets.Field)]
         private class ExternalTextureAttribute : Attribute
         {
-            private int x;
-            private int y;
-
             public ExternalTextureAttribute(int x,int y)
             {
-                this.x = x;
-                this.y = y;
+                X = x;
+                Y = y;
             }
 
-            public int X
-            {
-                get { return x; }
-            }
-
-            public int Y
-            {
-                get { return y; }
-            }
+            public int X { get; }
+            public int Y { get; }
         }
     }
 }
