@@ -209,30 +209,25 @@ namespace Crash
             return nsf;
         }
 
-        private EvList<Chunk> chunks;
-
         public NSF(IEnumerable<Chunk> chunks)
         {
             if (chunks == null)
                 throw new ArgumentNullException("chunks");
-            this.chunks = new EvList<Chunk>(chunks);
+            Chunks = new EvList<Chunk>(chunks);
         }
 
-        public EvList<Chunk> Chunks
-        {
-            get { return chunks; }
-        }
+        public EvList<Chunk> Chunks { get; }
 
         public void ProcessAll(GameVersion gameversion)
         {
-            for (int i = 0;i < chunks.Count;i++)
+            for (int i = 0;i < Chunks.Count;i++)
             {
-                if (chunks[i] is UnprocessedChunk)
+                if (Chunks[i] is UnprocessedChunk)
                 {
                     ErrorManager.EnterSkipRegion();
                     try
                     {
-                        chunks[i] = ((UnprocessedChunk)chunks[i]).Process(i * 2 + 1);
+                        Chunks[i] = ((UnprocessedChunk)Chunks[i]).Process(i * 2 + 1);
                     }
                     catch (LoadSkippedException)
                     {
@@ -242,16 +237,16 @@ namespace Crash
                         ErrorManager.ExitSkipRegion();
                     }
                 }
-                if (chunks[i] is EntryChunk)
+                if (Chunks[i] is EntryChunk)
                 {
-                    ((EntryChunk)chunks[i]).ProcessAll(gameversion);
+                    ((EntryChunk)Chunks[i]).ProcessAll(gameversion);
                 }
             }
         }
 
         public T FindEID<T>(int eid) where T : class,IEntry
         {
-            foreach (Chunk chunk in chunks)
+            foreach (Chunk chunk in Chunks)
             {
                 if (chunk is IEntry)
                 {
@@ -276,10 +271,10 @@ namespace Crash
 
         public byte[] Save()
         {
-            byte[] data = new byte [chunks.Count * Chunk.Length];
-            for (int i = 0;i < chunks.Count;i++)
+            byte[] data = new byte [Chunks.Count * Chunk.Length];
+            for (int i = 0;i < Chunks.Count;i++)
             {
-                chunks[i].Save(i * 2 + 1).CopyTo(data,i * Chunk.Length);
+                Chunks[i].Save(i * 2 + 1).CopyTo(data,i * Chunk.Length);
             }
             return data;
         }
