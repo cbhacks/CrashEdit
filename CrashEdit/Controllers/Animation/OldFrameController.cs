@@ -5,14 +5,10 @@ namespace CrashEdit
 {
     public sealed class OldFrameController : Controller
     {
-        private OldAnimationEntryController oldanimationentrycontroller;
-        private OldFrame oldframe;
-        private TabControl tbcTabs;
-
         public OldFrameController(OldAnimationEntryController oldanimationentrycontroller,OldFrame oldframe)
         {
-            this.oldanimationentrycontroller = oldanimationentrycontroller;
-            this.oldframe = oldframe;
+            OldAnimationEntryController = oldanimationentrycontroller;
+            OldFrame = oldframe;
             InvalidateNode();
         }
 
@@ -26,14 +22,12 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            tbcTabs = new TabControl();
-            tbcTabs.Dock = DockStyle.Fill;
-            OldModelEntry modelentry = OldAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(oldframe.ModelEID);
+            TabControl tbcTabs = new TabControl() { Dock = DockStyle.Fill };
+            OldModelEntry modelentry = OldAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(OldFrame.ModelEID);
 
             OldFrameBox framebox = new OldFrameBox(this);
             framebox.Dock = DockStyle.Fill;
-            OldAnimationEntryViewer viewerbox = new OldAnimationEntryViewer(oldframe,modelentry);
-            viewerbox.Dock = DockStyle.Fill;
+            OldAnimationEntryViewer viewerbox = new OldAnimationEntryViewer(OldFrame, modelentry) { Dock = DockStyle.Fill };
 
             TabPage edittab = new TabPage("Editor");
             edittab.Controls.Add(framebox);
@@ -47,19 +41,12 @@ namespace CrashEdit
             return tbcTabs;
         }
 
-        public OldAnimationEntryController OldAnimationEntryController
-        {
-            get { return oldanimationentrycontroller; }
-        }
-
-        public OldFrame OldFrame
-        {
-            get { return oldframe; }
-        }
+        public OldAnimationEntryController OldAnimationEntryController { get; }
+        public OldFrame OldFrame { get; }
 
         private void Menu_Export_OBJ()
         {
-            OldModelEntry modelentry = OldAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(oldframe.ModelEID);
+            OldModelEntry modelentry = OldAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(OldFrame.ModelEID);
             if (modelentry == null)
             {
                 throw new GUIException("The linked model entry could not be found.");
@@ -68,7 +55,7 @@ namespace CrashEdit
             {
                 return;
             }
-            FileUtil.SaveFile(oldframe.ToOBJ(modelentry),FileFilters.OBJ,FileFilters.Any);
+            FileUtil.SaveFile(OldFrame.ToOBJ(modelentry),FileFilters.OBJ,FileFilters.Any);
         }
     }
 }

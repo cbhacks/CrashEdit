@@ -1,4 +1,3 @@
-
 using Crash;
 using System.Windows.Forms;
 
@@ -6,13 +5,10 @@ namespace CrashEdit
 {
     public sealed class ProtoFrameController : Controller
     {
-        private ProtoAnimationEntryController protoanimationentrycontroller;
-        private ProtoFrame protoframe;
-
         public ProtoFrameController(ProtoAnimationEntryController protoanimationentrycontroller,ProtoFrame protoframe)
         {
-            this.protoanimationentrycontroller = protoanimationentrycontroller;
-            this.protoframe = protoframe;
+            ProtoAnimationEntryController = protoanimationentrycontroller;
+            ProtoFrame = protoframe;
             InvalidateNode();
         }
 
@@ -26,24 +22,17 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            OldModelEntry modelentry = ProtoAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(protoframe.ModelEID);
-            return new ProtoAnimationEntryViewer(protoframe,modelentry);
+            OldModelEntry modelentry = ProtoAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(ProtoFrame.ModelEID);
+            return new ProtoAnimationEntryViewer(ProtoFrame,modelentry);
             //return new ProtoFrameBox(this);
         }
 
-        public ProtoAnimationEntryController ProtoAnimationEntryController
-        {
-            get { return protoanimationentrycontroller; }
-        }
-
-        public ProtoFrame ProtoFrame
-        {
-            get { return protoframe; }
-        }
+        public ProtoAnimationEntryController ProtoAnimationEntryController { get; }
+        public ProtoFrame ProtoFrame { get; }
 
         private void Menu_Export_OBJ()
         {
-            OldModelEntry modelentry = ProtoAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(protoframe.ModelEID);
+            OldModelEntry modelentry = ProtoAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(ProtoFrame.ModelEID);
             if (modelentry == null)
             {
                 throw new GUIException("The linked model entry could not be found.");
@@ -52,7 +41,7 @@ namespace CrashEdit
             {
                 return;
             }
-            FileUtil.SaveFile(protoframe.ToOBJ(modelentry),FileFilters.OBJ,FileFilters.Any);
+            FileUtil.SaveFile(ProtoFrame.ToOBJ(modelentry),FileFilters.OBJ,FileFilters.Any);
         }
     }
 }
