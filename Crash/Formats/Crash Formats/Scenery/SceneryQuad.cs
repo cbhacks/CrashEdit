@@ -21,13 +21,6 @@ namespace Crash
             return new SceneryQuad(vertexa,vertexb,vertexc,vertexd,unknown2,unknown3);
         }
 
-        private int vertexa;
-        private int vertexb;
-        private int vertexc;
-        private int vertexd;
-        private byte unknown2;
-        private byte unknown3;
-
         public SceneryQuad(int vertexa,int vertexb,int vertexc,int vertexd,byte unknown2,byte unknown3)
         {
             if (vertexa < 0 || vertexa > 0xFFF)
@@ -38,49 +31,26 @@ namespace Crash
                 throw new ArgumentOutOfRangeException("vertexc");
             if (vertexd < 0 || vertexd > 0xFFF)
                 throw new ArgumentOutOfRangeException("vertexd");
-            this.vertexa = vertexa;
-            this.vertexb = vertexb;
-            this.vertexc = vertexc;
-            this.vertexd = vertexd;
-            this.unknown2 = unknown2;
-            this.unknown3 = unknown3;
+            VertexA = vertexa;
+            VertexB = vertexb;
+            VertexC = vertexc;
+            VertexD = vertexd;
+            Unknown2 = unknown2;
+            Unknown3 = unknown3;
         }
 
-        public int VertexA
-        {
-            get { return vertexa; }
-        }
-
-        public int VertexB
-        {
-            get { return vertexb; }
-        }
-
-        public int VertexC
-        {
-            get { return vertexc; }
-        }
-
-        public int VertexD
-        {
-            get { return vertexd; }
-        }
-
-        public byte Unknown2
-        {
-            get { return unknown2; }
-        }
-
-        public byte Unknown3
-        {
-            get { return unknown3; }
-        }
+        public int VertexA { get; }
+        public int VertexB { get; }
+        public int VertexC { get; }
+        public int VertexD { get; }
+        public byte Unknown2 { get; }
+        public byte Unknown3 { get; }
 
         public byte[] Save()
         {
             byte[] data = new byte [8];
-            int worda = (vertexa << 8) | (vertexb << 20) | unknown2;
-            int wordb = (vertexd << 8) | (vertexc << 20) | unknown3;
+            int worda = (VertexA << 8) | (VertexB << 20) | Unknown2;
+            int wordb = (VertexD << 8) | (VertexC << 20) | Unknown3;
             BitConv.ToInt32(data,0,worda);
             BitConv.ToInt32(data,4,wordb);
             return data;
