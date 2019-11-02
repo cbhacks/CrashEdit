@@ -4,11 +4,9 @@ namespace CrashEdit
 {
     public sealed class SoundChunkController : EntryChunkController
     {
-        private SoundChunk soundchunk;
-
         public SoundChunkController(NSFController nsfcontroller,SoundChunk soundchunk) : base(nsfcontroller,soundchunk)
         {
-            this.soundchunk = soundchunk;
+            SoundChunk = soundchunk;
             InvalidateNode();
         }
 
@@ -19,9 +17,6 @@ namespace CrashEdit
             Node.SelectedImageKey = "bluej";
         }
 
-        public SoundChunk SoundChunk
-        {
-            get { return soundchunk; }
-        }
+        public SoundChunk SoundChunk { get; }
     }
 }
