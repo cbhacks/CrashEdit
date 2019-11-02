@@ -82,9 +82,13 @@ namespace Crash
                 }
             }
             Aligner.Align(ref offset,4);
-            if (offset != data.Length)
+            if (offset < data.Length)
             {
                 ErrorManager.SignalIgnorableError("EntityProperty: More data than expected");
+            }
+            else if (offset > data.Length)
+            {
+                ErrorManager.SignalIgnorableError("EntityProperty: Less data than expected (missing padding)");
             }
             return Load(rows);
         }

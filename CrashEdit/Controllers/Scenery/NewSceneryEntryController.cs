@@ -14,6 +14,7 @@ namespace CrashEdit
             AddMenu("Export as Wavefront OBJ",Menu_Export_OBJ);
             AddMenu("Export as Stanford PLY",Menu_Export_PLY);
             //AddMenu("Export as COLLADA",Menu_Export_COLLADA);
+            AddMenu("Fix coords imported from Crash 2", Menu_Fix_WGEOv2);
             InvalidateNode();
         }
 
@@ -60,5 +61,25 @@ namespace CrashEdit
             }
             FileUtil.SaveFile(sceneryentry.ToCOLLADA(), FileFilters.COLLADA, FileFilters.Any);
         }*/
+
+        private void Menu_Fix_WGEOv2()
+        {
+            for (int i = 0;i < sceneryentry.Vertices.Count;i++)
+            {
+                NewSceneryVertex vtx = sceneryentry.Vertices[i];
+                sceneryentry.Vertices[i] = new NewSceneryVertex(
+                    (vtx.X + 0x800) & 0xFFF,
+                    (vtx.Y + 0x800) & 0xFFF,
+                    (vtx.Z + 0x800) & 0xFFF,
+                    vtx.UnknownX,
+                    vtx.UnknownY,
+                    vtx.UnknownZ
+                );
+            }
+
+            sceneryentry.XOffset -= 0x8000;
+            sceneryentry.YOffset -= 0x8000;
+            sceneryentry.ZOffset -= 0x8000;
+        }
     }
 }

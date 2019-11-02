@@ -150,6 +150,7 @@ namespace Crash
         public int VBSize
         {
             get { return vbsize; }
+            set { vbsize = value; }
         }
 
         public byte Volume

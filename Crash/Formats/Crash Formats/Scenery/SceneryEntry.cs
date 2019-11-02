@@ -68,19 +68,19 @@ namespace Crash
         public int XOffset
         {
             get { return BitConv.FromInt32(info,0); }
-            set { XOffset = BitConv.FromInt32(info,0); ; }
+            set { BitConv.ToInt32(info,0,value); }
         }
 
         public int YOffset
         {
             get { return BitConv.FromInt32(info,4); }
-            set { YOffset = BitConv.FromInt32(info,4); ; }
+            set { BitConv.ToInt32(info,4,value); }
         }
 
         public int ZOffset
         {
             get { return BitConv.FromInt32(info,8); }
-            set { ZOffset = BitConv.FromInt32(info,8); ; }
+            set { BitConv.ToInt32(info,8,value); }
         }
 
         public override UnprocessedEntry Unprocess()

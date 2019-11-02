@@ -2,8 +2,10 @@ using Crash;
 using Crash.UI;
 using System;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using DiscUtils.Iso9660;
 
 namespace CrashEdit
 {
@@ -35,11 +37,20 @@ namespace CrashEdit
         private ToolStripButton tbbSave;
         private ToolStripButton tbbPatchNSD;
         private ToolStripButton tbbClose;
-        private ToolStripSeparator tbsSeparator;
         private ToolStripButton tbbFind;
         private ToolStripButton tbbFindNext;
+        private ToolStripMenuItem tbxMakeBIN;
+        private ToolStripMenuItem tbxMakeBINUSA;
+        private ToolStripMenuItem tbxMakeBINEUR;
+        private ToolStripMenuItem tbxMakeBINJAP;
+        private ToolStripMenuItem tbxConvertVHVB;
+        private ToolStripMenuItem tbxConvertVAB;
+        private ToolStripDropDownButton tbbExtra;
         private TabControl tbcTabs;
         private GameVersionForm dlgGameVersion;
+
+        private FolderBrowserDialog dlgMakeBINDir = new FolderBrowserDialog();
+        private SaveFileDialog dlgMakeBINFile = new SaveFileDialog();
 
         public OldMainForm()
         {
@@ -93,6 +104,41 @@ namespace CrashEdit
             };
             tbbFindNext.Click += new EventHandler(tbbFindNext_Click);
 
+            tbxMakeBIN = new ToolStripMenuItem();
+            tbxMakeBIN.Text = "Make BIN (no region)";
+            tbxMakeBIN.Click += new EventHandler(tbxMakeBIN_Click);
+
+            tbxMakeBINUSA = new ToolStripMenuItem();
+            tbxMakeBINUSA.Text = "Make BIN (NTSC-U/C)";
+            tbxMakeBINUSA.Click += new EventHandler(tbxMakeBIN_Click);
+
+            tbxMakeBINEUR = new ToolStripMenuItem();
+            tbxMakeBINEUR.Text = "Make BIN (PAL)";
+            tbxMakeBINEUR.Click += new EventHandler(tbxMakeBIN_Click);
+
+            tbxMakeBINJAP = new ToolStripMenuItem();
+            tbxMakeBINJAP.Text = "Make BIN (NTSC-J)";
+            tbxMakeBINJAP.Click += new EventHandler(tbxMakeBIN_Click);
+
+            tbxConvertVHVB = new ToolStripMenuItem();
+            tbxConvertVHVB.Text = "Convert VH+VB to DLS";
+            tbxConvertVHVB.Click += new EventHandler(tbxConvertVHVB_Click);
+
+            tbxConvertVAB = new ToolStripMenuItem();
+            tbxConvertVAB.Text = "Convert VAB to DLS";
+            tbxConvertVAB.Click += new EventHandler(tbxConvertVAB_Click);
+
+            tbbExtra = new ToolStripDropDownButton();
+            tbbExtra.Text = "Extra Features";
+            tbbExtra.DropDown = new ToolStripDropDown();
+            tbbExtra.DropDown.Items.Add(tbxMakeBIN);
+            tbbExtra.DropDown.Items.Add(tbxMakeBINUSA);
+            tbbExtra.DropDown.Items.Add(tbxMakeBINEUR);
+            tbbExtra.DropDown.Items.Add(tbxMakeBINJAP);
+            tbbExtra.DropDown.Items.Add(new ToolStripSeparator());
+            tbbExtra.DropDown.Items.Add(tbxConvertVHVB);
+            tbbExtra.DropDown.Items.Add(tbxConvertVAB);
+
             tsToolbar = new ToolStrip
             {
                 Dock = DockStyle.Top,
@@ -102,9 +148,11 @@ namespace CrashEdit
             tsToolbar.Items.Add(tbbSave);
             tsToolbar.Items.Add(tbbPatchNSD);
             tsToolbar.Items.Add(tbbClose);
-            tsToolbar.Items.Add(tbsSeparator);
+            tsToolbar.Items.Add(new ToolStripSeparator());
             tsToolbar.Items.Add(tbbFind);
             tsToolbar.Items.Add(tbbFindNext);
+            tsToolbar.Items.Add(new ToolStripSeparator());
+            tsToolbar.Items.Add(tbbExtra);
 
             tbcTabs = new TabControl
             {
@@ -118,6 +166,8 @@ namespace CrashEdit
             Text = "CrashEdit";
             Controls.Add(tbcTabs);
             Controls.Add(tsToolbar);
+
+            dlgMakeBINFile.Filter = "Playstation Disc Images (*.bin)|*.bin";
         }
 
         void tbbOpen_Click(object sender,EventArgs e)
@@ -269,6 +319,7 @@ namespace CrashEdit
                     NSD nsd = NSD.Load(data);
                     nsd.ChunkCount = nsf.Chunks.Count;
                     Dictionary<int, int> newindex = new Dictionary<int, int>();
+                    List<int> eids = new List<int>();
                     for (int i = 0; i < nsf.Chunks.Count; i++)
                     {
                         if (nsf.Chunks[i] is IEntry ientry)
@@ -285,15 +336,101 @@ namespace CrashEdit
                     }
                     foreach (NSDLink link in nsd.Index)
                     {
+                        eids.Add(link.EntryID);
                         if (newindex.ContainsKey(link.EntryID))
                         {
                             link.ChunkID = newindex[link.EntryID];
                             newindex.Remove(link.EntryID);
                         }
                     }
+                    if (newindex.Count > 0)
+                    {
+                        List<string> neweids = new List<string>();
+                        foreach (KeyValuePair<int, int> kvp in newindex)
+                        {
+                            neweids.Add(Entry.EIDToEName(kvp.Key));
+                        }
+                        string question = "The NSD is missing some entry ID's:\n\n";
+                        foreach (string eid in neweids)
+                        {
+                            question += eid + "\n";
+                        }
+                        question += "\nDo you want to add these to the end of the NSD's entry index?";
+                        if (MessageBox.Show(question, "Patch NSD - New EID's", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            foreach (KeyValuePair<int, int> kvp in newindex)
+                            {
+                                nsd.Index.Add(new NSDLink(kvp.Value, kvp.Key));
+                                nsd.EntryCount++;
+                            }
+                        }
+                    }
                     if (MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
                         File.WriteAllBytes(filename, nsd.Save());
+                    }
+                    if (MessageBox.Show("Do you want to sort all Crash 2 and Crash 3 loadlists according to the NSD?", "Loadlist autosorter", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        foreach (Chunk chunk in nsf.Chunks)
+                        {
+                            if (!(chunk is EntryChunk))
+                                continue;
+                            foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                            {
+                                if (entry is ZoneEntry)
+                                {
+                                    foreach (Entity ent in ((ZoneEntry)entry).Entities)
+                                    {
+                                        if (ent.LoadListA != null)
+                                        {
+                                            foreach (EntityPropertyRow<int> row in ent.LoadListA.Rows)
+                                            {
+                                                List<int> values = (List<int>)row.Values;
+                                                values.Sort(delegate (int a,int b) {
+                                                    return eids.IndexOf(a) - eids.IndexOf(b);
+                                                });
+                                            }
+                                        }
+                                        if (ent.LoadListB != null)
+                                        {
+                                            foreach (EntityPropertyRow<int> row in ent.LoadListB.Rows)
+                                            {
+                                                List<int> values = (List<int>)row.Values;
+                                                values.Sort(delegate (int a,int b) {
+                                                    return eids.IndexOf(a) - eids.IndexOf(b);
+                                                });
+                                            }
+                                        }
+                                    }
+                                }
+                                else if (entry is NewZoneEntry)
+                                {
+                                    foreach (Entity ent in ((NewZoneEntry)entry).Entities)
+                                    {
+                                        if (ent.LoadListA != null)
+                                        {
+                                            foreach (EntityPropertyRow<int> row in ent.LoadListA.Rows)
+                                            {
+                                                List<int> values = (List<int>)row.Values;
+                                                values.Sort(delegate (int a,int b) {
+                                                    return eids.IndexOf(a) - eids.IndexOf(b);
+                                                });
+                                            }
+                                        }
+                                        if (ent.LoadListB != null)
+                                        {
+                                            foreach (EntityPropertyRow<int> row in ent.LoadListB.Rows)
+                                            {
+                                                List<int> values = (List<int>)row.Values;
+                                                values.Sort(delegate (int a,int b) {
+                                                    return eids.IndexOf(a) - eids.IndexOf(b);
+                                                });
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 catch (LoadAbortedException)
@@ -335,6 +472,158 @@ namespace CrashEdit
             {
                 NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
                 nsfbox.FindNext();
+            }
+        }
+
+        void AddDirectoryToISO(CDBuilder fs, string prefix, DirectoryInfo dir)
+        {
+            foreach (DirectoryInfo subdir in dir.GetDirectories()) {
+                AddDirectoryToISO(fs, $"{prefix}{subdir.Name}\\", subdir);
+            }
+            foreach (FileInfo file in dir.GetFiles()) {
+                fs.AddFile($"{prefix}{file.Name};1", file.FullName);
+            }
+        }
+
+        void tbxMakeBIN_Click(object sender,EventArgs e)
+        {
+            var log = new StringBuilder();
+
+            if (dlgMakeBINDir.ShowDialog() != DialogResult.OK)
+                return;
+
+            string cnffile = Path.Combine(dlgMakeBINDir.SelectedPath, "SYSTEM.CNF");
+            string exefile = Path.Combine(dlgMakeBINDir.SelectedPath, "PSX.EXE");
+
+            if (!File.Exists(cnffile) && !File.Exists(exefile)) {
+                if (MessageBox.Show("The selected drive or folder does not contain SYSTEM.CNF or PSX.EXE. At least one of these is required for a bootable PSX CD image. Continue anyway?", "Make BIN", MessageBoxButtons.YesNo, MessageBoxIcon.Stop) != DialogResult.Yes)
+                    return;
+            }
+
+            if (dlgMakeBINFile.ShowDialog() != DialogResult.OK)
+                return;
+
+            var fs = new CDBuilder();
+            AddDirectoryToISO(fs, "", new DirectoryInfo(dlgMakeBINDir.SelectedPath));
+
+            using (var bin = new FileStream(dlgMakeBINFile.FileName, FileMode.Create, FileAccess.Write))
+            using (var iso = fs.Build()) {
+                ISO2PSX.Run(iso, bin);
+            }
+
+            log.AppendLine("Created BIN file without region OK.");
+            log.AppendLine();
+
+            string cueFilename = Path.ChangeExtension(dlgMakeBINFile.FileName, ".cue");
+            if (!File.Exists(cueFilename)) {
+                try {
+                    using (var cue = new StreamWriter(cueFilename)) {
+                        cue.WriteLine($"FILE \"{Path.GetFileName(dlgMakeBINFile.FileName)}\" BINARY");
+                        cue.WriteLine("  TRACK 01 MODE2/2352");
+                        cue.WriteLine("    INDEX 01 00:00:00");
+                    }
+                    log.AppendLine("Created matching CUE file.");
+                    log.AppendLine();
+                } catch (IOException ex) {
+                    log.AppendLine($"Failed to create CUE file: {ex}");
+                    log.AppendLine();
+                }
+            } else {
+                log.AppendLine("CUE file already exists, will not be modified.");
+                log.AppendLine();
+            }
+
+            string imprintOpt;
+            if (sender == tbxMakeBINUSA) {
+                imprintOpt = ":cdxa-imprint --psx-scea";
+            } else if (sender == tbxMakeBINEUR) {
+                imprintOpt = ":cdxa-imprint --psx-scee";
+            } else if (sender == tbxMakeBINJAP) {
+                imprintOpt = ":cdxa-imprint --psx-scei";
+            } else {
+                log.Append("Done.");
+                MessageBox.Show(log.ToString());
+                return;
+            }
+
+            log.AppendLine("Launching DRNSF to apply selected region...");
+            try {
+                if (DRNSF.Invoke($"{imprintOpt} -- \"{dlgMakeBINFile.FileName}\"") != 0) {
+                    log.AppendLine("DRNSF returned an error. No region has been applied.");
+                    log.AppendLine();
+                } else {
+                    log.AppendLine("Region applied successfully.");
+                    log.AppendLine();
+                }
+            } catch (FileNotFoundException) {
+                log.AppendLine("Could not find DRNSF exe. Please place this in the same directory as CrashEdit.");
+                log.AppendLine();
+            } catch (Exception ex) {
+                log.AppendLine($"Failed to launch DRNSF. Reason: {ex}");
+                log.AppendLine();
+            }
+            log.Append("Done.");
+            MessageBox.Show(log.ToString());
+        }
+
+        void tbxConvertVHVB_Click(object sender,EventArgs e)
+        {
+            try
+            {
+                byte[] vh_data = FileUtil.OpenFile(FileFilters.VH, FileFilters.Any);
+                byte[] vb_data = FileUtil.OpenFile(FileFilters.VB, FileFilters.Any);
+
+                VH vh = VH.Load(vh_data);
+
+                if (vb_data.Length / 16 != vh.VBSize)
+                {
+                    ErrorManager.SignalIgnorableError("extra feature: VB size does not match size specified in VH");
+                }
+                SampleLine[] vb = new SampleLine [vb_data.Length / 16];
+                byte[] line_data = new byte[16];
+                for (int i = 0; i < vb.Length; i++)
+                {
+                    Array.Copy(vb_data, i * 16, line_data, 0, 16);
+                    vb[i] = SampleLine.Load(line_data);
+                }
+
+                VAB vab = VAB.Join(vh, vb);
+
+                FileUtil.SaveFile(vab.ToDLS().Save(), FileFilters.DLS, FileFilters.Any);
+            }
+            catch (LoadAbortedException)
+            {
+            }
+        }
+
+        void tbxConvertVAB_Click(object sender,EventArgs e)
+        {
+            try
+            {
+                byte[] vab_data = FileUtil.OpenFile(FileFilters.VAB, FileFilters.Any);
+
+                VH vh = VH.Load(vab_data);
+
+                int vb_offset = 2592+32*16*vh.Programs.Count;
+                if ((vab_data.Length - vb_offset) % 16 != 0)
+                {
+                    ErrorManager.SignalIgnorableError("extra feature: VB size is invalid");
+                }
+                vh.VBSize = (vab_data.Length - vb_offset) / 16;
+                SampleLine[] vb = new SampleLine [vh.VBSize];
+                byte[] line_data = new byte[16];
+                for (int i = 0; i < vb.Length; i++)
+                {
+                    Array.Copy(vab_data, vb_offset + i * 16, line_data, 0, 16);
+                    vb[i] = SampleLine.Load(line_data);
+                }
+
+                VAB vab = VAB.Join(vh, vb);
+
+                FileUtil.SaveFile(vab.ToDLS().Save(), FileFilters.DLS, FileFilters.Any);
+            }
+            catch (LoadAbortedException)
+            {
             }
         }
     }
