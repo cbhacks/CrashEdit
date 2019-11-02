@@ -16,25 +16,10 @@ namespace Crash
             this.entities = new List<Entity>(entities);
         }
 
-        public override int Type
-        {
-            get { return 7; }
-        }
-
-        public byte[] Unknown1
-        {
-            get { return unknown1; }
-        }
-        
-        public byte[] Unknown2
-        {
-            get { return unknown2; }
-        }
-
-        public IList<Entity> Entities
-        {
-            get { return entities; }
-        }
+        public override int Type => 7;
+        public byte[] Unknown1 { get; }
+        public byte[] Unknown2 { get; }
+        public IList<Entity> Entities => entities;
 
         public override UnprocessedEntry Unprocess()
         {
