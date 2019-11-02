@@ -16,7 +16,6 @@ namespace Crash
         }
 
         private byte info;
-        private SampleLineFlags flags;
         private byte[] data;
 
         public SampleLine(byte info,SampleLineFlags flags,byte[] data)
@@ -26,20 +25,17 @@ namespace Crash
             if (data.Length != 14)
                 throw new ArgumentException("Value must be 14 bytes long.","data");
             this.info = info;
-            this.flags = flags;
+            Flags = flags;
             this.data = data;
         }
 
-        public SampleLineFlags Flags
-        {
-            get { return flags; }
-        }
+        public SampleLineFlags Flags { get; }
 
         public byte[] Save()
         {
             byte[] result = new byte [16];
             result[0] = info;
-            result[1] = (byte)flags;
+            result[1] = (byte)Flags;
             data.CopyTo(result,2);
             return result;
         }
@@ -51,7 +47,7 @@ namespace Crash
             byte[] result = new byte [28 * 2];
             int factor = info & 0xF;
             int predict = (info >> 4) & 0xF;
-            for (int i = 0;i < 14;i++)
+            for (int i = 0;i < 14;++i)
             {
                 int adl = data[i] & 0xF;
                 int adh = (data[i] & 0xF0) >> 4;

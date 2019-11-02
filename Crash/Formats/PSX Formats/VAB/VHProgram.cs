@@ -46,32 +46,26 @@ namespace Crash
             return new VHProgram(isoldversion,volume,priority,mode,panning,attribute,tones);
         }
 
-        private bool isoldversion;
-        private byte volume;
-        private byte priority;
-        private byte mode;
-        private byte panning;
-        private short attribute;
         private List<VHTone> tones;
 
         public VHProgram(bool isoldversion)
         {
-            this.isoldversion = isoldversion;
+            IsOldVersion = isoldversion;
             if (isoldversion)
             {
-                volume = 0;
-                priority = 0;
-                mode = 0x1A;
-                panning = 0;
-                attribute = 0;
+                Volume = 0;
+                Priority = 0;
+                Mode = 0x1A;
+                Panning = 0;
+                Attribute = 0;
             }
             else
             {
-                volume = 127;
-                priority = 255;
-                mode = 255;
-                panning = 64;
-                attribute = 0;
+                Volume = 127;
+                Priority = 255;
+                Mode = 255;
+                Panning = 64;
+                Attribute = 0;
             }
             tones = new List<VHTone>();
         }
@@ -80,60 +74,33 @@ namespace Crash
         {
             if (tones == null)
                 throw new ArgumentNullException("tones");
-            this.isoldversion = isoldversion;
-            this.volume = volume;
-            this.priority = priority;
-            this.mode = mode;
-            this.panning = panning;
-            this.attribute = attribute;
+            IsOldVersion = isoldversion;
+            Volume = volume;
+            Priority = priority;
+            Mode = mode;
+            Panning = panning;
+            Attribute = attribute;
             this.tones = new List<VHTone>(tones);
         }
 
-        public bool IsOldVersion
-        {
-            get { return isoldversion; }
-        }
-
-        public byte Volume
-        {
-            get { return volume; }
-        }
-
-        public byte Priority
-        {
-            get { return priority; }
-        }
-
-        public byte Mode
-        {
-            get { return mode; }
-        }
-
-        public byte Panning
-        {
-            get { return panning; }
-        }
-
-        public short Attribute
-        {
-            get { return attribute; }
-        }
-        
-        public IList<VHTone> Tones
-        {
-            get { return tones; }
-        }
+        public bool IsOldVersion { get; }
+        public byte Volume { get; }
+        public byte Priority { get; }
+        public byte Mode { get; }
+        public byte Panning { get; }
+        public short Attribute { get; }
+        public IList<VHTone> Tones => tones;
 
         public byte[] Save()
         {
             byte[] data = new byte [16];
             data[0] = (byte)tones.Count;
-            data[1] = volume;
-            data[2] = priority;
-            data[3] = mode;
-            data[4] = panning;
-            data[5] = isoldversion ? (byte)0x00 : (byte)0xFF;
-            BitConv.ToInt16(data,6,attribute);
+            data[1] = Volume;
+            data[2] = Priority;
+            data[3] = Mode;
+            data[4] = Panning;
+            data[5] = IsOldVersion ? (byte)0x00 : (byte)0xFF;
+            BitConv.ToInt16(data,6,Attribute);
             BitConv.ToInt32(data,8,-1);
             BitConv.ToInt32(data,12,-1);
             return data;

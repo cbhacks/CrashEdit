@@ -73,10 +73,7 @@ namespace Crash
             this.seqs = new List<SEQ>(seqs);
         }
 
-        public IList<SEQ> SEQs
-        {
-            get { return seqs; }
-        }
+        public IList<SEQ> SEQs => seqs;
 
         public byte[] Save()
         {
