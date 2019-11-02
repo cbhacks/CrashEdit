@@ -5,29 +5,24 @@ namespace CrashEdit
 {
     public sealed class UnprocessedChunkController : ChunkController
     {
-        private UnprocessedChunk unprocessedchunk;
-
         public UnprocessedChunkController(NSFController nsfcontroller,UnprocessedChunk unprocessedchunk) : base(nsfcontroller,unprocessedchunk)
         {
-            this.unprocessedchunk = unprocessedchunk;
+            UnprocessedChunk = unprocessedchunk;
             InvalidateNode();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Unprocessed Chunk (T{0})",unprocessedchunk.Type);
+            Node.Text = string.Format("Unprocessed Chunk (T{0})",UnprocessedChunk.Type);
             Node.ImageKey = "yellowj";
             Node.SelectedImageKey = "yellowj";
         }
 
         protected override Control CreateEditor()
         {
-            return new MysteryBox(unprocessedchunk.Data);
+            return new MysteryBox(UnprocessedChunk.Data);
         }
 
-        public UnprocessedChunk UnprocessedChunk
-        {
-            get { return unprocessedchunk; }
-        }
+        public UnprocessedChunk UnprocessedChunk { get; }
     }
 }
