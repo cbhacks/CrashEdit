@@ -8,9 +8,6 @@ namespace Crash
         {
         }
 
-        public override int Type
-        {
-            get { return 17; }
-        }
+        public override int Type => 17;
     }
 }
