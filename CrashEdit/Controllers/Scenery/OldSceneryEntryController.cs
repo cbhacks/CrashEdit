@@ -5,11 +5,9 @@ namespace CrashEdit
 {
     public sealed class OldSceneryEntryController : EntryController
     {
-        private OldSceneryEntry oldsceneryentry;
-
         public OldSceneryEntryController(EntryChunkController entrychunkcontroller,OldSceneryEntry oldsceneryentry) : base(entrychunkcontroller,oldsceneryentry)
         {
-            this.oldsceneryentry = oldsceneryentry;
+            OldSceneryEntry = oldsceneryentry;
             if (oldsceneryentry.ExtraData != null)
             {
                 AddNode(new ItemController(null,oldsceneryentry.ExtraData));
@@ -22,20 +20,17 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Old Scenery ({0})",oldsceneryentry.EName);
+            Node.Text = string.Format("Old Scenery ({0})",OldSceneryEntry.EName);
             Node.ImageKey = "thing";
             Node.SelectedImageKey = "thing";
         }
 
         protected override Control CreateEditor()
         {
-            return new UndockableControl(new OldSceneryEntryViewer(oldsceneryentry));
+            return new UndockableControl(new OldSceneryEntryViewer(OldSceneryEntry));
         }
 
-        public OldSceneryEntry OldSceneryEntry
-        {
-            get { return oldsceneryentry; }
-        }
+        public OldSceneryEntry OldSceneryEntry { get; }
 
         private void Menu_Export_OBJ()
         {
@@ -43,7 +38,7 @@ namespace CrashEdit
             {
                 return;
             }
-            FileUtil.SaveFile(oldsceneryentry.ToOBJ(),FileFilters.OBJ,FileFilters.Any);
+            FileUtil.SaveFile(OldSceneryEntry.ToOBJ(),FileFilters.OBJ,FileFilters.Any);
         }
 
         private void Menu_Export_COLLADA()
@@ -52,7 +47,7 @@ namespace CrashEdit
             {
                 return;
             }
-            FileUtil.SaveFile(oldsceneryentry.ToCOLLADA(),FileFilters.COLLADA,FileFilters.Any);
+            FileUtil.SaveFile(OldSceneryEntry.ToCOLLADA(),FileFilters.COLLADA,FileFilters.Any);
         }
     }
 }

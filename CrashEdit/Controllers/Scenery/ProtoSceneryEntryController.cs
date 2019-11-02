@@ -5,11 +5,9 @@ namespace CrashEdit
 {
     public sealed class ProtoSceneryEntryController : EntryController
     {
-        private ProtoSceneryEntry protosceneryentry;
-
         public ProtoSceneryEntryController(EntryChunkController entrychunkcontroller,ProtoSceneryEntry protosceneryentry) : base(entrychunkcontroller,protosceneryentry)
         {
-            this.protosceneryentry = protosceneryentry;
+            ProtoSceneryEntry = protosceneryentry;
             if (protosceneryentry.ExtraData != null)
             {
                 AddNode(new ItemController(null,protosceneryentry.ExtraData));
@@ -22,20 +20,17 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Prototype Scenery ({0})",protosceneryentry.EName);
+            Node.Text = string.Format("Prototype Scenery ({0})",ProtoSceneryEntry.EName);
             Node.ImageKey = "thing";
             Node.SelectedImageKey = "thing";
         }
 
         protected override Control CreateEditor()
         {
-            return new UndockableControl(new ProtoSceneryEntryViewer(protosceneryentry));
+            return new UndockableControl(new ProtoSceneryEntryViewer(ProtoSceneryEntry));
         }
 
-        public ProtoSceneryEntry ProtoSceneryEntry
-        {
-            get { return protosceneryentry; }
-        }
+        public ProtoSceneryEntry ProtoSceneryEntry { get; }
 
         private void Menu_Export_OBJ()
         {
@@ -43,7 +38,7 @@ namespace CrashEdit
             {
                 return;
             }
-            FileUtil.SaveFile(protosceneryentry.ToOBJ(),FileFilters.OBJ,FileFilters.Any);
+            FileUtil.SaveFile(ProtoSceneryEntry.ToOBJ(),FileFilters.OBJ,FileFilters.Any);
         }
 
         private void Menu_Export_COLLADA()
@@ -52,7 +47,7 @@ namespace CrashEdit
             {
                 return;
             }
-            FileUtil.SaveFile(protosceneryentry.ToCOLLADA(),FileFilters.COLLADA,FileFilters.Any);
+            FileUtil.SaveFile(ProtoSceneryEntry.ToCOLLADA(),FileFilters.COLLADA,FileFilters.Any);
         }
     }
 }

@@ -5,11 +5,9 @@ namespace CrashEdit
 {
     public sealed class NewSceneryEntryController : EntryController
     {
-        private NewSceneryEntry sceneryentry;
-
         public NewSceneryEntryController(EntryChunkController entrychunkcontroller,NewSceneryEntry sceneryentry) : base(entrychunkcontroller,sceneryentry)
         {
-            this.sceneryentry = sceneryentry;
+            SceneryEntry = sceneryentry;
             AddMenuSeparator();
             AddMenu("Export as Wavefront OBJ",Menu_Export_OBJ);
             AddMenu("Export as Stanford PLY",Menu_Export_PLY);
@@ -20,20 +18,17 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Scenery ({0})",sceneryentry.EName);
+            Node.Text = string.Format("Scenery ({0})",SceneryEntry.EName);
             Node.ImageKey = "thing";
             Node.SelectedImageKey = "thing";
         }
 
         protected override Control CreateEditor()
         {
-            return new UndockableControl(new NewSceneryEntryViewer(sceneryentry));
+            return new UndockableControl(new NewSceneryEntryViewer(SceneryEntry));
         }
 
-        public NewSceneryEntry SceneryEntry
-        {
-            get { return sceneryentry; }
-        }
+        public NewSceneryEntry SceneryEntry { get; }
 
         private void Menu_Export_OBJ()
         {
@@ -41,7 +36,7 @@ namespace CrashEdit
             {
                 return;
             }
-            FileUtil.SaveFile(sceneryentry.ToOBJ(), FileFilters.OBJ, FileFilters.Any);
+            FileUtil.SaveFile(SceneryEntry.ToOBJ(), FileFilters.OBJ, FileFilters.Any);
         }
 
         private void Menu_Export_PLY()
@@ -50,7 +45,7 @@ namespace CrashEdit
             {
                 return;
             }
-            FileUtil.SaveFile(sceneryentry.ToPLY(), FileFilters.PLY, FileFilters.Any);
+            FileUtil.SaveFile(SceneryEntry.ToPLY(), FileFilters.PLY, FileFilters.Any);
         }
 
         /*private void Menu_Export_COLLADA()
@@ -64,10 +59,10 @@ namespace CrashEdit
 
         private void Menu_Fix_WGEOv2()
         {
-            for (int i = 0;i < sceneryentry.Vertices.Count;i++)
+            for (int i = 0;i < SceneryEntry.Vertices.Count;i++)
             {
-                NewSceneryVertex vtx = sceneryentry.Vertices[i];
-                sceneryentry.Vertices[i] = new NewSceneryVertex(
+                NewSceneryVertex vtx = SceneryEntry.Vertices[i];
+                SceneryEntry.Vertices[i] = new NewSceneryVertex(
                     (vtx.X + 0x800) & 0xFFF,
                     (vtx.Y + 0x800) & 0xFFF,
                     (vtx.Z + 0x800) & 0xFFF,
@@ -77,9 +72,9 @@ namespace CrashEdit
                 );
             }
 
-            sceneryentry.XOffset -= 0x8000;
-            sceneryentry.YOffset -= 0x8000;
-            sceneryentry.ZOffset -= 0x8000;
+            SceneryEntry.XOffset -= 0x8000;
+            SceneryEntry.YOffset -= 0x8000;
+            SceneryEntry.ZOffset -= 0x8000;
         }
     }
 }
