@@ -8,8 +8,8 @@ namespace CrashEdit
         public NewZoneEntryController(EntryChunkController entrychunkcontroller,NewZoneEntry zoneentry) : base(entrychunkcontroller,zoneentry)
         {
             NewZoneEntry = zoneentry;
-            AddNode(new ItemController(null,zoneentry.Unknown1));
-            AddNode(new ItemController(null,zoneentry.Unknown2));
+            AddNode(new ItemController(null,zoneentry.Header));
+            AddNode(new ItemController(null,zoneentry.Layout));
             foreach (Entity entity in zoneentry.Entities)
             {
                 AddNode(new NewEntityController(this,entity));
@@ -26,17 +26,17 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            int linkedsceneryentrycount = BitConv.FromInt32(NewZoneEntry.Unknown1,0);
+            int linkedsceneryentrycount = BitConv.FromInt32(NewZoneEntry.Header,0);
             NewSceneryEntry[] linkedsceneryentries = new NewSceneryEntry [linkedsceneryentrycount];
             for (int i = 0;i < linkedsceneryentrycount;i++)
             {
-                linkedsceneryentries[i] = FindEID<NewSceneryEntry>(BitConv.FromInt32(NewZoneEntry.Unknown1,4 + i * 48));
+                linkedsceneryentries[i] = FindEID<NewSceneryEntry>(BitConv.FromInt32(NewZoneEntry.Header,4 + i * 48));
             }
-            int linkedzoneentrycount = BitConv.FromInt32(NewZoneEntry.Unknown1,400);
+            int linkedzoneentrycount = BitConv.FromInt32(NewZoneEntry.Header,400);
             NewZoneEntry[] linkedzoneentries = new NewZoneEntry [linkedzoneentrycount];
             for (int i = 0;i < linkedzoneentrycount;i++)
             {
-                linkedzoneentries[i] = FindEID<NewZoneEntry>(BitConv.FromInt32(NewZoneEntry.Unknown1,404 + i * 4));
+                linkedzoneentries[i] = FindEID<NewZoneEntry>(BitConv.FromInt32(NewZoneEntry.Header,404 + i * 4));
             }
             return new UndockableControl(new NewZoneEntryViewer(NewZoneEntry,linkedsceneryentries,linkedzoneentries));
         }

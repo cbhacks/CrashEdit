@@ -1044,11 +1044,11 @@ namespace CrashEdit
                             {
                                 if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityA.Value)
                                 {
-                                    for (int i = 0; i < controller.NewZoneEntryController.NewZoneEntry.Unknown1[0x190];i++)
+                                    for (int i = 0; i < controller.NewZoneEntryController.NewZoneEntry.Header[0x190];i++)
                                     {
-                                        if (entry.EName == Entry.EIDToEName(BitConv.FromInt32(controller.NewZoneEntryController.NewZoneEntry.Unknown1,0x194 + i * 4)))
+                                        if (entry.EName == Entry.EIDToEName(BitConv.FromInt32(controller.NewZoneEntryController.NewZoneEntry.Header,0x194 + i * 4)))
                                         {
-                                            entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] = (int)(i | (otherentity.ID << 8) | ((((NewZoneEntry)entry).Entities.IndexOf(otherentity) - BitConv.FromInt32(((NewZoneEntry)entry).Unknown1, 0x188)) << 24));
+                                            entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] = (int)(i | (otherentity.ID << 8) | ((((NewZoneEntry)entry).Entities.IndexOf(otherentity) - BitConv.FromInt32(((NewZoneEntry)entry).Header, 0x188)) << 24));
                                         }
                                     }
                                 }
@@ -1202,11 +1202,11 @@ namespace CrashEdit
                             {
                                 if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityB.Value)
                                 {
-                                    for (int i = 0; i < controller.NewZoneEntryController.NewZoneEntry.Unknown1[0x190]; i++)
+                                    for (int i = 0; i < controller.NewZoneEntryController.NewZoneEntry.Header[0x190]; i++)
                                     {
-                                        if (entry.EName == Entry.EIDToEName(BitConv.FromInt32(controller.NewZoneEntryController.NewZoneEntry.Unknown1, 0x194 + i * 4)))
+                                        if (entry.EName == Entry.EIDToEName(BitConv.FromInt32(controller.NewZoneEntryController.NewZoneEntry.Header, 0x194 + i * 4)))
                                         {
-                                            entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] = (int)(i | (otherentity.ID << 8) | ((((NewZoneEntry)entry).Entities.IndexOf(otherentity) - BitConv.FromInt32(((NewZoneEntry)entry).Unknown1, 0x188)) << 24));
+                                            entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] = (int)(i | (otherentity.ID << 8) | ((((NewZoneEntry)entry).Entities.IndexOf(otherentity) - BitConv.FromInt32(((NewZoneEntry)entry).Header, 0x188)) << 24));
                                         }
                                     }
                                 }
