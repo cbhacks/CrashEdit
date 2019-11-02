@@ -4,11 +4,9 @@ namespace CrashEdit
 {
     public sealed class WavebankChunkController : EntryChunkController
     {
-        private WavebankChunk wavebankchunk;
-
         public WavebankChunkController(NSFController nsfcontroller,WavebankChunk wavebankchunk) : base(nsfcontroller,wavebankchunk)
         {
-            this.wavebankchunk = wavebankchunk;
+            WavebankChunk = wavebankchunk;
             InvalidateNode();
         }
 
@@ -19,9 +17,6 @@ namespace CrashEdit
             Node.SelectedImageKey = "music";
         }
 
-        public WavebankChunk WavebankChunk
-        {
-            get { return wavebankchunk; }
-        }
+        public WavebankChunk WavebankChunk { get; }
     }
 }
