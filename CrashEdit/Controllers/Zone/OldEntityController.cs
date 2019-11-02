@@ -52,12 +52,9 @@ namespace CrashEdit
                         {
                             foreach (OldEntity otherentity in ((OldZoneEntry)entry).Entities)
                             {
-                                if (otherentity.ID.HasValue)
+                                if (otherentity.ID > maxid)
                                 {
-                                    if (otherentity.ID.Value > maxid)
-                                    {
-                                        maxid = otherentity.ID.Value;
-                                    }
+                                    maxid = otherentity.ID;
                                 }
                             }
                         }

@@ -449,11 +449,11 @@ namespace CrashEdit
                 {
                     case 0x3:
                         GL.Translate(position.X,position.Y,position.Z);
-                        RenderPickup(entity.Subtype.Value);
+                        RenderPickup(entity.Subtype);
                         break;
                     case 0x22:
                         GL.Translate(position.X + 50,position.Y,position.Z + 50);
-                        RenderBox(entity.Subtype.Value);
+                        RenderBox(entity.Subtype);
                         break;
                     default:
                         GL.Translate(position.X,position.Y,position.Z);

@@ -207,9 +207,9 @@ namespace CrashEdit
 
         private void UpdateGeneral()
         {
-            numAvgDist.Value = camera.AvgDist.Value;
-            numMode.Value = camera.Mode.Value;
-            numZoom.Value = camera.Zoom.Value;
+            numAvgDist.Value = camera.AvgDist;
+            numMode.Value = camera.Mode;
+            numZoom.Value = camera.Zoom;
         }
 
         private void numMode_ValueChanged(object sender,EventArgs e)
@@ -224,23 +224,23 @@ namespace CrashEdit
 
         private void UpdateNeighbor()
         {
-            numNeighborCount.Value = camera.NeighborCount.Value;
-            numRelative1.Value = camera.Relative1.Value;
-            numRelative2.Value = camera.Relative2.Value;
-            numRelative3.Value = camera.Relative3.Value;
-            numRelative4.Value = camera.Relative4.Value;
-            numParentZone1.Value = camera.ParentZone1.Value;
-            numParentZone2.Value = camera.ParentZone2.Value;
-            numParentZone3.Value = camera.ParentZone3.Value;
-            numParentZone4.Value = camera.ParentZone4.Value;
-            numPathItem1.Value = camera.PathItem1.Value;
-            numPathItem2.Value = camera.PathItem2.Value;
-            numPathItem3.Value = camera.PathItem3.Value;
-            numPathItem4.Value = camera.PathItem4.Value;
-            numRelativeFlag1.Value = camera.RelativeFlag1.Value;
-            numRelativeFlag2.Value = camera.RelativeFlag2.Value;
-            numRelativeFlag3.Value = camera.RelativeFlag3.Value;
-            numRelativeFlag4.Value = camera.RelativeFlag4.Value;
+            numNeighborCount.Value = camera.NeighborCount;
+            numRelative1.Value = camera.Relative1;
+            numRelative2.Value = camera.Relative2;
+            numRelative3.Value = camera.Relative3;
+            numRelative4.Value = camera.Relative4;
+            numParentZone1.Value = camera.ParentZone1;
+            numParentZone2.Value = camera.ParentZone2;
+            numParentZone3.Value = camera.ParentZone3;
+            numParentZone4.Value = camera.ParentZone4;
+            numPathItem1.Value = camera.PathItem1;
+            numPathItem2.Value = camera.PathItem2;
+            numPathItem3.Value = camera.PathItem3;
+            numPathItem4.Value = camera.PathItem4;
+            numRelativeFlag1.Value = camera.RelativeFlag1;
+            numRelativeFlag2.Value = camera.RelativeFlag2;
+            numRelativeFlag3.Value = camera.RelativeFlag3;
+            numRelativeFlag4.Value = camera.RelativeFlag4;
         }
 
         private void numNeighborCount_ValueChanged(object sender,EventArgs e)
@@ -336,9 +336,9 @@ namespace CrashEdit
 
         private void UpdateDir()
         {
-            numXDir.Value = camera.XDir.Value / 4096;
-            numYDir.Value = camera.YDir.Value / 4096;
-            numZDir.Value = camera.ZDir.Value / 4096;
+            numXDir.Value = camera.XDir / 4096;
+            numYDir.Value = camera.YDir / 4096;
+            numZDir.Value = camera.ZDir / 4096;
         }
 
         private void numXDir_ValueChanged(object sender,EventArgs e)
