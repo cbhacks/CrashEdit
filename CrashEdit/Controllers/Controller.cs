@@ -52,9 +52,11 @@ namespace CrashEdit
 
         protected virtual Control CreateEditor()
         {
-            Label label = new Label();
-            label.TextAlign = ContentAlignment.MiddleCenter;
-            label.Text = "No options available";
+            Label label = new Label
+            {
+                TextAlign = ContentAlignment.MiddleCenter,
+                Text = "No options available"
+            };
             return label;
         }
 
@@ -78,7 +80,6 @@ namespace CrashEdit
         }
 
         public TreeNode Node { get; }
-
         public ContextMenu ContextMenu { get; }
 
         public Control Editor

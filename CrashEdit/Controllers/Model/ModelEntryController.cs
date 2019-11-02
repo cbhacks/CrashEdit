@@ -24,12 +24,7 @@ namespace CrashEdit
                 return new AnimationEntryViewer(ModelEntry);
             else
             {
-                Label label = new Label
-                {
-                    TextAlign = System.Drawing.ContentAlignment.MiddleCenter,
-                    Text = "No options available"
-                };
-                return label;
+                return base.CreateEditor();
             }
         }
 
