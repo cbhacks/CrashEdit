@@ -108,8 +108,16 @@ namespace CrashEdit
         {
             if (model != null)
             {
+                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+                GL.Color3(Color.LightGray);
+                GL.Begin(PrimitiveType.Triangles);
+                for (int i = 0; i < model.PositionIndices.Count; ++i)
+                {
+                    RenderVertex(frame.Vertices[model.PositionIndices[i] + frame.SpecialVertexCount]);
+                }
+                GL.End();
                 GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-                GL.Color3(Color.White);
+                GL.Color3(Color.Black);
                 GL.Begin(PrimitiveType.Triangles);
                 for (int i = 0; i < model.PositionIndices.Count; ++i)
                 {

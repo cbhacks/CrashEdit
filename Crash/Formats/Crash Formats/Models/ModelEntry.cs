@@ -7,7 +7,6 @@ namespace Crash
     {
         private List<int> positionindices;
         private List<int> colorindices;
-        private List<byte> orientations;
         private List<SceneryColor> colors;
         private List<ModelTexture> textures;
         private List<ModelAnimatedTexture> animatedtextures;
@@ -133,18 +132,6 @@ namespace Crash
                                 lastccpos = cur_v;
                                 break;
                         }
-                    }
-                    switch (t.TriangleSubtype)
-                    {
-                        case 0: // front and back
-                            orientations.Add(0);
-                            break;
-                        case 1: // clockwise
-                            orientations.Add(0);
-                            break;
-                        case 2: // counter-clockwise
-                            orientations.Add(0);
-                            break;
                     }
                     ++cur_v;
                 }
