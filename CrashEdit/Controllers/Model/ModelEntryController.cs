@@ -1,5 +1,4 @@
 using Crash;
-using System.Windows.Forms;
 
 namespace CrashEdit
 {
@@ -24,16 +23,6 @@ namespace CrashEdit
                 Node.Text = string.Format("Compressed Model ({0})", ModelEntry.EName);
                 Node.ImageKey = "crimsonb"; // would prefer red but whatever
                 Node.SelectedImageKey = "crimsonb";
-            }
-        }
-
-        protected override Control CreateEditor()
-        {
-            if (ModelEntry.Positions != null)
-                return new AnimationEntryViewer(ModelEntry);
-            else
-            {
-                return base.CreateEditor();
             }
         }
 
