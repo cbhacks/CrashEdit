@@ -33,12 +33,13 @@ namespace Crash
             {
                 ErrorManager.SignalError("Frame: Header size value is invalid");
             }
+            int fake_headersize = 24 + collision * 0x28;
             byte[] settings = new byte[collision * 0x28]; // FIXME
             Array.Copy(data, 24, settings, 0, settings.Length);
-            int specialvertexcount = (headersize - 24 - collision * 0x28) / 3;
+            int specialvertexcount = (headersize - fake_headersize) / 3;
             FrameVertex[] vertices = new FrameVertex[vertexcount];
             bool[] temporals = null;
-            int uncompressedsize = vertexcount * 3 + collision * 0x28 + 24;
+            int uncompressedsize = vertexcount * 3 + fake_headersize;
             Aligner.Align(ref uncompressedsize, 4);
             if (data.Length > uncompressedsize)
             {
@@ -53,14 +54,14 @@ namespace Crash
             }
             else
             {
-                if (((data.Length - headersize) % 4) != 0)
+                if (((data.Length - fake_headersize) % 4) != 0)
                 {
                     ErrorManager.SignalError("Frame: compressed frame vertex data is not aligned");
                 }
-                temporals = new bool[(data.Length - headersize) / 4 * 32];
-                for (int i = 0; i < (data.Length - headersize) / 4; ++i)
+                temporals = new bool[(data.Length - fake_headersize) / 4 * 32];
+                for (int i = 0; i < (data.Length - fake_headersize) / 4; ++i)
                 {
-                    int val = BitConv.FromInt32(data, headersize+i*4);
+                    int val = BitConv.FromInt32(data, fake_headersize + i*4);
                     for (int j = 0; j < 32;++j) // reverse endianness for decompression
                     {
                         temporals[i * 32 + j] = (val >> (31-j) & 0x1) == 1;
