@@ -94,10 +94,7 @@ namespace CrashEdit
             };
         }
 
-        protected virtual int CameraRangeMargin
-        {
-            get { return 400; }
-        }
+        protected virtual int CameraRangeMargin => 400;
 
         protected abstract IEnumerable<IPosition> CorePositions
         {
