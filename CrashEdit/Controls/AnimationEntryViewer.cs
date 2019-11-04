@@ -75,9 +75,9 @@ namespace CrashEdit
         {
             get
             {
-                int i = Math.Max(BitConv.FromInt32(model.Info, 8),Math.Max(BitConv.FromInt32(model.Info,0),BitConv.FromInt32(model.Info,4))) * 96;
+                int i = Math.Max(BitConv.FromInt32(model.Info, 8),Math.Max(BitConv.FromInt32(model.Info,0),BitConv.FromInt32(model.Info,4))) * 256;
                 if (model != null && model.Positions != null)
-                    i /= 4;
+                    i /= 2;
                 return i;
             }
         }
