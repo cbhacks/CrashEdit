@@ -244,8 +244,8 @@ namespace CrashEdit
             GL.ClearColor(0.05f,0.05f,0.05f,1);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadIdentity();
-            GL.Frustum(-0.01,+0.01,-0.01,+0.01,0.01,ushort.MaxValue);
+            var proj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver3,(float)Width/Height,1/25f,ushort.MaxValue);
+            GL.LoadMatrix(ref proj);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
             GL.Translate(0,0,-1);
