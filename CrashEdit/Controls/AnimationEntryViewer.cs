@@ -9,6 +9,8 @@ namespace CrashEdit
 {
     public sealed class AnimationEntryViewer : ThreeDimensionalViewer
     {
+        private static readonly int[] SignTable = { -1, -2, -4, -8, -16, -32, -64, -128 }; // used for decompression
+
         private List<Frame> frames;
         private ModelEntry model;
         private int frameid;
@@ -50,9 +52,11 @@ namespace CrashEdit
             xoffset = this.frames[frameid].XOffset;
             yoffset = this.frames[frameid].YOffset;
             zoffset = this.frames[frameid].ZOffset;
-            animatetimer = new Timer();
-            animatetimer.Interval = 1000/30;
-            animatetimer.Enabled = true;
+            animatetimer = new Timer
+            {
+                Interval = 1000 / 30,
+                Enabled = true
+            };
             animatetimer.Tick += delegate (object sender,EventArgs e)
             {
                 frameid++;
@@ -65,17 +69,6 @@ namespace CrashEdit
                 zoffset = this.frames[frameid].ZOffset;
                 Refresh();
             };
-        }
-
-        public AnimationEntryViewer(ModelEntry model)
-        {
-            frames = new List<Frame>();
-            frames.Add(ModelToFrame(model));
-            this.model = model;
-            xoffset = 0;
-            yoffset = 0;
-            zoffset = 0;
-            frameid = 0;
         }
 
         protected override int CameraRangeMargin
@@ -115,239 +108,12 @@ namespace CrashEdit
         {
             if (model != null)
             {
-                int i = 0;
-                int ii = 0;
-                int vertexid = 0;
-                int tris = 0;
-                for (int iii = 0;iii < model.Polygons.Count;iii++)
-                {
-                    if (!model.Polygons[iii].ColorSlot && !model.Polygons[iii].Footer) tris++;
-                }
-                int[] indexes = new int[tris];
+                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+                GL.Color3(Color.White);
                 GL.Begin(PrimitiveType.Triangles);
-                foreach (ModelPolygon polygon in model.Polygons)
+                for (int i = 0; i < model.PositionIndices.Count; ++i)
                 {
-                    if (!polygon.ColorSlot && !polygon.Footer)
-                    {
-                        if ((polygon.StructType & 0x4) == 0)
-                        {
-                            indexes[ii] = vertexid;
-                            vertexid++;
-                        }
-                        else
-                        {
-                            int j = 1;
-                            while (model.Polygons[i - j].Pointer != polygon.Pointer || model.Polygons[i - j].Pointer == 0x57 || ((model.Polygons[i - j].StructType & 4) == 4) || model.Polygons[i - j].ColorSlot)
-                            {
-                                j++;
-                            }
-                            int k = 0;
-                            int l = 0;
-                            while (i - j - l > -1)
-                            {
-                                if (model.Polygons[i - j - l].ColorSlot) k++;
-                                l++;
-                            }
-                            indexes[ii] = indexes[i - j - k];
-                        }
-                        ii++;
-                    }
-                    i++;
-                }
-                i = 0;
-                ii = 0;
-                byte invalid = 0;
-                foreach (ModelPolygon polygon in model.Polygons)
-                {
-                    byte r = 0;
-                    byte g = 0;
-                    byte b = 0;
-                    int vertexa = 0;
-                    int vertexb = 0;
-                    int vertexc = 0;
-                    if (!polygon.ColorSlot && !polygon.Footer)
-                    {
-                        GL.Color3(Color.Fuchsia);
-                        vertexa = indexes[ii];
-                        //Vertex IDs
-                        if (polygon.TriType < 4) //AA
-                        {
-                            vertexb = indexes[ii - 1];
-                            vertexc = indexes[ii - 2];
-                        }
-                        else if (polygon.TriType < 8) //BB
-                        {
-                            vertexb = indexes[ii - 1];
-                            int j = 1;
-                            while ((model.Polygons[i - j].TriType > 3 && model.Polygons[i - j].TriType < 8) || model.Polygons[i - j].ColorSlot)
-                            {
-                                j++;
-                            }
-                            int k = 0;
-                            int l = 0;
-                            while (i - j - l > -1)
-                            {
-                                if (model.Polygons[i - j - l].ColorSlot) k++;
-                                l++;
-                            }
-                            if (model.Polygons[i - j].TriType < 4) //AA
-                                vertexc = indexes[i - j - k - 2];
-                            else if (invalid == 0) //CC
-                                vertexc = indexes[i - j - k];
-                            else
-                                vertexc = 0;
-                        }
-                        else if (invalid == 0) //CC
-                        {
-                            vertexb = indexes[ii + 1];
-                            vertexc = indexes[ii + 2];
-                        }
-                        else //Invalid CC
-                        {
-                            vertexa = 0;
-                            vertexb = 0;
-                            vertexc = 0;
-                        }
-                        //Vertex Colors
-                        //Vertex A
-                        //AA
-                        //BB
-                        //CC
-                        r = model.Colors[polygon.ColorIndex].Red;
-                        g = model.Colors[polygon.ColorIndex].Green;
-                        b = model.Colors[polygon.ColorIndex].Blue;
-                        GL.Color3(r,g,b);
-                        RenderVertex(frame.Vertices[vertexa]);
-                        GL.Color3(Color.Fuchsia);
-                        //Vertex B
-                        //AA
-                        //BB
-                        if (polygon.TriType < 8)
-                        {
-                            if (model.Polygons[i - 1].ColorSlot)
-                            {
-                                r = model.Colors[model.Polygons[i - 1].ColorA].Red;
-                                g = model.Colors[model.Polygons[i - 1].ColorA].Green;
-                                b = model.Colors[model.Polygons[i - 1].ColorA].Blue;
-                            }
-                            else
-                            {
-                                r = model.Colors[model.Polygons[i - 1].ColorIndex].Red;
-                                g = model.Colors[model.Polygons[i - 1].ColorIndex].Green;
-                                b = model.Colors[model.Polygons[i - 1].ColorIndex].Blue;
-                            }
-                        }
-                        //CC
-                        else if(invalid == 0)
-                        {
-                            if (!model.Polygons[i + 1].ColorSlot)
-                            {
-                                r = model.Colors[model.Polygons[i + 1].ColorIndex].Red;
-                                g = model.Colors[model.Polygons[i + 1].ColorIndex].Green;
-                                b = model.Colors[model.Polygons[i + 1].ColorIndex].Blue;
-                            }
-                            else
-                            {
-                                r = model.Colors[polygon.ColorIndex].Red;
-                                g = model.Colors[polygon.ColorIndex].Green;
-                                b = model.Colors[polygon.ColorIndex].Blue;
-                            }
-                        }
-                        GL.Color3(r,g,b);
-                        RenderVertex(frame.Vertices[vertexb]);
-                        GL.Color3(Color.Fuchsia);
-                        //Vertex C
-                        //AA
-                        if (polygon.TriType < 4)
-                        {
-                            if (model.Polygons[i - 1].ColorSlot)
-                            {
-                                r = model.Colors[model.Polygons[i - 1].ColorB].Red;
-                                g = model.Colors[model.Polygons[i - 1].ColorB].Green;
-                                b = model.Colors[model.Polygons[i - 1].ColorB].Blue;
-                            }
-                            else if (model.Polygons[i - 2].ColorSlot)
-                            {
-                                r = model.Colors[model.Polygons[i - 2].ColorA].Red;
-                                g = model.Colors[model.Polygons[i - 2].ColorA].Green;
-                                b = model.Colors[model.Polygons[i - 2].ColorA].Blue;
-                            }
-                            //else
-                            //{
-                            //    r = model.Colors[polygon.ColorIndex].Red;
-                            //    g = model.Colors[polygon.ColorIndex].Green;
-                            //    b = model.Colors[polygon.ColorIndex].Blue;
-                            //}
-                            else
-                            {
-                                int j = 2;
-                                while (model.Polygons[i - j].ColorSlot)
-                                    j++;
-                                r = model.Colors[model.Polygons[i - j].ColorIndex].Red;
-                                g = model.Colors[model.Polygons[i - j].ColorIndex].Green;
-                                b = model.Colors[model.Polygons[i - j].ColorIndex].Blue;
-                            }
-                        }
-                        //BB
-                        else if (polygon.TriType < 8)
-                        {
-                            int j = 1;
-                            while (model.Polygons[i - j].TriType > 3 && model.Polygons[i - j].TriType < 8)
-                                j++;
-                            int k = 1;
-                            while (!model.Polygons[i - k].ColorSlot)
-                                k++;
-                            if (j + 2 < k) //Scenario 3
-                            {
-                                r = model.Colors[model.Polygons[i - j - 2].ColorIndex].Red;
-                                g = model.Colors[model.Polygons[i - j - 2].ColorIndex].Green;
-                                b = model.Colors[model.Polygons[i - j - 2].ColorIndex].Blue;
-                            }
-                            if (j + 2 == k) //Scenario 1
-                            {
-                                r = model.Colors[model.Polygons[i - k].ColorA].Red;
-                                g = model.Colors[model.Polygons[i - k].ColorA].Green;
-                                b = model.Colors[model.Polygons[i - k].ColorA].Blue;
-                            }
-                            if (j + 1 == k) //Scenario 2
-                            {
-                                r = model.Colors[model.Polygons[i - k].ColorB].Red;
-                                g = model.Colors[model.Polygons[i - k].ColorB].Green;
-                                b = model.Colors[model.Polygons[i - k].ColorB].Blue;
-                            }
-                            if (j + 2 > k) //Scenario 4
-                            {
-                                r = model.Colors[model.Polygons[i - k].ColorB].Red;
-                                g = model.Colors[model.Polygons[i - k].ColorB].Green;
-                                b = model.Colors[model.Polygons[i - k].ColorB].Blue;
-                            }
-                        }
-                        //CC
-                        else if (invalid == 0)
-                        {
-                            r = model.Colors[polygon.ColorIndex].Red;
-                            g = model.Colors[polygon.ColorIndex].Green;
-                            b = model.Colors[polygon.ColorIndex].Blue;
-                            if (!model.Polygons[i + 2].ColorSlot)
-                            {
-                                r = model.Colors[model.Polygons[i + 2].ColorIndex].Red;
-                                g = model.Colors[model.Polygons[i + 2].ColorIndex].Green;
-                                b = model.Colors[model.Polygons[i + 2].ColorIndex].Blue;
-                            }
-                            else if (!model.Polygons[i + 1].ColorSlot)
-                            {
-                                r = model.Colors[model.Polygons[i + 1].ColorIndex].Red;
-                                g = model.Colors[model.Polygons[i + 1].ColorIndex].Green;
-                                b = model.Colors[model.Polygons[i + 1].ColorIndex].Blue;
-                            }
-                        }
-                        GL.Color3(r,g,b);
-                        RenderVertex(frame.Vertices[vertexc]);
-                        ii++;
-                        if (invalid > 0) invalid--;
-                        else if (polygon.TriType > 7) invalid = 2;
-                    }
-                    i++;
+                    RenderVertex(frame.Vertices[model.PositionIndices[i] + frame.SpecialVertexCount]);
                 }
                 GL.End();
             }
@@ -369,78 +135,55 @@ namespace CrashEdit
 
         private Frame UncompressFrame(Frame frame)
         {
-            int bit = 0;
-            int modelxcum = 0;
-            int modelycum = 0;
-            int modelzcum = 0;
-            for (int i = 0; i < model.Positions.Count; i++)
+            if (frame.Decompressed) return frame; // already decompressed
+            int x_alu = 0;
+            int y_alu = 0;
+            int z_alu = 0;
+            int bi = 0;
+            for (int i = 0; i < model.Positions.Count; ++i)
             {
-                byte modelx = (byte)(model.Positions[i].X * 2);
-                if (model.Positions[i].XBits == 7) { modelx = 0; modelxcum = 0; }
-                sbyte vertexx = 0;
-                bit += model.Positions[i].XBits;
-                for (int ii = 0; ii < model.Positions[i].XBits; ii++)
+                int bx = model.Positions[i].X << 1;
+                int by = model.Positions[i].Y;
+                int bz = model.Positions[i].Z;
+                if (model.Positions[i].XBits == 7)
                 {
-                    vertexx |= (sbyte)(Convert.ToByte(frame.Temporals[bit]) << ii);
-                    bit--;
+                    x_alu = bx;
                 }
-                if (frame.Temporals[bit] == true)
+                if (model.Positions[i].YBits == 7)
                 {
-                    vertexx -= (sbyte)(1 << model.Positions[i].XBits);
+                    y_alu = by;
                 }
-                bit += model.Positions[i].XBits + 1;
-                byte modelz = model.Positions[i].Z;
-                if (model.Positions[i].ZBits == 7) { modelz = 0; modelzcum = 0; }
-                sbyte vertexz = 0;
-                bit += model.Positions[i].ZBits;
-                for (int ii = 0; ii < model.Positions[i].ZBits; ii++)
+                if (model.Positions[i].ZBits == 7)
                 {
-                    vertexz |= (sbyte)(Convert.ToByte(frame.Temporals[bit]) << ii);
-                    bit--;
+                    z_alu = bz;
                 }
-                if (frame.Temporals[bit] == true)
+                
+                // XZY frame data
+                int vx = frame.Temporals[bi++] ? SignTable[model.Positions[i].XBits] : 0;
+                for (int j = 0; j < model.Positions[i].XBits; ++j)
                 {
-                    vertexz -= (sbyte)(1 << model.Positions[i].ZBits);
+                    vx |= Convert.ToByte(frame.Temporals[bi++]) << (model.Positions[i].XBits - 1 - j);
                 }
-                bit += model.Positions[i].ZBits + 1;
-                byte modely = model.Positions[i].Y;
-                if (model.Positions[i].YBits == 7) { modely = 0; modelycum = 0; }
-                sbyte vertexy = 0;
-                bit += model.Positions[i].YBits;
-                for (int ii = 0; ii < model.Positions[i].YBits; ii++)
-                {
-                    vertexy |= (sbyte)(Convert.ToByte(frame.Temporals[bit]) << ii);
-                    bit--;
-                }
-                if (frame.Temporals[bit] == true)
-                {
-                    vertexy -= (sbyte)(1 << model.Positions[i].YBits);
-                }
-                bit += model.Positions[i].YBits + 1;
-                byte finalx = 0;
-                byte finaly = 0;
-                byte finalz = 0;
 
-                finalx = (byte)((modelxcum + modelx + vertexx) % 256);
-                finaly = (byte)((modelycum + modely + vertexy) % 256);
-                finalz = (byte)((modelzcum + modelz + vertexz) % 256);
+                int vz = frame.Temporals[bi++] ? SignTable[model.Positions[i].ZBits] : 0;
+                for (int j = 0; j < model.Positions[i].ZBits; ++j)
+                {
+                    vz |= Convert.ToByte(frame.Temporals[bi++]) << (model.Positions[i].ZBits - 1 - j);
+                }
 
-                modelxcum += (byte)(modelx + vertexx);
-                modelycum += (byte)(modely + vertexy);
-                modelzcum += (byte)(modelz + vertexz);
-                frame.Vertices[i] = new FrameVertex(finalx,finaly,finalz);
+                int vy = frame.Temporals[bi++] ? SignTable[model.Positions[i].YBits] : 0;
+                for (int j = 0; j < model.Positions[i].YBits; ++j)
+                {
+                    vy |= Convert.ToByte(frame.Temporals[bi++]) << (model.Positions[i].YBits - 1 - j);
+                }
+
+                x_alu = (x_alu + vx + bx) % 256;
+                y_alu = (y_alu + vy + by) % 256;
+                z_alu = (z_alu + vz + bz) % 256;
+
+                frame.Vertices[i] = new FrameVertex((byte)x_alu, (byte)y_alu, (byte)z_alu);
             }
-            return frame;
-        }
-
-        private Frame ModelToFrame(ModelEntry model)
-        {
-            List<FrameVertex> vertices = new List<FrameVertex>();
-            for (int i = 0; i < model.Positions.Count; i++)
-            {
-                vertices.Add(new FrameVertex(model.Positions[i].X,model.Positions[i].Y,model.Positions[i].Z));
-            }
-            Frame frame = new Frame(0,0,0,0,BitConv.FromInt32(model.Info,0x38),1,model.EID,24,null,vertices,null);
+            frame.Decompressed = true;
             return frame;
         }
 

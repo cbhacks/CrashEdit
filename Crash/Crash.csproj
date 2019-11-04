@@ -59,8 +59,8 @@
     <Compile Include="Formats\Crash Formats\Models\ModelEntry.cs" />
     <Compile Include="Formats\Crash Formats\Models\ModelAnimatedTexture.cs" />
     <Compile Include="Formats\Crash Formats\Models\ModelPosition.cs" />
+    <Compile Include="Formats\Crash Formats\Models\ModelStruct.cs" />
     <Compile Include="Formats\Crash Formats\Models\ModelTexture.cs" />
-    <Compile Include="Formats\Crash Formats\Models\ModelPolygon.cs" />
     <Compile Include="Formats\Crash Formats\Models\ModelEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Models\T2Entry.cs" />
     <Compile Include="Formats\Crash Formats\Models\T2EntryLoader.cs" />
