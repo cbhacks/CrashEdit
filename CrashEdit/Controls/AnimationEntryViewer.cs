@@ -147,7 +147,7 @@ namespace CrashEdit
             int x_alu = 0;
             int y_alu = 0;
             int z_alu = 0;
-            int bi = 0;
+            int bi = frame.SpecialVertexCount * 8 * 3;
             for (int i = 0; i < model.Positions.Count; ++i)
             {
                 int bx = model.Positions[i].X << 1;
