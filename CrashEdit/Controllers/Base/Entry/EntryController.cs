@@ -6,8 +6,8 @@ namespace CrashEdit
     {
         public EntryController(EntryChunkController entrychunkcontroller,Entry entry)
         {
-            this.EntryChunkController = entrychunkcontroller;
-            this.Entry = entry;
+            EntryChunkController = entrychunkcontroller;
+            Entry = entry;
             AddMenu("Export Entry",Menu_Export_Entry);
             AddMenu("Delete Entry",Menu_Delete_Entry);
             if (!(this is UnprocessedEntryController))
@@ -57,6 +57,8 @@ namespace CrashEdit
 
         private void Menu_Unprocess_Entry()
         {
+            var trv = Node.TreeView;
+            trv.BeginUpdate();
             int index = EntryChunkController.EntryChunk.Entries.IndexOf(Entry);
             UnprocessedEntry unprocessedentry = Entry.Unprocess();
             EntryChunkController.EntryChunk.Entries[index] = unprocessedentry;
@@ -67,6 +69,7 @@ namespace CrashEdit
                 Node.TreeView.SelectedNode = unprocessedentrycontroller.Node;
             }
             Dispose();
+            trv.EndUpdate();
         }
     }
 }

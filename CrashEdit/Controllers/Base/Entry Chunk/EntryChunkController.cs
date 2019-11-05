@@ -18,10 +18,7 @@ namespace CrashEdit
 
         public EntryChunk EntryChunk { get; }
 
-        protected override Control CreateEditor()
-        {
-            return new EntryChunkBox(this);
-        }
+        protected override Control CreateEditor() => new EntryChunkBox(this);
 
         internal EntryController CreateEntryController(Entry entry)
         {
