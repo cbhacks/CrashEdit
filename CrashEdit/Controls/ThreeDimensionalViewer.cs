@@ -106,6 +106,13 @@ namespace CrashEdit
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.AlphaTest);
+            GL.Enable(EnableCap.Blend);
+            GL.Enable(EnableCap.Normalize);
+            GL.DepthFunc(DepthFunction.Lequal);
+            GL.AlphaFunc(AlphaFunction.Greater, 0);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             ResetCamera();
         }
 
@@ -236,10 +243,6 @@ namespace CrashEdit
         protected override void OnPaint(PaintEventArgs e)
         {
             MakeCurrent();
-            GL.Enable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.AlphaTest);
-            GL.DepthFunc(DepthFunction.Lequal);
-            GL.AlphaFunc(AlphaFunction.Greater,0);
             GL.Viewport(Location,Size);
             GL.ClearColor(0.05f,0.05f,0.05f,1);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -255,8 +258,6 @@ namespace CrashEdit
             GL.Translate(-midx,-midy,-midz);
             RenderObjects();
             SwapBuffers();
-            GL.Disable(EnableCap.DepthTest);
-            GL.Disable(EnableCap.AlphaTest);
         }
 
         public void ResetCamera()
