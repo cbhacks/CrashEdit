@@ -14,9 +14,7 @@ namespace CrashEdit
         private ModelEntry model;
         private int frameid;
         private Timer animatetimer;
-        private short xoffset;
-        private short yoffset;
-        private short zoffset;
+        private int interi;
 
         public AnimationEntryViewer(Frame frame,ModelEntry model)
         {
@@ -26,9 +24,6 @@ namespace CrashEdit
                 frames.Add(UncompressFrame(frame));
             else
                 frames.Add(LoadFrame(frame));
-            xoffset = frame.XOffset;
-            yoffset = frame.YOffset;
-            zoffset = frame.ZOffset;
             frameid = 0;
         }
 
@@ -37,6 +32,7 @@ namespace CrashEdit
             this.frames = new List<Frame>();
             this.model = model;
             frameid = 0;
+            interi = 0;
             if (model.Positions != null)
             {
                 foreach (Frame frame in frames)
@@ -54,21 +50,17 @@ namespace CrashEdit
                 }
             }
             frameid = 0;
-            xoffset = this.frames[frameid].XOffset;
-            yoffset = this.frames[frameid].YOffset;
-            zoffset = this.frames[frameid].ZOffset;
             animatetimer = new Timer
             {
-                Interval = 1000 / OldMainForm.GetRate(),
+                Interval = 1000 / OldMainForm.GetRate() / 2,
                 Enabled = true
             };
             animatetimer.Tick += delegate (object sender,EventArgs e)
             {
-                animatetimer.Interval = 1000 / OldMainForm.GetRate();
-                frameid = ++frameid % this.frames.Count;
-                xoffset = this.frames[frameid].XOffset;
-                yoffset = this.frames[frameid].YOffset;
-                zoffset = this.frames[frameid].ZOffset;
+                animatetimer.Interval = 1000 / OldMainForm.GetRate() / 2;
+                interi = ++interi % 2;
+                frameid = (frameid + (interi == 1 ? 1 : 0)) % this.frames.Count;
+                if (frameid == 0) interi = 0;
                 Refresh();
             };
         }
@@ -103,7 +95,14 @@ namespace CrashEdit
 
         protected override void RenderObjects()
         {
-            RenderFrame(frames[frameid % frames.Count]);
+            if (interi == 0)
+            {
+                RenderFrame(frames[frameid]);
+            }
+            else
+            {
+                RenderInterpolatedFrames(frames[frameid-1], frames[frameid]);
+            }
         }
 
         private void RenderFrame(Frame frame)
@@ -116,7 +115,7 @@ namespace CrashEdit
                 {
                     int c = Math.Min(model.ColorIndices[i], model.ColorIndices.Count);
                     GL.Color3(model.Colors[c].Red, model.Colors[c].Green, model.Colors[c].Blue);
-                    RenderVertex(frame.Vertices[model.PositionIndices[i] + frame.SpecialVertexCount]);
+                    RenderVertex(frame, frame.Vertices[model.PositionIndices[i] + frame.SpecialVertexCount]);
                 }
                 GL.End();
             }
@@ -125,15 +124,51 @@ namespace CrashEdit
                 GL.Begin(PrimitiveType.Points);
                 foreach (FrameVertex vertex in frame.Vertices)
                 {
-                    RenderVertex(vertex);
+                    RenderVertex(frame, vertex);
                 }
                 GL.End();
             }
         }
 
-        private void RenderVertex(FrameVertex vertex)
+        private void RenderInterpolatedFrames(Frame f1, Frame f2)
         {
-            GL.Vertex3((vertex.X + xoffset / 4) * BitConv.FromInt32(model.Info,0),(vertex.Z + yoffset / 4) * BitConv.FromInt32(model.Info,4),(vertex.Y + zoffset / 4) * BitConv.FromInt32(model.Info,8));
+            if (model != null)
+            {
+                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+                GL.Begin(PrimitiveType.Triangles);
+                for (int i = 0; i < model.PositionIndices.Count; ++i)
+                {
+                    int c = Math.Min(model.ColorIndices[i], model.ColorIndices.Count);
+                    GL.Color3(model.Colors[c].Red, model.Colors[c].Green, model.Colors[c].Blue);
+                    RenderInterpolatedVertices(f1,f2,f1.Vertices[model.PositionIndices[i] + f1.SpecialVertexCount], f2.Vertices[model.PositionIndices[i] + f2.SpecialVertexCount]);
+                }
+                GL.End();
+            }
+            else
+            {
+                GL.Begin(PrimitiveType.Points);
+                for (int i = 0; i < f1.Vertices.Count; ++i)
+                {
+                    RenderInterpolatedVertices(f1,f2,f1.Vertices[i], f2.Vertices[i]);
+                }
+                GL.End();
+            }
+        }
+
+        private void RenderVertex(Frame f, FrameVertex vertex)
+        {
+            GL.Vertex3((vertex.X + f.XOffset / 4) * BitConv.FromInt32(model.Info,0),(vertex.Z + f.YOffset / 4) * BitConv.FromInt32(model.Info,4),(vertex.Y + f.ZOffset / 4) * BitConv.FromInt32(model.Info,8));
+        }
+
+        private void RenderInterpolatedVertices(Frame f1, Frame f2, FrameVertex v1, FrameVertex v2)
+        {
+            int x1 = v1.X + f1.XOffset / 4;
+            int x2 = v2.X + f2.XOffset / 4;
+            int y1 = v1.Z + f1.YOffset / 4;
+            int y2 = v2.Z + f2.YOffset / 4;
+            int z1 = v1.Y + f1.ZOffset / 4;
+            int z2 = v2.Y + f2.ZOffset / 4;
+            GL.Vertex3((x1+x2)/2f * BitConv.FromInt32(model.Info,0),(y1+y2)/2f * BitConv.FromInt32(model.Info,4),(z1+z2)/2f * BitConv.FromInt32(model.Info,8));
         }
 
         private Frame UncompressFrame(Frame frame)
