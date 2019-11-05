@@ -2,7 +2,6 @@
 {
     public interface ModelStruct
     {
-
     }
 
     public struct ModelTriangle : ModelStruct
@@ -12,28 +11,33 @@
         public enum IndexType : byte
         {
             Original = 0,
-            Duplicate = 4
+            Duplicate = 1
         }
 
         public static ModelTriangle Load(uint structure)
         {
-            byte texture = (byte)structure;
-            bool animated = (structure >> 8 & 0x1) != 0;
-            byte color = (byte)(structure >> 9 & 0x7F);
-            byte key = (byte)(structure >> 16);
-            byte type = (byte)(structure >> 24 & 0x07);
-            byte tritype = (byte)(structure >> 28);
-            return new ModelTriangle(texture,animated,color,key,type,tritype);
+            // LE format: YYSSFTLL PPPPPPPP CCCCCCCA XXXXXXXX
+            // TTL is probably TLL or maybe even TPP?
+            byte texture = (byte)structure; // X
+            bool animated = (structure >> 8 & 0x1) != 0; // A
+            byte color = (byte)(structure >> 9 & 0x7F); // C
+            byte key = (byte)(structure >> 16); // P
+            byte unknown = (byte)(structure >> 24 & 0x3); // L
+            byte type = (byte)(structure >> 26 & 0x01); // T
+            bool flag = (structure >> 27 & 0x1) != 0; // F
+            byte tritype = (byte)(structure >> 28); // Y/S
+            return new ModelTriangle(texture,animated,color,key,unknown,type,flag,tritype);
         }
 
-        public ModelTriangle(byte texture,bool animated,byte color,byte key,byte type,byte tritype)
+        public ModelTriangle(byte texture,bool animated,byte color,byte key,byte unknown,byte type,bool flag,byte tritype)
         {
             TextureIndex = texture;
             Animated = animated;
             ColorIndex = color;
             PositionKey = key;
-            Flag = (type & 0x8) == 1;
+            Unknown = unknown;
             Type = (IndexType)type;
+            Flag = flag;
             TriangleSubtype = (byte)(tritype & 0x3);
             TriangleType = (byte)(tritype >> 2 & 0x3);
         }
@@ -44,6 +48,7 @@
         public byte PositionKey { get; }
         public byte TriangleType { get; }
         public byte TriangleSubtype { get; }
+        public byte Unknown { get; }
         public bool Flag { get; }
         public IndexType Type { get; }
     }
