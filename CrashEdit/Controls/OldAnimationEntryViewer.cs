@@ -62,11 +62,7 @@ namespace CrashEdit
                 animatetimer.Interval = 1000 / 30;
                 if (pal)
                     animatetimer.Interval = 1000 / 25;
-                frameid++;
-                if (frameid == this.frames.Count)
-                {
-                    frameid = 0;
-                }
+                frameid = ++frameid % this.frames.Count;
                 xoffset = this.frames[frameid].XOffset;
                 yoffset = this.frames[frameid].YOffset;
                 zoffset = this.frames[frameid].ZOffset;

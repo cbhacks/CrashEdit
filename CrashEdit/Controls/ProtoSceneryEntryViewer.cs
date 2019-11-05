@@ -1,5 +1,5 @@
 using Crash;
-using System;
+using System.Drawing;
 using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
 
@@ -47,17 +47,32 @@ namespace CrashEdit
                 {
                     if (entry != null)
                     {
+                        GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+                        GL.Color3(Color.LightGray);
+                        GL.Begin(PrimitiveType.Triangles);
                         foreach (ProtoSceneryPolygon polygon in entry.Polygons)
                         {
-                            GL.Begin(PrimitiveType.Triangles);
                             if (polygon.VertexA < entry.Vertices.Count)
                                 RenderVertex(entry, entry.Vertices[polygon.VertexA]);
                             if (polygon.VertexB < entry.Vertices.Count)
                                 RenderVertex(entry, entry.Vertices[polygon.VertexB]);
                             if (polygon.VertexC < entry.Vertices.Count)
                                 RenderVertex(entry, entry.Vertices[polygon.VertexC]);
-                            GL.End();
                         }
+                        GL.End();
+                        GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+                        GL.Color3(Color.Black);
+                        GL.Begin(PrimitiveType.Triangles);
+                        foreach (ProtoSceneryPolygon polygon in entry.Polygons)
+                        {
+                            if (polygon.VertexA < entry.Vertices.Count)
+                                RenderVertex(entry, entry.Vertices[polygon.VertexA]);
+                            if (polygon.VertexB < entry.Vertices.Count)
+                                RenderVertex(entry, entry.Vertices[polygon.VertexB]);
+                            if (polygon.VertexC < entry.Vertices.Count)
+                                RenderVertex(entry, entry.Vertices[polygon.VertexC]);
+                        }
+                        GL.End();
                     }
                 }
                 GL.EndList();
@@ -70,8 +85,6 @@ namespace CrashEdit
 
         private void RenderVertex(ProtoSceneryEntry entry, ProtoSceneryVertex vertex)
         {
-            Random random = new Random();
-            byte[] color = new byte[3]; random.NextBytes(color); GL.Color3(color[0], color[1], color[2]);
             GL.Vertex3(entry.XOffset + vertex.X, entry.YOffset + vertex.Y, entry.ZOffset + vertex.Z);
         }
 

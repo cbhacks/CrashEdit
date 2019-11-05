@@ -14,7 +14,7 @@ namespace Crash
             {
                 frames[i] = ProtoFrame.Load(items[i]);
             }
-            return new ProtoAnimationEntry(frames,eid,size);
+            return new ProtoAnimationEntry(frames,frames[0].NotProto,eid,size);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Proto Animation ({0})",ProtoAnimationEntry.EName);
+            Node.Text = string.Format("{1} Animation ({0})",ProtoAnimationEntry.EName, ProtoAnimationEntry.NotProto ? "Old" : "Proto"); // fucking hell
             Node.ImageKey = "limeb";
             Node.SelectedImageKey = "limeb";
         }

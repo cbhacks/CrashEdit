@@ -37,7 +37,7 @@ namespace CrashEdit
             animatetimer.Enabled = true;
             animatetimer.Tick += delegate (object sender,EventArgs e)
             {
-                frameid++;
+                frameid = ++frameid % this.frames.Count;
                 xoffset = this.frames[frameid].XOffset;
                 yoffset = this.frames[frameid].YOffset;
                 zoffset = this.frames[frameid].ZOffset;
