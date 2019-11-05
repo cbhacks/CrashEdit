@@ -23,10 +23,6 @@ namespace Crash
                 ErrorManager.SignalError("Frame: Vertex count is invalid");
             }
             int collision = BitConv.FromInt32(data,12);
-            if (collision > 1)
-            {
-                ErrorManager.SignalError("Frame: More than 1 collision");
-            }
             int modeleid = BitConv.FromInt32(data,16);
             int headersize = BitConv.FromInt32(data,20);
             if (headersize < 24)
