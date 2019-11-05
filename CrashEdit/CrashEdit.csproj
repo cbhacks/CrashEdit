@@ -232,10 +232,10 @@
     </Compile>
     <Compile Include="FileFilters.cs" />
     <Compile Include="Properties\Resources.Designer.cs" />
-    <Compile Include="Resources\ErrorReporter.cs">
+    <Compile Include="ErrorReporter.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Resources\ErrorReporter.Designer.cs">
+    <Compile Include="ErrorReporter.Designer.cs">
       <DependentUpon>ErrorReporter.cs</DependentUpon>
     </Compile>
     <Compile Include="FileUtil.cs" />
@@ -329,7 +329,7 @@
       <DependentUpon>SoundBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx" />
-    <EmbeddedResource Include="Resources\ErrorReporter.resx">
+    <EmbeddedResource Include="ErrorReporter.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ErrorReporter.cs</DependentUpon>
     </EmbeddedResource>
