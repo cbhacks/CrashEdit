@@ -229,7 +229,7 @@ namespace CrashEdit
             {
                 dialog.Filter = FileFilters.NSF + "|" + FileFilters.Any;
                 dialog.Multiselect = true;
-                if (dialog.ShowDialog() == DialogResult.OK)
+                if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
                     foreach (string filename in dialog.FileNames)
                     {
@@ -245,7 +245,7 @@ namespace CrashEdit
             try
             {
                 byte[] nsfdata = File.ReadAllBytes(filename);
-                if (dlgGameVersion.ShowDialog() == DialogResult.OK)
+                if (dlgGameVersion.ShowDialog(this) == DialogResult.OK)
                 {
                     NSF nsf = NSF.LoadAndProcess(nsfdata,dlgGameVersion.SelectedVersion);
                     OpenNSF(filename,nsf,dlgGameVersion.SelectedVersion);
@@ -481,7 +481,7 @@ namespace CrashEdit
                 NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
                 using (InputWindow inputwindow = new InputWindow())
                 {
-                    if (inputwindow.ShowDialog() == DialogResult.OK)
+                    if (inputwindow.ShowDialog(this) == DialogResult.OK)
                     {
                         nsfbox.Find(inputwindow.Input);
                     }
@@ -512,7 +512,7 @@ namespace CrashEdit
         {
             var log = new StringBuilder();
 
-            if (dlgMakeBINDir.ShowDialog() != DialogResult.OK)
+            if (dlgMakeBINDir.ShowDialog(this) != DialogResult.OK)
                 return;
 
             string cnffile = Path.Combine(dlgMakeBINDir.SelectedPath, "SYSTEM.CNF");
@@ -523,7 +523,7 @@ namespace CrashEdit
                     return;
             }
 
-            if (dlgMakeBINFile.ShowDialog() != DialogResult.OK)
+            if (dlgMakeBINFile.ShowDialog(this) != DialogResult.OK)
                 return;
 
             var fs = new CDBuilder();

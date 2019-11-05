@@ -8,9 +8,10 @@ namespace CrashEdit
         [STAThread]
         internal static void Main(string[] args)
         {
-            using (ErrorReporter errorform = new ErrorReporter())
             using (OldMainForm mainform = new OldMainForm())
+            using (ErrorReporter errorform = new ErrorReporter(mainform))
             {
+                FileUtil.Owner = mainform;
                 Application.Run(mainform);
             }
         }

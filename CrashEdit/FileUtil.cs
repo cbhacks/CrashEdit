@@ -15,11 +15,13 @@ namespace CrashEdit
             savefiledlg = new SaveFileDialog();
         }
 
+        public static IWin32Window Owner { get; set; } = null;
+
         public static byte[] OpenFile(params string[] filters)
         {
             openfiledlg.Filter = string.Join("|",filters);
             openfiledlg.Multiselect = false;
-            if (openfiledlg.ShowDialog() == DialogResult.OK)
+            if (openfiledlg.ShowDialog(Owner) == DialogResult.OK)
             {
                 return File.ReadAllBytes(openfiledlg.FileName);
             }
@@ -33,7 +35,7 @@ namespace CrashEdit
         {
             openfiledlg.Filter = string.Join("|",filters);
             openfiledlg.Multiselect = true;
-            if (openfiledlg.ShowDialog() == DialogResult.OK)
+            if (openfiledlg.ShowDialog(Owner) == DialogResult.OK)
             {
                 byte[][] result = new byte [openfiledlg.FileNames.Length][];
                 for (int i = 0;i < openfiledlg.FileNames.Length;i++)
@@ -53,7 +55,7 @@ namespace CrashEdit
             if (data == null)
                 throw new ArgumentNullException("data");
             savefiledlg.Filter = string.Join("|",filters);
-            if (savefiledlg.ShowDialog() == DialogResult.OK)
+            if (savefiledlg.ShowDialog(Owner) == DialogResult.OK)
             {
                 File.WriteAllBytes(savefiledlg.FileName,data);
                 return true;
