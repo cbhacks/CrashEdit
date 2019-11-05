@@ -65,10 +65,7 @@ namespace CrashEdit
             allentries = false;
         }
 
-        protected override int CameraRangeMargin
-        {
-            get { return 1600; }
-        }
+        protected override int CameraRangeMargin => 800;
 
         protected override IEnumerable<IPosition> CorePositions
         {

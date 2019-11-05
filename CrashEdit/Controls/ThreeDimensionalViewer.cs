@@ -281,9 +281,9 @@ namespace CrashEdit
             midy = (maxy + miny) / 2;
             midz = (maxz + minz) / 2;
             range = 1;
-            range = Math.Max(range,midx - minx);
-            range = Math.Max(range,midy - miny);
-            range = Math.Max(range,midz - minz);
+            range = Math.Max(range,maxx - minx);
+            range = Math.Max(range,maxy - miny);
+            range = Math.Max(range,maxz - minz);
             range += CameraRangeMargin;
             rotx = 0;
             roty = 0;

@@ -66,17 +66,9 @@ namespace CrashEdit
         }
 
         private int MinScale => model != null ? Math.Min(BitConv.FromInt32(model.Info, 8), Math.Min(BitConv.FromInt32(model.Info, 0), BitConv.FromInt32(model.Info, 4))) : 0x1000;
+        private int MaxScale => model != null ? Math.Max(BitConv.FromInt32(model.Info, 8), Math.Max(BitConv.FromInt32(model.Info, 0), BitConv.FromInt32(model.Info, 4))) : 0x1000;
 
-        protected override int CameraRangeMargin
-        {
-            get
-            {
-                int i = MinScale * 256;
-                if (model != null && model.Positions != null)
-                    i /= 2;
-                return i;
-            }
-        }
+        protected override int CameraRangeMargin => 200000;
 
         protected override IEnumerable<IPosition> CorePositions
         {
@@ -84,6 +76,13 @@ namespace CrashEdit
             {
                 foreach (Frame frame in frames)
                 {
+                    if (!frame.Decompressed)
+                    {
+                        if (model.Positions == null)
+                            UncompressFrame(frame);
+                        else
+                            LoadFrame(frame);
+                    }
                     foreach (FrameVertex vertex in frame.Vertices)
                     {
                         int x = (vertex.X + frame.XOffset / 4) * BitConv.FromInt32(model.Info,0);
@@ -203,6 +202,11 @@ namespace CrashEdit
             int z1 = v1.Y + f1.ZOffset / 4;
             int z2 = v2.Y + f2.ZOffset / 4;
             GL.Vertex3((x1+x2)/2f * BitConv.FromInt32(model.Info,0),(y1+y2)/2f * BitConv.FromInt32(model.Info,4),(z1+z2)/2f * BitConv.FromInt32(model.Info,8));
+        }
+
+        private void UncompressFrame(ref Frame frame)
+        {
+            frame = UncompressFrame(frame);
         }
 
         private Frame UncompressFrame(Frame frame)
