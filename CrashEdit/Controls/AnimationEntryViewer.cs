@@ -26,7 +26,7 @@ namespace CrashEdit
             if (model.Positions != null)
                 frames.Add(UncompressFrame(frame));
             else
-                frames.Add(frame);
+                frames.Add(LoadFrame(frame));
             xoffset = frame.XOffset;
             yoffset = frame.YOffset;
             zoffset = frame.ZOffset;
@@ -47,7 +47,13 @@ namespace CrashEdit
                 }
             }
             else
-                this.frames = new List<Frame>(frames);
+            {
+                foreach (Frame frame in frames)
+                {
+                    this.frames.Add(LoadFrame(frame));
+                    frameid++;
+                }
+            }
             frameid = 0;
             xoffset = this.frames[frameid].XOffset;
             yoffset = this.frames[frameid].YOffset;
@@ -148,15 +154,15 @@ namespace CrashEdit
                 int bz = model.Positions[i].Z;
                 if (model.Positions[i].XBits == 7)
                 {
-                    x_alu = bx;
+                    x_alu = 0;
                 }
                 if (model.Positions[i].YBits == 7)
                 {
-                    y_alu = by;
+                    y_alu = 0;
                 }
                 if (model.Positions[i].ZBits == 7)
                 {
-                    z_alu = bz;
+                    z_alu = 0;
                 }
                 
                 // XZY frame data
@@ -183,6 +189,47 @@ namespace CrashEdit
                 z_alu = (z_alu + vz + bz) % 256;
 
                 frame.Vertices[i] = new FrameVertex((byte)x_alu, (byte)y_alu, (byte)z_alu);
+            }
+            frame.Decompressed = true;
+            return frame;
+        }
+
+        private Frame LoadFrame(Frame frame)
+        {
+            if (frame.Decompressed) return frame; // already loaded (no decompression was necessary though)
+            bool[] uncompressedbitstream = new bool[frame.Temporals.Length];
+            for (int i = 0; i < uncompressedbitstream.Length / 32;++i)
+            {
+                for (int j = 0; j < 4; ++j)
+                {
+                    for (int k = 0; k < 8; ++k)
+                    {
+                        uncompressedbitstream[32*i+24-j*8+k] = frame.Temporals[32*i+j*8+k]; // replace this with a cool formula one day
+                    }
+                }
+            }
+            int bi = frame.SpecialVertexCount * 8 * 3;
+            for (int i = frame.SpecialVertexCount; i < frame.Vertices.Count; ++i)
+            {
+                byte x = 0;
+                for (int j = 0; j < 8; ++j)
+                {
+                    x |= (byte)(Convert.ToByte(uncompressedbitstream[bi++]) << (7-j));
+                }
+                
+                byte y = 0;
+                for (int j = 0; j < 8; ++j)
+                {
+                    y |= (byte)(Convert.ToByte(uncompressedbitstream[bi++]) << (7-j));
+                }
+                
+                byte z = 0;
+                for (int j = 0; j < 8; ++j)
+                {
+                    z |= (byte)(Convert.ToByte(uncompressedbitstream[bi++]) << (7-j));
+                }
+                
+                frame.Vertices[i] = new FrameVertex(x,y,z);
             }
             frame.Decompressed = true;
             return frame;

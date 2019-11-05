@@ -28,7 +28,7 @@ namespace Crash
                 ErrorManager.SignalError("Frame: More than 1 collision");
             }
             int modeleid = BitConv.FromInt32(data,16);
-            int headersize = BitConv.FromInt32(data, 20);
+            int headersize = BitConv.FromInt32(data,20);
             if (headersize < 24)
             {
                 ErrorManager.SignalError("Frame: Header size value is invalid");
@@ -38,34 +38,21 @@ namespace Crash
             Array.Copy(data, 24, settings, 0, settings.Length);
             int specialvertexcount = (headersize - fake_headersize) / 3;
             FrameVertex[] vertices = new FrameVertex[vertexcount];
-            bool[] temporals = null;
-            int uncompressedsize = vertexcount * 3 + fake_headersize;
-            Aligner.Align(ref uncompressedsize, 4);
-            if (data.Length > uncompressedsize)
+            for (int i = 0; i < specialvertexcount; ++i) // these vertices are NEVER compressed
             {
-                ErrorManager.SignalError("Frame: unknown frame parameters detected");
+                vertices[i] = new FrameVertex(data[fake_headersize + i * 3], data[fake_headersize + i * 3 + 1], data[fake_headersize + i * 3 + 2]);
             }
-            else if (data.Length == uncompressedsize) // uncompressed
+            if (((data.Length - fake_headersize) % 4) != 0)
             {
-                for (int i = 0; i < vertexcount; i++)
-                {
-                    vertices[i] = new FrameVertex(data[collision*0x28+24+i*3], data[collision*0x28+24+i*3+1], data[collision*0x28+24+i*3+2]);
-                }
+                ErrorManager.SignalError("Frame: Invalid data alignment");
             }
-            else
+            bool[] temporals = new bool[(data.Length - fake_headersize) / 4 * 32];
+            for (int i = 0; i < (data.Length - fake_headersize) / 4; ++i)
             {
-                if (((data.Length - fake_headersize) % 4) != 0)
+                int val = BitConv.FromInt32(data, fake_headersize + i * 4);
+                for (int j = 0; j < 32; ++j) // reverse endianness for decompression
                 {
-                    ErrorManager.SignalError("Frame: compressed frame vertex data is not aligned");
-                }
-                temporals = new bool[(data.Length - fake_headersize) / 4 * 32];
-                for (int i = 0; i < (data.Length - fake_headersize) / 4; ++i)
-                {
-                    int val = BitConv.FromInt32(data, fake_headersize + i*4);
-                    for (int j = 0; j < 32;++j) // reverse endianness for decompression
-                    {
-                        temporals[i * 32 + j] = (val >> (31-j) & 0x1) == 1;
-                    }
+                    temporals[i * 32 + j] = (val >> (31 - j) & 0x1) == 1;
                 }
             }
             return new Frame(xoffset,yoffset,zoffset,unknown,collision,modeleid,headersize,settings,vertices,specialvertexcount,temporals);
@@ -105,15 +92,7 @@ namespace Crash
         public byte[] Save()
         {
             int fake_headersize = 24 + Collision * 0x28;
-            int size = fake_headersize;
-            if (Temporals != null)
-            {
-                size += Temporals.Length / 8;
-            }
-            else
-            {
-                size += Vertices.Count * 3;
-            }
+            int size = fake_headersize + Temporals.Length / 8;
             byte[] result = new byte [size];
             BitConv.ToInt16(result,0,XOffset);
             BitConv.ToInt16(result,2,YOffset);
@@ -123,27 +102,15 @@ namespace Crash
             BitConv.ToInt32(result,12,Collision);
             BitConv.ToInt32(result,16,ModelEID);
             BitConv.ToInt32(result,20,HeaderSize);
-            Array.Copy(Settings, 0, result, 24, Settings.Length);
-            if (Temporals != null)
+            Array.Copy(Settings,0,result,24,Settings.Length);
+            for (short i = 0; i < Temporals.Length / 32; ++i)
             {
-                for (short i = 0; i < Temporals.Length / 32;++i)
+                int val = 0;
+                for (short j = 0; j < 32; ++j)
                 {
-                    int val = 0;
-                    for (short j = 0; j < 32;++j)
-                    {
-                        val |= Convert.ToInt32(Temporals[i*32+j]) << (31-j);
-                    }
-                    BitConv.ToInt32(result, fake_headersize+i*4, val);
+                    val |= Convert.ToInt32(Temporals[i*32+j]) << (31-j);
                 }
-            }
-            else
-            {
-                for (int i = 0; i < vertices.Count; ++i)
-                {
-                    result[fake_headersize+i*3+0] = vertices[i].X;
-                    result[fake_headersize+i*3+1] = vertices[i].Y;
-                    result[fake_headersize+i*3+2] = vertices[i].Z;
-                }
+                BitConv.ToInt32(result, fake_headersize+i*4, val);
             }
             return result;
         }
