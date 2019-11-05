@@ -1,6 +1,5 @@
 using Crash;
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
@@ -60,16 +59,13 @@ namespace CrashEdit
             zoffset = this.frames[frameid].ZOffset;
             animatetimer = new Timer
             {
-                Interval = 1000 / 30,
+                Interval = 1000 / OldMainForm.GetRate(),
                 Enabled = true
             };
             animatetimer.Tick += delegate (object sender,EventArgs e)
             {
-                frameid++;
-                if (frameid == this.frames.Count)
-                {
-                    frameid = 0;
-                }
+                animatetimer.Interval = 1000 / OldMainForm.GetRate();
+                frameid = ++frameid % this.frames.Count;
                 xoffset = this.frames[frameid].XOffset;
                 yoffset = this.frames[frameid].YOffset;
                 zoffset = this.frames[frameid].ZOffset;
@@ -146,7 +142,7 @@ namespace CrashEdit
             int x_alu = 0;
             int y_alu = 0;
             int z_alu = 0;
-            int bi = frame.SpecialVertexCount * 8 * 3;
+            int bi = 0;
             for (int i = 0; i < model.Positions.Count; ++i)
             {
                 int bx = model.Positions[i].X << 1;

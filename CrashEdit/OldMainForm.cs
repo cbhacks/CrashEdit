@@ -48,9 +48,14 @@ namespace CrashEdit
         private ToolStripDropDownButton tbbExtra;
         private TabControl tbcTabs;
         private GameVersionForm dlgGameVersion;
+        private ToolStripButton tbbPAL;
 
         private FolderBrowserDialog dlgMakeBINDir = new FolderBrowserDialog();
         private SaveFileDialog dlgMakeBINFile = new SaveFileDialog();
+
+        private static bool PAL = false;
+        private const int RateNTSC = 30;
+        private const int RatePAL = 25;
 
         public OldMainForm()
         {
@@ -133,9 +138,18 @@ namespace CrashEdit
             tbbExtra.DropDown.Items.Add(tbxMakeBINUSA);
             tbbExtra.DropDown.Items.Add(tbxMakeBINEUR);
             tbbExtra.DropDown.Items.Add(tbxMakeBINJAP);
-            tbbExtra.DropDown.Items.Add(new ToolStripSeparator()); // lol. FIXME
+            tbbExtra.DropDown.Items.Add(new ToolStripMenuItem() { Text = "-" });
             tbbExtra.DropDown.Items.Add(tbxConvertVHVB);
             tbbExtra.DropDown.Items.Add(tbxConvertVAB);
+
+            tbbPAL = new ToolStripButton
+            {
+                Text = "PAL",
+                TextImageRelation = TextImageRelation.ImageAboveText,
+                Checked = false,
+                CheckOnClick = true
+            };
+            tbbPAL.Click += new EventHandler(tbbPAL_Click);
 
             tsToolbar = new ToolStrip
             {
@@ -151,6 +165,7 @@ namespace CrashEdit
             tsToolbar.Items.Add(tbbFindNext);
             tsToolbar.Items.Add(new ToolStripSeparator());
             tsToolbar.Items.Add(tbbExtra);
+            tsToolbar.Items.Add(tbbPAL);
 
             tbcTabs = new TabControl
             {
@@ -166,6 +181,16 @@ namespace CrashEdit
             Controls.Add(tsToolbar);
 
             dlgMakeBINFile.Filter = "Playstation Disc Images (*.bin)|*.bin";
+        }
+
+        void tbbPAL_Click(object sender, EventArgs e)
+        {
+            PAL = tbbPAL.Checked;
+        }
+
+        public static int GetRate()
+        {
+            return PAL ? RatePAL : RateNTSC;
         }
 
         void tbbOpen_Click(object sender,EventArgs e)
