@@ -60,7 +60,6 @@ namespace CrashEdit
                 animatetimer.Interval = 1000 / OldMainForm.GetRate() / 2;
                 interi = ++interi % 2;
                 frameid = (frameid + (interi == 1 ? 1 : 0)) % this.frames.Count;
-                if (frameid == 0) interi = 0;
                 Refresh();
             };
         }
@@ -95,7 +94,7 @@ namespace CrashEdit
 
         protected override void RenderObjects()
         {
-            if (interi == 0)
+            if (interi == 0 || frameid == 0)
             {
                 RenderFrame(frames[frameid]);
             }
@@ -177,7 +176,7 @@ namespace CrashEdit
             int x_alu = 0;
             int y_alu = 0;
             int z_alu = 0;
-            int bi = 0;
+            int bi = frame.SpecialVertexCount * 8 * 3;
             for (int i = 0; i < model.Positions.Count; ++i)
             {
                 int bx = model.Positions[i].X << 1;
