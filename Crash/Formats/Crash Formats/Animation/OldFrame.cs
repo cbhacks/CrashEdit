@@ -39,10 +39,7 @@ namespace Crash
             OldFrameVertex[] vertices = new OldFrameVertex [vertexcount];
             for (int i = 0;i < vertexcount;i++)
             {
-                //byte[] vertexdata = new byte [6];
-                //Array.Copy(data,56 + i * 6,vertexdata,0,vertexdata.Length);
-                //vertices[i] = OldFrameVertex.Load(vertexdata);
-                vertices[i] = new OldFrameVertex(data[0],data[1],data[2],data[3],data[4],data[5]);
+                vertices[i] = new OldFrameVertex(data[56+i*6+0],data[56+i*6+1],data[56+i*6+2],data[56+i*6+3],data[56+i*6+4],data[56+i*6+5]);
             }
             short unknown = BitConv.FromInt16(data,56 + vertexcount * 6);
             return new OldFrame(modeleid,xoffset,yoffset,zoffset,x1,y1,z1,x2,y2,z2,xglobal,yglobal,zglobal,vertices,unknown);
