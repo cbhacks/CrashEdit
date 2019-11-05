@@ -75,7 +75,7 @@ namespace CrashEdit
         {
             get
             {
-                int i = Math.Max(BitConv.FromInt32(model.Info, 8),Math.Max(BitConv.FromInt32(model.Info,0),BitConv.FromInt32(model.Info,4))) * 256;
+                int i = Math.Max(BitConv.FromInt32(model.Info, 8),Math.Max(BitConv.FromInt32(model.Info,0),BitConv.FromInt32(model.Info,4))) * 400;
                 if (model != null && model.Positions != null)
                     i /= 2;
                 return i;
@@ -109,18 +109,11 @@ namespace CrashEdit
             if (model != null)
             {
                 GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-                GL.Color3(Color.LightGray);
                 GL.Begin(PrimitiveType.Triangles);
                 for (int i = 0; i < model.PositionIndices.Count; ++i)
                 {
-                    RenderVertex(frame.Vertices[model.PositionIndices[i] + frame.SpecialVertexCount]);
-                }
-                GL.End();
-                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-                GL.Color3(Color.Black);
-                GL.Begin(PrimitiveType.Triangles);
-                for (int i = 0; i < model.PositionIndices.Count; ++i)
-                {
+                    int c = Math.Min(model.ColorIndices[i], model.ColorIndices.Count);
+                    GL.Color3(model.Colors[c].Red, model.Colors[c].Green, model.Colors[c].Blue);
                     RenderVertex(frame.Vertices[model.PositionIndices[i] + frame.SpecialVertexCount]);
                 }
                 GL.End();

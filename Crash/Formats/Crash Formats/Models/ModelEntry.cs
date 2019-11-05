@@ -29,21 +29,23 @@ namespace Crash
         private void ConvertIndices()
         {
             positionindices = new List<int>();
+            colorindices = new List<int>();
             Dictionary<byte, int> p = new Dictionary<byte, int>();
             int v = positions == null ? 0 : -BitConv.FromInt32(Info, 0x4C); // special vertex count, let's get rid of it for compressed models
             List<int> vtx = new List<int>();
             int lastvalidcc = -3; // dirty hack
             int lastccpos = -1;
             int lastaapos = -1;
-            ModelColor lastfirstcolor = new ModelColor();
-            ModelColor lastsecondcolor;
+            int lastcolor = -1;
+            int lastnonbb = -1;
+            ModelStruct[] structs = new ModelStruct[PolyData.Length];
             for (int i = 0; i < PolyData.Length; ++i) // pre-pass (ugh)
             {
                 ModelStruct s = ConvertPolyItem(PolyData[i]);
                 if (s == null) // footer
                     break;
                 else if (s is ModelColor c) // color
-                    continue;
+                    structs[i] = c;
                 else if (s is ModelTriangle t) // index
                 {
                     if (t.Type == ModelTriangle.IndexType.Original)
@@ -63,19 +65,19 @@ namespace Crash
                     }
                     else
                         throw new Exception();
+                    structs[i] = t;
                 }
                 else
                     throw new Exception();
             }
             for (int i = 0, cur_v = 0; i < PolyData.Length;++i)
             {
-                ModelStruct s = ConvertPolyItem(PolyData[i]);
+                ModelStruct s = structs[i];
                 if (s == null) // footer
                     break;
                 else if (s is ModelColor c) // color
                 {
-                    lastsecondcolor = lastfirstcolor;
-                    lastfirstcolor = c;
+                    lastcolor = i;
                 }
                 else if (s is ModelTriangle t) // index
                 {
@@ -84,15 +86,31 @@ namespace Crash
                         switch (t.TriangleType)
                         {
                             case 0:
+                                lastaapos = cur_v;
+                                lastnonbb = i;
                                 positionindices.Add(vtx[cur_v]);
                                 positionindices.Add(vtx[cur_v-1]);
                                 positionindices.Add(vtx[cur_v-2]);
-                                lastaapos = cur_v;
+                                colorindices.Add(t.ColorIndex);
+                                colorindices.Add(lastcolor+1 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i-1]).ColorIndex);
+                                colorindices.Add(lastcolor+1 == i ? ((ModelColor)structs[lastcolor]).Color2 : (lastcolor+2 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i-2]).ColorIndex));
                                 break;
                             case 1:
                                 positionindices.Add(vtx[cur_v]);
                                 positionindices.Add(vtx[cur_v-1]);
                                 positionindices.Add(lastccpos > lastaapos ? vtx[lastccpos] : vtx[lastaapos-2]);
+                                colorindices.Add(t.ColorIndex);
+                                colorindices.Add(lastcolor+1 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i-1]).ColorIndex);
+                                int ci = -1;
+                                if (lastcolor < lastnonbb-2) // 3
+                                    ci = ((ModelTriangle)structs[lastnonbb-2]).ColorIndex;
+                                else if (lastcolor == lastnonbb-2) // 1
+                                    ci = ((ModelColor)structs[lastcolor]).Color1;
+                                else if (lastcolor == lastnonbb-1) // 2
+                                    ci = ((ModelColor)structs[lastcolor]).Color2;
+                                else if (lastcolor > lastnonbb-2) // 4
+                                    ci = ((ModelColor)structs[lastcolor]).Color2;
+                                colorindices.Add(ci);
                                 break;
                             case 2:
                                 if (i + 2 < PolyData.Length && lastvalidcc + 2 < i)
@@ -101,8 +119,12 @@ namespace Crash
                                     positionindices.Add(vtx[cur_v]);
                                     positionindices.Add(vtx[cur_v+1]);
                                     positionindices.Add(vtx[cur_v+2]);
+                                    colorindices.Add(t.ColorIndex);
+                                    colorindices.Add(((ModelTriangle)structs[i+1]).ColorIndex);
+                                    colorindices.Add(((ModelTriangle)structs[i+2]).ColorIndex);
                                 }
                                 lastccpos = cur_v;
+                                lastnonbb = i;
                                 break;
                         }
                     }
@@ -111,15 +133,31 @@ namespace Crash
                         switch (t.TriangleType)
                         {
                             case 0:
+                                lastaapos = cur_v;
+                                lastnonbb = i;
                                 positionindices.Add(vtx[cur_v]);
                                 positionindices.Add(vtx[cur_v-1]);
                                 positionindices.Add(vtx[cur_v-2]);
-                                lastaapos = cur_v;
+                                colorindices.Add(t.ColorIndex);
+                                colorindices.Add(lastcolor+1 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i-1]).ColorIndex);
+                                colorindices.Add(lastcolor+1 == i ? ((ModelColor)structs[lastcolor]).Color2 : (lastcolor+2 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i-2]).ColorIndex));
                                 break;
                             case 1:
                                 positionindices.Add(vtx[cur_v]);
                                 positionindices.Add(vtx[cur_v-1]);
                                 positionindices.Add(lastccpos > lastaapos ? vtx[lastccpos] : vtx[lastaapos-2]);
+                                colorindices.Add(t.ColorIndex);
+                                colorindices.Add(lastcolor+1 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i-1]).ColorIndex);
+                                int ci = -1;
+                                if (lastcolor < lastnonbb-2) // 3
+                                    ci = ((ModelTriangle)structs[lastnonbb-2]).ColorIndex;
+                                else if (lastcolor == lastnonbb-2) // 1
+                                    ci = ((ModelColor)structs[lastcolor]).Color1;
+                                else if (lastcolor == lastnonbb-1) // 2
+                                    ci = ((ModelColor)structs[lastcolor]).Color2;
+                                else if (lastcolor > lastnonbb-2) // 4
+                                    ci = ((ModelColor)structs[lastcolor]).Color2;
+                                colorindices.Add(ci);
                                 break;
                             case 2:
                                 if (i + 2 < PolyData.Length && lastvalidcc + 2 < i)
@@ -128,8 +166,12 @@ namespace Crash
                                     positionindices.Add(vtx[cur_v]);
                                     positionindices.Add(vtx[cur_v+1]);
                                     positionindices.Add(vtx[cur_v+2]);
+                                    colorindices.Add(t.ColorIndex);
+                                    colorindices.Add(((ModelTriangle)structs[i+1]).ColorIndex);
+                                    colorindices.Add(((ModelTriangle)structs[i+2]).ColorIndex);
                                 }
                                 lastccpos = cur_v;
+                                lastnonbb = i;
                                 break;
                         }
                     }
