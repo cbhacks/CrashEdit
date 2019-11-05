@@ -25,7 +25,7 @@ namespace CrashEdit
         protected override Control CreateEditor()
         {
             OldModelEntry modelentry = EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(OldAnimationEntry.Frames[0].ModelEID);
-            return new OldAnimationEntryViewer(OldAnimationEntry.Frames,modelentry);
+            return new UndockableControl(new OldAnimationEntryViewer(OldAnimationEntry.Frames,modelentry));
         }
 
         public OldAnimationEntry OldAnimationEntry { get; }

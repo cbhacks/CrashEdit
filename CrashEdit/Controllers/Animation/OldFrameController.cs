@@ -32,10 +32,10 @@ namespace CrashEdit
             TabPage edittab = new TabPage("Editor");
             edittab.Controls.Add(framebox);
             TabPage viewertab = new TabPage("Viewer");
-            viewertab.Controls.Add(viewerbox);
+            viewertab.Controls.Add(new UndockableControl(viewerbox));
 
-            tbcTabs.TabPages.Add(edittab);
             tbcTabs.TabPages.Add(viewertab);
+            tbcTabs.TabPages.Add(edittab);
             tbcTabs.SelectedTab = edittab;
 
             return tbcTabs;
