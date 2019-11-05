@@ -19,7 +19,49 @@ namespace Crash
             Dictionary<int,EntryLoader> loaders = GetLoaders(gameversion);
             if (loaders.ContainsKey(type))
             {
-                return loaders[type].Load(((List<byte[]>)Items).ToArray(),EID,Size);
+                var result = loaders[type].Load(((List<byte[]>)Items).ToArray(),EID,Size);
+                var resultOut = result.Unprocess();
+                if (Items.Count != resultOut.Items.Count) {
+                    ErrorManager.SignalIgnorableError("Entry: Processed entry deprocesses to different item count");
+                    return result;
+                }
+
+                for (int i = 0; i < Items.Count; i++) {
+                    byte[] shorterData;
+                    byte[] longerData;
+                    if (Items[i].Length < resultOut.Items[i].Length) {
+                        shorterData = Items[i];
+                        longerData = resultOut.Items[i];
+                    } else {
+                        shorterData = resultOut.Items[i];
+                        longerData = Items[i];
+                    }
+
+                    // Compare the data held in both the original item data
+                    // and the output item data. Warn on mismatch.
+                    for (int j = 0; j < shorterData.Length; j++) {
+                        if (shorterData[j] == longerData[j])
+                            continue;
+
+                        ErrorManager.SignalIgnorableError("Entry: Processed entry deprocesses to different item data");
+                        return result;
+                    }
+
+                    // Compare excess bytes in whichever item's data was
+                    // longer. Warn on non-zero.
+                    //
+                    // This check is done instead of a simple SequenceEqual
+                    // via LINQ because the input may be padded differently.
+                    for (int j = shorterData.Length; j < longerData.Length; j++) {
+                        if (longerData[j] == 0)
+                            continue;
+
+                        ErrorManager.SignalIgnorableError("Entry: Processed entry deprocesses to different item data");
+                        return result;
+                    }
+                }
+
+                return result;
             }
             else
             {
