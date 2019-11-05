@@ -6,8 +6,12 @@ namespace CrashEdit
 {
     public partial class ErrorReporter : Form
     {
-        public ErrorReporter()
+        private IWin32Window owner = null;
+
+        public ErrorReporter(IWin32Window owner)
         {
+            this.owner = owner;
+
             InitializeComponent();
             ErrorManager.Signal += ErrorManager_Signal;
         }
@@ -29,7 +33,7 @@ namespace CrashEdit
             {
                 optAbort.Checked = true;
             }
-            ShowDialog();
+            ShowDialog(owner);
             if (optAbort.Checked)
             {
                 e.Response = ErrorResponse.Abort;
