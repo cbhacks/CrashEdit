@@ -1,5 +1,6 @@
 using Crash;
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
@@ -64,13 +65,15 @@ namespace CrashEdit
             };
         }
 
+        private int MinScale => model != null ? Math.Min(BitConv.FromInt32(model.Info, 8), Math.Min(BitConv.FromInt32(model.Info, 0), BitConv.FromInt32(model.Info, 4))) : 0x1000;
+
         protected override int CameraRangeMargin
         {
             get
             {
-                int i = Math.Max(BitConv.FromInt32(model.Info, 8),Math.Max(BitConv.FromInt32(model.Info,0),BitConv.FromInt32(model.Info,4))) * 400;
+                int i = MinScale * 256;
                 if (model != null && model.Positions != null)
-                    i /= 4;
+                    i /= 2;
                 return i;
             }
         }
@@ -106,6 +109,8 @@ namespace CrashEdit
 
         private void RenderFrame(Frame frame)
         {
+            //LoadTexture(OldResources.PointTexture);
+            //RenderPoints(frame);
             if (model != null)
             {
                 GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
@@ -120,6 +125,7 @@ namespace CrashEdit
             }
             else
             {
+                GL.Color3(Color.White);
                 GL.Begin(PrimitiveType.Points);
                 foreach (FrameVertex vertex in frame.Vertices)
                 {
@@ -131,6 +137,8 @@ namespace CrashEdit
 
         private void RenderInterpolatedFrames(Frame f1, Frame f2)
         {
+            //LoadTexture(OldResources.PointTexture);
+            //RenderPoints(f2);
             if (model != null)
             {
                 GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
@@ -145,6 +153,7 @@ namespace CrashEdit
             }
             else
             {
+                GL.Color3(Color.White);
                 GL.Begin(PrimitiveType.Points);
                 for (int i = 0; i < f1.Vertices.Count; ++i)
                 {
@@ -152,6 +161,32 @@ namespace CrashEdit
                 }
                 GL.End();
             }
+        }
+
+        private void RenderPoints(Frame f)
+        {
+            GL.Enable(EnableCap.Texture2D);
+            GL.Color3(Color.Fuchsia);
+            for (int i = 0; i < f.SpecialVertexCount; ++i)
+            {
+                GL.PushMatrix();
+                GL.Translate((f.Vertices[i].X + f.XOffset / 4) * BitConv.FromInt32(model.Info,0),(f.Vertices[i].Z + f.YOffset / 4) * BitConv.FromInt32(model.Info,4),(f.Vertices[i].Y + f.ZOffset / 4) * BitConv.FromInt32(model.Info,8));
+                GL.Rotate(-rotx, 0, 1, 0);
+                GL.Rotate(-roty, 1, 0, 0);
+                GL.Scale(12.8f*MinScale,12.8f*MinScale,12.8f*MinScale);
+                GL.Begin(PrimitiveType.Quads);
+                GL.TexCoord2(0,0);
+                GL.Vertex2(-1,+1);
+                GL.TexCoord2(1,0);
+                GL.Vertex2(+1,+1);
+                GL.TexCoord2(1,1);
+                GL.Vertex2(+1,-1);
+                GL.TexCoord2(0,1);
+                GL.Vertex2(-1,-1);
+                GL.End();
+                GL.PopMatrix();
+            }
+            GL.Disable(EnableCap.Texture2D);
         }
 
         private void RenderVertex(Frame f, FrameVertex vertex)
