@@ -602,32 +602,32 @@ namespace CrashEdit
             switch (subtype)
             {
                 case 0: // TNT
-                    LoadTexture(OldResources.TNTTopTexture);
+                    LoadTexture(OldResources.TNTBoxTopTexture);
                     break;
-                case 2: // Normal
-                case 3: // Arrow
-                case 6: // Apple
+                case 2: // Empty
+                case 3: // Spring
+                case 6: // Fruit
                 case 8: // Life
-                case 9: // Mask
-                case 10: // Question Mark
-                    LoadTexture(OldResources.BoxTexture);
+                case 9: // Doctor
+                case 10: // Pickup
+                    LoadTexture(OldResources.EmptyBoxTexture);
                     break;
-                case 4: // Checkpoint
-                    LoadTexture(OldResources.CheckpointTexture);
+                case 4: // Continue
+                    LoadTexture(OldResources.ContinueBoxTexture);
                     break;
                 case 5: // Iron
-                case 7: // Activator
-                case 15: // Iron Arrow
+                case 7: // Action
+                case 15: // Iron Spring
                     LoadTexture(OldResources.IronBoxTexture);
                     break;
                 case 18: // Nitro
-                    LoadTexture(OldResources.NitroTopTexture);
+                    LoadTexture(OldResources.NitroBoxTopTexture);
                     break;
-                case 23: // Bodyslam
-                    LoadTexture(OldResources.BodyslamBoxTexture);
+                case 23: // Steel
+                    LoadTexture(OldResources.SteelBoxTexture);
                     break;
-                case 24: // Detonator
-                    LoadTexture(OldResources.DetonatorBoxTopTexture);
+                case 24: // Action Nitro
+                    LoadTexture(OldResources.ActionNitroBoxTopTexture);
                     break;
                 default:
                     LoadTexture(OldResources.UnknownBoxTopTexture);
@@ -640,46 +640,49 @@ namespace CrashEdit
             switch (subtype)
             {
                 case 0: // TNT
-                    LoadTexture(OldResources.TNTTexture);
+                    LoadTexture(OldResources.TNTBoxTexture);
                     break;
-                case 2: // Normal
-                    LoadTexture(OldResources.BoxTexture);
+                case 2: // Empty
+                    LoadTexture(OldResources.EmptyBoxTexture);
                     break;
-                case 3: // Arrow
-                    LoadTexture(OldResources.ArrowBoxTexture);
+                case 3: // Spring
+                    LoadTexture(OldResources.SpringBoxTexture);
                     break;
-                case 4: // Checkpoint
-                    LoadTexture(OldResources.CheckpointTexture);
+                case 4: // Continue
+                    LoadTexture(OldResources.ContinueBoxTexture);
                     break;
                 case 5: // Iron
                     LoadTexture(OldResources.IronBoxTexture);
                     break;
-                case 6: // Apple
-                    LoadTexture(OldResources.AppleBoxTexture);
+                case 6: // Fruit
+                    LoadTexture(OldResources.FruitBoxTexture);
                     break;
-                case 7: // Activator
-                    LoadTexture(OldResources.ActivatorBoxTexture);
+                case 7: // Action
+                    LoadTexture(OldResources.ActionBoxTexture);
                     break;
                 case 8: // Life
                     LoadTexture(OldResources.LifeBoxTexture);
                     break;
-                case 9: // Mask
-                    LoadTexture(OldResources.MaskBoxTexture);
+                case 9: // Doctor
+                    LoadTexture(OldResources.DoctorBoxTexture);
                     break;
-                case 10: // Question Mark
-                    LoadTexture(OldResources.QuestionMarkBoxTexture);
+                case 10: // Pickup
+                    LoadTexture(OldResources.PickupBoxTexture);
                     break;
-                case 15: // Iron Arrow
-                    LoadTexture(OldResources.IronArrowBoxTexture);
+                case 13: // Ghost
+                    LoadTexture(OldResources.UnknownBoxTopTexture);
+                    break;
+                case 15: // Iron Spring
+                    LoadTexture(OldResources.IronSpringBoxTexture);
                     break;
                 case 18: // Nitro
-                    LoadTexture(OldResources.NitroTexture);
+                    LoadTexture(OldResources.NitroBoxTexture);
                     break;
-                case 23: // Bodyslam
-                    LoadTexture(OldResources.BodyslamBoxTexture);
+                case 23: // Steel
+                    LoadTexture(OldResources.SteelBoxTexture);
                     break;
-                case 24: // Detonator
-                    LoadTexture(OldResources.DetonatorBoxTexture);
+                case 24: // Action Nitro
+                    LoadTexture(OldResources.ActionNitroBoxTexture);
                     break;
                 default:
                     LoadTexture(OldResources.UnknownBoxTexture);

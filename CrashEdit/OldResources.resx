@@ -166,34 +166,34 @@
   <data name="YellowJournalImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Images/YellowJournal.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
-  <data name="ActivatorBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="ActionBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/ActivatorBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
   <data name="AppleTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/Apple.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
-  <data name="AppleBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="FruitBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/AppleBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
-  <data name="ArrowBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="SpringBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/ArrowBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
-  <data name="BodyslamBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="SteelBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/BodyslamBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
-  <data name="BoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="EmptyBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/Box.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
-  <data name="CheckpointTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="ContinueBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/Checkpoint.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
-  <data name="DetonatorBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="ActionNitroBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/DetonatorBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
-  <data name="DetonatorBoxTopTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="ActionNitroBoxTopTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/DetonatorBoxTop.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
-  <data name="IronArrowBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="IronSpringBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/IronArrowBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
   <data name="IronBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -208,25 +208,25 @@
   <data name="MaskTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/Mask.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
-  <data name="MaskBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="DoctorBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/MaskBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
-  <data name="NitroTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="NitroBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/Nitro.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
-  <data name="NitroTopTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="NitroBoxTopTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/NitroTop.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
   <data name="PointTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/Point.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
-  <data name="QuestionMarkBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="PickupBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/QuestionMarkBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
-  <data name="TNTTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="TNTBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/TNT.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
-  <data name="TNTTopTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="TNTBoxTopTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/TNTTop.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
   <data name="UnknownBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">

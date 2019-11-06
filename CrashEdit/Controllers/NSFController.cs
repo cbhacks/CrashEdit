@@ -183,7 +183,7 @@ namespace CrashEdit
                                     {
                                         case 5: // iron
                                         case 7: // action
-                                        case 15: // iron ghost
+                                        case 15: // iron spring
                                         case 24: // nitro action
                                             break;
                                         default:
@@ -207,7 +207,7 @@ namespace CrashEdit
                                     {
                                         case 5: // iron
                                         case 7: // action
-                                        case 15: // iron ghost
+                                        case 15: // iron spring
                                         case 24: // nitro action
                                         case 27: // iron continue
                                         case 28: // clock
