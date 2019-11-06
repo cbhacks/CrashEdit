@@ -90,9 +90,9 @@ namespace CrashEdit
             {
                 return new NewZoneEntryController(this,(NewZoneEntry)entry);
             }
-            else if (entry is CodeEntry)
+            else if (entry is T11Entry)
             {
-                return new CodeEntryController(this,(CodeEntry)entry);
+                return new T11EntryController(this,(T11Entry)entry);
             }
             else if (entry is SoundEntry)
             {

@@ -214,8 +214,8 @@
     <Compile Include="Formats\Crash Formats\Texture\TextureChunkLoader.cs" />
     <Compile Include="Formats\Crash Formats\Mystery\MysteryMultiItemEntry.cs" />
     <Compile Include="Formats\Crash Formats\Mystery\MysteryUniItemEntry.cs" />
-    <Compile Include="Formats\Crash Formats\T11\CodeEntry.cs" />
-    <Compile Include="Formats\Crash Formats\T11\CodeEntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\T11\T11Entry.cs" />
+    <Compile Include="Formats\Crash Formats\T11\T11EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T15\T15Entry.cs" />
     <Compile Include="Formats\Crash Formats\T15\T15EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T17\T17Entry.cs" />
