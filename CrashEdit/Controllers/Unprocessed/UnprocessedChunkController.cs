@@ -8,6 +8,7 @@ namespace CrashEdit
         public UnprocessedChunkController(NSFController nsfcontroller,UnprocessedChunk unprocessedchunk) : base(nsfcontroller,unprocessedchunk)
         {
             UnprocessedChunk = unprocessedchunk;
+            AddMenu("Process Chunk", Menu_Process_Chunk);
             InvalidateNode();
         }
 
@@ -24,5 +25,34 @@ namespace CrashEdit
         }
 
         public UnprocessedChunk UnprocessedChunk { get; }
+
+        private void Menu_Process_Chunk()
+        {
+            Chunk processedchunk;
+            try
+            {
+                processedchunk = UnprocessedChunk.Process(NSFController.NSF.Chunks.IndexOf(UnprocessedChunk) * 2 + 1);
+            }
+            catch (LoadAbortedException)
+            {
+                return;
+            }
+            var trv = Node.TreeView;
+            trv.BeginUpdate();
+            int index = NSFController.NSF.Chunks.IndexOf(UnprocessedChunk);
+            NSFController.NSF.Chunks[index] = processedchunk;
+            if (processedchunk is EntryChunk)
+            {
+                ((EntryChunk)processedchunk).ProcessAll(NSFController.GameVersion);
+            }
+            ChunkController processedchunkcontroller = NSFController.CreateChunkController(processedchunk);
+            NSFController.InsertNode(index, processedchunkcontroller);
+            if (Node.IsSelected)
+            {
+                Node.TreeView.SelectedNode = processedchunkcontroller.Node;
+            }
+            Dispose();
+            trv.EndUpdate();
+        }
     }
 }

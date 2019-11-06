@@ -31,6 +31,8 @@ namespace CrashEdit
             {
                 return;
             }
+            var trv = Node.TreeView;
+            trv.BeginUpdate();
             int index = EntryChunkController.EntryChunk.Entries.IndexOf(UnprocessedEntry);
             EntryChunkController.EntryChunk.Entries[index] = processedentry;
             EntryController processedentrycontroller = EntryChunkController.CreateEntryController(processedentry);
@@ -40,6 +42,7 @@ namespace CrashEdit
                 Node.TreeView.SelectedNode = processedentrycontroller.Node;
             }
             Dispose();
+            trv.EndUpdate();
         }
     }
 }
