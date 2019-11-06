@@ -133,12 +133,12 @@ namespace CrashEdit
 
             tbbExtra = new ToolStripDropDownButton();
             tbbExtra.Text = "Extra Features";
-            tbbExtra.DropDown = new ToolStripDropDown();
+            tbbExtra.DropDown = new ToolStripDropDown { LayoutStyle = ToolStripLayoutStyle.VerticalStackWithOverflow };
             tbbExtra.DropDown.Items.Add(tbxMakeBIN);
             tbbExtra.DropDown.Items.Add(tbxMakeBINUSA);
             tbbExtra.DropDown.Items.Add(tbxMakeBINEUR);
             tbbExtra.DropDown.Items.Add(tbxMakeBINJAP);
-            tbbExtra.DropDown.Items.Add(new ToolStripMenuItem() { Text = "-" });
+            tbbExtra.DropDown.Items.Add("-");
             tbbExtra.DropDown.Items.Add(tbxConvertVHVB);
             tbbExtra.DropDown.Items.Add(tbxConvertVAB);
 
