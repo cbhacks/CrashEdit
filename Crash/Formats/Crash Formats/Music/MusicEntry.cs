@@ -30,6 +30,10 @@ namespace Crash
         public VH VH { get; set; }
         public SEP SEP { get; }
 
+        // FIXME? - resaving of unused instrument metadata causes mismatches in
+        // various game versions
+        public override bool IgnoreResaveErrors => true;
+
         public override UnprocessedEntry Unprocess()
         {
             byte[][] items = new byte [3][];

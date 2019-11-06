@@ -136,6 +136,8 @@ namespace Crash
         public int Size { get; }
         public string EName => EIDToEName(EID);
 
+        public virtual bool IgnoreResaveErrors => false;
+
         public abstract UnprocessedEntry Unprocess();
 
         public virtual byte[] Save()
