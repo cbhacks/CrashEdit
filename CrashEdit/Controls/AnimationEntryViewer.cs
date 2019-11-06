@@ -16,11 +16,13 @@ namespace CrashEdit
         private int frameid;
         private Timer animatetimer;
         private int interi;
+        private bool collision_enabled;
 
         public AnimationEntryViewer(Frame frame,ModelEntry model)
         {
             frames = new List<Frame>();
             this.model = model;
+            collision_enabled = false;
             if (model.Positions != null)
                 frames.Add(UncompressFrame(frame));
             else
@@ -32,6 +34,7 @@ namespace CrashEdit
         {
             this.frames = new List<Frame>();
             this.model = model;
+            collision_enabled = false;
             frameid = 0;
             interi = 0;
             if (model.Positions != null)
@@ -106,6 +109,28 @@ namespace CrashEdit
             }
         }
 
+        protected override bool IsInputKey(Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.C:
+                    return true;
+                default:
+                    return base.IsInputKey(keyData);
+            }
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            switch (e.KeyCode)
+            {
+                case Keys.C:
+                    collision_enabled = !collision_enabled;
+                    break;
+            }
+        }
+
         private void RenderFrame(Frame frame)
         {
             //LoadTexture(OldResources.PointTexture);
@@ -132,12 +157,16 @@ namespace CrashEdit
                 }
                 GL.End();
             }
+            for (int i = 0;i < frame.Collision; ++i)
+            {
+                RenderCollision(frame, i);
+            }
         }
 
         private void RenderInterpolatedFrames(Frame f1, Frame f2)
         {
             //LoadTexture(OldResources.PointTexture);
-            //RenderPoints(f2);
+            //RenderPoints(f1);
             if (model != null)
             {
                 GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
@@ -159,6 +188,10 @@ namespace CrashEdit
                     RenderInterpolatedVertices(f1,f2,f1.Vertices[i], f2.Vertices[i]);
                 }
                 GL.End();
+            }
+            for (int i = 0; i < f1.Collision; ++i)
+            {
+                RenderCollision(f1, i);
             }
         }
 
@@ -302,6 +335,66 @@ namespace CrashEdit
             }
             frame.Decompressed = true;
             return frame;
+        }
+
+        private void RenderCollision(Frame frame, int col)
+        {
+            if (!collision_enabled) return;
+            GL.DepthMask(false);
+            GL.Color4(0f, 1f, 0f, 0.2f);
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+            RenderCollisionBox(frame, col);
+            GL.Color4(0f, 1f, 0f, 1f);
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+            RenderCollisionBox(frame, col);
+            GL.DepthMask(true);
+        }
+
+        private void RenderCollisionBox(Frame frame, int col)
+        {
+            //int xoffset = frame.XOffset;
+            //int yoffset = frame.YOffset;
+            //int zoffset = frame.ZOffset;
+            int xglobal = BitConv.FromInt32(frame.Settings,4);
+            int yglobal = BitConv.FromInt32(frame.Settings,8);
+            int zglobal = BitConv.FromInt32(frame.Settings,12);
+            int xcol1 = BitConv.FromInt32(frame.Settings,16);
+            int ycol1 = BitConv.FromInt32(frame.Settings,20);
+            int zcol1 = BitConv.FromInt32(frame.Settings,24);
+            int xcol2 = BitConv.FromInt32(frame.Settings,28);
+            int ycol2 = BitConv.FromInt32(frame.Settings,32);
+            int zcol2 = BitConv.FromInt32(frame.Settings,36);
+            GL.PushMatrix();
+            //GL.Translate(xoffset,yoffset,zoffset);
+            //GL.Scale(BitConv.FromInt32(model.Info,0),BitConv.FromInt32(model.Info,4),BitConv.FromInt32(model.Info,8));
+            //GL.Scale(yglobal,yglobal,yglobal);
+            //GL.Scale(1 / 8000f, 1 / 8000f, 1 / 8000f);
+            GL.Scale(4, 4, 4);
+            GL.Translate(xglobal, yglobal, zglobal);
+            GL.Begin(PrimitiveType.QuadStrip);
+            GL.Vertex3(xcol1, ycol1, zcol1);
+            GL.Vertex3(xcol1, ycol2, zcol1);
+            GL.Vertex3(xcol2, ycol1, zcol1);
+            GL.Vertex3(xcol2, ycol2, zcol1);
+            GL.Vertex3(xcol2, ycol1, zcol2);
+            GL.Vertex3(xcol2, ycol2, zcol2);
+            GL.Vertex3(xcol1, ycol1, zcol2);
+            GL.Vertex3(xcol1, ycol2, zcol2);
+            GL.Vertex3(xcol1, ycol1, zcol1);
+            GL.Vertex3(xcol1, ycol2, zcol1);
+            GL.End();
+            GL.Begin(PrimitiveType.Quads);
+            GL.Vertex3(xcol1, ycol1, zcol1);
+            GL.Vertex3(xcol2, ycol1, zcol1);
+            GL.Vertex3(xcol2, ycol1, zcol2);
+            GL.Vertex3(xcol1, ycol1, zcol2);
+
+            GL.Vertex3(xcol1, ycol2, zcol1);
+            GL.Vertex3(xcol2, ycol2, zcol1);
+            GL.Vertex3(xcol2, ycol2, zcol2);
+            GL.Vertex3(xcol1, ycol2, zcol2);
+            GL.End();
+            GL.PopMatrix();
         }
 
         protected override void Dispose(bool disposing)
