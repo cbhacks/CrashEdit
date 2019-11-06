@@ -20,6 +20,10 @@ namespace Crash
             if (loaders.ContainsKey(type))
             {
                 var result = loaders[type].Load(((List<byte[]>)Items).ToArray(),EID,Size);
+
+                if (result.IgnoreResaveErrors)
+                    return result;
+
                 var resultOut = result.Unprocess();
                 if (Items.Count != resultOut.Items.Count) {
                     ErrorManager.SignalIgnorableError("Entry: Processed entry deprocesses to different item count");
