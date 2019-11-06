@@ -89,7 +89,7 @@ namespace Crash
         [EntityPropertyField(0xAA)]
         private int? subtype;
         [EntityPropertyField(0x103)]
-        private int? slst;
+        private EntityT4Property slst;
         [EntityPropertyField(0x118)]
         private int? othersettings = null;
         [EntityPropertyField(0x131)]
@@ -209,12 +209,6 @@ namespace Crash
             set => subtype = value;
         }
 
-        public string SLST
-        {
-            get => slst != null ? Entry.EIDToEName((int)slst) : null;
-            set => slst = value != null ? BitConv.FlipInt32(Entry.ENameToEID(value)) : (int?)null;
-        }
-
         public int? OtherSettings
         {
             get => othersettings;
@@ -233,6 +227,12 @@ namespace Crash
         {
             get => drawlistb;
             set => drawlistb = value;
+        }
+
+        public EntityT4Property SLST
+        {
+            get => slst;
+            set => slst = value;
         }
 
         public EntityT4Property LoadListA
@@ -284,9 +284,9 @@ namespace Crash
         public byte[] Save()
         {
             if (LoadListA != null ^ LoadListB != null)
-                ErrorManager.SignalError("Entity: Entity contains one load list but not the other");
+                ErrorManager.SignalIgnorableError("Entity: Entity contains one load list but not the other");
             if (DrawListA != null ^ DrawListB != null)
-                ErrorManager.SignalError("Entity: Entity contains one draw list but not the other");
+                ErrorManager.SignalIgnorableError("Entity: Entity contains one draw list but not the other");
             SortedDictionary<short,EntityProperty> properties = new SortedDictionary<short,EntityProperty>(extraproperties);
             foreach (KeyValuePair<short,FieldInfo> pair in propertyfields)
             {

@@ -236,8 +236,8 @@ namespace CrashEdit
             else
             {
                 lblSettingIndex.Text = string.Format("{0} / {1}",settingindex + 1,entity.Settings.Count);
-                cmdPreviousSetting.Enabled = (settingindex > 0);
-                cmdNextSetting.Enabled = (settingindex < entity.Settings.Count - 1);
+                cmdPreviousSetting.Enabled = settingindex > 0;
+                cmdNextSetting.Enabled = settingindex < entity.Settings.Count - 1;
                 cmdRemoveSetting.Enabled = true;
                 lblSettingA.Enabled = true;
                 lblSettingB.Enabled = true;
@@ -1354,7 +1354,7 @@ namespace CrashEdit
         {
             if (entity.SLST != null)
             {
-                txtSLST.Text = entity.SLST;
+                txtSLST.Text = Entry.EIDToEName(entity.SLST.Rows[0].Values[0]);
                 chkSLST.Checked = true;
             }
             else
@@ -1399,7 +1399,7 @@ namespace CrashEdit
                 }
                 if (text == true)
                 {
-                    entity.SLST = txtSLST.Text;
+                    entity.SLST.Rows[0].Values[0] = Entry.ENameToEID(txtSLST.Text);
                     text = false;
                 }
 
@@ -1445,7 +1445,7 @@ namespace CrashEdit
             }
             if (text == true)
             {
-                entity.SLST = txtSLST.Text;
+                entity.SLST.Rows[0].Values[0] = Entry.ENameToEID(txtSLST.Text);
                 text = false;
             }
             InvalidateNodes();

@@ -1354,7 +1354,7 @@ namespace CrashEdit
         {
             if (entity.SLST != null)
             {
-                txtSLST.Text = entity.SLST;
+                txtSLST.Text = Entry.EIDToEName(entity.SLST.Rows[0].Values[0]);
                 chkSLST.Checked = true;
             }
             else
@@ -1399,7 +1399,9 @@ namespace CrashEdit
                 }
                 if (text == true)
                 {
-                    entity.SLST = txtSLST.Text;
+                    entity.SLST = new EntityT4Property();
+                    entity.SLST.Rows.Add(new EntityPropertyRow<int>());
+                    entity.SLST.Rows[0].Values.Add(Entry.ENameToEID(txtSLST.Text));
                     text = false;
                 }
 
@@ -1445,7 +1447,7 @@ namespace CrashEdit
             }
             if (text == true)
             {
-                entity.SLST = txtSLST.Text;
+                entity.SLST.Rows[0].Values[0] = Entry.ENameToEID(txtSLST.Text);
                 text = false;
             }
             InvalidateNodes();
