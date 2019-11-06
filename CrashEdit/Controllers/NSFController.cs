@@ -6,48 +6,13 @@ namespace CrashEdit
 {
     public sealed class NSFController : Controller
     {
-        public short chunkid;
-
         public NSFController(NSF nsf,GameVersion gameversion)
         {
             NSF = nsf;
             GameVersion = gameversion;
-            chunkid = 1;
             foreach (Chunk chunk in nsf.Chunks)
             {
-                if (chunk is NormalChunk)
-                {
-                    AddNode(new NormalChunkController(this,(NormalChunk)chunk));
-                }
-                else if (chunk is TextureChunk)
-                {
-                    AddNode(new TextureChunkController(this,(TextureChunk)chunk));
-                }
-                else if (chunk is OldSoundChunk)
-                {
-                    AddNode(new OldSoundChunkController(this,(OldSoundChunk)chunk));
-                }
-                else if (chunk is SoundChunk)
-                {
-                    AddNode(new SoundChunkController(this,(SoundChunk)chunk));
-                }
-                else if (chunk is WavebankChunk)
-                {
-                    AddNode(new WavebankChunkController(this,(WavebankChunk)chunk));
-                }
-                else if (chunk is SpeechChunk)
-                {
-                    AddNode(new SpeechChunkController(this,(SpeechChunk)chunk));
-                }
-                else if (chunk is UnprocessedChunk)
-                {
-                    AddNode(new UnprocessedChunkController(this,(UnprocessedChunk)chunk));
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-                chunkid += 2;
+                AddNode(CreateChunkController(chunk));
             }
             AddMenu("Add Chunk - Normal",Menu_Add_NormalChunk);
             AddMenu("Add Chunk - Sound",Menu_Add_SoundChunk);
@@ -69,13 +34,48 @@ namespace CrashEdit
         public NSF NSF { get; }
         public GameVersion GameVersion { get; }
 
+        public ChunkController CreateChunkController(Chunk chunk)
+        {
+            if (chunk is NormalChunk)
+            {
+                return new NormalChunkController(this, (NormalChunk)chunk);
+            }
+            else if (chunk is TextureChunk)
+            {
+                return new TextureChunkController(this, (TextureChunk)chunk);
+            }
+            else if (chunk is OldSoundChunk)
+            {
+                return new OldSoundChunkController(this, (OldSoundChunk)chunk);
+            }
+            else if (chunk is SoundChunk)
+            {
+                return new SoundChunkController(this, (SoundChunk)chunk);
+            }
+            else if (chunk is WavebankChunk)
+            {
+                return new WavebankChunkController(this, (WavebankChunk)chunk);
+            }
+            else if (chunk is SpeechChunk)
+            {
+                return new SpeechChunkController(this, (SpeechChunk)chunk);
+            }
+            else if (chunk is UnprocessedChunk)
+            {
+                return new UnprocessedChunkController(this, (UnprocessedChunk)chunk);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         private void Menu_Add_NormalChunk()
         {
             NormalChunk chunk = new NormalChunk();
             NSF.Chunks.Add(chunk);
             NormalChunkController controller = new NormalChunkController(this,chunk);
             AddNode(controller);
-            chunkid += 2;
         }
 
         private void Menu_Add_SoundChunk()
@@ -84,7 +84,6 @@ namespace CrashEdit
             NSF.Chunks.Add(chunk);
             SoundChunkController controller = new SoundChunkController(this,chunk);
             AddNode(controller);
-            chunkid += 2;
         }
 
         private void Menu_Add_WavebankChunk()
@@ -93,7 +92,6 @@ namespace CrashEdit
             NSF.Chunks.Add(chunk);
             WavebankChunkController controller = new WavebankChunkController(this,chunk);
             AddNode(controller);
-            chunkid += 2;
         }
 
         private void Menu_Add_SpeechChunk()
@@ -102,7 +100,6 @@ namespace CrashEdit
             NSF.Chunks.Add(chunk);
             SpeechChunkController controller = new SpeechChunkController(this,chunk);
             AddNode(controller);
-            chunkid += 2;
         }
 
         private void Menu_Fix_Detonator()

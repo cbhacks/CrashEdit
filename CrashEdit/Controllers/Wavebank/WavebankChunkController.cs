@@ -12,7 +12,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Wavebank Chunk {0}", NSFController.chunkid);
+            Node.Text = string.Format("Wavebank Chunk {0}", NSFController.NSF.Chunks.IndexOf(WavebankChunk) * 2 + 1);
             Node.ImageKey = "music";
             Node.SelectedImageKey = "music";
         }

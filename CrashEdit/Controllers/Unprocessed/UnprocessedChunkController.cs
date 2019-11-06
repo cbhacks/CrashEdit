@@ -13,7 +13,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Unprocessed Chunk (T{0})",UnprocessedChunk.Type);
+            Node.Text = string.Format("Unprocessed Chunk {1} (T{0})",UnprocessedChunk.Type,NSFController.NSF.Chunks.IndexOf(UnprocessedChunk) * 2 + 1);
             Node.ImageKey = "yellowj";
             Node.SelectedImageKey = "yellowj";
         }
