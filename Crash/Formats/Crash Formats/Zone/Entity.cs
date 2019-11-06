@@ -47,6 +47,7 @@ namespace Crash
                 int offset = (ushort)BitConv.FromInt16(data,18 + i * 8) + 12;
                 int nextoffset = (i == propertycount - 1) ? data.Length : ((ushort)BitConv.FromInt16(data,26 + i * 8) + 12);
                 byte type = data[20 + i * 8];
+                if (id == 0x103 && type == 0x13) type = 4; // force-fix a stupid bug
                 byte elementsize = data[21 + i * 8];
                 short unknown = BitConv.FromInt16(data,22 + i * 8);
                 if (offset > data.Length)
