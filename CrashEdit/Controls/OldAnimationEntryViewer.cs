@@ -13,68 +13,26 @@ namespace CrashEdit
         private OldModelEntry model;
         private int frameid;
         private Timer animatetimer;
-        private int xoffset;
-        private int yoffset;
-        private int zoffset;
-        private int xglobal;
-        private int yglobal;
-        private int zglobal;
-        private int xcol1;
-        private int ycol1;
-        private int zcol1;
-        private int xcol2;
-        private int ycol2;
-        private int zcol2;
-        private bool pal;
 
         public OldAnimationEntryViewer(OldFrame frame,OldModelEntry model)
         {
             frames = new List<OldFrame>() { frame };
             this.model = model;
             frameid = 0;
-            xoffset = frame.XOffset;
-            yoffset = frame.YOffset;
-            zoffset = frame.ZOffset;
-            xglobal = frame.XGlobal;
-            yglobal = frame.YGlobal;
-            zglobal = frame.ZGlobal;
-            xcol1 = frame.X1;
-            xcol2 = frame.X2;
-            ycol1 = frame.Y1;
-            ycol2 = frame.Y2;
-            zcol1 = frame.Z1;
-            zcol2 = frame.Z2;
         }
 
         public OldAnimationEntryViewer(IEnumerable<OldFrame> frames,OldModelEntry model)
         {
-            pal = false;
             this.frames = new List<OldFrame>(frames);
             this.model = model;
             frameid = 0;
             animatetimer = new Timer();
-            animatetimer.Interval = 1000/30;
-            if (pal)
-                animatetimer.Interval = 1000/25;
+            animatetimer.Interval = 1000/OldMainForm.GetRate();
             animatetimer.Enabled = true;
             animatetimer.Tick += delegate (object sender,EventArgs e)
             {
-                animatetimer.Interval = 1000 / 30;
-                if (pal)
-                    animatetimer.Interval = 1000 / 25;
+                animatetimer.Interval = 1000 / OldMainForm.GetRate();
                 frameid = ++frameid % this.frames.Count;
-                xoffset = this.frames[frameid].XOffset;
-                yoffset = this.frames[frameid].YOffset;
-                zoffset = this.frames[frameid].ZOffset;
-                xglobal = this.frames[frameid].XGlobal;
-                yglobal = this.frames[frameid].YGlobal;
-                zglobal = this.frames[frameid].ZGlobal;
-                xcol1 = this.frames[frameid].X1;
-                xcol2 = this.frames[frameid].X2;
-                ycol1 = this.frames[frameid].Y1;
-                ycol2 = this.frames[frameid].Y2;
-                zcol1 = this.frames[frameid].Z1;
-                zcol2 = this.frames[frameid].Z2;
                 Refresh();
             };
         }
@@ -97,29 +55,7 @@ namespace CrashEdit
                 }
             }
         }
-
-        protected override bool IsInputKey(Keys keyData)
-        {
-            switch (keyData)
-            {
-                case Keys.F:
-                    return true;
-                default:
-                    return base.IsInputKey(keyData);
-            }
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            base.OnKeyDown(e);
-            switch (e.KeyCode)
-            {
-                case Keys.F:
-                    pal = !pal;
-                    break;
-            }
-        }
-
+        
         protected override void RenderObjects()
         {
             RenderFrame(frames[frameid % frames.Count]);
@@ -138,9 +74,9 @@ namespace CrashEdit
                     byte g = model.Info[coloroffset + 1];
                     byte b = model.Info[coloroffset + 2];
                     GL.Color3(r,g,b);
-                    RenderVertex(frame.Vertices[polygon.VertexA / 6]);
-                    RenderVertex(frame.Vertices[polygon.VertexB / 6]);
-                    RenderVertex(frame.Vertices[polygon.VertexC / 6]);
+                    RenderVertex(frame, frame.Vertices[polygon.VertexA / 6]);
+                    RenderVertex(frame, frame.Vertices[polygon.VertexB / 6]);
+                    RenderVertex(frame, frame.Vertices[polygon.VertexC / 6]);
                 }
                 GL.End();
             }
@@ -150,32 +86,44 @@ namespace CrashEdit
                 GL.Begin(PrimitiveType.Points);
                 foreach (OldFrameVertex vertex in frame.Vertices)
                 {
-                    RenderVertex(vertex);
+                    RenderVertex(frame, vertex);
                 }
                 GL.End();
             }
-            //RenderCollision();
+            //RenderCollision(frame);
         }
 
-        private void RenderVertex(OldFrameVertex vertex)
+        private void RenderVertex(OldFrame frame, OldFrameVertex vertex)
         {
-            GL.Vertex3(vertex.X + xoffset,vertex.Y + yoffset,vertex.Z + zoffset);
+            GL.Vertex3(vertex.X + frame.XOffset,vertex.Y + frame.YOffset,vertex.Z + frame.ZOffset);
         }
 
-        private void RenderCollision()
+        private void RenderCollision(OldFrame frame)
         {
             GL.DepthMask(false);
             GL.Color4(0f, 1f, 0f, 0.2f);
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-            RenderCollisionBox();
+            RenderCollisionBox(frame);
             GL.Color4(0f, 1f, 0f, 1f);
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-            RenderCollisionBox();
+            RenderCollisionBox(frame);
             GL.DepthMask(true);
         }
 
-        private void RenderCollisionBox()
+        private void RenderCollisionBox(OldFrame frame)
         {
+            int xoffset = frame.XOffset;
+            int yoffset = frame.YOffset;
+            int zoffset = frame.ZOffset;
+            int xglobal = frame.XGlobal;
+            int yglobal = frame.YGlobal;
+            int zglobal = frame.ZGlobal;
+            int xcol1 = frame.X1;
+            int xcol2 = frame.X2;
+            int ycol1 = frame.Y1;
+            int ycol2 = frame.Y2;
+            int zcol1 = frame.Z1;
+            int zcol2 = frame.Z2;
             GL.PushMatrix();
             //GL.Translate(xoffset,yoffset,zoffset);
             GL.Scale(0.00125f,0.00125f,0.00125f);
