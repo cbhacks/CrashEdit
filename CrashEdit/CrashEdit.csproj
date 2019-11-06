@@ -11,7 +11,7 @@
     <RootNamespace>CrashEdit</RootNamespace>
     <AssemblyName>CrashEdit</AssemblyName>
     <StartupObject>CrashEdit.Program</StartupObject>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
