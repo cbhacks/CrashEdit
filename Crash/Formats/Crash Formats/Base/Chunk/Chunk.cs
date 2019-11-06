@@ -45,10 +45,6 @@ namespace Crash
 
         public static UnprocessedChunk Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException("data");
-            if (data.Length != Length)
-                throw new ArgumentException("Value must be 65536 bytes long.","data");
             short magic = BitConv.FromInt16(data,0);
             if (magic != Magic)
             {
@@ -57,10 +53,7 @@ namespace Crash
             return new UnprocessedChunk(data);
         }
 
-        public abstract short Type
-        {
-            get;
-        }
+        public abstract short Type { get; }
 
         public abstract UnprocessedChunk Unprocess(int chunkid);
 

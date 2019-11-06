@@ -75,6 +75,7 @@
     <Compile Include="Scripts\Other\SingleAnimationScript.cs" />
     <Compile Include="Scripts\Scenery\Color\RandomScript.cs" />
     <Compile Include="Scripts\Scenery\FeastScript.cs" />
+    <Compile Include="Scripts\Scenery\NoTexScript.cs" />
     <Compile Include="Scripts\Scenery\ScrumpScript.cs" />
     <Compile Include="Scripts\Zone\CloseCameraScript.cs" />
     <Compile Include="Scripts\Zone\EasyRelicsScript.cs" />

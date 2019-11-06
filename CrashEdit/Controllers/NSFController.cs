@@ -6,50 +6,13 @@ namespace CrashEdit
 {
     public sealed class NSFController : Controller
     {
-        private NSF nsf;
-        private GameVersion gameversion;
-        public short chunkid;
-
         public NSFController(NSF nsf,GameVersion gameversion)
         {
-            this.nsf = nsf;
-            this.gameversion = gameversion;
-            chunkid = -1;
+            NSF = nsf;
+            GameVersion = gameversion;
             foreach (Chunk chunk in nsf.Chunks)
             {
-                chunkid += 2; 
-                if (chunk is NormalChunk)
-                {
-                    AddNode(new NormalChunkController(this,(NormalChunk)chunk));
-                }
-                else if (chunk is TextureChunk)
-                {
-                    AddNode(new TextureChunkController(this,(TextureChunk)chunk));
-                }
-                else if (chunk is OldSoundChunk)
-                {
-                    AddNode(new OldSoundChunkController(this,(OldSoundChunk)chunk));
-                }
-                else if (chunk is SoundChunk)
-                {
-                    AddNode(new SoundChunkController(this,(SoundChunk)chunk));
-                }
-                else if (chunk is WavebankChunk)
-                {
-                    AddNode(new WavebankChunkController(this,(WavebankChunk)chunk));
-                }
-                else if (chunk is SpeechChunk)
-                {
-                    AddNode(new SpeechChunkController(this,(SpeechChunk)chunk));
-                }
-                else if (chunk is UnprocessedChunk)
-                {
-                    AddNode(new UnprocessedChunkController(this,(UnprocessedChunk)chunk));
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
+                AddNode(CreateChunkController(chunk));
             }
             AddMenu("Add Chunk - Normal",Menu_Add_NormalChunk);
             AddMenu("Add Chunk - Sound",Menu_Add_SoundChunk);
@@ -68,57 +31,82 @@ namespace CrashEdit
             Node.SelectedImageKey = "nsf";
         }
 
-        public NSF NSF
-        {
-            get { return nsf; }
-        }
+        public NSF NSF { get; }
+        public GameVersion GameVersion { get; }
 
-        public GameVersion GameVersion
+        public ChunkController CreateChunkController(Chunk chunk)
         {
-            get { return gameversion; }
+            if (chunk is NormalChunk)
+            {
+                return new NormalChunkController(this, (NormalChunk)chunk);
+            }
+            else if (chunk is TextureChunk)
+            {
+                return new TextureChunkController(this, (TextureChunk)chunk);
+            }
+            else if (chunk is OldSoundChunk)
+            {
+                return new OldSoundChunkController(this, (OldSoundChunk)chunk);
+            }
+            else if (chunk is SoundChunk)
+            {
+                return new SoundChunkController(this, (SoundChunk)chunk);
+            }
+            else if (chunk is WavebankChunk)
+            {
+                return new WavebankChunkController(this, (WavebankChunk)chunk);
+            }
+            else if (chunk is SpeechChunk)
+            {
+                return new SpeechChunkController(this, (SpeechChunk)chunk);
+            }
+            else if (chunk is UnprocessedChunk)
+            {
+                return new UnprocessedChunkController(this, (UnprocessedChunk)chunk);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private void Menu_Add_NormalChunk()
         {
             NormalChunk chunk = new NormalChunk();
-            nsf.Chunks.Add(chunk);
+            NSF.Chunks.Add(chunk);
             NormalChunkController controller = new NormalChunkController(this,chunk);
             AddNode(controller);
-            chunkid += 2;
         }
 
         private void Menu_Add_SoundChunk()
         {
             SoundChunk chunk = new SoundChunk();
-            nsf.Chunks.Add(chunk);
+            NSF.Chunks.Add(chunk);
             SoundChunkController controller = new SoundChunkController(this,chunk);
             AddNode(controller);
-            chunkid += 2;
         }
 
         private void Menu_Add_WavebankChunk()
         {
             WavebankChunk chunk = new WavebankChunk();
-            nsf.Chunks.Add(chunk);
+            NSF.Chunks.Add(chunk);
             WavebankChunkController controller = new WavebankChunkController(this,chunk);
             AddNode(controller);
-            chunkid += 2;
         }
 
         private void Menu_Add_SpeechChunk()
         {
             SpeechChunk chunk = new SpeechChunk();
-            nsf.Chunks.Add(chunk);
+            NSF.Chunks.Add(chunk);
             SpeechChunkController controller = new SpeechChunkController(this,chunk);
             AddNode(controller);
-            chunkid += 2;
         }
 
         private void Menu_Fix_Detonator()
         {
             List<Entity> nitros = new List<Entity>();
             List<Entity> detonators = new List<Entity>();
-            foreach (Chunk chunk in nsf.Chunks)
+            foreach (Chunk chunk in NSF.Chunks)
             {
                 if (chunk is EntryChunk)
                 {
@@ -175,13 +163,13 @@ namespace CrashEdit
         {
             int boxcount = 0;
             List<Entity> willys = new List<Entity>();
-            foreach (Chunk chunk in nsf.Chunks)
+            foreach (Chunk chunk in NSF.Chunks)
             {
                 if (chunk is EntryChunk)
                 {
                     foreach (Entry entry in ((EntryChunk)chunk).Entries)
                     {
-                        if (entry is NewZoneEntry)
+                        if (entry is ZoneEntry)
                         {
                             foreach (Entity entity in ((NewZoneEntry)entry).Entities)
                             {
@@ -193,10 +181,10 @@ namespace CrashEdit
                                 {
                                     switch (entity.Subtype)
                                     {
-                                        case 5:
-                                        case 7:
-                                        case 15:
-                                        case 24:
+                                        case 5: // iron
+                                        case 7: // action
+                                        case 15: // iron spring
+                                        case 24: // nitro action
                                             break;
                                         default:
                                             boxcount++;
@@ -205,7 +193,7 @@ namespace CrashEdit
                                 }
                             }
                         }
-                        if (entry is ZoneEntry)
+                        if (entry is NewZoneEntry)
                         {
                             foreach (Entity entity in ((ZoneEntry)entry).Entities)
                             {
@@ -217,11 +205,12 @@ namespace CrashEdit
                                 {
                                     switch (entity.Subtype)
                                     {
-                                        case 5:
-                                        case 7:
-                                        case 15:
-                                        case 24:
-                                        case 28:
+                                        case 5: // iron
+                                        case 7: // action
+                                        case 15: // iron spring
+                                        case 24: // nitro action
+                                        case 27: // iron continue
+                                        case 28: // clock
                                             break;
                                         default:
                                             boxcount++;

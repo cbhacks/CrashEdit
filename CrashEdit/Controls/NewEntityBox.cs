@@ -53,13 +53,6 @@ namespace CrashEdit
             controller.InvalidateNode();
         }
 
-        public static string Reverse(string str)
-        {
-            char[] charArray = str.ToCharArray();
-            Array.Reverse(charArray);
-            return new string(charArray);
-        }
-
         private void UpdateName()
         {
             if (entity.Name != null)
@@ -243,8 +236,8 @@ namespace CrashEdit
             else
             {
                 lblSettingIndex.Text = string.Format("{0} / {1}",settingindex + 1,entity.Settings.Count);
-                cmdPreviousSetting.Enabled = (settingindex > 0);
-                cmdNextSetting.Enabled = (settingindex < entity.Settings.Count - 1);
+                cmdPreviousSetting.Enabled = settingindex > 0;
+                cmdNextSetting.Enabled = settingindex < entity.Settings.Count - 1;
                 cmdRemoveSetting.Enabled = true;
                 lblSettingA.Enabled = true;
                 lblSettingB.Enabled = true;
@@ -717,7 +710,7 @@ namespace CrashEdit
             }
             if (text == true)
             {
-                entity.LoadListA.Rows[loadlistarowindex].Values[loadlistaeidindex] = BitConv.FromInt32(Entry.Str2EID(Reverse(txtEIDA.Text)));
+                entity.LoadListA.Rows[loadlistarowindex].Values[loadlistaeidindex] = Entry.ENameToEID(txtEIDA.Text);
                 text = false;
             }
         }
@@ -902,7 +895,7 @@ namespace CrashEdit
             }
             if (text == true)
             {
-                entity.LoadListB.Rows[loadlistbrowindex].Values[loadlistbeidindex] = BitConv.FromInt32(Entry.Str2EID(Reverse(txtEIDB.Text)));
+                entity.LoadListB.Rows[loadlistbrowindex].Values[loadlistbeidindex] = Entry.ENameToEID(txtEIDB.Text);
                 text = false;
             }
         }
@@ -1051,11 +1044,11 @@ namespace CrashEdit
                             {
                                 if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityA.Value)
                                 {
-                                    for (int i = 0; i < controller.NewZoneEntryController.NewZoneEntry.Unknown1[0x190];i++)
+                                    for (int i = 0; i < controller.NewZoneEntryController.NewZoneEntry.Header[0x190];i++)
                                     {
-                                        if (entry.EName == Entry.EIDToEName(BitConv.FromInt32(controller.NewZoneEntryController.NewZoneEntry.Unknown1,0x194 + i * 4)))
+                                        if (entry.EName == Entry.EIDToEName(BitConv.FromInt32(controller.NewZoneEntryController.NewZoneEntry.Header,0x194 + i * 4)))
                                         {
-                                            entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] = (int)(i | (otherentity.ID << 8) | ((((NewZoneEntry)entry).Entities.IndexOf(otherentity) - BitConv.FromInt32(((NewZoneEntry)entry).Unknown1, 0x188)) << 24));
+                                            entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] = (int)(i | (otherentity.ID << 8) | ((((NewZoneEntry)entry).Entities.IndexOf(otherentity) - BitConv.FromInt32(((NewZoneEntry)entry).Header, 0x188)) << 24));
                                         }
                                     }
                                 }
@@ -1209,11 +1202,11 @@ namespace CrashEdit
                             {
                                 if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityB.Value)
                                 {
-                                    for (int i = 0; i < controller.NewZoneEntryController.NewZoneEntry.Unknown1[0x190]; i++)
+                                    for (int i = 0; i < controller.NewZoneEntryController.NewZoneEntry.Header[0x190]; i++)
                                     {
-                                        if (entry.EName == Entry.EIDToEName(BitConv.FromInt32(controller.NewZoneEntryController.NewZoneEntry.Unknown1, 0x194 + i * 4)))
+                                        if (entry.EName == Entry.EIDToEName(BitConv.FromInt32(controller.NewZoneEntryController.NewZoneEntry.Header, 0x194 + i * 4)))
                                         {
-                                            entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] = (int)(i | (otherentity.ID << 8) | ((((NewZoneEntry)entry).Entities.IndexOf(otherentity) - BitConv.FromInt32(((NewZoneEntry)entry).Unknown1, 0x188)) << 24));
+                                            entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] = (int)(i | (otherentity.ID << 8) | ((((NewZoneEntry)entry).Entities.IndexOf(otherentity) - BitConv.FromInt32(((NewZoneEntry)entry).Header, 0x188)) << 24));
                                         }
                                     }
                                 }
@@ -1361,7 +1354,7 @@ namespace CrashEdit
         {
             if (entity.SLST != null)
             {
-                txtSLST.Text = entity.SLST;
+                txtSLST.Text = Entry.EIDToEName(entity.SLST.Rows[0].Values[0]);
                 chkSLST.Checked = true;
             }
             else
@@ -1406,7 +1399,7 @@ namespace CrashEdit
                 }
                 if (text == true)
                 {
-                    entity.SLST = Reverse(txtSLST.Text);
+                    entity.SLST.Rows[0].Values[0] = Entry.ENameToEID(txtSLST.Text);
                     text = false;
                 }
 
@@ -1452,7 +1445,7 @@ namespace CrashEdit
             }
             if (text == true)
             {
-                entity.SLST = Reverse(txtSLST.Text);
+                entity.SLST.Rows[0].Values[0] = Entry.ENameToEID(txtSLST.Text);
                 text = false;
             }
             InvalidateNodes();

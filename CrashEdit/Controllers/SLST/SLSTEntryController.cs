@@ -4,30 +4,25 @@ namespace CrashEdit
 {
     public sealed class SLSTEntryController : EntryController
     {
-        private SLSTEntry slstentry;
-
         public SLSTEntryController(EntryChunkController entrychunkcontroller,SLSTEntry slstentry) : base(entrychunkcontroller,slstentry)
         {
-            this.slstentry = slstentry;
-            //AddNode(new SLSTItem0Controller(null,slstentry.SLSTItemFirst));
-            foreach (SLSTItem slstitem in slstentry.SLSTItems)
+            SLSTEntry = slstentry;
+            AddNode(new SLSTSourceController(null,slstentry.Start));
+            foreach (SLSTDelta delta in slstentry.Deltas)
             {
-                AddNode(new SLSTItemController(this,slstitem));
+                AddNode(new SLSTDeltaController(this,delta));
             }
-            //AddNode(new SLSTItem0Controller(null,slstentry.SLSTItemLast));
+            AddNode(new SLSTSourceController(null,slstentry.End));
             InvalidateNode();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("SLST ({0})",slstentry.EName);
-            Node.ImageKey = "thing";
-            Node.SelectedImageKey = "thing";
+            Node.Text = string.Format("Sort List ({0})",SLSTEntry.EName);
+            Node.ImageKey = "greyb";
+            Node.SelectedImageKey = "greyb";
         }
 
-        public SLSTEntry SLSTEntry
-        {
-            get { return slstentry; }
-        }
+        public SLSTEntry SLSTEntry { get; }
     }
 }

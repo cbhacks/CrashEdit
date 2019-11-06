@@ -6,27 +6,27 @@ namespace CrashEdit
 {
     public abstract class Controller : IDisposable
     {
-        private TreeNode node;
-        private ContextMenu contextmenu;
         private Control editor;
 
         public Controller()
         {
-            node = new TreeNode();
-            node.Tag = this;
-            contextmenu = new ContextMenu();
+            ContextMenu = new ContextMenu();
+            Node = new TreeNode
+            {
+                Tag = this,
+                ContextMenu = ContextMenu
+            };
             editor = null;
-            node.ContextMenu = contextmenu;
         }
 
         public void AddNode(Controller controller)
         {
-            node.Nodes.Add(controller.node);
+            Node.Nodes.Add(controller.Node);
         }
 
         public void InsertNode(int index,Controller controller)
         {
-            node.Nodes.Insert(index,controller.node);
+            Node.Nodes.Insert(index,controller.Node);
         }
 
         protected void AddMenu(string text,ControllerMenuDelegate proc)
@@ -42,21 +42,23 @@ namespace CrashEdit
                     MessageBox.Show(ex.Message,text,MessageBoxButtons.OK,MessageBoxIcon.Error);
                 }
             };
-            contextmenu.MenuItems.Add(text,handler);
+            ContextMenu.MenuItems.Add(text,handler);
         }
 
         protected void AddMenuSeparator()
         {
-            contextmenu.MenuItems.Add("-");
+            ContextMenu.MenuItems.Add("-");
         }
 
         public abstract void InvalidateNode();
 
         protected virtual Control CreateEditor()
         {
-            Label label = new Label();
-            label.TextAlign = ContentAlignment.MiddleCenter;
-            label.Text = "No options available";
+            Label label = new Label
+            {
+                TextAlign = ContentAlignment.MiddleCenter,
+                Text = "No options available"
+            };
             return label;
         }
 
@@ -71,23 +73,16 @@ namespace CrashEdit
                 }
                 editor.Dispose();
                 editor = null;
-                if (node.IsSelected)
+                if (Node.IsSelected)
                 {
-                    node.TreeView.SelectedNode = null;
-                    node.TreeView.SelectedNode = node;
+                    Node.TreeView.SelectedNode = null;
+                    Node.TreeView.SelectedNode = Node;
                 }
             }
         }
 
-        public TreeNode Node
-        {
-            get { return node; }
-        }
-
-        public ContextMenu ContextMenu
-        {
-            get { return contextmenu; }
-        }
+        public TreeNode Node { get; }
+        public ContextMenu ContextMenu { get; }
 
         public Control Editor
         {
@@ -109,8 +104,24 @@ namespace CrashEdit
 
         public virtual void Dispose()
         {
-            node.Remove();
-            contextmenu.Dispose();
+            TreeNode[] nodes = new TreeNode[Node.Nodes.Count];
+            int i = 0;
+            foreach(TreeNode node in Node.Nodes)
+            {
+                nodes[i++] = node;
+            }
+            for (i = 0; i < nodes.Length; ++i)
+            {
+                if (nodes[i].Tag != null)
+                {
+                    if (nodes[i].Tag is Controller t)
+                    {
+                        t.Dispose();
+                    }
+                }
+            }
+            Node.Remove(); // <-- this line makes the TreeNodeCollection volatile, so the node references must be copies onto a separate list beforehand
+            ContextMenu.Dispose();
             if (editor != null)
             {
                 editor.Dispose();

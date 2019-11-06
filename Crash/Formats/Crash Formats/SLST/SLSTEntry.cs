@@ -5,38 +5,31 @@ namespace Crash
 {
     public sealed class SLSTEntry : Entry
     {
-        //private SLSTItem0 slstitemfirst;
-        private List<SLSTItem> slstitems;
-        //private SLSTItem0 slstitemlast;
+        private List<SLSTDelta> deltas;
 
-        public SLSTEntry(IEnumerable<SLSTItem> slstitems,int eid,int size) : base(eid,size)
+        public SLSTEntry(SLSTSource start, SLSTSource end, IEnumerable<SLSTDelta> deltas, int eid, int size) : base(eid, size)
         {
-            if (slstitems == null)
-                throw new ArgumentNullException("slstitems");
-            //this.slstitemfirst = slstitemfirst;
-            this.slstitems = new List<SLSTItem>(slstitems);
-            //this.slstitemlast = slstitemlast;
+            if (deltas == null)
+                throw new ArgumentNullException("deltas");
+            this.deltas = new List<SLSTDelta>(deltas);
+            Start = start;
+            End = end;
         }
 
-        public override int Type
-        {
-            get { return 4; }
-        }
-
-        public IList<SLSTItem> SLSTItems
-        {
-            get { return slstitems; }
-        }
+        public override int Type => 4;
+        public IList<SLSTDelta> Deltas => deltas;
+        public SLSTSource Start { get; }
+        public SLSTSource End { get; }
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte [slstitems.Count][];
-            //items[0] = slstitemfirst.Save();
-            for (int i = 0;i < slstitems.Count;i++)
+            byte[][] items = new byte[deltas.Count + 2][];
+            items[0] = Start.Save();
+            for (int i = 0;i < deltas.Count;++i)
             {
-                items[i] = slstitems[i].Save();
+                items[1+i] = deltas[i].Save();
             }
-            //items[slstitems.Count + 1] = slstitemlast.Save();
+            items[1 + deltas.Count] = End.Save();
             return new UnprocessedEntry(items,EID,Type,Size);
         }
     }

@@ -1,4 +1,5 @@
 using Crash;
+using System;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -15,16 +16,29 @@ namespace CrashEdit
         {
             this.controller = controller;
 
-            lstEntryList = new ListBox();
-            lstEntryList.Dock = DockStyle.Fill;
-            foreach (Entry entry in controller.EntryChunk.Entries)
-            {
-                lstEntryList.Items.Add(string.Format("{0}: {1} bytes",entry.EName,entry.Size));
-                totalsize += entry.Size;
-            }
-            lstEntryList.Items.Add(string.Format("Total size: {0} bytes ({1} remaining)",totalsize + 16 + ((controller.EntryChunk.Entries.Count + 1) * 4),0x10000 - totalsize - 16 - ((controller.EntryChunk.Entries.Count + 1) * 4)));
+            lstEntryList = new ListBox { Dock = DockStyle.Fill };
 
             Controls.Add(lstEntryList);
+            
+            Invalidated += EntryChunkBox_Invalidated;
+        }
+
+        private void EntryChunkBox_Invalidated(object sender, InvalidateEventArgs e)
+        {
+            PopulateList();
+        }
+
+        private void PopulateList()
+        {
+            totalsize = 0;
+            lstEntryList.Items.Clear();
+            foreach (Entry entry in controller.EntryChunk.Entries)
+            {
+                var this_size = entry.Save().Length; // yuck! FIXME use like a size getter or something
+                lstEntryList.Items.Add(string.Format("{0}: {1} bytes", entry.EName, this_size));
+                totalsize += this_size;
+            }
+            lstEntryList.Items.Add(string.Format("Total size: {2} entries, {0} bytes ({1} remaining)", totalsize + 16 + ((controller.EntryChunk.Entries.Count + 1) * 4), Chunk.Length - (totalsize + 16 + ((controller.EntryChunk.Entries.Count + 1) * 4)), controller.EntryChunk.Entries.Count));
         }
 
         protected override void Dispose(bool disposing)

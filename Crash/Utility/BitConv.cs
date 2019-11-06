@@ -97,16 +97,13 @@ namespace Crash
             str[offset + 3] = (byte)(value >> 8 * 3);
         }
 
-        public static int FromInt32(int? value)
+        public static int FlipInt32(int value)
         {
-            if (value == null)
-                throw new ArgumentNullException("value");
-            byte [] str = BitConverter.GetBytes((int)value);
             int result = 0;
-            result |= str[0];
-            result |= str[1] << 8;
-            result |= str[2] << 8 * 2;
-            result |= str[3] << 8 * 3;
+            result |= (value & 0xFF << 8 * 0) << 8 * 3;
+            result |= (value & 0xFF << 8 * 1) << 8 * 2;
+            result |= (value & 0xFF << 8 * 2) << 8 * 1;
+            result |= (value & 0xFF << 8 * 3) << 8 * 0;
             return result;
         }
     }

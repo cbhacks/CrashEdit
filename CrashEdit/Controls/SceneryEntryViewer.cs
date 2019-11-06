@@ -47,32 +47,29 @@ namespace CrashEdit
                 {
                     if (entry != null)
                     {
-                        foreach (SceneryColorList colorlist in entry.ColorList)
+                        foreach (SceneryTriangle triangle in entry.Triangles)
                         {
-                            foreach (SceneryTriangle triangle in entry.Triangles)
-                            {
-                                GL.Begin(PrimitiveType.Triangles);
-                                if (triangle.VertexA < entry.Vertices.Count)
-                                    RenderVertex(entry, entry.Vertices[triangle.VertexA], colorlist);
-                                if (triangle.VertexB < entry.Vertices.Count)
-                                    RenderVertex(entry, entry.Vertices[triangle.VertexB], colorlist);
-                                if (triangle.VertexC < entry.Vertices.Count)
-                                    RenderVertex(entry, entry.Vertices[triangle.VertexC], colorlist);
-                                GL.End();
-                            }
-                            foreach (SceneryQuad quad in entry.Quads)
-                            {
-                                GL.Begin(PrimitiveType.Quads);
-                                if (quad.VertexA < entry.Vertices.Count)
-                                    RenderVertex(entry, entry.Vertices[quad.VertexA], colorlist);
-                                if (quad.VertexB < entry.Vertices.Count)
-                                    RenderVertex(entry, entry.Vertices[quad.VertexB], colorlist);
-                                if (quad.VertexC < entry.Vertices.Count)
-                                    RenderVertex(entry, entry.Vertices[quad.VertexC], colorlist);
-                                if (quad.VertexD < entry.Vertices.Count)
-                                    RenderVertex(entry, entry.Vertices[quad.VertexD], colorlist);
-                                GL.End();
-                            }
+                            GL.Begin(PrimitiveType.Triangles);
+                            if (triangle.VertexA < entry.Vertices.Count)
+                                RenderVertex(entry, entry.Vertices[triangle.VertexA]);
+                            if (triangle.VertexB < entry.Vertices.Count)
+                                RenderVertex(entry, entry.Vertices[triangle.VertexB]);
+                            if (triangle.VertexC < entry.Vertices.Count)
+                                RenderVertex(entry, entry.Vertices[triangle.VertexC]);
+                            GL.End();
+                        }
+                        foreach (SceneryQuad quad in entry.Quads)
+                        {
+                            GL.Begin(PrimitiveType.Quads);
+                            if (quad.VertexA < entry.Vertices.Count)
+                                RenderVertex(entry, entry.Vertices[quad.VertexA]);
+                            if (quad.VertexB < entry.Vertices.Count)
+                                RenderVertex(entry, entry.Vertices[quad.VertexB]);
+                            if (quad.VertexC < entry.Vertices.Count)
+                                RenderVertex(entry, entry.Vertices[quad.VertexC]);
+                            if (quad.VertexD < entry.Vertices.Count)
+                                RenderVertex(entry, entry.Vertices[quad.VertexD]);
+                            GL.End();
                         }
                     }
                 }
@@ -84,11 +81,11 @@ namespace CrashEdit
             }
         }
 
-        private void RenderVertex(SceneryEntry entry,SceneryVertex vertex,SceneryColorList colorlist)
+        private void RenderVertex(SceneryEntry entry,SceneryVertex vertex)
         {
-            if (vertex.Color < colorlist.Colors.Count)
+            if (vertex.Color < entry.Colors.Count)
             {
-                SceneryColor color = colorlist.Colors[vertex.Color];
+                SceneryColor color = entry.Colors[vertex.Color];
                 GL.Color3(color.Red,color.Green,color.Blue);
             }
             else

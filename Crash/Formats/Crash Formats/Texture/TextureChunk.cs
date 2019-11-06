@@ -4,33 +4,18 @@ namespace Crash
 {
     public sealed class TextureChunk : Chunk,IEntry
     {
-        private byte[] data;
-
         public TextureChunk(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException("data");
-            this.data = data;
+            Data = data ?? throw new ArgumentNullException("data");
         }
 
-        public override short Type
-        {
-            get { return 1; }
-        }
-
-        public int EID
-        {
-            get { return BitConv.FromInt32(data,4); }
-        }
-
-        public byte[] Data
-        {
-            get { return data; }
-        }
+        public override short Type => 1;
+        public int EID => BitConv.FromInt32(Data, 4);
+        public byte[] Data { get; }
 
         public override UnprocessedChunk Unprocess(int chunkid)
         {
-            return new UnprocessedChunk(data);
+            return new UnprocessedChunk(Data);
         }
     }
 }

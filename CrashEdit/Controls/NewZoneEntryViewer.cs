@@ -65,22 +65,19 @@ namespace CrashEdit
             allentries = false;
         }
 
-        protected override int CameraRangeMargin
-        {
-            get { return 3200; }
-        }
+        protected override int CameraRangeMargin => 1600;
 
         protected override IEnumerable<IPosition> CorePositions
         {
             get
             {
-                int xoffset = BitConv.FromInt32(entry.Unknown2,0);
-                int yoffset = BitConv.FromInt32(entry.Unknown2,4);
-                int zoffset = BitConv.FromInt32(entry.Unknown2,8);
+                int xoffset = BitConv.FromInt32(entry.Layout,0);
+                int yoffset = BitConv.FromInt32(entry.Layout,4);
+                int zoffset = BitConv.FromInt32(entry.Layout,8);
                 yield return new Position(xoffset,yoffset,zoffset);
-                int x2 = BitConv.FromInt32(entry.Unknown2,12);
-                int y2 = BitConv.FromInt32(entry.Unknown2,16);
-                int z2 = BitConv.FromInt32(entry.Unknown2,20);
+                int x2 = BitConv.FromInt32(entry.Layout,12);
+                int y2 = BitConv.FromInt32(entry.Layout,16);
+                int z2 = BitConv.FromInt32(entry.Layout,20);
                 yield return new Position(x2 + xoffset,y2 + yoffset,z2 + zoffset);
                 foreach (Entity entity in entry.Entities)
                 {
@@ -167,9 +164,9 @@ namespace CrashEdit
         protected override void RenderObjects()
         {
             RenderEntry(entry,ref octreedisplaylists[0]);
-            int xoffset = BitConv.FromInt32(entry.Unknown2,0);
-            int yoffset = BitConv.FromInt32(entry.Unknown2,4);
-            int zoffset = BitConv.FromInt32(entry.Unknown2,8);
+            int xoffset = BitConv.FromInt32(entry.Layout,0);
+            int yoffset = BitConv.FromInt32(entry.Layout,4);
+            int zoffset = BitConv.FromInt32(entry.Layout,8);
             base.RenderObjects();
             GL.Enable(EnableCap.PolygonStipple);
             GL.PolygonStipple(stippleb);
@@ -187,12 +184,12 @@ namespace CrashEdit
 
         private void RenderEntry(NewZoneEntry entry,ref int octreedisplaylist)
         {
-            int xoffset = BitConv.FromInt32(entry.Unknown2,0);
-            int yoffset = BitConv.FromInt32(entry.Unknown2,4);
-            int zoffset = BitConv.FromInt32(entry.Unknown2,8);
-            int x2 = BitConv.FromInt32(entry.Unknown2,12);
-            int y2 = BitConv.FromInt32(entry.Unknown2,16);
-            int z2 = BitConv.FromInt32(entry.Unknown2,20);
+            int xoffset = BitConv.FromInt32(entry.Layout,0);
+            int yoffset = BitConv.FromInt32(entry.Layout,4);
+            int zoffset = BitConv.FromInt32(entry.Layout,8);
+            int x2 = BitConv.FromInt32(entry.Layout,12);
+            int y2 = BitConv.FromInt32(entry.Layout,16);
+            int z2 = BitConv.FromInt32(entry.Layout,20);
             GL.PushMatrix();
             GL.Translate(xoffset,yoffset,zoffset);
             if (deletelists)
@@ -210,10 +207,10 @@ namespace CrashEdit
                     octreedisplaylist = GL.GenLists(1);
                     GL.NewList(octreedisplaylist,ListMode.CompileAndExecute);
                     GL.PushMatrix();
-                    int xmax = (ushort)BitConv.FromInt16(entry.Unknown2,0x1E);
-                    int ymax = (ushort)BitConv.FromInt16(entry.Unknown2,0x20);
-                    int zmax = (ushort)BitConv.FromInt16(entry.Unknown2,0x22);
-                    RenderOctree(entry.Unknown2,0x1C,0,0,0,x2,y2,z2,xmax,ymax,zmax);
+                    int xmax = (ushort)BitConv.FromInt16(entry.Layout,0x1E);
+                    int ymax = (ushort)BitConv.FromInt16(entry.Layout,0x20);
+                    int zmax = (ushort)BitConv.FromInt16(entry.Layout,0x22);
+                    RenderOctree(entry.Layout,0x1C,0,0,0,x2,y2,z2,xmax,ymax,zmax);
                     GL.PopMatrix();
                     GL.EndList();
                 }
@@ -224,9 +221,9 @@ namespace CrashEdit
                 GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
             }
             GL.Scale(4,4,4);
-            int xdepth = BitConv.FromInt32(entry.Unknown2,12);
-            int ydepth = BitConv.FromInt32(entry.Unknown2,16);
-            int zdepth = BitConv.FromInt32(entry.Unknown2,20);
+            int xdepth = BitConv.FromInt32(entry.Layout,12);
+            int ydepth = BitConv.FromInt32(entry.Layout,16);
+            int zdepth = BitConv.FromInt32(entry.Layout,20);
             GL.Color3(Color.White);
             GL.Begin(PrimitiveType.LineStrip);
             GL.Vertex3(0,0,0);
@@ -262,12 +259,12 @@ namespace CrashEdit
 
         private void RenderLinkedEntry(NewZoneEntry entry,ref int octreedisplaylist)
         {
-            int xoffset = BitConv.FromInt32(entry.Unknown2,0);
-            int yoffset = BitConv.FromInt32(entry.Unknown2,4);
-            int zoffset = BitConv.FromInt32(entry.Unknown2,8);
-            int x2 = BitConv.FromInt32(entry.Unknown2,12);
-            int y2 = BitConv.FromInt32(entry.Unknown2,16);
-            int z2 = BitConv.FromInt32(entry.Unknown2,20);
+            int xoffset = BitConv.FromInt32(entry.Layout,0);
+            int yoffset = BitConv.FromInt32(entry.Layout,4);
+            int zoffset = BitConv.FromInt32(entry.Layout,8);
+            int x2 = BitConv.FromInt32(entry.Layout,12);
+            int y2 = BitConv.FromInt32(entry.Layout,16);
+            int z2 = BitConv.FromInt32(entry.Layout,20);
             GL.PushMatrix();
             GL.Translate(xoffset,yoffset,zoffset);
             if (allentries)
@@ -288,10 +285,10 @@ namespace CrashEdit
                         octreedisplaylist = GL.GenLists(1);
                         GL.NewList(octreedisplaylist,ListMode.CompileAndExecute);
                         GL.PushMatrix();
-                        int xmax = (ushort)BitConv.FromInt16(entry.Unknown2,0x1E);
-                        int ymax = (ushort)BitConv.FromInt16(entry.Unknown2,0x20);
-                        int zmax = (ushort)BitConv.FromInt16(entry.Unknown2,0x22);
-                        RenderOctree(entry.Unknown2,0x1C,0,0,0,x2,y2,z2,xmax,ymax,zmax);
+                        int xmax = (ushort)BitConv.FromInt16(entry.Layout,0x1E);
+                        int ymax = (ushort)BitConv.FromInt16(entry.Layout,0x20);
+                        int zmax = (ushort)BitConv.FromInt16(entry.Layout,0x22);
+                        RenderOctree(entry.Layout,0x1C,0,0,0,x2,y2,z2,xmax,ymax,zmax);
                         GL.PopMatrix();
                         GL.EndList();
                     }
@@ -418,6 +415,7 @@ namespace CrashEdit
                 RenderOctreeY(data,ref offset,x,y,z,w,h,d,xmax - 1,ymax,zmax);
             }
         }
+
         private void RenderOctreeY(byte[] data,ref int offset,double x,double y,double z,double w,double h,double d,int xmax,int ymax,int zmax)
         {
             if (ymax > 0)
@@ -614,32 +612,38 @@ namespace CrashEdit
             switch (subtype)
             {
                 case 0: // TNT
-                    LoadTexture(OldResources.TNTTopTexture);
+                    LoadTexture(OldResources.TNTBoxTopTexture);
                     break;
-                case 2: // Normal
-                case 3: // Arrow
-                case 6: // Apple
+                case 2: // Empty
+                case 3: // Spring
+                case 6: // Fruit
                 case 8: // Life
-                case 9: // Mask
-                case 10: // Question Mark
-                    LoadTexture(OldResources.BoxTexture);
+                case 9: // Doctor
+                case 10: // Pickup
+                case 25: // Slot
+                    LoadTexture(OldResources.EmptyBoxTexture);
                     break;
-                case 4: // Checkpoint
-                    LoadTexture(OldResources.CheckpointTexture);
+                case 4: // Continue
+                    LoadTexture(OldResources.ContinueBoxTexture);
                     break;
                 case 5: // Iron
-                case 7: // Activator
-                case 15: // Iron Arrow
+                case 7: // Action
+                case 15: // Iron Spring
+                case 27: // Iron Continue
+                case 28: // Clock
                     LoadTexture(OldResources.IronBoxTexture);
                     break;
                 case 18: // Nitro
-                    LoadTexture(OldResources.NitroTopTexture);
+                    LoadTexture(OldResources.NitroBoxTopTexture);
                     break;
-                case 23: // Bodyslam
-                    LoadTexture(OldResources.BodyslamBoxTexture);
+                case 23: // Steel
+                    LoadTexture(OldResources.SteelBoxTexture);
                     break;
-                case 24: // Detonator
-                    LoadTexture(OldResources.DetonatorBoxTopTexture);
+                case 24: // Action Nitro
+                    LoadTexture(OldResources.ActionNitroBoxTopTexture);
+                    break;
+                case 26: // Time ?
+                    LoadTexture(OldResources.TimeBoxTopTexture);
                     break;
                 default:
                     LoadTexture(OldResources.UnknownBoxTopTexture);
@@ -652,46 +656,64 @@ namespace CrashEdit
             switch (subtype)
             {
                 case 0: // TNT
-                    LoadTexture(OldResources.TNTTexture);
+                    LoadTexture(OldResources.TNTBoxTexture);
                     break;
-                case 2: // Normal
-                    LoadTexture(OldResources.BoxTexture);
+                case 2: // Empty
+                    LoadTexture(OldResources.EmptyBoxTexture);
                     break;
-                case 3: // Arrow
-                    LoadTexture(OldResources.ArrowBoxTexture);
+                case 3: // Spring
+                    LoadTexture(OldResources.SpringBoxTexture);
                     break;
-                case 4: // Checkpoint
-                    LoadTexture(OldResources.CheckpointTexture);
+                case 4: // Continue
+                    LoadTexture(OldResources.ContinueBoxTexture);
                     break;
                 case 5: // Iron
                     LoadTexture(OldResources.IronBoxTexture);
                     break;
-                case 6: // Apple
-                    LoadTexture(OldResources.AppleBoxTexture);
+                case 6: // Fruit
+                    LoadTexture(OldResources.FruitBoxTexture);
                     break;
-                case 7: // Activator
-                    LoadTexture(OldResources.ActivatorBoxTexture);
+                case 7: // Action
+                    LoadTexture(OldResources.ActionBoxTexture);
                     break;
                 case 8: // Life
                     LoadTexture(OldResources.LifeBoxTexture);
                     break;
-                case 9: // Mask
-                    LoadTexture(OldResources.MaskBoxTexture);
+                case 9: // Doctor
+                    LoadTexture(OldResources.DoctorBoxTexture);
                     break;
-                case 10: // Question Mark
-                    LoadTexture(OldResources.QuestionMarkBoxTexture);
+                case 10: // Pickup
+                    LoadTexture(OldResources.PickupBoxTexture);
                     break;
-                case 15: // Iron Arrow
-                    LoadTexture(OldResources.IronArrowBoxTexture);
+                case 11: // POW
+                    LoadTexture(OldResources.POWBoxTexture);
+                    break;
+                case 13: // Ghost
+                    LoadTexture(OldResources.UnknownBoxTopTexture);
+                    break;
+                case 15: // Iron Spring
+                    LoadTexture(OldResources.IronSpringBoxTexture);
                     break;
                 case 18: // Nitro
-                    LoadTexture(OldResources.NitroTexture);
+                    LoadTexture(OldResources.NitroBoxTexture);
                     break;
-                case 23: // Bodyslam
-                    LoadTexture(OldResources.BodyslamBoxTexture);
+                case 23: // Steel
+                    LoadTexture(OldResources.SteelBoxTexture);
                     break;
-                case 24: // Detonator
-                    LoadTexture(OldResources.DetonatorBoxTexture);
+                case 24: // Action Nitro
+                    LoadTexture(OldResources.ActionNitroBoxTexture);
+                    break;
+                case 25: // Slot
+                    LoadTexture(OldResources.SlotBoxTexture);
+                    break;
+                case 26: // Time ?
+                    LoadTexture(OldResources.TimeBoxTexture);
+                    break;
+                case 27: // Iron Continue
+                    LoadTexture(OldResources.IronContinueBoxTexture);
+                    break;
+                case 28: // Clock
+                    LoadTexture(OldResources.ClockBoxTexture);
                     break;
                 default:
                     LoadTexture(OldResources.UnknownBoxTexture);

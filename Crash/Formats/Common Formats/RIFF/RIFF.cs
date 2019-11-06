@@ -14,10 +14,7 @@ namespace Crash
             items = new List<RIFFItem>();
         }
 
-        public IList<RIFFItem> Items
-        {
-            get { return items; }
-        }
+        public IList<RIFFItem> Items => items;
 
         public override int Length
         {

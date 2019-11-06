@@ -94,10 +94,7 @@ namespace CrashEdit
             };
         }
 
-        protected virtual int CameraRangeMargin
-        {
-            get { return 400; }
-        }
+        protected virtual int CameraRangeMargin => 400;
 
         protected abstract IEnumerable<IPosition> CorePositions
         {
@@ -109,6 +106,13 @@ namespace CrashEdit
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.AlphaTest);
+            GL.Enable(EnableCap.Blend);
+            GL.Enable(EnableCap.Normalize);
+            GL.DepthFunc(DepthFunction.Lequal);
+            GL.AlphaFunc(AlphaFunction.Greater, 0);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             ResetCamera();
         }
 
@@ -239,16 +243,12 @@ namespace CrashEdit
         protected override void OnPaint(PaintEventArgs e)
         {
             MakeCurrent();
-            GL.Enable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.AlphaTest);
-            GL.DepthFunc(DepthFunction.Lequal);
-            GL.AlphaFunc(AlphaFunction.Greater,0);
             GL.Viewport(Location,Size);
             GL.ClearColor(0.05f,0.05f,0.05f,1);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadIdentity();
-            GL.Frustum(-0.01,+0.01,-0.01,+0.01,0.01,ushort.MaxValue);
+            var proj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver3,(float)Width/Height,1/25f,ushort.MaxValue);
+            GL.LoadMatrix(ref proj);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
             GL.Translate(0,0,-1);
@@ -258,8 +258,6 @@ namespace CrashEdit
             GL.Translate(-midx,-midy,-midz);
             RenderObjects();
             SwapBuffers();
-            GL.Disable(EnableCap.DepthTest);
-            GL.Disable(EnableCap.AlphaTest);
         }
 
         public void ResetCamera()
@@ -283,9 +281,9 @@ namespace CrashEdit
             midy = (maxy + miny) / 2;
             midz = (maxz + minz) / 2;
             range = 1;
-            range = Math.Max(range,midx - minx);
-            range = Math.Max(range,midy - miny);
-            range = Math.Max(range,midz - minz);
+            range = Math.Max(range,maxx - minx);
+            range = Math.Max(range,maxy - miny);
+            range = Math.Max(range,maxz - minz);
             range += CameraRangeMargin;
             rotx = 0;
             roty = 0;

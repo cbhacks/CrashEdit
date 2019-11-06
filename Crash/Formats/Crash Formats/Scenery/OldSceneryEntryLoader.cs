@@ -15,6 +15,7 @@ namespace Crash
             {
                 ErrorManager.SignalError("OldSceneryEntry: Wrong number of items");
             }
+            // TODO :: get these from header item
             if (items[1].Length % 8 != 0)
             {
                 ErrorManager.SignalError("OldSceneryEntry: Second item (polygons) length is invalid");

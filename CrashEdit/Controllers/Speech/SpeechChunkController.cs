@@ -4,24 +4,19 @@ namespace CrashEdit
 {
     public sealed class SpeechChunkController : EntryChunkController
     {
-        private SpeechChunk speechchunk;
-
         public SpeechChunkController(NSFController nsfcontroller,SpeechChunk speechchunk) : base(nsfcontroller,speechchunk)
         {
-            this.speechchunk = speechchunk;
+            SpeechChunk = speechchunk;
             InvalidateNode();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Speech Chunk {0}", NSFController.chunkid);
+            Node.Text = string.Format("Speech Chunk {0}", NSFController.NSF.Chunks.IndexOf(SpeechChunk) * 2 + 1);
             Node.ImageKey = "whitej";
             Node.SelectedImageKey = "whitej";
         }
 
-        public SpeechChunk SpeechChunk
-        {
-            get { return speechchunk; }
-        }
+        public SpeechChunk SpeechChunk { get; }
     }
 }

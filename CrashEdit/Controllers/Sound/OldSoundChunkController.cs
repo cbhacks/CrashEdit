@@ -4,24 +4,19 @@ namespace CrashEdit
 {
     public sealed class OldSoundChunkController : EntryChunkController
     {
-        private OldSoundChunk oldsoundchunk;
-
         public OldSoundChunkController(NSFController nsfcontroller,OldSoundChunk oldsoundchunk) : base(nsfcontroller,oldsoundchunk)
         {
-            this.oldsoundchunk = oldsoundchunk;
+            OldSoundChunk = oldsoundchunk;
             InvalidateNode();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Old Sound Chunk {0}", NSFController.chunkid);
+            Node.Text = string.Format("Old Sound Chunk {0}",NSFController.NSF.Chunks.IndexOf(OldSoundChunk) * 2 + 1);
             Node.ImageKey = "bluej";
             Node.SelectedImageKey = "bluej";
         }
-        
-        public OldSoundChunk OldSoundChunk
-        {
-            get { return oldsoundchunk; }
-        }
+
+        public OldSoundChunk OldSoundChunk { get; }
     }
 }

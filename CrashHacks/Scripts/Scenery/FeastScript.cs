@@ -29,17 +29,17 @@ namespace CrashHacks.Scripts.Scenery
             if (value is SceneryEntry)
             {
                 SceneryEntry entry = (SceneryEntry)value;
-                if (entry.Item6.Length < 4)
+                if (entry.Colors.Count < 1)
                     return;
-                int feast = 0;
-                for (int i = 0;i < entry.Item6.Length;i += 4)
+                SceneryColor feast = new SceneryColor(0, 0, 0, 0);
+                for (int i = 0;i < entry.Colors.Count;++i)
                 {
-                    int newfeast = BitConv.FromInt32(entry.Item6,i);
+                    SceneryColor newfeast = entry.Colors[i];
                     if (i != 0)
-                        BitConv.ToInt32(entry.Item6,i,feast);
+                        entry.Colors[i] = new SceneryColor(feast.Red, feast.Green, feast.Blue, feast.Extra);
                     feast = newfeast;
                 }
-                BitConv.ToInt32(entry.Item6,0,feast);
+                entry.Colors[0] = new SceneryColor(feast.Red, feast.Green, feast.Blue, feast.Extra);
             }
         }
     }

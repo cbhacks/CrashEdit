@@ -93,10 +93,7 @@ namespace Crash
             return Load(rows);
         }
 
-        protected abstract byte ElementSize
-        {
-            get;
-        }
+        protected abstract byte ElementSize { get; }
 
         protected abstract T LoadElement(byte[] data);
 

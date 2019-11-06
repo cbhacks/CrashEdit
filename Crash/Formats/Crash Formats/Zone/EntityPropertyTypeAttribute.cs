@@ -5,16 +5,11 @@ namespace Crash
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class EntityPropertyTypeAttribute : Attribute
     {
-        private byte type;
-
         public EntityPropertyTypeAttribute(byte type)
         {
-            this.type = type;
+            Type = type;
         }
 
-        public byte Type
-        {
-            get { return type; }
-        }
+        public byte Type { get; }
     }
 }

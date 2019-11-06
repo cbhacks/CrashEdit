@@ -17,12 +17,8 @@ namespace Crash
                 throw new ArgumentOutOfRangeException("alignment");
             if (offset < 0 || offset >= alignment)
                 throw new ArgumentOutOfRangeException("offset");
-            while (position % alignment != offset)
-            {
-                // Ugly hack
-                // Change this to an if and use proper math some day
-                position++;
-            }
+            if (position > 0) position += -(((position - 1) % alignment) + 1) + alignment;
+            //irrelevant: position = position ? position - (((position - 1) % alignment) + 1) + alignment : position;
         }
     }
 }

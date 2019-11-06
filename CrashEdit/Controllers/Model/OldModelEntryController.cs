@@ -4,24 +4,19 @@ namespace CrashEdit
 {
     public sealed class OldModelEntryController : EntryController
     {
-        private OldModelEntry oldmodelentry;
-
         public OldModelEntryController(EntryChunkController entrychunkcontroller,OldModelEntry oldmodelentry) : base(entrychunkcontroller,oldmodelentry)
         {
-            this.oldmodelentry = oldmodelentry;
+            OldModelEntry = oldmodelentry;
             InvalidateNode();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Old Model ({0})",oldmodelentry.EName);
-            Node.ImageKey = "thing";
-            Node.SelectedImageKey = "thing";
+            Node.Text = string.Format("Old Model ({0})",OldModelEntry.EName);
+            Node.ImageKey = "crimsonb";
+            Node.SelectedImageKey = "crimsonb";
         }
 
-        public OldModelEntry OldModelEntry
-        {
-            get { return oldmodelentry; }
-        }
+        public OldModelEntry OldModelEntry { get; }
     }
 }

@@ -11,12 +11,14 @@
     <RootNamespace>CrashEdit</RootNamespace>
     <AssemblyName>CrashEdit</AssemblyName>
     <StartupObject>CrashEdit.Program</StartupObject>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,6 +28,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,6 +37,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>
@@ -58,6 +62,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\Model\T2EntryController.cs" />
     <Compile Include="DRNSF.cs" />
     <Compile Include="ISO2PSX.cs" />
     <Compile Include="Controllers\Animation\CutsceneFrameController.cs" />
@@ -65,29 +70,29 @@
     <Compile Include="Controllers\Animation\FrameController.cs" />
     <Compile Include="Controllers\Animation\ProtoAnimationEntryController.cs" />
     <Compile Include="Controllers\Animation\ProtoFrameController.cs" />
-    <Compile Include="Controllers\ChunkController.cs" />
-    <Compile Include="Controllers\CodeEntryController.cs" />
+    <Compile Include="Controllers\Base\Chunk\ChunkController.cs" />
+    <Compile Include="Controllers\T11\T11EntryController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\ControllerMenuDelegate.cs" />
     <Compile Include="Controllers\Animation\OldAnimationEntryController.cs" />
     <Compile Include="Controllers\Animation\OldFrameController.cs" />
     <Compile Include="Controllers\Model\ModelEntryController.cs" />
-    <Compile Include="Controllers\Model\T2EntryController.cs" />
     <Compile Include="Controllers\Scenery\NewSceneryEntryController.cs" />
-    <Compile Include="Controllers\Scenery\SceneryColorListController.cs" />
     <Compile Include="Controllers\Scenery\ProtoSceneryEntryController.cs" />
-    <Compile Include="Controllers\SLST\SLSTItemController.cs" />
-    <Compile Include="Controllers\SLST\SLSTItem1Controller.cs" />
-    <Compile Include="Controllers\SLST\SLSTItem0Controller.cs" />
-    <Compile Include="Controllers\TextureChunkController.cs" />
+    <Compile Include="Controllers\SLST\OldSLSTDeltaController.cs" />
+    <Compile Include="Controllers\SLST\SLSTDeltaController.cs" />
+    <Compile Include="Controllers\SLST\OldSLSTEntryController.cs" />
+    <Compile Include="Controllers\SLST\OldSLSTSourceController.cs" />
+    <Compile Include="Controllers\SLST\SLSTSourceController.cs" />
+    <Compile Include="Controllers\Texture\TextureChunkController.cs" />
     <Compile Include="Controllers\Animation\CutsceneAnimationEntryController.cs" />
     <Compile Include="Controllers\Music\OldSEQController.cs" />
     <Compile Include="Controllers\Music\OldVHController.cs" />
     <Compile Include="Controllers\Music\OldMusicEntryController.cs" />
-    <Compile Include="Controllers\PaletteEntryController.cs" />
-    <Compile Include="Controllers\T6EntryController.cs" />
-    <Compile Include="Controllers\OldT15EntryController.cs" />
-    <Compile Include="Controllers\OldT17EntryController.cs" />
+    <Compile Include="Controllers\Palette\PaletteEntryController.cs" />
+    <Compile Include="Controllers\T6\T6EntryController.cs" />
+    <Compile Include="Controllers\T15\OldT15EntryController.cs" />
+    <Compile Include="Controllers\T17\OldT17EntryController.cs" />
     <Compile Include="Controllers\Zone\NewEntityController.cs" />
     <Compile Include="Controllers\Zone\ProtoCameraController.cs" />
     <Compile Include="Controllers\Zone\OldCameraController.cs" />
@@ -102,27 +107,27 @@
     <Compile Include="Controllers\Sound\SoundEntryController.cs" />
     <Compile Include="Controllers\Sound\OldSoundChunkController.cs" />
     <Compile Include="Controllers\Unprocessed\UnprocessedChunkController.cs" />
-    <Compile Include="Controllers\ItemController.cs" />
+    <Compile Include="Controllers\Base\Entry\ItemController.cs" />
     <Compile Include="Controllers\Zone\EntityController.cs" />
     <Compile Include="Controllers\Zone\NewZoneEntryController.cs" />
     <Compile Include="Controllers\Zone\ZoneEntryController.cs" />
     <Compile Include="Controllers\Unprocessed\UnprocessedEntryController.cs" />
     <Compile Include="Controllers\SLST\SLSTEntryController.cs" />
     <Compile Include="Controllers\Music\VHController.cs" />
-    <Compile Include="Controllers\DemoEntryController.cs" />
-    <Compile Include="Controllers\T15EntryController.cs" />
-    <Compile Include="Controllers\T21EntryController.cs" />
-    <Compile Include="Controllers\T17EntryController.cs" />
+    <Compile Include="Controllers\Demo\DemoEntryController.cs" />
+    <Compile Include="Controllers\T15\T15EntryController.cs" />
+    <Compile Include="Controllers\T21\T21EntryController.cs" />
+    <Compile Include="Controllers\T17\T17EntryController.cs" />
     <Compile Include="Controllers\Scenery\SceneryEntryController.cs" />
     <Compile Include="Controllers\Mystery\MysteryMultiItemEntryController.cs" />
     <Compile Include="Controllers\Mystery\MysteryUniItemEntryController.cs" />
-    <Compile Include="Controllers\T1EntryController.cs" />
+    <Compile Include="Controllers\T1\T1EntryController.cs" />
     <Compile Include="Controllers\Wavebank\WavebankChunkController.cs" />
-    <Compile Include="Controllers\EntryChunkController.cs" />
-    <Compile Include="Controllers\EntryController.cs" />
+    <Compile Include="Controllers\Base\Entry Chunk\EntryChunkController.cs" />
+    <Compile Include="Controllers\Base\Entry\EntryController.cs" />
     <Compile Include="Controllers\Music\SEQController.cs" />
     <Compile Include="Controllers\Music\MusicEntryController.cs" />
-    <Compile Include="Controllers\NormalChunkController.cs" />
+    <Compile Include="Controllers\Normal Chunk\NormalChunkController.cs" />
     <Compile Include="Controllers\Sound\SoundChunkController.cs" />
     <Compile Include="Controllers\NSFController.cs" />
     <Compile Include="Controllers\Speech\SpeechChunkController.cs" />
@@ -143,12 +148,6 @@
     </Compile>
     <Compile Include="Controls\OldFrameBox.Designer.cs">
       <DependentUpon>OldFrameBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SceneryColorListBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\SceneryColorListBox.Designer.cs">
-      <DependentUpon>SceneryColorListBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProtoCameraBox.cs">
       <SubType>UserControl</SubType>
@@ -195,16 +194,19 @@
     <Compile Include="Controls\EntryChunkBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Controls\OldSLSTDeltaBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\OldSLSTSourceBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\SoundBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\SLSTItem0Box.cs">
+    <Compile Include="Controls\SLSTSourceBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\SLSTItemBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\SLSTItem1Box.cs">
+    <Compile Include="Controls\SLSTDeltaBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ThreeDimensionalViewer.cs">
@@ -298,10 +300,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\OldFrameBox.resx">
       <DependentUpon>OldFrameBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\SceneryColorListBox.resx">
-      <DependentUpon>SceneryColorListBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ProtoCameraBox.resx">
@@ -421,5 +419,10 @@
     <Content Include="Resources\Textures\UnknownBoxTop.png" />
     <Content Include="Resources\Textures\UnknownPickup.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
 </Project>

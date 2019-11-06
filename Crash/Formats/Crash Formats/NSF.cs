@@ -19,22 +19,21 @@ namespace Crash
             short magic = BitConv.FromInt16(data,offset);
             if (magic == Chunk.Magic)
             {
-                compressed = false;
                 if (data.Length < offset + Chunk.Length)
                 {
                     ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
                 }
+                compressed = false;
                 Array.Copy(data,offset,result,0,Chunk.Length);
                 offset += Chunk.Length;
             }
             else if (magic == Chunk.CompressedMagic)
             {
-                compressed = true;
-                int pos = 0;
                 if (data.Length < offset + 12)
                 {
                     ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
                 }
+                compressed = true;
                 short zero = BitConv.FromInt16(data,offset + 2);
                 int length = BitConv.FromInt32(data,offset + 4);
                 int skip = BitConv.FromInt32(data,offset + 8);
@@ -51,6 +50,7 @@ namespace Crash
                     ErrorManager.SignalError("NSF.ReadChunk: Skip value is negative");
                 }
                 offset += 12;
+                int pos = 0;
                 while (pos < length)
                 {
                     if (data.Length < offset + 1)
@@ -58,7 +58,7 @@ namespace Crash
                         ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
                     }
                     byte prefix = data[offset];
-                    offset++;
+                    ++offset;
                     if ((prefix & 0x80) != 0)
                     {
                         prefix &= 0x7F;
@@ -67,7 +67,7 @@ namespace Crash
                             ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
                         }
                         int seek = data[offset];
-                        offset++;
+                        ++offset;
                         int span = seek & 7;
                         seek >>= 3;
                         seek |= prefix << 5;
@@ -90,7 +90,7 @@ namespace Crash
                         // Do NOT use Array.Copy as
                         // overlap is possible i.e. span
                         // may be greater than seek
-                        for (int i = 0;i < span;i++)
+                        for (int i = 0;i < span;++i)
                         {
                             result[pos + i] = result[pos - seek + i];
                         }
@@ -121,11 +121,11 @@ namespace Crash
             }
             else if (magic == 0) // Fixes some sort of read error
             {
-                compressed = false;
                 if (data.Length < offset + Chunk.Length)
                 {
                     ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
                 }
+                compressed = false;
                 Array.Copy(data, offset, result, 0, Chunk.Length);
                 offset += Chunk.Length;
             }
@@ -149,8 +149,7 @@ namespace Crash
             List<bool> chunkcompression = new List<bool>();
             while (offset < data.Length)
             {
-                bool compressed;
-                byte[] chunkdata = ReadChunk(data,ref offset,out compressed);
+                byte[] chunkdata = ReadChunk(data,ref offset,out bool compressed);
                 UnprocessedChunk chunk = Chunk.Load(chunkdata);
                 if (firstid == null)
                 {
@@ -185,12 +184,12 @@ namespace Crash
                 }
                 chunks.Add(chunk);
             }
-            if (prelude != null && chunks.Count < prelude.Count)
-            {
-                ErrorManager.SignalIgnorableError("NSF: Prelude is longer than actual data");
-            }
             if (prelude != null)
             {
+                if (chunks.Count < prelude.Count) // error merging for now
+                {
+                    ErrorManager.SignalIgnorableError("NSF: Prelude is longer than actual data");
+                }
                 ErrorManager.SignalIgnorableError("NSF: Prelude saving is not yet implemented");
             }
             foreach (bool compressed in chunkcompression)
@@ -210,30 +209,25 @@ namespace Crash
             return nsf;
         }
 
-        private EvList<Chunk> chunks;
-
         public NSF(IEnumerable<Chunk> chunks)
         {
             if (chunks == null)
                 throw new ArgumentNullException("chunks");
-            this.chunks = new EvList<Chunk>(chunks);
+            Chunks = new EvList<Chunk>(chunks);
         }
 
-        public EvList<Chunk> Chunks
-        {
-            get { return chunks; }
-        }
+        public EvList<Chunk> Chunks { get; }
 
         public void ProcessAll(GameVersion gameversion)
         {
-            for (int i = 0;i < chunks.Count;i++)
+            for (int i = 0;i < Chunks.Count;i++)
             {
-                if (chunks[i] is UnprocessedChunk)
+                if (Chunks[i] is UnprocessedChunk)
                 {
                     ErrorManager.EnterSkipRegion();
                     try
                     {
-                        chunks[i] = ((UnprocessedChunk)chunks[i]).Process(i * 2 + 1);
+                        Chunks[i] = ((UnprocessedChunk)Chunks[i]).Process(i * 2 + 1);
                     }
                     catch (LoadSkippedException)
                     {
@@ -243,16 +237,16 @@ namespace Crash
                         ErrorManager.ExitSkipRegion();
                     }
                 }
-                if (chunks[i] is EntryChunk)
+                if (Chunks[i] is EntryChunk)
                 {
-                    ((EntryChunk)chunks[i]).ProcessAll(gameversion);
+                    ((EntryChunk)Chunks[i]).ProcessAll(gameversion);
                 }
             }
         }
 
         public T FindEID<T>(int eid) where T : class,IEntry
         {
-            foreach (Chunk chunk in chunks)
+            foreach (Chunk chunk in Chunks)
             {
                 if (chunk is IEntry)
                 {
@@ -277,10 +271,10 @@ namespace Crash
 
         public byte[] Save()
         {
-            byte[] data = new byte [chunks.Count * Chunk.Length];
-            for (int i = 0;i < chunks.Count;i++)
+            byte[] data = new byte [Chunks.Count * Chunk.Length];
+            for (int i = 0;i < Chunks.Count;i++)
             {
-                chunks[i].Save(i * 2 + 1).CopyTo(data,i * Chunk.Length);
+                Chunks[i].Save(i * 2 + 1).CopyTo(data,i * Chunk.Length);
             }
             return data;
         }

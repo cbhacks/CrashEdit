@@ -17,19 +17,16 @@ namespace Crash
 
         public string Name
         {
-            get { return name; }
+            get => name;
             set
             {
                 if (name.Length != 4)
-                    throw new ArgumentException("Value must be 4 characters long.","name");
+                    throw new ArgumentException("Value must be 4 characters long.", "name");
                 name = value;
             }
         }
 
-        public abstract int Length
-        {
-            get;
-        }
+        public abstract int Length { get; }
 
         public byte[] Save()
         {

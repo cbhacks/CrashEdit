@@ -5,10 +5,7 @@ namespace Crash
     [EntityPropertyType(5)]
     public sealed class EntitySettingPropertyLoader : EntityBasicPropertyLoader<EntitySetting>
     {
-        protected override byte ElementSize
-        {
-            get { return 4; }
-        }
+        protected override byte ElementSize => 4;
 
         protected override EntitySetting LoadElement(byte[] data)
         {

@@ -5,29 +5,54 @@ namespace CrashEdit
 {
     public sealed class UnprocessedChunkController : ChunkController
     {
-        private UnprocessedChunk unprocessedchunk;
-
         public UnprocessedChunkController(NSFController nsfcontroller,UnprocessedChunk unprocessedchunk) : base(nsfcontroller,unprocessedchunk)
         {
-            this.unprocessedchunk = unprocessedchunk;
+            UnprocessedChunk = unprocessedchunk;
+            AddMenu("Process Chunk", Menu_Process_Chunk);
             InvalidateNode();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Unprocessed Chunk (T{0})",unprocessedchunk.Type);
+            Node.Text = string.Format("Unprocessed Chunk {1} (T{0})",UnprocessedChunk.Type,NSFController.NSF.Chunks.IndexOf(UnprocessedChunk) * 2 + 1);
             Node.ImageKey = "yellowj";
             Node.SelectedImageKey = "yellowj";
         }
 
         protected override Control CreateEditor()
         {
-            return new MysteryBox(unprocessedchunk.Data);
+            return new MysteryBox(UnprocessedChunk.Data);
         }
 
-        public UnprocessedChunk UnprocessedChunk
+        public UnprocessedChunk UnprocessedChunk { get; }
+
+        private void Menu_Process_Chunk()
         {
-            get { return unprocessedchunk; }
+            Chunk processedchunk;
+            try
+            {
+                processedchunk = UnprocessedChunk.Process(NSFController.NSF.Chunks.IndexOf(UnprocessedChunk) * 2 + 1);
+            }
+            catch (LoadAbortedException)
+            {
+                return;
+            }
+            var trv = Node.TreeView;
+            trv.BeginUpdate();
+            int index = NSFController.NSF.Chunks.IndexOf(UnprocessedChunk);
+            NSFController.NSF.Chunks[index] = processedchunk;
+            if (processedchunk is EntryChunk)
+            {
+                ((EntryChunk)processedchunk).ProcessAll(NSFController.GameVersion);
+            }
+            ChunkController processedchunkcontroller = NSFController.CreateChunkController(processedchunk);
+            NSFController.InsertNode(index, processedchunkcontroller);
+            if (Node.IsSelected)
+            {
+                Node.TreeView.SelectedNode = processedchunkcontroller.Node;
+            }
+            Dispose();
+            trv.EndUpdate();
         }
     }
 }

@@ -40,12 +40,12 @@ namespace CrashHacks.Scripts.Zone
             if (value is ZoneEntry)
             {
                 ZoneEntry entry = (ZoneEntry)value;
-                /*entry.Unknown1[0x2AC] = 0x7F;
-                entry.Unknown1[0x2AD] = 0x0;
-                entry.Unknown1[0x2AE] = 0x0;
-                entry.Unknown1[0x2B0] = 0x0;
-                entry.Unknown1[0x2B1] = 0x7F;
-                entry.Unknown1[0x2B2] = 0x0;*/
+                /*entry.Header[0x2AC] = 0x7F;
+                entry.Header[0x2AD] = 0x0;
+                entry.Header[0x2AE] = 0x0;
+                entry.Header[0x2B0] = 0x0;
+                entry.Header[0x2B1] = 0x7F;
+                entry.Header[0x2B2] = 0x0;*/
                 foreach (Entity entity in entry.Entities)
                 {
                     if (entity.ExtraProperties.ContainsKey(0x185))

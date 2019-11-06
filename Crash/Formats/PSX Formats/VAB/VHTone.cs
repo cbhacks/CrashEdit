@@ -59,203 +59,118 @@ namespace Crash
             return new VHTone(priority,mode,volume,panning,centernote,pitchshift,minimumnote,maximumnote,vibratowidth,vibratotime,portamentowidth,portamentotime,pitchbendminimum,pitchbendmaximum,adsr1,adsr2,wave);
         }
 
-        private byte priority;
-        private byte mode;
-        private byte volume;
-        private byte panning;
-        private byte centernote;
-        private byte pitchshift;
-        private byte minimumnote;
-        private byte maximumnote;
-        private byte vibratowidth;
-        private byte vibratotime;
-        private byte portamentowidth;
-        private byte portamentotime;
-        private byte pitchbendminimum;
-        private byte pitchbendmaximum;
-        private short adsr1;
-        private short adsr2;
-        private short wave;
-        
         public VHTone(bool isoldversion)
         {
             if (isoldversion)
             {
-                priority = 0;
-                mode = 0;
-                volume = 0;
-                panning = 0;
-                centernote = 0;
-                pitchshift = 0;
-                minimumnote = 0;
-                maximumnote = 0;
-                vibratowidth = 0;
-                vibratotime = 0;
-                portamentowidth = 0;
-                portamentotime = 0;
-                pitchbendminimum = 0;
-                pitchbendmaximum = 0;
+                Priority = 0;
+                Mode = 0;
+                Volume = 0;
+                Panning = 0;
+                CenterNote = 0;
+                PitchShift = 0;
+                MinimumNote = 0;
+                MaximumNote = 0;
+                VibratoWidth = 0;
+                VibratoTime = 0;
+                PortamentoWidth = 0;
+                PortamentoTime = 0;
+                PitchBendMinimum = 0;
+                PitchBendMaximum = 0;
                 unchecked
                 {
-                    adsr1 = (short)0x80DF;
-                    adsr2 = 0x5FDF;
+                    ADSR1 = (short)0x80DF;
+                    ADSR2 = 0x5FDF;
                 }
             }
             else
             {
-                priority = 0;
-                mode = 0;
-                volume = 80;
-                panning = 64;
-                centernote = 64;
-                pitchshift = 0;
-                minimumnote = 64;
-                maximumnote = 64;
-                vibratowidth = 0;
-                vibratotime = 0;
-                portamentowidth = 0;
-                portamentotime = 0;
-                pitchbendminimum = 0;
-                pitchbendmaximum = 0;
+                Priority = 0;
+                Mode = 0;
+                Volume = 80;
+                Panning = 64;
+                CenterNote = 64;
+                PitchShift = 0;
+                MinimumNote = 64;
+                MaximumNote = 64;
+                VibratoWidth = 0;
+                VibratoTime = 0;
+                PortamentoWidth = 0;
+                PortamentoTime = 0;
+                PitchBendMinimum = 0;
+                PitchBendMaximum = 0;
                 unchecked
                 {
-                    adsr1 = (short)0x80DF;
-                    adsr2 = 0x5FDF;
+                    ADSR1 = (short)0x80DF;
+                    ADSR2 = 0x5FDF;
                 }
             }
-            wave = 0;
+            Wave = 0;
         }
 
         // This is ridiculous! There has to be a better way.
         public VHTone(byte priority,byte mode,byte volume,byte panning,byte centernote,byte pitchshift,byte minimumnote,byte maximumnote,byte vibratowidth,byte vibratotime,byte portamentowidth,byte portamentotime,byte pitchbendminimum,byte pitchbendmaximum,short adsr1,short adsr2,short wave)
         {
-            this.priority = priority;
-            this.mode = mode;
-            this.volume = volume;
-            this.panning = panning;
-            this.centernote = centernote;
-            this.pitchshift = pitchshift;
-            this.minimumnote = minimumnote;
-            this.maximumnote = maximumnote;
-            this.vibratowidth = vibratowidth;
-            this.vibratotime = vibratotime;
-            this.portamentowidth = portamentowidth;
-            this.portamentotime = portamentotime;
-            this.pitchbendminimum = pitchbendminimum;
-            this.pitchbendmaximum = pitchbendmaximum;
-            this.adsr1 = adsr1;
-            this.adsr2 = adsr2;
-            this.wave = wave;
+            Priority = priority;
+            Mode = mode;
+            Volume = volume;
+            Panning = panning;
+            CenterNote = centernote;
+            PitchShift = pitchshift;
+            MinimumNote = minimumnote;
+            MaximumNote = maximumnote;
+            VibratoWidth = vibratowidth;
+            VibratoTime = vibratotime;
+            PortamentoWidth = portamentowidth;
+            PortamentoTime = portamentotime;
+            PitchBendMinimum = pitchbendminimum;
+            PitchBendMaximum = pitchbendmaximum;
+            ADSR1 = adsr1;
+            ADSR2 = adsr2;
+            Wave = wave;
         }
 
-        public byte Priority
-        {
-            get { return priority; }
-        }
-
-        public byte Mode
-        {
-            get { return mode; }
-        }
-
-        public byte Volume
-        {
-            get { return volume; }
-        }
-
-        public byte Panning
-        {
-            get { return panning; }
-        }
-
-        public byte CenterNote
-        {
-            get { return centernote; }
-        }
-
-        public byte PitchShift
-        {
-            get { return pitchshift; }
-        }
-
-        public byte MinimumNote
-        {
-            get { return minimumnote; }
-        }
-
-        public byte MaximumNote
-        {
-            get { return maximumnote; }
-        }
-
-        public byte VibratoWidth
-        {
-            get { return vibratowidth; }
-        }
-
-        public byte VibratoTime
-        {
-            get { return vibratotime; }
-        }
-
-        public byte PortamentoWidth
-        {
-            get { return portamentowidth; }
-        }
-
-        public byte PortamentoTime
-        {
-            get { return portamentotime; }
-        }
-
-        public byte PitchBendMinimum
-        {
-            get { return pitchbendminimum; }
-        }
-
-        public byte PitchBendMaximum
-        {
-            get { return pitchbendmaximum; }
-        }
-
-        public short ADSR1
-        {
-            get { return adsr1; }
-        }
-
-        public short ADSR2
-        {
-            get { return adsr2; }
-        }
-
-        public short Wave
-        {
-            get { return wave; }
-        }
+        public byte Priority { get; }
+        public byte Mode { get; }
+        public byte Volume { get; }
+        public byte Panning { get; }
+        public byte CenterNote { get; }
+        public byte PitchShift { get; }
+        public byte MinimumNote { get; }
+        public byte MaximumNote { get; }
+        public byte VibratoWidth { get; }
+        public byte VibratoTime { get; }
+        public byte PortamentoWidth { get; }
+        public byte PortamentoTime { get; }
+        public byte PitchBendMinimum { get; }
+        public byte PitchBendMaximum { get; }
+        public short ADSR1 { get; }
+        public short ADSR2 { get; }
+        public short Wave { get; }
 
         public byte[] Save(int program)
         {
             byte[] data = new byte [32];
-            data[0] = priority;
-            data[1] = mode;
-            data[2] = volume;
-            data[3] = panning;
-            data[4] = centernote;
-            data[5] = pitchshift;
-            data[6] = minimumnote;
-            data[7] = maximumnote;
-            data[8] = vibratowidth;
-            data[9] = vibratotime;
-            data[10] = portamentowidth;
-            data[11] = portamentotime;
-            data[12] = pitchbendminimum;
-            data[13] = pitchbendmaximum;
+            data[0] = Priority;
+            data[1] = Mode;
+            data[2] = Volume;
+            data[3] = Panning;
+            data[4] = CenterNote;
+            data[5] = PitchShift;
+            data[6] = MinimumNote;
+            data[7] = MaximumNote;
+            data[8] = VibratoWidth;
+            data[9] = VibratoTime;
+            data[10] = PortamentoWidth;
+            data[11] = PortamentoTime;
+            data[12] = PitchBendMinimum;
+            data[13] = PitchBendMaximum;
             data[14] = 0xB1;
             data[15] = 0xB2;
-            BitConv.ToInt16(data,16,adsr1);
-            BitConv.ToInt16(data,18,adsr2);
+            BitConv.ToInt16(data,16,ADSR1);
+            BitConv.ToInt16(data,18,ADSR2);
             BitConv.ToInt16(data,20,(short)program);
-            BitConv.ToInt16(data,22,wave);
+            BitConv.ToInt16(data,22,Wave);
             BitConv.ToInt16(data,24,0xC0);
             BitConv.ToInt16(data,26,0xC1);
             BitConv.ToInt16(data,28,0xC2);
@@ -267,8 +182,8 @@ namespace Crash
         {
             RIFF rgn = new RIFF("rgn ");
             byte[] rgnh = new byte [12];
-            BitConv.ToInt16(rgnh,0,minimumnote);
-            BitConv.ToInt16(rgnh,2,maximumnote);
+            BitConv.ToInt16(rgnh,0,MinimumNote);
+            BitConv.ToInt16(rgnh,2,MaximumNote);
             BitConv.ToInt16(rgnh,4,0);
             BitConv.ToInt16(rgnh,6,127);
             BitConv.ToInt16(rgnh,8,0);
@@ -276,9 +191,9 @@ namespace Crash
             rgn.Items.Add(new RIFFData("rgnh",rgnh));
             byte[] wsmp = new byte [20 /* 36 */];
             BitConv.ToInt32(wsmp,0,20);
-            BitConv.ToInt16(wsmp,4,centernote);
-            BitConv.ToInt16(wsmp,6,pitchshift);
-            BitConv.ToInt32(wsmp,8,volume - 64 << 16);
+            BitConv.ToInt16(wsmp,4,CenterNote);
+            BitConv.ToInt16(wsmp,6,PitchShift);
+            BitConv.ToInt32(wsmp,8,Volume - 64 << 16);
             BitConv.ToInt32(wsmp,12,0);
             BitConv.ToInt32(wsmp,16,0 /* 1 */);
             /*BitConv.ToInt32(wsmp,20,16);
@@ -290,7 +205,7 @@ namespace Crash
             BitConv.ToInt16(wlnk,0,0);
             BitConv.ToInt16(wlnk,2,0);
             BitConv.ToInt32(wlnk,4,3); // ???
-            BitConv.ToInt32(wlnk,8,wave - 1);
+            BitConv.ToInt32(wlnk,8,Wave - 1);
             rgn.Items.Add(new RIFFData("wlnk",wlnk));
             return rgn;
         }

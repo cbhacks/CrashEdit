@@ -16,53 +16,26 @@ namespace Crash
             return new ProtoSceneryVertex(x,y,z);
         }
 
-        private short x;
-        private short y;
-        private short z;
-
         public ProtoSceneryVertex(short x,short y,short z)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+            X = x;
+            Y = y;
+            Z = z;
         }
 
-        public short X
-        {
-            get { return x; }
-        }
-
-        public short Y
-        {
-            get { return y; }
-        }
-
-        public short Z
-        {
-            get { return z; }
-        }
-
-        double IPosition.X
-        {
-            get { return x; }
-        }
-
-        double IPosition.Y
-        {
-            get { return y; }
-        }
-
-        double IPosition.Z
-        {
-            get { return z; }
-        }
+        public short X { get; }
+        public short Y { get; }
+        public short Z { get; }
+        double IPosition.X => X;
+        double IPosition.Y => Y;
+        double IPosition.Z => Z;
 
         public byte[] Save()
         {
             byte[] result = new byte [6];
-            BitConv.ToInt16(result, 0, x);
-            BitConv.ToInt16(result, 2, y);
-            BitConv.ToInt16(result, 4, z);
+            BitConv.ToInt16(result, 0, X);
+            BitConv.ToInt16(result, 2, Y);
+            BitConv.ToInt16(result, 4, Z);
             return result;
         }
     }

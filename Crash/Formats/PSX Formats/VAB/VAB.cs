@@ -69,9 +69,7 @@ namespace Crash
 
         public byte[] Save()
         {
-            VH vh;
-            SampleLine[] vb;
-            Split(out vh,out vb);
+            Split(out VH vh, out SampleLine[] vb);
             List<byte> result = new List<byte>();
             result.AddRange(vh.Save());
             foreach (SampleLine line in vb)

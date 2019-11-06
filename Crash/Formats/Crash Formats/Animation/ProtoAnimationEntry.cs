@@ -6,20 +6,16 @@ namespace Crash
     {
         private List<ProtoFrame> frames;
 
-        public ProtoAnimationEntry(IEnumerable<ProtoFrame> frames,int eid, int size) : base(eid, size)
+        public ProtoAnimationEntry(IEnumerable<ProtoFrame> frames,bool notproto,int eid, int size) : base(eid, size)
         {
             this.frames = new List<ProtoFrame>(frames);
+            NotProto = notproto;
         }
 
-        public override int Type
-        {
-            get { return 1; }
-        }
+        public override int Type => 1;
+        public IList<ProtoFrame> Frames => frames;
 
-        public IList<ProtoFrame> Frames
-        {
-            get { return frames; }
-        }
+        public bool NotProto { get; }
 
         public override UnprocessedEntry Unprocess()
         {

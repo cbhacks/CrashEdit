@@ -47,6 +47,7 @@ namespace Crash
                 int offset = (ushort)BitConv.FromInt16(data,18 + i * 8) + 12;
                 int nextoffset = (i == propertycount - 1) ? data.Length : ((ushort)BitConv.FromInt16(data,26 + i * 8) + 12);
                 byte type = data[20 + i * 8];
+                if (id == 0x103 && type == 0x13) type = 4; // force-fix a stupid bug
                 byte elementsize = data[21 + i * 8];
                 short unknown = BitConv.FromInt16(data,22 + i * 8);
                 if (offset > data.Length)
@@ -89,7 +90,7 @@ namespace Crash
         [EntityPropertyField(0xAA)]
         private int? subtype;
         [EntityPropertyField(0x103)]
-        private int? slst;
+        private EntityT4Property slst;
         [EntityPropertyField(0x118)]
         private int? othersettings = null;
         [EntityPropertyField(0x131)]
@@ -143,18 +144,15 @@ namespace Crash
 
         public string Name
         {
-            get { return name; }
-            set { name = value; }
+            get => name;
+            set => name = value;
         }
 
-        public IList<EntityPosition> Positions
-        {
-            get { return positions; }
-        }
+        public IList<EntityPosition> Positions => positions;
 
         public int? ID
         {
-            get { return id.HasValue ? (int?)id.Value.ID : null; }
+            get => id.HasValue ? (int?)id.Value.ID : null;
             set
             {
                 if (value != null)
@@ -184,7 +182,7 @@ namespace Crash
 
         public int? AlternateID
         {
-            get { return id.HasValue ? id.Value.AlternateID : null; }
+            get => id.HasValue ? id.Value.AlternateID : null;
             set
             {
                 if (id != null)
@@ -198,120 +196,98 @@ namespace Crash
             }
         }
 
-        public IList<EntitySetting> Settings
-        {
-            get { return settings; }
-        }
+        public IList<EntitySetting> Settings => settings;
 
         public int? Type
         {
-            get { return type; }
-            set { type = value; }
+            get => type;
+            set => type = value;
         }
 
         public int? Subtype
         {
-            get { return subtype; }
-            set { subtype = value; }
-        }
-
-        public string SLST
-        {
-            get
-            {
-                if (slst != null)
-                    return Entry.EIDToEName(slst);
-                else return null;
-            }
-            set
-            {
-                if (value != null)
-                    slst = BitConv.FromInt32(Entry.Str2EID(value));
-                else slst = null;
-            }
+            get => subtype;
+            set => subtype = value;
         }
 
         public int? OtherSettings
         {
-            get { return othersettings; }
-            set { othersettings = value; }
+            get => othersettings;
+            set => othersettings = value;
         }
 
-        public EntityVictimProperty CameraThing
-        {
-            get { return camerathing; }
-        }
+        public EntityVictimProperty CameraThing => camerathing;
 
         public EntityInt32Property DrawListA
         {
-            get { return drawlista; }
-            set { drawlista = value; }
+            get => drawlista;
+            set => drawlista = value;
         }
 
         public EntityInt32Property DrawListB
         {
-            get { return drawlistb; }
-            set { drawlistb = value; }
+            get => drawlistb;
+            set => drawlistb = value;
+        }
+
+        public EntityT4Property SLST
+        {
+            get => slst;
+            set => slst = value;
         }
 
         public EntityT4Property LoadListA
         {
-            get { return loadlista; }
-            set { loadlista = value; }
+            get => loadlista;
+            set => loadlista = value;
         }
 
         public EntityT4Property LoadListB
         {
-            get { return loadlistb; }
-            set { loadlistb = value; }
+            get => loadlistb;
+            set => loadlistb = value;
         }
 
         public int? DDASettings
         {
-            get { return ddasettings; }
-            set { ddasettings = value; }
+            get => ddasettings;
+            set => ddasettings = value;
         }
 
-        public List<EntityVictim> Victims
-        {
-            get { return victims; }
-        }
+        public List<EntityVictim> Victims => victims;
 
         public int? DDASection
         {
-            get { return ddasection; }
-            set { ddasection = value; }
+            get => ddasection;
+            set => ddasection = value;
         }
 
         public EntitySetting? BoxCount
         {
-            get { return boxcount; }
-            set { boxcount = value; }
+            get => boxcount;
+            set => boxcount = value;
         }
 
         public int? Scaling
         {
-            get { return scaling; }
-            set { scaling = value; }
+            get => scaling;
+            set => scaling = value;
         }
 
         public EntitySetting? BonusBoxCount
         {
-            get { return bonusboxcount; }
-            set { bonusboxcount = value; }
+            get => bonusboxcount;
+            set => bonusboxcount = value;
         }
 
-        public IDictionary<short,EntityProperty> ExtraProperties
-        {
-            get { return extraproperties; }
-        }
+        public IDictionary<short, EntityProperty> ExtraProperties => extraproperties;
 
         public byte[] Save()
         {
             if (LoadListA != null ^ LoadListB != null)
-                ErrorManager.SignalError("Entity: Entity contains one load list but not the other");
+                ErrorManager.SignalIgnorableError("Entity: Entity contains one load list but not the other");
             if (DrawListA != null ^ DrawListB != null)
-                ErrorManager.SignalError("Entity: Entity contains one draw list but not the other");
+                ErrorManager.SignalIgnorableError("Entity: Entity contains one draw list but not the other");
             SortedDictionary<short,EntityProperty> properties = new SortedDictionary<short,EntityProperty>(extraproperties);
             foreach (KeyValuePair<short,FieldInfo> pair in propertyfields)
             {
@@ -354,17 +330,12 @@ namespace Crash
         [AttributeUsage(AttributeTargets.Field)]
         private class EntityPropertyFieldAttribute : Attribute
         {
-            private short id;
-
             public EntityPropertyFieldAttribute(short id)
             {
-                this.id = id;
+                ID = id;
             }
 
-            public short ID
-            {
-                get { return id; }
-            }
+            public short ID { get; }
         }
     }
 }

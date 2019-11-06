@@ -2,41 +2,21 @@ namespace Crash
 {
     public sealed class NSDSpawnPoint
     {
-        private int zoneeid;
-        private int spawnx;
-        private int spawny;
-        private int spawnz;
-
-        public NSDSpawnPoint(int zoneeid,int spawnx,int spawny,int spawnz)
+        public NSDSpawnPoint(int zoneeid,int unk1, int unk2,int spawnx,int spawny,int spawnz)
         {
-            this.zoneeid = zoneeid;
-            this.spawnx = spawnx;
-            this.spawny = spawny;
-            this.spawnz = spawnz;
+            ZoneEID = zoneeid;
+            Unknown1 = unk1;
+            Unknown2 = unk2;
+            SpawnX = spawnx;
+            SpawnY = spawny;
+            SpawnZ = spawnz;
         }
 
-        public int ZoneEID
-        {
-            get { return zoneeid; }
-            set { zoneeid = value; }
-        }
-
-        public int SpawnX
-        {
-            get { return spawnx; }
-            set { spawnx = value; }
-        }
-
-        public int SpawnY
-        {
-            get { return spawny; }
-            set { spawny = value; }
-        }
-
-        public int SpawnZ
-        {
-            get { return spawnz; }
-            set { spawnz = value; }
-        }
+        public int ZoneEID { get; set; }
+        public int Unknown1 { get; set; }
+        public int Unknown2 { get; set; }
+        public int SpawnX { get; set; }
+        public int SpawnY { get; set; }
+        public int SpawnZ { get; set; }
     }
 }

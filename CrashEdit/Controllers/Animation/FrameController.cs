@@ -5,13 +5,10 @@ namespace CrashEdit
 {
     public sealed class FrameController : Controller
     {
-        private AnimationEntryController animationentrycontroller;
-        private Frame frame;
-
         public FrameController(AnimationEntryController animationentrycontroller,Frame frame)
         {
-            this.animationentrycontroller = animationentrycontroller;
-            this.frame = frame;
+            AnimationEntryController = animationentrycontroller;
+            Frame = frame;
             InvalidateNode();
         }
 
@@ -24,18 +21,11 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            ModelEntry modelentry = AnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<ModelEntry>(frame.ModelEID);
-            return new AnimationEntryViewer(frame, modelentry);
+            ModelEntry modelentry = AnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<ModelEntry>(Frame.ModelEID);
+            return new UndockableControl(new AnimationEntryViewer(Frame, modelentry));
         }
 
-        public AnimationEntryController AnimationEntryController
-        {
-            get { return animationentrycontroller; }
-        }
-
-        public Frame Frame
-        {
-            get { return frame; }
-        }
+        public AnimationEntryController AnimationEntryController { get; }
+        public Frame Frame { get; }
     }
 }

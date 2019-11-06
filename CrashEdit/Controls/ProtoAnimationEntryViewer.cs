@@ -12,6 +12,9 @@ namespace CrashEdit
         private OldModelEntry model;
         private int frameid;
         private Timer animatetimer;
+        private int xoffset;
+        private int yoffset;
+        private int zoffset;
 
         public ProtoAnimationEntryViewer(ProtoFrame frame,OldModelEntry model)
         {
@@ -19,6 +22,9 @@ namespace CrashEdit
             frames.Add(frame);
             this.model = model;
             frameid = 0;
+            xoffset = frame.XOffset;
+            yoffset = frame.YOffset;
+            zoffset = frame.ZOffset;
         }
 
         public ProtoAnimationEntryViewer(IEnumerable<ProtoFrame> frames,OldModelEntry model)
@@ -31,15 +37,15 @@ namespace CrashEdit
             animatetimer.Enabled = true;
             animatetimer.Tick += delegate (object sender,EventArgs e)
             {
-                frameid++;
+                frameid = ++frameid % this.frames.Count;
+                xoffset = this.frames[frameid].XOffset;
+                yoffset = this.frames[frameid].YOffset;
+                zoffset = this.frames[frameid].ZOffset;
                 Refresh();
             };
         }
 
-        protected override int CameraRangeMargin
-        {
-            get { return 100; }
-        }
+        protected override int CameraRangeMargin => 256;
 
         protected override IEnumerable<IPosition> CorePositions
         {
@@ -62,6 +68,8 @@ namespace CrashEdit
 
         private void RenderFrame(ProtoFrame frame)
         {
+            GL.PushMatrix();
+            GL.Translate(frame.XOffset,frame.YOffset,frame.ZOffset);
             if (model != null)
             {
                 GL.Begin(PrimitiveType.Triangles);
@@ -87,6 +95,7 @@ namespace CrashEdit
                 }
                 GL.End();
             }
+            GL.PopMatrix();
         }
 
         private void RenderVertex(OldFrameVertex vertex)

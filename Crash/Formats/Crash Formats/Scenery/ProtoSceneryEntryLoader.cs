@@ -13,6 +13,7 @@ namespace Crash
             {
                 ErrorManager.SignalError("ProtoSceneryEntry: Wrong number of items");
             }
+            // TODO :: fix all of this jesus christ
             if (items[1].Length % 12 != 0)
             {
                 ErrorManager.SignalError("ProtoSceneryEntry: Second item (polygons) length is invalid");

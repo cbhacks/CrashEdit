@@ -9,14 +9,14 @@ namespace Crash
             {
                 ErrorManager.SignalError("ZoneEntry: Wrong number of items");
             }
-            byte[] unknown1 = items[0];
-            byte[] unknown2 = items[1];
+            byte[] header = items[0];
+            byte[] layout = items[1];
             Entity[] entities = new Entity [items.Length - 2];
             for (int i = 2;i < items.Length;i++)
             {
                 entities[i - 2] = Entity.Load(items[i]);
             }
-            return new ZoneEntry(unknown1,unknown2,entities,eid,size);
+            return new ZoneEntry(header,layout,entities,eid,size);
         }
     }
 }

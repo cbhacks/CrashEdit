@@ -59,9 +59,8 @@ namespace Crash
                 }
                 return true;
             }
-            else if (obj is List<T>)
+            else if (obj is List<T> values)
             {
-                List<T> values = (List<T>)obj;
                 if (values.Count > 0)
                 {
                     EntityBasicProperty<T> p = (EntityBasicProperty<T>)Activator.CreateInstance(type);
@@ -98,8 +97,7 @@ namespace Crash
             }
             else if (obj is string)
             {
-                List<byte> bytestr = new List<byte>(System.Text.Encoding.UTF8.GetBytes((string)obj));
-                bytestr.Add(0);
+                List<byte> bytestr = new List<byte>(System.Text.Encoding.UTF8.GetBytes((string)obj)) { 0 };
                 return LoadFromField(bytestr);
             }
             else if (obj is EntityID?)
@@ -124,13 +122,12 @@ namespace Crash
                     return null;
                 }
             }
-            EntityProperty property;
             if (
-                LoadFromFieldOf<byte>(out property,obj,typeof(EntityUInt8Property)) ||
-                LoadFromFieldOf<EntityVictim>(out property,obj,typeof(EntityVictimProperty)) ||
-                LoadFromFieldOf<int>(out property,obj,typeof(EntityInt32Property)) ||
-                LoadFromFieldOf<EntitySetting>(out property,obj,typeof(EntitySettingProperty)) ||
-                LoadFromFieldOf<EntityPosition>(out property,obj,typeof(EntityPositionProperty)))
+                LoadFromFieldOf<byte>(out EntityProperty property, obj, typeof(EntityUInt8Property)) ||
+                LoadFromFieldOf<EntityVictim>(out property, obj, typeof(EntityVictimProperty)) ||
+                LoadFromFieldOf<int>(out property, obj, typeof(EntityInt32Property)) ||
+                LoadFromFieldOf<EntitySetting>(out property, obj, typeof(EntitySettingProperty)) ||
+                LoadFromFieldOf<EntityPosition>(out property, obj, typeof(EntityPositionProperty)))
             {
                 return property;
             }
@@ -140,31 +137,12 @@ namespace Crash
             }
         }
 
-        public abstract byte Type
-        {
-            get;
-        }
+        public abstract byte Type { get; }
+        public abstract byte ElementSize { get; }
+        public abstract short Unknown { get; }
+        public abstract bool IsSparse { get; }
+        public abstract bool HasMetaValues { get; }
 
-        public abstract byte ElementSize
-        {
-            get;
-        }
-
-        public abstract short Unknown
-        {
-            get;
-        }
-
-        public abstract bool IsSparse
-        {
-            get;
-        }
-
-        public abstract bool HasMetaValues
-        {
-            get;
-        }
-        
         internal virtual void LoadToField(object obj,FieldInfo field)
         {
             ErrorManager.SignalError("EntityProperty: Type mismatch");

@@ -53,13 +53,6 @@ namespace CrashEdit
             controller.InvalidateNode();
         }
 
-        public static string Reverse(string str)
-        {
-            char[] charArray = str.ToCharArray();
-            Array.Reverse(charArray);
-            return new string(charArray);
-        }
-
         private void UpdateName()
         {
             if (entity.Name != null)
@@ -717,7 +710,7 @@ namespace CrashEdit
             }
             if (text == true)
             {
-                entity.LoadListA.Rows[loadlistarowindex].Values[loadlistaeidindex] = BitConv.FromInt32(Entry.Str2EID(Reverse(txtEIDA.Text)));
+                entity.LoadListA.Rows[loadlistarowindex].Values[loadlistaeidindex] = Entry.ENameToEID(txtEIDA.Text);
                 text = false;
             }
         }
@@ -902,7 +895,7 @@ namespace CrashEdit
             }
             if (text == true)
             {
-                entity.LoadListB.Rows[loadlistbrowindex].Values[loadlistbeidindex] = BitConv.FromInt32(Entry.Str2EID(Reverse(txtEIDB.Text)));
+                entity.LoadListB.Rows[loadlistbrowindex].Values[loadlistbeidindex] = Entry.ENameToEID(txtEIDB.Text);
                 text = false;
             }
         }
@@ -1361,7 +1354,7 @@ namespace CrashEdit
         {
             if (entity.SLST != null)
             {
-                txtSLST.Text = entity.SLST;
+                txtSLST.Text = Entry.EIDToEName(entity.SLST.Rows[0].Values[0]);
                 chkSLST.Checked = true;
             }
             else
@@ -1406,7 +1399,9 @@ namespace CrashEdit
                 }
                 if (text == true)
                 {
-                    entity.SLST = Reverse(txtSLST.Text);
+                    entity.SLST = new EntityT4Property();
+                    entity.SLST.Rows.Add(new EntityPropertyRow<int>());
+                    entity.SLST.Rows[0].Values.Add(Entry.ENameToEID(txtSLST.Text));
                     text = false;
                 }
 
@@ -1452,7 +1447,7 @@ namespace CrashEdit
             }
             if (text == true)
             {
-                entity.SLST = Reverse(txtSLST.Text);
+                entity.SLST.Rows[0].Values[0] = Entry.ENameToEID(txtSLST.Text);
                 text = false;
             }
             InvalidateNodes();

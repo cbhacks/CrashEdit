@@ -13,14 +13,14 @@ namespace Crash
 
         public EvList()
         {
-            this.list = new List<T>();
+            list = new List<T>();
         }
 
         public EvList(IEnumerable<T> collection)
         {
             if (collection == null)
                 throw new ArgumentNullException("collection");
-            this.list = new List<T>(collection);
+            list = new List<T>(collection);
         }
 
         public int Count
@@ -42,14 +42,8 @@ namespace Crash
                 EvListEventArgs<T> e = new EvListEventArgs<T>();
                 e.Index = i;
                 e.Item = value;
-                if (ItemRemoved != null)
-                {
-                    ItemRemoved(this, e);
-                }
-                if (ItemAdded != null)
-                {
-                    ItemAdded(this, e);
-                }
+                ItemRemoved?.Invoke(this, e);
+                ItemAdded?.Invoke(this, e);
             }
         }
 

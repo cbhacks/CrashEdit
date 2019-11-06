@@ -1,8 +1,8 @@
 using System;
-using System.IO;
 using System.Drawing;
-using System.Resources;
+using System.IO;
 using System.Reflection;
+using System.Resources;
 
 namespace CrashEdit
 {
@@ -56,84 +56,109 @@ namespace CrashEdit
         [Resource("YellowJournalImage")]
         private static Image yellowjournalimage = null;
 
-        [Resource("ActivatorBoxTexture")]
-        [ExternalTexture(2,1)]
-        private static Bitmap activatorboxtexture = null;
-
-        [Resource("AppleTexture")]
-        private static Bitmap appletexture = null;
-
-        [Resource("AppleBoxTexture")]
-        [ExternalTexture(4,0)]
-        private static Bitmap appleboxtexture = null;
-
-        [Resource("ArrowBoxTexture")]
-        [ExternalTexture(5,0)]
-        private static Bitmap arrowboxtexture = null;
-
-        [Resource("BodyslamBoxTexture")]
-        [ExternalTexture(0,1)]
-        private static Bitmap bodyslamboxtexture = null;
-
-        [Resource("BoxTexture")]
-        [ExternalTexture(0,0)]
-        private static Bitmap boxtexture = null;
-
-        [Resource("CheckpointTexture")]
-        [ExternalTexture(6,0)]
-        private static Bitmap checkpointtexture = null;
-
-        [Resource("DetonatorBoxTexture")]
-        [ExternalTexture(3,1)]
-        private static Bitmap detonatorboxtexture = null;
-
-        [Resource("DetonatorBoxTopTexture")]
-        private static Bitmap detonatorboxtoptexture = null;
-
-        [Resource("IronArrowBoxTexture")]
-        [ExternalTexture(4,1)]
-        private static Bitmap ironarrowboxtexture = null;
-
-        [Resource("IronBoxTexture")]
-        [ExternalTexture(1,1)]
-        private static Bitmap ironboxtexture = null;
-
-        [Resource("LifeTexture")]
-        private static Bitmap lifetexture = null;
-
-        [Resource("LifeBoxTexture")]
-        [ExternalTexture(3,0)]
-        private static Bitmap lifeboxtexture = null;
+        [Resource("PointTexture")]
+        private static Bitmap pointtexture = null;
 
         [Resource("MaskTexture")]
         private static Bitmap masktexture = null;
 
-        [Resource("MaskBoxTexture")]
-        [ExternalTexture(2,0)]
-        private static Bitmap maskboxtexture = null;
+        [Resource("LifeTexture")]
+        private static Bitmap lifetexture = null;
 
-        [Resource("NitroTexture")]
-        [ExternalTexture(7,1)]
-        private static Bitmap nitrotexture = null;
+        [Resource("AppleTexture")]
+        private static Bitmap appletexture = null;
 
-        [Resource("NitroTopTexture")]
-        [ExternalTexture(6,1)]
-        private static Bitmap nitrotoptexture = null;
-
-        [Resource("PointTexture")]
-        private static Bitmap pointtexture = null;
-
-        [Resource("QuestionMarkBoxTexture")]
+        [Resource("TNTBoxTexture")]
         [ExternalTexture(1,0)]
-        private static Bitmap questionmarkboxtexture = null;
+        private static Bitmap tntboxtexture = null;
 
-        [Resource("TNTTexture")]
-        [ExternalTexture(8,0)]
-        private static Bitmap tnttexture = null;
+        [Resource("TNTBoxTopTexture")]
+        [ExternalTexture(0,0)]
+        private static Bitmap tntboxtoptexture = null;
 
-        [Resource("TNTTopTexture")]
+        [Resource("EmptyBoxTexture")]
+        [ExternalTexture(5,0)]
+        private static Bitmap emptyboxtexture = null;
+
+        [Resource("SpringBoxTexture")]
+        [ExternalTexture(6,0)]
+        private static Bitmap springboxtexture = null;
+
+        [Resource("ContinueTexture")]
         [ExternalTexture(7,0)]
-        private static Bitmap tnttoptexture = null;
+        private static Bitmap continueboxtexture = null;
+
+        [Resource("IronBoxTexture")]
+        [ExternalTexture(8,0)]
+        private static Bitmap ironboxtexture = null;
+
+        [Resource("FruitBoxTexture")]
+        [ExternalTexture(9,0)]
+        private static Bitmap fruitboxtexture = null;
+
+        [Resource("ActionBoxTexture")]
+        [ExternalTexture(10,0)]
+        private static Bitmap actionboxtexture = null;
+
+        [Resource("LifeBoxTexture")]
+        [ExternalTexture(11,0)]
+        private static Bitmap lifeboxtexture = null;
+
+        [Resource("DoctorBoxTexture")]
+        [ExternalTexture(12,0)]
+        private static Bitmap doctorboxtexture = null;
+
+        [Resource("PickupBoxTexture")]
+        [ExternalTexture(0,1)]
+        private static Bitmap pickupboxtexture = null;
+
+        [Resource("UnknownBoxTexture")]
+        [ExternalTexture(1,1)]
+        private static Bitmap powboxtexture = null;
+
+        [Resource("IronSpringBoxTexture")]
+        [ExternalTexture(2,1)]
+        private static Bitmap ironspringboxtexture = null;
+
+        [Resource("NitroBoxTexture")]
+        [ExternalTexture(4,1)]
+        private static Bitmap nitroboxtexture = null;
+
+        [Resource("NitroBoxTopTexture")]
+        [ExternalTexture(3,1)]
+        private static Bitmap nitroboxtoptexture = null;
+
+        [Resource("SteelBoxTexture")]
+        [ExternalTexture(5,1)]
+        private static Bitmap steelboxtexture = null;
+
+        [Resource("ActionNitroBoxTexture")]
+        [ExternalTexture(6,1)]
+        private static Bitmap actionnitroboxtexture = null;
+
+        [Resource("ActionNitroBoxTopTexture")]
+        [ExternalTexture(8,0)]
+        private static Bitmap actionnitroboxtoptexture = null;
+
+        [Resource("UnknownBoxTexture")]
+        [ExternalTexture(9,1)]
+        private static Bitmap slotboxtexture = null;
+
+        [Resource("UnknownBoxTexture")]
+        [ExternalTexture(5,2)]
+        private static Bitmap timeboxtexture = null;
+
+        [Resource("UnknownBoxTopTexture")]
+        [ExternalTexture(2,2)]
+        private static Bitmap timeboxtoptexture = null;
+
+        [Resource("UnknownBoxTexture")]
+        [ExternalTexture(6,2)]
+        private static Bitmap ironcontinueboxtexture = null;
+
+        [Resource("UnknownBoxTexture")]
+        [ExternalTexture(7,2)]
+        private static Bitmap clockboxtexture = null;
 
         [Resource("UnknownBoxTexture")]
         private static Bitmap unknownboxtexture = null;
@@ -143,6 +168,24 @@ namespace CrashEdit
 
         [Resource("UnknownPickupTexture")]
         private static Bitmap unknownpickuptexture = null;
+
+        [Resource("GreyBuckle")]
+        private static Image greybuckle = null;
+
+        [Resource("CodeBuckle")]
+        private static Image codebuckle = null;
+
+        [Resource("CrimsonBuckle")]
+        private static Image crimsonbuckle = null;
+
+        [Resource("LimeBuckle")]
+        private static Image limebuckle = null;
+
+        [Resource("BlueBuckle")]
+        private static Image bluebuckle = null;
+
+        [Resource("VioletBuckle")]
+        private static Image violetbuckle = null;
 
         static OldResources()
         {
@@ -166,8 +209,8 @@ namespace CrashEdit
                         foreach (ExternalTextureAttribute attribute in field.GetCustomAttributes(typeof(ExternalTextureAttribute),false))
                         {
                             Bitmap texture = new Bitmap(32,32);
-                            int x = attribute.X * 33;
-                            int y = attribute.Y * 33;
+                            int x = attribute.X * 32;
+                            int y = attribute.Y * 32;
                             using (Graphics g = Graphics.FromImage(texture))
                             {
                                 g.DrawImage(texturespng,new Rectangle(0,0,32,32),new Rectangle(x,y,32,32),GraphicsUnit.Pixel);
@@ -179,243 +222,81 @@ namespace CrashEdit
             }
         }
 
-        public static Icon NSDIcon
-        {
-            get { return nsdicon; }
-        }
-
-        public static Icon NSFIcon
-        {
-            get { return nsficon; }
-        }
-
-        public static Image ArrowImage
-        {
-            get { return arrowimage; }
-        }
-
-        public static Image BinocularsImage
-        {
-            get { return binocularsimage; }
-        }
-
-        public static Image BinocularsNextImage
-        {
-            get { return binocularsnextimage; }
-        }
-
-        public static Image FileImage
-        {
-            get { return fileimage; }
-        }
-
-        public static Image FolderImage
-        {
-            get { return folderimage;}
-        }
-
-        public static Image ImageImage
-        {
-            get { return imageimage; }
-        }
-
-        public static Image MusicImage
-        {
-            get { return musicimage; }
-        }
-
-        public static Image OpenImage
-        {
-            get { return openimage; }
-        }
-
-        public static Image SaveImage
-        {
-            get { return saveimage; }
-        }
-
-        public static Image SpeakerImage
-        {
-            get { return speakerimage; }
-        }
-
-        public static Image ThingImage
-        {
-            get { return thingimage; }
-        }
-
-        public static Image BlueJournalImage
-        {
-            get { return bluejournalimage; }
-        }
-
-        public static Image WhiteJournalImage
-        {
-            get { return whitejournalimage; }
-        }
-
-        public static Image YellowJournalImage
-        {
-            get { return yellowjournalimage; }
-        }
-
-        public static Bitmap ActivatorBoxTexture
-        {
-            get { return activatorboxtexture; }
-        }
-
-        public static Bitmap AppleTexture
-        {
-            get { return appletexture; }
-        }
-
-        public static Bitmap AppleBoxTexture
-        {
-            get { return appleboxtexture; }
-        }
-
-        public static Bitmap ArrowBoxTexture
-        {
-            get { return arrowboxtexture; }
-        }
-
-        public static Bitmap BodyslamBoxTexture
-        {
-            get { return bodyslamboxtexture; }
-        }
-
-        public static Bitmap BoxTexture
-        {
-            get { return boxtexture; }
-        }
-
-        public static Bitmap CheckpointTexture
-        {
-            get { return checkpointtexture; }
-        }
-
-        public static Bitmap DetonatorBoxTexture
-        {
-            get { return detonatorboxtexture; }
-        }
-
-        public static Bitmap DetonatorBoxTopTexture
-        {
-            get { return detonatorboxtoptexture; }
-        }
-
-        public static Bitmap IronArrowBoxTexture
-        {
-            get { return ironarrowboxtexture; }
-        }
-
-        public static Bitmap IronBoxTexture
-        {
-            get { return ironboxtexture; }
-        }
-
-        public static Bitmap LifeTexture
-        {
-            get { return lifetexture; }
-        }
-
-        public static Bitmap LifeBoxTexture
-        {
-            get { return lifeboxtexture; }
-        }
-
-        public static Bitmap MaskTexture
-        {
-            get { return masktexture; }
-        }
-
-        public static Bitmap MaskBoxTexture
-        {
-            get { return maskboxtexture; }
-        }
-
-        public static Bitmap NitroTexture
-        {
-            get { return nitrotexture; }
-        }
-
-        public static Bitmap NitroTopTexture
-        {
-            get { return nitrotoptexture; }
-        }
-
-        public static Bitmap PointTexture
-        {
-            get { return pointtexture; }
-        }
-
-        public static Bitmap QuestionMarkBoxTexture
-        {
-            get { return questionmarkboxtexture; }
-        }
-
-        public static Bitmap TNTTexture
-        {
-            get { return tnttexture; }
-        }
-
-        public static Bitmap TNTTopTexture
-        {
-            get { return tnttoptexture; }
-        }
-
-        public static Bitmap UnknownBoxTexture
-        {
-            get { return unknownboxtexture; }
-        }
-
-        public static Bitmap UnknownBoxTopTexture
-        {
-            get { return unknownboxtoptexture; }
-        }
-
-        public static Bitmap UnknownPickupTexture
-        {
-            get { return unknownpickuptexture; }
-        }
+        public static Icon NSDIcon => nsdicon;
+        public static Icon NSFIcon => nsficon;
+        public static Image ArrowImage => arrowimage;
+        public static Image BinocularsImage => binocularsimage;
+        public static Image BinocularsNextImage => binocularsnextimage;
+        public static Image FileImage => fileimage;
+        public static Image FolderImage => folderimage;
+        public static Image ImageImage => imageimage;
+        public static Image MusicImage => musicimage;
+        public static Image OpenImage => openimage;
+        public static Image SaveImage => saveimage;
+        public static Image SpeakerImage => speakerimage;
+        public static Image ThingImage => thingimage;
+        public static Image BlueJournalImage => bluejournalimage;
+        public static Image WhiteJournalImage => whitejournalimage;
+        public static Image YellowJournalImage => yellowjournalimage;
+        public static Bitmap AppleTexture => appletexture;
+        public static Bitmap LifeTexture => lifetexture;
+        public static Bitmap MaskTexture => masktexture;
+        public static Bitmap PointTexture => pointtexture;
+        public static Bitmap ActionBoxTexture => actionboxtexture;
+        public static Bitmap ActionNitroBoxTexture => actionnitroboxtexture;
+        public static Bitmap ActionNitroBoxTopTexture => actionnitroboxtoptexture;
+        public static Bitmap ClockBoxTexture => clockboxtexture;
+        public static Bitmap ContinueBoxTexture => continueboxtexture;
+        public static Bitmap DoctorBoxTexture => doctorboxtexture;
+        public static Bitmap EmptyBoxTexture => emptyboxtexture;
+        public static Bitmap FruitBoxTexture => fruitboxtexture;
+        public static Bitmap IronBoxTexture => ironboxtexture;
+        public static Bitmap IronContinueBoxTexture => ironcontinueboxtexture;
+        public static Bitmap IronSpringBoxTexture => ironspringboxtexture;
+        public static Bitmap LifeBoxTexture => lifeboxtexture;
+        public static Bitmap NitroBoxTexture => nitroboxtexture;
+        public static Bitmap NitroBoxTopTexture => nitroboxtoptexture;
+        public static Bitmap PickupBoxTexture => pickupboxtexture;
+        public static Bitmap POWBoxTexture => powboxtexture;
+        public static Bitmap SlotBoxTexture => slotboxtexture;
+        public static Bitmap SpringBoxTexture => springboxtexture;
+        public static Bitmap SteelBoxTexture => steelboxtexture;
+        public static Bitmap TimeBoxTexture => timeboxtexture;
+        public static Bitmap TimeBoxTopTexture => timeboxtoptexture;
+        public static Bitmap TNTBoxTexture => tntboxtexture;
+        public static Bitmap TNTBoxTopTexture => tntboxtoptexture;
+        public static Bitmap UnknownBoxTexture => unknownboxtexture;
+        public static Bitmap UnknownBoxTopTexture => unknownboxtoptexture;
+        public static Bitmap UnknownPickupTexture => unknownpickuptexture;
+        public static Image BlueBuckle => bluebuckle;
+        public static Image CodeBuckle => codebuckle;
+        public static Image CrimsonBuckle => crimsonbuckle;
+        public static Image GreyBuckle => greybuckle;
+        public static Image LimeBuckle => limebuckle;
+        public static Image VioletBuckle => violetbuckle;
 
         [AttributeUsage(AttributeTargets.Field)]
         private class ResourceAttribute : Attribute
         {
-            private string name;
-
             public ResourceAttribute(string name)
             {
-                this.name = name;
+                Name = name;
             }
 
-            public string Name
-            {
-                get { return name; }
-            }
+            public string Name { get; }
         }
 
         [AttributeUsage(AttributeTargets.Field)]
         private class ExternalTextureAttribute : Attribute
         {
-            private int x;
-            private int y;
-
             public ExternalTextureAttribute(int x,int y)
             {
-                this.x = x;
-                this.y = y;
+                X = x;
+                Y = y;
             }
 
-            public int X
-            {
-                get { return x; }
-            }
-
-            public int Y
-            {
-                get { return y; }
-            }
+            public int X { get; }
+            public int Y { get; }
         }
     }
 }

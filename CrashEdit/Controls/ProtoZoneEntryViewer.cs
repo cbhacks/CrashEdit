@@ -219,7 +219,7 @@ namespace CrashEdit
                     int zmax = BitConv.FromInt16(entry.Unknown2,0x22);
                     if (zmax == 0)
                         zmax = xmax;
-                    RenderOctree(entry.Unknown2,0x1C,0,0,0,x2,y2,z2,xmax,ymax,zmax);
+                    RenderOctree(entry.Unknown2,0x1C,0,y2,0,x2,y2,z2,xmax,ymax,zmax);
                     GL.PopMatrix();
                     GL.EndList();
                 }
@@ -295,7 +295,7 @@ namespace CrashEdit
                         int zmax = BitConv.FromInt16(entry.Unknown2,0x22);
                         if (zmax == 0)
                             zmax = xmax;
-                        RenderOctree(entry.Unknown2,0x1C,0,0,0,x2,y2,z2,xmax,ymax,zmax);
+                        RenderOctree(entry.Unknown2,0x1C,0,y2,0,x2,y2,z2,xmax,ymax,zmax);
                         GL.PopMatrix();
                         GL.EndList();
                     }
@@ -323,14 +323,13 @@ namespace CrashEdit
             int value = (ushort)BitConv.FromInt16(data,offset);
             if ((value & 1) != 0)
             {
-                Color color;
-                if (!octreevalues.TryGetValue((short)value,out color))
+                if (!octreevalues.TryGetValue((short)value, out Color color))
                 {
                     byte[] colorbuf = new byte[16];
                     Random random = new Random(value);
                     random.NextBytes(colorbuf);
-                    color = Color.FromArgb(255,colorbuf[0],colorbuf[1],colorbuf[2]);
-                    octreevalues.Add((short)value,color);
+                    color = Color.FromArgb(255, colorbuf[0], colorbuf[1], colorbuf[2]);
+                    octreevalues.Add((short)value, color);
                 }
                 if (octreeselection != -1 && octreeselection != value)
                     return;
@@ -352,21 +351,21 @@ namespace CrashEdit
 
                 // Top
                 GL.Color3(c1);
-                GL.Vertex3(x + 0,y + h,z + 0);
+                GL.Vertex3(x + 0,y - h,z + 0);
                 GL.Color3(c2);
-                GL.Vertex3(x + w,y + h,z + 0);
+                GL.Vertex3(x + w,y - h,z + 0);
                 GL.Color3(c3);
-                GL.Vertex3(x + w,y + h,z + d);
+                GL.Vertex3(x + w,y - h,z + d);
                 GL.Color3(c4);
-                GL.Vertex3(x + 0,y + h,z + d);
+                GL.Vertex3(x + 0,y - h,z + d);
 
                 // Left
                 GL.Color3(c1);
                 GL.Vertex3(x + 0,y + 0,z + 0);
                 GL.Color3(c2);
-                GL.Vertex3(x + 0,y + h,z + 0);
+                GL.Vertex3(x + 0,y - h,z + 0);
                 GL.Color3(c3);
-                GL.Vertex3(x + 0,y + h,z + d);
+                GL.Vertex3(x + 0,y - h,z + d);
                 GL.Color3(c4);
                 GL.Vertex3(x + 0,y + 0,z + d);
 
@@ -374,9 +373,9 @@ namespace CrashEdit
                 GL.Color3(c1);
                 GL.Vertex3(x + w,y + 0,z + 0);
                 GL.Color3(c2);
-                GL.Vertex3(x + w,y + h,z + 0);
+                GL.Vertex3(x + w,y - h,z + 0);
                 GL.Color3(c3);
-                GL.Vertex3(x + w,y + h,z + d);
+                GL.Vertex3(x + w,y - h,z + d);
                 GL.Color3(c4);
                 GL.Vertex3(x + w,y + 0,z + d);
 
@@ -386,9 +385,9 @@ namespace CrashEdit
                 GL.Color3(c2);
                 GL.Vertex3(x + w,y + 0,z + 0);
                 GL.Color3(c3);
-                GL.Vertex3(x + w,y + h,z + 0);
+                GL.Vertex3(x + w,y - h,z + 0);
                 GL.Color3(c4);
-                GL.Vertex3(x + 0,y + h,z + 0);
+                GL.Vertex3(x + 0,y - h,z + 0);
 
                 // Back
                 GL.Color3(c1);
@@ -396,9 +395,9 @@ namespace CrashEdit
                 GL.Color3(c2);
                 GL.Vertex3(x + w,y + 0,z + d);
                 GL.Color3(c3);
-                GL.Vertex3(x + w,y + h,z + d);
+                GL.Vertex3(x + w,y - h,z + d);
                 GL.Color3(c4);
-                GL.Vertex3(x + 0,y + h,z + d);
+                GL.Vertex3(x + 0,y - h,z + d);
                 GL.End();
             }
             else if (value != 0)
@@ -424,7 +423,7 @@ namespace CrashEdit
             if (ymax > 0)
             {
                 RenderOctreeZ(data,ref offset,x,y + 0 / 2,z,w,h / 2,d,xmax,ymax - 1,zmax);
-                RenderOctreeZ(data,ref offset,x,y + h / 2,z,w,h / 2,d,xmax,ymax - 1,zmax);
+                RenderOctreeZ(data,ref offset,x,y - h / 2,z,w,h / 2,d,xmax,ymax - 1,zmax);
             }
             else
             {

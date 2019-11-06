@@ -1,41 +1,31 @@
 using Crash;
-using System.Windows.Forms;
 
 namespace CrashEdit
 {
     public sealed class ModelEntryController : EntryController
     {
-        private ModelEntry modelentry;
-
         public ModelEntryController(EntryChunkController entrychunkcontroller,ModelEntry modelentry) : base(entrychunkcontroller,modelentry)
         {
-            this.modelentry = modelentry;
+            ModelEntry = modelentry;
             InvalidateNode();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Model ({0})",modelentry.EName);
-            Node.ImageKey = "thing";
-            Node.SelectedImageKey = "thing";
-        }
-
-        protected override Control CreateEditor()
-        {
-            if (modelentry.Positions != null)
-                return new AnimationEntryViewer(modelentry);
+            if (ModelEntry.Positions == null)
+            {
+                Node.Text = string.Format("Model ({0})", ModelEntry.EName);
+                Node.ImageKey = "crimsonb";
+                Node.SelectedImageKey = "crimsonb";
+            }
             else
             {
-                Label label = new Label();
-                label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-                label.Text = "No options available";
-                return label;
+                Node.Text = string.Format("Compressed Model ({0})", ModelEntry.EName);
+                Node.ImageKey = "crimsonb"; // would prefer red but whatever
+                Node.SelectedImageKey = "crimsonb";
             }
         }
 
-        public ModelEntry ModelEntry
-        {
-            get { return modelentry; }
-        }
+        public ModelEntry ModelEntry { get; }
     }
 }

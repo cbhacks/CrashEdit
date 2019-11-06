@@ -5,21 +5,16 @@ namespace CrashEdit
 {
     public abstract class MysteryUniItemEntryController : EntryController
     {
-        private MysteryUniItemEntry mysteryentry;
-
         public MysteryUniItemEntryController(EntryChunkController entrychunkcontroller,MysteryUniItemEntry mysteryentry) : base(entrychunkcontroller,mysteryentry)
         {
-            this.mysteryentry = mysteryentry;
+            MysteryEntry = mysteryentry;
         }
 
         protected override Control CreateEditor()
         {
-            return new MysteryBox(mysteryentry.Data);
+            return new MysteryBox(MysteryEntry.Data);
         }
 
-        public MysteryUniItemEntry MysteryEntry
-        {
-            get { return mysteryentry; }
-        }
+        public MysteryUniItemEntry MysteryEntry { get; }
     }
 }

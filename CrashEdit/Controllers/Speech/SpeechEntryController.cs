@@ -5,29 +5,24 @@ namespace CrashEdit
 {
     public sealed class SpeechEntryController : EntryController
     {
-        private SpeechEntry speechentry;
-
         public SpeechEntryController(EntryChunkController entrychunkcontroller,SpeechEntry speechentry) : base(entrychunkcontroller,speechentry)
         {
-            this.speechentry = speechentry;
+            SpeechEntry = speechentry;
             InvalidateNode();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Speech ({0})",speechentry.EName);
+            Node.Text = string.Format("Speech ({0})",SpeechEntry.EName);
             Node.ImageKey = "speaker";
             Node.SelectedImageKey = "speaker";
         }
 
         protected override Control CreateEditor()
         {
-            return new SoundBox(speechentry);
+            return new SoundBox(SpeechEntry);
         }
 
-        public SpeechEntry SpeechEntry
-        {
-            get { return speechentry; }
-        }
+        public SpeechEntry SpeechEntry { get; }
     }
 }

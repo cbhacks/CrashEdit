@@ -5,7 +5,6 @@ namespace Crash
 {
     public class Frame
     {
-
         public static Frame Load(byte[] data)
         {
             if (data == null)
@@ -30,138 +29,84 @@ namespace Crash
             {
                 ErrorManager.SignalError("Frame: Header size value is invalid");
             }
-            byte[] settings = new byte[headersize - 24];
-            for (int i = 0;i < settings.Length; i++)
+            int fake_headersize = 24 + collision * 0x28;
+            byte[] settings = new byte[collision * 0x28]; // FIXME
+            Array.Copy(data, 24, settings, 0, settings.Length);
+            int specialvertexcount = (headersize - fake_headersize) / 3;
+            FrameVertex[] vertices = new FrameVertex[vertexcount];
+            for (int i = 0; i < specialvertexcount; ++i) // these vertices are NEVER compressed
             {
-                settings[i] = data[24 + i];
+                vertices[i] = new FrameVertex(data[fake_headersize + i * 3], data[fake_headersize + i * 3 + 1], data[fake_headersize + i * 3 + 2]);
             }
-            FrameVertex[] vertices = new FrameVertex [vertexcount - ((headersize - 24 - collision * 40) / 3)];
-            bool[] temporals = new bool[(data.Length - headersize) * 8];
-            if (data.Length >= vertexcount * 3 + 24 + collision * 40)
+            if (((data.Length - fake_headersize) % 4) != 0)
             {
-                for (int i = 0; i < vertexcount - ((headersize - 24 - collision * 40) / 3); i++)
+                ErrorManager.SignalError("Frame: Invalid data alignment");
+            }
+            bool[] temporals = new bool[(data.Length - fake_headersize) / 4 * 32];
+            for (int i = 0; i < (data.Length - fake_headersize) / 4; ++i)
+            {
+                int val = BitConv.FromInt32(data, fake_headersize + i * 4);
+                for (int j = 0; j < 32; ++j) // reverse endianness for decompression
                 {
-                    byte[] vertexdata = new byte[3];
-                    Array.Copy(data,headersize + i * 3,vertexdata,0,vertexdata.Length);
-                    vertices[i] = FrameVertex.Load(vertexdata);
+                    temporals[i * 32 + j] = (val >> (31 - j) & 0x1) == 1;
                 }
             }
-            for (int i = 0;i < (data.Length - headersize) / 4; i++)
-            {
-                int val = BitConv.FromInt32(data,headersize + i * 4);
-                for (int ii = 0;ii < 32;ii++)
-                {
-                    temporals[i * 32 + ii] = (((val >> (31 - ii)) & 0x1) == 1);
-                }
-            }
-            return new Frame(xoffset,yoffset,zoffset,unknown,vertexcount,collision,modeleid,headersize,settings,vertices,temporals);
+            return new Frame(xoffset,yoffset,zoffset,unknown,collision,modeleid,headersize,settings,vertices,specialvertexcount,temporals);
         }
 
-        private short xoffset;
-        private short yoffset;
-        private short zoffset;
-        private short unknown;
-        private int vertexcount;
-        private int collision;
-        private int modeleid;
-        private int headersize;
-        private byte[] settings;
         private List<FrameVertex> vertices;
-        private bool[] temporals;
 
-        public Frame(short xoffset,short yoffset,short zoffset,short unknown,int vertexcount,int collision,int modeleid,int headersize,byte[] settings,IEnumerable<FrameVertex> vertices,bool[] temporals)
+        public Frame(short xoffset,short yoffset,short zoffset,short unknown,int collision,int modeleid,int headersize,byte[] settings,IEnumerable<FrameVertex> vertices,int specialvertexcount, bool[] temporals)
         {
-            this.xoffset = xoffset;
-            this.yoffset = yoffset;
-            this.zoffset = zoffset;
-            this.unknown = unknown;
-            this.vertexcount = vertexcount;
-            this.collision = collision;
-            this.modeleid = modeleid;
-            this.headersize = headersize;
-            this.settings = settings;
+            XOffset = xoffset;
+            YOffset = yoffset;
+            ZOffset = zoffset;
+            Unknown = unknown;
+            Collision = collision;
+            ModelEID = modeleid;
+            HeaderSize = headersize;
+            Settings = settings;
+            SpecialVertexCount = specialvertexcount;
             this.vertices = new List<FrameVertex>(vertices);
-            this.temporals = temporals;
+            Temporals = temporals;
         }
 
-        public int ModelEID
-        {
-            get { return modeleid; }
-        }
+        public int ModelEID { get; }
+        public short XOffset { get; }
+        public short YOffset { get; }
+        public short ZOffset { get; }
+        public int Collision { get; }
+        public int HeaderSize { get; }
+        public byte[] Settings { get; }
+        public IList<FrameVertex> Vertices => vertices;
+        public int SpecialVertexCount { get; }
+        public bool[] Temporals { get; }
+        public short Unknown { get; }
 
-        public short XOffset
-        {
-            get { return xoffset; }
-        }
-
-        public short YOffset
-        {
-            get { return yoffset; }
-        }
-
-        public short ZOffset
-        {
-            get { return zoffset; }
-        }
-
-        public int Collision
-        {
-            get { return collision; }
-        }
-
-        public int HeaderSize
-        {
-            get { return headersize; }
-        }
-
-        public byte[] Settings
-        {
-            get { return settings; }
-        }
-
-        public int VertexCount
-        {
-            get { return vertexcount; }
-        }
-
-        public IList<FrameVertex> Vertices
-        {
-            get { return vertices; }
-        }
-
-        public bool[] Temporals
-        {
-            get { return temporals; }
-        }
-
-        public short Unknown
-        {
-            get { return unknown; }
-        }
+        public bool Decompressed { get; set; } = false;
 
         public byte[] Save()
         {
-            byte[] result = new byte [headersize + Temporals.Length / 8];
-            BitConv.ToInt16(result,0,xoffset);
-            BitConv.ToInt16(result,2,yoffset);
-            BitConv.ToInt16(result,4,zoffset);
-            BitConv.ToInt16(result,6,unknown);
-            BitConv.ToInt32(result,8,vertexcount);
-            BitConv.ToInt32(result,12,collision);
-            BitConv.ToInt32(result,16,modeleid);
-            BitConv.ToInt32(result,20,headersize);
-            for (int i = 0; i < settings.Length; i++)
-            {
-                BitConv.ToInt32(result,24 + i,settings[i]);
-            }
-            for (short i = 0; i < Temporals.Length / 32; i++)
+            int fake_headersize = 24 + Collision * 0x28;
+            int size = fake_headersize + Temporals.Length / 8;
+            byte[] result = new byte [size];
+            BitConv.ToInt16(result,0,XOffset);
+            BitConv.ToInt16(result,2,YOffset);
+            BitConv.ToInt16(result,4,ZOffset);
+            BitConv.ToInt16(result,6,Unknown);
+            BitConv.ToInt32(result,8,vertices.Count);
+            BitConv.ToInt32(result,12,Collision);
+            BitConv.ToInt32(result,16,ModelEID);
+            BitConv.ToInt32(result,20,HeaderSize);
+            Array.Copy(Settings,0,result,24,Settings.Length);
+            for (short i = 0; i < Temporals.Length / 32; ++i)
             {
                 int val = 0;
-                for (short ii = 0; ii < 32; ii++)
+                for (short j = 0; j < 32; ++j)
                 {
-                    val |= Convert.ToByte(Temporals[i * 32 + ii]) << (31 - ii);
+                    val |= Convert.ToInt32(Temporals[i*32+j]) << (31-j);
                 }
-                BitConv.ToInt32(result,headersize + i * 4,val);
+                BitConv.ToInt32(result, fake_headersize+i*4, val);
             }
             return result;
         }

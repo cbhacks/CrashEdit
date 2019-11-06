@@ -7,65 +7,46 @@ namespace Crash
 {
     public sealed class OldSceneryEntry : Entry
     {
-        private byte[] info;
         private List<OldSceneryPolygon> polygons;
         private List<OldSceneryVertex> vertices;
-        private byte[] extradata;
 
         public OldSceneryEntry(byte[] info,IEnumerable<OldSceneryPolygon> polygons,IEnumerable<OldSceneryVertex> vertices,byte[] extradata,int eid, int size) : base(eid, size)
         {
-            if (info == null)
-                throw new ArgumentNullException("info");
-            this.info = info;
+            Info = info ?? throw new ArgumentNullException("info");
             this.polygons = new List<OldSceneryPolygon>(polygons);
             this.vertices = new List<OldSceneryVertex>(vertices);
-            this.extradata = extradata;
+            ExtraData = extradata;
         }
 
-        public override int Type
-        {
-            get { return 3; }
-        }
-
-        public byte[] Info
-        {
-            get { return info; }
-        }
-
-        public byte[] ExtraData
-        {
-            get { return extradata; }
-        }
+        public override int Type => 3;
+        public byte[] Info { get; }
+        public byte[] ExtraData { get; }
 
         public int XOffset
         {
-            get { return BitConv.FromInt32(info,0); }
+            get => BitConv.FromInt32(Info,0);
+            set => BitConv.ToInt32(Info,0,value);
         }
 
         public int YOffset
         {
-            get { return BitConv.FromInt32(info,4); }
+            get => BitConv.FromInt32(Info,4);
+            set => BitConv.ToInt32(Info,4,value);
         }
 
         public int ZOffset
         {
-            get { return BitConv.FromInt32(info,8); }
+            get => BitConv.FromInt32(Info,8);
+            set => BitConv.ToInt32(Info,8,value);
         }
 
-        public IList<OldSceneryPolygon> Polygons
-        {
-            get { return polygons; }
-        }
-
-        public IList<OldSceneryVertex> Vertices
-        {
-            get { return vertices; }
-        }
+        public IList<OldSceneryPolygon> Polygons => polygons;
+        public IList<OldSceneryVertex> Vertices => vertices;
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte [extradata == null ? 3 : 4][];
-            items[0] = info;
+            byte[][] items = new byte [ExtraData == null ? 3 : 4][];
+            items[0] = Info;
             items[1] = new byte [polygons.Count * 8];
             for (int i = 0;i < polygons.Count;i++)
             {
@@ -76,9 +57,9 @@ namespace Crash
             {
                 vertices[i].Save().CopyTo(items[2],i * 8);
             }
-            if (extradata != null)
+            if (ExtraData != null)
             {
-                items[3] = extradata;
+                items[3] = ExtraData;
             }
             return new UnprocessedEntry(items,EID,Type,Size);
         }

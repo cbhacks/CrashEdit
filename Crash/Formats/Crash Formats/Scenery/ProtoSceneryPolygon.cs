@@ -15,12 +15,12 @@ namespace Crash
             short short1 = BitConv.FromInt16(data, 8);
             short short2 = BitConv.FromInt16(data, 10);
             byte[] vertexarray = new byte[4];
-            vertexarray[2] = (byte)(unknownint2 & 0x0F); //Most significant nibble
+            vertexarray[2] = (byte)(unknownint2 & 0x0F); // Most significant nibble
             vertexarray[1] = (byte)(short2 & 0x0F);
-            vertexarray[0] = (byte)((short1 >> 12) & 0x0F); //Least significant nibble
+            vertexarray[0] = (byte)((short1 >> 12) & 0x0F); // Least significant nibble
             short vertexa = (short)((((BitConverter.ToInt32(vertexarray, 0) & 0xFF00) >> 4) | vertexarray[0]) | (BitConverter.ToInt32(vertexarray,0) & 0xFF0000) >> 8);
             //short vertexa = (short)(BitConverter.ToInt32(vertexarray, 0));
-            //short vertexa = (short)((unknownint2) & 0xFF07); //what
+            //short vertexa = (short)((unknownint2) & 0xFF07); // what
             short vertexb = (short)(short1 & 0x7FF);
             vertexarray[1] = (byte)((short2 >> 4) & 0x07);
             vertexarray[0] = (byte)(short2 >> 8);
@@ -28,70 +28,32 @@ namespace Crash
             return new ProtoSceneryPolygon(vertexa, unknownint1, unknownint2, short1, short2, vertexb,vertexc);
         }
 
-        private short vertexa;
-        private int unknownint1;
-        private int unknownint2;
-        private short short1;
-        private short short2;
-        private short vertexb;
-        private short vertexc;
-
         public ProtoSceneryPolygon(short vertexa, int unknownint1, int unknownint2, short short1, short short2, short vertexb, short vertexc)
         {
-            this.vertexa = vertexa;
-            this.unknownint1 = unknownint1;
-            this.unknownint2 = unknownint2;
-            this.short1 = short1;
-            this.short2 = short2;
-            this.vertexb = vertexb;
-            this.vertexc = vertexc;
+            VertexA = vertexa;
+            UnknownInt1 = unknownint1;
+            UnknownInt2 = unknownint2;
+            Short1 = short1;
+            Short2 = short2;
+            VertexB = vertexb;
+            VertexC = vertexc;
         }
 
-        public short VertexA
-        {
-            get { return vertexa; }
-            set { vertexa = value; }
-        }
-
-        public int UnknownInt1
-        {
-            get { return unknownint1; }
-        }
-
-        public int UnknownInt2
-        {
-            get { return unknownint2; }
-        }
-
-        public short Short1
-        {
-            get { return short1; }
-        }
-
-        public short Short2
-        {
-            get { return short2; }
-        }
-
-        public short VertexB
-        {
-            get { return vertexb; }
-            set { vertexb = value; }
-        }
-
-        public short VertexC
-        {
-            get { return vertexc; }
-            set { vertexc = value; }
-        }
+        public short VertexA { get; set; }
+        public int UnknownInt1 { get; }
+        public int UnknownInt2 { get; }
+        public short Short1 { get; }
+        public short Short2 { get; }
+        public short VertexB { get; set; }
+        public short VertexC { get; set; }
 
         public byte[] Save()
         {
             byte[] data = new byte [12];
-            BitConv.ToInt32(data,0,unknownint1);
-            BitConv.ToInt32(data, 4, unknownint2);
-            BitConv.ToInt16(data, 8, short1);
-            BitConv.ToInt16(data, 10, short2);
+            BitConv.ToInt32(data,0,UnknownInt1);
+            BitConv.ToInt32(data, 4, UnknownInt2);
+            BitConv.ToInt16(data, 8, Short1);
+            BitConv.ToInt16(data, 10, Short2);
             return data;
         }
     }

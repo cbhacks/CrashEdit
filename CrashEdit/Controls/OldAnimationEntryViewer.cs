@@ -1,5 +1,6 @@
 using Crash;
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
@@ -12,66 +13,31 @@ namespace CrashEdit
         private OldModelEntry model;
         private int frameid;
         private Timer animatetimer;
-        private int xoffset;
-        private int yoffset;
-        private int zoffset;
-        private int xcol1;
-        private int ycol1;
-        private int zcol1;
-        private int xcol2;
-        private int ycol2;
-        private int zcol2;
-        private bool pal;
 
         public OldAnimationEntryViewer(OldFrame frame,OldModelEntry model)
         {
-            frames = new List<OldFrame>();
-            frames.Add(frame);
+            frames = new List<OldFrame>() { frame };
             this.model = model;
             frameid = 0;
-            xoffset = frame.XOffset;
-            yoffset = frame.YOffset;
-            zoffset = frame.ZOffset;
-            xcol1 = frame.X1 + frame.XGlobal;
-            ycol1 = frame.Y1 + frame.YGlobal;
-            zcol1 = frame.Z1 + frame.ZGlobal;
-            xcol2 = frame.X2 + frame.XGlobal;
-            ycol2 = frame.Y2 + frame.YGlobal;
-            zcol2 = frame.Z2 + frame.ZGlobal;
         }
 
         public OldAnimationEntryViewer(IEnumerable<OldFrame> frames,OldModelEntry model)
         {
-            pal = false;
             this.frames = new List<OldFrame>(frames);
             this.model = model;
             frameid = 0;
             animatetimer = new Timer();
-            animatetimer.Interval = 1000/30;
-            if (pal)
-                animatetimer.Interval = 1000/25;
+            animatetimer.Interval = 1000/OldMainForm.GetRate();
             animatetimer.Enabled = true;
             animatetimer.Tick += delegate (object sender,EventArgs e)
             {
-                animatetimer.Interval = 1000 / 30;
-                if (pal)
-                    animatetimer.Interval = 1000 / 25;
-                frameid++;
-                if (frameid == this.frames.Count)
-                {
-                    frameid = 0;
-                }
-                xoffset = this.frames[frameid].XOffset;
-                yoffset = this.frames[frameid].YOffset;
-                zoffset = this.frames[frameid].ZOffset;
+                animatetimer.Interval = 1000 / OldMainForm.GetRate();
+                frameid = ++frameid % this.frames.Count;
                 Refresh();
             };
         }
 
-        protected override int CameraRangeMargin
-        {
-            get { return 100; }
-        }
+        protected override int CameraRangeMargin => 256;
 
         protected override IEnumerable<IPosition> CorePositions
         {
@@ -84,34 +50,12 @@ namespace CrashEdit
                         int x = vertex.X + frame.XOffset;
                         int y = vertex.Y + frame.YOffset;
                         int z = vertex.Z + frame.ZOffset;
-                        yield return new Position(x, y, z);
+                        yield return new Position(x,y,z);
                     }
                 }
             }
         }
-
-        protected override bool IsInputKey(Keys keyData)
-        {
-            switch (keyData)
-            {
-                case Keys.F:
-                    return true;
-                default:
-                    return base.IsInputKey(keyData);
-            }
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            base.OnKeyDown(e);
-            switch (e.KeyCode)
-            {
-                case Keys.F:
-                    pal = !pal;
-                    break;
-            }
-        }
-
+        
         protected override void RenderObjects()
         {
             RenderFrame(frames[frameid % frames.Count]);
@@ -121,6 +65,7 @@ namespace CrashEdit
         {
             if (model != null)
             {
+                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
                 GL.Begin(PrimitiveType.Triangles);
                 foreach (OldModelPolygon polygon in model.Polygons)
                 {
@@ -129,56 +74,84 @@ namespace CrashEdit
                     byte g = model.Info[coloroffset + 1];
                     byte b = model.Info[coloroffset + 2];
                     GL.Color3(r,g,b);
-                    RenderVertex(frame.Vertices[polygon.VertexA / 6]);
-                    RenderVertex(frame.Vertices[polygon.VertexB / 6]);
-                    RenderVertex(frame.Vertices[polygon.VertexC / 6]);
+                    RenderVertex(frame, frame.Vertices[polygon.VertexA / 6]);
+                    RenderVertex(frame, frame.Vertices[polygon.VertexB / 6]);
+                    RenderVertex(frame, frame.Vertices[polygon.VertexC / 6]);
                 }
                 GL.End();
             }
             else
             {
+                GL.Color3(Color.White);
                 GL.Begin(PrimitiveType.Points);
                 foreach (OldFrameVertex vertex in frame.Vertices)
                 {
-                    RenderVertex(vertex);
+                    RenderVertex(frame, vertex);
                 }
                 GL.End();
             }
-            //RenderCollision();
+            //RenderCollision(frame);
         }
 
-        private void RenderVertex(OldFrameVertex vertex)
+        private void RenderVertex(OldFrame frame, OldFrameVertex vertex)
         {
-            GL.Vertex3(vertex.X + xoffset,vertex.Y + yoffset,vertex.Z + zoffset);
+            GL.Vertex3(vertex.X + frame.XOffset,vertex.Y + frame.YOffset,vertex.Z + frame.ZOffset);
         }
 
-        private void RenderCollision()
+        private void RenderCollision(OldFrame frame)
         {
-            GL.Begin(PrimitiveType.Quads);
-            GL.Color4(0f, 1f, 0f, 0.5f);
-            GL.Vertex3(xcol1 * 0.00128 + xoffset,ycol1 * 0.00128 + yoffset,zcol1 * 0.00128 + zoffset);
-            GL.Vertex3(xcol1 * 0.00128 + xoffset,ycol2 * 0.00128 + yoffset,zcol1 * 0.00128 + zoffset);
-            GL.Vertex3(xcol2 * 0.00128 + xoffset,ycol2 * 0.00128 + yoffset,zcol1 * 0.00128 + zoffset);
-            GL.Vertex3(xcol2 * 0.00128 + xoffset,ycol1 * 0.00128 + yoffset,zcol1 * 0.00128 + zoffset);
-            GL.Vertex3(xcol2 * 0.00128 + xoffset,ycol1 * 0.00128 + yoffset,zcol2 * 0.00128 + zoffset);
-            GL.Vertex3(xcol2 * 0.00128 + xoffset,ycol2 * 0.00128 + yoffset,zcol2 * 0.00128 + zoffset);
-            GL.Vertex3(xcol1 * 0.00128 + xoffset,ycol2 * 0.00128 + yoffset,zcol2 * 0.00128 + zoffset);
-            GL.Vertex3(xcol1 * 0.00128 + xoffset,ycol1 * 0.00128 + yoffset,zcol2 * 0.00128 + zoffset);
+            GL.DepthMask(false);
+            GL.Color4(0f, 1f, 0f, 0.2f);
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+            RenderCollisionBox(frame);
+            GL.Color4(0f, 1f, 0f, 1f);
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+            RenderCollisionBox(frame);
+            GL.DepthMask(true);
+        }
+
+        private void RenderCollisionBox(OldFrame frame)
+        {
+            int xoffset = frame.XOffset;
+            int yoffset = frame.YOffset;
+            int zoffset = frame.ZOffset;
+            int xglobal = frame.XGlobal;
+            int yglobal = frame.YGlobal;
+            int zglobal = frame.ZGlobal;
+            int xcol1 = frame.X1;
+            int xcol2 = frame.X2;
+            int ycol1 = frame.Y1;
+            int ycol2 = frame.Y2;
+            int zcol1 = frame.Z1;
+            int zcol2 = frame.Z2;
+            GL.PushMatrix();
+            //GL.Translate(xoffset,yoffset,zoffset);
+            GL.Scale(0.00125f,0.00125f,0.00125f);
+            GL.Translate(yglobal*2,yglobal*2,yglobal*2);
+            GL.Begin(PrimitiveType.QuadStrip);
+            GL.Vertex3(xcol1,ycol1,zcol1);
+            GL.Vertex3(xcol1,ycol2,zcol1);
+            GL.Vertex3(xcol2,ycol1,zcol1);
+            GL.Vertex3(xcol2,ycol2,zcol1);
+            GL.Vertex3(xcol2,ycol1,zcol2);
+            GL.Vertex3(xcol2,ycol2,zcol2);
+            GL.Vertex3(xcol1,ycol1,zcol2);
+            GL.Vertex3(xcol1,ycol2,zcol2);
+            GL.Vertex3(xcol1,ycol1,zcol1);
+            GL.Vertex3(xcol1,ycol2,zcol1);
             GL.End();
             GL.Begin(PrimitiveType.Quads);
-            GL.Color4(0f,1f,0f,0.5f);
-            GL.Vertex3(xcol1 * 0.00128 + xoffset,ycol2 * 0.00128 + yoffset,zcol1 * 0.00128 + zoffset);
-            GL.Vertex3(xcol2 * 0.00128 + xoffset,ycol2 * 0.00128 + yoffset,zcol1 * 0.00128 + zoffset);
-            GL.Vertex3(xcol2 * 0.00128 + xoffset,ycol2 * 0.00128 + yoffset,zcol2 * 0.00128 + zoffset);
-            GL.Vertex3(xcol1 * 0.00128 + xoffset,ycol2 * 0.00128 + yoffset,zcol2 * 0.00128 + zoffset);
+            GL.Vertex3(xcol1,ycol1,zcol1);
+            GL.Vertex3(xcol2,ycol1,zcol1);
+            GL.Vertex3(xcol2,ycol1,zcol2);
+            GL.Vertex3(xcol1,ycol1,zcol2);
+
+            GL.Vertex3(xcol1,ycol2,zcol1);
+            GL.Vertex3(xcol2,ycol2,zcol1);
+            GL.Vertex3(xcol2,ycol2,zcol2);
+            GL.Vertex3(xcol1,ycol2,zcol2);
             GL.End();
-            GL.Begin(PrimitiveType.Quads);
-            GL.Color4(0f, 1f, 0f, 0.5f);
-            GL.Vertex3(xcol1 * 0.00128 + xoffset,ycol1 * 0.00128 + yoffset,zcol1 * 0.00128 + zoffset);
-            GL.Vertex3(xcol2 * 0.00128 + xoffset,ycol1 * 0.00128 + yoffset,zcol1 * 0.00128 + zoffset);
-            GL.Vertex3(xcol2 * 0.00128 + xoffset,ycol1 * 0.00128 + yoffset,zcol2 * 0.00128 + zoffset);
-            GL.Vertex3(xcol1 * 0.00128 + xoffset,ycol1 * 0.00128 + yoffset,zcol2 * 0.00128 + zoffset);
-            GL.End();
+            GL.PopMatrix();
         }
 
         protected override void Dispose(bool disposing)

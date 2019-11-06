@@ -5,13 +5,10 @@ namespace CrashEdit
 {
     public sealed class CutsceneFrameController : Controller
     {
-        private CutsceneAnimationEntryController cutsceneanimationentrycontroller;
-        private OldFrame oldframe;
-
         public CutsceneFrameController(CutsceneAnimationEntryController cutsceneanimationentrycontroller,OldFrame oldframe)
         {
-            this.cutsceneanimationentrycontroller = cutsceneanimationentrycontroller;
-            this.oldframe = oldframe;
+            CutsceneAnimationEntryController = cutsceneanimationentrycontroller;
+            OldFrame = oldframe;
             InvalidateNode();
         }
 
@@ -25,23 +22,16 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            OldModelEntry modelentry = CutsceneAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(oldframe.ModelEID);
-            return new OldAnimationEntryViewer(oldframe,modelentry);
+            OldModelEntry modelentry = CutsceneAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(OldFrame.ModelEID);
+            return new UndockableControl(new OldAnimationEntryViewer(OldFrame,modelentry));
         }
 
-        public CutsceneAnimationEntryController CutsceneAnimationEntryController
-        {
-            get { return cutsceneanimationentrycontroller; }
-        }
-
-        public OldFrame OldFrame
-        {
-            get { return oldframe; }
-        }
+        public CutsceneAnimationEntryController CutsceneAnimationEntryController { get; }
+        public OldFrame OldFrame { get; }
 
         private void Menu_Export_OBJ()
         {
-            OldModelEntry modelentry = CutsceneAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(oldframe.ModelEID);
+            OldModelEntry modelentry = CutsceneAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(OldFrame.ModelEID);
             if (modelentry == null)
             {
                 throw new GUIException("The linked model entry could not be found.");
@@ -50,7 +40,7 @@ namespace CrashEdit
             {
                 return;
             }
-            FileUtil.SaveFile(oldframe.ToOBJ(modelentry),FileFilters.OBJ,FileFilters.Any);
+            FileUtil.SaveFile(OldFrame.ToOBJ(modelentry),FileFilters.OBJ,FileFilters.Any);
         }
     }
 }

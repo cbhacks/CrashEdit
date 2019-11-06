@@ -4,13 +4,10 @@ namespace CrashEdit
 {
     public sealed class VHController : Controller
     {
-        private MusicEntryController musicentrycontroller;
-        private VH vh;
-
         public VHController(MusicEntryController musicentrycontroller,VH vh)
         {
-            this.musicentrycontroller = musicentrycontroller;
-            this.vh = vh;
+            MusicEntryController = musicentrycontroller;
+            VH = vh;
             AddMenu("Replace VH",Menu_Replace_VH);
             AddMenu("Delete VH",Menu_Delete_VH);
             AddMenuSeparator();
@@ -25,35 +22,28 @@ namespace CrashEdit
             Node.SelectedImageKey = "arrow";
         }
 
-        public MusicEntryController MusicEntryController
-        {
-            get { return musicentrycontroller; }
-        }
-
-        public VH VH
-        {
-            get { return vh; }
-        }
+        public MusicEntryController MusicEntryController { get; }
+        public VH VH { get; private set; }
 
         private void Menu_Replace_VH()
         {
             byte[] data = FileUtil.OpenFile(FileFilters.VH,FileFilters.Any);
             if (data != null)
             {
-                vh = VH.Load(data);
-                musicentrycontroller.MusicEntry.VH = vh;
+                VH = VH.Load(data);
+                MusicEntryController.MusicEntry.VH = VH;
             }
         }
 
         private void Menu_Delete_VH()
         {
-            musicentrycontroller.MusicEntry.VH = null;
+            MusicEntryController.MusicEntry.VH = null;
             Dispose();
         }
 
         private void Menu_Export_VH()
         {
-            byte[] data = vh.Save();
+            byte[] data = VH.Save();
             FileUtil.SaveFile(data,FileFilters.VH,FileFilters.Any);
         }
     }

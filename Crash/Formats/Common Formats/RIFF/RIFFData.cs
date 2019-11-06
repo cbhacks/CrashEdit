@@ -10,15 +10,10 @@ namespace Crash
         {
             if (name == null)
                 throw new ArgumentNullException("name");
-            if (data == null)
-                throw new ArgumentNullException("data");
-            this.data = data;
+            this.data = data ?? throw new ArgumentNullException("data");
         }
 
-        public override int Length
-        {
-            get { return data.Length + 8; }
-        }
+        public override int Length => data.Length + 8;
 
         public override byte[] Save(Endianness endianness)
         {

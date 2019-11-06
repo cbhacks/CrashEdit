@@ -5,21 +5,17 @@ namespace Crash
 {
     public sealed class ModelEntry : Entry
     {
-        private byte[] info;
-        private List<ModelPolygon> polygons;
+        private List<int> positionindices;
+        private List<int> colorindices;
         private List<SceneryColor> colors;
         private List<ModelTexture> textures;
         private List<ModelAnimatedTexture> animatedtextures;
         private List<ModelPosition> positions;
 
-        public ModelEntry(byte[] info,IEnumerable<ModelPolygon> polygons,IEnumerable<SceneryColor> colors,IEnumerable<ModelTexture> textures,IEnumerable<ModelAnimatedTexture> animatedtextures,IEnumerable<ModelPosition> positions,int eid,int size) : base(eid,size)
+        public ModelEntry(byte[] info,uint[] polygons,IEnumerable<SceneryColor> colors,IEnumerable<ModelTexture> textures,IEnumerable<ModelAnimatedTexture> animatedtextures,IEnumerable<ModelPosition> positions,int eid,int size) : base(eid,size)
         {
-            if (info == null)
-                throw new ArgumentNullException("info");
-            if (polygons == null)
-                throw new ArgumentNullException("polygons");
-            this.info = info;
-            this.polygons = new List<ModelPolygon>(polygons);
+            Info = info ?? throw new ArgumentNullException("info");
+            PolyData = polygons ?? throw new ArgumentNullException("polygons");
             this.colors = new List<SceneryColor>(colors);
             this.textures = new List<ModelTexture>(textures);
             this.animatedtextures = new List<ModelAnimatedTexture>(animatedtextures);
@@ -27,55 +23,200 @@ namespace Crash
                 this.positions = new List<ModelPosition>(positions);
             else
                 this.positions = null;
+            ConvertIndices();
         }
 
-        public override int Type
+        private void ConvertIndices()
         {
-            get { return 2; }
+            positionindices = new List<int>();
+            colorindices = new List<int>();
+            Dictionary<byte, int> p = new Dictionary<byte, int>();
+            int v = positions == null ? 0 : -BitConv.FromInt32(Info, 0x4C); // special vertex count, let's get rid of it for compressed models
+            List<int> vtx = new List<int>();
+            int lastvalidcc = -3; // dirty hack
+            int lastccpos = -1;
+            int lastaapos = -1;
+            int lastcolor = -1;
+            int lastnonbb = -1;
+            ModelStruct[] structs = new ModelStruct[PolyData.Length];
+            for (int i = 0; i < PolyData.Length; ++i) // pre-pass (ugh)
+            {
+                ModelStruct s = ConvertPolyItem(PolyData[i]);
+                if (s == null) // footer
+                    break;
+                else if (s is ModelColor c) // color
+                    structs[i] = c;
+                else if (s is ModelTriangle t) // index
+                {
+                    if (t.Type == ModelTriangle.IndexType.Original)
+                    {
+                        if (t.PositionKey != ModelTriangle.NullPtr)
+                        {
+                            if (p.ContainsKey(t.PositionKey))
+                                p[t.PositionKey] = v;
+                            else
+                                p.Add(t.PositionKey, v);
+                        }
+                        vtx.Add(v++);
+                    }
+                    else if (t.Type == ModelTriangle.IndexType.Duplicate)
+                    {
+                        vtx.Add(p[t.PositionKey]);
+                    }
+                    else
+                        throw new Exception();
+                    structs[i] = t;
+                }
+                else
+                    throw new Exception();
+            }
+            for (int i = 0, cur_v = 0; i < PolyData.Length;++i)
+            {
+                ModelStruct s = structs[i];
+                if (s == null) // footer
+                    break;
+                else if (s is ModelColor c) // color
+                {
+                    lastcolor = i;
+                }
+                else if (s is ModelTriangle t) // index
+                {
+                    if (t.Type == ModelTriangle.IndexType.Original)
+                    {
+                        switch (t.TriangleType)
+                        {
+                            case 0:
+                                lastaapos = cur_v;
+                                lastnonbb = i;
+                                positionindices.Add(vtx[cur_v]);
+                                positionindices.Add(vtx[cur_v-1]);
+                                positionindices.Add(vtx[cur_v-2]);
+                                colorindices.Add(t.ColorIndex);
+                                colorindices.Add(lastcolor+1 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i-1]).ColorIndex);
+                                colorindices.Add(lastcolor+1 == i ? ((ModelColor)structs[lastcolor]).Color2 : (lastcolor+2 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i-2]).ColorIndex));
+                                break;
+                            case 1:
+                                positionindices.Add(vtx[cur_v]);
+                                positionindices.Add(vtx[cur_v-1]);
+                                positionindices.Add(lastccpos > lastaapos ? vtx[lastccpos] : vtx[lastaapos-2]);
+                                colorindices.Add(t.ColorIndex);
+                                colorindices.Add(lastcolor+1 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i-1]).ColorIndex);
+                                int ci = -1;
+                                if (lastcolor < lastnonbb-2) // 3
+                                    ci = ((ModelTriangle)structs[lastnonbb-2]).ColorIndex;
+                                else if (lastcolor == lastnonbb-2) // 1
+                                    ci = ((ModelColor)structs[lastcolor]).Color1;
+                                else if (lastcolor == lastnonbb-1) // 2
+                                    ci = ((ModelColor)structs[lastcolor]).Color2;
+                                else if (lastcolor > lastnonbb-2) // 4
+                                    ci = ((ModelColor)structs[lastcolor]).Color2;
+                                colorindices.Add(ci);
+                                break;
+                            case 2:
+                                if (i + 2 < PolyData.Length && lastvalidcc + 2 < i)
+                                {
+                                    lastvalidcc = i;
+                                    positionindices.Add(vtx[cur_v]);
+                                    positionindices.Add(vtx[cur_v+1]);
+                                    positionindices.Add(vtx[cur_v+2]);
+                                    colorindices.Add(t.ColorIndex);
+                                    colorindices.Add(((ModelTriangle)structs[i+1]).ColorIndex);
+                                    colorindices.Add(((ModelTriangle)structs[i+2]).ColorIndex);
+                                }
+                                lastccpos = cur_v;
+                                lastnonbb = i;
+                                break;
+                        }
+                    }
+                    else if (t.Type == ModelTriangle.IndexType.Duplicate)
+                    {
+                        switch (t.TriangleType)
+                        {
+                            case 0:
+                                lastaapos = cur_v;
+                                lastnonbb = i;
+                                positionindices.Add(vtx[cur_v]);
+                                positionindices.Add(vtx[cur_v-1]);
+                                positionindices.Add(vtx[cur_v-2]);
+                                colorindices.Add(t.ColorIndex);
+                                colorindices.Add(lastcolor+1 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i-1]).ColorIndex);
+                                colorindices.Add(lastcolor+1 == i ? ((ModelColor)structs[lastcolor]).Color2 : (lastcolor+2 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i-2]).ColorIndex));
+                                break;
+                            case 1:
+                                positionindices.Add(vtx[cur_v]);
+                                positionindices.Add(vtx[cur_v-1]);
+                                positionindices.Add(lastccpos > lastaapos ? vtx[lastccpos] : vtx[lastaapos-2]);
+                                colorindices.Add(t.ColorIndex);
+                                colorindices.Add(lastcolor+1 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i-1]).ColorIndex);
+                                int ci = -1;
+                                if (lastcolor < lastnonbb-2) // 3
+                                    ci = ((ModelTriangle)structs[lastnonbb-2]).ColorIndex;
+                                else if (lastcolor == lastnonbb-2) // 1
+                                    ci = ((ModelColor)structs[lastcolor]).Color1;
+                                else if (lastcolor == lastnonbb-1) // 2
+                                    ci = ((ModelColor)structs[lastcolor]).Color2;
+                                else if (lastcolor > lastnonbb-2) // 4
+                                    ci = ((ModelColor)structs[lastcolor]).Color2;
+                                colorindices.Add(ci);
+                                break;
+                            case 2:
+                                if (i + 2 < PolyData.Length && lastvalidcc + 2 < i)
+                                {
+                                    lastvalidcc = i;
+                                    positionindices.Add(vtx[cur_v]);
+                                    positionindices.Add(vtx[cur_v+1]);
+                                    positionindices.Add(vtx[cur_v+2]);
+                                    colorindices.Add(t.ColorIndex);
+                                    colorindices.Add(((ModelTriangle)structs[i+1]).ColorIndex);
+                                    colorindices.Add(((ModelTriangle)structs[i+2]).ColorIndex);
+                                }
+                                lastccpos = cur_v;
+                                lastnonbb = i;
+                                break;
+                        }
+                    }
+                    ++cur_v;
+                }
+            }
         }
 
-        public byte[] Info
+        private static ModelStruct ConvertPolyItem(uint item)
         {
-            get { return info; }
+            if (item == 0xFFFFFFFF)
+            {
+                return null;
+            }
+            else if ((item & 0xFFFF0000) != 0) // TODO check for a better mask
+            {
+                return ModelTriangle.Load(item);
+            }
+            else
+            {
+                return ModelColor.Load(item);
+            }
         }
 
-        public IList<ModelPolygon> Polygons
-        {
-            get { return polygons; }
-        }
-
-        public IList<SceneryColor> Colors
-        {
-            get { return colors; }
-        }
-
-        public IList<ModelTexture> Textures
-        {
-            get { return textures; }
-        }
-
-        public IList<ModelAnimatedTexture> AnimatedTextures
-        {
-            get { return animatedtextures; }
-        }
-
-        public IList<ModelPosition> Positions
-        {
-            get { return positions; }
-        }
+        public override int Type => 2;
+        public byte[] Info { get; }
+        public uint[] PolyData { get; }
+        public IList<int> PositionIndices => positionindices;
+        public IList<int> ColorIndices => colorindices;
+        public IList<SceneryColor> Colors => colors;
+        public IList<ModelTexture> Textures => textures;
+        public IList<ModelAnimatedTexture> AnimatedTextures => animatedtextures;
+        public IList<ModelPosition> Positions => positions;
 
         public override UnprocessedEntry Unprocess()
         {
-            //ErrorManager.SignalError("ModelEntry cannot be saved.");
             byte itemcount = 5;
             if (Positions != null)
                 itemcount = 6;
             byte[][] items = new byte [itemcount][];
-            items[0] = info;
-            items[1] = new byte [polygons.Count * 4];
-            for (int i = 0;i < polygons.Count;i++)
+            items[0] = Info;
+            items[1] = new byte [PolyData.Length * 4];
+            for (int i = 0;i < PolyData.Length; i++)
             {
-                polygons[i].Save().CopyTo(items[1],i * 4);
+                BitConv.ToInt32(items[1],i*4,(int)PolyData[i]);
             }
             items[2] = new byte[colors.Count * 4];
             for (int i = 0;i < colors.Count;i++)

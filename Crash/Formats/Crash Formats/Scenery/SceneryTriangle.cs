@@ -13,7 +13,7 @@ namespace Crash
             if (adata.Length != 4)
                 throw new ArgumentException("Value must be 4 bytes long.","adata");
             if (bdata.Length != 2)
-                throw new ArgumentException("Value must be 2 bytes long.","adata");
+                throw new ArgumentException("Value must be 2 bytes long.","bdata");
             int avalue = BitConv.FromInt32(adata,0);
             short bvalue = BitConv.FromInt16(bdata,0);
             int vertexa = (avalue >> 8) & 0xFFF;
@@ -23,12 +23,6 @@ namespace Crash
             byte unknown2 = (byte)(bvalue & 0xF);
             return new SceneryTriangle(vertexa,vertexb,vertexc,unknown1,unknown2);
         }
-
-        private int vertexa;
-        private int vertexb;
-        private int vertexc;
-        private byte unknown1;
-        private byte unknown2;
 
         public SceneryTriangle(int vertexa,int vertexb,int vertexc,byte unknown1,byte unknown2)
         {
@@ -40,42 +34,23 @@ namespace Crash
                 throw new ArgumentOutOfRangeException("vertexc");
             if (unknown2 < 0 || unknown2 > 0xF)
                 throw new ArgumentOutOfRangeException("unknown2");
-            this.vertexa = vertexa;
-            this.vertexb = vertexb;
-            this.vertexc = vertexc;
-            this.unknown1 = unknown1;
-            this.unknown2 = unknown2;
+            VertexA = vertexa;
+            VertexB = vertexb;
+            VertexC = vertexc;
+            Unknown1 = unknown1;
+            Unknown2 = unknown2;
         }
 
-        public int VertexA
-        {
-            get { return vertexa; }
-        }
-
-        public int VertexB
-        {
-            get { return vertexb; }
-        }
-
-        public int VertexC
-        {
-            get { return vertexc; }
-        }
-
-        public byte Unknown1
-        {
-            get { return unknown1; }
-        }
-
-        public byte Unknown2
-        {
-            get { return unknown2; }
-        }
+        public int VertexA { get; }
+        public int VertexB { get; }
+        public int VertexC { get; }
+        public byte Unknown1 { get; }
+        public byte Unknown2 { get; }
 
         public byte[] SaveA()
         {
             byte[] data = new byte [4];
-            int value = (vertexa << 8) | (vertexb << 20) | unknown1;
+            int value = (VertexA << 8) | (VertexB << 20) | Unknown1;
             BitConv.ToInt32(data,0,value);
             return data;
         }
@@ -83,7 +58,7 @@ namespace Crash
         public byte[] SaveB()
         {
             byte[] data = new byte [2];
-            int value = (vertexc << 4) | unknown2;
+            int value = (VertexC << 4) | Unknown2;
             BitConv.ToInt16(data,0,(short)value);
             return data;
         }

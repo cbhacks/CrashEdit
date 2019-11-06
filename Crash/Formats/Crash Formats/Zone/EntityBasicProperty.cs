@@ -6,29 +6,24 @@ namespace Crash
 {
     public abstract class EntityBasicProperty<T> : EntityProperty where T : struct
     {
-        private List<EntityPropertyRow<T>> rows;
-
         public EntityBasicProperty()
         {
-            rows = new List<EntityPropertyRow<T>>();
+            Rows = new List<EntityPropertyRow<T>>();
         }
 
         public EntityBasicProperty(IEnumerable<EntityPropertyRow<T>> rows)
         {
-            this.rows = new List<EntityPropertyRow<T>>(rows);
+            Rows = new List<EntityPropertyRow<T>>(rows);
         }
 
-        public override sealed short Unknown
-        {
-            get { return (short)rows.Count; }
-        }
+        public override sealed short Unknown => (short)Rows.Count;
 
         public override bool IsSparse
         {
             get
             {
                 int? lastcount = null;
-                foreach (EntityPropertyRow<T> row in rows)
+                foreach (EntityPropertyRow<T> row in Rows)
                 {
                     if (!lastcount.HasValue)
                     {
@@ -50,7 +45,7 @@ namespace Crash
         {
             get
             {
-                foreach (EntityPropertyRow<T> row in rows)
+                foreach (EntityPropertyRow<T> row in Rows)
                 {
                     if (row.MetaValue.HasValue)
                     {
@@ -61,22 +56,19 @@ namespace Crash
             }
         }
 
-        public List<EntityPropertyRow<T>> Rows
-        {
-            get { return rows; }
-        }
+        public List<EntityPropertyRow<T>> Rows { get; }
 
         internal override void LoadToField(object obj,FieldInfo field)
         {
             if (field.FieldType == typeof(T?))
             {
-                if (rows.Count == 1)
+                if (Rows.Count == 1)
                 {
-                    if (rows[0].MetaValue == null)
+                    if (Rows[0].MetaValue == null)
                     {
-                        if (rows[0].Values.Count == 1)
+                        if (Rows[0].Values.Count == 1)
                         {
-                            field.SetValue(obj,rows[0].Values[0]);
+                            field.SetValue(obj,Rows[0].Values[0]);
                         }
                         else
                         {
@@ -95,12 +87,12 @@ namespace Crash
             }
             else if (field.FieldType == typeof(List<T>))
             {
-                if (rows.Count == 1)
+                if (Rows.Count == 1)
                 {
-                    if (rows[0].MetaValue == null)
+                    if (Rows[0].MetaValue == null)
                     {
                         List<T> list = new List<T>();
-                        list.AddRange(rows[0].Values);
+                        list.AddRange(Rows[0].Values);
                         field.SetValue(obj,list);
                     }
                     else
@@ -128,7 +120,7 @@ namespace Crash
             int length;
             if (IsSparse)
             {
-                length = rows.Count * 2;
+                length = Rows.Count * 2;
             }
             else
             {
@@ -136,10 +128,10 @@ namespace Crash
             }
             if (HasMetaValues)
             {
-                length += rows.Count * 2;
+                length += Rows.Count * 2;
             }
             Aligner.Align(ref length,4);
-            foreach (EntityPropertyRow<T> row in rows)
+            foreach (EntityPropertyRow<T> row in Rows)
             {
                 length += row.Values.Count * ElementSize;
             }
@@ -148,25 +140,25 @@ namespace Crash
             int offset = 0;
             if (IsSparse)
             {
-                foreach (EntityPropertyRow<T> row in rows)
+                foreach (EntityPropertyRow<T> row in Rows)
                 {
                     BitConv.ToInt16(data,offset,(short)row.Values.Count);
                     offset += 2;
                 }
             }
-            else if (rows.Count == 0)
+            else if (Rows.Count == 0)
             {
                 BitConv.ToInt16(data,offset,0);
                 offset += 2;
             }
             else
             {
-                BitConv.ToInt16(data,offset,(short)rows[0].Values.Count);
+                BitConv.ToInt16(data,offset,(short)Rows[0].Values.Count);
                 offset += 2;
             }
             if (HasMetaValues)
             {
-                foreach (EntityPropertyRow<T> row in rows)
+                foreach (EntityPropertyRow<T> row in Rows)
                 {
                     if (!row.MetaValue.HasValue)
                     {
@@ -178,7 +170,7 @@ namespace Crash
             }
             Aligner.Align(ref offset,4);
             byte[] elementdata = new byte [ElementSize];
-            foreach (EntityPropertyRow<T> row in rows)
+            foreach (EntityPropertyRow<T> row in Rows)
             {
                 foreach (T value in row.Values)
                 {

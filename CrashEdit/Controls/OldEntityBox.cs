@@ -158,12 +158,12 @@ namespace CrashEdit
 
         private void UpdateID()
         {
-            numID.Value = entity.ID.Value;
+            numID.Value = entity.ID;
         }
 
         private void numID_ValueChanged(object sender,EventArgs e)
         {
-            if (entity.ID.Value > -32768 && entity.ID.Value < 32767)
+            if (entity.ID > short.MinValue && entity.ID < short.MaxValue)
                 entity.ID = (short)numID.Value;
             else
                 throw new ArgumentOutOfRangeException("id");
@@ -171,7 +171,7 @@ namespace CrashEdit
 
         private void UpdateType()
         {
-            numType.Value = entity.Type.Value;
+            numType.Value = entity.Type;
         }
 
         private void numType_ValueChanged(object sender,EventArgs e)
@@ -182,7 +182,7 @@ namespace CrashEdit
 
         private void UpdateSubtype()
         {
-            numSubtype.Value = entity.Subtype.Value;
+            numSubtype.Value = entity.Subtype;
         }
 
         private void numSubtype_ValueChanged(object sender,EventArgs e)
@@ -192,10 +192,10 @@ namespace CrashEdit
 
         private void UpdateSettings()
         {
-            numA.Value = entity.Unknown1.Value;
-            numB.Value = entity.SettingA.Value;
-            numC.Value = entity.SettingB.Value;
-            numD.Value = entity.LinkID.Value;
+            numA.Value = entity.Unknown1;
+            numB.Value = entity.SettingA;
+            numC.Value = entity.SettingB;
+            numD.Value = entity.LinkID;
         }
 
         private void numA_ValueChanged(object sender,EventArgs e)

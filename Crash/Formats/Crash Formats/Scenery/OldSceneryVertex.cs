@@ -19,19 +19,11 @@ namespace Crash
             byte red = data[0];
             byte green = data[1];
             byte blue = data[2];
-            bool lightingflag = ((data[4] & 1) != 0);
-            return new OldSceneryVertex(x,y,z,red,green,blue,lightingflag);
+            bool fx = ((data[4] & 1) != 0);
+            return new OldSceneryVertex(x,y,z,red,green,blue, fx);
         }
 
-        private short x;
-        private short y;
-        private short z;
-        private byte red;
-        private byte green;
-        private byte blue;
-        private bool lightingflag;
-
-        public OldSceneryVertex(short x,short y,short z,byte red,byte green,byte blue,bool lightingflag)
+        public OldSceneryVertex(short x,short y,short z,byte red,byte green,byte blue,bool fx)
         {
             if ((x & 0x7) != 0)
                 throw new ArgumentException("Value must be a multiple of 8.","x");
@@ -39,80 +31,41 @@ namespace Crash
                 throw new ArgumentException("Value must be a multiple of 8.","y");
             if ((z & 0x7) != 0)
                 throw new ArgumentException("Value must be a multiple of 8.","z");
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.red = red;
-            this.green = green;
-            this.blue = blue;
-            this.lightingflag = lightingflag;
+            X = x;
+            Y = y;
+            Z = z;
+            Red = red;
+            Green = green;
+            Blue = blue;
+            FX = fx;
         }
 
-        public short X
-        {
-            get { return x; }
-        }
-
-        public short Y
-        {
-            get { return y; }
-        }
-
-        public short Z
-        {
-            get { return z; }
-        }
-
-        public byte Red
-        {
-            get { return red; }
-        }
-
-        public byte Green
-        {
-            get { return green; }
-        }
-
-        public byte Blue
-        {
-            get { return blue; }
-        }
-
-        public bool LightingFlag
-        {
-            get { return lightingflag; }
-        }
-
-        double IPosition.X
-        {
-            get { return x; }
-        }
-
-        double IPosition.Y
-        {
-            get { return y; }
-        }
-
-        double IPosition.Z
-        {
-            get { return z; }
-        }
+        public short X { get; }
+        public short Y { get; }
+        public short Z { get; }
+        public byte Red { get; }
+        public byte Green { get; }
+        public byte Blue { get; }
+        public bool FX { get; }
+        double IPosition.X => X;
+        double IPosition.Y => Y;
+        double IPosition.Z => Z;
 
         public byte[] Save()
         {
-            int zlow = (z >> 3) & 0xFF;
-            int zmid = (z >> 11) & 0x3;
-            int zhigh = (z >> 13) & 0x7;
+            int zlow = (Z >> 3) & 0xFF;
+            int zmid = (Z >> 11) & 0x3;
+            int zhigh = (Z >> 13) & 0x7;
             byte[] data = new byte [8];
-            data[0] = red;
-            data[1] = green;
-            data[2] = blue;
+            data[0] = Red;
+            data[1] = Green;
+            data[2] = Blue;
             data[3] = (byte)zlow;
-            BitConv.ToInt16(data,4,x);
+            BitConv.ToInt16(data,4,X);
             data[4] |= (byte)(zmid << 1);
-            BitConv.ToInt16(data,6,y);
+            BitConv.ToInt16(data,6,Y);
             data[6] |= (byte)(zhigh);
-            if (lightingflag)
+            if (FX)
             {
                 data[4] |= 1;
             }
