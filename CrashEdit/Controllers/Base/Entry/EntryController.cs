@@ -39,7 +39,7 @@ namespace CrashEdit
             }
         }
 
-        protected T FindEID<T>(int eid) where T : Entry
+        protected T FindEID<T>(int eid) where T : class,IEntry
         {
             return EntryChunkController.NSFController.NSF.FindEID<T>(eid);
         }
