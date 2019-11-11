@@ -31,11 +31,13 @@ namespace CrashEdit
                 {
                     foreach (SceneryVertex vertex in entry.Vertices)
                     {
-                        yield return new Position((double)(entry.XOffset + vertex.X * 16),(double)(entry.YOffset + vertex.Y * 16),(double)(entry.ZOffset + vertex.Z * 16));
+                        yield return new Position(entry.XOffset + vertex.X * 16,entry.YOffset + vertex.Y * 16,entry.ZOffset + vertex.Z * 16);
                     }
                 }
             }
         }
+
+        protected override int CameraRangeMargin => 0;
 
         protected override void RenderObjects()
         {
@@ -47,20 +49,20 @@ namespace CrashEdit
                 {
                     if (entry != null)
                     {
+                        GL.Begin(PrimitiveType.Triangles);
                         foreach (SceneryTriangle triangle in entry.Triangles)
                         {
-                            GL.Begin(PrimitiveType.Triangles);
                             if (triangle.VertexA < entry.Vertices.Count)
                                 RenderVertex(entry, entry.Vertices[triangle.VertexA]);
                             if (triangle.VertexB < entry.Vertices.Count)
                                 RenderVertex(entry, entry.Vertices[triangle.VertexB]);
                             if (triangle.VertexC < entry.Vertices.Count)
                                 RenderVertex(entry, entry.Vertices[triangle.VertexC]);
-                            GL.End();
                         }
+                        GL.End();
+                        GL.Begin(PrimitiveType.Quads);
                         foreach (SceneryQuad quad in entry.Quads)
                         {
-                            GL.Begin(PrimitiveType.Quads);
                             if (quad.VertexA < entry.Vertices.Count)
                                 RenderVertex(entry, entry.Vertices[quad.VertexA]);
                             if (quad.VertexB < entry.Vertices.Count)
@@ -69,8 +71,8 @@ namespace CrashEdit
                                 RenderVertex(entry, entry.Vertices[quad.VertexC]);
                             if (quad.VertexD < entry.Vertices.Count)
                                 RenderVertex(entry, entry.Vertices[quad.VertexD]);
-                            GL.End();
                         }
+                        GL.End();
                     }
                 }
                 GL.EndList();
