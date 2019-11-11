@@ -256,9 +256,8 @@ namespace Crash
                         return (T)entry;
                     }
                 }
-                if (chunk is EntryChunk)
+                if (chunk is EntryChunk entrychunk)
                 {
-                    EntryChunk entrychunk = (EntryChunk)chunk;
                     T entry = entrychunk.FindEID<T>(eid);
                     if (entry != null)
                     {
