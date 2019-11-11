@@ -16,25 +16,29 @@ namespace CrashEdit
         private int frameid;
         private Timer animatetimer;
         private int interi;
-        private bool collision_enabled;
+        private bool collision_enabled = false;
+        private bool textures_enabled = true;
+        private int[] textures = null;
+        private TextureChunk[] texturechunks;
 
-        public AnimationEntryViewer(Frame frame,ModelEntry model)
+        public AnimationEntryViewer(Frame frame,ModelEntry model,TextureChunk[] texturechunks)
         {
             frames = new List<Frame>();
             this.model = model;
-            collision_enabled = false;
-            if (model.Positions != null)
+            this.texturechunks = texturechunks;
+            if (model.Positions != null) // fix this later
                 frames.Add(UncompressFrame(frame));
             else
                 frames.Add(LoadFrame(frame));
             frameid = 0;
+            interi = 0;
         }
 
-        public AnimationEntryViewer(IEnumerable<Frame> frames,ModelEntry model)
+        public AnimationEntryViewer(IEnumerable<Frame> frames,ModelEntry model,TextureChunk[] texturechunks)
         {
             this.frames = new List<Frame>();
             this.model = model;
-            collision_enabled = false;
+            this.texturechunks = texturechunks;
             frameid = 0;
             interi = 0;
             if (model.Positions != null)
@@ -67,7 +71,7 @@ namespace CrashEdit
                 Refresh();
             };
         }
-
+        
         private int MinScale => model != null ? Math.Min(BitConv.FromInt32(model.Info, 8), Math.Min(BitConv.FromInt32(model.Info, 0), BitConv.FromInt32(model.Info, 4))) : 0x1000;
         private int MaxScale => model != null ? Math.Max(BitConv.FromInt32(model.Info, 8), Math.Max(BitConv.FromInt32(model.Info, 0), BitConv.FromInt32(model.Info, 4))) : 0x1000;
 
@@ -99,6 +103,10 @@ namespace CrashEdit
 
         protected override void RenderObjects()
         {
+            if (textures == null)
+            {
+                ConvertTexturesToGL();
+            }
             if (interi == 0 || frameid == 0)
             {
                 RenderFrame(frames[frameid]);
@@ -114,6 +122,7 @@ namespace CrashEdit
             switch (keyData)
             {
                 case Keys.C:
+                case Keys.T:
                     return true;
                 default:
                     return base.IsInputKey(keyData);
@@ -128,24 +137,85 @@ namespace CrashEdit
                 case Keys.C:
                     collision_enabled = !collision_enabled;
                     break;
+                case Keys.T:
+                    textures_enabled = !textures_enabled;
+                    break;
             }
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Combine);
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.CombineRgb, (int)TextureEnvModeCombine.Modulate);
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
         }
 
         private void RenderFrame(Frame frame)
         {
-            //LoadTexture(OldResources.PointTexture);
             //RenderPoints(frame);
             if (model != null)
             {
-                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-                GL.Begin(PrimitiveType.Triangles);
-                for (int i = 0; i < model.PositionIndices.Count; ++i)
+                if (textures_enabled)
                 {
-                    int c = Math.Min(model.ColorIndices[i], model.ColorIndices.Count);
-                    GL.Color3(model.Colors[c].Red, model.Colors[c].Green, model.Colors[c].Blue);
-                    RenderVertex(frame, frame.Vertices[model.PositionIndices[i] + frame.SpecialVertexCount]);
+                    float[] uvs = new float[6] { 0, 0, 0, 0, 0, 0 };
+                    for (int i = 0; i < model.Triangles.Count; ++i)
+                    {
+                        var tri = model.Triangles[i];
+                        if (tri.Tex != 0)
+                        {
+                            //GL.Enable(EnableCap.Texture2D);
+                            int tex = tri.Tex - 1;
+                            //LoadTexture(bitmaps[tex]);
+                            GL.BindTexture(TextureTarget.Texture2D, textures[tex]);
+                            switch (tri.Type)
+                            {
+                                case 0:
+                                case 1:
+                                    uvs[0] = model.Textures[tex].X3;
+                                    uvs[1] = model.Textures[tex].Y3;
+                                    uvs[4] = model.Textures[tex].X1;
+                                    uvs[5] = model.Textures[tex].Y1;
+                                    break;
+                                case 2:
+                                    uvs[0] = model.Textures[tex].X1;
+                                    uvs[1] = model.Textures[tex].Y1;
+                                    uvs[4] = model.Textures[tex].X3;
+                                    uvs[5] = model.Textures[tex].Y3;
+                                    break;
+                            }
+                            uvs[2] = model.Textures[tex].X2;
+                            uvs[3] = model.Textures[tex].Y2;
+                        }
+                        else
+                            //GL.Disable(EnableCap.Texture2D);
+                            GL.BindTexture(TextureTarget.Texture2D, 0);
+                        GL.Begin(PrimitiveType.Triangles);
+                        for (int j = 0; j < 3; ++j)
+                        {
+                            int c = tri.Color[j];
+                            GL.Color3(model.Colors[c].Red, model.Colors[c].Green, model.Colors[c].Blue);
+                            GL.TexCoord2(uvs[2 * j + 0], uvs[2 * j + 1]);
+                            RenderVertex(frame, frame.Vertices[tri.Vertex[j] + frame.SpecialVertexCount]);
+                        }
+                        GL.End();
+                    }
                 }
-                GL.End();
+                else
+                {
+                    GL.Begin(PrimitiveType.Triangles);
+                    for (int i = 0; i < model.Triangles.Count; ++i)
+                    {
+                        var tri = model.Triangles[i];
+                        for (int j = 0; j < 3; ++j)
+                        {
+                            int c = tri.Color[j];
+                            GL.Color3(model.Colors[c].Red, model.Colors[c].Green, model.Colors[c].Blue);
+                            RenderVertex(frame, frame.Vertices[tri.Vertex[j] + frame.SpecialVertexCount]);
+                        }
+                    }
+                    GL.End();
+                }
             }
             else
             {
@@ -157,27 +227,82 @@ namespace CrashEdit
                 }
                 GL.End();
             }
-            for (int i = 0;i < frame.Collision; ++i)
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+            if (collision_enabled)
             {
-                RenderCollision(frame, i);
+                for (int i = 0; i < frame.Collision; ++i)
+                {
+                    RenderCollision(frame, i);
+                }
             }
         }
 
         private void RenderInterpolatedFrames(Frame f1, Frame f2)
         {
             //LoadTexture(OldResources.PointTexture);
-            //RenderPoints(f1);
+            //RenderPoints(f2);
             if (model != null)
             {
-                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-                GL.Begin(PrimitiveType.Triangles);
-                for (int i = 0; i < model.PositionIndices.Count; ++i)
+                if (textures_enabled)
                 {
-                    int c = Math.Min(model.ColorIndices[i], model.ColorIndices.Count);
-                    GL.Color3(model.Colors[c].Red, model.Colors[c].Green, model.Colors[c].Blue);
-                    RenderInterpolatedVertices(f1,f2,f1.Vertices[model.PositionIndices[i] + f1.SpecialVertexCount], f2.Vertices[model.PositionIndices[i] + f2.SpecialVertexCount]);
+                    float[] uvs = new float[6] { 0, 0, 0, 0, 0, 0 };
+                    for (int i = 0; i < model.Triangles.Count; ++i)
+                    {
+                        var tri = model.Triangles[i];
+                        if (tri.Tex != 0)
+                        {
+                            //GL.Enable(EnableCap.Texture2D);
+                            int tex = tri.Tex - 1;
+                            //LoadTexture(bitmaps[tex]);
+                            GL.BindTexture(TextureTarget.Texture2D, textures[tex]);
+                            switch (tri.Type)
+                            {
+                                case 0:
+                                case 1:
+                                    uvs[0] = model.Textures[tex].X3;
+                                    uvs[1] = model.Textures[tex].Y3;
+                                    uvs[4] = model.Textures[tex].X1;
+                                    uvs[5] = model.Textures[tex].Y1;
+                                    break;
+                                case 2:
+                                    uvs[0] = model.Textures[tex].X1;
+                                    uvs[1] = model.Textures[tex].Y1;
+                                    uvs[4] = model.Textures[tex].X3;
+                                    uvs[5] = model.Textures[tex].Y3;
+                                    break;
+                            }
+                            uvs[2] = model.Textures[tex].X2;
+                            uvs[3] = model.Textures[tex].Y2;
+                        }
+                        else
+                            //GL.Disable(EnableCap.Texture2D);
+                            GL.BindTexture(TextureTarget.Texture2D, 0);
+                        GL.Begin(PrimitiveType.Triangles);
+                        for (int j = 0; j < 3; ++j)
+                        {
+                            int c = tri.Color[j];
+                            GL.Color3(model.Colors[c].Red, model.Colors[c].Green, model.Colors[c].Blue);
+                            GL.TexCoord2(uvs[2 * j + 0], uvs[2 * j + 1]);
+                            RenderInterpolatedVertices(f1,f2,f1.Vertices[tri.Vertex[j] + f1.SpecialVertexCount],f2.Vertices[tri.Vertex[j] + f2.SpecialVertexCount]);
+                        }
+                        GL.End();
+                    }
                 }
-                GL.End();
+                else
+                {
+                    GL.Begin(PrimitiveType.Triangles);
+                    for (int i = 0; i < model.Triangles.Count; ++i)
+                    {
+                        var tri = model.Triangles[i];
+                        for (int j = 0; j < 3; ++j)
+                        {
+                            int c = tri.Color[j];
+                            GL.Color3(model.Colors[c].Red, model.Colors[c].Green, model.Colors[c].Blue);
+                            RenderInterpolatedVertices(f1,f2,f1.Vertices[tri.Vertex[j] + f1.SpecialVertexCount],f2.Vertices[tri.Vertex[j] + f2.SpecialVertexCount]);
+                        }
+                    }
+                    GL.End();
+                }
             }
             else
             {
@@ -189,9 +314,13 @@ namespace CrashEdit
                 }
                 GL.End();
             }
-            for (int i = 0; i < f1.Collision; ++i)
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+            if (collision_enabled)
             {
-                RenderCollision(f1, i);
+                for (int i = 0; i < f2.Collision; ++i)
+                {
+                    RenderCollision(f2, i);
+                }
             }
         }
 
@@ -339,7 +468,6 @@ namespace CrashEdit
 
         private void RenderCollision(Frame frame, int col)
         {
-            if (!collision_enabled) return;
             GL.DepthMask(false);
             GL.Color4(0f, 1f, 0f, 0.2f);
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
@@ -348,6 +476,7 @@ namespace CrashEdit
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
             RenderCollisionBox(frame, col);
             GL.DepthMask(true);
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
         }
 
         private void RenderCollisionBox(Frame frame, int col)
@@ -397,11 +526,110 @@ namespace CrashEdit
             GL.PopMatrix();
         }
 
+        private long GenerateTextureHash(ModelTexture tex, int texid) // lol
+        {
+            return tex.ClutY
+                | tex.ClutX << 7
+                | texid << 11
+                | tex.Left << 14
+                | tex.Top << 24
+                | tex.Width << 31
+                | tex.Height << 41
+                | (tex.BitFlag ? 0xFFFF : 0) << 48;
+        }
+
+        public void ConvertTexturesToGL()
+        {
+            //bitmaps = new Bitmap[model.Textures.Count];
+            //Dictionary<long, Bitmap> bitmapbucket = new Dictionary<long, Bitmap>();
+            textures = new int[model.Textures.Count];
+            Dictionary<long, int> texturebucket = new Dictionary<long, int>();
+            for (int i = 0; i < textures.Length; ++i)
+            {
+                ModelTexture tex = model.Textures[i];
+                int w = tex.Width + 1;
+                int h = tex.Height + 1;
+                TextureChunk texturechunk = null;
+                int eid = BitConv.FromInt32(model.Info,0xC+tex.TextureOffset);
+                int t;
+                for (t = 0; t < texturechunks.Length; ++t)
+                {
+                    if (eid == texturechunks[t].EID)
+                    {
+                        texturechunk = texturechunks[t];
+                        break;
+                    }
+                }
+                if (texturechunk == null) throw new Exception("ConvertTexturesToGL: Texture chunk not found");
+                int[] pixels = new int[w*h]; // using indexed colors in GL would be dumb so we convert them to 32-bit
+                if (tex.BitFlag) // 8-bit
+                {
+                    int[] palette = new int[256];
+                    for (int j = 0; j < 256; ++j) // copy palette
+                    {
+                        palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data,tex.ClutX*32+tex.ClutY*512+j*2));
+                    }
+                    for (int y = 0; y < h; ++y) // copy pixel data
+                    {
+                        for (int x = 0; x < w; ++x)
+                        {
+                            pixels[x + w * y] = palette[texturechunk.Data[(tex.Left + x) + (tex.Top + y) * 512]];
+                        }
+                    }
+                }
+                else // 4-bit
+                {
+                    int[] palette = new int[16];
+                    for (int j = 0; j < 16; ++j) // copy palette
+                    {
+                        palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data,tex.ClutX*32+tex.ClutY*512+j*2));
+                    }
+                    for (int y = 0; y < h; ++y) // copy pixels
+                    {
+                        for (int x = 0; x < w / 2; ++x) // 2 pixels per byte
+                        {
+                            pixels[x*2+w*y] = palette[texturechunk.Data[(tex.Left/2+x) + (tex.Top + y)*512] & 0xF];
+                            pixels[x*2+w*y+1] = palette[texturechunk.Data[(tex.Left/2+x) + (tex.Top + y)*512] >> 4 & 0xF];
+                        }
+                    }
+                }
+                long hash = GenerateTextureHash(tex, t);
+                if (texturebucket.ContainsKey(hash))
+                {
+                    textures[i] = texturebucket[hash];
+                }
+                else
+                {
+                    //Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    //BitmapData data = bmp.LockBits(new Rectangle(Point.Empty, bmp.Size), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    //unsafe
+                    //{
+                    //    for (int j = 0; j < w * h; ++j)
+                    //    {
+                    //        *((int*)data.Scan0.ToPointer() + j) = pixels[j];
+                    //    }
+                    //}
+                    GL.GenTextures(1, out textures[i]);
+                    GL.BindTexture(TextureTarget.Texture2D, textures[i]);
+                    GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Four, w, h, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, pixels);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+                    //bmp.UnlockBits(data);
+                    texturebucket[hash] = textures[i];
+                }
+            }
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (animatetimer != null)
             {
                 animatetimer.Dispose();
+            }
+            if (textures != null)
+            {
+                GL.DeleteTextures(textures.Length, textures);
             }
             base.Dispose(disposing);
         }
