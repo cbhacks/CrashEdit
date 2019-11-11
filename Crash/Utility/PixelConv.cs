@@ -24,5 +24,15 @@ namespace Crash
             c5 = (byte)(data >> 5 & 0x1F);
             d5 = (byte)(data & 0x1F);
         }
+
+        private const float Factor255_31 = 255f / 31f;
+        public static int Convert5551_8888(short p)
+        {
+            byte r = (byte)(Factor255_31 * (p >> 0 & 0x1F));
+            byte g = (byte)(Factor255_31 * (p >> 5 & 0x1F));
+            byte b = (byte)(Factor255_31 * (p >> 10 & 0x1F));
+            byte a = (byte)(0xFF * (p >> 15 & 1));
+            return (0xFF << 24) | (r << 16) | (g << 8) | b;
+        }
     }
 }
