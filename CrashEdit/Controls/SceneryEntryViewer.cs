@@ -37,8 +37,6 @@ namespace CrashEdit
             }
         }
 
-        protected override int CameraRangeMargin => 0;
-
         protected override void RenderObjects()
         {
             if (displaylist == -1)
