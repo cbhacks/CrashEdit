@@ -481,23 +481,16 @@ namespace CrashEdit
 
         private void RenderCollisionBox(Frame frame, int col)
         {
-            //int xoffset = frame.XOffset;
-            //int yoffset = frame.YOffset;
-            //int zoffset = frame.ZOffset;
-            int xglobal = BitConv.FromInt32(frame.Settings,4);
-            int yglobal = BitConv.FromInt32(frame.Settings,8);
-            int zglobal = BitConv.FromInt32(frame.Settings,12);
-            int xcol1 = BitConv.FromInt32(frame.Settings,16);
-            int ycol1 = BitConv.FromInt32(frame.Settings,20);
-            int zcol1 = BitConv.FromInt32(frame.Settings,24);
-            int xcol2 = BitConv.FromInt32(frame.Settings,28);
-            int ycol2 = BitConv.FromInt32(frame.Settings,32);
-            int zcol2 = BitConv.FromInt32(frame.Settings,36);
+            int xglobal = BitConv.FromInt32(frame.Settings,4+col*40);
+            int yglobal = BitConv.FromInt32(frame.Settings,8+col*40);
+            int zglobal = BitConv.FromInt32(frame.Settings,12+col*40);
+            int xcol1 = BitConv.FromInt32(frame.Settings,16+col*40);
+            int ycol1 = BitConv.FromInt32(frame.Settings,20+col*40);
+            int zcol1 = BitConv.FromInt32(frame.Settings,24+col*40);
+            int xcol2 = BitConv.FromInt32(frame.Settings,28+col*40);
+            int ycol2 = BitConv.FromInt32(frame.Settings,32+col*40);
+            int zcol2 = BitConv.FromInt32(frame.Settings,36+col*40);
             GL.PushMatrix();
-            //GL.Translate(xoffset,yoffset,zoffset);
-            //GL.Scale(BitConv.FromInt32(model.Info,0),BitConv.FromInt32(model.Info,4),BitConv.FromInt32(model.Info,8));
-            //GL.Scale(yglobal,yglobal,yglobal);
-            //GL.Scale(1 / 8000f, 1 / 8000f, 1 / 8000f);
             GL.Scale(4, 4, 4);
             GL.Translate(xglobal, yglobal, zglobal);
             GL.Begin(PrimitiveType.QuadStrip);
