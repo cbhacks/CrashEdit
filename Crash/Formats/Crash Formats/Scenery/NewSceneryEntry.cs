@@ -10,9 +10,9 @@ namespace Crash
         private List<SceneryQuad> quads;
         private List<ModelTexture> textures;
         private List<SceneryColor> colors;
-        private List<ModelAnimatedTexture> animatedtextures;
+        private List<ModelExtendedTexture> animatedtextures;
 
-        public NewSceneryEntry(byte[] info, IEnumerable<NewSceneryVertex> vertices, IEnumerable<SceneryTriangle> triangles, IEnumerable<SceneryQuad> quads, IEnumerable<ModelTexture> textures, IEnumerable<SceneryColor> colors, IEnumerable<ModelAnimatedTexture> animatedtextures, int eid, int size)
+        public NewSceneryEntry(byte[] info, IEnumerable<NewSceneryVertex> vertices, IEnumerable<SceneryTriangle> triangles, IEnumerable<SceneryQuad> quads, IEnumerable<ModelTexture> textures, IEnumerable<SceneryColor> colors, IEnumerable<ModelExtendedTexture> animatedtextures, int eid, int size)
             : base(eid, size)
         {
             Info = info;
@@ -21,7 +21,7 @@ namespace Crash
             this.quads = new List<SceneryQuad>(quads);
             this.textures = new List<ModelTexture>(textures);
             this.colors = new List<SceneryColor>(colors);
-            this.animatedtextures = new List<ModelAnimatedTexture>(animatedtextures);
+            this.animatedtextures = new List<ModelExtendedTexture>(animatedtextures);
         }
 
         public override int Type => 3;
@@ -31,7 +31,7 @@ namespace Crash
         public IList<SceneryQuad> Quads => quads;
         public IList<ModelTexture> Textures => textures;
         public IList<SceneryColor> Colors => colors;
-        public IList<ModelAnimatedTexture> AnimatedTextures => animatedtextures;
+        public IList<ModelExtendedTexture> AnimatedTextures => animatedtextures;
 
         public int XOffset
         {

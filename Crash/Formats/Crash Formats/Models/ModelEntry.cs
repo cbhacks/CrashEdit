@@ -8,16 +8,16 @@ namespace Crash
         private List<ModelTransformedTriangle> triangles;
         private List<SceneryColor> colors;
         private List<ModelTexture> textures;
-        private List<ModelAnimatedTexture> animatedtextures;
+        private List<ModelExtendedTexture> animatedtextures;
         private List<ModelPosition> positions;
 
-        public ModelEntry(byte[] info,uint[] polygons,IEnumerable<SceneryColor> colors,IEnumerable<ModelTexture> textures,IEnumerable<ModelAnimatedTexture> animatedtextures,IEnumerable<ModelPosition> positions,int eid,int size) : base(eid,size)
+        public ModelEntry(byte[] info,uint[] polygons,IEnumerable<SceneryColor> colors,IEnumerable<ModelTexture> textures,IEnumerable<ModelExtendedTexture> animatedtextures,IEnumerable<ModelPosition> positions,int eid,int size) : base(eid,size)
         {
             Info = info ?? throw new ArgumentNullException("info");
             PolyData = polygons ?? throw new ArgumentNullException("polygons");
             this.colors = new List<SceneryColor>(colors);
             this.textures = new List<ModelTexture>(textures);
-            this.animatedtextures = new List<ModelAnimatedTexture>(animatedtextures);
+            this.animatedtextures = new List<ModelExtendedTexture>(animatedtextures);
             if (positions != null)
                 this.positions = new List<ModelPosition>(positions);
             else
@@ -165,7 +165,7 @@ namespace Crash
         public IList<ModelTransformedTriangle> Triangles => triangles;
         public IList<SceneryColor> Colors => colors;
         public IList<ModelTexture> Textures => textures;
-        public IList<ModelAnimatedTexture> AnimatedTextures => animatedtextures;
+        public IList<ModelExtendedTexture> AnimatedTextures => animatedtextures;
         public IList<ModelPosition> Positions => positions;
 
         public override UnprocessedEntry Unprocess()

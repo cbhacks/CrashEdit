@@ -72,12 +72,12 @@ namespace Crash
                 byte extra = items[5][i * 4 + 3];
                 colors[i] = new SceneryColor(red, green, blue, extra);
             }
-            ModelAnimatedTexture[] animatedtextures = new ModelAnimatedTexture[animatedtexturecount];
+            ModelExtendedTexture[] animatedtextures = new ModelExtendedTexture[animatedtexturecount];
             for (int i = 0; i < animatedtexturecount; i++)
             {
                 byte[] animatedtexturedata = new byte[4];
                 Array.Copy(items[6], i * 4, animatedtexturedata, 0, animatedtexturedata.Length);
-                animatedtextures[i] = ModelAnimatedTexture.Load(animatedtexturedata);
+                animatedtextures[i] = ModelExtendedTexture.Load(animatedtexturedata);
             }
             return new SceneryEntry(items[0],vertices,triangles,quads,textures,colors,animatedtextures,eid,size);
         }

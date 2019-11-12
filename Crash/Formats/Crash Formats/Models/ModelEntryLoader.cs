@@ -54,12 +54,12 @@ namespace Crash
                 Array.Copy(items[3], i * 12, texturedata, 0, texturedata.Length);
                 textures[i] = ModelTexture.Load(texturedata);
             }
-            ModelAnimatedTexture[] animatedtextures = new ModelAnimatedTexture[animatedtexturecount];
+            ModelExtendedTexture[] animatedtextures = new ModelExtendedTexture[animatedtexturecount];
             for (int i = 0; i < animatedtexturecount; i++)
             {
                 byte[] animatedtexturedata = new byte[4];
                 Array.Copy(items[4], i * 4, animatedtexturedata, 0, animatedtexturedata.Length);
-                animatedtextures[i] = ModelAnimatedTexture.Load(animatedtexturedata);
+                animatedtextures[i] = ModelExtendedTexture.Load(animatedtexturedata);
             }
             int positioncount = BitConv.FromInt32(items[0],0x38) - BitConv.FromInt32(items[0],0x4C);
             ModelPosition[] positions = new ModelPosition[positioncount];
