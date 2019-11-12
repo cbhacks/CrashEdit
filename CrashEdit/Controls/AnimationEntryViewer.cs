@@ -479,16 +479,16 @@ namespace CrashEdit
             GL.PopMatrix();
         }
 
-        private long GenerateTextureHash(ModelTexture tex, int texid) // lol
+        private long GenerateTextureHash(ModelTexture tex) // lol
         {
-            return tex.ClutY
-                | tex.ClutX << 7
-                | texid << 11
-                | tex.Left << 14
-                | tex.Top << 25
-                | tex.Width << 32
-                | tex.Height << 43
-                | (tex.BitFlag ? 1 : 0) << 50;
+            return (long)tex.ClutY
+                | (long)tex.ClutX << 7
+                | (long)tex.TextureOffset / 4 << 11
+                | (long)tex.Left << 14
+                | (long)tex.Top << 24
+                | (long)tex.Width << 31
+                | (long)tex.Height << 41
+                | (tex.BitFlag ? 1L : 0L) << 48;
         }
 
         public void ConvertTexturesToGL()
@@ -504,8 +504,7 @@ namespace CrashEdit
                 int h = tex.Height + 1;
                 TextureChunk texturechunk = null;
                 int eid = BitConv.FromInt32(model.Info,0xC+tex.TextureOffset);
-                int t;
-                for (t = 0; t < texturechunks.Length; ++t)
+                for (int t = 0; t < texturechunks.Length; ++t)
                 {
                     if (eid == texturechunks[t].EID)
                     {
@@ -546,7 +545,7 @@ namespace CrashEdit
                         }
                     }
                 }
-                long hash = GenerateTextureHash(tex, t);
+                long hash = GenerateTextureHash(tex);
                 if (texturebucket.ContainsKey(hash))
                 {
                     textures[i] = texturebucket[hash];
