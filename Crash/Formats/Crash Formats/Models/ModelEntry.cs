@@ -93,7 +93,8 @@ namespace Crash
                                 lastcolor + 1 == i ? ((ModelColor)structs[lastcolor]).Color2 : (lastcolor + 2 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i - 2]).ColorIndex),
                                 t.TextureIndex,
                                 t.TriangleType,
-                                t.TriangleSubtype));
+                                t.TriangleSubtype,
+                                t.Animated));
                             break;
                         case 1:
                             int ci = -1;
@@ -114,7 +115,8 @@ namespace Crash
                                 ci,
                                 t.TextureIndex,
                                 t.TriangleType,
-                                t.TriangleSubtype));
+                                t.TriangleSubtype,
+                                t.Animated));
                             break;
                         case 2:
                             if (i + 2 < PolyData.Length && lastvalidcc + 2 < i)
@@ -129,7 +131,8 @@ namespace Crash
                                     ((ModelTriangle)structs[i+2]).ColorIndex,
                                     t.TextureIndex,
                                     t.TriangleType,
-                                    t.TriangleSubtype));
+                                    t.TriangleSubtype,
+                                    t.Animated));
                             }
                             lastccpos = cur_v;
                             lastnonbb = i;
