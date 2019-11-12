@@ -525,10 +525,10 @@ namespace CrashEdit
                 | tex.ClutX << 7
                 | texid << 11
                 | tex.Left << 14
-                | tex.Top << 24
-                | tex.Width << 31
-                | tex.Height << 41
-                | (tex.BitFlag ? 0xFFFF : 0) << 48;
+                | tex.Top << 25
+                | tex.Width << 32
+                | tex.Height << 43
+                | (tex.BitFlag ? 1 : 0) << 50;
         }
 
         public void ConvertTexturesToGL()
