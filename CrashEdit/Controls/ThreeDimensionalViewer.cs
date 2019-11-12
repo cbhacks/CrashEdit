@@ -94,7 +94,7 @@ namespace CrashEdit
             };
         }
 
-        protected virtual int CameraRangeMargin => 400;
+        protected virtual int CameraRangeMargin => 0;
 
         protected abstract IEnumerable<IPosition> CorePositions
         {
