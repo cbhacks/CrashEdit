@@ -16,6 +16,7 @@ namespace CrashEdit
         private int frameid;
         private Timer animatetimer;
         private int interi;
+        private int interp = 2;
         private bool collision_enabled = false;
         private bool textures_enabled = true;
         private int[] textures = null;
@@ -60,13 +61,13 @@ namespace CrashEdit
             frameid = 0;
             animatetimer = new Timer
             {
-                Interval = 1000 / OldMainForm.GetRate() / 2,
+                Interval = 1000 / OldMainForm.GetRate() / interp,
                 Enabled = true
             };
             animatetimer.Tick += delegate (object sender,EventArgs e)
             {
-                animatetimer.Interval = 1000 / OldMainForm.GetRate() / 2;
-                interi = ++interi % 2;
+                animatetimer.Interval = 1000 / OldMainForm.GetRate() / interp;
+                interi = ++interi % interp;
                 frameid = (frameid + (interi == 1 ? 1 : 0)) % this.frames.Count;
                 Refresh();
             };
@@ -113,7 +114,7 @@ namespace CrashEdit
             }
             else
             {
-                RenderInterpolatedFrames(frames[frameid-1], frames[frameid]);
+                RenderFrame(frames[frameid-1], frames[frameid]);
             }
         }
 
@@ -151,98 +152,19 @@ namespace CrashEdit
             GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
         }
 
-        private void RenderFrame(Frame frame)
+        private void RenderFrame(Frame f1)
         {
-            //RenderPoints(frame);
-            if (model != null)
-            {
-                if (textures_enabled)
-                {
-                    float[] uvs = new float[6] { 0, 0, 0, 0, 0, 0 };
-                    for (int i = 0; i < model.Triangles.Count; ++i)
-                    {
-                        var tri = model.Triangles[i];
-                        if (tri.Tex != 0)
-                        {
-                            //GL.Enable(EnableCap.Texture2D);
-                            int tex = tri.Tex - 1;
-                            //LoadTexture(bitmaps[tex]);
-                            GL.BindTexture(TextureTarget.Texture2D, textures[tex]);
-                            switch (tri.Type)
-                            {
-                                case 0:
-                                case 1:
-                                    uvs[0] = model.Textures[tex].X3;
-                                    uvs[1] = model.Textures[tex].Y3;
-                                    uvs[4] = model.Textures[tex].X1;
-                                    uvs[5] = model.Textures[tex].Y1;
-                                    break;
-                                case 2:
-                                    uvs[0] = model.Textures[tex].X1;
-                                    uvs[1] = model.Textures[tex].Y1;
-                                    uvs[4] = model.Textures[tex].X3;
-                                    uvs[5] = model.Textures[tex].Y3;
-                                    break;
-                            }
-                            uvs[2] = model.Textures[tex].X2;
-                            uvs[3] = model.Textures[tex].Y2;
-                        }
-                        else
-                            //GL.Disable(EnableCap.Texture2D);
-                            GL.BindTexture(TextureTarget.Texture2D, 0);
-                        GL.Begin(PrimitiveType.Triangles);
-                        for (int j = 0; j < 3; ++j)
-                        {
-                            int c = tri.Color[j];
-                            GL.Color3(model.Colors[c].Red, model.Colors[c].Green, model.Colors[c].Blue);
-                            GL.TexCoord2(uvs[2 * j + 0], uvs[2 * j + 1]);
-                            RenderVertex(frame, frame.Vertices[tri.Vertex[j] + frame.SpecialVertexCount]);
-                        }
-                        GL.End();
-                    }
-                }
-                else
-                {
-                    GL.Begin(PrimitiveType.Triangles);
-                    for (int i = 0; i < model.Triangles.Count; ++i)
-                    {
-                        var tri = model.Triangles[i];
-                        for (int j = 0; j < 3; ++j)
-                        {
-                            int c = tri.Color[j];
-                            GL.Color3(model.Colors[c].Red, model.Colors[c].Green, model.Colors[c].Blue);
-                            RenderVertex(frame, frame.Vertices[tri.Vertex[j] + frame.SpecialVertexCount]);
-                        }
-                    }
-                    GL.End();
-                }
-            }
-            else
-            {
-                GL.Color3(Color.White);
-                GL.Begin(PrimitiveType.Points);
-                foreach (FrameVertex vertex in frame.Vertices)
-                {
-                    RenderVertex(frame, vertex);
-                }
-                GL.End();
-            }
-            GL.BindTexture(TextureTarget.Texture2D, 0);
-            if (collision_enabled)
-            {
-                for (int i = 0; i < frame.Collision; ++i)
-                {
-                    RenderCollision(frame, i);
-                }
-            }
+            RenderFrame(f1, null);
         }
 
-        private void RenderInterpolatedFrames(Frame f1, Frame f2)
+        private void RenderFrame(Frame f1, Frame f2)
         {
             //LoadTexture(OldResources.PointTexture);
             //RenderPoints(f2);
             if (model != null)
             {
+                GL.PushMatrix();
+                GL.Scale(BitConv.FromInt32(model.Info,0), BitConv.FromInt32(model.Info,4), BitConv.FromInt32(model.Info,8));
                 if (textures_enabled)
                 {
                     float[] uvs = new float[6] { 0, 0, 0, 0, 0, 0 };
@@ -254,7 +176,8 @@ namespace CrashEdit
                             //GL.Enable(EnableCap.Texture2D);
                             int tex = tri.Tex - 1;
                             //LoadTexture(bitmaps[tex]);
-                            GL.BindTexture(TextureTarget.Texture2D, textures[tex]);
+                            if (!tri.Animated)
+                                GL.BindTexture(TextureTarget.Texture2D, textures[tex]);
                             switch (tri.Type)
                             {
                                 case 0:
@@ -275,7 +198,6 @@ namespace CrashEdit
                             uvs[3] = model.Textures[tex].Y2;
                         }
                         else
-                            //GL.Disable(EnableCap.Texture2D);
                             GL.BindTexture(TextureTarget.Texture2D, 0);
                         GL.Begin(PrimitiveType.Triangles);
                         for (int j = 0; j < 3; ++j)
@@ -283,7 +205,7 @@ namespace CrashEdit
                             int c = tri.Color[j];
                             GL.Color3(model.Colors[c].Red, model.Colors[c].Green, model.Colors[c].Blue);
                             GL.TexCoord2(uvs[2 * j + 0], uvs[2 * j + 1]);
-                            RenderInterpolatedVertices(f1,f2,f1.Vertices[tri.Vertex[j] + f1.SpecialVertexCount],f2.Vertices[tri.Vertex[j] + f2.SpecialVertexCount]);
+                            RenderVertex(f1,f2,tri.Vertex[j] + f1.SpecialVertexCount,f2 != null ? tri.Vertex[j] + f2.SpecialVertexCount : 0);
                         }
                         GL.End();
                     }
@@ -298,11 +220,12 @@ namespace CrashEdit
                         {
                             int c = tri.Color[j];
                             GL.Color3(model.Colors[c].Red, model.Colors[c].Green, model.Colors[c].Blue);
-                            RenderInterpolatedVertices(f1,f2,f1.Vertices[tri.Vertex[j] + f1.SpecialVertexCount],f2.Vertices[tri.Vertex[j] + f2.SpecialVertexCount]);
+                            RenderVertex(f1,f2,tri.Vertex[j] + f1.SpecialVertexCount,f2 != null ? tri.Vertex[j] + f2.SpecialVertexCount : 0);
                         }
                     }
                     GL.End();
                 }
+                GL.PopMatrix();
             }
             else
             {
@@ -310,16 +233,21 @@ namespace CrashEdit
                 GL.Begin(PrimitiveType.Points);
                 for (int i = 0; i < f1.Vertices.Count; ++i)
                 {
-                    RenderInterpolatedVertices(f1,f2,f1.Vertices[i], f2.Vertices[i]);
+                    RenderVertex(f1,f2,i,i);
                 }
                 GL.End();
             }
             GL.BindTexture(TextureTarget.Texture2D, 0);
             if (collision_enabled)
             {
-                for (int i = 0; i < f2.Collision; ++i)
+                Frame fcol;
+                if (f2 == null)
+                    fcol = f1;
+                else
+                    fcol = f2;
+                for (int i = 0; i < fcol.Collision; ++i)
                 {
-                    RenderCollision(f2, i);
+                    RenderCollision(fcol, i);
                 }
             }
         }
@@ -350,20 +278,25 @@ namespace CrashEdit
             GL.Disable(EnableCap.Texture2D);
         }
 
-        private void RenderVertex(Frame f, FrameVertex vertex)
+        private void RenderVertex(Frame f1, Frame f2, int id1, int id2)
         {
-            GL.Vertex3((vertex.X + f.XOffset / 4) * BitConv.FromInt32(model.Info,0),(vertex.Z + f.YOffset / 4) * BitConv.FromInt32(model.Info,4),(vertex.Y + f.ZOffset / 4) * BitConv.FromInt32(model.Info,8));
-        }
-
-        private void RenderInterpolatedVertices(Frame f1, Frame f2, FrameVertex v1, FrameVertex v2)
-        {
-            int x1 = v1.X + f1.XOffset / 4;
-            int x2 = v2.X + f2.XOffset / 4;
-            int y1 = v1.Z + f1.YOffset / 4;
-            int y2 = v2.Z + f2.YOffset / 4;
-            int z1 = v1.Y + f1.ZOffset / 4;
-            int z2 = v2.Y + f2.ZOffset / 4;
-            GL.Vertex3((x1+x2)/2f * BitConv.FromInt32(model.Info,0),(y1+y2)/2f * BitConv.FromInt32(model.Info,4),(z1+z2)/2f * BitConv.FromInt32(model.Info,8));
+            if (f2 == null)
+            {
+                FrameVertex vertex = f1.Vertices[id1];
+                GL.Vertex3(vertex.X + f1.XOffset / 4, vertex.Z + f1.YOffset / 4, vertex.Y + f1.ZOffset / 4);
+            }
+            else
+            {
+                FrameVertex v1 = f1.Vertices[id1];
+                FrameVertex v2 = f2.Vertices[id2];
+                int x1 = v1.X + f1.XOffset / 4;
+                int x2 = v2.X + f2.XOffset / 4;
+                int y1 = v1.Z + f1.YOffset / 4;
+                int y2 = v2.Z + f2.YOffset / 4;
+                int z1 = v1.Y + f1.ZOffset / 4;
+                int z2 = v2.Y + f2.ZOffset / 4;
+                GL.Vertex3(x1 + (x2 - x1) / (float)interp * interi, y1 + (y2 - y1) / (float)interp * interi, z1 + (z2 - z1) / (float)interp * interi);
+            }
         }
 
         private void UncompressFrame(ref Frame frame)
