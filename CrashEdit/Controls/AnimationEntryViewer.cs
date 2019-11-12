@@ -11,6 +11,9 @@ namespace CrashEdit
     {
         private static readonly int[] SignTable = { -1, -2, -4, -8, -16, -32, -64, -128 }; // used for decompression
 
+        private static int textureframe = 0;
+        private static Timer texturetimer;
+
         private List<Frame> frames;
         private ModelEntry model;
         private int frameid;
@@ -21,6 +24,19 @@ namespace CrashEdit
         private bool textures_enabled = true;
         private int[] textures = null;
         private TextureChunk[] texturechunks;
+
+        static AnimationEntryViewer()
+        {
+            texturetimer = new Timer
+            {
+                Interval = 1000 / OldMainForm.GetRate(),
+                Enabled = true
+            };
+            texturetimer.Tick += delegate (object sender,EventArgs e)
+            {
+                textureframe = ++textureframe % 128;
+            };
+        }
 
         public AnimationEntryViewer(Frame frame,ModelEntry model,TextureChunk[] texturechunks)
         {
@@ -178,6 +194,17 @@ namespace CrashEdit
                             //LoadTexture(bitmaps[tex]);
                             if (!tri.Animated)
                                 GL.BindTexture(TextureTarget.Texture2D, textures[tex]);
+                            else
+                            {
+                                var anim = model.AnimatedTextures[tex];
+                                if (!anim.IsLOD && !anim.Leap && anim.Offset != 0)
+                                {
+                                    tex = anim.Offset - 1 + (textureframe & anim.Mask);
+                                    GL.BindTexture(TextureTarget.Texture2D, textures[tex]);
+                                }
+                                else
+                                    GL.BindTexture(TextureTarget.Texture2D, 0);
+                            }
                             switch (tri.Type)
                             {
                                 case 0:
