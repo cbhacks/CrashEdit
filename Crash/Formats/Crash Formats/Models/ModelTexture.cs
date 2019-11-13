@@ -23,8 +23,8 @@ namespace Crash
             byte textureoffset = data[7];
             byte u3 = data[8];
             byte v3 = data[9];
-            byte v4 = data[10];
-            byte u4 = data[11];
+            byte u4 = data[10];
+            byte v4 = data[11];
             return new ModelTexture(u1,v1,cluty1,clutx,cluty2,u2,v2,bitflag,blendmode,segment,textureoffset,u3,v3,u4,v4);
         }
 
@@ -93,8 +93,8 @@ namespace Crash
             result[7] = TextureOffset;
             result[8] = U3;
             result[9] = V3;
-            result[10] = V4;
-            result[11] = U4;
+            result[10] = U4;
+            result[11] = V4;
             return result;
         }
     }
