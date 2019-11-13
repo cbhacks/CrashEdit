@@ -45,9 +45,9 @@ namespace CrashHacks.Scripts.Scenery
                     int vertexb = quad.VertexB;
                     int vertexc = quad.VertexC;
                     int vertexd = quad.VertexD;
-                    byte unknown1 = 0;
-                    byte unknown2 = 0;
-                    e.Quads[i] = new SceneryQuad(vertexa,vertexb,vertexc,vertexd,unknown1,unknown2);
+                    short texture = 0;
+                    bool animated = false;
+                    e.Quads[i] = new SceneryQuad(vertexa,vertexb,vertexc,vertexd,texture,animated);
                 }
             }
         }
