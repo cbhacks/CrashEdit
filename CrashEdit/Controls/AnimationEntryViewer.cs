@@ -22,8 +22,6 @@ namespace CrashEdit
         private int interp = 2;
         private bool collision_enabled = false;
         private bool textures_enabled = true;
-        private int[] textures = null;
-        private TextureChunk[] texturechunks;
 
         static AnimationEntryViewer()
         {
@@ -42,7 +40,7 @@ namespace CrashEdit
         {
             frames = new List<Frame>();
             this.model = model;
-            this.texturechunks = texturechunks;
+            ConvertTexturesToGL(texturechunks, model.Textures, model.Info, 0xC);
             if (model.Positions != null) // fix this later
                 frames.Add(UncompressFrame(frame));
             else
@@ -55,7 +53,7 @@ namespace CrashEdit
         {
             this.frames = new List<Frame>();
             this.model = model;
-            this.texturechunks = texturechunks;
+            ConvertTexturesToGL(texturechunks, model.Textures, model.Info, 0xC);
             frameid = 0;
             interi = 0;
             if (model.Positions != null)
@@ -120,10 +118,6 @@ namespace CrashEdit
 
         protected override void RenderObjects()
         {
-            if (textures == null)
-            {
-                ConvertTexturesToGL();
-            }
             if (interi == 0 || frameid == 0)
             {
                 RenderFrame(frames[frameid]);
@@ -194,17 +188,17 @@ namespace CrashEdit
                             //LoadTexture(bitmaps[tex]);
                             if (!tri.Animated)
                                 GL.BindTexture(TextureTarget.Texture2D, textures[tex]);
-                            else
-                            {
-                                var anim = model.AnimatedTextures[tex];
-                                if (!anim.IsLOD && !anim.Leap && anim.Offset != 0)
-                                {
-                                    tex = anim.Offset - 1 + (textureframe & anim.Mask);
-                                    GL.BindTexture(TextureTarget.Texture2D, textures[tex]);
-                                }
-                                else
-                                    GL.BindTexture(TextureTarget.Texture2D, 0);
-                            }
+                            //else
+                            //{
+                            //    var anim = model.AnimatedTextures[tex];
+                            //    if (!anim.IsLOD && !anim.Leap && anim.Offset != 0)
+                            //    {
+                            //        tex = anim.Offset - 1 + (textureframe & anim.Mask);
+                            //        GL.BindTexture(TextureTarget.Texture2D, textures[tex]);
+                            //    }
+                            //    else
+                            //        GL.BindTexture(TextureTarget.Texture2D, 0);
+                            //}
                             switch (tri.Type)
                             {
                                 case 0:
@@ -477,100 +471,6 @@ namespace CrashEdit
             GL.Vertex3(xcol1, ycol2, zcol2);
             GL.End();
             GL.PopMatrix();
-        }
-
-        private long GenerateTextureHash(ModelTexture tex) // lol
-        {
-            return (long)tex.ClutY
-                | (long)tex.ClutX << 7
-                | (long)tex.TextureOffset / 4 << 11
-                | (long)tex.Left << 14
-                | (long)tex.Top << 24
-                | (long)tex.Width << 31
-                | (long)tex.Height << 41
-                | (tex.BitFlag ? 1L : 0L) << 48;
-        }
-
-        public void ConvertTexturesToGL()
-        {
-            //bitmaps = new Bitmap[model.Textures.Count];
-            //Dictionary<long, Bitmap> bitmapbucket = new Dictionary<long, Bitmap>();
-            textures = new int[model.Textures.Count];
-            Dictionary<long, int> texturebucket = new Dictionary<long, int>();
-            for (int i = 0; i < textures.Length; ++i)
-            {
-                ModelTexture tex = model.Textures[i];
-                int w = tex.Width + 1;
-                int h = tex.Height + 1;
-                TextureChunk texturechunk = null;
-                int eid = BitConv.FromInt32(model.Info,0xC+tex.TextureOffset);
-                for (int t = 0; t < texturechunks.Length; ++t)
-                {
-                    if (eid == texturechunks[t].EID)
-                    {
-                        texturechunk = texturechunks[t];
-                        break;
-                    }
-                }
-                if (texturechunk == null) throw new Exception("ConvertTexturesToGL: Texture chunk not found");
-                int[] pixels = new int[w*h]; // using indexed colors in GL would be dumb so we convert them to 32-bit
-                if (tex.BitFlag) // 8-bit
-                {
-                    int[] palette = new int[256];
-                    for (int j = 0; j < 256; ++j) // copy palette
-                    {
-                        palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data,tex.ClutX*32+tex.ClutY*512+j*2));
-                    }
-                    for (int y = 0; y < h; ++y) // copy pixel data
-                    {
-                        for (int x = 0; x < w; ++x)
-                        {
-                            pixels[x + w * y] = palette[texturechunk.Data[(tex.Left + x) + (tex.Top + y) * 512]];
-                        }
-                    }
-                }
-                else // 4-bit
-                {
-                    int[] palette = new int[16];
-                    for (int j = 0; j < 16; ++j) // copy palette
-                    {
-                        palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data,tex.ClutX*32+tex.ClutY*512+j*2));
-                    }
-                    for (int y = 0; y < h; ++y) // copy pixels
-                    {
-                        for (int x = 0; x < w / 2; ++x) // 2 pixels per byte
-                        {
-                            pixels[x*2+w*y] = palette[texturechunk.Data[(tex.Left/2+x) + (tex.Top + y)*512] & 0xF];
-                            pixels[x*2+w*y+1] = palette[texturechunk.Data[(tex.Left/2+x) + (tex.Top + y)*512] >> 4 & 0xF];
-                        }
-                    }
-                }
-                long hash = GenerateTextureHash(tex);
-                if (texturebucket.ContainsKey(hash))
-                {
-                    textures[i] = texturebucket[hash];
-                }
-                else
-                {
-                    //Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                    //BitmapData data = bmp.LockBits(new Rectangle(Point.Empty, bmp.Size), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                    //unsafe
-                    //{
-                    //    for (int j = 0; j < w * h; ++j)
-                    //    {
-                    //        *((int*)data.Scan0.ToPointer() + j) = pixels[j];
-                    //    }
-                    //}
-                    GL.GenTextures(1, out textures[i]);
-                    GL.BindTexture(TextureTarget.Texture2D, textures[i]);
-                    GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Four, w, h, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, pixels);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-                    //bmp.UnlockBits(data);
-                    texturebucket[hash] = textures[i];
-                }
-            }
-            GL.BindTexture(TextureTarget.Texture2D, 0);
         }
 
         protected override void Dispose(bool disposing)
