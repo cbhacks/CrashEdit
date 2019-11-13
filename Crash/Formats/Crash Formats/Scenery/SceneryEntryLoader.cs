@@ -23,14 +23,14 @@ namespace Crash
             int texturecount = BitConv.FromInt32(items[0], 28);
             int colorcount = BitConv.FromInt32(items[0], 32);
             int animatedtexturecount = BitConv.FromInt32(items[0], 36);
-            if (items[4].Length != texturecount * 12)
-            {
-                ErrorManager.SignalError("SceneryEntry: Texture count mismatch");
-            }
-            if (items[6].Length != animatedtexturecount * 4)
-            {
-                ErrorManager.SignalError("SceneryEntry: Animated texture count mismatch");
-            }
+            //if (items[4].Length != texturecount * 12)
+            //{
+            //    ErrorManager.SignalError("SceneryEntry: Texture count mismatch");
+            //}
+            //if (items[6].Length != animatedtexturecount * 4)
+            //{
+            //    ErrorManager.SignalError("SceneryEntry: Animated texture count mismatch");
+            //}
             SceneryVertex[] vertices = new SceneryVertex[vertexcount];
             for (int i = 0; i < vertexcount; i++)
             {

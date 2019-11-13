@@ -90,9 +90,15 @@ namespace CrashEdit
             }
             else
             {
+                throw new System.Exception("Vertex color outside color range.");
                 GL.Color3(Color.Fuchsia);
             }
             GL.Vertex3(entry.XOffset + vertex.X * 16,entry.YOffset + vertex.Y * 16,entry.ZOffset + vertex.Z * 16);
+        }
+
+        private void ConvertTexturesToGL()
+        {
+
         }
 
         protected override void Dispose(bool disposing)
