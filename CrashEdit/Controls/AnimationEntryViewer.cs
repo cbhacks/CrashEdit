@@ -177,7 +177,7 @@ namespace CrashEdit
                 GL.Scale(BitConv.FromInt32(model.Info,0), BitConv.FromInt32(model.Info,4), BitConv.FromInt32(model.Info,8));
                 if (textures_enabled)
                 {
-                    float[] uvs = new float[6] { 0, 0, 0, 0, 0, 0 };
+                    float[] uvs = new float[6];
                     for (int i = 0; i < model.Triangles.Count; ++i)
                     {
                         var tri = model.Triangles[i];
@@ -478,10 +478,6 @@ namespace CrashEdit
             if (animatetimer != null)
             {
                 animatetimer.Dispose();
-            }
-            if (textures != null)
-            {
-                GL.DeleteTextures(textures.Length, textures);
             }
             base.Dispose(disposing);
         }

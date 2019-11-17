@@ -164,6 +164,8 @@ namespace CrashEdit
                 range -= (e.Y - mousey) * fullrange / 500;
                 if (range < 1)
                     range = 1;
+                else if (range > fullrange * 4)
+                    range = fullrange * 4;
                 Invalidate();
             }
             mousex = e.X;
@@ -391,6 +393,10 @@ namespace CrashEdit
         {
             inputtimer.Dispose();
             refreshtimer.Dispose();
+            if (textures != null)
+            {
+                GL.DeleteTextures(textures.Length, textures);
+            }
             base.Dispose(disposing);
         }
     }
