@@ -47,8 +47,8 @@ namespace CrashEdit
         private bool polygonmode;
         private bool allentries;
 
-        public ZoneEntryViewer(ZoneEntry entry,SceneryEntry[] linkedsceneryentries,ZoneEntry[] linkedentries)
-            : base(linkedsceneryentries)
+        public ZoneEntryViewer(ZoneEntry entry,SceneryEntry[] linkedsceneryentries,TextureChunk[][] texturechunks,ZoneEntry[] linkedentries)
+            : base(linkedsceneryentries,texturechunks)
         {
             this.entry = entry;
             this.linkedentries = linkedentries;
