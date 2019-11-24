@@ -37,7 +37,7 @@ namespace CrashEdit
             };
         }
 
-        protected override int CameraRangeMargin => 256;
+        protected override int CameraRangeMargin => 128;
 
         protected override IEnumerable<IPosition> CorePositions
         {
@@ -127,7 +127,7 @@ namespace CrashEdit
             GL.PushMatrix();
             //GL.Translate(xoffset,yoffset,zoffset);
             GL.Scale(0.00125f,0.00125f,0.00125f);
-            GL.Translate(yglobal*2,yglobal*2,yglobal*2);
+            GL.Translate(xglobal*2,yglobal*2,zglobal*2);
             GL.Begin(PrimitiveType.QuadStrip);
             GL.Vertex3(xcol1,ycol1,zcol1);
             GL.Vertex3(xcol1,ycol2,zcol1);
