@@ -33,10 +33,11 @@ namespace CrashEdit
             this.model = model;
             frameid = 0;
             animatetimer = new Timer();
-            animatetimer.Interval = 40;
+            animatetimer.Interval = 1000 / OldMainForm.GetRate();
             animatetimer.Enabled = true;
             animatetimer.Tick += delegate (object sender,EventArgs e)
             {
+                animatetimer.Interval = 1000 / OldMainForm.GetRate();
                 frameid = ++frameid % this.frames.Count;
                 xoffset = this.frames[frameid].XOffset;
                 yoffset = this.frames[frameid].YOffset;
