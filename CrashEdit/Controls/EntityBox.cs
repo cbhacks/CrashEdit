@@ -1404,7 +1404,6 @@ namespace CrashEdit
                     entity.SLST.Rows[0].Values.Add(Entry.ENameToEID(txtSLST.Text));
                     text = false;
                 }
-
             }
             else
             {
@@ -1412,7 +1411,6 @@ namespace CrashEdit
                 lblSLST1.Visible = false;
                 lblSLST2.Visible = false;
             }
-            InvalidateNodes();
         }
 
         private void txtSLST_TextChanged(object sender, EventArgs e)
@@ -1450,7 +1448,6 @@ namespace CrashEdit
                 entity.SLST.Rows[0].Values[0] = Entry.ENameToEID(txtSLST.Text);
                 text = false;
             }
-            InvalidateNodes();
         }
 
         private void tabGeneral_Enter(object sender, EventArgs e)
