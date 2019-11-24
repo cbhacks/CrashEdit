@@ -8,7 +8,7 @@ namespace CrashEdit
         public ZoneEntryController(EntryChunkController entrychunkcontroller,ZoneEntry zoneentry) : base(entrychunkcontroller,zoneentry)
         {
             ZoneEntry = zoneentry;
-            AddNode(new ItemController(null,zoneentry.Unknown1));
+            AddNode(new ItemController(null,zoneentry.Header));
             AddNode(new ItemController(null,zoneentry.Unknown2));
             foreach (Entity entity in zoneentry.Entities)
             {
@@ -26,12 +26,12 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            int linkedsceneryentrycount = BitConv.FromInt32(ZoneEntry.Unknown1,0);
+            int linkedsceneryentrycount = BitConv.FromInt32(ZoneEntry.Header,0);
             SceneryEntry[] linkedsceneryentries = new SceneryEntry [linkedsceneryentrycount];
             TextureChunk[][] totaltexturechunks = new TextureChunk[linkedsceneryentrycount][];
             for (int i = 0;i < linkedsceneryentrycount;i++)
             {
-                linkedsceneryentries[i] = FindEID<SceneryEntry>(BitConv.FromInt32(ZoneEntry.Unknown1,4 + i * 48));
+                linkedsceneryentries[i] = FindEID<SceneryEntry>(BitConv.FromInt32(ZoneEntry.Header,4 + i * 48));
                 TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(linkedsceneryentries[i].Info,0x28)];
                 for (int j = 0; j < texturechunks.Length; ++j)
                 {
@@ -39,11 +39,11 @@ namespace CrashEdit
                 }
                 totaltexturechunks[i] = texturechunks;
             }
-            int linkedzoneentrycount = BitConv.FromInt32(ZoneEntry.Unknown1,400);
+            int linkedzoneentrycount = BitConv.FromInt32(ZoneEntry.Header,400);
             ZoneEntry[] linkedzoneentries = new ZoneEntry [linkedzoneentrycount];
             for (int i = 0;i < linkedzoneentrycount;i++)
             {
-                linkedzoneentries[i] = FindEID<ZoneEntry>(BitConv.FromInt32(ZoneEntry.Unknown1,404 + i * 4));
+                linkedzoneentries[i] = FindEID<ZoneEntry>(BitConv.FromInt32(ZoneEntry.Header,404 + i * 4));
             }
             return new UndockableControl(new ZoneEntryViewer(ZoneEntry,linkedsceneryentries,totaltexturechunks,linkedzoneentries));
         }

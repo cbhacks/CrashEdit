@@ -81,9 +81,9 @@ namespace CrashEdit
             }
             maxid++;
             int newindex = ZoneEntryController.ZoneEntry.Entities.Count;
-            newindex -= BitConv.FromInt32(ZoneEntryController.ZoneEntry.Unknown1,0x188);
-            int entitycount = BitConv.FromInt32(ZoneEntryController.ZoneEntry.Unknown1,0x18C);
-            BitConv.ToInt32(ZoneEntryController.ZoneEntry.Unknown1,0x18C,entitycount + 1);
+            newindex -= BitConv.FromInt32(ZoneEntryController.ZoneEntry.Header,0x188);
+            int entitycount = BitConv.FromInt32(ZoneEntryController.ZoneEntry.Header,0x18C);
+            BitConv.ToInt32(ZoneEntryController.ZoneEntry.Header,0x18C,entitycount + 1);
             Entity newentity = Entity.Load(Entity.Save());
             newentity.ID = maxid;
             newentity.AlternateID = null;
