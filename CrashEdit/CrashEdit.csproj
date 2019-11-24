@@ -66,6 +66,12 @@
   <ItemGroup>
     <Compile Include="Controllers\Model\T2EntryController.cs" />
     <Compile Include="Controllers\T11\T11EntryController.cs" />
+    <Compile Include="Controls\GOOLBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\OldGOOLBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="DRNSF.cs" />
     <Compile Include="ISO2PSX.cs" />
     <Compile Include="Controllers\Animation\CutsceneFrameController.cs" />

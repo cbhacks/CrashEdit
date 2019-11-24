@@ -106,5 +106,15 @@ namespace Crash
             result |= (value & 0xFF << 8 * 3) << 8 * 0;
             return result;
         }
+
+        // sign-extend values with nonconventional bit lengths
+        public static int SignExtend32(int value, int valuebits)
+        {
+            if ((value & (1 << valuebits)) != 0)
+            {
+                return value | (int)(0xFFFFFFFF << valuebits);
+            }
+            else return value;
+        }
     }
 }
