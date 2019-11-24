@@ -82,6 +82,8 @@
     <Compile Include="Formats\Crash Formats\SLST\SLSTSource.cs" />
     <Compile Include="Formats\Crash Formats\SLST\OldSLSTSource.cs" />
     <Compile Include="Formats\Crash Formats\SLST\OldSLSTDelta.cs" />
+    <Compile Include="Formats\Crash Formats\T11\OldT11Entry.cs" />
+    <Compile Include="Formats\Crash Formats\T11\OldT11EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Zone\ProtoEntityPosition.cs" />
     <Compile Include="Formats\Crash Formats\Zone\ProtoZoneEntry.cs" />
     <Compile Include="Formats\Crash Formats\Zone\ProtoZoneEntryLoader.cs" />
