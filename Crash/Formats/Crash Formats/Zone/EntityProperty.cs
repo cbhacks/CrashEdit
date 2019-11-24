@@ -139,7 +139,7 @@ namespace Crash
 
         public abstract byte Type { get; }
         public abstract byte ElementSize { get; }
-        public abstract short Unknown { get; }
+        public abstract short RowCount { get; }
         public abstract bool IsSparse { get; }
         public abstract bool HasMetaValues { get; }
 
