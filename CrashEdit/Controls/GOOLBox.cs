@@ -605,7 +605,7 @@ namespace CrashEdit
                 case Opcodes.NOP:
                     return $"# no operation";
                 case Opcodes.ANIS:
-                    return $"# play animation {ins & 0x7F} frame {ins >> 7 & 0x1FF} (flip {ins >> 22 & 0b11}) for {ins >> 16 & 0x3F} frames";
+                    return $"# play frame {ins & 0x7F} animation at {ins >> 7 & 0x1FF} (flip {ins >> 22 & 0b11}) for {ins >> 16 & 0x3F} frames";
                 case Opcodes.ANIF:
                     return $"# play frame {GetGOOLReference(ins & 0xFFF)} (flip {ins >> 22 & 0b11}) for {ins >> 16 & 0x3F} frames";
                 case Opcodes.MIPS:
