@@ -6,7 +6,7 @@ namespace CrashEdit
 {
     public partial class EntityBox : UserControl
     {
-        private EntityController controller;
+        private Controller controller;
         private Entity entity;
 
         private bool positiondirty;
@@ -24,6 +24,29 @@ namespace CrashEdit
         private int drawlistaentityindex;
         private int drawlistbrowindex;
         private int drawlistbentityindex;
+
+        public EntityBox(NewEntityController controller)
+        {
+            this.controller = controller;
+            entity = controller.Entity;
+            InitializeComponent();
+            UpdateName();
+            UpdatePosition();
+            UpdateType();
+            UpdateSubtype();
+            UpdateSettings();
+            UpdateID();
+            positionindex = 0;
+            victimindex = 0;
+            loadlistarowindex = 0;
+            loadlistaeidindex = 0;
+            loadlistbrowindex = 0;
+            loadlistbeidindex = 0;
+            drawlistarowindex = 0;
+            drawlistaentityindex = 0;
+            drawlistbrowindex = 0;
+            drawlistbentityindex = 0;
+        }
 
         public EntityBox(EntityController controller)
         {
@@ -1032,23 +1055,54 @@ namespace CrashEdit
 
         private void numEntityA_ValueChanged(object sender, EventArgs e)
         {
-            foreach (Chunk chunk in controller.ZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
+            if (controller is EntityController c)
             {
-                if (chunk is EntryChunk)
+                foreach (Chunk chunk in c.ZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
                 {
-                    foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                    if (chunk is EntryChunk)
                     {
-                        if (entry is ZoneEntry)
+                        foreach (Entry entry in ((EntryChunk)chunk).Entries)
                         {
-                            foreach (Entity otherentity in ((ZoneEntry)entry).Entities)
+                            if (entry is ZoneEntry zone)
                             {
-                                if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityA.Value)
+                                foreach (Entity otherentity in zone.Entities)
                                 {
-                                    for (int i = 0; i < controller.ZoneEntryController.ZoneEntry.Unknown1[0x190];i++)
+                                    if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityA.Value)
                                     {
-                                        if (entry.EName == Entry.EIDToEName(BitConv.FromInt32(controller.ZoneEntryController.ZoneEntry.Unknown1,0x194 + i * 4)))
+                                        for (int i = 0; i < c.ZoneEntryController.ZoneEntry.Unknown1[0x190]; ++i)
                                         {
-                                            entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] = (int)(i | (otherentity.ID << 8) | ((((ZoneEntry)entry).Entities.IndexOf(otherentity) - BitConv.FromInt32(((ZoneEntry)entry).Unknown1, 0x188)) << 24));
+                                            if (entry.EName == Entry.EIDToEName(BitConv.FromInt32(c.ZoneEntryController.ZoneEntry.Unknown1, 0x194 + i * 4)))
+                                            {
+                                                entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Unknown1, 0x188)) << 24));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (controller is NewEntityController nc)
+            {
+                foreach (Chunk chunk in nc.NewZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
+                {
+                    if (chunk is EntryChunk)
+                    {
+                        foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                        {
+                            if (entry is NewZoneEntry zone)
+                            {
+                                foreach (Entity otherentity in zone.Entities)
+                                {
+                                    if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityA.Value)
+                                    {
+                                        for (int i = 0; i < nc.NewZoneEntryController.NewZoneEntry.Header[0x190]; ++i)
+                                        {
+                                            if (entry.EName == Entry.EIDToEName(BitConv.FromInt32(nc.NewZoneEntryController.NewZoneEntry.Header, 0x194 + i * 4)))
+                                            {
+                                                entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
+                                            }
                                         }
                                     }
                                 }
@@ -1190,23 +1244,54 @@ namespace CrashEdit
 
         private void numEntityB_ValueChanged(object sender, EventArgs e)
         {
-            foreach (Chunk chunk in controller.ZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
+            if (controller is EntityController c)
             {
-                if (chunk is EntryChunk)
+                foreach (Chunk chunk in c.ZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
                 {
-                    foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                    if (chunk is EntryChunk)
                     {
-                        if (entry is ZoneEntry)
+                        foreach (Entry entry in ((EntryChunk)chunk).Entries)
                         {
-                            foreach (Entity otherentity in ((ZoneEntry)entry).Entities)
+                            if (entry is ZoneEntry zone)
                             {
-                                if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityB.Value)
+                                foreach (Entity otherentity in zone.Entities)
                                 {
-                                    for (int i = 0; i < controller.ZoneEntryController.ZoneEntry.Unknown1[0x190]; i++)
+                                    if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityB.Value)
                                     {
-                                        if (entry.EName == Entry.EIDToEName(BitConv.FromInt32(controller.ZoneEntryController.ZoneEntry.Unknown1, 0x194 + i * 4)))
+                                        for (int i = 0; i < c.ZoneEntryController.ZoneEntry.Unknown1[0x190]; ++i)
                                         {
-                                            entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] = (int)(i | (otherentity.ID << 8) | ((((ZoneEntry)entry).Entities.IndexOf(otherentity) - BitConv.FromInt32(((ZoneEntry)entry).Unknown1, 0x188)) << 24));
+                                            if (entry.EName == Entry.EIDToEName(BitConv.FromInt32(c.ZoneEntryController.ZoneEntry.Unknown1, 0x194 + i * 4)))
+                                            {
+                                                entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Unknown1, 0x188)) << 24));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (controller is NewEntityController nc)
+            {
+                foreach (Chunk chunk in nc.NewZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
+                {
+                    if (chunk is EntryChunk)
+                    {
+                        foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                        {
+                            if (entry is NewZoneEntry zone)
+                            {
+                                foreach (Entity otherentity in zone.Entities)
+                                {
+                                    if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityB.Value)
+                                    {
+                                        for (int i = 0; i < nc.NewZoneEntryController.NewZoneEntry.Header[0x190]; ++i)
+                                        {
+                                            if (entry.EName == Entry.EIDToEName(BitConv.FromInt32(nc.NewZoneEntryController.NewZoneEntry.Header, 0x194 + i * 4)))
+                                            {
+                                                entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
+                                            }
                                         }
                                     }
                                 }

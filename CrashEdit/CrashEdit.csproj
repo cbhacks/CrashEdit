@@ -143,12 +143,6 @@
     <Compile Include="Controls\AnimationEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\NewEntityBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\NewEntityBox.Designer.cs">
-      <DependentUpon>NewEntityBox.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\ProtoAnimationEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -303,10 +297,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\NewEntityBox.resx">
-      <DependentUpon>NewEntityBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\OldFrameBox.resx">
       <DependentUpon>OldFrameBox.cs</DependentUpon>
       <SubType>Designer</SubType>
