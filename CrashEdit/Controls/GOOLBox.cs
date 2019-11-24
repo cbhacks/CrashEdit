@@ -273,6 +273,7 @@ namespace CrashEdit
                 }
             }
             lstCode.Items.Add("");
+            bool mips = false;
             for (short i = 0; i < goolentry.Items[1].Length / 4; ++i)
             {
                 string str;
@@ -288,36 +289,32 @@ namespace CrashEdit
                     str += ":";
                     lstCode.Items.Add(str);
                 }
-                int ins = BitConv.FromInt32(goolentry.Items[1], 4 * i);
-                Opcodes opcode = (Opcodes)(ins >> 24 & 0xFF);
                 str = string.Format("{0,-05}\t", i);
-                if (!Enum.IsDefined(typeof(Opcodes), opcode))
+                int ins = BitConv.FromInt32(goolentry.Items[1], 4*i);
+                if (mips)
                 {
-                    str += $"invalid opcode {opcode}";
+                    int prev = BitConv.FromInt32(goolentry.Items[1], 4 * i - 4);
+                    if (ins == 0x03E00008 || (prev == 0x03E0A809 && ins == 0)) // native mips returns or ends here
+                    {
+                        mips = false;
+                    }
+                    str += GetMIPSInstruction(ins);
                 }
                 else
                 {
-                    str += $"{opcode.ToString()} ";
-                }
-                str += string.Format("\t{0,-030}\t{1}", GetArguments(ins), GetComment(ins));
-                lstCode.Items.Add(str);
-                if (opcode == Opcodes.MIPS)
-                {
-                    lstCode.Items.Add("\t<native MIPS code>");
-                    while (++i < goolentry.Items[1].Length / 4)
+                    Opcodes opcode = (Opcodes)(ins >> 24 & 0xFF);
+                    if (!Enum.IsDefined(typeof(Opcodes), opcode))
                     {
-                        //if (i == 62)
-                            //System.Diagnostics.Debugger.Break();
-                        int l = BitConv.FromInt32(goolentry.Items[1], 4*i);
-                        int h = i+1 < goolentry.Items[1].Length / 4 ? BitConv.FromInt32(goolentry.Items[1], 4*i+4) : -1;
-                        if (l == 0x03E00008 || (l == 0x03E0A809 && h == 0)) // native mips returns or ends here
-                        {
-                            ++i;
-                            break;
-                        }
+                        str += $"invalid opcode {opcode}";
                     }
-                    continue;
+                    else
+                    {
+                        str += $"{opcode.ToString()} ";
+                    }
+                    str += string.Format("\t{0,-030}\t{1}", GetArguments(ins), GetComment(ins));
+                    mips = opcode == Opcodes.MIPS;
                 }
+                lstCode.Items.Add(str);
             }
             Controls.Add(lstCode);
         }
@@ -633,28 +630,158 @@ namespace CrashEdit
             ra
         }
 
-        private enum MIPSInsType
-        {
-            I, J, R
-        }
-
-        private enum MIPSOpcodes
-        {
-
-        }
-
         private string GetMIPSInstruction(int ins)
         {
+            if (ins == 0)
+                return "nop";
             string str = string.Empty;
 
             int opcode = ins >> 26 & 0b111111;
-            int arg = 0;
+            int rs = ins >> 21 & 0b11111;
+            int rt = ins >> 16 & 0b11111;
+            int rd = ins >> 11 & 0b11111;
+            int shamt = ins >> 6 & 0b11111;
+            int funct = ins & 0b111111;
+            short imm = (short)(ins & 0xFFFF);
+            ushort immu = (ushort)imm;
+            int ofs = ins ^ (opcode << 26);
+
             switch (opcode)
             {
-
+                case 0:
+                    switch (funct)
+                    {
+                        case 0:
+                            return $"sll \t{GetMIPSReg(rd)},{GetMIPSReg(rt)},{shamt}";
+                        case 2:
+                            return $"srl \t{GetMIPSReg(rd)},{GetMIPSReg(rt)},{shamt}";
+                        case 3:
+                            return $"sra \t{GetMIPSReg(rd)},{GetMIPSReg(rt)},{shamt}";
+                        case 4:
+                            return $"sllv\t{GetMIPSReg(rd)},{GetMIPSReg(rt)},{GetMIPSReg(rs)}";
+                        case 6:
+                            return $"srlv\t{GetMIPSReg(rd)},{GetMIPSReg(rt)},{GetMIPSReg(rs)}";
+                        case 7:
+                            return $"srav\t{GetMIPSReg(rd)},{GetMIPSReg(rt)},{GetMIPSReg(rs)}";
+                        case 8:
+                            return $"jr  \t{GetMIPSReg(rs)}";
+                        case 9:
+                            return $"jalr\t{GetMIPSReg(rs)},{GetMIPSReg(rd)}";
+                        case 12:
+                            return $"syscall";
+                        case 13:
+                            return $"break";
+                        case 16:
+                            return $"mfhi\t{GetMIPSReg(rd)}";
+                        case 17:
+                            return $"mthi\t{GetMIPSReg(rd)}"; // verify
+                        case 18:
+                            return $"mflo\t{GetMIPSReg(rd)}";
+                        case 19:
+                            return $"mtlo\t{GetMIPSReg(rd)}"; // verify
+                        case 24:
+                            return $"mult\t{GetMIPSReg(rt)},{GetMIPSReg(rs)}";
+                        case 25:
+                            return $"multu\t{GetMIPSReg(rt)},{GetMIPSReg(rs)}";
+                        case 26:
+                            return $"div \t{GetMIPSReg(rt)},{GetMIPSReg(rs)}";
+                        case 27:
+                            return $"divu\t{GetMIPSReg(rt)},{GetMIPSReg(rs)}";
+                        case 32:
+                            return $"add \t{GetMIPSReg(rd)},{GetMIPSReg(rs)},{GetMIPSReg(rt)}";
+                        case 33:
+                            return $"addu\t{GetMIPSReg(rd)},{GetMIPSReg(rs)},{GetMIPSReg(rt)}";
+                        case 34:
+                            return $"sub \t{GetMIPSReg(rd)},{GetMIPSReg(rs)},{GetMIPSReg(rt)}";
+                        case 35:
+                            return $"subu\t{GetMIPSReg(rd)},{GetMIPSReg(rs)},{GetMIPSReg(rt)}";
+                        case 36:
+                            return $"and \t{GetMIPSReg(rd)},{GetMIPSReg(rs)},{GetMIPSReg(rt)}";
+                        case 37:
+                            return $"or  \t{GetMIPSReg(rd)},{GetMIPSReg(rs)},{GetMIPSReg(rt)}";
+                        case 38:
+                            return $"xor \t{GetMIPSReg(rd)},{GetMIPSReg(rs)},{GetMIPSReg(rt)}";
+                        case 39:
+                            return $"nor \t{GetMIPSReg(rd)},{GetMIPSReg(rs)},{GetMIPSReg(rt)}";
+                        case 42:
+                            return $"slt \t{GetMIPSReg(rd)},{GetMIPSReg(rs)},{GetMIPSReg(rt)}";
+                        case 43:
+                            return $"sltu\t{GetMIPSReg(rd)},{GetMIPSReg(rs)},{GetMIPSReg(rt)}";
+                    }
+                    break;
+                case 1:
+                    switch (rt)
+                    {
+                        case 0:
+                            return $"bltz\t{GetMIPSReg(rs)},{imm}";
+                        case 1:
+                            return $"bgez\t{GetMIPSReg(rs)},{imm}";
+                        case 16:
+                            return $"bltzal\t{GetMIPSReg(rs)},{imm}";
+                        case 17:
+                            return $"bgezal\t{GetMIPSReg(rs)},{imm}";
+                    }
+                    break;
+                case 2:
+                    return $"j   \t{ofs}";
+                case 3:
+                    return $"jal \t{ofs}";
+                case 4:
+                    return $"beq \t{GetMIPSReg(rs)},{GetMIPSReg(rt)},{imm}";
+                case 5:
+                    return $"bne \t{GetMIPSReg(rs)},{GetMIPSReg(rt)},{imm}";
+                case 6:
+                    return $"blez\t{GetMIPSReg(rs)},{imm}";
+                case 7:
+                    return $"bgtz\t{GetMIPSReg(rs)},{imm}";
+                case 8:
+                    return $"addi\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{imm}";
+                case 9:
+                    return $"addiu\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{immu}";
+                case 10:
+                    return $"subi\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{imm}";
+                case 11:
+                    return $"subiu\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{immu}";
+                case 12:
+                    return $"andi\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{imm}";
+                case 13:
+                    return $"ori \t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{imm}";
+                case 14:
+                    return $"xori\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{imm}";
+                case 15:
+                    return $"xori\t{GetMIPSReg(rt)},{imm}";
+                case 32:
+                    return $"lb  \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                case 33:
+                    return $"lh  \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                case 34:
+                    return $"lwl \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                case 35:
+                    return $"lw  \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                case 36:
+                    return $"lbu \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                case 37:
+                    return $"lhu \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                case 38:
+                    return $"lwr \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                case 40:
+                    return $"sb  \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                case 41:
+                    return $"sh  \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                case 42:
+                    return $"swl \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                case 43:
+                    return $"sw  \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                case 46:
+                    return $"swr \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
             }
 
             return str;
+        }
+
+        private string GetMIPSReg(int reg)
+        {
+            return $"${(MIPSReg)reg}";
         }
     }
 }
