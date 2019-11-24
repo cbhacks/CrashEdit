@@ -48,7 +48,6 @@ namespace CrashEdit
             this.numZ = new System.Windows.Forms.NumericUpDown();
             this.numY = new System.Windows.Forms.NumericUpDown();
             this.numX = new System.Windows.Forms.NumericUpDown();
-            this.cmdAppendVictim = new System.Windows.Forms.Button();
             this.cmdInsertVictim = new System.Windows.Forms.Button();
             this.fraID = new System.Windows.Forms.GroupBox();
             this.chkID2 = new System.Windows.Forms.CheckBox();
@@ -327,6 +326,7 @@ namespace CrashEdit
             this.cmdNextAndRemove.TabIndex = 8;
             this.cmdNextAndRemove.Text = "Next and Remove";
             this.cmdNextAndRemove.UseVisualStyleBackColor = true;
+            this.cmdNextAndRemove.Visible = false;
             this.cmdNextAndRemove.Click += new System.EventHandler(this.cmdNextAndRemove_Click);
             // 
             // lblPositionIndex
@@ -484,16 +484,6 @@ namespace CrashEdit
             this.numX.Size = new System.Drawing.Size(86, 20);
             this.numX.TabIndex = 2;
             this.numX.ValueChanged += new System.EventHandler(this.numX_ValueChanged);
-            // 
-            // cmdAppendVictim
-            // 
-            this.cmdAppendVictim.Location = new System.Drawing.Point(6, 154);
-            this.cmdAppendVictim.Name = "cmdAppendVictim";
-            this.cmdAppendVictim.Size = new System.Drawing.Size(120, 23);
-            this.cmdAppendVictim.TabIndex = 5;
-            this.cmdAppendVictim.Text = "Append";
-            this.cmdAppendVictim.UseVisualStyleBackColor = true;
-            this.cmdAppendVictim.Click += new System.EventHandler(this.cmdAppendVictim_Click);
             // 
             // cmdInsertVictim
             // 
@@ -752,7 +742,6 @@ namespace CrashEdit
             this.tabGeneral.TabIndex = 0;
             this.tabGeneral.Text = "General";
             this.tabGeneral.UseVisualStyleBackColor = true;
-            this.tabGeneral.Enter += new System.EventHandler(this.tabGeneral_Enter);
             // 
             // tabSpecial
             // 
@@ -775,7 +764,7 @@ namespace CrashEdit
             // 
             this.fraOtherSettings.Controls.Add(this.chkOtherSettings);
             this.fraOtherSettings.Controls.Add(this.numOtherSettings);
-            this.fraOtherSettings.Location = new System.Drawing.Point(141, 194);
+            this.fraOtherSettings.Location = new System.Drawing.Point(141, 163);
             this.fraOtherSettings.Name = "fraOtherSettings";
             this.fraOtherSettings.Size = new System.Drawing.Size(132, 72);
             this.fraOtherSettings.TabIndex = 10;
@@ -815,7 +804,7 @@ namespace CrashEdit
             // 
             this.fraScaling.Controls.Add(this.chkScaling);
             this.fraScaling.Controls.Add(this.numScaling);
-            this.fraScaling.Location = new System.Drawing.Point(3, 194);
+            this.fraScaling.Location = new System.Drawing.Point(3, 163);
             this.fraScaling.Name = "fraScaling";
             this.fraScaling.Size = new System.Drawing.Size(132, 72);
             this.fraScaling.TabIndex = 11;
@@ -855,7 +844,7 @@ namespace CrashEdit
             // 
             this.fraDDASection.Controls.Add(this.chkDDASection);
             this.fraDDASection.Controls.Add(this.numDDASection);
-            this.fraDDASection.Location = new System.Drawing.Point(3, 272);
+            this.fraDDASection.Location = new System.Drawing.Point(3, 241);
             this.fraDDASection.Name = "fraDDASection";
             this.fraDDASection.Size = new System.Drawing.Size(132, 70);
             this.fraDDASection.TabIndex = 10;
@@ -895,7 +884,7 @@ namespace CrashEdit
             // 
             this.fraDDASettings.Controls.Add(this.chkDDASettings);
             this.fraDDASettings.Controls.Add(this.numDDASettings);
-            this.fraDDASettings.Location = new System.Drawing.Point(141, 272);
+            this.fraDDASettings.Location = new System.Drawing.Point(141, 241);
             this.fraDDASettings.Name = "fraDDASettings";
             this.fraDDASettings.Size = new System.Drawing.Size(132, 70);
             this.fraDDASettings.TabIndex = 9;
@@ -1011,10 +1000,9 @@ namespace CrashEdit
             this.fraVictims.Controls.Add(this.cmdNextVictim);
             this.fraVictims.Controls.Add(this.cmdPreviousVictim);
             this.fraVictims.Controls.Add(this.lblVictimIndex);
-            this.fraVictims.Controls.Add(this.cmdAppendVictim);
             this.fraVictims.Location = new System.Drawing.Point(3, 3);
             this.fraVictims.Name = "fraVictims";
-            this.fraVictims.Size = new System.Drawing.Size(132, 185);
+            this.fraVictims.Size = new System.Drawing.Size(132, 154);
             this.fraVictims.TabIndex = 7;
             this.fraVictims.TabStop = false;
             this.fraVictims.Text = "Victims";
@@ -1033,15 +1021,10 @@ namespace CrashEdit
             // 
             this.numVictimID.Location = new System.Drawing.Point(6, 71);
             this.numVictimID.Maximum = new decimal(new int[] {
-            32767,
+            65535,
             0,
             0,
             0});
-            this.numVictimID.Minimum = new decimal(new int[] {
-            32768,
-            0,
-            0,
-            -2147483648});
             this.numVictimID.Name = "numVictimID";
             this.numVictimID.Size = new System.Drawing.Size(120, 20);
             this.numVictimID.TabIndex = 2;
@@ -1117,9 +1100,9 @@ namespace CrashEdit
             this.lblSLST2.AutoSize = true;
             this.lblSLST2.Location = new System.Drawing.Point(79, 45);
             this.lblSLST2.Name = "lblSLST2";
-            this.lblSLST2.Size = new System.Drawing.Size(199, 13);
+            this.lblSLST2.Size = new System.Drawing.Size(185, 13);
             this.lblSLST2.TabIndex = 3;
-            this.lblSLST2.Text = "WARNING: String has invalid characters";
+            this.lblSLST2.Text = "ERROR: String has invalid characters";
             this.lblSLST2.Visible = false;
             // 
             // lblSLST1
@@ -1127,9 +1110,9 @@ namespace CrashEdit
             this.lblSLST1.AutoSize = true;
             this.lblSLST1.Location = new System.Drawing.Point(79, 20);
             this.lblSLST1.Name = "lblSLST1";
-            this.lblSLST1.Size = new System.Drawing.Size(206, 13);
+            this.lblSLST1.Size = new System.Drawing.Size(192, 13);
             this.lblSLST1.TabIndex = 2;
-            this.lblSLST1.Text = "WARNING: String is not 5 characters long";
+            this.lblSLST1.Text = "ERROR: String is not 5 characters long";
             this.lblSLST1.Visible = false;
             // 
             // txtSLST
@@ -1189,9 +1172,9 @@ namespace CrashEdit
             this.lblMetavalueLoadB.AutoSize = true;
             this.lblMetavalueLoadB.Location = new System.Drawing.Point(6, 75);
             this.lblMetavalueLoadB.Name = "lblMetavalueLoadB";
-            this.lblMetavalueLoadB.Size = new System.Drawing.Size(57, 13);
+            this.lblMetavalueLoadB.Size = new System.Drawing.Size(44, 13);
             this.lblMetavalueLoadB.TabIndex = 20;
-            this.lblMetavalueLoadB.Text = "Metavalue";
+            this.lblMetavalueLoadB.Text = "Position";
             // 
             // cmdRemoveRowB
             // 
@@ -1217,15 +1200,10 @@ namespace CrashEdit
             // 
             this.numMetavalueLoadB.Location = new System.Drawing.Point(69, 73);
             this.numMetavalueLoadB.Maximum = new decimal(new int[] {
-            32767,
+            65535,
             0,
             0,
             0});
-            this.numMetavalueLoadB.Minimum = new decimal(new int[] {
-            32768,
-            0,
-            0,
-            -2147483648});
             this.numMetavalueLoadB.Name = "numMetavalueLoadB";
             this.numMetavalueLoadB.Size = new System.Drawing.Size(68, 20);
             this.numMetavalueLoadB.TabIndex = 19;
@@ -1352,9 +1330,9 @@ namespace CrashEdit
             this.lblEID2.AutoSize = true;
             this.lblEID2.Location = new System.Drawing.Point(16, 335);
             this.lblEID2.Name = "lblEID2";
-            this.lblEID2.Size = new System.Drawing.Size(190, 13);
+            this.lblEID2.Size = new System.Drawing.Size(176, 13);
             this.lblEID2.TabIndex = 5;
-            this.lblEID2.Text = "WARNING: EID has invalid characters";
+            this.lblEID2.Text = "ERROR: EID has invalid characters";
             this.lblEID2.Visible = false;
             // 
             // lblEID1
@@ -1362,9 +1340,9 @@ namespace CrashEdit
             this.lblEID1.AutoSize = true;
             this.lblEID1.Location = new System.Drawing.Point(16, 310);
             this.lblEID1.Name = "lblEID1";
-            this.lblEID1.Size = new System.Drawing.Size(197, 13);
+            this.lblEID1.Size = new System.Drawing.Size(183, 13);
             this.lblEID1.TabIndex = 4;
-            this.lblEID1.Text = "WARNING: EID is not 5 characters long";
+            this.lblEID1.Text = "ERROR: EID is not 5 characters long";
             this.lblEID1.Visible = false;
             // 
             // fraLoadListA
@@ -1389,9 +1367,9 @@ namespace CrashEdit
             this.lblMetavalueLoadA.AutoSize = true;
             this.lblMetavalueLoadA.Location = new System.Drawing.Point(6, 75);
             this.lblMetavalueLoadA.Name = "lblMetavalueLoadA";
-            this.lblMetavalueLoadA.Size = new System.Drawing.Size(57, 13);
+            this.lblMetavalueLoadA.Size = new System.Drawing.Size(44, 13);
             this.lblMetavalueLoadA.TabIndex = 20;
-            this.lblMetavalueLoadA.Text = "Metavalue";
+            this.lblMetavalueLoadA.Text = "Position";
             // 
             // cmdRemoveRowA
             // 
@@ -1417,15 +1395,10 @@ namespace CrashEdit
             // 
             this.numMetavalueLoadA.Location = new System.Drawing.Point(69, 73);
             this.numMetavalueLoadA.Maximum = new decimal(new int[] {
-            32767,
+            65535,
             0,
             0,
             0});
-            this.numMetavalueLoadA.Minimum = new decimal(new int[] {
-            32768,
-            0,
-            0,
-            -2147483648});
             this.numMetavalueLoadA.Name = "numMetavalueLoadA";
             this.numMetavalueLoadA.Size = new System.Drawing.Size(68, 20);
             this.numMetavalueLoadA.TabIndex = 19;
@@ -1582,9 +1555,9 @@ namespace CrashEdit
             this.lblMetavalueDrawB.AutoSize = true;
             this.lblMetavalueDrawB.Location = new System.Drawing.Point(6, 75);
             this.lblMetavalueDrawB.Name = "lblMetavalueDrawB";
-            this.lblMetavalueDrawB.Size = new System.Drawing.Size(57, 13);
+            this.lblMetavalueDrawB.Size = new System.Drawing.Size(44, 13);
             this.lblMetavalueDrawB.TabIndex = 20;
-            this.lblMetavalueDrawB.Text = "Metavalue";
+            this.lblMetavalueDrawB.Text = "Position";
             // 
             // cmdRemoveRowDrawB
             // 
@@ -1780,9 +1753,9 @@ namespace CrashEdit
             this.lblMetavalueDrawA.AutoSize = true;
             this.lblMetavalueDrawA.Location = new System.Drawing.Point(6, 75);
             this.lblMetavalueDrawA.Name = "lblMetavalueDrawA";
-            this.lblMetavalueDrawA.Size = new System.Drawing.Size(57, 13);
+            this.lblMetavalueDrawA.Size = new System.Drawing.Size(44, 13);
             this.lblMetavalueDrawA.TabIndex = 20;
-            this.lblMetavalueDrawA.Text = "Metavalue";
+            this.lblMetavalueDrawA.Text = "Position";
             // 
             // cmdRemoveRowDrawA
             // 
@@ -2090,7 +2063,6 @@ namespace CrashEdit
         private System.Windows.Forms.CheckBox chkBoxCount;
         private System.Windows.Forms.NumericUpDown numBoxCount;
         private System.Windows.Forms.Button cmdClearAllVictims;
-        private System.Windows.Forms.Button cmdAppendVictim;
         private System.Windows.Forms.Button cmdNextAndRemove;
         private System.Windows.Forms.GroupBox fraDDASettings;
         private System.Windows.Forms.CheckBox chkDDASettings;
