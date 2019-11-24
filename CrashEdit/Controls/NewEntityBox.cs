@@ -1399,7 +1399,9 @@ namespace CrashEdit
                 }
                 if (text == true)
                 {
-                    entity.SLST.Rows[0].Values[0] = Entry.ENameToEID(txtSLST.Text);
+                    entity.SLST = new EntityT4Property();
+                    entity.SLST.Rows.Add(new EntityPropertyRow<int>());
+                    entity.SLST.Rows[0].Values.Add(Entry.ENameToEID(txtSLST.Text));
                     text = false;
                 }
 
