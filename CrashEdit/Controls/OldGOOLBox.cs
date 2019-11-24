@@ -381,6 +381,8 @@ namespace CrashEdit
                     return $"{ins & 0x7F},{ins >> 7 & 0x1FF},{ins >> 16 & 0x3F},{ins >> 22 & 0b11}";
                 case Opcodes.ANIF:
                     return $"{GetGOOLReference(ins & 0xFFF)},{ins >> 16 & 0x3F},{ins >> 22 & 0b11}";
+                case Opcodes.VECA:
+                    return $"{GetGOOLReference(ins & 0xFFF)},{ins >> 12 & 0b111},{ins >> 15 & 0b111},{ins >> 18 & 0b111},{ins >> 21 & 0b111}";
                 case Opcodes.JAL:
                     return $"{ins & 0x3FFF},{ins >> 20 & 0b1111}";
                 case Opcodes.CHLD:
