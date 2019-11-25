@@ -37,14 +37,14 @@ namespace CrashEdit
             MOVC = 24,
             ABS = 25,
             PAD = 26,
-            //SPD = 27,
-            //MSC = 28,
+            SPD = 27,
+            MSC = 28,
             //PRS = 29,
             TICK = 30,
             RGL = 31,
             WGL = 32,
             //ANGD = 33,
-            //APCH = 34,
+            APCH = 34,
             CVMR = 35,
             CVMW = 36,
             //ROT = 37,
@@ -60,7 +60,7 @@ namespace CrashEdit
             //
             ANIS = 56,
             ANIF = 57,
-            //
+            VECA = 58,
             JAL = 59,
             //
             CHLD = 63,
@@ -357,9 +357,13 @@ namespace CrashEdit
                 case Opcodes.NOTB:
                 case Opcodes.ABS:
 
+                case Opcodes.SPD:
+
                 case Opcodes.TICK:
 
                 case Opcodes.WGL:
+
+                case Opcodes.APCH:
 
                 case Opcodes.ANID:
 
@@ -369,6 +373,8 @@ namespace CrashEdit
                     return $"{GetGOOLReference(ins & 0xFFF)},{GetGOOLReference(ins >> 12 & 0xFFF)}";
                 case Opcodes.PAD:
                     return $"{ins & 0xFFF},{ins >> 12 & 0b11},{ins >> 14 & 0b11},{ins >> 16 & 0b1111},{ins >> 20 & 0b1}";
+                case Opcodes.MSC:
+                    return $"{GetGOOLReference(ins & 0xFFF)},{ins >> 12 & 0b111},{ins >> 15 & 0b11111},{ins >> 20 & 0b1111}";
                 case Opcodes.RGL:
                     return $"{GetGOOLReference(ins & 0xFFF)}";
                 case Opcodes.MOVC:
@@ -389,6 +395,8 @@ namespace CrashEdit
                     return $"{ins & 0x7F},{ins >> 7 & 0x1FF},{ins >> 16 & 0x3F},{ins >> 22 & 0b11}";
                 case Opcodes.ANIF:
                     return $"{GetGOOLReference(ins & 0xFFF)},{ins >> 16 & 0x3F},{ins >> 22 & 0b11}";
+                case Opcodes.VECA:
+                    return $"{GetGOOLReference(ins & 0xFFF)},{ins >> 12 & 0b111},{ins >> 15 & 0b111},{ins >> 18 & 0b111},{ins >> 21 & 0b111}";
                 case Opcodes.JAL:
                     return $"{ins & 0x3FFF},{ins >> 20 & 0b1111}";
                 case Opcodes.CHLD:
@@ -596,6 +604,8 @@ namespace CrashEdit
                     return $"# global[{GetGOOLReference(ins & 0xFFF)}]";
                 case Opcodes.WGL:
                     return $"# global[{GetGOOLReference(ins & 0xFFF)}] = {GetGOOLReference(ins >> 12 & 0xFFF)}";
+                case Opcodes.APCH:
+                    return $"# approach({GetGOOLReference(ins & 0xFFF)}, {GetGOOLReference(ins >> 12 & 0xFFF)}, ?)";
                 case Opcodes.CVMR:
                     return $"# {ObjFields.self + (ins >> 12 & 0b111)}->{(ObjColors)(ins >> 15 & 0b111111)}";
                 case Opcodes.CVMW:
@@ -608,6 +618,12 @@ namespace CrashEdit
                     return $"# play frame {ins & 0x7F} animation at {ins >> 7 & 0x1FF} (flip {ins >> 22 & 0b11}) for {ins >> 16 & 0x3F} frames";
                 case Opcodes.ANIF:
                     return $"# play frame {GetGOOLReference(ins & 0xFFF)} (flip {ins >> 22 & 0b11}) for {ins >> 16 & 0x3F} frames";
+                case Opcodes.BRA:
+                    return $"# {((ins & 0x3FF) != 0 ? "branch immediately and " : "")}pop {ins >> 10 & 0b1111} values off stack";
+                case Opcodes.BNEZ:
+                    return $"# if true, {((ins & 0x3FF) != 0 ? "branch and " : "")}pop {ins >> 10 & 0b1111} values off stack";
+                case Opcodes.BEQZ:
+                    return $"# if false, {((ins & 0x3FF) != 0 ? "branch and " : "")}pop {ins >> 10 & 0b1111} values off stack";
                 case Opcodes.MIPS:
                     return $"# begin native MIPS bytecode";
             }
