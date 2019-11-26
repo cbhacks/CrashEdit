@@ -276,6 +276,7 @@ namespace CrashEdit
             }
             lstCode.Items.Add("");
             bool mips = false;
+            bool returned = false;
             for (short i = 0; i < goolentry.Items[1].Length / 4; ++i)
             {
                 string str;
@@ -290,6 +291,12 @@ namespace CrashEdit
                         str += $"{cpc_list.IndexOf(i)}_cpc";
                     str += ":";
                     lstCode.Items.Add(str);
+                    returned = false;
+                }
+                else if (returned)
+                {
+                    lstCode.Items.Add($"Func_{i}:");
+                    returned = false;
                 }
                 str = string.Format("{0,-05}\t", i);
                 int ins = BitConv.FromInt32(goolentry.Items[1], 4*i);
@@ -315,6 +322,7 @@ namespace CrashEdit
                     }
                     str += string.Format("\t{0,-030}\t{1}", GetArguments(ins), GetComment(ins));
                     mips = opcode == Opcodes.MIPS;
+                    returned = opcode == Opcodes.RET;
                 }
                 lstCode.Items.Add(str);
             }
