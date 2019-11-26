@@ -295,7 +295,7 @@ namespace CrashEdit
                 }
                 else if (returned)
                 {
-                    lstCode.Items.Add($"Func_{i}:");
+                    lstCode.Items.Add($"Sub_{i}:");
                     returned = false;
                 }
                 str = string.Format("{0,-05}\t", i);
