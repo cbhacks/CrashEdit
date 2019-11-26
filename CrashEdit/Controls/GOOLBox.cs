@@ -378,7 +378,7 @@ namespace CrashEdit
                 case Opcodes.RGL:
                     return $"{GetGOOLReference(ins & 0xFFF)}";
                 case Opcodes.MOVC:
-                    return $"{ins & 0x3FFF},{(ObjFields)(ins >> 14 & 0x3F)}";
+                    return $"{ins & 0x3FFF},{ins >> 14 & 1},{(ObjFields)(ins >> 18 & 0x3F)}";
                 case Opcodes.CVMR:
                     return $"{ObjFields.self + (ins >> 12 & 0b111)},{ins >> 15 & 0b111111}";
                 case Opcodes.CVMW:
@@ -537,7 +537,7 @@ namespace CrashEdit
                 case Opcodes.NOTB:
                     return $"# {GetGOOLReference(ins & 0xFFF)} = ~{GetGOOLReference(ins >> 12 & 0xFFF)}";
                 case Opcodes.MOVC:
-                    return $"# {(ObjFields)(ins >> 14 & 0x3F)} = ins[{ins & 0x3FFF}]";
+                    return $"# {(ObjFields)(ins >> 18 & 0x3F)} = {((ins & 0x4000) != 0 ? "ext_" : "")}ins[{ins & 0x3FFF}]";
                 case Opcodes.ABS:
                     return $"# {GetGOOLReference(ins & 0xFFF)} = abs({GetGOOLReference(ins >> 12 & 0xFFF)})";
                 case Opcodes.PAD:
