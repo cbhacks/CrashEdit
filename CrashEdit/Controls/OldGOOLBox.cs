@@ -130,7 +130,7 @@ namespace CrashEdit
             pathprog = 45,
             pathlen = 46,
             ground = 47,
-            state = 48,
+            stateflag = 48,
             speed = 49,
             displaymode = 50,
             unk2 = 51,
