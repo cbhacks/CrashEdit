@@ -7,7 +7,7 @@ namespace CrashEdit
 {
     public sealed class GOOLBox : UserControl
     {
-        // TODO : find and fix remaining GOOL opcodes, add or improve comments, add MIPS code support(?)
+        // TODO : find and fix remaining GOOL opcodes, add or improve comments
 
         private enum Opcodes {
             ADD = 0,
@@ -50,6 +50,8 @@ namespace CrashEdit
             //ROT = 37,
             //PSHP = 38,
             ANID = 39,
+            EFDU = 40,
+            EFDS = 41,
             //
             NOP = 47,
             //
@@ -305,11 +307,11 @@ namespace CrashEdit
                     Opcodes opcode = (Opcodes)(ins >> 24 & 0xFF);
                     if (!Enum.IsDefined(typeof(Opcodes), opcode))
                     {
-                        str += $"invalid opcode {opcode}";
+                        str += $"unknown opcode {opcode}";
                     }
                     else
                     {
-                        str += $"{opcode.ToString()} ";
+                        str += $"{opcode} ";
                     }
                     str += string.Format("\t{0,-030}\t{1}", GetArguments(ins), GetComment(ins));
                     mips = opcode == Opcodes.MIPS;
@@ -366,10 +368,14 @@ namespace CrashEdit
                 case Opcodes.APCH:
 
                 case Opcodes.ANID:
+                case Opcodes.EFDU:
+                case Opcodes.EFDS:
+                case (Opcodes)42:
 
                 case Opcodes.SNDA:
 
                 case Opcodes.MIPS:
+                case (Opcodes)78:
                     return $"{GetGOOLReference(ins & 0xFFF)},{GetGOOLReference(ins >> 12 & 0xFFF)}";
                 case Opcodes.PAD:
                     return $"{ins & 0xFFF},{ins >> 12 & 0b11},{ins >> 14 & 0b11},{ins >> 16 & 0b1111},{ins >> 20 & 0b1}";
@@ -422,7 +428,7 @@ namespace CrashEdit
             {
                 if ((val & 0b010000000000) == 0) // ireg
                 {
-                    if (goolentry.Format == 1) // data-less GOOL entries will logically not have data...
+                    if (goolentry.Format == 1) // external GOOL entries will logically not have local data...
                     {
                         int cval = GetConst(val & 0b1111111111);
                         if (cval >= 0x2000000 && (cval & 1) == 1)
@@ -438,7 +444,22 @@ namespace CrashEdit
                     }
                 }
                 else // pool
-                    r = string.Format("[ext$(0x{0:X})]", val & 0b1111111111);
+                {
+                    if (goolentry.Format == 0) // local GOOL entries will logically not have external data...
+                    {
+                        int cval = GetConst(val & 0b1111111111);
+                        if (cval >= 0x2000000 && (cval & 1) == 1)
+                            r = $"({Entry.EIDToEName(cval)})";
+                        else if (cval >= 256 || cval <= -256)
+                            r = string.Format("(0x{0:X})", cval);
+                        else
+                            r = $"({cval})";
+                    }
+                    else
+                    {
+                        r = string.Format("[ext$(0x{0:X})]", val & 0b1111111111);
+                    }
+                }
             }
             else
             {
