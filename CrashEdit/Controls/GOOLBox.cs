@@ -788,29 +788,29 @@ namespace CrashEdit
                 case 15:
                     return $"xori\t{GetMIPSReg(rt)},{imm}";
                 case 32:
-                    return $"lb  \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                    return string.Format("lb  \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
                 case 33:
-                    return $"lh  \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                    return string.Format("lh  \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
                 case 34:
-                    return $"lwl \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                    return string.Format("lwl \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
                 case 35:
-                    return $"lw  \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                    return string.Format("lw  \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
                 case 36:
-                    return $"lbu \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                    return string.Format("lbu \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
                 case 37:
-                    return $"lhu \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                    return string.Format("lhu \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
                 case 38:
-                    return $"lwr \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                    return string.Format("lwr \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
                 case 40:
-                    return $"sb  \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                    return string.Format("sb  \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
                 case 41:
-                    return $"sh  \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                    return string.Format("sh  \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
                 case 42:
-                    return $"swl \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                    return string.Format("swl \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
                 case 43:
-                    return $"sw  \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                    return string.Format("sw  \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
                 case 46:
-                    return $"swr \t{GetMIPSReg(rt)},{imm}({GetMIPSReg(rs)})";
+                    return string.Format("swr \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
             }
 
             return str;
