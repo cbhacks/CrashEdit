@@ -39,50 +39,47 @@ namespace CrashEdit
             PAD = 26,
             SPD = 27,
             MSC = 28,
-            //PRS = 29,
+            PRS = 29,
             TICK = 30,
             RGL = 31,
             WGL = 32,
-            //ANGD = 33,
+            ANGD = 33,
             APCH = 34,
             CVMR = 35,
             CVMW = 36,
-            //ROT = 37,
-            //PSHP = 38,
+            ROT = 37,
+            PSHP = 38,
             ANID = 39,
             EFDU = 40,
             EFDS = 41,
             //
             NOP = 47,
-            //
+            DBG = 48,
             RET = 49,
             BRA = 50,
             BNEZ = 51,
             BEQZ = 52,
-            //
+            CST = 53,
+            CNEZ = 54,
+            CEQZ = 55,
             ANIS = 56,
             ANIF = 57,
             VECA = 58,
             JAL = 59,
-            //
+            EVNT = 60,
+            RSTT = 61,
+            RSTF = 62,
             CHLD = 63,
-            //
+            NTRY = 64,
             SNDA = 65,
             SNDP = 66,
+            VECB = 67,
+            EVNB = 68,
+            EVNU = 69,
+            CHLF = 70,
+            STCK = 71,
             //
             MIPS = 73
-
-            //DBG = 128,
-            //VECA = 133,
-            //JAL = 134,
-            //EVNT = 135,
-            //RSTT = 136,
-            //RSTF = 137,
-            //NTRY = 139,
-            //VECB = 142,
-            //EVNB = 143,
-            //EVNU = 144,
-            //CHLF = 145
         };
 
         private enum ObjFields {
@@ -214,7 +211,7 @@ namespace CrashEdit
             lstCode.Items.Add($"Type: {BitConv.FromInt32(goolentry.Items[0],0)}");
             lstCode.Items.Add($"Category: {BitConv.FromInt32(goolentry.Items[0],4)}");
             lstCode.Items.Add($"Format: {goolentry.Format}");
-            lstCode.Items.Add($"Stack Start: {(ObjFields)BitConv.FromInt32(goolentry.Items[0],12)}");
+            lstCode.Items.Add(string.Format("Stack Start: {0} (0x{1:X})",(ObjFields)BitConv.FromInt32(goolentry.Items[0],12),BitConv.FromInt32(goolentry.Items[0],12)*4));
             lstCode.Items.Add($"Interrupt Count: {interruptcount}");
             lstCode.Items.Add($"unknown: {BitConv.FromInt32(goolentry.Items[0],20)}");
             List<short> epc_list = new List<short>();
@@ -355,34 +352,47 @@ namespace CrashEdit
                 case Opcodes.MOD:
                 case Opcodes.XOR:
                 case Opcodes.TST:
-
                 case Opcodes.RND:
-                case Opcodes.PATH:
-                case Opcodes.SHA:
-                case Opcodes.PUSH:
-
                 case Opcodes.MOV:
                 case Opcodes.NOTL:
+                case Opcodes.PATH:
                 case Opcodes.LEA:
+                case Opcodes.SHA:
+                case Opcodes.PUSH:
                 case Opcodes.NOTB:
+
                 case Opcodes.ABS:
 
                 case Opcodes.SPD:
 
+                case Opcodes.PRS:
                 case Opcodes.TICK:
 
                 case Opcodes.WGL:
-
+                case Opcodes.ANGD:
                 case Opcodes.APCH:
 
+                case Opcodes.ROT:
+                case Opcodes.PSHP:
                 case Opcodes.ANID:
                 case Opcodes.EFDU:
                 case Opcodes.EFDS:
                 case (Opcodes)42:
+                case (Opcodes)43:
+                case (Opcodes)44:
+                case (Opcodes)45:
+                case (Opcodes)46:
+
+                case Opcodes.DBG:
 
                 case Opcodes.SNDA:
 
-                case Opcodes.MIPS:
+                case Opcodes.STCK:
+
+                case (Opcodes)72:
+
+                case (Opcodes)76:
+                case (Opcodes)77:
                 case (Opcodes)78:
                     return $"{GetGOOLReference(ins & 0xFFF)},{GetGOOLReference(ins >> 12 & 0xFFF)}";
                 case Opcodes.PAD:
@@ -390,6 +400,8 @@ namespace CrashEdit
                 case Opcodes.MSC:
                     return $"{GetGOOLReference(ins & 0xFFF)},{ins >> 12 & 0b111},{ins >> 15 & 0b11111},{ins >> 20 & 0b1111}";
                 case Opcodes.RGL:
+                case (Opcodes)74:
+                case (Opcodes)75:
                     return $"{GetGOOLReference(ins & 0xFFF)}";
                 case Opcodes.MOVC:
                     return $"{ins & 0x3FFF},{ins >> 14 & 1},{(ObjFields)(ins >> 18 & 0x3F)}";
@@ -398,23 +410,34 @@ namespace CrashEdit
                 case Opcodes.CVMW:
                     return $"{GetGOOLReference(ins & 0xFFF)},{ObjFields.self + (ins >> 12 & 0b111)},{ins >> 15 & 0b111111}";
                 case Opcodes.NOP:
+                case Opcodes.MIPS:
                     return string.Empty;
                 case Opcodes.RET:
                     return $"{ins & 0x3FFF},{(ObjFields)(ins >> 14 & 0x3F)}";
                 case Opcodes.BRA:
                 case Opcodes.BNEZ:
                 case Opcodes.BEQZ:
+                case Opcodes.CST:
+                case Opcodes.CNEZ:
+                case Opcodes.CEQZ:
                     return $"{BitConv.SignExtend32(ins & 0x3FF, 9)},{ins >> 10 & 0xF},{(ObjFields)(ins >> 14 & 0x3F)}";
                 case Opcodes.ANIS:
                     return $"{ins & 0x7F},{ins >> 7 & 0x1FF},{ins >> 16 & 0x3F},{ins >> 22 & 0b11}";
                 case Opcodes.ANIF:
                     return $"{GetGOOLReference(ins & 0xFFF)},{ins >> 16 & 0x3F},{ins >> 22 & 0b11}";
                 case Opcodes.VECA:
+                case Opcodes.EVNT:
+                case Opcodes.EVNB:
+                case Opcodes.EVNU:
+                case Opcodes.VECB:
                     return $"{GetGOOLReference(ins & 0xFFF)},{ins >> 12 & 0b111},{ins >> 15 & 0b111},{ins >> 18 & 0b111},{ins >> 21 & 0b111}";
                 case Opcodes.JAL:
                     return $"{ins & 0x3FFF},{ins >> 20 & 0b1111}";
                 case Opcodes.CHLD:
+                case Opcodes.CHLF:
                     return $"{ins & 0x3F},{ins >> 6 & 0x3F},{ins >> 12 & 0xFF},{ins >> 20 & 0xF}";
+                case Opcodes.NTRY:
+                    return $"{ins & 0xFFF},{ins >> 12 & 0xFFF}";
                 case Opcodes.SNDP:
                     return $"{GetGOOLReference(ins & 0xFFF)},{ins >> 12 & 0xFF},{ins >> 20 & 0b1111}";
                 default:
@@ -524,10 +547,9 @@ namespace CrashEdit
                     return $"# {GetGOOLReference(ins & 0xFFF)} == {GetGOOLReference(ins >> 12 & 0xFFF)}";
                 case Opcodes.ANDL:
                     return $"# {GetGOOLReference(ins & 0xFFF)} && {GetGOOLReference(ins >> 12 & 0xFFF)}";
-                case Opcodes.ORL:
-                    return $"# {GetGOOLReference(ins & 0xFFF)} || {GetGOOLReference(ins >> 12 & 0xFFF)}";
                 case Opcodes.ANDB:
                     return $"# {GetGOOLReference(ins & 0xFFF)} & {GetGOOLReference(ins >> 12 & 0xFFF)}";
+                case Opcodes.ORL:
                 case Opcodes.ORB:
                     return $"# {GetGOOLReference(ins & 0xFFF)} | {GetGOOLReference(ins >> 12 & 0xFFF)}";
                 case Opcodes.SLT:
@@ -642,7 +664,7 @@ namespace CrashEdit
                 case Opcodes.ANID:
                     return $"# {GetGOOLReference(ins & 0xFFF)} = &{goolentry.EName}.anim[{GetGOOLReference(ins >> 12 & 0xFFF)}]";
                 case Opcodes.NOP:
-                    return $"# no operation";
+                    return $"\t# no operation";
                 case Opcodes.ANIS:
                     return $"# play frame {ins & 0x7F} animation at {ins >> 7 & 0x1FF} (flip {ins >> 22 & 0b11}) for {ins >> 16 & 0x3F} frames";
                 case Opcodes.ANIF:
@@ -654,7 +676,7 @@ namespace CrashEdit
                 case Opcodes.BEQZ:
                     return $"# if false, {((ins & 0x3FF) != 0 ? "branch and " : "")}pop {ins >> 10 & 0b1111} values off stack";
                 case Opcodes.MIPS:
-                    return $"# begin native MIPS bytecode";
+                    return $"\t# begin native MIPS bytecode";
             }
             return string.Empty;
         }
@@ -688,7 +710,6 @@ namespace CrashEdit
             int shamt = ins >> 6 & 0b11111;
             int funct = ins & 0b111111;
             short imm = (short)(ins & 0xFFFF);
-            ushort immu = (ushort)imm;
             int ofs = ins ^ (opcode << 26);
 
             switch (opcode)
@@ -782,11 +803,11 @@ namespace CrashEdit
                 case 8:
                     return $"addi\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{imm}";
                 case 9:
-                    return $"addiu\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{immu}";
+                    return $"addiu\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{imm}";
                 case 10:
                     return $"subi\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{imm}";
                 case 11:
-                    return $"subiu\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{immu}";
+                    return $"subiu\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{imm}";
                 case 12:
                     return $"andi\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{imm}";
                 case 13:
