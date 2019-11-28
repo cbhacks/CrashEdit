@@ -409,6 +409,7 @@ namespace CrashEdit
                 RenderOctreeY(data,ref offset,x,y,z,w,h,d,xmax - 1,ymax,zmax);
             }
         }
+
         private void RenderOctreeY(byte[] data,ref int offset,double x,double y,double z,double w,double h,double d,int xmax,int ymax,int zmax)
         {
             if (ymax > 0)
