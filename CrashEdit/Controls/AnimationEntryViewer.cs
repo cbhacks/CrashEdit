@@ -40,20 +40,19 @@ namespace CrashEdit
         {
             frames = new List<Frame>();
             this.model = model;
-            ConvertTexturesToGL(texturechunks, model.Textures, model.Info, 0xC);
-            if (model.Positions != null) // fix this later
+            if (model.Positions != null) // FIXME this later
                 frames.Add(UncompressFrame(frame));
             else
                 frames.Add(LoadFrame(frame));
             frameid = 0;
             interi = 0;
+            ConvertTexturesToGL(texturechunks, model.Textures, model.Info, 0xC);
         }
 
         public AnimationEntryViewer(IEnumerable<Frame> frames,ModelEntry model,TextureChunk[] texturechunks)
         {
             this.frames = new List<Frame>();
             this.model = model;
-            ConvertTexturesToGL(texturechunks, model.Textures, model.Info, 0xC);
             frameid = 0;
             interi = 0;
             if (model.Positions != null)
@@ -85,6 +84,7 @@ namespace CrashEdit
                 frameid = (frameid + (interi == 1 ? 1 : 0)) % this.frames.Count;
                 Refresh();
             };
+            ConvertTexturesToGL(texturechunks, model.Textures, model.Info, 0xC);
         }
         
         private int MinScale => model != null ? Math.Min(BitConv.FromInt32(model.Info, 8), Math.Min(BitConv.FromInt32(model.Info, 0), BitConv.FromInt32(model.Info, 4))) : 0x1000;
@@ -98,13 +98,6 @@ namespace CrashEdit
             {
                 foreach (Frame frame in frames)
                 {
-                    if (!frame.Decompressed)
-                    {
-                        if (model.Positions == null)
-                            UncompressFrame(frame);
-                        else
-                            LoadFrame(frame);
-                    }
                     foreach (FrameVertex vertex in frame.Vertices)
                     {
                         int x = (vertex.X + frame.XOffset / 4) * BitConv.FromInt32(model.Info,0);
