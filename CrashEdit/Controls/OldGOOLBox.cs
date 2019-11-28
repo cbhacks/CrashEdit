@@ -218,7 +218,7 @@ namespace CrashEdit
             lstCode.Items.Add($"Type: {BitConv.FromInt32(goolentry.Items[0],0)}");
             lstCode.Items.Add($"Category: {BitConv.FromInt32(goolentry.Items[0],4)}");
             lstCode.Items.Add($"Format: {goolentry.Format}");
-            lstCode.Items.Add($"Stack Start: {(ObjFields)BitConv.FromInt32(goolentry.Items[0],12)}");
+            lstCode.Items.Add(string.Format("Stack Start: {0} ({1})",(ObjFields)BitConv.FromInt32(goolentry.Items[0],12),GetNumber(BitConv.FromInt32(goolentry.Items[0],12)*4)));
             lstCode.Items.Add($"Interrupt Count: {interruptcount}");
             lstCode.Items.Add($"unknown: {BitConv.FromInt32(goolentry.Items[0],20)}");
             List<short> epc_list = new List<short>();
@@ -230,14 +230,14 @@ namespace CrashEdit
                 lstCode.Items.Add("Interrupts:");
                 for (int i = 0; i < interruptcount; ++i)
                 {
-                    if (goolentry.Items[3][i * 2] == 255) continue;
+                    if (BitConv.FromInt16(goolentry.Items[3],i*2) == 255) continue;
                     lstCode.Items.Add($"\tInterrupt {i}: State_{goolentry.Items[3][i * 2]}");
                 }
                 lstCode.Items.Add($"Available Subtypes: {goolentry.Items[3].Length / 0x2 - interruptcount}");
                 for (int i = interruptcount; i < goolentry.Items[3].Length / 0x2; ++i)
                 {
                     if (i > interruptcount && i+1 == goolentry.Items[3].Length / 2 && (interruptcount & 1) == 1 && goolentry.Items[3][i * 2] == 0) continue;
-                    lstCode.Items.Add($"\tSubtype {i - interruptcount}: {(goolentry.Items[3][i * 2] == 255 ? "invalid" : $"State_{goolentry.Items[3][i * 2]}")}");
+                    lstCode.Items.Add($"\tSubtype {i - interruptcount}: {(BitConv.FromInt16(goolentry.Items[3],i*2) == 255 ? "invalid" : $"State_{goolentry.Items[3][i * 2]}")}");
                 }
                 lstCode.Items.Add("");
                 for (int i = 0; i < goolentry.Items[4].Length / 0x10; ++i)
@@ -443,37 +443,51 @@ namespace CrashEdit
             {
                 if ((val & 0b010000000000) == 0) // ireg
                 {
-                    if (goolentry.Format == 1) // data-less GOOL entries will logically not have data...
+                    if (goolentry.Format == 1) // external GOOL entries will logically not have local data...
                     {
                         int cval = GetConst(val & 0b1111111111);
                         if (cval >= 0x2000000 && (cval & 1) == 1)
                             r = $"({Entry.EIDToEName(cval)})";
-                        else if (cval >= 256 || cval <= -256)
-                            r = string.Format("(0x{0:X})", cval);
                         else
-                            r = $"({cval})";
+                            r = $"({GetNumber(cval)})";
                     }
                     else
                     {
-                        r = string.Format("[pool$(0x{0:X})]", val & 0b1111111111);
+                        r = $"[pool$({GetNumber(val & 0b1111111111)})]";
                     }
                 }
                 else // pool
-                    r = string.Format("[ext$(0x{0:X})]", val & 0b1111111111);
+                {
+                    if (goolentry.Format == 0) // local GOOL entries will logically not have external data...
+                    {
+                        int cval = GetConst(val & 0b1111111111);
+                        if (cval >= 0x2000000 && (cval & 1) == 1)
+                            r = $"({Entry.EIDToEName(cval)})";
+                        else
+                            r = $"({GetNumber(cval)})";
+                    }
+                    else
+                    {
+                        r = $"[ext$({GetNumber(val & 0b1111111111)})]";
+                    }
+                }
             }
             else
             {
                 int hi1 = val >> 9 & 0b11;
                 if (hi1 == 0) // int
                 {
-                    r = string.Format("{0}0x{1:X}", (val & 0x100) == 1 ? "-" : "", (val & 0x100) == 0 ? (val & 0xFF) : 256 - (val & 0xFF));
+                    r = $"{GetNumber(BitConv.SignExtend32(val & 0x1FF,8))}";
                 }
                 else if (hi1 == 1)
                 {
                     if ((val >> 8 & 1) == 0) // frac
-                        r = string.Format("{0}0x{1:X}", (val & 0x80) == 0 ? "" : "-", (val & 0x7F) * 0x100);
+                        r = $"{GetNumber(BitConv.SignExtend32(val,7)*0x100)}";
                     else // stack
-                        r = string.Format("{0}[{1}]", (val & 0x40) == 0 ? "stack" : "arg", (val & 0x40) == 0 ? val & 0b111111 : 0x3F - (val & 0b111111));
+                    {
+                        int n = BitConv.SignExtend32(val, 6);
+                        r = string.Format("{0}[{1}]", n >= 0 ? "stack" : "arg", GetNumber(n < 0 ? -n - 1 : n));
+                    }
                 }
                 else if (hi1 == 2) // reg
                 {
@@ -486,11 +500,10 @@ namespace CrashEdit
                         r = ((ObjFields)(val & 0x1FF)).ToString();
                     }
                     else
-                        r = string.Format("[var${0}]", val & 0x1FF);
+                        r = $"[var${GetNumber(0x1FF)}]";
                 }
                 else throw new Exception();
             }
-
             return r;
         }
 
@@ -663,6 +676,19 @@ namespace CrashEdit
                     return $"# no operation";
             }
             return string.Empty;
+        }
+
+        private string GetNumber(int num)
+        {
+            if (num > 64 || num < -64)
+            {
+                if (num < 0)
+                    return string.Format("-0x{0:X}", -num);
+                else
+                    return string.Format("0x{0:X}", num);
+            }
+            else
+                return $"{num}";
         }
     }
 }

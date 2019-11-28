@@ -211,7 +211,7 @@ namespace CrashEdit
             lstCode.Items.Add($"Type: {BitConv.FromInt32(goolentry.Items[0],0)}");
             lstCode.Items.Add($"Category: {BitConv.FromInt32(goolentry.Items[0],4)}");
             lstCode.Items.Add($"Format: {goolentry.Format}");
-            lstCode.Items.Add(string.Format("Stack Start: {0} (0x{1:X})",(ObjFields)BitConv.FromInt32(goolentry.Items[0],12),BitConv.FromInt32(goolentry.Items[0],12)*4));
+            lstCode.Items.Add(string.Format("Stack Start: {0} ({1})",(ObjFields)BitConv.FromInt32(goolentry.Items[0],12),GetNumber(BitConv.FromInt32(goolentry.Items[0],12)*4)));
             lstCode.Items.Add($"Interrupt Count: {interruptcount}");
             lstCode.Items.Add($"unknown: {BitConv.FromInt32(goolentry.Items[0],20)}");
             List<short> epc_list = new List<short>();
@@ -223,14 +223,14 @@ namespace CrashEdit
                 lstCode.Items.Add("Interrupts:");
                 for (int i = 0; i < interruptcount; ++i)
                 {
-                    if (goolentry.Items[3][i * 2] == 255) continue;
-                    lstCode.Items.Add($"\tInterrupt {i}: State_{goolentry.Items[3][i * 2]}");
+                    if (BitConv.FromInt16(goolentry.Items[3],i*2) == 255) continue;
+                    lstCode.Items.Add($"\tInterrupt {i}: State_{goolentry.Items[3][i * 2] & 0x3F}");
                 }
                 lstCode.Items.Add($"Available Subtypes: {goolentry.Items[3].Length / 0x2 - interruptcount}");
                 for (int i = interruptcount; i < goolentry.Items[3].Length / 0x2; ++i)
                 {
                     if (i > interruptcount && i+1 == goolentry.Items[3].Length / 2 && (interruptcount & 1) == 1 && goolentry.Items[3][i * 2] == 0) continue;
-                    lstCode.Items.Add($"\tSubtype {i - interruptcount}: {(goolentry.Items[3][i * 2] == 255 ? "invalid" : $"State_{goolentry.Items[3][i * 2]}")}");
+                    lstCode.Items.Add($"\tSubtype {i - interruptcount}: {(BitConv.FromInt16(goolentry.Items[3],i*2) == 255 ? "invalid" : $"State_{goolentry.Items[3][i * 2]}")}");
                 }
                 lstCode.Items.Add("");
                 for (int i = 0; i < goolentry.Items[4].Length / 0x10; ++i)
@@ -238,7 +238,7 @@ namespace CrashEdit
                     short epc = BitConv.FromInt16(goolentry.Items[4],0x10*i+0xA);
                     short tpc = BitConv.FromInt16(goolentry.Items[4],0x10*i+0xC);
                     short cpc = BitConv.FromInt16(goolentry.Items[4],0x10*i+0xE);
-                    lstCode.Items.Add($"State_{i} [{Entry.EIDToEName(GetConst(BitConv.FromInt16(goolentry.Items[4],0x10*i+8)))}] (State Flags: {BitConv.FromInt32(goolentry.Items[4],0x10*i+0)} | C-Flags: {BitConv.FromInt32(goolentry.Items[4],0x10*i+4)})");
+                    lstCode.Items.Add($"State_{i} [{Entry.EIDToEName(GetConst(BitConv.FromInt16(goolentry.Items[4],0x10*i+8)))}] (State Flags: {string.Format("0x{0:X}",BitConv.FromInt32(goolentry.Items[4],0x10*i+0))} | C-Flags: {string.Format("0x{0:X}",BitConv.FromInt32(goolentry.Items[4],0x10*i+4))})");
                     if (BitConv.FromInt32(goolentry.Items[2], 4 * BitConv.FromInt16(goolentry.Items[4], 0x10 * i + 8)) == goolentry.EID)
                     {
                         epc_list.Add(epc);
@@ -303,6 +303,7 @@ namespace CrashEdit
                     if (ins == 0x03E00008 || (prev == 0x03E0A809 && ins == 0)) // native mips returns or ends here
                     {
                         mips = false;
+                        returned = ins == 0x03E00008;
                     }
                     str += GetMIPSInstruction(ins);
                 }
@@ -464,14 +465,12 @@ namespace CrashEdit
                         int cval = GetConst(val & 0b1111111111);
                         if (cval >= 0x2000000 && (cval & 1) == 1)
                             r = $"({Entry.EIDToEName(cval)})";
-                        else if (cval >= 256 || cval <= -256)
-                            r = string.Format("(0x{0:X})", cval);
                         else
-                            r = $"({cval})";
+                            r = $"({GetNumber(cval)})";
                     }
                     else
                     {
-                        r = string.Format("[pool$(0x{0:X})]", val & 0b1111111111);
+                        r = $"[pool$({GetNumber(val & 0b1111111111)})]";
                     }
                 }
                 else // pool
@@ -481,14 +480,12 @@ namespace CrashEdit
                         int cval = GetConst(val & 0b1111111111);
                         if (cval >= 0x2000000 && (cval & 1) == 1)
                             r = $"({Entry.EIDToEName(cval)})";
-                        else if (cval >= 256 || cval <= -256)
-                            r = string.Format("(0x{0:X})", cval);
                         else
-                            r = $"({cval})";
+                            r = $"({GetNumber(cval)})";
                     }
                     else
                     {
-                        r = string.Format("[ext$(0x{0:X})]", val & 0b1111111111);
+                        r = $"[ext$({GetNumber(val & 0b1111111111)})]";
                     }
                 }
             }
@@ -497,14 +494,17 @@ namespace CrashEdit
                 int hi1 = val >> 9 & 0b11;
                 if (hi1 == 0) // int
                 {
-                    r = string.Format("{0}0x{1:X}", (val & 0x100) == 1 ? "-" : "", (val & 0x100) == 0 ? (val & 0xFF) : 256 - (val & 0xFF));
+                    r = $"{GetNumber(BitConv.SignExtend32(val & 0x1FF,8))}";
                 }
                 else if (hi1 == 1)
                 {
                     if ((val >> 8 & 1) == 0) // frac
-                        r = string.Format("{0}0x{1:X}", (val & 0x80) == 0 ? "" : "-", (val & 0x7F) * 0x100);
+                        r = $"{GetNumber(BitConv.SignExtend32(val,7)*0x100)}";
                     else // stack
-                        r = string.Format("{0}[{1}]", (val & 0x40) == 0 ? "stack" : "arg", (val & 0x40) == 0 ? val & 0b111111 : 0x3F - (val & 0b111111));
+                    {
+                        int n = BitConv.SignExtend32(val, 6);
+                        r = string.Format("{0}[{1}]", n >= 0 ? "stack" : "arg", GetNumber(n < 0 ? -n - 1 : n));
+                    }
                 }
                 else if (hi1 == 2) // reg
                 {
@@ -517,11 +517,10 @@ namespace CrashEdit
                         r = ((ObjFields)(val & 0x1FF)).ToString();
                     }
                     else
-                        r = string.Format("[var${0}]", val & 0x1FF);
+                        r = $"[var${GetNumber(0x1FF)}]";
                 }
                 else throw new Exception();
             }
-
             return r;
         }
 
@@ -688,8 +687,8 @@ namespace CrashEdit
             v0, v1,
             a0, a1, a2, a3,
             t0, t1, t2, t3, t4, t5, t6, t7,
-            s0, s1, s2, s3, s4, s5, s6, s7,
-            t8, t9,
+            s0, s1, s2, s3, s4, s5, s6, s7, s8,
+            t8,
             k0, k1,
             gp,
             sp,
@@ -779,13 +778,13 @@ namespace CrashEdit
                     switch (rt)
                     {
                         case 0:
-                            return $"bltz\t{GetMIPSReg(rs)},{imm}";
+                            return $"bltz\t{GetMIPSReg(rs)},{GetNumber(imm)}";
                         case 1:
-                            return $"bgez\t{GetMIPSReg(rs)},{imm}";
+                            return $"bgez\t{GetMIPSReg(rs)},{GetNumber(imm)}";
                         case 16:
-                            return $"bltzal\t{GetMIPSReg(rs)},{imm}";
+                            return $"bltzal\t{GetMIPSReg(rs)},{GetNumber(imm)}";
                         case 17:
-                            return $"bgezal\t{GetMIPSReg(rs)},{imm}";
+                            return $"bgezal\t{GetMIPSReg(rs)},{GetNumber(imm)}";
                     }
                     break;
                 case 2:
@@ -793,53 +792,53 @@ namespace CrashEdit
                 case 3:
                     return $"jal \t{ofs}";
                 case 4:
-                    return $"beq \t{GetMIPSReg(rs)},{GetMIPSReg(rt)},{imm}";
+                    return $"beq \t{GetMIPSReg(rs)},{GetMIPSReg(rt)},{GetNumber(imm)}";
                 case 5:
-                    return $"bne \t{GetMIPSReg(rs)},{GetMIPSReg(rt)},{imm}";
+                    return $"bne \t{GetMIPSReg(rs)},{GetMIPSReg(rt)},{GetNumber(imm)}";
                 case 6:
-                    return $"blez\t{GetMIPSReg(rs)},{imm}";
+                    return $"blez\t{GetMIPSReg(rs)},{GetNumber(imm)}";
                 case 7:
-                    return $"bgtz\t{GetMIPSReg(rs)},{imm}";
+                    return $"bgtz\t{GetMIPSReg(rs)},{GetNumber(imm)}";
                 case 8:
-                    return $"addi\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{imm}";
+                    return $"addi\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{GetNumber(imm)}";
                 case 9:
-                    return $"addiu\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{imm}";
+                    return $"addiu\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{GetNumber(imm)}";
                 case 10:
-                    return $"subi\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{imm}";
+                    return $"subi\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{GetNumber(imm)}";
                 case 11:
-                    return $"subiu\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{imm}";
+                    return $"subiu\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{GetNumber(imm)}";
                 case 12:
-                    return $"andi\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{imm}";
+                    return $"andi\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{GetNumber(imm)}";
                 case 13:
-                    return $"ori \t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{imm}";
+                    return $"ori \t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{GetNumber(imm)}";
                 case 14:
-                    return $"xori\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{imm}";
+                    return $"xori\t{GetMIPSReg(rt)},{GetMIPSReg(rs)},{GetNumber(imm)}";
                 case 15:
-                    return $"xori\t{GetMIPSReg(rt)},{imm}";
+                    return $"xori\t{GetMIPSReg(rt)},{GetNumber(imm)}";
                 case 32:
-                    return string.Format("lb  \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
+                    return string.Format("lb  \t{1},{0}({2})",GetNumber(imm),GetMIPSReg(rt),GetMIPSReg(rs));
                 case 33:
-                    return string.Format("lh  \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
+                    return string.Format("lh  \t{1},{0}({2})",GetNumber(imm),GetMIPSReg(rt),GetMIPSReg(rs));
                 case 34:
-                    return string.Format("lwl \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
+                    return string.Format("lwl \t{1},{0}({2})",GetNumber(imm),GetMIPSReg(rt),GetMIPSReg(rs));
                 case 35:
-                    return string.Format("lw  \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
+                    return string.Format("lw  \t{1},{0}({2})",GetNumber(imm),GetMIPSReg(rt),GetMIPSReg(rs));
                 case 36:
-                    return string.Format("lbu \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
+                    return string.Format("lbu \t{1},{0}({2})",GetNumber(imm),GetMIPSReg(rt),GetMIPSReg(rs));
                 case 37:
-                    return string.Format("lhu \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
+                    return string.Format("lhu \t{1},{0}({2})",GetNumber(imm),GetMIPSReg(rt),GetMIPSReg(rs));
                 case 38:
-                    return string.Format("lwr \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
+                    return string.Format("lwr \t{1},{0}({2})",GetNumber(imm),GetMIPSReg(rt),GetMIPSReg(rs));
                 case 40:
-                    return string.Format("sb  \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
+                    return string.Format("sb  \t{1},{0}({2})",GetNumber(imm),GetMIPSReg(rt),GetMIPSReg(rs));
                 case 41:
-                    return string.Format("sh  \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
+                    return string.Format("sh  \t{1},{0}({2})",GetNumber(imm),GetMIPSReg(rt),GetMIPSReg(rs));
                 case 42:
-                    return string.Format("swl \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
+                    return string.Format("swl \t{1},{0}({2})",GetNumber(imm),GetMIPSReg(rt),GetMIPSReg(rs));
                 case 43:
-                    return string.Format("sw  \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
+                    return string.Format("sw  \t{1},{0}({2})",GetNumber(imm),GetMIPSReg(rt),GetMIPSReg(rs));
                 case 46:
-                    return string.Format("swr \t{1},0x{0:X}({2})",imm,GetMIPSReg(rt),GetMIPSReg(rs));
+                    return string.Format("swr \t{1},{0}({2})",GetNumber(imm),GetMIPSReg(rt),GetMIPSReg(rs));
             }
 
             return str;
@@ -848,6 +847,32 @@ namespace CrashEdit
         private string GetMIPSReg(int reg)
         {
             return $"${(MIPSReg)reg}";
+        }
+
+        private string GetNumber(short num)
+        {
+            if (num > 64 || num < -64)
+            {
+                if (num < 0)
+                    return string.Format("-0x{0:X}",-num);
+                else
+                    return string.Format("0x{0:X}",num);
+            }
+            else
+                return $"{num}";
+        }
+
+        private string GetNumber(int num)
+        {
+            if (num > 64 || num < -64)
+            {
+                if (num < 0)
+                    return string.Format("-0x{0:X}",-num);
+                else
+                    return string.Format("0x{0:X}",num);
+            }
+            else
+                return $"{num}";
         }
     }
 }
