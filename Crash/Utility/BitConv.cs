@@ -114,7 +114,7 @@ namespace Crash
             {
                 return value | (int)(0xFFFFFFFF << valuebits);
             }
-            else return value;
+            else return (value | (int)(0xFFFFFFFF << valuebits)) ^ (int)(0xFFFFFFFF << valuebits);
         }
     }
 }
