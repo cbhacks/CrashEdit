@@ -211,7 +211,7 @@ namespace CrashEdit
             lstCode.Items.Add($"Type: {BitConv.FromInt32(goolentry.Items[0],0)}");
             lstCode.Items.Add($"Category: {BitConv.FromInt32(goolentry.Items[0],4)}");
             lstCode.Items.Add($"Format: {goolentry.Format}");
-            lstCode.Items.Add(string.Format("Stack Start: {0} ({1})",(ObjFields)BitConv.FromInt32(goolentry.Items[0],12),GetNumber(BitConv.FromInt32(goolentry.Items[0],12)*4)));
+            lstCode.Items.Add(string.Format("Stack Start: {0} ({1})",(ObjFields)BitConv.FromInt32(goolentry.Items[0],12),GetNumber(BitConv.FromInt32(goolentry.Items[0],12)*4+0x40)));
             lstCode.Items.Add($"Interrupt Count: {interruptcount}");
             lstCode.Items.Add($"unknown: {BitConv.FromInt32(goolentry.Items[0],20)}");
             List<short> epc_list = new List<short>();
