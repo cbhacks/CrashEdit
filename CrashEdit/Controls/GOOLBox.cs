@@ -223,21 +223,27 @@ namespace CrashEdit
                 lstCode.Items.Add("Interrupts:");
                 for (int i = 0; i < interruptcount; ++i)
                 {
-                    if (BitConv.FromInt16(goolentry.Items[3],i*2) == 255) continue;
-                    lstCode.Items.Add($"\tInterrupt {i}: State_{goolentry.Items[3][i * 2] & 0x3F}");
+                    short evt = BitConv.FromInt16(goolentry.Items[3],i*2);
+                    if (evt == 255)
+                        continue;
+                    else if ((evt & 0x8000) != 0)
+                        lstCode.Items.Add($"\tInterrupt {i}: Sub_{evt & 0x3FFF}");
+                    else
+                        lstCode.Items.Add($"\tInterrupt {i}: State_{evt}");
                 }
                 lstCode.Items.Add($"Available Subtypes: {goolentry.Items[3].Length / 0x2 - interruptcount}");
                 for (int i = interruptcount; i < goolentry.Items[3].Length / 0x2; ++i)
                 {
-                    if (i > interruptcount && i+1 == goolentry.Items[3].Length / 2 && (interruptcount & 1) == 1 && goolentry.Items[3][i * 2] == 0) continue;
-                    lstCode.Items.Add($"\tSubtype {i - interruptcount}: {(BitConv.FromInt16(goolentry.Items[3],i*2) == 255 ? "invalid" : $"State_{goolentry.Items[3][i * 2]}")}");
+                    short subtype = BitConv.FromInt16(goolentry.Items[3],i*2);
+                    if (i > interruptcount && i+1 == goolentry.Items[3].Length / 2 && subtype == 0) continue;
+                    lstCode.Items.Add($"\tSubtype {i - interruptcount}: {(subtype == 255 ? "invalid" : $"State_{subtype}")}");
                 }
                 lstCode.Items.Add("");
                 for (int i = 0; i < goolentry.Items[4].Length / 0x10; ++i)
                 {
-                    short epc = BitConv.FromInt16(goolentry.Items[4],0x10*i+0xA);
-                    short tpc = BitConv.FromInt16(goolentry.Items[4],0x10*i+0xC);
-                    short cpc = BitConv.FromInt16(goolentry.Items[4],0x10*i+0xE);
+                    short epc = (short)(BitConv.FromInt16(goolentry.Items[4],0x10*i+0xA) & 0x3FFF);
+                    short tpc = (short)(BitConv.FromInt16(goolentry.Items[4],0x10*i+0xC) & 0x3FFF);
+                    short cpc = (short)(BitConv.FromInt16(goolentry.Items[4],0x10*i+0xE) & 0x3FFF);
                     lstCode.Items.Add($"State_{i} [{Entry.EIDToEName(GetConst(BitConv.FromInt16(goolentry.Items[4],0x10*i+8)))}] (State Flags: {string.Format("0x{0:X}",BitConv.FromInt32(goolentry.Items[4],0x10*i+0))} | C-Flags: {string.Format("0x{0:X}",BitConv.FromInt32(goolentry.Items[4],0x10*i+4))})");
                     if (BitConv.FromInt32(goolentry.Items[2], 4 * BitConv.FromInt16(goolentry.Items[4], 0x10 * i + 8)) == goolentry.EID)
                     {
