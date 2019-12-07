@@ -108,13 +108,9 @@ namespace Crash
         }
 
         // sign-extend values with nonconventional bit lengths
-        public static int SignExtend32(int value, int valuebits)
+        public static int SignExtendInt32(int value, int bitlength)
         {
-            if ((value & (1 << valuebits)) != 0)
-            {
-                return value | (int)(0xFFFFFFFF << valuebits);
-            }
-            else return (value | (int)(0xFFFFFFFF << valuebits)) ^ (int)(0xFFFFFFFF << valuebits);
+            return value << (32-bitlength) >> (32-bitlength);
         }
     }
 }
