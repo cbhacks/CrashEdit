@@ -37,10 +37,21 @@ namespace Crash
                 {
                     Dictionary<int, Type> opset = opsets[Version];
                     int opcode = ins >> 24 & 0xFF;
+                    if (opset.ContainsKey(opcode))
+                    {
+                        if (opcode == 73 && Version == GOOLVersion.Version2)
+                            mips = true;
+                        return (GOOLInstruction)Activator.CreateInstance(opset[opcode],ins,this);
+                    }
+                    else
+                        return new GOOLInvalidInstruction(ins, this);
                 }
+                else
+                    return new GOOLInvalidInstruction(ins, this);
             }
             else
             {
+                return new MIPSInstruction(ins,this);
             }
         }
         private List<GOOLInstruction> instructions;
@@ -59,6 +70,13 @@ namespace Crash
                 else
                 {
                     this.instructions.Add(LoadInstruction(ins,ref mips));
+                    MIPSInstruction prev = null;
+                    if (this.instructions[this.instructions.Count-2] is MIPSInstruction)
+                        prev = (MIPSInstruction)this.instructions[this.instructions.Count-2];
+                    if (prev != null && (prev.Value == 0x03E0A809 || prev.Value == 0x03E00008)) // native mips returns or ends here
+                    {
+                        mips = false;
+                    }
                 }
             }
             Data = data;
