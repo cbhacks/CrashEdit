@@ -110,8 +110,10 @@ namespace CrashEdit
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.AlphaTest);
             GL.Enable(EnableCap.Texture2D);
+            GL.Enable(EnableCap.Blend);
             GL.DepthFunc(DepthFunction.Lequal);
             GL.AlphaFunc(AlphaFunction.Greater, 0);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             ResetCamera();
         }
 
