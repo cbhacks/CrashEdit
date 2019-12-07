@@ -65,11 +65,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\Model\T2EntryController.cs" />
-    <Compile Include="Controllers\T11\T11EntryController.cs" />
+    <Compile Include="Controllers\GOOL\GOOLEntryController.cs" />
     <Compile Include="Controls\GOOLBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\OldGOOLBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="DRNSF.cs" />
@@ -80,7 +77,6 @@
     <Compile Include="Controllers\Animation\ProtoAnimationEntryController.cs" />
     <Compile Include="Controllers\Animation\ProtoFrameController.cs" />
     <Compile Include="Controllers\Base\Chunk\ChunkController.cs" />
-    <Compile Include="Controllers\T11\OldT11EntryController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\ControllerMenuDelegate.cs" />
     <Compile Include="Controllers\Animation\OldAnimationEntryController.cs" />

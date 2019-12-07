@@ -2,11 +2,10 @@ using System;
 
 namespace Crash
 {
-    [EntryType(11,GameVersion.Crash1Beta1995)]
     [EntryType(11,GameVersion.Crash1BetaMAR08)]
     [EntryType(11,GameVersion.Crash1BetaMAY11)]
     [EntryType(11,GameVersion.Crash1)]
-    public sealed class OldT11EntryLoader : EntryLoader
+    public sealed class GOOLEntryLoader : EntryLoader
     {
         public override Entry Load(byte[][] items,int eid,int size)
         {
@@ -14,13 +13,17 @@ namespace Crash
                 throw new ArgumentNullException("items");
             if (items.Length != 3 && items.Length != 5 && items.Length != 6)
             {
-                ErrorManager.SignalError("T11Entry: Wrong number of items");
+                ErrorManager.SignalError("GOOLEntry: Wrong number of items");
             }
             if (items[0].Length != 24)
             {
-                ErrorManager.SignalError("T11Entry: First item length is wrong");
+                ErrorManager.SignalError("GOOLEntry: Header length is wrong");
             }
-            return new OldT11Entry(items,eid,size);
+            return new GOOLEntry(GOOLVersion.Version1,items[0],items[1],items[2],
+                items.Length >= 4 ? items[3] : null,
+                items.Length >= 5 ? items[4] : null,
+                items.Length >= 6 ? items[5] : null,
+                eid,size);
         }
     }
 }

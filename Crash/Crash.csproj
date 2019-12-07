@@ -83,8 +83,10 @@
     <Compile Include="Formats\Crash Formats\SLST\SLSTSource.cs" />
     <Compile Include="Formats\Crash Formats\SLST\OldSLSTSource.cs" />
     <Compile Include="Formats\Crash Formats\SLST\OldSLSTDelta.cs" />
-    <Compile Include="Formats\Crash Formats\T11\OldT11Entry.cs" />
-    <Compile Include="Formats\Crash Formats\T11\OldT11EntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\OldGOOLEntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOLv2EntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOLInstructionAttribute.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOLInterpreter.cs" />
     <Compile Include="Formats\Crash Formats\Zone\ProtoEntityPosition.cs" />
     <Compile Include="Formats\Crash Formats\Zone\ProtoZoneEntry.cs" />
     <Compile Include="Formats\Crash Formats\Zone\ProtoZoneEntryLoader.cs" />
@@ -218,8 +220,8 @@
     <Compile Include="Formats\Crash Formats\Texture\TextureChunkLoader.cs" />
     <Compile Include="Formats\Crash Formats\Mystery\MysteryMultiItemEntry.cs" />
     <Compile Include="Formats\Crash Formats\Mystery\MysteryUniItemEntry.cs" />
-    <Compile Include="Formats\Crash Formats\T11\T11Entry.cs" />
-    <Compile Include="Formats\Crash Formats\T11\T11EntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOLEntry.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOLEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T15\T15Entry.cs" />
     <Compile Include="Formats\Crash Formats\T15\T15EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T17\T17Entry.cs" />
@@ -241,4 +243,5 @@
     <Reference Include="System" />
     <Reference Include="System.XML" />
   </ItemGroup>
+  <ItemGroup />
 </Project>

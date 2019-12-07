@@ -1,22 +1,17 @@
 namespace Crash.UI
 {
-    public sealed class T11EntryController : MysteryMultiItemEntryController
+    public sealed class GOOLEntryController : EntryController
     {
-        private T11Entry entry;
-
-        public T11EntryController(EntryChunkController up,T11Entry entry) : base(up,entry)
+        public GOOLEntryController(EntryChunkController up,GOOLEntry entry) : base(up,entry)
         {
-            this.entry = entry;
+            Entry = entry;
         }
 
-        public new T11Entry Entry
-        {
-            get { return entry; }
-        }
+        public new GOOLEntry Entry { get; }
 
         public override string ToString()
         {
-            return string.Format(Properties.Resources.T11EntryController_Text,entry.EName);
+            return string.Format(Properties.Resources.T11EntryController_Text,Entry.EName);
         }
     }
 }
