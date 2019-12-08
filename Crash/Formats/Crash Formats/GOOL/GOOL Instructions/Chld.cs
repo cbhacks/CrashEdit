@@ -12,6 +12,6 @@
 
         public override string Name => "CHLD";
         public override string Format => "CCCCCC SSSSSS TTTTTTTT AAAA";
-        public override string Comment => string.Empty;
+        public override string Comment => $"spawn {GetArg('C')}x object {GetArg('T')} subtype {GetArg('S')}" + (Args['A'].Value > 0 ? $" with {GetArg('A')} arguments" : "");
     }
 }

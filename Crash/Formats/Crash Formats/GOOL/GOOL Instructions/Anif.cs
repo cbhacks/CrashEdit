@@ -14,6 +14,6 @@
 
         public override string Name => "ANIF";
         public override string Format => "[FFFFFFFFFFFF] 0000 TTTTTT HH";
-        public override string Comment => $"play frame {GetArg('F')} @{GetArg('T')}fps ({FlipComments[Args['H'].Value]})";
+        public override string Comment => $"play frame {GetArg('F')} for {GetArg('T')} frames ({FlipComments[Args['H'].Value]})";
     }
 }

@@ -14,6 +14,6 @@
 
         public override string Name => "ANIM";
         public override string Format => "FFFFFFF SSSSSSSSS TTTTTT HH";
-        public override string Comment => $"play anim &{GetArg('S')} frame {GetArg('F')} @{GetArg('T')}fps ({FlipComments[Args['H'].Value]})";
+        public override string Comment => $"play anim &{GetArg('S')} frame {GetArg('F')} for {GetArg('T')} frames ({FlipComments[Args['H'].Value]})";
     }
 }
