@@ -8,6 +8,8 @@ namespace CrashEdit
     {
         private IWin32Window owner = null;
 
+        private bool lastcheckedwasskip = false;
+
         public ErrorReporter(IWin32Window owner)
         {
             this.owner = owner;
@@ -21,7 +23,11 @@ namespace CrashEdit
             lblMessage.Text = e.Message;
             optSkip.Enabled = e.CanSkip;
             optIgnore.Enabled = e.CanIgnore;
-            if (e.CanIgnore)
+            if (lastcheckedwasskip && e.CanSkip)
+            {
+                optSkip.Checked = true;
+            }
+            else if (e.CanIgnore)
             {
                 optIgnore.Checked = true;
             }
@@ -37,18 +43,22 @@ namespace CrashEdit
             if (optAbort.Checked)
             {
                 e.Response = ErrorResponse.Abort;
+                lastcheckedwasskip = false;
             }
             else if (optSkip.Checked)
             {
                 e.Response = ErrorResponse.Skip;
+                lastcheckedwasskip = true;
             }
             else if (optIgnore.Checked)
             {
                 e.Response = ErrorResponse.Ignore;
+                lastcheckedwasskip = false;
             }
             else if (optBreak.Checked)
             {
                 e.Response = ErrorResponse.Break;
+                lastcheckedwasskip = false;
             }
         }
 
