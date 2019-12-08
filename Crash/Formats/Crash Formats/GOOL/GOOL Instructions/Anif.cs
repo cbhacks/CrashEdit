@@ -8,10 +8,12 @@
     [GOOLInstruction(57,GameVersion.Crash3)]
     public sealed class Anif : GOOLInstruction
     {
+        private readonly string[] FlipComments = { "not mirrored", "mirrored", "mirror", "no change" };
+
         public Anif(int value,GOOLEntry gool) : base(value,gool) { }
 
         public override string Name => "ANIF";
-        public override string Format => "[FFFFFFFFFFFF] ---- TTTTTT HH";
-        public override string Comment => $"play frame {GetArg('F')} @{GetArg('T')}fps (flip {GetArg('H')})";
+        public override string Format => "[FFFFFFFFFFFF] 0000 TTTTTT HH";
+        public override string Comment => $"play frame {GetArg('F')} @{GetArg('T')}fps ({FlipComments[Args['H'].Value]})";
     }
 }
