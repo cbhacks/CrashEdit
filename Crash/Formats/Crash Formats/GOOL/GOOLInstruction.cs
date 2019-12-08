@@ -230,12 +230,12 @@ namespace Crash
                 int hi1 = val >> 9 & 0b11;
                 if (hi1 == 0) // int
                 {
-                    r = $"{BitConv.SignExtendInt32(val & 0x1FF, 9).TransformedString()}";
+                    r = $"{(BitConv.SignExtendInt32(val & 0x1FF, 9) * 0x100).TransformedString()}";
                 }
                 else if (hi1 == 1)
                 {
                     if ((val >> 8 & 1) == 0) // frac
-                        r = $"{(BitConv.SignExtendInt32(val, 8) * 0x100).TransformedString()}";
+                        r = $"{(BitConv.SignExtendInt32(val, 8) * 0x10).TransformedString()}";
                     else // stack
                     {
                         int n = BitConv.SignExtendInt32(val, 7);
