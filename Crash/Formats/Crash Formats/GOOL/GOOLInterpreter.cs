@@ -111,10 +111,10 @@
 
     public enum ObjectColors2
     {
-        mod = 0,
-        modr,
-        modg,
-        modb,
+        mod1 = 0,
+        mod2,
+        mod3,
+        modfinal,
         lightcolr1,
         lightcolg1,
         lightcolb1,
