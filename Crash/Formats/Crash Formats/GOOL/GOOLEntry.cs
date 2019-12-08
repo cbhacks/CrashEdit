@@ -41,7 +41,14 @@ namespace Crash
                     {
                         if (opcode == 73 && Version == GOOLVersion.Version2)
                             mips = true;
-                        return (GOOLInstruction)Activator.CreateInstance(opset[opcode],ins,this);
+                        try
+                        {
+                            return (GOOLInstruction)Activator.CreateInstance(opset[opcode],ins,this);
+                        }
+                        catch (TargetInvocationException ex)
+                        {
+                            throw ex.InnerException;
+                        }
                     }
                     else
                         return new GOOLInvalidInstruction(ins, this);
