@@ -185,13 +185,12 @@ namespace Crash
 
         private string GetRefVal(int val)
         {
-            string r = string.Empty;
             if (val == 0b101111100000) // 0xBE0
-                r = "[null]";
+                return "[null]";
             else if (val == 0b101111110000) // 0xBF0
-                r = "[sp2]";
+                return "[sp2]";
             else if (val == 0b111000011111) // 0xE1F
-                r = "[top]";
+                return "[top]";
             else if ((val & 0b100000000000) == 0)
             {
                 if ((val & 0b010000000000) == 0) // ireg
@@ -200,13 +199,13 @@ namespace Crash
                     {
                         int cval = GOOL.GetConst(val & 0b1111111111);
                         if (cval >= 0x2000000 && (cval & 1) == 1)
-                            r = $"({Entry.EIDToEName(cval)})";
+                            return $"({Entry.EIDToEName(cval)})";
                         else
-                            r = $"({cval.TransformedString()})";
+                            return $"({cval.TransformedString()})";
                     }
                     else
                     {
-                        r = $"[pool$({(val & 0b1111111111).TransformedString()})]";
+                        return $"[pool$({(val & 0b1111111111).TransformedString()})]";
                     }
                 }
                 else // pool
@@ -215,13 +214,13 @@ namespace Crash
                     {
                         int cval = GOOL.GetConst(val & 0b1111111111);
                         if (cval >= 0x2000000 && (cval & 1) == 1)
-                            r = $"({Entry.EIDToEName(cval)})";
+                            return $"({Entry.EIDToEName(cval)})";
                         else
-                            r = $"({cval.TransformedString()})";
+                            return $"({cval.TransformedString()})";
                     }
                     else
                     {
-                        r = $"[ext$({(val & 0b1111111111).TransformedString()})]";
+                        return $"[ext$({(val & 0b1111111111).TransformedString()})]";
                     }
                 }
             }
@@ -230,34 +229,31 @@ namespace Crash
                 int hi1 = val >> 9 & 0b11;
                 if (hi1 == 0) // int
                 {
-                    r = $"{(BitConv.SignExtendInt32(val & 0x1FF, 9) * 0x100).TransformedString()}";
+                    return $"{(BitConv.SignExtendInt32(val & 0x1FF, 9) * 0x100).TransformedString()}";
                 }
                 else if (hi1 == 1)
                 {
                     if ((val >> 8 & 1) == 0) // frac
-                        r = $"{(BitConv.SignExtendInt32(val, 8) * 0x10).TransformedString()}";
+                        return $"{(BitConv.SignExtendInt32(val, 8) * 0x10).TransformedString()}";
                     else // stack
                     {
                         int n = BitConv.SignExtendInt32(val, 7);
-                        r = string.Format("{0}[{1}]", n >= 0 ? "stack" : "arg", (n < 0 ? -n - 1 : n).TransformedString());
+                        return string.Format("{0}[{1}]", n >= 0 ? "stack" : "arg", (n < 0 ? -n - 1 : n).TransformedString());
                     }
                 }
                 else if (hi1 == 2) // reg
                 {
-                    r = $"{ObjectFields.self + (val >> 6 & 0b111)}->{(ObjectFields)(val & 0x3F)}";
+                    return $"{ObjectFields.self + (val >> 6 & 0b111)}->{(ObjectFields)(val & 0x3F)}";
                 }
                 else if (hi1 == 3) // var
                 {
                     if (Enum.IsDefined(typeof(ObjectFields), val & 0x1FF))
-                    {
-                        r = ((ObjectFields)(val & 0x1FF)).ToString();
-                    }
+                        return ((ObjectFields)(val & 0x1FF)).ToString();
                     else
-                        r = $"[var${(val & 0x1FF).TransformedString()}]";
+                        return $"[var${(val & 0x1FF).TransformedString()}]";
                 }
                 else throw new Exception();
             }
-            return r;
         }
     }
 }

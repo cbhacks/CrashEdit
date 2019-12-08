@@ -68,21 +68,15 @@ namespace CrashEdit
                         cpc_list.Add(0x3FFF);
                     }
                     if (epc != 0x3FFF)
-                    {
                         lstCode.Items.Add($"\tEPC: {epc}");
-                    }
                     else
                         lstCode.Items.Add("\tEvent block unavailable.");
                     if (tpc != 0x3FFF)
-                    {
                         lstCode.Items.Add($"\tTPC: {tpc}");
-                    }
                     else
                         lstCode.Items.Add("\tTrans block unavailable.");
                     if (cpc != 0x3FFF)
-                    {
                         lstCode.Items.Add($"\tCPC: {cpc}");
-                    }
                     else
                         lstCode.Items.Add("\tCode block unavailable.");
                 }
