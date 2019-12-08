@@ -10,7 +10,7 @@
         }
 
         public override string Name => "BEQZ";
-        public override string Format => "IIIIIIIIII VVVV (RRRRRR) 01 00";
+        public override string Format => "IIIIIIIIII VVVV (RRRRRR) ----";
         public override string Comment
         {
             get
