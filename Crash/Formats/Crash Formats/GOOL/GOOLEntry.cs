@@ -63,7 +63,7 @@ namespace Crash
         }
         private List<GOOLInstruction> instructions;
 
-        public GOOLEntry(GOOLVersion version,byte[] header,byte[] instructions,byte[] data,short[] statemap,GOOLStateDescriptor[] statedescriptors,byte[] anims,int eid,int size) : base(eid,size)
+        public GOOLEntry(GOOLVersion version,byte[] header,byte[] instructions,int[] data,short[] statemap,GOOLStateDescriptor[] statedescriptors,byte[] anims,int eid,int size) : base(eid,size)
         {
             Version = version;
             Header = header;
@@ -97,7 +97,7 @@ namespace Crash
         public GOOLVersion Version { get; }
 
         public byte[] Header { get; }
-        public byte[] Data { get; }
+        public int[] Data { get; }
         public short[] StateMap { get; }
         public GOOLStateDescriptor[] StateDescriptors { get; }
         public byte[] Anims { get; }
@@ -105,11 +105,6 @@ namespace Crash
         public int Format => BitConv.FromInt32(Header,8);
 
         public IList<GOOLInstruction> Instructions => instructions;
-        
-        public int GetConst(int i)
-        {
-            return BitConv.FromInt32(Data,i*4);
-        }
 
         public override UnprocessedEntry Unprocess()
         {
@@ -127,7 +122,11 @@ namespace Crash
             {
                 BitConv.ToInt32(items[1],i*4,instructions[i].Save());
             }
-            items[2] = Data;
+            items[2] = new byte[Data.Length*4];
+            for (int i = 0; i < Data.Length; ++i)
+            {
+                BitConv.ToInt32(items[2],i*4,Data[i]);
+            }
             if (itemcount > 3)
             {
                 items[3] = new byte[StateMap.Length*2];

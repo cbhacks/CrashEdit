@@ -197,7 +197,7 @@ namespace Crash
                 {
                     if (GOOL.Format == 1) // external GOOL entries will logically not have local data...
                     {
-                        int cval = GOOL.GetConst(val & 0b1111111111);
+                        int cval = GOOL.Data[val & 0b1111111111];
                         if (cval >= 0x2000000 && (cval & 1) == 1)
                             return $"({Entry.EIDToEName(cval)})";
                         else
@@ -212,7 +212,7 @@ namespace Crash
                 {
                     if (GOOL.Format == 0) // local GOOL entries will logically not have external data...
                     {
-                        int cval = GOOL.GetConst(val & 0b1111111111);
+                        int cval = GOOL.Data[val & 0b1111111111];
                         if (cval >= 0x2000000 && (cval & 1) == 1)
                             return $"({Entry.EIDToEName(cval)})";
                         else

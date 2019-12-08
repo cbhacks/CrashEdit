@@ -54,8 +54,9 @@ namespace CrashEdit
                     short epc = (short)(goolentry.StateDescriptors[i].EPC & 0x3FFF);
                     short tpc = (short)(goolentry.StateDescriptors[i].TPC & 0x3FFF);
                     short cpc = (short)(goolentry.StateDescriptors[i].CPC & 0x3FFF);
-                    lstCode.Items.Add($"State_{i} [{Entry.EIDToEName(goolentry.GetConst(goolentry.StateDescriptors[i].GOOLID))}] (State Flags: {string.Format("0x{0:X}",goolentry.StateDescriptors[i].StateFlags)} | C-Flags: {string.Format("0x{0:X}",goolentry.StateDescriptors[i].CFlags)})");
-                    if (BitConv.FromInt32(goolentry.Data,4 * goolentry.StateDescriptors[i].GOOLID) == goolentry.EID)
+                    int stategooleid = goolentry.Data[goolentry.StateDescriptors[i].GOOLID];
+                    lstCode.Items.Add($"State_{i} [{Entry.EIDToEName(stategooleid)}] (State Flags: {string.Format("0x{0:X}",goolentry.StateDescriptors[i].StateFlags)} | C-Flags: {string.Format("0x{0:X}",goolentry.StateDescriptors[i].CFlags)})");
+                    if (stategooleid == goolentry.EID)
                     {
                         epc_list.Add(epc);
                         tpc_list.Add(tpc);
