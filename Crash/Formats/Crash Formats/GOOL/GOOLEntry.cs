@@ -56,7 +56,7 @@ namespace Crash
         }
         private List<GOOLInstruction> instructions;
 
-        public GOOLEntry(GOOLVersion version,byte[] header,byte[] instructions,byte[] data,byte[] statemap,byte[] statedescriptors,byte[] anims,int eid,int size) : base(eid,size)
+        public GOOLEntry(GOOLVersion version,byte[] header,byte[] instructions,byte[] data,short[] statemap,byte[] statedescriptors,byte[] anims,int eid,int size) : base(eid,size)
         {
             Version = version;
             Header = header;
@@ -91,7 +91,7 @@ namespace Crash
 
         public byte[] Header { get; }
         public byte[] Data { get; }
-        public byte[] StateMap { get; }
+        public short[] StateMap { get; }
         public byte[] StateDescriptors { get; }
         public byte[] Anims { get; }
 
@@ -123,7 +123,11 @@ namespace Crash
             items[2] = Data;
             if (itemcount >= 4)
             {
-                items[3] = StateMap;
+                items[3] = new byte[StateMap.Length*2];
+                for (int i = 0; i < StateMap.Length;++i)
+                {
+                    BitConv.ToInt16(items[3],i*2,StateMap[i]);
+                }
                 if (itemcount >= 5)
                 {
                     items[4] = StateDescriptors;

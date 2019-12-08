@@ -1,5 +1,4 @@
 using Crash;
-using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -34,21 +33,21 @@ namespace CrashEdit
                 lstCode.Items.Add("Interrupts:");
                 for (int i = 0; i < interruptcount; ++i)
                 {
-                    short evt = BitConv.FromInt16(goolentry.StateMap,i*2);
-                    if (evt == 255)
+                    if (goolentry.StateMap[i] == 255)
                         continue;
-                    else if ((evt & 0x8000) != 0)
-                        lstCode.Items.Add($"\tInterrupt {i}: Sub_{evt & 0x3FFF}");
+                    else if ((goolentry.StateMap[i] & 0x8000) != 0)
+                        lstCode.Items.Add($"\tInterrupt {i}: Sub_{goolentry.StateMap[i] & 0x3FFF}");
                     else
-                        lstCode.Items.Add($"\tInterrupt {i}: State_{evt}");
+                        lstCode.Items.Add($"\tInterrupt {i}: State_{goolentry.StateMap[i]}");
                 }
-                lstCode.Items.Add($"Available Subtypes: {goolentry.StateMap.Length / 0x2 - interruptcount}");
-                for (int i = interruptcount; i < goolentry.StateMap.Length / 0x2; ++i)
+
+                lstCode.Items.Add($"Available Subtypes: {goolentry.StateMap.Length - interruptcount}");
+                for (int i = interruptcount; i < goolentry.StateMap.Length; ++i)
                 {
-                    short subtype = BitConv.FromInt16(goolentry.StateMap,i*2);
-                    if (i > interruptcount && i+1 == goolentry.StateMap.Length / 2 && subtype == 0) continue;
-                    lstCode.Items.Add($"\tSubtype {i - interruptcount}: {(subtype == 255 ? "invalid" : $"State_{subtype}")}");
+                    if (i > interruptcount && i+1 == goolentry.StateMap.Length && goolentry.StateMap[i] == 0) continue;
+                    lstCode.Items.Add($"\tSubtype {i - interruptcount}: {(goolentry.StateMap[i] == 255 ? "invalid" : $"State_{goolentry.StateMap[i]}")}");
                 }
+
                 lstCode.Items.Add("");
                 for (int i = 0; i < goolentry.StateDescriptors.Length / 0x10; ++i)
                 {
@@ -88,6 +87,7 @@ namespace CrashEdit
                         lstCode.Items.Add("\tCode block unavailable.");
                 }
             }
+
             lstCode.Items.Add("");
             bool returned = false;
             int mipscount = 0;
@@ -128,6 +128,7 @@ namespace CrashEdit
                 string comment = ins.Comment;
                 lstCode.Items.Add(string.Format("{0,-05}\t{1,-4}\t{2,-30}\t{3}",i,ins.Name,ins.Arguments,!string.IsNullOrWhiteSpace(comment) ? $"# {comment}" : ""));
             }
+
             if (goolcount != goolentry.Instructions.Count)
             {
                 lstCode.Items.Add("");
@@ -138,6 +139,7 @@ namespace CrashEdit
                     str += string.Format(", {0:0.00}% invalid", (goolentry.Instructions.Count - mipscount - goolcount) * 100F / goolentry.Instructions.Count);
                 lstCode.Items.Add(str);
             }
+
             Controls.Add(lstCode);
         }
     }

@@ -17,8 +17,17 @@ namespace Crash
             {
                 ErrorManager.SignalError("OldGOOLEntry: Header length is wrong");
             }
+            short[] statemap = null;
+            if (items.Length > 3)
+            {
+                statemap = new short[items[3].Length/2];
+                for (int i = 0; i < statemap.Length; ++i)
+                {
+                    statemap[i] = BitConv.FromInt16(items[3],i*2);
+                }
+            }
             return new GOOLEntry(GOOLVersion.Version0,items[0],items[1],items[2],
-                items.Length >= 4 ? items[3] : null,
+                statemap,
                 items.Length >= 5 ? items[4] : null,
                 items.Length >= 6 ? items[5] : null,
                 eid,size);
