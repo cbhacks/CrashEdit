@@ -11,7 +11,7 @@
         public Ntry(int value,GOOLEntry gool) : base(value,gool) { }
 
         public override string Name => "NTRY";
-        public override string Format => "EEEEEEEEEEEE TTTTTTTTTTTT";
+        public override string Format => "[EEEEEEEEEEEE] [TTTTTTTTTTTT]";
         public override string Comment => string.Empty;
     }
 }
