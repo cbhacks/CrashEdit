@@ -19,7 +19,7 @@ namespace CrashEdit
             };
             int interruptcount = BitConv.FromInt32(goolentry.Header,16);
             lstCode.Items.Add($"Type: {BitConv.FromInt32(goolentry.Header,0)}");
-            lstCode.Items.Add($"Category: {BitConv.FromInt32(goolentry.Header,4)}");
+            lstCode.Items.Add($"Category: {BitConv.FromInt32(goolentry.Header,4) / 0x100}");
             lstCode.Items.Add($"Format: {goolentry.Format}");
             lstCode.Items.Add(string.Format("Stack Start: {0} ({1})",(ObjectFields)BitConv.FromInt32(goolentry.Header,12),(BitConv.FromInt32(goolentry.Header,12)*4+GOOLInterpreter.GetProcessOff(goolentry.Version)).TransformedString()));
             lstCode.Items.Add($"Interrupt Count: {interruptcount}");
