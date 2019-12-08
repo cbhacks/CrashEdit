@@ -1,6 +1,7 @@
 ﻿namespace Crash.GOOLIns
 {
     [GOOLInstruction(130, GameVersion.Crash1Beta1995)]
+    [GOOLInstruction(130, GameVersion.Crash1BetaMAR08)]
     public sealed class Cfl_95 : GOOLInstruction
     {
         public Cfl_95(int value,GOOLEntry gool) : base(value,gool)
@@ -95,7 +96,6 @@
     }
 
     [GOOLInstruction(130,GameVersion.Crash1)]
-    [GOOLInstruction(130,GameVersion.Crash1BetaMAR08)]
     [GOOLInstruction(130,GameVersion.Crash1BetaMAY11)]
     public sealed class Cfl : GOOLInstruction
     {
