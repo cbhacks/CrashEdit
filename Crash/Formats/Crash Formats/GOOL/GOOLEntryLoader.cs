@@ -20,6 +20,7 @@ namespace Crash
                 ErrorManager.SignalError("GOOLEntry: Header length is wrong");
             }
             short[] statemap = null;
+            GOOLStateDescriptor[] statedesc = null;
             if (items.Length > 3)
             {
                 statemap = new short[items[3].Length/2];
@@ -27,10 +28,25 @@ namespace Crash
                 {
                     statemap[i] = BitConv.FromInt16(items[3],i*2);
                 }
+                if (items.Length > 4)
+                {
+                    statedesc = new GOOLStateDescriptor[items[4].Length/0x10];
+                    for (int i = 0; i < statedesc.Length; ++i)
+                    {
+                        statedesc[i] = new GOOLStateDescriptor(
+                            BitConv.FromInt32(items[4],i*0x10+0),
+                            BitConv.FromInt32(items[4],i*0x10+4),
+                            BitConv.FromInt16(items[4],i*0x10+8),
+                            BitConv.FromInt16(items[4],i*0x10+10),
+                            BitConv.FromInt16(items[4],i*0x10+12),
+                            BitConv.FromInt16(items[4],i*0x10+14)
+                            );
+                    }
+                }
             }
             return new GOOLEntry(GOOLVersion.Version1,items[0],items[1],items[2],
                 statemap,
-                items.Length >= 5 ? items[4] : null,
+                statedesc,
                 items.Length >= 6 ? items[5] : null,
                 eid,size);
         }

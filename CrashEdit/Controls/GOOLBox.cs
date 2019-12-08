@@ -49,13 +49,13 @@ namespace CrashEdit
                 }
 
                 lstCode.Items.Add("");
-                for (int i = 0; i < goolentry.StateDescriptors.Length / 0x10; ++i)
+                for (int i = 0; i < goolentry.StateDescriptors.Length; ++i)
                 {
-                    short epc = (short)(BitConv.FromInt16(goolentry.StateDescriptors,0x10*i+0xA) & 0x3FFF);
-                    short tpc = (short)(BitConv.FromInt16(goolentry.StateDescriptors,0x10*i+0xC) & 0x3FFF);
-                    short cpc = (short)(BitConv.FromInt16(goolentry.StateDescriptors,0x10*i+0xE) & 0x3FFF);
-                    lstCode.Items.Add($"State_{i} [{Entry.EIDToEName(goolentry.GetConst(BitConv.FromInt16(goolentry.StateDescriptors,0x10*i+8)))}] (State Flags: {string.Format("0x{0:X}",BitConv.FromInt32(goolentry.StateDescriptors,0x10*i+0))} | C-Flags: {string.Format("0x{0:X}",BitConv.FromInt32(goolentry.StateDescriptors,0x10*i+4))})");
-                    if (BitConv.FromInt32(goolentry.Data, 4 * BitConv.FromInt16(goolentry.StateDescriptors, 0x10 * i + 8)) == goolentry.EID)
+                    short epc = (short)(goolentry.StateDescriptors[i].EPC & 0x3FFF);
+                    short tpc = (short)(goolentry.StateDescriptors[i].TPC & 0x3FFF);
+                    short cpc = (short)(goolentry.StateDescriptors[i].CPC & 0x3FFF);
+                    lstCode.Items.Add($"State_{i} [{Entry.EIDToEName(goolentry.GetConst(goolentry.StateDescriptors[i].GOOLID))}] (State Flags: {string.Format("0x{0:X}",goolentry.StateDescriptors[i].StateFlags)} | C-Flags: {string.Format("0x{0:X}",goolentry.StateDescriptors[i].CFlags)})");
+                    if (BitConv.FromInt32(goolentry.Data,4 * goolentry.StateDescriptors[i].GOOLID) == goolentry.EID)
                     {
                         epc_list.Add(epc);
                         tpc_list.Add(tpc);

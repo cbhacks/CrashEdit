@@ -63,7 +63,7 @@ namespace Crash
         }
         private List<GOOLInstruction> instructions;
 
-        public GOOLEntry(GOOLVersion version,byte[] header,byte[] instructions,byte[] data,short[] statemap,byte[] statedescriptors,byte[] anims,int eid,int size) : base(eid,size)
+        public GOOLEntry(GOOLVersion version,byte[] header,byte[] instructions,byte[] data,short[] statemap,GOOLStateDescriptor[] statedescriptors,byte[] anims,int eid,int size) : base(eid,size)
         {
             Version = version;
             Header = header;
@@ -99,7 +99,7 @@ namespace Crash
         public byte[] Header { get; }
         public byte[] Data { get; }
         public short[] StateMap { get; }
-        public byte[] StateDescriptors { get; }
+        public GOOLStateDescriptor[] StateDescriptors { get; }
         public byte[] Anims { get; }
 
         public int Format => BitConv.FromInt32(Header,8);
@@ -128,17 +128,21 @@ namespace Crash
                 BitConv.ToInt32(items[1],i*4,instructions[i].Save());
             }
             items[2] = Data;
-            if (itemcount >= 4)
+            if (itemcount > 3)
             {
                 items[3] = new byte[StateMap.Length*2];
                 for (int i = 0; i < StateMap.Length;++i)
                 {
                     BitConv.ToInt16(items[3],i*2,StateMap[i]);
                 }
-                if (itemcount >= 5)
+                if (itemcount > 4)
                 {
-                    items[4] = StateDescriptors;
-                    if (itemcount >= 6)
+                    items[4] = new byte[StateDescriptors.Length*0x10];
+                    for (int i = 0; i < StateDescriptors.Length; ++i)
+                    {
+                        StateDescriptors[i].Save().CopyTo(items[4],i*0x10);
+                    }
+                    if (itemcount > 5)
                     {
                         items[5] = Anims;
                     }

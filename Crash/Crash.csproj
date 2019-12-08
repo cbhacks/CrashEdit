@@ -58,6 +58,7 @@
     <Compile Include="Formats\Crash Formats\Animation\T1Entry.cs" />
     <Compile Include="Formats\Crash Formats\Animation\T1EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Models\ModelEntry.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOLStateDescriptor.cs" />
     <Compile Include="Formats\Crash Formats\Models\ModelExtendedTexture.cs" />
     <Compile Include="Formats\Crash Formats\Models\ModelPosition.cs" />
     <Compile Include="Formats\Crash Formats\Models\ModelStruct.cs" />
