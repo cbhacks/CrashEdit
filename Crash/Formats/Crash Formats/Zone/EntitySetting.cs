@@ -14,5 +14,6 @@ namespace Crash
 
         public byte ValueA { get; }
         public int ValueB { get; }
+        public int ValueInt => ValueA | (ValueB << 8);
     }
 }

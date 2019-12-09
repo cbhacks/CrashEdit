@@ -42,18 +42,18 @@ namespace CrashHacks.Scripts.Animation
             if (value is ZoneEntry)
             {
                 ZoneEntry entry = (ZoneEntry)value;
-                for (int i = 0x24;i < entry.Unknown2.Length;i += 2)
+                for (int i = 0x24;i < entry.Layout.Length;i += 2)
                 {
-                    short node = BitConv.FromInt16(entry.Unknown2,i);
+                    short node = BitConv.FromInt16(entry.Layout,i);
                     if (node == 0x35)
                     {
                         //bear level water => solid
-                        BitConv.ToInt16(entry.Unknown2,i,3);
+                        BitConv.ToInt16(entry.Layout,i,3);
                     }
                     else if (node == 0x129)
                     {
                         //water level water => solid
-                        BitConv.ToInt16(entry.Unknown2,i,3);
+                        BitConv.ToInt16(entry.Layout,i,3);
                     }
                 }
             }

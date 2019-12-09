@@ -2,21 +2,13 @@ namespace Crash.UI
 {
     public sealed class SpeechEntryController : EntryController
     {
-        private SpeechEntry entry;
-
         public SpeechEntryController(EntryChunkController up,SpeechEntry entry) : base(up,entry)
         {
-            this.entry = entry;
+            Entry = entry;
         }
 
-        public new SpeechEntry Entry
-        {
-            get { return entry; }
-        }
+        public new SpeechEntry Entry { get; }
 
-        public override string ToString()
-        {
-            return string.Format(Properties.Resources.SpeechEntryController_Text,entry.EName);
-        }
+        public override string ToString() => string.Format(Properties.Resources.SpeechEntryController_Text,Entry.EName);
     }
 }

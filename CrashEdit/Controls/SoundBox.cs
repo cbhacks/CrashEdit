@@ -39,7 +39,7 @@ namespace CrashEdit
             cmdPlay.Click += new EventHandler(cmdPlay_Click);
 
             cmdExport = new Button();
-            cmdPlay.Dock = DockStyle.Fill;
+            cmdExport.Dock = DockStyle.Fill;
             cmdExport.Text = "Export";
             cmdExport.Click += new EventHandler(cmdExport_Click);
 

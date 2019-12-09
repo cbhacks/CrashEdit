@@ -1,4 +1,5 @@
 using Crash;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -8,9 +9,9 @@ namespace CrashEdit
         public OldZoneEntryController(EntryChunkController entrychunkcontroller,OldZoneEntry zoneentry)
             : base(entrychunkcontroller,zoneentry)
         {
-            ZoneEntry = zoneentry;
-            AddNode(new ItemController(null,zoneentry.Unknown1));
-            AddNode(new ItemController(null,zoneentry.Unknown2));
+            OldZoneEntry = zoneentry;
+            AddNode(new ItemController(null,zoneentry.Header));
+            AddNode(new ItemController(null,zoneentry.Layout));
             foreach (OldCamera camera in zoneentry.Cameras)
             {
                 AddNode(new OldCameraController(this,camera));
@@ -19,33 +20,72 @@ namespace CrashEdit
             {
                 AddNode(new OldEntityController(this,entity));
             }
+            AddMenu("Add Camera", Menu_AddCamera);
+            AddMenu("Add Entity", Menu_AddEntity);
             InvalidateNode();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Old Zone ({0})",ZoneEntry.EName);
+            Node.Text = string.Format("Old Zone ({0})",OldZoneEntry.EName);
             Node.ImageKey = "violetb";
             Node.SelectedImageKey = "violetb";
         }
 
         protected override Control CreateEditor()
         {
-            int linkedsceneryentrycount = BitConv.FromInt32(ZoneEntry.Unknown1,0);
+            int linkedsceneryentrycount = BitConv.FromInt32(OldZoneEntry.Header,0);
             OldSceneryEntry[] linkedsceneryentries = new OldSceneryEntry[linkedsceneryentrycount];
             for (int i = 0; i < linkedsceneryentrycount; i++)
             {
-                linkedsceneryentries[i] = FindEID<OldSceneryEntry>(BitConv.FromInt32(ZoneEntry.Unknown1,4 + i * 64));
+                linkedsceneryentries[i] = FindEID<OldSceneryEntry>(BitConv.FromInt32(OldZoneEntry.Header,4 + i * 64));
             }
-            int linkedzoneentrycount = BitConv.FromInt32(ZoneEntry.Unknown1,528);
+            int linkedzoneentrycount = BitConv.FromInt32(OldZoneEntry.Header,528);
             OldZoneEntry[] linkedzoneentries = new OldZoneEntry[linkedzoneentrycount];
             for (int i = 0; i < linkedzoneentrycount; i++)
             {
-                linkedzoneentries[i] = FindEID<OldZoneEntry>(BitConv.FromInt32(ZoneEntry.Unknown1,532 + i * 4));
+                linkedzoneentries[i] = FindEID<OldZoneEntry>(BitConv.FromInt32(OldZoneEntry.Header,532 + i * 4));
             }
-            return new UndockableControl(new OldZoneEntryViewer(ZoneEntry,linkedsceneryentries,linkedzoneentries));
+            return new UndockableControl(new OldZoneEntryViewer(OldZoneEntry,linkedsceneryentries,linkedzoneentries));
         }
 
-        public OldZoneEntry ZoneEntry { get; }
+        public OldZoneEntry OldZoneEntry { get; }
+
+        void Menu_AddCamera()
+        {
+            OldCamera newcam = OldCamera.Load(new OldCamera(Entry.ENameToEID("NONE!"),0,0,new OldCameraNeighbor[4],0,0,0,0,1600,0,0,0,0,0,0,new List<OldCameraPosition>(),0).Save());
+            OldZoneEntry.Cameras.Add(newcam);
+            InsertNode(2 + OldZoneEntry.Cameras.Count - 1,new OldCameraController(this,newcam));
+            OldZoneEntry.CameraCount = OldZoneEntry.Cameras.Count;
+        }
+
+        void Menu_AddEntity()
+        {
+            short maxid = 1;
+            foreach (Chunk chunk in EntryChunkController.NSFController.NSF.Chunks)
+            {
+                if (chunk is EntryChunk)
+                {
+                    foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                    {
+                        if (entry is OldZoneEntry)
+                        {
+                            foreach (OldEntity otherentity in ((OldZoneEntry)entry).Entities)
+                            {
+                                if (otherentity.ID > maxid)
+                                {
+                                    maxid = otherentity.ID;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            ++maxid;
+            OldEntity newentity = OldEntity.Load(new OldEntity(0,0,0,maxid,0,0,0,0,0,new List<EntityPosition>() { new EntityPosition(0,0,0) },0).Save());
+            OldZoneEntry.Entities.Add(newentity);
+            AddNode(new OldEntityController(this,newentity));
+            OldZoneEntry.EntityCount = OldZoneEntry.Entities.Count;
+        }
     }
 }

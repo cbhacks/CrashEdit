@@ -102,18 +102,6 @@ namespace Crash
             return new string(str);
         }
 
-        //public static string EIDToEName(int? eid)
-        //{
-        //    char[] str = new char[5];
-        //    eid >>= 1;
-        //    for (int i = 0; i < 5; i++)
-        //    {
-        //        str[4 - i] = ENameCharacterSet[(int)eid & 0x3F];
-        //        eid >>= 6;
-        //    }
-        //    return new string(str);
-        //}
-
         // thanks to NeoKesha for this
         public static int ENameToEID(string str)
         {

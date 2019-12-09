@@ -15,7 +15,7 @@ namespace Crash
             }
             if (items[0].Length != 76)
             {
-                ErrorManager.SignalError("SceneryEntry: First item length is wrong");
+                ErrorManager.SignalError("SceneryEntry: Header length is wrong");
             }
             int vertexcount = BitConv.FromInt32(items[0], 16);
             int trianglecount = BitConv.FromInt32(items[0], 20);
@@ -23,9 +23,25 @@ namespace Crash
             int texturecount = BitConv.FromInt32(items[0], 28);
             int colorcount = BitConv.FromInt32(items[0], 32);
             int animatedtexturecount = BitConv.FromInt32(items[0], 36);
+            if (items[1].Length != Aligner.Align(vertexcount * 6,4))
+            {
+                ErrorManager.SignalError("SceneryEntry: Vertex count mismatch");
+            }
+            if (items[2].Length != Aligner.Align(trianglecount * 6,4))
+            {
+                ErrorManager.SignalError("SceneryEntry: Triangle count mismatch");
+            }
+            if (items[3].Length != quadcount * 8)
+            {
+                ErrorManager.SignalError("SceneryEntry: Quad count mismatch");
+            }
             if (items[4].Length != texturecount * 12)
             {
                 ErrorManager.SignalError("SceneryEntry: Texture count mismatch");
+            }
+            if (items[5].Length != colorcount * 4)
+            {
+                ErrorManager.SignalError("SceneryEntry: Color count mismatch");
             }
             if (items[6].Length != animatedtexturecount * 4)
             {
@@ -72,12 +88,12 @@ namespace Crash
                 byte extra = items[5][i * 4 + 3];
                 colors[i] = new SceneryColor(red, green, blue, extra);
             }
-            ModelAnimatedTexture[] animatedtextures = new ModelAnimatedTexture[animatedtexturecount];
+            ModelExtendedTexture[] animatedtextures = new ModelExtendedTexture[animatedtexturecount];
             for (int i = 0; i < animatedtexturecount; i++)
             {
                 byte[] animatedtexturedata = new byte[4];
                 Array.Copy(items[6], i * 4, animatedtexturedata, 0, animatedtexturedata.Length);
-                animatedtextures[i] = ModelAnimatedTexture.Load(animatedtexturedata);
+                animatedtextures[i] = ModelExtendedTexture.Load(animatedtexturedata);
             }
             return new SceneryEntry(items[0],vertices,triangles,quads,textures,colors,animatedtextures,eid,size);
         }

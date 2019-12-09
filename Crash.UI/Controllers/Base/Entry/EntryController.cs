@@ -3,23 +3,16 @@ namespace Crash.UI
     public abstract class EntryController : Controller,IEntryController
     {
         private EntryChunkController up;
-        private Entry entry;
 
         public EntryController(EntryChunkController up,Entry entry)
         {
             this.up = up;
-            this.entry = entry;
+            Entry = entry;
         }
 
-        public Entry Entry
-        {
-            get { return entry; }
-        }
+        public Entry Entry { get; }
 
-        IEntry IEntryController.Entry
-        {
-            get { return entry; }
-        }
+        IEntry IEntryController.Entry => Entry;
 
         private sealed class AcDelete : Action<EntryController>
         {
@@ -43,15 +36,12 @@ namespace Crash.UI
                 return true;
             }
 
-            protected override string GetText(EntryController c)
-            {
-                return string.Format(Properties.Resources.EntryController_AcDeprocess,c.Entry.EName);
-            }
+            protected override string GetText(EntryController c) => string.Format(Properties.Resources.EntryController_AcDeprocess,c.Entry.EName);
 
             protected override Command Activate(EntryController c)
             {
-                UnprocessedEntry unprocessedentry = c.entry.Unprocess();
-                return c.up.Chunk.Entries.CmSet(c.up.Chunk.Entries.IndexOf(c.entry),unprocessedentry);
+                UnprocessedEntry unprocessedentry = c.Entry.Unprocess();
+                return c.up.Chunk.Entries.CmSet(c.up.Chunk.Entries.IndexOf(c.Entry),unprocessedentry);
             }
         }
     }

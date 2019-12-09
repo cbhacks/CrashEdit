@@ -13,7 +13,7 @@ namespace CrashEdit
             AddNode(new ItemController(null,zoneentry.Unknown2));
             foreach (OldCamera camera in zoneentry.Cameras)
             {
-                AddNode(new ProtoCameraController(this,camera));
+                AddNode(new OldCameraController(this,camera));
             }
             foreach (ProtoEntity entity in zoneentry.Entities)
             {

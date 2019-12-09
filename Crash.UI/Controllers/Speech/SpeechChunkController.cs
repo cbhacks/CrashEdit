@@ -2,21 +2,13 @@ namespace Crash.UI
 {
     public sealed class SpeechChunkController : EntryChunkController
     {
-        private SpeechChunk chunk;
-
         public SpeechChunkController(NSFController up,SpeechChunk chunk) : base(up,chunk)
         {
-            this.chunk = chunk;
+            Chunk = chunk;
         }
 
-        public new SpeechChunk Chunk
-        {
-            get { return chunk; }
-        }
+        public new SpeechChunk Chunk { get; }
 
-        public override string ToString()
-        {
-            return Properties.Resources.SpeechChunkController_Text;
-        }
+        public override string ToString() => Properties.Resources.SpeechChunkController_Text;
     }
 }

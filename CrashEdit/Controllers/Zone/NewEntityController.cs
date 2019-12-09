@@ -34,7 +34,7 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            return new NewEntityBox(this);
+            return new EntityBox(this);
         }
 
         public NewZoneEntryController NewZoneEntryController { get; }

@@ -2,21 +2,13 @@ namespace Crash.UI
 {
     public sealed class MusicEntryController : EntryController
     {
-        private MusicEntry entry;
-
         public MusicEntryController(EntryChunkController up,MusicEntry entry) : base(up,entry)
         {
-            this.entry = entry;
+            Entry = entry;
         }
 
-        public new MusicEntry Entry
-        {
-            get { return entry; }
-        }
+        public new MusicEntry Entry { get; }
 
-        public override string ToString()
-        {
-            return string.Format(Properties.Resources.MusicEntryController_Text,entry.EName);
-        }
+        public override string ToString() => string.Format(Properties.Resources.MusicEntryController_Text,Entry.EName);
     }
 }

@@ -13,18 +13,19 @@ namespace Crash
             }
             byte[] unknown1 = items[0];
             byte[] unknown2 = items[1];
-            int camcount = BitConv.FromInt32(unknown1,520);
+            int camcount = BitConv.FromInt32(unknown1,0x208);
             OldCamera[] cameras = new OldCamera[camcount];
             for (int i = 2; i < 2 + camcount; i++)
             {
                 cameras[i - 2] = OldCamera.Load(items[i]);
             }
-            OldEntity[] entities = new OldEntity[items.Length - 2 - camcount];
+            int entitycount = BitConv.FromInt32(unknown1,0x20C);
+            OldEntity[] entities = new OldEntity[entitycount];
             for (int i = 2 + camcount; i < items.Length; i++)
             {
                 entities[i - 2 - camcount] = OldEntity.Load(items[i]);
             }
-            return new OldZoneEntry(unknown1,unknown2,cameras,entities,camcount,eid,size);
+            return new OldZoneEntry(unknown1,unknown2,cameras,entities,eid,size);
         }
     }
 }

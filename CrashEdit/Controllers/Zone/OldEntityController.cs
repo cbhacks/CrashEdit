@@ -16,7 +16,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Old Entity {0} ({1})",Entity.ID,Entity.Index.Count);
+            Node.Text = string.Format("Old Entity {0} ({1})",Entity.ID,Entity.Positions.Count);
             Node.ImageKey = "arrow";
             Node.SelectedImageKey = "arrow";
         }
@@ -53,21 +53,21 @@ namespace CrashEdit
                 }
             }
             maxid++;
-            int newindex = OldZoneEntryController.ZoneEntry.Entities.Count;
-            newindex -= BitConv.FromInt32(OldZoneEntryController.ZoneEntry.Unknown1,0x208);
-            int entitycount = BitConv.FromInt32(OldZoneEntryController.ZoneEntry.Unknown1,0x20C);
-            BitConv.ToInt32(OldZoneEntryController.ZoneEntry.Unknown1,0x20C,entitycount + 1);
+            int newindex = OldZoneEntryController.OldZoneEntry.Entities.Count;
+            newindex -= BitConv.FromInt32(OldZoneEntryController.OldZoneEntry.Header,0x208);
+            int entitycount = BitConv.FromInt32(OldZoneEntryController.OldZoneEntry.Header,0x20C);
+            BitConv.ToInt32(OldZoneEntryController.OldZoneEntry.Header,0x20C,entitycount + 1);
             OldEntity newentity = OldEntity.Load(Entity.Save());
             newentity.ID = maxid;
-            OldZoneEntryController.ZoneEntry.Entities.Add(newentity);
+            OldZoneEntryController.OldZoneEntry.Entities.Add(newentity);
             OldZoneEntryController.AddNode(new OldEntityController(OldZoneEntryController,newentity));
         }
 
         private void Menu_Delete()
         {
-            int entitycount = BitConv.FromInt32(OldZoneEntryController.ZoneEntry.Unknown1,0x20C);
-            BitConv.ToInt32(OldZoneEntryController.ZoneEntry.Unknown1,0x20C,entitycount - 1);
-            OldZoneEntryController.ZoneEntry.Entities.Remove(Entity);
+            int entitycount = BitConv.FromInt32(OldZoneEntryController.OldZoneEntry.Header,0x20C);
+            BitConv.ToInt32(OldZoneEntryController.OldZoneEntry.Header,0x20C,entitycount - 1);
+            OldZoneEntryController.OldZoneEntry.Entities.Remove(Entity);
             Dispose();
         }
     }

@@ -29,33 +29,33 @@ namespace CrashHacks.Scripts.Zone
             if (value is ZoneEntry)
             {
                 ZoneEntry entry = (ZoneEntry)value;
-                for (int i = 0x24;i < entry.Unknown2.Length;i += 2)
+                for (int i = 0x24;i < entry.Layout.Length;i += 2)
                 {
-                    short node = BitConv.FromInt16(entry.Unknown2,i);
+                    short node = BitConv.FromInt16(entry.Layout,i);
                     if (node == 0x35)
                     {
                         //bear level water => nothin'
-                        BitConv.ToInt16(entry.Unknown2,i,0);
+                        BitConv.ToInt16(entry.Layout,i,0);
                     }
                     else if (node == 0x129)
                     {
                         //water level water => burn your ass
-                        BitConv.ToInt16(entry.Unknown2,i,0x41);
+                        BitConv.ToInt16(entry.Layout,i,0x41);
                     }
                     else if (node == 0xC1)
                     {
                         //bear level totem fucks => solid
-                        BitConv.ToInt16(entry.Unknown2,i,3);
+                        BitConv.ToInt16(entry.Layout,i,3);
                     }
                     else if (node == 0x41)
                     {
                         //burning surfaces => solid
-                        BitConv.ToInt16(entry.Unknown2,i,3);
+                        BitConv.ToInt16(entry.Layout,i,3);
                     }
                     else if (node == 0x5)
                     {
                         //weird borders on grates/etc => nothin'
-                        BitConv.ToInt16(entry.Unknown2,i,0);
+                        BitConv.ToInt16(entry.Layout,i,0);
                     }
                 }
             }

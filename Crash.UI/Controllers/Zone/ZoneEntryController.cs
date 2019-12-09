@@ -2,21 +2,13 @@ namespace Crash.UI
 {
     public sealed class ZoneEntryController : EntryController
     {
-        private ZoneEntry entry;
-
         public ZoneEntryController(EntryChunkController up,ZoneEntry entry) : base(up,entry)
         {
-            this.entry = entry;
+            Entry = entry;
         }
 
-        public new ZoneEntry Entry
-        {
-            get { return entry; }
-        }
+        public new ZoneEntry Entry { get; }
 
-        public override string ToString()
-        {
-            return string.Format(Properties.Resources.ZoneEntryController_Text,entry.EName);
-        }
+        public override string ToString() => string.Format(Properties.Resources.ZoneEntryController_Text,Entry.EName);
     }
 }

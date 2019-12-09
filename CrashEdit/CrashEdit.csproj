@@ -29,6 +29,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,6 +39,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>
@@ -63,6 +65,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\Model\T2EntryController.cs" />
+    <Compile Include="Controllers\GOOL\GOOLEntryController.cs" />
+    <Compile Include="Controls\GOOLBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="DRNSF.cs" />
     <Compile Include="ISO2PSX.cs" />
     <Compile Include="Controllers\Animation\CutsceneFrameController.cs" />
@@ -71,7 +77,6 @@
     <Compile Include="Controllers\Animation\ProtoAnimationEntryController.cs" />
     <Compile Include="Controllers\Animation\ProtoFrameController.cs" />
     <Compile Include="Controllers\Base\Chunk\ChunkController.cs" />
-    <Compile Include="Controllers\T11\T11EntryController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\ControllerMenuDelegate.cs" />
     <Compile Include="Controllers\Animation\OldAnimationEntryController.cs" />
@@ -94,7 +99,6 @@
     <Compile Include="Controllers\T15\OldT15EntryController.cs" />
     <Compile Include="Controllers\T17\OldT17EntryController.cs" />
     <Compile Include="Controllers\Zone\NewEntityController.cs" />
-    <Compile Include="Controllers\Zone\ProtoCameraController.cs" />
     <Compile Include="Controllers\Zone\OldCameraController.cs" />
     <Compile Include="Controllers\Zone\ProtoZoneEntryController.cs" />
     <Compile Include="Controllers\Zone\ProtoEntityController.cs" />
@@ -134,26 +138,11 @@
     <Compile Include="Controls\AnimationEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\NewEntityBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\NewEntityBox.Designer.cs">
-      <DependentUpon>NewEntityBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ProtoAnimationEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Controls\OldFrameBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\OldFrameBox.Designer.cs">
       <DependentUpon>OldFrameBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ProtoCameraBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ProtoCameraBox.Designer.cs">
-      <DependentUpon>ProtoCameraBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\OldCameraBox.cs">
       <SubType>UserControl</SubType>
@@ -294,16 +283,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\NewEntityBox.resx">
-      <DependentUpon>NewEntityBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\OldFrameBox.resx">
       <DependentUpon>OldFrameBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ProtoCameraBox.resx">
-      <DependentUpon>ProtoCameraBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\OldCameraBox.resx">

@@ -36,11 +36,13 @@ namespace CrashEdit
                 case Keys.D:
                     if (form == null)
                     {
-                        form = new Form();
-                        form.Text = "Undocked Control";
-                        form.Width = Width;
-                        form.Height = Height;
-                        form.FormBorderStyle = FormBorderStyle.SizableToolWindow;
+                        form = new Form
+                        {
+                            Text = "Undocked Control",
+                            Width = Width,
+                            Height = Height,
+                            FormBorderStyle = FormBorderStyle.SizableToolWindow
+                        };
                         Controls.Remove(control);
                         form.Controls.Add(control);
                         form.FormClosed += delegate (object sender,FormClosedEventArgs ee)

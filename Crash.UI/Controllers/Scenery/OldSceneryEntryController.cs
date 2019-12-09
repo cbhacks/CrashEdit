@@ -2,21 +2,13 @@ namespace Crash.UI
 {
     public sealed class OldSceneryEntryController : EntryController
     {
-        private OldSceneryEntry entry;
-
         public OldSceneryEntryController(EntryChunkController up,OldSceneryEntry entry) : base(up,entry)
         {
-            this.entry = entry;
+            Entry = entry;
         }
 
-        public new OldSceneryEntry Entry
-        {
-            get { return entry; }
-        }
+        public new OldSceneryEntry Entry { get; }
 
-        public override string ToString()
-        {
-            return string.Format(Properties.Resources.OldSceneryEntryController_Text,entry.EName);
-        }
+        public override string ToString() => string.Format(Properties.Resources.OldSceneryEntryController_Text,Entry.EName);
     }
 }

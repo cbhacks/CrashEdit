@@ -2,21 +2,13 @@ namespace Crash.UI
 {
     public sealed class OldSoundChunkController : EntryChunkController
     {
-        private OldSoundChunk chunk;
-
         public OldSoundChunkController(NSFController up,OldSoundChunk chunk) : base(up,chunk)
         {
-            this.chunk = chunk;
+            Chunk = chunk;
         }
 
-        public new OldSoundChunk Chunk
-        {
-            get { return chunk; }
-        }
+        public new OldSoundChunk Chunk { get; }
 
-        public override string ToString()
-        {
-            return Properties.Resources.OldSoundChunkController_Text;
-        }
+        public override string ToString() => Properties.Resources.OldSoundChunkController_Text;
     }
 }

@@ -21,20 +21,11 @@ namespace Crash.UI
             }
         }
 
-        public static IEnumerable<Action> AllActions
-        {
-            get { return actions; }
-        }
+        public static IEnumerable<Action> AllActions => actions;
 
-        public virtual bool CheckCompatibility(Controller c)
-        {
-            return true;
-        }
+        public virtual bool CheckCompatibility(Controller c) => true;
 
-        public virtual string GetText(Controller c)
-        {
-            return string.Format("{0} @ {1}",this,c);
-        }
+        public virtual string GetText(Controller c) => string.Format("{0} @ {1}",this,c);
 
         public abstract Command Activate(Controller c);
     }
@@ -62,15 +53,9 @@ namespace Crash.UI
             return Activate((T)c);
         }
 
-        protected virtual bool CheckCompatibility(T c)
-        {
-            return true;
-        }
+        protected virtual bool CheckCompatibility(T c) => true;
 
-        protected virtual string GetText(T c)
-        {
-            return string.Format("{0} @ {1}",this,c);
-        }
+        protected virtual string GetText(T c) => string.Format("{0} @ {1}",this,c);
 
         protected abstract Command Activate(T c);
     }

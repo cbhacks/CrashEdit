@@ -5,20 +5,19 @@ namespace Crash
 {
     public sealed class ModelEntry : Entry
     {
-        private List<int> positionindices;
-        private List<int> colorindices;
+        private List<ModelTransformedTriangle> triangles;
         private List<SceneryColor> colors;
         private List<ModelTexture> textures;
-        private List<ModelAnimatedTexture> animatedtextures;
+        private List<ModelExtendedTexture> animatedtextures;
         private List<ModelPosition> positions;
 
-        public ModelEntry(byte[] info,uint[] polygons,IEnumerable<SceneryColor> colors,IEnumerable<ModelTexture> textures,IEnumerable<ModelAnimatedTexture> animatedtextures,IEnumerable<ModelPosition> positions,int eid,int size) : base(eid,size)
+        public ModelEntry(byte[] info,uint[] polygons,IEnumerable<SceneryColor> colors,IEnumerable<ModelTexture> textures,IEnumerable<ModelExtendedTexture> animatedtextures,IEnumerable<ModelPosition> positions,int eid,int size) : base(eid,size)
         {
             Info = info ?? throw new ArgumentNullException("info");
             PolyData = polygons ?? throw new ArgumentNullException("polygons");
             this.colors = new List<SceneryColor>(colors);
             this.textures = new List<ModelTexture>(textures);
-            this.animatedtextures = new List<ModelAnimatedTexture>(animatedtextures);
+            this.animatedtextures = new List<ModelExtendedTexture>(animatedtextures);
             if (positions != null)
                 this.positions = new List<ModelPosition>(positions);
             else
@@ -28,8 +27,7 @@ namespace Crash
 
         private void ConvertIndices()
         {
-            positionindices = new List<int>();
-            colorindices = new List<int>();
+            triangles = new List<ModelTransformedTriangle>();
             Dictionary<byte, int> p = new Dictionary<byte, int>();
             int v = positions == null ? 0 : -BitConv.FromInt32(Info, 0x4C); // special vertex count, let's get rid of it for compressed models
             List<int> vtx = new List<int>();
@@ -70,7 +68,7 @@ namespace Crash
                 else
                     throw new Exception();
             }
-            for (int i = 0, cur_v = 0; i < PolyData.Length;++i)
+            for (int i = 0, cur_v = 0; i < PolyData.Length; ++i)
             {
                 ModelStruct s = structs[i];
                 if (s == null) // footer
@@ -81,99 +79,64 @@ namespace Crash
                 }
                 else if (s is ModelTriangle t) // index
                 {
-                    if (t.Type == ModelTriangle.IndexType.Original)
+                    switch (t.TriangleType)
                     {
-                        switch (t.TriangleType)
-                        {
-                            case 0:
-                                lastaapos = cur_v;
-                                lastnonbb = i;
-                                positionindices.Add(vtx[cur_v]);
-                                positionindices.Add(vtx[cur_v-1]);
-                                positionindices.Add(vtx[cur_v-2]);
-                                colorindices.Add(t.ColorIndex);
-                                colorindices.Add(lastcolor+1 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i-1]).ColorIndex);
-                                colorindices.Add(lastcolor+1 == i ? ((ModelColor)structs[lastcolor]).Color2 : (lastcolor+2 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i-2]).ColorIndex));
-                                break;
-                            case 1:
-                                positionindices.Add(vtx[cur_v]);
-                                positionindices.Add(vtx[cur_v-1]);
-                                positionindices.Add(lastccpos > lastaapos ? vtx[lastccpos] : vtx[lastaapos-2]);
-                                colorindices.Add(t.ColorIndex);
-                                colorindices.Add(lastcolor+1 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i-1]).ColorIndex);
-                                int ci = -1;
-                                if (lastcolor < lastnonbb-2) // 3
-                                    ci = ((ModelTriangle)structs[lastnonbb-2]).ColorIndex;
-                                else if (lastcolor == lastnonbb-2) // 1
-                                    ci = ((ModelColor)structs[lastcolor]).Color1;
-                                else if (lastcolor == lastnonbb-1) // 2
-                                    ci = ((ModelColor)structs[lastcolor]).Color2;
-                                else if (lastcolor > lastnonbb-2) // 4
-                                    ci = ((ModelColor)structs[lastcolor]).Color2;
-                                colorindices.Add(ci);
-                                break;
-                            case 2:
-                                if (i + 2 < PolyData.Length && lastvalidcc + 2 < i)
-                                {
-                                    lastvalidcc = i;
-                                    positionindices.Add(vtx[cur_v]);
-                                    positionindices.Add(vtx[cur_v+1]);
-                                    positionindices.Add(vtx[cur_v+2]);
-                                    colorindices.Add(t.ColorIndex);
-                                    colorindices.Add(((ModelTriangle)structs[i+1]).ColorIndex);
-                                    colorindices.Add(((ModelTriangle)structs[i+2]).ColorIndex);
-                                }
-                                lastccpos = cur_v;
-                                lastnonbb = i;
-                                break;
-                        }
-                    }
-                    else if (t.Type == ModelTriangle.IndexType.Duplicate)
-                    {
-                        switch (t.TriangleType)
-                        {
-                            case 0:
-                                lastaapos = cur_v;
-                                lastnonbb = i;
-                                positionindices.Add(vtx[cur_v]);
-                                positionindices.Add(vtx[cur_v-1]);
-                                positionindices.Add(vtx[cur_v-2]);
-                                colorindices.Add(t.ColorIndex);
-                                colorindices.Add(lastcolor+1 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i-1]).ColorIndex);
-                                colorindices.Add(lastcolor+1 == i ? ((ModelColor)structs[lastcolor]).Color2 : (lastcolor+2 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i-2]).ColorIndex));
-                                break;
-                            case 1:
-                                positionindices.Add(vtx[cur_v]);
-                                positionindices.Add(vtx[cur_v-1]);
-                                positionindices.Add(lastccpos > lastaapos ? vtx[lastccpos] : vtx[lastaapos-2]);
-                                colorindices.Add(t.ColorIndex);
-                                colorindices.Add(lastcolor+1 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i-1]).ColorIndex);
-                                int ci = -1;
-                                if (lastcolor < lastnonbb-2) // 3
-                                    ci = ((ModelTriangle)structs[lastnonbb-2]).ColorIndex;
-                                else if (lastcolor == lastnonbb-2) // 1
-                                    ci = ((ModelColor)structs[lastcolor]).Color1;
-                                else if (lastcolor == lastnonbb-1) // 2
-                                    ci = ((ModelColor)structs[lastcolor]).Color2;
-                                else if (lastcolor > lastnonbb-2) // 4
-                                    ci = ((ModelColor)structs[lastcolor]).Color2;
-                                colorindices.Add(ci);
-                                break;
-                            case 2:
-                                if (i + 2 < PolyData.Length && lastvalidcc + 2 < i)
-                                {
-                                    lastvalidcc = i;
-                                    positionindices.Add(vtx[cur_v]);
-                                    positionindices.Add(vtx[cur_v+1]);
-                                    positionindices.Add(vtx[cur_v+2]);
-                                    colorindices.Add(t.ColorIndex);
-                                    colorindices.Add(((ModelTriangle)structs[i+1]).ColorIndex);
-                                    colorindices.Add(((ModelTriangle)structs[i+2]).ColorIndex);
-                                }
-                                lastccpos = cur_v;
-                                lastnonbb = i;
-                                break;
-                        }
+                        case 0:
+                            lastaapos = cur_v;
+                            lastnonbb = i;
+                            triangles.Add(new ModelTransformedTriangle(
+                                vtx[cur_v],
+                                vtx[cur_v - 1],
+                                vtx[cur_v - 2],
+                                t.ColorIndex,
+                                lastcolor + 1 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i - 1]).ColorIndex,
+                                lastcolor + 1 == i ? ((ModelColor)structs[lastcolor]).Color2 : (lastcolor + 2 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i - 2]).ColorIndex),
+                                t.TextureIndex,
+                                t.TriangleType,
+                                t.TriangleSubtype,
+                                t.Animated));
+                            break;
+                        case 1:
+                            int ci = -1;
+                            if (lastcolor < lastnonbb-2) // 3
+                                ci = ((ModelTriangle)structs[lastnonbb-2]).ColorIndex;
+                            else if (lastcolor == lastnonbb-2) // 1
+                                ci = ((ModelColor)structs[lastcolor]).Color1;
+                            else if (lastcolor == lastnonbb-1) // 2
+                                ci = ((ModelColor)structs[lastcolor]).Color2;
+                            else if (lastcolor > lastnonbb-2) // 4
+                                ci = ((ModelColor)structs[lastcolor]).Color2;
+                            triangles.Add(new ModelTransformedTriangle(
+                                vtx[cur_v],
+                                vtx[cur_v - 1],
+                                lastccpos > lastaapos ? vtx[lastccpos] : vtx[lastaapos - 2],
+                                t.ColorIndex,
+                                lastcolor + 1 == i ? ((ModelColor)structs[lastcolor]).Color1 : ((ModelTriangle)structs[i - 1]).ColorIndex,
+                                ci,
+                                t.TextureIndex,
+                                t.TriangleType,
+                                t.TriangleSubtype,
+                                t.Animated));
+                            break;
+                        case 2:
+                            if (i + 2 < PolyData.Length && lastvalidcc + 2 < i)
+                            {
+                                lastvalidcc = i;
+                                triangles.Add(new ModelTransformedTriangle(
+                                    vtx[cur_v],
+                                    vtx[cur_v+1],
+                                    vtx[cur_v+2],
+                                    t.ColorIndex,
+                                    ((ModelTriangle)structs[i+1]).ColorIndex,
+                                    ((ModelTriangle)structs[i+2]).ColorIndex,
+                                    t.TextureIndex,
+                                    t.TriangleType,
+                                    t.TriangleSubtype,
+                                    t.Animated));
+                            }
+                            lastccpos = cur_v;
+                            lastnonbb = i;
+                            break;
                     }
                     ++cur_v;
                 }
@@ -199,11 +162,10 @@ namespace Crash
         public override int Type => 2;
         public byte[] Info { get; }
         public uint[] PolyData { get; }
-        public IList<int> PositionIndices => positionindices;
-        public IList<int> ColorIndices => colorindices;
+        public IList<ModelTransformedTriangle> Triangles => triangles;
         public IList<SceneryColor> Colors => colors;
         public IList<ModelTexture> Textures => textures;
-        public IList<ModelAnimatedTexture> AnimatedTextures => animatedtextures;
+        public IList<ModelExtendedTexture> AnimatedTextures => animatedtextures;
         public IList<ModelPosition> Positions => positions;
 
         public override UnprocessedEntry Unprocess()

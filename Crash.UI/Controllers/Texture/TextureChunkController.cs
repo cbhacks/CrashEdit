@@ -2,26 +2,15 @@ namespace Crash.UI
 {
     public sealed class TextureChunkController : ChunkController,IEntryController
     {
-        private TextureChunk chunk;
-
         public TextureChunkController(NSFController up,TextureChunk chunk) : base(up,chunk)
         {
-            this.chunk = chunk;
+            Chunk = chunk;
         }
 
-        public new TextureChunk Chunk
-        {
-            get { return chunk; }
-        }
+        public new TextureChunk Chunk { get; }
 
-        IEntry IEntryController.Entry
-        {
-            get { return chunk; }
-        }
+        IEntry IEntryController.Entry => Chunk;
 
-        public override string ToString()
-        {
-            return string.Format(Properties.Resources.TextureChunkController_Text,Entry.EIDToEName(chunk.EID));
-        }
+        public override string ToString() => string.Format(Properties.Resources.TextureChunkController_Text,Entry.EIDToEName(Chunk.EID));
     }
 }

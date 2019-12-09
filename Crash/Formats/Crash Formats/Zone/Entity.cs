@@ -313,7 +313,7 @@ namespace Crash
                 }
                 header[16 + 8 * i + 4] = (byte)(property.Type | ((i == properties.Count - 1) ? 128 : 0) | (property.IsSparse ? 64 : 0) | (property.HasMetaValues ? 32 : 0));
                 header[16 + 8 * i + 5] = property.ElementSize;
-                BitConv.ToInt16(header,16 + 8 * i + 6,property.Unknown);
+                BitConv.ToInt16(header,16 + 8 * i + 6,property.RowCount);
                 byte[] propertydata = property.Save();
                 i++;
                 offset += propertydata.Length;

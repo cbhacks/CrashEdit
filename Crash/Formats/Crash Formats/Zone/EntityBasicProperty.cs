@@ -16,7 +16,7 @@ namespace Crash
             Rows = new List<EntityPropertyRow<T>>(rows);
         }
 
-        public override sealed short Unknown => (short)Rows.Count;
+        public override sealed short RowCount => (short)Rows.Count;
 
         public override bool IsSparse
         {

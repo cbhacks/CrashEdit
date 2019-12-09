@@ -1,9 +1,9 @@
 using Crash;
-using System;
-using System.Drawing;
-using System.Collections.Generic;
-using System.Windows.Forms;
 using OpenTK.Graphics.OpenGL;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace CrashEdit
 {
@@ -47,8 +47,8 @@ namespace CrashEdit
         private bool polygonmode;
         private bool allentries;
 
-        public ZoneEntryViewer(ZoneEntry entry,SceneryEntry[] linkedsceneryentries,ZoneEntry[] linkedentries)
-            : base(linkedsceneryentries)
+        public ZoneEntryViewer(ZoneEntry entry,SceneryEntry[] linkedsceneryentries,TextureChunk[][] texturechunks,ZoneEntry[] linkedentries)
+            : base(linkedsceneryentries,texturechunks)
         {
             this.entry = entry;
             this.linkedentries = linkedentries;
@@ -65,19 +65,17 @@ namespace CrashEdit
             allentries = false;
         }
 
-        protected override int CameraRangeMargin => 800;
-
         protected override IEnumerable<IPosition> CorePositions
         {
             get
             {
-                int xoffset = BitConv.FromInt32(entry.Unknown2,0);
-                int yoffset = BitConv.FromInt32(entry.Unknown2,4);
-                int zoffset = BitConv.FromInt32(entry.Unknown2,8);
+                int xoffset = BitConv.FromInt32(entry.Layout,0);
+                int yoffset = BitConv.FromInt32(entry.Layout,4);
+                int zoffset = BitConv.FromInt32(entry.Layout,8);
                 yield return new Position(xoffset,yoffset,zoffset);
-                int x2 = BitConv.FromInt32(entry.Unknown2,12);
-                int y2 = BitConv.FromInt32(entry.Unknown2,16);
-                int z2 = BitConv.FromInt32(entry.Unknown2,20);
+                int x2 = BitConv.FromInt32(entry.Layout,12);
+                int y2 = BitConv.FromInt32(entry.Layout,16);
+                int z2 = BitConv.FromInt32(entry.Layout,20);
                 yield return new Position(x2 + xoffset, y2 + yoffset, z2 + zoffset);
                 foreach (Entity entity in entry.Entities)
                 {
@@ -88,7 +86,7 @@ namespace CrashEdit
                             int x = position.X + xoffset;
                             int y = position.Y + yoffset;
                             int z = position.Z + zoffset;
-                            yield return new Position(x, y, z);
+                            yield return new Position(x,y,z);
                         }
                     }
                 }
@@ -103,6 +101,7 @@ namespace CrashEdit
                 case Keys.C:
                 case Keys.R:
                 case Keys.V:
+                case Keys.F:
                     return true;
                 default:
                     return base.IsInputKey(keyData);
@@ -161,9 +160,9 @@ namespace CrashEdit
         protected override void RenderObjects()
         {
             RenderEntry(entry,ref octreedisplaylists[0]);
-            int xoffset = BitConv.FromInt32(entry.Unknown2,0);
-            int yoffset = BitConv.FromInt32(entry.Unknown2,4);
-            int zoffset = BitConv.FromInt32(entry.Unknown2,8);
+            int xoffset = BitConv.FromInt32(entry.Layout,0);
+            int yoffset = BitConv.FromInt32(entry.Layout,4);
+            int zoffset = BitConv.FromInt32(entry.Layout,8);
             base.RenderObjects();
             GL.Enable(EnableCap.PolygonStipple);
             GL.PolygonStipple(stippleb);
@@ -181,33 +180,33 @@ namespace CrashEdit
 
         private void RenderEntry(ZoneEntry entry,ref int octreedisplaylist)
         {
-            int xoffset = BitConv.FromInt32(entry.Unknown2,0);
-            int yoffset = BitConv.FromInt32(entry.Unknown2,4);
-            int zoffset = BitConv.FromInt32(entry.Unknown2,8);
-            int x2 = BitConv.FromInt32(entry.Unknown2,12);
-            int y2 = BitConv.FromInt32(entry.Unknown2,16);
-            int z2 = BitConv.FromInt32(entry.Unknown2,20);
+            int xoffset = BitConv.FromInt32(entry.Layout,0);
+            int yoffset = BitConv.FromInt32(entry.Layout,4);
+            int zoffset = BitConv.FromInt32(entry.Layout,8);
+            int x2 = BitConv.FromInt32(entry.Layout,12);
+            int y2 = BitConv.FromInt32(entry.Layout,16);
+            int z2 = BitConv.FromInt32(entry.Layout,20);
             GL.PushMatrix();
             GL.Translate(xoffset,yoffset,zoffset);
             if (deletelists)
             {
-                GL.DeleteLists(octreedisplaylist, 1);
+                GL.DeleteLists(octreedisplaylist,1);
                 octreedisplaylist = -1;
                 deletelists = false;
             }
             if (renderoctree)
             {
-                if (polygonmode)
+                if (!polygonmode)
                     GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Line);
                 if (octreedisplaylist == -1)
                 {
                     octreedisplaylist = GL.GenLists(1);
                     GL.NewList(octreedisplaylist,ListMode.CompileAndExecute);
                     GL.PushMatrix();
-                    int xmax = (ushort)BitConv.FromInt16(entry.Unknown2,0x1E);
-                    int ymax = (ushort)BitConv.FromInt16(entry.Unknown2,0x20);
-                    int zmax = (ushort)BitConv.FromInt16(entry.Unknown2,0x22);
-                    RenderOctree(entry.Unknown2,0x1C,0,0,0,x2,y2,z2,xmax,ymax,zmax);
+                    int xmax = (ushort)BitConv.FromInt16(entry.Layout,0x1E);
+                    int ymax = (ushort)BitConv.FromInt16(entry.Layout,0x20);
+                    int zmax = (ushort)BitConv.FromInt16(entry.Layout,0x22);
+                    RenderOctree(entry.Layout,0x1C,0,0,0,x2,y2,z2,xmax,ymax,zmax);
                     GL.PopMatrix();
                     GL.EndList();
                 }
@@ -253,12 +252,12 @@ namespace CrashEdit
 
         private void RenderLinkedEntry(ZoneEntry entry,ref int octreedisplaylist)
         {
-            int xoffset = BitConv.FromInt32(entry.Unknown2,0);
-            int yoffset = BitConv.FromInt32(entry.Unknown2,4);
-            int zoffset = BitConv.FromInt32(entry.Unknown2,8);
-            int x2 = BitConv.FromInt32(entry.Unknown2, 12);
-            int y2 = BitConv.FromInt32(entry.Unknown2, 16);
-            int z2 = BitConv.FromInt32(entry.Unknown2, 20);
+            int xoffset = BitConv.FromInt32(entry.Layout,0);
+            int yoffset = BitConv.FromInt32(entry.Layout,4);
+            int zoffset = BitConv.FromInt32(entry.Layout,8);
+            int x2 = BitConv.FromInt32(entry.Layout,12);
+            int y2 = BitConv.FromInt32(entry.Layout,16);
+            int z2 = BitConv.FromInt32(entry.Layout,20);
             GL.PushMatrix();
             GL.Translate(xoffset,yoffset,zoffset);
             if (allentries)
@@ -266,23 +265,23 @@ namespace CrashEdit
                 GL.PolygonStipple(stippleb);
                 if (deletelists)
                 {
-                    GL.DeleteLists(octreedisplaylist, 1);
+                    GL.DeleteLists(octreedisplaylist,1);
                     octreedisplaylist = -1;
                     deletelists = false;
                 }
                 if (renderoctree)
                 {
-                    if (polygonmode)
-                        GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+                    if (!polygonmode)
+                        GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Line);
                     if (octreedisplaylist == -1)
                     {
                         octreedisplaylist = GL.GenLists(1);
-                        GL.NewList(octreedisplaylist, ListMode.CompileAndExecute);
+                        GL.NewList(octreedisplaylist,ListMode.CompileAndExecute);
                         GL.PushMatrix();
-                        int xmax = (ushort)BitConv.FromInt16(entry.Unknown2, 0x1E);
-                        int ymax = (ushort)BitConv.FromInt16(entry.Unknown2, 0x20);
-                        int zmax = (ushort)BitConv.FromInt16(entry.Unknown2, 0x22);
-                        RenderOctree(entry.Unknown2, 0x1C, 0, 0, 0, x2, y2, z2, xmax, ymax, zmax);
+                        int xmax = (ushort)BitConv.FromInt16(entry.Layout,0x1E);
+                        int ymax = (ushort)BitConv.FromInt16(entry.Layout,0x20);
+                        int zmax = (ushort)BitConv.FromInt16(entry.Layout,0x22);
+                        RenderOctree(entry.Layout,0x1C,0,0,0,x2,y2,z2,xmax,ymax,zmax);
                         GL.PopMatrix();
                         GL.EndList();
                     }
@@ -290,7 +289,7 @@ namespace CrashEdit
                     {
                         GL.CallList(octreedisplaylist);
                     }
-                    GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+                    GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
                 }
             }
             GL.Scale(4,4,4);
@@ -409,6 +408,7 @@ namespace CrashEdit
                 RenderOctreeY(data,ref offset,x,y,z,w,h,d,xmax - 1,ymax,zmax);
             }
         }
+
         private void RenderOctreeY(byte[] data,ref int offset,double x,double y,double z,double w,double h,double d,int xmax,int ymax,int zmax)
         {
             if (ymax > 0)

@@ -10,10 +10,7 @@ namespace CrashEdit
             InitializeComponent();
         }
 
-        public string Input
-        {
-            get { return txtInput.Text; }
-        }
+        public string Input => txtInput.Text;
 
         private void cmdOK_Click(object sender,EventArgs e)
         {

@@ -20,7 +20,7 @@ namespace Crash
 
         public override byte Type => type;
         public override byte ElementSize => elementsize;
-        public override short Unknown => unknown;
+        public override short RowCount => unknown;
         public override bool IsSparse => issparse;
         public override bool HasMetaValues => hasmetavalues;
         public byte[] Data { get; }

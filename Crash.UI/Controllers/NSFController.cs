@@ -4,25 +4,17 @@ namespace Crash.UI
 {
     public sealed class NSFController : Controller
     {
-        private NSF nsf;
-
         public NSFController(NSF nsf)
         {
-            this.nsf = nsf;
-            this.nsf.Chunks.ItemAdded += new EvListEventHandler<Chunk>(Chunks_ItemAdded);
-            this.nsf.Chunks.ItemRemoved += new EvListEventHandler<Chunk>(Chunks_ItemRemoved);
-            this.nsf.Chunks.Populate(Chunks_ItemAdded);
+            NSF = nsf;
+            NSF.Chunks.ItemAdded += new EvListEventHandler<Chunk>(Chunks_ItemAdded);
+            NSF.Chunks.ItemRemoved += new EvListEventHandler<Chunk>(Chunks_ItemRemoved);
+            NSF.Chunks.Populate(Chunks_ItemAdded);
         }
 
-        public NSF NSF
-        {
-            get { return nsf; }
-        }
+        public NSF NSF { get; }
 
-        public override string ToString()
-        {
-            return Properties.Resources.NSFController_Text;
-        }
+        public override string ToString() => Properties.Resources.NSFController_Text;
 
         private void Chunks_ItemAdded(object sender,EvListEventArgs<Chunk> e)
         {
@@ -67,22 +59,16 @@ namespace Crash.UI
 
         public override void Dispose()
         {
-            nsf.Chunks.ItemAdded -= Chunks_ItemAdded;
-            nsf.Chunks.ItemRemoved -= Chunks_ItemRemoved;
+            NSF.Chunks.ItemAdded -= Chunks_ItemAdded;
+            NSF.Chunks.ItemRemoved -= Chunks_ItemRemoved;
             base.Dispose();
         }
 
         private sealed class AcAddNormalChunk : Action<NSFController>
         {
-            protected override string GetText(NSFController c)
-            {
-                return Properties.Resources.NSFController_AcAddNormalChunk;
-            }
+            protected override string GetText(NSFController c) => Properties.Resources.NSFController_AcAddNormalChunk;
 
-            protected override Command Activate(NSFController c)
-            {
-                return c.NSF.Chunks.CmAdd(new NormalChunk());
-            }
+            protected override Command Activate(NSFController c) => c.NSF.Chunks.CmAdd(new NormalChunk());
         }
     }
 }

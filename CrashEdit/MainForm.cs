@@ -15,23 +15,25 @@ namespace CrashEdit
         {
             InitializeComponent();
 
-            syncstripitems = new List<ToolStripItem>();
-            syncstripitems.Add(mniFileSave);
-            syncstripitems.Add(mniFileSaveAs);
-            syncstripitems.Add(mniFilePatchNSD);
-            syncstripitems.Add(mniFileClose);
-            syncstripitems.Add(mnuEdit);
-            syncstripitems.Add(mniFindFind);
-            syncstripitems.Add(mniFindFindNext);
-            syncstripitems.Add(mniFindEntryID);
-            syncstripitems.Add(mniFindEntryName);
-            syncstripitems.Add(mniFindObjectName);
-            syncstripitems.Add(tbiSave);
-            syncstripitems.Add(tbiClose);
-            syncstripitems.Add(tbiPatchNSD);
-            syncstripitems.Add(tbiFind);
-            syncstripitems.Add(tbiFindNext);
-            syncstripitems.Add(tbiGotoEID);
+            syncstripitems = new List<ToolStripItem>
+            {
+                mniFileSave,
+                mniFileSaveAs,
+                mniFilePatchNSD,
+                mniFileClose,
+                mnuEdit,
+                mniFindFind,
+                mniFindFindNext,
+                mniFindEntryID,
+                mniFindEntryName,
+                mniFindObjectName,
+                tbiSave,
+                tbiClose,
+                tbiPatchNSD,
+                tbiFind,
+                tbiFindNext,
+                tbiGotoEID
+            };
 
             // Set menu strings
             mnuFile.Text = Properties.Resources.Menu_File;
@@ -62,8 +64,10 @@ namespace CrashEdit
 
             foreach (Crash.UI.Action action in Crash.UI.Action.AllActions)
             {
-                ToolStripMenuItem tsi = new ToolStripMenuItem();
-                tsi.Tag = action;
+                ToolStripMenuItem tsi = new ToolStripMenuItem
+                {
+                    Tag = action
+                };
                 tsi.Click += mniEditAction_Click;
                 mnuEdit.DropDownItems.Add(tsi);
             }
@@ -98,9 +102,8 @@ namespace CrashEdit
             sbiProgress.Visible = false;
             if (uxTabs.SelectedIndex == -1)
                 return;
-            if (uxTabs.SelectedTab.Tag is MainControl)
+            if (uxTabs.SelectedTab.Tag is MainControl maincontrol)
             {
-                MainControl maincontrol = (MainControl)uxTabs.SelectedTab.Tag;
                 foreach (ToolStripItem stripitem in syncstripitems)
                 {
                     stripitem.Enabled = true;
@@ -132,7 +135,7 @@ namespace CrashEdit
                             tsi.Click += mniUndoUndo_Click;
                             mnuUndo.DropDownItems.Add(tsi);
                         }
-                        tsi.Text = string.Format(Properties.Resources.Menu_Undo_UndoAction,action);
+                        tsi.Text = string.Format(Properties.Resources.Menu_Undo_UndoAction, action);
                         tsi.Tag = i;
                         i++;
                     }
@@ -149,9 +152,9 @@ namespace CrashEdit
                         {
                             tsi = new ToolStripMenuItem();
                             tsi.Click += mniUndoRedo_Click;
-                            mnuUndo.DropDownItems.Insert(0,tsi);
+                            mnuUndo.DropDownItems.Insert(0, tsi);
                         }
-                        tsi.Text = string.Format(Properties.Resources.Menu_Undo_RedoAction,action);
+                        tsi.Text = string.Format(Properties.Resources.Menu_Undo_RedoAction, action);
                         tsi.Tag = i;
                         i++;
                     }
@@ -216,16 +219,24 @@ namespace CrashEdit
                 }
                 foreach (string filename in dlgOpenNSF.FileNames)
                 {
-                    MainControl control = new MainControl(new FileInfo(filename),gameversion);
-                    control.Dock = DockStyle.Fill;
-                    TabPage tab = new TabPage(filename);
-                    tab.Tag = control;
+                    MainControl control = new MainControl(new FileInfo(filename), gameversion)
+                    {
+                        Dock = DockStyle.Fill
+                    };
+                    TabPage tab = new TabPage(filename)
+                    {
+                        Tag = control
+                    };
                     tab.Controls.Add(control);
                     uxTabs.TabPages.Add(tab);
-                    NSFBox nsfbox = new NSFBox(control.NSFController.NSF,gameversion);
-                    nsfbox.Dock = DockStyle.Fill;
-                    TabPage oldtab = new TabPage("[OLD] " + filename);
-                    oldtab.Tag = nsfbox;
+                    NSFBox nsfbox = new NSFBox(control.NSFController.NSF, gameversion)
+                    {
+                        Dock = DockStyle.Fill
+                    };
+                    TabPage oldtab = new TabPage("[OLD] " + filename)
+                    {
+                        Tag = nsfbox
+                    };
                     oldtab.Controls.Add(nsfbox);
                     uxTabs.TabPages.Add(oldtab);
                     uxTabs.SelectedTab = tab;
@@ -251,13 +262,12 @@ namespace CrashEdit
         private void mniFileClose_Click(object sender,EventArgs e)
         {
             TabPage tab = uxTabs.SelectedTab;
-            if (tab.Tag is MainControl)
+            if (tab.Tag is MainControl maincontrol)
             {
-                MainControl maincontrol = (MainControl)tab.Tag;
                 if (maincontrol.CommandManager.Dirty)
                 {
-                    if (MessageBox.Show(this,string.Format(Properties.Resources.Text_CloseDirtyFilePrompt,
-                        maincontrol.FileInfo.FullName),"CrashEdit",MessageBoxButtons.YesNo,
+                    if (MessageBox.Show(this, string.Format(Properties.Resources.Text_CloseDirtyFilePrompt,
+                        maincontrol.FileInfo.FullName), "CrashEdit", MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question) != DialogResult.Yes)
                     {
                         return;
