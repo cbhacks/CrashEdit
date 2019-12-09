@@ -2,21 +2,13 @@ namespace Crash.UI
 {
     public sealed class NormalChunkController : EntryChunkController
     {
-        private NormalChunk chunk;
-
         public NormalChunkController(NSFController up,NormalChunk chunk) : base(up,chunk)
         {
-            this.chunk = chunk;
+            Chunk = chunk;
         }
 
-        public new NormalChunk Chunk
-        {
-            get { return chunk; }
-        }
+        public new NormalChunk Chunk { get; }
 
-        public override string ToString()
-        {
-            return Properties.Resources.NormalChunkController_Text;
-        }
+        public override string ToString() => Properties.Resources.NormalChunkController_Text;
     }
 }

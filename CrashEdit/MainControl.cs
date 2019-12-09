@@ -8,34 +8,31 @@ namespace CrashEdit
 {
     public partial class MainControl : UserControl
     {
-        private FileInfo fileinfo;
         private GameVersion gameversion;
         private Dictionary<Crash.UI.Controller,ControllerData> controllers;
-        private Crash.UI.NSFController nsfc;
         private ControllerData nsfcd;
         private ControllerData activecd;
-        private CommandManager commandmanager;
 
         public event EventHandler SyncMasterUI;
 
         public MainControl(FileInfo fileinfo,GameVersion gameversion)
         {
             InitializeComponent();
-            this.fileinfo = fileinfo;
+            FileInfo = fileinfo;
             this.gameversion = gameversion;
-            this.controllers = new Dictionary<Crash.UI.Controller,ControllerData>();
+            controllers = new Dictionary<Crash.UI.Controller,ControllerData>();
             byte[] data = File.ReadAllBytes(fileinfo.FullName);
             NSF nsf = NSF.LoadAndProcess(data,gameversion);
-            nsfc = new Crash.UI.NSFController(nsf);
-            nsfcd = new ControllerData(this,nsfc);
-            controllers.Add(nsfc,nsfcd);
+            NSFController = new Crash.UI.NSFController(nsf);
+            nsfcd = new ControllerData(this,NSFController);
+            controllers.Add(NSFController,nsfcd);
             uxTree.Nodes.Add(nsfcd.Node);
-            nsfc.DeepItemAdded += nsfc_DeepItemAdded;
-            nsfc.DeepItemRemoved += nsfc_DeepItemRemoved;
-            nsfc.DeepPopulate(nsfc_DeepItemAdded);
-            this.activecd = null;
-            this.commandmanager = new CommandManager();
-            commandmanager.CommandExecuted += new EventHandler(commandmanager_CommandExecuted);
+            NSFController.DeepItemAdded += nsfc_DeepItemAdded;
+            NSFController.DeepItemRemoved += nsfc_DeepItemRemoved;
+            NSFController.DeepPopulate(nsfc_DeepItemAdded);
+            activecd = null;
+            CommandManager = new CommandManager();
+            CommandManager.CommandExecuted += new EventHandler(commandmanager_CommandExecuted);
             uxImageList.Images.Add("NSFController",Properties.Resources.Computer_File_053);
             uxImageList.Images.Add("NormalChunkController",Properties.Resources.People_014);
             uxImageList.Images.Add("TextureChunkController",Properties.Resources.Computer_File_068);
@@ -71,16 +68,9 @@ namespace CrashEdit
             uxImageList.Images.Add("UnprocessedEntryController",Properties.Resources.objects_012_code);
         }
 
-        public FileInfo FileInfo
-        {
-            get { return fileinfo; }
-            set { fileinfo = value; }
-        }
+        public FileInfo FileInfo { get; set; }
 
-        public Crash.UI.NSFController NSFController
-        {
-            get { return nsfc; }
-        }
+        public Crash.UI.NSFController NSFController { get; }
 
         public Crash.UI.Controller SelectedController
         {
@@ -92,46 +82,32 @@ namespace CrashEdit
             }
         }
 
-        public CommandManager CommandManager
-        {
-            get { return commandmanager; }
-        }
+        public CommandManager CommandManager { get; }
 
         private void SyncUI()
         {
-            if (SyncMasterUI != null)
-            {
-                SyncMasterUI(this,EventArgs.Empty);
-            }
+            SyncMasterUI?.Invoke(this, EventArgs.Empty);
         }
 
         private class ControllerData : IDisposable
         {
             private MainControl maincontrol;
-            private Crash.UI.Controller controller;
-            private TreeNode node;
             private Control control;
 
             public ControllerData(MainControl maincontrol,Crash.UI.Controller controller)
             {
                 this.maincontrol = maincontrol;
-                this.controller = controller;
-                this.node = new TreeNode();
-                this.control = null;
+                this.Controller = controller;
+                Node = new TreeNode();
+                control = null;
                 controller.Invalidated += controller_Invalidated;
                 controller_Invalidated(null,null);
-                node.Tag = this;
+                Node.Tag = this;
             }
 
-            public Crash.UI.Controller Controller
-            {
-                get { return controller; }
-            }
+            public Crash.UI.Controller Controller { get; }
 
-            public TreeNode Node
-            {
-                get { return node; }
-            }
+            public TreeNode Node { get; }
 
             public Control Control
             {
@@ -141,7 +117,7 @@ namespace CrashEdit
                     {
                         try
                         {
-                            control = controller.CreateControl();
+                            control = Controller.CreateControl();
                             control.Dock = DockStyle.Fill;
                         }
                         catch (Exception ex)
@@ -175,11 +151,11 @@ namespace CrashEdit
 
             private void controller_Invalidated(object sender,EventArgs e)
             {
-                node.Text = controller.ToString();
-                node.ImageKey = controller.ImageKey;
-                node.SelectedImageKey = controller.ImageKey;
-                node.ForeColor = controller.ForeColor;
-                node.BackColor = controller.BackColor;
+                Node.Text = Controller.ToString();
+                Node.ImageKey = Controller.ImageKey;
+                Node.SelectedImageKey = Controller.ImageKey;
+                Node.ForeColor = Controller.ForeColor;
+                Node.BackColor = Controller.BackColor;
             }
         }
 

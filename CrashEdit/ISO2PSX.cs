@@ -1,7 +1,6 @@
 using Crash;
 using System;
 using System.IO;
-using System.ComponentModel;
 
 namespace CrashEdit
 {

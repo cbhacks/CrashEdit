@@ -6,62 +6,46 @@ namespace Crash.UI
 {
     public abstract class Controller : IDisposable
     {
-        private EvList<Controller> subcontrollers;
-
         public event EventHandler Invalidated;
         public event EvListEventHandler<Controller> DeepItemAdded;
         public event EvListEventHandler<Controller> DeepItemRemoved;
 
         public Controller()
         {
-            this.subcontrollers = new EvList<Controller>();
-            this.subcontrollers.ItemAdded += Subcontrollers_ItemAdded;
-            this.subcontrollers.ItemRemoved += Subcontrollers_ItemRemoved;
-            this.subcontrollers.Populate(Subcontrollers_ItemAdded);
+            Subcontrollers = new EvList<Controller>();
+            Subcontrollers.ItemAdded += Subcontrollers_ItemAdded;
+            Subcontrollers.ItemRemoved += Subcontrollers_ItemRemoved;
+            Subcontrollers.Populate(Subcontrollers_ItemAdded);
         }
 
-        public virtual string ImageKey
-        {
-            get { return GetType().Name; }
-        }
+        public virtual string ImageKey => GetType().Name;
 
-        public virtual Color ForeColor
-        {
-            get { return Color.Empty; }
-        }
+        public virtual Color ForeColor => Color.Empty;
+        public virtual Color BackColor => Color.Empty;
 
-        public virtual Color BackColor
-        {
-            get { return Color.Empty; }
-        }
-
-        public EvList<Controller> Subcontrollers
-        {
-            get { return subcontrollers; }
-        }
+        public EvList<Controller> Subcontrollers { get; }
 
         public virtual Control CreateControl()
         {
-            Label label = new Label();
-            label.AutoSize = false;
-            label.Width = 200;
-            label.Height = 200;
-            label.TextAlign = ContentAlignment.MiddleCenter;
-            label.Text = Properties.Resources.Controller_NoOptionsAvailable;
+            Label label = new Label
+            {
+                AutoSize = false,
+                Width = 200,
+                Height = 200,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Text = Properties.Resources.Controller_NoOptionsAvailable
+            };
             return label;
         }
 
         protected void Invalidate()
         {
-            if (Invalidated != null)
-            {
-                Invalidated(this,EventArgs.Empty);
-            }
+            Invalidated?.Invoke(this, EventArgs.Empty);
         }
 
         public virtual void Dispose()
         {
-            foreach (Controller subcontroller in subcontrollers)
+            foreach (Controller subcontroller in Subcontrollers)
             {
                 subcontroller.Dispose();
             }
@@ -69,11 +53,11 @@ namespace Crash.UI
 
         public void DeepPopulate(EvListEventHandler<Controller> handler)
         {
-            for (int i = 0;i < subcontrollers.Count;i++)
+            for (int i = 0;i < Subcontrollers.Count;i++)
             {
                 EvListEventArgs<Controller> e = new EvListEventArgs<Controller>();
                 e.Index = i;
-                e.Item = subcontrollers[i];
+                e.Item = Subcontrollers[i];
                 handler(this,e);
                 e.Item.DeepPopulate(handler);
             }
@@ -96,18 +80,12 @@ namespace Crash.UI
 
         private void Subcontrollers_DeepItemAdded(object sender,EvListEventArgs<Controller> e)
         {
-            if (DeepItemAdded != null)
-            {
-                DeepItemAdded(sender,e);
-            }
+            DeepItemAdded?.Invoke(sender, e);
         }
 
         private void Subcontrollers_DeepItemRemoved(object sender,EvListEventArgs<Controller> e)
         {
-            if (DeepItemRemoved != null)
-            {
-                DeepItemRemoved(sender,e);
-            }
+            DeepItemRemoved?.Invoke(sender, e);
         }
     }
 }

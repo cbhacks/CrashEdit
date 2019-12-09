@@ -2,24 +2,15 @@ namespace Crash.UI
 {
     public abstract class ChunkController : Controller
     {
-        private NSFController up;
-        private Chunk chunk;
-
         public ChunkController(NSFController up,Chunk chunk)
         {
-            this.up = up;
-            this.chunk = chunk;
+            Up = up;
+            Chunk = chunk;
         }
 
-        public NSFController Up
-        {
-            get { return up; }
-        }
+        public NSFController Up { get; }
 
-        public Chunk Chunk
-        {
-            get { return chunk; }
-        }
+        public Chunk Chunk { get; }
 
         private sealed class AcDelete : Action<ChunkController>
         {
@@ -36,10 +27,7 @@ namespace Crash.UI
                 }
             }
 
-            protected override Command Activate(ChunkController c)
-            {
-                return c.up.NSF.Chunks.CmRemove(c.Chunk);
-            }
+            protected override Command Activate(ChunkController c) => c.Up.NSF.Chunks.CmRemove(c.Chunk);
         }
 
         private sealed class AcDeprocess : Action<ChunkController>
@@ -66,9 +54,9 @@ namespace Crash.UI
 
             protected override Command Activate(ChunkController c)
             {
-                int index = c.up.NSF.Chunks.IndexOf(c.chunk);
-                UnprocessedChunk unprocessedchunk = c.chunk.Unprocess(index * 2 + 1);
-                return c.up.NSF.Chunks.CmSet(index,unprocessedchunk);
+                int index = c.Up.NSF.Chunks.IndexOf(c.Chunk);
+                UnprocessedChunk unprocessedchunk = c.Chunk.Unprocess(index * 2 + 1);
+                return c.Up.NSF.Chunks.CmSet(index,unprocessedchunk);
             }
         }
     }

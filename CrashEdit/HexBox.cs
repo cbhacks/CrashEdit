@@ -10,7 +10,6 @@ namespace CrashEdit
         private int offset;
         private int position;
         private int? input;
-        private byte[] data;
         private int viewbit;
         private bool eidview;
 
@@ -19,7 +18,7 @@ namespace CrashEdit
             offset = 0;
             position = 0;
             input = null;
-            data = new byte [0];
+            Data = new byte [0];
             viewbit = 8;
             eidview = false;
             TabStop = true;
@@ -27,21 +26,17 @@ namespace CrashEdit
             DoubleBuffered = true;
         }
 
-        public byte[] Data
-        {
-            //get { return data; }
-            set { data = value; }
-        }
+        public byte[] Data { get; set; }
 
         public int Position
         {
-            get { return position; }
+            get => position;
             set
             {
                 position = value;
-                if (position >= data.Length)
+                if (position >= Data.Length)
                 {
-                    position = data.Length - 1;
+                    position = Data.Length - 1;
                 }
                 if (position < 0)
                 {
@@ -123,9 +118,9 @@ namespace CrashEdit
             }
             else
             {
-                if (position < data.Length)
+                if (position < Data.Length)
                 {
-                    data[position] = (byte)((input << 4) | value);
+                    Data[position] = (byte)((input << 4) | value);
                 }
                 input = null;
             }
@@ -325,15 +320,15 @@ namespace CrashEdit
                     {
                         if (MessageBox.Show("Are you sure?","Nullify",MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
-                            for (int i = 0;i < data.Length;i++)
+                            for (int i = 0;i < Data.Length;i++)
                             {
-                                data[i] = 0;
+                                Data[i] = 0;
                             }
                         }
                     }
                     else
                     {
-                        data[position] = 0;
+                        Data[position] = 0;
                     }
                     Invalidate();
                     break;
@@ -378,26 +373,28 @@ namespace CrashEdit
                     Brush curbrush;
                     Brush curbackbrush;
                     StringFormat curformat;
-                    Rectangle rect = new Rectangle();
-                    rect.X = hstep * x + 1;
-                    rect.Y = vstep * y + 1;
-                    rect.Width = hstep - 1;
-                    rect.Height = vstep - 1;
+                    Rectangle rect = new Rectangle
+                    {
+                        X = hstep * x + 1,
+                        Y = vstep * y + 1,
+                        Width = hstep - 1,
+                        Height = vstep - 1
+                    };
                     string text;
-                    if (eidview && x % 4 == 0 && i + 3 < data.Length && (data[i] & 1) != 0 && (data[i + 3] & 128) == 0)
+                    if (eidview && x % 4 == 0 && i + 3 < Data.Length && (Data[i] & 1) != 0 && (Data[i + 3] & 128) == 0)
                     {
                         curfont = font;
                         curbrush = selbrush;
                         curbackbrush = eidbackbrush;
                         curformat = format;
                         rect.Width = hstep * 4 - 1;
-                        int eid = BitConv.FromInt32(data,i);
+                        int eid = BitConv.FromInt32(Data,i);
                         e.Graphics.FillRectangle(curbackbrush,rect);
                         e.Graphics.DrawString(Entry.EIDToEName(eid),curfont,curbrush,rect,curformat);
                         x += 3;
                         continue;
                     }
-                    if (x == xsel && y + offset == ysel && x + y * 16 < data.Length)
+                    if (x == xsel && y + offset == ysel && x + y * 16 < Data.Length)
                     {
                         curfont = selfont;
                         curbrush = selbrush;
@@ -405,7 +402,7 @@ namespace CrashEdit
                         if (input == null)
                         {
                             curbackbrush = Focused ? selbackbrush : deadselbackbrush;
-                            text = data[x + (offset + y) * 16].ToString("X2");
+                            text = Data[x + (offset + y) * 16].ToString("X2");
                         }
                         else
                         {
@@ -413,20 +410,20 @@ namespace CrashEdit
                             text = ((int)input).ToString("X");
                         }
                     }
-                    else if (x + (offset + y) * 16 < data.Length)
+                    else if (x + (offset + y) * 16 < Data.Length)
                     {
                         curfont = font;
                         curbrush = brush;
                         if (viewbit != 8)
                         {
-                            curbackbrush = ((data[x + (offset + y) * 16] & 1 << viewbit) != 0) ? bithibackbrush : backbrush;
+                            curbackbrush = ((Data[x + (offset + y) * 16] & 1 << viewbit) != 0) ? bithibackbrush : backbrush;
                         }
                         else
                         {
-                            curbackbrush = (data[x + (offset + y) * 16] != 0) ? hibackbrush : backbrush;
+                            curbackbrush = (Data[x + (offset + y) * 16] != 0) ? hibackbrush : backbrush;
                         }
                         curformat = format;
-                        text = data[x + (offset + y) * 16].ToString("X2");
+                        text = Data[x + (offset + y) * 16].ToString("X2");
                     }
                     else
                     {
@@ -437,7 +434,7 @@ namespace CrashEdit
                         text = "";
                     }
                     e.Graphics.FillRectangle(curbackbrush,rect);
-                    if (x + (offset + y) * 16 < data.Length)
+                    if (x + (offset + y) * 16 < Data.Length)
                     {
                         e.Graphics.DrawString(text,curfont,curbrush,rect,curformat);
                     }

@@ -4,20 +4,15 @@ namespace Crash.UI
 {
     public abstract class EntryChunkController : ChunkController
     {
-        private EntryChunk chunk;
-
         public EntryChunkController(NSFController up,EntryChunk chunk) : base(up,chunk)
         {
-            this.chunk = chunk;
-            this.chunk.Entries.ItemAdded += new EvListEventHandler<Entry>(Entries_ItemAdded);
-            this.chunk.Entries.ItemRemoved += new EvListEventHandler<Entry>(Entries_ItemRemoved);
-            this.chunk.Entries.Populate(Entries_ItemAdded);
+            Chunk = chunk;
+            Chunk.Entries.ItemAdded += new EvListEventHandler<Entry>(Entries_ItemAdded);
+            Chunk.Entries.ItemRemoved += new EvListEventHandler<Entry>(Entries_ItemRemoved);
+            Chunk.Entries.Populate(Entries_ItemAdded);
         }
 
-        public new EntryChunk Chunk
-        {
-            get { return chunk; }
-        }
+        public new EntryChunk Chunk { get; }
 
         private void Entries_ItemAdded(object sender,EvListEventArgs<Entry> e)
         {
@@ -136,8 +131,8 @@ namespace Crash.UI
 
         public override void Dispose()
         {
-            chunk.Entries.ItemAdded -= Entries_ItemAdded;
-            chunk.Entries.ItemRemoved -= Entries_ItemRemoved;
+            Chunk.Entries.ItemAdded -= Entries_ItemAdded;
+            Chunk.Entries.ItemRemoved -= Entries_ItemRemoved;
             base.Dispose();
         }
     }

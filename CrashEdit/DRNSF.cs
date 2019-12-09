@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Diagnostics;
 
@@ -49,9 +48,11 @@ namespace CrashEdit
 
         public static int Invoke(string args)
         {
-            var psi = new ProcessStartInfo(FindEXE());
-            psi.Arguments = args;
-            psi.UseShellExecute = false;
+            var psi = new ProcessStartInfo(FindEXE())
+            {
+                Arguments = args,
+                UseShellExecute = false
+            };
             using (var drnsf = Process.Start(psi)) {
                 drnsf.WaitForExit();
                 return drnsf.ExitCode;

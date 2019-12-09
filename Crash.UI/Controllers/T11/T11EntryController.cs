@@ -9,9 +9,6 @@ namespace Crash.UI
 
         public new GOOLEntry Entry { get; }
 
-        public override string ToString()
-        {
-            return string.Format(Properties.Resources.T11EntryController_Text,Entry.EName);
-        }
+        public override string ToString() => string.Format(Properties.Resources.T11EntryController_Text,Entry.EName);
     }
 }

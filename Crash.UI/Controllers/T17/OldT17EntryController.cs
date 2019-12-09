@@ -2,21 +2,13 @@ namespace Crash.UI
 {
     public sealed class OldT17EntryController : MysteryMultiItemEntryController
     {
-        private OldT17Entry entry;
-
         public OldT17EntryController(EntryChunkController up,OldT17Entry entry) : base(up,entry)
         {
-            this.entry = entry;
+            Entry = entry;
         }
 
-        public new OldT17Entry Entry
-        {
-            get { return entry; }
-        }
+        public new OldT17Entry Entry { get; }
 
-        public override string ToString()
-        {
-            return string.Format(Properties.Resources.OldT17EntryController_Text,entry.EName);
-        }
+        public override string ToString() => string.Format(Properties.Resources.OldT17EntryController_Text,Entry.EName);
     }
 }
