@@ -236,7 +236,6 @@ namespace CrashEdit
                         OpenNSF(filename);
                     }
                 }
-                dialog.Dispose();
             }
         }
 
