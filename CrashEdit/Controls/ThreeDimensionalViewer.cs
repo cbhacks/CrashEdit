@@ -11,8 +11,11 @@ namespace CrashEdit
 {
     public abstract class ThreeDimensionalViewer : GLControl
     {
+        private static Bitmap lastimage = null;
+
         protected static void LoadTexture(Bitmap image)
         {
+            if (image == lastimage) return; // no reload
             BitmapData data = image.LockBits(new Rectangle(Point.Empty,image.Size),ImageLockMode.ReadOnly,System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             try
             {
@@ -23,6 +26,7 @@ namespace CrashEdit
             finally
             {
                 image.UnlockBits(data);
+                lastimage = image;
             }
         }
 
@@ -57,9 +61,11 @@ namespace CrashEdit
             keyright = false;
             keya = false;
             keyz = false;
-            inputtimer = new Timer();
-            inputtimer.Interval = 15;
-            inputtimer.Enabled = true;
+            inputtimer = new Timer
+            {
+                Interval = 16,
+                Enabled = true
+            };
             inputtimer.Tick += delegate (object sender,EventArgs e)
             {
                 int speed = range / 100;
@@ -86,9 +92,11 @@ namespace CrashEdit
                     Invalidate();
                 }
             };
-            refreshtimer = new Timer();
-            refreshtimer.Interval = 100;
-            refreshtimer.Enabled = true;
+            refreshtimer = new Timer
+            {
+                Interval = 100,
+                Enabled = true
+            };
             refreshtimer.Tick += delegate (object sender,EventArgs e)
             {
                 Invalidate();
