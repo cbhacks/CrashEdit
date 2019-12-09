@@ -7,17 +7,17 @@ namespace Crash
     {
         public static OldEntity Load(byte[] data)
         {
-            if (data.Length < 28)
-                ErrorManager.SignalError("OldEntity: Data is too short\n\nReason: Data is less than 28 bytes long");
+            if (data.Length < 22)
+                ErrorManager.SignalError("OldEntity: Data is too short");
             int garbage = BitConv.FromInt32(data,0);
             short unknown1 = BitConv.FromInt16(data,4);
             short unknown2 = BitConv.FromInt16(data,6);
             short id = BitConv.FromInt16(data,8);
             short positioncount = BitConv.FromInt16(data,10);
             if (data.Length < 22 + 6 * positioncount)
-                ErrorManager.SignalError("OldEntity: Data is too short\n\nReason: Data is less than 22 + 6 * positioncount bytes long");
-            if (positioncount <= 0)
-                ErrorManager.SignalError("OldEntity: Position count is negative or equal to zero");
+                ErrorManager.SignalError("OldEntity: Data is too short");
+            if (positioncount < 0)
+                ErrorManager.SignalError("OldEntity: Position count is negative");
             short settinga = BitConv.FromInt16(data,12);
             short settingb = BitConv.FromInt16(data,14);
             short linkid = BitConv.FromInt16(data,16);
