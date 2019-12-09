@@ -248,7 +248,6 @@ namespace CrashEdit
             {
                 RenderEntity(entity);
             }
-            LoadTexture(OldResources.PointTexture);
             foreach (OldCamera camera in entry.Cameras)
             {
                 RenderCamera(camera);
@@ -500,6 +499,7 @@ namespace CrashEdit
             }
             GL.End();
             GL.Color3(Color.Yellow);
+            LoadTexture(OldResources.PointTexture);
             foreach (OldCameraPosition position in camera.Positions)
             {
                 GL.PushMatrix();
