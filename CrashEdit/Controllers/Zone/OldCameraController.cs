@@ -9,6 +9,7 @@ namespace CrashEdit
         {
             ProtoZoneEntryController = protozoneentrycontroller;
             Camera = camera;
+            AddMenu("Delete Camera", Menu_Delete);
             InvalidateNode();
         }
 
@@ -16,6 +17,7 @@ namespace CrashEdit
         {
             OldZoneEntryController = oldzoneentrycontroller;
             Camera = camera;
+            AddMenu("Delete Camera", Menu_Delete);
             InvalidateNode();
         }
 
@@ -34,5 +36,12 @@ namespace CrashEdit
         public ProtoZoneEntryController ProtoZoneEntryController { get; }
         public OldZoneEntryController OldZoneEntryController { get; }
         public OldCamera Camera { get; }
+        
+        private void Menu_Delete()
+        {
+            OldZoneEntryController.OldZoneEntry.Cameras.Remove(Camera);
+            OldZoneEntryController.OldZoneEntry.CameraCount = OldZoneEntryController.OldZoneEntry.Cameras.Count;
+            Dispose();
+        }
     }
 }

@@ -1,4 +1,5 @@
 using Crash;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -19,6 +20,8 @@ namespace CrashEdit
             {
                 AddNode(new OldEntityController(this,entity));
             }
+            AddMenu("Add Camera", Menu_AddCamera);
+            AddMenu("Add Entity", Menu_AddEntity);
             InvalidateNode();
         }
 
@@ -47,5 +50,42 @@ namespace CrashEdit
         }
 
         public OldZoneEntry OldZoneEntry { get; }
+
+        void Menu_AddCamera()
+        {
+            OldCamera newcam = OldCamera.Load(new OldCamera(Entry.ENameToEID("NONE!"),0,0,new OldCameraNeighbor[4],0,0,0,0,1600,0,0,0,0,0,0,new List<OldCameraPosition>(),0).Save());
+            OldZoneEntry.Cameras.Add(newcam);
+            InsertNode(2 + OldZoneEntry.Cameras.Count - 1,new OldCameraController(this,newcam));
+            OldZoneEntry.CameraCount = OldZoneEntry.Cameras.Count;
+        }
+
+        void Menu_AddEntity()
+        {
+            short maxid = 1;
+            foreach (Chunk chunk in EntryChunkController.NSFController.NSF.Chunks)
+            {
+                if (chunk is EntryChunk)
+                {
+                    foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                    {
+                        if (entry is OldZoneEntry)
+                        {
+                            foreach (OldEntity otherentity in ((OldZoneEntry)entry).Entities)
+                            {
+                                if (otherentity.ID > maxid)
+                                {
+                                    maxid = otherentity.ID;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            ++maxid;
+            OldEntity newentity = OldEntity.Load(new OldEntity(0,0,0,maxid,0,0,0,0,0,new List<EntityPosition>() { new EntityPosition(0,0,0) },0).Save());
+            OldZoneEntry.Entities.Add(newentity);
+            AddNode(new OldEntityController(this,newentity));
+            OldZoneEntry.EntityCount = OldZoneEntry.Entities.Count;
+        }
     }
 }

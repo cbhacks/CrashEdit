@@ -22,8 +22,22 @@ namespace Crash
         public IList<OldCamera> Cameras => cameras;
         public IList<OldEntity> Entities => entities;
 
+        public int CameraCount
+        {
+            get => BitConv.FromInt32(Header,0x208);
+            set => BitConv.ToInt32(Header,0x208,value);
+        }
+
+        public int EntityCount
+        {
+            get => BitConv.FromInt32(Header,0x20C);
+            set => BitConv.ToInt32(Header,0x20C,value);
+        }
+
         public override UnprocessedEntry Unprocess()
         {
+            CameraCount = cameras.Count;
+            EntityCount = entities.Count;
             byte[][] items = new byte[2 + entities.Count + cameras.Count][];
             items[0] = Header;
             items[1] = Layout;
