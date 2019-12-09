@@ -177,7 +177,6 @@
     <Compile Include="Formats\Crash Formats\Zone\EntityVictim.cs" />
     <Compile Include="Formats\Crash Formats\Zone\OldCamera.cs" />
     <Compile Include="Formats\Crash Formats\Zone\OldCameraPosition.cs" />
-    <Compile Include="Formats\Crash Formats\Zone\OldEntityPosition.cs" />
     <Compile Include="Formats\Crash Formats\Zone\OldEntity.cs" />
     <Compile Include="Formats\Crash Formats\Zone\EntityUInt32Property.cs" />
     <Compile Include="Formats\Crash Formats\Zone\EntityUInt32PropertyLoader.cs" />
