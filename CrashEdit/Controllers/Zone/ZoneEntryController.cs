@@ -9,7 +9,7 @@ namespace CrashEdit
         {
             ZoneEntry = zoneentry;
             AddNode(new ItemController(null,zoneentry.Header));
-            AddNode(new ItemController(null,zoneentry.Unknown2));
+            AddNode(new ItemController(null,zoneentry.Layout));
             foreach (Entity entity in zoneentry.Entities)
             {
                 AddNode(new EntityController(this,entity));
