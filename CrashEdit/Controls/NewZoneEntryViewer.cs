@@ -221,27 +221,24 @@ namespace CrashEdit
                 GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
             }
             GL.Scale(4,4,4);
-            int xdepth = BitConv.FromInt32(entry.Layout,12);
-            int ydepth = BitConv.FromInt32(entry.Layout,16);
-            int zdepth = BitConv.FromInt32(entry.Layout,20);
             GL.Color3(Color.White);
             GL.Begin(PrimitiveType.LineStrip);
             GL.Vertex3(0,0,0);
-            GL.Vertex3(xdepth / 4,0,0);
-            GL.Vertex3(xdepth / 4,ydepth / 4,0);
-            GL.Vertex3(0,ydepth / 4,0);
+            GL.Vertex3(x2 / 4,0,0);
+            GL.Vertex3(x2 / 4,y2 / 4,0);
+            GL.Vertex3(0,y2 / 4,0);
             GL.Vertex3(0,0,0);
-            GL.Vertex3(0,0,zdepth / 4);
-            GL.Vertex3(xdepth / 4,0,zdepth / 4);
-            GL.Vertex3(xdepth / 4,ydepth / 4,zdepth / 4);
-            GL.Vertex3(0,ydepth / 4,zdepth / 4);
-            GL.Vertex3(0,0,zdepth / 4);
-            GL.Vertex3(xdepth / 4,0,zdepth / 4);
-            GL.Vertex3(xdepth / 4,0,0);
-            GL.Vertex3(xdepth / 4,ydepth / 4,0);
-            GL.Vertex3(xdepth / 4,ydepth / 4,zdepth / 4);
-            GL.Vertex3(0,ydepth / 4,zdepth / 4);
-            GL.Vertex3(0,ydepth / 4,0);
+            GL.Vertex3(0,0,z2 / 4);
+            GL.Vertex3(x2 / 4,0,z2 / 4);
+            GL.Vertex3(x2 / 4,y2 / 4,z2 / 4);
+            GL.Vertex3(0,y2 / 4,z2 / 4);
+            GL.Vertex3(0,0,z2 / 4);
+            GL.Vertex3(x2 / 4,0,z2 / 4);
+            GL.Vertex3(x2 / 4,0,0);
+            GL.Vertex3(x2 / 4,y2 / 4,0);
+            GL.Vertex3(x2 / 4,y2 / 4,z2 / 4);
+            GL.Vertex3(0,y2 / 4,z2 / 4);
+            GL.Vertex3(0,y2 / 4,0);
             GL.End();
             foreach (Entity entity in entry.Entities)
             {
@@ -449,7 +446,7 @@ namespace CrashEdit
         {
             float scale = 1;
             if (entity.Scaling.HasValue)
-                scale = (1 << entity.Scaling.Value) / 4.0f;
+                scale = (1 << entity.Scaling.Value) / 4F;
             if (camera)
                 GL.PolygonStipple(stippleb);
             else
