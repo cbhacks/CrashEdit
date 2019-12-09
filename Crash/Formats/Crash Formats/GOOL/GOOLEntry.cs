@@ -84,7 +84,8 @@ namespace Crash
                         mips = false;
                     }
                 }
-                mips = GOOLInterpreter.IsMIPSInstruction(ins);
+                else
+                    mips = GOOLInterpreter.IsMIPSInstruction(ins);
             }
             Data = data;
             StateMap = statemap;

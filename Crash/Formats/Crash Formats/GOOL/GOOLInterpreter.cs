@@ -202,7 +202,7 @@ namespace Crash
             switch (ins.GOOL.Version)
             {
                 case GOOLVersion.Version2:
-                    return ins is MIPSInstruction;
+                    return ins is Mips;
                 default:
                     return false;
             }
