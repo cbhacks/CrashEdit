@@ -676,4 +676,3 @@ namespace CrashEdit
         }
     }
 }
-
