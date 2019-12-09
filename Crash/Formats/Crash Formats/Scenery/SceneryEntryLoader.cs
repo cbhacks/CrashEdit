@@ -23,7 +23,15 @@ namespace Crash
             int texturecount = BitConv.FromInt32(items[0], 28);
             int colorcount = BitConv.FromInt32(items[0], 32);
             int animatedtexturecount = BitConv.FromInt32(items[0], 36);
-            if (items[3].Length != texturecount * 8)
+            if (items[1].Length != Aligner.Align(vertexcount * 6,4))
+            {
+                ErrorManager.SignalError("SceneryEntry: Vertex count mismatch");
+            }
+            if (items[2].Length != Aligner.Align(trianglecount * 6,4))
+            {
+                ErrorManager.SignalError("SceneryEntry: Triangle count mismatch");
+            }
+            if (items[3].Length != quadcount * 8)
             {
                 ErrorManager.SignalError("SceneryEntry: Quad count mismatch");
             }
@@ -31,7 +39,7 @@ namespace Crash
             {
                 ErrorManager.SignalError("SceneryEntry: Texture count mismatch");
             }
-            if (items[5].Length != texturecount * 4)
+            if (items[5].Length != colorcount * 4)
             {
                 ErrorManager.SignalError("SceneryEntry: Color count mismatch");
             }
