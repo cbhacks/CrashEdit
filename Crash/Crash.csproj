@@ -57,6 +57,13 @@
     <Compile Include="Formats\Crash Formats\Animation\ProtoFrame.cs" />
     <Compile Include="Formats\Crash Formats\Animation\T1Entry.cs" />
     <Compile Include="Formats\Crash Formats\Animation\T1EntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOLAnimation.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOLAnimationFont.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOLAnimationStrings.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOLAnimationSprite.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOLAnimationVertex.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOLChar.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOLSpriteFrame.cs" />
     <Compile Include="Formats\Crash Formats\Models\ModelEntry.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOLStateDescriptor.cs" />
     <Compile Include="Formats\Crash Formats\Models\ModelExtendedTexture.cs" />

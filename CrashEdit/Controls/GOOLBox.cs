@@ -49,7 +49,7 @@ namespace CrashEdit
                 }
 
                 lstCode.Items.Add("");
-                for (int i = 0; i < goolentry.StateDescriptors.Length; ++i)
+                for (int i = 0; i < goolentry.StateDescriptors.Count; ++i)
                 {
                     short epc = (short)(goolentry.StateDescriptors[i].EPC & 0x3FFF);
                     short tpc = (short)(goolentry.StateDescriptors[i].TPC & 0x3FFF);

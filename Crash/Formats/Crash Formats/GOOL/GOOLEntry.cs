@@ -61,9 +61,12 @@ namespace Crash
                 return new MIPSInstruction(ins,this);
             }
         }
-        private List<GOOLInstruction> instructions;
 
-        public GOOLEntry(GOOLVersion version,byte[] header,byte[] instructions,int[] data,short[] statemap,GOOLStateDescriptor[] statedescriptors,byte[] anims,int eid,int size) : base(eid,size)
+        private List<GOOLInstruction> instructions;
+        private List<GOOLStateDescriptor> statedescriptors;
+        //private List<GOOLAnimation> anims;
+
+        public GOOLEntry(GOOLVersion version,byte[] header,byte[] instructions,int[] data,short[] statemap,IEnumerable<GOOLStateDescriptor> statedescriptors,byte[] anims,int eid,int size) : base(eid,size)
         {
             Version = version;
             Header = header;
@@ -88,7 +91,10 @@ namespace Crash
             }
             Data = data;
             StateMap = statemap;
-            StateDescriptors = statedescriptors;
+            if (statedescriptors == null)
+                this.statedescriptors = null;
+            else
+                this.statedescriptors = new List<GOOLStateDescriptor>(statedescriptors);
             Anims = anims;
         }
 
@@ -99,8 +105,8 @@ namespace Crash
         public byte[] Header { get; }
         public int[] Data { get; }
         public short[] StateMap { get; }
-        public GOOLStateDescriptor[] StateDescriptors { get; }
-        public byte[] Anims { get; }
+        public IList<GOOLStateDescriptor> StateDescriptors => statedescriptors;
+        public byte[] Anims;
 
         public int Format => BitConv.FromInt32(Header,8);
 
@@ -110,7 +116,7 @@ namespace Crash
         {
             int itemcount =
                 Anims != null ? 6 : (
-                StateDescriptors != null ? 5 : (
+                statedescriptors != null ? 5 : (
                 StateMap != null ? 4 : 3
                 )
                 );
@@ -136,10 +142,10 @@ namespace Crash
                 }
                 if (itemcount > 4)
                 {
-                    items[4] = new byte[StateDescriptors.Length*0x10];
-                    for (int i = 0; i < StateDescriptors.Length; ++i)
+                    items[4] = new byte[statedescriptors.Count*0x10];
+                    for (int i = 0; i < statedescriptors.Count; ++i)
                     {
-                        StateDescriptors[i].Save().CopyTo(items[4],i*0x10);
+                        statedescriptors[i].Save().CopyTo(items[4],i*0x10);
                     }
                     if (itemcount > 5)
                     {

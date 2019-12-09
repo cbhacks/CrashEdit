@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Crash
 {
@@ -19,13 +20,14 @@ namespace Crash
             {
                 ErrorManager.SignalError("GOOLEntry: Header length is wrong");
             }
-            int[] data = new int [items[2].Length/4];
-            for (int i = 0; i < data.Length; ++i)
+            int[] ins = new int [items[2].Length/4];
+            for (int i = 0; i < ins.Length; ++i)
             {
-                data[i] = BitConv.FromInt32(items[2],i*4);
+                ins[i] = BitConv.FromInt32(items[2],i*4);
             }
             short[] statemap = null;
             GOOLStateDescriptor[] statedesc = null;
+            byte[] anims = null;
             if (items.Length > 3)
             {
                 statemap = new short[items[3].Length/2];
@@ -47,12 +49,16 @@ namespace Crash
                             BitConv.FromInt16(items[4],i*0x10+14)
                             );
                     }
+                    if (items.Length > 5)
+                    {
+                        anims = items[5];
+                    }
                 }
             }
-            return new GOOLEntry(GOOLVersion.Version1,items[0],items[1],data,
+            return new GOOLEntry(GOOLVersion.Version1,items[0],items[1],ins,
                 statemap,
                 statedesc,
-                items.Length >= 6 ? items[5] : null,
+                anims,
                 eid,size);
         }
     }
