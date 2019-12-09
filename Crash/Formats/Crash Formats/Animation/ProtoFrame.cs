@@ -138,11 +138,14 @@ namespace Crash
                 }
                 BitConv.ToInt16(data,56 + vertices.Count * 6,Unknown);
             }
-            for (int i = 0;i < vertices.Count;i++)
+            else
             {
-                vertices[i].Save().CopyTo(data,44 + i * 6);
+                for (int i = 0;i < vertices.Count;i++)
+                {
+                    vertices[i].Save().CopyTo(data,44 + i * 6);
+                }
+                BitConv.ToInt16(data,44 + vertices.Count * 6,Unknown);
             }
-            BitConv.ToInt16(data,44 + vertices.Count * 6,Unknown);
             return data;
         }
 

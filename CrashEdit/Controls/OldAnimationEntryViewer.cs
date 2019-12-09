@@ -1,31 +1,64 @@
 using Crash;
+using OpenTK.Graphics.OpenGL;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Collections.Generic;
-using OpenTK.Graphics.OpenGL;
 
 namespace CrashEdit
 {
     public sealed class OldAnimationEntryViewer : ThreeDimensionalViewer
     {
         private List<OldFrame> frames;
+        private List<ProtoFrame> protoframes;
         private OldModelEntry model;
         private int frameid;
         private Timer animatetimer;
+        private bool isproto;
+
+        public OldAnimationEntryViewer(ProtoFrame frame,OldModelEntry model)
+        {
+            protoframes = new List<ProtoFrame> { frame };
+            frames = new List<OldFrame>();
+            this.model = model;
+            frameid = 0;
+            isproto = true;
+        }
+
+        public OldAnimationEntryViewer(IEnumerable<ProtoFrame> frames,OldModelEntry model)
+        {
+            protoframes = new List<ProtoFrame>(frames);
+            this.frames = new List<OldFrame>();
+            this.model = model;
+            frameid = 0;
+            isproto = true;
+            animatetimer = new Timer();
+            animatetimer.Interval = 1000 / OldMainForm.GetRate();
+            animatetimer.Enabled = true;
+            animatetimer.Tick += delegate (object sender,EventArgs e)
+            {
+                animatetimer.Interval = 1000 / OldMainForm.GetRate();
+                frameid = ++frameid % protoframes.Count;
+                Refresh();
+            };
+        }
 
         public OldAnimationEntryViewer(OldFrame frame,OldModelEntry model)
         {
+            protoframes = new List<ProtoFrame>();
             frames = new List<OldFrame>() { frame };
             this.model = model;
             frameid = 0;
+            isproto = false;
         }
 
         public OldAnimationEntryViewer(IEnumerable<OldFrame> frames,OldModelEntry model)
         {
+            protoframes = new List<ProtoFrame>();
             this.frames = new List<OldFrame>(frames);
             this.model = model;
             frameid = 0;
+            isproto = false;
             animatetimer = new Timer();
             animatetimer.Interval = 1000 / OldMainForm.GetRate();
             animatetimer.Enabled = true;
@@ -58,12 +91,56 @@ namespace CrashEdit
                         yield return new Position(x,y,z);
                     }
                 }
+                foreach (ProtoFrame frame in protoframes)
+                {
+                    foreach (OldFrameVertex vertex in frame.Vertices)
+                    {
+                        int x = vertex.X + frame.XOffset;
+                        int y = vertex.Y + frame.YOffset;
+                        int z = vertex.Z + frame.ZOffset;
+                        yield return new Position(x,y,z);
+                    }
+                }
             }
         }
-        
+
         protected override void RenderObjects()
         {
-            RenderFrame(frames[frameid % frames.Count]);
+            if (isproto)
+                RenderFrame(protoframes[frameid % protoframes.Count]);
+            else
+                RenderFrame(frames[frameid % frames.Count]);
+        }
+
+        private void RenderFrame(ProtoFrame frame)
+        {
+            if (model != null)
+            {
+                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+                GL.Begin(PrimitiveType.Triangles);
+                foreach (OldModelPolygon polygon in model.Polygons)
+                {
+                    int coloroffset = 20 + (polygon.Unknown & 0x7FFF) * 4;
+                    byte r = model.Info[coloroffset + 0];
+                    byte g = model.Info[coloroffset + 1];
+                    byte b = model.Info[coloroffset + 2];
+                    GL.Color3(r,g,b);
+                    RenderVertex(frame, frame.Vertices[polygon.VertexA / 6]);
+                    RenderVertex(frame, frame.Vertices[polygon.VertexB / 6]);
+                    RenderVertex(frame, frame.Vertices[polygon.VertexC / 6]);
+                }
+                GL.End();
+            }
+            else
+            {
+                GL.Color3(Color.White);
+                GL.Begin(PrimitiveType.Points);
+                foreach (OldFrameVertex vertex in frame.Vertices)
+                {
+                    RenderVertex(frame, vertex);
+                }
+                GL.End();
+            }
         }
 
         private void RenderFrame(OldFrame frame)
@@ -96,6 +173,11 @@ namespace CrashEdit
                 GL.End();
             }
             //RenderCollision(frame);
+        }
+
+        private void RenderVertex(ProtoFrame frame, OldFrameVertex vertex)
+        {
+            GL.Vertex3(vertex.X + frame.XOffset,vertex.Y + frame.YOffset,vertex.Z + frame.ZOffset);
         }
 
         private void RenderVertex(OldFrame frame, OldFrameVertex vertex)

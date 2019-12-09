@@ -138,9 +138,6 @@
     <Compile Include="Controls\AnimationEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\ProtoAnimationEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Controls\OldFrameBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
