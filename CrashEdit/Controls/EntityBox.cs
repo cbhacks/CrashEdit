@@ -759,13 +759,13 @@ namespace CrashEdit
 
         private void cmdPrevRowB_Click(object sender, EventArgs e)
         {
-            ++loadlistbrowindex;
+            --loadlistbrowindex;
             UpdateLoadListB();
         }
 
         private void cmdNextRowB_Click(object sender, EventArgs e)
         {
-            --loadlistbrowindex;
+            ++loadlistbrowindex;
             UpdateLoadListB();
         }
 
