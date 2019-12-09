@@ -1,9 +1,9 @@
 using Crash;
-using System;
-using System.Drawing;
-using System.Collections.Generic;
-using System.Windows.Forms;
 using OpenTK.Graphics.OpenGL;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace CrashEdit
 {
@@ -106,6 +106,7 @@ namespace CrashEdit
                 case Keys.C:
                 case Keys.R:
                 case Keys.V:
+                case Keys.F:
                     return true;
                 default:
                     return base.IsInputKey(keyData);
@@ -200,7 +201,7 @@ namespace CrashEdit
             }
             if (renderoctree)
             {
-                if (polygonmode)
+                if (!polygonmode)
                     GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Line);
                 if (octreedisplaylist == -1)
                 {
@@ -275,7 +276,7 @@ namespace CrashEdit
                 }
                 if (renderoctree)
                 {
-                    if (polygonmode)
+                    if (!polygonmode)
                         GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Line);
                     if (octreedisplaylist == -1)
                     {

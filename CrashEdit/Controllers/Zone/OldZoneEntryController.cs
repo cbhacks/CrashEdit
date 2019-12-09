@@ -10,7 +10,7 @@ namespace CrashEdit
         {
             ZoneEntry = zoneentry;
             AddNode(new ItemController(null,zoneentry.Unknown1));
-            AddNode(new ItemController(null,zoneentry.Unknown2));
+            AddNode(new ItemController(null,zoneentry.Layout));
             foreach (OldCamera camera in zoneentry.Cameras)
             {
                 AddNode(new OldCameraController(this,camera));

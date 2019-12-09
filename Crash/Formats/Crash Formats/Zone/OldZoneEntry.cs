@@ -11,7 +11,7 @@ namespace Crash
             : base(eid,size)
         {
             Unknown1 = unknown1;
-            Unknown2 = unknown2;
+            Layout = unknown2;
             this.cameras = new List<OldCamera>(cameras);
             this.entities = new List<OldEntity>(entities);
             CamCount = camcount;
@@ -19,7 +19,7 @@ namespace Crash
 
         public override int Type => 7;
         public byte[] Unknown1 { get; }
-        public byte[] Unknown2 { get; }
+        public byte[] Layout { get; }
         public IList<OldCamera> Cameras => cameras;
         public IList<OldEntity> Entities => entities;
         public int CamCount { get; set; }
@@ -28,7 +28,7 @@ namespace Crash
         {
             byte[][] items = new byte[2 + entities.Count + CamCount][];
             items[0] = Unknown1;
-            items[1] = Unknown2;
+            items[1] = Layout;
             for (int i = 0; i < CamCount; i++)
             {
                 items[2 + i] = cameras[i].Save();
