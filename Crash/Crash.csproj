@@ -162,6 +162,7 @@
     <Compile Include="Formats\Crash Formats\GOOL\GOOLInstructionAttribute.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOLInterpreter.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\MIPSInstruction.cs" />
+    <Compile Include="Formats\Crash Formats\Zone\OldCameraNeighbor.cs" />
     <Compile Include="Formats\Crash Formats\Zone\ProtoEntityPosition.cs" />
     <Compile Include="Formats\Crash Formats\Zone\ProtoZoneEntry.cs" />
     <Compile Include="Formats\Crash Formats\Zone\ProtoZoneEntryLoader.cs" />

@@ -125,14 +125,12 @@ namespace CrashEdit
         private void cmdInsertPosition_Click(object sender,EventArgs e)
         {
             camera.Positions.Insert(positionindex,camera.Positions[positionindex]);
-            camera.PointCount++;
             UpdatePosition();
         }
 
         private void cmdRemovePosition_Click(object sender,EventArgs e)
         {
             camera.Positions.RemoveAt(positionindex);
-            camera.PointCount--;
             UpdatePosition();
         }
 
@@ -147,7 +145,6 @@ namespace CrashEdit
             {
                 camera.Positions.Add(new OldCameraPosition(0,0,0,0,0,0));
             }
-            camera.PointCount++;
             UpdatePosition();
         }
 
@@ -225,107 +222,111 @@ namespace CrashEdit
         private void UpdateNeighbor()
         {
             numNeighborCount.Value = camera.NeighborCount;
-            numRelative1.Value = camera.Relative1;
-            numRelative2.Value = camera.Relative2;
-            numRelative3.Value = camera.Relative3;
-            numRelative4.Value = camera.Relative4;
-            numParentZone1.Value = camera.ParentZone1;
-            numParentZone2.Value = camera.ParentZone2;
-            numParentZone3.Value = camera.ParentZone3;
-            numParentZone4.Value = camera.ParentZone4;
-            numPathItem1.Value = camera.PathItem1;
-            numPathItem2.Value = camera.PathItem2;
-            numPathItem3.Value = camera.PathItem3;
-            numPathItem4.Value = camera.PathItem4;
-            numRelativeFlag1.Value = camera.RelativeFlag1;
-            numRelativeFlag2.Value = camera.RelativeFlag2;
-            numRelativeFlag3.Value = camera.RelativeFlag3;
-            numRelativeFlag4.Value = camera.RelativeFlag4;
+            numRelative1.Value = camera.Neighbors[0].LinkType;
+            numRelative2.Value = camera.Neighbors[1].LinkType;
+            numRelative3.Value = camera.Neighbors[2].LinkType;
+            numRelative4.Value = camera.Neighbors[3].LinkType;
+            numParentZone1.Value = camera.Neighbors[0].ZoneIndex;
+            numParentZone2.Value = camera.Neighbors[1].ZoneIndex;
+            numParentZone3.Value = camera.Neighbors[2].ZoneIndex;
+            numParentZone4.Value = camera.Neighbors[3].ZoneIndex;
+            numPathItem1.Value = camera.Neighbors[0].CameraIndex;
+            numPathItem2.Value = camera.Neighbors[1].CameraIndex;
+            numPathItem3.Value = camera.Neighbors[2].CameraIndex;
+            numPathItem4.Value = camera.Neighbors[3].CameraIndex;
+            numRelativeFlag1.Value = camera.Neighbors[0].Flag;
+            numRelativeFlag2.Value = camera.Neighbors[1].Flag;
+            numRelativeFlag3.Value = camera.Neighbors[2].Flag;
+            numRelativeFlag4.Value = camera.Neighbors[3].Flag;
         }
 
         private void numNeighborCount_ValueChanged(object sender,EventArgs e)
         {
             camera.NeighborCount = (int)numNeighborCount.Value;
+            fraNeighbor0.Enabled = camera.NeighborCount >= 1;
+            fraNeighbor1.Enabled = camera.NeighborCount >= 2;
+            fraNeighbor2.Enabled = camera.NeighborCount >= 3;
+            fraNeighbor3.Enabled = camera.NeighborCount >= 4;
         }
 
         private void numRelative1_ValueChanged(object sender,EventArgs e)
         {
-            camera.Relative1 = (byte)numRelative1.Value;
+            camera.Neighbors[0].LinkType = (byte)numRelative1.Value;
         }
 
         private void numRelative2_ValueChanged(object sender,EventArgs e)
         {
-            camera.Relative2 = (byte)numRelative2.Value;
+            camera.Neighbors[1].LinkType = (byte)numRelative2.Value;
         }
 
         private void numRelative3_ValueChanged(object sender,EventArgs e)
         {
-            camera.Relative3 = (byte)numRelative3.Value;
+            camera.Neighbors[2].LinkType = (byte)numRelative3.Value;
         }
 
         private void numRelative4_ValueChanged(object sender,EventArgs e)
         {
-            camera.Relative4 = (byte)numRelative4.Value;
+            camera.Neighbors[3].LinkType = (byte)numRelative4.Value;
         }
 
         private void numParentZone1_ValueChanged(object sender,EventArgs e)
         {
-            camera.ParentZone1 = (byte)numParentZone1.Value;
+            camera.Neighbors[0].ZoneIndex = (byte)numParentZone1.Value;
         }
 
         private void numParentZone2_ValueChanged(object sender,EventArgs e)
         {
-            camera.ParentZone2 = (byte)numParentZone2.Value;
+            camera.Neighbors[1].ZoneIndex = (byte)numParentZone2.Value;
         }
 
         private void numParentZone3_ValueChanged(object sender,EventArgs e)
         {
-            camera.ParentZone3 = (byte)numParentZone3.Value;
+            camera.Neighbors[2].ZoneIndex = (byte)numParentZone3.Value;
         }
 
         private void numParentZone4_ValueChanged(object sender,EventArgs e)
         {
-            camera.ParentZone4 = (byte)numParentZone4.Value;
+            camera.Neighbors[3].ZoneIndex = (byte)numParentZone4.Value;
         }
 
         private void numPathItem1_ValueChanged(object sender,EventArgs e)
         {
-            camera.PathItem1 = (byte)numPathItem1.Value;
+            camera.Neighbors[0].CameraIndex = (byte)numPathItem1.Value;
         }
 
         private void numPathItem2_ValueChanged(object sender,EventArgs e)
         {
-            camera.PathItem2 = (byte)numPathItem2.Value;
+            camera.Neighbors[1].CameraIndex = (byte)numPathItem2.Value;
         }
 
         private void numPathItem3_ValueChanged(object sender,EventArgs e)
         {
-            camera.PathItem3 = (byte)numPathItem3.Value;
+            camera.Neighbors[2].CameraIndex = (byte)numPathItem3.Value;
         }
 
         private void numPathItem4_ValueChanged(object sender,EventArgs e)
         {
-            camera.PathItem4 = (byte)numPathItem4.Value;
+            camera.Neighbors[3].CameraIndex = (byte)numPathItem4.Value;
         }
 
         private void numRelativeFlag1_ValueChanged(object sender,EventArgs e)
         {
-            camera.RelativeFlag1 = (byte)numRelativeFlag1.Value;
+            camera.Neighbors[0].Flag = (byte)numRelativeFlag1.Value;
         }
 
         private void numRelativeFlag2_ValueChanged(object sender,EventArgs e)
         {
-            camera.RelativeFlag2 = (byte)numRelativeFlag2.Value;
+            camera.Neighbors[1].Flag = (byte)numRelativeFlag2.Value;
         }
 
         private void numRelativeFlag3_ValueChanged(object sender,EventArgs e)
         {
-            camera.RelativeFlag3 = (byte)numRelativeFlag3.Value;
+            camera.Neighbors[2].Flag = (byte)numRelativeFlag3.Value;
         }
 
         private void numRelativeFlag4_ValueChanged(object sender,EventArgs e)
         {
-            camera.RelativeFlag4 = (byte)numRelativeFlag4.Value;
+            camera.Neighbors[3].Flag = (byte)numRelativeFlag4.Value;
         }
 
         private void cmdFirstPosition_Click(object sender,EventArgs e)
@@ -361,43 +362,25 @@ namespace CrashEdit
             camera.AvgDist = (short)numAvgDist.Value;
         }
 
-        private void cmdDebug1_Click(object sender, EventArgs e)
+        private void cmdAvgDistCalc_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < camera.Positions.Count; i++)
+            if (camera.Positions.Count <= 1)
             {
-                OldCameraPosition pos = camera.Positions[i];
-                camera.Positions[i] = new OldCameraPosition(pos.X, pos.Y, (short)(pos.Z + 1200), pos.XRot, pos.YRot, pos.ZRot);
+                numAvgDist.Value = 0;
+                return;
             }
-            /*positionindex = camera.Positions.Count;
-            if (camera.Positions.Count > 0)
-            {
-                camera.Positions.Add(camera.Positions[positionindex - 1]);
-                OldCameraPosition pos = camera.Positions[positionindex];
-                camera.Positions[positionindex] = new OldCameraPosition(pos.X,pos.Y,(short)(pos.Z - 80),(short)(pos.XRot - 3), pos.YRot, pos.ZRot);
-            }
-            else
-            {
-                camera.Positions.Add(new OldCameraPosition(0, 0, 0, 0, 0, 0));
-            }
-            camera.PointCount++;*/
-            UpdatePosition();
-        }
 
-        private void cmdDebug2_Click(object sender,EventArgs e)
-        {
-            positionindex = camera.Positions.Count;
-            if (camera.Positions.Count > 0)
+            double dist = 0;
+
+            for (int i = 0; i < camera.Positions.Count; ++i)
             {
-                camera.Positions.Add(camera.Positions[positionindex - 1]);
-                OldCameraPosition pos = camera.Positions[positionindex];
-                camera.Positions[positionindex] = new OldCameraPosition(pos.X, pos.Y, (short)(pos.Z - 80),pos.XRot, pos.YRot, pos.ZRot);
+                if (i == 0) continue;
+                var p1 = camera.Positions[i-1];
+                var p2 = camera.Positions[i];
+                dist += Math.Sqrt(Math.Pow(p2.X - p1.X, 2) + Math.Pow(p2.Y - p1.Y, 2) + Math.Pow(p2.Z - p1.Z, 2));
             }
-            else
-            {
-                camera.Positions.Add(new OldCameraPosition(0, 0, 0, 0, 0, 0));
-            }
-            camera.PointCount++;
-            UpdatePosition();
+
+            numAvgDist.Value = (short)(dist / (camera.Positions.Count-1));
         }
     }
 }

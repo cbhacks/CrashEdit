@@ -99,7 +99,6 @@
     <Compile Include="Controllers\T15\OldT15EntryController.cs" />
     <Compile Include="Controllers\T17\OldT17EntryController.cs" />
     <Compile Include="Controllers\Zone\NewEntityController.cs" />
-    <Compile Include="Controllers\Zone\ProtoCameraController.cs" />
     <Compile Include="Controllers\Zone\OldCameraController.cs" />
     <Compile Include="Controllers\Zone\ProtoZoneEntryController.cs" />
     <Compile Include="Controllers\Zone\ProtoEntityController.cs" />
@@ -147,12 +146,6 @@
     </Compile>
     <Compile Include="Controls\OldFrameBox.Designer.cs">
       <DependentUpon>OldFrameBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ProtoCameraBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ProtoCameraBox.Designer.cs">
-      <DependentUpon>ProtoCameraBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\OldCameraBox.cs">
       <SubType>UserControl</SubType>
@@ -295,10 +288,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Controls\OldFrameBox.resx">
       <DependentUpon>OldFrameBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ProtoCameraBox.resx">
-      <DependentUpon>ProtoCameraBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\OldCameraBox.resx">
