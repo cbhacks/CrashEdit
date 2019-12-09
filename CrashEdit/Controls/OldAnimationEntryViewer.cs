@@ -27,7 +27,7 @@ namespace CrashEdit
             this.model = model;
             frameid = 0;
             animatetimer = new Timer();
-            animatetimer.Interval = 1000/OldMainForm.GetRate();
+            animatetimer.Interval = 1000 / OldMainForm.GetRate();
             animatetimer.Enabled = true;
             animatetimer.Tick += delegate (object sender,EventArgs e)
             {
@@ -37,7 +37,12 @@ namespace CrashEdit
             };
         }
 
-        protected override int CameraRangeMargin => 128;
+        // Final animation scale is tiny,
+        // we need to increase it to stay consistent
+        // with other viewers which have a larger scale.
+        protected override float ScaleFactor => 16;
+
+        protected override int CameraRangeMargin => 64;
 
         protected override IEnumerable<IPosition> CorePositions
         {

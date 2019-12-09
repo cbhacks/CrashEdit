@@ -68,7 +68,7 @@ namespace CrashEdit
             };
             inputtimer.Tick += delegate (object sender,EventArgs e)
             {
-                int speed = range / 100;
+                int speed = 50 + range / 66;
                 int changex = 0;
                 int changey = 0;
                 int changez = 0;
@@ -103,6 +103,7 @@ namespace CrashEdit
             };
         }
 
+        protected virtual float ScaleFactor => 1;
         protected virtual int CameraRangeMargin => 0;
 
         protected abstract IEnumerable<IPosition> CorePositions
@@ -169,11 +170,11 @@ namespace CrashEdit
             }
             else if (mouseright)
             {
-                range -= (e.Y - mousey) * fullrange / 500;
-                if (range < 1)
-                    range = 1;
-                else if (range > fullrange * 4)
-                    range = fullrange * 4;
+                range -= (int)((e.Y - mousey) * fullrange / 256 * (range / (float)(fullrange * 8) * 0.8F + 0.2F));
+                if (range < 5)
+                    range = 5;
+                else if (range > fullrange * 8)
+                    range = fullrange * 8;
                 Invalidate();
             }
             mousex = e.X;
@@ -258,15 +259,15 @@ namespace CrashEdit
             GL.ClearColor(0.05f,0.05f,0.05f,1);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.MatrixMode(MatrixMode.Projection);
-            var proj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver3,(float)Width/Height,1/25f,ushort.MaxValue);
+            var proj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver3,(float)Width/Height,200,2000000);
             GL.LoadMatrix(ref proj);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
-            GL.Translate(0,0,-1);
-            GL.Scale(1F / range,1F / range,1F / range);
+            GL.Translate(0,0,-range);
             GL.Rotate(roty,1,0,0);
             GL.Rotate(rotx,0,1,0);
             GL.Translate(-midx,-midy,-midz);
+            GL.Scale(ScaleFactor,ScaleFactor,ScaleFactor);
             RenderObjects();
             SwapBuffers();
         }
@@ -281,21 +282,21 @@ namespace CrashEdit
             int maxz = int.MinValue;
             foreach (IPosition position in CorePositions)
             {
-                minx = Math.Min(minx,(int)position.X);
-                miny = Math.Min(miny,(int)position.Y);
-                minz = Math.Min(minz,(int)position.Z);
-                maxx = Math.Max(maxx,(int)position.X);
-                maxy = Math.Max(maxy,(int)position.Y);
-                maxz = Math.Max(maxz,(int)position.Z);
+                minx = (int)Math.Min(minx,position.X * ScaleFactor);
+                miny = (int)Math.Min(miny,position.Y * ScaleFactor);
+                minz = (int)Math.Min(minz,position.Z * ScaleFactor);
+                maxx = (int)Math.Max(maxx,position.X * ScaleFactor);
+                maxy = (int)Math.Max(maxy,position.Y * ScaleFactor);
+                maxz = (int)Math.Max(maxz,position.Z * ScaleFactor);
             }
             midx = (maxx + minx) / 2;
             midy = (maxy + miny) / 2;
             midz = (maxz + minz) / 2;
-            range = 1;
+            range = 5;
             range = Math.Max(range,maxx - minx);
             range = Math.Max(range,maxy - miny);
             range = Math.Max(range,maxz - minz);
-            range += CameraRangeMargin;
+            range += (int)(CameraRangeMargin * ScaleFactor);
             rotx = 0;
             roty = 0;
             fullrange = range;

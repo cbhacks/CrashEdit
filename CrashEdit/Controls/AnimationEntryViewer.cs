@@ -90,7 +90,12 @@ namespace CrashEdit
         private int MinScale => model != null ? Math.Min(BitConv.FromInt32(model.Info, 8), Math.Min(BitConv.FromInt32(model.Info, 0), BitConv.FromInt32(model.Info, 4))) : 0x1000;
         private int MaxScale => model != null ? Math.Max(BitConv.FromInt32(model.Info, 8), Math.Max(BitConv.FromInt32(model.Info, 0), BitConv.FromInt32(model.Info, 4))) : 0x1000;
 
-        protected override int CameraRangeMargin => 200000;
+        protected override int CameraRangeMargin => 0x60000;
+
+        // Final animation scale is ginormous,
+        // we need to reduce it to stay consistent
+        // with other viewers which have a smaller scale.
+        protected override float ScaleFactor => 1 / 128F;
 
         protected override IEnumerable<IPosition> CorePositions
         {
