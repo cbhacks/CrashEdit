@@ -8,8 +8,8 @@ namespace CrashEdit
         public OldZoneEntryController(EntryChunkController entrychunkcontroller,OldZoneEntry zoneentry)
             : base(entrychunkcontroller,zoneentry)
         {
-            ZoneEntry = zoneentry;
-            AddNode(new ItemController(null,zoneentry.Unknown1));
+            OldZoneEntry = zoneentry;
+            AddNode(new ItemController(null,zoneentry.Header));
             AddNode(new ItemController(null,zoneentry.Layout));
             foreach (OldCamera camera in zoneentry.Cameras)
             {
@@ -24,28 +24,28 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Old Zone ({0})",ZoneEntry.EName);
+            Node.Text = string.Format("Old Zone ({0})",OldZoneEntry.EName);
             Node.ImageKey = "violetb";
             Node.SelectedImageKey = "violetb";
         }
 
         protected override Control CreateEditor()
         {
-            int linkedsceneryentrycount = BitConv.FromInt32(ZoneEntry.Unknown1,0);
+            int linkedsceneryentrycount = BitConv.FromInt32(OldZoneEntry.Header,0);
             OldSceneryEntry[] linkedsceneryentries = new OldSceneryEntry[linkedsceneryentrycount];
             for (int i = 0; i < linkedsceneryentrycount; i++)
             {
-                linkedsceneryentries[i] = FindEID<OldSceneryEntry>(BitConv.FromInt32(ZoneEntry.Unknown1,4 + i * 64));
+                linkedsceneryentries[i] = FindEID<OldSceneryEntry>(BitConv.FromInt32(OldZoneEntry.Header,4 + i * 64));
             }
-            int linkedzoneentrycount = BitConv.FromInt32(ZoneEntry.Unknown1,528);
+            int linkedzoneentrycount = BitConv.FromInt32(OldZoneEntry.Header,528);
             OldZoneEntry[] linkedzoneentries = new OldZoneEntry[linkedzoneentrycount];
             for (int i = 0; i < linkedzoneentrycount; i++)
             {
-                linkedzoneentries[i] = FindEID<OldZoneEntry>(BitConv.FromInt32(ZoneEntry.Unknown1,532 + i * 4));
+                linkedzoneentries[i] = FindEID<OldZoneEntry>(BitConv.FromInt32(OldZoneEntry.Header,532 + i * 4));
             }
-            return new UndockableControl(new OldZoneEntryViewer(ZoneEntry,linkedsceneryentries,linkedzoneentries));
+            return new UndockableControl(new OldZoneEntryViewer(OldZoneEntry,linkedsceneryentries,linkedzoneentries));
         }
 
-        public OldZoneEntry ZoneEntry { get; }
+        public OldZoneEntry OldZoneEntry { get; }
     }
 }

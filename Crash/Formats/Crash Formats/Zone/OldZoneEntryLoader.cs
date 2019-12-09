@@ -24,7 +24,7 @@ namespace Crash
             {
                 entities[i - 2 - camcount] = OldEntity.Load(items[i]);
             }
-            return new OldZoneEntry(unknown1,unknown2,cameras,entities,camcount,eid,size);
+            return new OldZoneEntry(unknown1,unknown2,cameras,entities,eid,size);
         }
     }
 }
