@@ -7,9 +7,13 @@ namespace Crash
     {
         public static OldCamera Load(byte[] data)
         {
-            if (data.Length < 52)
+            if (data.Length < 50)
             {
                 ErrorManager.SignalError("OldCamera: Data is too short");
+            }
+            if (data.Length < 52)
+            {
+                ErrorManager.SignalIgnorableError("OldCamera: Data is too short");
             }
             int slsteid = BitConv.FromInt32(data,0);
             int garbage = BitConv.FromInt32(data,4);
@@ -50,7 +54,7 @@ namespace Crash
                 short zrot = BitConv.FromInt16(data,60 + 12 * i);
                 position[i] = new OldCameraPosition(x,y,z,xrot,yrot,zrot);
             }
-            short blank = BitConv.FromInt16(data,50 + 12*pointcount);
+            short blank = data.Length < 52 + 12*pointcount ? (short)0 : BitConv.FromInt16(data,50 + 12*pointcount);
             return new OldCamera(slsteid,garbage,neighborcount,neighbors,entrypoint,exitpoint,mode,avgdist,zoom,unk1,unk2,unk3,xdir,ydir,zdir,position,blank);
         }
 
