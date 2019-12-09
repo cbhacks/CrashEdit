@@ -29,7 +29,7 @@ namespace Crash
             }
         }
 
-        internal GOOLInstruction LoadInstruction(int ins, ref bool mips)
+        internal GOOLInstruction LoadInstruction(int ins, bool mips)
         {
             if (!mips)
             {
@@ -39,8 +39,6 @@ namespace Crash
                     int opcode = ins >> 24 & 0xFF;
                     if (opset.ContainsKey(opcode))
                     {
-                        if (opcode == 73 && Version == GOOLVersion.Version2)
-                            mips = true;
                         try
                         {
                             return (GOOLInstruction)Activator.CreateInstance(opset[opcode],ins,this);
@@ -74,12 +72,10 @@ namespace Crash
             bool mips = false;
             for (int i = 0; i < instructions.Length / 4; ++i)
             {
-                int ins = BitConv.FromInt32(instructions,i*4);
-                if (!mips)
-                    this.instructions.Add(LoadInstruction(ins,ref mips));
-                else
+                GOOLInstruction ins = LoadInstruction(BitConv.FromInt32(instructions,i*4),mips);
+                this.instructions.Add(ins);
+                if (mips)
                 {
-                    this.instructions.Add(LoadInstruction(ins,ref mips));
                     MIPSInstruction prev = null;
                     if (this.instructions[this.instructions.Count-2] is MIPSInstruction)
                         prev = (MIPSInstruction)this.instructions[this.instructions.Count-2];
@@ -88,6 +84,7 @@ namespace Crash
                         mips = false;
                     }
                 }
+                mips = GOOLInterpreter.IsMIPSInstruction(ins);
             }
             Data = data;
             StateMap = statemap;

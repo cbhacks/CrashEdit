@@ -1,4 +1,6 @@
-﻿namespace Crash
+﻿using Crash.GOOLIns;
+
+namespace Crash
 {
     public enum GOOLVersion
     {
@@ -185,12 +187,14 @@
         {
             switch (ins.GOOL.Version)
             {
+                case GOOLVersion.Version0:
                 case GOOLVersion.Version1:
-                    return !(ins is GOOLInvalidInstruction) && ins.Opcode == 0x82 && ins.Args['T'].Value == 2;
+                    return ins is Cfl && ins.Args['T'].Value == 2;
                 case GOOLVersion.Version2:
-                    return ins.Opcode == 49;
+                    return ins is Ret;
+                default:
+                    return false;
             }
-            return false;
         }
 
         public static bool IsMIPSInstruction(GOOLInstruction ins)
@@ -198,9 +202,10 @@
             switch (ins.GOOL.Version)
             {
                 case GOOLVersion.Version2:
-                    return ins.Opcode == 73;
+                    return ins is MIPSInstruction;
+                default:
+                    return false;
             }
-            return false;
         }
 
         public static string GetColor(GOOLVersion ver, int col)
