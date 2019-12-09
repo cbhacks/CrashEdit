@@ -15,7 +15,7 @@ namespace Crash
             }
             if (items[0].Length != 76)
             {
-                ErrorManager.SignalError("SceneryEntry: First item length is wrong");
+                ErrorManager.SignalError("SceneryEntry: Header length is wrong");
             }
             int vertexcount = BitConv.FromInt32(items[0], 16);
             int trianglecount = BitConv.FromInt32(items[0], 20);
@@ -23,14 +23,22 @@ namespace Crash
             int texturecount = BitConv.FromInt32(items[0], 28);
             int colorcount = BitConv.FromInt32(items[0], 32);
             int animatedtexturecount = BitConv.FromInt32(items[0], 36);
-            //if (items[4].Length != texturecount * 12)
-            //{
-            //    ErrorManager.SignalError("SceneryEntry: Texture count mismatch");
-            //}
-            //if (items[6].Length != animatedtexturecount * 4)
-            //{
-            //    ErrorManager.SignalError("SceneryEntry: Animated texture count mismatch");
-            //}
+            if (items[3].Length != texturecount * 8)
+            {
+                ErrorManager.SignalError("SceneryEntry: Quad count mismatch");
+            }
+            if (items[4].Length != texturecount * 12)
+            {
+                ErrorManager.SignalError("SceneryEntry: Texture count mismatch");
+            }
+            if (items[5].Length != texturecount * 4)
+            {
+                ErrorManager.SignalError("SceneryEntry: Color count mismatch");
+            }
+            if (items[6].Length != animatedtexturecount * 4)
+            {
+                ErrorManager.SignalError("SceneryEntry: Animated texture count mismatch");
+            }
             SceneryVertex[] vertices = new SceneryVertex[vertexcount];
             for (int i = 0; i < vertexcount; i++)
             {
