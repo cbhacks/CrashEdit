@@ -79,7 +79,7 @@ namespace CrashEdit
                 yield return new Position(xoffset,yoffset,zoffset);
                 foreach (OldEntity entity in entry.Entities)
                 {
-                    foreach (EntityPosition position in entity.Index)
+                    foreach (EntityPosition position in entity.Positions)
                     {
                         int x = position.X * 4 + xoffset;
                         int y = position.Y * 4 + yoffset;
@@ -442,9 +442,9 @@ namespace CrashEdit
         private void RenderEntity(OldEntity entity)
         {
             GL.PolygonStipple(stipplea);
-            if (entity.Index.Count == 1)
+            if (entity.Positions.Count == 1)
             {
-                EntityPosition position = entity.Index[0];
+                EntityPosition position = entity.Positions[0];
                 GL.PushMatrix();
                 switch (entity.Type)
                 {
@@ -470,14 +470,14 @@ namespace CrashEdit
                 GL.Color3(Color.Blue);
                 GL.PushMatrix();
                 GL.Begin(PrimitiveType.LineStrip);
-                foreach (EntityPosition position in entity.Index)
+                foreach (EntityPosition position in entity.Positions)
                 {
                     GL.Vertex3(position.X,position.Y,position.Z);
                 }
                 GL.End();
                 GL.Color3(Color.Red);
                 LoadTexture(OldResources.PointTexture);
-                foreach (EntityPosition position in entity.Index)
+                foreach (EntityPosition position in entity.Positions)
                 {
                     GL.PushMatrix();
                     GL.Translate(position.X,position.Y,position.Z);

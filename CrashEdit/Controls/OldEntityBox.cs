@@ -34,9 +34,9 @@ namespace CrashEdit
         private void UpdatePosition()
         {
             positiondirty = true;
-            if (positionindex >= entity.Index.Count)
+            if (positionindex >= entity.Positions.Count)
             {
-                positionindex = entity.Index.Count - 1;
+                positionindex = entity.Positions.Count - 1;
             }
             // Do not make this else if,
             // sometimes both will run.
@@ -46,7 +46,7 @@ namespace CrashEdit
                 positionindex = 0;
             }
             // Do not remove this either
-            if (positionindex >= entity.Index.Count)
+            if (positionindex >= entity.Positions.Count)
             {
                 lblPositionIndex.Text = "-- / --";
                 cmdPreviousPosition.Enabled = false;
@@ -62,20 +62,20 @@ namespace CrashEdit
             }
             else
             {
-                lblPositionIndex.Text = string.Format("{0} / {1}",positionindex + 1,entity.Index.Count);
+                lblPositionIndex.Text = string.Format("{0} / {1}",positionindex + 1,entity.Positions.Count);
                 cmdPreviousPosition.Enabled = (positionindex > 0);
-                cmdNextPosition.Enabled = (positionindex < entity.Index.Count - 1);
+                cmdNextPosition.Enabled = (positionindex < entity.Positions.Count - 1);
                 cmdInsertPosition.Enabled = true;
-                cmdRemovePosition.Enabled = (entity.Index.Count > 1);
+                cmdRemovePosition.Enabled = (entity.Positions.Count > 1);
                 lblX.Enabled = true;
                 lblY.Enabled = true;
                 lblZ.Enabled = true;
                 numX.Enabled = true;
                 numY.Enabled = true;
                 numZ.Enabled = true;
-                numX.Value = entity.Index[positionindex].X;
-                numY.Value = entity.Index[positionindex].Y;
-                numZ.Value = entity.Index[positionindex].Z;
+                numX.Value = entity.Positions[positionindex].X;
+                numY.Value = entity.Positions[positionindex].Y;
+                numZ.Value = entity.Positions[positionindex].Z;
             }
             positiondirty = false;
         }
@@ -95,35 +95,35 @@ namespace CrashEdit
         private void cmdNextAndRemovePosition_Click(object sender,EventArgs e)
         {
             positionindex++;
-            entity.Index.RemoveAt(positionindex);
+            entity.Positions.RemoveAt(positionindex);
             InvalidateNodes();
             UpdatePosition();
         }
 
         private void cmdInsertPosition_Click(object sender,EventArgs e)
         {
-            entity.Index.Insert(positionindex, entity.Index[positionindex]);
+            entity.Positions.Insert(positionindex, entity.Positions[positionindex]);
             InvalidateNodes();
             UpdatePosition();
         }
 
         private void cmdRemovePosition_Click(object sender,EventArgs e)
         {
-            entity.Index.RemoveAt(positionindex);
+            entity.Positions.RemoveAt(positionindex);
             InvalidateNodes();
             UpdatePosition();
         }
 
         private void cmdAppendPosition_Click(object sender,EventArgs e)
         {
-            positionindex = entity.Index.Count;
-            if (entity.Index.Count > 0)
+            positionindex = entity.Positions.Count;
+            if (entity.Positions.Count > 0)
             {
-                entity.Index.Add(entity.Index[positionindex - 1]);
+                entity.Positions.Add(entity.Positions[positionindex - 1]);
             }
             else
             {
-                entity.Index.Add(new EntityPosition(0,0,0));
+                entity.Positions.Add(new EntityPosition(0,0,0));
             }
             InvalidateNodes();
             UpdatePosition();
@@ -133,8 +133,8 @@ namespace CrashEdit
         {
             if (!positiondirty)
             {
-                EntityPosition pos = entity.Index[positionindex];
-                entity.Index[positionindex] = new EntityPosition((short)numX.Value,pos.Y,pos.Z);
+                EntityPosition pos = entity.Positions[positionindex];
+                entity.Positions[positionindex] = new EntityPosition((short)numX.Value,pos.Y,pos.Z);
             }
         }
 
@@ -142,8 +142,8 @@ namespace CrashEdit
         {
             if (!positiondirty)
             {
-                EntityPosition pos = entity.Index[positionindex];
-                entity.Index[positionindex] = new EntityPosition(pos.X,(short)numY.Value,pos.Z);
+                EntityPosition pos = entity.Positions[positionindex];
+                entity.Positions[positionindex] = new EntityPosition(pos.X,(short)numY.Value,pos.Z);
             }
         }
 
@@ -151,8 +151,8 @@ namespace CrashEdit
         {
             if (!positiondirty)
             {
-                EntityPosition pos = entity.Index[positionindex];
-                entity.Index[positionindex] = new EntityPosition(pos.X,pos.Y,(short)numZ.Value);
+                EntityPosition pos = entity.Positions[positionindex];
+                entity.Positions[positionindex] = new EntityPosition(pos.X,pos.Y,(short)numZ.Value);
             }
         }
 
