@@ -1,5 +1,6 @@
 using Crash;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -553,6 +554,7 @@ namespace CrashEdit
         {
             if (entity.LoadListA != null && entity.LoadListA.RowCount != 0)
             {
+                fraLoadListCheck.Enabled = cmdLoadListVerify.Enabled = entity.LoadListB != null;
                 if (loadlistarowindex >= entity.LoadListA.RowCount)
                     loadlistarowindex = entity.LoadListA.RowCount-1;
                 lblMetavalueLoadA.Enabled = true;
@@ -587,6 +589,7 @@ namespace CrashEdit
             }
             else
             {
+                fraLoadListCheck.Enabled = cmdLoadListVerify.Enabled = false;
                 entity.LoadListA = null;
                 lblLoadListRowIndexA.Text = "-- / --";
                 lblEIDIndexA.Text = "-- / --";
@@ -695,6 +698,7 @@ namespace CrashEdit
         {
             if (entity.LoadListB != null && entity.LoadListB.RowCount != 0)
             {
+                fraLoadListCheck.Enabled = cmdLoadListVerify.Enabled = entity.LoadListA != null;
                 if (loadlistbrowindex >= entity.LoadListB.RowCount)
                     loadlistbrowindex = entity.LoadListB.RowCount-1;
                 lblMetavalueLoadB.Enabled = true;
@@ -729,6 +733,7 @@ namespace CrashEdit
             }
             else
             {
+                fraLoadListCheck.Enabled = cmdLoadListVerify.Enabled = false;
                 entity.LoadListB = null;
                 lblLoadListRowIndexB.Text = "-- / --";
                 lblEIDIndexB.Text = "-- / --";
@@ -1425,6 +1430,51 @@ namespace CrashEdit
         private void txtEIDB_LostFocus(object sender, EventArgs e)
         {
             UpdateLoadListB();
+        }
+
+        private void cmdLoadListVerify_Click(object sender, EventArgs e)
+        {
+            List<int> loadedentries = new List<int>();
+            for (int i = 0; i < entity.Positions.Count; ++i)
+            {
+                foreach (var row in entity.LoadListA.Rows)
+                {
+                    if (row.MetaValue == i)
+                    {
+                        // load
+                        foreach (int eid in row.Values)
+                        {
+                            loadedentries.Add(eid);
+                        }
+                    }
+                }
+                foreach (var row in entity.LoadListB.Rows)
+                {
+                    if (row.MetaValue == i)
+                    {
+                        // unload
+                        foreach (int eid in row.Values)
+                        {
+                            if (!loadedentries.Remove(eid))
+                            {
+                                MessageBox.Show(this, $"Load lists are incorrect. {Entry.EIDToEName(eid)} was already deloaded by position {i}.", "Load list verification exception.");
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            if (loadedentries.Count == 0)
+                MessageBox.Show(this, "Load lists are correct.", "Load list verification exception.");
+            else
+            {
+                string eidlist = string.Empty;
+                foreach (int eid in loadedentries)
+                {
+                    eidlist += Entry.EIDToEName(eid) + Environment.NewLine;
+                }
+                MessageBox.Show(this, $"Load lists are incorrect. The following entries are never deloaded:\n{eidlist}", "Load list verification exception.");
+            }
         }
     }
 }

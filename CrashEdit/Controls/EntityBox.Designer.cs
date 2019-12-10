@@ -170,6 +170,8 @@ namespace CrashEdit
             this.cmdNextEntityA = new System.Windows.Forms.Button();
             this.cmdPrevRowDrawA = new System.Windows.Forms.Button();
             this.cmdNextRowDrawA = new System.Windows.Forms.Button();
+            this.fraLoadListCheck = new System.Windows.Forms.GroupBox();
+            this.cmdLoadListVerify = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -1137,6 +1139,8 @@ namespace CrashEdit
             // 
             // tabLoadLists
             // 
+            this.tabLoadLists.Controls.Add(this.cmdLoadListVerify);
+            this.tabLoadLists.Controls.Add(this.fraLoadListCheck);
             this.tabLoadLists.Controls.Add(this.fraLoadListB);
             this.tabLoadLists.Controls.Add(this.lblEID2);
             this.tabLoadLists.Controls.Add(this.lblEID1);
@@ -1328,7 +1332,7 @@ namespace CrashEdit
             // lblEID2
             // 
             this.lblEID2.AutoSize = true;
-            this.lblEID2.Location = new System.Drawing.Point(16, 335);
+            this.lblEID2.Location = new System.Drawing.Point(6, 331);
             this.lblEID2.Name = "lblEID2";
             this.lblEID2.Size = new System.Drawing.Size(176, 13);
             this.lblEID2.TabIndex = 5;
@@ -1338,7 +1342,7 @@ namespace CrashEdit
             // lblEID1
             // 
             this.lblEID1.AutoSize = true;
-            this.lblEID1.Location = new System.Drawing.Point(16, 310);
+            this.lblEID1.Location = new System.Drawing.Point(6, 309);
             this.lblEID1.Name = "lblEID1";
             this.lblEID1.Size = new System.Drawing.Size(183, 13);
             this.lblEID1.TabIndex = 4;
@@ -1929,6 +1933,25 @@ namespace CrashEdit
             this.cmdNextRowDrawA.UseVisualStyleBackColor = true;
             this.cmdNextRowDrawA.Click += new System.EventHandler(this.cmdNextRowDrawA_Click);
             // 
+            // fraLoadListCheck
+            // 
+            this.fraLoadListCheck.Location = new System.Drawing.Point(195, 303);
+            this.fraLoadListCheck.Name = "fraLoadListCheck";
+            this.fraLoadListCheck.Size = new System.Drawing.Size(189, 107);
+            this.fraLoadListCheck.TabIndex = 22;
+            this.fraLoadListCheck.TabStop = false;
+            this.fraLoadListCheck.Text = "Verify Lists";
+            // 
+            // cmdLoadListVerify
+            // 
+            this.cmdLoadListVerify.Location = new System.Drawing.Point(155, 25);
+            this.cmdLoadListVerify.Name = "cmdLoadListVerify";
+            this.cmdLoadListVerify.Size = new System.Drawing.Size(80, 23);
+            this.cmdLoadListVerify.TabIndex = 0;
+            this.cmdLoadListVerify.Text = "Verify Lists";
+            this.cmdLoadListVerify.UseVisualStyleBackColor = true;
+            this.cmdLoadListVerify.Click += new System.EventHandler(this.cmdLoadListVerify_Click);
+            // 
             // EntityBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2154,5 +2177,7 @@ namespace CrashEdit
         private System.Windows.Forms.Button cmdNextEntityB;
         private System.Windows.Forms.Button cmdPrevRowDrawB;
         private System.Windows.Forms.Button cmdNextRowDrawB;
+        private System.Windows.Forms.Button cmdLoadListVerify;
+        private System.Windows.Forms.GroupBox fraLoadListCheck;
     }
 }
