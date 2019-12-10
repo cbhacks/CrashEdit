@@ -94,7 +94,7 @@ namespace CrashEdit
             };
             refreshtimer = new Timer
             {
-                Interval = 100,
+                Interval = 33,
                 Enabled = true
             };
             refreshtimer.Tick += delegate (object sender,EventArgs e)
