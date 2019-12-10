@@ -12,8 +12,8 @@ namespace Crash
         private List<SceneryColor> colors;
         private List<ModelExtendedTexture> animatedtextures;
 
-        public SceneryEntry(byte[] info,IEnumerable<SceneryVertex> vertices,IEnumerable<SceneryTriangle> triangles,IEnumerable<SceneryQuad> quads,IEnumerable<ModelTexture> textures,IEnumerable<SceneryColor> colors,IEnumerable<ModelExtendedTexture> animatedtextures,int eid,int size)
-            : base(eid,size)
+        public SceneryEntry(byte[] info,IEnumerable<SceneryVertex> vertices,IEnumerable<SceneryTriangle> triangles,IEnumerable<SceneryQuad> quads,IEnumerable<ModelTexture> textures,IEnumerable<SceneryColor> colors,IEnumerable<ModelExtendedTexture> animatedtextures,int eid)
+            : base(eid)
         {
             Info = info;
             this.vertices = new List<SceneryVertex>(vertices);
@@ -90,7 +90,7 @@ namespace Crash
             {
                 animatedtextures[i].Save().CopyTo(items[6], i * 4);
             }
-            return new UnprocessedEntry(items,EID,Type,Size);
+            return new UnprocessedEntry(items,EID,Type);
         }
 
         public byte[] ToOBJ()

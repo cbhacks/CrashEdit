@@ -86,8 +86,7 @@ namespace Crash
                 Array.Copy(data,itemstart,itemdata,0,itemsize);
                 items[i] = itemdata;
             }
-            int size = data.Length;
-            return new UnprocessedEntry(items,eid,type,size);
+            return new UnprocessedEntry(items,eid,type);
         }
 
         public static string EIDToEName(int eid)
@@ -125,15 +124,13 @@ namespace Crash
             throw new ArgumentException("Entry: invalid character for EName");
         }
 
-        public Entry(int eid,int size)
+        public Entry(int eid)
         {
             EID = eid;
-            Size = size;
         }
 
         public abstract int Type { get; }
         public int EID { get; }
-        public int Size { get; }
         public string EName => EIDToEName(EID);
 
         public virtual bool IgnoreResaveErrors => false;

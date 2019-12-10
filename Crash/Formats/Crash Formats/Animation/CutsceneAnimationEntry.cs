@@ -6,7 +6,7 @@ namespace Crash
     {
         private List<OldFrame> frames;
 
-        public CutsceneAnimationEntry(IEnumerable<OldFrame> frames,int eid, int size) : base(eid, size)
+        public CutsceneAnimationEntry(IEnumerable<OldFrame> frames,int eid) : base(eid)
         {
             this.frames = new List<OldFrame>(frames);
         }
@@ -21,7 +21,7 @@ namespace Crash
             {
                 items[i] = frames[i].Save();
             }
-            return new UnprocessedEntry(items,EID,Type,Size);
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }

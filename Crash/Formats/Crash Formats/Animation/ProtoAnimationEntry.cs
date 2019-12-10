@@ -6,7 +6,7 @@ namespace Crash
     {
         private List<ProtoFrame> frames;
 
-        public ProtoAnimationEntry(IEnumerable<ProtoFrame> frames,bool notproto,int eid, int size) : base(eid, size)
+        public ProtoAnimationEntry(IEnumerable<ProtoFrame> frames,bool notproto,int eid) : base(eid)
         {
             this.frames = new List<ProtoFrame>(frames);
             NotProto = notproto;
@@ -24,7 +24,7 @@ namespace Crash
             {
                 items[i] = frames[i].Save();
             }
-            return new UnprocessedEntry(items,EID,Type,Size);
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }

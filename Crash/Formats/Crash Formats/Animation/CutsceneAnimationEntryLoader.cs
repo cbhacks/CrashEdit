@@ -7,7 +7,7 @@ namespace Crash
     [EntryType(20,GameVersion.Crash1)]
     public sealed class CutsceneAnimationEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid,int size)
+        public override Entry Load(byte[][] items,int eid)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -16,7 +16,7 @@ namespace Crash
             {
                 frames[i] = OldFrame.Load(items[i]);
             }
-            return new CutsceneAnimationEntry(frames,eid,size);
+            return new CutsceneAnimationEntry(frames,eid);
         }
     }
 }

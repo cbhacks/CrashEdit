@@ -10,7 +10,7 @@ namespace Crash
         private List<ProtoSceneryPolygon> polygons;
         private List<ProtoSceneryVertex> vertices;
 
-        public ProtoSceneryEntry(byte[] info,IEnumerable<ProtoSceneryPolygon> polygons,IEnumerable<ProtoSceneryVertex> vertices,byte[] extradata,int eid,int size) : base(eid,size)
+        public ProtoSceneryEntry(byte[] info,IEnumerable<ProtoSceneryPolygon> polygons,IEnumerable<ProtoSceneryVertex> vertices,byte[] extradata,int eid) : base(eid)
         {
             Info = info ?? throw new ArgumentNullException("info");
             this.polygons = new List<ProtoSceneryPolygon>(polygons);
@@ -61,7 +61,7 @@ namespace Crash
             {
                 items[3] = ExtraData;
             }
-            return new UnprocessedEntry(items,EID,Type,Size);
+            return new UnprocessedEntry(items,EID,Type);
         }
 
         public byte[] ToOBJ()

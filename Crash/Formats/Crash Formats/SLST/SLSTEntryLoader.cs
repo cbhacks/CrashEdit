@@ -6,7 +6,7 @@ namespace Crash
     [EntryType(4,GameVersion.Crash3)]
     public sealed class SLSTEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid,int size)
+        public override Entry Load(byte[][] items,int eid)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -19,7 +19,7 @@ namespace Crash
                 deltas[i] = SLSTDelta.Load(items[i+1]);
             }
             SLSTSource sourceend = SLSTSource.Load(items[items.Length - 1]);
-            return new SLSTEntry(sourcestart, sourceend, deltas, eid, size);
+            return new SLSTEntry(sourcestart,sourceend,deltas,eid);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Crash
     {
         private List<byte[]> items;
 
-        public MysteryMultiItemEntry(IEnumerable<byte[]> items,int eid, int size) : base(eid, size)
+        public MysteryMultiItemEntry(IEnumerable<byte[]> items,int eid) : base(eid)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -18,7 +18,7 @@ namespace Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            return new UnprocessedEntry(items,EID,Type,Size);
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }

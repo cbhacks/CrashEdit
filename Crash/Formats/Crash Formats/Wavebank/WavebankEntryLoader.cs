@@ -9,7 +9,7 @@ namespace Crash
     [EntryType(14,GameVersion.Crash3)]
     public sealed class WavebankEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid,int size)
+        public override Entry Load(byte[][] items,int eid)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -31,7 +31,7 @@ namespace Crash
             {
                 ErrorManager.SignalIgnorableError("WavebankEntry: Length field mismatch");
             }
-            return new WavebankEntry(id,SampleSet.Load(items[1]),eid,size);
+            return new WavebankEntry(id,SampleSet.Load(items[1]),eid);
         }
     }
 }

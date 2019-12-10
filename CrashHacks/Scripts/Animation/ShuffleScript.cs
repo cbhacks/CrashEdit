@@ -69,7 +69,7 @@ namespace CrashHacks.Scripts.Animation
                 List<T1Entry> sourceentries = new List<T1Entry>();
                 for (int i = 0;i < entries.Count;i++)
                 {
-                    sourceentries.Insert(random.Next(i),new T1Entry(entries[i].Items,entries[i].EID,entries[i].Size));
+                    sourceentries.Insert(random.Next(i),new T1Entry(entries[i].Items,entries[i].EID));
                 }
                 foreach (T1Entry entry in entries)
                 {

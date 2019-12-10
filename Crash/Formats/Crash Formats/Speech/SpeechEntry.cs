@@ -4,7 +4,7 @@ namespace Crash
 {
     public sealed class SpeechEntry : Entry
     {
-        public SpeechEntry(SampleSet samples,int eid,int size) : base(eid,size)
+        public SpeechEntry(SampleSet samples,int eid) : base(eid)
         {
             Samples = samples ?? throw new ArgumentNullException("samples");
         }
@@ -16,7 +16,7 @@ namespace Crash
         {
             byte[][] items = new byte [1][];
             items[0] = Samples.Save();
-            return new UnprocessedEntry(items,EID,Type,Size);
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }

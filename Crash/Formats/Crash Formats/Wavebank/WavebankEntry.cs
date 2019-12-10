@@ -4,7 +4,7 @@ namespace Crash
 {
     public sealed class WavebankEntry : Entry
     {
-        public WavebankEntry(int id,SampleSet samples,int eid,int size) : base(eid,size)
+        public WavebankEntry(int id,SampleSet samples,int eid) : base(eid)
         {
             ID = id;
             Samples = samples ?? throw new ArgumentNullException("samples");
@@ -23,7 +23,7 @@ namespace Crash
             byte[][] items = new byte [2][];
             items[0] = info;
             items[1] = data;
-            return new UnprocessedEntry(items,EID,Type,Size);
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }

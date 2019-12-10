@@ -6,7 +6,7 @@ namespace Crash
     {
         private VH vh;
 
-        public OldMusicEntry(int vb0eid,int vb1eid,int vb2eid,int vb3eid,VH vh,SEP sep,int eid, int size) : base(eid, size)
+        public OldMusicEntry(int vb0eid,int vb1eid,int vb2eid,int vb3eid,VH vh,SEP sep,int eid) : base(eid)
         {
             this.vh = vh ?? throw new ArgumentNullException("vh");
             SEP = sep ?? throw new ArgumentNullException("sep");
@@ -46,7 +46,7 @@ namespace Crash
             BitConv.ToInt32(items[0],16,VB3EID);
             items[1] = vh.Save();
             items[2] = SEP.Save();
-            return new UnprocessedEntry(items,EID,Type,Size);
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }

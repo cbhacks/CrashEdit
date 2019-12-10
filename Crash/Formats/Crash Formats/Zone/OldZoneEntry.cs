@@ -7,8 +7,8 @@ namespace Crash
         private List<OldCamera> cameras;
         private List<OldEntity> entities;
 
-        public OldZoneEntry(byte[] unknown1,byte[] unknown2,IEnumerable<OldCamera> cameras,IEnumerable<OldEntity> entities,int eid,int size)
-            : base(eid,size)
+        public OldZoneEntry(byte[] unknown1,byte[] unknown2,IEnumerable<OldCamera> cameras,IEnumerable<OldEntity> entities,int eid)
+            : base(eid)
         {
             Header = unknown1;
             Layout = unknown2;
@@ -49,7 +49,7 @@ namespace Crash
             {
                 items[2 + cameras.Count + i] = entities[i].Save();
             }
-            return new UnprocessedEntry(items,EID,Type,Size);
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }

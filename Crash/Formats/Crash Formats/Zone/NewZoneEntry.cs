@@ -7,7 +7,7 @@ namespace Crash
     {
         private List<Entity> entities;
 
-        public NewZoneEntry(byte[] header, byte[] layout,IEnumerable<Entity> entities,int eid,int size) : base(eid,size)
+        public NewZoneEntry(byte[] header, byte[] layout,IEnumerable<Entity> entities,int eid) : base(eid)
         {
             Header = header;
             Layout = layout;
@@ -28,7 +28,7 @@ namespace Crash
             {
                 items[2 + i] = entities[i].Save();
             }
-            return new UnprocessedEntry(items,EID,Type,Size);
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }

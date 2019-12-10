@@ -5,7 +5,7 @@ namespace Crash
     [EntryType(2,GameVersion.Crash2)]
     public sealed class ModelEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid,int size)
+        public override Entry Load(byte[][] items,int eid)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -81,7 +81,7 @@ namespace Crash
                 positioncount = 0;
                 positions = null;
             }
-            return new ModelEntry(items[0],structs,colors,textures,animatedtextures,positions,eid,size);
+            return new ModelEntry(items[0],structs,colors,textures,animatedtextures,positions,eid);
         }
     }
 }

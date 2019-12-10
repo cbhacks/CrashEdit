@@ -8,7 +8,7 @@ namespace Crash
     [EntryType(4,GameVersion.Crash1)]
     public sealed class OldSLSTEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid,int size)
+        public override Entry Load(byte[][] items,int eid)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -21,7 +21,7 @@ namespace Crash
                 deltas[i] = OldSLSTDelta.Load(items[i+1]);
             }
             OldSLSTSource sourceend = OldSLSTSource.Load(items[items.Length - 1]);
-            return new OldSLSTEntry(sourcestart,sourceend,deltas,eid,size);
+            return new OldSLSTEntry(sourcestart,sourceend,deltas,eid);
         }
     }
 }

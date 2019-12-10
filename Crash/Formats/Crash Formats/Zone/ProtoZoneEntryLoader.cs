@@ -3,7 +3,7 @@ namespace Crash
     [EntryType(7,GameVersion.Crash1Beta1995)]
     public sealed class ProtoZoneEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid,int size)
+        public override Entry Load(byte[][] items,int eid)
         {
             if (items.Length < 2)
             {
@@ -22,7 +22,7 @@ namespace Crash
             {
                 entities[i - 2 - camcount] = ProtoEntity.Load(items[i]);
             }
-            return new ProtoZoneEntry(header,layout,cameras,entities,camcount,eid,size);
+            return new ProtoZoneEntry(header,layout,cameras,entities,camcount,eid);
         }
     }
 }

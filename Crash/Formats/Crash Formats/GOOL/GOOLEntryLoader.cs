@@ -8,7 +8,7 @@ namespace Crash
     [EntryType(11,GameVersion.Crash1)]
     public sealed class GOOLEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid,int size)
+        public override Entry Load(byte[][] items,int eid)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -59,7 +59,7 @@ namespace Crash
                 statemap,
                 statedesc,
                 anims,
-                eid,size);
+                eid);
         }
     }
 }

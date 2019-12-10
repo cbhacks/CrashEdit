@@ -7,8 +7,8 @@ namespace Crash
         private List<OldCamera> cameras;
         private List<ProtoEntity> entities;
 
-        public ProtoZoneEntry(byte[] unknown1,byte[] unknown2,IEnumerable<OldCamera> cameras,IEnumerable<ProtoEntity> entities,int camcount,int eid,int size)
-            : base(eid,size)
+        public ProtoZoneEntry(byte[] unknown1,byte[] unknown2,IEnumerable<OldCamera> cameras,IEnumerable<ProtoEntity> entities,int camcount,int eid)
+            : base(eid)
         {
             Unknown1 = unknown1;
             Unknown2 = unknown2;
@@ -37,7 +37,7 @@ namespace Crash
             {
                 items[2 + CamCount + i] = entities[i].Save();
             }
-            return new UnprocessedEntry(items,EID,Type,Size);
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }

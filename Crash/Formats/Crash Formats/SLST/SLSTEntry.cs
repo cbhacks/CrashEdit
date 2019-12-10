@@ -7,7 +7,7 @@ namespace Crash
     {
         private List<SLSTDelta> deltas;
 
-        public SLSTEntry(SLSTSource start, SLSTSource end, IEnumerable<SLSTDelta> deltas, int eid, int size) : base(eid, size)
+        public SLSTEntry(SLSTSource start, SLSTSource end, IEnumerable<SLSTDelta> deltas, int eid) : base(eid)
         {
             if (deltas == null)
                 throw new ArgumentNullException("deltas");
@@ -30,7 +30,7 @@ namespace Crash
                 items[1+i] = deltas[i].Save();
             }
             items[1 + deltas.Count] = End.Save();
-            return new UnprocessedEntry(items,EID,Type,Size);
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }

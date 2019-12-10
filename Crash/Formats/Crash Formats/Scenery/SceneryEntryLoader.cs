@@ -5,7 +5,7 @@ namespace Crash
     [EntryType(3,GameVersion.Crash2)]
     public sealed class SceneryEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid,int size)
+        public override Entry Load(byte[][] items,int eid)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -95,7 +95,7 @@ namespace Crash
                 Array.Copy(items[6], i * 4, animatedtexturedata, 0, animatedtexturedata.Length);
                 animatedtextures[i] = ModelExtendedTexture.Load(animatedtexturedata);
             }
-            return new SceneryEntry(items[0],vertices,triangles,quads,textures,colors,animatedtextures,eid,size);
+            return new SceneryEntry(items[0],vertices,triangles,quads,textures,colors,animatedtextures,eid);
         }
     }
 }

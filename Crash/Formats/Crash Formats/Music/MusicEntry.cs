@@ -4,7 +4,7 @@ namespace Crash
 {
     public sealed class MusicEntry : Entry
     {
-        public MusicEntry(int vheid,int vb0eid,int vb1eid,int vb2eid,int vb3eid,int vb4eid,int vb5eid,int vb6eid,VH vh,SEP sep,int eid, int size) : base(eid, size)
+        public MusicEntry(int vheid,int vb0eid,int vb1eid,int vb2eid,int vb3eid,int vb4eid,int vb5eid,int vb6eid,VH vh,SEP sep,int eid) : base(eid)
         {
             SEP = sep ?? throw new ArgumentNullException("sep");
             VHEID = vheid;
@@ -56,7 +56,7 @@ namespace Crash
                 items[1] = new byte [0];
             }
             items[2] = SEP.Save();
-            return new UnprocessedEntry(items,EID,Type,Size);
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }

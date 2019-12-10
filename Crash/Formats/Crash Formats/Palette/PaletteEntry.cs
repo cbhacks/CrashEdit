@@ -4,7 +4,7 @@ namespace Crash
 {
     public sealed class PaletteEntry : MysteryMultiItemEntry
     {
-        public PaletteEntry(IEnumerable<byte[]> items,int eid,int size) : base(items,eid,size)
+        public PaletteEntry(IEnumerable<byte[]> items,int eid) : base(items,eid)
         {
         }
 

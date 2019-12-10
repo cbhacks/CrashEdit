@@ -64,7 +64,7 @@ namespace Crash
         private List<GOOLStateDescriptor> statedescriptors;
         //private List<GOOLAnimation> anims;
 
-        public GOOLEntry(GOOLVersion version,byte[] header,byte[] instructions,int[] data,short[] statemap,IEnumerable<GOOLStateDescriptor> statedescriptors,byte[] anims,int eid,int size) : base(eid,size)
+        public GOOLEntry(GOOLVersion version,byte[] header,byte[] instructions,int[] data,short[] statemap,IEnumerable<GOOLStateDescriptor> statedescriptors,byte[] anims,int eid) : base(eid)
         {
             Version = version;
             Header = header;
@@ -151,7 +151,7 @@ namespace Crash
                     }
                 }
             }
-            return new UnprocessedEntry(items,EID,Type,Size);
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }
