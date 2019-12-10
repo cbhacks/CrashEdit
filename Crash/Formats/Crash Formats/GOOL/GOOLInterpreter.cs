@@ -170,6 +170,8 @@ namespace Crash
             }
         }
 
+        public static int GetProcessOff(GameVersion ver) => GetProcessOff(GetVersion(ver));
+
         public static int GetProcessOff(GOOLVersion ver)
         {
             switch (ver)
