@@ -170,8 +170,12 @@ namespace CrashEdit
             this.cmdNextEntityA = new System.Windows.Forms.Button();
             this.cmdPrevRowDrawA = new System.Windows.Forms.Button();
             this.cmdNextRowDrawA = new System.Windows.Forms.Button();
-            this.fraLoadListCheck = new System.Windows.Forms.GroupBox();
+            this.fraLoadListPayload = new System.Windows.Forms.GroupBox();
             this.cmdLoadListVerify = new System.Windows.Forms.Button();
+            this.lblPayloadPosition = new System.Windows.Forms.Label();
+            this.numPayloadPosition = new System.Windows.Forms.NumericUpDown();
+            this.cmdPayload = new System.Windows.Forms.Button();
+            this.lblPayload = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -221,6 +225,8 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numMetavalueDrawA)).BeginInit();
             this.fraEntityA.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEntityA)).BeginInit();
+            this.fraLoadListPayload.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numPayloadPosition)).BeginInit();
             this.SuspendLayout();
             // 
             // chkType
@@ -1139,8 +1145,7 @@ namespace CrashEdit
             // 
             // tabLoadLists
             // 
-            this.tabLoadLists.Controls.Add(this.cmdLoadListVerify);
-            this.tabLoadLists.Controls.Add(this.fraLoadListCheck);
+            this.tabLoadLists.Controls.Add(this.fraLoadListPayload);
             this.tabLoadLists.Controls.Add(this.fraLoadListB);
             this.tabLoadLists.Controls.Add(this.lblEID2);
             this.tabLoadLists.Controls.Add(this.lblEID1);
@@ -1332,21 +1337,23 @@ namespace CrashEdit
             // lblEID2
             // 
             this.lblEID2.AutoSize = true;
+            this.lblEID2.ForeColor = System.Drawing.Color.Red;
             this.lblEID2.Location = new System.Drawing.Point(6, 331);
             this.lblEID2.Name = "lblEID2";
-            this.lblEID2.Size = new System.Drawing.Size(176, 13);
+            this.lblEID2.Size = new System.Drawing.Size(134, 13);
             this.lblEID2.TabIndex = 5;
-            this.lblEID2.Text = "ERROR: EID has invalid characters";
+            this.lblEID2.Text = "EID has invalid characters!";
             this.lblEID2.Visible = false;
             // 
             // lblEID1
             // 
             this.lblEID1.AutoSize = true;
+            this.lblEID1.ForeColor = System.Drawing.Color.Red;
             this.lblEID1.Location = new System.Drawing.Point(6, 309);
             this.lblEID1.Name = "lblEID1";
-            this.lblEID1.Size = new System.Drawing.Size(183, 13);
+            this.lblEID1.Size = new System.Drawing.Size(141, 13);
             this.lblEID1.TabIndex = 4;
-            this.lblEID1.Text = "ERROR: EID is not 5 characters long";
+            this.lblEID1.Text = "EID is not 5 characters long!";
             this.lblEID1.Visible = false;
             // 
             // fraLoadListA
@@ -1933,24 +1940,70 @@ namespace CrashEdit
             this.cmdNextRowDrawA.UseVisualStyleBackColor = true;
             this.cmdNextRowDrawA.Click += new System.EventHandler(this.cmdNextRowDrawA_Click);
             // 
-            // fraLoadListCheck
+            // fraLoadListPayload
             // 
-            this.fraLoadListCheck.Location = new System.Drawing.Point(195, 303);
-            this.fraLoadListCheck.Name = "fraLoadListCheck";
-            this.fraLoadListCheck.Size = new System.Drawing.Size(189, 107);
-            this.fraLoadListCheck.TabIndex = 22;
-            this.fraLoadListCheck.TabStop = false;
-            this.fraLoadListCheck.Text = "Verify Lists";
+            this.fraLoadListPayload.Controls.Add(this.lblPayload);
+            this.fraLoadListPayload.Controls.Add(this.cmdLoadListVerify);
+            this.fraLoadListPayload.Controls.Add(this.cmdPayload);
+            this.fraLoadListPayload.Controls.Add(this.lblPayloadPosition);
+            this.fraLoadListPayload.Controls.Add(this.numPayloadPosition);
+            this.fraLoadListPayload.Location = new System.Drawing.Point(153, 303);
+            this.fraLoadListPayload.Name = "fraLoadListPayload";
+            this.fraLoadListPayload.Size = new System.Drawing.Size(231, 109);
+            this.fraLoadListPayload.TabIndex = 22;
+            this.fraLoadListPayload.TabStop = false;
+            this.fraLoadListPayload.Text = "Verify Load Lists";
             // 
             // cmdLoadListVerify
             // 
-            this.cmdLoadListVerify.Location = new System.Drawing.Point(155, 25);
+            this.cmdLoadListVerify.Location = new System.Drawing.Point(6, 19);
             this.cmdLoadListVerify.Name = "cmdLoadListVerify";
-            this.cmdLoadListVerify.Size = new System.Drawing.Size(80, 23);
+            this.cmdLoadListVerify.Size = new System.Drawing.Size(105, 23);
             this.cmdLoadListVerify.TabIndex = 0;
-            this.cmdLoadListVerify.Text = "Verify Lists";
+            this.cmdLoadListVerify.Text = "Verify List Integrity";
             this.cmdLoadListVerify.UseVisualStyleBackColor = true;
             this.cmdLoadListVerify.Click += new System.EventHandler(this.cmdLoadListVerify_Click);
+            // 
+            // lblPayloadPosition
+            // 
+            this.lblPayloadPosition.AutoSize = true;
+            this.lblPayloadPosition.Location = new System.Drawing.Point(6, 50);
+            this.lblPayloadPosition.Name = "lblPayloadPosition";
+            this.lblPayloadPosition.Size = new System.Drawing.Size(44, 13);
+            this.lblPayloadPosition.TabIndex = 22;
+            this.lblPayloadPosition.Text = "Position";
+            // 
+            // numPayloadPosition
+            // 
+            this.numPayloadPosition.Location = new System.Drawing.Point(56, 48);
+            this.numPayloadPosition.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.numPayloadPosition.Name = "numPayloadPosition";
+            this.numPayloadPosition.Size = new System.Drawing.Size(68, 20);
+            this.numPayloadPosition.TabIndex = 21;
+            // 
+            // cmdPayload
+            // 
+            this.cmdPayload.Location = new System.Drawing.Point(130, 45);
+            this.cmdPayload.Name = "cmdPayload";
+            this.cmdPayload.Size = new System.Drawing.Size(93, 23);
+            this.cmdPayload.TabIndex = 23;
+            this.cmdPayload.Text = "Check Payload";
+            this.cmdPayload.UseVisualStyleBackColor = true;
+            this.cmdPayload.Click += new System.EventHandler(this.cmdPayload_Click);
+            // 
+            // lblPayload
+            // 
+            this.lblPayload.AutoSize = true;
+            this.lblPayload.Location = new System.Drawing.Point(6, 80);
+            this.lblPayload.Name = "lblPayload";
+            this.lblPayload.Size = new System.Drawing.Size(142, 13);
+            this.lblPayload.TabIndex = 24;
+            this.lblPayload.Text = "Payload is ?? normal chunks";
+            this.lblPayload.Visible = false;
             // 
             // EntityBox
             // 
@@ -2029,6 +2082,9 @@ namespace CrashEdit
             this.fraEntityA.ResumeLayout(false);
             this.fraEntityA.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEntityA)).EndInit();
+            this.fraLoadListPayload.ResumeLayout(false);
+            this.fraLoadListPayload.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numPayloadPosition)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2178,6 +2234,10 @@ namespace CrashEdit
         private System.Windows.Forms.Button cmdPrevRowDrawB;
         private System.Windows.Forms.Button cmdNextRowDrawB;
         private System.Windows.Forms.Button cmdLoadListVerify;
-        private System.Windows.Forms.GroupBox fraLoadListCheck;
+        private System.Windows.Forms.GroupBox fraLoadListPayload;
+        private System.Windows.Forms.Button cmdPayload;
+        private System.Windows.Forms.Label lblPayloadPosition;
+        private System.Windows.Forms.NumericUpDown numPayloadPosition;
+        private System.Windows.Forms.Label lblPayload;
     }
 }

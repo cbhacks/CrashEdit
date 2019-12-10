@@ -1,6 +1,7 @@
 using Crash;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -554,7 +555,7 @@ namespace CrashEdit
         {
             if (entity.LoadListA != null && entity.LoadListA.RowCount != 0)
             {
-                fraLoadListCheck.Enabled = cmdLoadListVerify.Enabled = entity.LoadListB != null;
+                fraLoadListPayload.Enabled = entity.LoadListB != null;
                 if (loadlistarowindex >= entity.LoadListA.RowCount)
                     loadlistarowindex = entity.LoadListA.RowCount-1;
                 lblMetavalueLoadA.Enabled = true;
@@ -589,7 +590,7 @@ namespace CrashEdit
             }
             else
             {
-                fraLoadListCheck.Enabled = cmdLoadListVerify.Enabled = false;
+                fraLoadListPayload.Enabled = false;
                 entity.LoadListA = null;
                 lblLoadListRowIndexA.Text = "-- / --";
                 lblEIDIndexA.Text = "-- / --";
@@ -698,7 +699,7 @@ namespace CrashEdit
         {
             if (entity.LoadListB != null && entity.LoadListB.RowCount != 0)
             {
-                fraLoadListCheck.Enabled = cmdLoadListVerify.Enabled = entity.LoadListA != null;
+                fraLoadListPayload.Enabled = entity.LoadListA != null;
                 if (loadlistbrowindex >= entity.LoadListB.RowCount)
                     loadlistbrowindex = entity.LoadListB.RowCount-1;
                 lblMetavalueLoadB.Enabled = true;
@@ -733,7 +734,7 @@ namespace CrashEdit
             }
             else
             {
-                fraLoadListCheck.Enabled = cmdLoadListVerify.Enabled = false;
+                fraLoadListPayload.Enabled = false;
                 entity.LoadListB = null;
                 lblLoadListRowIndexB.Text = "-- / --";
                 lblEIDIndexB.Text = "-- / --";
@@ -1474,6 +1475,86 @@ namespace CrashEdit
                     eidlist += Entry.EIDToEName(eid) + Environment.NewLine;
                 }
                 MessageBox.Show(this, $"Load lists are incorrect. The following entries are never deloaded:\n{eidlist}", "Load list verification exception.");
+            }
+        }
+
+        private void cmdPayload_Click(object sender, EventArgs e)
+        {
+            List<int> loadedentries = new List<int>();
+            for (int i = 0; i < numPayloadPosition.Value + 1; ++i)
+            {
+                foreach (var row in entity.LoadListA.Rows)
+                {
+                    if (row.MetaValue == i)
+                    {
+                        // load
+                        foreach (int eid in row.Values)
+                        {
+                            loadedentries.Add(eid);
+                        }
+                    }
+                }
+                foreach (var row in entity.LoadListB.Rows)
+                {
+                    if (row.MetaValue == i)
+                    {
+                        // unload
+                        foreach (int eid in row.Values)
+                        {
+                            if (!loadedentries.Remove(eid))
+                            {
+                                MessageBox.Show(this, $"Load lists are incorrect. {Entry.EIDToEName(eid)} was already deloaded by position {i}.", "Load list verification exception.");
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            EvList<Chunk> chunks = null;
+            HashSet<Entry> entries = null;
+            if (controller is EntityController c2c)
+            {
+                chunks = c2c.ZoneEntryController.EntryChunkController.NSFController.NSF.Chunks;
+                entries = new HashSet<Entry>();
+                foreach (int eid in loadedentries)
+                {
+                    entries.Add(c2c.ZoneEntryController.EntryChunkController.NSFController.NSF.FindEID<Entry>(eid));
+                }
+            }
+            else if (controller is NewEntityController c3c)
+            {
+                chunks = c3c.NewZoneEntryController.EntryChunkController.NSFController.NSF.Chunks;
+                entries = new HashSet<Entry>();
+                foreach (int eid in loadedentries)
+                {
+                    entries.Add(c3c.NewZoneEntryController.EntryChunkController.NSFController.NSF.FindEID<Entry>(eid));
+                }
+            }
+            HashSet<Chunk> loadedchunks = new HashSet<Chunk>();
+            foreach (Chunk chunk in chunks)
+            {
+                if (chunk is NormalChunk c)
+                {
+                    foreach (Entry entry in entries)
+                    {
+                        if (c.Entries.Contains(entry))
+                            loadedchunks.Add(chunk);
+                    }
+                }
+            }
+            lblPayload.Visible = true;
+            lblPayload.Text = $"Payload is {loadedchunks.Count} normal chunks";
+            if (loadedchunks.Count < 21)
+            {
+                lblPayload.ForeColor = Color.Green;
+            }
+            else if (loadedchunks.Count == 21)
+            {
+                lblPayload.ForeColor = Color.Yellow;
+            }
+            else
+            {
+                lblPayload.ForeColor = Color.Red;
             }
         }
     }
