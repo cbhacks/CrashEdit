@@ -99,6 +99,8 @@ namespace CrashEdit
             }
         }
 
+        protected override int CameraRangeMinimum => 800;
+
         protected override bool IsInputKey(Keys keyData)
         {
             switch (keyData)

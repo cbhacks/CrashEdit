@@ -105,6 +105,7 @@ namespace CrashEdit
 
         protected virtual float ScaleFactor => 1;
         protected virtual int CameraRangeMargin => 0;
+        protected virtual int CameraRangeMinimum => 5;
 
         protected abstract IEnumerable<IPosition> CorePositions
         {
@@ -293,7 +294,7 @@ namespace CrashEdit
             midx = (maxx + minx) / 2;
             midy = (maxy + miny) / 2;
             midz = (maxz + minz) / 2;
-            range = 5;
+            range = CameraRangeMinimum;
             range = Math.Max(range,maxx - minx);
             range = Math.Max(range,maxy - miny);
             range = Math.Max(range,maxz - minz);
