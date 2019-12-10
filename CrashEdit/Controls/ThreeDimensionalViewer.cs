@@ -254,6 +254,7 @@ namespace CrashEdit
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            lastimage = null;
             MakeCurrent();
             GL.Viewport(Location,Size);
             GL.ClearColor(0.05f,0.05f,0.05f,1);
