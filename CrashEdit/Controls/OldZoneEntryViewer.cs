@@ -90,9 +90,9 @@ namespace CrashEdit
                 {
                     foreach (OldCameraPosition position in camera.Positions)
                     {
-                        int x = position.X / 4 + xoffset;
-                        int y = position.Y / 4 + yoffset;
-                        int z = position.Z / 4 + zoffset;
+                        int x = position.X + xoffset;
+                        int y = position.Y + yoffset;
+                        int z = position.Z + zoffset;
                         yield return new Position(x,y,z);
                     }
                 }
