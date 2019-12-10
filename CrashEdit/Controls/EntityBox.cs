@@ -661,6 +661,7 @@ namespace CrashEdit
             try
             {
                 entity.LoadListA.Rows[loadlistarowindex].Values[loadlistaeidindex] = Entry.ENameToEID(txtEIDA.Text);
+                lblEID2.Visible = false;
             }
             catch (ArgumentException)
             {
@@ -712,7 +713,7 @@ namespace CrashEdit
                     txtEIDB.Enabled = true;
                     cmdPrevEIDB.Enabled = loadlistbeidindex > 0;
                     cmdNextEIDB.Enabled = loadlistbeidindex + 1 < entity.LoadListB.Rows[loadlistbrowindex].Values.Count;
-                    lblEIDIndexA.Text = $"{loadlistbeidindex+1} / {entity.LoadListB.Rows[loadlistbrowindex].Values.Count}";
+                    lblEIDIndexB.Text = $"{loadlistbeidindex+1} / {entity.LoadListB.Rows[loadlistbrowindex].Values.Count}";
                     txtEIDB.Text = Entry.EIDToEName(entity.LoadListB.Rows[loadlistbrowindex].Values[loadlistbeidindex]);
                 }
                 else
@@ -802,6 +803,7 @@ namespace CrashEdit
             try
             {
                 entity.LoadListB.Rows[loadlistbrowindex].Values[loadlistbeidindex] = Entry.ENameToEID(txtEIDB.Text);
+                lblEID2.Visible = false;
             }
             catch (ArgumentException)
             {
