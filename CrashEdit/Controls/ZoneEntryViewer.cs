@@ -176,6 +176,8 @@ namespace CrashEdit
                 RenderLinkedEntry(linkedentry,ref octreedisplaylists[i + 1]);
             }
             GL.Disable(EnableCap.PolygonStipple);
+            if (deletelists)
+                deletelists = false;
         }
 
         private void RenderEntry(ZoneEntry entry,ref int octreedisplaylist)
@@ -192,7 +194,6 @@ namespace CrashEdit
             {
                 GL.DeleteLists(octreedisplaylist,1);
                 octreedisplaylist = -1;
-                deletelists = false;
             }
             if (renderoctree)
             {
@@ -262,12 +263,11 @@ namespace CrashEdit
             GL.Translate(xoffset,yoffset,zoffset);
             if (allentries)
             {
-                GL.PolygonStipple(stippleb);
+                GL.Disable(EnableCap.PolygonStipple);
                 if (deletelists)
                 {
                     GL.DeleteLists(octreedisplaylist,1);
                     octreedisplaylist = -1;
-                    deletelists = false;
                 }
                 if (renderoctree)
                 {
@@ -291,6 +291,7 @@ namespace CrashEdit
                     }
                     GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
                 }
+                GL.Enable(EnableCap.PolygonStipple);
             }
             GL.Scale(4,4,4);
             foreach (Entity entity in entry.Entities)
@@ -449,7 +450,7 @@ namespace CrashEdit
                 EntityPosition position = entity.Positions[0];
                 GL.PushMatrix();
                 if (camera)
-                    GL.Scale(0.25,0.25,0.25);
+                    GL.Scale(0.25F,0.25F,0.25F);
                 GL.Translate(position.X,position.Y,position.Z);
                 if (camera)
                     GL.Scale(4,4,4);
@@ -486,7 +487,7 @@ namespace CrashEdit
                     GL.Color3(Color.Blue);
                 GL.PushMatrix();
                 if (camera)
-                    GL.Scale(0.25,0.25,0.25);
+                    GL.Scale(0.25F,0.25F,0.25F);
                 GL.Begin(PrimitiveType.LineStrip);
                 foreach (EntityPosition position in entity.Positions)
                 {
