@@ -84,7 +84,7 @@ namespace CrashEdit
         [ExternalTexture(6,0)]
         private static Bitmap springboxtexture = null;
 
-        [Resource("ContinueTexture")]
+        [Resource("ContinueBoxTexture")]
         [ExternalTexture(7,0)]
         private static Bitmap continueboxtexture = null;
 
