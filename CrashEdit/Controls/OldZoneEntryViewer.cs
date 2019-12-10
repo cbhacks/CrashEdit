@@ -80,9 +80,9 @@ namespace CrashEdit
                 {
                     foreach (EntityPosition position in entity.Positions)
                     {
-                        int x = position.X * 4 + xoffset;
-                        int y = position.Y * 4 + yoffset;
-                        int z = position.Z * 4 + zoffset;
+                        int x = (entity.Type != 34 ? position.X : position.X + 50) + xoffset;
+                        int y = (entity.Type != 34 ? position.Y : position.Y + 50) + yoffset;
+                        int z = (entity.Type != 34 ? position.Z : position.Z + 50) + zoffset;
                         yield return new Position(x,y,z);
                     }
                 }
@@ -90,9 +90,9 @@ namespace CrashEdit
                 {
                     foreach (OldCameraPosition position in camera.Positions)
                     {
-                        int x = position.X + xoffset;
-                        int y = position.Y + yoffset;
-                        int z = position.Z + zoffset;
+                        int x = position.X / 4 + xoffset;
+                        int y = position.Y / 4 + yoffset;
+                        int z = position.Z / 4 + zoffset;
                         yield return new Position(x,y,z);
                     }
                 }
@@ -540,7 +540,7 @@ namespace CrashEdit
 
         private void RenderBox(int subtype)
         {
-            GL.Translate(0,50,0);
+            GL.Translate(50,50,50);
             GL.Enable(EnableCap.Texture2D);
             GL.Color3(Color.White);
             LoadBoxSideTexture(subtype);
