@@ -52,6 +52,7 @@ namespace CrashEdit
         private void Menu_Delete_Entry()
         {
             EntryChunkController.EntryChunk.Entries.Remove(Entry);
+            EntryChunkController.Editor.Invalidate();
             Dispose();
         }
 
