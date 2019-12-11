@@ -339,121 +339,15 @@ namespace CrashEdit
                 {
                     NSF nsf = nsfc.NSF;
                     byte[] data = File.ReadAllBytes(filename);
-                    NSD nsd = NSD.Load(data);
-                    nsd.ChunkCount = nsf.Chunks.Count;
-                    Dictionary<int, int> newindex = new Dictionary<int, int>();
-                    List<int> eids = new List<int>();
-                    for (int i = 0; i < nsf.Chunks.Count; i++)
+                    if (nsfc.GameVersion != GameVersion.Crash1)
                     {
-                        if (nsf.Chunks[i] is IEntry ientry)
-                        {
-                            newindex.Add(ientry.EID, i * 2 + 1);
-                        }
-                        if (nsf.Chunks[i] is EntryChunk)
-                        {
-                            foreach (Entry entry in ((EntryChunk)nsf.Chunks[i]).Entries)
-                            {
-                                newindex.Add(entry.EID, i * 2 + 1);
-                            }
-                        }
+                        NSD nsd = NSD.Load(data);
+                        PatchNSD(nsd,nsf,filename);
                     }
-                    foreach (NSDLink link in nsd.Index)
+                    else
                     {
-                        eids.Add(link.EntryID);
-                        if (newindex.ContainsKey(link.EntryID))
-                        {
-                            link.ChunkID = newindex[link.EntryID];
-                            newindex.Remove(link.EntryID);
-                        }
-                    }
-                    if (newindex.Count > 0)
-                    {
-                        List<string> neweids = new List<string>();
-                        foreach (KeyValuePair<int, int> kvp in newindex)
-                        {
-                            neweids.Add(Entry.EIDToEName(kvp.Key));
-                        }
-                        string question = "The NSD is missing some entry ID's:\n\n";
-                        foreach (string eid in neweids)
-                        {
-                            question += eid + "\n";
-                        }
-                        question += "\nDo you want to add these to the end of the NSD's entry index?";
-                        if (MessageBox.Show(question, "Patch NSD - New EID's", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                        {
-                            foreach (KeyValuePair<int, int> kvp in newindex)
-                            {
-                                nsd.Index.Add(new NSDLink(kvp.Value, kvp.Key));
-                                nsd.EntryCount++;
-                            }
-                        }
-                    }
-                    if (MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    {
-                        File.WriteAllBytes(filename, nsd.Save());
-                    }
-                    if (MessageBox.Show("Do you want to sort all Crash 2 and Crash 3 loadlists according to the NSD?", "Loadlist autosorter", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    {
-                        foreach (Chunk chunk in nsf.Chunks)
-                        {
-                            if (!(chunk is EntryChunk))
-                                continue;
-                            foreach (Entry entry in ((EntryChunk)chunk).Entries)
-                            {
-                                if (entry is ZoneEntry)
-                                {
-                                    foreach (Entity ent in ((ZoneEntry)entry).Entities)
-                                    {
-                                        if (ent.LoadListA != null)
-                                        {
-                                            foreach (EntityPropertyRow<int> row in ent.LoadListA.Rows)
-                                            {
-                                                List<int> values = (List<int>)row.Values;
-                                                values.Sort(delegate (int a,int b) {
-                                                    return eids.IndexOf(a) - eids.IndexOf(b);
-                                                });
-                                            }
-                                        }
-                                        if (ent.LoadListB != null)
-                                        {
-                                            foreach (EntityPropertyRow<int> row in ent.LoadListB.Rows)
-                                            {
-                                                List<int> values = (List<int>)row.Values;
-                                                values.Sort(delegate (int a,int b) {
-                                                    return eids.IndexOf(a) - eids.IndexOf(b);
-                                                });
-                                            }
-                                        }
-                                    }
-                                }
-                                else if (entry is NewZoneEntry)
-                                {
-                                    foreach (Entity ent in ((NewZoneEntry)entry).Entities)
-                                    {
-                                        if (ent.LoadListA != null)
-                                        {
-                                            foreach (EntityPropertyRow<int> row in ent.LoadListA.Rows)
-                                            {
-                                                List<int> values = (List<int>)row.Values;
-                                                values.Sort(delegate (int a,int b) {
-                                                    return eids.IndexOf(a) - eids.IndexOf(b);
-                                                });
-                                            }
-                                        }
-                                        if (ent.LoadListB != null)
-                                        {
-                                            foreach (EntityPropertyRow<int> row in ent.LoadListB.Rows)
-                                            {
-                                                List<int> values = (List<int>)row.Values;
-                                                values.Sort(delegate (int a,int b) {
-                                                    return eids.IndexOf(a) - eids.IndexOf(b);
-                                                });
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        OldNSD nsd = OldNSD.Load(data);
+                        PatchNSD(nsd,nsf,filename);
                     }
                 }
                 catch (LoadAbortedException)
@@ -462,6 +356,197 @@ namespace CrashEdit
             }
             else
                 throw new NotImplementedException("beta crash 1 nsd patch");
+        }
+
+        public void PatchNSD(NSD nsd, NSF nsf, string path)
+        {
+            nsd.ChunkCount = nsf.Chunks.Count;
+            Dictionary<int, int> newindex = new Dictionary<int, int>();
+            List<int> eids = new List<int>();
+            for (int i = 0; i < nsf.Chunks.Count; i++)
+            {
+                if (nsf.Chunks[i] is IEntry ientry)
+                {
+                    newindex.Add(ientry.EID, i * 2 + 1);
+                }
+                if (nsf.Chunks[i] is EntryChunk)
+                {
+                    foreach (Entry entry in ((EntryChunk)nsf.Chunks[i]).Entries)
+                    {
+                        newindex.Add(entry.EID, i * 2 + 1);
+                    }
+                }
+            }
+            foreach (NSDLink link in nsd.Index)
+            {
+                eids.Add(link.EntryID);
+                if (newindex.ContainsKey(link.EntryID))
+                {
+                    link.ChunkID = newindex[link.EntryID];
+                    newindex.Remove(link.EntryID);
+                }
+            }
+            if (newindex.Count > 0)
+            {
+                List<string> neweids = new List<string>();
+                foreach (KeyValuePair<int, int> kvp in newindex)
+                {
+                    neweids.Add(Entry.EIDToEName(kvp.Key));
+                }
+                string question = "The NSD is missing some entry ID's:\n\n";
+                foreach (string eid in neweids)
+                {
+                    question += eid + "\n";
+                }
+                question += "\nDo you want to add these to the end of the NSD's entry index?";
+                if (MessageBox.Show(question, "Patch NSD - New EID's", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    foreach (KeyValuePair<int, int> kvp in newindex)
+                    {
+                        nsd.Index.Add(new NSDLink(kvp.Value, kvp.Key));
+                        nsd.EntryCount++;
+                    }
+                }
+            }
+            if (MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                File.WriteAllBytes(path, nsd.Save());
+            }
+            if (MessageBox.Show("Do you want to sort all loadlists according to the NSD?", "Loadlist autosorter", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                foreach (Chunk chunk in nsf.Chunks)
+                {
+                    if (!(chunk is EntryChunk))
+                        continue;
+                    foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                    {
+                        if (entry is ZoneEntry)
+                        {
+                            foreach (Entity ent in ((ZoneEntry)entry).Entities)
+                            {
+                                if (ent.LoadListA != null)
+                                {
+                                    foreach (EntityPropertyRow<int> row in ent.LoadListA.Rows)
+                                    {
+                                        List<int> values = (List<int>)row.Values;
+                                        values.Sort(delegate (int a, int b) {
+                                            return eids.IndexOf(a) - eids.IndexOf(b);
+                                        });
+                                    }
+                                }
+                                if (ent.LoadListB != null)
+                                {
+                                    foreach (EntityPropertyRow<int> row in ent.LoadListB.Rows)
+                                    {
+                                        List<int> values = (List<int>)row.Values;
+                                        values.Sort(delegate (int a, int b) {
+                                            return eids.IndexOf(a) - eids.IndexOf(b);
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                        else if (entry is NewZoneEntry)
+                        {
+                            foreach (Entity ent in ((NewZoneEntry)entry).Entities)
+                            {
+                                if (ent.LoadListA != null)
+                                {
+                                    foreach (EntityPropertyRow<int> row in ent.LoadListA.Rows)
+                                    {
+                                        List<int> values = (List<int>)row.Values;
+                                        values.Sort(delegate (int a, int b) {
+                                            return eids.IndexOf(a) - eids.IndexOf(b);
+                                        });
+                                    }
+                                }
+                                if (ent.LoadListB != null)
+                                {
+                                    foreach (EntityPropertyRow<int> row in ent.LoadListB.Rows)
+                                    {
+                                        List<int> values = (List<int>)row.Values;
+                                        values.Sort(delegate (int a, int b) {
+                                            return eids.IndexOf(a) - eids.IndexOf(b);
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void PatchNSD(OldNSD nsd, NSF nsf, string path)
+        {
+            nsd.ChunkCount = nsf.Chunks.Count;
+            Dictionary<int, int> newindex = new Dictionary<int, int>();
+            List<int> eids = new List<int>();
+            for (int i = 0; i < nsf.Chunks.Count; i++)
+            {
+                if (nsf.Chunks[i] is IEntry ientry)
+                {
+                    newindex.Add(ientry.EID, i * 2 + 1);
+                }
+                if (nsf.Chunks[i] is EntryChunk)
+                {
+                    foreach (Entry entry in ((EntryChunk)nsf.Chunks[i]).Entries)
+                    {
+                        newindex.Add(entry.EID, i * 2 + 1);
+                    }
+                }
+            }
+            HashSet<NSDLink> unused = new HashSet<NSDLink>();
+            foreach (NSDLink link in nsd.Index)
+            {
+                eids.Add(link.EntryID);
+                if (newindex.ContainsKey(link.EntryID))
+                {
+                    link.ChunkID = newindex[link.EntryID];
+                    newindex.Remove(link.EntryID);
+                }
+                else // NSD contains nonexistant entry
+                {
+                    MessageBox.Show($"unused eid found: {Entry.EIDToEName(link.EntryID)}");
+                    unused.Add(link);
+                }
+            }
+            if (unused.Count > 0)
+            {
+                foreach (NSDLink link in unused)
+                {
+                    nsd.Index.Remove(link);
+                }
+                for (int i = 0;i < 256;++i)
+                {
+                    nsd.FirstEntries[i] = Math.Min(nsd.FirstEntries[i],nsd.Index.Count-1);
+                }
+            }
+            if (newindex.Count > 0)
+            {
+                List<string> neweids = new List<string>();
+                foreach (KeyValuePair<int, int> kvp in newindex)
+                {
+                    neweids.Add(Entry.EIDToEName(kvp.Key));
+                }
+                string question = "The NSD is missing some entry ID's:\n\n";
+                foreach (string eid in neweids)
+                {
+                    question += eid + "\n";
+                }
+                question += "\nDo you want to add these to the end of the NSD's entry index?";
+                if (MessageBox.Show(question, "Patch NSD - New EID's", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    foreach (KeyValuePair<int, int> kvp in newindex)
+                    {
+                        nsd.Index.Add(new NSDLink(kvp.Value, kvp.Key));
+                    }
+                }
+            }
+            if (MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                File.WriteAllBytes(path, nsd.Save());
+            }
         }
 
         public void CloseNSF()
