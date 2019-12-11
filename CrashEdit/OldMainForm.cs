@@ -507,7 +507,6 @@ namespace CrashEdit
                 }
                 else // NSD contains nonexistant entry
                 {
-                    MessageBox.Show($"unused eid found: {Entry.EIDToEName(link.EntryID)}");
                     unused.Add(link);
                 }
             }
