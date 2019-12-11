@@ -1,4 +1,5 @@
 using Crash;
+using System.Windows.Forms;
 
 namespace CrashEdit
 {
@@ -10,6 +11,7 @@ namespace CrashEdit
             Entry = entry;
             AddMenu("Export Entry",Menu_Export_Entry);
             AddMenu("Delete Entry",Menu_Delete_Entry);
+            AddMenu("Rename Entry",Menu_Rename_Entry);
             if (!(this is UnprocessedEntryController))
             {
                 AddMenu("Unprocess Entry",Menu_Unprocess_Entry);
@@ -71,6 +73,21 @@ namespace CrashEdit
             }
             Dispose();
             trv.EndUpdate();
+        }
+
+        private void Menu_Rename_Entry()
+        {
+            using (NewEntryForm newentrywindow = new NewEntryForm(EntryChunkController.NSFController))
+            {
+                newentrywindow.Text = "Rename Entry";
+                newentrywindow.SetRenameMode(Entry.EName);
+                if (newentrywindow.ShowDialog(Node.TreeView.TopLevelControl) == DialogResult.OK)
+                {
+                    Entry.EID = newentrywindow.EID;
+                    InvalidateNode();
+                    EntryChunkController.Editor.Invalidate();
+                }
+            }
         }
     }
 }

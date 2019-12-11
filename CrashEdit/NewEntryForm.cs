@@ -53,6 +53,12 @@ namespace CrashEdit
         public int UnprocessedType => (int)numType.Value;
         public int EID => Entry.ENameToEID(txtEID.Text);
 
+        public void SetRenameMode(string ename)
+        {
+            txtEID.Text = ename;
+            fraType.Enabled = false;
+        }
+
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             numType.Enabled = (string)dpdType.SelectedItem == EntryTypeUnprocessed;

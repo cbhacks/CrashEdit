@@ -130,7 +130,7 @@ namespace Crash
         }
 
         public abstract int Type { get; }
-        public int EID { get; }
+        public int EID { get; set; }
         public string EName => EIDToEName(EID);
 
         public virtual bool IgnoreResaveErrors => false;
