@@ -327,16 +327,17 @@ namespace CrashEdit
                     return;
                 }
                 NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
-                PatchNSD(filename,nsfbox.NSF);
+                PatchNSD(filename,nsfbox.NSFController);
             }
         }
 
-        public void PatchNSD(string filename,NSF nsf)
+        public void PatchNSD(string filename,NSFController nsfc)
         {
-            if (dlgGameVersion.SelectedVersion == GameVersion.Crash1 || dlgGameVersion.SelectedVersion == GameVersion.Crash2 || dlgGameVersion.SelectedVersion == GameVersion.Crash3)
+            if (nsfc.GameVersion == GameVersion.Crash1 || nsfc.GameVersion == GameVersion.Crash2 || nsfc.GameVersion == GameVersion.Crash3)
             {
                 try
                 {
+                    NSF nsf = nsfc.NSF;
                     byte[] data = File.ReadAllBytes(filename);
                     NSD nsd = NSD.Load(data);
                     nsd.ChunkCount = nsf.Chunks.Count;

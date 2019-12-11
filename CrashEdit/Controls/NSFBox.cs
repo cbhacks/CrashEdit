@@ -37,8 +37,6 @@ namespace CrashEdit
             }
         }
 
-        private NSFController controller;
-
         private List<TreeNode> searchresults;
 
         private SplitContainer pnSplit;
@@ -47,21 +45,21 @@ namespace CrashEdit
         public NSFBox(NSF nsf, GameVersion gameversion)
         {
             NSF = nsf;
-            controller = new NSFController(nsf, gameversion);
+            NSFController = new NSFController(nsf, gameversion);
 
             searchresults = new List<TreeNode>();
 
-            controller.Node.Expand();
+            NSFController.Node.Expand();
 
             trvMain = new TreeView
             {
                 Dock = DockStyle.Fill,
                 ImageList = imglist,
                 HideSelection = false,
-                SelectedNode = controller.Node,
+                SelectedNode = NSFController.Node,
                 AllowDrop = true
             };
-            trvMain.Nodes.Add(controller.Node);
+            trvMain.Nodes.Add(NSFController.Node);
             trvMain.AfterSelect += new TreeViewEventHandler(trvMain_AfterSelect);
             trvMain.ItemDrag += new ItemDragEventHandler(trvMain_ItemDrag);
             trvMain.DragOver += new DragEventHandler(trvMain_DragOver);
@@ -74,6 +72,7 @@ namespace CrashEdit
         }
 
         public NSF NSF { get; }
+        public NSFController NSFController { get; }
 
         private void trvMain_AfterSelect(object sender,TreeViewEventArgs e)
         {
@@ -197,7 +196,7 @@ namespace CrashEdit
 
         public void GotoEID(int eid)
         {
-            TreeNode node = FindEID(eid,controller.Node);
+            TreeNode node = FindEID(eid,NSFController.Node);
             if (node != null)
             {
                 node.EnsureVisible();
@@ -233,7 +232,7 @@ namespace CrashEdit
         {
             if (disposing)
             {
-                controller.Dispose();
+                NSFController.Dispose();
             }
             base.Dispose(disposing);
         }
