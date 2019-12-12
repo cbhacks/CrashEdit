@@ -126,7 +126,6 @@ namespace CrashEdit
                 cmdNextPosition.Enabled = false;
                 cmdInsertPosition.Enabled = false;
                 cmdRemovePosition.Enabled = false;
-                cmdNextAndRemove.Enabled = false;
                 lblX.Enabled = lblY.Enabled = lblZ.Enabled = numX.Enabled = numY.Enabled = numZ.Enabled = false;
             }
             else
@@ -136,7 +135,6 @@ namespace CrashEdit
                 cmdNextPosition.Enabled = positionindex < entity.Positions.Count-1;
                 cmdInsertPosition.Enabled = true;
                 cmdRemovePosition.Enabled = true;
-                cmdNextAndRemove.Enabled = positionindex < entity.Positions.Count-1;
                 lblX.Enabled = lblY.Enabled = lblZ.Enabled = numX.Enabled = numY.Enabled = numZ.Enabled = true;
                 numX.Value = entity.Positions[positionindex].X;
                 numY.Value = entity.Positions[positionindex].Y;
@@ -232,26 +230,31 @@ namespace CrashEdit
             if (settingindex >= entity.Settings.Count)
             {
                 lblSettingIndex.Text = "-- / --";
-                cmdPreviousSetting.Enabled = false;
-                cmdNextSetting.Enabled = false;
-                cmdRemoveSetting.Enabled = false;
-                lblSettingA.Enabled = false;
-                lblSettingB.Enabled = false;
-                numSettingA.Enabled = false;
-                numSettingB.Enabled = false;
+                cmdPreviousSetting.Enabled =
+                cmdNextSetting.Enabled =
+                cmdRemoveSetting.Enabled =
+                lblSettingA.Enabled =
+                lblSettingB.Enabled =
+                lblSettingC.Enabled =
+                numSettingA.Enabled =
+                numSettingB.Enabled =
+                numSettingC.Enabled = false;
             }
             else
             {
                 lblSettingIndex.Text = $"{settingindex+1} / {entity.Settings.Count}";
                 cmdPreviousSetting.Enabled = settingindex > 0;
-                cmdNextSetting.Enabled = settingindex < entity.Settings.Count - 1;
-                cmdRemoveSetting.Enabled = true;
-                lblSettingA.Enabled = true;
-                lblSettingB.Enabled = true;
-                numSettingA.Enabled = true;
-                numSettingB.Enabled = true;
+                cmdNextSetting.Enabled = settingindex < entity.Settings.Count-1;
+                cmdRemoveSetting.Enabled =
+                lblSettingA.Enabled =
+                lblSettingB.Enabled =
+                lblSettingC.Enabled =
+                numSettingA.Enabled =
+                numSettingB.Enabled =
+                numSettingC.Enabled = true;
                 numSettingA.Value = entity.Settings[settingindex].ValueA;
                 numSettingB.Value = entity.Settings[settingindex].ValueB;
+                numSettingC.Value = entity.Settings[settingindex].ValueA | (entity.Settings[settingindex].ValueB << 8);
             }
             settingdirty = false;
         }
@@ -286,6 +289,9 @@ namespace CrashEdit
             {
                 EntitySetting s = entity.Settings[settingindex];
                 entity.Settings[settingindex] = new EntitySetting((byte)numSettingA.Value,s.ValueB);
+                settingdirty = true;
+                numSettingC.Value = (int)(entity.Settings[settingindex].ValueA | (entity.Settings[settingindex].ValueB << 8));
+                settingdirty = false;
             }
         }
 
@@ -295,6 +301,23 @@ namespace CrashEdit
             {
                 EntitySetting s = entity.Settings[settingindex];
                 entity.Settings[settingindex] = new EntitySetting(s.ValueA,(int)numSettingB.Value);
+                settingdirty = true;
+                numSettingC.Value = (int)(entity.Settings[settingindex].ValueA | (entity.Settings[settingindex].ValueB << 8));
+                settingdirty = false;
+            }
+        }
+        
+        private void numSettingC_ValueChanged(object sender, EventArgs e)
+        {
+            if (!settingdirty)
+            {
+                EntitySetting s = entity.Settings[settingindex];
+                int c = (int)numSettingC.Value;
+                entity.Settings[settingindex] = new EntitySetting((byte)c, c >> 8);
+                settingdirty = true;
+                numSettingA.Value = entity.Settings[settingindex].ValueA;
+                numSettingB.Value = entity.Settings[settingindex].ValueB;
+                settingdirty = false;
             }
         }
 
@@ -539,16 +562,6 @@ namespace CrashEdit
             {
                 entity.Victims[victimindex] = new EntityVictim((short)numVictimID.Value);
             }
-        }
-
-        private void cmdNextAndRemove_Click(object sender, EventArgs e)
-        {
-            ++positionindex;
-            entity.Positions.RemoveAt(positionindex);
-            UpdatePosition();
-            if (entity.Positions.Count == 0)
-                InvalidateNodes();
-
         }
 
         private void UpdateLoadListA()
@@ -1556,6 +1569,13 @@ namespace CrashEdit
             {
                 lblPayload.ForeColor = Color.Red;
             }
+        }
+
+        private void chkSettingHex_CheckedChanged(object sender, EventArgs e)
+        {
+            numSettingC.Hexadecimal = chkSettingHex.Checked;
+            numSettingC.Minimum = int.MinValue;
+            numSettingC.Maximum = int.MaxValue;
         }
     }
 }

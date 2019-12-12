@@ -35,7 +35,6 @@ namespace CrashEdit
             this.chkSubtype = new System.Windows.Forms.CheckBox();
             this.numSubtype = new System.Windows.Forms.NumericUpDown();
             this.fraPosition = new System.Windows.Forms.GroupBox();
-            this.cmdNextAndRemove = new System.Windows.Forms.Button();
             this.lblPositionIndex = new System.Windows.Forms.Label();
             this.cmdNextPosition = new System.Windows.Forms.Button();
             this.cmdPreviousPosition = new System.Windows.Forms.Button();
@@ -101,6 +100,12 @@ namespace CrashEdit
             this.txtSLST = new System.Windows.Forms.TextBox();
             this.chkSLST = new System.Windows.Forms.CheckBox();
             this.tabLoadLists = new System.Windows.Forms.TabPage();
+            this.fraLoadListPayload = new System.Windows.Forms.GroupBox();
+            this.lblPayload = new System.Windows.Forms.Label();
+            this.cmdLoadListVerify = new System.Windows.Forms.Button();
+            this.cmdPayload = new System.Windows.Forms.Button();
+            this.lblPayloadPosition = new System.Windows.Forms.Label();
+            this.numPayloadPosition = new System.Windows.Forms.NumericUpDown();
             this.fraLoadListB = new System.Windows.Forms.GroupBox();
             this.lblMetavalueLoadB = new System.Windows.Forms.Label();
             this.cmdRemoveRowB = new System.Windows.Forms.Button();
@@ -170,12 +175,9 @@ namespace CrashEdit
             this.cmdNextEntityA = new System.Windows.Forms.Button();
             this.cmdPrevRowDrawA = new System.Windows.Forms.Button();
             this.cmdNextRowDrawA = new System.Windows.Forms.Button();
-            this.fraLoadListPayload = new System.Windows.Forms.GroupBox();
-            this.cmdLoadListVerify = new System.Windows.Forms.Button();
-            this.lblPayloadPosition = new System.Windows.Forms.Label();
-            this.numPayloadPosition = new System.Windows.Forms.NumericUpDown();
-            this.cmdPayload = new System.Windows.Forms.Button();
-            this.lblPayload = new System.Windows.Forms.Label();
+            this.lblSettingC = new System.Windows.Forms.Label();
+            this.numSettingC = new System.Windows.Forms.NumericUpDown();
+            this.chkSettingHex = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -210,6 +212,8 @@ namespace CrashEdit
             this.tabCamera.SuspendLayout();
             this.fraSLST.SuspendLayout();
             this.tabLoadLists.SuspendLayout();
+            this.fraLoadListPayload.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numPayloadPosition)).BeginInit();
             this.fraLoadListB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numMetavalueLoadB)).BeginInit();
             this.fraEIDB.SuspendLayout();
@@ -225,8 +229,7 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numMetavalueDrawA)).BeginInit();
             this.fraEntityA.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEntityA)).BeginInit();
-            this.fraLoadListPayload.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numPayloadPosition)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numSettingC)).BeginInit();
             this.SuspendLayout();
             // 
             // chkType
@@ -306,7 +309,6 @@ namespace CrashEdit
             // 
             // fraPosition
             // 
-            this.fraPosition.Controls.Add(this.cmdNextAndRemove);
             this.fraPosition.Controls.Add(this.lblPositionIndex);
             this.fraPosition.Controls.Add(this.cmdNextPosition);
             this.fraPosition.Controls.Add(this.cmdPreviousPosition);
@@ -321,21 +323,10 @@ namespace CrashEdit
             this.fraPosition.Controls.Add(this.numX);
             this.fraPosition.Location = new System.Drawing.Point(3, 79);
             this.fraPosition.Name = "fraPosition";
-            this.fraPosition.Size = new System.Drawing.Size(200, 162);
+            this.fraPosition.Size = new System.Drawing.Size(200, 133);
             this.fraPosition.TabIndex = 1;
             this.fraPosition.TabStop = false;
             this.fraPosition.Text = "Position(s)";
-            // 
-            // cmdNextAndRemove
-            // 
-            this.cmdNextAndRemove.Location = new System.Drawing.Point(9, 130);
-            this.cmdNextAndRemove.Name = "cmdNextAndRemove";
-            this.cmdNextAndRemove.Size = new System.Drawing.Size(103, 23);
-            this.cmdNextAndRemove.TabIndex = 8;
-            this.cmdNextAndRemove.Text = "Next and Remove";
-            this.cmdNextAndRemove.UseVisualStyleBackColor = true;
-            this.cmdNextAndRemove.Visible = false;
-            this.cmdNextAndRemove.Click += new System.EventHandler(this.cmdNextAndRemove_Click);
             // 
             // lblPositionIndex
             // 
@@ -576,6 +567,9 @@ namespace CrashEdit
             // 
             // fraSettings
             // 
+            this.fraSettings.Controls.Add(this.chkSettingHex);
+            this.fraSettings.Controls.Add(this.numSettingC);
+            this.fraSettings.Controls.Add(this.lblSettingC);
             this.fraSettings.Controls.Add(this.lblSettingIndex);
             this.fraSettings.Controls.Add(this.cmdNextSetting);
             this.fraSettings.Controls.Add(this.cmdPreviousSetting);
@@ -585,9 +579,9 @@ namespace CrashEdit
             this.fraSettings.Controls.Add(this.lblSettingA);
             this.fraSettings.Controls.Add(this.numSettingB);
             this.fraSettings.Controls.Add(this.numSettingA);
-            this.fraSettings.Location = new System.Drawing.Point(3, 245);
+            this.fraSettings.Location = new System.Drawing.Point(3, 218);
             this.fraSettings.Name = "fraSettings";
-            this.fraSettings.Size = new System.Drawing.Size(200, 106);
+            this.fraSettings.Size = new System.Drawing.Size(200, 130);
             this.fraSettings.TabIndex = 2;
             this.fraSettings.TabStop = false;
             this.fraSettings.Text = "General Settings";
@@ -1158,6 +1152,71 @@ namespace CrashEdit
             this.tabLoadLists.Text = "Load Lists";
             this.tabLoadLists.UseVisualStyleBackColor = true;
             this.tabLoadLists.Enter += new System.EventHandler(this.tabLoadLists_Enter);
+            // 
+            // fraLoadListPayload
+            // 
+            this.fraLoadListPayload.Controls.Add(this.lblPayload);
+            this.fraLoadListPayload.Controls.Add(this.cmdLoadListVerify);
+            this.fraLoadListPayload.Controls.Add(this.cmdPayload);
+            this.fraLoadListPayload.Controls.Add(this.lblPayloadPosition);
+            this.fraLoadListPayload.Controls.Add(this.numPayloadPosition);
+            this.fraLoadListPayload.Location = new System.Drawing.Point(153, 303);
+            this.fraLoadListPayload.Name = "fraLoadListPayload";
+            this.fraLoadListPayload.Size = new System.Drawing.Size(231, 109);
+            this.fraLoadListPayload.TabIndex = 22;
+            this.fraLoadListPayload.TabStop = false;
+            this.fraLoadListPayload.Text = "Verify Load Lists";
+            // 
+            // lblPayload
+            // 
+            this.lblPayload.AutoSize = true;
+            this.lblPayload.Location = new System.Drawing.Point(6, 80);
+            this.lblPayload.Name = "lblPayload";
+            this.lblPayload.Size = new System.Drawing.Size(142, 13);
+            this.lblPayload.TabIndex = 24;
+            this.lblPayload.Text = "Payload is ?? normal chunks";
+            this.lblPayload.Visible = false;
+            // 
+            // cmdLoadListVerify
+            // 
+            this.cmdLoadListVerify.Location = new System.Drawing.Point(6, 19);
+            this.cmdLoadListVerify.Name = "cmdLoadListVerify";
+            this.cmdLoadListVerify.Size = new System.Drawing.Size(105, 23);
+            this.cmdLoadListVerify.TabIndex = 0;
+            this.cmdLoadListVerify.Text = "Verify List Integrity";
+            this.cmdLoadListVerify.UseVisualStyleBackColor = true;
+            this.cmdLoadListVerify.Click += new System.EventHandler(this.cmdLoadListVerify_Click);
+            // 
+            // cmdPayload
+            // 
+            this.cmdPayload.Location = new System.Drawing.Point(130, 45);
+            this.cmdPayload.Name = "cmdPayload";
+            this.cmdPayload.Size = new System.Drawing.Size(93, 23);
+            this.cmdPayload.TabIndex = 23;
+            this.cmdPayload.Text = "Check Payload";
+            this.cmdPayload.UseVisualStyleBackColor = true;
+            this.cmdPayload.Click += new System.EventHandler(this.cmdPayload_Click);
+            // 
+            // lblPayloadPosition
+            // 
+            this.lblPayloadPosition.AutoSize = true;
+            this.lblPayloadPosition.Location = new System.Drawing.Point(6, 50);
+            this.lblPayloadPosition.Name = "lblPayloadPosition";
+            this.lblPayloadPosition.Size = new System.Drawing.Size(44, 13);
+            this.lblPayloadPosition.TabIndex = 22;
+            this.lblPayloadPosition.Text = "Position";
+            // 
+            // numPayloadPosition
+            // 
+            this.numPayloadPosition.Location = new System.Drawing.Point(56, 48);
+            this.numPayloadPosition.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.numPayloadPosition.Name = "numPayloadPosition";
+            this.numPayloadPosition.Size = new System.Drawing.Size(68, 20);
+            this.numPayloadPosition.TabIndex = 21;
             // 
             // fraLoadListB
             // 
@@ -1940,70 +1999,43 @@ namespace CrashEdit
             this.cmdNextRowDrawA.UseVisualStyleBackColor = true;
             this.cmdNextRowDrawA.Click += new System.EventHandler(this.cmdNextRowDrawA_Click);
             // 
-            // fraLoadListPayload
+            // lblSettingC
             // 
-            this.fraLoadListPayload.Controls.Add(this.lblPayload);
-            this.fraLoadListPayload.Controls.Add(this.cmdLoadListVerify);
-            this.fraLoadListPayload.Controls.Add(this.cmdPayload);
-            this.fraLoadListPayload.Controls.Add(this.lblPayloadPosition);
-            this.fraLoadListPayload.Controls.Add(this.numPayloadPosition);
-            this.fraLoadListPayload.Location = new System.Drawing.Point(153, 303);
-            this.fraLoadListPayload.Name = "fraLoadListPayload";
-            this.fraLoadListPayload.Size = new System.Drawing.Size(231, 109);
-            this.fraLoadListPayload.TabIndex = 22;
-            this.fraLoadListPayload.TabStop = false;
-            this.fraLoadListPayload.Text = "Verify Load Lists";
+            this.lblSettingC.AutoSize = true;
+            this.lblSettingC.Location = new System.Drawing.Point(6, 106);
+            this.lblSettingC.Name = "lblSettingC";
+            this.lblSettingC.Size = new System.Drawing.Size(14, 13);
+            this.lblSettingC.TabIndex = 6;
+            this.lblSettingC.Text = "C";
             // 
-            // cmdLoadListVerify
+            // numSettingC
             // 
-            this.cmdLoadListVerify.Location = new System.Drawing.Point(6, 19);
-            this.cmdLoadListVerify.Name = "cmdLoadListVerify";
-            this.cmdLoadListVerify.Size = new System.Drawing.Size(105, 23);
-            this.cmdLoadListVerify.TabIndex = 0;
-            this.cmdLoadListVerify.Text = "Verify List Integrity";
-            this.cmdLoadListVerify.UseVisualStyleBackColor = true;
-            this.cmdLoadListVerify.Click += new System.EventHandler(this.cmdLoadListVerify_Click);
-            // 
-            // lblPayloadPosition
-            // 
-            this.lblPayloadPosition.AutoSize = true;
-            this.lblPayloadPosition.Location = new System.Drawing.Point(6, 50);
-            this.lblPayloadPosition.Name = "lblPayloadPosition";
-            this.lblPayloadPosition.Size = new System.Drawing.Size(44, 13);
-            this.lblPayloadPosition.TabIndex = 22;
-            this.lblPayloadPosition.Text = "Position";
-            // 
-            // numPayloadPosition
-            // 
-            this.numPayloadPosition.Location = new System.Drawing.Point(56, 48);
-            this.numPayloadPosition.Maximum = new decimal(new int[] {
-            65535,
+            this.numSettingC.Location = new System.Drawing.Point(26, 104);
+            this.numSettingC.Maximum = new decimal(new int[] {
+            2147483647,
             0,
             0,
             0});
-            this.numPayloadPosition.Name = "numPayloadPosition";
-            this.numPayloadPosition.Size = new System.Drawing.Size(68, 20);
-            this.numPayloadPosition.TabIndex = 21;
+            this.numSettingC.Minimum = new decimal(new int[] {
+            -2147483648,
+            0,
+            0,
+            -2147483648});
+            this.numSettingC.Name = "numSettingC";
+            this.numSettingC.Size = new System.Drawing.Size(117, 20);
+            this.numSettingC.TabIndex = 7;
+            this.numSettingC.ValueChanged += new System.EventHandler(this.numSettingC_ValueChanged);
             // 
-            // cmdPayload
+            // chkSettingHex
             // 
-            this.cmdPayload.Location = new System.Drawing.Point(130, 45);
-            this.cmdPayload.Name = "cmdPayload";
-            this.cmdPayload.Size = new System.Drawing.Size(93, 23);
-            this.cmdPayload.TabIndex = 23;
-            this.cmdPayload.Text = "Check Payload";
-            this.cmdPayload.UseVisualStyleBackColor = true;
-            this.cmdPayload.Click += new System.EventHandler(this.cmdPayload_Click);
-            // 
-            // lblPayload
-            // 
-            this.lblPayload.AutoSize = true;
-            this.lblPayload.Location = new System.Drawing.Point(6, 80);
-            this.lblPayload.Name = "lblPayload";
-            this.lblPayload.Size = new System.Drawing.Size(142, 13);
-            this.lblPayload.TabIndex = 24;
-            this.lblPayload.Text = "Payload is ?? normal chunks";
-            this.lblPayload.Visible = false;
+            this.chkSettingHex.AutoSize = true;
+            this.chkSettingHex.Location = new System.Drawing.Point(149, 104);
+            this.chkSettingHex.Name = "chkSettingHex";
+            this.chkSettingHex.Size = new System.Drawing.Size(45, 17);
+            this.chkSettingHex.TabIndex = 8;
+            this.chkSettingHex.Text = "Hex";
+            this.chkSettingHex.UseVisualStyleBackColor = true;
+            this.chkSettingHex.CheckedChanged += new System.EventHandler(this.chkSettingHex_CheckedChanged);
             // 
             // EntityBox
             // 
@@ -2059,6 +2091,9 @@ namespace CrashEdit
             this.fraSLST.PerformLayout();
             this.tabLoadLists.ResumeLayout(false);
             this.tabLoadLists.PerformLayout();
+            this.fraLoadListPayload.ResumeLayout(false);
+            this.fraLoadListPayload.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numPayloadPosition)).EndInit();
             this.fraLoadListB.ResumeLayout(false);
             this.fraLoadListB.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numMetavalueLoadB)).EndInit();
@@ -2082,9 +2117,7 @@ namespace CrashEdit
             this.fraEntityA.ResumeLayout(false);
             this.fraEntityA.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEntityA)).EndInit();
-            this.fraLoadListPayload.ResumeLayout(false);
-            this.fraLoadListPayload.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numPayloadPosition)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numSettingC)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2142,7 +2175,6 @@ namespace CrashEdit
         private System.Windows.Forms.CheckBox chkBoxCount;
         private System.Windows.Forms.NumericUpDown numBoxCount;
         private System.Windows.Forms.Button cmdClearAllVictims;
-        private System.Windows.Forms.Button cmdNextAndRemove;
         private System.Windows.Forms.GroupBox fraDDASettings;
         private System.Windows.Forms.CheckBox chkDDASettings;
         private System.Windows.Forms.NumericUpDown numDDASettings;
@@ -2239,5 +2271,8 @@ namespace CrashEdit
         private System.Windows.Forms.Label lblPayloadPosition;
         private System.Windows.Forms.NumericUpDown numPayloadPosition;
         private System.Windows.Forms.Label lblPayload;
+        private System.Windows.Forms.NumericUpDown numSettingC;
+        private System.Windows.Forms.Label lblSettingC;
+        private System.Windows.Forms.CheckBox chkSettingHex;
     }
 }
