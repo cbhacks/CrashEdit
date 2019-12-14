@@ -423,6 +423,26 @@ namespace CrashEdit
                     }
                 }
             }
+
+            // patch object entity count
+            nsd.EntityCount = 0;
+            foreach (Chunk chunk in nsf.Chunks)
+            {
+                if (!(chunk is EntryChunk))
+                    continue;
+                foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                {
+                    if (entry is ZoneEntry)
+                        foreach (Entity ent1 in ((ZoneEntry)entry).Entities)
+                            if (ent1.ID != null)
+                                ++nsd.EntityCount;
+                    else if (entry is NewZoneEntry)
+                        foreach (Entity ent2 in ((NewZoneEntry)entry).Entities)
+                            if (ent2.ID != null)
+                                ++nsd.EntityCount;
+                }
+            }
+
             if (MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
