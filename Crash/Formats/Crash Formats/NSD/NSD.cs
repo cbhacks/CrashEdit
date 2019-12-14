@@ -76,8 +76,8 @@ namespace Crash
             int extralength = 0xCC;
             byte[] extradata = new byte [extralength];
             Array.Copy(data,0x630+8*entrycount,extradata,0,extralength);
-            NSDSpawnPoint[] spawns = new NSDSpawnPoint[entrycount];
-            for (int i = 0;i < entrycount;i++)
+            NSDSpawnPoint[] spawns = new NSDSpawnPoint[spawncount];
+            for (int i = 0;i < spawncount;++i)
             {
                 int zone = BitConv.FromInt32(data,0x6FC+8*entrycount+24*i);
                 int camera = BitConv.FromInt32(data,0x6FC+8*entrycount+24*i+4);
