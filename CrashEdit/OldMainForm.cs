@@ -377,6 +377,7 @@ namespace CrashEdit
                     }
                 }
             }
+            HashSet<NSDLink> unused = new HashSet<NSDLink>();
             foreach (NSDLink link in nsd.Index)
             {
                 eids.Add(link.EntryID);
@@ -384,6 +385,21 @@ namespace CrashEdit
                 {
                     link.ChunkID = newindex[link.EntryID];
                     newindex.Remove(link.EntryID);
+                }
+                else // NSD contains nonexistant entry
+                {
+                    unused.Add(link);
+                }
+            }
+            if (unused.Count > 0)
+            {
+                foreach (NSDLink link in unused)
+                {
+                    nsd.Index.Remove(link);
+                }
+                for (int i = 0;i < 256;++i)
+                {
+                    nsd.FirstEntries[i] = Math.Min(nsd.FirstEntries[i],nsd.Index.Count-1);
                 }
             }
             if (newindex.Count > 0)
@@ -404,7 +420,6 @@ namespace CrashEdit
                     foreach (KeyValuePair<int, int> kvp in newindex)
                     {
                         nsd.Index.Add(new NSDLink(kvp.Value, kvp.Key));
-                        nsd.EntryCount++;
                     }
                 }
             }
