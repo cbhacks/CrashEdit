@@ -369,9 +369,9 @@ namespace CrashEdit
                 {
                     newindex.Add(ientry.EID, i * 2 + 1);
                 }
-                if (nsf.Chunks[i] is EntryChunk)
+                if (nsf.Chunks[i] is EntryChunk chunk)
                 {
-                    foreach (Entry entry in ((EntryChunk)nsf.Chunks[i]).Entries)
+                    foreach (Entry entry in chunk.Entries)
                     {
                         newindex.Add(entry.EID, i * 2 + 1);
                     }
@@ -420,6 +420,35 @@ namespace CrashEdit
                     foreach (KeyValuePair<int, int> kvp in newindex)
                     {
                         nsd.Index.Add(new NSDLink(kvp.Value, kvp.Key));
+                    }
+                }
+            }
+
+            // check list
+            for (int i = 0; i < nsf.Chunks.Count; i++)
+            {
+                if (nsf.Chunks[i] is EntryChunk chunk)
+                {
+                    List<int> nsdchunkentries = new List<int>();
+                    for (int j = 0; j < nsd.Index.Count; ++j)
+                    {
+                        NSDLink link = nsd.Index[j];
+                        if (i*2+1 == link.ChunkID)
+                        {
+                            nsdchunkentries.Add(j);
+                        }
+                    }
+                    for (int j = 0; j < chunk.Entries.Count; ++j)
+                    {
+                        Entry entry = chunk.Entries[j];
+                        if (entry.EID != nsd.Index[nsdchunkentries[j]].EntryID)
+                        {
+                            MessageBox.Show($"NSD hash map is not in correct order. Entry {entry.EName} in chunk {i*2+1} will be swapped.", "NSD hash map mismatch");
+                            int k = j;
+                            for (;k < nsdchunkentries.Count; ++k)
+                                if (entry.EID == nsd.Index[nsdchunkentries[k]].EntryID) break;
+                            nsd.Index.Swap(nsdchunkentries[j], nsdchunkentries[k]);
+                        }
                     }
                 }
             }
@@ -523,9 +552,9 @@ namespace CrashEdit
                 {
                     newindex.Add(ientry.EID, i * 2 + 1);
                 }
-                if (nsf.Chunks[i] is EntryChunk)
+                if (nsf.Chunks[i] is EntryChunk chunk)
                 {
-                    foreach (Entry entry in ((EntryChunk)nsf.Chunks[i]).Entries)
+                    foreach (Entry entry in chunk.Entries)
                     {
                         newindex.Add(entry.EID, i * 2 + 1);
                     }
@@ -574,6 +603,34 @@ namespace CrashEdit
                     foreach (KeyValuePair<int, int> kvp in newindex)
                     {
                         nsd.Index.Add(new NSDLink(kvp.Value, kvp.Key));
+                    }
+                }
+            }
+            // check list
+            for (int i = 0; i < nsf.Chunks.Count; i++)
+            {
+                if (nsf.Chunks[i] is EntryChunk chunk)
+                {
+                    List<int> nsdchunkentries = new List<int>();
+                    for (int j = 0; j < nsd.Index.Count; ++j)
+                    {
+                        NSDLink link = nsd.Index[j];
+                        if (i*2+1 == link.ChunkID)
+                        {
+                            nsdchunkentries.Add(j);
+                        }
+                    }
+                    for (int j = 0; j < chunk.Entries.Count; ++j)
+                    {
+                        Entry entry = chunk.Entries[j];
+                        if (entry.EID != nsd.Index[nsdchunkentries[j]].EntryID)
+                        {
+                            MessageBox.Show($"NSD hash map is not in correct order. Entry {entry.EName} in chunk {i*2+1} will be swapped.", "NSD hash map mismatch");
+                            int k = j;
+                            for (;k < nsdchunkentries.Count; ++k)
+                                if (entry.EID == nsd.Index[nsdchunkentries[k]].EntryID) break;
+                            nsd.Index.Swap(nsdchunkentries[j], nsdchunkentries[k]);
+                        }
                     }
                 }
             }

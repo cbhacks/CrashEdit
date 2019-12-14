@@ -220,6 +220,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="FileFilters.cs" />
+    <Compile Include="ListExt.cs" />
     <Compile Include="NewEntryForm.cs">
       <SubType>Form</SubType>
     </Compile>
