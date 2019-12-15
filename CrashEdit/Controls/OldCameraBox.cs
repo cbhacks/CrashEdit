@@ -207,6 +207,11 @@ namespace CrashEdit
             numAvgDist.Value = camera.AvgDist;
             numMode.Value = camera.Mode;
             numZoom.Value = camera.Zoom;
+            numEntryPoint.Value = camera.EntryPoint;
+            numExitPoint.Value = camera.ExitPoint;
+            numUnk1.Value = camera.Unk1;
+            numUnk2.Value = camera.Unk2;
+            numUnk3.Value = camera.Unk3;
         }
 
         private void numMode_ValueChanged(object sender,EventArgs e)
@@ -381,6 +386,31 @@ namespace CrashEdit
             }
 
             numAvgDist.Value = (short)(dist / (camera.Positions.Count-1));
+        }
+
+        private void numEntryPoint_ValueChanged(object sender, EventArgs e)
+        {
+            camera.EntryPoint = (byte)numEntryPoint.Value;
+        }
+
+        private void numExitPoint_ValueChanged(object sender, EventArgs e)
+        {
+            camera.ExitPoint = (byte)numExitPoint.Value;
+        }
+
+        private void numUnk1_ValueChanged(object sender, EventArgs e)
+        {
+            camera.Unk1 = (short)numUnk1.Value;
+        }
+
+        private void numUnk2_ValueChanged(object sender, EventArgs e)
+        {
+            camera.Unk2 = (short)numUnk2.Value;
+        }
+
+        private void numUnk3_ValueChanged(object sender, EventArgs e)
+        {
+            camera.Unk3 = (short)numUnk3.Value;
         }
     }
 }
