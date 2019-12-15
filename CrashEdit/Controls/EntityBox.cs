@@ -1354,7 +1354,6 @@ namespace CrashEdit
             else
             {
                 entity.SLST = null;
-                lblEIDErr1.Visible = false;
             }
         }
 
@@ -1364,44 +1363,36 @@ namespace CrashEdit
             if (lblEIDErr1.Text != string.Empty) return;
             entity.SLST.Rows[0].Values[0] = Entry.ENameToEID(txtSLST.Text);
         }
-
-        private bool specialEntered = false;
+        
         private void tabSpecial_Enter(object sender, EventArgs e)
         {
-            if (specialEntered) return;
             UpdateVictim();
             UpdateScaling();
             UpdateBoxCount();
             UpdateDDASection();
             UpdateDDASettings();
             UpdateOtherSettings();
-            specialEntered = true;
+            tabSpecial.Enter -= tabSpecial_Enter;
         }
-
-        private bool cameraEntered = false;
+        
         private void tabCamera_Enter(object sender, EventArgs e)
         {
-            if (cameraEntered) return;
             UpdateSLST();
-            cameraEntered = true;
+            tabCamera.Enter -= tabCamera_Enter;
         }
-
-        private bool loadlistsEntered = false;
+        
         private void tabLoadLists_Enter(object sender, EventArgs e)
         {
-            if (loadlistsEntered) return;
             UpdateLoadListA();
             UpdateLoadListB();
-            loadlistsEntered = true;
+            tabLoadLists.Enter -= tabLoadLists_Enter;
         }
-
-        private bool drawlistsEntered = false;
+        
         private void tabDrawLists_Enter(object sender, EventArgs e)
         {
-            if (drawlistsEntered) return;
             UpdateDrawListA();
             UpdateDrawListB();
-            drawlistsEntered = true;
+            tabDrawLists.Enter -= tabDrawLists_Enter;
         }
 
         private void txtEIDA_LostFocus(object sender, EventArgs e)
