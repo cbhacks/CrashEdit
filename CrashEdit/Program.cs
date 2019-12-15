@@ -12,6 +12,7 @@ namespace CrashEdit
             using (ErrorReporter errorform = new ErrorReporter(mainform))
             {
                 FileUtil.Owner = mainform;
+                Application.EnableVisualStyles();
                 Application.Run(mainform);
             }
         }
