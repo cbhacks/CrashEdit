@@ -195,36 +195,24 @@ namespace CrashEdit
             numC.Value = entity.SettingC;
         }
 
+        private void numUnknown_ValueChanged(object sender,EventArgs e)
+        {
+            entity.Unknown1 = (short)numUnknown.Value;
+        }
+
         private void numA_ValueChanged(object sender,EventArgs e)
         {
-            if (numUnknown.Value < numUnknown.Maximum && numUnknown.Value > numUnknown.Minimum)
-                entity.Unknown1 = (short)numUnknown.Value;
-            else
-                entity.Unknown1 = 0;
+            entity.SettingA = (short)numA.Value;
         }
 
         private void numB_ValueChanged(object sender,EventArgs e)
         {
-            if (numA.Value < numA.Maximum && numA.Value > numA.Minimum)
-                entity.SettingA = (short)numA.Value;
-            else
-                entity.SettingA = 0;
+            entity.SettingB = (short)numB.Value;
         }
 
         private void numC_ValueChanged(object sender,EventArgs e)
         {
-            if (numB.Value < numB.Maximum && numB.Value > numB.Minimum)
-                entity.SettingB = (short)numB.Value;
-            else
-                entity.SettingB = 0;
-        }
-
-        private void numD_ValueChanged(object sender,EventArgs e)
-        {
-            if (numC.Value < numC.Maximum && numC.Value > numC.Minimum)
-                entity.SettingC = (short)numC.Value;
-            else
-                entity.SettingC = 0;
+            entity.SettingC = (short)numC.Value;
         }
 
         private void UpdateCodeString() // TODO : use NSD gool map

@@ -412,7 +412,7 @@ namespace CrashEdit
             this.numC.Name = "numC";
             this.numC.Size = new System.Drawing.Size(86, 20);
             this.numC.TabIndex = 6;
-            this.numC.ValueChanged += new System.EventHandler(this.numD_ValueChanged);
+            this.numC.ValueChanged += new System.EventHandler(this.numC_ValueChanged);
             // 
             // lblC
             // 
@@ -457,7 +457,7 @@ namespace CrashEdit
             this.numB.Name = "numB";
             this.numB.Size = new System.Drawing.Size(86, 20);
             this.numB.TabIndex = 4;
-            this.numB.ValueChanged += new System.EventHandler(this.numC_ValueChanged);
+            this.numB.ValueChanged += new System.EventHandler(this.numB_ValueChanged);
             // 
             // numA
             // 
@@ -475,7 +475,7 @@ namespace CrashEdit
             this.numA.Name = "numA";
             this.numA.Size = new System.Drawing.Size(86, 20);
             this.numA.TabIndex = 3;
-            this.numA.ValueChanged += new System.EventHandler(this.numB_ValueChanged);
+            this.numA.ValueChanged += new System.EventHandler(this.numA_ValueChanged);
             // 
             // numUnknown
             // 
@@ -493,7 +493,7 @@ namespace CrashEdit
             this.numUnknown.Name = "numUnknown";
             this.numUnknown.Size = new System.Drawing.Size(86, 20);
             this.numUnknown.TabIndex = 2;
-            this.numUnknown.ValueChanged += new System.EventHandler(this.numA_ValueChanged);
+            this.numUnknown.ValueChanged += new System.EventHandler(this.numUnknown_ValueChanged);
             // 
             // chkHexUnknown
             // 
