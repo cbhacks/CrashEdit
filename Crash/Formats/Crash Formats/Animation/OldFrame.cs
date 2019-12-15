@@ -42,12 +42,17 @@ namespace Crash
                 vertices[i] = new OldFrameVertex(data[56+i*6+0],data[56+i*6+1],data[56+i*6+2],data[56+i*6+3],data[56+i*6+4],data[56+i*6+5]);
             }
             short unknown = BitConv.FromInt16(data,56 + vertexcount * 6);
-            return new OldFrame(modeleid,xoffset,yoffset,zoffset,x1,y1,z1,x2,y2,z2,xglobal,yglobal,zglobal,vertices,unknown);
+            short? unknown2 = null;
+            if (data.Length >= 56 + vertexcount * 6 + 4)
+            {
+                unknown2 = BitConv.FromInt16(data,58 + vertexcount * 6);
+            }
+            return new OldFrame(modeleid,xoffset,yoffset,zoffset,x1,y1,z1,x2,y2,z2,xglobal,yglobal,zglobal,vertices,unknown,unknown2);
         }
 
         private List<OldFrameVertex> vertices;
 
-        public OldFrame(int modeleid,int xoffset,int yoffset,int zoffset,int x1,int y1,int z1,int x2,int y2,int z2,int xglobal,int yglobal,int zglobal,IEnumerable<OldFrameVertex> vertices,short unknown)
+        public OldFrame(int modeleid,int xoffset,int yoffset,int zoffset,int x1,int y1,int z1,int x2,int y2,int z2,int xglobal,int yglobal,int zglobal,IEnumerable<OldFrameVertex> vertices,short unknown,short? unknown2)
         {
             this.vertices = new List<OldFrameVertex>(vertices);
             ModelEID = modeleid;
@@ -64,6 +69,7 @@ namespace Crash
             YGlobal = yglobal;
             ZGlobal = zglobal;
             Unknown = unknown;
+            Unknown2 = unknown2;
         }
 
         public int ModelEID { get; }
@@ -83,10 +89,11 @@ namespace Crash
         public IList<OldFrameVertex> Vertices => vertices;
 
         public short Unknown { get; set; }
+        public short? Unknown2 { get; set; }
 
         public byte[] Save()
         {
-            byte[] data = new byte [56 + vertices.Count * 6 + 2];
+            byte[] data = new byte [56 + vertices.Count * 6 + 2 + (Unknown2.HasValue? 2:0)];
             BitConv.ToInt32(data,0,vertices.Count);
             BitConv.ToInt32(data,4,ModelEID);
             BitConv.ToInt32(data,8,XOffset);
@@ -106,6 +113,10 @@ namespace Crash
                 vertices[i].Save().CopyTo(data,56 + i * 6);
             }
             BitConv.ToInt16(data,56 + vertices.Count * 6,Unknown);
+            if (Unknown2.HasValue)
+            {
+                BitConv.ToInt16(data,58 + vertices.Count * 6,Unknown2.Value);
+            }
             return data;
         }
 
