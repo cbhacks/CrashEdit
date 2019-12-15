@@ -69,7 +69,7 @@ namespace CrashEdit
             }
 
             lstCode.Items.Add("");
-            bool returned = false;
+            bool returned = true;
             int mipscount = 0;
             int goolcount = 0;
             string str;
