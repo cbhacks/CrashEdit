@@ -306,7 +306,7 @@ namespace CrashEdit
                 settingdirty = false;
             }
         }
-        
+
         private void numSettingC_ValueChanged(object sender, EventArgs e)
         {
             if (!settingdirty)
@@ -699,7 +699,7 @@ namespace CrashEdit
         {
             entity.LoadListA.Rows[loadlistarowindex].MetaValue = (short)numMetavalueLoadA.Value;
         }
-        
+
         private void UpdateLoadListB()
         {
             if (entity.LoadListB != null && entity.LoadListB.RowCount != 0)
@@ -1363,7 +1363,7 @@ namespace CrashEdit
             if (lblEIDErr1.Text != string.Empty) return;
             entity.SLST.Rows[0].Values[0] = Entry.ENameToEID(txtSLST.Text);
         }
-        
+
         private void tabSpecial_Enter(object sender, EventArgs e)
         {
             UpdateVictim();
@@ -1374,20 +1374,20 @@ namespace CrashEdit
             UpdateOtherSettings();
             tabSpecial.Enter -= tabSpecial_Enter;
         }
-        
+
         private void tabCamera_Enter(object sender, EventArgs e)
         {
             UpdateSLST();
             tabCamera.Enter -= tabCamera_Enter;
         }
-        
+
         private void tabLoadLists_Enter(object sender, EventArgs e)
         {
             UpdateLoadListA();
             UpdateLoadListB();
             tabLoadLists.Enter -= tabLoadLists_Enter;
         }
-        
+
         private void tabDrawLists_Enter(object sender, EventArgs e)
         {
             UpdateDrawListA();
