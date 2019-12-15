@@ -24,9 +24,6 @@ namespace CrashEdit
             lstCode.Items.Add(string.Format("Stack Start: {0} ({1})",(ObjectFields)BitConv.FromInt32(goolentry.Header,12),(BitConv.FromInt32(goolentry.Header,12)*4+GOOLInterpreter.GetProcessOff(goolentry.Version)).TransformedString()));
             lstCode.Items.Add($"Interrupt Count: {interruptcount}");
             lstCode.Items.Add($"unknown: {BitConv.FromInt32(goolentry.Header,20)}");
-            List<short> epc_list = new List<short>();
-            List<short> tpc_list = new List<short>();
-            List<short> cpc_list = new List<short>();
             if (BitConv.FromInt32(goolentry.Header, 8) == 1)
             {
                 lstCode.Items.Add("");
@@ -56,18 +53,6 @@ namespace CrashEdit
                     short cpc = (short)(goolentry.StateDescriptors[i].CPC & 0x3FFF);
                     int stategooleid = goolentry.Data[goolentry.StateDescriptors[i].GOOLID];
                     lstCode.Items.Add($"State_{i} [{Entry.EIDToEName(stategooleid)}] (State Flags: {string.Format("0x{0:X}",goolentry.StateDescriptors[i].StateFlags)} | C-Flags: {string.Format("0x{0:X}",goolentry.StateDescriptors[i].CFlags)})");
-                    if (stategooleid == goolentry.EID)
-                    {
-                        epc_list.Add(epc);
-                        tpc_list.Add(tpc);
-                        cpc_list.Add(cpc);
-                    }
-                    else
-                    {
-                        epc_list.Add(0x3FFF);
-                        tpc_list.Add(0x3FFF);
-                        cpc_list.Add(0x3FFF);
-                    }
                     if (epc != 0x3FFF)
                         lstCode.Items.Add($"\tEPC: {epc}");
                     else
@@ -90,20 +75,20 @@ namespace CrashEdit
             string str;
             for (short i = 0; i < goolentry.Instructions.Count; ++i)
             {
-                if (epc_list.Contains(i) || tpc_list.Contains(i) || cpc_list.Contains(i))
+                for (int j = 0; j < goolentry.StateDescriptors.Count; ++j)
                 {
-                    str = "State_";
-                    if (epc_list.Contains(i))
-                        str += $"{epc_list.IndexOf(i)}_epc";
-                    if (tpc_list.Contains(i))
-                        str += $"{tpc_list.IndexOf(i)}_tpc";
-                    if (cpc_list.Contains(i))
-                        str += $"{cpc_list.IndexOf(i)}_cpc";
-                    str += ":";
-                    lstCode.Items.Add(str);
-                    returned = false;
+                    GOOLStateDescriptor desc = goolentry.StateDescriptors[j];
+                    int cpc = desc.CPC & 0x3FFF;
+                    int tpc = desc.TPC & 0x3FFF;
+                    int epc = desc.EPC & 0x3FFF;
+                    if (cpc == i && cpc != 0x3FFF)
+                        lstCode.Items.Add($"State_{j}_cpc:");
+                    if (tpc == i && tpc != 0x3FFF)
+                        lstCode.Items.Add($"State_{j}_tpc:");
+                    if (epc == i && epc != 0x3FFF)
+                        lstCode.Items.Add($"State_{j}_epc:");
                 }
-                else if (returned)
+                if (returned)
                 {
                     lstCode.Items.Add($"Sub_{i}:");
                     returned = false;
