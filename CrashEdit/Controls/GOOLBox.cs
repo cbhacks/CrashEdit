@@ -82,11 +82,20 @@ namespace CrashEdit
                     int tpc = desc.TPC & 0x3FFF;
                     int epc = desc.EPC & 0x3FFF;
                     if (cpc == i && cpc != 0x3FFF)
+                    {
                         lstCode.Items.Add($"State_{j}_cpc:");
+                        returned = false;
+                    }
                     if (tpc == i && tpc != 0x3FFF)
+                    {
                         lstCode.Items.Add($"State_{j}_tpc:");
+                        returned = false;
+                    }
                     if (epc == i && epc != 0x3FFF)
+                    {
                         lstCode.Items.Add($"State_{j}_epc:");
+                        returned = false;
+                    }
                 }
                 if (returned)
                 {

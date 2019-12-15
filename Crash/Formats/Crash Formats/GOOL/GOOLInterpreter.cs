@@ -158,9 +158,9 @@ namespace Crash
             switch (ver)
             {
                 case GameVersion.Crash1Beta1995:
+                case GameVersion.Crash1BetaMAR08:
                     return GOOLVersion.Version0;
                 case GameVersion.Crash1:
-                case GameVersion.Crash1BetaMAR08:
                 case GameVersion.Crash1BetaMAY11:
                 default:
                     return GOOLVersion.Version1;
@@ -190,8 +190,9 @@ namespace Crash
             switch (ins.GOOL.Version)
             {
                 case GOOLVersion.Version0:
+                    return ins is Cfl_95 r0 && r0.Args['T'].Value == 2;
                 case GOOLVersion.Version1:
-                    return ins is Cfl && ins.Args['T'].Value == 2;
+                    return ins is Cfl r1 && r1.Args['T'].Value == 2;
                 case GOOLVersion.Version2:
                     return ins is Ret;
                 default:
