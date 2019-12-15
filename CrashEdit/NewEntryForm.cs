@@ -58,7 +58,7 @@ namespace CrashEdit
 
         private void txtEID_TextChanged(object sender, EventArgs e)
         {
-            lblEIDErr.Text = Entry.CheckEIDErrors(txtEID.Text, nsf);
+            lblEIDErr.Text = Entry.CheckEIDErrors(txtEID.Text, false, nsf);
             if (lblEIDErr.Text == string.Empty)
             {
                 cmdOK.Enabled = true;

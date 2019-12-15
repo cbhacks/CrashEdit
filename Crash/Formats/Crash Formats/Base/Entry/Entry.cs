@@ -151,8 +151,9 @@ namespace Crash
 
         ///<summary> Verifies the integrity of an entry name and returns an error string if it is invalid, returns and empty string on success.</summary>
         ///<param name="ename">An entry name to verify.</param>
+        ///<param name="allownull">Determines whether to error out if entry name is the null entry name.</param>
         ///<param name="nsf">An NSF in which to find duplicate entry names in. If null or unspecified, the pre-existing entry check is skipped.</param>
-        public static string CheckEIDErrors(string ename, NSF nsf = null)
+        public static string CheckEIDErrors(string ename, bool allownull, NSF nsf = null)
         {
             if (ename.Length != 5)
             {
@@ -167,7 +168,7 @@ namespace Crash
             {
                 return Errors[1];
             }
-            if (eid == NullEID)
+            if (eid == NullEID && !allownull)
             {
                 return Errors[2];
             }

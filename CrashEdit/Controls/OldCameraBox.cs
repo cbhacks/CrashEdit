@@ -212,6 +212,7 @@ namespace CrashEdit
             numUnk1.Value = camera.Unk1;
             numUnk2.Value = camera.Unk2;
             numUnk3.Value = camera.Unk3;
+            txtSLST.Text = Entry.EIDToEName(camera.SLSTEID);
         }
 
         private void numMode_ValueChanged(object sender,EventArgs e)
@@ -411,6 +412,15 @@ namespace CrashEdit
         private void numUnk3_ValueChanged(object sender, EventArgs e)
         {
             camera.Unk3 = (short)numUnk3.Value;
+        }
+
+        private void txtSLST_TextChanged(object sender, EventArgs e)
+        {
+            lblSLST.Text = Entry.CheckEIDErrors(txtSLST.Text, true);
+            if (lblSLST.Text == string.Empty)
+            {
+                camera.SLSTEID = Entry.ENameToEID(txtSLST.Text);
+            }
         }
     }
 }

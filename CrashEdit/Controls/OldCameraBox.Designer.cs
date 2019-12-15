@@ -52,6 +52,18 @@ namespace CrashEdit
             this.tbcTabs = new System.Windows.Forms.TabControl();
             this.tabPosition = new System.Windows.Forms.TabPage();
             this.tabSettings = new System.Windows.Forms.TabPage();
+            this.fraUnknown = new System.Windows.Forms.GroupBox();
+            this.lblUnk1 = new System.Windows.Forms.Label();
+            this.numUnk1 = new System.Windows.Forms.NumericUpDown();
+            this.numUnk2 = new System.Windows.Forms.NumericUpDown();
+            this.numUnk3 = new System.Windows.Forms.NumericUpDown();
+            this.lblUnk3 = new System.Windows.Forms.Label();
+            this.lblUnk2 = new System.Windows.Forms.Label();
+            this.fraLink = new System.Windows.Forms.GroupBox();
+            this.lblExitPoint = new System.Windows.Forms.Label();
+            this.numExitPoint = new System.Windows.Forms.NumericUpDown();
+            this.lblEntryPoint = new System.Windows.Forms.Label();
+            this.numEntryPoint = new System.Windows.Forms.NumericUpDown();
             this.fraAvgDist = new System.Windows.Forms.GroupBox();
             this.cmdAvgDistCalc = new System.Windows.Forms.Button();
             this.numAvgDist = new System.Windows.Forms.NumericUpDown();
@@ -105,18 +117,9 @@ namespace CrashEdit
             this.numPathItem1 = new System.Windows.Forms.NumericUpDown();
             this.fraCount = new System.Windows.Forms.GroupBox();
             this.numNeighborCount = new System.Windows.Forms.NumericUpDown();
-            this.fraLink = new System.Windows.Forms.GroupBox();
-            this.numEntryPoint = new System.Windows.Forms.NumericUpDown();
-            this.lblEntryPoint = new System.Windows.Forms.Label();
-            this.lblExitPoint = new System.Windows.Forms.Label();
-            this.numExitPoint = new System.Windows.Forms.NumericUpDown();
-            this.fraUnknown = new System.Windows.Forms.GroupBox();
-            this.lblUnk1 = new System.Windows.Forms.Label();
-            this.numUnk1 = new System.Windows.Forms.NumericUpDown();
-            this.numUnk2 = new System.Windows.Forms.NumericUpDown();
-            this.numUnk3 = new System.Windows.Forms.NumericUpDown();
-            this.lblUnk3 = new System.Windows.Forms.Label();
-            this.lblUnk2 = new System.Windows.Forms.Label();
+            this.fraSLST = new System.Windows.Forms.GroupBox();
+            this.txtSLST = new System.Windows.Forms.TextBox();
+            this.lblSLST = new System.Windows.Forms.Label();
             this.fraPosition.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numZRot)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numYRot)).BeginInit();
@@ -127,6 +130,13 @@ namespace CrashEdit
             this.tbcTabs.SuspendLayout();
             this.tabPosition.SuspendLayout();
             this.tabSettings.SuspendLayout();
+            this.fraUnknown.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numUnk1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numUnk2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numUnk3)).BeginInit();
+            this.fraLink.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numExitPoint)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numEntryPoint)).BeginInit();
             this.fraAvgDist.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numAvgDist)).BeginInit();
             this.fraZoom.SuspendLayout();
@@ -160,13 +170,7 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numPathItem1)).BeginInit();
             this.fraCount.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numNeighborCount)).BeginInit();
-            this.fraLink.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numEntryPoint)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numExitPoint)).BeginInit();
-            this.fraUnknown.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numUnk1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numUnk2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numUnk3)).BeginInit();
+            this.fraSLST.SuspendLayout();
             this.SuspendLayout();
             // 
             // fraPosition
@@ -466,7 +470,7 @@ namespace CrashEdit
             this.tbcTabs.Location = new System.Drawing.Point(0, 0);
             this.tbcTabs.Name = "tbcTabs";
             this.tbcTabs.SelectedIndex = 0;
-            this.tbcTabs.Size = new System.Drawing.Size(390, 454);
+            this.tbcTabs.Size = new System.Drawing.Size(400, 400);
             this.tbcTabs.TabIndex = 7;
             // 
             // tabPosition
@@ -475,13 +479,14 @@ namespace CrashEdit
             this.tabPosition.Controls.Add(this.fraPosition);
             this.tabPosition.Location = new System.Drawing.Point(4, 22);
             this.tabPosition.Name = "tabPosition";
-            this.tabPosition.Size = new System.Drawing.Size(382, 428);
+            this.tabPosition.Size = new System.Drawing.Size(392, 374);
             this.tabPosition.TabIndex = 0;
             this.tabPosition.Text = "Positions";
             this.tabPosition.UseVisualStyleBackColor = true;
             // 
             // tabSettings
             // 
+            this.tabSettings.Controls.Add(this.fraSLST);
             this.tabSettings.Controls.Add(this.fraUnknown);
             this.tabSettings.Controls.Add(this.fraLink);
             this.tabSettings.Controls.Add(this.fraAvgDist);
@@ -491,10 +496,167 @@ namespace CrashEdit
             this.tabSettings.Location = new System.Drawing.Point(4, 22);
             this.tabSettings.Name = "tabSettings";
             this.tabSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSettings.Size = new System.Drawing.Size(382, 428);
+            this.tabSettings.Size = new System.Drawing.Size(392, 374);
             this.tabSettings.TabIndex = 1;
             this.tabSettings.Text = "Trail Settings";
             this.tabSettings.UseVisualStyleBackColor = true;
+            // 
+            // fraUnknown
+            // 
+            this.fraUnknown.AutoSize = true;
+            this.fraUnknown.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.fraUnknown.Controls.Add(this.lblUnk1);
+            this.fraUnknown.Controls.Add(this.numUnk1);
+            this.fraUnknown.Controls.Add(this.numUnk2);
+            this.fraUnknown.Controls.Add(this.numUnk3);
+            this.fraUnknown.Controls.Add(this.lblUnk3);
+            this.fraUnknown.Controls.Add(this.lblUnk2);
+            this.fraUnknown.Location = new System.Drawing.Point(279, 6);
+            this.fraUnknown.Name = "fraUnknown";
+            this.fraUnknown.Size = new System.Drawing.Size(101, 110);
+            this.fraUnknown.TabIndex = 26;
+            this.fraUnknown.TabStop = false;
+            this.fraUnknown.Text = "Unknown";
+            // 
+            // lblUnk1
+            // 
+            this.lblUnk1.AutoSize = true;
+            this.lblUnk1.Location = new System.Drawing.Point(6, 21);
+            this.lblUnk1.Name = "lblUnk1";
+            this.lblUnk1.Size = new System.Drawing.Size(13, 13);
+            this.lblUnk1.TabIndex = 21;
+            this.lblUnk1.Text = "1";
+            // 
+            // numUnk1
+            // 
+            this.numUnk1.Location = new System.Drawing.Point(25, 19);
+            this.numUnk1.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+            this.numUnk1.Minimum = new decimal(new int[] {
+            32768,
+            0,
+            0,
+            -2147483648});
+            this.numUnk1.Name = "numUnk1";
+            this.numUnk1.Size = new System.Drawing.Size(70, 20);
+            this.numUnk1.TabIndex = 20;
+            this.numUnk1.ValueChanged += new System.EventHandler(this.numUnk1_ValueChanged);
+            // 
+            // numUnk2
+            // 
+            this.numUnk2.Location = new System.Drawing.Point(25, 45);
+            this.numUnk2.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+            this.numUnk2.Minimum = new decimal(new int[] {
+            32768,
+            0,
+            0,
+            -2147483648});
+            this.numUnk2.Name = "numUnk2";
+            this.numUnk2.Size = new System.Drawing.Size(70, 20);
+            this.numUnk2.TabIndex = 22;
+            this.numUnk2.ValueChanged += new System.EventHandler(this.numUnk2_ValueChanged);
+            // 
+            // numUnk3
+            // 
+            this.numUnk3.Location = new System.Drawing.Point(25, 71);
+            this.numUnk3.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+            this.numUnk3.Minimum = new decimal(new int[] {
+            32768,
+            0,
+            0,
+            -2147483648});
+            this.numUnk3.Name = "numUnk3";
+            this.numUnk3.Size = new System.Drawing.Size(70, 20);
+            this.numUnk3.TabIndex = 24;
+            this.numUnk3.ValueChanged += new System.EventHandler(this.numUnk3_ValueChanged);
+            // 
+            // lblUnk3
+            // 
+            this.lblUnk3.AutoSize = true;
+            this.lblUnk3.Location = new System.Drawing.Point(6, 73);
+            this.lblUnk3.Name = "lblUnk3";
+            this.lblUnk3.Size = new System.Drawing.Size(13, 13);
+            this.lblUnk3.TabIndex = 25;
+            this.lblUnk3.Text = "3";
+            // 
+            // lblUnk2
+            // 
+            this.lblUnk2.AutoSize = true;
+            this.lblUnk2.Location = new System.Drawing.Point(6, 47);
+            this.lblUnk2.Name = "lblUnk2";
+            this.lblUnk2.Size = new System.Drawing.Size(13, 13);
+            this.lblUnk2.TabIndex = 23;
+            this.lblUnk2.Text = "2";
+            // 
+            // fraLink
+            // 
+            this.fraLink.AutoSize = true;
+            this.fraLink.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.fraLink.Controls.Add(this.lblExitPoint);
+            this.fraLink.Controls.Add(this.numExitPoint);
+            this.fraLink.Controls.Add(this.lblEntryPoint);
+            this.fraLink.Controls.Add(this.numEntryPoint);
+            this.fraLink.Location = new System.Drawing.Point(6, 134);
+            this.fraLink.Name = "fraLink";
+            this.fraLink.Size = new System.Drawing.Size(99, 84);
+            this.fraLink.TabIndex = 32;
+            this.fraLink.TabStop = false;
+            this.fraLink.Text = "Link Settings";
+            // 
+            // lblExitPoint
+            // 
+            this.lblExitPoint.AutoSize = true;
+            this.lblExitPoint.Location = new System.Drawing.Point(6, 47);
+            this.lblExitPoint.Name = "lblExitPoint";
+            this.lblExitPoint.Size = new System.Drawing.Size(24, 13);
+            this.lblExitPoint.TabIndex = 3;
+            this.lblExitPoint.Text = "Exit";
+            // 
+            // numExitPoint
+            // 
+            this.numExitPoint.Location = new System.Drawing.Point(43, 45);
+            this.numExitPoint.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numExitPoint.Name = "numExitPoint";
+            this.numExitPoint.Size = new System.Drawing.Size(50, 20);
+            this.numExitPoint.TabIndex = 2;
+            this.numExitPoint.ValueChanged += new System.EventHandler(this.numExitPoint_ValueChanged);
+            // 
+            // lblEntryPoint
+            // 
+            this.lblEntryPoint.AutoSize = true;
+            this.lblEntryPoint.Location = new System.Drawing.Point(6, 21);
+            this.lblEntryPoint.Name = "lblEntryPoint";
+            this.lblEntryPoint.Size = new System.Drawing.Size(31, 13);
+            this.lblEntryPoint.TabIndex = 1;
+            this.lblEntryPoint.Text = "Entry";
+            // 
+            // numEntryPoint
+            // 
+            this.numEntryPoint.Location = new System.Drawing.Point(43, 19);
+            this.numEntryPoint.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numEntryPoint.Name = "numEntryPoint";
+            this.numEntryPoint.Size = new System.Drawing.Size(50, 20);
+            this.numEntryPoint.TabIndex = 0;
+            this.numEntryPoint.ValueChanged += new System.EventHandler(this.numEntryPoint_ValueChanged);
             // 
             // fraAvgDist
             // 
@@ -504,14 +666,14 @@ namespace CrashEdit
             this.fraAvgDist.Controls.Add(this.numAvgDist);
             this.fraAvgDist.Location = new System.Drawing.Point(6, 70);
             this.fraAvgDist.Name = "fraAvgDist";
-            this.fraAvgDist.Size = new System.Drawing.Size(179, 58);
+            this.fraAvgDist.Size = new System.Drawing.Size(153, 58);
             this.fraAvgDist.TabIndex = 31;
             this.fraAvgDist.TabStop = false;
             this.fraAvgDist.Text = "Average Distance";
             // 
             // cmdAvgDistCalc
             // 
-            this.cmdAvgDistCalc.Location = new System.Drawing.Point(98, 16);
+            this.cmdAvgDistCalc.Location = new System.Drawing.Point(72, 16);
             this.cmdAvgDistCalc.Name = "cmdAvgDistCalc";
             this.cmdAvgDistCalc.Size = new System.Drawing.Size(75, 23);
             this.cmdAvgDistCalc.TabIndex = 28;
@@ -533,7 +695,7 @@ namespace CrashEdit
             0,
             -2147483648});
             this.numAvgDist.Name = "numAvgDist";
-            this.numAvgDist.Size = new System.Drawing.Size(86, 20);
+            this.numAvgDist.Size = new System.Drawing.Size(60, 20);
             this.numAvgDist.TabIndex = 27;
             this.numAvgDist.ValueChanged += new System.EventHandler(this.numAvgDist_ValueChanged);
             // 
@@ -542,9 +704,9 @@ namespace CrashEdit
             this.fraZoom.AutoSize = true;
             this.fraZoom.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.fraZoom.Controls.Add(this.numZoom);
-            this.fraZoom.Location = new System.Drawing.Point(110, 6);
+            this.fraZoom.Location = new System.Drawing.Point(84, 6);
             this.fraZoom.Name = "fraZoom";
-            this.fraZoom.Size = new System.Drawing.Size(98, 58);
+            this.fraZoom.Size = new System.Drawing.Size(72, 58);
             this.fraZoom.TabIndex = 30;
             this.fraZoom.TabStop = false;
             this.fraZoom.Text = "Zoom";
@@ -568,8 +730,13 @@ namespace CrashEdit
             0,
             -2147483648});
             this.numZoom.Name = "numZoom";
-            this.numZoom.Size = new System.Drawing.Size(86, 20);
+            this.numZoom.Size = new System.Drawing.Size(60, 20);
             this.numZoom.TabIndex = 19;
+            this.numZoom.Value = new decimal(new int[] {
+            32768,
+            0,
+            0,
+            -2147483648});
             this.numZoom.ValueChanged += new System.EventHandler(this.numZoom_ValueChanged);
             // 
             // fraMode
@@ -579,7 +746,7 @@ namespace CrashEdit
             this.fraMode.Controls.Add(this.numMode);
             this.fraMode.Location = new System.Drawing.Point(6, 6);
             this.fraMode.Name = "fraMode";
-            this.fraMode.Size = new System.Drawing.Size(98, 58);
+            this.fraMode.Size = new System.Drawing.Size(72, 58);
             this.fraMode.TabIndex = 29;
             this.fraMode.TabStop = false;
             this.fraMode.Text = "Mode";
@@ -598,7 +765,7 @@ namespace CrashEdit
             0,
             -2147483648});
             this.numMode.Name = "numMode";
-            this.numMode.Size = new System.Drawing.Size(86, 20);
+            this.numMode.Size = new System.Drawing.Size(60, 20);
             this.numMode.TabIndex = 18;
             this.numMode.ValueChanged += new System.EventHandler(this.numMode_ValueChanged);
             // 
@@ -612,9 +779,9 @@ namespace CrashEdit
             this.fraDirection.Controls.Add(this.numZDir);
             this.fraDirection.Controls.Add(this.lblZDir);
             this.fraDirection.Controls.Add(this.lblYDir);
-            this.fraDirection.Location = new System.Drawing.Point(214, 6);
+            this.fraDirection.Location = new System.Drawing.Point(165, 6);
             this.fraDirection.Name = "fraDirection";
-            this.fraDirection.Size = new System.Drawing.Size(122, 110);
+            this.fraDirection.Size = new System.Drawing.Size(108, 110);
             this.fraDirection.TabIndex = 15;
             this.fraDirection.TabStop = false;
             this.fraDirection.Text = "Direction";
@@ -642,7 +809,7 @@ namespace CrashEdit
             0,
             -2147483648});
             this.numXDir.Name = "numXDir";
-            this.numXDir.Size = new System.Drawing.Size(74, 20);
+            this.numXDir.Size = new System.Drawing.Size(60, 20);
             this.numXDir.TabIndex = 20;
             this.numXDir.ValueChanged += new System.EventHandler(this.numXDir_ValueChanged);
             // 
@@ -660,7 +827,7 @@ namespace CrashEdit
             0,
             -2147483648});
             this.numYDir.Name = "numYDir";
-            this.numYDir.Size = new System.Drawing.Size(74, 20);
+            this.numYDir.Size = new System.Drawing.Size(60, 20);
             this.numYDir.TabIndex = 22;
             this.numYDir.ValueChanged += new System.EventHandler(this.numYDir_ValueChanged);
             // 
@@ -678,7 +845,7 @@ namespace CrashEdit
             0,
             -2147483648});
             this.numZDir.Name = "numZDir";
-            this.numZDir.Size = new System.Drawing.Size(74, 20);
+            this.numZDir.Size = new System.Drawing.Size(60, 20);
             this.numZDir.TabIndex = 24;
             this.numZDir.ValueChanged += new System.EventHandler(this.numZDir_ValueChanged);
             // 
@@ -710,7 +877,7 @@ namespace CrashEdit
             this.tabNeighbor.Location = new System.Drawing.Point(4, 22);
             this.tabNeighbor.Name = "tabNeighbor";
             this.tabNeighbor.Padding = new System.Windows.Forms.Padding(3);
-            this.tabNeighbor.Size = new System.Drawing.Size(382, 428);
+            this.tabNeighbor.Size = new System.Drawing.Size(392, 374);
             this.tabNeighbor.TabIndex = 2;
             this.tabNeighbor.Text = "Neighbors";
             this.tabNeighbor.UseVisualStyleBackColor = true;
@@ -1168,162 +1335,38 @@ namespace CrashEdit
             this.numNeighborCount.TabIndex = 39;
             this.numNeighborCount.ValueChanged += new System.EventHandler(this.numNeighborCount_ValueChanged);
             // 
-            // fraLink
+            // fraSLST
             // 
-            this.fraLink.AutoSize = true;
-            this.fraLink.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.fraLink.Controls.Add(this.lblExitPoint);
-            this.fraLink.Controls.Add(this.numExitPoint);
-            this.fraLink.Controls.Add(this.lblEntryPoint);
-            this.fraLink.Controls.Add(this.numEntryPoint);
-            this.fraLink.Location = new System.Drawing.Point(6, 134);
-            this.fraLink.Name = "fraLink";
-            this.fraLink.Size = new System.Drawing.Size(106, 84);
-            this.fraLink.TabIndex = 32;
-            this.fraLink.TabStop = false;
-            this.fraLink.Text = "Link Settings";
+            this.fraSLST.AutoSize = true;
+            this.fraSLST.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.fraSLST.Controls.Add(this.lblSLST);
+            this.fraSLST.Controls.Add(this.txtSLST);
+            this.fraSLST.Location = new System.Drawing.Point(6, 224);
+            this.fraSLST.Name = "fraSLST";
+            this.fraSLST.Size = new System.Drawing.Size(139, 75);
+            this.fraSLST.TabIndex = 33;
+            this.fraSLST.TabStop = false;
+            this.fraSLST.Text = "SLST";
             // 
-            // numEntryPoint
+            // txtSLST
             // 
-            this.numEntryPoint.Location = new System.Drawing.Point(43, 19);
-            this.numEntryPoint.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numEntryPoint.Name = "numEntryPoint";
-            this.numEntryPoint.Size = new System.Drawing.Size(57, 20);
-            this.numEntryPoint.TabIndex = 0;
-            this.numEntryPoint.ValueChanged += new System.EventHandler(this.numEntryPoint_ValueChanged);
+            this.txtSLST.Location = new System.Drawing.Point(6, 19);
+            this.txtSLST.MaxLength = 5;
+            this.txtSLST.Name = "txtSLST";
+            this.txtSLST.Size = new System.Drawing.Size(64, 20);
+            this.txtSLST.TabIndex = 0;
+            this.txtSLST.Text = "WWWWW";
+            this.txtSLST.TextChanged += new System.EventHandler(this.txtSLST_TextChanged);
             // 
-            // lblEntryPoint
+            // lblSLST
             // 
-            this.lblEntryPoint.AutoSize = true;
-            this.lblEntryPoint.Location = new System.Drawing.Point(6, 21);
-            this.lblEntryPoint.Name = "lblEntryPoint";
-            this.lblEntryPoint.Size = new System.Drawing.Size(31, 13);
-            this.lblEntryPoint.TabIndex = 1;
-            this.lblEntryPoint.Text = "Entry";
-            // 
-            // lblExitPoint
-            // 
-            this.lblExitPoint.AutoSize = true;
-            this.lblExitPoint.Location = new System.Drawing.Point(6, 47);
-            this.lblExitPoint.Name = "lblExitPoint";
-            this.lblExitPoint.Size = new System.Drawing.Size(24, 13);
-            this.lblExitPoint.TabIndex = 3;
-            this.lblExitPoint.Text = "Exit";
-            // 
-            // numExitPoint
-            // 
-            this.numExitPoint.Location = new System.Drawing.Point(43, 45);
-            this.numExitPoint.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numExitPoint.Name = "numExitPoint";
-            this.numExitPoint.Size = new System.Drawing.Size(57, 20);
-            this.numExitPoint.TabIndex = 2;
-            this.numExitPoint.ValueChanged += new System.EventHandler(this.numExitPoint_ValueChanged);
-            // 
-            // fraUnknown
-            // 
-            this.fraUnknown.AutoSize = true;
-            this.fraUnknown.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.fraUnknown.Controls.Add(this.lblUnk1);
-            this.fraUnknown.Controls.Add(this.numUnk1);
-            this.fraUnknown.Controls.Add(this.numUnk2);
-            this.fraUnknown.Controls.Add(this.numUnk3);
-            this.fraUnknown.Controls.Add(this.lblUnk3);
-            this.fraUnknown.Controls.Add(this.lblUnk2);
-            this.fraUnknown.Location = new System.Drawing.Point(118, 134);
-            this.fraUnknown.Name = "fraUnknown";
-            this.fraUnknown.Size = new System.Drawing.Size(105, 110);
-            this.fraUnknown.TabIndex = 26;
-            this.fraUnknown.TabStop = false;
-            this.fraUnknown.Text = "Unknown";
-            // 
-            // lblUnk1
-            // 
-            this.lblUnk1.AutoSize = true;
-            this.lblUnk1.Location = new System.Drawing.Point(6, 21);
-            this.lblUnk1.Name = "lblUnk1";
-            this.lblUnk1.Size = new System.Drawing.Size(13, 13);
-            this.lblUnk1.TabIndex = 21;
-            this.lblUnk1.Text = "1";
-            // 
-            // numUnk1
-            // 
-            this.numUnk1.Location = new System.Drawing.Point(25, 19);
-            this.numUnk1.Maximum = new decimal(new int[] {
-            32767,
-            0,
-            0,
-            0});
-            this.numUnk1.Minimum = new decimal(new int[] {
-            32768,
-            0,
-            0,
-            -2147483648});
-            this.numUnk1.Name = "numUnk1";
-            this.numUnk1.Size = new System.Drawing.Size(74, 20);
-            this.numUnk1.TabIndex = 20;
-            this.numUnk1.ValueChanged += new System.EventHandler(this.numUnk1_ValueChanged);
-            // 
-            // numUnk2
-            // 
-            this.numUnk2.Location = new System.Drawing.Point(25, 45);
-            this.numUnk2.Maximum = new decimal(new int[] {
-            32767,
-            0,
-            0,
-            0});
-            this.numUnk2.Minimum = new decimal(new int[] {
-            32768,
-            0,
-            0,
-            -2147483648});
-            this.numUnk2.Name = "numUnk2";
-            this.numUnk2.Size = new System.Drawing.Size(74, 20);
-            this.numUnk2.TabIndex = 22;
-            this.numUnk2.ValueChanged += new System.EventHandler(this.numUnk2_ValueChanged);
-            // 
-            // numUnk3
-            // 
-            this.numUnk3.Location = new System.Drawing.Point(25, 71);
-            this.numUnk3.Maximum = new decimal(new int[] {
-            32767,
-            0,
-            0,
-            0});
-            this.numUnk3.Minimum = new decimal(new int[] {
-            32768,
-            0,
-            0,
-            -2147483648});
-            this.numUnk3.Name = "numUnk3";
-            this.numUnk3.Size = new System.Drawing.Size(74, 20);
-            this.numUnk3.TabIndex = 24;
-            this.numUnk3.ValueChanged += new System.EventHandler(this.numUnk3_ValueChanged);
-            // 
-            // lblUnk3
-            // 
-            this.lblUnk3.AutoSize = true;
-            this.lblUnk3.Location = new System.Drawing.Point(6, 73);
-            this.lblUnk3.Name = "lblUnk3";
-            this.lblUnk3.Size = new System.Drawing.Size(13, 13);
-            this.lblUnk3.TabIndex = 25;
-            this.lblUnk3.Text = "3";
-            // 
-            // lblUnk2
-            // 
-            this.lblUnk2.AutoSize = true;
-            this.lblUnk2.Location = new System.Drawing.Point(6, 47);
-            this.lblUnk2.Name = "lblUnk2";
-            this.lblUnk2.Size = new System.Drawing.Size(13, 13);
-            this.lblUnk2.TabIndex = 23;
-            this.lblUnk2.Text = "2";
+            this.lblSLST.AutoSize = true;
+            this.lblSLST.ForeColor = System.Drawing.Color.Red;
+            this.lblSLST.Location = new System.Drawing.Point(7, 46);
+            this.lblSLST.Name = "lblSLST";
+            this.lblSLST.Size = new System.Drawing.Size(126, 13);
+            this.lblSLST.TabIndex = 1;
+            this.lblSLST.Text = "EID ERROR WARNING!";
             // 
             // OldCameraBox
             // 
@@ -1331,7 +1374,7 @@ namespace CrashEdit
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tbcTabs);
             this.Name = "OldCameraBox";
-            this.Size = new System.Drawing.Size(390, 454);
+            this.Size = new System.Drawing.Size(400, 400);
             this.fraPosition.ResumeLayout(false);
             this.fraPosition.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numZRot)).EndInit();
@@ -1345,6 +1388,15 @@ namespace CrashEdit
             this.tabPosition.PerformLayout();
             this.tabSettings.ResumeLayout(false);
             this.tabSettings.PerformLayout();
+            this.fraUnknown.ResumeLayout(false);
+            this.fraUnknown.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numUnk1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numUnk2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numUnk3)).EndInit();
+            this.fraLink.ResumeLayout(false);
+            this.fraLink.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numExitPoint)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numEntryPoint)).EndInit();
             this.fraAvgDist.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numAvgDist)).EndInit();
             this.fraZoom.ResumeLayout(false);
@@ -1384,15 +1436,8 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numPathItem1)).EndInit();
             this.fraCount.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numNeighborCount)).EndInit();
-            this.fraLink.ResumeLayout(false);
-            this.fraLink.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numEntryPoint)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numExitPoint)).EndInit();
-            this.fraUnknown.ResumeLayout(false);
-            this.fraUnknown.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numUnk1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numUnk2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numUnk3)).EndInit();
+            this.fraSLST.ResumeLayout(false);
+            this.fraSLST.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1488,5 +1533,8 @@ namespace CrashEdit
         private System.Windows.Forms.NumericUpDown numUnk3;
         private System.Windows.Forms.Label lblUnk3;
         private System.Windows.Forms.Label lblUnk2;
+        private System.Windows.Forms.GroupBox fraSLST;
+        private System.Windows.Forms.TextBox txtSLST;
+        private System.Windows.Forms.Label lblSLST;
     }
 }

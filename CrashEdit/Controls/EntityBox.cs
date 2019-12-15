@@ -673,7 +673,7 @@ namespace CrashEdit
 
         private void txtEIDA_TextChanged(object sender, EventArgs e)
         {
-            lblEIDErrA.Text = Entry.CheckEIDErrors(txtEIDA.Text);
+            lblEIDErrA.Text = Entry.CheckEIDErrors(txtEIDA.Text, true);
             if (lblEIDErrA.Text != string.Empty) return;
             entity.LoadListA.Rows[loadlistarowindex].Values[loadlistaeidindex] = Entry.ENameToEID(txtEIDA.Text);
         }
@@ -809,7 +809,7 @@ namespace CrashEdit
 
         private void txtEIDB_TextChanged(object sender, EventArgs e)
         {
-            lblEIDErrB.Text = Entry.CheckEIDErrors(txtEIDB.Text);
+            lblEIDErrB.Text = Entry.CheckEIDErrors(txtEIDB.Text, true);
             if (lblEIDErrB.Text != string.Empty) return;
             entity.LoadListB.Rows[loadlistbrowindex].Values[loadlistbeidindex] = Entry.ENameToEID(txtEIDB.Text);
         }
@@ -1345,12 +1345,11 @@ namespace CrashEdit
             txtSLST.Enabled = chkSLST.Checked;
             if (txtSLST.Enabled)
             {
-                lblEIDErr1.Text = Entry.CheckEIDErrors(txtSLST.Text);
-                if (lblEIDErr1.Text != string.Empty) return;
-                int eid = Entry.ENameToEID(txtSLST.Text);
+                lblEIDErr1.Text = Entry.CheckEIDErrors(txtSLST.Text, true);
                 entity.SLST = new EntityT4Property();
                 entity.SLST.Rows.Add(new EntityPropertyRow<int>());
-                entity.SLST.Rows[0].Values.Add(eid);
+                if (lblEIDErr1.Text != string.Empty) return;
+                entity.SLST.Rows[0].Values.Add(Entry.ENameToEID(txtSLST.Text));
             }
             else
             {
@@ -1361,7 +1360,7 @@ namespace CrashEdit
 
         private void txtSLST_TextChanged(object sender, EventArgs e)
         {
-            lblEIDErr1.Text = Entry.CheckEIDErrors(txtSLST.Text);
+            lblEIDErr1.Text = Entry.CheckEIDErrors(txtSLST.Text, true);
             if (lblEIDErr1.Text != string.Empty) return;
             entity.SLST.Rows[0].Values[0] = Entry.ENameToEID(txtSLST.Text);
         }
