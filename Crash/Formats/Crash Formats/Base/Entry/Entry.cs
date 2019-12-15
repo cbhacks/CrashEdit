@@ -10,6 +10,13 @@ namespace Crash
         public const int NullEID = 0x6396347F;
         public const string NullEName = "NONE!";
         public const string ENameCharacterSet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_!";
+        public static readonly string[] Errors = {
+            "EID is not 5 characters long.",
+            "EID has invalid characters.",
+            "EID cannot be \"NONE!\"",
+            "EID already exists.",
+            "EID final character mismatch."
+        };
 
         internal static Dictionary<GameVersion,Dictionary<int,EntryLoader>> loadersets;
 
@@ -140,6 +147,43 @@ namespace Crash
         public virtual byte[] Save()
         {
             return Unprocess().Save();
+        }
+
+        ///<summary> Verifies the integrity of an entry name and returns an error string if it is invalid, returns and empty string on success.</summary>
+        ///<param name="ename">An entry name to verify.</param>
+        ///<param name="nsf">An NSF in which to find duplicate entry names in. If null or unspecified, the pre-existing entry check is skipped.</param>
+        public static string CheckEIDErrors(string ename, NSF nsf = null)
+        {
+            if (ename.Length != 5)
+            {
+                return Errors[0];
+            }
+            int eid = NullEID;
+            try
+            {
+                eid = ENameToEID(ename);
+            }
+            catch (ArgumentException)
+            {
+                return Errors[1];
+            }
+            if (eid == NullEID)
+            {
+                return Errors[2];
+            }
+            if (nsf != null)
+            {
+                IEntry existingentry = nsf.FindEID<Entry>(eid);
+                if (existingentry == null)
+                {
+                    existingentry = nsf.FindEID<TextureChunk>(eid);
+                }
+                if (existingentry != null)
+                {
+                    return Errors[3];
+                }
+            }
+            return string.Empty;
         }
     }
 }

@@ -17,14 +17,6 @@ namespace CrashEdit
             { EntryTypeGOOL, 11 }
         };
 
-        private readonly string[] EIDErrors = {
-            "EID is not 5 characters long.",
-            "EID has invalid characters.",
-            "EID cannot be \"NONE!\"",
-            "EID already exists.",
-            "EID final character mismatch."
-        };
-
         private NSF nsf;
 
         public NewEntryForm(NSFController nsfc)
@@ -66,40 +58,17 @@ namespace CrashEdit
 
         private void txtEID_TextChanged(object sender, EventArgs e)
         {
-            cmdOK.Enabled = false;
-            lblEIDErr.Visible = true;
-            if (txtEID.TextLength < 5)
+            lblEIDErr.Text = Entry.CheckEIDErrors(txtEID.Text, nsf);
+            if (lblEIDErr.Text == string.Empty)
             {
-                lblEIDErr.Text = EIDErrors[0];
-                return;
+                cmdOK.Enabled = true;
+                lblEIDErr.Visible = false;
             }
-            int eid = Entry.NullEID;
-            try
+            else
             {
-                eid = Entry.ENameToEID(txtEID.Text);
+                cmdOK.Enabled = false;
+                lblEIDErr.Visible = true;
             }
-            catch (ArgumentException)
-            {
-                lblEIDErr.Text = EIDErrors[1];
-                return;
-            }
-            if (eid == Entry.NullEID)
-            {
-                lblEIDErr.Text = EIDErrors[2];
-                return;
-            }
-            IEntry existingentry = nsf.FindEID<Entry>(eid);
-            if (existingentry == null)
-            {
-                existingentry = nsf.FindEID<TextureChunk>(eid);
-            }
-            if (existingentry != null)
-            {
-                lblEIDErr.Text = EIDErrors[3];
-                return;
-            }
-            cmdOK.Enabled = true;
-            lblEIDErr.Visible = false;
         }
 
         private void cmdOK_Click(object sender, EventArgs e)

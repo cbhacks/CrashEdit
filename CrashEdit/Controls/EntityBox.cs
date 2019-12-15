@@ -673,17 +673,9 @@ namespace CrashEdit
 
         private void txtEIDA_TextChanged(object sender, EventArgs e)
         {
-            lblEID1.Visible = !(txtEIDB.Text.Length == 5 && txtEIDA.Text.Length == 5);
-            if (lblEID1.Visible) return;
-            try
-            {
-                entity.LoadListA.Rows[loadlistarowindex].Values[loadlistaeidindex] = Entry.ENameToEID(txtEIDA.Text);
-                lblEID2.Visible = false;
-            }
-            catch (ArgumentException)
-            {
-                lblEID2.Visible = true;
-            }
+            lblEIDErrA.Text = Entry.CheckEIDErrors(txtEIDA.Text);
+            if (lblEIDErrA.Text != string.Empty) return;
+            entity.LoadListA.Rows[loadlistarowindex].Values[loadlistaeidindex] = Entry.ENameToEID(txtEIDA.Text);
         }
 
         private void cmdRemoveRowA_Click(object sender, EventArgs e)
@@ -817,17 +809,9 @@ namespace CrashEdit
 
         private void txtEIDB_TextChanged(object sender, EventArgs e)
         {
-            lblEID1.Visible = !(txtEIDB.Text.Length == 5 && txtEIDA.Text.Length == 5);
-            if (lblEID1.Visible) return;
-            try
-            {
-                entity.LoadListB.Rows[loadlistbrowindex].Values[loadlistbeidindex] = Entry.ENameToEID(txtEIDB.Text);
-                lblEID2.Visible = false;
-            }
-            catch (ArgumentException)
-            {
-                lblEID2.Visible = true;
-            }
+            lblEIDErrB.Text = Entry.CheckEIDErrors(txtEIDB.Text);
+            if (lblEIDErrB.Text != string.Empty) return;
+            entity.LoadListB.Rows[loadlistbrowindex].Values[loadlistbeidindex] = Entry.ENameToEID(txtEIDB.Text);
         }
 
         private void cmdRemoveRowB_Click(object sender, EventArgs e)
@@ -1361,40 +1345,25 @@ namespace CrashEdit
             txtSLST.Enabled = chkSLST.Checked;
             if (txtSLST.Enabled)
             {
-                lblSLST1.Visible = !(txtSLST.Text.Length == 5);
-                if (lblSLST1.Visible) return;
-                try
-                {
-                    int eid = Entry.ENameToEID(txtSLST.Text); // exception must be caught before changes can be made
-                    entity.SLST = new EntityT4Property();
-                    entity.SLST.Rows.Add(new EntityPropertyRow<int>());
-                    entity.SLST.Rows[0].Values.Add(eid);
-                }
-                catch (ArgumentException)
-                {
-                    lblEID2.Visible = true;
-                }
+                lblEIDErr1.Text = Entry.CheckEIDErrors(txtSLST.Text);
+                if (lblEIDErr1.Text != string.Empty) return;
+                int eid = Entry.ENameToEID(txtSLST.Text);
+                entity.SLST = new EntityT4Property();
+                entity.SLST.Rows.Add(new EntityPropertyRow<int>());
+                entity.SLST.Rows[0].Values.Add(eid);
             }
             else
             {
                 entity.SLST = null;
-                lblSLST1.Visible = false;
-                lblSLST2.Visible = false;
+                lblEIDErr1.Visible = false;
             }
         }
 
         private void txtSLST_TextChanged(object sender, EventArgs e)
         {
-            lblSLST1.Visible = !(txtSLST.Text.Length == 5);
-            if (lblSLST1.Visible) return;
-            try
-            {
-                entity.SLST.Rows[0].Values[0] = Entry.ENameToEID(txtSLST.Text);
-            }
-            catch (ArgumentException)
-            {
-                lblEID2.Visible = true;
-            }
+            lblEIDErr1.Text = Entry.CheckEIDErrors(txtSLST.Text);
+            if (lblEIDErr1.Text != string.Empty) return;
+            entity.SLST.Rows[0].Values[0] = Entry.ENameToEID(txtSLST.Text);
         }
 
         private bool specialEntered = false;
