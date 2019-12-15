@@ -48,7 +48,7 @@ namespace Crash
             ID = id;
             SettingA = settinga;
             SettingB = settingb;
-            LinkID = linkid;
+            SettingC = linkid;
             Type = type;
             Subtype = subtype;
             Nullfield1 = nullfield1;
@@ -60,7 +60,7 @@ namespace Crash
         public short ID { get; set; }
         public short SettingA { get; set; }
         public short SettingB { get; set; }
-        public short LinkID { get; set; }
+        public short SettingC { get; set; }
         public byte Type { get; set; }
         public byte Subtype { get; set; }
         public IList<EntityPosition> Positions => positions;
@@ -76,7 +76,7 @@ namespace Crash
             BitConv.ToInt16(result,10,(short)positions.Count);
             BitConv.ToInt16(result,12,SettingA);
             BitConv.ToInt16(result,14,SettingB);
-            BitConv.ToInt16(result,16,LinkID);
+            BitConv.ToInt16(result,16,SettingC);
             result[18] = Type;
             result[19] = Subtype;
             for (int i = 0;i < positions.Count;++i)

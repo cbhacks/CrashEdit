@@ -195,7 +195,7 @@ namespace CrashEdit
             numA.Value = entity.Unknown1;
             numB.Value = entity.SettingA;
             numC.Value = entity.SettingB;
-            numD.Value = entity.LinkID;
+            numD.Value = entity.SettingC;
         }
 
         private void numA_ValueChanged(object sender,EventArgs e)
@@ -225,9 +225,9 @@ namespace CrashEdit
         private void numD_ValueChanged(object sender,EventArgs e)
         {
             if (numD.Value < numD.Maximum && numD.Value > numD.Minimum)
-                entity.LinkID = (short)numD.Value;
+                entity.SettingC = (short)numD.Value;
             else
-                entity.LinkID = 0;
+                entity.SettingC = 0;
         }
 
         private void UpdateCodeString()
