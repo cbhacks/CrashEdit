@@ -1407,6 +1407,7 @@ namespace CrashEdit
 
         private void cmdLoadListVerify_Click(object sender, EventArgs e)
         {
+            bool haserror = false;
             List<int> loadedentries = new List<int>();
             for (int i = 0; i < entity.Positions.Count; ++i)
             {
@@ -1431,15 +1432,15 @@ namespace CrashEdit
                             if (!loadedentries.Remove(eid))
                             {
                                 MessageBox.Show(this, $"Load lists are incorrect. {Entry.EIDToEName(eid)} was already deloaded by position {i}.", "Load list verification exception.");
-                                return;
+                                haserror = true;
                             }
                         }
                     }
                 }
             }
-            if (loadedentries.Count == 0)
+            if (loadedentries.Count == 0 && !haserror)
                 MessageBox.Show(this, "Load lists are correct.", "Load list verification exception.");
-            else
+            else if (loadedentries.Count != 0)
             {
                 string eidlist = string.Empty;
                 foreach (int eid in loadedentries)
