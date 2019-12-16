@@ -12,6 +12,6 @@
 
         public override string Name => "PATH";
         public override string Format => DefaultFormatLR;
-        public override string Comment => $"seekrot({GetArg('L')}, " + (Args['R'].Value == DoubleStackRef ? "[top], [top-1])" : $"{GetArg('R')}, 0x100)");
+        public override string Comment => string.Empty;
     }
 }
