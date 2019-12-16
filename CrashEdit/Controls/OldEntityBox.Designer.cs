@@ -528,15 +528,10 @@ namespace CrashEdit
             this.numFlags.Hexadecimal = true;
             this.numFlags.Location = new System.Drawing.Point(62, 19);
             this.numFlags.Maximum = new decimal(new int[] {
-            32767,
+            -1,
             0,
             0,
             0});
-            this.numFlags.Minimum = new decimal(new int[] {
-            32768,
-            0,
-            0,
-            -2147483648});
             this.numFlags.Name = "numFlags";
             this.numFlags.Size = new System.Drawing.Size(86, 20);
             this.numFlags.TabIndex = 2;
