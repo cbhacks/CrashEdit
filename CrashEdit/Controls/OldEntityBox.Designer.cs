@@ -51,18 +51,18 @@ namespace CrashEdit
             this.tbcTabs = new System.Windows.Forms.TabControl();
             this.tabGeneral = new System.Windows.Forms.TabPage();
             this.fraSettings = new System.Windows.Forms.GroupBox();
-            this.lblD = new System.Windows.Forms.Label();
-            this.numC = new System.Windows.Forms.NumericUpDown();
+            this.chkHexC = new System.Windows.Forms.CheckBox();
+            this.chkHexB = new System.Windows.Forms.CheckBox();
+            this.chkHexA = new System.Windows.Forms.CheckBox();
+            this.chkHexFlags = new System.Windows.Forms.CheckBox();
             this.lblC = new System.Windows.Forms.Label();
+            this.numC = new System.Windows.Forms.NumericUpDown();
             this.lblB = new System.Windows.Forms.Label();
             this.lblA = new System.Windows.Forms.Label();
+            this.lblFlags = new System.Windows.Forms.Label();
             this.numB = new System.Windows.Forms.NumericUpDown();
             this.numA = new System.Windows.Forms.NumericUpDown();
-            this.numUnknown = new System.Windows.Forms.NumericUpDown();
-            this.chkHexUnknown = new System.Windows.Forms.CheckBox();
-            this.chkHexA = new System.Windows.Forms.CheckBox();
-            this.chkHexB = new System.Windows.Forms.CheckBox();
-            this.chkHexC = new System.Windows.Forms.CheckBox();
+            this.numFlags = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -79,7 +79,7 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numC)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numA)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numUnknown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numFlags)).BeginInit();
             this.SuspendLayout();
             // 
             // numType
@@ -371,15 +371,15 @@ namespace CrashEdit
             this.fraSettings.Controls.Add(this.chkHexC);
             this.fraSettings.Controls.Add(this.chkHexB);
             this.fraSettings.Controls.Add(this.chkHexA);
-            this.fraSettings.Controls.Add(this.chkHexUnknown);
-            this.fraSettings.Controls.Add(this.lblD);
-            this.fraSettings.Controls.Add(this.numC);
+            this.fraSettings.Controls.Add(this.chkHexFlags);
             this.fraSettings.Controls.Add(this.lblC);
+            this.fraSettings.Controls.Add(this.numC);
             this.fraSettings.Controls.Add(this.lblB);
             this.fraSettings.Controls.Add(this.lblA);
+            this.fraSettings.Controls.Add(this.lblFlags);
             this.fraSettings.Controls.Add(this.numB);
             this.fraSettings.Controls.Add(this.numA);
-            this.fraSettings.Controls.Add(this.numUnknown);
+            this.fraSettings.Controls.Add(this.numFlags);
             this.fraSettings.Location = new System.Drawing.Point(3, 152);
             this.fraSettings.Name = "fraSettings";
             this.fraSettings.Size = new System.Drawing.Size(200, 133);
@@ -387,14 +387,60 @@ namespace CrashEdit
             this.fraSettings.TabStop = false;
             this.fraSettings.Text = "Settings";
             // 
-            // lblD
+            // chkHexC
             // 
-            this.lblD.AutoSize = true;
-            this.lblD.Location = new System.Drawing.Point(6, 99);
-            this.lblD.Name = "lblD";
-            this.lblD.Size = new System.Drawing.Size(44, 13);
-            this.lblD.TabIndex = 7;
-            this.lblD.Text = "Mode C";
+            this.chkHexC.AutoSize = true;
+            this.chkHexC.Location = new System.Drawing.Point(154, 98);
+            this.chkHexC.Name = "chkHexC";
+            this.chkHexC.Size = new System.Drawing.Size(45, 17);
+            this.chkHexC.TabIndex = 11;
+            this.chkHexC.Text = "Hex";
+            this.chkHexC.UseVisualStyleBackColor = true;
+            this.chkHexC.CheckedChanged += new System.EventHandler(this.chkHexC_CheckedChanged);
+            // 
+            // chkHexB
+            // 
+            this.chkHexB.AutoSize = true;
+            this.chkHexB.Location = new System.Drawing.Point(154, 72);
+            this.chkHexB.Name = "chkHexB";
+            this.chkHexB.Size = new System.Drawing.Size(45, 17);
+            this.chkHexB.TabIndex = 10;
+            this.chkHexB.Text = "Hex";
+            this.chkHexB.UseVisualStyleBackColor = true;
+            this.chkHexB.CheckedChanged += new System.EventHandler(this.chkHexB_CheckedChanged);
+            // 
+            // chkHexA
+            // 
+            this.chkHexA.AutoSize = true;
+            this.chkHexA.Location = new System.Drawing.Point(154, 46);
+            this.chkHexA.Name = "chkHexA";
+            this.chkHexA.Size = new System.Drawing.Size(45, 17);
+            this.chkHexA.TabIndex = 9;
+            this.chkHexA.Text = "Hex";
+            this.chkHexA.UseVisualStyleBackColor = true;
+            this.chkHexA.CheckedChanged += new System.EventHandler(this.chkHexA_CheckedChanged);
+            // 
+            // chkHexFlags
+            // 
+            this.chkHexFlags.AutoSize = true;
+            this.chkHexFlags.Checked = true;
+            this.chkHexFlags.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkHexFlags.Location = new System.Drawing.Point(154, 20);
+            this.chkHexFlags.Name = "chkHexFlags";
+            this.chkHexFlags.Size = new System.Drawing.Size(45, 17);
+            this.chkHexFlags.TabIndex = 8;
+            this.chkHexFlags.Text = "Hex";
+            this.chkHexFlags.UseVisualStyleBackColor = true;
+            this.chkHexFlags.CheckedChanged += new System.EventHandler(this.chkHexUnknown_CheckedChanged);
+            // 
+            // lblC
+            // 
+            this.lblC.AutoSize = true;
+            this.lblC.Location = new System.Drawing.Point(6, 99);
+            this.lblC.Name = "lblC";
+            this.lblC.Size = new System.Drawing.Size(44, 13);
+            this.lblC.TabIndex = 7;
+            this.lblC.Text = "Mode C";
             // 
             // numC
             // 
@@ -414,32 +460,32 @@ namespace CrashEdit
             this.numC.TabIndex = 6;
             this.numC.ValueChanged += new System.EventHandler(this.numC_ValueChanged);
             // 
-            // lblC
-            // 
-            this.lblC.AutoSize = true;
-            this.lblC.Location = new System.Drawing.Point(6, 73);
-            this.lblC.Name = "lblC";
-            this.lblC.Size = new System.Drawing.Size(44, 13);
-            this.lblC.TabIndex = 5;
-            this.lblC.Text = "Mode B";
-            // 
             // lblB
             // 
             this.lblB.AutoSize = true;
-            this.lblB.Location = new System.Drawing.Point(6, 47);
+            this.lblB.Location = new System.Drawing.Point(6, 73);
             this.lblB.Name = "lblB";
             this.lblB.Size = new System.Drawing.Size(44, 13);
-            this.lblB.TabIndex = 4;
-            this.lblB.Text = "Mode A";
+            this.lblB.TabIndex = 5;
+            this.lblB.Text = "Mode B";
             // 
             // lblA
             // 
             this.lblA.AutoSize = true;
-            this.lblA.Location = new System.Drawing.Point(6, 21);
+            this.lblA.Location = new System.Drawing.Point(6, 47);
             this.lblA.Name = "lblA";
-            this.lblA.Size = new System.Drawing.Size(53, 13);
-            this.lblA.TabIndex = 3;
-            this.lblA.Text = "Unknown";
+            this.lblA.Size = new System.Drawing.Size(44, 13);
+            this.lblA.TabIndex = 4;
+            this.lblA.Text = "Mode A";
+            // 
+            // lblFlags
+            // 
+            this.lblFlags.AutoSize = true;
+            this.lblFlags.Location = new System.Drawing.Point(6, 21);
+            this.lblFlags.Name = "lblFlags";
+            this.lblFlags.Size = new System.Drawing.Size(32, 13);
+            this.lblFlags.TabIndex = 3;
+            this.lblFlags.Text = "Flags";
             // 
             // numB
             // 
@@ -477,67 +523,24 @@ namespace CrashEdit
             this.numA.TabIndex = 3;
             this.numA.ValueChanged += new System.EventHandler(this.numA_ValueChanged);
             // 
-            // numUnknown
+            // numFlags
             // 
-            this.numUnknown.Location = new System.Drawing.Point(62, 19);
-            this.numUnknown.Maximum = new decimal(new int[] {
+            this.numFlags.Hexadecimal = true;
+            this.numFlags.Location = new System.Drawing.Point(62, 19);
+            this.numFlags.Maximum = new decimal(new int[] {
             32767,
             0,
             0,
             0});
-            this.numUnknown.Minimum = new decimal(new int[] {
+            this.numFlags.Minimum = new decimal(new int[] {
             32768,
             0,
             0,
             -2147483648});
-            this.numUnknown.Name = "numUnknown";
-            this.numUnknown.Size = new System.Drawing.Size(86, 20);
-            this.numUnknown.TabIndex = 2;
-            this.numUnknown.ValueChanged += new System.EventHandler(this.numUnknown_ValueChanged);
-            // 
-            // chkHexUnknown
-            // 
-            this.chkHexUnknown.AutoSize = true;
-            this.chkHexUnknown.Location = new System.Drawing.Point(154, 20);
-            this.chkHexUnknown.Name = "chkHexUnknown";
-            this.chkHexUnknown.Size = new System.Drawing.Size(45, 17);
-            this.chkHexUnknown.TabIndex = 8;
-            this.chkHexUnknown.Text = "Hex";
-            this.chkHexUnknown.UseVisualStyleBackColor = true;
-            this.chkHexUnknown.CheckedChanged += new System.EventHandler(this.chkHexUnknown_CheckedChanged);
-            // 
-            // chkHexA
-            // 
-            this.chkHexA.AutoSize = true;
-            this.chkHexA.Location = new System.Drawing.Point(154, 46);
-            this.chkHexA.Name = "chkHexA";
-            this.chkHexA.Size = new System.Drawing.Size(45, 17);
-            this.chkHexA.TabIndex = 9;
-            this.chkHexA.Text = "Hex";
-            this.chkHexA.UseVisualStyleBackColor = true;
-            this.chkHexA.CheckedChanged += new System.EventHandler(this.chkHexA_CheckedChanged);
-            // 
-            // chkHexB
-            // 
-            this.chkHexB.AutoSize = true;
-            this.chkHexB.Location = new System.Drawing.Point(154, 72);
-            this.chkHexB.Name = "chkHexB";
-            this.chkHexB.Size = new System.Drawing.Size(45, 17);
-            this.chkHexB.TabIndex = 10;
-            this.chkHexB.Text = "Hex";
-            this.chkHexB.UseVisualStyleBackColor = true;
-            this.chkHexB.CheckedChanged += new System.EventHandler(this.chkHexB_CheckedChanged);
-            // 
-            // chkHexC
-            // 
-            this.chkHexC.AutoSize = true;
-            this.chkHexC.Location = new System.Drawing.Point(154, 98);
-            this.chkHexC.Name = "chkHexC";
-            this.chkHexC.Size = new System.Drawing.Size(45, 17);
-            this.chkHexC.TabIndex = 11;
-            this.chkHexC.Text = "Hex";
-            this.chkHexC.UseVisualStyleBackColor = true;
-            this.chkHexC.CheckedChanged += new System.EventHandler(this.chkHexC_CheckedChanged);
+            this.numFlags.Name = "numFlags";
+            this.numFlags.Size = new System.Drawing.Size(86, 20);
+            this.numFlags.TabIndex = 2;
+            this.numFlags.ValueChanged += new System.EventHandler(this.numUnknown_ValueChanged);
             // 
             // OldEntityBox
             // 
@@ -565,7 +568,7 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numC)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numA)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numUnknown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numFlags)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -594,18 +597,18 @@ namespace CrashEdit
         private System.Windows.Forms.TabControl tbcTabs;
         private System.Windows.Forms.TabPage tabGeneral;
         private System.Windows.Forms.GroupBox fraSettings;
-        private System.Windows.Forms.Label lblD;
-        private System.Windows.Forms.NumericUpDown numC;
         private System.Windows.Forms.Label lblC;
+        private System.Windows.Forms.NumericUpDown numC;
         private System.Windows.Forms.Label lblB;
         private System.Windows.Forms.Label lblA;
+        private System.Windows.Forms.Label lblFlags;
         private System.Windows.Forms.NumericUpDown numB;
         private System.Windows.Forms.NumericUpDown numA;
-        private System.Windows.Forms.NumericUpDown numUnknown;
+        private System.Windows.Forms.NumericUpDown numFlags;
         private System.Windows.Forms.Label lblCodeName;
         private System.Windows.Forms.CheckBox chkHexC;
         private System.Windows.Forms.CheckBox chkHexB;
         private System.Windows.Forms.CheckBox chkHexA;
-        private System.Windows.Forms.CheckBox chkHexUnknown;
+        private System.Windows.Forms.CheckBox chkHexFlags;
     }
 }

@@ -189,7 +189,7 @@ namespace CrashEdit
 
         private void UpdateSettings()
         {
-            numUnknown.Value = entity.Unknown1;
+            numFlags.Value = entity.Flags;
             numA.Value = entity.SettingA;
             numB.Value = entity.SettingB;
             numC.Value = entity.SettingC;
@@ -197,7 +197,7 @@ namespace CrashEdit
 
         private void numUnknown_ValueChanged(object sender,EventArgs e)
         {
-            entity.Unknown1 = (short)numUnknown.Value;
+            entity.Flags = (int)numFlags.Value;
         }
 
         private void numA_ValueChanged(object sender,EventArgs e)
@@ -287,7 +287,7 @@ namespace CrashEdit
 
         private void chkHexUnknown_CheckedChanged(object sender, EventArgs e)
         {
-            numUnknown.Hexadecimal = chkHexUnknown.Checked;
+            numFlags.Hexadecimal = chkHexFlags.Checked;
         }
 
         private void chkHexA_CheckedChanged(object sender, EventArgs e)

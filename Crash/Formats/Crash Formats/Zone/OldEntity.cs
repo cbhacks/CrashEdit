@@ -10,8 +10,7 @@ namespace Crash
             if (data.Length < 22)
                 ErrorManager.SignalError("OldEntity: Data is too short");
             int garbage = BitConv.FromInt32(data,0);
-            short unknown1 = BitConv.FromInt16(data,4);
-            short unknown2 = BitConv.FromInt16(data,6);
+            int flags = BitConv.FromInt32(data,4);
             short id = BitConv.FromInt16(data,8);
             short positioncount = BitConv.FromInt16(data,10);
             if (data.Length < 22 + 6 * positioncount)
@@ -32,18 +31,17 @@ namespace Crash
                 positions[i] = new EntityPosition(x,y,z);
             }
             short nullfield1 = BitConv.FromInt16(data,20 + positioncount * 6);
-            return new OldEntity(garbage,unknown1,unknown2,id,settinga,settingb,linkid,type,subtype,positions,nullfield1);
+            return new OldEntity(garbage,flags,id,settinga,settingb,linkid,type,subtype,positions,nullfield1);
         }
 
         private List<EntityPosition> positions = null;
 
-        public OldEntity(int garbage,short unknown1,short unknown2,short id,short settinga,short settingb,short linkid,byte type,byte subtype,IEnumerable<EntityPosition> positions,short nullfield1)
+        public OldEntity(int garbage,int flags,short id,short settinga,short settingb,short linkid,byte type,byte subtype,IEnumerable<EntityPosition> positions,short nullfield1)
         {
             if (positions == null)
                 throw new ArgumentNullException("index");
             Garbage = garbage;
-            Unknown1 = unknown1;
-            Unknown2 = unknown2;
+            Flags = flags;
             this.positions = new List<EntityPosition>(positions);
             ID = id;
             SettingA = settinga;
@@ -54,8 +52,7 @@ namespace Crash
             Nullfield1 = nullfield1;
         }
 
-        public short Unknown2 { get; set; }
-        public short Unknown1 { get; set; }
+        public int Flags { get; set; }
         public int Garbage { get; set; }
         public short ID { get; set; }
         public short SettingA { get; set; }
@@ -70,8 +67,7 @@ namespace Crash
         {
             byte[] result = new byte [22 + (6 * positions.Count)];
             BitConv.ToInt32(result,0,Garbage);
-            BitConv.ToInt16(result,4,Unknown1);
-            BitConv.ToInt16(result,6,Unknown2);
+            BitConv.ToInt32(result,4,Flags);
             BitConv.ToInt16(result,8,ID);
             BitConv.ToInt16(result,10,(short)positions.Count);
             BitConv.ToInt16(result,12,SettingA);
