@@ -61,28 +61,34 @@ namespace CrashEdit
 
         void Menu_AddEntity()
         {
-            short maxid = 1;
-            foreach (Chunk chunk in EntryChunkController.NSFController.NSF.Chunks)
+            short id = 6;
+            while (true)
             {
-                if (chunk is EntryChunk)
+                foreach (Chunk chunk in EntryChunkController.NSFController.NSF.Chunks)
                 {
-                    foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                    if (chunk is EntryChunk entrychunk)
                     {
-                        if (entry is OldZoneEntry)
+                        foreach (Entry entry in entrychunk.Entries)
                         {
-                            foreach (OldEntity otherentity in ((OldZoneEntry)entry).Entities)
+                            if (entry is OldZoneEntry zone)
                             {
-                                if (otherentity.ID > maxid)
+                                foreach (OldEntity otherentity in zone.Entities)
                                 {
-                                    maxid = otherentity.ID;
+                                    if (otherentity.ID == id)
+                                    {
+                                        goto FOUND_ID;
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                break;
+            FOUND_ID:
+                ++id;
+                continue;
             }
-            ++maxid;
-            OldEntity newentity = OldEntity.Load(new OldEntity(0,0,0,maxid,0,0,0,0,0,new List<EntityPosition>() { new EntityPosition(0,0,0) },0).Save());
+            OldEntity newentity = OldEntity.Load(new OldEntity(0,0x00030018,id,0,0,0,0,0,new List<EntityPosition>() { new EntityPosition(0,0,0) },0).Save());
             OldZoneEntry.Entities.Add(newentity);
             AddNode(new OldEntityController(this,newentity));
             OldZoneEntry.EntityCount = OldZoneEntry.Entities.Count;
