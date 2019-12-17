@@ -9,10 +9,12 @@ namespace CrashEdit
     {
         private const string FuncLinear = "Linear";
         private const string FuncSquare = "Square";
+        private const string FuncCubic = "Cubic";
         private const string FuncSine = "Sine";
-        private const string FuncSquareDouble = "Double Square";
         private const string FuncSquareInverse = "Inverse Square";
+        private const string FuncCubicInverse = "Inverse Cubic";
         private const string FuncTangent = "Tangent";
+        private const string FuncSquareDouble = "Double Square";
 
         private List<Position> positions;
         private int positionindex;
@@ -31,11 +33,13 @@ namespace CrashEdit
 
             dpdFunc.Items.Add(FuncLinear);
             dpdFunc.Items.Add(FuncSquare);
+            dpdFunc.Items.Add(FuncCubic);
             dpdFunc.Items.Add(FuncSine);
-            dpdFunc.Items.Add(FuncSquareDouble);
             dpdFunc.Items.Add(FuncSquareInverse);
+            dpdFunc.Items.Add(FuncCubicInverse);
             dpdFunc.Items.Add(FuncTangent);
-            
+            dpdFunc.Items.Add(FuncSquareDouble);
+
             dpdFunc.SelectedIndex = 0;
             numAmount.Maximum = short.MaxValue - positions.Count;
             numEnd.Maximum = positions.Count;
@@ -148,10 +152,12 @@ namespace CrashEdit
                 {
                     //case FuncLinear: fac = MathFunctionLinear(fac); break;
                     case FuncSquare: fac = MathFunctionSquare(fac); break;
+                    case FuncCubic: fac = MathFunctionCubic(fac); break;
                     case FuncSine: fac = MathFunctionSine(fac); break;
                     case FuncTangent: fac = MathFunctionTangent(fac); break;
-                    case FuncSquareDouble: fac = MathFunctionSquareDouble(fac); break;
                     case FuncSquareInverse: fac = MathFunctionSquareInverse(fac); break;
+                    case FuncCubicInverse: fac = MathFunctionCubicInverse(fac); break;
+                    case FuncSquareDouble: fac = MathFunctionSquareDouble(fac); break;
                 }
                 NewPositions[i] = FindPointByDistance(oldpositions, arclen, fac);
             }
@@ -220,6 +226,11 @@ namespace CrashEdit
             return x*x;
         }
 
+        private static double MathFunctionCubic(double x)
+        {
+            return x*x*x;
+        }
+
         private static double MathFunctionSine(double x)
         {
             return Math.Sin((x-0.5)*Math.PI) / 2 + 0.5;
@@ -238,6 +249,11 @@ namespace CrashEdit
         private static double MathFunctionSquareInverse(double x)
         {
             return Math.Sqrt(x);
+        }
+
+        private static double MathFunctionCubicInverse(double x)
+        {
+            return Math.Pow(x,1.0/3.0);
         }
 
         private void numStart_ValueChanged(object sender, EventArgs e)
