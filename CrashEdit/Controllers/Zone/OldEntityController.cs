@@ -35,7 +35,7 @@ namespace CrashEdit
             short id = 6;
             while (true)
             {
-                foreach (Chunk chunk in EntryChunkController.NSFController.NSF.Chunks)
+                foreach (Chunk chunk in OldZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
                 {
                     if (chunk is EntryChunk entrychunk)
                     {
