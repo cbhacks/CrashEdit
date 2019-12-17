@@ -1,5 +1,6 @@
 using Crash;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -77,6 +78,7 @@ namespace CrashEdit
                 numY.Value = entity.Positions[positionindex].Y;
                 numZ.Value = entity.Positions[positionindex].Z;
             }
+            cmdInterpolate.Enabled = entity.Positions.Count >= 2;
             positiondirty = false;
         }
 
@@ -303,6 +305,30 @@ namespace CrashEdit
         private void chkHexC_CheckedChanged(object sender, EventArgs e)
         {
             numC.Hexadecimal = chkHexC.Checked;
+        }
+
+        private void cmdInterpolate_Click(object sender, EventArgs e)
+        {
+            Position[] pos = new Position[entity.Positions.Count];
+            for (int i = 0; i < entity.Positions.Count; ++i)
+            {
+                pos[i] = new Position(entity.Positions[i].X, entity.Positions[i].Y, entity.Positions[i].Z);
+            }
+            using (InterpolatorForm interpolator = new InterpolatorForm(pos))
+            {
+                if (interpolator.ShowDialog() == DialogResult.OK)
+                {
+                    for (int m = interpolator.Start-1, i = interpolator.End-2; i > m; --i)
+                    {
+                        entity.Positions.RemoveAt(i);
+                    }
+                    for (int i = 0; i < interpolator.Amount; ++i)
+                    {
+                        entity.Positions.Insert(i+interpolator.Start,new EntityPosition(interpolator.NewPositions[i+1]));
+                    }
+                    UpdatePosition();
+                }
+            }
         }
     }
 }

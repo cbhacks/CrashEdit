@@ -63,6 +63,7 @@ namespace CrashEdit
             this.numB = new System.Windows.Forms.NumericUpDown();
             this.numA = new System.Windows.Forms.NumericUpDown();
             this.numFlags = new System.Windows.Forms.NumericUpDown();
+            this.cmdInterpolate = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -138,6 +139,7 @@ namespace CrashEdit
             // 
             this.fraPosition.AutoSize = true;
             this.fraPosition.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.fraPosition.Controls.Add(this.cmdInterpolate);
             this.fraPosition.Controls.Add(this.lblPositionIndex);
             this.fraPosition.Controls.Add(this.cmdNextPosition);
             this.fraPosition.Controls.Add(this.cmdPreviousPosition);
@@ -152,7 +154,7 @@ namespace CrashEdit
             this.fraPosition.Controls.Add(this.numX);
             this.fraPosition.Location = new System.Drawing.Point(3, 3);
             this.fraPosition.Name = "fraPosition";
-            this.fraPosition.Size = new System.Drawing.Size(200, 143);
+            this.fraPosition.Size = new System.Drawing.Size(200, 172);
             this.fraPosition.TabIndex = 1;
             this.fraPosition.TabStop = false;
             this.fraPosition.Text = "Position(s)";
@@ -380,7 +382,7 @@ namespace CrashEdit
             this.fraSettings.Controls.Add(this.numB);
             this.fraSettings.Controls.Add(this.numA);
             this.fraSettings.Controls.Add(this.numFlags);
-            this.fraSettings.Location = new System.Drawing.Point(3, 152);
+            this.fraSettings.Location = new System.Drawing.Point(3, 181);
             this.fraSettings.Name = "fraSettings";
             this.fraSettings.Size = new System.Drawing.Size(200, 133);
             this.fraSettings.TabIndex = 8;
@@ -537,6 +539,16 @@ namespace CrashEdit
             this.numFlags.TabIndex = 2;
             this.numFlags.ValueChanged += new System.EventHandler(this.numUnknown_ValueChanged);
             // 
+            // cmdInterpolate
+            // 
+            this.cmdInterpolate.Location = new System.Drawing.Point(6, 130);
+            this.cmdInterpolate.Name = "cmdInterpolate";
+            this.cmdInterpolate.Size = new System.Drawing.Size(75, 23);
+            this.cmdInterpolate.TabIndex = 8;
+            this.cmdInterpolate.Text = "Interpolate";
+            this.cmdInterpolate.UseVisualStyleBackColor = true;
+            this.cmdInterpolate.Click += new System.EventHandler(this.cmdInterpolate_Click);
+            // 
             // OldEntityBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -605,5 +617,6 @@ namespace CrashEdit
         private System.Windows.Forms.CheckBox chkHexB;
         private System.Windows.Forms.CheckBox chkHexA;
         private System.Windows.Forms.CheckBox chkHexFlags;
+        private System.Windows.Forms.Button cmdInterpolate;
     }
 }

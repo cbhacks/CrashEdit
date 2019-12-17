@@ -221,6 +221,12 @@
     </Compile>
     <Compile Include="FileFilters.cs" />
     <Compile Include="ListExt.cs" />
+    <Compile Include="InterpolatorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InterpolatorForm.Designer.cs">
+      <DependentUpon>InterpolatorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="NewEntryForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -317,6 +323,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SoundBox.resx">
       <DependentUpon>SoundBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InterpolatorForm.resx">
+      <DependentUpon>InterpolatorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="NewEntryForm.resx">
       <DependentUpon>NewEntryForm.cs</DependentUpon>
