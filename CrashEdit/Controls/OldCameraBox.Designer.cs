@@ -52,6 +52,9 @@ namespace CrashEdit
             this.tbcTabs = new System.Windows.Forms.TabControl();
             this.tabPosition = new System.Windows.Forms.TabPage();
             this.tabSettings = new System.Windows.Forms.TabPage();
+            this.fraSLST = new System.Windows.Forms.GroupBox();
+            this.lblSLST = new System.Windows.Forms.Label();
+            this.txtSLST = new System.Windows.Forms.TextBox();
             this.fraUnknown = new System.Windows.Forms.GroupBox();
             this.lblUnk1 = new System.Windows.Forms.Label();
             this.numUnk1 = new System.Windows.Forms.NumericUpDown();
@@ -117,9 +120,7 @@ namespace CrashEdit
             this.numPathItem1 = new System.Windows.Forms.NumericUpDown();
             this.fraCount = new System.Windows.Forms.GroupBox();
             this.numNeighborCount = new System.Windows.Forms.NumericUpDown();
-            this.fraSLST = new System.Windows.Forms.GroupBox();
-            this.txtSLST = new System.Windows.Forms.TextBox();
-            this.lblSLST = new System.Windows.Forms.Label();
+            this.cmdPosInterpolate = new System.Windows.Forms.Button();
             this.fraPosition.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numZRot)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numYRot)).BeginInit();
@@ -130,6 +131,7 @@ namespace CrashEdit
             this.tbcTabs.SuspendLayout();
             this.tabPosition.SuspendLayout();
             this.tabSettings.SuspendLayout();
+            this.fraSLST.SuspendLayout();
             this.fraUnknown.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUnk1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numUnk2)).BeginInit();
@@ -170,13 +172,13 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numPathItem1)).BeginInit();
             this.fraCount.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numNeighborCount)).BeginInit();
-            this.fraSLST.SuspendLayout();
             this.SuspendLayout();
             // 
             // fraPosition
             // 
             this.fraPosition.AutoSize = true;
             this.fraPosition.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.fraPosition.Controls.Add(this.cmdPosInterpolate);
             this.fraPosition.Controls.Add(this.cmdFirstPosition);
             this.fraPosition.Controls.Add(this.cmdLastPosition);
             this.fraPosition.Controls.Add(this.lblZRot);
@@ -199,7 +201,7 @@ namespace CrashEdit
             this.fraPosition.Controls.Add(this.numX);
             this.fraPosition.Location = new System.Drawing.Point(3, 3);
             this.fraPosition.Name = "fraPosition";
-            this.fraPosition.Size = new System.Drawing.Size(356, 143);
+            this.fraPosition.Size = new System.Drawing.Size(356, 172);
             this.fraPosition.TabIndex = 1;
             this.fraPosition.TabStop = false;
             this.fraPosition.Text = "Position(s)";
@@ -500,6 +502,39 @@ namespace CrashEdit
             this.tabSettings.TabIndex = 1;
             this.tabSettings.Text = "Trail Settings";
             this.tabSettings.UseVisualStyleBackColor = true;
+            // 
+            // fraSLST
+            // 
+            this.fraSLST.AutoSize = true;
+            this.fraSLST.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.fraSLST.Controls.Add(this.lblSLST);
+            this.fraSLST.Controls.Add(this.txtSLST);
+            this.fraSLST.Location = new System.Drawing.Point(6, 224);
+            this.fraSLST.Name = "fraSLST";
+            this.fraSLST.Size = new System.Drawing.Size(139, 75);
+            this.fraSLST.TabIndex = 33;
+            this.fraSLST.TabStop = false;
+            this.fraSLST.Text = "SLST";
+            // 
+            // lblSLST
+            // 
+            this.lblSLST.AutoSize = true;
+            this.lblSLST.ForeColor = System.Drawing.Color.Red;
+            this.lblSLST.Location = new System.Drawing.Point(7, 46);
+            this.lblSLST.Name = "lblSLST";
+            this.lblSLST.Size = new System.Drawing.Size(126, 13);
+            this.lblSLST.TabIndex = 1;
+            this.lblSLST.Text = "EID ERROR WARNING!";
+            // 
+            // txtSLST
+            // 
+            this.txtSLST.Location = new System.Drawing.Point(6, 19);
+            this.txtSLST.MaxLength = 5;
+            this.txtSLST.Name = "txtSLST";
+            this.txtSLST.Size = new System.Drawing.Size(64, 20);
+            this.txtSLST.TabIndex = 0;
+            this.txtSLST.Text = "WWWWW";
+            this.txtSLST.TextChanged += new System.EventHandler(this.txtSLST_TextChanged);
             // 
             // fraUnknown
             // 
@@ -1335,38 +1370,17 @@ namespace CrashEdit
             this.numNeighborCount.TabIndex = 39;
             this.numNeighborCount.ValueChanged += new System.EventHandler(this.numNeighborCount_ValueChanged);
             // 
-            // fraSLST
+            // cmdPosInterpolate
             // 
-            this.fraSLST.AutoSize = true;
-            this.fraSLST.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.fraSLST.Controls.Add(this.lblSLST);
-            this.fraSLST.Controls.Add(this.txtSLST);
-            this.fraSLST.Location = new System.Drawing.Point(6, 224);
-            this.fraSLST.Name = "fraSLST";
-            this.fraSLST.Size = new System.Drawing.Size(139, 75);
-            this.fraSLST.TabIndex = 33;
-            this.fraSLST.TabStop = false;
-            this.fraSLST.Text = "SLST";
-            // 
-            // txtSLST
-            // 
-            this.txtSLST.Location = new System.Drawing.Point(6, 19);
-            this.txtSLST.MaxLength = 5;
-            this.txtSLST.Name = "txtSLST";
-            this.txtSLST.Size = new System.Drawing.Size(64, 20);
-            this.txtSLST.TabIndex = 0;
-            this.txtSLST.Text = "WWWWW";
-            this.txtSLST.TextChanged += new System.EventHandler(this.txtSLST_TextChanged);
-            // 
-            // lblSLST
-            // 
-            this.lblSLST.AutoSize = true;
-            this.lblSLST.ForeColor = System.Drawing.Color.Red;
-            this.lblSLST.Location = new System.Drawing.Point(7, 46);
-            this.lblSLST.Name = "lblSLST";
-            this.lblSLST.Size = new System.Drawing.Size(126, 13);
-            this.lblSLST.TabIndex = 1;
-            this.lblSLST.Text = "EID ERROR WARNING!";
+            this.cmdPosInterpolate.AutoSize = true;
+            this.cmdPosInterpolate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.cmdPosInterpolate.Location = new System.Drawing.Point(9, 130);
+            this.cmdPosInterpolate.Name = "cmdPosInterpolate";
+            this.cmdPosInterpolate.Size = new System.Drawing.Size(67, 23);
+            this.cmdPosInterpolate.TabIndex = 16;
+            this.cmdPosInterpolate.Text = "Interpolate";
+            this.cmdPosInterpolate.UseVisualStyleBackColor = true;
+            this.cmdPosInterpolate.Click += new System.EventHandler(this.cmdPosInterpolate_Click);
             // 
             // OldCameraBox
             // 
@@ -1388,6 +1402,8 @@ namespace CrashEdit
             this.tabPosition.PerformLayout();
             this.tabSettings.ResumeLayout(false);
             this.tabSettings.PerformLayout();
+            this.fraSLST.ResumeLayout(false);
+            this.fraSLST.PerformLayout();
             this.fraUnknown.ResumeLayout(false);
             this.fraUnknown.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUnk1)).EndInit();
@@ -1436,8 +1452,6 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numPathItem1)).EndInit();
             this.fraCount.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numNeighborCount)).EndInit();
-            this.fraSLST.ResumeLayout(false);
-            this.fraSLST.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1536,5 +1550,6 @@ namespace CrashEdit
         private System.Windows.Forms.GroupBox fraSLST;
         private System.Windows.Forms.TextBox txtSLST;
         private System.Windows.Forms.Label lblSLST;
+        private System.Windows.Forms.Button cmdPosInterpolate;
     }
 }

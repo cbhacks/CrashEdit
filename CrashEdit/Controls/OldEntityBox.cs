@@ -280,8 +280,10 @@ namespace CrashEdit
                 case 0x38: lblCodeName.Text = "BonoC"; break;
                 case 0x39: lblCodeName.Text = "CardC"; break;
                 case 0x3A: lblCodeName.Text = "GemsC"; break;
+
                 case 0x3C: lblCodeName.Text = "AsciC"; break;
                 case 0x3D: lblCodeName.Text = "WinGC"; break;
+
                 default:
                     lblCodeName.Text = "(Unknown)"; break;
             }

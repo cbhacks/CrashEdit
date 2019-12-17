@@ -422,5 +422,30 @@ namespace CrashEdit
                 camera.SLSTEID = Entry.ENameToEID(txtSLST.Text);
             }
         }
+
+        private void cmdPosInterpolate_Click(object sender, EventArgs e)
+        {
+            Position[] pos = new Position[camera.Positions.Count];
+            for (int i = 0; i < camera.Positions.Count; ++i)
+            {
+                pos[i] = new Position(camera.Positions[i].X, camera.Positions[i].Y, camera.Positions[i].Z);
+            }
+            using (InterpolatorForm interpolator = new InterpolatorForm(pos))
+            {
+                if (interpolator.ShowDialog() == DialogResult.OK)
+                {
+                    for (int m = interpolator.Start-1, i = interpolator.End-2; i > m; --i)
+                    {
+                        camera.Positions.RemoveAt(i);
+                    }
+                    for (int i = 0; i < interpolator.Amount; ++i)
+                    {
+                        camera.Positions.Insert(i+interpolator.Start,new OldCameraPosition((short)interpolator.NewPositions[i+1].X,(short)interpolator.NewPositions[i+1].Y,(short)interpolator.NewPositions[i+1].Z,0,0,0));
+                    }
+                    UpdatePosition();
+                    InvalidateNodes();
+                }
+            }
+        }
     }
 }
