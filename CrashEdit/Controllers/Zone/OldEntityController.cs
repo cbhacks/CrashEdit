@@ -32,41 +32,43 @@ namespace CrashEdit
 
         private void Menu_Duplicate()
         {
-            short maxid = 1;
-            foreach (Chunk chunk in OldZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
+            short id = 6;
+            while (true)
             {
-                if (chunk is EntryChunk)
+                foreach (Chunk chunk in EntryChunkController.NSFController.NSF.Chunks)
                 {
-                    foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                    if (chunk is EntryChunk entrychunk)
                     {
-                        if (entry is OldZoneEntry)
+                        foreach (Entry entry in entrychunk.Entries)
                         {
-                            foreach (OldEntity otherentity in ((OldZoneEntry)entry).Entities)
+                            if (entry is OldZoneEntry zone)
                             {
-                                if (otherentity.ID > maxid)
+                                foreach (OldEntity otherentity in zone.Entities)
                                 {
-                                    maxid = otherentity.ID;
+                                    if (otherentity.ID == id)
+                                    {
+                                        goto FOUND_ID;
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                break;
+            FOUND_ID:
+                ++id;
+                continue;
             }
-            maxid++;
-            int newindex = OldZoneEntryController.OldZoneEntry.Entities.Count;
-            newindex -= BitConv.FromInt32(OldZoneEntryController.OldZoneEntry.Header,0x208);
-            int entitycount = BitConv.FromInt32(OldZoneEntryController.OldZoneEntry.Header,0x20C);
-            BitConv.ToInt32(OldZoneEntryController.OldZoneEntry.Header,0x20C,entitycount + 1);
+            ++OldZoneEntryController.OldZoneEntry.EntityCount;
             OldEntity newentity = OldEntity.Load(Entity.Save());
-            newentity.ID = maxid;
+            newentity.ID = id;
             OldZoneEntryController.OldZoneEntry.Entities.Add(newentity);
             OldZoneEntryController.AddNode(new OldEntityController(OldZoneEntryController,newentity));
         }
 
         private void Menu_Delete()
         {
-            int entitycount = BitConv.FromInt32(OldZoneEntryController.OldZoneEntry.Header,0x20C);
-            BitConv.ToInt32(OldZoneEntryController.OldZoneEntry.Header,0x20C,entitycount - 1);
+            --OldZoneEntryController.OldZoneEntry.EntityCount;
             OldZoneEntryController.OldZoneEntry.Entities.Remove(Entity);
             Dispose();
         }
