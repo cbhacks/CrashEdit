@@ -327,6 +327,7 @@ namespace CrashEdit
                         entity.Positions.Insert(i+interpolator.Start,new EntityPosition(interpolator.NewPositions[i+1]));
                     }
                     UpdatePosition();
+                    InvalidateNodes();
                 }
             }
         }
