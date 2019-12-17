@@ -16,7 +16,7 @@ namespace CrashEdit
         public OldEntityBox(OldEntityController controller)
         {
             this.controller = controller;
-            entity = controller.Entity;
+            entity = controller.OldEntity;
             InitializeComponent();
             UpdatePosition();
             UpdateID();
