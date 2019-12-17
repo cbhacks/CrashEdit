@@ -41,7 +41,7 @@ namespace CrashEdit
             numEnd.Maximum = positions.Count;
             numStart.Maximum = numEnd.Maximum - 1;
             UpdatePosition();
-            numTension.Value = 10;
+            numTension.Value = 2;
         }
         
         private double Tension => (double)numTension.Value;
