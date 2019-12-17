@@ -102,6 +102,7 @@ namespace CrashEdit
             this.txtSLST = new System.Windows.Forms.TextBox();
             this.chkSLST = new System.Windows.Forms.CheckBox();
             this.tabLoadLists = new System.Windows.Forms.TabPage();
+            this.lblEIDErrB = new System.Windows.Forms.Label();
             this.fraLoadListPayload = new System.Windows.Forms.GroupBox();
             this.lblPayload = new System.Windows.Forms.Label();
             this.cmdLoadListVerify = new System.Windows.Forms.Button();
@@ -176,7 +177,7 @@ namespace CrashEdit
             this.cmdNextEntityA = new System.Windows.Forms.Button();
             this.cmdPrevRowDrawA = new System.Windows.Forms.Button();
             this.cmdNextRowDrawA = new System.Windows.Forms.Button();
-            this.lblEIDErrB = new System.Windows.Forms.Label();
+            this.cmdInterpolate = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -308,6 +309,7 @@ namespace CrashEdit
             // 
             // fraPosition
             // 
+            this.fraPosition.Controls.Add(this.cmdInterpolate);
             this.fraPosition.Controls.Add(this.lblPositionIndex);
             this.fraPosition.Controls.Add(this.cmdNextPosition);
             this.fraPosition.Controls.Add(this.cmdPreviousPosition);
@@ -322,7 +324,7 @@ namespace CrashEdit
             this.fraPosition.Controls.Add(this.numX);
             this.fraPosition.Location = new System.Drawing.Point(3, 79);
             this.fraPosition.Name = "fraPosition";
-            this.fraPosition.Size = new System.Drawing.Size(200, 133);
+            this.fraPosition.Size = new System.Drawing.Size(200, 159);
             this.fraPosition.TabIndex = 1;
             this.fraPosition.TabStop = false;
             this.fraPosition.Text = "Position(s)";
@@ -578,12 +580,12 @@ namespace CrashEdit
             this.fraSettings.Controls.Add(this.lblSettingA);
             this.fraSettings.Controls.Add(this.numSettingB);
             this.fraSettings.Controls.Add(this.numSettingA);
-            this.fraSettings.Location = new System.Drawing.Point(3, 218);
+            this.fraSettings.Location = new System.Drawing.Point(3, 244);
             this.fraSettings.Name = "fraSettings";
             this.fraSettings.Size = new System.Drawing.Size(200, 130);
             this.fraSettings.TabIndex = 2;
             this.fraSettings.TabStop = false;
-            this.fraSettings.Text = "General Settings";
+            this.fraSettings.Text = "Argument(s)";
             // 
             // chkSettingHex
             // 
@@ -1180,6 +1182,16 @@ namespace CrashEdit
             this.tabLoadLists.Text = "Load Lists";
             this.tabLoadLists.UseVisualStyleBackColor = true;
             this.tabLoadLists.Enter += new System.EventHandler(this.tabLoadLists_Enter);
+            // 
+            // lblEIDErrB
+            // 
+            this.lblEIDErrB.AutoSize = true;
+            this.lblEIDErrB.ForeColor = System.Drawing.Color.Red;
+            this.lblEIDErrB.Location = new System.Drawing.Point(244, 300);
+            this.lblEIDErrB.Name = "lblEIDErrB";
+            this.lblEIDErrB.Size = new System.Drawing.Size(126, 13);
+            this.lblEIDErrB.TabIndex = 23;
+            this.lblEIDErrB.Text = "EID ERROR WARNING!";
             // 
             // fraLoadListPayload
             // 
@@ -2015,15 +2027,17 @@ namespace CrashEdit
             this.cmdNextRowDrawA.UseVisualStyleBackColor = true;
             this.cmdNextRowDrawA.Click += new System.EventHandler(this.cmdNextRowDrawA_Click);
             // 
-            // lblEIDErrB
+            // cmdInterpolate
             // 
-            this.lblEIDErrB.AutoSize = true;
-            this.lblEIDErrB.ForeColor = System.Drawing.Color.Red;
-            this.lblEIDErrB.Location = new System.Drawing.Point(244, 300);
-            this.lblEIDErrB.Name = "lblEIDErrB";
-            this.lblEIDErrB.Size = new System.Drawing.Size(126, 13);
-            this.lblEIDErrB.TabIndex = 23;
-            this.lblEIDErrB.Text = "EID ERROR WARNING!";
+            this.cmdInterpolate.AutoSize = true;
+            this.cmdInterpolate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.cmdInterpolate.Location = new System.Drawing.Point(6, 130);
+            this.cmdInterpolate.Name = "cmdInterpolate";
+            this.cmdInterpolate.Size = new System.Drawing.Size(67, 23);
+            this.cmdInterpolate.TabIndex = 8;
+            this.cmdInterpolate.Text = "Interpolate";
+            this.cmdInterpolate.UseVisualStyleBackColor = true;
+            this.cmdInterpolate.Click += new System.EventHandler(this.cmdInterpolate_Click);
             // 
             // EntityBox
             // 
@@ -2262,5 +2276,6 @@ namespace CrashEdit
         private System.Windows.Forms.Label lblSettingC;
         private System.Windows.Forms.CheckBox chkSettingHex;
         private System.Windows.Forms.Label lblEIDErrB;
+        private System.Windows.Forms.Button cmdInterpolate;
     }
 }
