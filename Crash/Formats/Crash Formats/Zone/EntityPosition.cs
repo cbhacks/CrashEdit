@@ -9,6 +9,13 @@ namespace Crash
             Z = z;
         }
 
+        public EntityPosition(Position p)
+        {
+            X = (short)p.X;
+            Y = (short)p.Y;
+            Z = (short)p.Z;
+        }
+
         public short X { get; }
         public short Y { get; }
         public short Z { get; }
