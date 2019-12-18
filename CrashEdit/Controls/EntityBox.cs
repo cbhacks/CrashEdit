@@ -587,6 +587,7 @@ namespace CrashEdit
                     cmdInsertEIDA.Enabled = true;
                     cmdRemoveEIDA.Enabled = true;
                     txtEIDA.Enabled = true;
+                    lblEIDErrA.Visible = true;
                     cmdPrevEIDA.Enabled = loadlistaeidindex > 0;
                     cmdNextEIDA.Enabled = loadlistaeidindex + 1 < entity.LoadListA.Rows[loadlistarowindex].Values.Count;
                     lblEIDIndexA.Text = $"{loadlistaeidindex+1} / {entity.LoadListA.Rows[loadlistarowindex].Values.Count}";
@@ -600,6 +601,7 @@ namespace CrashEdit
                     txtEIDA.Enabled = false;
                     cmdPrevEIDA.Enabled = false;
                     cmdNextEIDA.Enabled = false;
+                    lblEIDErrA.Visible = false;
                     lblEIDIndexA.Text = "-- / --";
                 }
             }
@@ -620,6 +622,7 @@ namespace CrashEdit
                 cmdRemoveEIDA.Enabled = false;
                 cmdInsertEIDA.Enabled = false;
                 cmdAppendEIDA.Enabled = false;
+                lblEIDErrA.Visible = false;
             }
         }
 
@@ -723,6 +726,7 @@ namespace CrashEdit
                     cmdInsertEIDB.Enabled = true;
                     cmdRemoveEIDB.Enabled = true;
                     txtEIDB.Enabled = true;
+                    lblEIDErrB.Visible = true;
                     cmdPrevEIDB.Enabled = loadlistbeidindex > 0;
                     cmdNextEIDB.Enabled = loadlistbeidindex + 1 < entity.LoadListB.Rows[loadlistbrowindex].Values.Count;
                     lblEIDIndexB.Text = $"{loadlistbeidindex+1} / {entity.LoadListB.Rows[loadlistbrowindex].Values.Count}";
@@ -736,6 +740,7 @@ namespace CrashEdit
                     txtEIDB.Enabled = false;
                     cmdPrevEIDB.Enabled = false;
                     cmdNextEIDB.Enabled = false;
+                    lblEIDErrB.Visible = false;
                     lblEIDIndexB.Text = "-- / --";
                 }
             }
@@ -756,6 +761,7 @@ namespace CrashEdit
                 cmdRemoveEIDB.Enabled = false;
                 cmdInsertEIDB.Enabled = false;
                 cmdAppendEIDB.Enabled = false;
+                lblEIDErrB.Visible = false;
             }
         }
 
@@ -1335,19 +1341,20 @@ namespace CrashEdit
                 txtSLST.Text = Entry.EIDToEName(entity.SLST.Rows[0].Values[0]);
                 chkSLST.Checked = true;
                 lblEIDErr1.Visible = true;
+                txtSLST.Enabled = true;
             }
             else
             {
                 txtSLST.Enabled = false;
                 chkSLST.Checked = false;
                 lblEIDErr1.Visible = false;
+                txtSLST.Enabled = false;
             }
         }
 
         private void chkSLST_CheckedChanged(object sender, EventArgs e)
         {
-            txtSLST.Enabled = chkSLST.Checked;
-            if (txtSLST.Enabled)
+            if (chkSLST.Checked)
             {
                 lblEIDErr1.Text = Entry.CheckEIDErrors(txtSLST.Text, true);
                 entity.SLST = new EntityT4Property();
@@ -1361,6 +1368,7 @@ namespace CrashEdit
             {
                 entity.SLST = null;
             }
+            UpdateSLST();
         }
 
         private void txtSLST_TextChanged(object sender, EventArgs e)
