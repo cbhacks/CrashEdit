@@ -174,8 +174,8 @@ namespace CrashEdit
 
             dlgGameVersion = new GameVersionForm();
 
-            Width = 640;
-            Height = 480;
+            Width = 680;
+            Height = 510;
             Text = "CrashEdit";
             Controls.Add(tbcTabs);
             Controls.Add(tsToolbar);
