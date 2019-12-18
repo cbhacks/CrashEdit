@@ -160,6 +160,7 @@ namespace CrashEdit
         protected override void RenderObjects()
         {
             base.RenderObjects();
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 1.0f);
             RenderEntry(entry,ref octreedisplaylists[0]);
             int xoffset = BitConv.FromInt32(entry.Layout,0);
             int yoffset = BitConv.FromInt32(entry.Layout,4);
@@ -178,6 +179,7 @@ namespace CrashEdit
             GL.Disable(EnableCap.PolygonStipple);
             if (deletelists)
                 deletelists = false;
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
         }
 
         private void RenderEntry(ZoneEntry entry,ref int octreedisplaylist)
@@ -218,7 +220,6 @@ namespace CrashEdit
                 GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
             }
             GL.Scale(4,4,4);
-            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 1.0f);
             GL.Color3(Color.White);
             GL.Begin(PrimitiveType.LineStrip);
             GL.Vertex3(0,0,0);
@@ -249,7 +250,6 @@ namespace CrashEdit
                     RenderEntity(entity,true);
                 }
             }
-            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
             GL.PopMatrix();
         }
 
@@ -295,7 +295,6 @@ namespace CrashEdit
                 }
                 GL.Enable(EnableCap.PolygonStipple);
             }
-            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 1.0f);
             GL.Scale(4,4,4);
             foreach (Entity entity in entry.Entities)
             {
@@ -308,7 +307,6 @@ namespace CrashEdit
                     RenderEntity(entity,true);
                 }
             }
-            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
             GL.PopMatrix();
         }
 
