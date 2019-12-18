@@ -329,7 +329,8 @@ namespace CrashEdit
             GL.DepthMask(true);
             SetBlendMode(3);
             GL.BindTexture(TextureTarget.Texture2D, 0);
-            GL.Enable(EnableCap.Texture2D);
+            if (!textures_enabled)
+                GL.Enable(EnableCap.Texture2D);
         }
 
         private void RenderVertex(SceneryEntry entry,SceneryVertex vertex)
