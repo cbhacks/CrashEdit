@@ -21,6 +21,7 @@ namespace CrashEdit
 
         static SceneryEntryViewer()
         {
+            textureframe = 0;
             texturetimer = new Timer
             {
                 Interval = 1000 / OldMainForm.GetRate() / 2,
@@ -39,7 +40,6 @@ namespace CrashEdit
             entries.Add(entry);
             displaylist = -1;
             entrytextures = new int[1][];
-            textureframe = 0;
             dyntris = new List<SceneryTriangle>[1] { new List<SceneryTriangle>() };
             dynquads = new List<SceneryQuad>[1] { new List<SceneryQuad>() };
             ConvertTexturesToGL(texturechunks, entry.Textures, entry.Info, 0x2C);
@@ -51,7 +51,6 @@ namespace CrashEdit
             this.entries = new List<SceneryEntry>(entries);
             displaylist = -1;
             entrytextures = new int[this.entries.Count][];
-            textureframe = 0;
             dyntris = new List<SceneryTriangle>[this.entries.Count];
             dynquads = new List<SceneryQuad>[this.entries.Count];
             for (int i = 0; i < this.entries.Count; ++i)
