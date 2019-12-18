@@ -160,6 +160,7 @@ namespace CrashEdit
         protected override void RenderObjects()
         {
             base.RenderObjects();
+            GL.Disable(EnableCap.Texture2D);
             GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 1.0f);
             RenderEntry(entry,ref octreedisplaylists[0]);
             int xoffset = BitConv.FromInt32(entry.Layout,0);
@@ -180,6 +181,7 @@ namespace CrashEdit
             if (deletelists)
                 deletelists = false;
             GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
+            GL.Enable(EnableCap.Texture2D);
         }
 
         private void RenderEntry(ZoneEntry entry,ref int octreedisplaylist)
@@ -516,7 +518,7 @@ namespace CrashEdit
 
         private void RenderSprite()
         {
-            //GL.Enable(EnableCap.Texture2D);
+            GL.Enable(EnableCap.Texture2D);
             GL.PushMatrix();
             GL.Rotate(-rotx,0,1,0);
             GL.Rotate(-roty,1,0,0);
@@ -531,7 +533,7 @@ namespace CrashEdit
             GL.Vertex2(-50,-50);
             GL.End();
             GL.PopMatrix();
-            //GL.Disable(EnableCap.Texture2D);
+            GL.Disable(EnableCap.Texture2D);
         }
 
         private void RenderPickup(int subtype)
@@ -545,7 +547,7 @@ namespace CrashEdit
         private void RenderBox(int subtype)
         {
             GL.Translate(0,50,0);
-            //GL.Enable(EnableCap.Texture2D);
+            GL.Enable(EnableCap.Texture2D);
             GL.Color3(Color.White);
             LoadBoxSideTexture(subtype);
             GL.PushMatrix();
@@ -564,7 +566,7 @@ namespace CrashEdit
             GL.Rotate(180,1,0,0);
             RenderBoxFace();
             GL.PopMatrix();
-            //GL.Disable(EnableCap.Texture2D);
+            GL.Disable(EnableCap.Texture2D);
         }
 
         private void RenderBoxFace()
