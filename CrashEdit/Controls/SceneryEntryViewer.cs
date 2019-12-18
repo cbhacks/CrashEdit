@@ -127,6 +127,10 @@ namespace CrashEdit
                 GL.NewList(displaylist,ListMode.CompileAndExecute);
                 for (int e = 0; e < entries.Count; ++e)
                 {
+                    dyntris[e].Clear();
+                    dynquads[e].Clear();
+                    lasttris[e].Clear();
+                    lastquads[e].Clear();
                     SceneryEntry entry = entries[e];
                     if (entry != null)
                     {
@@ -218,6 +222,7 @@ namespace CrashEdit
             for (int i = 0; i < dynquads.Length; ++i)
             {
                 SceneryEntry entry = entries[i];
+                List<SceneryQuad> fakes = new List<SceneryQuad>();
                 foreach (SceneryQuad quad in dynquads[i])
                 {
                     ModelExtendedTexture anim = entry.AnimatedTextures[quad.Texture];
@@ -227,6 +232,11 @@ namespace CrashEdit
                         ++tex;
                         if (!entry.AnimatedTextures[tex].IsLOD) System.Diagnostics.Debugger.Break();
                         tex = entry.AnimatedTextures[tex].Offset - 1 + entry.AnimatedTextures[tex].LOD0;
+                    }
+                    if (entry.Textures[tex].BlendMode == 1)
+                    {
+                        fakes.Add(quad);
+                        continue;
                     }
                     GL.BindTexture(TextureTarget.Texture2D, entrytextures[i][tex]);
                     SetBlendMode(entry.Textures[tex].BlendMode);
@@ -240,6 +250,11 @@ namespace CrashEdit
                     GL.TexCoord2(entry.Textures[tex].X4, entry.Textures[tex].Y4);
                     RenderVertex(entry, entry.Vertices[quad.VertexD]);
                     GL.End();
+                }
+                foreach (var fake in fakes)
+                {
+                    dynquads[i].Remove(fake);
+                    lastquads[i].Add(fake);
                 }
             }
             SetBlendMode(1);
@@ -303,6 +318,7 @@ namespace CrashEdit
             GL.DepthMask(true);
             SetBlendMode(3);
             GL.BindTexture(TextureTarget.Texture2D, 0);
+            GL.Enable(EnableCap.Texture2D);
         }
 
         private void RenderVertex(SceneryEntry entry,SceneryVertex vertex)
