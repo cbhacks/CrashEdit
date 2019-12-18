@@ -159,11 +159,11 @@ namespace CrashEdit
 
         protected override void RenderObjects()
         {
+            base.RenderObjects();
             RenderEntry(entry,ref octreedisplaylists[0]);
             int xoffset = BitConv.FromInt32(entry.Layout,0);
             int yoffset = BitConv.FromInt32(entry.Layout,4);
             int zoffset = BitConv.FromInt32(entry.Layout,8);
-            base.RenderObjects();
             GL.Enable(EnableCap.PolygonStipple);
             GL.PolygonStipple(stippleb);
             for (int i = 0; i < linkedentries.Length; i++)
@@ -218,6 +218,7 @@ namespace CrashEdit
                 GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
             }
             GL.Scale(4,4,4);
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 1.0f);
             GL.Color3(Color.White);
             GL.Begin(PrimitiveType.LineStrip);
             GL.Vertex3(0,0,0);
@@ -248,6 +249,7 @@ namespace CrashEdit
                     RenderEntity(entity,true);
                 }
             }
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
             GL.PopMatrix();
         }
 
@@ -514,7 +516,7 @@ namespace CrashEdit
 
         private void RenderSprite()
         {
-            GL.Enable(EnableCap.Texture2D);
+            //GL.Enable(EnableCap.Texture2D);
             GL.PushMatrix();
             GL.Rotate(-rotx,0,1,0);
             GL.Rotate(-roty,1,0,0);
@@ -529,7 +531,7 @@ namespace CrashEdit
             GL.Vertex2(-50,-50);
             GL.End();
             GL.PopMatrix();
-            GL.Disable(EnableCap.Texture2D);
+            //GL.Disable(EnableCap.Texture2D);
         }
 
         private void RenderPickup(int subtype)
@@ -543,7 +545,7 @@ namespace CrashEdit
         private void RenderBox(int subtype)
         {
             GL.Translate(0,50,0);
-            GL.Enable(EnableCap.Texture2D);
+            //GL.Enable(EnableCap.Texture2D);
             GL.Color3(Color.White);
             LoadBoxSideTexture(subtype);
             GL.PushMatrix();
@@ -562,7 +564,7 @@ namespace CrashEdit
             GL.Rotate(180,1,0,0);
             RenderBoxFace();
             GL.PopMatrix();
-            GL.Disable(EnableCap.Texture2D);
+            //GL.Disable(EnableCap.Texture2D);
         }
 
         private void RenderBoxFace()

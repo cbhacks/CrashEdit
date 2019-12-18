@@ -11,10 +11,12 @@ namespace CrashEdit
         private List<SceneryEntry> entries;
         private int displaylist;
         private bool textures_enabled = true;
+        private bool init = false;
 
         private static long textureframe; // CrashEdit would have to run for so long for this to overflow
         private static Timer texturetimer;
 
+        private TextureChunk[][] texturechunks;
         private int[][] entrytextures;
         private List<SceneryTriangle>[] dyntris;
         private List<SceneryQuad>[] dynquads;
@@ -42,12 +44,12 @@ namespace CrashEdit
             entries.Add(entry);
             displaylist = -1;
             entrytextures = new int[1][];
+            this.texturechunks = new TextureChunk[1][];
             dyntris = new List<SceneryTriangle>[1] { new List<SceneryTriangle>() };
             dynquads = new List<SceneryQuad>[1] { new List<SceneryQuad>() };
             lasttris = new List<SceneryTriangle>[1] { new List<SceneryTriangle>() };
             lastquads = new List<SceneryQuad>[1] { new List<SceneryQuad>() };
-            ConvertTexturesToGL(texturechunks, entry.Textures, entry.Info, 0x2C);
-            entrytextures[0] = textures;
+            this.texturechunks[0] = texturechunks;
         }
 
         public SceneryEntryViewer(IEnumerable<SceneryEntry> entries,TextureChunk[][] texturechunks)
@@ -55,6 +57,7 @@ namespace CrashEdit
             this.entries = new List<SceneryEntry>(entries);
             displaylist = -1;
             entrytextures = new int[this.entries.Count][];
+            this.texturechunks = texturechunks;
             dyntris = new List<SceneryTriangle>[this.entries.Count];
             dynquads = new List<SceneryQuad>[this.entries.Count];
             lasttris = new List<SceneryTriangle>[this.entries.Count];
@@ -65,8 +68,6 @@ namespace CrashEdit
                 dynquads[i] = new List<SceneryQuad>();
                 lasttris[i] = new List<SceneryTriangle>();
                 lastquads[i] = new List<SceneryQuad>();
-                ConvertTexturesToGL(texturechunks[i], this.entries[i].Textures, this.entries[i].Info, 0x2C);
-                entrytextures[i] = textures;
             }
         }
 
@@ -101,15 +102,11 @@ namespace CrashEdit
             switch (e.KeyCode)
             {
                 case Keys.T:
-                    if (textures_enabled)
-                        GL.Disable(EnableCap.Texture2D);
-                    else
-                        GL.Enable(EnableCap.Texture2D);
                     textures_enabled = !textures_enabled;
                     break;
             }
         }
-        
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -120,6 +117,21 @@ namespace CrashEdit
 
         protected override void RenderObjects()
         {
+            if (!init)
+            {
+                init = true;
+                for (int i = 0; i < entrytextures.Length; ++i)
+                {
+                    ConvertTexturesToGL(texturechunks[i], entries[i].Textures, entries[i].Info, 0x2C);
+                    entrytextures[i] = textures;
+                }
+            }
+
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+            if (!textures_enabled)
+                GL.Disable(EnableCap.Texture2D);
+            else
+                GL.Enable(EnableCap.Texture2D);
             float[] uvs = new float[8];
             if (displaylist == -1)
             {

@@ -12,16 +12,23 @@ namespace CrashEdit
     public abstract class ThreeDimensionalViewer : GLControl
     {
         private static Bitmap lastimage = null;
+        private static int defaulttexture = 0;
 
         protected static void LoadTexture(Bitmap image)
         {
+            if (defaulttexture == 0) defaulttexture = GL.GenTexture();
             if (image == lastimage) return; // no reload
             BitmapData data = image.LockBits(new Rectangle(Point.Empty,image.Size),ImageLockMode.ReadOnly,System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             try
             {
+                GL.BindTexture(TextureTarget.Texture2D, defaulttexture);
                 GL.TexImage2D(TextureTarget.Texture2D,0,PixelInternalFormat.Rgba,image.Width,image.Height,0,OpenTK.Graphics.OpenGL.PixelFormat.Bgra,PixelType.UnsignedByte,data.Scan0);
                 GL.TexParameter(TextureTarget.Texture2D,TextureParameterName.TextureMinFilter,(int)TextureMinFilter.Nearest);
                 GL.TexParameter(TextureTarget.Texture2D,TextureParameterName.TextureMagFilter,(int)TextureMagFilter.Nearest);
+            }
+            catch
+            {
+                GL.BindTexture(TextureTarget.Texture2D, 0);
             }
             finally
             {
