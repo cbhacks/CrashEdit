@@ -141,12 +141,11 @@ namespace CrashEdit
                                 if (q.VertexA >= entry.Vertices.Count || q.VertexB >= entry.Vertices.Count || q.VertexC >= entry.Vertices.Count || q.VertexD >= entry.Vertices.Count) continue;
                                 if (q.Texture != 0 || q.Animated)
                                 {
-                                    int tex = q.Texture - 1;
+                                    int tex = q.Texture;
                                     if (!q.Animated)
-                                        GL.BindTexture(TextureTarget.Texture2D, entrytextures[e][tex]);
+                                        GL.BindTexture(TextureTarget.Texture2D, entrytextures[e][tex-1]);
                                     else
                                     {
-                                        ++tex;
                                         var anim = entry.AnimatedTextures[tex];
                                         if (anim.Offset == 0)
                                             GL.BindTexture(TextureTarget.Texture2D, 0);
