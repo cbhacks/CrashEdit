@@ -22,7 +22,7 @@ namespace Crash
         public int Data { get; }
 
         public int Offset => Data & 0x7FF;
-        public bool IsLOD => Data < 0; // quick sign check
+        public bool IsLOD => Data < 0;
 
         public int LOD0 => IsLOD ? Data >> 29 & 0x3 : throw new Exception("This extended texture field is not a LOD field.");
         public int LOD1 => IsLOD ? Data >> 27 & 0x3 : throw new Exception("This extended texture field is not a LOD field.");
@@ -32,10 +32,11 @@ namespace Crash
         public int LOD5 => IsLOD ? Data >> 19 & 0x3 : throw new Exception("This extended texture field is not a LOD field.");
         public int LOD6 => IsLOD ? Data >> 17 & 0x3 : throw new Exception("This extended texture field is not a LOD field.");
         public int LOD7 => IsLOD ? Data >> 15 & 0x3 : throw new Exception("This extended texture field is not a LOD field.");
-        public int LOD8 => IsLOD ? Data >> 13 & 0x3 : throw new Exception("This extended texture field is not a LOD field.");
 
         public bool Leap => !IsLOD ? (Data >> 11 & 0x1) == 1 : throw new Exception("This extended texture field is not a flipbook field.");
-        public int Mask => !IsLOD ? Data >> 12 & 0xFF : throw new Exception("This extended texture field is not a flipbook field.");
+        public int Mask => !IsLOD ? Data >> 12 & 0x7F : throw new Exception("This extended texture field is not a flipbook field.");
+        public int Delay => !IsLOD ? Data >> 19 & 0x3F : throw new Exception("This extended texture field is not a flipbook field.");
+        public int Latency => !IsLOD ? Data >> 25 & 0x3F : throw new Exception("This extended texture field is not a flipbook field.");
 
         public byte[] Save()
         {

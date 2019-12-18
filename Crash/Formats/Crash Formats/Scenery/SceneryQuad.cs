@@ -16,12 +16,13 @@ namespace Crash
             int vertexb = (worda >> 20) & 0xFFF;
             int vertexd = (wordb >> 8) & 0xFFF;
             int vertexc = (wordb >> 20) & 0xFFF;
-            short texture = (short)((byte)wordb | (((byte)worda & 0x7F) << 8));
+            short texture = (short)(((byte)wordb & 0xF) | (((byte)worda & 0x7F) << 4));
+            byte unknown = (byte)(wordb >> 4 & 0xF);
             bool animated = (worda & 0x80) != 0;
-            return new SceneryQuad(vertexa,vertexb,vertexc,vertexd,texture,animated);
+            return new SceneryQuad(vertexa,vertexb,vertexc,vertexd,texture,unknown,animated);
         }
 
-        public SceneryQuad(int vertexa,int vertexb,int vertexc,int vertexd,short texture,bool animated)
+        public SceneryQuad(int vertexa,int vertexb,int vertexc,int vertexd,short texture,byte unknown,bool animated)
         {
             if (vertexa < 0 || vertexa > 0xFFF)
                 throw new ArgumentOutOfRangeException("vertexa");
@@ -36,6 +37,7 @@ namespace Crash
             VertexC = vertexc;
             VertexD = vertexd;
             Texture = texture;
+            Unknown = unknown;
             Animated = animated;
         }
 
@@ -44,13 +46,14 @@ namespace Crash
         public int VertexC { get; }
         public int VertexD { get; }
         public short Texture { get; }
+        public byte Unknown { get; }
         public bool Animated { get; }
 
         public byte[] Save()
         {
             byte[] data = new byte [8];
-            int worda = (VertexA << 8) | (VertexB << 20) | (Animated ? 0x80 : 0) | (Texture >> 8);
-            int wordb = (VertexD << 8) | (VertexC << 20) | (Texture & 0xFF);
+            int worda = (VertexA << 8) | (VertexB << 20) | (Animated ? 0x80 : 0) | (Texture >> 4);
+            int wordb = (VertexD << 8) | (VertexC << 20) | (Unknown << 4) | (Texture & 0xF);
             BitConv.ToInt32(data,0,worda);
             BitConv.ToInt32(data,4,wordb);
             return data;

@@ -33,6 +33,7 @@ namespace CrashEdit
             texturetimer.Tick += delegate (object sender,EventArgs e)
             {
                 textureframe = ++textureframe % 128;
+                texturetimer.Interval = 1000 / OldMainForm.GetRate();
             };
         }
 
