@@ -18,6 +18,8 @@ namespace CrashEdit
         private int[][] entrytextures;
         private List<SceneryTriangle>[] dyntris;
         private List<SceneryQuad>[] dynquads;
+        private List<SceneryTriangle>[] lasttris;
+        private List<SceneryQuad>[] lastquads;
 
         static SceneryEntryViewer()
         {
@@ -42,6 +44,8 @@ namespace CrashEdit
             entrytextures = new int[1][];
             dyntris = new List<SceneryTriangle>[1] { new List<SceneryTriangle>() };
             dynquads = new List<SceneryQuad>[1] { new List<SceneryQuad>() };
+            lasttris = new List<SceneryTriangle>[1] { new List<SceneryTriangle>() };
+            lastquads = new List<SceneryQuad>[1] { new List<SceneryQuad>() };
             ConvertTexturesToGL(texturechunks, entry.Textures, entry.Info, 0x2C);
             entrytextures[0] = textures;
         }
@@ -53,10 +57,14 @@ namespace CrashEdit
             entrytextures = new int[this.entries.Count][];
             dyntris = new List<SceneryTriangle>[this.entries.Count];
             dynquads = new List<SceneryQuad>[this.entries.Count];
+            lasttris = new List<SceneryTriangle>[this.entries.Count];
+            lastquads = new List<SceneryQuad>[this.entries.Count];
             for (int i = 0; i < this.entries.Count; ++i)
             {
                 dyntris[i] = new List<SceneryTriangle>();
                 dynquads[i] = new List<SceneryQuad>();
+                lasttris[i] = new List<SceneryTriangle>();
+                lastquads[i] = new List<SceneryQuad>();
                 ConvertTexturesToGL(texturechunks[i], this.entries[i].Textures, this.entries[i].Info, 0x2C);
                 entrytextures[i] = textures;
             }
@@ -112,6 +120,7 @@ namespace CrashEdit
 
         protected override void RenderObjects()
         {
+            float[] uvs = new float[8];
             if (displaylist == -1)
             {
                 displaylist = GL.GenLists(1);
@@ -121,104 +130,85 @@ namespace CrashEdit
                     SceneryEntry entry = entries[e];
                     if (entry != null)
                     {
-                        if (textures_enabled)
+                        GL.Begin(PrimitiveType.Triangles);
+                        foreach (SceneryTriangle triangle in entry.Triangles)
                         {
-                            GL.Begin(PrimitiveType.Triangles);
-                            foreach (SceneryTriangle triangle in entry.Triangles)
+                            if (triangle.VertexA < entry.Vertices.Count && triangle.VertexB < entry.Vertices.Count && triangle.VertexC < entry.Vertices.Count)
                             {
-                                if (triangle.VertexA < entry.Vertices.Count && triangle.VertexB < entry.Vertices.Count && triangle.VertexC < entry.Vertices.Count)
-                                {
-                                    RenderVertex(entry, entry.Vertices[triangle.VertexA]);
-                                    RenderVertex(entry, entry.Vertices[triangle.VertexB]);
-                                    RenderVertex(entry, entry.Vertices[triangle.VertexC]);
-                                }
+                                RenderVertex(entry, entry.Vertices[triangle.VertexA]);
+                                RenderVertex(entry, entry.Vertices[triangle.VertexB]);
+                                RenderVertex(entry, entry.Vertices[triangle.VertexC]);
                             }
-                            GL.End();
-                            float[] uvs = new float[8];
-                            for (int i = 0; i < entry.Quads.Count; ++i)
+                        }
+                        GL.End();
+                        for (int i = 0; i < entry.Quads.Count; ++i)
+                        {
+                            var q = entry.Quads[i];
+                            if (q.VertexA >= entry.Vertices.Count || q.VertexB >= entry.Vertices.Count || q.VertexC >= entry.Vertices.Count || q.VertexD >= entry.Vertices.Count) continue;
+                            if (q.Texture != 0 || q.Animated)
                             {
-                                var q = entry.Quads[i];
-                                if (q.VertexA >= entry.Vertices.Count || q.VertexB >= entry.Vertices.Count || q.VertexC >= entry.Vertices.Count || q.VertexD >= entry.Vertices.Count) continue;
-                                if (q.Texture != 0 || q.Animated)
+                                bool untex = false;
+                                int tex = q.Texture - 1;
+                                if (q.Animated)
                                 {
-                                    bool untex = false;
-                                    int tex = q.Texture - 1;
-                                    if (q.Animated)
+                                    ++tex;
+                                    var anim = entry.AnimatedTextures[tex];
+                                    if (anim.Offset == 0)
+                                        untex = true;
+                                    else if (anim.IsLOD)
                                     {
-                                        ++tex;
-                                        var anim = entry.AnimatedTextures[tex];
-                                        if (anim.Offset == 0)
-                                            untex = true;
-                                        else if (anim.IsLOD)
-                                        {
-                                            tex = anim.Offset - 1 + anim.LOD0; // we render the closest LOD for now
-                                        }
-                                        else
-                                        {
-                                            dynquads[e].Add(q);
-                                            continue;
-                                        }
-                                    }
-                                    if (untex)
-                                    {
-                                        GL.BindTexture(TextureTarget.Texture2D, 0);
+                                        tex = anim.Offset - 1 + anim.LOD0; // we render the closest LOD for now
                                     }
                                     else
                                     {
-                                        GL.BindTexture(TextureTarget.Texture2D, entrytextures[e][tex]);
-                                        uvs[0] = entry.Textures[tex].X2;
-                                        uvs[1] = entry.Textures[tex].Y2;
-                                        uvs[2] = entry.Textures[tex].X1;
-                                        uvs[3] = entry.Textures[tex].Y1;
-                                        uvs[4] = entry.Textures[tex].X3;
-                                        uvs[5] = entry.Textures[tex].Y3;
-                                        uvs[6] = entry.Textures[tex].X4;
-                                        uvs[7] = entry.Textures[tex].Y4;
+                                        if (entry.Textures[tex].BlendMode == 1)
+                                            lastquads[e].Add(q);
+                                        else
+                                            dynquads[e].Add(q);
+                                        continue;
                                     }
                                 }
-                                else
+                                if (untex)
+                                {
                                     GL.BindTexture(TextureTarget.Texture2D, 0);
-                                GL.Begin(PrimitiveType.Quads);
-                                GL.TexCoord2(uvs[0], uvs[1]);
-                                RenderVertex(entry, entry.Vertices[q.VertexA]);
-                                GL.TexCoord2(uvs[2], uvs[3]);
-                                RenderVertex(entry, entry.Vertices[q.VertexB]);
-                                GL.TexCoord2(uvs[4], uvs[5]);
-                                RenderVertex(entry, entry.Vertices[q.VertexC]);
-                                GL.TexCoord2(uvs[6], uvs[7]);
-                                RenderVertex(entry, entry.Vertices[q.VertexD]);
-                                GL.End();
-                            }
-                            GL.BindTexture(TextureTarget.Texture2D, 0);
-                        }
-                        else
-                        {
-                            GL.Begin(PrimitiveType.Triangles);
-                            foreach (SceneryTriangle triangle in entry.Triangles)
-                            {
-                                if (triangle.VertexA < entry.Vertices.Count && triangle.VertexB < entry.Vertices.Count && triangle.VertexC < entry.Vertices.Count)
+                                }
+                                else
                                 {
-                                    RenderVertex(entry, entry.Vertices[triangle.VertexA]);
-                                    RenderVertex(entry, entry.Vertices[triangle.VertexB]);
-                                    RenderVertex(entry, entry.Vertices[triangle.VertexC]);
+                                    if (entry.Textures[tex].BlendMode == 1)
+                                    {
+                                        lastquads[e].Add(q);
+                                        continue;
+                                    }
+                                    GL.BindTexture(TextureTarget.Texture2D, entrytextures[e][tex]);
+                                    uvs[0] = entry.Textures[tex].X2;
+                                    uvs[1] = entry.Textures[tex].Y2;
+                                    uvs[2] = entry.Textures[tex].X1;
+                                    uvs[3] = entry.Textures[tex].Y1;
+                                    uvs[4] = entry.Textures[tex].X3;
+                                    uvs[5] = entry.Textures[tex].Y3;
+                                    uvs[6] = entry.Textures[tex].X4;
+                                    uvs[7] = entry.Textures[tex].Y4;
+                                    //SetBlendMode(entry.Textures[tex].BlendMode);
                                 }
                             }
-                            GL.End();
+                            else
+                                GL.BindTexture(TextureTarget.Texture2D, 0);
                             GL.Begin(PrimitiveType.Quads);
-                            foreach (SceneryQuad quad in entry.Quads)
-                            {
-                                if (quad.VertexA < entry.Vertices.Count && quad.VertexB < entry.Vertices.Count && quad.VertexC < entry.Vertices.Count && quad.VertexD < entry.Vertices.Count)
-                                {
-                                    RenderVertex(entry, entry.Vertices[quad.VertexA]);
-                                    RenderVertex(entry, entry.Vertices[quad.VertexB]);
-                                    RenderVertex(entry, entry.Vertices[quad.VertexC]);
-                                    RenderVertex(entry, entry.Vertices[quad.VertexD]);
-                                }
-                            }
+                            GL.TexCoord2(uvs[0], uvs[1]);
+                            RenderVertex(entry, entry.Vertices[q.VertexA]);
+                            GL.TexCoord2(uvs[2], uvs[3]);
+                            RenderVertex(entry, entry.Vertices[q.VertexB]);
+                            GL.TexCoord2(uvs[4], uvs[5]);
+                            RenderVertex(entry, entry.Vertices[q.VertexC]);
+                            GL.TexCoord2(uvs[6], uvs[7]);
+                            RenderVertex(entry, entry.Vertices[q.VertexD]);
                             GL.End();
                         }
+                        GL.BindTexture(TextureTarget.Texture2D, 0);
+                        SetBlendMode(3);
                     }
                 }
+                SetBlendMode(3);
                 GL.EndList();
             }
             else
@@ -227,9 +217,9 @@ namespace CrashEdit
             }
             for (int i = 0; i < dynquads.Length; ++i)
             {
+                SceneryEntry entry = entries[i];
                 foreach (SceneryQuad quad in dynquads[i])
                 {
-                    SceneryEntry entry = entries[i];
                     ModelExtendedTexture anim = entry.AnimatedTextures[quad.Texture];
                     int tex = anim.Offset - 1 + (int)((textureframe / (1 + anim.Latency) + anim.Delay) & anim.Mask);
                     if (anim.Leap)
@@ -239,6 +229,7 @@ namespace CrashEdit
                         tex = entry.AnimatedTextures[tex].Offset - 1 + entry.AnimatedTextures[tex].LOD0;
                     }
                     GL.BindTexture(TextureTarget.Texture2D, entrytextures[i][tex]);
+                    SetBlendMode(entry.Textures[tex].BlendMode);
                     GL.Begin(PrimitiveType.Quads);
                     GL.TexCoord2(entry.Textures[tex].X2, entry.Textures[tex].Y2);
                     RenderVertex(entry, entry.Vertices[quad.VertexA]);
@@ -251,6 +242,66 @@ namespace CrashEdit
                     GL.End();
                 }
             }
+            SetBlendMode(1);
+            GL.DepthMask(false);
+            for (int i = 0; i < lastquads.Length; ++i)
+            {
+                SceneryEntry entry = entries[i];
+                foreach (SceneryQuad q in lastquads[i])
+                {
+                    bool untex = false;
+                    int tex = q.Texture - 1;
+                    if (q.Animated)
+                    {
+                        ++tex;
+                        var anim = entry.AnimatedTextures[tex];
+                        if (anim.Offset == 0)
+                            untex = true;
+                        else if (anim.IsLOD)
+                        {
+                            tex = anim.Offset - 1 + anim.LOD0; // we render the closest LOD for now
+                        }
+                        else
+                        {
+                            tex = anim.Offset - 1 + (int)((textureframe / (1 + anim.Latency) + anim.Delay) & anim.Mask);
+                            if (anim.Leap)
+                            {
+                                ++tex;
+                                if (!entry.AnimatedTextures[tex].IsLOD) System.Diagnostics.Debugger.Break();
+                                tex = entry.AnimatedTextures[tex].Offset - 1 + entry.AnimatedTextures[tex].LOD0;
+                            }
+                        }
+                    }
+                    if (untex)
+                    {
+                        GL.BindTexture(TextureTarget.Texture2D, 0);
+                    }
+                    else
+                    {
+                        GL.BindTexture(TextureTarget.Texture2D, entrytextures[i][tex]);
+                        uvs[0] = entry.Textures[tex].X2;
+                        uvs[1] = entry.Textures[tex].Y2;
+                        uvs[2] = entry.Textures[tex].X1;
+                        uvs[3] = entry.Textures[tex].Y1;
+                        uvs[4] = entry.Textures[tex].X3;
+                        uvs[5] = entry.Textures[tex].Y3;
+                        uvs[6] = entry.Textures[tex].X4;
+                        uvs[7] = entry.Textures[tex].Y4;
+                    }
+                    GL.Begin(PrimitiveType.Quads);
+                    GL.TexCoord2(entry.Textures[tex].X2, entry.Textures[tex].Y2);
+                    RenderVertex(entry, entry.Vertices[q.VertexA]);
+                    GL.TexCoord2(entry.Textures[tex].X1, entry.Textures[tex].Y1);
+                    RenderVertex(entry, entry.Vertices[q.VertexB]);
+                    GL.TexCoord2(entry.Textures[tex].X3, entry.Textures[tex].Y3);
+                    RenderVertex(entry, entry.Vertices[q.VertexC]);
+                    GL.TexCoord2(entry.Textures[tex].X4, entry.Textures[tex].Y4);
+                    RenderVertex(entry, entry.Vertices[q.VertexD]);
+                    GL.End();
+                }
+            }
+            GL.DepthMask(true);
+            SetBlendMode(3);
             GL.BindTexture(TextureTarget.Texture2D, 0);
         }
 

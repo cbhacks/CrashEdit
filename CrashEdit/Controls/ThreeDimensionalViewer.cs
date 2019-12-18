@@ -50,6 +50,7 @@ namespace CrashEdit
         private Timer inputtimer;
         private Timer refreshtimer;
         protected int[] textures;
+        private int blend;
 
         public ThreeDimensionalViewer()
         {
@@ -123,7 +124,7 @@ namespace CrashEdit
             GL.Enable(EnableCap.Blend);
             GL.DepthFunc(DepthFunction.Lequal);
             GL.AlphaFunc(AlphaFunction.Greater, 0);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            SetBlendMode(3);
             ResetCamera();
         }
 
@@ -303,6 +304,19 @@ namespace CrashEdit
             roty = 0;
             fullrange = range;
             Invalidate();
+        }
+
+        protected void SetBlendMode(int blendmode)
+        {
+            if (blend == blendmode) return;
+            switch (blendmode)
+            {
+                case 0: GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha); break; // translucent
+                case 1: GL.BlendFunc(BlendingFactor.One, BlendingFactor.One); break; // additive
+                case 2: GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha); break; // subtractive - not supported
+                case 3: GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha); break; // normal
+            }
+            blend = blendmode;
         }
 
         private long GenerateTextureHash(ModelTexture tex) // lol
