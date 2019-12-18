@@ -141,18 +141,17 @@ namespace CrashEdit
                                 if (q.VertexA >= entry.Vertices.Count || q.VertexB >= entry.Vertices.Count || q.VertexC >= entry.Vertices.Count || q.VertexD >= entry.Vertices.Count) continue;
                                 if (q.Texture != 0 || q.Animated)
                                 {
+                                    bool untex = false;
                                     int tex = q.Texture - 1;
-                                    if (!q.Animated)
-                                        GL.BindTexture(TextureTarget.Texture2D, entrytextures[e][tex]);
-                                    else
+                                    if (q.Animated)
                                     {
+                                        ++tex;
                                         var anim = entry.AnimatedTextures[tex];
                                         if (anim.Offset == 0)
-                                            GL.BindTexture(TextureTarget.Texture2D, 0);
+                                            untex = true;
                                         else if (anim.IsLOD)
                                         {
                                             tex = anim.Offset - 1 + anim.LOD0; // we render the closest LOD for now
-                                            GL.BindTexture(TextureTarget.Texture2D, entrytextures[e][tex]);
                                         }
                                         else
                                         {
@@ -160,14 +159,22 @@ namespace CrashEdit
                                             continue;
                                         }
                                     }
-                                    uvs[0] = entry.Textures[tex].X2;
-                                    uvs[1] = entry.Textures[tex].Y2;
-                                    uvs[2] = entry.Textures[tex].X1;
-                                    uvs[3] = entry.Textures[tex].Y1;
-                                    uvs[4] = entry.Textures[tex].X3;
-                                    uvs[5] = entry.Textures[tex].Y3;
-                                    uvs[6] = entry.Textures[tex].X4;
-                                    uvs[7] = entry.Textures[tex].Y4;
+                                    if (untex)
+                                    {
+                                        GL.BindTexture(TextureTarget.Texture2D, 0);
+                                    }
+                                    else
+                                    {
+                                        GL.BindTexture(TextureTarget.Texture2D, entrytextures[e][tex]);
+                                        uvs[0] = entry.Textures[tex].X2;
+                                        uvs[1] = entry.Textures[tex].Y2;
+                                        uvs[2] = entry.Textures[tex].X1;
+                                        uvs[3] = entry.Textures[tex].Y1;
+                                        uvs[4] = entry.Textures[tex].X3;
+                                        uvs[5] = entry.Textures[tex].Y3;
+                                        uvs[6] = entry.Textures[tex].X4;
+                                        uvs[7] = entry.Textures[tex].Y4;
+                                    }
                                 }
                                 else
                                     GL.BindTexture(TextureTarget.Texture2D, 0);
