@@ -295,6 +295,7 @@ namespace CrashEdit
                 }
                 GL.Enable(EnableCap.PolygonStipple);
             }
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 1.0f);
             GL.Scale(4,4,4);
             foreach (Entity entity in entry.Entities)
             {
@@ -307,6 +308,7 @@ namespace CrashEdit
                     RenderEntity(entity,true);
                 }
             }
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
             GL.PopMatrix();
         }
 
