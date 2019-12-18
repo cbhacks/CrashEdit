@@ -167,7 +167,6 @@ namespace CrashEdit
             int yoffset = BitConv.FromInt32(entry.Layout,4);
             int zoffset = BitConv.FromInt32(entry.Layout,8);
             GL.Enable(EnableCap.PolygonStipple);
-            GL.PolygonStipple(stippleb);
             for (int i = 0; i < linkedentries.Length; i++)
             {
                 ZoneEntry linkedentry = linkedentries[i];
