@@ -35,6 +35,7 @@ namespace CrashEdit
             this.chkSubtype = new System.Windows.Forms.CheckBox();
             this.numSubtype = new System.Windows.Forms.NumericUpDown();
             this.fraPosition = new System.Windows.Forms.GroupBox();
+            this.cmdInterpolate = new System.Windows.Forms.Button();
             this.lblPositionIndex = new System.Windows.Forms.Label();
             this.cmdNextPosition = new System.Windows.Forms.Button();
             this.cmdPreviousPosition = new System.Windows.Forms.Button();
@@ -177,7 +178,6 @@ namespace CrashEdit
             this.cmdNextEntityA = new System.Windows.Forms.Button();
             this.cmdPrevRowDrawA = new System.Windows.Forms.Button();
             this.cmdNextRowDrawA = new System.Windows.Forms.Button();
-            this.cmdInterpolate = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -328,6 +328,18 @@ namespace CrashEdit
             this.fraPosition.TabIndex = 1;
             this.fraPosition.TabStop = false;
             this.fraPosition.Text = "Position(s)";
+            // 
+            // cmdInterpolate
+            // 
+            this.cmdInterpolate.AutoSize = true;
+            this.cmdInterpolate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.cmdInterpolate.Location = new System.Drawing.Point(6, 130);
+            this.cmdInterpolate.Name = "cmdInterpolate";
+            this.cmdInterpolate.Size = new System.Drawing.Size(67, 23);
+            this.cmdInterpolate.TabIndex = 8;
+            this.cmdInterpolate.Text = "Interpolate";
+            this.cmdInterpolate.UseVisualStyleBackColor = true;
+            this.cmdInterpolate.Click += new System.EventHandler(this.cmdInterpolate_Click);
             // 
             // lblPositionIndex
             // 
@@ -765,7 +777,7 @@ namespace CrashEdit
             this.tbcTabs.Location = new System.Drawing.Point(0, 0);
             this.tbcTabs.Name = "tbcTabs";
             this.tbcTabs.SelectedIndex = 0;
-            this.tbcTabs.Size = new System.Drawing.Size(398, 454);
+            this.tbcTabs.Size = new System.Drawing.Size(398, 427);
             this.tbcTabs.TabIndex = 7;
             // 
             // tabGeneral
@@ -779,7 +791,7 @@ namespace CrashEdit
             this.tabGeneral.Controls.Add(this.fraID);
             this.tabGeneral.Location = new System.Drawing.Point(4, 22);
             this.tabGeneral.Name = "tabGeneral";
-            this.tabGeneral.Size = new System.Drawing.Size(390, 428);
+            this.tabGeneral.Size = new System.Drawing.Size(390, 401);
             this.tabGeneral.TabIndex = 0;
             this.tabGeneral.Text = "General";
             this.tabGeneral.UseVisualStyleBackColor = true;
@@ -795,7 +807,7 @@ namespace CrashEdit
             this.tabSpecial.Controls.Add(this.fraVictims);
             this.tabSpecial.Location = new System.Drawing.Point(4, 22);
             this.tabSpecial.Name = "tabSpecial";
-            this.tabSpecial.Size = new System.Drawing.Size(390, 428);
+            this.tabSpecial.Size = new System.Drawing.Size(390, 401);
             this.tabSpecial.TabIndex = 1;
             this.tabSpecial.Text = "Special";
             this.tabSpecial.UseVisualStyleBackColor = true;
@@ -1117,7 +1129,7 @@ namespace CrashEdit
             this.tabCamera.Location = new System.Drawing.Point(4, 22);
             this.tabCamera.Name = "tabCamera";
             this.tabCamera.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCamera.Size = new System.Drawing.Size(390, 428);
+            this.tabCamera.Size = new System.Drawing.Size(390, 401);
             this.tabCamera.TabIndex = 2;
             this.tabCamera.Text = "Camera";
             this.tabCamera.UseVisualStyleBackColor = true;
@@ -1154,6 +1166,7 @@ namespace CrashEdit
             this.txtSLST.Name = "txtSLST";
             this.txtSLST.Size = new System.Drawing.Size(62, 20);
             this.txtSLST.TabIndex = 1;
+            this.txtSLST.Text = "NONE!";
             this.txtSLST.TextChanged += new System.EventHandler(this.txtSLST_TextChanged);
             // 
             // chkSLST
@@ -2027,25 +2040,13 @@ namespace CrashEdit
             this.cmdNextRowDrawA.UseVisualStyleBackColor = true;
             this.cmdNextRowDrawA.Click += new System.EventHandler(this.cmdNextRowDrawA_Click);
             // 
-            // cmdInterpolate
-            // 
-            this.cmdInterpolate.AutoSize = true;
-            this.cmdInterpolate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.cmdInterpolate.Location = new System.Drawing.Point(6, 130);
-            this.cmdInterpolate.Name = "cmdInterpolate";
-            this.cmdInterpolate.Size = new System.Drawing.Size(67, 23);
-            this.cmdInterpolate.TabIndex = 8;
-            this.cmdInterpolate.Text = "Interpolate";
-            this.cmdInterpolate.UseVisualStyleBackColor = true;
-            this.cmdInterpolate.Click += new System.EventHandler(this.cmdInterpolate_Click);
-            // 
             // EntityBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tbcTabs);
             this.Name = "EntityBox";
-            this.Size = new System.Drawing.Size(398, 454);
+            this.Size = new System.Drawing.Size(398, 427);
             ((System.ComponentModel.ISupportInitialize)(this.numType)).EndInit();
             this.fraType.ResumeLayout(false);
             this.fraType.PerformLayout();

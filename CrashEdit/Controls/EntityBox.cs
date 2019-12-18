@@ -1334,11 +1334,13 @@ namespace CrashEdit
             {
                 txtSLST.Text = Entry.EIDToEName(entity.SLST.Rows[0].Values[0]);
                 chkSLST.Checked = true;
+                lblEIDErr1.Visible = true;
             }
             else
             {
                 txtSLST.Enabled = false;
                 chkSLST.Checked = false;
+                lblEIDErr1.Visible = false;
             }
         }
 
@@ -1350,8 +1352,10 @@ namespace CrashEdit
                 lblEIDErr1.Text = Entry.CheckEIDErrors(txtSLST.Text, true);
                 entity.SLST = new EntityT4Property();
                 entity.SLST.Rows.Add(new EntityPropertyRow<int>());
-                if (lblEIDErr1.Text != string.Empty) return;
-                entity.SLST.Rows[0].Values.Add(Entry.ENameToEID(txtSLST.Text));
+                if (lblEIDErr1.Text != string.Empty)
+                    entity.SLST.Rows[0].Values.Add(Entry.NullEID);
+                else
+                    entity.SLST.Rows[0].Values.Add(Entry.ENameToEID(txtSLST.Text));
             }
             else
             {
