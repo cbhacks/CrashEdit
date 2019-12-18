@@ -11,7 +11,7 @@ namespace CrashEdit
     {
         private static readonly int[] SignTable = { -1, -2, -4, -8, -16, -32, -64, -128 }; // used for decompression
 
-        private static int textureframe = 0;
+        private static long textureframe; // CrashEdit would have to run for so long for this to overflow
         private static Timer texturetimer;
 
         private List<Frame> frames;
@@ -25,15 +25,16 @@ namespace CrashEdit
 
         static AnimationEntryViewer()
         {
+            textureframe = 0;
             texturetimer = new Timer
             {
-                Interval = 1000 / OldMainForm.GetRate(),
+                Interval = 1000 / OldMainForm.GetRate() / 2,
                 Enabled = true
             };
-            texturetimer.Tick += delegate (object sender,EventArgs e)
+            texturetimer.Tick += delegate (object sender, EventArgs e)
             {
-                textureframe = ++textureframe % 128;
-                texturetimer.Interval = 1000 / OldMainForm.GetRate();
+                ++textureframe;
+                texturetimer.Interval = 1000 / OldMainForm.GetRate() / 2;
             };
         }
 
@@ -180,42 +181,58 @@ namespace CrashEdit
                     for (int i = 0; i < model.Triangles.Count; ++i)
                     {
                         var tri = model.Triangles[i];
-                        if (tri.Tex != 0)
+                        if (tri.Tex != 0 || tri.Animated)
                         {
-                            //GL.Enable(EnableCap.Texture2D);
+                            bool untex = false;
                             int tex = tri.Tex - 1;
-                            //LoadTexture(bitmaps[tex]);
-                            if (!tri.Animated)
-                                GL.BindTexture(TextureTarget.Texture2D, textures[tex]);
-                            //else
-                            //{
-                            //    var anim = model.AnimatedTextures[tex];
-                            //    if (!anim.IsLOD && !anim.Leap && anim.Offset != 0)
-                            //    {
-                            //        tex = anim.Offset - 1 + (textureframe & anim.Mask);
-                            //        GL.BindTexture(TextureTarget.Texture2D, textures[tex]);
-                            //    }
-                            //    else
-                            //        GL.BindTexture(TextureTarget.Texture2D, 0);
-                            //}
-                            switch (tri.Type)
+                            if (tri.Animated)
                             {
-                                case 0:
-                                case 1:
-                                    uvs[0] = model.Textures[tex].X3;
-                                    uvs[1] = model.Textures[tex].Y3;
-                                    uvs[4] = model.Textures[tex].X1;
-                                    uvs[5] = model.Textures[tex].Y1;
-                                    break;
-                                case 2:
-                                    uvs[0] = model.Textures[tex].X1;
-                                    uvs[1] = model.Textures[tex].Y1;
-                                    uvs[4] = model.Textures[tex].X3;
-                                    uvs[5] = model.Textures[tex].Y3;
-                                    break;
+                                ++tex;
+                                var anim = model.AnimatedTextures[tex];
+                                if (anim.Offset == 0)
+                                    untex = true;
+                                else if (anim.IsLOD)
+                                {
+                                    tex = anim.Offset - 1 + anim.LOD0; // we render the closest LOD for now
+                                }
+                                else
+                                {
+                                    tex = anim.Offset - 1 + (int)((textureframe / (1 + anim.Latency) + anim.Delay) & anim.Mask);
+                                    if (anim.Leap)
+                                    {
+                                        ++tex;
+                                        anim = model.AnimatedTextures[tex];
+                                        if (!anim.IsLOD) System.Diagnostics.Debugger.Break();
+                                        tex = anim.Offset - 1 + anim.LOD0;
+                                    }
+                                }
                             }
-                            uvs[2] = model.Textures[tex].X2;
-                            uvs[3] = model.Textures[tex].Y2;
+                            if (untex)
+                            {
+                                GL.BindTexture(TextureTarget.Texture2D, 0);
+                            }
+                            else
+                            {
+                                GL.BindTexture(TextureTarget.Texture2D, textures[tex]);
+                                switch (tri.Type)
+                                {
+                                    case 0:
+                                    case 1:
+                                        uvs[0] = model.Textures[tex].X3;
+                                        uvs[1] = model.Textures[tex].Y3;
+                                        uvs[4] = model.Textures[tex].X1;
+                                        uvs[5] = model.Textures[tex].Y1;
+                                        break;
+                                    case 2:
+                                        uvs[0] = model.Textures[tex].X1;
+                                        uvs[1] = model.Textures[tex].Y1;
+                                        uvs[4] = model.Textures[tex].X3;
+                                        uvs[5] = model.Textures[tex].Y3;
+                                        break;
+                                }
+                                uvs[2] = model.Textures[tex].X2;
+                                uvs[3] = model.Textures[tex].Y2;
+                            }
                         }
                         else
                             GL.BindTexture(TextureTarget.Texture2D, 0);
