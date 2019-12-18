@@ -26,13 +26,20 @@ namespace Crash
         }
 
         private const float Factor255_31 = 255f / 31f;
-        public static int Convert5551_8888(short p)
+        public static int Convert5551_8888(short p, int mode)
         {
             byte r = (byte)(Factor255_31 * (p >> 0 & 0x1F));
             byte g = (byte)(Factor255_31 * (p >> 5 & 0x1F));
             byte b = (byte)(Factor255_31 * (p >> 10 & 0x1F));
-            byte a = (byte)(0xFF * (p >> 15 & 1));
-            return (0xFF << 24) | (r << 16) | (g << 8) | b;
+            byte a = (byte)(p >> 15 & 1);
+            switch (mode)
+            {
+                case 0: a = a == 1 ? (byte)0x7F : (r+g+b == 0 ? (byte)0 : (byte)0xFF); break;
+                case 1: a = a == 1 ? (byte)0x7F : (r+g+b == 0 ? (byte)0 : (byte)0xFF); break;
+                case 2: a = a == 1 ? (byte)0xFF : (r+g+b == 0 ? (byte)0 : (byte)0xFF); break;
+                case 3: a = a == 1 ? (byte)0xFF : (r+g+b == 0 ? (byte)0 : (byte)0xFF); break;
+            }
+            return (a << 24) | (r << 16) | (g << 8) | b;
         }
     }
 }

@@ -317,7 +317,7 @@ namespace CrashEdit
                 | (tex.BitFlag ? 1L : 0L) << 48;
         }
 
-        public void ConvertTexturesToGL(TextureChunk[] texturechunks, IList<ModelTexture> modeltextures, byte[] eid_list, int eid_off)
+        protected void ConvertTexturesToGL(TextureChunk[] texturechunks, IList<ModelTexture> modeltextures, byte[] eid_list, int eid_off)
         {
             MakeCurrent();
             //bitmaps = new Bitmap[model.Textures.Count];
@@ -346,7 +346,7 @@ namespace CrashEdit
                     int[] palette = new int[256];
                     for (int j = 0; j < 256; ++j) // copy palette
                     {
-                        palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data, tex.ClutX * 32 + tex.ClutY * 512 + j * 2));
+                        palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data,tex.ClutX*32 + tex.ClutY*512 + j*2),tex.BlendMode);
                     }
                     for (int y = 0; y < h; ++y) // copy pixel data
                     {
@@ -361,7 +361,7 @@ namespace CrashEdit
                     int[] palette = new int[16];
                     for (int j = 0; j < 16; ++j) // copy palette
                     {
-                        palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data, tex.ClutX * 32 + tex.ClutY * 512 + j * 2));
+                        palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data,tex.ClutX*32 + tex.ClutY*512 + j*2),tex.BlendMode);
                     }
                     for (int y = 0; y < h; ++y) // copy pixels
                     {
