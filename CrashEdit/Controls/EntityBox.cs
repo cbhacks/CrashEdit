@@ -1698,26 +1698,26 @@ namespace CrashEdit
 
         private void UpdateMode()
         {
-            if (entity.Mode.HasValue)
-            {
-                numMode.Value = entity.Mode.Value;
-            }
-            numMode.Enabled = entity.Mode.HasValue;
-            chkMode.Checked = entity.Mode.HasValue;
+            //if (entity.Mode.HasValue)
+            //{
+            //    numMode.Value = entity.Mode.Value;
+            //}
+            //numMode.Enabled = entity.Mode.HasValue;
+            //chkMode.Checked = entity.Mode.HasValue;
         }
 
         private void numMode_ValueChanged(object sender, EventArgs e)
         {
-            entity.Mode = (byte)numMode.Value;
+            //entity.Mode = (byte)numMode.Value;
         }
 
         private void chkMode_CheckedChanged(object sender, EventArgs e)
         {
-            numMode.Enabled = chkMode.Checked;
-            if (chkMode.Checked)
-                entity.Mode = (byte)numMode.Value;
-            else
-                entity.Mode = null;
+            //numMode.Enabled = chkMode.Checked;
+            //if (chkMode.Checked)
+            //    entity.Mode = (byte)numMode.Value;
+            //else
+            //    entity.Mode = null;
         }
 
         private void UpdateAvgDist()

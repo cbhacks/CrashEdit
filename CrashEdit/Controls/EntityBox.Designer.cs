@@ -108,6 +108,11 @@ namespace CrashEdit
             this.numNeighborPosition = new System.Windows.Forms.NumericUpDown();
             this.lblNeighbor = new System.Windows.Forms.Label();
             this.fraNeighborSetting = new System.Windows.Forms.GroupBox();
+            this.lblNeighborSetting = new System.Windows.Forms.Label();
+            this.cmdRemoveNeighborSetting = new System.Windows.Forms.Button();
+            this.cmdInsertNeighborSetting = new System.Windows.Forms.Button();
+            this.cmdPrevNeighborSetting = new System.Windows.Forms.Button();
+            this.cmdNextNeighborSetting = new System.Windows.Forms.Button();
             this.lblNeighborLink = new System.Windows.Forms.Label();
             this.lblNeighborFlag = new System.Windows.Forms.Label();
             this.numNeighborFlag = new System.Windows.Forms.NumericUpDown();
@@ -210,11 +215,6 @@ namespace CrashEdit
             this.cmdNextEntityA = new System.Windows.Forms.Button();
             this.cmdPrevRowDrawA = new System.Windows.Forms.Button();
             this.cmdNextRowDrawA = new System.Windows.Forms.Button();
-            this.lblNeighborSetting = new System.Windows.Forms.Label();
-            this.cmdPrevNeighborSetting = new System.Windows.Forms.Button();
-            this.cmdNextNeighborSetting = new System.Windows.Forms.Button();
-            this.cmdRemoveNeighborSetting = new System.Windows.Forms.Button();
-            this.cmdInsertNeighborSetting = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -845,7 +845,7 @@ namespace CrashEdit
             this.tabGeneral.Controls.Add(this.fraID);
             this.tabGeneral.Location = new System.Drawing.Point(4, 22);
             this.tabGeneral.Name = "tabGeneral";
-            this.tabGeneral.Size = new System.Drawing.Size(390, 434);
+            this.tabGeneral.Size = new System.Drawing.Size(412, 434);
             this.tabGeneral.TabIndex = 0;
             this.tabGeneral.Text = "General";
             this.tabGeneral.UseVisualStyleBackColor = true;
@@ -862,7 +862,7 @@ namespace CrashEdit
             this.tabSpecial.Controls.Add(this.fraVictims);
             this.tabSpecial.Location = new System.Drawing.Point(4, 22);
             this.tabSpecial.Name = "tabSpecial";
-            this.tabSpecial.Size = new System.Drawing.Size(390, 434);
+            this.tabSpecial.Size = new System.Drawing.Size(412, 434);
             this.tabSpecial.TabIndex = 1;
             this.tabSpecial.Text = "Special";
             this.tabSpecial.UseVisualStyleBackColor = true;
@@ -1331,6 +1331,56 @@ namespace CrashEdit
             this.fraNeighborSetting.TabStop = false;
             this.fraNeighborSetting.Text = "Neighbor";
             // 
+            // lblNeighborSetting
+            // 
+            this.lblNeighborSetting.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNeighborSetting.Location = new System.Drawing.Point(6, 45);
+            this.lblNeighborSetting.Name = "lblNeighborSetting";
+            this.lblNeighborSetting.Size = new System.Drawing.Size(127, 23);
+            this.lblNeighborSetting.TabIndex = 21;
+            this.lblNeighborSetting.Text = "?? / ??";
+            this.lblNeighborSetting.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // cmdRemoveNeighborSetting
+            // 
+            this.cmdRemoveNeighborSetting.Location = new System.Drawing.Point(7, 71);
+            this.cmdRemoveNeighborSetting.Name = "cmdRemoveNeighborSetting";
+            this.cmdRemoveNeighborSetting.Size = new System.Drawing.Size(60, 23);
+            this.cmdRemoveNeighborSetting.TabIndex = 46;
+            this.cmdRemoveNeighborSetting.Text = "Remove";
+            this.cmdRemoveNeighborSetting.UseVisualStyleBackColor = true;
+            this.cmdRemoveNeighborSetting.Click += new System.EventHandler(this.cmdRemoveNeighborSetting_Click);
+            // 
+            // cmdInsertNeighborSetting
+            // 
+            this.cmdInsertNeighborSetting.Location = new System.Drawing.Point(73, 71);
+            this.cmdInsertNeighborSetting.Name = "cmdInsertNeighborSetting";
+            this.cmdInsertNeighborSetting.Size = new System.Drawing.Size(60, 23);
+            this.cmdInsertNeighborSetting.TabIndex = 47;
+            this.cmdInsertNeighborSetting.Text = "Insert";
+            this.cmdInsertNeighborSetting.UseVisualStyleBackColor = true;
+            this.cmdInsertNeighborSetting.Click += new System.EventHandler(this.cmdInsertNeighborSetting_Click);
+            // 
+            // cmdPrevNeighborSetting
+            // 
+            this.cmdPrevNeighborSetting.Location = new System.Drawing.Point(6, 19);
+            this.cmdPrevNeighborSetting.Name = "cmdPrevNeighborSetting";
+            this.cmdPrevNeighborSetting.Size = new System.Drawing.Size(60, 23);
+            this.cmdPrevNeighborSetting.TabIndex = 22;
+            this.cmdPrevNeighborSetting.Text = "Previous";
+            this.cmdPrevNeighborSetting.UseVisualStyleBackColor = true;
+            this.cmdPrevNeighborSetting.Click += new System.EventHandler(this.cmdPrevNeighborSetting_Click);
+            // 
+            // cmdNextNeighborSetting
+            // 
+            this.cmdNextNeighborSetting.Location = new System.Drawing.Point(72, 19);
+            this.cmdNextNeighborSetting.Name = "cmdNextNeighborSetting";
+            this.cmdNextNeighborSetting.Size = new System.Drawing.Size(60, 23);
+            this.cmdNextNeighborSetting.TabIndex = 23;
+            this.cmdNextNeighborSetting.Text = "Next";
+            this.cmdNextNeighborSetting.UseVisualStyleBackColor = true;
+            this.cmdNextNeighborSetting.Click += new System.EventHandler(this.cmdNextNeighborSetting_Click);
+            // 
             // lblNeighborLink
             // 
             this.lblNeighborLink.AutoSize = true;
@@ -1483,6 +1533,7 @@ namespace CrashEdit
             // 
             this.fraMode.Controls.Add(this.chkMode);
             this.fraMode.Controls.Add(this.numMode);
+            this.fraMode.Enabled = false;
             this.fraMode.Location = new System.Drawing.Point(6, 93);
             this.fraMode.Name = "fraMode";
             this.fraMode.Size = new System.Drawing.Size(120, 72);
@@ -1650,7 +1701,7 @@ namespace CrashEdit
             this.tabLoadLists.Location = new System.Drawing.Point(4, 22);
             this.tabLoadLists.Name = "tabLoadLists";
             this.tabLoadLists.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLoadLists.Size = new System.Drawing.Size(390, 434);
+            this.tabLoadLists.Size = new System.Drawing.Size(412, 434);
             this.tabLoadLists.TabIndex = 2;
             this.tabLoadLists.Text = "Load Lists";
             this.tabLoadLists.UseVisualStyleBackColor = true;
@@ -2098,7 +2149,7 @@ namespace CrashEdit
             this.tabDrawLists.Location = new System.Drawing.Point(4, 22);
             this.tabDrawLists.Name = "tabDrawLists";
             this.tabDrawLists.Padding = new System.Windows.Forms.Padding(3);
-            this.tabDrawLists.Size = new System.Drawing.Size(390, 434);
+            this.tabDrawLists.Size = new System.Drawing.Size(412, 434);
             this.tabDrawLists.TabIndex = 3;
             this.tabDrawLists.Text = "Draw Lists";
             this.tabDrawLists.UseVisualStyleBackColor = true;
@@ -2499,56 +2550,6 @@ namespace CrashEdit
             this.cmdNextRowDrawA.Text = "Next";
             this.cmdNextRowDrawA.UseVisualStyleBackColor = true;
             this.cmdNextRowDrawA.Click += new System.EventHandler(this.cmdNextRowDrawA_Click);
-            // 
-            // lblNeighborSetting
-            // 
-            this.lblNeighborSetting.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNeighborSetting.Location = new System.Drawing.Point(6, 45);
-            this.lblNeighborSetting.Name = "lblNeighborSetting";
-            this.lblNeighborSetting.Size = new System.Drawing.Size(127, 23);
-            this.lblNeighborSetting.TabIndex = 21;
-            this.lblNeighborSetting.Text = "?? / ??";
-            this.lblNeighborSetting.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // cmdPrevNeighborSetting
-            // 
-            this.cmdPrevNeighborSetting.Location = new System.Drawing.Point(6, 19);
-            this.cmdPrevNeighborSetting.Name = "cmdPrevNeighborSetting";
-            this.cmdPrevNeighborSetting.Size = new System.Drawing.Size(60, 23);
-            this.cmdPrevNeighborSetting.TabIndex = 22;
-            this.cmdPrevNeighborSetting.Text = "Previous";
-            this.cmdPrevNeighborSetting.UseVisualStyleBackColor = true;
-            this.cmdPrevNeighborSetting.Click += new System.EventHandler(this.cmdPrevNeighborSetting_Click);
-            // 
-            // cmdNextNeighborSetting
-            // 
-            this.cmdNextNeighborSetting.Location = new System.Drawing.Point(72, 19);
-            this.cmdNextNeighborSetting.Name = "cmdNextNeighborSetting";
-            this.cmdNextNeighborSetting.Size = new System.Drawing.Size(60, 23);
-            this.cmdNextNeighborSetting.TabIndex = 23;
-            this.cmdNextNeighborSetting.Text = "Next";
-            this.cmdNextNeighborSetting.UseVisualStyleBackColor = true;
-            this.cmdNextNeighborSetting.Click += new System.EventHandler(this.cmdNextNeighborSetting_Click);
-            // 
-            // cmdRemoveNeighborSetting
-            // 
-            this.cmdRemoveNeighborSetting.Location = new System.Drawing.Point(7, 71);
-            this.cmdRemoveNeighborSetting.Name = "cmdRemoveNeighborSetting";
-            this.cmdRemoveNeighborSetting.Size = new System.Drawing.Size(60, 23);
-            this.cmdRemoveNeighborSetting.TabIndex = 46;
-            this.cmdRemoveNeighborSetting.Text = "Remove";
-            this.cmdRemoveNeighborSetting.UseVisualStyleBackColor = true;
-            this.cmdRemoveNeighborSetting.Click += new System.EventHandler(this.cmdRemoveNeighborSetting_Click);
-            // 
-            // cmdInsertNeighborSetting
-            // 
-            this.cmdInsertNeighborSetting.Location = new System.Drawing.Point(73, 71);
-            this.cmdInsertNeighborSetting.Name = "cmdInsertNeighborSetting";
-            this.cmdInsertNeighborSetting.Size = new System.Drawing.Size(60, 23);
-            this.cmdInsertNeighborSetting.TabIndex = 47;
-            this.cmdInsertNeighborSetting.Text = "Insert";
-            this.cmdInsertNeighborSetting.UseVisualStyleBackColor = true;
-            this.cmdInsertNeighborSetting.Click += new System.EventHandler(this.cmdInsertNeighborSetting_Click);
             // 
             // EntityBox
             // 
