@@ -34,8 +34,8 @@ namespace Crash
         public int LOD7 => IsLOD ? Data >> 15 & 0x3 : throw new Exception("This extended texture field is not a LOD field.");
 
         public bool Leap => !IsLOD ? (Data >> 11 & 0x1) == 1 : throw new Exception("This extended texture field is not a flipbook field.");
-        public int Mask => !IsLOD ? Data >> 12 & 0x7F : throw new Exception("This extended texture field is not a flipbook field.");
-        public int Delay => !IsLOD ? Data >> 19 & 0x3F : throw new Exception("This extended texture field is not a flipbook field.");
+        public int Mask => !IsLOD ? Data >> 12 & 0x3F : throw new Exception("This extended texture field is not a flipbook field.");
+        public int Delay => !IsLOD ? Data >> 18 & 0x7F : throw new Exception("This extended texture field is not a flipbook field.");
         public int Latency => !IsLOD ? Data >> 25 & 0x3F : throw new Exception("This extended texture field is not a flipbook field.");
 
         public byte[] Save()
