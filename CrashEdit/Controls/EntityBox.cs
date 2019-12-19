@@ -1179,9 +1179,9 @@ namespace CrashEdit
             {
                 foreach (Chunk chunk in c.ZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
                 {
-                    if (chunk is EntryChunk)
+                    if (chunk is EntryChunk entrychunk)
                     {
-                        foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                        foreach (Entry entry in entrychunk.Entries)
                         {
                             if (entry is ZoneEntry zone)
                             {
@@ -1207,9 +1207,9 @@ namespace CrashEdit
             {
                 foreach (Chunk chunk in nc.NewZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
                 {
-                    if (chunk is EntryChunk)
+                    if (chunk is EntryChunk entrychunk)
                     {
-                        foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                        foreach (Entry entry in entrychunk.Entries)
                         {
                             if (entry is NewZoneEntry zone)
                             {

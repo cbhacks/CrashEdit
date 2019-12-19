@@ -11,6 +11,7 @@ namespace CrashEdit
             ZoneEntryController = zoneentrycontroller;
             Entity = entity;
             AddMenu("Duplicate Entity",Menu_Duplicate);
+            AddMenu("Delete Entity",Menu_Delete);
             Node.ImageKey = "arrow";
             Node.SelectedImageKey = "arrow";
             InvalidateNode();
@@ -38,6 +39,7 @@ namespace CrashEdit
         }
 
         public ZoneEntryController ZoneEntryController { get; }
+        public ZoneEntry ZoneEntry => ZoneEntryController.ZoneEntry;
 
         public Entity Entity { get; }
 
@@ -80,14 +82,14 @@ namespace CrashEdit
                 }
             }
             maxid++;
-            int newindex = ZoneEntryController.ZoneEntry.Entities.Count;
-            newindex -= BitConv.FromInt32(ZoneEntryController.ZoneEntry.Header,0x188);
-            int entitycount = BitConv.FromInt32(ZoneEntryController.ZoneEntry.Header,0x18C);
-            BitConv.ToInt32(ZoneEntryController.ZoneEntry.Header,0x18C,entitycount + 1);
+            int newindex = ZoneEntry.Entities.Count;
+            newindex -= BitConv.FromInt32(ZoneEntry.Header,0x188);
+            int entitycount = BitConv.FromInt32(ZoneEntry.Header,0x18C);
+            BitConv.ToInt32(ZoneEntry.Header,0x18C,entitycount + 1);
             Entity newentity = Entity.Load(Entity.Save());
             newentity.ID = maxid;
             newentity.AlternateID = null;
-            ZoneEntryController.ZoneEntry.Entities.Add(newentity);
+            ZoneEntry.Entities.Add(newentity);
             ZoneEntryController.AddNode(new EntityController(ZoneEntryController,newentity));
             foreach (EntityPropertyRow<int> drawlist in drawlists)
             {
@@ -107,6 +109,56 @@ namespace CrashEdit
                     drawlist.Values.Add(maxid);
                 }
             }
+        }
+
+        private void Menu_Delete()
+        {
+            if (Entity.ID.HasValue)
+            {
+                foreach (Chunk chunk in ZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
+                {
+                    if (chunk is EntryChunk entrychunk)
+                    {
+                        foreach (Entry entry in entrychunk.Entries)
+                        {
+                            if (entry is ZoneEntry zone)
+                            {
+                                foreach (Entity otherentity in zone.Entities)
+                                {
+                                    if (otherentity.DrawListA != null)
+                                    {
+                                        foreach (EntityPropertyRow<int> row in otherentity.DrawListA.Rows)
+                                        {
+                                            for (int i = row.Values.Count - 1; i >= 0; --i)
+                                            {
+                                                if ((row.Values[i] & 0xFFFF00) >> 8 == Entity.ID.Value)
+                                                    row.Values.RemoveAt(i);
+                                            }
+                                        }
+                                    }
+                                    if (otherentity.DrawListB != null)
+                                    {
+                                        foreach (EntityPropertyRow<int> row in otherentity.DrawListB.Rows)
+                                        {
+                                            for (int i = row.Values.Count - 1; i >= 0; --i)
+                                            {
+                                                if ((row.Values[i] & 0xFFFF00) >> 8 == Entity.ID.Value)
+                                                    row.Values.RemoveAt(i);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (ZoneEntry.Entities.IndexOf(Entity) < ZoneEntry.CameraCount)
+                --ZoneEntry.CameraCount;
+            else
+                --ZoneEntry.EntityCount;
+            ZoneEntry.Entities.Remove(Entity);
+            Dispose();
         }
     }
 }
