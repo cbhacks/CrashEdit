@@ -348,51 +348,6 @@ namespace CrashEdit
             for (int i = 0; i < textures.Length; ++i)
             {
                 ModelTexture tex = modeltextures[i];
-                int w = tex.Width + 1;
-                int h = tex.Height + 1;
-                TextureChunk texturechunk = null;
-                int eid = BitConv.FromInt32(eid_list, eid_off + tex.TextureOffset);
-                for (int t = 0; t < texturechunks.Length; ++t)
-                {
-                    if (eid == texturechunks[t].EID)
-                    {
-                        texturechunk = texturechunks[t];
-                        break;
-                    }
-                }
-                if (texturechunk == null) throw new Exception("ConvertTexturesToGL: Texture chunk not found");
-                int[] pixels = new int[w * h]; // using indexed colors in GL would be dumb so we convert them to 32-bit
-                if (tex.BitFlag) // 8-bit
-                {
-                    int[] palette = new int[256];
-                    for (int j = 0; j < 256; ++j) // copy palette
-                    {
-                        palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data,tex.ClutX*32 + tex.ClutY*512 + j*2),tex.BlendMode);
-                    }
-                    for (int y = 0; y < h; ++y) // copy pixel data
-                    {
-                        for (int x = 0; x < w; ++x)
-                        {
-                            pixels[x + w * y] = palette[texturechunk.Data[(tex.Left + x) + (tex.Top + y) * 512]];
-                        }
-                    }
-                }
-                else // 4-bit
-                {
-                    int[] palette = new int[16];
-                    for (int j = 0; j < 16; ++j) // copy palette
-                    {
-                        palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data,tex.ClutX*32 + tex.ClutY*512 + j*2),tex.BlendMode);
-                    }
-                    for (int y = 0; y < h; ++y) // copy pixels
-                    {
-                        for (int x = 0; x < w / 2; ++x) // 2 pixels per byte
-                        {
-                            pixels[x * 2 + w * y] = palette[texturechunk.Data[(tex.Left / 2 + x) + (tex.Top + y) * 512] & 0xF];
-                            pixels[x * 2 + w * y + 1] = palette[texturechunk.Data[(tex.Left / 2 + x) + (tex.Top + y) * 512] >> 4 & 0xF];
-                        }
-                    }
-                }
                 long hash = GenerateTextureHash(tex);
                 if (texturebucket.ContainsKey(hash))
                 {
@@ -400,6 +355,51 @@ namespace CrashEdit
                 }
                 else
                 {
+                    int w = tex.Width + 1;
+                    int h = tex.Height + 1;
+                    TextureChunk texturechunk = null;
+                    int eid = BitConv.FromInt32(eid_list, eid_off + tex.TextureOffset);
+                    for (int t = 0; t < texturechunks.Length; ++t)
+                    {
+                        if (eid == texturechunks[t].EID)
+                        {
+                            texturechunk = texturechunks[t];
+                            break;
+                        }
+                    }
+                    if (texturechunk == null) throw new Exception("ConvertTexturesToGL: Texture chunk not found");
+                    int[] pixels = new int[w * h]; // using indexed colors in GL would be dumb so we convert them to 32-bit
+                    if (tex.BitFlag) // 8-bit
+                    {
+                        int[] palette = new int[256];
+                        for (int j = 0; j < 256; ++j) // copy palette
+                        {
+                            palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data, tex.ClutX * 32 + tex.ClutY * 512 + j * 2), tex.BlendMode);
+                        }
+                        for (int y = 0; y < h; ++y) // copy pixel data
+                        {
+                            for (int x = 0; x < w; ++x)
+                            {
+                                pixels[x + w * y] = palette[texturechunk.Data[(tex.Left + x) + (tex.Top + y) * 512]];
+                            }
+                        }
+                    }
+                    else // 4-bit
+                    {
+                        int[] palette = new int[16];
+                        for (int j = 0; j < 16; ++j) // copy palette
+                        {
+                            palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data, tex.ClutX * 32 + tex.ClutY * 512 + j * 2), tex.BlendMode);
+                        }
+                        for (int y = 0; y < h; ++y) // copy pixels
+                        {
+                            for (int x = 0; x < w / 2; ++x) // 2 pixels per byte
+                            {
+                                pixels[x * 2 + w * y] = palette[texturechunk.Data[(tex.Left / 2 + x) + (tex.Top + y) * 512] & 0xF];
+                                pixels[x * 2 + w * y + 1] = palette[texturechunk.Data[(tex.Left / 2 + x) + (tex.Top + y) * 512] >> 4 & 0xF];
+                            }
+                        }
+                    }
                     //Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                     //BitmapData data = bmp.LockBits(new Rectangle(Point.Empty, bmp.Size), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                     //unsafe
