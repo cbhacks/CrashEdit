@@ -792,7 +792,7 @@ namespace CrashEdit
             this.tbcTabs.Location = new System.Drawing.Point(0, 0);
             this.tbcTabs.Name = "tbcTabs";
             this.tbcTabs.SelectedIndex = 0;
-            this.tbcTabs.Size = new System.Drawing.Size(398, 427);
+            this.tbcTabs.Size = new System.Drawing.Size(398, 460);
             this.tbcTabs.TabIndex = 7;
             // 
             // tabGeneral
@@ -1202,7 +1202,7 @@ namespace CrashEdit
             this.fraCameraSubIndex.Size = new System.Drawing.Size(112, 72);
             this.fraCameraSubIndex.TabIndex = 6;
             this.fraCameraSubIndex.TabStop = false;
-            this.fraCameraSubIndex.Text = "Camera Sub-index";
+            this.fraCameraSubIndex.Text = "Camera Subindex";
             this.fraCameraSubIndex.UseCompatibleTextRendering = true;
             // 
             // chkCameraSubIndex
@@ -1329,7 +1329,7 @@ namespace CrashEdit
             this.tabLoadLists.Location = new System.Drawing.Point(4, 22);
             this.tabLoadLists.Name = "tabLoadLists";
             this.tabLoadLists.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLoadLists.Size = new System.Drawing.Size(390, 401);
+            this.tabLoadLists.Size = new System.Drawing.Size(390, 434);
             this.tabLoadLists.TabIndex = 2;
             this.tabLoadLists.Text = "Load Lists";
             this.tabLoadLists.UseVisualStyleBackColor = true;
@@ -2185,7 +2185,7 @@ namespace CrashEdit
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tbcTabs);
             this.Name = "EntityBox";
-            this.Size = new System.Drawing.Size(398, 427);
+            this.Size = new System.Drawing.Size(398, 460);
             ((System.ComponentModel.ISupportInitialize)(this.numType)).EndInit();
             this.fraType.ResumeLayout(false);
             this.fraType.PerformLayout();
