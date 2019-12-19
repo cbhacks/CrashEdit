@@ -113,6 +113,8 @@ namespace Crash
         private EntitySetting? boxcount = null;
         [EntityPropertyField(0x30E)]
         private int? scaling = null;
+        [EntityPropertyField(0x336)]
+        private int? timetrialreward = null;
         [EntityPropertyField(0x337)]
         private EntitySetting? bonusboxcount = null;
 
@@ -272,6 +274,12 @@ namespace Crash
         {
             get => scaling;
             set => scaling = value;
+        }
+
+        public int? TimeTrialReward
+        {
+            get => timetrialreward;
+            set => timetrialreward = value;
         }
 
         public EntitySetting? BonusBoxCount

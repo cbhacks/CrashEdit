@@ -1394,6 +1394,7 @@ namespace CrashEdit
             UpdateDDASection();
             UpdateDDASettings();
             UpdateOtherSettings();
+            UpdateTTReward();
             tabSpecial.Enter -= tabSpecial_Enter;
         }
 
@@ -1582,6 +1583,34 @@ namespace CrashEdit
                     UpdatePosition();
                 }
             }
+        }
+        
+        private void UpdateTTReward()
+        {
+            if (entity.TimeTrialReward.HasValue)
+            {
+                numTTReward.Value = entity.TimeTrialReward.Value >> 8;
+            }
+            numTTReward.Enabled = entity.TimeTrialReward.HasValue;
+            chkTTReward.Checked = entity.TimeTrialReward.HasValue;
+        }
+
+        private void chkTTReward_CheckedChanged(object sender, EventArgs e)
+        {
+            numTTReward.Enabled = chkTTReward.Checked;
+            if (chkTTReward.Checked)
+            {
+                entity.TimeTrialReward = (int)numTTReward.Value << 8;
+            }
+            else
+            {
+                entity.TimeTrialReward = null;
+            }
+        }
+
+        private void numTTReward_ValueChanged(object sender, EventArgs e)
+        {
+            entity.TimeTrialReward = (int)numTTReward.Value << 8;
         }
     }
 }

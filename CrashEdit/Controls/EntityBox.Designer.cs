@@ -178,6 +178,9 @@ namespace CrashEdit
             this.cmdNextEntityA = new System.Windows.Forms.Button();
             this.cmdPrevRowDrawA = new System.Windows.Forms.Button();
             this.cmdNextRowDrawA = new System.Windows.Forms.Button();
+            this.fraTTReward = new System.Windows.Forms.GroupBox();
+            this.chkTTReward = new System.Windows.Forms.CheckBox();
+            this.numTTReward = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -230,6 +233,8 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numMetavalueDrawA)).BeginInit();
             this.fraEntityA.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEntityA)).BeginInit();
+            this.fraTTReward.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numTTReward)).BeginInit();
             this.SuspendLayout();
             // 
             // chkType
@@ -799,6 +804,7 @@ namespace CrashEdit
             // tabSpecial
             // 
             this.tabSpecial.AutoScroll = true;
+            this.tabSpecial.Controls.Add(this.fraTTReward);
             this.tabSpecial.Controls.Add(this.fraOtherSettings);
             this.tabSpecial.Controls.Add(this.fraScaling);
             this.tabSpecial.Controls.Add(this.fraDDASection);
@@ -2040,6 +2046,46 @@ namespace CrashEdit
             this.cmdNextRowDrawA.UseVisualStyleBackColor = true;
             this.cmdNextRowDrawA.Click += new System.EventHandler(this.cmdNextRowDrawA_Click);
             // 
+            // fraTTReward
+            // 
+            this.fraTTReward.Controls.Add(this.chkTTReward);
+            this.fraTTReward.Controls.Add(this.numTTReward);
+            this.fraTTReward.Location = new System.Drawing.Point(121, 239);
+            this.fraTTReward.Name = "fraTTReward";
+            this.fraTTReward.Size = new System.Drawing.Size(112, 70);
+            this.fraTTReward.TabIndex = 12;
+            this.fraTTReward.TabStop = false;
+            this.fraTTReward.Text = "TimeTrial Reward";
+            // 
+            // chkTTReward
+            // 
+            this.chkTTReward.AutoSize = true;
+            this.chkTTReward.Location = new System.Drawing.Point(6, 19);
+            this.chkTTReward.Name = "chkTTReward";
+            this.chkTTReward.Size = new System.Drawing.Size(65, 17);
+            this.chkTTReward.TabIndex = 0;
+            this.chkTTReward.Text = "Enabled";
+            this.chkTTReward.UseVisualStyleBackColor = true;
+            this.chkTTReward.CheckedChanged += new System.EventHandler(this.chkTTReward_CheckedChanged);
+            // 
+            // numTTReward
+            // 
+            this.numTTReward.Location = new System.Drawing.Point(6, 42);
+            this.numTTReward.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.numTTReward.Minimum = new decimal(new int[] {
+            -2147483648,
+            0,
+            0,
+            -2147483648});
+            this.numTTReward.Name = "numTTReward";
+            this.numTTReward.Size = new System.Drawing.Size(100, 20);
+            this.numTTReward.TabIndex = 1;
+            this.numTTReward.ValueChanged += new System.EventHandler(this.numTTReward_ValueChanged);
+            // 
             // EntityBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2122,6 +2168,9 @@ namespace CrashEdit
             this.fraEntityA.ResumeLayout(false);
             this.fraEntityA.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEntityA)).EndInit();
+            this.fraTTReward.ResumeLayout(false);
+            this.fraTTReward.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numTTReward)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2278,5 +2327,8 @@ namespace CrashEdit
         private System.Windows.Forms.CheckBox chkSettingHex;
         private System.Windows.Forms.Label lblEIDErrB;
         private System.Windows.Forms.Button cmdInterpolate;
+        private System.Windows.Forms.GroupBox fraTTReward;
+        private System.Windows.Forms.CheckBox chkTTReward;
+        private System.Windows.Forms.NumericUpDown numTTReward;
     }
 }
