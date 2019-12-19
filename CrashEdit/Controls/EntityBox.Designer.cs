@@ -187,6 +187,9 @@ namespace CrashEdit
             this.cmdNextEntityA = new System.Windows.Forms.Button();
             this.cmdPrevRowDrawA = new System.Windows.Forms.Button();
             this.cmdNextRowDrawA = new System.Windows.Forms.Button();
+            this.fraMode = new System.Windows.Forms.GroupBox();
+            this.chkMode = new System.Windows.Forms.CheckBox();
+            this.numMode = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -245,6 +248,8 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numMetavalueDrawA)).BeginInit();
             this.fraEntityA.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEntityA)).BeginInit();
+            this.fraMode.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMode)).BeginInit();
             this.SuspendLayout();
             // 
             // chkType
@@ -823,7 +828,7 @@ namespace CrashEdit
             this.tabSpecial.Controls.Add(this.fraVictims);
             this.tabSpecial.Location = new System.Drawing.Point(4, 22);
             this.tabSpecial.Name = "tabSpecial";
-            this.tabSpecial.Size = new System.Drawing.Size(390, 401);
+            this.tabSpecial.Size = new System.Drawing.Size(390, 434);
             this.tabSpecial.TabIndex = 1;
             this.tabSpecial.Text = "Special";
             this.tabSpecial.UseVisualStyleBackColor = true;
@@ -1181,6 +1186,7 @@ namespace CrashEdit
             // 
             // tabCamera
             // 
+            this.tabCamera.Controls.Add(this.fraMode);
             this.tabCamera.Controls.Add(this.fraCameraSubIndex);
             this.tabCamera.Controls.Add(this.fraCameraIndex);
             this.tabCamera.Controls.Add(this.fraSLST);
@@ -1197,7 +1203,7 @@ namespace CrashEdit
             // 
             this.fraCameraSubIndex.Controls.Add(this.chkCameraSubIndex);
             this.fraCameraSubIndex.Controls.Add(this.numCameraSubIndex);
-            this.fraCameraSubIndex.Location = new System.Drawing.Point(124, 93);
+            this.fraCameraSubIndex.Location = new System.Drawing.Point(124, 171);
             this.fraCameraSubIndex.Name = "fraCameraSubIndex";
             this.fraCameraSubIndex.Size = new System.Drawing.Size(112, 72);
             this.fraCameraSubIndex.TabIndex = 6;
@@ -1238,7 +1244,7 @@ namespace CrashEdit
             // 
             this.fraCameraIndex.Controls.Add(this.chkCameraIndex);
             this.fraCameraIndex.Controls.Add(this.numCameraIndex);
-            this.fraCameraIndex.Location = new System.Drawing.Point(6, 93);
+            this.fraCameraIndex.Location = new System.Drawing.Point(6, 171);
             this.fraCameraIndex.Name = "fraCameraIndex";
             this.fraCameraIndex.Size = new System.Drawing.Size(112, 72);
             this.fraCameraIndex.TabIndex = 5;
@@ -2179,6 +2185,41 @@ namespace CrashEdit
             this.cmdNextRowDrawA.UseVisualStyleBackColor = true;
             this.cmdNextRowDrawA.Click += new System.EventHandler(this.cmdNextRowDrawA_Click);
             // 
+            // fraMode
+            // 
+            this.fraMode.Controls.Add(this.chkMode);
+            this.fraMode.Controls.Add(this.numMode);
+            this.fraMode.Location = new System.Drawing.Point(6, 93);
+            this.fraMode.Name = "fraMode";
+            this.fraMode.Size = new System.Drawing.Size(112, 72);
+            this.fraMode.TabIndex = 6;
+            this.fraMode.TabStop = false;
+            this.fraMode.Text = "Camera Mode";
+            // 
+            // chkMode
+            // 
+            this.chkMode.AutoSize = true;
+            this.chkMode.Location = new System.Drawing.Point(6, 19);
+            this.chkMode.Name = "chkMode";
+            this.chkMode.Size = new System.Drawing.Size(65, 17);
+            this.chkMode.TabIndex = 0;
+            this.chkMode.Text = "Enabled";
+            this.chkMode.UseVisualStyleBackColor = true;
+            this.chkMode.CheckedChanged += new System.EventHandler(this.chkMode_CheckedChanged);
+            // 
+            // numMode
+            // 
+            this.numMode.Location = new System.Drawing.Point(6, 42);
+            this.numMode.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numMode.Name = "numMode";
+            this.numMode.Size = new System.Drawing.Size(100, 20);
+            this.numMode.TabIndex = 1;
+            this.numMode.ValueChanged += new System.EventHandler(this.numMode_ValueChanged);
+            // 
             // EntityBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2270,6 +2311,9 @@ namespace CrashEdit
             this.fraEntityA.ResumeLayout(false);
             this.fraEntityA.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEntityA)).EndInit();
+            this.fraMode.ResumeLayout(false);
+            this.fraMode.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMode)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2435,5 +2479,8 @@ namespace CrashEdit
         private System.Windows.Forms.GroupBox fraCameraIndex;
         private System.Windows.Forms.CheckBox chkCameraIndex;
         private System.Windows.Forms.NumericUpDown numCameraIndex;
+        private System.Windows.Forms.GroupBox fraMode;
+        private System.Windows.Forms.CheckBox chkMode;
+        private System.Windows.Forms.NumericUpDown numMode;
     }
 }
