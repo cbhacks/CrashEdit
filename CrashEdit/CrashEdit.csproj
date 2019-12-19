@@ -233,6 +233,7 @@
     <Compile Include="NewEntryForm.Designer.cs">
       <DependentUpon>NewEntryForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs" />
     <Compile Include="ErrorReporter.cs">
       <SubType>Form</SubType>

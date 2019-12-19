@@ -233,6 +233,7 @@
     <Compile Include="Formats\Crash Formats\T6\T6EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Zone\NewZoneEntry.cs" />
     <Compile Include="Formats\Crash Formats\Zone\NewZoneEntryLoader.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\Aligner.cs" />
     <Compile Include="Utility\ADPCMConv.cs" />
     <Compile Include="Utility\AutoBitConv.cs" />
