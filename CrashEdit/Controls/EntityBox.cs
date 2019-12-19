@@ -517,7 +517,6 @@ namespace CrashEdit
                 lblVictimIndex.Text = "-- / --";
                 cmdPreviousVictim.Enabled = false;
                 cmdNextVictim.Enabled = false;
-                cmdInsertVictim.Enabled = false;
                 cmdRemoveVictim.Enabled = false;
                 numVictimID.Enabled = false;
             }
@@ -526,7 +525,6 @@ namespace CrashEdit
                 lblVictimIndex.Text = $"{victimindex+1} / {entity.Victims.Count}";
                 cmdPreviousVictim.Enabled = victimindex > 0;
                 cmdNextVictim.Enabled = victimindex < entity.Victims.Count-1;
-                cmdInsertVictim.Enabled = true;
                 cmdRemoveVictim.Enabled = true;
                 numVictimID.Enabled = true;
                 numVictimID.Value = entity.Victims[victimindex].VictimID;
