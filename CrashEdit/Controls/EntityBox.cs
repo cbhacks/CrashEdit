@@ -515,18 +515,20 @@ namespace CrashEdit
             if (victimindex >= entity.Victims.Count)
             {
                 lblVictimIndex.Text = "-- / --";
-                cmdPreviousVictim.Enabled = false;
-                cmdNextVictim.Enabled = false;
-                cmdRemoveVictim.Enabled = false;
-                numVictimID.Enabled = false;
+                cmdPreviousVictim.Enabled =
+                cmdNextVictim.Enabled =
+                cmdRemoveVictim.Enabled =
+                numVictimID.Enabled =
+                cmdClearAllVictims.Enabled = false;
             }
             else
             {
                 lblVictimIndex.Text = $"{victimindex+1} / {entity.Victims.Count}";
                 cmdPreviousVictim.Enabled = victimindex > 0;
                 cmdNextVictim.Enabled = victimindex < entity.Victims.Count-1;
-                cmdRemoveVictim.Enabled = true;
-                numVictimID.Enabled = true;
+                cmdRemoveVictim.Enabled =
+                numVictimID.Enabled =
+                cmdClearAllVictims.Enabled = true;
                 numVictimID.Value = entity.Victims[victimindex].VictimID;
             }
             victimdirty = false;
@@ -546,7 +548,15 @@ namespace CrashEdit
 
         private void cmdInsertVictim_Click(object sender,EventArgs e)
         {
-            entity.Victims.Insert(victimindex,entity.Victims[victimindex]);
+            if (entity.Victims.Count > 0)
+            {
+                entity.Victims.Insert(victimindex,entity.Victims[victimindex]);
+            }
+            else
+            {
+                victimindex = 0;
+                entity.Victims.Add(new EntityVictim(10));
+            }
             UpdateVictim();
         }
 
