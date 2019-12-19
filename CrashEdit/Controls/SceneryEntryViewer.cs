@@ -159,7 +159,7 @@ namespace CrashEdit
                         for (int i = 0; i < entry.Quads.Count; ++i)
                         {
                             var q = entry.Quads[i];
-                            if (q.VertexA >= entry.Vertices.Count || q.VertexB >= entry.Vertices.Count || q.VertexC >= entry.Vertices.Count || q.VertexD >= entry.Vertices.Count) continue;
+                            if ((q.VertexA >= entry.Vertices.Count || q.VertexB >= entry.Vertices.Count || q.VertexC >= entry.Vertices.Count || q.VertexD >= entry.Vertices.Count) || (q.VertexA == q.VertexB && q.VertexB == q.VertexC && q.VertexC == q.VertexD && q.VertexD == q.VertexA)) continue;
                             if (q.Texture != 0 || q.Animated)
                             {
                                 bool untex = false;
