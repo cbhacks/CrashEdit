@@ -1452,7 +1452,7 @@ namespace CrashEdit
             this.cmdInsertRowB.Name = "cmdInsertRowB";
             this.cmdInsertRowB.Size = new System.Drawing.Size(63, 23);
             this.cmdInsertRowB.TabIndex = 17;
-            this.cmdInsertRowB.Text = "Add";
+            this.cmdInsertRowB.Text = "Insert";
             this.cmdInsertRowB.UseVisualStyleBackColor = true;
             this.cmdInsertRowB.Click += new System.EventHandler(this.cmdInsertRowB_Click);
             // 
@@ -1637,7 +1637,7 @@ namespace CrashEdit
             this.cmdInsertRowA.Name = "cmdInsertRowA";
             this.cmdInsertRowA.Size = new System.Drawing.Size(63, 23);
             this.cmdInsertRowA.TabIndex = 17;
-            this.cmdInsertRowA.Text = "Add";
+            this.cmdInsertRowA.Text = "Insert";
             this.cmdInsertRowA.UseVisualStyleBackColor = true;
             this.cmdInsertRowA.Click += new System.EventHandler(this.cmdInsertRowA_Click);
             // 
@@ -1777,7 +1777,7 @@ namespace CrashEdit
             this.tabDrawLists.Location = new System.Drawing.Point(4, 22);
             this.tabDrawLists.Name = "tabDrawLists";
             this.tabDrawLists.Padding = new System.Windows.Forms.Padding(3);
-            this.tabDrawLists.Size = new System.Drawing.Size(390, 401);
+            this.tabDrawLists.Size = new System.Drawing.Size(390, 434);
             this.tabDrawLists.TabIndex = 3;
             this.tabDrawLists.Text = "Draw Lists";
             this.tabDrawLists.UseVisualStyleBackColor = true;
@@ -1825,7 +1825,7 @@ namespace CrashEdit
             this.cmdInsertRowDrawB.Name = "cmdInsertRowDrawB";
             this.cmdInsertRowDrawB.Size = new System.Drawing.Size(63, 23);
             this.cmdInsertRowDrawB.TabIndex = 17;
-            this.cmdInsertRowDrawB.Text = "Add";
+            this.cmdInsertRowDrawB.Text = "Insert";
             this.cmdInsertRowDrawB.UseVisualStyleBackColor = true;
             this.cmdInsertRowDrawB.Click += new System.EventHandler(this.cmdInsertRowDrawB_Click);
             // 
@@ -2023,7 +2023,7 @@ namespace CrashEdit
             this.cmdInsertRowDrawA.Name = "cmdInsertRowDrawA";
             this.cmdInsertRowDrawA.Size = new System.Drawing.Size(63, 23);
             this.cmdInsertRowDrawA.TabIndex = 17;
-            this.cmdInsertRowDrawA.Text = "Add";
+            this.cmdInsertRowDrawA.Text = "Insert";
             this.cmdInsertRowDrawA.UseVisualStyleBackColor = true;
             this.cmdInsertRowDrawA.Click += new System.EventHandler(this.cmdInsertRowDrawA_Click);
             // 

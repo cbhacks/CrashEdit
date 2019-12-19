@@ -699,12 +699,18 @@ namespace CrashEdit
 
         private void cmdInsertRowA_Click(object sender, EventArgs e)
         {
-            if (entity.LoadListA == null)
+            if (entity.LoadListA == null || entity.LoadListA.Rows.Count == 0)
+            {
                 entity.LoadListA = new EntityT4Property();
-            entity.LoadListA.Rows.Add(new EntityPropertyRow<int>());
-            entity.LoadListA.Rows[entity.LoadListA.RowCount - 1].MetaValue = 0;
-            loadlistarowindex = entity.LoadListA.RowCount - 1;
-            loadlistaeidindex = 0;
+                entity.LoadListA.Rows.Add(new EntityPropertyRow<int>());
+                entity.LoadListA.Rows[entity.LoadListA.RowCount - 1].MetaValue = 0;
+                loadlistarowindex = entity.LoadListA.RowCount - 1;
+                loadlistaeidindex = 0;
+            }
+            else
+            {
+                entity.LoadListA.Rows.Insert(loadlistarowindex, entity.LoadListA.Rows[loadlistarowindex]);
+            }
             UpdateLoadListA();
         }
 
@@ -838,12 +844,18 @@ namespace CrashEdit
 
         private void cmdInsertRowB_Click(object sender, EventArgs e)
         {
-            if (entity.LoadListB == null)
+            if (entity.LoadListB == null || entity.LoadListB.Rows.Count == 0)
+            {
                 entity.LoadListB = new EntityT4Property();
-            entity.LoadListB.Rows.Add(new EntityPropertyRow<int>());
-            entity.LoadListB.Rows[entity.LoadListB.RowCount - 1].MetaValue = 0;
-            loadlistbrowindex = entity.LoadListB.RowCount - 1;
-            loadlistbeidindex = 0;
+                entity.LoadListB.Rows.Add(new EntityPropertyRow<int>());
+                entity.LoadListB.Rows[entity.LoadListB.RowCount - 1].MetaValue = 0;
+                loadlistbrowindex = entity.LoadListB.RowCount - 1;
+                loadlistbeidindex = 0;
+            }
+            else
+            {
+                entity.LoadListB.Rows.Insert(loadlistbrowindex, entity.LoadListB.Rows[loadlistbrowindex]);
+            }
             UpdateLoadListB();
         }
 
@@ -1029,10 +1041,16 @@ namespace CrashEdit
 
         private void cmdInsertRowDrawA_Click(object sender, EventArgs e)
         {
-            if (entity.DrawListA == null)
+            if (entity.DrawListA == null || entity.DrawListA.Rows.Count == 0)
+            {
                 entity.DrawListA = new EntityInt32Property();
-            entity.DrawListA.Rows.Add(new EntityPropertyRow<int>());
-            entity.DrawListA.Rows[entity.DrawListA.RowCount - 1].MetaValue = 0;
+                entity.DrawListA.Rows.Add(new EntityPropertyRow<int>());
+                entity.DrawListA.Rows[entity.DrawListA.RowCount - 1].MetaValue = 0;
+            }
+            else
+            {
+                entity.DrawListA.Rows.Insert(drawlistarowindex, entity.DrawListA.Rows[drawlistarowindex]);
+            }
             UpdateDrawListA();
         }
 
@@ -1218,10 +1236,16 @@ namespace CrashEdit
 
         private void cmdInsertRowDrawB_Click(object sender, EventArgs e)
         {
-            if (entity.DrawListB == null)
+            if (entity.DrawListB == null || entity.DrawListB.Rows.Count == 0)
+            {
                 entity.DrawListB = new EntityInt32Property();
-            entity.DrawListB.Rows.Add(new EntityPropertyRow<int>());
-            entity.DrawListB.Rows[entity.DrawListB.RowCount - 1].MetaValue = 0;
+                entity.DrawListB.Rows.Add(new EntityPropertyRow<int>());
+                entity.DrawListB.Rows[entity.DrawListB.RowCount - 1].MetaValue = 0;
+            }
+            else
+            {
+                entity.DrawListB.Rows.Insert(drawlistbrowindex, entity.DrawListB.Rows[drawlistbrowindex]);
+            }
             UpdateDrawListB();
         }
 
