@@ -223,7 +223,6 @@ namespace CrashEdit
                         SetBlendMode(3);
                     }
                 }
-                SetBlendMode(3);
                 GL.EndList();
             }
             else
