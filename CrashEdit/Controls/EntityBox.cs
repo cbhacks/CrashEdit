@@ -1428,6 +1428,7 @@ namespace CrashEdit
             UpdateCameraIndex();
             UpdateCameraSubIndex();
             UpdateMode();
+            UpdateAvgDist();
             tabCamera.Enter -= tabCamera_Enter;
         }
 
@@ -1710,6 +1711,30 @@ namespace CrashEdit
                 entity.Mode = (byte)numMode.Value;
             else
                 entity.Mode = null;
+        }
+
+        private void UpdateAvgDist()
+        {
+            if (entity.AverageDistance.HasValue)
+            {
+                numAvgDist.Value = entity.AverageDistance.Value.ValueB;
+            }
+            numAvgDist.Enabled = entity.AverageDistance.HasValue;
+            chkAvgDist.Checked = entity.AverageDistance.HasValue;
+        }
+
+        private void numAvgDist_ValueChanged(object sender, EventArgs e)
+        {
+            entity.AverageDistance = new EntitySetting(0, (int)numAvgDist.Value);
+        }
+
+        private void chkAvgDist_CheckedChanged(object sender, EventArgs e)
+        {
+            numAvgDist.Enabled = chkAvgDist.Checked;
+            if (chkAvgDist.Checked)
+                entity.AverageDistance = new EntitySetting(0, (int)numAvgDist.Value);
+            else
+                entity.AverageDistance = null;
         }
     }
 }

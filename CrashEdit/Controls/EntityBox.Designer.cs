@@ -190,6 +190,9 @@ namespace CrashEdit
             this.fraMode = new System.Windows.Forms.GroupBox();
             this.chkMode = new System.Windows.Forms.CheckBox();
             this.numMode = new System.Windows.Forms.NumericUpDown();
+            this.fraAvgDist = new System.Windows.Forms.GroupBox();
+            this.chkAvgDist = new System.Windows.Forms.CheckBox();
+            this.numAvgDist = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -250,6 +253,8 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numEntityA)).BeginInit();
             this.fraMode.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numMode)).BeginInit();
+            this.fraAvgDist.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numAvgDist)).BeginInit();
             this.SuspendLayout();
             // 
             // chkType
@@ -811,7 +816,7 @@ namespace CrashEdit
             this.tabGeneral.Controls.Add(this.fraID);
             this.tabGeneral.Location = new System.Drawing.Point(4, 22);
             this.tabGeneral.Name = "tabGeneral";
-            this.tabGeneral.Size = new System.Drawing.Size(390, 401);
+            this.tabGeneral.Size = new System.Drawing.Size(390, 434);
             this.tabGeneral.TabIndex = 0;
             this.tabGeneral.Text = "General";
             this.tabGeneral.UseVisualStyleBackColor = true;
@@ -1186,6 +1191,7 @@ namespace CrashEdit
             // 
             // tabCamera
             // 
+            this.tabCamera.Controls.Add(this.fraAvgDist);
             this.tabCamera.Controls.Add(this.fraMode);
             this.tabCamera.Controls.Add(this.fraCameraSubIndex);
             this.tabCamera.Controls.Add(this.fraCameraIndex);
@@ -2220,6 +2226,46 @@ namespace CrashEdit
             this.numMode.TabIndex = 1;
             this.numMode.ValueChanged += new System.EventHandler(this.numMode_ValueChanged);
             // 
+            // fraAvgDist
+            // 
+            this.fraAvgDist.Controls.Add(this.chkAvgDist);
+            this.fraAvgDist.Controls.Add(this.numAvgDist);
+            this.fraAvgDist.Location = new System.Drawing.Point(124, 93);
+            this.fraAvgDist.Name = "fraAvgDist";
+            this.fraAvgDist.Size = new System.Drawing.Size(112, 72);
+            this.fraAvgDist.TabIndex = 7;
+            this.fraAvgDist.TabStop = false;
+            this.fraAvgDist.Text = "Point Distance";
+            // 
+            // chkAvgDist
+            // 
+            this.chkAvgDist.AutoSize = true;
+            this.chkAvgDist.Location = new System.Drawing.Point(6, 19);
+            this.chkAvgDist.Name = "chkAvgDist";
+            this.chkAvgDist.Size = new System.Drawing.Size(65, 17);
+            this.chkAvgDist.TabIndex = 0;
+            this.chkAvgDist.Text = "Enabled";
+            this.chkAvgDist.UseVisualStyleBackColor = true;
+            this.chkAvgDist.CheckedChanged += new System.EventHandler(this.chkAvgDist_CheckedChanged);
+            // 
+            // numAvgDist
+            // 
+            this.numAvgDist.Location = new System.Drawing.Point(6, 42);
+            this.numAvgDist.Maximum = new decimal(new int[] {
+            8388607,
+            0,
+            0,
+            0});
+            this.numAvgDist.Minimum = new decimal(new int[] {
+            8388608,
+            0,
+            0,
+            -2147483648});
+            this.numAvgDist.Name = "numAvgDist";
+            this.numAvgDist.Size = new System.Drawing.Size(100, 20);
+            this.numAvgDist.TabIndex = 1;
+            this.numAvgDist.ValueChanged += new System.EventHandler(this.numAvgDist_ValueChanged);
+            // 
             // EntityBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2314,6 +2360,9 @@ namespace CrashEdit
             this.fraMode.ResumeLayout(false);
             this.fraMode.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numMode)).EndInit();
+            this.fraAvgDist.ResumeLayout(false);
+            this.fraAvgDist.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numAvgDist)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2482,5 +2531,8 @@ namespace CrashEdit
         private System.Windows.Forms.GroupBox fraMode;
         private System.Windows.Forms.CheckBox chkMode;
         private System.Windows.Forms.NumericUpDown numMode;
+        private System.Windows.Forms.GroupBox fraAvgDist;
+        private System.Windows.Forms.CheckBox chkAvgDist;
+        private System.Windows.Forms.NumericUpDown numAvgDist;
     }
 }

@@ -91,6 +91,8 @@ namespace Crash
         private int? type;
         [EntityPropertyField(0xAA)]
         private int? subtype;
+        [EntityPropertyField(0xC9)]
+        private EntitySetting? avgdist;
         [EntityPropertyField(0x103)]
         private EntityT4Property slst;
         [EntityPropertyField(0x118)]
@@ -222,6 +224,12 @@ namespace Crash
         {
             get => subtype;
             set => subtype = value;
+        }
+
+        public EntitySetting? AverageDistance
+        {
+            get => avgdist;
+            set => avgdist = value;
         }
 
         public int? OtherSettings
