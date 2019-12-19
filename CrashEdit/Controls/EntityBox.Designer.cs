@@ -1187,7 +1187,7 @@ namespace CrashEdit
             this.tabCamera.Location = new System.Drawing.Point(4, 22);
             this.tabCamera.Name = "tabCamera";
             this.tabCamera.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCamera.Size = new System.Drawing.Size(390, 401);
+            this.tabCamera.Size = new System.Drawing.Size(390, 434);
             this.tabCamera.TabIndex = 2;
             this.tabCamera.Text = "Camera";
             this.tabCamera.UseVisualStyleBackColor = true;
@@ -1197,7 +1197,7 @@ namespace CrashEdit
             // 
             this.fraCameraSubIndex.Controls.Add(this.chkCameraSubIndex);
             this.fraCameraSubIndex.Controls.Add(this.numCameraSubIndex);
-            this.fraCameraSubIndex.Location = new System.Drawing.Point(124, 90);
+            this.fraCameraSubIndex.Location = new System.Drawing.Point(124, 93);
             this.fraCameraSubIndex.Name = "fraCameraSubIndex";
             this.fraCameraSubIndex.Size = new System.Drawing.Size(112, 72);
             this.fraCameraSubIndex.TabIndex = 6;
@@ -1238,7 +1238,7 @@ namespace CrashEdit
             // 
             this.fraCameraIndex.Controls.Add(this.chkCameraIndex);
             this.fraCameraIndex.Controls.Add(this.numCameraIndex);
-            this.fraCameraIndex.Location = new System.Drawing.Point(6, 90);
+            this.fraCameraIndex.Location = new System.Drawing.Point(6, 93);
             this.fraCameraIndex.Name = "fraCameraIndex";
             this.fraCameraIndex.Size = new System.Drawing.Size(112, 72);
             this.fraCameraIndex.TabIndex = 5;
@@ -1281,7 +1281,7 @@ namespace CrashEdit
             this.fraSLST.Controls.Add(this.lblEIDErr1);
             this.fraSLST.Controls.Add(this.txtSLST);
             this.fraSLST.Controls.Add(this.chkSLST);
-            this.fraSLST.Location = new System.Drawing.Point(3, 3);
+            this.fraSLST.Location = new System.Drawing.Point(6, 6);
             this.fraSLST.Name = "fraSLST";
             this.fraSLST.Size = new System.Drawing.Size(206, 81);
             this.fraSLST.TabIndex = 1;
