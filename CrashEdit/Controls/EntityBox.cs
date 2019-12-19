@@ -1548,7 +1548,7 @@ namespace CrashEdit
             }
             else if (loadedchunks.Count == 21)
             {
-                lblPayload.ForeColor = Color.Yellow;
+                lblPayload.ForeColor = Color.Goldenrod;
             }
             else
             {
