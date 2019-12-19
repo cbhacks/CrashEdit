@@ -95,6 +95,8 @@ namespace Crash
         private EntitySetting? avgdist;
         [EntityPropertyField(0x103)]
         private EntityT4Property slst;
+        [EntityPropertyField(0x109)]
+        private EntityUInt32Property neighbors = null;
         [EntityPropertyField(0x118)]
         private int? othersettings = null;
         [EntityPropertyField(0x131)]
@@ -268,6 +270,12 @@ namespace Crash
         {
             get => slst;
             set => slst = value;
+        }
+
+        public EntityUInt32Property Neighbors
+        {
+            get => neighbors;
+            set => neighbors = value;
         }
 
         public EntityT4Property LoadListA

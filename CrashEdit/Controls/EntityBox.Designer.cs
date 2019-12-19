@@ -101,6 +101,29 @@ namespace CrashEdit
             this.cmdPreviousVictim = new System.Windows.Forms.Button();
             this.lblVictimIndex = new System.Windows.Forms.Label();
             this.tabCamera = new System.Windows.Forms.TabPage();
+            this.fraNeighbor = new System.Windows.Forms.GroupBox();
+            this.lblNeighborPosition = new System.Windows.Forms.Label();
+            this.cmdRemoveNeighbor = new System.Windows.Forms.Button();
+            this.cmdInsertNeighbor = new System.Windows.Forms.Button();
+            this.numNeighborPosition = new System.Windows.Forms.NumericUpDown();
+            this.lblNeighbor = new System.Windows.Forms.Label();
+            this.fraNeighborSetting = new System.Windows.Forms.GroupBox();
+            this.lblNeighborLink = new System.Windows.Forms.Label();
+            this.lblNeighborFlag = new System.Windows.Forms.Label();
+            this.numNeighborFlag = new System.Windows.Forms.NumericUpDown();
+            this.lblNeighborCamera = new System.Windows.Forms.Label();
+            this.lblNeighborZone = new System.Windows.Forms.Label();
+            this.numNeighborLink = new System.Windows.Forms.NumericUpDown();
+            this.numNeighborCamera = new System.Windows.Forms.NumericUpDown();
+            this.numNeighborZone = new System.Windows.Forms.NumericUpDown();
+            this.cmdPrevNeighbor = new System.Windows.Forms.Button();
+            this.cmdNextNeighbor = new System.Windows.Forms.Button();
+            this.fraAvgDist = new System.Windows.Forms.GroupBox();
+            this.chkAvgDist = new System.Windows.Forms.CheckBox();
+            this.numAvgDist = new System.Windows.Forms.NumericUpDown();
+            this.fraMode = new System.Windows.Forms.GroupBox();
+            this.chkMode = new System.Windows.Forms.CheckBox();
+            this.numMode = new System.Windows.Forms.NumericUpDown();
             this.fraCameraSubIndex = new System.Windows.Forms.GroupBox();
             this.chkCameraSubIndex = new System.Windows.Forms.CheckBox();
             this.numCameraSubIndex = new System.Windows.Forms.NumericUpDown();
@@ -187,12 +210,11 @@ namespace CrashEdit
             this.cmdNextEntityA = new System.Windows.Forms.Button();
             this.cmdPrevRowDrawA = new System.Windows.Forms.Button();
             this.cmdNextRowDrawA = new System.Windows.Forms.Button();
-            this.fraMode = new System.Windows.Forms.GroupBox();
-            this.chkMode = new System.Windows.Forms.CheckBox();
-            this.numMode = new System.Windows.Forms.NumericUpDown();
-            this.fraAvgDist = new System.Windows.Forms.GroupBox();
-            this.chkAvgDist = new System.Windows.Forms.CheckBox();
-            this.numAvgDist = new System.Windows.Forms.NumericUpDown();
+            this.lblNeighborSetting = new System.Windows.Forms.Label();
+            this.cmdPrevNeighborSetting = new System.Windows.Forms.Button();
+            this.cmdNextNeighborSetting = new System.Windows.Forms.Button();
+            this.cmdRemoveNeighborSetting = new System.Windows.Forms.Button();
+            this.cmdInsertNeighborSetting = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -228,6 +250,17 @@ namespace CrashEdit
             this.fraVictims.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numVictimID)).BeginInit();
             this.tabCamera.SuspendLayout();
+            this.fraNeighbor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numNeighborPosition)).BeginInit();
+            this.fraNeighborSetting.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numNeighborFlag)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numNeighborLink)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numNeighborCamera)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numNeighborZone)).BeginInit();
+            this.fraAvgDist.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numAvgDist)).BeginInit();
+            this.fraMode.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMode)).BeginInit();
             this.fraCameraSubIndex.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numCameraSubIndex)).BeginInit();
             this.fraCameraIndex.SuspendLayout();
@@ -251,10 +284,6 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numMetavalueDrawA)).BeginInit();
             this.fraEntityA.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEntityA)).BeginInit();
-            this.fraMode.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numMode)).BeginInit();
-            this.fraAvgDist.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numAvgDist)).BeginInit();
             this.SuspendLayout();
             // 
             // chkType
@@ -802,7 +831,7 @@ namespace CrashEdit
             this.tbcTabs.Location = new System.Drawing.Point(0, 0);
             this.tbcTabs.Name = "tbcTabs";
             this.tbcTabs.SelectedIndex = 0;
-            this.tbcTabs.Size = new System.Drawing.Size(398, 460);
+            this.tbcTabs.Size = new System.Drawing.Size(420, 460);
             this.tbcTabs.TabIndex = 7;
             // 
             // tabGeneral
@@ -1191,6 +1220,7 @@ namespace CrashEdit
             // 
             // tabCamera
             // 
+            this.tabCamera.Controls.Add(this.fraNeighbor);
             this.tabCamera.Controls.Add(this.fraAvgDist);
             this.tabCamera.Controls.Add(this.fraMode);
             this.tabCamera.Controls.Add(this.fraCameraSubIndex);
@@ -1199,19 +1229,298 @@ namespace CrashEdit
             this.tabCamera.Location = new System.Drawing.Point(4, 22);
             this.tabCamera.Name = "tabCamera";
             this.tabCamera.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCamera.Size = new System.Drawing.Size(390, 434);
+            this.tabCamera.Size = new System.Drawing.Size(412, 434);
             this.tabCamera.TabIndex = 2;
             this.tabCamera.Text = "Camera";
             this.tabCamera.UseVisualStyleBackColor = true;
             this.tabCamera.Enter += new System.EventHandler(this.tabCamera_Enter);
             // 
+            // fraNeighbor
+            // 
+            this.fraNeighbor.Controls.Add(this.lblNeighborPosition);
+            this.fraNeighbor.Controls.Add(this.cmdRemoveNeighbor);
+            this.fraNeighbor.Controls.Add(this.cmdInsertNeighbor);
+            this.fraNeighbor.Controls.Add(this.numNeighborPosition);
+            this.fraNeighbor.Controls.Add(this.lblNeighbor);
+            this.fraNeighbor.Controls.Add(this.fraNeighborSetting);
+            this.fraNeighbor.Controls.Add(this.cmdPrevNeighbor);
+            this.fraNeighbor.Controls.Add(this.cmdNextNeighbor);
+            this.fraNeighbor.Location = new System.Drawing.Point(132, 93);
+            this.fraNeighbor.Name = "fraNeighbor";
+            this.fraNeighbor.Size = new System.Drawing.Size(151, 335);
+            this.fraNeighbor.TabIndex = 8;
+            this.fraNeighbor.TabStop = false;
+            this.fraNeighbor.Text = "Neighbors";
+            // 
+            // lblNeighborPosition
+            // 
+            this.lblNeighborPosition.AutoSize = true;
+            this.lblNeighborPosition.Location = new System.Drawing.Point(6, 73);
+            this.lblNeighborPosition.Name = "lblNeighborPosition";
+            this.lblNeighborPosition.Size = new System.Drawing.Size(44, 13);
+            this.lblNeighborPosition.TabIndex = 20;
+            this.lblNeighborPosition.Text = "Position";
+            // 
+            // cmdRemoveNeighbor
+            // 
+            this.cmdRemoveNeighbor.Location = new System.Drawing.Point(7, 97);
+            this.cmdRemoveNeighbor.Name = "cmdRemoveNeighbor";
+            this.cmdRemoveNeighbor.Size = new System.Drawing.Size(66, 23);
+            this.cmdRemoveNeighbor.TabIndex = 16;
+            this.cmdRemoveNeighbor.Text = "Remove";
+            this.cmdRemoveNeighbor.UseVisualStyleBackColor = true;
+            this.cmdRemoveNeighbor.Click += new System.EventHandler(this.cmdRemoveNeighbor_Click);
+            // 
+            // cmdInsertNeighbor
+            // 
+            this.cmdInsertNeighbor.Location = new System.Drawing.Point(79, 97);
+            this.cmdInsertNeighbor.Name = "cmdInsertNeighbor";
+            this.cmdInsertNeighbor.Size = new System.Drawing.Size(66, 23);
+            this.cmdInsertNeighbor.TabIndex = 17;
+            this.cmdInsertNeighbor.Text = "Insert";
+            this.cmdInsertNeighbor.UseVisualStyleBackColor = true;
+            this.cmdInsertNeighbor.Click += new System.EventHandler(this.cmdInsertNeighbor_Click);
+            // 
+            // numNeighborPosition
+            // 
+            this.numNeighborPosition.Location = new System.Drawing.Point(56, 71);
+            this.numNeighborPosition.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+            this.numNeighborPosition.Minimum = new decimal(new int[] {
+            32768,
+            0,
+            0,
+            -2147483648});
+            this.numNeighborPosition.Name = "numNeighborPosition";
+            this.numNeighborPosition.Size = new System.Drawing.Size(68, 20);
+            this.numNeighborPosition.TabIndex = 19;
+            this.numNeighborPosition.ValueChanged += new System.EventHandler(this.numNeighborPosition_ValueChanged);
+            // 
+            // lblNeighbor
+            // 
+            this.lblNeighbor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNeighbor.Location = new System.Drawing.Point(6, 45);
+            this.lblNeighbor.Name = "lblNeighbor";
+            this.lblNeighbor.Size = new System.Drawing.Size(139, 23);
+            this.lblNeighbor.TabIndex = 17;
+            this.lblNeighbor.Text = "?? / ??";
+            this.lblNeighbor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // fraNeighborSetting
+            // 
+            this.fraNeighborSetting.Controls.Add(this.lblNeighborSetting);
+            this.fraNeighborSetting.Controls.Add(this.cmdRemoveNeighborSetting);
+            this.fraNeighborSetting.Controls.Add(this.cmdInsertNeighborSetting);
+            this.fraNeighborSetting.Controls.Add(this.cmdPrevNeighborSetting);
+            this.fraNeighborSetting.Controls.Add(this.cmdNextNeighborSetting);
+            this.fraNeighborSetting.Controls.Add(this.lblNeighborLink);
+            this.fraNeighborSetting.Controls.Add(this.lblNeighborFlag);
+            this.fraNeighborSetting.Controls.Add(this.numNeighborFlag);
+            this.fraNeighborSetting.Controls.Add(this.lblNeighborCamera);
+            this.fraNeighborSetting.Controls.Add(this.lblNeighborZone);
+            this.fraNeighborSetting.Controls.Add(this.numNeighborLink);
+            this.fraNeighborSetting.Controls.Add(this.numNeighborCamera);
+            this.fraNeighborSetting.Controls.Add(this.numNeighborZone);
+            this.fraNeighborSetting.Location = new System.Drawing.Point(6, 126);
+            this.fraNeighborSetting.Name = "fraNeighborSetting";
+            this.fraNeighborSetting.Size = new System.Drawing.Size(139, 203);
+            this.fraNeighborSetting.TabIndex = 15;
+            this.fraNeighborSetting.TabStop = false;
+            this.fraNeighborSetting.Text = "Neighbor";
+            // 
+            // lblNeighborLink
+            // 
+            this.lblNeighborLink.AutoSize = true;
+            this.lblNeighborLink.Location = new System.Drawing.Point(6, 179);
+            this.lblNeighborLink.Name = "lblNeighborLink";
+            this.lblNeighborLink.Size = new System.Drawing.Size(54, 13);
+            this.lblNeighborLink.TabIndex = 45;
+            this.lblNeighborLink.Text = "Link Type";
+            // 
+            // lblNeighborFlag
+            // 
+            this.lblNeighborFlag.AutoSize = true;
+            this.lblNeighborFlag.Location = new System.Drawing.Point(6, 101);
+            this.lblNeighborFlag.Name = "lblNeighborFlag";
+            this.lblNeighborFlag.Size = new System.Drawing.Size(27, 13);
+            this.lblNeighborFlag.TabIndex = 39;
+            this.lblNeighborFlag.Text = "Flag";
+            // 
+            // numNeighborFlag
+            // 
+            this.numNeighborFlag.Location = new System.Drawing.Point(73, 99);
+            this.numNeighborFlag.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numNeighborFlag.Name = "numNeighborFlag";
+            this.numNeighborFlag.Size = new System.Drawing.Size(60, 20);
+            this.numNeighborFlag.TabIndex = 38;
+            this.numNeighborFlag.ValueChanged += new System.EventHandler(this.numNeighborFlag_ValueChanged);
+            // 
+            // lblNeighborCamera
+            // 
+            this.lblNeighborCamera.AutoSize = true;
+            this.lblNeighborCamera.Location = new System.Drawing.Point(6, 127);
+            this.lblNeighborCamera.Name = "lblNeighborCamera";
+            this.lblNeighborCamera.Size = new System.Drawing.Size(60, 13);
+            this.lblNeighborCamera.TabIndex = 44;
+            this.lblNeighborCamera.Text = "Cam. Index";
+            // 
+            // lblNeighborZone
+            // 
+            this.lblNeighborZone.AutoSize = true;
+            this.lblNeighborZone.Location = new System.Drawing.Point(6, 153);
+            this.lblNeighborZone.Name = "lblNeighborZone";
+            this.lblNeighborZone.Size = new System.Drawing.Size(61, 13);
+            this.lblNeighborZone.TabIndex = 41;
+            this.lblNeighborZone.Text = "Zone Index";
+            // 
+            // numNeighborLink
+            // 
+            this.numNeighborLink.Location = new System.Drawing.Point(73, 177);
+            this.numNeighborLink.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numNeighborLink.Name = "numNeighborLink";
+            this.numNeighborLink.Size = new System.Drawing.Size(60, 20);
+            this.numNeighborLink.TabIndex = 43;
+            this.numNeighborLink.ValueChanged += new System.EventHandler(this.numNeighborLink_ValueChanged);
+            // 
+            // numNeighborCamera
+            // 
+            this.numNeighborCamera.Location = new System.Drawing.Point(73, 125);
+            this.numNeighborCamera.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numNeighborCamera.Name = "numNeighborCamera";
+            this.numNeighborCamera.Size = new System.Drawing.Size(60, 20);
+            this.numNeighborCamera.TabIndex = 40;
+            this.numNeighborCamera.ValueChanged += new System.EventHandler(this.numNeighborCamera_ValueChanged);
+            // 
+            // numNeighborZone
+            // 
+            this.numNeighborZone.Location = new System.Drawing.Point(73, 151);
+            this.numNeighborZone.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numNeighborZone.Name = "numNeighborZone";
+            this.numNeighborZone.Size = new System.Drawing.Size(60, 20);
+            this.numNeighborZone.TabIndex = 42;
+            this.numNeighborZone.ValueChanged += new System.EventHandler(this.numNeighborZone_ValueChanged);
+            // 
+            // cmdPrevNeighbor
+            // 
+            this.cmdPrevNeighbor.Location = new System.Drawing.Point(7, 19);
+            this.cmdPrevNeighbor.Name = "cmdPrevNeighbor";
+            this.cmdPrevNeighbor.Size = new System.Drawing.Size(66, 23);
+            this.cmdPrevNeighbor.TabIndex = 15;
+            this.cmdPrevNeighbor.Text = "Previous";
+            this.cmdPrevNeighbor.UseVisualStyleBackColor = true;
+            this.cmdPrevNeighbor.Click += new System.EventHandler(this.cmdPrevNeighbor_Click);
+            // 
+            // cmdNextNeighbor
+            // 
+            this.cmdNextNeighbor.Location = new System.Drawing.Point(79, 19);
+            this.cmdNextNeighbor.Name = "cmdNextNeighbor";
+            this.cmdNextNeighbor.Size = new System.Drawing.Size(66, 23);
+            this.cmdNextNeighbor.TabIndex = 16;
+            this.cmdNextNeighbor.Text = "Next";
+            this.cmdNextNeighbor.UseVisualStyleBackColor = true;
+            this.cmdNextNeighbor.Click += new System.EventHandler(this.cmdNextNeighbor_Click);
+            // 
+            // fraAvgDist
+            // 
+            this.fraAvgDist.Controls.Add(this.chkAvgDist);
+            this.fraAvgDist.Controls.Add(this.numAvgDist);
+            this.fraAvgDist.Location = new System.Drawing.Point(6, 171);
+            this.fraAvgDist.Name = "fraAvgDist";
+            this.fraAvgDist.Size = new System.Drawing.Size(120, 72);
+            this.fraAvgDist.TabIndex = 7;
+            this.fraAvgDist.TabStop = false;
+            this.fraAvgDist.Text = "Point Distance";
+            // 
+            // chkAvgDist
+            // 
+            this.chkAvgDist.AutoSize = true;
+            this.chkAvgDist.Location = new System.Drawing.Point(6, 19);
+            this.chkAvgDist.Name = "chkAvgDist";
+            this.chkAvgDist.Size = new System.Drawing.Size(65, 17);
+            this.chkAvgDist.TabIndex = 0;
+            this.chkAvgDist.Text = "Enabled";
+            this.chkAvgDist.UseVisualStyleBackColor = true;
+            this.chkAvgDist.CheckedChanged += new System.EventHandler(this.chkAvgDist_CheckedChanged);
+            // 
+            // numAvgDist
+            // 
+            this.numAvgDist.Location = new System.Drawing.Point(6, 42);
+            this.numAvgDist.Maximum = new decimal(new int[] {
+            8388607,
+            0,
+            0,
+            0});
+            this.numAvgDist.Minimum = new decimal(new int[] {
+            8388608,
+            0,
+            0,
+            -2147483648});
+            this.numAvgDist.Name = "numAvgDist";
+            this.numAvgDist.Size = new System.Drawing.Size(108, 20);
+            this.numAvgDist.TabIndex = 1;
+            this.numAvgDist.ValueChanged += new System.EventHandler(this.numAvgDist_ValueChanged);
+            // 
+            // fraMode
+            // 
+            this.fraMode.Controls.Add(this.chkMode);
+            this.fraMode.Controls.Add(this.numMode);
+            this.fraMode.Location = new System.Drawing.Point(6, 93);
+            this.fraMode.Name = "fraMode";
+            this.fraMode.Size = new System.Drawing.Size(120, 72);
+            this.fraMode.TabIndex = 6;
+            this.fraMode.TabStop = false;
+            this.fraMode.Text = "Camera Mode";
+            // 
+            // chkMode
+            // 
+            this.chkMode.AutoSize = true;
+            this.chkMode.Location = new System.Drawing.Point(6, 19);
+            this.chkMode.Name = "chkMode";
+            this.chkMode.Size = new System.Drawing.Size(65, 17);
+            this.chkMode.TabIndex = 0;
+            this.chkMode.Text = "Enabled";
+            this.chkMode.UseVisualStyleBackColor = true;
+            this.chkMode.CheckedChanged += new System.EventHandler(this.chkMode_CheckedChanged);
+            // 
+            // numMode
+            // 
+            this.numMode.Location = new System.Drawing.Point(6, 42);
+            this.numMode.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numMode.Name = "numMode";
+            this.numMode.Size = new System.Drawing.Size(108, 20);
+            this.numMode.TabIndex = 1;
+            this.numMode.ValueChanged += new System.EventHandler(this.numMode_ValueChanged);
+            // 
             // fraCameraSubIndex
             // 
             this.fraCameraSubIndex.Controls.Add(this.chkCameraSubIndex);
             this.fraCameraSubIndex.Controls.Add(this.numCameraSubIndex);
-            this.fraCameraSubIndex.Location = new System.Drawing.Point(124, 171);
+            this.fraCameraSubIndex.Location = new System.Drawing.Point(6, 327);
             this.fraCameraSubIndex.Name = "fraCameraSubIndex";
-            this.fraCameraSubIndex.Size = new System.Drawing.Size(112, 72);
+            this.fraCameraSubIndex.Size = new System.Drawing.Size(120, 72);
             this.fraCameraSubIndex.TabIndex = 6;
             this.fraCameraSubIndex.TabStop = false;
             this.fraCameraSubIndex.Text = "Camera Subindex";
@@ -1242,7 +1551,7 @@ namespace CrashEdit
             0,
             -2147483648});
             this.numCameraSubIndex.Name = "numCameraSubIndex";
-            this.numCameraSubIndex.Size = new System.Drawing.Size(100, 20);
+            this.numCameraSubIndex.Size = new System.Drawing.Size(108, 20);
             this.numCameraSubIndex.TabIndex = 1;
             this.numCameraSubIndex.ValueChanged += new System.EventHandler(this.numCameraSubIndex_ValueChanged);
             // 
@@ -1250,9 +1559,9 @@ namespace CrashEdit
             // 
             this.fraCameraIndex.Controls.Add(this.chkCameraIndex);
             this.fraCameraIndex.Controls.Add(this.numCameraIndex);
-            this.fraCameraIndex.Location = new System.Drawing.Point(6, 171);
+            this.fraCameraIndex.Location = new System.Drawing.Point(6, 249);
             this.fraCameraIndex.Name = "fraCameraIndex";
-            this.fraCameraIndex.Size = new System.Drawing.Size(112, 72);
+            this.fraCameraIndex.Size = new System.Drawing.Size(120, 72);
             this.fraCameraIndex.TabIndex = 5;
             this.fraCameraIndex.TabStop = false;
             this.fraCameraIndex.Text = "Camera Index";
@@ -1282,7 +1591,7 @@ namespace CrashEdit
             0,
             -2147483648});
             this.numCameraIndex.Name = "numCameraIndex";
-            this.numCameraIndex.Size = new System.Drawing.Size(100, 20);
+            this.numCameraIndex.Size = new System.Drawing.Size(108, 20);
             this.numCameraIndex.TabIndex = 1;
             this.numCameraIndex.ValueChanged += new System.EventHandler(this.numCameraIndex_ValueChanged);
             // 
@@ -2191,80 +2500,55 @@ namespace CrashEdit
             this.cmdNextRowDrawA.UseVisualStyleBackColor = true;
             this.cmdNextRowDrawA.Click += new System.EventHandler(this.cmdNextRowDrawA_Click);
             // 
-            // fraMode
+            // lblNeighborSetting
             // 
-            this.fraMode.Controls.Add(this.chkMode);
-            this.fraMode.Controls.Add(this.numMode);
-            this.fraMode.Location = new System.Drawing.Point(6, 93);
-            this.fraMode.Name = "fraMode";
-            this.fraMode.Size = new System.Drawing.Size(112, 72);
-            this.fraMode.TabIndex = 6;
-            this.fraMode.TabStop = false;
-            this.fraMode.Text = "Camera Mode";
+            this.lblNeighborSetting.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNeighborSetting.Location = new System.Drawing.Point(6, 45);
+            this.lblNeighborSetting.Name = "lblNeighborSetting";
+            this.lblNeighborSetting.Size = new System.Drawing.Size(127, 23);
+            this.lblNeighborSetting.TabIndex = 21;
+            this.lblNeighborSetting.Text = "?? / ??";
+            this.lblNeighborSetting.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // chkMode
+            // cmdPrevNeighborSetting
             // 
-            this.chkMode.AutoSize = true;
-            this.chkMode.Location = new System.Drawing.Point(6, 19);
-            this.chkMode.Name = "chkMode";
-            this.chkMode.Size = new System.Drawing.Size(65, 17);
-            this.chkMode.TabIndex = 0;
-            this.chkMode.Text = "Enabled";
-            this.chkMode.UseVisualStyleBackColor = true;
-            this.chkMode.CheckedChanged += new System.EventHandler(this.chkMode_CheckedChanged);
+            this.cmdPrevNeighborSetting.Location = new System.Drawing.Point(6, 19);
+            this.cmdPrevNeighborSetting.Name = "cmdPrevNeighborSetting";
+            this.cmdPrevNeighborSetting.Size = new System.Drawing.Size(60, 23);
+            this.cmdPrevNeighborSetting.TabIndex = 22;
+            this.cmdPrevNeighborSetting.Text = "Previous";
+            this.cmdPrevNeighborSetting.UseVisualStyleBackColor = true;
+            this.cmdPrevNeighborSetting.Click += new System.EventHandler(this.cmdPrevNeighborSetting_Click);
             // 
-            // numMode
+            // cmdNextNeighborSetting
             // 
-            this.numMode.Location = new System.Drawing.Point(6, 42);
-            this.numMode.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numMode.Name = "numMode";
-            this.numMode.Size = new System.Drawing.Size(100, 20);
-            this.numMode.TabIndex = 1;
-            this.numMode.ValueChanged += new System.EventHandler(this.numMode_ValueChanged);
+            this.cmdNextNeighborSetting.Location = new System.Drawing.Point(72, 19);
+            this.cmdNextNeighborSetting.Name = "cmdNextNeighborSetting";
+            this.cmdNextNeighborSetting.Size = new System.Drawing.Size(60, 23);
+            this.cmdNextNeighborSetting.TabIndex = 23;
+            this.cmdNextNeighborSetting.Text = "Next";
+            this.cmdNextNeighborSetting.UseVisualStyleBackColor = true;
+            this.cmdNextNeighborSetting.Click += new System.EventHandler(this.cmdNextNeighborSetting_Click);
             // 
-            // fraAvgDist
+            // cmdRemoveNeighborSetting
             // 
-            this.fraAvgDist.Controls.Add(this.chkAvgDist);
-            this.fraAvgDist.Controls.Add(this.numAvgDist);
-            this.fraAvgDist.Location = new System.Drawing.Point(124, 93);
-            this.fraAvgDist.Name = "fraAvgDist";
-            this.fraAvgDist.Size = new System.Drawing.Size(112, 72);
-            this.fraAvgDist.TabIndex = 7;
-            this.fraAvgDist.TabStop = false;
-            this.fraAvgDist.Text = "Point Distance";
+            this.cmdRemoveNeighborSetting.Location = new System.Drawing.Point(7, 71);
+            this.cmdRemoveNeighborSetting.Name = "cmdRemoveNeighborSetting";
+            this.cmdRemoveNeighborSetting.Size = new System.Drawing.Size(60, 23);
+            this.cmdRemoveNeighborSetting.TabIndex = 46;
+            this.cmdRemoveNeighborSetting.Text = "Remove";
+            this.cmdRemoveNeighborSetting.UseVisualStyleBackColor = true;
+            this.cmdRemoveNeighborSetting.Click += new System.EventHandler(this.cmdRemoveNeighborSetting_Click);
             // 
-            // chkAvgDist
+            // cmdInsertNeighborSetting
             // 
-            this.chkAvgDist.AutoSize = true;
-            this.chkAvgDist.Location = new System.Drawing.Point(6, 19);
-            this.chkAvgDist.Name = "chkAvgDist";
-            this.chkAvgDist.Size = new System.Drawing.Size(65, 17);
-            this.chkAvgDist.TabIndex = 0;
-            this.chkAvgDist.Text = "Enabled";
-            this.chkAvgDist.UseVisualStyleBackColor = true;
-            this.chkAvgDist.CheckedChanged += new System.EventHandler(this.chkAvgDist_CheckedChanged);
-            // 
-            // numAvgDist
-            // 
-            this.numAvgDist.Location = new System.Drawing.Point(6, 42);
-            this.numAvgDist.Maximum = new decimal(new int[] {
-            8388607,
-            0,
-            0,
-            0});
-            this.numAvgDist.Minimum = new decimal(new int[] {
-            8388608,
-            0,
-            0,
-            -2147483648});
-            this.numAvgDist.Name = "numAvgDist";
-            this.numAvgDist.Size = new System.Drawing.Size(100, 20);
-            this.numAvgDist.TabIndex = 1;
-            this.numAvgDist.ValueChanged += new System.EventHandler(this.numAvgDist_ValueChanged);
+            this.cmdInsertNeighborSetting.Location = new System.Drawing.Point(73, 71);
+            this.cmdInsertNeighborSetting.Name = "cmdInsertNeighborSetting";
+            this.cmdInsertNeighborSetting.Size = new System.Drawing.Size(60, 23);
+            this.cmdInsertNeighborSetting.TabIndex = 47;
+            this.cmdInsertNeighborSetting.Text = "Insert";
+            this.cmdInsertNeighborSetting.UseVisualStyleBackColor = true;
+            this.cmdInsertNeighborSetting.Click += new System.EventHandler(this.cmdInsertNeighborSetting_Click);
             // 
             // EntityBox
             // 
@@ -2272,7 +2556,7 @@ namespace CrashEdit
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tbcTabs);
             this.Name = "EntityBox";
-            this.Size = new System.Drawing.Size(398, 460);
+            this.Size = new System.Drawing.Size(420, 460);
             ((System.ComponentModel.ISupportInitialize)(this.numType)).EndInit();
             this.fraType.ResumeLayout(false);
             this.fraType.PerformLayout();
@@ -2321,6 +2605,21 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numVictimID)).EndInit();
             this.tabCamera.ResumeLayout(false);
             this.tabCamera.PerformLayout();
+            this.fraNeighbor.ResumeLayout(false);
+            this.fraNeighbor.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numNeighborPosition)).EndInit();
+            this.fraNeighborSetting.ResumeLayout(false);
+            this.fraNeighborSetting.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numNeighborFlag)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numNeighborLink)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numNeighborCamera)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numNeighborZone)).EndInit();
+            this.fraAvgDist.ResumeLayout(false);
+            this.fraAvgDist.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numAvgDist)).EndInit();
+            this.fraMode.ResumeLayout(false);
+            this.fraMode.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMode)).EndInit();
             this.fraCameraSubIndex.ResumeLayout(false);
             this.fraCameraSubIndex.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numCameraSubIndex)).EndInit();
@@ -2357,12 +2656,6 @@ namespace CrashEdit
             this.fraEntityA.ResumeLayout(false);
             this.fraEntityA.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEntityA)).EndInit();
-            this.fraMode.ResumeLayout(false);
-            this.fraMode.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numMode)).EndInit();
-            this.fraAvgDist.ResumeLayout(false);
-            this.fraAvgDist.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numAvgDist)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2534,5 +2827,27 @@ namespace CrashEdit
         private System.Windows.Forms.GroupBox fraAvgDist;
         private System.Windows.Forms.CheckBox chkAvgDist;
         private System.Windows.Forms.NumericUpDown numAvgDist;
+        private System.Windows.Forms.GroupBox fraNeighbor;
+        private System.Windows.Forms.Label lblNeighborPosition;
+        private System.Windows.Forms.Button cmdRemoveNeighbor;
+        private System.Windows.Forms.Button cmdInsertNeighbor;
+        private System.Windows.Forms.NumericUpDown numNeighborPosition;
+        private System.Windows.Forms.Label lblNeighbor;
+        private System.Windows.Forms.GroupBox fraNeighborSetting;
+        private System.Windows.Forms.Button cmdPrevNeighbor;
+        private System.Windows.Forms.Button cmdNextNeighbor;
+        private System.Windows.Forms.Label lblNeighborLink;
+        private System.Windows.Forms.Label lblNeighborFlag;
+        private System.Windows.Forms.NumericUpDown numNeighborFlag;
+        private System.Windows.Forms.Label lblNeighborCamera;
+        private System.Windows.Forms.Label lblNeighborZone;
+        private System.Windows.Forms.NumericUpDown numNeighborLink;
+        private System.Windows.Forms.NumericUpDown numNeighborCamera;
+        private System.Windows.Forms.NumericUpDown numNeighborZone;
+        private System.Windows.Forms.Label lblNeighborSetting;
+        private System.Windows.Forms.Button cmdRemoveNeighborSetting;
+        private System.Windows.Forms.Button cmdInsertNeighborSetting;
+        private System.Windows.Forms.Button cmdPrevNeighborSetting;
+        private System.Windows.Forms.Button cmdNextNeighborSetting;
     }
 }

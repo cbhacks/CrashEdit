@@ -25,6 +25,8 @@ namespace CrashEdit
         private int drawlistaentityindex;
         private int drawlistbrowindex;
         private int drawlistbentityindex;
+        private int neighborindex;
+        private int neighborsettingindex;
 
         public EntityBox(NewEntityController controller)
         {
@@ -47,6 +49,8 @@ namespace CrashEdit
             drawlistaentityindex = 0;
             drawlistbrowindex = 0;
             drawlistbentityindex = 0;
+            neighborindex = 0;
+            neighborsettingindex = 0;
         }
 
         public EntityBox(EntityController controller)
@@ -70,6 +74,8 @@ namespace CrashEdit
             drawlistaentityindex = 0;
             drawlistbrowindex = 0;
             drawlistbentityindex = 0;
+            neighborindex = 0;
+            neighborsettingindex = 0;
         }
 
         private void InvalidateNodes()
@@ -1429,6 +1435,7 @@ namespace CrashEdit
             UpdateCameraSubIndex();
             UpdateMode();
             UpdateAvgDist();
+            UpdateNeighbors();
             tabCamera.Enter -= tabCamera_Enter;
         }
 
@@ -1735,6 +1742,168 @@ namespace CrashEdit
                 entity.AverageDistance = new EntitySetting(0, (int)numAvgDist.Value);
             else
                 entity.AverageDistance = null;
+        }
+
+        private void UpdateNeighbors()
+        {
+            if (entity.Neighbors != null && entity.Neighbors.RowCount != 0)
+            {
+                if (neighborindex >= entity.Neighbors.RowCount)
+                    neighborindex = entity.Neighbors.RowCount - 1;
+                numNeighborPosition.Value = entity.Neighbors.Rows[neighborindex].MetaValue.Value;
+                lblNeighbor.Text = $"{neighborindex + 1} / {entity.Neighbors.RowCount}";
+                cmdPrevNeighbor.Enabled = neighborindex > 0;
+                cmdNextNeighbor.Enabled = neighborindex + 1 < entity.Neighbors.RowCount;
+                lblNeighborPosition.Enabled =
+                numNeighborPosition.Enabled =
+                cmdRemoveNeighbor.Enabled = true;
+                cmdInsertNeighborSetting.Enabled = true;
+                neighborsettingindex = Math.Min(entity.Neighbors.Rows[neighborindex].Values.Count - 1, neighborsettingindex);
+                if (entity.Neighbors.Rows[neighborindex].Values.Count > 0)
+                {
+                    lblNeighborSetting.Text = $"{neighborsettingindex+1} / {entity.Neighbors.Rows[neighborindex].Values.Count}";
+                    cmdPrevNeighborSetting.Enabled = neighborsettingindex > 0;
+                    cmdNextNeighborSetting.Enabled = neighborsettingindex + 1 < entity.Neighbors.Rows[neighborindex].Values.Count;
+                    cmdRemoveNeighborSetting.Enabled =
+                    numNeighborFlag.Enabled =
+                    numNeighborZone.Enabled =
+                    numNeighborCamera.Enabled =
+                    numNeighborLink.Enabled =
+                    lblNeighborFlag.Enabled =
+                    lblNeighborZone.Enabled =
+                    lblNeighborCamera.Enabled =
+                    lblNeighborLink.Enabled = true;
+                    numNeighborFlag.Value = (entity.Neighbors.Rows[neighborindex].Values[neighborsettingindex] & (0xFF << 0)) >> 0;
+                    numNeighborCamera.Value = (entity.Neighbors.Rows[neighborindex].Values[neighborsettingindex] & (0xFF << 8)) >> 8;
+                    numNeighborZone.Value = (entity.Neighbors.Rows[neighborindex].Values[neighborsettingindex] & (0xFF << 16)) >> 16;
+                    numNeighborLink.Value = (entity.Neighbors.Rows[neighborindex].Values[neighborsettingindex] & (0xFF << 24)) >> 24;
+                }
+                else
+                {
+                    lblNeighborSetting.Text = "-- / --";
+                    cmdPrevNeighborSetting.Enabled =
+                    cmdNextNeighborSetting.Enabled =
+                    cmdRemoveNeighborSetting.Enabled =
+                    numNeighborFlag.Enabled =
+                    numNeighborZone.Enabled =
+                    numNeighborCamera.Enabled =
+                    numNeighborLink.Enabled =
+                    lblNeighborFlag.Enabled =
+                    lblNeighborZone.Enabled =
+                    lblNeighborCamera.Enabled =
+                    lblNeighborLink.Enabled = false;
+                }
+            }
+            else
+            {
+                entity.Neighbors = null;
+                lblNeighbor.Text = "-- / --";
+                lblNeighborSetting.Text = "-- / --";
+                lblNeighborPosition.Enabled =
+                numNeighborPosition.Enabled =
+                cmdPrevNeighbor.Enabled =
+                cmdNextNeighbor.Enabled =
+                cmdRemoveNeighbor.Enabled =
+                cmdInsertNeighborSetting.Enabled =
+                cmdPrevNeighborSetting.Enabled =
+                cmdNextNeighborSetting.Enabled =
+                cmdRemoveNeighborSetting.Enabled =
+                numNeighborFlag.Enabled =
+                numNeighborZone.Enabled =
+                numNeighborCamera.Enabled =
+                numNeighborLink.Enabled =
+                lblNeighborFlag.Enabled =
+                lblNeighborZone.Enabled =
+                lblNeighborCamera.Enabled =
+                lblNeighborLink.Enabled = false;
+            }
+        }
+
+        private void cmdNextNeighbor_Click(object sender, EventArgs e)
+        {
+            ++neighborindex;
+            UpdateNeighbors();
+        }
+
+        private void cmdPrevNeighbor_Click(object sender, EventArgs e)
+        {
+            --neighborindex;
+            UpdateNeighbors();
+        }
+
+        private void cmdRemoveNeighbor_Click(object sender, EventArgs e)
+        {
+            entity.Neighbors.Rows.RemoveAt(neighborindex);
+            UpdateNeighbors();
+        }
+
+        private void cmdInsertNeighbor_Click(object sender, EventArgs e)
+        {
+            if (entity.Neighbors == null || entity.Neighbors.Rows.Count == 0)
+            {
+                entity.Neighbors = new EntityUInt32Property();
+                entity.Neighbors.Rows.Add(new EntityPropertyRow<uint>());
+                entity.Neighbors.Rows[entity.Neighbors.RowCount - 1].MetaValue = 0;
+            }
+            else
+                entity.Neighbors.Rows.Insert(neighborindex,entity.Neighbors.Rows[neighborindex]);
+            UpdateNeighbors();
+        }
+
+        private void numNeighborFlag_ValueChanged(object sender, EventArgs e)
+        {
+            entity.Neighbors.Rows[neighborindex].Values[neighborsettingindex] &= 0xFFFFFF00;
+            entity.Neighbors.Rows[neighborindex].Values[neighborsettingindex] |= (uint)((byte)numNeighborFlag.Value << 0);
+        }
+
+        private void numNeighborCamera_ValueChanged(object sender, EventArgs e)
+        {
+            entity.Neighbors.Rows[neighborindex].Values[neighborsettingindex] &= 0xFFFF00FF;
+            entity.Neighbors.Rows[neighborindex].Values[neighborsettingindex] |= (uint)((byte)numNeighborCamera.Value << 8);
+        }
+
+        private void numNeighborZone_ValueChanged(object sender, EventArgs e)
+        {
+            entity.Neighbors.Rows[neighborindex].Values[neighborsettingindex] &= 0xFF00FFFF;
+            entity.Neighbors.Rows[neighborindex].Values[neighborsettingindex] |= (uint)((byte)numNeighborZone.Value << 16);
+        }
+
+        private void numNeighborLink_ValueChanged(object sender, EventArgs e)
+        {
+            entity.Neighbors.Rows[neighborindex].Values[neighborsettingindex] &= 0x00FFFFFF;
+            entity.Neighbors.Rows[neighborindex].Values[neighborsettingindex] |= (uint)((byte)numNeighborLink.Value << 24);
+        }
+
+        private void numNeighborPosition_ValueChanged(object sender, EventArgs e)
+        {
+            entity.Neighbors.Rows[neighborindex].MetaValue = (short)numNeighborPosition.Value;
+        }
+
+        private void cmdPrevNeighborSetting_Click(object sender, EventArgs e)
+        {
+            --neighborsettingindex;
+            UpdateNeighbors();
+        }
+
+        private void cmdNextNeighborSetting_Click(object sender, EventArgs e)
+        {
+            ++neighborsettingindex;
+            UpdateNeighbors();
+        }
+
+        private void cmdRemoveNeighborSetting_Click(object sender, EventArgs e)
+        {
+            entity.Neighbors.Rows[neighborindex].Values.RemoveAt(neighborsettingindex);
+            UpdateNeighbors();
+        }
+
+        private void cmdInsertNeighborSetting_Click(object sender, EventArgs e)
+        {
+            if (entity.Neighbors.Rows[neighborindex].Values.Count == 0)
+                entity.Neighbors.Rows[neighborindex].Values.Add(0);
+            else
+                entity.Neighbors.Rows[neighborindex].Values.Insert(neighborsettingindex, entity.Neighbors.Rows[neighborindex].Values[neighborsettingindex]);
+            UpdateNeighbors();
         }
     }
 }
