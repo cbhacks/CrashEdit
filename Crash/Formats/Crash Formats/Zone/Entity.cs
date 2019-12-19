@@ -99,6 +99,10 @@ namespace Crash
         private EntityInt32Property drawlista = null;
         [EntityPropertyField(0x13C)]
         private EntityInt32Property drawlistb = null;
+        [EntityPropertyField(0x173)]
+        private int? cameraindex = null;
+        [EntityPropertyField(0x174)]
+        private int? camerasubindex = null;
         [EntityPropertyField(0x208)]
         private EntityT4Property loadlista = null;
         [EntityPropertyField(0x209)]
@@ -230,6 +234,18 @@ namespace Crash
         {
             get => drawlistb;
             set => drawlistb = value;
+        }
+
+        public int? CameraIndex
+        {
+            get => cameraindex;
+            set => cameraindex = value;
+        }
+
+        public int? CameraSubIndex
+        {
+            get => camerasubindex;
+            set => camerasubindex = value;
         }
 
         public EntityT4Property SLST

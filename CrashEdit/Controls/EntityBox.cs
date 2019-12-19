@@ -1401,6 +1401,8 @@ namespace CrashEdit
         private void tabCamera_Enter(object sender, EventArgs e)
         {
             UpdateSLST();
+            UpdateCameraIndex();
+            UpdateCameraSubIndex();
             tabCamera.Enter -= tabCamera_Enter;
         }
 
@@ -1611,6 +1613,54 @@ namespace CrashEdit
         private void numTTReward_ValueChanged(object sender, EventArgs e)
         {
             entity.TimeTrialReward = (int)numTTReward.Value << 8;
+        }
+
+        private void UpdateCameraIndex()
+        {
+            if (entity.CameraIndex.HasValue)
+            {
+                numCameraIndex.Value = entity.CameraIndex.Value;
+            }
+            numCameraIndex.Enabled = entity.CameraIndex.HasValue;
+            chkCameraIndex.Checked = entity.CameraIndex.HasValue;
+        }
+
+        private void UpdateCameraSubIndex()
+        {
+            if (entity.CameraSubIndex.HasValue)
+            {
+                numCameraSubIndex.Value = entity.CameraSubIndex.Value;
+            }
+            numCameraSubIndex.Enabled = entity.CameraSubIndex.HasValue;
+            chkCameraSubIndex.Checked = entity.CameraSubIndex.HasValue;
+        }
+
+        private void numCameraIndex_ValueChanged(object sender, EventArgs e)
+        {
+            entity.CameraIndex = (int)numCameraIndex.Value;
+        }
+
+        private void chkCameraIndex_CheckedChanged(object sender, EventArgs e)
+        {
+            numCameraIndex.Enabled = chkCameraIndex.Checked;
+            if (chkCameraIndex.Checked)
+                entity.CameraIndex = (int)numCameraIndex.Value;
+            else
+                entity.CameraIndex = null;
+        }
+
+        private void numCameraSubIndex_ValueChanged(object sender, EventArgs e)
+        {
+            entity.CameraSubIndex = (int)numCameraSubIndex.Value;
+        }
+
+        private void chkCameraSubIndex_CheckedChanged(object sender, EventArgs e)
+        {
+            numCameraSubIndex.Enabled = chkCameraSubIndex.Checked;
+            if (chkCameraSubIndex.Checked)
+                entity.CameraSubIndex = (int)numCameraSubIndex.Value;
+            else
+                entity.CameraSubIndex = null;
         }
     }
 }

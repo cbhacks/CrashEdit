@@ -73,6 +73,9 @@ namespace CrashEdit
             this.tbcTabs = new System.Windows.Forms.TabControl();
             this.tabGeneral = new System.Windows.Forms.TabPage();
             this.tabSpecial = new System.Windows.Forms.TabPage();
+            this.fraTTReward = new System.Windows.Forms.GroupBox();
+            this.chkTTReward = new System.Windows.Forms.CheckBox();
+            this.numTTReward = new System.Windows.Forms.NumericUpDown();
             this.fraOtherSettings = new System.Windows.Forms.GroupBox();
             this.chkOtherSettings = new System.Windows.Forms.CheckBox();
             this.numOtherSettings = new System.Windows.Forms.NumericUpDown();
@@ -98,6 +101,12 @@ namespace CrashEdit
             this.cmdPreviousVictim = new System.Windows.Forms.Button();
             this.lblVictimIndex = new System.Windows.Forms.Label();
             this.tabCamera = new System.Windows.Forms.TabPage();
+            this.fraCameraSubIndex = new System.Windows.Forms.GroupBox();
+            this.chkCameraSubIndex = new System.Windows.Forms.CheckBox();
+            this.numCameraSubIndex = new System.Windows.Forms.NumericUpDown();
+            this.fraCameraIndex = new System.Windows.Forms.GroupBox();
+            this.chkCameraIndex = new System.Windows.Forms.CheckBox();
+            this.numCameraIndex = new System.Windows.Forms.NumericUpDown();
             this.fraSLST = new System.Windows.Forms.GroupBox();
             this.lblEIDErr1 = new System.Windows.Forms.Label();
             this.txtSLST = new System.Windows.Forms.TextBox();
@@ -178,9 +187,6 @@ namespace CrashEdit
             this.cmdNextEntityA = new System.Windows.Forms.Button();
             this.cmdPrevRowDrawA = new System.Windows.Forms.Button();
             this.cmdNextRowDrawA = new System.Windows.Forms.Button();
-            this.fraTTReward = new System.Windows.Forms.GroupBox();
-            this.chkTTReward = new System.Windows.Forms.CheckBox();
-            this.numTTReward = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -200,6 +206,8 @@ namespace CrashEdit
             this.tbcTabs.SuspendLayout();
             this.tabGeneral.SuspendLayout();
             this.tabSpecial.SuspendLayout();
+            this.fraTTReward.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numTTReward)).BeginInit();
             this.fraOtherSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numOtherSettings)).BeginInit();
             this.fraScaling.SuspendLayout();
@@ -214,6 +222,10 @@ namespace CrashEdit
             this.fraVictims.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numVictimID)).BeginInit();
             this.tabCamera.SuspendLayout();
+            this.fraCameraSubIndex.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numCameraSubIndex)).BeginInit();
+            this.fraCameraIndex.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numCameraIndex)).BeginInit();
             this.fraSLST.SuspendLayout();
             this.tabLoadLists.SuspendLayout();
             this.fraLoadListPayload.SuspendLayout();
@@ -233,8 +245,6 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numMetavalueDrawA)).BeginInit();
             this.fraEntityA.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEntityA)).BeginInit();
-            this.fraTTReward.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numTTReward)).BeginInit();
             this.SuspendLayout();
             // 
             // chkType
@@ -819,6 +829,46 @@ namespace CrashEdit
             this.tabSpecial.UseVisualStyleBackColor = true;
             this.tabSpecial.Enter += new System.EventHandler(this.tabSpecial_Enter);
             // 
+            // fraTTReward
+            // 
+            this.fraTTReward.Controls.Add(this.chkTTReward);
+            this.fraTTReward.Controls.Add(this.numTTReward);
+            this.fraTTReward.Location = new System.Drawing.Point(121, 239);
+            this.fraTTReward.Name = "fraTTReward";
+            this.fraTTReward.Size = new System.Drawing.Size(112, 70);
+            this.fraTTReward.TabIndex = 12;
+            this.fraTTReward.TabStop = false;
+            this.fraTTReward.Text = "TimeTrial Reward";
+            // 
+            // chkTTReward
+            // 
+            this.chkTTReward.AutoSize = true;
+            this.chkTTReward.Location = new System.Drawing.Point(6, 19);
+            this.chkTTReward.Name = "chkTTReward";
+            this.chkTTReward.Size = new System.Drawing.Size(65, 17);
+            this.chkTTReward.TabIndex = 0;
+            this.chkTTReward.Text = "Enabled";
+            this.chkTTReward.UseVisualStyleBackColor = true;
+            this.chkTTReward.CheckedChanged += new System.EventHandler(this.chkTTReward_CheckedChanged);
+            // 
+            // numTTReward
+            // 
+            this.numTTReward.Location = new System.Drawing.Point(6, 42);
+            this.numTTReward.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.numTTReward.Minimum = new decimal(new int[] {
+            -2147483648,
+            0,
+            0,
+            -2147483648});
+            this.numTTReward.Name = "numTTReward";
+            this.numTTReward.Size = new System.Drawing.Size(100, 20);
+            this.numTTReward.TabIndex = 1;
+            this.numTTReward.ValueChanged += new System.EventHandler(this.numTTReward_ValueChanged);
+            // 
             // fraOtherSettings
             // 
             this.fraOtherSettings.Controls.Add(this.chkOtherSettings);
@@ -1131,6 +1181,8 @@ namespace CrashEdit
             // 
             // tabCamera
             // 
+            this.tabCamera.Controls.Add(this.fraCameraSubIndex);
+            this.tabCamera.Controls.Add(this.fraCameraIndex);
             this.tabCamera.Controls.Add(this.fraSLST);
             this.tabCamera.Location = new System.Drawing.Point(4, 22);
             this.tabCamera.Name = "tabCamera";
@@ -1140,6 +1192,87 @@ namespace CrashEdit
             this.tabCamera.Text = "Camera";
             this.tabCamera.UseVisualStyleBackColor = true;
             this.tabCamera.Enter += new System.EventHandler(this.tabCamera_Enter);
+            // 
+            // fraCameraSubIndex
+            // 
+            this.fraCameraSubIndex.Controls.Add(this.chkCameraSubIndex);
+            this.fraCameraSubIndex.Controls.Add(this.numCameraSubIndex);
+            this.fraCameraSubIndex.Location = new System.Drawing.Point(124, 90);
+            this.fraCameraSubIndex.Name = "fraCameraSubIndex";
+            this.fraCameraSubIndex.Size = new System.Drawing.Size(112, 72);
+            this.fraCameraSubIndex.TabIndex = 6;
+            this.fraCameraSubIndex.TabStop = false;
+            this.fraCameraSubIndex.Text = "Camera Sub-index";
+            this.fraCameraSubIndex.UseCompatibleTextRendering = true;
+            // 
+            // chkCameraSubIndex
+            // 
+            this.chkCameraSubIndex.AutoSize = true;
+            this.chkCameraSubIndex.Location = new System.Drawing.Point(6, 19);
+            this.chkCameraSubIndex.Name = "chkCameraSubIndex";
+            this.chkCameraSubIndex.Size = new System.Drawing.Size(65, 17);
+            this.chkCameraSubIndex.TabIndex = 0;
+            this.chkCameraSubIndex.Text = "Enabled";
+            this.chkCameraSubIndex.UseVisualStyleBackColor = true;
+            this.chkCameraSubIndex.CheckedChanged += new System.EventHandler(this.chkCameraSubIndex_CheckedChanged);
+            // 
+            // numCameraSubIndex
+            // 
+            this.numCameraSubIndex.Location = new System.Drawing.Point(6, 42);
+            this.numCameraSubIndex.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.numCameraSubIndex.Minimum = new decimal(new int[] {
+            -2147483648,
+            0,
+            0,
+            -2147483648});
+            this.numCameraSubIndex.Name = "numCameraSubIndex";
+            this.numCameraSubIndex.Size = new System.Drawing.Size(100, 20);
+            this.numCameraSubIndex.TabIndex = 1;
+            this.numCameraSubIndex.ValueChanged += new System.EventHandler(this.numCameraSubIndex_ValueChanged);
+            // 
+            // fraCameraIndex
+            // 
+            this.fraCameraIndex.Controls.Add(this.chkCameraIndex);
+            this.fraCameraIndex.Controls.Add(this.numCameraIndex);
+            this.fraCameraIndex.Location = new System.Drawing.Point(6, 90);
+            this.fraCameraIndex.Name = "fraCameraIndex";
+            this.fraCameraIndex.Size = new System.Drawing.Size(112, 72);
+            this.fraCameraIndex.TabIndex = 5;
+            this.fraCameraIndex.TabStop = false;
+            this.fraCameraIndex.Text = "Camera Index";
+            // 
+            // chkCameraIndex
+            // 
+            this.chkCameraIndex.AutoSize = true;
+            this.chkCameraIndex.Location = new System.Drawing.Point(6, 19);
+            this.chkCameraIndex.Name = "chkCameraIndex";
+            this.chkCameraIndex.Size = new System.Drawing.Size(65, 17);
+            this.chkCameraIndex.TabIndex = 0;
+            this.chkCameraIndex.Text = "Enabled";
+            this.chkCameraIndex.UseVisualStyleBackColor = true;
+            this.chkCameraIndex.CheckedChanged += new System.EventHandler(this.chkCameraIndex_CheckedChanged);
+            // 
+            // numCameraIndex
+            // 
+            this.numCameraIndex.Location = new System.Drawing.Point(6, 42);
+            this.numCameraIndex.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.numCameraIndex.Minimum = new decimal(new int[] {
+            -2147483648,
+            0,
+            0,
+            -2147483648});
+            this.numCameraIndex.Name = "numCameraIndex";
+            this.numCameraIndex.Size = new System.Drawing.Size(100, 20);
+            this.numCameraIndex.TabIndex = 1;
+            this.numCameraIndex.ValueChanged += new System.EventHandler(this.numCameraIndex_ValueChanged);
             // 
             // fraSLST
             // 
@@ -2046,46 +2179,6 @@ namespace CrashEdit
             this.cmdNextRowDrawA.UseVisualStyleBackColor = true;
             this.cmdNextRowDrawA.Click += new System.EventHandler(this.cmdNextRowDrawA_Click);
             // 
-            // fraTTReward
-            // 
-            this.fraTTReward.Controls.Add(this.chkTTReward);
-            this.fraTTReward.Controls.Add(this.numTTReward);
-            this.fraTTReward.Location = new System.Drawing.Point(121, 239);
-            this.fraTTReward.Name = "fraTTReward";
-            this.fraTTReward.Size = new System.Drawing.Size(112, 70);
-            this.fraTTReward.TabIndex = 12;
-            this.fraTTReward.TabStop = false;
-            this.fraTTReward.Text = "TimeTrial Reward";
-            // 
-            // chkTTReward
-            // 
-            this.chkTTReward.AutoSize = true;
-            this.chkTTReward.Location = new System.Drawing.Point(6, 19);
-            this.chkTTReward.Name = "chkTTReward";
-            this.chkTTReward.Size = new System.Drawing.Size(65, 17);
-            this.chkTTReward.TabIndex = 0;
-            this.chkTTReward.Text = "Enabled";
-            this.chkTTReward.UseVisualStyleBackColor = true;
-            this.chkTTReward.CheckedChanged += new System.EventHandler(this.chkTTReward_CheckedChanged);
-            // 
-            // numTTReward
-            // 
-            this.numTTReward.Location = new System.Drawing.Point(6, 42);
-            this.numTTReward.Maximum = new decimal(new int[] {
-            2147483647,
-            0,
-            0,
-            0});
-            this.numTTReward.Minimum = new decimal(new int[] {
-            -2147483648,
-            0,
-            0,
-            -2147483648});
-            this.numTTReward.Name = "numTTReward";
-            this.numTTReward.Size = new System.Drawing.Size(100, 20);
-            this.numTTReward.TabIndex = 1;
-            this.numTTReward.ValueChanged += new System.EventHandler(this.numTTReward_ValueChanged);
-            // 
             // EntityBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2118,6 +2211,9 @@ namespace CrashEdit
             this.tbcTabs.ResumeLayout(false);
             this.tabGeneral.ResumeLayout(false);
             this.tabSpecial.ResumeLayout(false);
+            this.fraTTReward.ResumeLayout(false);
+            this.fraTTReward.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numTTReward)).EndInit();
             this.fraOtherSettings.ResumeLayout(false);
             this.fraOtherSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numOtherSettings)).EndInit();
@@ -2138,6 +2234,12 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numVictimID)).EndInit();
             this.tabCamera.ResumeLayout(false);
             this.tabCamera.PerformLayout();
+            this.fraCameraSubIndex.ResumeLayout(false);
+            this.fraCameraSubIndex.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numCameraSubIndex)).EndInit();
+            this.fraCameraIndex.ResumeLayout(false);
+            this.fraCameraIndex.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numCameraIndex)).EndInit();
             this.fraSLST.ResumeLayout(false);
             this.fraSLST.PerformLayout();
             this.tabLoadLists.ResumeLayout(false);
@@ -2168,9 +2270,6 @@ namespace CrashEdit
             this.fraEntityA.ResumeLayout(false);
             this.fraEntityA.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEntityA)).EndInit();
-            this.fraTTReward.ResumeLayout(false);
-            this.fraTTReward.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numTTReward)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2330,5 +2429,11 @@ namespace CrashEdit
         private System.Windows.Forms.GroupBox fraTTReward;
         private System.Windows.Forms.CheckBox chkTTReward;
         private System.Windows.Forms.NumericUpDown numTTReward;
+        private System.Windows.Forms.GroupBox fraCameraSubIndex;
+        private System.Windows.Forms.CheckBox chkCameraSubIndex;
+        private System.Windows.Forms.NumericUpDown numCameraSubIndex;
+        private System.Windows.Forms.GroupBox fraCameraIndex;
+        private System.Windows.Forms.CheckBox chkCameraIndex;
+        private System.Windows.Forms.NumericUpDown numCameraIndex;
     }
 }
