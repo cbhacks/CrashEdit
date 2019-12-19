@@ -168,6 +168,8 @@ namespace Crash
         public IList<ModelExtendedTexture> AnimatedTextures => animatedtextures;
         public IList<ModelPosition> Positions => positions;
 
+        public int TPAGCount => BitConv.FromInt32(Info, 0x40);
+
         public override UnprocessedEntry Unprocess()
         {
             byte itemcount = 5;

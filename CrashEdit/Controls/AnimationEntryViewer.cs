@@ -14,6 +14,9 @@ namespace CrashEdit
         private static long textureframe; // CrashEdit would have to run for so long for this to overflow
         private static Timer texturetimer;
 
+        private bool init = false;
+        private TextureChunk[] texturechunks;
+
         private List<Frame> frames;
         private ModelEntry model;
         private int frameid;
@@ -48,7 +51,8 @@ namespace CrashEdit
                 frames.Add(LoadFrame(frame));
             frameid = 0;
             interi = 0;
-            ConvertTexturesToGL(texturechunks, model.Textures, model.Info, 0xC);
+            this.texturechunks = texturechunks;
+            InitTextures(1);
         }
 
         public AnimationEntryViewer(IEnumerable<Frame> frames,ModelEntry model,TextureChunk[] texturechunks)
@@ -73,6 +77,8 @@ namespace CrashEdit
                     frameid++;
                 }
             }
+            this.texturechunks = texturechunks;
+            InitTextures(1);
             frameid = 0;
             animatetimer = new Timer
             {
@@ -86,7 +92,6 @@ namespace CrashEdit
                 frameid = (frameid + (interi == 1 ? 1 : 0)) % this.frames.Count;
                 Refresh();
             };
-            ConvertTexturesToGL(texturechunks, model.Textures, model.Info, 0xC);
         }
         
         private int MinScale => model != null ? Math.Min(BitConv.FromInt32(model.Info, 8), Math.Min(BitConv.FromInt32(model.Info, 0), BitConv.FromInt32(model.Info, 4))) : 0x1000;
@@ -118,6 +123,11 @@ namespace CrashEdit
 
         protected override void RenderObjects()
         {
+            if (!init)
+            {
+                init = true;
+                ConvertTexturesToGL(0, texturechunks, model.Textures, model.Info, 0xC);
+            }
             if (interi == 0 || frameid == 0)
             {
                 RenderFrame(frames[frameid]);
@@ -176,7 +186,7 @@ namespace CrashEdit
                 GL.Scale(BitConv.FromInt32(model.Info,0), BitConv.FromInt32(model.Info,4), BitConv.FromInt32(model.Info,8));
                 if (textures_enabled)
                 {
-                    float[] uvs = new float[6];
+                    double[] uvs = new double[6];
                     for (int i = 0; i < model.Triangles.Count; ++i)
                     {
                         var tri = model.Triangles[i];
@@ -208,11 +218,11 @@ namespace CrashEdit
                             }
                             if (untex)
                             {
-                                GL.BindTexture(TextureTarget.Texture2D, 0);
+                                UnbindTexture();
                             }
                             else
                             {
-                                GL.BindTexture(TextureTarget.Texture2D, textures[tex]);
+                                BindTexture(0,tex);
                                 switch (tri.Type)
                                 {
                                     case 0:
@@ -234,7 +244,7 @@ namespace CrashEdit
                             }
                         }
                         else
-                            GL.BindTexture(TextureTarget.Texture2D, 0);
+                            UnbindTexture();
                         GL.Begin(PrimitiveType.Triangles);
                         for (int j = 0; j < 3; ++j)
                         {
@@ -273,7 +283,7 @@ namespace CrashEdit
                 }
                 GL.End();
             }
-            GL.BindTexture(TextureTarget.Texture2D, 0);
+            UnbindTexture();
             if (collision_enabled)
             {
                 Frame fcol;

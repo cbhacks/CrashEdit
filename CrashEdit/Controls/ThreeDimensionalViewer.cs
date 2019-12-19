@@ -56,7 +56,9 @@ namespace CrashEdit
         private int mousey;
         private Timer inputtimer;
         private Timer refreshtimer;
-        protected int[] textures;
+        private int[][] textureIDs;
+        private int[][] textures; // maps modeltexture offsets to an offset in textureIDs
+        private int boundtex;
         private int blend;
 
         public ThreeDimensionalViewer()
@@ -69,6 +71,7 @@ namespace CrashEdit
             keyright = false;
             keya = false;
             keyz = false;
+            boundtex = 0;
             inputtimer = new Timer
             {
                 Interval = 16,
@@ -326,7 +329,13 @@ namespace CrashEdit
             blend = blendmode;
         }
 
-        private long GenerateTextureHash(ModelTexture tex) // lol
+        protected void InitTextures(int count)
+        {
+            textureIDs = new int[count][];
+            textures = new int[count][];
+        }
+
+        private long GenerateTextureHash(ModelTexture tex) // compresses a model texture's relevant texture info into a standard type that can be quickly looked up
         {
             return (long)tex.ClutY
                 | (long)tex.ClutX << 7
@@ -335,28 +344,28 @@ namespace CrashEdit
                 | (long)tex.Top << 24
                 | (long)tex.Width << 31
                 | (long)tex.Height << 41
-                | (tex.BitFlag ? 1L : 0L) << 48;
+                | (long)tex.BlendMode << 48
+                | (tex.BitFlag ? 1L : 0L) << 50;
         }
 
-        protected void ConvertTexturesToGL(TextureChunk[] texturechunks, IList<ModelTexture> modeltextures, byte[] eid_list, int eid_off)
+        protected void ConvertTexturesToGL(int list, TextureChunk[] texturechunks, IList<ModelTexture> modeltextures, byte[] eid_list, int eid_off)
         {
-            MakeCurrent();
-            //bitmaps = new Bitmap[model.Textures.Count];
-            //Dictionary<long, Bitmap> bitmapbucket = new Dictionary<long, Bitmap>();
-            textures = new int[modeltextures.Count];
+            textureIDs[list] = new int[texturechunks.Length*2];
+            GL.GenTextures(textureIDs[list].Length, textureIDs[list]);
+            int[][] texturepages = new int[textureIDs[list].Length][]; // using indexed colors in GL would be dumb so we will convert each texture chunk into two 32-bit pages
+            for (int i = 0; i < texturechunks.Length; ++i)
+            {
+                texturepages[i*2+0] = new int[1024*128]; // 4bpp
+                texturepages[i*2+1] = new int[512*128]; // 8bpp
+            }
+            textures[list] = new int[modeltextures.Count];
             Dictionary<long, int> texturebucket = new Dictionary<long, int>();
-            for (int i = 0; i < textures.Length; ++i)
+            for (int i = 0; i < modeltextures.Count; ++i)
             {
                 ModelTexture tex = modeltextures[i];
                 long hash = GenerateTextureHash(tex);
-                if (texturebucket.ContainsKey(hash))
+                if (!texturebucket.ContainsKey(hash))
                 {
-                    textures[i] = texturebucket[hash];
-                }
-                else
-                {
-                    int w = tex.Width + 1;
-                    int h = tex.Height + 1;
                     TextureChunk texturechunk = null;
                     int eid = BitConv.FromInt32(eid_list, eid_off + tex.TextureOffset);
                     for (int t = 0; t < texturechunks.Length; ++t)
@@ -368,19 +377,21 @@ namespace CrashEdit
                         }
                     }
                     if (texturechunk == null) throw new Exception("ConvertTexturesToGL: Texture chunk not found");
-                    int[] pixels = new int[w * h]; // using indexed colors in GL would be dumb so we convert them to 32-bit
+                    int w = tex.Width + 1;
+                    int h = tex.Height + 1;
+                    int page = tex.TextureOffset / 2 + Convert.ToInt32(tex.BitFlag);
                     if (tex.BitFlag) // 8-bit
                     {
                         int[] palette = new int[256];
                         for (int j = 0; j < 256; ++j) // copy palette
                         {
-                            palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data, tex.ClutX * 32 + tex.ClutY * 512 + j * 2), tex.BlendMode);
+                            palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data, tex.ClutX*32 + tex.ClutY*512 + j*2), tex.BlendMode);
                         }
                         for (int y = 0; y < h; ++y) // copy pixel data
                         {
                             for (int x = 0; x < w; ++x)
                             {
-                                pixels[x + w * y] = palette[texturechunk.Data[(tex.Left + x) + (tex.Top + y) * 512]];
+                                texturepages[page][tex.Left + tex.Top*512 + x + 512*y] = palette[texturechunk.Data[(tex.Left + x) + (tex.Top + y) * 512]];
                             }
                         }
                     }
@@ -389,45 +400,80 @@ namespace CrashEdit
                         int[] palette = new int[16];
                         for (int j = 0; j < 16; ++j) // copy palette
                         {
-                            palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data, tex.ClutX * 32 + tex.ClutY * 512 + j * 2), tex.BlendMode);
+                            palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data, tex.ClutX*32 + tex.ClutY*512 + j*2), tex.BlendMode);
                         }
                         for (int y = 0; y < h; ++y) // copy pixels
                         {
                             for (int x = 0; x < w / 2; ++x) // 2 pixels per byte
                             {
-                                pixels[x * 2 + w * y] = palette[texturechunk.Data[(tex.Left / 2 + x) + (tex.Top + y) * 512] & 0xF];
-                                pixels[x * 2 + w * y + 1] = palette[texturechunk.Data[(tex.Left / 2 + x) + (tex.Top + y) * 512] >> 4 & 0xF];
+                                texturepages[page][tex.Left + tex.Top*1024 + x*2 + 1024*y] = palette[texturechunk.Data[(tex.Left/2 + x) + (tex.Top + y)*512] & 0xF];
+                                texturepages[page][tex.Left + tex.Top*1024 + x*2 + 1024*y+1] = palette[texturechunk.Data[(tex.Left/2 + x) + (tex.Top + y)*512] >> 4 & 0xF];
                             }
                         }
                     }
-                    //Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                    //BitmapData data = bmp.LockBits(new Rectangle(Point.Empty, bmp.Size), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                    //unsafe
-                    //{
-                    //    for (int j = 0; j < w * h; ++j)
-                    //    {
-                    //        *((int*)data.Scan0.ToPointer() + j) = pixels[j];
-                    //    }
-                    //}
-                    GL.GenTextures(1, out textures[i]);
-                    GL.BindTexture(TextureTarget.Texture2D, textures[i]);
-                    GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Four, w, h, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, pixels);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-                    //bmp.UnlockBits(data);
-                    texturebucket[hash] = textures[i];
+                    texturebucket[hash] = page;
                 }
+                textures[list][i] = texturebucket[hash];
+            }
+            // get rid of unused textures
+            HashSet<int> usedids = new HashSet<int>();
+            foreach (int id in texturebucket.Values)
+            {
+                usedids.Add(id);
+            }
+            for (int i = 0; i < texturepages.Length; ++i)
+            {
+                if (!usedids.Contains(i))
+                {
+                    GL.DeleteTexture(textureIDs[list][i]);
+                    textureIDs[list][i] = 0;
+                    continue;
+                }
+                //Bitmap bmp = new Bitmap(texturepages[i].Length / 128, 128, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                //BitmapData data = bmp.LockBits(new Rectangle(Point.Empty, bmp.Size), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                //unsafe
+                //{
+                //    for (int j = 0; j < texturepages[i].Length / 128 * 128; ++j)
+                //    {
+                //        *((int*)data.Scan0.ToPointer() + j) = texturepages[i][j];
+                //    }
+                //}
+                GL.BindTexture(TextureTarget.Texture2D, textureIDs[list][i]);
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Four, texturepages[i].Length/128, 128, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, texturepages[i]);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+                //string filename = $"tex_{texturechunks[i/2].EName}_{(i%2 == 0 ?"4":"8")}bpp_{textureIDs[list][i]}.png";
+                //bmp.Save(/*YOURPATHHERE*/ + filename, ImageFormat.Png);
+                //bmp.UnlockBits(data);
             }
             GL.BindTexture(TextureTarget.Texture2D, 0);
+        }
+
+        protected void UnbindTexture()
+        {
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+            boundtex = 0;
+        }
+
+        protected void BindTexture(int list, int i)
+        {
+            int tex = textureIDs[list][textures[list][i]];
+            if (tex == boundtex) return;
+            GL.BindTexture(TextureTarget.Texture2D, tex);
+            boundtex = tex;
         }
 
         protected override void Dispose(bool disposing)
         {
             inputtimer.Dispose();
             refreshtimer.Dispose();
-            if (textures != null)
+            for (int i = 0; i < textureIDs.Length; ++i)
             {
-                GL.DeleteTextures(textures.Length, textures);
+                if (textureIDs[i] != null)
+                {
+                    GL.DeleteTextures(textureIDs[i].Length, textureIDs[i]);
+                    textureIDs[i] = null;
+                }
             }
             base.Dispose(disposing);
         }

@@ -25,8 +25,8 @@ namespace CrashEdit
         protected override Control CreateEditor()
         {
             ModelEntry modelentry = FindEID<ModelEntry>(AnimationEntry.Frames[0].ModelEID);
-            TextureChunk[] texturechunks = new TextureChunk[8];
-            for (int i = 0; i < 8; ++i)
+            TextureChunk[] texturechunks = new TextureChunk[modelentry.TPAGCount];
+            for (int i = 0; i < texturechunks.Length; ++i)
             {
                 texturechunks[i] = FindEID<TextureChunk>(BitConv.FromInt32(modelentry.Info,0xC+i*4));
             }

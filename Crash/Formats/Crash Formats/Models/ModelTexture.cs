@@ -63,6 +63,7 @@ namespace Crash
         public byte Segment { get; }
         public byte TextureOffset { get; }
 
+        public float PageWidth => BitFlag ? 512F : 1024F;
         public int XOff => (BitFlag ? 128 : 256) * Segment;
         public int Left => Math.Min(U1, Math.Min(U2, U3)) + XOff;
         public int Right => Math.Max(U1, Math.Max(U2, U3)) + XOff;
@@ -71,14 +72,14 @@ namespace Crash
         public int Width => Right - Left;
         public int Height => Bottom - Top;
         public int ClutY => (ClutY2 << 2) | (ClutY1 >> 2 & 0x3);
-        public float X1 => ((U1 + XOff) - Left) / (float)(Right - Left);
-        public float X2 => ((U2 + XOff) - Left) / (float)(Right - Left);
-        public float X3 => ((U3 + XOff) - Left) / (float)(Right - Left);
-        public float X4 => ((U4 + XOff) - Left) / (float)(Right - Left);
-        public float Y1 => (V1 - Top) / (float)(Bottom - Top);
-        public float Y2 => (V2 - Top) / (float)(Bottom - Top);
-        public float Y3 => (V3 - Top) / (float)(Bottom - Top);
-        public float Y4 => (V4 - Top) / (float)(Bottom - Top);
+        public float X1 => ((U1 + XOff) - Left) / (float)(Right - Left) * ((Width+1)/PageWidth) + Left/PageWidth;
+        public float X2 => ((U2 + XOff) - Left) / (float)(Right - Left) * ((Width+1)/PageWidth) + Left/PageWidth;
+        public float X3 => ((U3 + XOff) - Left) / (float)(Right - Left) * ((Width+1)/PageWidth) + Left/PageWidth;
+        public float X4 => ((U4 + XOff) - Left) / (float)(Right - Left) * ((Width+1)/PageWidth) + Left/PageWidth;
+        public float Y1 => (V1 - Top) / (float)(Bottom - Top) * ((Height+1)/128F) + Top/128F;
+        public float Y2 => (V2 - Top) / (float)(Bottom - Top) * ((Height+1)/128F) + Top/128F;
+        public float Y3 => (V3 - Top) / (float)(Bottom - Top) * ((Height+1)/128F) + Top/128F;
+        public float Y4 => (V4 - Top) / (float)(Bottom - Top) * ((Height+1)/128F) + Top/128F;
 
         public byte[] Save()
         {

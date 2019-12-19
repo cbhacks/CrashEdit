@@ -17,7 +17,6 @@ namespace CrashEdit
         private static Timer texturetimer;
 
         private TextureChunk[][] texturechunks;
-        private int[][] entrytextures;
         private List<SceneryTriangle>[] dyntris;
         private List<SceneryQuad>[] dynquads;
         private List<SceneryTriangle>[] lasttris;
@@ -43,7 +42,7 @@ namespace CrashEdit
             entries = new List<SceneryEntry>();
             entries.Add(entry);
             displaylist = -1;
-            entrytextures = new int[1][];
+            InitTextures(1);
             this.texturechunks = new TextureChunk[1][];
             dyntris = new List<SceneryTriangle>[1] { new List<SceneryTriangle>() };
             dynquads = new List<SceneryQuad>[1] { new List<SceneryQuad>() };
@@ -56,7 +55,7 @@ namespace CrashEdit
         {
             this.entries = new List<SceneryEntry>(entries);
             displaylist = -1;
-            entrytextures = new int[this.entries.Count][];
+            InitTextures(this.entries.Count);
             this.texturechunks = texturechunks;
             dyntris = new List<SceneryTriangle>[this.entries.Count];
             dynquads = new List<SceneryQuad>[this.entries.Count];
@@ -119,10 +118,9 @@ namespace CrashEdit
             if (!init)
             {
                 init = true;
-                for (int i = 0; i < entrytextures.Length; ++i)
+                for (int i = 0; i < entries.Count; ++i)
                 {
-                    ConvertTexturesToGL(texturechunks[i], entries[i].Textures, entries[i].Info, 0x2C);
-                    entrytextures[i] = textures;
+                    ConvertTexturesToGL(i, texturechunks[i], entries[i].Textures, entries[i].Info, 0x2C);
                 }
             }
 
@@ -131,7 +129,7 @@ namespace CrashEdit
                 GL.Disable(EnableCap.Texture2D);
             else
                 GL.Enable(EnableCap.Texture2D);
-            float[] uvs = new float[8];
+            double[] uvs = new double[8];
             if (displaylist == -1)
             {
                 displaylist = GL.GenLists(1);
@@ -185,7 +183,7 @@ namespace CrashEdit
                                 }
                                 if (untex)
                                 {
-                                    GL.BindTexture(TextureTarget.Texture2D, 0);
+                                    UnbindTexture();
                                 }
                                 else
                                 {
@@ -194,7 +192,7 @@ namespace CrashEdit
                                         lastquads[e].Add(q);
                                         continue;
                                     }
-                                    GL.BindTexture(TextureTarget.Texture2D, entrytextures[e][tex]);
+                                    BindTexture(e,tex);
                                     uvs[0] = entry.Textures[tex].X2;
                                     uvs[1] = entry.Textures[tex].Y2;
                                     uvs[2] = entry.Textures[tex].X1;
@@ -207,7 +205,7 @@ namespace CrashEdit
                                 }
                             }
                             else
-                                GL.BindTexture(TextureTarget.Texture2D, 0);
+                                UnbindTexture();
                             GL.Begin(PrimitiveType.Quads);
                             GL.TexCoord2(uvs[0], uvs[1]);
                             RenderVertex(entry, entry.Vertices[q.VertexA]);
@@ -219,7 +217,7 @@ namespace CrashEdit
                             RenderVertex(entry, entry.Vertices[q.VertexD]);
                             GL.End();
                         }
-                        GL.BindTexture(TextureTarget.Texture2D, 0);
+                        UnbindTexture();
                         SetBlendMode(3);
                     }
                 }
@@ -248,7 +246,7 @@ namespace CrashEdit
                         fakes.Add(quad);
                         continue;
                     }
-                    GL.BindTexture(TextureTarget.Texture2D, entrytextures[i][tex]);
+                    BindTexture(i,tex);
                     SetBlendMode(entry.Textures[tex].BlendMode);
                     GL.Begin(PrimitiveType.Quads);
                     GL.TexCoord2(entry.Textures[tex].X2, entry.Textures[tex].Y2);
@@ -299,11 +297,11 @@ namespace CrashEdit
                     }
                     if (untex)
                     {
-                        GL.BindTexture(TextureTarget.Texture2D, 0);
+                        UnbindTexture();
                     }
                     else
                     {
-                        GL.BindTexture(TextureTarget.Texture2D, entrytextures[i][tex]);
+                        BindTexture(i,tex);
                         uvs[0] = entry.Textures[tex].X2;
                         uvs[1] = entry.Textures[tex].Y2;
                         uvs[2] = entry.Textures[tex].X1;
@@ -327,7 +325,7 @@ namespace CrashEdit
             }
             GL.DepthMask(true);
             SetBlendMode(3);
-            GL.BindTexture(TextureTarget.Texture2D, 0);
+            UnbindTexture();
             if (!textures_enabled)
                 GL.Enable(EnableCap.Texture2D);
         }
@@ -337,20 +335,6 @@ namespace CrashEdit
             SceneryColor color = entry.Colors[vertex.Color];
             GL.Color3(color.Red,color.Green,color.Blue);
             GL.Vertex3(entry.XOffset + vertex.X * 16,entry.YOffset + vertex.Y * 16,entry.ZOffset + vertex.Z * 16);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (entrytextures != null)
-            {
-                for (int i = 0; i < entrytextures.Length; ++i)
-                {
-                    if (entrytextures[i] == null) continue;
-                    GL.DeleteTextures(entrytextures[i].Length, entrytextures[i]);
-                    entrytextures[i] = null;
-                }
-            }
-            base.Dispose(disposing);
         }
     }
 }

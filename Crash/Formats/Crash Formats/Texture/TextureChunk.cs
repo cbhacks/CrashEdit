@@ -11,6 +11,7 @@ namespace Crash
 
         public override short Type => 1;
         public int EID => BitConv.FromInt32(Data, 4);
+        public string EName => Entry.EIDToEName(EID);
         public byte[] Data { get; }
 
         public override UnprocessedChunk Unprocess(int chunkid)
