@@ -159,7 +159,6 @@ namespace CrashEdit
 
         protected override void RenderObjects()
         {
-            base.RenderObjects();
             GL.Disable(EnableCap.Texture2D);
             GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 1.0f);
             RenderEntry(entry,ref octreedisplaylists[0]);
@@ -181,6 +180,7 @@ namespace CrashEdit
                 deletelists = false;
             GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
             GL.Enable(EnableCap.Texture2D);
+            base.RenderObjects();
         }
 
         private void RenderEntry(ZoneEntry entry,ref int octreedisplaylist)
