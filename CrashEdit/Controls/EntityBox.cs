@@ -1234,7 +1234,7 @@ namespace CrashEdit
         {
             if (entity.DDASettings.HasValue)
             {
-                numDDASettings.Value = entity.DDASettings.Value;
+                numDDASettings.Value = entity.DDASettings.Value >> 8;
             }
             numDDASettings.Enabled = entity.DDASettings.HasValue;
             chkDDASettings.Checked = entity.DDASettings.HasValue;
@@ -1245,7 +1245,7 @@ namespace CrashEdit
             numDDASettings.Enabled = chkDDASettings.Checked;
             if (chkDDASettings.Checked)
             {
-                entity.DDASettings = (int)numDDASettings.Value;
+                entity.DDASettings = (int)numDDASettings.Value << 8;
             }
             else
             {
@@ -1255,7 +1255,7 @@ namespace CrashEdit
 
         private void numDDASettings_ValueChanged(object sender, EventArgs e)
         {
-            entity.DDASettings = (int)numDDASettings.Value;
+            entity.DDASettings = (int)numDDASettings.Value << 8;
         }
 
         private void UpdateDDASection()

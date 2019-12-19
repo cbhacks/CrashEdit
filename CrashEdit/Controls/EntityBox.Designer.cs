@@ -817,9 +817,9 @@ namespace CrashEdit
             // 
             this.fraOtherSettings.Controls.Add(this.chkOtherSettings);
             this.fraOtherSettings.Controls.Add(this.numOtherSettings);
-            this.fraOtherSettings.Location = new System.Drawing.Point(141, 163);
+            this.fraOtherSettings.Location = new System.Drawing.Point(239, 163);
             this.fraOtherSettings.Name = "fraOtherSettings";
-            this.fraOtherSettings.Size = new System.Drawing.Size(132, 72);
+            this.fraOtherSettings.Size = new System.Drawing.Size(112, 70);
             this.fraOtherSettings.TabIndex = 10;
             this.fraOtherSettings.TabStop = false;
             this.fraOtherSettings.Text = "Other Settings";
@@ -849,7 +849,7 @@ namespace CrashEdit
             0,
             -2147483648});
             this.numOtherSettings.Name = "numOtherSettings";
-            this.numOtherSettings.Size = new System.Drawing.Size(120, 20);
+            this.numOtherSettings.Size = new System.Drawing.Size(100, 20);
             this.numOtherSettings.TabIndex = 1;
             this.numOtherSettings.ValueChanged += new System.EventHandler(this.numOtherSettings_ValueChanged);
             // 
@@ -857,9 +857,9 @@ namespace CrashEdit
             // 
             this.fraScaling.Controls.Add(this.chkScaling);
             this.fraScaling.Controls.Add(this.numScaling);
-            this.fraScaling.Location = new System.Drawing.Point(3, 163);
+            this.fraScaling.Location = new System.Drawing.Point(3, 239);
             this.fraScaling.Name = "fraScaling";
-            this.fraScaling.Size = new System.Drawing.Size(132, 72);
+            this.fraScaling.Size = new System.Drawing.Size(112, 70);
             this.fraScaling.TabIndex = 11;
             this.fraScaling.TabStop = false;
             this.fraScaling.Text = "Scaling Factor";
@@ -879,17 +879,17 @@ namespace CrashEdit
             // 
             this.numScaling.Location = new System.Drawing.Point(6, 42);
             this.numScaling.Maximum = new decimal(new int[] {
-            8388607,
+            2147483647,
             0,
             0,
             0});
             this.numScaling.Minimum = new decimal(new int[] {
-            8388608,
+            -2147483648,
             0,
             0,
             -2147483648});
             this.numScaling.Name = "numScaling";
-            this.numScaling.Size = new System.Drawing.Size(120, 20);
+            this.numScaling.Size = new System.Drawing.Size(100, 20);
             this.numScaling.TabIndex = 1;
             this.numScaling.ValueChanged += new System.EventHandler(this.numScaling_ValueChanged);
             // 
@@ -897,12 +897,12 @@ namespace CrashEdit
             // 
             this.fraDDASection.Controls.Add(this.chkDDASection);
             this.fraDDASection.Controls.Add(this.numDDASection);
-            this.fraDDASection.Location = new System.Drawing.Point(3, 241);
+            this.fraDDASection.Location = new System.Drawing.Point(3, 163);
             this.fraDDASection.Name = "fraDDASection";
-            this.fraDDASection.Size = new System.Drawing.Size(132, 70);
+            this.fraDDASection.Size = new System.Drawing.Size(112, 70);
             this.fraDDASection.TabIndex = 10;
             this.fraDDASection.TabStop = false;
-            this.fraDDASection.Text = "DDA Section";
+            this.fraDDASection.Text = "Section";
             // 
             // chkDDASection
             // 
@@ -929,7 +929,7 @@ namespace CrashEdit
             0,
             -2147483648});
             this.numDDASection.Name = "numDDASection";
-            this.numDDASection.Size = new System.Drawing.Size(120, 20);
+            this.numDDASection.Size = new System.Drawing.Size(100, 20);
             this.numDDASection.TabIndex = 1;
             this.numDDASection.ValueChanged += new System.EventHandler(this.numDDASection_ValueChanged);
             // 
@@ -937,12 +937,12 @@ namespace CrashEdit
             // 
             this.fraDDASettings.Controls.Add(this.chkDDASettings);
             this.fraDDASettings.Controls.Add(this.numDDASettings);
-            this.fraDDASettings.Location = new System.Drawing.Point(141, 241);
+            this.fraDDASettings.Location = new System.Drawing.Point(121, 163);
             this.fraDDASettings.Name = "fraDDASettings";
-            this.fraDDASettings.Size = new System.Drawing.Size(132, 70);
+            this.fraDDASettings.Size = new System.Drawing.Size(112, 70);
             this.fraDDASettings.TabIndex = 9;
             this.fraDDASettings.TabStop = false;
-            this.fraDDASettings.Text = "DDA Settings";
+            this.fraDDASettings.Text = "Death Count";
             // 
             // chkDDASettings
             // 
@@ -959,17 +959,17 @@ namespace CrashEdit
             // 
             this.numDDASettings.Location = new System.Drawing.Point(6, 42);
             this.numDDASettings.Maximum = new decimal(new int[] {
-            2147483647,
+            8388607,
             0,
             0,
             0});
             this.numDDASettings.Minimum = new decimal(new int[] {
-            -2147483648,
+            8388608,
             0,
             0,
             -2147483648});
             this.numDDASettings.Name = "numDDASettings";
-            this.numDDASettings.Size = new System.Drawing.Size(120, 20);
+            this.numDDASettings.Size = new System.Drawing.Size(100, 20);
             this.numDDASettings.TabIndex = 1;
             this.numDDASettings.ValueChanged += new System.EventHandler(this.numDDASettings_ValueChanged);
             // 
@@ -991,9 +991,9 @@ namespace CrashEdit
             this.chkBonusBoxCount.AutoSize = true;
             this.chkBonusBoxCount.Location = new System.Drawing.Point(6, 68);
             this.chkBonusBoxCount.Name = "chkBonusBoxCount";
-            this.chkBonusBoxCount.Size = new System.Drawing.Size(65, 17);
+            this.chkBonusBoxCount.Size = new System.Drawing.Size(104, 17);
             this.chkBonusBoxCount.TabIndex = 2;
-            this.chkBonusBoxCount.Text = "Enabled";
+            this.chkBonusBoxCount.Text = "Enabled (Bonus)";
             this.chkBonusBoxCount.UseVisualStyleBackColor = true;
             this.chkBonusBoxCount.CheckedChanged += new System.EventHandler(this.chkBonusBoxCount_CheckedChanged);
             // 
@@ -1190,7 +1190,7 @@ namespace CrashEdit
             this.tabLoadLists.Location = new System.Drawing.Point(4, 22);
             this.tabLoadLists.Name = "tabLoadLists";
             this.tabLoadLists.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLoadLists.Size = new System.Drawing.Size(390, 428);
+            this.tabLoadLists.Size = new System.Drawing.Size(390, 401);
             this.tabLoadLists.TabIndex = 2;
             this.tabLoadLists.Text = "Load Lists";
             this.tabLoadLists.UseVisualStyleBackColor = true;
@@ -1638,7 +1638,7 @@ namespace CrashEdit
             this.tabDrawLists.Location = new System.Drawing.Point(4, 22);
             this.tabDrawLists.Name = "tabDrawLists";
             this.tabDrawLists.Padding = new System.Windows.Forms.Padding(3);
-            this.tabDrawLists.Size = new System.Drawing.Size(390, 428);
+            this.tabDrawLists.Size = new System.Drawing.Size(390, 401);
             this.tabDrawLists.TabIndex = 3;
             this.tabDrawLists.Text = "Draw Lists";
             this.tabDrawLists.UseVisualStyleBackColor = true;
