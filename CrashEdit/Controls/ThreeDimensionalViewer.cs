@@ -344,8 +344,7 @@ namespace CrashEdit
                 | (long)tex.Top << 24
                 | (long)tex.Width << 31
                 | (long)tex.Height << 41
-                | (long)tex.BlendMode << 48
-                | (tex.BitFlag ? 1L : 0L) << 50;
+                | (tex.BitFlag ? 1L : 0L) << 48;
         }
 
         protected void ConvertTexturesToGL(int list, TextureChunk[] texturechunks, IList<ModelTexture> modeltextures, byte[] eid_list, int eid_off)

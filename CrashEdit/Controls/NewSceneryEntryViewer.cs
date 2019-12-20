@@ -10,6 +10,7 @@ namespace CrashEdit
     {
         private List<NewSceneryEntry> entries;
         private int displaylist;
+        private int displaylist_translucid;
         private bool textures_enabled = true;
         private bool init = false;
 
@@ -39,9 +40,9 @@ namespace CrashEdit
 
         public NewSceneryEntryViewer(NewSceneryEntry entry,TextureChunk[] texturechunks)
         {
-            entries = new List<NewSceneryEntry>();
-            entries.Add(entry);
+            entries = new List<NewSceneryEntry>() { entry };
             displaylist = -1;
+            displaylist_translucid = -1;
             InitTextures(1);
             this.texturechunks = new TextureChunk[1][];
             dyntris = new List<SceneryTriangle>[1] { new List<SceneryTriangle>() };
@@ -55,6 +56,7 @@ namespace CrashEdit
         {
             this.entries = new List<NewSceneryEntry>(entries);
             displaylist = -1;
+            displaylist_translucid = -1;
             InitTextures(this.entries.Count);
             this.texturechunks = texturechunks;
             dyntris = new List<SceneryTriangle>[this.entries.Count];
@@ -192,6 +194,10 @@ namespace CrashEdit
                                         lastquads[e].Add(q);
                                         continue;
                                     }
+                                    else if (entry.Textures[tex].BlendMode == 0)
+                                    {
+                                        continue;
+                                    }
                                     BindTexture(e,tex);
                                     uvs[0] = entry.Textures[tex].X2;
                                     uvs[1] = entry.Textures[tex].Y2;
@@ -207,14 +213,14 @@ namespace CrashEdit
                             else
                                 UnbindTexture();
                             GL.Begin(PrimitiveType.Quads);
-                            GL.TexCoord2(uvs[0], uvs[1]);
-                            RenderVertex(entry, entry.Vertices[q.VertexA]);
-                            GL.TexCoord2(uvs[2], uvs[3]);
-                            RenderVertex(entry, entry.Vertices[q.VertexB]);
-                            GL.TexCoord2(uvs[4], uvs[5]);
-                            RenderVertex(entry, entry.Vertices[q.VertexC]);
-                            GL.TexCoord2(uvs[6], uvs[7]);
-                            RenderVertex(entry, entry.Vertices[q.VertexD]);
+                            GL.TexCoord2(uvs[0],uvs[1]);
+                            RenderVertex(entry,entry.Vertices[q.VertexA]);
+                            GL.TexCoord2(uvs[2],uvs[3]);
+                            RenderVertex(entry,entry.Vertices[q.VertexB]);
+                            GL.TexCoord2(uvs[4],uvs[5]);
+                            RenderVertex(entry,entry.Vertices[q.VertexC]);
+                            GL.TexCoord2(uvs[6],uvs[7]);
+                            RenderVertex(entry,entry.Vertices[q.VertexD]);
                             GL.End();
                         }
                         UnbindTexture();
@@ -312,28 +318,96 @@ namespace CrashEdit
                         uvs[7] = entry.Textures[tex].Y4;
                     }
                     GL.Begin(PrimitiveType.Quads);
-                    GL.TexCoord2(entry.Textures[tex].X2, entry.Textures[tex].Y2);
-                    RenderVertex(entry, entry.Vertices[q.VertexA]);
-                    GL.TexCoord2(entry.Textures[tex].X1, entry.Textures[tex].Y1);
-                    RenderVertex(entry, entry.Vertices[q.VertexB]);
-                    GL.TexCoord2(entry.Textures[tex].X3, entry.Textures[tex].Y3);
-                    RenderVertex(entry, entry.Vertices[q.VertexC]);
-                    GL.TexCoord2(entry.Textures[tex].X4, entry.Textures[tex].Y4);
-                    RenderVertex(entry, entry.Vertices[q.VertexD]);
+                    GL.TexCoord2(entry.Textures[tex].X2,entry.Textures[tex].Y2);
+                    RenderVertex(entry,entry.Vertices[q.VertexA],0x7F);
+                    GL.TexCoord2(entry.Textures[tex].X1,entry.Textures[tex].Y1);
+                    RenderVertex(entry,entry.Vertices[q.VertexB],0x7F);
+                    GL.TexCoord2(entry.Textures[tex].X3,entry.Textures[tex].Y3);
+                    RenderVertex(entry,entry.Vertices[q.VertexC],0x7F);
+                    GL.TexCoord2(entry.Textures[tex].X4,entry.Textures[tex].Y4);
+                    RenderVertex(entry,entry.Vertices[q.VertexD],0x7F);
                     GL.End();
                 }
             }
             GL.DepthMask(true);
+            SetBlendMode(0);
+            if (displaylist_translucid == -1)
+            {
+                displaylist_translucid = GL.GenLists(1);
+                GL.NewList(displaylist_translucid, ListMode.CompileAndExecute);
+                for (int e = 0; e < entries.Count; ++e)
+                {
+                    NewSceneryEntry entry = entries[e];
+                    if (entry != null)
+                    {
+                        for (int i = 0; i < entry.Quads.Count; ++i)
+                        {
+                            var q = entry.Quads[i];
+                            if ((q.VertexA >= entry.Vertices.Count || q.VertexB >= entry.Vertices.Count || q.VertexC >= entry.Vertices.Count || q.VertexD >= entry.Vertices.Count) || (q.VertexA == q.VertexB && q.VertexB == q.VertexC && q.VertexC == q.VertexD && q.VertexD == q.VertexA)) continue;
+                            if (q.Texture != 0 || q.Animated)
+                            {
+                                int tex = q.Texture - 1;
+                                if (q.Animated)
+                                {
+                                    ++tex;
+                                    var anim = entry.AnimatedTextures[tex];
+                                    if (anim.Offset == 0)
+                                        continue;
+                                    else if (anim.IsLOD)
+                                    {
+                                        tex = anim.Offset - 1 + anim.LOD0; // we render the closest LOD for now
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                }
+                                if (entry.Textures[tex].BlendMode != 0)
+                                {
+                                    continue;
+                                }
+                                BindTexture(e, tex);
+                                uvs[0] = entry.Textures[tex].X2;
+                                uvs[1] = entry.Textures[tex].Y2;
+                                uvs[2] = entry.Textures[tex].X1;
+                                uvs[3] = entry.Textures[tex].Y1;
+                                uvs[4] = entry.Textures[tex].X3;
+                                uvs[5] = entry.Textures[tex].Y3;
+                                uvs[6] = entry.Textures[tex].X4;
+                                uvs[7] = entry.Textures[tex].Y4;
+                            }
+                            else
+                                continue;
+                            GL.Begin(PrimitiveType.Quads);
+                            GL.TexCoord2(uvs[0],uvs[1]);
+                            RenderVertex(entry,entry.Vertices[q.VertexA],0x7F);
+                            GL.TexCoord2(uvs[2],uvs[3]);
+                            RenderVertex(entry,entry.Vertices[q.VertexB],0x7F);
+                            GL.TexCoord2(uvs[4],uvs[5]);
+                            RenderVertex(entry,entry.Vertices[q.VertexC],0x7F);
+                            GL.TexCoord2(uvs[6],uvs[7]);
+                            RenderVertex(entry,entry.Vertices[q.VertexD],0x7F);
+                            GL.End();
+                        }
+                        UnbindTexture();
+                    }
+                }
+                GL.EndList();
+            }
+            else
+            {
+                GL.CallList(displaylist_translucid);
+            }
             SetBlendMode(3);
             UnbindTexture();
             if (!textures_enabled)
                 GL.Enable(EnableCap.Texture2D);
         }
 
-        private void RenderVertex(NewSceneryEntry entry,NewSceneryVertex vertex)
+        private void RenderVertex(NewSceneryEntry entry,NewSceneryVertex vertex,byte alpha = 0xFF)
         {
             SceneryColor color = entry.Colors[vertex.Color];
-            GL.Color3(color.Red,color.Green,color.Blue);
+            GL.Color4(color.Red,color.Green,color.Blue,alpha);
             GL.Vertex3(entry.XOffset + vertex.X * 16,entry.YOffset + vertex.Y * 16,entry.ZOffset + vertex.Z * 16);
         }
     }
