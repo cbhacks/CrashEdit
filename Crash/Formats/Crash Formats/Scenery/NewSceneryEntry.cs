@@ -55,13 +55,13 @@ namespace Crash
         {
             byte[][] items = new byte [7][];
             items[0] = Info;
-            items[1] = new byte [vertices.Count * 6];
+            items[1] = new byte [Aligner.Align(vertices.Count * 6,4)];
             for (int i = 0;i < vertices.Count;i++)
             {
                 vertices[i].SaveXY().CopyTo(items[1],(vertices.Count - 1 - i) * 4);
                 vertices[i].SaveZ().CopyTo(items[1],vertices.Count * 4 + i * 2);
             }
-            items[2] = new byte [triangles.Count * 6];
+            items[2] = new byte [Aligner.Align(triangles.Count * 6,4)];
             for (int i = 0;i < triangles.Count;i++)
             {
                 triangles[i].SaveA().CopyTo(items[2],(triangles.Count - 1 - i) * 4);
