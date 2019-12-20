@@ -148,10 +148,6 @@ namespace CrashEdit
             {
                 return new T21EntryController(this,(T21Entry)entry);
             }
-            else if (entry is T2Entry)
-            {
-                return new T2EntryController(this, (T2Entry)entry);
-            }
             else if (entry is UnprocessedEntry)
             {
                 return new UnprocessedEntryController(this,(UnprocessedEntry)entry);
