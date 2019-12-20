@@ -1,8 +1,8 @@
 using Crash;
+using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using OpenTK.Graphics.OpenGL;
 
 namespace CrashEdit
 {

@@ -9,8 +9,8 @@ namespace CrashEdit
         {
             SceneryEntry = sceneryentry;
             AddMenuSeparator();
-            AddMenu("Export as Wavefront OBJ", Menu_Export_OBJ);
-            AddMenu("Export as Stanford PLY", Menu_Export_PLY);
+            AddMenu("Export as Wavefront OBJ",Menu_Export_OBJ);
+            AddMenu("Export as Stanford PLY",Menu_Export_PLY);
             //AddMenu("Export as COLLADA",Menu_Export_COLLADA);
             AddMenu("Fix coords imported from Crash 3", Menu_Fix_WGEOv3);
             InvalidateNode();
