@@ -715,7 +715,11 @@ namespace CrashEdit
             }
             else
             {
-                entity.LoadListA.Rows.Insert(loadlistarowindex, entity.LoadListA.Rows[loadlistarowindex]);
+                var newrow = new EntityPropertyRow<int>();
+                newrow.MetaValue = entity.LoadListA.Rows[loadlistarowindex].MetaValue;
+                foreach (var val in entity.LoadListA.Rows[loadlistarowindex].Values)
+                    newrow.Values.Add(val);
+                entity.LoadListA.Rows.Insert(loadlistarowindex,newrow);
             }
             UpdateLoadListA();
         }
@@ -860,7 +864,11 @@ namespace CrashEdit
             }
             else
             {
-                entity.LoadListB.Rows.Insert(loadlistbrowindex, entity.LoadListB.Rows[loadlistbrowindex]);
+                var newrow = new EntityPropertyRow<int>();
+                newrow.MetaValue = entity.LoadListB.Rows[loadlistbrowindex].MetaValue;
+                foreach (var val in entity.LoadListB.Rows[loadlistbrowindex].Values)
+                    newrow.Values.Add(val);
+                entity.LoadListB.Rows.Insert(loadlistbrowindex,newrow);
             }
             UpdateLoadListB();
         }
@@ -1055,7 +1063,11 @@ namespace CrashEdit
             }
             else
             {
-                entity.DrawListA.Rows.Insert(drawlistarowindex, entity.DrawListA.Rows[drawlistarowindex]);
+                var newrow = new EntityPropertyRow<int>();
+                newrow.MetaValue = entity.DrawListA.Rows[drawlistarowindex].MetaValue;
+                foreach (var val in entity.DrawListA.Rows[drawlistarowindex].Values)
+                    newrow.Values.Add(val);
+                entity.DrawListA.Rows.Insert(drawlistarowindex,newrow);
             }
             UpdateDrawListA();
         }
@@ -1250,7 +1262,11 @@ namespace CrashEdit
             }
             else
             {
-                entity.DrawListB.Rows.Insert(drawlistbrowindex, entity.DrawListB.Rows[drawlistbrowindex]);
+                var newrow = new EntityPropertyRow<int>();
+                newrow.MetaValue = entity.DrawListB.Rows[drawlistbrowindex].MetaValue;
+                foreach (var val in entity.DrawListB.Rows[drawlistbrowindex].Values)
+                    newrow.Values.Add(val);
+                entity.DrawListB.Rows.Insert(drawlistbrowindex,newrow);
             }
             UpdateDrawListB();
         }
@@ -1846,7 +1862,13 @@ namespace CrashEdit
                 entity.Neighbors.Rows[entity.Neighbors.RowCount - 1].MetaValue = 0;
             }
             else
-                entity.Neighbors.Rows.Insert(neighborindex,entity.Neighbors.Rows[neighborindex]);
+            {
+                var newrow = new EntityPropertyRow<uint>();
+                newrow.MetaValue = entity.Neighbors.Rows[neighborindex].MetaValue;
+                foreach (var val in entity.Neighbors.Rows[neighborindex].Values)
+                    newrow.Values.Add(val);
+                entity.Neighbors.Rows.Insert(neighborindex,newrow);
+            }
             UpdateNeighbors();
         }
 

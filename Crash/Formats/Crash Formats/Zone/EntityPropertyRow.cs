@@ -13,6 +13,6 @@ namespace Crash
         }
 
         public short? MetaValue { get; set; }
-        public IList<T> Values => values;
+        public List<T> Values => values;
     }
 }
