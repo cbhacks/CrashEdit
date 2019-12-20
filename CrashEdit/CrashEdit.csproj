@@ -64,7 +64,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\Model\T2EntryController.cs" />
     <Compile Include="Controllers\GOOL\GOOLEntryController.cs" />
     <Compile Include="Controls\GOOLBox.cs">
       <SubType>UserControl</SubType>
