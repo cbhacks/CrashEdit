@@ -476,8 +476,8 @@ namespace CrashEdit
                         GL.DeleteTextures(textureIDs[i].Length, textureIDs[i]);
                         textureIDs[i] = null;
                     }
-                    textureIDs = null;
                 }
+                textureIDs = null;
             }
             base.Dispose(disposing);
         }
