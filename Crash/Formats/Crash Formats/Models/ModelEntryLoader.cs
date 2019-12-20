@@ -3,6 +3,7 @@ using System;
 namespace Crash
 {
     [EntryType(2,GameVersion.Crash2)]
+    [EntryType(2,GameVersion.Crash3)]
     public sealed class ModelEntryLoader : EntryLoader
     {
         public override Entry Load(byte[][] items,int eid)
