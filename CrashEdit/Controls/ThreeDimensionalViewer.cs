@@ -467,12 +467,16 @@ namespace CrashEdit
         {
             inputtimer.Dispose();
             refreshtimer.Dispose();
-            for (int i = 0; i < textureIDs.Length; ++i)
+            if (textureIDs != null)
             {
-                if (textureIDs[i] != null)
+                for (int i = 0; i < textureIDs.Length; ++i)
                 {
-                    GL.DeleteTextures(textureIDs[i].Length, textureIDs[i]);
-                    textureIDs[i] = null;
+                    if (textureIDs[i] != null)
+                    {
+                        GL.DeleteTextures(textureIDs[i].Length, textureIDs[i]);
+                        textureIDs[i] = null;
+                    }
+                    textureIDs = null;
                 }
             }
             base.Dispose(disposing);
