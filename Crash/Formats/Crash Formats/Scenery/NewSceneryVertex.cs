@@ -14,27 +14,20 @@ namespace Crash
                 throw new ArgumentException("Value must be 4 bytes long.","xydata");
             if (zdata.Length != 2)
                 throw new ArgumentException("Value must be 2 bytes long.","zdata");
-            uint xy = (uint)BitConv.FromInt32(xydata,0);
+            int xy = BitConv.FromInt32(xydata,0);
             ushort z = (ushort)BitConv.FromInt16(zdata,0);
             ushort y = (ushort)(xy >> 16);
             ushort x = (ushort)xy;
-            uint unknownx = (uint)x & 0xF;
-            uint unknowny = (uint)y & 0xF;
-            uint unknownz = (uint)z & 0xF;
+            int unknownx = x & 0xF;
+            int unknowny = y & 0xF;
+            int unknownz = z & 0xF;
             x >>= 4;
             y >>= 4;
             z >>= 4;
             return new NewSceneryVertex(x,y,z,unknownx,unknowny,unknownz);
         }
 
-        private uint x;
-        private uint y;
-        private uint z;
-        private uint unknownx;
-        private uint unknowny;
-        private uint unknownz;
-
-        public NewSceneryVertex(uint x,uint y,uint z,uint unknownx,uint unknowny,uint unknownz)
+        public NewSceneryVertex(uint x,uint y,uint z,int unknownx,int unknowny,int unknownz)
         {
             if (x > 0xFFF)
                 throw new ArgumentOutOfRangeException("x");
@@ -48,69 +41,30 @@ namespace Crash
                 throw new ArgumentOutOfRangeException("unknowny");
             if (unknownz < 0 || unknownz > 0xF)
                 throw new ArgumentOutOfRangeException("unknownz");
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.unknownx = unknownx;
-            this.unknowny = unknowny;
-            this.unknownz = unknownz;
+            X = x;
+            Y = y;
+            Z = z;
+            UnknownX = unknownx;
+            UnknownY = unknowny;
+            UnknownZ = unknownz;
         }
 
-        public uint X
-        {
-            get { return x; }
-        }
-
-        public uint Y
-        {
-            get { return y; }
-        }
-
-        public uint Z
-        {
-            get { return z; }
-        }
-
-        public uint UnknownX
-        {
-            get { return unknownx; }
-        }
-
-        public uint UnknownY
-        {
-            get { return unknowny; }
-        }
-
-        public uint UnknownZ
-        {
-            get { return unknownz; }
-        }
-
-        public int Color
-        {
-            get { return ((int)unknowny & 0x3) << 8 | (int)unknownx << 4 | (int)unknownz; }
-        }
-
-        double IPosition.X
-        {
-            get { return x; }
-        }
-
-        double IPosition.Y
-        {
-            get { return y; }
-        }
-
-        double IPosition.Z
-        {
-            get { return z; }
-        }
+        public uint X { get; }
+        public uint Y { get; }
+        public uint Z { get; }
+        public int UnknownX { get; }
+        public int UnknownY { get; }
+        public int UnknownZ { get; }
+        public int Color => (UnknownY & 0x3) << 8 | UnknownX << 4 | UnknownZ;
+        double IPosition.X => X;
+        double IPosition.Y => Y;
+        double IPosition.Z => Z;
 
         public byte[] SaveXY()
         {
             byte[] data = new byte [4];
-            uint xdata = (x << 4) | unknownx;
-            uint ydata = (y << 4) | unknowny;
+            int xdata = (int)((X << 4) | UnknownX);
+            int ydata = (int)((Y << 4) | UnknownY);
             BitConv.ToInt16(data,0,(short)xdata);
             BitConv.ToInt16(data,2,(short)ydata);
             return data;
@@ -119,7 +73,7 @@ namespace Crash
         public byte[] SaveZ()
         {
             byte[] data = new byte [2];
-            uint zdata = (z << 4) | unknownz;
+            int zdata = (int)((Z << 4) | UnknownZ);
             BitConv.ToInt16(data,0,(short)zdata);
             return data;
         }

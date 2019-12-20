@@ -35,20 +35,20 @@ namespace Crash
 
         public int XOffset
         {
-            get => BitConv.FromInt32(Info, 0);
-            set => BitConv.ToInt32(Info, 0, value);
+            get => BitConv.FromInt32(Info,0);
+            set => BitConv.ToInt32(Info,0,value);
         }
 
         public int YOffset
         {
-            get => BitConv.FromInt32(Info, 4);
-            set => BitConv.ToInt32(Info, 4, value);
+            get => BitConv.FromInt32(Info,4);
+            set => BitConv.ToInt32(Info,4,value);
         }
 
         public int ZOffset
         {
-            get => BitConv.FromInt32(Info, 8);
-            set => BitConv.ToInt32(Info, 8, value);
+            get => BitConv.FromInt32(Info,8);
+            set => BitConv.ToInt32(Info,8,value);
         }
 
         public override UnprocessedEntry Unprocess()
@@ -105,11 +105,11 @@ namespace Crash
                         if (vertex.Color < Colors.Count)
                         {
                             SceneryColor color = Colors[vertex.Color];
-                            obj.WriteLine("v {0} {1} {2} {3} {4} {5}", vertex.X + XOffset / 16, vertex.Y + YOffset / 16, vertex.Z + ZOffset / 16,color.Red / 255.0,color.Green / 255.0,color.Blue / 255.0);
+                            obj.WriteLine("v {0} {1} {2} {3} {4} {5}", vertex.X + XOffset / 4, vertex.Y + YOffset / 4, vertex.Z + ZOffset / 4,color.Red / 255.0,color.Green / 255.0,color.Blue / 255.0);
                         }
                         else
                         {
-                            obj.WriteLine("v {0} {1} {2}", vertex.X + XOffset / 16, vertex.Y + YOffset / 16, vertex.Z + ZOffset / 16);
+                            obj.WriteLine("v {0} {1} {2}", vertex.X + XOffset / 4, vertex.Y + YOffset / 4, vertex.Z + ZOffset / 4);
                         }
                     }
                     obj.WriteLine();
@@ -122,7 +122,7 @@ namespace Crash
                     obj.WriteLine("# Quads");
                     foreach (SceneryQuad quad in quads)
                     {
-                        obj.WriteLine("f {0} {1} {2} {3}", quad.VertexA + 1, quad.VertexB + 1, quad.VertexC + 1,quad.VertexD + 1);
+                        obj.WriteLine("f {0} {1} {2} {3}", quad.VertexA + 1, quad.VertexB + 1, quad.VertexC + 1, quad.VertexD + 1);
                     }
                 }
                 return stream.ToArray();
@@ -214,11 +214,11 @@ namespace Crash
                     xmlwriter.WriteAttributeString("count", (vertices.Count * 3).ToString());
                     foreach (NewSceneryVertex vertex in vertices)
                     {
-                        xmlwriter.WriteValue(vertex.X + XOffset / 16);
+                        xmlwriter.WriteValue(vertex.X + XOffset / 4);
                         xmlwriter.WriteWhitespace(" ");
-                        xmlwriter.WriteValue(vertex.Y + YOffset / 16);
+                        xmlwriter.WriteValue(vertex.Y + YOffset / 4);
                         xmlwriter.WriteWhitespace(" ");
-                        xmlwriter.WriteValue(vertex.Z + ZOffset / 16);
+                        xmlwriter.WriteValue(vertex.Z + ZOffset / 4);
                         xmlwriter.WriteWhitespace(" ");
                     }
                     xmlwriter.WriteEndElement();

@@ -86,7 +86,7 @@ namespace Crash
                 byte green = items[5][i * 4 + 1];
                 byte blue = items[5][i * 4 + 2];
                 byte extra = items[5][i * 4 + 3];
-                colors[i] = new SceneryColor(red, green, blue, extra);
+                colors[i] = new SceneryColor(red,green,blue,extra);
             }
             ModelExtendedTexture[] animatedtextures = new ModelExtendedTexture[animatedtexturecount];
             for (int i = 0; i < animatedtexturecount; i++)
