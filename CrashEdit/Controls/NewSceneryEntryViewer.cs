@@ -28,13 +28,13 @@ namespace CrashEdit
             textureframe = 0;
             texturetimer = new Timer
             {
-                Interval = 1000 / OldMainForm.GetRate() / 2,
+                Interval = 1000 / OldMainForm.GetRate(),
                 Enabled = true
             };
             texturetimer.Tick += delegate (object sender, EventArgs e)
             {
                 ++textureframe;
-                texturetimer.Interval = 1000 / OldMainForm.GetRate() / 2;
+                texturetimer.Interval = 1000 / OldMainForm.GetRate();
             };
         }
 
@@ -176,6 +176,12 @@ namespace CrashEdit
                                     }
                                     else
                                     {
+                                        if (anim.Leap)
+                                        {
+                                            ++tex;
+                                            anim = entry.AnimatedTextures[tex];
+                                            tex = anim.Offset - 1 + anim.LOD0;
+                                        }
                                         if (entry.Textures[tex].BlendMode == 1)
                                             lastquads[e].Add(q);
                                         else
