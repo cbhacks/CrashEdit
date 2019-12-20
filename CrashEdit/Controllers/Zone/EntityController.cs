@@ -27,7 +27,7 @@ namespace CrashEdit
             {
                 Node.Text = string.Format("Entity ID {0}",Entity.ID);
             }
-            else if (Node.Text != "Entity")
+            else
             {
                 Node.Text = "Entity";
             }
@@ -53,13 +53,13 @@ namespace CrashEdit
             List<EntityPropertyRow<int>> drawlists = new List<EntityPropertyRow<int>>();
             foreach (Chunk chunk in ZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
             {
-                if (chunk is EntryChunk)
+                if (chunk is EntryChunk entrychunk)
                 {
-                    foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                    foreach (Entry entry in entrychunk.Entries)
                     {
-                        if (entry is ZoneEntry)
+                        if (entry is ZoneEntry zone)
                         {
-                            foreach (Entity otherentity in ((ZoneEntry)entry).Entities)
+                            foreach (Entity otherentity in zone.Entities)
                             {
                                 if (otherentity.ID.HasValue)
                                 {
@@ -82,10 +82,8 @@ namespace CrashEdit
                 }
             }
             maxid++;
-            int newindex = ZoneEntry.Entities.Count;
-            newindex -= BitConv.FromInt32(ZoneEntry.Header,0x188);
-            int entitycount = BitConv.FromInt32(ZoneEntry.Header,0x18C);
-            BitConv.ToInt32(ZoneEntry.Header,0x18C,entitycount + 1);
+            int newindex = ZoneEntry.Entities.Count - ZoneEntry.CameraCount;
+            ++ZoneEntry.EntityCount;
             Entity newentity = Entity.Load(Entity.Save());
             newentity.ID = maxid;
             newentity.AlternateID = null;

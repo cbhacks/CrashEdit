@@ -76,7 +76,7 @@ namespace CrashEdit
                 int x2 = BitConv.FromInt32(entry.Layout,12);
                 int y2 = BitConv.FromInt32(entry.Layout,16);
                 int z2 = BitConv.FromInt32(entry.Layout,20);
-                yield return new Position(x2 + xoffset, y2 + yoffset, z2 + zoffset);
+                yield return new Position(x2 + xoffset,y2 + yoffset,z2 + zoffset);
                 foreach (Entity entity in entry.Entities)
                 {
                     if (entry.Entities.IndexOf(entity) % 3 == 0 || entity.ID != null)

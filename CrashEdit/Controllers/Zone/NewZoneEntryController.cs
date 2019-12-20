@@ -28,9 +28,16 @@ namespace CrashEdit
         {
             int linkedsceneryentrycount = BitConv.FromInt32(NewZoneEntry.Header,0);
             NewSceneryEntry[] linkedsceneryentries = new NewSceneryEntry [linkedsceneryentrycount];
+            TextureChunk[][] totaltexturechunks = new TextureChunk[linkedsceneryentrycount][];
             for (int i = 0;i < linkedsceneryentrycount;i++)
             {
                 linkedsceneryentries[i] = FindEID<NewSceneryEntry>(BitConv.FromInt32(NewZoneEntry.Header,4 + i * 48));
+                TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(linkedsceneryentries[i].Info,0x28)];
+                for (int j = 0; j < texturechunks.Length; ++j)
+                {
+                     texturechunks[j] = FindEID<TextureChunk>(BitConv.FromInt32(linkedsceneryentries[i].Info,0x2C+j*4));
+                }
+                totaltexturechunks[i] = texturechunks;
             }
             int linkedzoneentrycount = BitConv.FromInt32(NewZoneEntry.Header,400);
             NewZoneEntry[] linkedzoneentries = new NewZoneEntry [linkedzoneentrycount];
@@ -38,7 +45,7 @@ namespace CrashEdit
             {
                 linkedzoneentries[i] = FindEID<NewZoneEntry>(BitConv.FromInt32(NewZoneEntry.Header,404 + i * 4));
             }
-            return new UndockableControl(new NewZoneEntryViewer(NewZoneEntry,linkedsceneryentries,linkedzoneentries));
+            return new UndockableControl(new NewZoneEntryViewer(NewZoneEntry,linkedsceneryentries,totaltexturechunks,linkedzoneentries));
         }
 
         public NewZoneEntry NewZoneEntry { get; }

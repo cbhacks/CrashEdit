@@ -47,8 +47,8 @@ namespace CrashEdit
         private bool polygonmode;
         private bool allentries;
 
-        public NewZoneEntryViewer(NewZoneEntry entry,NewSceneryEntry[] linkedsceneryentries,NewZoneEntry[] linkedentries)
-            : base(linkedsceneryentries)
+        public NewZoneEntryViewer(NewZoneEntry entry,NewSceneryEntry[] linkedsceneryentries,TextureChunk[][] texturechunks,NewZoneEntry[] linkedentries)
+            : base(linkedsceneryentries,texturechunks)
         {
             this.entry = entry;
             this.linkedentries = linkedentries;
@@ -162,13 +162,13 @@ namespace CrashEdit
 
         protected override void RenderObjects()
         {
+            GL.Disable(EnableCap.Texture2D);
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 1.0f);
             RenderEntry(entry,ref octreedisplaylists[0]);
             int xoffset = BitConv.FromInt32(entry.Layout,0);
             int yoffset = BitConv.FromInt32(entry.Layout,4);
             int zoffset = BitConv.FromInt32(entry.Layout,8);
-            base.RenderObjects();
             GL.Enable(EnableCap.PolygonStipple);
-            GL.PolygonStipple(stippleb);
             for (int i = 0; i < linkedentries.Length; i++)
             {
                 NewZoneEntry linkedentry = linkedentries[i];
@@ -179,6 +179,11 @@ namespace CrashEdit
                 RenderLinkedEntry(linkedentry,ref octreedisplaylists[i + 1]);
             }
             GL.Disable(EnableCap.PolygonStipple);
+            if (deletelists)
+                deletelists = false;
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
+            GL.Enable(EnableCap.Texture2D);
+            base.RenderObjects();
         }
 
         private void RenderEntry(NewZoneEntry entry,ref int octreedisplaylist)
@@ -195,7 +200,6 @@ namespace CrashEdit
             {
                 GL.DeleteLists(octreedisplaylist,1);
                 octreedisplaylist = -1;
-                deletelists = false;
             }
             if (renderoctree)
             {
@@ -265,12 +269,11 @@ namespace CrashEdit
             GL.Translate(xoffset,yoffset,zoffset);
             if (allentries)
             {
-                GL.PolygonStipple(stippleb);
+                GL.Disable(EnableCap.PolygonStipple);
                 if (deletelists)
                 {
                     GL.DeleteLists(octreedisplaylist,1);
                     octreedisplaylist = -1;
-                    deletelists = false;
                 }
                 if (renderoctree)
                 {
@@ -294,6 +297,7 @@ namespace CrashEdit
                     }
                     GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
                 }
+                GL.Enable(EnableCap.PolygonStipple);
             }
             GL.Scale(4,4,4);
             foreach (Entity entity in entry.Entities)
@@ -455,7 +459,7 @@ namespace CrashEdit
                 EntityPosition position = entity.Positions[0];
                 GL.PushMatrix();
                 if (camera)
-                    GL.Scale(0.25,0.25,0.25);
+                    GL.Scale(0.25F,0.25F,0.25F);
                 GL.Translate(position.X * scale,position.Y * scale,position.Z * scale);
                 if (camera)
                     GL.Scale(4,4,4);
@@ -492,7 +496,7 @@ namespace CrashEdit
                     GL.Color3(Color.Blue);
                 GL.PushMatrix();
                 if (camera)
-                    GL.Scale(0.25,0.25,0.25);
+                    GL.Scale(0.25F,0.25F,0.25F);
                 GL.Begin(PrimitiveType.LineStrip);
                 foreach (EntityPosition position in entity.Positions)
                 {
@@ -680,9 +684,6 @@ namespace CrashEdit
                     break;
                 case 10: // Pickup
                     LoadTexture(OldResources.PickupBoxTexture);
-                    break;
-                case 11: // POW
-                    LoadTexture(OldResources.POWBoxTexture);
                     break;
                 case 13: // Ghost
                     LoadTexture(OldResources.UnknownBoxTopTexture);
