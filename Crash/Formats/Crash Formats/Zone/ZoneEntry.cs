@@ -6,10 +6,10 @@ namespace Crash
     {
         private List<Entity> entities;
 
-        public ZoneEntry(byte[] unknown1,byte[] unknown2,IEnumerable<Entity> entities,int eid) : base(eid)
+        public ZoneEntry(byte[] header,byte[] layout,IEnumerable<Entity> entities,int eid) : base(eid)
         {
-            Header = unknown1;
-            Layout = unknown2;
+            Header = header;
+            Layout = layout;
             this.entities = new List<Entity>(entities);
         }
 
