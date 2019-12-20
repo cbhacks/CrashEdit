@@ -2,6 +2,7 @@ using Crash;
 using Crash.UI;
 using System;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -176,7 +177,7 @@ namespace CrashEdit
 
             Width = 747;
             Height = 560;
-            Text = "CrashEdit";
+            Text = $"CrashEdit v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
             Controls.Add(tbcTabs);
             Controls.Add(tsToolbar);
 
