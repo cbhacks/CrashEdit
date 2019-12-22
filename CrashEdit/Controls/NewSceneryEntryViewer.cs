@@ -143,150 +143,147 @@ namespace CrashEdit
                     lasttris[e].Clear();
                     lastquads[e].Clear();
                     NewSceneryEntry entry = entries[e];
-                    if (entry != null)
+                    for (int i = 0; i < entry.Triangles.Count; ++i)
                     {
-                        for (int i = 0; i < entry.Triangles.Count; ++i)
+                        var t = entry.Triangles[i];
+                        if ((t.VertexA >= entry.Vertices.Count || t.VertexB >= entry.Vertices.Count || t.VertexC >= entry.Vertices.Count) || (t.VertexA == t.VertexB && t.VertexB == t.VertexC && t.VertexC == t.VertexA)) continue;
+                        if (t.Texture != 0 || t.Animated)
                         {
-                            var t = entry.Triangles[i];
-                            if ((t.VertexA >= entry.Vertices.Count || t.VertexB >= entry.Vertices.Count || t.VertexC >= entry.Vertices.Count) || (t.VertexA == t.VertexB && t.VertexB == t.VertexC && t.VertexC == t.VertexA)) continue;
-                            if (t.Texture != 0 || t.Animated)
+                            bool untex = false;
+                            int tex = t.Texture - 1;
+                            if (t.Animated)
                             {
-                                bool untex = false;
-                                int tex = t.Texture - 1;
-                                if (t.Animated)
+                                ++tex;
+                                var anim = entry.AnimatedTextures[tex];
+                                if (anim.Offset == 0)
+                                    untex = true;
+                                else if (anim.IsLOD)
                                 {
-                                    ++tex;
-                                    var anim = entry.AnimatedTextures[tex];
-                                    if (anim.Offset == 0)
-                                        untex = true;
-                                    else if (anim.IsLOD)
-                                    {
-                                        tex = anim.Offset - 1 + anim.LOD0; // we render the closest LOD for now
-                                    }
-                                    else
-                                    {
-                                        if (anim.Leap)
-                                        {
-                                            ++tex;
-                                            anim = entry.AnimatedTextures[tex];
-                                            tex = anim.Offset - 1 + anim.LOD0;
-                                        }
-                                        if (entry.Textures[tex].BlendMode == 1)
-                                            lasttris[e].Add(t);
-                                        else
-                                            dyntris[e].Add(t);
-                                        continue;
-                                    }
-                                }
-                                if (untex)
-                                {
-                                    UnbindTexture();
+                                    tex = anim.Offset - 1 + anim.LOD0; // we render the closest LOD for now
                                 }
                                 else
                                 {
-                                    if (entry.Textures[tex].BlendMode == 1)
+                                    if (anim.Leap)
                                     {
+                                        ++tex;
+                                        anim = entry.AnimatedTextures[tex];
+                                        tex = anim.Offset - 1 + anim.LOD0;
+                                    }
+                                    if (entry.Textures[tex].BlendMode == 1)
                                         lasttris[e].Add(t);
-                                        continue;
-                                    }
-                                    else if (entry.Textures[tex].BlendMode == 0)
-                                    {
-                                        continue;
-                                    }
-                                    BindTexture(e,tex);
-                                    uvs[0] = entry.Textures[tex].X2;
-                                    uvs[1] = entry.Textures[tex].Y2;
-                                    uvs[2] = entry.Textures[tex].X1;
-                                    uvs[3] = entry.Textures[tex].Y1;
-                                    uvs[4] = entry.Textures[tex].X3;
-                                    uvs[5] = entry.Textures[tex].Y3;
-                                    //SetBlendMode(entry.Textures[tex].BlendMode);
+                                    else
+                                        dyntris[e].Add(t);
+                                    continue;
                                 }
                             }
-                            else
-                                UnbindTexture();
-                            GL.Begin(PrimitiveType.Triangles);
-                            GL.TexCoord2(uvs[0],uvs[1]);
-                            RenderVertex(entry,entry.Vertices[t.VertexA]);
-                            GL.TexCoord2(uvs[2],uvs[3]);
-                            RenderVertex(entry,entry.Vertices[t.VertexB]);
-                            GL.TexCoord2(uvs[4],uvs[5]);
-                            RenderVertex(entry,entry.Vertices[t.VertexC]);
-                            GL.End();
-                        }
-                        for (int i = 0; i < entry.Quads.Count; ++i)
-                        {
-                            var q = entry.Quads[i];
-                            if ((q.VertexA >= entry.Vertices.Count || q.VertexB >= entry.Vertices.Count || q.VertexC >= entry.Vertices.Count || q.VertexD >= entry.Vertices.Count) || (q.VertexA == q.VertexB && q.VertexB == q.VertexC && q.VertexC == q.VertexD && q.VertexD == q.VertexA)) continue;
-                            if (q.Texture != 0 || q.Animated)
+                            if (untex)
                             {
-                                bool untex = false;
-                                int tex = q.Texture - 1;
-                                if (q.Animated)
+                                UnbindTexture();
+                            }
+                            else
+                            {
+                                if (entry.Textures[tex].BlendMode == 1)
                                 {
-                                    ++tex;
-                                    var anim = entry.AnimatedTextures[tex];
-                                    if (anim.Offset == 0)
-                                        untex = true;
-                                    else if (anim.IsLOD)
-                                    {
-                                        tex = anim.Offset - 1 + anim.LOD0; // we render the closest LOD for now
-                                    }
-                                    else
-                                    {
-                                        if (anim.Leap)
-                                        {
-                                            ++tex;
-                                            anim = entry.AnimatedTextures[tex];
-                                            tex = anim.Offset - 1 + anim.LOD0;
-                                        }
-                                        if (entry.Textures[tex].BlendMode == 1)
-                                            lastquads[e].Add(q);
-                                        else
-                                            dynquads[e].Add(q);
-                                        continue;
-                                    }
+                                    lasttris[e].Add(t);
+                                    continue;
                                 }
-                                if (untex)
+                                else if (entry.Textures[tex].BlendMode == 0)
                                 {
-                                    UnbindTexture();
+                                    continue;
+                                }
+                                BindTexture(e, tex);
+                                uvs[0] = entry.Textures[tex].X2;
+                                uvs[1] = entry.Textures[tex].Y2;
+                                uvs[2] = entry.Textures[tex].X1;
+                                uvs[3] = entry.Textures[tex].Y1;
+                                uvs[4] = entry.Textures[tex].X3;
+                                uvs[5] = entry.Textures[tex].Y3;
+                                //SetBlendMode(entry.Textures[tex].BlendMode);
+                            }
+                        }
+                        else
+                            UnbindTexture();
+                        GL.Begin(PrimitiveType.Triangles);
+                        GL.TexCoord2(uvs[0], uvs[1]);
+                        RenderVertex(entry, entry.Vertices[t.VertexA]);
+                        GL.TexCoord2(uvs[2], uvs[3]);
+                        RenderVertex(entry, entry.Vertices[t.VertexB]);
+                        GL.TexCoord2(uvs[4], uvs[5]);
+                        RenderVertex(entry, entry.Vertices[t.VertexC]);
+                        GL.End();
+                    }
+                    for (int i = 0; i < entry.Quads.Count; ++i)
+                    {
+                        var q = entry.Quads[i];
+                        if ((q.VertexA >= entry.Vertices.Count || q.VertexB >= entry.Vertices.Count || q.VertexC >= entry.Vertices.Count || q.VertexD >= entry.Vertices.Count) || (q.VertexA == q.VertexB && q.VertexB == q.VertexC && q.VertexC == q.VertexD && q.VertexD == q.VertexA)) continue;
+                        if (q.Texture != 0 || q.Animated)
+                        {
+                            bool untex = false;
+                            int tex = q.Texture - 1;
+                            if (q.Animated)
+                            {
+                                ++tex;
+                                var anim = entry.AnimatedTextures[tex];
+                                if (anim.Offset == 0)
+                                    untex = true;
+                                else if (anim.IsLOD)
+                                {
+                                    tex = anim.Offset - 1 + anim.LOD0; // we render the closest LOD for now
                                 }
                                 else
                                 {
+                                    if (anim.Leap)
+                                    {
+                                        ++tex;
+                                        anim = entry.AnimatedTextures[tex];
+                                        tex = anim.Offset - 1 + anim.LOD0;
+                                    }
                                     if (entry.Textures[tex].BlendMode == 1)
-                                    {
                                         lastquads[e].Add(q);
-                                        continue;
-                                    }
-                                    else if (entry.Textures[tex].BlendMode == 0)
-                                    {
-                                        continue;
-                                    }
-                                    BindTexture(e,tex);
-                                    uvs[0] = entry.Textures[tex].X2;
-                                    uvs[1] = entry.Textures[tex].Y2;
-                                    uvs[2] = entry.Textures[tex].X1;
-                                    uvs[3] = entry.Textures[tex].Y1;
-                                    uvs[4] = entry.Textures[tex].X3;
-                                    uvs[5] = entry.Textures[tex].Y3;
-                                    uvs[6] = entry.Textures[tex].X4;
-                                    uvs[7] = entry.Textures[tex].Y4;
-                                    //SetBlendMode(entry.Textures[tex].BlendMode);
+                                    else
+                                        dynquads[e].Add(q);
+                                    continue;
                                 }
                             }
-                            else
+                            if (untex)
+                            {
                                 UnbindTexture();
-                            GL.Begin(PrimitiveType.Quads);
-                            GL.TexCoord2(uvs[0],uvs[1]);
-                            RenderVertex(entry,entry.Vertices[q.VertexA]);
-                            GL.TexCoord2(uvs[2],uvs[3]);
-                            RenderVertex(entry,entry.Vertices[q.VertexB]);
-                            GL.TexCoord2(uvs[4],uvs[5]);
-                            RenderVertex(entry,entry.Vertices[q.VertexC]);
-                            GL.TexCoord2(uvs[6],uvs[7]);
-                            RenderVertex(entry,entry.Vertices[q.VertexD]);
-                            GL.End();
+                            }
+                            else
+                            {
+                                if (entry.Textures[tex].BlendMode == 1)
+                                {
+                                    lastquads[e].Add(q);
+                                    continue;
+                                }
+                                else if (entry.Textures[tex].BlendMode == 0)
+                                {
+                                    continue;
+                                }
+                                BindTexture(e, tex);
+                                uvs[0] = entry.Textures[tex].X2;
+                                uvs[1] = entry.Textures[tex].Y2;
+                                uvs[2] = entry.Textures[tex].X1;
+                                uvs[3] = entry.Textures[tex].Y1;
+                                uvs[4] = entry.Textures[tex].X3;
+                                uvs[5] = entry.Textures[tex].Y3;
+                                uvs[6] = entry.Textures[tex].X4;
+                                uvs[7] = entry.Textures[tex].Y4;
+                                //SetBlendMode(entry.Textures[tex].BlendMode);
+                            }
                         }
+                        else
+                            UnbindTexture();
+                        GL.Begin(PrimitiveType.Quads);
+                        GL.TexCoord2(uvs[0], uvs[1]);
+                        RenderVertex(entry, entry.Vertices[q.VertexA]);
+                        GL.TexCoord2(uvs[2], uvs[3]);
+                        RenderVertex(entry, entry.Vertices[q.VertexB]);
+                        GL.TexCoord2(uvs[4], uvs[5]);
+                        RenderVertex(entry, entry.Vertices[q.VertexC]);
+                        GL.TexCoord2(uvs[6], uvs[7]);
+                        RenderVertex(entry, entry.Vertices[q.VertexD]);
+                        GL.End();
                     }
                 }
                 GL.EndList();
@@ -490,102 +487,99 @@ namespace CrashEdit
                 for (int e = 0; e < entries.Count; ++e)
                 {
                     NewSceneryEntry entry = entries[e];
-                    if (entry != null)
+                    for (int i = 0; i < entry.Triangles.Count; ++i)
                     {
-                        for (int i = 0; i < entry.Triangles.Count; ++i)
+                        var t = entry.Triangles[i];
+                        if ((t.VertexA >= entry.Vertices.Count || t.VertexB >= entry.Vertices.Count || t.VertexC >= entry.Vertices.Count) || (t.VertexA == t.VertexB && t.VertexB == t.VertexC && t.VertexC == t.VertexA)) continue;
+                        if (t.Texture != 0 || t.Animated)
                         {
-                            var t = entry.Triangles[i];
-                            if ((t.VertexA >= entry.Vertices.Count || t.VertexB >= entry.Vertices.Count || t.VertexC >= entry.Vertices.Count) || (t.VertexA == t.VertexB && t.VertexB == t.VertexC && t.VertexC == t.VertexA)) continue;
-                            if (t.Texture != 0 || t.Animated)
+                            int tex = t.Texture - 1;
+                            if (t.Animated)
                             {
-                                int tex = t.Texture - 1;
-                                if (t.Animated)
+                                ++tex;
+                                var anim = entry.AnimatedTextures[tex];
+                                if (anim.Offset == 0)
+                                    continue;
+                                else if (anim.IsLOD)
                                 {
-                                    ++tex;
-                                    var anim = entry.AnimatedTextures[tex];
-                                    if (anim.Offset == 0)
-                                        continue;
-                                    else if (anim.IsLOD)
-                                    {
-                                        tex = anim.Offset - 1 + anim.LOD0; // we render the closest LOD for now
-                                    }
-                                    else
-                                    {
-                                        continue;
-                                    }
+                                    tex = anim.Offset - 1 + anim.LOD0; // we render the closest LOD for now
                                 }
-                                if (entry.Textures[tex].BlendMode != 0)
+                                else
                                 {
                                     continue;
                                 }
-                                BindTexture(e, tex);
-                                uvs[0] = entry.Textures[tex].X2;
-                                uvs[1] = entry.Textures[tex].Y2;
-                                uvs[2] = entry.Textures[tex].X1;
-                                uvs[3] = entry.Textures[tex].Y1;
-                                uvs[4] = entry.Textures[tex].X3;
-                                uvs[5] = entry.Textures[tex].Y3;
                             }
-                            else
-                                continue;
-                            GL.Begin(PrimitiveType.Triangles);
-                            GL.TexCoord2(uvs[0],uvs[1]);
-                            RenderVertex(entry,entry.Vertices[t.VertexA]);
-                            GL.TexCoord2(uvs[2],uvs[3]);
-                            RenderVertex(entry,entry.Vertices[t.VertexB]);
-                            GL.TexCoord2(uvs[4],uvs[5]);
-                            RenderVertex(entry,entry.Vertices[t.VertexC]);
-                            GL.End();
-                        }
-                        for (int i = 0; i < entry.Quads.Count; ++i)
-                        {
-                            var q = entry.Quads[i];
-                            if ((q.VertexA >= entry.Vertices.Count || q.VertexB >= entry.Vertices.Count || q.VertexC >= entry.Vertices.Count || q.VertexD >= entry.Vertices.Count) || (q.VertexA == q.VertexB && q.VertexB == q.VertexC && q.VertexC == q.VertexD && q.VertexD == q.VertexA)) continue;
-                            if (q.Texture != 0 || q.Animated)
+                            if (entry.Textures[tex].BlendMode != 0)
                             {
-                                int tex = q.Texture - 1;
-                                if (q.Animated)
+                                continue;
+                            }
+                            BindTexture(e, tex);
+                            uvs[0] = entry.Textures[tex].X2;
+                            uvs[1] = entry.Textures[tex].Y2;
+                            uvs[2] = entry.Textures[tex].X1;
+                            uvs[3] = entry.Textures[tex].Y1;
+                            uvs[4] = entry.Textures[tex].X3;
+                            uvs[5] = entry.Textures[tex].Y3;
+                        }
+                        else
+                            continue;
+                        GL.Begin(PrimitiveType.Triangles);
+                        GL.TexCoord2(uvs[0], uvs[1]);
+                        RenderVertex(entry, entry.Vertices[t.VertexA]);
+                        GL.TexCoord2(uvs[2], uvs[3]);
+                        RenderVertex(entry, entry.Vertices[t.VertexB]);
+                        GL.TexCoord2(uvs[4], uvs[5]);
+                        RenderVertex(entry, entry.Vertices[t.VertexC]);
+                        GL.End();
+                    }
+                    for (int i = 0; i < entry.Quads.Count; ++i)
+                    {
+                        var q = entry.Quads[i];
+                        if ((q.VertexA >= entry.Vertices.Count || q.VertexB >= entry.Vertices.Count || q.VertexC >= entry.Vertices.Count || q.VertexD >= entry.Vertices.Count) || (q.VertexA == q.VertexB && q.VertexB == q.VertexC && q.VertexC == q.VertexD && q.VertexD == q.VertexA)) continue;
+                        if (q.Texture != 0 || q.Animated)
+                        {
+                            int tex = q.Texture - 1;
+                            if (q.Animated)
+                            {
+                                ++tex;
+                                var anim = entry.AnimatedTextures[tex];
+                                if (anim.Offset == 0)
+                                    continue;
+                                else if (anim.IsLOD)
                                 {
-                                    ++tex;
-                                    var anim = entry.AnimatedTextures[tex];
-                                    if (anim.Offset == 0)
-                                        continue;
-                                    else if (anim.IsLOD)
-                                    {
-                                        tex = anim.Offset - 1 + anim.LOD0; // we render the closest LOD for now
-                                    }
-                                    else
-                                    {
-                                        continue;
-                                    }
+                                    tex = anim.Offset - 1 + anim.LOD0; // we render the closest LOD for now
                                 }
-                                if (entry.Textures[tex].BlendMode != 0)
+                                else
                                 {
                                     continue;
                                 }
-                                BindTexture(e, tex);
-                                uvs[0] = entry.Textures[tex].X2;
-                                uvs[1] = entry.Textures[tex].Y2;
-                                uvs[2] = entry.Textures[tex].X1;
-                                uvs[3] = entry.Textures[tex].Y1;
-                                uvs[4] = entry.Textures[tex].X3;
-                                uvs[5] = entry.Textures[tex].Y3;
-                                uvs[6] = entry.Textures[tex].X4;
-                                uvs[7] = entry.Textures[tex].Y4;
                             }
-                            else
+                            if (entry.Textures[tex].BlendMode != 0)
+                            {
                                 continue;
-                            GL.Begin(PrimitiveType.Quads);
-                            GL.TexCoord2(uvs[0],uvs[1]);
-                            RenderVertex(entry,entry.Vertices[q.VertexA]);
-                            GL.TexCoord2(uvs[2],uvs[3]);
-                            RenderVertex(entry,entry.Vertices[q.VertexB]);
-                            GL.TexCoord2(uvs[4],uvs[5]);
-                            RenderVertex(entry,entry.Vertices[q.VertexC]);
-                            GL.TexCoord2(uvs[6],uvs[7]);
-                            RenderVertex(entry,entry.Vertices[q.VertexD]);
-                            GL.End();
+                            }
+                            BindTexture(e, tex);
+                            uvs[0] = entry.Textures[tex].X2;
+                            uvs[1] = entry.Textures[tex].Y2;
+                            uvs[2] = entry.Textures[tex].X1;
+                            uvs[3] = entry.Textures[tex].Y1;
+                            uvs[4] = entry.Textures[tex].X3;
+                            uvs[5] = entry.Textures[tex].Y3;
+                            uvs[6] = entry.Textures[tex].X4;
+                            uvs[7] = entry.Textures[tex].Y4;
                         }
+                        else
+                            continue;
+                        GL.Begin(PrimitiveType.Quads);
+                        GL.TexCoord2(uvs[0], uvs[1]);
+                        RenderVertex(entry, entry.Vertices[q.VertexA]);
+                        GL.TexCoord2(uvs[2], uvs[3]);
+                        RenderVertex(entry, entry.Vertices[q.VertexB]);
+                        GL.TexCoord2(uvs[4], uvs[5]);
+                        RenderVertex(entry, entry.Vertices[q.VertexC]);
+                        GL.TexCoord2(uvs[6], uvs[7]);
+                        RenderVertex(entry, entry.Vertices[q.VertexD]);
+                        GL.End();
                     }
                 }
                 UnbindTexture();
