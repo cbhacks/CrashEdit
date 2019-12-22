@@ -75,26 +75,29 @@ namespace CrashEdit
             string str;
             for (short i = 0; i < goolentry.Instructions.Count; ++i)
             {
-                for (int j = 0; j < goolentry.StateDescriptors.Count; ++j)
+                if (goolentry.StateDescriptors != null)
                 {
-                    GOOLStateDescriptor desc = goolentry.StateDescriptors[j];
-                    int cpc = desc.CPC & 0x3FFF;
-                    int tpc = desc.TPC & 0x3FFF;
-                    int epc = desc.EPC & 0x3FFF;
-                    if (cpc == i && cpc != 0x3FFF)
+                    for (int j = 0; j < goolentry.StateDescriptors.Count; ++j)
                     {
-                        lstCode.Items.Add($"State_{j}_cpc:");
-                        returned = false;
-                    }
-                    if (tpc == i && tpc != 0x3FFF)
-                    {
-                        lstCode.Items.Add($"State_{j}_tpc:");
-                        returned = false;
-                    }
-                    if (epc == i && epc != 0x3FFF)
-                    {
-                        lstCode.Items.Add($"State_{j}_epc:");
-                        returned = false;
+                        GOOLStateDescriptor desc = goolentry.StateDescriptors[j];
+                        int cpc = desc.CPC & 0x3FFF;
+                        int tpc = desc.TPC & 0x3FFF;
+                        int epc = desc.EPC & 0x3FFF;
+                        if (cpc == i && cpc != 0x3FFF)
+                        {
+                            lstCode.Items.Add($"State_{j}_cpc:");
+                            returned = false;
+                        }
+                        if (tpc == i && tpc != 0x3FFF)
+                        {
+                            lstCode.Items.Add($"State_{j}_tpc:");
+                            returned = false;
+                        }
+                        if (epc == i && epc != 0x3FFF)
+                        {
+                            lstCode.Items.Add($"State_{j}_epc:");
+                            returned = false;
+                        }
                     }
                 }
                 if (returned)
