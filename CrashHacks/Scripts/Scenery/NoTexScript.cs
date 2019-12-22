@@ -34,9 +34,9 @@ namespace CrashHacks.Scripts.Scenery
                     int vertexa = tri.VertexA;
                     int vertexb = tri.VertexB;
                     int vertexc = tri.VertexC;
-                    byte unknown1 = 0;
-                    byte unknown2 = 0;
-                    e.Triangles[i] = new SceneryTriangle(vertexa,vertexb,vertexc,unknown1,unknown2);
+                    short texture = 0;
+                    bool animated = false;
+                    e.Triangles[i] = new SceneryTriangle(vertexa,vertexb,vertexc,texture,animated);
                 }
                 for (int i = 0;i < e.Quads.Count;i++)
                 {
