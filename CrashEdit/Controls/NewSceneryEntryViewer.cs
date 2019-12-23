@@ -236,7 +236,8 @@ namespace CrashEdit
                                     {
                                         ++tex;
                                         anim = entry.AnimatedTextures[tex];
-                                        tex = anim.Offset - 1 + anim.LOD0;
+                                        // tex = anim.Offset - 1 + anim.LOD0;
+                                        tex = anim.Offset - 1 + (anim.Data >> 29 & 0x3);
                                     }
                                     if (entry.Textures[tex].BlendMode == 1)
                                         lastquads[e].Add(q);
