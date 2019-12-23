@@ -8,11 +8,12 @@ namespace CrashEdit
         [STAThread]
         internal static void Main(string[] args)
         {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
             using (OldMainForm mainform = new OldMainForm())
             using (ErrorReporter errorform = new ErrorReporter(mainform))
             {
                 FileUtil.Owner = mainform;
-                Application.EnableVisualStyles();
                 Application.Run(mainform);
             }
         }
