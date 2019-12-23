@@ -39,8 +39,7 @@ namespace CrashEdit
 
         public SceneryEntryViewer(SceneryEntry entry,TextureChunk[] texturechunks)
         {
-            entries = new List<SceneryEntry>();
-            entries.Add(entry);
+            entries = new List<SceneryEntry>() { entry };
             displaylist = -1;
             InitTextures(1);
             this.texturechunks = new TextureChunk[1][];
@@ -276,9 +275,9 @@ namespace CrashEdit
                         GL.End();
                     }
                 }
+                GL.EndList();
                 UnbindTexture();
                 SetBlendMode(3);
-                GL.EndList();
             }
             else
             {
