@@ -15,6 +15,8 @@ namespace CrashEdit
                 AddNode(CreateChunkController(chunk));
             }
             AddMenu("Add Chunk - Normal",Menu_Add_NormalChunk);
+            if (GameVersion != GameVersion.Crash2 && GameVersion != GameVersion.Crash3 && GameVersion != GameVersion.Crash1)
+                AddMenu("Add Chunk - Sound (Alpha)",Menu_Add_OldSoundChunk);
             AddMenu("Add Chunk - Sound",Menu_Add_SoundChunk);
             AddMenu("Add Chunk - Wavebank",Menu_Add_WavebankChunk);
             AddMenu("Add Chunk - Speech",Menu_Add_SpeechChunk);
@@ -75,6 +77,14 @@ namespace CrashEdit
             NormalChunk chunk = new NormalChunk();
             NSF.Chunks.Add(chunk);
             NormalChunkController controller = new NormalChunkController(this,chunk);
+            AddNode(controller);
+        }
+
+        private void Menu_Add_OldSoundChunk()
+        {
+            OldSoundChunk chunk = new OldSoundChunk();
+            NSF.Chunks.Add(chunk);
+            OldSoundChunkController controller = new OldSoundChunkController(this,chunk);
             AddNode(controller);
         }
 
