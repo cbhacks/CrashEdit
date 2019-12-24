@@ -20,9 +20,12 @@ namespace CrashEdit
             AddMenu("Add Chunk - Sound",Menu_Add_SoundChunk);
             AddMenu("Add Chunk - Wavebank",Menu_Add_WavebankChunk);
             AddMenu("Add Chunk - Speech",Menu_Add_SpeechChunk);
-            AddMenuSeparator();
-            AddMenu("Fix Nitro Detonators",Menu_Fix_Detonator);
-            AddMenu("Fix Box Count",Menu_Fix_BoxCount);
+            if (GameVersion == GameVersion.Crash2 || GameVersion == GameVersion.Crash3)
+            {
+                AddMenuSeparator();
+                AddMenu("Fix Nitro Detonators", Menu_Fix_Detonator);
+                AddMenu("Fix Box Count", Menu_Fix_BoxCount);
+            }
             InvalidateNode();
         }
 
