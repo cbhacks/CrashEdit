@@ -1,6 +1,7 @@
 using Crash;
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace CrashEdit
 {
@@ -23,8 +24,13 @@ namespace CrashEdit
             if (GameVersion == GameVersion.Crash2 || GameVersion == GameVersion.Crash3)
             {
                 AddMenuSeparator();
-                AddMenu("Fix Nitro Detonators", Menu_Fix_Detonator);
-                AddMenu("Fix Box Count", Menu_Fix_BoxCount);
+                AddMenu("Fix Nitro Detonators",Menu_Fix_Detonator);
+                AddMenu("Fix Box Count",Menu_Fix_BoxCount);
+                AddMenuSeparator();
+                if (GameVersion == GameVersion.Crash2)
+                    AddMenu("Show Entire Level",Menu_ShowLevelC2);
+                else if (GameVersion == GameVersion.Crash3)
+                    AddMenu("Show Entire Level",Menu_ShowLevelC3);
             }
             InvalidateNode();
         }
@@ -249,6 +255,66 @@ namespace CrashEdit
                     willy.BoxCount = new EntitySetting(0,boxcount);
                 }
             }
+        }
+
+        private void Menu_ShowLevelC2()
+        {
+            List<TextureChunk[]> sortedtexturechunks = new List<TextureChunk[]>();
+            List<SceneryEntry> sceneryentries = new List<SceneryEntry>();
+            foreach (Chunk chunk in NSF.Chunks)
+            {
+                if (chunk is EntryChunk entrychunk)
+                {
+                    foreach (Entry entry in entrychunk.Entries)
+                    {
+                        if (entry is SceneryEntry sceneryentry)
+                        {
+                            sceneryentries.Add(sceneryentry);
+                            TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(sceneryentry.Info,0x28)];
+                            for (int i = 0; i < texturechunks.Length; ++i)
+                            {
+                                texturechunks[i] = NSF.FindEID<TextureChunk>(BitConv.FromInt32(sceneryentry.Info,0x2C+i*4));
+                            }
+                            sortedtexturechunks.Add(texturechunks);
+                        }
+                    }
+                }
+            }
+            Form frm = new Form() { Text = "Loading...", Width = 480, Height = 360 };
+            frm.Show();
+            SceneryEntryViewer viewer = new SceneryEntryViewer(sceneryentries,sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
+            frm.Controls.Add(viewer);
+            frm.Text = string.Empty;
+        }
+
+        private void Menu_ShowLevelC3()
+        {
+            List<TextureChunk[]> sortedtexturechunks = new List<TextureChunk[]>();
+            List<NewSceneryEntry> sceneryentries = new List<NewSceneryEntry>();
+            foreach (Chunk chunk in NSF.Chunks)
+            {
+                if (chunk is EntryChunk entrychunk)
+                {
+                    foreach (Entry entry in entrychunk.Entries)
+                    {
+                        if (entry is NewSceneryEntry newsceneryentry)
+                        {
+                            sceneryentries.Add(newsceneryentry);
+                            TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(newsceneryentry.Info,0x28)];
+                            for (int i = 0; i < texturechunks.Length; ++i)
+                            {
+                                texturechunks[i] = NSF.FindEID<TextureChunk>(BitConv.FromInt32(newsceneryentry.Info,0x2C+i*4));
+                            }
+                            sortedtexturechunks.Add(texturechunks);
+                        }
+                    }
+                }
+            }
+            Form frm = new Form() { Text = "Loading...", Width = 480, Height = 360 };
+            frm.Show();
+            NewSceneryEntryViewer viewer = new NewSceneryEntryViewer(sceneryentries,sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
+            frm.Controls.Add(viewer);
+            frm.Text = string.Empty;
         }
     }
 }
