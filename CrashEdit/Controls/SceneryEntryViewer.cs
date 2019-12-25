@@ -243,6 +243,7 @@ namespace CrashEdit
                             }
                             else
                             {
+                                if (tex >= entry.Textures.Count) continue;
                                 if (entry.Textures[tex].BlendMode == 1)
                                 {
                                     lastquads[e].Add(q);
