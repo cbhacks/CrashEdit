@@ -142,7 +142,7 @@ namespace CrashEdit
                     SceneryEntry entry = entries[e];
                     foreach (var t in entry.Triangles)
                     {
-                        if ((t.VertexA >= entry.Vertices.Count || t.VertexB >= entry.Vertices.Count || t.VertexC >= entry.Vertices.Count) || (t.VertexA == t.VertexB && t.VertexB == t.VertexC && t.VertexC == t.VertexA)) continue;
+                        if ((t.VertexA >= entry.Vertices.Count || t.VertexB >= entry.Vertices.Count || t.VertexC >= entry.Vertices.Count) || (t.VertexA == t.VertexB || t.VertexB == t.VertexC || t.VertexC == t.VertexA)) continue;
                         if (t.Texture != 0 || t.Animated)
                         {
                             bool untex = false;
@@ -151,11 +151,12 @@ namespace CrashEdit
                             {
                                 ++tex;
                                 var anim = entry.AnimatedTextures[tex];
+                                tex = anim.Offset - 1;
                                 if (anim.Offset == 0)
                                     untex = true;
                                 else if (anim.IsLOD)
                                 {
-                                    tex = anim.Offset - 1 + anim.LOD0; // we render the closest LOD for now
+                                    tex += anim.LOD0; // we render the closest LOD for now
                                 }
                                 else
                                 {
@@ -206,7 +207,7 @@ namespace CrashEdit
                     }
                     foreach (var q in entry.Quads)
                     {
-                        if ((q.VertexA >= entry.Vertices.Count || q.VertexB >= entry.Vertices.Count || q.VertexC >= entry.Vertices.Count || q.VertexD >= entry.Vertices.Count) || (q.VertexA == q.VertexB && q.VertexB == q.VertexC && q.VertexC == q.VertexD && q.VertexD == q.VertexA)) continue;
+                        if ((q.VertexA >= entry.Vertices.Count || q.VertexB >= entry.Vertices.Count || q.VertexC >= entry.Vertices.Count || q.VertexD >= entry.Vertices.Count) || (q.VertexA == q.VertexB || q.VertexB == q.VertexC || q.VertexC == q.VertexD || q.VertexD == q.VertexA)) continue;
                         if (q.Texture != 0 || q.Animated)
                         {
                             bool untex = false;
@@ -215,11 +216,12 @@ namespace CrashEdit
                             {
                                 ++tex;
                                 var anim = entry.AnimatedTextures[tex];
+                                tex = anim.Offset - 1;
                                 if (anim.Offset == 0)
                                     untex = true;
                                 else if (anim.IsLOD)
                                 {
-                                    tex = anim.Offset - 1 + anim.LOD0; // we render the closest LOD for now
+                                    tex += anim.LOD0; // we render the closest LOD for now
                                 }
                                 else
                                 {
@@ -227,7 +229,6 @@ namespace CrashEdit
                                     {
                                         ++tex;
                                         anim = entry.AnimatedTextures[tex];
-                                        if (!anim.IsLOD) continue; // screw this
                                         tex = anim.Offset - 1 + anim.LOD0;
                                     }
                                     if (entry.Textures[tex].BlendMode == 1)
@@ -243,7 +244,6 @@ namespace CrashEdit
                             }
                             else
                             {
-                                if (tex >= entry.Textures.Count) continue;
                                 if (entry.Textures[tex].BlendMode == 1)
                                 {
                                     lastquads[e].Add(q);
@@ -294,7 +294,6 @@ namespace CrashEdit
                     if (anim.Leap)
                     {
                         ++tex;
-                        if (!entry.AnimatedTextures[tex].IsLOD) System.Diagnostics.Debugger.Break();
                         tex = entry.AnimatedTextures[tex].Offset - 1 + entry.AnimatedTextures[tex].LOD0;
                     }
                     if (entry.Textures[tex].BlendMode == 1)
@@ -330,7 +329,6 @@ namespace CrashEdit
                     if (anim.Leap)
                     {
                         ++tex;
-                        if (!entry.AnimatedTextures[tex].IsLOD) System.Diagnostics.Debugger.Break();
                         tex = entry.AnimatedTextures[tex].Offset - 1 + entry.AnimatedTextures[tex].LOD0;
                     }
                     if (entry.Textures[tex].BlendMode == 1)
@@ -382,7 +380,6 @@ namespace CrashEdit
                             if (anim.Leap)
                             {
                                 ++tex;
-                                if (!entry.AnimatedTextures[tex].IsLOD) System.Diagnostics.Debugger.Break();
                                 tex = entry.AnimatedTextures[tex].Offset - 1 + entry.AnimatedTextures[tex].LOD0;
                             }
                         }
@@ -434,7 +431,6 @@ namespace CrashEdit
                             if (anim.Leap)
                             {
                                 ++tex;
-                                if (!entry.AnimatedTextures[tex].IsLOD) System.Diagnostics.Debugger.Break();
                                 tex = entry.AnimatedTextures[tex].Offset - 1 + entry.AnimatedTextures[tex].LOD0;
                             }
                         }
@@ -456,14 +452,14 @@ namespace CrashEdit
                         uvs[7] = entry.Textures[tex].Y4;
                     }
                     GL.Begin(PrimitiveType.Quads);
-                    GL.TexCoord2(entry.Textures[tex].X2, entry.Textures[tex].Y2);
-                    RenderVertex(entry, entry.Vertices[q.VertexA]);
-                    GL.TexCoord2(entry.Textures[tex].X1, entry.Textures[tex].Y1);
-                    RenderVertex(entry, entry.Vertices[q.VertexB]);
-                    GL.TexCoord2(entry.Textures[tex].X3, entry.Textures[tex].Y3);
-                    RenderVertex(entry, entry.Vertices[q.VertexC]);
-                    GL.TexCoord2(entry.Textures[tex].X4, entry.Textures[tex].Y4);
-                    RenderVertex(entry, entry.Vertices[q.VertexD]);
+                    GL.TexCoord2(entry.Textures[tex].X2,entry.Textures[tex].Y2);
+                    RenderVertex(entry,entry.Vertices[q.VertexA]);
+                    GL.TexCoord2(entry.Textures[tex].X1,entry.Textures[tex].Y1);
+                    RenderVertex(entry,entry.Vertices[q.VertexB]);
+                    GL.TexCoord2(entry.Textures[tex].X3,entry.Textures[tex].Y3);
+                    RenderVertex(entry,entry.Vertices[q.VertexC]);
+                    GL.TexCoord2(entry.Textures[tex].X4,entry.Textures[tex].Y4);
+                    RenderVertex(entry,entry.Vertices[q.VertexD]);
                     GL.End();
                 }
             }
