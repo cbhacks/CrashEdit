@@ -16,7 +16,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Proto Entity {0} ({1})",Entity.ID,Entity.Index.Count);
+            Node.Text = string.Format("Proto Entity {0} ({1})",Entity.ID,Entity.Deltas.Count);
             Node.ImageKey = "arrow";
             Node.SelectedImageKey = "arrow";
         }
@@ -54,9 +54,9 @@ namespace CrashEdit
             }
             maxid++;
             int newindex = ProtoZoneEntryController.ZoneEntry.Entities.Count;
-            newindex -= BitConv.FromInt32(ProtoZoneEntryController.ZoneEntry.Unknown1,0x208);
-            int entitycount = BitConv.FromInt32(ProtoZoneEntryController.ZoneEntry.Unknown1,0x20C);
-            BitConv.ToInt32(ProtoZoneEntryController.ZoneEntry.Unknown1,0x20C,entitycount + 1);
+            newindex -= BitConv.FromInt32(ProtoZoneEntryController.ZoneEntry.Header,0x208);
+            int entitycount = BitConv.FromInt32(ProtoZoneEntryController.ZoneEntry.Header,0x20C);
+            BitConv.ToInt32(ProtoZoneEntryController.ZoneEntry.Header,0x20C,entitycount + 1);
             ProtoEntity newentity = ProtoEntity.Load(Entity.Save());
             newentity.ID = maxid;
             ProtoZoneEntryController.ZoneEntry.Entities.Add(newentity);
@@ -65,8 +65,8 @@ namespace CrashEdit
 
         private void Menu_Delete()
         {
-            int entitycount = BitConv.FromInt32(ProtoZoneEntryController.ZoneEntry.Unknown1,0x20C);
-            BitConv.ToInt32(ProtoZoneEntryController.ZoneEntry.Unknown1,0x20C,entitycount - 1);
+            int entitycount = BitConv.FromInt32(ProtoZoneEntryController.ZoneEntry.Header,0x20C);
+            BitConv.ToInt32(ProtoZoneEntryController.ZoneEntry.Header,0x20C,entitycount - 1);
             ProtoZoneEntryController.ZoneEntry.Entities.Remove(Entity);
             Dispose();
         }

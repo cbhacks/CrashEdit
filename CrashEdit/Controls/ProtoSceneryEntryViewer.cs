@@ -31,7 +31,7 @@ namespace CrashEdit
                 {
                     foreach (ProtoSceneryVertex vertex in entry.Vertices)
                     {
-                        yield return new Position(entry.XOffset + vertex.X, entry.YOffset + vertex.Y, entry.ZOffset + vertex.Z);
+                        yield return new Position(entry.XOffset + vertex.X,entry.YOffset + vertex.Y,entry.ZOffset + vertex.Z);
                     }
                 }
             }
@@ -42,35 +42,31 @@ namespace CrashEdit
             if (displaylist == -1)
             {
                 displaylist = GL.GenLists(1);
-                GL.NewList(displaylist, ListMode.CompileAndExecute);
+                GL.NewList(displaylist,ListMode.CompileAndExecute);
                 foreach (ProtoSceneryEntry entry in entries)
                 {
                     if (entry != null)
                     {
-                        GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+                        GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
                         GL.Color3(Color.LightGray);
                         GL.Begin(PrimitiveType.Triangles);
                         foreach (ProtoSceneryPolygon polygon in entry.Polygons)
                         {
-                            if (polygon.VertexA < entry.Vertices.Count)
-                                RenderVertex(entry, entry.Vertices[polygon.VertexA]);
-                            if (polygon.VertexB < entry.Vertices.Count)
-                                RenderVertex(entry, entry.Vertices[polygon.VertexB]);
-                            if (polygon.VertexC < entry.Vertices.Count)
-                                RenderVertex(entry, entry.Vertices[polygon.VertexC]);
+                            if (polygon.VertexA >= entry.Vertices.Count || polygon.VertexB >= entry.Vertices.Count || polygon.VertexC >= entry.Vertices.Count) continue;
+                            RenderVertex(entry,entry.Vertices[polygon.VertexA]);
+                            RenderVertex(entry,entry.Vertices[polygon.VertexB]);
+                            RenderVertex(entry,entry.Vertices[polygon.VertexC]);
                         }
                         GL.End();
-                        GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+                        GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Line);
                         GL.Color3(Color.Black);
                         GL.Begin(PrimitiveType.Triangles);
                         foreach (ProtoSceneryPolygon polygon in entry.Polygons)
                         {
-                            if (polygon.VertexA < entry.Vertices.Count)
-                                RenderVertex(entry, entry.Vertices[polygon.VertexA]);
-                            if (polygon.VertexB < entry.Vertices.Count)
-                                RenderVertex(entry, entry.Vertices[polygon.VertexB]);
-                            if (polygon.VertexC < entry.Vertices.Count)
-                                RenderVertex(entry, entry.Vertices[polygon.VertexC]);
+                            if (polygon.VertexA >= entry.Vertices.Count || polygon.VertexB >= entry.Vertices.Count || polygon.VertexC >= entry.Vertices.Count) continue;
+                            RenderVertex(entry,entry.Vertices[polygon.VertexA]);
+                            RenderVertex(entry,entry.Vertices[polygon.VertexB]);
+                            RenderVertex(entry,entry.Vertices[polygon.VertexC]);
                         }
                         GL.End();
                     }
@@ -81,6 +77,7 @@ namespace CrashEdit
             {
                 GL.CallList(displaylist);
             }
+            GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
         }
 
         private void RenderVertex(ProtoSceneryEntry entry, ProtoSceneryVertex vertex)

@@ -444,7 +444,7 @@ namespace CrashEdit
             this.lblC.TabIndex = 7;
             this.lblC.Text = "Mode C";
             // 
-            // numC
+            // numModeB
             // 
             this.numC.Location = new System.Drawing.Point(62, 97);
             this.numC.Maximum = new decimal(new int[] {
@@ -457,7 +457,7 @@ namespace CrashEdit
             0,
             0,
             -2147483648});
-            this.numC.Name = "numC";
+            this.numC.Name = "numModeB";
             this.numC.Size = new System.Drawing.Size(86, 20);
             this.numC.TabIndex = 6;
             this.numC.ValueChanged += new System.EventHandler(this.numC_ValueChanged);
@@ -489,7 +489,7 @@ namespace CrashEdit
             this.lblFlags.TabIndex = 3;
             this.lblFlags.Text = "Flags";
             // 
-            // numB
+            // numModeA
             // 
             this.numB.Location = new System.Drawing.Point(62, 71);
             this.numB.Maximum = new decimal(new int[] {
@@ -502,12 +502,12 @@ namespace CrashEdit
             0,
             0,
             -2147483648});
-            this.numB.Name = "numB";
+            this.numB.Name = "numModeA";
             this.numB.Size = new System.Drawing.Size(86, 20);
             this.numB.TabIndex = 4;
             this.numB.ValueChanged += new System.EventHandler(this.numB_ValueChanged);
             // 
-            // numA
+            // numFlags
             // 
             this.numA.Location = new System.Drawing.Point(62, 45);
             this.numA.Maximum = new decimal(new int[] {
@@ -520,7 +520,7 @@ namespace CrashEdit
             0,
             0,
             -2147483648});
-            this.numA.Name = "numA";
+            this.numA.Name = "numFlags";
             this.numA.Size = new System.Drawing.Size(86, 20);
             this.numA.TabIndex = 3;
             this.numA.ValueChanged += new System.EventHandler(this.numA_ValueChanged);

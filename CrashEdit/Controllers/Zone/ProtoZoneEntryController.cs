@@ -9,8 +9,8 @@ namespace CrashEdit
             : base(entrychunkcontroller,zoneentry)
         {
             ZoneEntry = zoneentry;
-            AddNode(new ItemController(null,zoneentry.Unknown1));
-            AddNode(new ItemController(null,zoneentry.Unknown2));
+            AddNode(new ItemController(null,zoneentry.Header));
+            AddNode(new ItemController(null,zoneentry.Layout));
             foreach (OldCamera camera in zoneentry.Cameras)
             {
                 AddNode(new OldCameraController(this,camera));
@@ -31,17 +31,17 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            int linkedsceneryentrycount = BitConv.FromInt32(ZoneEntry.Unknown1,0);
+            int linkedsceneryentrycount = BitConv.FromInt32(ZoneEntry.Header,0);
             ProtoSceneryEntry[] linkedsceneryentries = new ProtoSceneryEntry[linkedsceneryentrycount];
             for (int i = 0; i < linkedsceneryentrycount; i++)
             {
-                linkedsceneryentries[i] = FindEID<ProtoSceneryEntry>(BitConv.FromInt32(ZoneEntry.Unknown1,4 + i * 64));
+                linkedsceneryentries[i] = FindEID<ProtoSceneryEntry>(BitConv.FromInt32(ZoneEntry.Header,4 + i * 64));
             }
-            int linkedzoneentrycount = BitConv.FromInt32(ZoneEntry.Unknown1,528);
+            int linkedzoneentrycount = BitConv.FromInt32(ZoneEntry.Header,528);
             ProtoZoneEntry[] linkedzoneentries = new ProtoZoneEntry[linkedzoneentrycount];
             for (int i = 0; i < linkedzoneentrycount; i++)
             {
-                linkedzoneentries[i] = FindEID<ProtoZoneEntry>(BitConv.FromInt32(ZoneEntry.Unknown1,532 + i * 4));
+                linkedzoneentries[i] = FindEID<ProtoZoneEntry>(BitConv.FromInt32(ZoneEntry.Header,532 + i * 4));
             }
             return new UndockableControl(new ProtoZoneEntryViewer(ZoneEntry,linkedsceneryentries,linkedzoneentries));
         }

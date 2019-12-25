@@ -45,14 +45,14 @@ namespace CrashEdit
             this.tbcTabs = new System.Windows.Forms.TabControl();
             this.tabGeneral = new System.Windows.Forms.TabPage();
             this.fraSettings = new System.Windows.Forms.GroupBox();
-            this.lblD = new System.Windows.Forms.Label();
-            this.numD = new System.Windows.Forms.NumericUpDown();
-            this.lblC = new System.Windows.Forms.Label();
-            this.lblB = new System.Windows.Forms.Label();
-            this.lblA = new System.Windows.Forms.Label();
-            this.numC = new System.Windows.Forms.NumericUpDown();
-            this.numB = new System.Windows.Forms.NumericUpDown();
-            this.numA = new System.Windows.Forms.NumericUpDown();
+            this.lblModeC = new System.Windows.Forms.Label();
+            this.numModeC = new System.Windows.Forms.NumericUpDown();
+            this.lblModeB = new System.Windows.Forms.Label();
+            this.lblModeA = new System.Windows.Forms.Label();
+            this.lblFlags = new System.Windows.Forms.Label();
+            this.numModeB = new System.Windows.Forms.NumericUpDown();
+            this.numModeA = new System.Windows.Forms.NumericUpDown();
+            this.numFlags = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -66,10 +66,10 @@ namespace CrashEdit
             this.tbcTabs.SuspendLayout();
             this.tabGeneral.SuspendLayout();
             this.fraSettings.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numD)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numC)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numB)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numA)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numModeC)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numModeB)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numModeA)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numFlags)).BeginInit();
             this.SuspendLayout();
             // 
             // numType
@@ -290,128 +290,108 @@ namespace CrashEdit
             // 
             // fraSettings
             // 
-            this.fraSettings.Controls.Add(this.lblD);
-            this.fraSettings.Controls.Add(this.numD);
-            this.fraSettings.Controls.Add(this.lblC);
-            this.fraSettings.Controls.Add(this.lblB);
-            this.fraSettings.Controls.Add(this.lblA);
-            this.fraSettings.Controls.Add(this.numC);
-            this.fraSettings.Controls.Add(this.numB);
-            this.fraSettings.Controls.Add(this.numA);
+            this.fraSettings.Controls.Add(this.lblModeC);
+            this.fraSettings.Controls.Add(this.numModeC);
+            this.fraSettings.Controls.Add(this.lblModeB);
+            this.fraSettings.Controls.Add(this.lblModeA);
+            this.fraSettings.Controls.Add(this.lblFlags);
+            this.fraSettings.Controls.Add(this.numModeB);
+            this.fraSettings.Controls.Add(this.numModeA);
+            this.fraSettings.Controls.Add(this.numFlags);
             this.fraSettings.Location = new System.Drawing.Point(3, 164);
             this.fraSettings.Name = "fraSettings";
-            this.fraSettings.Size = new System.Drawing.Size(200, 133);
+            this.fraSettings.Size = new System.Drawing.Size(160, 133);
             this.fraSettings.TabIndex = 8;
             this.fraSettings.TabStop = false;
             this.fraSettings.Text = "Special Settings";
             // 
-            // lblD
+            // lblModeC
             // 
-            this.lblD.AutoSize = true;
-            this.lblD.Location = new System.Drawing.Point(6, 99);
-            this.lblD.Name = "lblD";
-            this.lblD.Size = new System.Drawing.Size(51, 13);
-            this.lblD.TabIndex = 7;
-            this.lblD.Text = "Setting D";
+            this.lblModeC.AutoSize = true;
+            this.lblModeC.Location = new System.Drawing.Point(6, 99);
+            this.lblModeC.Name = "lblModeC";
+            this.lblModeC.Size = new System.Drawing.Size(44, 13);
+            this.lblModeC.TabIndex = 7;
+            this.lblModeC.Text = "Mode C";
             // 
-            // numD
+            // numModeC
             // 
-            this.numD.Location = new System.Drawing.Point(62, 97);
-            this.numD.Maximum = new decimal(new int[] {
-            32767,
+            this.numModeC.Location = new System.Drawing.Point(62, 97);
+            this.numModeC.Maximum = new decimal(new int[] {
+            65535,
             0,
             0,
             0});
-            this.numD.Minimum = new decimal(new int[] {
-            32768,
-            0,
-            0,
-            -2147483648});
-            this.numD.Name = "numD";
-            this.numD.Size = new System.Drawing.Size(86, 20);
-            this.numD.TabIndex = 6;
-            this.numD.ValueChanged += new System.EventHandler(this.numD_ValueChanged);
+            this.numModeC.Name = "numModeC";
+            this.numModeC.Size = new System.Drawing.Size(86, 20);
+            this.numModeC.TabIndex = 6;
+            this.numModeC.ValueChanged += new System.EventHandler(this.numD_ValueChanged);
             // 
-            // lblC
+            // lblModeB
             // 
-            this.lblC.AutoSize = true;
-            this.lblC.Location = new System.Drawing.Point(6, 73);
-            this.lblC.Name = "lblC";
-            this.lblC.Size = new System.Drawing.Size(50, 13);
-            this.lblC.TabIndex = 5;
-            this.lblC.Text = "Setting C";
+            this.lblModeB.AutoSize = true;
+            this.lblModeB.Location = new System.Drawing.Point(6, 73);
+            this.lblModeB.Name = "lblModeB";
+            this.lblModeB.Size = new System.Drawing.Size(44, 13);
+            this.lblModeB.TabIndex = 5;
+            this.lblModeB.Text = "Mode B";
             // 
-            // lblB
+            // lblModeA
             // 
-            this.lblB.AutoSize = true;
-            this.lblB.Location = new System.Drawing.Point(6, 47);
-            this.lblB.Name = "lblB";
-            this.lblB.Size = new System.Drawing.Size(50, 13);
-            this.lblB.TabIndex = 4;
-            this.lblB.Text = "Setting B";
+            this.lblModeA.AutoSize = true;
+            this.lblModeA.Location = new System.Drawing.Point(6, 47);
+            this.lblModeA.Name = "lblModeA";
+            this.lblModeA.Size = new System.Drawing.Size(44, 13);
+            this.lblModeA.TabIndex = 4;
+            this.lblModeA.Text = "Mode A";
             // 
-            // lblA
+            // lblFlags
             // 
-            this.lblA.AutoSize = true;
-            this.lblA.Location = new System.Drawing.Point(6, 21);
-            this.lblA.Name = "lblA";
-            this.lblA.Size = new System.Drawing.Size(50, 13);
-            this.lblA.TabIndex = 3;
-            this.lblA.Text = "Setting A";
+            this.lblFlags.AutoSize = true;
+            this.lblFlags.Location = new System.Drawing.Point(6, 21);
+            this.lblFlags.Name = "lblFlags";
+            this.lblFlags.Size = new System.Drawing.Size(32, 13);
+            this.lblFlags.TabIndex = 3;
+            this.lblFlags.Text = "Flags";
             // 
-            // numC
+            // numModeB
             // 
-            this.numC.Location = new System.Drawing.Point(62, 71);
-            this.numC.Maximum = new decimal(new int[] {
-            32767,
+            this.numModeB.Location = new System.Drawing.Point(62, 71);
+            this.numModeB.Maximum = new decimal(new int[] {
+            65535,
             0,
             0,
             0});
-            this.numC.Minimum = new decimal(new int[] {
-            32768,
-            0,
-            0,
-            -2147483648});
-            this.numC.Name = "numC";
-            this.numC.Size = new System.Drawing.Size(86, 20);
-            this.numC.TabIndex = 4;
-            this.numC.ValueChanged += new System.EventHandler(this.numC_ValueChanged);
+            this.numModeB.Name = "numModeB";
+            this.numModeB.Size = new System.Drawing.Size(86, 20);
+            this.numModeB.TabIndex = 4;
+            this.numModeB.ValueChanged += new System.EventHandler(this.numC_ValueChanged);
             // 
-            // numB
+            // numModeA
             // 
-            this.numB.Location = new System.Drawing.Point(62, 45);
-            this.numB.Maximum = new decimal(new int[] {
-            32767,
+            this.numModeA.Location = new System.Drawing.Point(62, 45);
+            this.numModeA.Maximum = new decimal(new int[] {
+            65535,
             0,
             0,
             0});
-            this.numB.Minimum = new decimal(new int[] {
-            32768,
-            0,
-            0,
-            -2147483648});
-            this.numB.Name = "numB";
-            this.numB.Size = new System.Drawing.Size(86, 20);
-            this.numB.TabIndex = 3;
-            this.numB.ValueChanged += new System.EventHandler(this.numB_ValueChanged);
+            this.numModeA.Name = "numModeA";
+            this.numModeA.Size = new System.Drawing.Size(86, 20);
+            this.numModeA.TabIndex = 3;
+            this.numModeA.ValueChanged += new System.EventHandler(this.numB_ValueChanged);
             // 
-            // numA
+            // numFlags
             // 
-            this.numA.Location = new System.Drawing.Point(62, 19);
-            this.numA.Maximum = new decimal(new int[] {
-            32767,
+            this.numFlags.Location = new System.Drawing.Point(62, 19);
+            this.numFlags.Maximum = new decimal(new int[] {
+            -1,
             0,
             0,
             0});
-            this.numA.Minimum = new decimal(new int[] {
-            32768,
-            0,
-            0,
-            -2147483648});
-            this.numA.Name = "numA";
-            this.numA.Size = new System.Drawing.Size(86, 20);
-            this.numA.TabIndex = 2;
-            this.numA.ValueChanged += new System.EventHandler(this.numA_ValueChanged);
+            this.numFlags.Name = "numFlags";
+            this.numFlags.Size = new System.Drawing.Size(86, 20);
+            this.numFlags.TabIndex = 2;
+            this.numFlags.ValueChanged += new System.EventHandler(this.numA_ValueChanged);
             // 
             // ProtoEntityBox
             // 
@@ -435,10 +415,10 @@ namespace CrashEdit
             this.tabGeneral.ResumeLayout(false);
             this.fraSettings.ResumeLayout(false);
             this.fraSettings.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numD)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numC)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numB)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numA)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numModeC)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numModeB)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numModeA)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numFlags)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -461,14 +441,14 @@ namespace CrashEdit
         private System.Windows.Forms.TabControl tbcTabs;
         private System.Windows.Forms.TabPage tabGeneral;
         private System.Windows.Forms.GroupBox fraSettings;
-        private System.Windows.Forms.Label lblD;
-        private System.Windows.Forms.NumericUpDown numD;
-        private System.Windows.Forms.Label lblC;
-        private System.Windows.Forms.Label lblB;
-        private System.Windows.Forms.Label lblA;
-        private System.Windows.Forms.NumericUpDown numC;
-        private System.Windows.Forms.NumericUpDown numB;
-        private System.Windows.Forms.NumericUpDown numA;
+        private System.Windows.Forms.Label lblModeC;
+        private System.Windows.Forms.NumericUpDown numModeC;
+        private System.Windows.Forms.Label lblModeB;
+        private System.Windows.Forms.Label lblModeA;
+        private System.Windows.Forms.Label lblFlags;
+        private System.Windows.Forms.NumericUpDown numModeB;
+        private System.Windows.Forms.NumericUpDown numModeA;
+        private System.Windows.Forms.NumericUpDown numFlags;
         private System.Windows.Forms.Label lblCodeName;
     }
 }

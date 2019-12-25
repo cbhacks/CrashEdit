@@ -1,5 +1,6 @@
 using Crash;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -14,7 +15,7 @@ namespace CrashEdit
             this.controller = controller;
             entity = controller.Entity;
             InitializeComponent();
-            UpdatePosition();
+            UpdateStartPosition();
             UpdateID();
             UpdateType();
             UpdateSubtype();
@@ -27,7 +28,7 @@ namespace CrashEdit
             controller.InvalidateNode();
         }
 
-        private void UpdatePosition()
+        private void UpdateStartPosition()
         {
             numX.Value = entity.StartX;
             numY.Value = entity.StartY;
@@ -56,10 +57,7 @@ namespace CrashEdit
 
         private void numID_ValueChanged(object sender,EventArgs e)
         {
-            if (entity.ID > -32768 && entity.ID < 32767)
-                entity.ID = (short)numID.Value;
-            else
-                throw new ArgumentOutOfRangeException("id");
+            entity.ID = (short)numID.Value;
         }
 
         private void UpdateType()
@@ -85,234 +83,101 @@ namespace CrashEdit
 
         private void UpdateSettings()
         {
-            numA.Value = entity.SettingA;
-            numB.Value = entity.SettingB;
-            numC.Value = entity.SettingC;
-            numD.Value = entity.SettingD;
+            numFlags.Value = entity.Flags;
+            numModeA.Value = entity.ModeA;
+            numModeB.Value = entity.ModeB;
+            numModeC.Value = entity.ModeC;
         }
 
         private void numA_ValueChanged(object sender, EventArgs e)
         {
-            if (numA.Value < numA.Maximum && numA.Value > numA.Minimum)
-                entity.SettingA = (short)numA.Value;
-            else
-                entity.SettingA = 0;
+            entity.Flags = (int)numFlags.Value;
         }
 
         private void numB_ValueChanged(object sender, EventArgs e)
         {
-            if (numB.Value < numB.Maximum && numB.Value > numB.Minimum)
-                entity.SettingB = (short)numB.Value;
-            else
-                entity.SettingB = 0;
+            entity.ModeA = (short)numModeA.Value;
         }
 
         private void numC_ValueChanged(object sender, EventArgs e)
         {
-            if (numC.Value < numC.Maximum && numC.Value > numC.Minimum)
-                entity.SettingC = (short)numC.Value;
-            else
-                entity.SettingC = 0;
+            entity.ModeB = (short)numModeB.Value;
         }
 
         private void numD_ValueChanged(object sender, EventArgs e)
         {
-            if (numD.Value < numD.Maximum && numD.Value > numD.Minimum)
-                entity.SettingD = (short)numD.Value;
-            else
-                entity.SettingD = 0;
+            entity.ModeC = (short)numModeC.Value;
         }
 
         private void UpdateCodeString()
         {
             switch (entity.Type)
             {
-                case 0x0:
-                    lblCodeName.Text = string.Format("WillC");
-                    break;
-                case 0x1:
-                    lblCodeName.Text = string.Format("MonkC");
-                    break;
-                case 0x2:
-                    lblCodeName.Text = string.Format("SkunC");
-                    break;
-                case 0x3:
-                    lblCodeName.Text = string.Format("FruiC");
-                    break;
-                case 0x4:
-                    lblCodeName.Text = string.Format("DispC");
-                    break;
-                case 0x5:
-                    lblCodeName.Text = string.Format("DoctC");
-                    break;
-                case 0x6:
-                    lblCodeName.Text = string.Format("SnakC");
-                    break;
-                case 0x7:
-                    lblCodeName.Text = string.Format("WartC");
-                    break;
-                case 0x8:
-                    lblCodeName.Text = string.Format("PoDoC");
-                    break;
-                case 0x9:
-                    lblCodeName.Text = string.Format("PoRoC");
-                    break;
-                case 0xA:
-                    lblCodeName.Text = string.Format("PoREC");
-                    break;
-                case 0xB:
-                    lblCodeName.Text = string.Format("PoPlC");
-                    break;
-                case 0xC:
-                    lblCodeName.Text = string.Format("MafiC");
-                    break;
-                case 0xD:
-                    lblCodeName.Text = string.Format("Dog_C/PoCoC");
-                    break;
-                case 0xE:
-                    lblCodeName.Text = string.Format("PoObC");
-                    break;
-                case 0xF:
-                    lblCodeName.Text = string.Format("PinsC");
-                    break;
-                case 0x10:
-                    lblCodeName.Text = string.Format("BaraC");
-                    break;
-                case 0x11:
-                    lblCodeName.Text = string.Format("FatsC");
-                    break;
-                case 0x12:
-                    lblCodeName.Text = string.Format("PinOC");
-                    break;
-                case 0x13:
-                    lblCodeName.Text = string.Format("TurtC");
-                    break;
-                case 0x14:
-                    lblCodeName.Text = string.Format("ChefC");
-                    break;
-                case 0x15:
-                    lblCodeName.Text = string.Format("CheOC");
-                    break;
-                case 0x16:
-                    lblCodeName.Text = string.Format("JunOC");
-                    break;
-                case 0x17:
-                    lblCodeName.Text = string.Format("BridC");
-                    break;
-                case 0x18:
-                    lblCodeName.Text = string.Format("HyeaC");
-                    break;
-                case 0x19:
-                    lblCodeName.Text = string.Format("PlanC");
-                    break;
-                case 0x1A:
-                    lblCodeName.Text = string.Format("CliOC");
-                    break;
-                case 0x1B:
-                    lblCodeName.Text = string.Format("BeaOC");
-                    break;
-                case 0x1C:
-                    lblCodeName.Text = string.Format("RivOC");
-                    break;
-                case 0x1D:
-                    lblCodeName.Text = string.Format("ShadC");
-                    break;
-                case 0x1E:
-                    lblCodeName.Text = string.Format("KonOC");
-                    break;
-                case 0x1F:
-                    lblCodeName.Text = string.Format("CrabC");
-                    break;
-                case 0x20:
-                    lblCodeName.Text = string.Format("WarpC");
-                    break;
-                case 0x21:
-                    lblCodeName.Text = string.Format("WalOC");
-                    break;
-                case 0x22:
-                    lblCodeName.Text = string.Format("BoxsC");
-                    break;
-                case 0x23:
-                    lblCodeName.Text = string.Format("PillC");
-                    break;
-                case 0x24:
-                    lblCodeName.Text = string.Format("frogC");
-                    break;
-                case 0x25:
-                    lblCodeName.Text = string.Format("RRooC");
-                    break;
-                case 0x26:
-                    lblCodeName.Text = string.Format("SheNC");
-                    break;
-                case 0x27:
-                    lblCodeName.Text = string.Format("RooOC");
-                    break;
-                case 0x28:
-                    lblCodeName.Text = string.Format("BrioC");
-                    break;
-                case 0x29:
-                    lblCodeName.Text = string.Format("BriOC");
-                    break;
-                case 0x2A:
-                    lblCodeName.Text = string.Format("RuiOC");
-                    break;
-                case 0x2B:
-                    lblCodeName.Text = string.Format("SpidC");
-                    break;
-                case 0x2C:
-                    lblCodeName.Text = string.Format("MapOC");
-                    break;
-                case 0x2D:
-                    lblCodeName.Text = string.Format("KongC");
-                    break;
-                case 0x2E:
-                    lblCodeName.Text = string.Format("RWaOC");
-                    break;
-                case 0x2F:
-                    lblCodeName.Text = string.Format("LizaC");
-                    break;
-                case 0x30:
-                    lblCodeName.Text = string.Format("Opt0C");
-                    break;
-                case 0x31:
-                    lblCodeName.Text = string.Format("CortC");
-                    break;
-                case 0x32:
-                    lblCodeName.Text = string.Format("CorOC");
-                    break;
-                case 0x33:
-                    lblCodeName.Text = string.Format("VilOC");
-                    break;
-                case 0x34:
-                    lblCodeName.Text = string.Format("GamOC");
-                    break;
-                case 0x35:
-                    lblCodeName.Text = string.Format("CasOC");
-                    break;
-                case 0x36:
-                    lblCodeName.Text = string.Format("LabAC");
-                    break;
-                case 0x37:
-                    lblCodeName.Text = string.Format("WateC");
-                    break;
-                case 0x38:
-                    lblCodeName.Text = string.Format("BonoC");
-                    break;
-                case 0x39:
-                    lblCodeName.Text = string.Format("CardC");
-                    break;
-                case 0x3A:
-                    lblCodeName.Text = string.Format("GemsC");
-                    break;
-                case 0x3C:
-                    lblCodeName.Text = string.Format("AsciC");
-                    break;
-                case 0x3D:
-                    lblCodeName.Text = string.Format("WinGC");
-                    break;
+                case 0x0: lblCodeName.Text = "WillC"; break;
+                case 0x1: lblCodeName.Text = "MonkC"; break;
+                case 0x2: lblCodeName.Text = "SkunC"; break;
+                case 0x3: lblCodeName.Text = "FruiC"; break;
+                case 0x4: lblCodeName.Text = "DispC"; break;
+                case 0x5: lblCodeName.Text = "DoctC"; break;
+                case 0x6: lblCodeName.Text = "SnakC"; break;
+                case 0x7: lblCodeName.Text = "WartC"; break;
+                case 0x8: lblCodeName.Text = "PoDoC"; break;
+                case 0x9: lblCodeName.Text = "PoRoC"; break;
+                case 0xA: lblCodeName.Text = "PoREC"; break;
+                case 0xB: lblCodeName.Text = "PoPlC"; break;
+                case 0xC: lblCodeName.Text = "MafiC"; break;
+                case 0xD: lblCodeName.Text = "Dog_C/PoCoC"; break;
+                case 0xE: lblCodeName.Text = "PoObC"; break;
+                case 0xF: lblCodeName.Text = "PinsC"; break;
+                case 0x10: lblCodeName.Text = "BaraC"; break;
+                case 0x11: lblCodeName.Text = "FatsC"; break;
+                case 0x12: lblCodeName.Text = "PinOC"; break;
+                case 0x13: lblCodeName.Text = "TurtC"; break;
+                case 0x14: lblCodeName.Text = "ChefC"; break;
+                case 0x15: lblCodeName.Text = "CheOC"; break;
+                case 0x16: lblCodeName.Text = "JunOC"; break;
+                case 0x17: lblCodeName.Text = "BridC"; break;
+                case 0x18: lblCodeName.Text = "HyeaC"; break;
+                case 0x19: lblCodeName.Text = "PlanC"; break;
+                case 0x1A: lblCodeName.Text = "CliOC"; break;
+                case 0x1B: lblCodeName.Text = "BeaOC"; break;
+                case 0x1C: lblCodeName.Text = "RivOC"; break;
+                case 0x1D: lblCodeName.Text = "ShadC"; break;
+                case 0x1E: lblCodeName.Text = "KonOC"; break;
+                case 0x1F: lblCodeName.Text = "CrabC"; break;
+                case 0x20: lblCodeName.Text = "WarpC"; break;
+                case 0x21: lblCodeName.Text = "WalOC"; break;
+                case 0x22: lblCodeName.Text = "BoxsC"; break;
+                case 0x23: lblCodeName.Text = "PillC"; break;
+                case 0x24: lblCodeName.Text = "frogC"; break;
+                case 0x25: lblCodeName.Text = "RRooC"; break;
+                case 0x26: lblCodeName.Text = "SheNC"; break;
+                case 0x27: lblCodeName.Text = "RooOC"; break;
+                case 0x28: lblCodeName.Text = "BrioC"; break;
+                case 0x29: lblCodeName.Text = "BriOC"; break;
+                case 0x2A: lblCodeName.Text = "RuiOC"; break;
+                case 0x2B: lblCodeName.Text = "SpidC"; break;
+                case 0x2C: lblCodeName.Text = "MapOC"; break;
+                case 0x2D: lblCodeName.Text = "KongC"; break;
+                case 0x2E: lblCodeName.Text = "RWaOC"; break;
+                case 0x2F: lblCodeName.Text = "LizaC"; break;
+                case 0x30: lblCodeName.Text = "Opt0C"; break;
+                case 0x31: lblCodeName.Text = "CortC"; break;
+                case 0x32: lblCodeName.Text = "CorOC"; break;
+                case 0x33: lblCodeName.Text = "VilOC"; break;
+                case 0x34: lblCodeName.Text = "GamOC"; break;
+                case 0x35: lblCodeName.Text = "CasOC"; break;
+                case 0x36: lblCodeName.Text = "LabAC"; break;
+                case 0x37: lblCodeName.Text = "WateC"; break;
+                case 0x38: lblCodeName.Text = "BonoC"; break;
+                case 0x39: lblCodeName.Text = "CardC"; break;
+                case 0x3A: lblCodeName.Text = "GemsC"; break;
+
+                case 0x3C: lblCodeName.Text = "AsciC"; break;
+                case 0x3D: lblCodeName.Text = "WinGC"; break;
+
                 default:
-                    lblCodeName.Text = string.Format("Unavailable");
-                    break;
+                    lblCodeName.Text = "(Unknown)"; break;
             }
         }
     }

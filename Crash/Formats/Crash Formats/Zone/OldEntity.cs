@@ -17,9 +17,9 @@ namespace Crash
                 ErrorManager.SignalError("OldEntity: Data is too short");
             if (positioncount < 0)
                 ErrorManager.SignalError("OldEntity: Position count is negative");
-            short settinga = BitConv.FromInt16(data,12);
-            short settingb = BitConv.FromInt16(data,14);
-            short linkid = BitConv.FromInt16(data,16);
+            short modea = BitConv.FromInt16(data,12);
+            short modeb = BitConv.FromInt16(data,14);
+            short modec = BitConv.FromInt16(data,16);
             byte type = data[18];
             byte subtype = data[19];
             EntityPosition[] positions = new EntityPosition [positioncount];
@@ -31,12 +31,12 @@ namespace Crash
                 positions[i] = new EntityPosition(x,y,z);
             }
             short nullfield1 = BitConv.FromInt16(data,20 + positioncount * 6);
-            return new OldEntity(garbage,flags,id,settinga,settingb,linkid,type,subtype,positions,nullfield1);
+            return new OldEntity(garbage,flags,id,modea,modeb,modec,type,subtype,positions,nullfield1);
         }
 
         private List<EntityPosition> positions = null;
 
-        public OldEntity(int garbage,int flags,short id,short settinga,short settingb,short linkid,byte type,byte subtype,IEnumerable<EntityPosition> positions,short nullfield1)
+        public OldEntity(int garbage,int flags,short id,short modea,short modeb,short modec,byte type,byte subtype,IEnumerable<EntityPosition> positions,short nullfield1)
         {
             if (positions == null)
                 throw new ArgumentNullException("index");
@@ -44,9 +44,9 @@ namespace Crash
             Flags = flags;
             this.positions = new List<EntityPosition>(positions);
             ID = id;
-            SettingA = settinga;
-            SettingB = settingb;
-            SettingC = linkid;
+            ModeA = modea;
+            ModeB = modeb;
+            ModeC = modec;
             Type = type;
             Subtype = subtype;
             Nullfield1 = nullfield1;
@@ -55,9 +55,9 @@ namespace Crash
         public int Flags { get; set; }
         public int Garbage { get; set; }
         public short ID { get; set; }
-        public short SettingA { get; set; }
-        public short SettingB { get; set; }
-        public short SettingC { get; set; }
+        public short ModeA { get; set; }
+        public short ModeB { get; set; }
+        public short ModeC { get; set; }
         public byte Type { get; set; }
         public byte Subtype { get; set; }
         public IList<EntityPosition> Positions => positions;
@@ -70,9 +70,9 @@ namespace Crash
             BitConv.ToInt32(result,4,Flags);
             BitConv.ToInt16(result,8,ID);
             BitConv.ToInt16(result,10,(short)positions.Count);
-            BitConv.ToInt16(result,12,SettingA);
-            BitConv.ToInt16(result,14,SettingB);
-            BitConv.ToInt16(result,16,SettingC);
+            BitConv.ToInt16(result,12,ModeA);
+            BitConv.ToInt16(result,14,ModeB);
+            BitConv.ToInt16(result,16,ModeC);
             result[18] = Type;
             result[19] = Subtype;
             for (int i = 0;i < positions.Count;++i)

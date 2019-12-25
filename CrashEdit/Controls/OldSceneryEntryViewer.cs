@@ -46,17 +46,15 @@ namespace CrashEdit
                 {
                     if (entry != null)
                     {
+                        GL.Begin(PrimitiveType.Triangles);
                         foreach (OldSceneryPolygon polygon in entry.Polygons)
                         {
-                            GL.Begin(PrimitiveType.Triangles);
-                            if (polygon.VertexA < entry.Vertices.Count)
-                                RenderVertex(entry,entry.Vertices[polygon.VertexA]);
-                            if (polygon.VertexB < entry.Vertices.Count)
-                                RenderVertex(entry,entry.Vertices[polygon.VertexB]);
-                            if (polygon.VertexC < entry.Vertices.Count)
-                                RenderVertex(entry,entry.Vertices[polygon.VertexC]);
-                            GL.End();
+                            if (polygon.VertexA >= entry.Vertices.Count || polygon.VertexB >= entry.Vertices.Count || polygon.VertexC >= entry.Vertices.Count) continue;
+                            RenderVertex(entry,entry.Vertices[polygon.VertexA]);
+                            RenderVertex(entry,entry.Vertices[polygon.VertexB]);
+                            RenderVertex(entry,entry.Vertices[polygon.VertexC]);
                         }
+                        GL.End();
                     }
                 }
                 GL.EndList();

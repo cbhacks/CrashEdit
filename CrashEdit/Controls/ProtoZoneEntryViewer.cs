@@ -14,18 +14,18 @@ namespace CrashEdit
 
         static ProtoZoneEntryViewer()
         {
-            stipplea = new byte [128];
-            stippleb = new byte [128];
-            for (int i = 0;i < 128;i += 8)
+            stipplea = new byte[128];
+            stippleb = new byte[128];
+            for (int i = 0; i < 128; i += 8)
             {
-                stipplea[i + 0] = 0xFF;
-                stipplea[i + 1] = 0xFF;
-                stipplea[i + 2] = 0xFF;
-                stipplea[i + 3] = 0xFF;
-                stipplea[i + 4] = 0xFF;
-                stipplea[i + 5] = 0xFF;
-                stipplea[i + 6] = 0xFF;
-                stipplea[i + 7] = 0xFF;
+                stipplea[i + 0] = 0x55;
+                stipplea[i + 1] = 0x55;
+                stipplea[i + 2] = 0x55;
+                stipplea[i + 3] = 0x55;
+                stipplea[i + 4] = 0xAA;
+                stipplea[i + 5] = 0xAA;
+                stipplea[i + 6] = 0xAA;
+                stipplea[i + 7] = 0xAA;
                 stippleb[i + 0] = 0xAA;
                 stippleb[i + 1] = 0xAA;
                 stippleb[i + 2] = 0xAA;
@@ -46,47 +46,51 @@ namespace CrashEdit
         private bool deletelists;
         private bool polygonmode;
         private bool allentries;
+        private bool flipoctree;
 
         public ProtoZoneEntryViewer(ProtoZoneEntry entry,ProtoSceneryEntry[] linkedsceneryentries,ProtoZoneEntry[] linkedentries) : base(linkedsceneryentries)
-         {
+        {
             this.entry = entry;
             this.linkedentries = linkedentries;
-            this.renderoctree = false;
-            this.octreedisplaylists = new int[linkedentries.Length + 1];
+            renderoctree = false;
+            octreedisplaylists = new int[linkedentries.Length + 1];
             for (int i = 0; i < octreedisplaylists.Length; i++)
             {
                 octreedisplaylists[i] = -1;
             }
-            this.octreevalues = new Dictionary<short,Color>();
-            this.octreeselection = -1;
+            octreevalues = new Dictionary<short,Color>();
+            octreeselection = -1;
             deletelists = false;
             polygonmode = false;
             allentries = false;
-        }
-
-        protected override int CameraRangeMargin
-        {
-            get { return 1600; }
+            flipoctree = false;
         }
 
         protected override IEnumerable<IPosition> CorePositions
         {
             get
             {
-                int xoffset = BitConv.FromInt32(entry.Unknown2,0);
-                int yoffset = BitConv.FromInt32(entry.Unknown2,4);
-                int zoffset = BitConv.FromInt32(entry.Unknown2,8);
+                int xoffset = BitConv.FromInt32(entry.Layout,0);
+                int yoffset = BitConv.FromInt32(entry.Layout,4);
+                int zoffset = BitConv.FromInt32(entry.Layout,8);
                 yield return new Position(xoffset,yoffset,zoffset);
-                int x2 = BitConv.FromInt32(entry.Unknown2,12);
-                int y2 = BitConv.FromInt32(entry.Unknown2,16);
-                int z2 = BitConv.FromInt32(entry.Unknown2,20);
-                yield return new Position(xoffset + x2,yoffset + y2,zoffset + z2);
+                int x2 = BitConv.FromInt32(entry.Layout,12);
+                int y2 = BitConv.FromInt32(entry.Layout,16);
+                int z2 = BitConv.FromInt32(entry.Layout,20);
+                yield return new Position(x2 + xoffset,y2 + yoffset,z2 + zoffset);
                 foreach (ProtoEntity entity in entry.Entities)
                 {
                     int x = entity.StartX + xoffset;
                     int y = entity.StartY + yoffset;
                     int z = entity.StartZ + zoffset;
                     yield return new Position(x,y,z);
+                    foreach (ProtoEntityPosition delta in entity.Deltas)
+                    {
+                        x += delta.X + delta.Global;
+                        y += delta.Y + delta.Global;
+                        z += delta.Z + delta.Global;
+                        yield return new Position(x,y,z);
+                    }
                 }
                 foreach (OldCamera camera in entry.Cameras)
                 {
@@ -101,15 +105,18 @@ namespace CrashEdit
             }
         }
 
+        protected override int CameraRangeMinimum => 800;
+
         protected override bool IsInputKey(Keys keyData)
         {
             switch (keyData)
             {
                 case Keys.X:
                 case Keys.C:
+                case Keys.R:
                 case Keys.V:
                 case Keys.F:
-                case Keys.R:
+                case Keys.O:
                     return true;
                 default:
                     return base.IsInputKey(keyData);
@@ -138,7 +145,7 @@ namespace CrashEdit
                             lsi.Tag = color.Key;
                             lst.Items.Add(lsi);
                         }
-                        lst.SelectedIndexChanged += delegate(object sender,EventArgs ee)
+                        lst.SelectedIndexChanged += delegate (object sender,EventArgs ee)
                         {
                             if (lst.SelectedItems.Count == 0)
                             {
@@ -162,19 +169,17 @@ namespace CrashEdit
                 case Keys.F:
                     allentries = !allentries;
                     break;
+                case Keys.O:
+                    flipoctree = !flipoctree;
+                    deletelists = true;
+                    break;
             }
         }
 
         protected override void RenderObjects()
         {
             RenderEntry(entry,ref octreedisplaylists[0]);
-            int xoffset = BitConv.FromInt32(entry.Unknown2,0);
-            int yoffset = BitConv.FromInt32(entry.Unknown2,4);
-            int zoffset = BitConv.FromInt32(entry.Unknown2,8);
             GL.Enable(EnableCap.PolygonStipple);
-            GL.PolygonStipple(stipplea);
-            base.RenderObjects();
-            GL.PolygonStipple(stippleb);
             for (int i = 0; i < linkedentries.Length; i++)
             {
                 ProtoZoneEntry linkedentry = linkedentries[i];
@@ -185,41 +190,40 @@ namespace CrashEdit
                 RenderLinkedEntry(linkedentry,ref octreedisplaylists[i + 1]);
             }
             GL.Disable(EnableCap.PolygonStipple);
+            if (deletelists) deletelists = false;
+            base.RenderObjects();
         }
 
         private void RenderEntry(ProtoZoneEntry entry,ref int octreedisplaylist)
         {
-            int xoffset = BitConv.FromInt32(entry.Unknown2,0);
-            int yoffset = BitConv.FromInt32(entry.Unknown2,4);
-            int zoffset = BitConv.FromInt32(entry.Unknown2,8);
-            int x2 = BitConv.FromInt32(entry.Unknown2,12);
-            int y2 = BitConv.FromInt32(entry.Unknown2,16);
-            int z2 = BitConv.FromInt32(entry.Unknown2,20);
+            int xoffset = BitConv.FromInt32(entry.Layout,0);
+            int yoffset = BitConv.FromInt32(entry.Layout,4);
+            int zoffset = BitConv.FromInt32(entry.Layout,8);
+            int x2 = BitConv.FromInt32(entry.Layout,12);
+            int y2 = BitConv.FromInt32(entry.Layout,16);
+            int z2 = BitConv.FromInt32(entry.Layout,20);
             GL.PushMatrix();
             GL.Translate(xoffset,yoffset,zoffset);
             if (deletelists)
             {
                 GL.DeleteLists(octreedisplaylist,1);
                 octreedisplaylist = -1;
-                deletelists = false;
             }
             if (renderoctree)
             {
-                if (polygonmode)
+                if (!polygonmode)
                     GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Line);
                 if (octreedisplaylist == -1)
                 {
                     octreedisplaylist = GL.GenLists(1);
                     GL.NewList(octreedisplaylist,ListMode.CompileAndExecute);
                     GL.PushMatrix();
-                    int xmax = (ushort)BitConv.FromInt16(entry.Unknown2,0x1E);
-                    int ymax = (ushort)BitConv.FromInt16(entry.Unknown2,0x20);
-                    if (ymax == 0)
-                        ymax = xmax;
-                    int zmax = BitConv.FromInt16(entry.Unknown2,0x22);
-                    if (zmax == 0)
-                        zmax = xmax;
-                    RenderOctree(entry.Unknown2,0x1C,0,y2,0,x2,y2,z2,xmax,ymax,zmax);
+                    int xmax = (ushort)BitConv.FromInt16(entry.Layout,0x1E);
+                    int ymax = (ushort)BitConv.FromInt16(entry.Layout,0x20);
+                    if (ymax == 0) ymax = xmax;
+                    int zmax = (ushort)BitConv.FromInt16(entry.Layout,0x22);
+                    if (zmax == 0) zmax = ymax;
+                    RenderOctree(entry.Layout,0x1C,0,flipoctree ? -y2 : 0,flipoctree ? -z2 : 0,x2,y2,z2,xmax,ymax,zmax);
                     GL.PopMatrix();
                     GL.EndList();
                 }
@@ -229,26 +233,26 @@ namespace CrashEdit
                 }
                 GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
             }
-            GL.Scale(4,4,4);
             GL.Color3(Color.White);
             GL.Begin(PrimitiveType.LineStrip);
             GL.Vertex3(0,0,0);
-            GL.Vertex3(x2 / 4,0,0);
-            GL.Vertex3(x2 / 4,y2 / 4,0);
-            GL.Vertex3(0,y2 / 4,0);
+            GL.Vertex3(x2,0,0);
+            GL.Vertex3(x2,y2,0);
+            GL.Vertex3(0,y2,0);
             GL.Vertex3(0,0,0);
-            GL.Vertex3(0,0,z2 / 4);
-            GL.Vertex3(x2 / 4,0,z2 / 4);
-            GL.Vertex3(x2 / 4,y2 / 4,z2 / 4);
-            GL.Vertex3(0,y2 / 4,z2 / 4);
-            GL.Vertex3(0,0,z2 / 4);
-            GL.Vertex3(x2 / 4,0,z2 / 4);
-            GL.Vertex3(x2 / 4,0,0);
-            GL.Vertex3(x2 / 4,y2 / 4,0);
-            GL.Vertex3(x2 / 4,y2 / 4,z2 / 4);
-            GL.Vertex3(0,y2 / 4,z2 / 4);
-            GL.Vertex3(0,y2 / 4,0);
+            GL.Vertex3(0,0,z2);
+            GL.Vertex3(x2,0,z2);
+            GL.Vertex3(x2,y2,z2);
+            GL.Vertex3(0,y2,z2);
+            GL.Vertex3(0,0,z2);
+            GL.Vertex3(x2,0,z2);
+            GL.Vertex3(x2,0,0);
+            GL.Vertex3(x2,y2,0);
+            GL.Vertex3(x2,y2,z2);
+            GL.Vertex3(0,y2,z2);
+            GL.Vertex3(0,y2,0);
             GL.End();
+            GL.Scale(4,4,4);
             foreach (ProtoEntity entity in entry.Entities)
             {
                 RenderEntity(entity);
@@ -262,40 +266,37 @@ namespace CrashEdit
 
         private void RenderLinkedEntry(ProtoZoneEntry entry,ref int octreedisplaylist)
         {
-            int xoffset = BitConv.FromInt32(entry.Unknown2,0);
-            int yoffset = BitConv.FromInt32(entry.Unknown2,4);
-            int zoffset = BitConv.FromInt32(entry.Unknown2,8);
-            int x2 = BitConv.FromInt32(entry.Unknown2,12);
-            int y2 = BitConv.FromInt32(entry.Unknown2,16);
-            int z2 = BitConv.FromInt32(entry.Unknown2,20);
+            int xoffset = BitConv.FromInt32(entry.Layout,0);
+            int yoffset = BitConv.FromInt32(entry.Layout,4);
+            int zoffset = BitConv.FromInt32(entry.Layout,8);
+            int x2 = BitConv.FromInt32(entry.Layout,12);
+            int y2 = BitConv.FromInt32(entry.Layout,16);
+            int z2 = BitConv.FromInt32(entry.Layout,20);
             GL.PushMatrix();
             GL.Translate(xoffset,yoffset,zoffset);
             if (allentries)
             {
-                GL.PolygonStipple(stippleb);
+                GL.Disable(EnableCap.PolygonStipple);
                 if (deletelists)
                 {
                     GL.DeleteLists(octreedisplaylist,1);
                     octreedisplaylist = -1;
-                    deletelists = false;
                 }
                 if (renderoctree)
                 {
-                    if (polygonmode)
+                    if (!polygonmode)
                         GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Line);
                     if (octreedisplaylist == -1)
                     {
                         octreedisplaylist = GL.GenLists(1);
                         GL.NewList(octreedisplaylist,ListMode.CompileAndExecute);
                         GL.PushMatrix();
-                        int xmax = BitConv.FromInt16(entry.Unknown2,0x1E);
-                        int ymax = BitConv.FromInt16(entry.Unknown2,0x20);
-                        if (ymax == 0)
-                            ymax = xmax;
-                        int zmax = BitConv.FromInt16(entry.Unknown2,0x22);
-                        if (zmax == 0)
-                            zmax = xmax;
-                        RenderOctree(entry.Unknown2,0x1C,0,y2,0,x2,y2,z2,xmax,ymax,zmax);
+                        int xmax = (ushort)BitConv.FromInt16(entry.Layout,0x1E);
+                        int ymax = (ushort)BitConv.FromInt16(entry.Layout,0x20);
+                        if (ymax == 0) ymax = xmax;
+                        int zmax = (ushort)BitConv.FromInt16(entry.Layout,0x22);
+                        if (zmax == 0) zmax = ymax;
+                        RenderOctree(entry.Layout,0x1C,0,flipoctree ? -y2 : 0,flipoctree ? -z2 : 0,x2,y2,z2,xmax,ymax,zmax);
                         GL.PopMatrix();
                         GL.EndList();
                     }
@@ -305,6 +306,7 @@ namespace CrashEdit
                     }
                     GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
                 }
+                GL.Enable(EnableCap.PolygonStipple);
             }
             GL.Scale(4,4,4);
             foreach (ProtoEntity entity in entry.Entities)
@@ -323,13 +325,18 @@ namespace CrashEdit
             int value = (ushort)BitConv.FromInt16(data,offset);
             if ((value & 1) != 0)
             {
-                if (!octreevalues.TryGetValue((short)value, out Color color))
+                if (flipoctree)
                 {
-                    byte[] colorbuf = new byte[16];
+                    GL.Scale(1, -1, -1);
+                }
+                Color color;
+                if (!octreevalues.TryGetValue((short)value,out color))
+                {
+                    byte[] colorbuf = new byte[3];
                     Random random = new Random(value);
                     random.NextBytes(colorbuf);
-                    color = Color.FromArgb(255, colorbuf[0], colorbuf[1], colorbuf[2]);
-                    octreevalues.Add((short)value, color);
+                    color = Color.FromArgb(255,colorbuf[0],colorbuf[1],colorbuf[2]);
+                    octreevalues.Add((short)value,color);
                 }
                 if (octreeselection != -1 && octreeselection != value)
                     return;
@@ -351,21 +358,21 @@ namespace CrashEdit
 
                 // Top
                 GL.Color3(c1);
-                GL.Vertex3(x + 0,y - h,z + 0);
+                GL.Vertex3(x + 0,y + h,z + 0);
                 GL.Color3(c2);
-                GL.Vertex3(x + w,y - h,z + 0);
+                GL.Vertex3(x + w,y + h,z + 0);
                 GL.Color3(c3);
-                GL.Vertex3(x + w,y - h,z + d);
+                GL.Vertex3(x + w,y + h,z + d);
                 GL.Color3(c4);
-                GL.Vertex3(x + 0,y - h,z + d);
+                GL.Vertex3(x + 0,y + h,z + d);
 
                 // Left
                 GL.Color3(c1);
                 GL.Vertex3(x + 0,y + 0,z + 0);
                 GL.Color3(c2);
-                GL.Vertex3(x + 0,y - h,z + 0);
+                GL.Vertex3(x + 0,y + h,z + 0);
                 GL.Color3(c3);
-                GL.Vertex3(x + 0,y - h,z + d);
+                GL.Vertex3(x + 0,y + h,z + d);
                 GL.Color3(c4);
                 GL.Vertex3(x + 0,y + 0,z + d);
 
@@ -373,9 +380,9 @@ namespace CrashEdit
                 GL.Color3(c1);
                 GL.Vertex3(x + w,y + 0,z + 0);
                 GL.Color3(c2);
-                GL.Vertex3(x + w,y - h,z + 0);
+                GL.Vertex3(x + w,y + h,z + 0);
                 GL.Color3(c3);
-                GL.Vertex3(x + w,y - h,z + d);
+                GL.Vertex3(x + w,y + h,z + d);
                 GL.Color3(c4);
                 GL.Vertex3(x + w,y + 0,z + d);
 
@@ -385,9 +392,9 @@ namespace CrashEdit
                 GL.Color3(c2);
                 GL.Vertex3(x + w,y + 0,z + 0);
                 GL.Color3(c3);
-                GL.Vertex3(x + w,y - h,z + 0);
+                GL.Vertex3(x + w,y + h,z + 0);
                 GL.Color3(c4);
-                GL.Vertex3(x + 0,y - h,z + 0);
+                GL.Vertex3(x + 0,y + h,z + 0);
 
                 // Back
                 GL.Color3(c1);
@@ -395,10 +402,14 @@ namespace CrashEdit
                 GL.Color3(c2);
                 GL.Vertex3(x + w,y + 0,z + d);
                 GL.Color3(c3);
-                GL.Vertex3(x + w,y - h,z + d);
+                GL.Vertex3(x + w,y + h,z + d);
                 GL.Color3(c4);
-                GL.Vertex3(x + 0,y - h,z + d);
+                GL.Vertex3(x + 0,y + h,z + d);
                 GL.End();
+                if (flipoctree)
+                {
+                    GL.Scale(1, -1, -1);
+                }
             }
             else if (value != 0)
             {
@@ -413,17 +424,18 @@ namespace CrashEdit
                 RenderOctreeY(data,ref offset,x + 0 / 2,y,z,w / 2,h,d,xmax - 1,ymax,zmax);
                 RenderOctreeY(data,ref offset,x + w / 2,y,z,w / 2,h,d,xmax - 1,ymax,zmax);
             }
-           else
+            else
             {
                 RenderOctreeY(data,ref offset,x,y,z,w,h,d,xmax - 1,ymax,zmax);
             }
         }
+
         private void RenderOctreeY(byte[] data,ref int offset,double x,double y,double z,double w,double h,double d,int xmax,int ymax,int zmax)
         {
             if (ymax > 0)
             {
                 RenderOctreeZ(data,ref offset,x,y + 0 / 2,z,w,h / 2,d,xmax,ymax - 1,zmax);
-                RenderOctreeZ(data,ref offset,x,y - h / 2,z,w,h / 2,d,xmax,ymax - 1,zmax);
+                RenderOctreeZ(data,ref offset,x,y + h / 2,z,w,h / 2,d,xmax,ymax - 1,zmax);
             }
             else
             {
@@ -449,61 +461,62 @@ namespace CrashEdit
 
         private void RenderEntity(ProtoEntity entity)
         {
-            GL.PushMatrix();
-            if (entity.PositionCount == 1)
+            GL.PolygonStipple(stipplea);
+            if (entity.Deltas.Count == 0)
             {
+                GL.PushMatrix();
+                GL.Translate(entity.StartX/4,entity.StartY/4,entity.StartZ/4);
                 switch (entity.Type)
                 {
                     case 0x3:
-                        GL.Translate(entity.StartX / 4,entity.StartY / 4,entity.StartZ / 4);
                         RenderPickup(entity.Subtype);
                         break;
                     default:
-                        GL.Translate(entity.StartX / 4,entity.StartY / 4,entity.StartZ / 4);
                         GL.Color3(Color.White);
                         LoadTexture(OldResources.PointTexture);
                         RenderSprite();
                         break;
                 }
+                GL.PopMatrix();
             }
             else
             {
                 GL.Color3(Color.Blue);
                 GL.PushMatrix();
                 GL.Begin(PrimitiveType.LineStrip);
-                short curx = entity.StartX;
-                short cury = entity.StartY;
-                short curz = entity.StartZ;
-                foreach (ProtoEntityPosition position in entity.Index)
+                int curx = entity.StartX / 4;
+                int cury = entity.StartY / 4;
+                int curz = entity.StartZ / 4;
+                foreach (ProtoEntityPosition delta in entity.Deltas)
                 {
-                    curx += (short)(position.Z + position.Global);
-                    cury += (short)(position.X + position.Global);
-                    curz += (short)(position.Y + position.Global);
+                    curx += delta.Z + delta.Global;
+                    cury += delta.X + delta.Global;
+                    curz += delta.Y + delta.Global;
                     GL.Vertex3(curx,cury,curz);
                 }
                 GL.End();
-                curx = entity.StartX;
-                cury = entity.StartY;
-                curz = entity.StartZ;
+                curx = entity.StartX / 4;
+                cury = entity.StartY / 4;
+                curz = entity.StartZ / 4;
                 GL.Color3(Color.Red);
                 LoadTexture(OldResources.PointTexture);
-                foreach (ProtoEntityPosition position in entity.Index)
+                foreach (ProtoEntityPosition delta in entity.Deltas)
                 {
                     GL.PushMatrix();
-                    curx += (short)(position.Z + position.Global);
-                    cury += (short)(position.X + position.Global);
-                    curz += (short)(position.Y + position.Global);
+                    curx += delta.Z + delta.Global;
+                    cury += delta.X + delta.Global;
+                    curz += delta.Y + delta.Global;
                     GL.Translate(curx,cury,curz);
                     RenderSprite();
                     GL.PopMatrix();
                 }
                 GL.PopMatrix();
             }
-            GL.PopMatrix();
         }
 
         private void RenderCamera(OldCamera camera)
         {
+            GL.PolygonStipple(stippleb);
             GL.Color3(Color.Green);
             GL.PushMatrix();
             GL.Begin(PrimitiveType.LineStrip);
@@ -548,6 +561,7 @@ namespace CrashEdit
         {
             GL.Translate(0,50,0);
             GL.Color3(Color.White);
+            LoadPickupTexture(subtype);
             RenderSprite();
         }
 
@@ -571,4 +585,3 @@ namespace CrashEdit
         }
     }
 }
-

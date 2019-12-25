@@ -490,7 +490,7 @@ namespace CrashEdit
         private void RenderCamera(OldCamera camera)
         {
             GL.PolygonStipple(stippleb);
-            GL.Color3(Color.Blue);
+            GL.Color3(Color.Green);
             GL.PushMatrix();
             GL.Begin(PrimitiveType.LineStrip);
             foreach (OldCameraPosition position in camera.Positions)

@@ -192,9 +192,9 @@ namespace CrashEdit
         private void UpdateSettings()
         {
             numFlags.Value = entity.Flags;
-            numA.Value = entity.SettingA;
-            numB.Value = entity.SettingB;
-            numC.Value = entity.SettingC;
+            numA.Value = entity.ModeA;
+            numB.Value = entity.ModeB;
+            numC.Value = entity.ModeC;
         }
 
         private void numUnknown_ValueChanged(object sender,EventArgs e)
@@ -204,17 +204,17 @@ namespace CrashEdit
 
         private void numA_ValueChanged(object sender,EventArgs e)
         {
-            entity.SettingA = (short)numA.Value;
+            entity.ModeA = (short)numA.Value;
         }
 
         private void numB_ValueChanged(object sender,EventArgs e)
         {
-            entity.SettingB = (short)numB.Value;
+            entity.ModeB = (short)numB.Value;
         }
 
         private void numC_ValueChanged(object sender,EventArgs e)
         {
-            entity.SettingC = (short)numC.Value;
+            entity.ModeC = (short)numC.Value;
         }
 
         private void UpdateCodeString() // TODO : use NSD gool map

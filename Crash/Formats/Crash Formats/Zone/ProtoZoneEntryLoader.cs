@@ -11,7 +11,7 @@ namespace Crash
             }
             byte[] header = items[0];
             byte[] layout = items[1];
-            int camcount = BitConv.FromInt32(header, 520);
+            int camcount = BitConv.FromInt32(header,520);
             OldCamera[] cameras = new OldCamera[camcount];
             for (int i = 2; i < 2 + camcount; i++)
             {
@@ -22,7 +22,7 @@ namespace Crash
             {
                 entities[i - 2 - camcount] = ProtoEntity.Load(items[i]);
             }
-            return new ProtoZoneEntry(header,layout,cameras,entities,camcount,eid);
+            return new ProtoZoneEntry(header,layout,cameras,entities,eid);
         }
     }
 }
