@@ -15,13 +15,14 @@ namespace Crash
             int vertexa = (worda >> 20) & 0xFFF;
             int vertexb = (wordb >> 8) & 0xFFF;
             int vertexc = (wordb >> 20) & 0xFFF;
-            int unknown1 = (worda >> 8) & 0xFFF;
-            byte unknown2 = (byte)(worda & 0xFF);
-            byte unknown3 = (byte)(wordb & 0xFF);
-            return new OldSceneryPolygon(vertexa,vertexb,vertexc,unknown1,unknown2,unknown3);
+            int texture = (worda >> 8) & 0xFFF;
+            byte page = (byte)(worda >> 5 & 0b111);
+            byte anim0 = (byte)(worda & 0x1F);
+            byte unknown = (byte)(wordb & 0xFF);
+            return new OldSceneryPolygon(vertexa,vertexb,vertexc,texture,page,anim0,unknown);
         }
 
-        public OldSceneryPolygon(int vertexa,int vertexb,int vertexc,int unknown1,byte unknown2,byte unknown3)
+        public OldSceneryPolygon(int vertexa,int vertexb,int vertexc,int texture,byte page,byte anim0,byte unknown)
         {
             if (vertexa < 0 || vertexa > 0xFFF)
                 throw new ArgumentOutOfRangeException("vertexa");
@@ -29,22 +30,24 @@ namespace Crash
                 throw new ArgumentOutOfRangeException("vertexb");
             if (vertexc < 0 || vertexc > 0xFFF)
                 throw new ArgumentOutOfRangeException("vertexc");
-            if (unknown1 < 0 || unknown1 > 0xFFF)
+            if (texture < 0 || texture > 0xFFF)
                 throw new ArgumentOutOfRangeException("unknown1");
             VertexA = vertexa;
             VertexB = vertexb;
             VertexC = vertexc;
-            Unknown1 = unknown1;
-            Unknown2 = unknown2;
-            Unknown3 = unknown3;
+            Texture = texture;
+            Page = page;
+            Anim0 = anim0;
+            Unknown = unknown;
         }
 
         public int VertexA { get; }
         public int VertexB { get; }
         public int VertexC { get; }
-        public int Unknown1 { get; }
-        public byte Unknown2 { get; }
-        public byte Unknown3 { get; }
+        public int Texture { get; }
+        public byte Page { get; }
+        public byte Anim0 { get; }
+        public byte Unknown { get; }
 
         public byte[] Save()
         {
@@ -53,9 +56,10 @@ namespace Crash
             worda |= VertexA << 20;
             wordb |= VertexB << 8;
             wordb |= VertexC << 20;
-            worda |= Unknown1 << 8;
-            worda |= Unknown2;
-            wordb |= Unknown3;
+            worda |= Texture << 8;
+            worda |= Page << 5;
+            worda |= Anim0;
+            wordb |= Unknown;
             byte[] data = new byte [8];
             BitConv.ToInt32(data,0,worda);
             BitConv.ToInt32(data,4,wordb);
