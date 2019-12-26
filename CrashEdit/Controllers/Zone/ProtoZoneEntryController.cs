@@ -57,6 +57,7 @@ namespace CrashEdit
             System.Array.Copy(ProtoZoneEntry.Header,0,header,0,0x228);
             System.Array.Copy(ProtoZoneEntry.Header,0x228,header,0x234,0xB0);
             System.Array.Copy(ProtoZoneEntry.Header,0x2EC,header,0x318,0x60);
+            BitConv.ToInt32(header,0x304,Entry.NullEID);
             // convert layout
             short xmax = BitConv.FromInt16(ProtoZoneEntry.Layout,0x1E);
             short ymax = BitConv.FromInt16(ProtoZoneEntry.Layout,0x20);
