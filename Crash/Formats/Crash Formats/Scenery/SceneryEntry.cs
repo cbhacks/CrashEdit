@@ -105,11 +105,11 @@ namespace Crash
                         if (vertex.Color < Colors.Count)
                         {
                             SceneryColor color = Colors[vertex.Color];
-                            obj.WriteLine("v {0} {1} {2} {3} {4} {5}", vertex.X + XOffset / 4, vertex.Y + YOffset / 4, vertex.Z + ZOffset / 4, color.Red / 255.0, color.Green / 255.0, color.Blue / 255.0);
+                            obj.WriteLine("v {0} {1} {2} {3} {4} {5}", vertex.X + XOffset / 16, vertex.Y + YOffset / 16, vertex.Z + ZOffset / 16, color.Red / 255.0, color.Green / 255.0, color.Blue / 255.0);
                         }
                         else
                         {
-                            obj.WriteLine("v {0} {1} {2}", vertex.X + XOffset / 4, vertex.Y + YOffset / 4, vertex.Z + ZOffset / 4);
+                            obj.WriteLine("v {0} {1} {2}", vertex.X + XOffset / 16, vertex.Y + YOffset / 16, vertex.Z + ZOffset / 16);
                         }
                     }
                     obj.WriteLine();
@@ -167,11 +167,11 @@ namespace Crash
                         if (vertex.Color < Colors.Count)
                         {
                             SceneryColor color = Colors[vertex.Color];
-                            ply.WriteLine("{0} {1} {2} {3} {4} {5}", vertex.X + XOffset / 4, vertex.Y + YOffset / 4, vertex.Z + ZOffset / 4, color.Red, color.Green, color.Blue);
+                            ply.WriteLine("{0} {1} {2} {3} {4} {5}", vertex.X + XOffset / 16, vertex.Y + YOffset / 16, vertex.Z + ZOffset / 16, color.Red, color.Green, color.Blue);
                         }
                         else
                         {
-                            ply.WriteLine("{0} {1} {2} 255 0 255", vertex.X + XOffset / 4, vertex.Y + YOffset / 4, vertex.Z + ZOffset / 4);
+                            ply.WriteLine("{0} {1} {2} 255 0 255", vertex.X + XOffset / 16, vertex.Y + YOffset / 16, vertex.Z + ZOffset / 16);
                         }
                     }
                     foreach (SceneryTriangle triangle in triangles)
