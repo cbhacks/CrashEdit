@@ -185,6 +185,7 @@ namespace CrashEdit
                 {
                 }
             }
+            InvalidateEditor();
         }
 
         private void Menu_Add_Entry()
