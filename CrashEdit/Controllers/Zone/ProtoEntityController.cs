@@ -53,21 +53,21 @@ namespace CrashEdit
                 }
             }
             maxid++;
-            int newindex = ProtoZoneEntryController.ZoneEntry.Entities.Count;
-            newindex -= BitConv.FromInt32(ProtoZoneEntryController.ZoneEntry.Header,0x208);
-            int entitycount = BitConv.FromInt32(ProtoZoneEntryController.ZoneEntry.Header,0x20C);
-            BitConv.ToInt32(ProtoZoneEntryController.ZoneEntry.Header,0x20C,entitycount + 1);
+            int newindex = ProtoZoneEntryController.ProtoZoneEntry.Entities.Count;
+            newindex -= BitConv.FromInt32(ProtoZoneEntryController.ProtoZoneEntry.Header,0x208);
+            int entitycount = BitConv.FromInt32(ProtoZoneEntryController.ProtoZoneEntry.Header,0x20C);
+            BitConv.ToInt32(ProtoZoneEntryController.ProtoZoneEntry.Header,0x20C,entitycount + 1);
             ProtoEntity newentity = ProtoEntity.Load(Entity.Save());
             newentity.ID = maxid;
-            ProtoZoneEntryController.ZoneEntry.Entities.Add(newentity);
+            ProtoZoneEntryController.ProtoZoneEntry.Entities.Add(newentity);
             ProtoZoneEntryController.AddNode(new ProtoEntityController(ProtoZoneEntryController,newentity));
         }
 
         private void Menu_Delete()
         {
-            int entitycount = BitConv.FromInt32(ProtoZoneEntryController.ZoneEntry.Header,0x20C);
-            BitConv.ToInt32(ProtoZoneEntryController.ZoneEntry.Header,0x20C,entitycount - 1);
-            ProtoZoneEntryController.ZoneEntry.Entities.Remove(Entity);
+            int entitycount = BitConv.FromInt32(ProtoZoneEntryController.ProtoZoneEntry.Header,0x20C);
+            BitConv.ToInt32(ProtoZoneEntryController.ProtoZoneEntry.Header,0x20C,entitycount - 1);
+            ProtoZoneEntryController.ProtoZoneEntry.Entities.Remove(Entity);
             Dispose();
         }
     }
