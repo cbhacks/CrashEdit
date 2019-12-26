@@ -73,21 +73,22 @@ namespace CrashEdit
             foreach (ProtoEntity protoentity in ProtoZoneEntry.Entities)
             {
                 List<EntityPosition> pos = new List<EntityPosition>();
-                int x = protoentity.StartX;
-                int y = protoentity.StartY;
-                int z = protoentity.StartZ;
-                pos.Add(new EntityPosition((short)(x/4),(short)(y/4),(short)(z/4)));
+                short x = (short)(protoentity.StartX/4);
+                short y = (short)(protoentity.StartY/4);
+                short z = (short)(protoentity.StartZ/4);
+                pos.Add(new EntityPosition(x,y,z));
                 foreach (ProtoEntityPosition delta in protoentity.Deltas)
                 {
-                    x += delta.X*2;
-                    y += delta.Y*2;
-                    z += delta.Z*2;
-                    pos.Add(new EntityPosition((short)(x/4),(short)(y/4),(short)(z/4)));
+                    x += (short)(delta.X*2);
+                    y += (short)(delta.Y*2);
+                    z += (short)(delta.Z*2);
+                    pos.Add(new EntityPosition(x,y,z));
                 }
                 entities.Add(new OldEntity(protoentity.Garbage,protoentity.Flags,(short)(protoentity.ID+6),protoentity.ModeA,protoentity.ModeB,protoentity.ModeC,protoentity.Type,protoentity.Subtype,pos,protoentity.Nullfield1));
             }
             OldZoneEntry newzone = new OldZoneEntry(header,layout,ProtoZoneEntry.Cameras,entities,ProtoZoneEntry.EID);
-            FileUtil.SaveFile(newzone.Save(),FileFilters.NSEntry,FileFilters.Any);
+            //FileUtil.SaveFile(newzone.Save(),FileFilters.NSEntry,FileFilters.Any);
+            System.IO.File.WriteAllBytes(@"C:\GameData\Crash 1\Modded\PROTO\S1\NEW-" + newzone.EName +  ".nsentry", newzone.Save());
         }
     }
 }

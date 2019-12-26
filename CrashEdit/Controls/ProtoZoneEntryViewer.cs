@@ -80,9 +80,9 @@ namespace CrashEdit
                 yield return new Position(x2 + xoffset,y2 + yoffset,z2 + zoffset);
                 foreach (ProtoEntity entity in entry.Entities)
                 {
-                    int x = entity.StartX + xoffset;
-                    int y = entity.StartY + yoffset;
-                    int z = entity.StartZ + zoffset;
+                    int x = entity.StartX/4 + xoffset;
+                    int y = entity.StartY/4 + yoffset;
+                    int z = entity.StartZ/4 + zoffset;
                     yield return new Position(x,y,z);
                     foreach (ProtoEntityPosition delta in entity.Deltas)
                     {
