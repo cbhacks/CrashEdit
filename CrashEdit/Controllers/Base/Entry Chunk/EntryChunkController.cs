@@ -160,17 +160,30 @@ namespace CrashEdit
 
         private void Menu_Import_Entry()
         {
-            byte[] data = FileUtil.OpenFile(FileFilters.NSEntry,FileFilters.Any);
-            if (data == null)
+            byte[][] datas = FileUtil.OpenFiles(FileFilters.NSEntry,FileFilters.Any);
+            if (datas == null)
                 return;
-            try
+            bool process = MessageBox.Show("Do you want to process the imported entries?", "Import Entry", MessageBoxButtons.YesNo) == DialogResult.Yes;
+            foreach (var data in datas)
             {
-                UnprocessedEntry entry = Entry.Load(data);
-                EntryChunk.Entries.Add(entry);
-                AddNode(new UnprocessedEntryController(this,entry));
-            }
-            catch (LoadAbortedException)
-            {
+                try
+                {
+                    UnprocessedEntry entry = Entry.Load(data);
+                    if (process)
+                    {
+                        Entry processedentry = entry.Process(NSFController.GameVersion);
+                        EntryChunk.Entries.Add(processedentry);
+                        AddNode(CreateEntryController(processedentry));
+                    }
+                    else
+                    {
+                        EntryChunk.Entries.Add(entry);
+                        AddNode(new UnprocessedEntryController(this,entry));
+                    }
+                }
+                catch (LoadAbortedException)
+                {
+                }
             }
         }
 
