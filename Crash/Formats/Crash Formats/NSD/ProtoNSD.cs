@@ -35,8 +35,8 @@ namespace Crash
             NSDLink[] index = new NSDLink [entrycount];
             for (int i = 0;i < entrycount;i++)
             {
-                int chunkid = BitConv.FromInt32(data,0x520+8*i);
-                int entryid = BitConv.FromInt32(data,0x520+8*i+4);
+                int chunkid = BitConv.FromInt32(data,0x408+8*i);
+                int entryid = BitConv.FromInt32(data,0x408+8*i+4);
                 index[i] = new NSDLink(chunkid,entryid);
             }
             return new ProtoNSD(firstentries,chunkcount,index);
@@ -72,7 +72,7 @@ namespace Crash
             for (int i = 0;i < entrycount;++i)
             {
                 BitConv.ToInt32(result,0x408+i*8,index[i].ChunkID);
-                BitConv.ToInt32(result,0x408+i*8,index[i].EntryID);
+                BitConv.ToInt32(result,0x40C+i*8,index[i].EntryID);
             }
             return result;
         }
