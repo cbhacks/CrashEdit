@@ -10,17 +10,17 @@ namespace Crash
         private List<ProtoSceneryPolygon> polygons;
         private List<ProtoSceneryVertex> vertices;
 
-        public ProtoSceneryEntry(byte[] info,IEnumerable<ProtoSceneryPolygon> polygons,IEnumerable<ProtoSceneryVertex> vertices,byte[] extradata,int eid) : base(eid)
+        public ProtoSceneryEntry(byte[] info,IEnumerable<ProtoSceneryPolygon> polygons,IEnumerable<ProtoSceneryVertex> vertices,short? pad,int eid) : base(eid)
         {
             Info = info ?? throw new ArgumentNullException("info");
             this.polygons = new List<ProtoSceneryPolygon>(polygons);
             this.vertices = new List<ProtoSceneryVertex>(vertices);
-            ExtraData = extradata;
+            Pad = pad;
         }
 
         public override int Type => 3;
         public byte[] Info { get; }
-        public byte[] ExtraData { get; }
+        public short? Pad { get; }
 
         public int XOffset
         {
@@ -45,21 +45,21 @@ namespace Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte [ExtraData == null ? 3 : 4][];
+            byte[][] items = new byte [3][];
             items[0] = Info;
             items[1] = new byte [polygons.Count * 12];
             for (int i = 0;i < polygons.Count;i++)
             {
                 polygons[i].Save().CopyTo(items[1],i * 12);
             }
-            items[2] = new byte [vertices.Count * 6 + vertices.Count * 6 % 4];
+            items[2] = new byte [vertices.Count * 6 + (!Pad.HasValue ? 0 : 2)];
             for (int i = 0;i < vertices.Count;i++)
             {
                 vertices[i].Save().CopyTo(items[2],i * 6);
             }
-            if (ExtraData != null)
+            if (Pad.HasValue)
             {
-                items[3] = ExtraData;
+                BitConv.ToInt16(items[2],vertices.Count*6,Pad.Value);
             }
             return new UnprocessedEntry(items,EID,Type);
         }

@@ -10,50 +10,42 @@ namespace Crash
                 throw new ArgumentNullException("data");
             if (data.Length != 12)
                 throw new ArgumentException("Value must be 12 bytes long.","data");
-            int unknownint1 = BitConv.FromInt16(data, 0);
-            int unknownint2 = BitConv.FromInt32(data, 4);
-            short short1 = BitConv.FromInt16(data, 8);
-            short short2 = BitConv.FromInt16(data, 10);
-            byte[] vertexarray = new byte[4];
-            vertexarray[2] = (byte)(unknownint2 & 0x0F); // Most significant nibble
-            vertexarray[1] = (byte)(short2 & 0x0F);
-            vertexarray[0] = (byte)((short1 >> 12) & 0x0F); // Least significant nibble
-            short vertexa = (short)((((BitConverter.ToInt32(vertexarray, 0) & 0xFF00) >> 4) | vertexarray[0]) | (BitConverter.ToInt32(vertexarray,0) & 0xFF0000) >> 8);
-            //short vertexa = (short)(BitConverter.ToInt32(vertexarray, 0));
-            //short vertexa = (short)((unknownint2) & 0xFF07); // what
-            short vertexb = (short)(short1 & 0x7FF);
-            vertexarray[1] = (byte)((short2 >> 4) & 0x07);
-            vertexarray[0] = (byte)(short2 >> 8);
-            short vertexc = BitConverter.ToInt16(vertexarray, 0);
-            return new ProtoSceneryPolygon(vertexa, unknownint1, unknownint2, short1, short2, vertexb,vertexc);
+            int[] words = new int[3] { BitConv.FromInt32(data, 0),BitConv.FromInt32(data,4),BitConv.FromInt32(data,8) };
+            short texture = (short)(words[0] & 0xFFF);
+            int page = words[0] >> 12 & 0xFFFFF;
+            int unknown = words[1] >> 4 & 0xFFFFFFF; // color? animated texture info?
+            short vertexa = (short)(words[2] & 0xFFF);
+            short vertexb = (short)(words[2] >> 12 & 0xFFF);
+            short vertexc = (short)(((words[1] & 0xF) << 8) | (words[2] >> 24 & 0xFF));
+            return new ProtoSceneryPolygon(texture,page,unknown,vertexa,vertexb,vertexc);
         }
 
-        public ProtoSceneryPolygon(short vertexa, int unknownint1, int unknownint2, short short1, short short2, short vertexb, short vertexc)
+        public ProtoSceneryPolygon(short texture,int page,int unknown,short vertexa,short vertexb,short vertexc)
         {
+            Texture = texture;
+            Page = page;
+            Unknown = unknown;
             VertexA = vertexa;
-            UnknownInt1 = unknownint1;
-            UnknownInt2 = unknownint2;
-            Short1 = short1;
-            Short2 = short2;
             VertexB = vertexb;
             VertexC = vertexc;
         }
 
         public short VertexA { get; set; }
-        public int UnknownInt1 { get; }
-        public int UnknownInt2 { get; }
-        public short Short1 { get; }
-        public short Short2 { get; }
         public short VertexB { get; set; }
         public short VertexC { get; set; }
+        public short Texture { get; set; }
+        public int Page { get; set; }
+        public int Unknown { get; set; }
 
         public byte[] Save()
         {
             byte[] data = new byte [12];
-            BitConv.ToInt32(data,0,UnknownInt1);
-            BitConv.ToInt32(data, 4, UnknownInt2);
-            BitConv.ToInt16(data, 8, Short1);
-            BitConv.ToInt16(data, 10, Short2);
+            int worda = Texture | (Page << 12);
+            int wordb = (VertexC >> 8 & 0xF) | (Unknown << 4);
+            int wordc = VertexA | (VertexB << 12) | ((VertexC & 0xFF) << 24);
+            BitConv.ToInt32(data,0,worda);
+            BitConv.ToInt32(data,4,wordb);
+            BitConv.ToInt32(data,8,wordc);
             return data;
         }
     }

@@ -8,10 +8,6 @@ namespace CrashEdit
         public ProtoSceneryEntryController(EntryChunkController entrychunkcontroller,ProtoSceneryEntry protosceneryentry) : base(entrychunkcontroller,protosceneryentry)
         {
             ProtoSceneryEntry = protosceneryentry;
-            if (protosceneryentry.ExtraData != null)
-            {
-                AddNode(new ItemController(null,protosceneryentry.ExtraData));
-            }
             AddMenuSeparator();
             AddMenu("Export as OBJ",Menu_Export_OBJ);
             AddMenu("Export as COLLADA",Menu_Export_COLLADA);
