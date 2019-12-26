@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace Crash
 {
     [EntryType(11,GameVersion.Crash1Beta1995)]
+    [EntryType(11, GameVersion.Crash1BetaMAR08)]
     public sealed class OldGOOLEntryLoader : EntryLoader
     {
         public override Entry Load(byte[][] items,int eid)

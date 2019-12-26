@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Crash
 {
-    [EntryType(11,GameVersion.Crash1BetaMAR08)]
     [EntryType(11,GameVersion.Crash1BetaMAY11)]
     [EntryType(11,GameVersion.Crash1)]
     public sealed class GOOLEntryLoader : EntryLoader
