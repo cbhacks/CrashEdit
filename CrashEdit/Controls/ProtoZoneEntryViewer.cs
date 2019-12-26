@@ -86,9 +86,9 @@ namespace CrashEdit
                     yield return new Position(x,y,z);
                     foreach (ProtoEntityPosition delta in entity.Deltas)
                     {
-                        x += delta.X + delta.Global;
-                        y += delta.Y + delta.Global;
-                        z += delta.Z + delta.Global;
+                        x += delta.X*2;
+                        y += delta.Y*2;
+                        z += delta.Z*2;
                         yield return new Position(x,y,z);
                     }
                 }
@@ -487,11 +487,12 @@ namespace CrashEdit
                 int curx = entity.StartX / 4;
                 int cury = entity.StartY / 4;
                 int curz = entity.StartZ / 4;
+                GL.Vertex3(curx,cury,curz);
                 foreach (ProtoEntityPosition delta in entity.Deltas)
                 {
-                    curx += delta.Z + delta.Global;
-                    cury += delta.X + delta.Global;
-                    curz += delta.Y + delta.Global;
+                    curx += delta.X*2;
+                    cury += delta.Y*2;
+                    curz += delta.Z*2;
                     GL.Vertex3(curx,cury,curz);
                 }
                 GL.End();
@@ -500,12 +501,17 @@ namespace CrashEdit
                 curz = entity.StartZ / 4;
                 GL.Color3(Color.Red);
                 LoadTexture(OldResources.PointTexture);
+                GL.PushMatrix();
+                GL.Translate(curx,cury,curz);
+                RenderSprite();
+                GL.PopMatrix();
+                GL.Vertex3(curx,cury,curz);
                 foreach (ProtoEntityPosition delta in entity.Deltas)
                 {
                     GL.PushMatrix();
-                    curx += delta.Z + delta.Global;
-                    cury += delta.X + delta.Global;
-                    curz += delta.Y + delta.Global;
+                    curx += delta.X*2;
+                    cury += delta.Y*2;
+                    curz += delta.Z*2;
                     GL.Translate(curx,cury,curz);
                     RenderSprite();
                     GL.PopMatrix();

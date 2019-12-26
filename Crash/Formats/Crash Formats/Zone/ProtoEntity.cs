@@ -28,11 +28,7 @@ namespace Crash
             ProtoEntityPosition[] deltas = new ProtoEntityPosition [positioncount - 1];
             for (int i = 0;i < deltas.Length; ++i)
             {
-                sbyte global = (sbyte)data[26 + 4 * i];
-                sbyte x = (sbyte)data[27 + 4 * i];
-                sbyte y = (sbyte)data[28 + 4 * i];
-                sbyte z = (sbyte)data[29 + 4 * i];
-                deltas[i] = new ProtoEntityPosition(global,x,y,z);
+                deltas[i] = new ProtoEntityPosition((sbyte)data[26+4*i],(sbyte)data[27+4*i],(sbyte)data[28+4*i]);
             }
             short nullfield1 = BitConv.FromInt16(data,26+deltas.Length*4);
             return new ProtoEntity(garbage,flags,id,startx,starty,startz,modea,modeb,modec,type,subtype,deltas,nullfield1);
@@ -91,10 +87,9 @@ namespace Crash
             result[25] = Subtype;
             for (int i = 0; i < deltacount; i++)
             {
-                result[26 + i * 4] = (byte)deltas[i].Global;
-                result[27 + i * 4] = (byte)deltas[i].X;
-                result[28 + i * 4] = (byte)deltas[i].Y;
-                result[29 + i * 4] = (byte)deltas[i].Z;
+                result[26+i*4] = (byte)deltas[i].X;
+                result[27+i*4] = (byte)deltas[i].Y;
+                result[28+i*4] = (byte)deltas[i].Z;
             }
             BitConv.ToInt16(result,26+deltacount*4,Nullfield1);
             return result;
