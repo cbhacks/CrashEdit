@@ -9,7 +9,7 @@ namespace Crash
         {
             if (data == null)
                 throw new ArgumentNullException("data");
-            if (data.Length < 1840)
+            if (data.Length < 1672)
             {
                 ErrorManager.SignalError("OldNSD: Data is too short");
             }
@@ -23,7 +23,7 @@ namespace Crash
             {
                 ErrorManager.SignalError("OldNSD: Entry count is negative");
             }
-            if (data.Length < 1840 + entrycount * 8)
+            if (data.Length < 1672 + entrycount * 8)
             {
                 ErrorManager.SignalError("OldNSD: Data is too short");
             }
