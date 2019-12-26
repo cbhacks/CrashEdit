@@ -84,11 +84,10 @@ namespace CrashEdit
                     z += (short)(delta.Z*2);
                     pos.Add(new EntityPosition(x,y,z));
                 }
-                entities.Add(new OldEntity(protoentity.Garbage,protoentity.Flags,(short)(protoentity.ID+6),protoentity.ModeA,protoentity.ModeB,protoentity.ModeC,protoentity.Type,protoentity.Subtype,pos,protoentity.Nullfield1));
+                entities.Add(new OldEntity(protoentity.Garbage,protoentity.Flags,(short)(protoentity.ID+5),protoentity.ModeA,protoentity.ModeB,protoentity.ModeC,protoentity.Type,protoentity.Subtype,pos,protoentity.Nullfield1));
             }
             OldZoneEntry newzone = new OldZoneEntry(header,layout,ProtoZoneEntry.Cameras,entities,ProtoZoneEntry.EID);
-            //FileUtil.SaveFile(newzone.Save(),FileFilters.NSEntry,FileFilters.Any);
-            System.IO.File.WriteAllBytes(@"C:\GameData\Crash 1\Modded\PROTO\S1\NEW-" + newzone.EName +  ".nsentry", newzone.Save());
+            FileUtil.SaveFile(newzone.Save(),FileFilters.NSEntry,FileFilters.Any);
         }
     }
 }

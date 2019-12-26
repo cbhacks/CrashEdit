@@ -56,8 +56,7 @@ namespace CrashEdit
                     BitConv.ToInt32(newinstructions,i*4,GOOLEntry.Instructions[i].Save());
             }
             GOOLEntry newgool = new GOOLEntry(GOOLVersion.Version1,GOOLEntry.Header,newinstructions,GOOLEntry.Data,GOOLEntry.StateMap,GOOLEntry.StateDescriptors,GOOLEntry.Anims,GOOLEntry.EID);
-            //FileUtil.SaveFile(newgool.Save(), FileFilters.NSEntry, FileFilters.Any);
-            System.IO.File.WriteAllBytes(@"C:\GameData\Crash 1\Modded\PROTO\S1\NEW-" + newgool.EName + ".nsentry", newgool.Save());
+            FileUtil.SaveFile(newgool.Save(), FileFilters.NSEntry, FileFilters.Any);
         }
     }
 }

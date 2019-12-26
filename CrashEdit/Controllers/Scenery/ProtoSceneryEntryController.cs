@@ -61,8 +61,7 @@ namespace CrashEdit
                 vertices.Add(new OldSceneryVertex((short)((short)(protov.X/8.0)*8),(short)((short)(protov.Y/8.0)*8),(short)((short)(protov.Z/8.0)*8),0x7F,0x7F,0x7F,false));
             }
             OldSceneryEntry newworld = new OldSceneryEntry(ProtoSceneryEntry.Info,polygons,vertices,null,ProtoSceneryEntry.EID);
-            //FileUtil.SaveFile(newworld.Save(), FileFilters.NSEntry, FileFilters.Any);
-            System.IO.File.WriteAllBytes(@"C:\GameData\Crash 1\Modded\PROTO\S1\NEW-" + newworld.EName + ".nsentry", newworld.Save());
+            FileUtil.SaveFile(newworld.Save(), FileFilters.NSEntry, FileFilters.Any);
         }
     }
 }
