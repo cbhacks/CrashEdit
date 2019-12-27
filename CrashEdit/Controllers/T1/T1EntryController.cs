@@ -12,7 +12,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("T1 ({0})",T1Entry.EName);
+            Node.Text = string.Format("Animation ({0})",T1Entry.EName);
             Node.ImageKey = "limeb";
             Node.SelectedImageKey = "limeb";
         }

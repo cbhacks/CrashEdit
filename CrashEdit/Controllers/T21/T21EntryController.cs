@@ -12,7 +12,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("T21 ({0})",T21Entry.EName);
+            Node.Text = string.Format("Sprite ({0})",T21Entry.EName);
             Node.ImageKey = "image";
             Node.SelectedImageKey = "image";
         }
