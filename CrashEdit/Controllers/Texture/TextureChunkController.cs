@@ -10,6 +10,7 @@ namespace CrashEdit
         {
             TextureChunk = texturechunk;
             AddMenu("Recalculate Checksum",Menu_Recalculate_Checksum);
+            AddMenu("Rename Entry",Menu_Rename_Entry);
             InvalidateNode();
         }
 
@@ -41,6 +42,20 @@ namespace CrashEdit
             }
             BitConv.ToInt32(TextureChunk.Data, 12, correct_checksum);
             MessageBox.Show("Checksum was incorrect and has been corrected.");
+        }
+
+        private void Menu_Rename_Entry()
+        {
+            using (NewEntryForm newentrywindow = new NewEntryForm(NSFController))
+            {
+                newentrywindow.Text = "Rename Entry";
+                newentrywindow.SetRenameMode(TextureChunk.EName);
+                if (newentrywindow.ShowDialog(Node.TreeView.TopLevelControl) == DialogResult.OK)
+                {
+                    TextureChunk.EID = newentrywindow.EID;
+                    InvalidateNode();
+                }
+            }
         }
     }
 }

@@ -10,7 +10,11 @@ namespace Crash
         }
 
         public override short Type => 1;
-        public int EID => BitConv.FromInt32(Data, 4);
+        public int EID
+        {
+            get => BitConv.FromInt32(Data,4);
+            set => BitConv.ToInt32(Data,4,value);
+        }
         public string EName => Entry.EIDToEName(EID);
         public byte[] Data { get; }
 
