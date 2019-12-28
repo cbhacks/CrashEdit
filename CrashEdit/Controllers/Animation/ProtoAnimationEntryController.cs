@@ -1,4 +1,5 @@
 using Crash;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -12,6 +13,8 @@ namespace CrashEdit
             {
                 AddNode(new ProtoFrameController(this,frame));
             }
+            if (!ProtoAnimationEntry.NotProto)
+                AddMenu("Export as Crash 1 SVTX", Menu_ExportAsC1);
             InvalidateNode();
         }
 
@@ -29,5 +32,16 @@ namespace CrashEdit
         }
 
         public ProtoAnimationEntry ProtoAnimationEntry { get; }
+
+        private void Menu_ExportAsC1()
+        {
+            List<OldFrame> frames = new List<OldFrame>();
+            foreach (var frame in ProtoAnimationEntry.Frames)
+            {
+                frames.Add(new OldFrame(frame.ModelEID,frame.XOffset,frame.YOffset,frame.ZOffset,frame.X1,frame.Y1,frame.Z1,frame.X2,frame.Y2,frame.Z2,0,0,0,frame.Vertices,frame.Unknown,null));
+            }
+            OldAnimationEntry newanim = new OldAnimationEntry(frames,ProtoAnimationEntry.EID);
+            FileUtil.SaveFile(newanim.Save(), FileFilters.NSEntry, FileFilters.Any);
+        }
     }
 }
