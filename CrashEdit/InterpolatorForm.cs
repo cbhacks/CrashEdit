@@ -7,14 +7,17 @@ namespace CrashEdit
 {
     public partial class InterpolatorForm : Form
     {
-        private const string FuncLinear = "Linear";
-        private const string FuncSquare = "Square";
-        private const string FuncCubic = "Cubic";
-        private const string FuncSine = "Sine";
-        private const string FuncSquareInverse = "Inverse Square";
-        private const string FuncCubicInverse = "Inverse Cubic";
-        private const string FuncTangent = "Tangent";
-        private const string FuncSquareDouble = "Double Square";
+        public static Dictionary<string,MathCalc> MathFuncs = new Dictionary<string, MathCalc>()
+        {
+            { "Linear", MathFunctionLinear },
+            { "Square", MathFunctionSquare },
+            { "Cubic", MathFunctionCubic },
+            { "Sine", MathFunctionSine },
+            { "Inverse Square", MathFunctionSquareInverse },
+            { "Inverse Cubic", MathFunctionCubicInverse },
+            { "Tangent", MathFunctionTangent },
+            { "Double Square", MathFunctionSquareDouble }
+        };
 
         private List<Position> positions;
         private int positionindex;
@@ -31,14 +34,8 @@ namespace CrashEdit
 
             InitializeComponent();
 
-            dpdFunc.Items.Add(FuncLinear);
-            dpdFunc.Items.Add(FuncSquare);
-            dpdFunc.Items.Add(FuncCubic);
-            dpdFunc.Items.Add(FuncSine);
-            dpdFunc.Items.Add(FuncSquareInverse);
-            dpdFunc.Items.Add(FuncCubicInverse);
-            dpdFunc.Items.Add(FuncTangent);
-            dpdFunc.Items.Add(FuncSquareDouble);
+            foreach (string name in MathFuncs.Keys)
+                dpdFunc.Items.Add(name);
 
             dpdFunc.SelectedIndex = 0;
             numAmount.Maximum = short.MaxValue - positions.Count;
@@ -54,6 +51,7 @@ namespace CrashEdit
         public int Start => (int)numStart.Value;
         public int End => (int)numEnd.Value;
         public int Amount => (int)numAmount.Value;
+        public string Func => (string)dpdFunc.SelectedItem;
 
         private void cmdOK_Click(object sender, EventArgs e)
         {
@@ -148,17 +146,7 @@ namespace CrashEdit
             for (int i = 1, s = NewPositions.Length - 1; i < s; ++i)
             {
                 double fac = (double)i / s;
-                switch (dpdFunc.SelectedItem)
-                {
-                    //case FuncLinear: fac = MathFunctionLinear(fac); break;
-                    case FuncSquare: fac = MathFunctionSquare(fac); break;
-                    case FuncCubic: fac = MathFunctionCubic(fac); break;
-                    case FuncSine: fac = MathFunctionSine(fac); break;
-                    case FuncTangent: fac = MathFunctionTangent(fac); break;
-                    case FuncSquareInverse: fac = MathFunctionSquareInverse(fac); break;
-                    case FuncCubicInverse: fac = MathFunctionCubicInverse(fac); break;
-                    case FuncSquareDouble: fac = MathFunctionSquareDouble(fac); break;
-                }
+                MathFuncs[Func].Invoke(fac);
                 NewPositions[i] = FindPointByDistance(oldpositions, arclen, fac);
             }
         }
@@ -215,6 +203,8 @@ namespace CrashEdit
             }
             return newpos;
         }
+
+        public delegate double MathCalc(double x);
 
         private static double MathFunctionLinear(double x)
         {
