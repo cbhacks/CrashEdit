@@ -1,6 +1,5 @@
 using Crash;
 using Crash.GOOLIns;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -11,8 +10,8 @@ namespace CrashEdit
         {
             GOOLEntry = goolentry;
             InvalidateNode();
-            if (GOOLEntry.Version == GOOLVersion.Version0)
-                AddMenu("Export as Crash 1 GOOL", Menu_ExportAsC1);
+            //if (GOOLEntry.Version == GOOLVersion.Version0)
+            //    AddMenu("Export as Crash 1 GOOL", Menu_ExportAsC1);
         }
 
         public override void InvalidateNode()
