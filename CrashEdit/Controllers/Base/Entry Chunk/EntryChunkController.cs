@@ -211,9 +211,17 @@ namespace CrashEdit
                                     items[0] = new byte[0x378];
                                     items[1] = new byte[0x24];
                                     BitConv.ToInt32(items[0],0x214,newentrywindow.EID);
-                                    BitConv.ToInt32(items[0],0x2E8,40 * 102400);
+                                    BitConv.ToInt32(items[0],0x2E0,0x53);
                                     BitConv.ToInt32(items[0],0x304,Entry.NullEID);
-                                    BitConv.ToInt16(items[0],0x328,-2509); // 0xF633
+                                    BitConv.ToInt16(items[0],0x318,-4096); // 0xF000
+                                    BitConv.ToInt16(items[0],0x31A,0x800);
+                                    BitConv.ToInt16(items[0],0x31C,0x1000);
+                                    BitConv.ToInt16(items[0],0x31E,-3563); // 0xF000
+                                    BitConv.ToInt16(items[0],0x320,0x800);
+                                    BitConv.ToInt16(items[0],0x322,0x1000);
+                                    BitConv.ToInt16(items[0],0x324,0x1000);
+                                    BitConv.ToInt16(items[0],0x326,-2048); // 0xF800
+                                    BitConv.ToInt16(items[0],0x328,0);
                                     BitConv.ToInt16(items[0],0x32A,0x400);
                                     BitConv.ToInt16(items[0],0x32C,0x400);
                                     BitConv.ToInt16(items[0],0x32E,0x400);
