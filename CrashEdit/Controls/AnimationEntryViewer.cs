@@ -168,7 +168,7 @@ namespace CrashEdit
                 GL.Scale(BitConv.FromInt32(model.Info,0), BitConv.FromInt32(model.Info,4), BitConv.FromInt32(model.Info,8));
                 if (textures_enabled)
                 {
-                    double[] uvs = new double[6];
+                    float[] uvs = new float[6];
                     for (int i = 0; i < model.Triangles.Count; ++i)
                     {
                         var tri = model.Triangles[i];
