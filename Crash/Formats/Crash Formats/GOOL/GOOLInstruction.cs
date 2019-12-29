@@ -185,19 +185,13 @@ namespace Crash
 
         private string GetRefVal(int val)
         {
-            if (val == 0b101111100000) // 0xBE0
-                return "[null]";
-            else if (val == 0b101111110000) // 0xBF0
-                return "[sp2]";
-            else if (val == 0b111000011111) // 0xE1F
-                return "[top]";
-            else if ((val & 0b100000000000) == 0)
+            if ((val & 0x800) == 0)
             {
-                if ((val & 0b010000000000) == 0) // ireg
+                if ((val & 0x400) == 0)
                 {
                     if (GOOL.Format == 1) // external GOOL entries will logically not have local data...
                     {
-                        int cval = GOOL.Data[val & 0b1111111111];
+                        int cval = GOOL.Data[val & 0x3FF];
                         if (cval >= 0x2000000 && (cval & 1) == 1)
                             return $"({Entry.EIDToEName(cval)})";
                         else
@@ -205,14 +199,14 @@ namespace Crash
                     }
                     else
                     {
-                        return $"[pool$({(val & 0b1111111111).TransformedString()})]";
+                        return $"[pool$({(val & 0x3FF).TransformedString()})]";
                     }
                 }
-                else // pool
+                else
                 {
                     if (GOOL.Format == 0) // local GOOL entries will logically not have external data...
                     {
-                        int cval = GOOL.Data[val & 0b1111111111];
+                        int cval = GOOL.Data[val & 0x3FF];
                         if (cval >= 0x2000000 && (cval & 1) == 1)
                             return $"({Entry.EIDToEName(cval)})";
                         else
@@ -220,40 +214,50 @@ namespace Crash
                     }
                     else
                     {
-                        return $"[ext$({(val & 0b1111111111).TransformedString()})]";
+                        return $"[ext$({(val & 0x3FF).TransformedString()})]";
                     }
+                }
+            }
+            if ((val & 0x400) == 0)
+            {
+                if ((val & 0x200) == 0)
+                {
+                    return $"{(val << 0x17 >> 0xF).TransformedString()}";
+                }
+                if ((val & 0x100) == 0)
+                {
+                    return $"{(val << 0x18 >> 0x14).TransformedString()}";
+                }
+                if ((val & 0x80) == 0)
+                {
+                    int n = BitConv.SignExtendInt32(val,7);
+                    return string.Format("{0}[{1}]", n >= 0 ? "stack" : "arg", (n < 0 ? -n - 1 : n).TransformedString());
+                }
+                if (val != 0xBE0)
+                {
+                    if (val != 0xBF0)
+                    {
+                        return 0xBF0.TransformedString();
+                    }
+                    return "[sp2]";
                 }
             }
             else
             {
-                int hi1 = val >> 9 & 0b11;
-                if (hi1 == 0) // int
+                if ((val & 0x200) == 0)
                 {
-                    return $"{(BitConv.SignExtendInt32(val & 0x1FF, 9) * 0x100).TransformedString()}";
-                }
-                else if (hi1 == 1)
-                {
-                    if ((val >> 8 & 1) == 0) // frac
-                        return $"{(BitConv.SignExtendInt32(val, 8) * 0x10).TransformedString()}";
-                    else // stack
-                    {
-                        int n = BitConv.SignExtendInt32(val, 7);
-                        return string.Format("{0}[{1}]", n >= 0 ? "stack" : "arg", (n < 0 ? -n - 1 : n).TransformedString());
-                    }
-                }
-                else if (hi1 == 2) // reg
-                {
-                    return $"{ObjectFields.self + (val >> 6 & 0b111)}->{(ObjectFields)(val & 0x3F)}";
-                }
-                else if (hi1 == 3) // var
-                {
-                    if (Enum.IsDefined(typeof(ObjectFields), val & 0x1FF))
-                        return ((ObjectFields)(val & 0x1FF)).ToString();
+                    int link = val >> 6 & 0x7;
+                    if (link == 0)
+                        return ((ObjectFields)(val & 0x3F)).ToString();
                     else
-                        return $"[var${(val & 0x1FF).TransformedString()}]";
+                        return $"{ObjectFields.self + (val >> 6 & 0x7)}->{(ObjectFields)(val & 0x3F)}";
                 }
-                else throw new Exception();
+                if ((val & 0x1FF) == 0x1F)
+                    return "[sp]";
+                else
+                    return ((ObjectFields)(val & 0x1FF)).ToString();
             }
+            return "[null]";
         }
     }
 }
