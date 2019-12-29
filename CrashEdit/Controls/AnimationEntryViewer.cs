@@ -11,9 +11,6 @@ namespace CrashEdit
     {
         private static readonly int[] SignTable = { -1, -2, -4, -8, -16, -32, -64, -128 }; // used for decompression
 
-        private static long textureframe; // CrashEdit would have to run for so long for this to overflow
-        private static Timer texturetimer;
-
         private bool init = false;
         private TextureChunk[] texturechunks;
 
@@ -25,21 +22,6 @@ namespace CrashEdit
         private int interp = 2;
         private bool collision_enabled = false;
         private bool textures_enabled = true;
-
-        static AnimationEntryViewer()
-        {
-            textureframe = 0;
-            texturetimer = new Timer
-            {
-                Interval = 1000 / OldMainForm.GetRate() / 2,
-                Enabled = true
-            };
-            texturetimer.Tick += delegate (object sender, EventArgs e)
-            {
-                ++textureframe;
-                texturetimer.Interval = 1000 / OldMainForm.GetRate() / 2;
-            };
-        }
 
         public AnimationEntryViewer(Frame frame,ModelEntry model,TextureChunk[] texturechunks)
         {
