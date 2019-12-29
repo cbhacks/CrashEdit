@@ -21,6 +21,7 @@ namespace CrashEdit
             AddMenu("Add Chunk - Sound",Menu_Add_SoundChunk);
             AddMenu("Add Chunk - Wavebank",Menu_Add_WavebankChunk);
             AddMenu("Add Chunk - Speech",Menu_Add_SpeechChunk);
+            AddMenu("Import Chunk", Menu_Import_Chunk);
             if (GameVersion == GameVersion.Crash2 || GameVersion == GameVersion.Crash3)
             {
                 AddMenuSeparator();
@@ -315,6 +316,35 @@ namespace CrashEdit
             NewSceneryEntryViewer viewer = new NewSceneryEntryViewer(sceneryentries,sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
             frm.Controls.Add(viewer);
             frm.Text = string.Empty;
+        }
+
+        private void Menu_Import_Chunk()
+        {
+            byte[][] datas = FileUtil.OpenFiles(FileFilters.NSEntry, FileFilters.Any);
+            if (datas == null)
+                return;
+            bool process = MessageBox.Show("Do you want to process the imported chunks?", "Import Chunk", MessageBoxButtons.YesNo) == DialogResult.Yes;
+            foreach (var data in datas)
+            {
+                try
+                {
+                    UnprocessedChunk chunk = Chunk.Load(data);
+                    if (process)
+                    {
+                        Chunk processedchunk = chunk.Process(NSF.Chunks.Count*2 + 1);
+                        NSF.Chunks.Add(processedchunk);
+                        AddNode(CreateChunkController(processedchunk));
+                    }
+                    else
+                    {
+                        NSF.Chunks.Add(chunk);
+                        AddNode(new UnprocessedChunkController(this,chunk));
+                    }
+                }
+                catch (LoadAbortedException)
+                {
+                }
+            }
         }
     }
 }
