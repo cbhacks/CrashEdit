@@ -364,6 +364,9 @@ namespace CrashEdit
                             PatchNSD(nsd, nsf, filename);
                         }
                         break;
+                    default:
+                        MessageBox.Show("NSD patching is not supported for this game version.", "Patch NSD", MessageBoxButtons.OK);
+                        break;
                 }
             }
             catch (LoadAbortedException)
