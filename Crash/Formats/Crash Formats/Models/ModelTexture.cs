@@ -63,12 +63,12 @@ namespace Crash
         public byte Segment { get; }
         public byte TextureOffset { get; }
 
-        public float PageWidth => BitFlag ? 512F : 1024F;
-        public int XOff => (BitFlag ? 128 : 256) * Segment;
+        private float PageWidth => BitFlag ? 512F : 1024F;
+        private int XOff => (BitFlag ? 128 : 256) * Segment;
         public int Left => Math.Min(U1, Math.Min(U2, U3)) + XOff;
-        public int Right => Math.Max(U1, Math.Max(U2, U3)) + XOff;
+        private int Right => Math.Max(U1, Math.Max(U2, U3)) + XOff;
         public int Top => Math.Min(V1, Math.Min(V2, V3));
-        public int Bottom => Math.Max(V1, Math.Max(V2, V3));
+        private int Bottom => Math.Max(V1, Math.Max(V2, V3));
         public int Width => Right - Left;
         public int Height => Bottom - Top;
         public int ClutY => (ClutY2 << 2) | (ClutY1 >> 2 & 0x3);
