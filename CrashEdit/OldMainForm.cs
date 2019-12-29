@@ -753,6 +753,7 @@ namespace CrashEdit
                     }
                 }
             }
+
             // check list
             for (int i = 0; i < nsf.Chunks.Count; i++)
             {
@@ -852,6 +853,7 @@ namespace CrashEdit
                     }
                 }
             }
+
             // check list
             for (int i = 0; i < nsf.Chunks.Count; i++)
             {
