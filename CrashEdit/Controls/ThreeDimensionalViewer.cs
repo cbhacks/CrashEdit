@@ -37,6 +37,24 @@ namespace CrashEdit
             }
         }
 
+        protected static long textureframe; // CrashEdit would have to run for so long for this to overflow
+        private static Timer texturetimer;
+
+        static ThreeDimensionalViewer()
+        {
+            textureframe = 0;
+            texturetimer = new Timer
+            {
+                Interval = 1000 / OldMainForm.GetRate(),
+                Enabled = true
+            };
+            texturetimer.Tick += delegate (object sender, EventArgs e)
+            {
+                ++textureframe;
+                texturetimer.Interval = 1000 / OldMainForm.GetRate();
+            };
+        }
+
         private int midx;
         private int midy;
         private int midz;
