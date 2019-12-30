@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="Action System\Action.cs" />
     <Compile Include="Controllers\Animation\CutsceneAnimationEntryController.cs" />
+    <Compile Include="Controllers\Animation\AnimationEntryController.cs" />
     <Compile Include="Controllers\Base\Entry\IEntryController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\Base\Chunk\ChunkController.cs" />

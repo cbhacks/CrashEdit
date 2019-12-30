@@ -202,7 +202,7 @@ namespace CrashEdit
             try
             {
                 dlgOpenNSF.Tag = true;
-                openresult = dlgOpenNSF.ShowDialog();
+                openresult = dlgOpenNSF.ShowDialog(this);
             }
             finally
             {

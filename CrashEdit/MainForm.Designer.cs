@@ -31,47 +31,47 @@ namespace CrashEdit
             this.uxTabs = new System.Windows.Forms.TabControl();
             this.uxStartPage = new System.Windows.Forms.TabPage();
             this.uxToolbar = new System.Windows.Forms.ToolStrip();
+            this.tbiOpen = new System.Windows.Forms.ToolStripButton();
+            this.tbiSave = new System.Windows.Forms.ToolStripButton();
+            this.tbiClose = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbiPatchNSD = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbiFind = new System.Windows.Forms.ToolStripButton();
+            this.tbiFindNext = new System.Windows.Forms.ToolStripButton();
+            this.tbiGotoEID = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbiUndo = new System.Windows.Forms.ToolStripButton();
+            this.tbiRedo = new System.Windows.Forms.ToolStripButton();
             this.uxStatusbar = new System.Windows.Forms.StatusStrip();
             this.sbiStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.sbiProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.uxMenubar = new System.Windows.Forms.MenuStrip();
             this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.mniFileOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.mniFileSave = new System.Windows.Forms.ToolStripMenuItem();
+            this.mniFileSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.mniFilePatchNSD = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.mniFileClose = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.mniFileExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuFind = new System.Windows.Forms.ToolStripMenuItem();
+            this.mniFindFind = new System.Windows.Forms.ToolStripMenuItem();
+            this.mniFindFindNext = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.mniFindEntryID = new System.Windows.Forms.ToolStripMenuItem();
             this.mniFindEntryName = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.mniFindObjectName = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuUndo = new System.Windows.Forms.ToolStripMenuItem();
-            this.mniUndoCurrentState = new System.Windows.Forms.ToolStripMenuItem();
-            this.mniFileSaveAs = new System.Windows.Forms.ToolStripMenuItem();
-            this.tbiOpen = new System.Windows.Forms.ToolStripButton();
-            this.tbiSave = new System.Windows.Forms.ToolStripButton();
-            this.tbiClose = new System.Windows.Forms.ToolStripButton();
-            this.tbiPatchNSD = new System.Windows.Forms.ToolStripButton();
-            this.tbiFind = new System.Windows.Forms.ToolStripButton();
-            this.tbiFindNext = new System.Windows.Forms.ToolStripButton();
-            this.tbiGotoEID = new System.Windows.Forms.ToolStripButton();
-            this.tbiUndo = new System.Windows.Forms.ToolStripButton();
-            this.tbiRedo = new System.Windows.Forms.ToolStripButton();
-            this.mniFileOpen = new System.Windows.Forms.ToolStripMenuItem();
-            this.mniFileSave = new System.Windows.Forms.ToolStripMenuItem();
-            this.mniFilePatchNSD = new System.Windows.Forms.ToolStripMenuItem();
-            this.mniFileClose = new System.Windows.Forms.ToolStripMenuItem();
-            this.mniFindFind = new System.Windows.Forms.ToolStripMenuItem();
-            this.mniFindFindNext = new System.Windows.Forms.ToolStripMenuItem();
-            this.mniFindEntryID = new System.Windows.Forms.ToolStripMenuItem();
             this.mniUndoRedo = new System.Windows.Forms.ToolStripMenuItem();
+            this.mniUndoCurrentState = new System.Windows.Forms.ToolStripMenuItem();
             this.mniUndoUndo = new System.Windows.Forms.ToolStripMenuItem();
             this.dlgOpenNSF = new System.Windows.Forms.OpenFileDialog();
-            this.mnuEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.uxTabs.SuspendLayout();
             this.uxToolbar.SuspendLayout();
             this.uxStatusbar.SuspendLayout();
@@ -82,18 +82,18 @@ namespace CrashEdit
             // 
             this.uxTabs.Controls.Add(this.uxStartPage);
             this.uxTabs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uxTabs.Location = new System.Drawing.Point(0,49);
+            this.uxTabs.Location = new System.Drawing.Point(0, 50);
             this.uxTabs.Name = "uxTabs";
             this.uxTabs.SelectedIndex = 0;
-            this.uxTabs.Size = new System.Drawing.Size(632,380);
+            this.uxTabs.Size = new System.Drawing.Size(712, 439);
             this.uxTabs.TabIndex = 0;
             this.uxTabs.Selected += new System.Windows.Forms.TabControlEventHandler(this.uxTabs_Selected);
             // 
             // uxStartPage
             // 
-            this.uxStartPage.Location = new System.Drawing.Point(4,22);
+            this.uxStartPage.Location = new System.Drawing.Point(4, 22);
             this.uxStartPage.Name = "uxStartPage";
-            this.uxStartPage.Size = new System.Drawing.Size(624,354);
+            this.uxStartPage.Size = new System.Drawing.Size(704, 413);
             this.uxStartPage.TabIndex = 0;
             this.uxStartPage.Text = "CrashEdit";
             this.uxStartPage.UseVisualStyleBackColor = true;
@@ -113,40 +113,130 @@ namespace CrashEdit
             this.toolStripSeparator9,
             this.tbiUndo,
             this.tbiRedo});
-            this.uxToolbar.Location = new System.Drawing.Point(0,24);
+            this.uxToolbar.Location = new System.Drawing.Point(0, 25);
             this.uxToolbar.Name = "uxToolbar";
-            this.uxToolbar.Size = new System.Drawing.Size(632,25);
+            this.uxToolbar.Size = new System.Drawing.Size(712, 25);
             this.uxToolbar.TabIndex = 1;
+            // 
+            // tbiOpen
+            // 
+            this.tbiOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbiOpen.Image = global::CrashEdit.Properties.Resources.Computer_File_064;
+            this.tbiOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbiOpen.Name = "tbiOpen";
+            this.tbiOpen.Size = new System.Drawing.Size(23, 22);
+            this.tbiOpen.Text = "<OPEN>";
+            this.tbiOpen.Click += new System.EventHandler(this.tbiOpen_Click);
+            // 
+            // tbiSave
+            // 
+            this.tbiSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbiSave.Image = global::CrashEdit.Properties.Resources.objects_029;
+            this.tbiSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbiSave.Name = "tbiSave";
+            this.tbiSave.Size = new System.Drawing.Size(23, 22);
+            this.tbiSave.Text = "<SAVE>";
+            this.tbiSave.Click += new System.EventHandler(this.tbiSave_Click);
+            // 
+            // tbiClose
+            // 
+            this.tbiClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbiClose.Image = global::CrashEdit.Properties.Resources.Computer_File_063;
+            this.tbiClose.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbiClose.Name = "tbiClose";
+            this.tbiClose.Size = new System.Drawing.Size(23, 22);
+            this.tbiClose.Text = "<CLOSE>";
+            this.tbiClose.Click += new System.EventHandler(this.tbiClose_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6,25);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tbiPatchNSD
+            // 
+            this.tbiPatchNSD.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbiPatchNSD.Image = global::CrashEdit.Properties.Resources.objects_070;
+            this.tbiPatchNSD.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbiPatchNSD.Name = "tbiPatchNSD";
+            this.tbiPatchNSD.Size = new System.Drawing.Size(23, 22);
+            this.tbiPatchNSD.Text = "<PATCH NSD>";
+            this.tbiPatchNSD.Click += new System.EventHandler(this.tbiPatchNSD_Click);
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(6,25);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tbiFind
+            // 
+            this.tbiFind.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbiFind.Image = global::CrashEdit.Properties.Resources.objects_036;
+            this.tbiFind.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbiFind.Name = "tbiFind";
+            this.tbiFind.Size = new System.Drawing.Size(23, 22);
+            this.tbiFind.Text = "<FIND>";
+            this.tbiFind.Click += new System.EventHandler(this.tbiFind_Click);
+            // 
+            // tbiFindNext
+            // 
+            this.tbiFindNext.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbiFindNext.Image = global::CrashEdit.Properties.Resources.objects_037;
+            this.tbiFindNext.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbiFindNext.Name = "tbiFindNext";
+            this.tbiFindNext.Size = new System.Drawing.Size(23, 22);
+            this.tbiFindNext.Text = "<FIND NEXT>";
+            this.tbiFindNext.Click += new System.EventHandler(this.tbiFindNext_Click);
+            // 
+            // tbiGotoEID
+            // 
+            this.tbiGotoEID.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbiGotoEID.Image = global::CrashEdit.Properties.Resources.objects_028;
+            this.tbiGotoEID.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbiGotoEID.Name = "tbiGotoEID";
+            this.tbiGotoEID.Size = new System.Drawing.Size(23, 22);
+            this.tbiGotoEID.Text = "<GOTO EID>";
+            this.tbiGotoEID.Click += new System.EventHandler(this.tbiGotoEID_Click);
             // 
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(6,25);
+            this.toolStripSeparator9.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tbiUndo
+            // 
+            this.tbiUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbiUndo.Image = global::CrashEdit.Properties.Resources.objects_079;
+            this.tbiUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbiUndo.Name = "tbiUndo";
+            this.tbiUndo.Size = new System.Drawing.Size(23, 22);
+            this.tbiUndo.Text = "<UNDO>";
+            this.tbiUndo.Click += new System.EventHandler(this.tbiUndo_Click);
+            // 
+            // tbiRedo
+            // 
+            this.tbiRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbiRedo.Image = global::CrashEdit.Properties.Resources.objects_020;
+            this.tbiRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbiRedo.Name = "tbiRedo";
+            this.tbiRedo.Size = new System.Drawing.Size(23, 22);
+            this.tbiRedo.Text = "<REDO>";
+            this.tbiRedo.Click += new System.EventHandler(this.tbiRedo_Click);
             // 
             // uxStatusbar
             // 
             this.uxStatusbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.sbiStatus,
             this.sbiProgress});
-            this.uxStatusbar.Location = new System.Drawing.Point(0,429);
+            this.uxStatusbar.Location = new System.Drawing.Point(0, 489);
             this.uxStatusbar.Name = "uxStatusbar";
-            this.uxStatusbar.Size = new System.Drawing.Size(632,22);
+            this.uxStatusbar.Size = new System.Drawing.Size(712, 22);
             this.uxStatusbar.TabIndex = 2;
             // 
             // sbiStatus
             // 
             this.sbiStatus.Name = "sbiStatus";
-            this.sbiStatus.Size = new System.Drawing.Size(515,17);
+            this.sbiStatus.Size = new System.Drawing.Size(595, 17);
             this.sbiStatus.Spring = true;
             this.sbiStatus.Text = "<READY>";
             this.sbiStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -154,7 +244,7 @@ namespace CrashEdit
             // sbiProgress
             // 
             this.sbiProgress.Name = "sbiProgress";
-            this.sbiProgress.Size = new System.Drawing.Size(100,16);
+            this.sbiProgress.Size = new System.Drawing.Size(100, 16);
             // 
             // uxMenubar
             // 
@@ -163,9 +253,9 @@ namespace CrashEdit
             this.mnuEdit,
             this.mnuFind,
             this.mnuUndo});
-            this.uxMenubar.Location = new System.Drawing.Point(0,0);
+            this.uxMenubar.Location = new System.Drawing.Point(0, 0);
             this.uxMenubar.Name = "uxMenubar";
-            this.uxMenubar.Size = new System.Drawing.Size(632,24);
+            this.uxMenubar.Size = new System.Drawing.Size(712, 25);
             this.uxMenubar.TabIndex = 3;
             // 
             // mnuFile
@@ -182,35 +272,83 @@ namespace CrashEdit
             this.toolStripSeparator4,
             this.mniFileExit});
             this.mnuFile.Name = "mnuFile";
-            this.mnuFile.Size = new System.Drawing.Size(56,20);
+            this.mnuFile.Size = new System.Drawing.Size(60, 21);
             this.mnuFile.Text = "<FILE>";
+            // 
+            // mniFileOpen
+            // 
+            this.mniFileOpen.Image = global::CrashEdit.Properties.Resources.Computer_File_064;
+            this.mniFileOpen.Name = "mniFileOpen";
+            this.mniFileOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.mniFileOpen.Size = new System.Drawing.Size(181, 22);
+            this.mniFileOpen.Text = "<OPEN>";
+            this.mniFileOpen.Click += new System.EventHandler(this.mniFileOpen_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(161,6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(178, 6);
+            // 
+            // mniFileSave
+            // 
+            this.mniFileSave.Image = global::CrashEdit.Properties.Resources.objects_029;
+            this.mniFileSave.Name = "mniFileSave";
+            this.mniFileSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.mniFileSave.Size = new System.Drawing.Size(181, 22);
+            this.mniFileSave.Text = "<SAVE>";
+            this.mniFileSave.Click += new System.EventHandler(this.mniFileSave_Click);
+            // 
+            // mniFileSaveAs
+            // 
+            this.mniFileSaveAs.Name = "mniFileSaveAs";
+            this.mniFileSaveAs.Size = new System.Drawing.Size(181, 22);
+            this.mniFileSaveAs.Text = "<SAVE AS>";
+            this.mniFileSaveAs.Click += new System.EventHandler(this.mniFileSaveAs_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(161,6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(178, 6);
+            // 
+            // mniFilePatchNSD
+            // 
+            this.mniFilePatchNSD.Image = global::CrashEdit.Properties.Resources.objects_070;
+            this.mniFilePatchNSD.Name = "mniFilePatchNSD";
+            this.mniFilePatchNSD.Size = new System.Drawing.Size(181, 22);
+            this.mniFilePatchNSD.Text = "<PATCH NSD>";
+            this.mniFilePatchNSD.Click += new System.EventHandler(this.mniFilePatchNSD_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(161,6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(178, 6);
+            // 
+            // mniFileClose
+            // 
+            this.mniFileClose.Image = global::CrashEdit.Properties.Resources.Computer_File_063;
+            this.mniFileClose.Name = "mniFileClose";
+            this.mniFileClose.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
+            this.mniFileClose.Size = new System.Drawing.Size(181, 22);
+            this.mniFileClose.Text = "<CLOSE>";
+            this.mniFileClose.Click += new System.EventHandler(this.mniFileClose_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(161,6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(178, 6);
             // 
             // mniFileExit
             // 
             this.mniFileExit.Name = "mniFileExit";
-            this.mniFileExit.Size = new System.Drawing.Size(164,22);
+            this.mniFileExit.Size = new System.Drawing.Size(181, 22);
             this.mniFileExit.Text = "<EXIT>";
             this.mniFileExit.Click += new System.EventHandler(this.mniFileExit_Click);
+            // 
+            // mnuEdit
+            // 
+            this.mnuEdit.Name = "mnuEdit";
+            this.mnuEdit.Size = new System.Drawing.Size(64, 21);
+            this.mnuEdit.Text = "<EDIT>";
             // 
             // mnuFind
             // 
@@ -223,30 +361,57 @@ namespace CrashEdit
             this.toolStripSeparator8,
             this.mniFindObjectName});
             this.mnuFind.Name = "mnuFind";
-            this.mnuFind.Size = new System.Drawing.Size(59,20);
+            this.mnuFind.Size = new System.Drawing.Size(66, 21);
             this.mnuFind.Text = "<FIND>";
+            // 
+            // mniFindFind
+            // 
+            this.mniFindFind.Image = global::CrashEdit.Properties.Resources.objects_036;
+            this.mniFindFind.Name = "mniFindFind";
+            this.mniFindFind.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
+            this.mniFindFind.Size = new System.Drawing.Size(195, 22);
+            this.mniFindFind.Text = "<FIND>";
+            this.mniFindFind.Click += new System.EventHandler(this.mniFindFind_Click);
+            // 
+            // mniFindFindNext
+            // 
+            this.mniFindFindNext.Image = global::CrashEdit.Properties.Resources.objects_037;
+            this.mniFindFindNext.Name = "mniFindFindNext";
+            this.mniFindFindNext.ShortcutKeys = System.Windows.Forms.Keys.F3;
+            this.mniFindFindNext.Size = new System.Drawing.Size(195, 22);
+            this.mniFindFindNext.Text = "<FIND NEXT>";
+            this.mniFindFindNext.Click += new System.EventHandler(this.mniFindFindNext_Click);
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(172,6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(192, 6);
+            // 
+            // mniFindEntryID
+            // 
+            this.mniFindEntryID.Image = global::CrashEdit.Properties.Resources.objects_028;
+            this.mniFindEntryID.Name = "mniFindEntryID";
+            this.mniFindEntryID.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+            this.mniFindEntryID.Size = new System.Drawing.Size(195, 22);
+            this.mniFindEntryID.Text = "<ENTRY ID>";
+            this.mniFindEntryID.Click += new System.EventHandler(this.mniFindEntryID_Click);
             // 
             // mniFindEntryName
             // 
             this.mniFindEntryName.Name = "mniFindEntryName";
-            this.mniFindEntryName.Size = new System.Drawing.Size(175,22);
+            this.mniFindEntryName.Size = new System.Drawing.Size(195, 22);
             this.mniFindEntryName.Text = "<ENTRY NAME>";
             this.mniFindEntryName.Click += new System.EventHandler(this.mniFindEntryName_Click);
             // 
             // toolStripSeparator8
             // 
             this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(172,6);
+            this.toolStripSeparator8.Size = new System.Drawing.Size(192, 6);
             // 
             // mniFindObjectName
             // 
             this.mniFindObjectName.Name = "mniFindObjectName";
-            this.mniFindObjectName.Size = new System.Drawing.Size(175,22);
+            this.mniFindObjectName.Size = new System.Drawing.Size(195, 22);
             this.mniFindObjectName.Text = "<OBJECT NAME>";
             this.mniFindObjectName.Click += new System.EventHandler(this.mniFindObjectName_Click);
             // 
@@ -257,191 +422,32 @@ namespace CrashEdit
             this.mniUndoCurrentState,
             this.mniUndoUndo});
             this.mnuUndo.Name = "mnuUndo";
-            this.mnuUndo.Size = new System.Drawing.Size(64,20);
+            this.mnuUndo.Size = new System.Drawing.Size(76, 21);
             this.mnuUndo.Text = "<UNDO>";
-            // 
-            // mniUndoCurrentState
-            // 
-            this.mniUndoCurrentState.Enabled = false;
-            this.mniUndoCurrentState.Image = global::CrashEdit.Properties.Resources.objects_028;
-            this.mniUndoCurrentState.Name = "mniUndoCurrentState";
-            this.mniUndoCurrentState.Size = new System.Drawing.Size(171,22);
-            this.mniUndoCurrentState.Text = "<CURRENT STATE>";
-            // 
-            // mniFileSaveAs
-            // 
-            this.mniFileSaveAs.Name = "mniFileSaveAs";
-            this.mniFileSaveAs.Size = new System.Drawing.Size(164,22);
-            this.mniFileSaveAs.Text = "<SAVE AS>";
-            this.mniFileSaveAs.Click += new System.EventHandler(this.mniFileSaveAs_Click);
-            // 
-            // tbiOpen
-            // 
-            this.tbiOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbiOpen.Image = global::CrashEdit.Properties.Resources.Computer_File_064;
-            this.tbiOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbiOpen.Name = "tbiOpen";
-            this.tbiOpen.Size = new System.Drawing.Size(23,22);
-            this.tbiOpen.Text = "<OPEN>";
-            this.tbiOpen.Click += new System.EventHandler(this.tbiOpen_Click);
-            // 
-            // tbiSave
-            // 
-            this.tbiSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbiSave.Image = global::CrashEdit.Properties.Resources.objects_029;
-            this.tbiSave.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbiSave.Name = "tbiSave";
-            this.tbiSave.Size = new System.Drawing.Size(23,22);
-            this.tbiSave.Text = "<SAVE>";
-            this.tbiSave.Click += new System.EventHandler(this.tbiSave_Click);
-            // 
-            // tbiClose
-            // 
-            this.tbiClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbiClose.Image = global::CrashEdit.Properties.Resources.Computer_File_063;
-            this.tbiClose.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbiClose.Name = "tbiClose";
-            this.tbiClose.Size = new System.Drawing.Size(23,22);
-            this.tbiClose.Text = "<CLOSE>";
-            this.tbiClose.Click += new System.EventHandler(this.tbiClose_Click);
-            // 
-            // tbiPatchNSD
-            // 
-            this.tbiPatchNSD.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbiPatchNSD.Image = global::CrashEdit.Properties.Resources.objects_070;
-            this.tbiPatchNSD.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbiPatchNSD.Name = "tbiPatchNSD";
-            this.tbiPatchNSD.Size = new System.Drawing.Size(23,22);
-            this.tbiPatchNSD.Text = "<PATCH NSD>";
-            this.tbiPatchNSD.Click += new System.EventHandler(this.tbiPatchNSD_Click);
-            // 
-            // tbiFind
-            // 
-            this.tbiFind.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbiFind.Image = global::CrashEdit.Properties.Resources.objects_036;
-            this.tbiFind.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbiFind.Name = "tbiFind";
-            this.tbiFind.Size = new System.Drawing.Size(23,22);
-            this.tbiFind.Text = "<FIND>";
-            this.tbiFind.Click += new System.EventHandler(this.tbiFind_Click);
-            // 
-            // tbiFindNext
-            // 
-            this.tbiFindNext.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbiFindNext.Image = global::CrashEdit.Properties.Resources.objects_037;
-            this.tbiFindNext.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbiFindNext.Name = "tbiFindNext";
-            this.tbiFindNext.Size = new System.Drawing.Size(23,22);
-            this.tbiFindNext.Text = "<FIND NEXT>";
-            this.tbiFindNext.Click += new System.EventHandler(this.tbiFindNext_Click);
-            // 
-            // tbiGotoEID
-            // 
-            this.tbiGotoEID.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbiGotoEID.Image = global::CrashEdit.Properties.Resources.objects_028;
-            this.tbiGotoEID.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbiGotoEID.Name = "tbiGotoEID";
-            this.tbiGotoEID.Size = new System.Drawing.Size(23,22);
-            this.tbiGotoEID.Text = "<GOTO EID>";
-            this.tbiGotoEID.Click += new System.EventHandler(this.tbiGotoEID_Click);
-            // 
-            // tbiUndo
-            // 
-            this.tbiUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbiUndo.Image = global::CrashEdit.Properties.Resources.objects_079;
-            this.tbiUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbiUndo.Name = "tbiUndo";
-            this.tbiUndo.Size = new System.Drawing.Size(23,22);
-            this.tbiUndo.Text = "<UNDO>";
-            this.tbiUndo.Click += new System.EventHandler(this.tbiUndo_Click);
-            // 
-            // tbiRedo
-            // 
-            this.tbiRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbiRedo.Image = global::CrashEdit.Properties.Resources.objects_020;
-            this.tbiRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbiRedo.Name = "tbiRedo";
-            this.tbiRedo.Size = new System.Drawing.Size(23,22);
-            this.tbiRedo.Text = "<REDO>";
-            this.tbiRedo.Click += new System.EventHandler(this.tbiRedo_Click);
-            // 
-            // mniFileOpen
-            // 
-            this.mniFileOpen.Image = global::CrashEdit.Properties.Resources.Computer_File_064;
-            this.mniFileOpen.Name = "mniFileOpen";
-            this.mniFileOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.mniFileOpen.Size = new System.Drawing.Size(164,22);
-            this.mniFileOpen.Text = "<OPEN>";
-            this.mniFileOpen.Click += new System.EventHandler(this.mniFileOpen_Click);
-            // 
-            // mniFileSave
-            // 
-            this.mniFileSave.Image = global::CrashEdit.Properties.Resources.objects_029;
-            this.mniFileSave.Name = "mniFileSave";
-            this.mniFileSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.mniFileSave.Size = new System.Drawing.Size(164,22);
-            this.mniFileSave.Text = "<SAVE>";
-            this.mniFileSave.Click += new System.EventHandler(this.mniFileSave_Click);
-            // 
-            // mniFilePatchNSD
-            // 
-            this.mniFilePatchNSD.Image = global::CrashEdit.Properties.Resources.objects_070;
-            this.mniFilePatchNSD.Name = "mniFilePatchNSD";
-            this.mniFilePatchNSD.Size = new System.Drawing.Size(164,22);
-            this.mniFilePatchNSD.Text = "<PATCH NSD>";
-            this.mniFilePatchNSD.Click += new System.EventHandler(this.mniFilePatchNSD_Click);
-            // 
-            // mniFileClose
-            // 
-            this.mniFileClose.Image = global::CrashEdit.Properties.Resources.Computer_File_063;
-            this.mniFileClose.Name = "mniFileClose";
-            this.mniFileClose.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
-            this.mniFileClose.Size = new System.Drawing.Size(164,22);
-            this.mniFileClose.Text = "<CLOSE>";
-            this.mniFileClose.Click += new System.EventHandler(this.mniFileClose_Click);
-            // 
-            // mniFindFind
-            // 
-            this.mniFindFind.Image = global::CrashEdit.Properties.Resources.objects_036;
-            this.mniFindFind.Name = "mniFindFind";
-            this.mniFindFind.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-            this.mniFindFind.Size = new System.Drawing.Size(175,22);
-            this.mniFindFind.Text = "<FIND>";
-            this.mniFindFind.Click += new System.EventHandler(this.mniFindFind_Click);
-            // 
-            // mniFindFindNext
-            // 
-            this.mniFindFindNext.Image = global::CrashEdit.Properties.Resources.objects_037;
-            this.mniFindFindNext.Name = "mniFindFindNext";
-            this.mniFindFindNext.ShortcutKeys = System.Windows.Forms.Keys.F3;
-            this.mniFindFindNext.Size = new System.Drawing.Size(175,22);
-            this.mniFindFindNext.Text = "<FIND NEXT>";
-            this.mniFindFindNext.Click += new System.EventHandler(this.mniFindFindNext_Click);
-            // 
-            // mniFindEntryID
-            // 
-            this.mniFindEntryID.Image = global::CrashEdit.Properties.Resources.objects_028;
-            this.mniFindEntryID.Name = "mniFindEntryID";
-            this.mniFindEntryID.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-            this.mniFindEntryID.Size = new System.Drawing.Size(175,22);
-            this.mniFindEntryID.Text = "<ENTRY ID>";
-            this.mniFindEntryID.Click += new System.EventHandler(this.mniFindEntryID_Click);
             // 
             // mniUndoRedo
             // 
             this.mniUndoRedo.Image = global::CrashEdit.Properties.Resources.objects_020;
             this.mniUndoRedo.Name = "mniUndoRedo";
             this.mniUndoRedo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.mniUndoRedo.Size = new System.Drawing.Size(171,22);
+            this.mniUndoRedo.Size = new System.Drawing.Size(189, 22);
             this.mniUndoRedo.Text = "<REDO>";
             this.mniUndoRedo.Click += new System.EventHandler(this.mniUndoRedo_Click);
+            // 
+            // mniUndoCurrentState
+            // 
+            this.mniUndoCurrentState.Enabled = false;
+            this.mniUndoCurrentState.Image = global::CrashEdit.Properties.Resources.objects_028;
+            this.mniUndoCurrentState.Name = "mniUndoCurrentState";
+            this.mniUndoCurrentState.Size = new System.Drawing.Size(189, 22);
+            this.mniUndoCurrentState.Text = "<CURRENT STATE>";
             // 
             // mniUndoUndo
             // 
             this.mniUndoUndo.Image = global::CrashEdit.Properties.Resources.objects_079;
             this.mniUndoUndo.Name = "mniUndoUndo";
             this.mniUndoUndo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.mniUndoUndo.Size = new System.Drawing.Size(171,22);
+            this.mniUndoUndo.Size = new System.Drawing.Size(189, 22);
             this.mniUndoUndo.Text = "<UNDO>";
             this.mniUndoUndo.Click += new System.EventHandler(this.mniUndoUndo_Click);
             // 
@@ -450,17 +456,11 @@ namespace CrashEdit
             this.dlgOpenNSF.Filter = "NSF Files (*.nsf)|*.nsf|All Files (*.*)|*.*";
             this.dlgOpenNSF.Multiselect = true;
             // 
-            // mnuEdit
-            // 
-            this.mnuEdit.Name = "mnuEdit";
-            this.mnuEdit.Size = new System.Drawing.Size(59,20);
-            this.mnuEdit.Text = "<EDIT>";
-            // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(632,451);
+            this.ClientSize = new System.Drawing.Size(712, 511);
             this.Controls.Add(this.uxTabs);
             this.Controls.Add(this.uxStatusbar);
             this.Controls.Add(this.uxToolbar);
