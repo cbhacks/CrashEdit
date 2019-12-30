@@ -97,7 +97,7 @@ namespace CrashEdit
             public ControllerData(MainControl maincontrol,Crash.UI.Controller controller)
             {
                 this.maincontrol = maincontrol;
-                this.Controller = controller;
+                Controller = controller;
                 Node = new TreeNode();
                 control = null;
                 controller.Invalidated += controller_Invalidated;

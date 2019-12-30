@@ -25,7 +25,7 @@ namespace Crash
             d5 = (byte)(data & 0x1F);
         }
 
-        private const float Factor255_31 = 255f / 31f;
+        private const double Factor255_31 = 255.0 / 31.0;
         public static int Convert5551_8888(short p, int mode)
         {
             byte r = (byte)(Factor255_31 * (p >> 0 & 0x1F));
@@ -37,7 +37,7 @@ namespace Crash
                 case 0: a = a == 1 ? (byte)0xFF : (r+g+b == 0 ? (byte)0 : (byte)0xFF); break;
                 case 1: a = a == 1 ? (byte)0xFF : (r+g+b == 0 ? (byte)0 : (byte)0xFF); break;
                 case 2: a = a == 1 ? (byte)0xFF : (r+g+b == 0 ? (byte)0 : (byte)0xFF); break;
-                case 3: a = a == 1 ? (byte)0xFF : (byte)0; break;
+                case 3: a = 0xFF; break;
             }
             return (a << 24) | (r << 16) | (g << 8) | b;
         }

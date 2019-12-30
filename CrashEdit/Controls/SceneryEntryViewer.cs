@@ -13,29 +13,11 @@ namespace CrashEdit
         private bool textures_enabled = true;
         private bool init = false;
 
-        private static long textureframe; // CrashEdit would have to run for so long for this to overflow
-        private static Timer texturetimer;
-
         private TextureChunk[][] texturechunks;
         private List<SceneryTriangle>[] dyntris;
         private List<SceneryQuad>[] dynquads;
         private List<SceneryTriangle>[] lasttris;
         private List<SceneryQuad>[] lastquads;
-
-        static SceneryEntryViewer()
-        {
-            textureframe = 0;
-            texturetimer = new Timer
-            {
-                Interval = 1000 / OldMainForm.GetRate(),
-                Enabled = true
-            };
-            texturetimer.Tick += delegate (object sender, EventArgs e)
-            {
-                ++textureframe;
-                texturetimer.Interval = 1000 / OldMainForm.GetRate();
-            };
-        }
 
         public SceneryEntryViewer(SceneryEntry entry,TextureChunk[] texturechunks)
         {
@@ -128,7 +110,7 @@ namespace CrashEdit
                 GL.Disable(EnableCap.Texture2D);
             else
                 GL.Enable(EnableCap.Texture2D);
-            double[] uvs = new double[8];
+            float[] uvs = new float[8];
             if (displaylist == -1)
             {
                 displaylist = GL.GenLists(1);
@@ -244,6 +226,7 @@ namespace CrashEdit
                             }
                             else
                             {
+                                if (tex >= entry.Textures.Count) continue; // it's a shitty broken poly
                                 if (entry.Textures[tex].BlendMode == 1)
                                 {
                                     lastquads[e].Add(q);

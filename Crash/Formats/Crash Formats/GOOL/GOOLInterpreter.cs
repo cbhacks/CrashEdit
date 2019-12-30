@@ -4,9 +4,10 @@ namespace Crash
 {
     public enum GOOLVersion
     {
-        Version0, // 1995
-        Version1,
-        Version2
+        Version0, // 1995 + Proto
+        Version1, // Crash 1
+        Version2, // Crash 2
+        Version3  // Crash 3
     }
 
     public enum ObjectFields
@@ -165,8 +166,9 @@ namespace Crash
                 default:
                     return GOOLVersion.Version1;
                 case GameVersion.Crash2:
-                case GameVersion.Crash3:
                     return GOOLVersion.Version2;
+                case GameVersion.Crash3:
+                    return GOOLVersion.Version3;
             }
         }
 
@@ -181,6 +183,7 @@ namespace Crash
                 case GOOLVersion.Version1:
                     return 0x60;
                 case GOOLVersion.Version2:
+                case GOOLVersion.Version3:
                     return 0x40;
             }
         }

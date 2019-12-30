@@ -364,6 +364,9 @@ namespace CrashEdit
                             PatchNSD(nsd, nsf, filename);
                         }
                         break;
+                    default:
+                        MessageBox.Show("NSD patching is not supported for this game version.", "Patch NSD", MessageBoxButtons.OK);
+                        break;
                 }
             }
             catch (LoadAbortedException)
@@ -750,6 +753,7 @@ namespace CrashEdit
                     }
                 }
             }
+
             // check list
             for (int i = 0; i < nsf.Chunks.Count; i++)
             {
@@ -849,6 +853,7 @@ namespace CrashEdit
                     }
                 }
             }
+
             // check list
             for (int i = 0; i < nsf.Chunks.Count; i++)
             {
@@ -885,11 +890,14 @@ namespace CrashEdit
 
         public void CloseNSF()
         {
-            TabPage tab = tbcTabs.SelectedTab;
-            if (tab != null)
+            if (MessageBox.Show("Are you sure you want to close the NSF file?", "Close Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                tbcTabs.TabPages.Remove(tab);
-                tab.Dispose();
+                TabPage tab = tbcTabs.SelectedTab;
+                if (tab != null)
+                {
+                    tbcTabs.TabPages.Remove(tab);
+                    tab.Dispose();
+                }
             }
         }
 

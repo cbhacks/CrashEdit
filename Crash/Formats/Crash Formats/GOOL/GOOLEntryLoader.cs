@@ -2,11 +2,9 @@ using System;
 
 namespace Crash
 {
-    [EntryType(11,GameVersion.Crash1BetaMAY11)]
-    [EntryType(11,GameVersion.Crash1)]
-    public sealed class GOOLEntryLoader : EntryLoader
+    internal static class GOOLEntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        internal static GOOLEntry LoadGOOL(GOOLVersion goolver, byte[][] items,int eid)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -53,11 +51,49 @@ namespace Crash
                     }
                 }
             }
-            return new GOOLEntry(GOOLVersion.Version1,items[0],items[1],ins,
+            return new GOOLEntry(goolver,items[0],items[1],ins,
                 statemap,
                 statedesc,
                 anims,
                 eid);
+        }
+    }
+
+    [EntryType(11,GameVersion.Crash1Beta1995)]
+    [EntryType(11,GameVersion.Crash1BetaMAR08)]
+    public sealed class GOOLv0EntryLoader : EntryLoader
+    {
+        public override Entry Load(byte[][] items,int eid)
+        {
+            return GOOLEntryLoader.LoadGOOL(GOOLVersion.Version0,items,eid);
+        }
+    }
+
+    [EntryType(11,GameVersion.Crash1BetaMAY11)]
+    [EntryType(11,GameVersion.Crash1)]
+    public sealed class GOOLv1EntryLoader : EntryLoader
+    {
+        public override Entry Load(byte[][] items,int eid)
+        {
+            return GOOLEntryLoader.LoadGOOL(GOOLVersion.Version1,items,eid);
+        }
+    }
+
+    [EntryType(11,GameVersion.Crash2)]
+    public sealed class GOOLv2EntryLoader : EntryLoader
+    {
+        public override Entry Load(byte[][] items,int eid)
+        {
+            return GOOLEntryLoader.LoadGOOL(GOOLVersion.Version2,items,eid);
+        }
+    }
+
+    [EntryType(11,GameVersion.Crash3)]
+    public sealed class GOOLv3EntryLoader : EntryLoader
+    {
+        public override Entry Load(byte[][] items,int eid)
+        {
+            return GOOLEntryLoader.LoadGOOL(GOOLVersion.Version3,items,eid);
         }
     }
 }

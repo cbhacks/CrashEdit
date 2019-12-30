@@ -37,6 +37,24 @@ namespace CrashEdit
             }
         }
 
+        protected static long textureframe; // CrashEdit would have to run for so long for this to overflow
+        private static Timer texturetimer;
+
+        static ThreeDimensionalViewer()
+        {
+            textureframe = 0;
+            texturetimer = new Timer
+            {
+                Interval = 1000 / OldMainForm.GetRate(),
+                Enabled = true
+            };
+            texturetimer.Tick += delegate (object sender, EventArgs e)
+            {
+                ++textureframe;
+                texturetimer.Interval = 1000 / OldMainForm.GetRate();
+            };
+        }
+
         private int midx;
         private int midy;
         private int midz;
@@ -365,13 +383,14 @@ namespace CrashEdit
                 long hash = GenerateTextureHash(tex);
                 if (!texturebucket.ContainsKey(hash))
                 {
+                    if (tex.TextureOffset / 4 >= texturechunks.Length) throw new Exception("ConvertTexturesToGL: Texture chunk index out of bounds");
+                    if (tex.TextureOffset % 4 != 0) throw new Exception("ConvertTexturesToGL: Texture chunk index is unaligned");
                     TextureChunk texturechunk = null;
-                    int eid = BitConv.FromInt32(eid_list, eid_off + tex.TextureOffset);
-                    for (int t = 0; t < texturechunks.Length; ++t)
+                    foreach (TextureChunk chunk in texturechunks)
                     {
-                        if (eid == texturechunks[t].EID)
+                        if (chunk.EID == BitConv.FromInt32(eid_list,eid_off + tex.TextureOffset))
                         {
-                            texturechunk = texturechunks[t];
+                            texturechunk = chunk;
                             break;
                         }
                     }

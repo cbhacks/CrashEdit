@@ -194,21 +194,7 @@ namespace CrashEdit
 
         private void mniFileOpen_Click(object sender,EventArgs e)
         {
-            // ShowDialog has major re-entrancy issues here
-            // https://connect.microsoft.com/VisualStudio/feedback/details/697252
-            if (dlgOpenNSF.Tag != null)
-                return;
-            DialogResult openresult;
-            try
-            {
-                dlgOpenNSF.Tag = true;
-                openresult = dlgOpenNSF.ShowDialog();
-            }
-            finally
-            {
-                dlgOpenNSF.Tag = null;
-            }
-            if (openresult == DialogResult.OK)
+            if (dlgOpenNSF.ShowDialog(this) == DialogResult.OK)
             {
                 GameVersion gameversion;
                 using (GameVersionForm gameversionform = new GameVersionForm())

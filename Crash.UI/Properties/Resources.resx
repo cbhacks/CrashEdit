@@ -261,4 +261,7 @@
   <data name="ProtoZoneEntryController_Text" xml:space="preserve">
     <value>Proto Zone ({0})</value>
   </data>
+  <data name="AnimationEntryController_Text" xml:space="preserve">
+    <value>Animation ({0})</value>
+  </data>
 </root>
