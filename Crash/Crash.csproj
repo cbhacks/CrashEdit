@@ -239,6 +239,7 @@
     <Compile Include="Utility\Endianness.cs" />
     <Compile Include="Utility\EvList.cs" />
     <Compile Include="Utility\EvListEventArgs.cs" />
+    <Compile Include="Utility\ListExt.cs" />
     <Compile Include="Utility\MIDIConv.cs" />
     <Compile Include="Formats\Crash Formats\Music\MusicEntry.cs" />
     <Compile Include="Formats\Crash Formats\Music\MusicEntryLoader.cs" />

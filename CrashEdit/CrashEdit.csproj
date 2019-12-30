@@ -219,7 +219,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="FileFilters.cs" />
-    <Compile Include="ListExt.cs" />
     <Compile Include="InterpolatorForm.cs">
       <SubType>Form</SubType>
     </Compile>
