@@ -160,11 +160,9 @@
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Div.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Mul.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOLArgument.cs" />
-    <Compile Include="Formats\Crash Formats\GOOL\OldGOOLEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOLInvalidInstruction.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Sub.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Add.cs" />
-    <Compile Include="Formats\Crash Formats\GOOL\GOOLv2EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOLInstruction.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOLInstructionAttribute.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOLInterpreter.cs" />
