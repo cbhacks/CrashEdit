@@ -25,7 +25,7 @@ namespace Crash
             d5 = (byte)(data & 0x1F);
         }
 
-        private const float Factor255_31 = 255f / 31f;
+        private const double Factor255_31 = 255.0 / 31.0;
         public static int Convert5551_8888(short p, int mode)
         {
             byte r = (byte)(Factor255_31 * (p >> 0 & 0x1F));
