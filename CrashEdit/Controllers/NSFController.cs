@@ -24,7 +24,7 @@ namespace CrashEdit
             AddMenu("Add Chunk - Sound",Menu_Add_SoundChunk);
             AddMenu("Add Chunk - Wavebank",Menu_Add_WavebankChunk);
             AddMenu("Add Chunk - Speech",Menu_Add_SpeechChunk);
-            AddMenu("Import Chunk",Menu_Import_Chunk);
+            AddMenu("Import Chunk", Menu_Import_Chunk);
             if (GameVersion == GameVersion.Crash2 || GameVersion == GameVersion.Crash3)
             {
                 AddMenuSeparator();
