@@ -286,7 +286,12 @@ namespace Crash
                 {
                     List<Entry> entries = new List<Entry>(entrychunk.Entries);
                     entries.Sort(delegate (Entry a, Entry b) {
-                        return (a.EID >> 15 & 0xFF) - (b.EID >> 15 & 0xFF);
+                        int c = a.HashKey - b.HashKey;
+                        if (c == 0)
+                        {
+                            c = new ENameComparer().Compare(a.EName,b.EName);
+                        }
+                        return c;
                     });
                     entrychunk.Entries = new EvList<Entry>(entries);
                 }

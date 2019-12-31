@@ -334,6 +334,7 @@ namespace CrashEdit
 
         public void PatchNSD(string filename, NSFController nsfc)
         {
+            //if (MessageBox.Show("The chunk contents in this NSF may be moved in accordance to the patched NSD. Continue anyway?", "Patch NSD", MessageBoxButtons.YesNo) == DialogResult.No) return;
             try
             {
                 NSF nsf = nsfc.NSF;
