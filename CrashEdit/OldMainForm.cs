@@ -400,7 +400,7 @@ namespace CrashEdit
         public void PatchNSD(NewNSD nsd, NSF nsf, string path)
         {
             nsd.ChunkCount = nsf.Chunks.Count;
-            var indexdata = PatchNSDIndex(nsf);
+            var indexdata = nsf.MakeNSDIndex();
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
 
@@ -472,7 +472,7 @@ namespace CrashEdit
         public void PatchNSD(NSD nsd, NSF nsf, string path)
         {
             nsd.ChunkCount = nsf.Chunks.Count;
-            var indexdata = PatchNSDIndex(nsf);
+            var indexdata = nsf.MakeNSDIndex();
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
 
@@ -544,7 +544,7 @@ namespace CrashEdit
         public void PatchNSD(OldNSD nsd, NSF nsf, string path)
         {
             nsd.ChunkCount = nsf.Chunks.Count;
-            var indexdata = PatchNSDIndex(nsf);
+            var indexdata = nsf.MakeNSDIndex();
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
             if (MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
@@ -556,60 +556,13 @@ namespace CrashEdit
         public void PatchNSD(ProtoNSD nsd, NSF nsf, string path)
         {
             nsd.ChunkCount = nsf.Chunks.Count;
-            var indexdata = PatchNSDIndex(nsf);
+            var indexdata = nsf.MakeNSDIndex();
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
             if (MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
             }
-        }
-
-        internal ValueTuple<int[],IList<NSDLink>> MakeNSDIndex(NSF nsf)
-        {
-            foreach (Chunk chunk in nsf.Chunks)
-            {
-                if (chunk is EntryChunk entrychunk)
-                {
-                    List<Entry> entries = new List<Entry>(entrychunk.Entries);
-                    entries.Sort(delegate (Entry a, Entry b) {
-                        return (a.EID >> 15 & 0xFF) - (b.EID >> 15 & 0xFF);
-                    });
-                    entrychunk.Entries = new EvList<Entry>(entries);
-                }
-            }
-            SortedDictionary<int,SortedDictionary<string,int>> newindex = new SortedDictionary<int,SortedDictionary<string,int>>();
-            for (int i = 0; i < nsf.Chunks.Count; i++)
-            {
-                if (nsf.Chunks[i] is IEntry ientry)
-                {
-                    if (!newindex.ContainsKey(ientry.HashKey))
-                        newindex.Add(ientry.HashKey,new SortedDictionary<string,int>(new ENameComparer()));
-                    newindex[ientry.HashKey].Add(ientry.EName,i*2+1);
-                }
-                else if (nsf.Chunks[i] is EntryChunk chunk)
-                {
-                    foreach (Entry entry in chunk.Entries)
-                    {
-                        if (!newindex.ContainsKey(entry.HashKey))
-                            newindex.Add(entry.HashKey,new SortedDictionary<string,int>(new ENameComparer()));
-                        newindex[entry.HashKey].Add(entry.EName,i*2+1);
-                    }
-                }
-            }
-            var index = new List<NSDLink>();
-            int[] hashkeymap = new int[256];
-            int curkey = 0;
-            foreach (var kvp in newindex)
-            {
-                while (curkey <= kvp.Key)
-                    hashkeymap[curkey++] = index.Count;
-                foreach (var link in kvp.Value)
-                    index.Add(new NSDLink(link.Value,Entry.ENameToEID(link.Key)));
-            }
-            while (curkey < 256)
-                hashkeymap[curkey++] = index.Count-1;
-            return (hashkeymap,index);
         }
         
         public void CloseNSF()
