@@ -565,7 +565,7 @@ namespace CrashEdit
             }
         }
 
-        internal ValueTuple<int[],IList<NSDLink>> PatchNSDIndex(NSF nsf)
+        internal ValueTuple<int[],IList<NSDLink>> MakeNSDIndex(NSF nsf)
         {
             foreach (Chunk chunk in nsf.Chunks)
             {
