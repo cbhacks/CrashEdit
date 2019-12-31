@@ -27,6 +27,9 @@ namespace CrashEdit
                 case GOOLVersion.Version2:
                     Node.Text = $"GOOLv2 ({GOOLEntry.EName})";
                     break;
+                case GOOLVersion.Version3:
+                    Node.Text = $"GOOLv3 ({GOOLEntry.EName})";
+                    break;
             }
             Node.ImageKey = "codeb";
             Node.SelectedImageKey = "codeb";
