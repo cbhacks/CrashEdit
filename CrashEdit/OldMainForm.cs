@@ -412,13 +412,9 @@ namespace CrashEdit
                     continue;
                 foreach (Entry entry in ((EntryChunk)chunk).Entries)
                 {
-                    if (entry is ZoneEntry)
-                        foreach (Entity ent1 in ((ZoneEntry)entry).Entities)
-                            if (ent1.ID != null)
-                                ++nsd.EntityCount;
-                    else if (entry is NewZoneEntry)
-                        foreach (Entity ent2 in ((NewZoneEntry)entry).Entities)
-                            if (ent2.ID != null)
+                    if (entry is NewZoneEntry zone)
+                        foreach (Entity ent in zone.Entities)
+                            if (ent.ID != null)
                                 ++nsd.EntityCount;
                 }
             }
@@ -484,13 +480,9 @@ namespace CrashEdit
                     continue;
                 foreach (Entry entry in ((EntryChunk)chunk).Entries)
                 {
-                    if (entry is ZoneEntry)
-                        foreach (Entity ent1 in ((ZoneEntry)entry).Entities)
-                            if (ent1.ID != null)
-                                ++nsd.EntityCount;
-                    else if (entry is NewZoneEntry)
-                        foreach (Entity ent2 in ((NewZoneEntry)entry).Entities)
-                            if (ent2.ID != null)
+                    if (entry is ZoneEntry zone)
+                        foreach (Entity ent in zone.Entities)
+                            if (ent.ID != null)
                                 ++nsd.EntityCount;
                 }
             }
