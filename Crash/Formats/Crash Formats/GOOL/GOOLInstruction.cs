@@ -116,8 +116,8 @@ namespace Crash
                     }
                     if (c == '0' || c == '1')
                     {
-                        if ((c == '0' && (Value >> vbits & 1) != 0) || (c == '1' && (Value >> vbits & 1) != 1))
-                            ErrorManager.SignalIgnorableError("GOOLInstruction: Constant bit had unexpected value.");
+                        //if ((c == '0' && (Value >> vbits & 1) != 0) || (c == '1' && (Value >> vbits & 1) != 1))
+                        //    ErrorManager.SignalIgnorableError("GOOLInstruction: Constant bit had unexpected value.");
                     }
                     else if (c == '-')
                     {
