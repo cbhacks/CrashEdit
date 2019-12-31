@@ -21,7 +21,7 @@ namespace Crash
             }
             int entitycount = BitConv.FromInt32(header,0x20C);
             OldEntity[] entities = new OldEntity[entitycount];
-            for (int i = 2 + camcount; i < items.Length; i++)
+            for (int i = 2 + camcount; i < 2 + camcount + entitycount; i++)
             {
                 entities[i - 2 - camcount] = OldEntity.Load(items[i]);
             }
