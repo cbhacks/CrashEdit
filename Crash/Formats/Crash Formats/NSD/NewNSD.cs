@@ -27,10 +27,10 @@ namespace Crash
             {
                 ErrorManager.SignalError("NewNSD: Data is too short");
             }
-            int[] firstentries = new int [256];
+            int[] hashkeymap = new int [256];
             for (int i = 0;i < 256;i++)
             {
-                firstentries[i] = BitConv.FromInt32(data,i*4);
+                hashkeymap[i] = BitConv.FromInt32(data,i*4);
             }
             int[] leveldata = new int [4];
             for (int i = 0;i < 4;i++)
@@ -90,15 +90,14 @@ namespace Crash
             extralength = data.Length - (0x7FC+8*entrycount+24*spawncount);
             byte[] imagedata = new byte [extralength];
             Array.Copy(data,data.Length-extralength,imagedata,0,extralength);
-            return new NewNSD(firstentries,chunkcount,leveldata,uncompressedchunksec,preludecount,compressedchunkinfo,index,blank,id,entitycount,goolmap,extradata,spawns,imagedata);
+            return new NewNSD(hashkeymap,chunkcount,leveldata,uncompressedchunksec,preludecount,compressedchunkinfo,index,blank,id,entitycount,goolmap,extradata,spawns,imagedata);
         }
 
-        private List<NSDLink> index;
         private List<NSDSpawnPoint> spawns;
 
-        public NewNSD(int[] firstentries,int chunkcount,int[] leveldata,int uncompressedchunksec,int preludecount,int[] compressedchunkinfo,IEnumerable<NSDLink> index,int blank,int id,int entitycount,int[] goolmap,byte[] extradata,IEnumerable<NSDSpawnPoint> spawns,byte[] imagedata)
+        public NewNSD(int[] hashkeymap,int chunkcount,int[] leveldata,int uncompressedchunksec,int preludecount,int[] compressedchunkinfo,IEnumerable<NSDLink> index,int blank,int id,int entitycount,int[] goolmap,byte[] extradata,IEnumerable<NSDSpawnPoint> spawns,byte[] imagedata)
         {
-            if (firstentries == null)
+            if (hashkeymap == null)
                 throw new ArgumentNullException("firstentries");
             if (leveldata == null)
                 throw new ArgumentNullException("leveldata");
@@ -110,7 +109,7 @@ namespace Crash
                 throw new ArgumentNullException("goolmap");
             if (spawns == null)
                 throw new ArgumentNullException("spawns");
-            if (firstentries.Length != 256)
+            if (hashkeymap.Length != 256)
                 throw new ArgumentException("Value must be 256 ints long.", "firstentries");
             if (leveldata.Length != 4)
                 throw new ArgumentException("Value must be 4 ints long.", "leveldata");
@@ -118,13 +117,13 @@ namespace Crash
                 throw new ArgumentException("Value must be 64 ints long.", "compressedchunkinfo");
             if (goolmap.Length != 128)
                 throw new ArgumentException("Value must be 128 ints long.", "goolmap");
-            FirstEntries = firstentries;
+            HashKeyMap = hashkeymap;
             ChunkCount = chunkcount;
             LevelData = leveldata;
             UncompressedChunkSec = uncompressedchunksec;
             PreludeCount = preludecount;
             CompressedChunkInfo = compressedchunkinfo;
-            this.index = new List<NSDLink>(index);
+            Index = new List<NSDLink>(index);
             Blank = blank;
             ID = id;
             EntityCount = entitycount;
@@ -134,13 +133,13 @@ namespace Crash
             ImageData = imagedata ?? throw new ArgumentNullException("image");
         }
 
-        public int[] FirstEntries { get; }
+        public int[] HashKeyMap { get; set; }
         public int ChunkCount { get; set; }
         public int[] LevelData { get; }
         public int UncompressedChunkSec { get; set; }
         public int PreludeCount { get; set; }
         public int[] CompressedChunkInfo { get; }
-        public IList<NSDLink> Index => index;
+        public IList<NSDLink> Index { get; set; }
         public int Blank { get; set; }
         public int ID { get; set; }
         public int EntityCount { get; set; }
@@ -151,12 +150,12 @@ namespace Crash
 
         public byte[] Save()
         {
-            int entrycount = index.Count;
+            int entrycount = Index.Count;
             int spawncount = spawns.Count;
             byte[] result = new byte [0x730+8*entrycount+24*spawncount + ExtraData.Length + ImageData.Length];
             for (int i = 0;i < 256;i++)
             {
-                BitConv.ToInt32(result,i*4,FirstEntries[i]);
+                BitConv.ToInt32(result,i*4,HashKeyMap[i]);
             }
             BitConv.ToInt32(result,0x400,ChunkCount);
             BitConv.ToInt32(result,0x404,entrycount);
@@ -173,8 +172,8 @@ namespace Crash
             //}
             for (int i = 0;i < entrycount;++i)
             {
-                BitConv.ToInt32(result,0x520+i*8,index[i].ChunkID);
-                BitConv.ToInt32(result,0x524+i*8,index[i].EntryID);
+                BitConv.ToInt32(result,0x520+i*8,Index[i].ChunkID);
+                BitConv.ToInt32(result,0x524+i*8,Index[i].EntryID);
             }
             BitConv.ToInt32(result,0x520+8*entrycount,spawncount);
             BitConv.ToInt32(result,0x524+8*entrycount,Blank);

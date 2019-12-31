@@ -4,5 +4,6 @@ namespace Crash
     {
         int EID { get; }
         string EName { get; }
+        int HashKey { get; }
     }
 }
