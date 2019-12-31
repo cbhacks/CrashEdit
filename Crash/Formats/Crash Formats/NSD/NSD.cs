@@ -117,7 +117,7 @@ namespace Crash
                 throw new ArgumentException("Value must be 64 ints long.", "compressedchunkinfo");
             if (goolmap.Length != 64)
                 throw new ArgumentException("Value must be 64 ints long.", "goolmap");
-            FirstEntries = hashkeymap;
+            HashKeyMap = hashkeymap;
             ChunkCount = chunkcount;
             LevelData = leveldata;
             UncompressedChunkSec = uncompressedchunksec;
@@ -155,7 +155,7 @@ namespace Crash
             byte[] result = new byte [0x630+8*entrycount+24*spawncount + ExtraData.Length + ImageData.Length];
             for (int i = 0;i < 256;i++)
             {
-                BitConv.ToInt32(result,i*4,FirstEntries[i]);
+                BitConv.ToInt32(result,i*4,HashKeyMap[i]);
             }
             BitConv.ToInt32(result,0x400,ChunkCount);
             BitConv.ToInt32(result,0x404,entrycount);
