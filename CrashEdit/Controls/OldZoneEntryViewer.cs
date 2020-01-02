@@ -168,10 +168,7 @@ namespace CrashEdit
         protected override void RenderObjects()
         {
             RenderEntry(entry,ref octreedisplaylists[0]);
-            int xoffset = BitConv.FromInt32(entry.Layout,0);
-            int yoffset = BitConv.FromInt32(entry.Layout,4);
-            int zoffset = BitConv.FromInt32(entry.Layout,8);
-            GL.PolygonStipple(stippleb);
+            GL.Enable(EnableCap.PolygonStipple);
             for (int i = 0; i < linkedentries.Length; i++)
             {
                 OldZoneEntry linkedentry = linkedentries[i];
@@ -224,26 +221,26 @@ namespace CrashEdit
                 }
                 GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
             }
-            GL.Scale(4,4,4);
             GL.Color3(Color.White);
             GL.Begin(PrimitiveType.LineStrip);
             GL.Vertex3(0,0,0);
-            GL.Vertex3(x2 / 4,0,0);
-            GL.Vertex3(x2 / 4,y2 / 4,0);
-            GL.Vertex3(0,y2 / 4,0);
+            GL.Vertex3(x2,0,0);
+            GL.Vertex3(x2,y2,0);
+            GL.Vertex3(0,y2,0);
             GL.Vertex3(0,0,0);
-            GL.Vertex3(0,0,z2 / 4);
-            GL.Vertex3(x2 / 4,0,z2 / 4);
-            GL.Vertex3(x2 / 4,y2 / 4,z2 / 4);
-            GL.Vertex3(0,y2 / 4,z2 / 4);
-            GL.Vertex3(0,0,z2 / 4);
-            GL.Vertex3(x2 / 4,0,z2 / 4);
-            GL.Vertex3(x2 / 4,0,0);
-            GL.Vertex3(x2 / 4,y2 / 4,0);
-            GL.Vertex3(x2 / 4,y2 / 4,z2 / 4);
-            GL.Vertex3(0,y2 / 4,z2 / 4);
-            GL.Vertex3(0,y2 / 4,0);
+            GL.Vertex3(0,0,z2);
+            GL.Vertex3(x2,0,z2);
+            GL.Vertex3(x2,y2,z2);
+            GL.Vertex3(0,y2,z2);
+            GL.Vertex3(0,0,z2);
+            GL.Vertex3(x2,0,z2);
+            GL.Vertex3(x2,0,0);
+            GL.Vertex3(x2,y2,0);
+            GL.Vertex3(x2,y2,z2);
+            GL.Vertex3(0,y2,z2);
+            GL.Vertex3(0,y2,0);
             GL.End();
+            GL.Scale(4,4,4);
             foreach (OldEntity entity in entry.Entities)
             {
                 RenderEntity(entity);
@@ -492,10 +489,11 @@ namespace CrashEdit
             GL.PolygonStipple(stippleb);
             GL.Color3(Color.Green);
             GL.PushMatrix();
+            GL.Scale(0.25F,0.25F,0.25F);
             GL.Begin(PrimitiveType.LineStrip);
             foreach (OldCameraPosition position in camera.Positions)
             {
-                GL.Vertex3(position.X / 4,position.Y / 4,position.Z / 4);
+                GL.Vertex3(position.X,position.Y,position.Z);
             }
             GL.End();
             GL.Color3(Color.Yellow);
@@ -503,7 +501,8 @@ namespace CrashEdit
             foreach (OldCameraPosition position in camera.Positions)
             {
                 GL.PushMatrix();
-                GL.Translate(position.X / 4,position.Y / 4,position.Z / 4);
+                GL.Translate(position.X,position.Y,position.Z);
+                GL.Scale(4,4,4);
                 RenderSprite();
                 GL.PopMatrix();
             }
