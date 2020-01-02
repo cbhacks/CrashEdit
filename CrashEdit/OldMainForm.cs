@@ -369,6 +369,7 @@ namespace CrashEdit
                         MessageBox.Show("NSD patching is not supported for this game version.", "Patch NSD", MessageBoxButtons.OK);
                         break;
                 }
+                nsfc.Node.TreeView.BeginUpdate();
                 foreach (TreeNode node in nsfc.Node.Nodes) // nsd patching might have moved entries, recreate every single controller just in case
                 {
                     if (node.Tag is EntryChunkController entrychunkcontroller)
@@ -392,6 +393,7 @@ namespace CrashEdit
                         entrychunkcontroller.PopulateNodes();
                     }
                 }
+                nsfc.Node.TreeView.EndUpdate();
             }
             catch (LoadAbortedException)
             {
