@@ -171,8 +171,6 @@ namespace CrashEdit
             int xoffset = BitConv.FromInt32(entry.Layout,0);
             int yoffset = BitConv.FromInt32(entry.Layout,4);
             int zoffset = BitConv.FromInt32(entry.Layout,8);
-            base.RenderObjects();
-            GL.Enable(EnableCap.PolygonStipple);
             GL.PolygonStipple(stippleb);
             for (int i = 0; i < linkedentries.Length; i++)
             {
@@ -184,6 +182,9 @@ namespace CrashEdit
                 RenderLinkedEntry(linkedentry,ref octreedisplaylists[i + 1]);
             }
             GL.Disable(EnableCap.PolygonStipple);
+            if (deletelists)
+                deletelists = false;
+            base.RenderObjects();
         }
 
         private void RenderEntry(OldZoneEntry entry,ref int octreedisplaylist)
@@ -200,7 +201,6 @@ namespace CrashEdit
             {
                 GL.DeleteLists(octreedisplaylist,1);
                 octreedisplaylist = -1;
-                deletelists = false;
             }
             if (renderoctree)
             {
@@ -267,15 +267,14 @@ namespace CrashEdit
             GL.Translate(xoffset,yoffset,zoffset);
             if (allentries)
             {
-                GL.PolygonStipple(stippleb);
                 if (deletelists)
                 {
                     GL.DeleteLists(octreedisplaylist,1);
                     octreedisplaylist = -1;
-                    deletelists = false;
                 }
                 if (renderoctree)
                 {
+                    GL.Disable(EnableCap.PolygonStipple);
                     if (!polygonmode)
                         GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Line);
                     if (octreedisplaylist == -1)
@@ -295,6 +294,7 @@ namespace CrashEdit
                         GL.CallList(octreedisplaylist);
                     }
                     GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
+                    GL.Enable(EnableCap.PolygonStipple);
                 }
             }
             GL.Scale(4,4,4);
