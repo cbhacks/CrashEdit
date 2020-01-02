@@ -8,11 +8,16 @@ namespace CrashEdit
         {
             T21Entry = t21entry;
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = string.Format("T21 ({0})",T21Entry.EName);
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "image";
             Node.SelectedImageKey = "image";
         }

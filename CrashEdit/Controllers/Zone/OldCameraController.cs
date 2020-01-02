@@ -9,7 +9,8 @@ namespace CrashEdit
         {
             ProtoZoneEntryController = protozoneentrycontroller;
             Camera = camera;
-            AddMenu("Delete Camera", Menu_Delete);
+            AddMenu("Delete Camera",Menu_DeleteProto);
+            InvalidateNodeImage();
             InvalidateNode();
         }
 
@@ -17,13 +18,18 @@ namespace CrashEdit
         {
             OldZoneEntryController = oldzoneentrycontroller;
             Camera = camera;
-            AddMenu("Delete Camera", Menu_Delete);
+            AddMenu("Delete Camera",Menu_DeleteOld);
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = "Old Camera";
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "arrow";
             Node.SelectedImageKey = "arrow";
         }
@@ -34,13 +40,22 @@ namespace CrashEdit
         }
 
         public ProtoZoneEntryController ProtoZoneEntryController { get; }
+        public ProtoZoneEntry ProtoZoneEntry => ProtoZoneEntryController.ProtoZoneEntry;
         public OldZoneEntryController OldZoneEntryController { get; }
+        public OldZoneEntry OldZoneEntry => OldZoneEntryController.OldZoneEntry;
         public OldCamera Camera { get; }
         
-        private void Menu_Delete()
+        private void Menu_DeleteProto()
         {
-            OldZoneEntryController.OldZoneEntry.Cameras.Remove(Camera);
-            OldZoneEntryController.OldZoneEntry.CameraCount = OldZoneEntryController.OldZoneEntry.Cameras.Count;
+            ProtoZoneEntry.Cameras.Remove(Camera);
+            ProtoZoneEntry.CameraCount = ProtoZoneEntry.Cameras.Count;
+            Dispose();
+        }
+        
+        private void Menu_DeleteOld()
+        {
+            OldZoneEntry.Cameras.Remove(Camera);
+            OldZoneEntry.CameraCount = OldZoneEntry.Cameras.Count;
             Dispose();
         }
     }

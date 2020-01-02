@@ -13,11 +13,16 @@ namespace CrashEdit
                 AddNode(new OldFrameController(this,frame));
             }
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Old Animation ({0})",OldAnimationEntry.EName);
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "limeb";
             Node.SelectedImageKey = "limeb";
         }

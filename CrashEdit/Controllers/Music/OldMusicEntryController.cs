@@ -23,11 +23,16 @@ namespace CrashEdit
             AddMenu("Export Linked VAB",Menu_Export_Linked_VAB);
             AddMenu("Export Linked VAB as DLS",Menu_Export_Linked_VAB_DLS);
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Old Music ({0})",OldMusicEntry.EName);
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "music";
             Node.SelectedImageKey = "music";
         }

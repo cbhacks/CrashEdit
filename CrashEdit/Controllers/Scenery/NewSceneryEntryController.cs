@@ -14,11 +14,16 @@ namespace CrashEdit
             //AddMenu("Export as COLLADA",Menu_Export_COLLADA);
             AddMenu("Fix coords imported from Crash 2", Menu_Fix_WGEOv2);
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Scenery ({0})",SceneryEntry.EName);
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "blueb";
             Node.SelectedImageKey = "blueb";
         }

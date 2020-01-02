@@ -15,11 +15,16 @@ namespace CrashEdit
                 AddNode(new NewEntityController(this,entity));
             }
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Zone ({0})",NewZoneEntry.EName);
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "violetb";
             Node.SelectedImageKey = "violetb";
         }

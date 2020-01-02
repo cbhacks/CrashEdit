@@ -14,11 +14,16 @@ namespace CrashEdit
             }
             AddNode(new OldSLSTSourceController(null,oldslstentry.End));
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Old Sort List ({0})",OldSLSTEntry.EName);
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "greyb";
             Node.SelectedImageKey = "greyb";
         }

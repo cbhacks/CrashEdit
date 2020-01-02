@@ -8,13 +8,18 @@ namespace CrashEdit
         {
             WavebankEntry = wavebankentry;
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Wavebank ({0})",WavebankEntry.EName);
-            Node.ImageKey = "music";
-            Node.SelectedImageKey = "music";
+        }
+
+        public override void InvalidateNodeImage()
+        {
+            Node.ImageKey = "musicyellow";
+            Node.SelectedImageKey = "musicyellow";
         }
 
         public WavebankEntry WavebankEntry { get; }

@@ -8,11 +8,16 @@ namespace CrashEdit
         {
             SpeechChunk = speechchunk;
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Speech Chunk {0}", NSFController.NSF.Chunks.IndexOf(SpeechChunk) * 2 + 1);
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "whitej";
             Node.SelectedImageKey = "whitej";
         }

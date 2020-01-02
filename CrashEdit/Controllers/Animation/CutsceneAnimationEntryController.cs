@@ -14,11 +14,16 @@ namespace CrashEdit
                 AddNode(new CutsceneFrameController(this,frame));
             }
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Cutscene Animation ({0})",CutsceneAnimationEntry.EName);
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "limeb";
             Node.SelectedImageKey = "limeb";
         }

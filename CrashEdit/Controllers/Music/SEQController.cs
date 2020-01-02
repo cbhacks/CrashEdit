@@ -14,11 +14,16 @@ namespace CrashEdit
             AddMenu("Export SEQ",Menu_Export_SEQ);
             AddMenu("Export SEQ as MIDI",Menu_Export_SEQ_MIDI);
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = "SEQ";
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "arrow";
             Node.SelectedImageKey = "arrow";
         }

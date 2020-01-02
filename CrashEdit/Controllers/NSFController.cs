@@ -34,11 +34,16 @@ namespace CrashEdit
                     AddMenu("Show Entire Level",Menu_ShowLevelC3);
             }
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = "NSF File";
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "nsf";
             Node.SelectedImageKey = "nsf";
         }

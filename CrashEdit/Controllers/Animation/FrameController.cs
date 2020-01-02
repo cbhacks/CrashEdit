@@ -10,11 +10,16 @@ namespace CrashEdit
             AnimationEntryController = animationentrycontroller;
             Frame = frame;
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = "Frame";
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "arrow";
             Node.SelectedImageKey = "arrow";
         }

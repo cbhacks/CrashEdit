@@ -9,11 +9,16 @@ namespace CrashEdit
             UnprocessedEntry = unprocessedentry;
             AddMenu("Process Entry",Menu_Process_Entry);
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Unprocessed T{0} Entry ({1})",UnprocessedEntry.Type,UnprocessedEntry.EName);
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "thing";
             Node.SelectedImageKey = "thing";
         }

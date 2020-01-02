@@ -23,11 +23,16 @@ namespace CrashEdit
             AddMenu("Add Camera", Menu_AddCamera);
             AddMenu("Add Entity", Menu_AddEntity);
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Old Zone ({0})",OldZoneEntry.EName);
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "violetb";
             Node.SelectedImageKey = "violetb";
         }

@@ -12,9 +12,8 @@ namespace CrashEdit
             Entity = entity;
             AddMenu("Duplicate Entity",Menu_Duplicate);
             AddMenu("Delete Entity",Menu_Delete);
-            Node.ImageKey = "arrow";
-            Node.SelectedImageKey = "arrow";
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
@@ -31,6 +30,12 @@ namespace CrashEdit
             {
                 Node.Text = "Entity";
             }
+        }
+
+        public override void InvalidateNodeImage()
+        {
+            Node.ImageKey = "arrow";
+            Node.SelectedImageKey = "arrow";
         }
 
         protected override Control CreateEditor()

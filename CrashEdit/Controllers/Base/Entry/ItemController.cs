@@ -14,11 +14,16 @@ namespace CrashEdit
                 AddMenu("Delete Item",Menu_Delete_Item);
             }
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = "Item";
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "arrow";
             Node.SelectedImageKey = "arrow";
         }

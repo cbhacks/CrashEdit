@@ -9,15 +9,20 @@ namespace CrashEdit
         {
             OldAnimationEntryController = oldanimationentrycontroller;
             OldFrame = oldframe;
+            AddMenu("Export as OBJ", Menu_Export_OBJ);
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = "Frame";
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "arrow";
             Node.SelectedImageKey = "arrow";
-            AddMenu("Export as OBJ",Menu_Export_OBJ);
         }
 
         protected override Control CreateEditor()

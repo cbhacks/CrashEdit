@@ -10,6 +10,7 @@ namespace CrashEdit
         {
             GOOLEntry = goolentry;
             InvalidateNode();
+            InvalidateNodeImage();
             //if (GOOLEntry.Version == GOOLVersion.Version0)
             //    AddMenu("Export as Crash 1 GOOL", Menu_ExportAsC1);
         }
@@ -31,6 +32,10 @@ namespace CrashEdit
                     Node.Text = $"GOOLv3 ({GOOLEntry.EName})";
                     break;
             }
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "codeb";
             Node.SelectedImageKey = "codeb";
         }

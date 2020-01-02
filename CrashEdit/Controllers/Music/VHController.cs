@@ -13,11 +13,16 @@ namespace CrashEdit
             AddMenuSeparator();
             AddMenu("Export VH",Menu_Export_VH);
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = "VH";
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "arrow";
             Node.SelectedImageKey = "arrow";
         }

@@ -10,11 +10,16 @@ namespace CrashEdit
             OldSLSTEntryController = oldslstentrycontroller;
             OldSLSTSource = oldslstsource;
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = "Source";
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "arrow";
             Node.SelectedImageKey = "arrow";
         }
