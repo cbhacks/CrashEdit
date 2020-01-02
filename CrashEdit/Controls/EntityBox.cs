@@ -1002,9 +1002,9 @@ namespace CrashEdit
                                 {
                                     if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityA.Value)
                                     {
-                                        for (int i = 0; i < c.ZoneEntryController.ZoneEntry.Header[0x190]; ++i)
+                                        for (int i = 0; i < c.ZoneEntryController.ZoneEntry.ZoneCount; ++i)
                                         {
-                                            if (entry.EName == Entry.EIDToEName(BitConv.FromInt32(c.ZoneEntryController.ZoneEntry.Header, 0x194 + i * 4)))
+                                            if (entry.EID == BitConv.FromInt32(c.ZoneEntryController.ZoneEntry.Header, 0x194 + i * 4))
                                             {
                                                 entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
                                             }
@@ -1229,9 +1229,9 @@ namespace CrashEdit
                                 {
                                     if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityB.Value)
                                     {
-                                        for (int i = 0; i < nc.NewZoneEntryController.NewZoneEntry.Header[0x190]; ++i)
+                                        for (int i = 0; i < nc.NewZoneEntryController.NewZoneEntry.ZoneCount; ++i)
                                         {
-                                            if (entry.EName == Entry.EIDToEName(BitConv.FromInt32(nc.NewZoneEntryController.NewZoneEntry.Header, 0x194 + i * 4)))
+                                            if (entry.EID == BitConv.FromInt32(nc.NewZoneEntryController.NewZoneEntry.Header, 0x194 + i * 4))
                                             {
                                                 entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
                                             }
