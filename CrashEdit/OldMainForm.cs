@@ -172,6 +172,9 @@ namespace CrashEdit
             {
                 Dock = DockStyle.Fill
             };
+            tbcTabs.SelectedIndexChanged += tbcTabs_SelectedIndexChanged;
+
+            tbcTabs_SelectedIndexChanged(null,null);
 
             dlgGameVersion = new GameVersionForm();
 
@@ -182,6 +185,16 @@ namespace CrashEdit
             Controls.Add(tsToolbar);
 
             dlgMakeBINFile.Filter = "Playstation Disc Images (*.bin)|*.bin";
+        }
+
+        private void tbcTabs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TabPage tab = tbcTabs.SelectedTab;
+            tbbSave.Enabled =
+            tbbPatchNSD.Enabled =
+            tbbClose.Enabled =
+            tbbFind.Enabled =
+            tbbFindNext.Enabled = tab != null && tab.Tag is NSFBox;
         }
 
         void tbbPAL_Click(object sender, EventArgs e)
