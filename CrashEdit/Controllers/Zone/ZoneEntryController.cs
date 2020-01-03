@@ -20,7 +20,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Zone ({0})",ZoneEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.ZoneEntryController_Text,ZoneEntry.EName);
         }
 
         public override void InvalidateNodeImage()
