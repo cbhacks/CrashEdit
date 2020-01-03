@@ -442,7 +442,7 @@ namespace CrashEdit
                     }
                     for (int i = 0; i < interpolator.Amount; ++i)
                     {
-                        double delta = InterpolatorForm.MathFuncs[interpolator.Func].Invoke((double)(i+1)/(interpolator.Amount+1));
+                        double delta = InterpolatorForm.MathFuncs[interpolator.Func].Invoke((double)(i+1)/(interpolator.Amount+1),interpolator.Order);
                         camera.Positions.Insert(i+interpolator.Start,new OldCameraPosition((short)interpolator.NewPositions[i+1].X,(short)interpolator.NewPositions[i+1].Y,(short)interpolator.NewPositions[i+1].Z,
                             (short)(deltarot.X*delta+startrot.X),
                             (short)(deltarot.Y*delta+startrot.Y),

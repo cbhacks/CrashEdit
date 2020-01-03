@@ -10,13 +10,9 @@ namespace CrashEdit
         public static Dictionary<string,MathCalc> MathFuncs = new Dictionary<string, MathCalc>()
         {
             { "Linear", MathFunctionLinear },
-            { "Square", MathFunctionSquare },
-            { "Cubic", MathFunctionCubic },
-            { "Sine", MathFunctionSine },
-            { "Inverse Square", MathFunctionSquareInverse },
-            { "Inverse Cubic", MathFunctionCubicInverse },
-            { "Tangent", MathFunctionTangent },
-            { "Double Square", MathFunctionSquareDouble }
+            { "Inverse Linear", MathFunctionInverseLinear },
+            { "Quadratic", MathFunctionDouble },
+            { "Inverse Quadratic", MathFunctionInverseDouble }
         };
 
         private List<Position> positions;
@@ -40,9 +36,8 @@ namespace CrashEdit
             dpdFunc.SelectedIndex = 0;
             numAmount.Maximum = short.MaxValue - positions.Count;
             numEnd.Maximum = positions.Count;
-            numStart.Maximum = numEnd.Maximum - 1;
+            numEnd_ValueChanged(null,null);
             UpdatePosition();
-            numTension.Value = 2;
         }
         
         private double Tension => (double)numTension.Value;
@@ -52,6 +47,7 @@ namespace CrashEdit
         public int End => (int)numEnd.Value;
         public int Amount => (int)numAmount.Value;
         public string Func => (string)dpdFunc.SelectedItem;
+        public double Order => (double)numOrder.Value;
 
         private void cmdOK_Click(object sender, EventArgs e)
         {
@@ -112,46 +108,58 @@ namespace CrashEdit
 
         private void CalcInterp()
         {
-            List<Position> subpositions = positions.GetRange(Start-1, End-Start+1);
-            double[] weights = new double[subpositions.Count];
-            weights[0] = weights[weights.Length-1] = 1;
-            for (int i = 1; i < weights.Length-1; ++i)
-                weights[i] = Tension;
-            Position start = positions[Start - 1];
-            Position end = positions[End - 1];
-            NewPositions = new Position[Amount + 2];
-            NewPositions[0] = start;
-            NewPositions[NewPositions.Length-1] = end;
-            Position[] oldpositions = new Position[NewPositions.Length];
-            oldpositions[0] = start;
-            oldpositions[oldpositions.Length-1] = end;
-            double[] arclen = new double[NewPositions.Length];
-            arclen[0] = 0;
-            double dist = 0;
-            Position distpos;
-            for (int i = 1, s = oldpositions.Length-1; i < s; ++i)
+            if (End - Start == 1)
             {
-                double fac = (double)i / s;
-                oldpositions[i] = GetBezierPoint(subpositions, weights, fac);
-                distpos = oldpositions[i] - oldpositions[i-1];
-                dist += Math.Sqrt(distpos.X*distpos.X + distpos.Y*distpos.Y + distpos.Z*distpos.Z);
-                arclen[i] = dist;
+                Position start = positions[Start - 1];
+                Position end = positions[End - 1];
+                Position delta = end - start;
+                NewPositions = new Position[Amount + 2];
+                NewPositions[0] = start;
+                NewPositions[NewPositions.Length - 1] = end;
+                for (int i = 1, s = NewPositions.Length-1; i < s + 1; ++i)
+                {
+                    NewPositions[i] = delta * MathFuncs[Func].Invoke((double)i/s,Order) + start;
+                }
+                delta /= Amount+1;
+                lblAverage.Text = $"Average Point Distance: {(int)Math.Sqrt(delta.X*delta.X+delta.Y*delta.Y+delta.Z*delta.Z)}";
             }
-            distpos = end - oldpositions[oldpositions.Length-2];
-            dist += Math.Sqrt(distpos.X*distpos.X + distpos.Y*distpos.Y + distpos.Z*distpos.Z);
-            arclen[arclen.Length-1] = dist;
-            dist /= oldpositions.Length-1;
-            lblAverage.Text = $"Average Point Distance: {(int)dist}";
-            // recalculate points for quick equidistance?
-            for (int i = 1, s = NewPositions.Length - 1; i < s; ++i)
+            else
             {
-                double fac = (double)i / s;
-                MathFuncs[Func].Invoke(fac);
-                NewPositions[i] = FindPointByDistance(oldpositions, arclen, fac);
+                List<Position> subpositions = positions.GetRange(Start - 1, End - Start + 1);
+                double[] weights = new double[subpositions.Count];
+                weights[0] = weights[weights.Length - 1] = 1;
+                for (int i = 1; i < weights.Length - 1; ++i)
+                    weights[i] = Tension;
+                Position start = positions[Start - 1];
+                Position end = positions[End - 1];
+                NewPositions = new Position[Amount + 2];
+                NewPositions[0] = start;
+                NewPositions[NewPositions.Length - 1] = end;
+                Position[] oldpositions = new Position[NewPositions.Length * 2];
+                oldpositions[0] = start;
+                oldpositions[oldpositions.Length - 1] = end;
+                double[] arclen = new double[oldpositions.Length];
+                arclen[0] = 0;
+                double dist = 0;
+                Position distpos;
+                for (int i = 1, s = oldpositions.Length-1; i < s + 1; ++i)
+                {
+                    oldpositions[i] = GetBezierPoint(subpositions, weights, MathFuncs[Func].Invoke((double)i/s,Order));
+                    distpos = oldpositions[i] - oldpositions[i - 1];
+                    dist += Math.Sqrt(distpos.X * distpos.X + distpos.Y * distpos.Y + distpos.Z * distpos.Z);
+                    arclen[i] = dist;
+                }
+                dist /= NewPositions.Length - 1;
+                lblAverage.Text = $"Average Point Distance: {(int)dist}";
+                // recalculate points for equidistance
+                for (int i = 1, s = NewPositions.Length-1; i < s; ++i)
+                {
+                    NewPositions[i] = FindPointByDistance(oldpositions, arclen, MathFuncs[Func].Invoke((double)i/s,Order));
+                }
             }
         }
 
-        private Position FindPointByDistance(Position[] positions, double[] arclen, double t)
+        private static Position FindPointByDistance(Position[] positions, double[] arclen, double t)
         {
             double targetlen = t * arclen[arclen.Length-1];
             for (int i = 0; i < arclen.Length; ++i)
@@ -204,46 +212,36 @@ namespace CrashEdit
             return newpos;
         }
 
-        public delegate double MathCalc(double x);
+        public delegate double MathCalc(double x,double o);
 
-        private static double MathFunctionLinear(double x)
+        private static double MathFunctionLinear(double x,double o)
         {
-            return x;
+            return Math.Pow(x,o);
         }
 
-        private static double MathFunctionSquare(double x)
+        private static double MathFunctionInverseLinear(double x,double o)
         {
-            return x*x;
+            return 1 - MathFunctionLinear(-x+1,o);
         }
 
-        private static double MathFunctionCubic(double x)
+        internal static double MathFuncQuadrPolinomial1(double x,double o)
         {
-            return x*x*x;
+            return Math.Min(Math.Pow(2*Math.Max(x,0),o)/2,0.5);
         }
 
-        private static double MathFunctionSine(double x)
+        internal static double MathFuncQuadrPolinomial2(double x,double o)
         {
-            return Math.Sin((x-0.5)*Math.PI) / 2 + 0.5;
+            return 0.5 - MathFuncQuadrPolinomial1(1 - x,o);
         }
 
-        private static double MathFunctionTangent(double x)
+        private static double MathFunctionDouble(double x,double o)
         {
-            return Math.Tan((x-0.5)*Math.PI / 2) / 2 + 0.5;
+            return MathFuncQuadrPolinomial1(x,o) + MathFuncQuadrPolinomial2(x,o);
         }
 
-        private static double MathFunctionSquareDouble(double x)
+        private static double MathFunctionInverseDouble(double x,double o)
         {
-            return Math.Pow(Math.Min(2*x,1),2)/2 + Math.Max(0,-Math.Pow(2*Math.Min(x-1,0),2)/2+0.5);
-        }
-
-        private static double MathFunctionSquareInverse(double x)
-        {
-            return Math.Sqrt(x);
-        }
-
-        private static double MathFunctionCubicInverse(double x)
-        {
-            return Math.Pow(x,1.0/3.0);
+            return MathFuncQuadrPolinomial1(x-0.5,o) + MathFuncQuadrPolinomial2(x+0.5,o);
         }
 
         private void numStart_ValueChanged(object sender, EventArgs e)
@@ -252,6 +250,11 @@ namespace CrashEdit
         }
 
         private void numTension_ValueChanged(object sender, EventArgs e)
+        {
+            CalcInterp();
+        }
+
+        private void numOrder_ValueChanged(object sender, EventArgs e)
         {
             CalcInterp();
         }
