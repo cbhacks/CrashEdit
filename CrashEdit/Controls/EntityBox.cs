@@ -1440,6 +1440,7 @@ namespace CrashEdit
             UpdateDDASection();
             UpdateDDASettings();
             UpdateOtherSettings();
+            UpdateZMod();
             UpdateTTReward();
             tabSpecial.Enter -= tabSpecial_Enter;
         }
@@ -1926,6 +1927,34 @@ namespace CrashEdit
             else
                 entity.Neighbors.Rows[neighborindex].Values.Insert(neighborsettingindex, entity.Neighbors.Rows[neighborindex].Values[neighborsettingindex]);
             UpdateNeighbors();
+        }
+
+        private void UpdateZMod()
+        {
+            if (entity.ZMod.HasValue)
+            {
+                numZMod.Value = entity.ZMod.Value;
+            }
+            numZMod.Enabled = entity.ZMod.HasValue;
+            chkZMod.Checked = entity.ZMod.HasValue;
+        }
+
+        private void chkZMod_CheckedChanged(object sender, EventArgs e)
+        {
+            numZMod.Enabled = chkZMod.Checked;
+            if (chkZMod.Checked)
+            {
+                entity.ZMod = (int)numZMod.Value;
+            }
+            else
+            {
+                entity.ZMod = null;
+            }
+        }
+
+        private void numZMod_ValueChanged(object sender, EventArgs e)
+        {
+            entity.ZMod = (int)numZMod.Value;
         }
     }
 }

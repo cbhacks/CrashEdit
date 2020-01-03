@@ -82,6 +82,8 @@ namespace Crash
         //private int? mode;
         [EntityPropertyField(0x2C)]
         private string name;
+        [EntityPropertyField(0x32)]
+        private int? zmod;
         [EntityPropertyField(0x4B)]
         private List<EntityPosition> positions = null;
         [EntityPropertyField(0x9F)]
@@ -165,6 +167,12 @@ namespace Crash
         {
             get => name;
             set => name = value;
+        }
+
+        public int? ZMod
+        {
+            get => zmod;
+            set => zmod = value;
         }
 
         public IList<EntityPosition> Positions => positions;

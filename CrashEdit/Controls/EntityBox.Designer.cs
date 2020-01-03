@@ -215,6 +215,9 @@ namespace CrashEdit
             this.cmdNextEntityA = new System.Windows.Forms.Button();
             this.cmdPrevRowDrawA = new System.Windows.Forms.Button();
             this.cmdNextRowDrawA = new System.Windows.Forms.Button();
+            this.fraZMod = new System.Windows.Forms.GroupBox();
+            this.chkZMod = new System.Windows.Forms.CheckBox();
+            this.numZMod = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -284,6 +287,8 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numMetavalueDrawA)).BeginInit();
             this.fraEntityA.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEntityA)).BeginInit();
+            this.fraZMod.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numZMod)).BeginInit();
             this.SuspendLayout();
             // 
             // chkType
@@ -831,7 +836,7 @@ namespace CrashEdit
             this.tbcTabs.Location = new System.Drawing.Point(0, 0);
             this.tbcTabs.Name = "tbcTabs";
             this.tbcTabs.SelectedIndex = 0;
-            this.tbcTabs.Size = new System.Drawing.Size(420, 460);
+            this.tbcTabs.Size = new System.Drawing.Size(500, 460);
             this.tbcTabs.TabIndex = 7;
             // 
             // tabGeneral
@@ -845,7 +850,7 @@ namespace CrashEdit
             this.tabGeneral.Controls.Add(this.fraID);
             this.tabGeneral.Location = new System.Drawing.Point(4, 22);
             this.tabGeneral.Name = "tabGeneral";
-            this.tabGeneral.Size = new System.Drawing.Size(412, 434);
+            this.tabGeneral.Size = new System.Drawing.Size(492, 434);
             this.tabGeneral.TabIndex = 0;
             this.tabGeneral.Text = "General";
             this.tabGeneral.UseVisualStyleBackColor = true;
@@ -853,6 +858,7 @@ namespace CrashEdit
             // tabSpecial
             // 
             this.tabSpecial.AutoScroll = true;
+            this.tabSpecial.Controls.Add(this.fraZMod);
             this.tabSpecial.Controls.Add(this.fraTTReward);
             this.tabSpecial.Controls.Add(this.fraOtherSettings);
             this.tabSpecial.Controls.Add(this.fraScaling);
@@ -862,7 +868,7 @@ namespace CrashEdit
             this.tabSpecial.Controls.Add(this.fraVictims);
             this.tabSpecial.Location = new System.Drawing.Point(4, 22);
             this.tabSpecial.Name = "tabSpecial";
-            this.tabSpecial.Size = new System.Drawing.Size(412, 434);
+            this.tabSpecial.Size = new System.Drawing.Size(492, 434);
             this.tabSpecial.TabIndex = 1;
             this.tabSpecial.Text = "Special";
             this.tabSpecial.UseVisualStyleBackColor = true;
@@ -872,7 +878,7 @@ namespace CrashEdit
             // 
             this.fraTTReward.Controls.Add(this.chkTTReward);
             this.fraTTReward.Controls.Add(this.numTTReward);
-            this.fraTTReward.Location = new System.Drawing.Point(121, 239);
+            this.fraTTReward.Location = new System.Drawing.Point(239, 239);
             this.fraTTReward.Name = "fraTTReward";
             this.fraTTReward.Size = new System.Drawing.Size(112, 70);
             this.fraTTReward.TabIndex = 12;
@@ -952,7 +958,7 @@ namespace CrashEdit
             // 
             this.fraScaling.Controls.Add(this.chkScaling);
             this.fraScaling.Controls.Add(this.numScaling);
-            this.fraScaling.Location = new System.Drawing.Point(3, 239);
+            this.fraScaling.Location = new System.Drawing.Point(121, 239);
             this.fraScaling.Name = "fraScaling";
             this.fraScaling.Size = new System.Drawing.Size(112, 70);
             this.fraScaling.TabIndex = 11;
@@ -997,7 +1003,7 @@ namespace CrashEdit
             this.fraDDASection.Size = new System.Drawing.Size(112, 70);
             this.fraDDASection.TabIndex = 10;
             this.fraDDASection.TabStop = false;
-            this.fraDDASection.Text = "Section";
+            this.fraDDASection.Text = "DDA Section";
             // 
             // chkDDASection
             // 
@@ -1037,7 +1043,7 @@ namespace CrashEdit
             this.fraDDASettings.Size = new System.Drawing.Size(112, 70);
             this.fraDDASettings.TabIndex = 9;
             this.fraDDASettings.TabStop = false;
-            this.fraDDASettings.Text = "Death Count";
+            this.fraDDASettings.Text = "DDA Death Count";
             // 
             // chkDDASettings
             // 
@@ -1211,9 +1217,9 @@ namespace CrashEdit
             // lblVictimIndex
             // 
             this.lblVictimIndex.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVictimIndex.Location = new System.Drawing.Point(38, 45);
+            this.lblVictimIndex.Location = new System.Drawing.Point(6, 45);
             this.lblVictimIndex.Name = "lblVictimIndex";
-            this.lblVictimIndex.Size = new System.Drawing.Size(60, 23);
+            this.lblVictimIndex.Size = new System.Drawing.Size(120, 23);
             this.lblVictimIndex.TabIndex = 7;
             this.lblVictimIndex.Text = "?? / ??";
             this.lblVictimIndex.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1229,7 +1235,7 @@ namespace CrashEdit
             this.tabCamera.Location = new System.Drawing.Point(4, 22);
             this.tabCamera.Name = "tabCamera";
             this.tabCamera.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCamera.Size = new System.Drawing.Size(412, 434);
+            this.tabCamera.Size = new System.Drawing.Size(492, 434);
             this.tabCamera.TabIndex = 2;
             this.tabCamera.Text = "Camera";
             this.tabCamera.UseVisualStyleBackColor = true;
@@ -1701,7 +1707,7 @@ namespace CrashEdit
             this.tabLoadLists.Location = new System.Drawing.Point(4, 22);
             this.tabLoadLists.Name = "tabLoadLists";
             this.tabLoadLists.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLoadLists.Size = new System.Drawing.Size(412, 434);
+            this.tabLoadLists.Size = new System.Drawing.Size(492, 434);
             this.tabLoadLists.TabIndex = 2;
             this.tabLoadLists.Text = "Load Lists";
             this.tabLoadLists.UseVisualStyleBackColor = true;
@@ -1711,7 +1717,7 @@ namespace CrashEdit
             // 
             this.lblEIDErrB.AutoSize = true;
             this.lblEIDErrB.ForeColor = System.Drawing.Color.Red;
-            this.lblEIDErrB.Location = new System.Drawing.Point(244, 300);
+            this.lblEIDErrB.Location = new System.Drawing.Point(158, 300);
             this.lblEIDErrB.Name = "lblEIDErrB";
             this.lblEIDErrB.Size = new System.Drawing.Size(126, 13);
             this.lblEIDErrB.TabIndex = 23;
@@ -1792,7 +1798,7 @@ namespace CrashEdit
             this.fraLoadListB.Controls.Add(this.fraEIDB);
             this.fraLoadListB.Controls.Add(this.cmdPrevRowB);
             this.fraLoadListB.Controls.Add(this.cmdNextRowB);
-            this.fraLoadListB.Location = new System.Drawing.Point(241, 6);
+            this.fraLoadListB.Location = new System.Drawing.Point(155, 6);
             this.fraLoadListB.Name = "fraLoadListB";
             this.fraLoadListB.Size = new System.Drawing.Size(143, 291);
             this.fraLoadListB.TabIndex = 21;
@@ -1844,9 +1850,9 @@ namespace CrashEdit
             // lblLoadListRowIndexB
             // 
             this.lblLoadListRowIndexB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLoadListRowIndexB.Location = new System.Drawing.Point(44, 45);
+            this.lblLoadListRowIndexB.Location = new System.Drawing.Point(6, 45);
             this.lblLoadListRowIndexB.Name = "lblLoadListRowIndexB";
-            this.lblLoadListRowIndexB.Size = new System.Drawing.Size(60, 23);
+            this.lblLoadListRowIndexB.Size = new System.Drawing.Size(131, 23);
             this.lblLoadListRowIndexB.TabIndex = 17;
             this.lblLoadListRowIndexB.Text = "?? / ??";
             this.lblLoadListRowIndexB.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1880,9 +1886,9 @@ namespace CrashEdit
             // lblEIDIndexB
             // 
             this.lblEIDIndexB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEIDIndexB.Location = new System.Drawing.Point(38, 45);
+            this.lblEIDIndexB.Location = new System.Drawing.Point(7, 45);
             this.lblEIDIndexB.Name = "lblEIDIndexB";
-            this.lblEIDIndexB.Size = new System.Drawing.Size(60, 23);
+            this.lblEIDIndexB.Size = new System.Drawing.Size(116, 23);
             this.lblEIDIndexB.TabIndex = 14;
             this.lblEIDIndexB.Text = "?? / ??";
             this.lblEIDIndexB.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2029,9 +2035,9 @@ namespace CrashEdit
             // lblLoadListRowIndexA
             // 
             this.lblLoadListRowIndexA.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLoadListRowIndexA.Location = new System.Drawing.Point(44, 45);
+            this.lblLoadListRowIndexA.Location = new System.Drawing.Point(6, 45);
             this.lblLoadListRowIndexA.Name = "lblLoadListRowIndexA";
-            this.lblLoadListRowIndexA.Size = new System.Drawing.Size(60, 23);
+            this.lblLoadListRowIndexA.Size = new System.Drawing.Size(131, 23);
             this.lblLoadListRowIndexA.TabIndex = 17;
             this.lblLoadListRowIndexA.Text = "?? / ??";
             this.lblLoadListRowIndexA.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2065,9 +2071,9 @@ namespace CrashEdit
             // lblEIDIndexA
             // 
             this.lblEIDIndexA.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEIDIndexA.Location = new System.Drawing.Point(38, 45);
+            this.lblEIDIndexA.Location = new System.Drawing.Point(6, 45);
             this.lblEIDIndexA.Name = "lblEIDIndexA";
-            this.lblEIDIndexA.Size = new System.Drawing.Size(60, 23);
+            this.lblEIDIndexA.Size = new System.Drawing.Size(120, 23);
             this.lblEIDIndexA.TabIndex = 14;
             this.lblEIDIndexA.Text = "?? / ??";
             this.lblEIDIndexA.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2149,7 +2155,7 @@ namespace CrashEdit
             this.tabDrawLists.Location = new System.Drawing.Point(4, 22);
             this.tabDrawLists.Name = "tabDrawLists";
             this.tabDrawLists.Padding = new System.Windows.Forms.Padding(3);
-            this.tabDrawLists.Size = new System.Drawing.Size(412, 434);
+            this.tabDrawLists.Size = new System.Drawing.Size(492, 434);
             this.tabDrawLists.TabIndex = 3;
             this.tabDrawLists.Text = "Draw Lists";
             this.tabDrawLists.UseVisualStyleBackColor = true;
@@ -2165,7 +2171,7 @@ namespace CrashEdit
             this.fraDrawListB.Controls.Add(this.fraEntityB);
             this.fraDrawListB.Controls.Add(this.cmdPrevRowDrawB);
             this.fraDrawListB.Controls.Add(this.cmdNextRowDrawB);
-            this.fraDrawListB.Location = new System.Drawing.Point(241, 6);
+            this.fraDrawListB.Location = new System.Drawing.Point(155, 6);
             this.fraDrawListB.Name = "fraDrawListB";
             this.fraDrawListB.Size = new System.Drawing.Size(143, 291);
             this.fraDrawListB.TabIndex = 21;
@@ -2222,9 +2228,9 @@ namespace CrashEdit
             // lblDrawListRowIndexB
             // 
             this.lblDrawListRowIndexB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDrawListRowIndexB.Location = new System.Drawing.Point(44, 45);
+            this.lblDrawListRowIndexB.Location = new System.Drawing.Point(6, 45);
             this.lblDrawListRowIndexB.Name = "lblDrawListRowIndexB";
-            this.lblDrawListRowIndexB.Size = new System.Drawing.Size(60, 23);
+            this.lblDrawListRowIndexB.Size = new System.Drawing.Size(131, 23);
             this.lblDrawListRowIndexB.TabIndex = 17;
             this.lblDrawListRowIndexB.Text = "?? / ??";
             this.lblDrawListRowIndexB.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2276,9 +2282,9 @@ namespace CrashEdit
             // lblEntityIndexB
             // 
             this.lblEntityIndexB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEntityIndexB.Location = new System.Drawing.Point(38, 45);
+            this.lblEntityIndexB.Location = new System.Drawing.Point(6, 45);
             this.lblEntityIndexB.Name = "lblEntityIndexB";
-            this.lblEntityIndexB.Size = new System.Drawing.Size(60, 23);
+            this.lblEntityIndexB.Size = new System.Drawing.Size(120, 23);
             this.lblEntityIndexB.TabIndex = 14;
             this.lblEntityIndexB.Text = "?? / ??";
             this.lblEntityIndexB.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2420,9 +2426,9 @@ namespace CrashEdit
             // lblDrawListRowIndexA
             // 
             this.lblDrawListRowIndexA.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDrawListRowIndexA.Location = new System.Drawing.Point(44, 45);
+            this.lblDrawListRowIndexA.Location = new System.Drawing.Point(6, 45);
             this.lblDrawListRowIndexA.Name = "lblDrawListRowIndexA";
-            this.lblDrawListRowIndexA.Size = new System.Drawing.Size(60, 23);
+            this.lblDrawListRowIndexA.Size = new System.Drawing.Size(131, 23);
             this.lblDrawListRowIndexA.TabIndex = 17;
             this.lblDrawListRowIndexA.Text = "?? / ??";
             this.lblDrawListRowIndexA.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2474,9 +2480,9 @@ namespace CrashEdit
             // lblEntityIndexA
             // 
             this.lblEntityIndexA.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEntityIndexA.Location = new System.Drawing.Point(38, 45);
+            this.lblEntityIndexA.Location = new System.Drawing.Point(6, 45);
             this.lblEntityIndexA.Name = "lblEntityIndexA";
-            this.lblEntityIndexA.Size = new System.Drawing.Size(60, 23);
+            this.lblEntityIndexA.Size = new System.Drawing.Size(120, 23);
             this.lblEntityIndexA.TabIndex = 14;
             this.lblEntityIndexA.Text = "?? / ??";
             this.lblEntityIndexA.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2551,13 +2557,53 @@ namespace CrashEdit
             this.cmdNextRowDrawA.UseVisualStyleBackColor = true;
             this.cmdNextRowDrawA.Click += new System.EventHandler(this.cmdNextRowDrawA_Click);
             // 
+            // fraZMod
+            // 
+            this.fraZMod.Controls.Add(this.chkZMod);
+            this.fraZMod.Controls.Add(this.numZMod);
+            this.fraZMod.Location = new System.Drawing.Point(3, 239);
+            this.fraZMod.Name = "fraZMod";
+            this.fraZMod.Size = new System.Drawing.Size(112, 70);
+            this.fraZMod.TabIndex = 11;
+            this.fraZMod.TabStop = false;
+            this.fraZMod.Text = "Depth Modifier";
+            // 
+            // chkZMod
+            // 
+            this.chkZMod.AutoSize = true;
+            this.chkZMod.Location = new System.Drawing.Point(6, 19);
+            this.chkZMod.Name = "chkZMod";
+            this.chkZMod.Size = new System.Drawing.Size(65, 17);
+            this.chkZMod.TabIndex = 0;
+            this.chkZMod.Text = "Enabled";
+            this.chkZMod.UseVisualStyleBackColor = true;
+            this.chkZMod.CheckedChanged += new System.EventHandler(this.chkZMod_CheckedChanged);
+            // 
+            // numZMod
+            // 
+            this.numZMod.Location = new System.Drawing.Point(6, 42);
+            this.numZMod.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.numZMod.Minimum = new decimal(new int[] {
+            -2147483648,
+            0,
+            0,
+            -2147483648});
+            this.numZMod.Name = "numZMod";
+            this.numZMod.Size = new System.Drawing.Size(100, 20);
+            this.numZMod.TabIndex = 1;
+            this.numZMod.ValueChanged += new System.EventHandler(this.numZMod_ValueChanged);
+            // 
             // EntityBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tbcTabs);
             this.Name = "EntityBox";
-            this.Size = new System.Drawing.Size(420, 460);
+            this.Size = new System.Drawing.Size(500, 460);
             ((System.ComponentModel.ISupportInitialize)(this.numType)).EndInit();
             this.fraType.ResumeLayout(false);
             this.fraType.PerformLayout();
@@ -2657,6 +2703,9 @@ namespace CrashEdit
             this.fraEntityA.ResumeLayout(false);
             this.fraEntityA.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEntityA)).EndInit();
+            this.fraZMod.ResumeLayout(false);
+            this.fraZMod.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numZMod)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2850,5 +2899,8 @@ namespace CrashEdit
         private System.Windows.Forms.Button cmdInsertNeighborSetting;
         private System.Windows.Forms.Button cmdPrevNeighborSetting;
         private System.Windows.Forms.Button cmdNextNeighborSetting;
+        private System.Windows.Forms.GroupBox fraZMod;
+        private System.Windows.Forms.CheckBox chkZMod;
+        private System.Windows.Forms.NumericUpDown numZMod;
     }
 }
