@@ -174,6 +174,14 @@ namespace CrashEdit
             };
             tbcTabs.SelectedIndexChanged += tbcTabs_SelectedIndexChanged;
 
+            TabPage configtab = new TabPage("CrashEdit")
+            {
+                Tag = null
+            };
+            configtab.Controls.Add(new ConfigEditor() { Dock = DockStyle.Fill });
+
+            tbcTabs.TabPages.Add(configtab);
+
             tbcTabs_SelectedIndexChanged(null,null);
 
             dlgGameVersion = new GameVersionForm();

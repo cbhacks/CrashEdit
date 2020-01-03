@@ -8,6 +8,13 @@ namespace CrashEdit
         [STAThread]
         internal static void Main(string[] args)
         {
+            try
+            {
+                Crash.UI.Properties.Resources.Culture = new System.Globalization.CultureInfo(ConfigEditor.Languages[Properties.Settings.Default.Language]);
+            }
+            catch (System.Collections.Generic.KeyNotFoundException) {
+                Properties.Settings.Default.Reset();
+            }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             using (OldMainForm mainform = new OldMainForm())

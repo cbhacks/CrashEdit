@@ -64,6 +64,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigEditor.Designer.cs">
+      <DependentUpon>ConfigEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\GOOL\GOOLEntryController.cs" />
     <Compile Include="Controls\GOOLBox.cs">
       <SubType>UserControl</SubType>
@@ -276,6 +282,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="OldResources.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
@@ -297,6 +308,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ConfigEditor.resx">
+      <DependentUpon>ConfigEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\OldFrameBox.resx">
       <DependentUpon>OldFrameBox.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -425,5 +439,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 </Project>
