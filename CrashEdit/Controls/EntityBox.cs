@@ -27,6 +27,8 @@ namespace CrashEdit
         private int drawlistbentityindex;
         private int neighborindex;
         private int neighborsettingindex;
+        private int fovframeindex;
+        private int fovindex;
 
         public EntityBox(NewEntityController controller)
         {
@@ -76,6 +78,8 @@ namespace CrashEdit
             drawlistbentityindex = 0;
             neighborindex = 0;
             neighborsettingindex = 0;
+            fovframeindex = 0;
+            fovindex = 0;
         }
 
         private void InvalidateNodes()
@@ -1453,6 +1457,7 @@ namespace CrashEdit
             UpdateMode();
             UpdateAvgDist();
             UpdateNeighbors();
+            UpdateFOV();
             tabCamera.Enter -= tabCamera_Enter;
         }
 
@@ -1955,6 +1960,135 @@ namespace CrashEdit
         private void numZMod_ValueChanged(object sender, EventArgs e)
         {
             entity.ZMod = (int)numZMod.Value;
+        }
+
+        private void UpdateFOV()
+        {
+            if (entity.FOV != null && entity.FOV.RowCount != 0)
+            {
+                if (fovframeindex >= entity.FOV.RowCount)
+                    fovframeindex = entity.FOV.RowCount-1;
+                lblFOVPosition.Enabled = true;
+                numFOVPosition.Enabled = true;
+                numFOVPosition.Value = entity.FOV.Rows[fovframeindex].MetaValue.Value;
+                lblFOVFrame.Text = $"{fovframeindex+1} / {entity.FOV.RowCount}";
+                cmdPrevFOVFrame.Enabled = fovframeindex > 0;
+                cmdNextFOVFrame.Enabled = fovframeindex + 1 < entity.FOV.RowCount;
+                cmdRemoveFOVFrame.Enabled = true;
+                if (entity.FOV.Rows[fovframeindex].Values.Count > 0)
+                {
+                    if (fovindex >= entity.FOV.Rows[fovframeindex].Values.Count)
+                        fovindex = entity.FOV.Rows[fovframeindex].Values.Count - 1;
+                    cmdInsertFOV.Enabled = true;
+                    cmdRemoveFOV.Enabled = true;
+                    lblFOV.Enabled = true;
+                    numFOV.Enabled = true;
+                    cmdPrevFOV.Enabled = fovindex > 0;
+                    cmdNextFOV.Enabled = fovindex + 1 < entity.FOV.Rows[fovframeindex].Values.Count;
+                    lblFOVIndex.Text = $"{fovindex+1} / {entity.FOV.Rows[fovframeindex].Values.Count}";
+                    numFOV.Value = entity.FOV.Rows[fovframeindex].Values[fovindex].VictimID;
+                }
+                else
+                {
+                    cmdInsertFOV.Enabled = false;
+                    cmdRemoveFOV.Enabled = false;
+                    lblFOV.Enabled = false;
+                    numFOV.Enabled = false;
+                    cmdPrevFOV.Enabled = false;
+                    cmdNextFOV.Enabled = false;
+                    lblFOVIndex.Text = "-- / --";
+                }
+            }
+            else
+            {
+                entity.FOV = null;
+                lblFOVFrame.Text = "-- / --";
+                lblFOVIndex.Text = "-- / --";
+                lblFOVPosition.Enabled = false;
+                cmdPrevFOVFrame.Enabled = false;
+                cmdNextFOVFrame.Enabled = false;
+                cmdRemoveFOVFrame.Enabled = false;
+                lblFOV.Enabled = false;
+                numFOV.Enabled = false;
+                cmdPrevFOV.Enabled = false;
+                cmdNextFOV.Enabled = false;
+                cmdRemoveFOV.Enabled = false;
+                cmdInsertFOV.Enabled = false;
+            }
+        }
+
+        private void cmdPrevFOVFrame_Click(object sender, EventArgs e)
+        {
+            --fovframeindex;
+            UpdateFOV();
+        }
+
+        private void cmdNextFOVFrame_Click(object sender, EventArgs e)
+        {
+            ++fovframeindex;
+            UpdateFOV();
+        }
+
+        private void cmdRemoveFOVFrame_Click(object sender, EventArgs e)
+        {
+            entity.FOV.Rows.RemoveAt(fovframeindex);
+            UpdateFOV();
+        }
+
+        private void cmdInsertFOVFrame_Click(object sender, EventArgs e)
+        {
+            if (entity.FOV == null || entity.FOV.Rows.Count == 0)
+            {
+                entity.FOV = new EntityVictimProperty();
+                entity.FOV.Rows.Add(new EntityPropertyRow<EntityVictim>());
+                entity.FOV.Rows[entity.FOV.RowCount - 1].MetaValue = 0;
+            }
+            else
+            {
+                var newrow = new EntityPropertyRow<EntityVictim>();
+                newrow.MetaValue = entity.FOV.Rows[fovframeindex].MetaValue;
+                foreach (var val in entity.FOV.Rows[fovframeindex].Values)
+                    newrow.Values.Add(val);
+                entity.FOV.Rows.Insert(fovframeindex,newrow);
+            }
+            UpdateFOV();
+        }
+
+        private void cmdPrevFOV_Click(object sender, EventArgs e)
+        {
+            --fovindex;
+            UpdateFOV();
+        }
+
+        private void cmdNextFOV_Click(object sender, EventArgs e)
+        {
+            ++fovindex;
+            UpdateFOV();
+        }
+
+        private void cmdRemoveFOV_Click(object sender, EventArgs e)
+        {
+            entity.FOV.Rows[fovframeindex].Values.RemoveAt(fovindex);
+            UpdateFOV();
+        }
+
+        private void cmdInsertFOV_Click(object sender, EventArgs e)
+        {
+            if (entity.FOV.Rows[fovframeindex].Values.Count == 0)
+                entity.FOV.Rows[fovframeindex].Values.Add(new EntityVictim());
+            else
+                entity.FOV.Rows[fovframeindex].Values.Insert(fovindex, entity.FOV.Rows[fovframeindex].Values[fovindex]);
+            UpdateFOV();
+        }
+
+        private void numFOVPosition_ValueChanged(object sender, EventArgs e)
+        {
+            entity.FOV.Rows[fovframeindex].MetaValue = (short)numFOVPosition.Value;
+        }
+
+        private void numFOV_ValueChanged(object sender, EventArgs e)
+        {
+            entity.FOV.Rows[fovframeindex].Values[fovindex] = new EntityVictim((short)numFOV.Value);
         }
     }
 }

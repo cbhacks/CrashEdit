@@ -73,6 +73,9 @@ namespace CrashEdit
             this.tbcTabs = new System.Windows.Forms.TabControl();
             this.tabGeneral = new System.Windows.Forms.TabPage();
             this.tabSpecial = new System.Windows.Forms.TabPage();
+            this.fraZMod = new System.Windows.Forms.GroupBox();
+            this.chkZMod = new System.Windows.Forms.CheckBox();
+            this.numZMod = new System.Windows.Forms.NumericUpDown();
             this.fraTTReward = new System.Windows.Forms.GroupBox();
             this.chkTTReward = new System.Windows.Forms.CheckBox();
             this.numTTReward = new System.Windows.Forms.NumericUpDown();
@@ -101,6 +104,22 @@ namespace CrashEdit
             this.cmdPreviousVictim = new System.Windows.Forms.Button();
             this.lblVictimIndex = new System.Windows.Forms.Label();
             this.tabCamera = new System.Windows.Forms.TabPage();
+            this.fraFOV = new System.Windows.Forms.GroupBox();
+            this.lblFOVPosition = new System.Windows.Forms.Label();
+            this.cmdRemoveFOVFrame = new System.Windows.Forms.Button();
+            this.cmdInsertFOVFrame = new System.Windows.Forms.Button();
+            this.numFOVPosition = new System.Windows.Forms.NumericUpDown();
+            this.lblFOVFrame = new System.Windows.Forms.Label();
+            this.fraFOVFrame = new System.Windows.Forms.GroupBox();
+            this.lblFOVIndex = new System.Windows.Forms.Label();
+            this.cmdRemoveFOV = new System.Windows.Forms.Button();
+            this.cmdInsertFOV = new System.Windows.Forms.Button();
+            this.cmdPrevFOV = new System.Windows.Forms.Button();
+            this.cmdNextFOV = new System.Windows.Forms.Button();
+            this.lblFOV = new System.Windows.Forms.Label();
+            this.numFOV = new System.Windows.Forms.NumericUpDown();
+            this.cmdPrevFOVFrame = new System.Windows.Forms.Button();
+            this.cmdNextFOVFrame = new System.Windows.Forms.Button();
             this.fraNeighbor = new System.Windows.Forms.GroupBox();
             this.lblNeighborPosition = new System.Windows.Forms.Label();
             this.cmdRemoveNeighbor = new System.Windows.Forms.Button();
@@ -215,9 +234,6 @@ namespace CrashEdit
             this.cmdNextEntityA = new System.Windows.Forms.Button();
             this.cmdPrevRowDrawA = new System.Windows.Forms.Button();
             this.cmdNextRowDrawA = new System.Windows.Forms.Button();
-            this.fraZMod = new System.Windows.Forms.GroupBox();
-            this.chkZMod = new System.Windows.Forms.CheckBox();
-            this.numZMod = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -237,6 +253,8 @@ namespace CrashEdit
             this.tbcTabs.SuspendLayout();
             this.tabGeneral.SuspendLayout();
             this.tabSpecial.SuspendLayout();
+            this.fraZMod.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numZMod)).BeginInit();
             this.fraTTReward.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numTTReward)).BeginInit();
             this.fraOtherSettings.SuspendLayout();
@@ -253,6 +271,10 @@ namespace CrashEdit
             this.fraVictims.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numVictimID)).BeginInit();
             this.tabCamera.SuspendLayout();
+            this.fraFOV.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numFOVPosition)).BeginInit();
+            this.fraFOVFrame.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numFOV)).BeginInit();
             this.fraNeighbor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numNeighborPosition)).BeginInit();
             this.fraNeighborSetting.SuspendLayout();
@@ -287,8 +309,6 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numMetavalueDrawA)).BeginInit();
             this.fraEntityA.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEntityA)).BeginInit();
-            this.fraZMod.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numZMod)).BeginInit();
             this.SuspendLayout();
             // 
             // chkType
@@ -874,6 +894,46 @@ namespace CrashEdit
             this.tabSpecial.UseVisualStyleBackColor = true;
             this.tabSpecial.Enter += new System.EventHandler(this.tabSpecial_Enter);
             // 
+            // fraZMod
+            // 
+            this.fraZMod.Controls.Add(this.chkZMod);
+            this.fraZMod.Controls.Add(this.numZMod);
+            this.fraZMod.Location = new System.Drawing.Point(3, 239);
+            this.fraZMod.Name = "fraZMod";
+            this.fraZMod.Size = new System.Drawing.Size(112, 70);
+            this.fraZMod.TabIndex = 11;
+            this.fraZMod.TabStop = false;
+            this.fraZMod.Text = "Depth Modifier";
+            // 
+            // chkZMod
+            // 
+            this.chkZMod.AutoSize = true;
+            this.chkZMod.Location = new System.Drawing.Point(6, 19);
+            this.chkZMod.Name = "chkZMod";
+            this.chkZMod.Size = new System.Drawing.Size(65, 17);
+            this.chkZMod.TabIndex = 0;
+            this.chkZMod.Text = "Enabled";
+            this.chkZMod.UseVisualStyleBackColor = true;
+            this.chkZMod.CheckedChanged += new System.EventHandler(this.chkZMod_CheckedChanged);
+            // 
+            // numZMod
+            // 
+            this.numZMod.Location = new System.Drawing.Point(6, 42);
+            this.numZMod.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.numZMod.Minimum = new decimal(new int[] {
+            -2147483648,
+            0,
+            0,
+            -2147483648});
+            this.numZMod.Name = "numZMod";
+            this.numZMod.Size = new System.Drawing.Size(100, 20);
+            this.numZMod.TabIndex = 1;
+            this.numZMod.ValueChanged += new System.EventHandler(this.numZMod_ValueChanged);
+            // 
             // fraTTReward
             // 
             this.fraTTReward.Controls.Add(this.chkTTReward);
@@ -1226,6 +1286,7 @@ namespace CrashEdit
             // 
             // tabCamera
             // 
+            this.tabCamera.Controls.Add(this.fraFOV);
             this.tabCamera.Controls.Add(this.fraNeighbor);
             this.tabCamera.Controls.Add(this.fraAvgDist);
             this.tabCamera.Controls.Add(this.fraMode);
@@ -1240,6 +1301,188 @@ namespace CrashEdit
             this.tabCamera.Text = "Camera";
             this.tabCamera.UseVisualStyleBackColor = true;
             this.tabCamera.Enter += new System.EventHandler(this.tabCamera_Enter);
+            // 
+            // fraFOV
+            // 
+            this.fraFOV.Controls.Add(this.lblFOVPosition);
+            this.fraFOV.Controls.Add(this.cmdRemoveFOVFrame);
+            this.fraFOV.Controls.Add(this.cmdInsertFOVFrame);
+            this.fraFOV.Controls.Add(this.numFOVPosition);
+            this.fraFOV.Controls.Add(this.lblFOVFrame);
+            this.fraFOV.Controls.Add(this.fraFOVFrame);
+            this.fraFOV.Controls.Add(this.cmdPrevFOVFrame);
+            this.fraFOV.Controls.Add(this.cmdNextFOVFrame);
+            this.fraFOV.Location = new System.Drawing.Point(289, 93);
+            this.fraFOV.Name = "fraFOV";
+            this.fraFOV.Size = new System.Drawing.Size(151, 266);
+            this.fraFOV.TabIndex = 21;
+            this.fraFOV.TabStop = false;
+            this.fraFOV.Text = "Field-of-View Timeline";
+            // 
+            // lblFOVPosition
+            // 
+            this.lblFOVPosition.AutoSize = true;
+            this.lblFOVPosition.Location = new System.Drawing.Point(6, 73);
+            this.lblFOVPosition.Name = "lblFOVPosition";
+            this.lblFOVPosition.Size = new System.Drawing.Size(44, 13);
+            this.lblFOVPosition.TabIndex = 20;
+            this.lblFOVPosition.Text = "Position";
+            // 
+            // cmdRemoveFOVFrame
+            // 
+            this.cmdRemoveFOVFrame.Location = new System.Drawing.Point(7, 97);
+            this.cmdRemoveFOVFrame.Name = "cmdRemoveFOVFrame";
+            this.cmdRemoveFOVFrame.Size = new System.Drawing.Size(66, 23);
+            this.cmdRemoveFOVFrame.TabIndex = 16;
+            this.cmdRemoveFOVFrame.Text = "Remove";
+            this.cmdRemoveFOVFrame.UseVisualStyleBackColor = true;
+            this.cmdRemoveFOVFrame.Click += new System.EventHandler(this.cmdRemoveFOVFrame_Click);
+            // 
+            // cmdInsertFOVFrame
+            // 
+            this.cmdInsertFOVFrame.Location = new System.Drawing.Point(79, 97);
+            this.cmdInsertFOVFrame.Name = "cmdInsertFOVFrame";
+            this.cmdInsertFOVFrame.Size = new System.Drawing.Size(66, 23);
+            this.cmdInsertFOVFrame.TabIndex = 17;
+            this.cmdInsertFOVFrame.Text = "Insert";
+            this.cmdInsertFOVFrame.UseVisualStyleBackColor = true;
+            this.cmdInsertFOVFrame.Click += new System.EventHandler(this.cmdInsertFOVFrame_Click);
+            // 
+            // numFOVPosition
+            // 
+            this.numFOVPosition.Location = new System.Drawing.Point(56, 71);
+            this.numFOVPosition.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+            this.numFOVPosition.Minimum = new decimal(new int[] {
+            32768,
+            0,
+            0,
+            -2147483648});
+            this.numFOVPosition.Name = "numFOVPosition";
+            this.numFOVPosition.Size = new System.Drawing.Size(68, 20);
+            this.numFOVPosition.TabIndex = 19;
+            this.numFOVPosition.ValueChanged += new System.EventHandler(this.numFOVPosition_ValueChanged);
+            // 
+            // lblFOVFrame
+            // 
+            this.lblFOVFrame.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFOVFrame.Location = new System.Drawing.Point(6, 45);
+            this.lblFOVFrame.Name = "lblFOVFrame";
+            this.lblFOVFrame.Size = new System.Drawing.Size(139, 23);
+            this.lblFOVFrame.TabIndex = 17;
+            this.lblFOVFrame.Text = "?? / ??";
+            this.lblFOVFrame.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // fraFOVFrame
+            // 
+            this.fraFOVFrame.Controls.Add(this.lblFOVIndex);
+            this.fraFOVFrame.Controls.Add(this.cmdRemoveFOV);
+            this.fraFOVFrame.Controls.Add(this.cmdInsertFOV);
+            this.fraFOVFrame.Controls.Add(this.cmdPrevFOV);
+            this.fraFOVFrame.Controls.Add(this.cmdNextFOV);
+            this.fraFOVFrame.Controls.Add(this.lblFOV);
+            this.fraFOVFrame.Controls.Add(this.numFOV);
+            this.fraFOVFrame.Location = new System.Drawing.Point(6, 126);
+            this.fraFOVFrame.Name = "fraFOVFrame";
+            this.fraFOVFrame.Size = new System.Drawing.Size(139, 128);
+            this.fraFOVFrame.TabIndex = 15;
+            this.fraFOVFrame.TabStop = false;
+            this.fraFOVFrame.Text = "Field-of-View";
+            // 
+            // lblFOVIndex
+            // 
+            this.lblFOVIndex.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFOVIndex.Location = new System.Drawing.Point(6, 45);
+            this.lblFOVIndex.Name = "lblFOVIndex";
+            this.lblFOVIndex.Size = new System.Drawing.Size(127, 23);
+            this.lblFOVIndex.TabIndex = 21;
+            this.lblFOVIndex.Text = "?? / ??";
+            this.lblFOVIndex.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // cmdRemoveFOV
+            // 
+            this.cmdRemoveFOV.Location = new System.Drawing.Point(7, 71);
+            this.cmdRemoveFOV.Name = "cmdRemoveFOV";
+            this.cmdRemoveFOV.Size = new System.Drawing.Size(60, 23);
+            this.cmdRemoveFOV.TabIndex = 46;
+            this.cmdRemoveFOV.Text = "Remove";
+            this.cmdRemoveFOV.UseVisualStyleBackColor = true;
+            this.cmdRemoveFOV.Click += new System.EventHandler(this.cmdRemoveFOV_Click);
+            // 
+            // cmdInsertFOV
+            // 
+            this.cmdInsertFOV.Location = new System.Drawing.Point(73, 71);
+            this.cmdInsertFOV.Name = "cmdInsertFOV";
+            this.cmdInsertFOV.Size = new System.Drawing.Size(60, 23);
+            this.cmdInsertFOV.TabIndex = 47;
+            this.cmdInsertFOV.Text = "Insert";
+            this.cmdInsertFOV.UseVisualStyleBackColor = true;
+            this.cmdInsertFOV.Click += new System.EventHandler(this.cmdInsertFOV_Click);
+            // 
+            // cmdPrevFOV
+            // 
+            this.cmdPrevFOV.Location = new System.Drawing.Point(6, 19);
+            this.cmdPrevFOV.Name = "cmdPrevFOV";
+            this.cmdPrevFOV.Size = new System.Drawing.Size(60, 23);
+            this.cmdPrevFOV.TabIndex = 22;
+            this.cmdPrevFOV.Text = "Previous";
+            this.cmdPrevFOV.UseVisualStyleBackColor = true;
+            this.cmdPrevFOV.Click += new System.EventHandler(this.cmdPrevFOV_Click);
+            // 
+            // cmdNextFOV
+            // 
+            this.cmdNextFOV.Location = new System.Drawing.Point(72, 19);
+            this.cmdNextFOV.Name = "cmdNextFOV";
+            this.cmdNextFOV.Size = new System.Drawing.Size(60, 23);
+            this.cmdNextFOV.TabIndex = 23;
+            this.cmdNextFOV.Text = "Next";
+            this.cmdNextFOV.UseVisualStyleBackColor = true;
+            this.cmdNextFOV.Click += new System.EventHandler(this.cmdNextFOV_Click);
+            // 
+            // lblFOV
+            // 
+            this.lblFOV.AutoSize = true;
+            this.lblFOV.Location = new System.Drawing.Point(6, 101);
+            this.lblFOV.Name = "lblFOV";
+            this.lblFOV.Size = new System.Drawing.Size(28, 13);
+            this.lblFOV.TabIndex = 39;
+            this.lblFOV.Text = "FOV";
+            // 
+            // numFOV
+            // 
+            this.numFOV.Location = new System.Drawing.Point(40, 99);
+            this.numFOV.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.numFOV.Name = "numFOV";
+            this.numFOV.Size = new System.Drawing.Size(93, 20);
+            this.numFOV.TabIndex = 38;
+            this.numFOV.ValueChanged += new System.EventHandler(this.numFOV_ValueChanged);
+            // 
+            // cmdPrevFOVFrame
+            // 
+            this.cmdPrevFOVFrame.Location = new System.Drawing.Point(7, 19);
+            this.cmdPrevFOVFrame.Name = "cmdPrevFOVFrame";
+            this.cmdPrevFOVFrame.Size = new System.Drawing.Size(66, 23);
+            this.cmdPrevFOVFrame.TabIndex = 15;
+            this.cmdPrevFOVFrame.Text = "Previous";
+            this.cmdPrevFOVFrame.UseVisualStyleBackColor = true;
+            this.cmdPrevFOVFrame.Click += new System.EventHandler(this.cmdPrevFOVFrame_Click);
+            // 
+            // cmdNextFOVFrame
+            // 
+            this.cmdNextFOVFrame.Location = new System.Drawing.Point(79, 19);
+            this.cmdNextFOVFrame.Name = "cmdNextFOVFrame";
+            this.cmdNextFOVFrame.Size = new System.Drawing.Size(66, 23);
+            this.cmdNextFOVFrame.TabIndex = 16;
+            this.cmdNextFOVFrame.Text = "Next";
+            this.cmdNextFOVFrame.UseVisualStyleBackColor = true;
+            this.cmdNextFOVFrame.Click += new System.EventHandler(this.cmdNextFOVFrame_Click);
             // 
             // fraNeighbor
             // 
@@ -2557,46 +2800,6 @@ namespace CrashEdit
             this.cmdNextRowDrawA.UseVisualStyleBackColor = true;
             this.cmdNextRowDrawA.Click += new System.EventHandler(this.cmdNextRowDrawA_Click);
             // 
-            // fraZMod
-            // 
-            this.fraZMod.Controls.Add(this.chkZMod);
-            this.fraZMod.Controls.Add(this.numZMod);
-            this.fraZMod.Location = new System.Drawing.Point(3, 239);
-            this.fraZMod.Name = "fraZMod";
-            this.fraZMod.Size = new System.Drawing.Size(112, 70);
-            this.fraZMod.TabIndex = 11;
-            this.fraZMod.TabStop = false;
-            this.fraZMod.Text = "Depth Modifier";
-            // 
-            // chkZMod
-            // 
-            this.chkZMod.AutoSize = true;
-            this.chkZMod.Location = new System.Drawing.Point(6, 19);
-            this.chkZMod.Name = "chkZMod";
-            this.chkZMod.Size = new System.Drawing.Size(65, 17);
-            this.chkZMod.TabIndex = 0;
-            this.chkZMod.Text = "Enabled";
-            this.chkZMod.UseVisualStyleBackColor = true;
-            this.chkZMod.CheckedChanged += new System.EventHandler(this.chkZMod_CheckedChanged);
-            // 
-            // numZMod
-            // 
-            this.numZMod.Location = new System.Drawing.Point(6, 42);
-            this.numZMod.Maximum = new decimal(new int[] {
-            2147483647,
-            0,
-            0,
-            0});
-            this.numZMod.Minimum = new decimal(new int[] {
-            -2147483648,
-            0,
-            0,
-            -2147483648});
-            this.numZMod.Name = "numZMod";
-            this.numZMod.Size = new System.Drawing.Size(100, 20);
-            this.numZMod.TabIndex = 1;
-            this.numZMod.ValueChanged += new System.EventHandler(this.numZMod_ValueChanged);
-            // 
             // EntityBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2629,6 +2832,9 @@ namespace CrashEdit
             this.tbcTabs.ResumeLayout(false);
             this.tabGeneral.ResumeLayout(false);
             this.tabSpecial.ResumeLayout(false);
+            this.fraZMod.ResumeLayout(false);
+            this.fraZMod.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numZMod)).EndInit();
             this.fraTTReward.ResumeLayout(false);
             this.fraTTReward.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numTTReward)).EndInit();
@@ -2652,6 +2858,12 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numVictimID)).EndInit();
             this.tabCamera.ResumeLayout(false);
             this.tabCamera.PerformLayout();
+            this.fraFOV.ResumeLayout(false);
+            this.fraFOV.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numFOVPosition)).EndInit();
+            this.fraFOVFrame.ResumeLayout(false);
+            this.fraFOVFrame.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numFOV)).EndInit();
             this.fraNeighbor.ResumeLayout(false);
             this.fraNeighbor.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numNeighborPosition)).EndInit();
@@ -2703,9 +2915,6 @@ namespace CrashEdit
             this.fraEntityA.ResumeLayout(false);
             this.fraEntityA.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEntityA)).EndInit();
-            this.fraZMod.ResumeLayout(false);
-            this.fraZMod.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numZMod)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2902,5 +3111,21 @@ namespace CrashEdit
         private System.Windows.Forms.GroupBox fraZMod;
         private System.Windows.Forms.CheckBox chkZMod;
         private System.Windows.Forms.NumericUpDown numZMod;
+        private System.Windows.Forms.GroupBox fraFOV;
+        private System.Windows.Forms.Label lblFOVPosition;
+        private System.Windows.Forms.Button cmdRemoveFOVFrame;
+        private System.Windows.Forms.Button cmdInsertFOVFrame;
+        private System.Windows.Forms.NumericUpDown numFOVPosition;
+        private System.Windows.Forms.Label lblFOVFrame;
+        private System.Windows.Forms.GroupBox fraFOVFrame;
+        private System.Windows.Forms.Label lblFOVIndex;
+        private System.Windows.Forms.Button cmdRemoveFOV;
+        private System.Windows.Forms.Button cmdInsertFOV;
+        private System.Windows.Forms.Button cmdPrevFOV;
+        private System.Windows.Forms.Button cmdNextFOV;
+        private System.Windows.Forms.Label lblFOV;
+        private System.Windows.Forms.NumericUpDown numFOV;
+        private System.Windows.Forms.Button cmdPrevFOVFrame;
+        private System.Windows.Forms.Button cmdNextFOVFrame;
     }
 }
