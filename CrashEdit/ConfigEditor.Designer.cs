@@ -41,7 +41,6 @@
             this.dpdLang.Name = "dpdLang";
             this.dpdLang.Size = new System.Drawing.Size(121, 21);
             this.dpdLang.TabIndex = 0;
-            this.dpdLang.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // fraLang
             // 

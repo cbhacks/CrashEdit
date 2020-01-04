@@ -18,13 +18,14 @@ namespace CrashEdit
             foreach (string lang in Languages.Keys)
                 dpdLang.Items.Add(lang);
             dpdLang.SelectedItem = Properties.Settings.Default.Language;
+            dpdLang.SelectedIndexChanged += new EventHandler(comboBox1_SelectedIndexChanged);
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.Language = (string)dpdLang.SelectedItem;
             Properties.Settings.Default.Save();
-            MessageBox.Show("Effects will apply on program restart.", "Configuration save successful", MessageBoxButtons.OK);
+            MessageBox.Show(this, "Effects will apply on program restart.", "Configuration save successful", MessageBoxButtons.OK);
         }
     }
 }
