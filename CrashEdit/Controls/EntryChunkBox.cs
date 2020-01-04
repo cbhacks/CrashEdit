@@ -1,5 +1,4 @@
 using Crash;
-using System;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -34,7 +33,7 @@ namespace CrashEdit
             lstEntryList.Items.Clear();
             foreach (Entry entry in controller.EntryChunk.Entries)
             {
-                var this_size = entry.Save().Length; // yuck! FIXME use like a size getter or something
+                var this_size = entry.Save().Length;
                 lstEntryList.Items.Add(string.Format("{0}: {1} bytes", entry.EName, this_size));
                 totalsize += this_size;
             }

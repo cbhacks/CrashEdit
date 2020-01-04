@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CrashEdit
+namespace Crash
 {
     public static class ListExt
     {

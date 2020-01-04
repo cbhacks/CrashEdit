@@ -16,11 +16,16 @@ namespace CrashEdit
             AddMenu("Export as OBJ",Menu_Export_OBJ);
             AddMenu("Export as COLLADA",Menu_Export_COLLADA);
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Old Scenery ({0})",OldSceneryEntry.EName);
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "blueb";
             Node.SelectedImageKey = "blueb";
         }

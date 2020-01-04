@@ -16,11 +16,16 @@ namespace CrashEdit
             if (!ProtoAnimationEntry.NotProto)
                 AddMenu("Export as Crash 1 SVTX", Menu_ExportAsC1);
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = string.Format("{1} Animation ({0})",ProtoAnimationEntry.EName, ProtoAnimationEntry.NotProto ? "Old" : "Proto"); // fucking hell
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "limeb";
             Node.SelectedImageKey = "limeb";
         }

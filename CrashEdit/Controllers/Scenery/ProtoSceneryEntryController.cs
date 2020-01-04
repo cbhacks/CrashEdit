@@ -14,11 +14,16 @@ namespace CrashEdit
             AddMenu("Export as COLLADA",Menu_Export_COLLADA);
             AddMenu("Export as Crash 1 WGEO", Menu_ExportAsC1);
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Prototype Scenery ({0})",ProtoSceneryEntry.EName);
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "blueb";
             Node.SelectedImageKey = "blueb";
         }

@@ -139,6 +139,7 @@ namespace Crash
         public abstract int Type { get; }
         public int EID { get; set; }
         public string EName => EIDToEName(EID);
+        public int HashKey => EID >> 15 & 0xFF;
 
         public virtual bool IgnoreResaveErrors => false;
 

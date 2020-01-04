@@ -46,11 +46,16 @@ namespace CrashEdit
             AddMenu("Export all scenery as .OBJ",Menu_ExportScenery_OBJ);
             AddMenu("Export all scenery as .PLY",Menu_ExportScenery_PLY);
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = "NSF File";
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "nsf";
             Node.SelectedImageKey = "nsf";
         }

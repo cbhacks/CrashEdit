@@ -51,6 +51,7 @@ namespace CrashEdit
         }
 
         public abstract void InvalidateNode();
+        public abstract void InvalidateNodeImage();
 
         protected virtual Control CreateEditor()
         {

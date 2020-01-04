@@ -27,10 +27,10 @@ namespace Crash
             {
                 ErrorManager.SignalError("OldNSD: Data is too short");
             }
-            int[] firstentries = new int [256];
+            int[] hashkeymap = new int [256];
             for (int i = 0;i < 256;i++)
             {
-                firstentries[i] = BitConv.FromInt32(data,i*4);
+                hashkeymap[i] = BitConv.FromInt32(data,i*4);
             }
             int[] leveldata = new int [4];
             for (int i = 0;i < 4;i++)
@@ -69,14 +69,12 @@ namespace Crash
             int extralength = data.Length - (0x634+8*entrycount);
             byte[] extradata = new byte [extralength];
             Array.Copy(data,data.Length-extralength,extradata,0,extralength);
-            return new OldNSD(firstentries,chunkcount,leveldata,uncompressedchunksec,preludecount,compressedchunkinfo,index,magic,id,startzone,camera,unknown,goolmap,extradata);
+            return new OldNSD(hashkeymap,chunkcount,leveldata,uncompressedchunksec,preludecount,compressedchunkinfo,index,magic,id,startzone,camera,unknown,goolmap,extradata);
         }
 
-        private List<NSDLink> index;
-
-        public OldNSD(int[] firstentries,int chunkcount,int[] leveldata,int uncompressedchunksec,int preludecount,int[] compressedchunkinfo,IEnumerable<NSDLink> index,int magic,int id,int startzone,int camera,int unknown,int[] goolmap,byte[] extradata)
+        public OldNSD(int[] hashkeymap,int chunkcount,int[] leveldata,int uncompressedchunksec,int preludecount,int[] compressedchunkinfo,IEnumerable<NSDLink> index,int magic,int id,int startzone,int camera,int unknown,int[] goolmap,byte[] extradata)
         {
-            if (firstentries == null)
+            if (hashkeymap == null)
                 throw new ArgumentNullException("firstentries");
             if (leveldata == null)
                 throw new ArgumentNullException("leveldata");
@@ -86,7 +84,7 @@ namespace Crash
                 throw new ArgumentNullException("index");
             if (goolmap == null)
                 throw new ArgumentNullException("goolmap");
-            if (firstentries.Length != 256)
+            if (hashkeymap.Length != 256)
                 throw new ArgumentException("Value must be 256 ints long.", "firstentries");
             if (leveldata.Length != 4)
                 throw new ArgumentException("Value must be 4 ints long.", "leveldata");
@@ -94,13 +92,13 @@ namespace Crash
                 throw new ArgumentException("Value must be 64 ints long.", "compressedchunkinfo");
             if (goolmap.Length != 64)
                 throw new ArgumentException("Value must be 64 ints long.", "goolmap");
-            FirstEntries = firstentries;
+            HashKeyMap = hashkeymap;
             ChunkCount = chunkcount;
             LevelData = leveldata;
             UncompressedChunkSec = uncompressedchunksec;
             PreludeCount = preludecount;
             CompressedChunkInfo = compressedchunkinfo;
-            this.index = new List<NSDLink>(index);
+            Index = new List<NSDLink>(index);
             Magic = magic;
             ID = id;
             StartZone = startzone;
@@ -110,13 +108,13 @@ namespace Crash
             ExtraData = extradata ?? throw new ArgumentNullException("extradata");
         }
 
-        public int[] FirstEntries { get; }
+        public int[] HashKeyMap { get; set; }
         public int ChunkCount { get; set; }
         public int[] LevelData { get; }
         public int UncompressedChunkSec { get; set; }
         public int PreludeCount { get; set; }
         public int[] CompressedChunkInfo { get; }
-        public IList<NSDLink> Index => index;
+        public IList<NSDLink> Index { get; set; }
         public int Magic { get; set; }
         public int ID { get; set; }
         public int StartZone { get; set; }
@@ -131,7 +129,7 @@ namespace Crash
             byte[] result = new byte [0x634+8*entrycount + ExtraData.Length];
             for (int i = 0;i < 256;i++)
             {
-                BitConv.ToInt32(result,i*4,FirstEntries[i]);
+                BitConv.ToInt32(result,i*4,HashKeyMap[i]);
             }
             BitConv.ToInt32(result,0x400,ChunkCount);
             BitConv.ToInt32(result,0x404,entrycount);
@@ -148,8 +146,8 @@ namespace Crash
             //}
             for (int i = 0;i < entrycount;++i)
             {
-                BitConv.ToInt32(result,0x520+i*8,index[i].ChunkID);
-                BitConv.ToInt32(result,0x524+i*8,index[i].EntryID);
+                BitConv.ToInt32(result,0x520+i*8,Index[i].ChunkID);
+                BitConv.ToInt32(result,0x524+i*8,Index[i].EntryID);
             }
             BitConv.ToInt32(result,0x520+8*entrycount, Magic);
             BitConv.ToInt32(result,0x524+8*entrycount,ID);

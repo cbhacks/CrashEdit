@@ -52,6 +52,8 @@
             this.numAmount = new System.Windows.Forms.NumericUpDown();
             this.fraTension = new System.Windows.Forms.GroupBox();
             this.numTension = new System.Windows.Forms.NumericUpDown();
+            this.fraOrder = new System.Windows.Forms.GroupBox();
+            this.numOrder = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numZ)).BeginInit();
@@ -64,6 +66,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numAmount)).BeginInit();
             this.fraTension.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numTension)).BeginInit();
+            this.fraOrder.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numOrder)).BeginInit();
             this.SuspendLayout();
             // 
             // cmdCancel
@@ -365,6 +369,11 @@
             // numTension
             // 
             this.numTension.DecimalPlaces = 2;
+            this.numTension.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
             this.numTension.Location = new System.Drawing.Point(6, 19);
             this.numTension.Minimum = new decimal(new int[] {
             1,
@@ -375,11 +384,50 @@
             this.numTension.Size = new System.Drawing.Size(121, 20);
             this.numTension.TabIndex = 0;
             this.numTension.Value = new decimal(new int[] {
-            1,
+            2,
             0,
             0,
             0});
             this.numTension.ValueChanged += new System.EventHandler(this.numTension_ValueChanged);
+            // 
+            // fraOrder
+            // 
+            this.fraOrder.Controls.Add(this.numOrder);
+            this.fraOrder.Location = new System.Drawing.Point(136, 176);
+            this.fraOrder.Name = "fraOrder";
+            this.fraOrder.Size = new System.Drawing.Size(133, 45);
+            this.fraOrder.TabIndex = 15;
+            this.fraOrder.TabStop = false;
+            this.fraOrder.Text = "Order";
+            // 
+            // numOrder
+            // 
+            this.numOrder.DecimalPlaces = 3;
+            this.numOrder.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numOrder.Location = new System.Drawing.Point(6, 19);
+            this.numOrder.Maximum = new decimal(new int[] {
+            16,
+            0,
+            0,
+            0});
+            this.numOrder.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numOrder.Name = "numOrder";
+            this.numOrder.Size = new System.Drawing.Size(121, 20);
+            this.numOrder.TabIndex = 0;
+            this.numOrder.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numOrder.ValueChanged += new System.EventHandler(this.numOrder_ValueChanged);
             // 
             // InterpolatorForm
             // 
@@ -388,6 +436,7 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(281, 298);
+            this.Controls.Add(this.fraOrder);
             this.Controls.Add(this.fraTension);
             this.Controls.Add(this.lblAverage);
             this.Controls.Add(this.fraAmount);
@@ -412,6 +461,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numAmount)).EndInit();
             this.fraTension.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numTension)).EndInit();
+            this.fraOrder.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numOrder)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -443,5 +494,7 @@
         private System.Windows.Forms.NumericUpDown numAmount;
         private System.Windows.Forms.GroupBox fraTension;
         private System.Windows.Forms.NumericUpDown numTension;
+        private System.Windows.Forms.GroupBox fraOrder;
+        private System.Windows.Forms.NumericUpDown numOrder;
     }
 }

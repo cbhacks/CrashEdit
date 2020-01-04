@@ -22,11 +22,16 @@ namespace CrashEdit
             }
             AddMenu("Export as Crash 1 ZDAT", Menu_ExportAsC1);
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Prototype Zone ({0})",ProtoZoneEntry.EName);
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "violetb";
             Node.SelectedImageKey = "violetb";
         }

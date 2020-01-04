@@ -12,11 +12,16 @@ namespace CrashEdit
             AddMenu("Recalculate Checksum",Menu_Recalculate_Checksum);
             AddMenu("Rename Entry",Menu_Rename_Entry);
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Texture Chunk {1} ({0})",Entry.EIDToEName(TextureChunk.EID),NSFController.NSF.Chunks.IndexOf(TextureChunk) * 2 + 1);
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "image";
             Node.SelectedImageKey = "image";
         }

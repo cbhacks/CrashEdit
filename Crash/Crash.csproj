@@ -57,6 +57,7 @@
     <Compile Include="Formats\Crash Formats\Animation\ProtoFrame.cs" />
     <Compile Include="Formats\Crash Formats\Animation\T1Entry.cs" />
     <Compile Include="Formats\Crash Formats\Animation\T1EntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Base\Entry\ENameComparer.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOLAnimation.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOLAnimationFont.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOLAnimationStrings.cs" />
@@ -239,6 +240,7 @@
     <Compile Include="Utility\Endianness.cs" />
     <Compile Include="Utility\EvList.cs" />
     <Compile Include="Utility\EvListEventArgs.cs" />
+    <Compile Include="Utility\ListExt.cs" />
     <Compile Include="Utility\MIDIConv.cs" />
     <Compile Include="Formats\Crash Formats\Music\MusicEntry.cs" />
     <Compile Include="Formats\Crash Formats\Music\MusicEntryLoader.cs" />

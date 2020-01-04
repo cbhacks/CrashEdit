@@ -16,6 +16,7 @@ namespace Crash
             set => BitConv.ToInt32(Data,4,value);
         }
         public string EName => Entry.EIDToEName(EID);
+        public int HashKey => EID >> 15 & 0xFF;
         public byte[] Data { get; }
 
         public override UnprocessedChunk Unprocess(int chunkid)

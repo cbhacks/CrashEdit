@@ -36,6 +36,12 @@ namespace Crash
             set => BitConv.ToInt32(Header,0x18C,value);
         }
 
+        public int ZoneCount
+        {
+            get => BitConv.FromInt32(Header,0x190);
+            set => BitConv.ToInt32(Header,0x190,value);
+        }
+
         public override UnprocessedEntry Unprocess()
         {
             byte[][] items = new byte [2 + entities.Count][];

@@ -184,9 +184,6 @@ namespace CrashEdit
             GL.Disable(EnableCap.Texture2D);
             GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 1.0f);
             RenderEntry(entry,ref octreedisplaylists[0]);
-            int xoffset = BitConv.FromInt32(entry.Layout,0);
-            int yoffset = BitConv.FromInt32(entry.Layout,4);
-            int zoffset = BitConv.FromInt32(entry.Layout,8);
             GL.Enable(EnableCap.PolygonStipple);
             for (int i = 0; i < linkedentries.Length; i++)
             {
@@ -242,26 +239,26 @@ namespace CrashEdit
                 }
                 GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
             }
-            GL.Scale(4,4,4);
             GL.Color3(Color.White);
             GL.Begin(PrimitiveType.LineStrip);
             GL.Vertex3(0,0,0);
-            GL.Vertex3(x2 / 4,0,0);
-            GL.Vertex3(x2 / 4,y2 / 4,0);
-            GL.Vertex3(0,y2 / 4,0);
+            GL.Vertex3(x2,0,0);
+            GL.Vertex3(x2,y2,0);
+            GL.Vertex3(0,y2,0);
             GL.Vertex3(0,0,0);
-            GL.Vertex3(0,0,z2 / 4);
-            GL.Vertex3(x2 / 4,0,z2 / 4);
-            GL.Vertex3(x2 / 4,y2 / 4,z2 / 4);
-            GL.Vertex3(0,y2 / 4,z2 / 4);
-            GL.Vertex3(0,0,z2 / 4);
-            GL.Vertex3(x2 / 4,0,z2 / 4);
-            GL.Vertex3(x2 / 4,0,0);
-            GL.Vertex3(x2 / 4,y2 / 4,0);
-            GL.Vertex3(x2 / 4,y2 / 4,z2 / 4);
-            GL.Vertex3(0,y2 / 4,z2 / 4);
-            GL.Vertex3(0,y2 / 4,0);
+            GL.Vertex3(0,0,z2);
+            GL.Vertex3(x2,0,z2);
+            GL.Vertex3(x2,y2,z2);
+            GL.Vertex3(0,y2,z2);
+            GL.Vertex3(0,0,z2);
+            GL.Vertex3(x2,0,z2);
+            GL.Vertex3(x2,0,0);
+            GL.Vertex3(x2,y2,0);
+            GL.Vertex3(x2,y2,z2);
+            GL.Vertex3(0,y2,z2);
+            GL.Vertex3(0,y2,0);
             GL.End();
+            GL.Scale(4,4,4);
             foreach (Entity entity in entry.Entities)
             {
                 if (entity.ID != null)
@@ -288,7 +285,6 @@ namespace CrashEdit
             GL.Translate(xoffset,yoffset,zoffset);
             if (allentries)
             {
-                GL.Disable(EnableCap.PolygonStipple);
                 if (deletelists)
                 {
                     GL.DeleteLists(octreedisplaylist,1);
@@ -296,6 +292,7 @@ namespace CrashEdit
                 }
                 if (renderoctree)
                 {
+                    GL.Disable(EnableCap.PolygonStipple);
                     if (!polygonmode)
                         GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Line);
                     if (octreedisplaylist == -1)
@@ -315,8 +312,8 @@ namespace CrashEdit
                         GL.CallList(octreedisplaylist);
                     }
                     GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
+                    GL.Enable(EnableCap.PolygonStipple);
                 }
-                GL.Enable(EnableCap.PolygonStipple);
             }
             GL.Scale(4,4,4);
             foreach (Entity entity in entry.Entities)

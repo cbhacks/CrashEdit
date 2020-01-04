@@ -8,13 +8,18 @@ namespace CrashEdit
         {
             WavebankChunk = wavebankchunk;
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Wavebank Chunk {0}", NSFController.NSF.Chunks.IndexOf(WavebankChunk) * 2 + 1);
-            Node.ImageKey = "music";
-            Node.SelectedImageKey = "music";
+        }
+
+        public override void InvalidateNodeImage()
+        {
+            Node.ImageKey = "musicred";
+            Node.SelectedImageKey = "musicred";
         }
 
         public WavebankChunk WavebankChunk { get; }

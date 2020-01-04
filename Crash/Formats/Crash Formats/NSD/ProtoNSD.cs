@@ -27,10 +27,10 @@ namespace Crash
             {
                 ErrorManager.SignalError("ProtoNSD: Data is too short");
             }
-            int[] firstentries = new int [256];
+            int[] hashkeymap = new int [256];
             for (int i = 0;i < 256;i++)
             {
-                firstentries[i] = BitConv.FromInt32(data,i*4);
+                hashkeymap[i] = BitConv.FromInt32(data,i*4);
             }
             NSDLink[] index = new NSDLink [entrycount];
             for (int i = 0;i < entrycount;i++)
@@ -39,25 +39,23 @@ namespace Crash
                 int entryid = BitConv.FromInt32(data,0x408+8*i+4);
                 index[i] = new NSDLink(chunkid,entryid);
             }
-            return new ProtoNSD(firstentries,chunkcount,index);
+            return new ProtoNSD(hashkeymap,chunkcount,index);
         }
 
-        private List<NSDLink> index;
-
-        public ProtoNSD(int[] firstentries,int chunkcount,IEnumerable<NSDLink> index)
+        public ProtoNSD(int[] hashkeymap,int chunkcount,IEnumerable<NSDLink> index)
         {
-            if (firstentries == null)
+            if (hashkeymap == null)
                 throw new ArgumentNullException("firstentries");
             if (index == null)
                 throw new ArgumentNullException("index");
-            FirstEntries = firstentries;
+            HashKeyMap = hashkeymap;
             ChunkCount = chunkcount;
-            this.index = new List<NSDLink>(index);
+            Index = new List<NSDLink>(index);
         }
 
-        public int[] FirstEntries { get; }
+        public int[] HashKeyMap { get; set; }
         public int ChunkCount { get; set; }
-        public IList<NSDLink> Index => index;
+        public IList<NSDLink> Index { get; set; }
 
         public byte[] Save()
         {
@@ -65,14 +63,14 @@ namespace Crash
             byte[] result = new byte [0x408+8*entrycount];
             for (int i = 0;i < 256;i++)
             {
-                BitConv.ToInt32(result,i*4,FirstEntries[i]);
+                BitConv.ToInt32(result,i*4,HashKeyMap[i]);
             }
             BitConv.ToInt32(result,0x400,ChunkCount);
             BitConv.ToInt32(result,0x404,entrycount);
             for (int i = 0;i < entrycount;++i)
             {
-                BitConv.ToInt32(result,0x408+i*8,index[i].ChunkID);
-                BitConv.ToInt32(result,0x40C+i*8,index[i].EntryID);
+                BitConv.ToInt32(result,0x408+i*8,Index[i].ChunkID);
+                BitConv.ToInt32(result,0x40C+i*8,Index[i].EntryID);
             }
             return result;
         }

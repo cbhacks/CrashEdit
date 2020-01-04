@@ -17,7 +17,7 @@ namespace Crash
             Entries = new EvList<Entry>(entries);
         }
 
-        public EvList<Entry> Entries { get; }
+        public EvList<Entry> Entries { get; set; }
 
         protected abstract int Alignment { get; }
 

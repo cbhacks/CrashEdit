@@ -20,6 +20,8 @@ namespace CrashEdit
                 imglist.Images.Add("image",OldResources.ImageImage);
                 imglist.Images.Add("bluej",OldResources.BlueJournalImage);
                 imglist.Images.Add("music",OldResources.MusicImage);
+                imglist.Images.Add("musicred",OldResources.MusicRedImage);
+                imglist.Images.Add("musicyellow",OldResources.MusicYellowImage);
                 imglist.Images.Add("whitej",OldResources.WhiteJournalImage);
                 imglist.Images.Add("thing",OldResources.ThingImage);
                 imglist.Images.Add("speaker",OldResources.SpeakerImage);

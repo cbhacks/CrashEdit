@@ -10,12 +10,17 @@ namespace CrashEdit
         public EntryChunkController(NSFController nsfcontroller,EntryChunk entrychunk) : base(nsfcontroller,entrychunk)
         {
             EntryChunk = entrychunk;
-            foreach (Entry entry in entrychunk.Entries)
+            PopulateNodes();
+            AddMenu("Import Entry",Menu_Import_Entry);
+            AddMenu("Add New Entry",Menu_Add_Entry);
+        }
+
+        public void PopulateNodes()
+        {
+            foreach (Entry entry in EntryChunk.Entries)
             {
                 AddNode(CreateEntryController(entry));
             }
-            AddMenu("Import Entry",Menu_Import_Entry);
-            AddMenu("Add New Entry",Menu_Add_Entry);
         }
 
         public EntryChunk EntryChunk { get; }

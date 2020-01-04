@@ -9,11 +9,16 @@ namespace CrashEdit
         {
             SoundEntry = soundentry;
             InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
             Node.Text = string.Format("Sound ({0})",SoundEntry.EName);
+        }
+
+        public override void InvalidateNodeImage()
+        {
             Node.ImageKey = "speaker";
             Node.SelectedImageKey = "speaker";
         }

@@ -277,5 +277,57 @@ namespace Crash
             }
             return data;
         }
+
+        public ValueTuple<int[], IList<NSDLink>> MakeNSDIndex()
+        {
+            foreach (Chunk chunk in Chunks)
+            {
+                if (chunk is EntryChunk entrychunk)
+                {
+                    List<Entry> entries = new List<Entry>(entrychunk.Entries);
+                    entries.Sort(delegate (Entry a, Entry b) {
+                        int c = a.HashKey - b.HashKey;
+                        if (c == 0)
+                        {
+                            c = new ENameComparer().Compare(a.EName,b.EName);
+                        }
+                        return c;
+                    });
+                    entrychunk.Entries = new EvList<Entry>(entries);
+                }
+            }
+            SortedDictionary<int, SortedDictionary<string, int>> newindex = new SortedDictionary<int, SortedDictionary<string, int>>();
+            for (int i = 0; i < Chunks.Count; i++)
+            {
+                if (Chunks[i] is IEntry ientry)
+                {
+                    if (!newindex.ContainsKey(ientry.HashKey))
+                        newindex.Add(ientry.HashKey, new SortedDictionary<string, int>(new ENameComparer()));
+                    newindex[ientry.HashKey].Add(ientry.EName, i * 2 + 1);
+                }
+                else if (Chunks[i] is EntryChunk chunk)
+                {
+                    foreach (Entry entry in chunk.Entries)
+                    {
+                        if (!newindex.ContainsKey(entry.HashKey))
+                            newindex.Add(entry.HashKey, new SortedDictionary<string, int>(new ENameComparer()));
+                        newindex[entry.HashKey].Add(entry.EName, i * 2 + 1);
+                    }
+                }
+            }
+            var index = new List<NSDLink>();
+            int[] hashkeymap = new int[256];
+            int curkey = 0;
+            foreach (var kvp in newindex)
+            {
+                while (curkey <= kvp.Key)
+                    hashkeymap[curkey++] = index.Count;
+                foreach (var link in kvp.Value)
+                    index.Add(new NSDLink(link.Value, Entry.ENameToEID(link.Key)));
+            }
+            while (curkey < 256)
+                hashkeymap[curkey++] = index.Count - 1;
+            return (hashkeymap, index);
+        }
     }
 }
