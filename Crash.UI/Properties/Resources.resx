@@ -264,4 +264,7 @@
   <data name="AnimationEntryController_Text" xml:space="preserve">
     <value>Animation ({0})</value>
   </data>
+  <data name="EntityController_Text" xml:space="preserve">
+    <value>Entity</value>
+  </data>
 </root>

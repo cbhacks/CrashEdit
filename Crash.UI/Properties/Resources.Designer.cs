@@ -142,6 +142,15 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Entity.
+        /// </summary>
+        public static string EntityController_Text {
+            get {
+                return ResourceManager.GetString("EntityController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Entry &quot;{0}&quot;.
         /// </summary>
         public static string EntryController_AcDelete {
