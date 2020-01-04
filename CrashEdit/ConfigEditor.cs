@@ -6,24 +6,20 @@ namespace CrashEdit
 {
     public partial class ConfigEditor : UserControl
     {
-        public static Dictionary<string,string> Languages = new Dictionary<string,string>()
-        {
-            { "English","en-US" },
-            { "Japanese","ja-JA" }
-        };
+        public static readonly List<string> Languages = new List<string> { "en-US", "ja-JA" };
 
         public ConfigEditor()
         {
             InitializeComponent();
-            foreach (string lang in Languages.Keys)
-                dpdLang.Items.Add(lang);
-            dpdLang.SelectedItem = Properties.Settings.Default.Language;
+            foreach (string lang in Languages)
+                dpdLang.Items.Add(Crash.UI.Properties.Resources.ResourceManager.GetString("Language", new System.Globalization.CultureInfo(lang)));
+            dpdLang.SelectedItem = Crash.UI.Properties.Resources.ResourceManager.GetString("Language", new System.Globalization.CultureInfo(Properties.Settings.Default.Language));
             dpdLang.SelectedIndexChanged += new EventHandler(comboBox1_SelectedIndexChanged);
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.Language = (string)dpdLang.SelectedItem;
+            Properties.Settings.Default.Language = Languages[dpdLang.SelectedIndex];
             Properties.Settings.Default.Save();
             MessageBox.Show(this, "Effects will apply on program restart.", "Configuration save successful", MessageBoxButtons.OK);
         }

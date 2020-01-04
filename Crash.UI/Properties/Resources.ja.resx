@@ -270,6 +270,9 @@
   <data name="FrameController_Text" xml:space="preserve">
     <value>フレーム</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>日本語</value>
+  </data>
   <data name="ProtoAnimationEntryController_Text" xml:space="preserve">
     <value>プロトタイプアニメーション ({0})</value>
   </data>

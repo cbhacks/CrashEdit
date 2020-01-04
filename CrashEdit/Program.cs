@@ -10,9 +10,9 @@ namespace CrashEdit
         {
             try
             {
-                Crash.UI.Properties.Resources.Culture = new System.Globalization.CultureInfo(ConfigEditor.Languages[Properties.Settings.Default.Language]);
+                Crash.UI.Properties.Resources.Culture = new System.Globalization.CultureInfo(Properties.Settings.Default.Language);
             }
-            catch (System.Collections.Generic.KeyNotFoundException) {
+            catch {
                 Properties.Settings.Default.Reset();
             }
             Application.EnableVisualStyles();
