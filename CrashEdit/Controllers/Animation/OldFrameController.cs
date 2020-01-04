@@ -16,7 +16,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = "Frame";
+            Node.Text = Crash.UI.Properties.Resources.FrameController_Text;
         }
 
         public override void InvalidateNodeImage()
@@ -41,7 +41,7 @@ namespace CrashEdit
 
             tbcTabs.TabPages.Add(viewertab);
             tbcTabs.TabPages.Add(edittab);
-            tbcTabs.SelectedTab = edittab;
+            tbcTabs.SelectedTab = viewertab;
 
             return tbcTabs;
         }

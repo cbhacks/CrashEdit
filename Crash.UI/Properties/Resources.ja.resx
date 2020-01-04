@@ -172,7 +172,7 @@
     <value>NSF File</value>
   </data>
   <data name="OldAnimationEntryController_Text" xml:space="preserve">
-    <value>Old Animation ({0})</value>
+    <value>オールドアニメーション ({0})</value>
   </data>
   <data name="OldModelEntryController_Text" xml:space="preserve">
     <value>Old Model ({0})</value>
@@ -226,7 +226,7 @@
     <value>T1 ({0})</value>
   </data>
   <data name="CutsceneAnimationEntryController_Text" xml:space="preserve">
-    <value>Cutscene Animation ({0})</value>
+    <value>カットシーンアニメーション ({0})</value>
   </data>
   <data name="T21EntryController_Text" xml:space="preserve">
     <value>T21 ({0})</value>
@@ -256,15 +256,21 @@
     <value>Wavebank ({0})</value>
   </data>
   <data name="ZoneEntryController_Text" xml:space="preserve">
-    <value>ゾーン({0})</value>
+    <value>ゾーン ({0})</value>
   </data>
   <data name="ProtoZoneEntryController_Text" xml:space="preserve">
     <value>Proto Zone ({0})</value>
   </data>
   <data name="AnimationEntryController_Text" xml:space="preserve">
-    <value>Animation ({0})</value>
+    <value>アニメーション ({0})</value>
   </data>
   <data name="EntityController_Text" xml:space="preserve">
     <value>エンティティ</value>
+  </data>
+  <data name="FrameController_Text" xml:space="preserve">
+    <value>フレーム</value>
+  </data>
+  <data name="ProtoAnimationEntryController_Text" xml:space="preserve">
+    <value>プロトタイプアニメーション ({0})</value>
   </data>
 </root>

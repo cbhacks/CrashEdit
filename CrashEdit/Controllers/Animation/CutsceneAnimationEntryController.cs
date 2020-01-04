@@ -19,7 +19,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Cutscene Animation ({0})",CutsceneAnimationEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.CutsceneAnimationEntryController_Text,CutsceneAnimationEntry.EName);
         }
 
         public override void InvalidateNodeImage()

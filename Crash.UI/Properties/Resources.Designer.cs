@@ -169,6 +169,15 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Frame.
+        /// </summary>
+        public static string FrameController_Text {
+            get {
+                return ResourceManager.GetString("FrameController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a game version from the list below. NTSC-U, NTSC-J, and PAL are all supported..
         /// </summary>
         public static string GameVersionForm_Message {
@@ -327,6 +336,15 @@ namespace Crash.UI.Properties {
         public static string PaletteEntryController_Text {
             get {
                 return ResourceManager.GetString("PaletteEntryController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prototype Animation ({0}).
+        /// </summary>
+        public static string ProtoAnimationEntryController_Text {
+            get {
+                return ResourceManager.GetString("ProtoAnimationEntryController_Text", resourceCulture);
             }
         }
         
