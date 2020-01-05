@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>キャンセル</value>
   </data>
   <data name="ChunkController_AcDelete" xml:space="preserve">
     <value>Delete Chunk</value>
@@ -145,16 +145,16 @@
     <value>Deprocess Entry "{0}"</value>
   </data>
   <data name="GameVersionForm_Message" xml:space="preserve">
-    <value>Select a game version from the list below. NTSC-U, NTSC-J, and PAL are all supported.</value>
+    <value>以下のリストからゲームバージョンを選択します。NTSC-UやNTSC-JやPALはサポートされて</value>
   </data>
   <data name="GameVersionForm_Prerelease" xml:space="preserve">
-    <value>Prerelease Versions</value>
+    <value>プレリリース版</value>
   </data>
   <data name="GameVersionForm_Release" xml:space="preserve">
-    <value>Release Versions</value>
+    <value>製品版</value>
   </data>
   <data name="GameVersionForm_Text" xml:space="preserve">
-    <value>Game Version Selection</value>
+    <value>ゲームバージョンの選択</value>
   </data>
   <data name="ModelEntryController_Text" xml:space="preserve">
     <value>モデル ({0})</value>
