@@ -247,7 +247,7 @@
     <value>Unprocessed Chunk {1} (T{0})</value>
   </data>
   <data name="UnprocessedEntryController_Text" xml:space="preserve">
-    <value>Unprocessed ({0})</value>
+    <value>Unprocessed T{0} ({1})</value>
   </data>
   <data name="WavebankChunkController_Text" xml:space="preserve">
     <value>Wavebank Chunk {0}</value>

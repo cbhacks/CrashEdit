@@ -592,7 +592,7 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unprocessed ({0}).
+        ///   Looks up a localized string similar to Unprocessed T{0} ({1}).
         /// </summary>
         public static string UnprocessedEntryController_Text {
             get {
