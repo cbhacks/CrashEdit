@@ -62,7 +62,7 @@ namespace CrashEdit
         {
             tbbOpen = new ToolStripButton
             {
-                Text = "Open",
+                Text = Properties.Resources.Toolbar_Open,
                 ImageKey = "tb_open",
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
@@ -70,7 +70,7 @@ namespace CrashEdit
 
             tbbSave = new ToolStripButton
             {
-                Text = "Save",
+                Text = Properties.Resources.Toolbar_Save,
                 ImageKey = "tb_save",
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
@@ -78,7 +78,7 @@ namespace CrashEdit
 
             tbbPatchNSD = new ToolStripButton
             {
-                Text = "Patch NSD",
+                Text = Properties.Resources.Toolbar_PatchNSD,
                 ImageKey = "tb_patchnsd",
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
@@ -86,7 +86,7 @@ namespace CrashEdit
 
             tbbClose = new ToolStripButton
             {
-                Text = "Close",
+                Text = Properties.Resources.Toolbar_Close,
                 ImageKey = "tb_close",
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
@@ -94,7 +94,7 @@ namespace CrashEdit
 
             tbbFind = new ToolStripButton
             {
-                Text = "Find",
+                Text = Properties.Resources.Toolbar_Find,
                 ImageKey = "tb_find",
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
@@ -102,7 +102,7 @@ namespace CrashEdit
 
             tbbFindNext = new ToolStripButton
             {
-                Text = "Find Next",
+                Text = Properties.Resources.Toolbar_FindNext,
                 ImageKey = "tb_findnext",
                 TextImageRelation = TextImageRelation.ImageAboveText
             };

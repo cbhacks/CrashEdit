@@ -154,7 +154,7 @@
     <value>見つける</value>
   </data>
   <data name="Menu_Find_FindNext" xml:space="preserve">
-    <value>次を見つける</value>
+    <value>次を</value>
   </data>
   <data name="Menu_Find_ObjectName" xml:space="preserve">
     <value>Object Name</value>
@@ -184,7 +184,7 @@
     <value>見つける</value>
   </data>
   <data name="Toolbar_FindNext" xml:space="preserve">
-    <value>次を見つける</value>
+    <value>次を</value>
   </data>
   <data name="Toolbar_GotoEID" xml:space="preserve">
     <value>Goto EID</value>
