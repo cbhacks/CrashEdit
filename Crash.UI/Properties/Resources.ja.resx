@@ -187,16 +187,16 @@
     <value>オールドサウンドチャンク {0}</value>
   </data>
   <data name="OldT15EntryController_Text" xml:space="preserve">
-    <value>Old T15 ({0})</value>
+    <value>オールド Ｔ15 ({0})</value>
   </data>
   <data name="OldT17EntryController_Text" xml:space="preserve">
-    <value>Old T17 ({0})</value>
+    <value>オールド Ｔ17 ({0})</value>
   </data>
   <data name="OldZoneEntryController_Text" xml:space="preserve">
     <value>Old Zone ({0})</value>
   </data>
   <data name="PaletteEntryController_Text" xml:space="preserve">
-    <value>Palette ({0})</value>
+    <value>パレット ({0})</value>
   </data>
   <data name="SceneryEntryController_Text" xml:space="preserve">
     <value>Scenery ({0})</value>

@@ -13,7 +13,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Old T17 ({0})",OldT17Entry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.OldT17EntryController_Text,OldT17Entry.EName);
         }
 
         public override void InvalidateNodeImage()
