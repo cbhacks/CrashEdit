@@ -163,7 +163,7 @@
     <value>Music ({0})</value>
   </data>
   <data name="NormalChunkController_Text" xml:space="preserve">
-    <value>Chunk</value>
+    <value>チャンク {0}</value>
   </data>
   <data name="NSFController_AcAddNormalChunk" xml:space="preserve">
     <value>Add Chunk</value>
@@ -184,7 +184,7 @@
     <value>Old Scenery ({0})</value>
   </data>
   <data name="OldSoundChunkController_Text" xml:space="preserve">
-    <value>Old Sound Chunk</value>
+    <value>オールドサウンドチャンク {0}</value>
   </data>
   <data name="OldT15EntryController_Text" xml:space="preserve">
     <value>Old T15 ({0})</value>
@@ -202,7 +202,7 @@
     <value>Scenery ({0})</value>
   </data>
   <data name="SoundChunkController_Text" xml:space="preserve">
-    <value>Sound Chunk</value>
+    <value>サウンドチャンク {0}</value>
   </data>
   <data name="SoundEntryController_Text" xml:space="preserve">
     <value>Sound ({0})</value>
@@ -238,19 +238,19 @@
     <value>T6 ({0})</value>
   </data>
   <data name="TextureChunkController_Text" xml:space="preserve">
-    <value>Texture Chunk ({0})</value>
+    <value>テキスチャーチャンク {1} ({0})</value>
   </data>
   <data name="UnprocessedChunkController_AcProcess" xml:space="preserve">
     <value>Process Chunk</value>
   </data>
   <data name="UnprocessedChunkController_Text" xml:space="preserve">
-    <value>Unprocessed Chunk</value>
+    <value>未加工のチャンク {1} (Ｔ{0})</value>
   </data>
   <data name="UnprocessedEntryController_Text" xml:space="preserve">
     <value>Unprocessed ({0})</value>
   </data>
   <data name="WavebankChunkController_Text" xml:space="preserve">
-    <value>Wavebank Chunk</value>
+    <value>ウエーブバンクチャンク {0}</value>
   </data>
   <data name="WavebankEntryController_Text" xml:space="preserve">
     <value>Wavebank ({0})</value>

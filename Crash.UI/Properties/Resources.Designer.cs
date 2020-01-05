@@ -241,7 +241,7 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chunk.
+        ///   Looks up a localized string similar to Chunk {0}.
         /// </summary>
         public static string NormalChunkController_Text {
             get {
@@ -304,7 +304,7 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Old Sound Chunk.
+        ///   Looks up a localized string similar to Old Sound Chunk {0}.
         /// </summary>
         public static string OldSoundChunkController_Text {
             get {
@@ -385,7 +385,7 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sound Chunk.
+        ///   Looks up a localized string similar to Sound Chunk {0}.
         /// </summary>
         public static string SoundChunkController_Text {
             get {
@@ -475,7 +475,7 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Texture Chunk ({0}).
+        ///   Looks up a localized string similar to Texture Chunk {1} ({0}).
         /// </summary>
         public static string TextureChunkController_Text {
             get {
@@ -493,7 +493,7 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unprocessed Chunk.
+        ///   Looks up a localized string similar to Unprocessed Chunk {1} (T{0}).
         /// </summary>
         public static string UnprocessedChunkController_Text {
             get {
@@ -511,7 +511,7 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wavebank Chunk.
+        ///   Looks up a localized string similar to Wavebank Chunk {0}.
         /// </summary>
         public static string WavebankChunkController_Text {
             get {
