@@ -21,7 +21,6 @@ namespace CrashEdit
         {
             Properties.Settings.Default.Language = Languages[dpdLang.SelectedIndex];
             Properties.Settings.Default.Save();
-            MessageBox.Show(this, "Effects will apply on program restart.", "Configuration save successful", MessageBoxButtons.OK);
         }
     }
 }

@@ -39,7 +39,7 @@
             this.dpdLang.FormattingEnabled = true;
             this.dpdLang.Location = new System.Drawing.Point(6, 19);
             this.dpdLang.Name = "dpdLang";
-            this.dpdLang.Size = new System.Drawing.Size(121, 21);
+            this.dpdLang.Size = new System.Drawing.Size(150, 21);
             this.dpdLang.TabIndex = 0;
             // 
             // fraLang
@@ -49,10 +49,10 @@
             this.fraLang.Controls.Add(this.dpdLang);
             this.fraLang.Location = new System.Drawing.Point(3, 3);
             this.fraLang.Name = "fraLang";
-            this.fraLang.Size = new System.Drawing.Size(133, 59);
+            this.fraLang.Size = new System.Drawing.Size(162, 59);
             this.fraLang.TabIndex = 1;
             this.fraLang.TabStop = false;
-            this.fraLang.Text = "Language";
+            this.fraLang.Text = "Language (requires restart)";
             // 
             // ConfigEditor
             // 
