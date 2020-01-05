@@ -10,7 +10,7 @@ namespace CrashEdit
         {
             try
             {
-                Crash.UI.Properties.Resources.Culture = new System.Globalization.CultureInfo(Properties.Settings.Default.Language);
+                Properties.Resources.Culture = Crash.UI.Properties.Resources.Culture = new System.Globalization.CultureInfo(Properties.Settings.Default.Language);
             }
             catch {
                 Properties.Settings.Default.Reset();

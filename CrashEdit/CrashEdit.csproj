@@ -281,6 +281,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="OldResources.cs" />
+    <Compile Include="Properties\Resources.ja.Designer.cs">
+      <DependentUpon>Resources.ja.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -364,6 +369,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OldResources.resx">
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.ja.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.ja.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
