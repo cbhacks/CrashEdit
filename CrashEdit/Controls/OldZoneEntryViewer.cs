@@ -46,6 +46,7 @@ namespace CrashEdit
         private bool deletelists;
         private bool polygonmode;
         private bool allentries;
+        private Form frmoctree;
 
         public OldZoneEntryViewer(OldZoneEntry entry,OldSceneryEntry[] linkedsceneryentries,OldZoneEntry[] linkedentries) : base(linkedsceneryentries)
         {
@@ -125,43 +126,60 @@ namespace CrashEdit
                     renderoctree = !renderoctree;
                     break;
                 case Keys.C:
+                    if (frmoctree == null || frmoctree.IsDisposed)
                     {
-                        Form frm = new Form();
-                        ListView lst = new ListView();
-                        lst.Dock = DockStyle.Fill;
-                        foreach (KeyValuePair<short,Color> color in octreevalues)
-                        {
-                            ListViewItem lsi = new ListViewItem();
-                            lsi.Text = color.Key.ToString("X4");
-                            lsi.BackColor = color.Value;
-                            lsi.ForeColor = color.Value.GetBrightness() >= 0.5 ? Color.Black : Color.White;
-                            lsi.Tag = color.Key;
-                            lst.Items.Add(lsi);
-                        }
-                        lst.SelectedIndexChanged += delegate (object sender,EventArgs ee)
-                        {
-                            if (lst.SelectedItems.Count == 0)
-                            {
-                                octreeselection = -1;
-                            }
-                            else
-                            {
-                                octreeselection = (ushort)(short)lst.SelectedItems[0].Tag;
-                            }
-                        };
-                        frm.Controls.Add(lst);
-                        frm.Show();
+                        frmoctree = new Form();
+                        UpdateOctreeFormList();
+                        frmoctree.Show();
+                    }
+                    else
+                    {
+                        frmoctree.Select();
                     }
                     break;
                 case Keys.R:
                     deletelists = true;
+                    UpdateOctreeFormList();
                     break;
                 case Keys.V:
                     polygonmode = !polygonmode;
                     break;
                 case Keys.F:
                     allentries = !allentries;
+                    UpdateOctreeFormList();
                     break;
+            }
+        }
+
+        internal void UpdateOctreeFormList()
+        {
+            if (frmoctree != null && !frmoctree.IsDisposed)
+            {
+                frmoctree.Controls.Clear();
+                ListView lst = new ListView();
+                lst.Dock = DockStyle.Fill;
+                foreach (KeyValuePair<short,Color> color in octreevalues)
+                {
+                    ListViewItem lsi = new ListViewItem();
+                    lsi.Text = color.Key.ToString("X4");
+                    lsi.BackColor = color.Value;
+                    lsi.ForeColor = color.Value.GetBrightness() >= 0.5 ? Color.Black : Color.White;
+                    lsi.Tag = color.Key;
+                    lst.Items.Add(lsi);
+                }
+                lst.SelectedIndexChanged += delegate (object sender,EventArgs ee)
+                {
+                    if (lst.SelectedItems.Count == 0)
+                    {
+                        octreeselection = -1;
+                    }
+                    else
+                    {
+                        octreeselection = (ushort)(short)lst.SelectedItems[0].Tag;
+                    }
+                    deletelists = true;
+                };
+                frmoctree.Controls.Add(lst);
             }
         }
 
