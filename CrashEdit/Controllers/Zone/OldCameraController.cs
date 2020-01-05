@@ -25,7 +25,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = "Old Camera";
+            Node.Text = Crash.UI.Properties.Resources.OldCameraController_Text;
         }
 
         public override void InvalidateNodeImage()

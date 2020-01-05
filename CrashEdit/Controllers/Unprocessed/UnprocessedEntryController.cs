@@ -14,7 +14,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Unprocessed T{0} Entry ({1})",UnprocessedEntry.Type,UnprocessedEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.UnprocessedEntryController_Text,UnprocessedEntry.Type,UnprocessedEntry.EName);
         }
 
         public override void InvalidateNodeImage()

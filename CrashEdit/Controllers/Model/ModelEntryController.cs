@@ -15,11 +15,11 @@ namespace CrashEdit
         {
             if (ModelEntry.Positions == null)
             {
-                Node.Text = string.Format("Model ({0})", ModelEntry.EName);
+                Node.Text = string.Format(Crash.UI.Properties.Resources.ModelEntryController_Text,ModelEntry.EName);
             }
             else
             {
-                Node.Text = string.Format("Compressed Model ({0})", ModelEntry.EName);
+                Node.Text = string.Format(Crash.UI.Properties.Resources.ModelEntryController_Compressed_Text,ModelEntry.EName);
             }
         }
 

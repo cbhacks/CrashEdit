@@ -39,7 +39,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = "NSF File";
+            Node.Text = Crash.UI.Properties.Resources.NSFController_Text;
         }
 
         public override void InvalidateNodeImage()

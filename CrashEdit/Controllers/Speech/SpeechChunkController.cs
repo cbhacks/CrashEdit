@@ -13,7 +13,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Speech Chunk {0}", NSFController.NSF.Chunks.IndexOf(SpeechChunk) * 2 + 1);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.SpeechChunkController_Text,NSFController.NSF.Chunks.IndexOf(SpeechChunk) * 2 + 1);
         }
 
         public override void InvalidateNodeImage()

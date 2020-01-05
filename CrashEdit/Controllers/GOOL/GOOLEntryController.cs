@@ -20,16 +20,16 @@ namespace CrashEdit
             switch (GOOLEntry.Version)
             {
                 case GOOLVersion.Version0:
-                    Node.Text = $"Prototype GOOL ({GOOLEntry.EName})";
+                    Node.Text = string.Format(Crash.UI.Properties.Resources.GOOLv0EntryController_Text,GOOLEntry.EName);
                     break;
                 case GOOLVersion.Version1:
-                    Node.Text = $"GOOL ({GOOLEntry.EName})";
+                    Node.Text = string.Format(Crash.UI.Properties.Resources.GOOLv1EntryController_Text,GOOLEntry.EName);
                     break;
                 case GOOLVersion.Version2:
-                    Node.Text = $"GOOLv2 ({GOOLEntry.EName})";
+                    Node.Text = string.Format(Crash.UI.Properties.Resources.GOOLv2EntryController_Text,GOOLEntry.EName);
                     break;
                 case GOOLVersion.Version3:
-                    Node.Text = $"GOOLv3 ({GOOLEntry.EName})";
+                    Node.Text = string.Format(Crash.UI.Properties.Resources.GOOLv3EntryController_Text,GOOLEntry.EName);
                     break;
             }
         }

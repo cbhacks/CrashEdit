@@ -232,7 +232,7 @@
     <value>T21 ({0})</value>
   </data>
   <data name="SLSTEntryController_Text" xml:space="preserve">
-    <value>SLST ({0})</value>
+    <value>Sort List ({0})</value>
   </data>
   <data name="T6EntryController_Text" xml:space="preserve">
     <value>T6 ({0})</value>
@@ -278,5 +278,32 @@
   </data>
   <data name="ProtoAnimationEntryController_Text" xml:space="preserve">
     <value>Prototype Animation ({0})</value>
+  </data>
+  <data name="GOOLv0EntryController_Text" xml:space="preserve">
+    <value>Prototype GOOL ({0})</value>
+  </data>
+  <data name="GOOLv1EntryController_Text" xml:space="preserve">
+    <value>GOOL ({0})</value>
+  </data>
+  <data name="GOOLv2EntryController_Text" xml:space="preserve">
+    <value>GOOLv2 ({0})</value>
+  </data>
+  <data name="GOOLv3EntryController_Text" xml:space="preserve">
+    <value>GOOLv3 ({0})</value>
+  </data>
+  <data name="ModelEntryController_Compressed_Text" xml:space="preserve">
+    <value>Compressed Model ({0})</value>
+  </data>
+  <data name="OldCameraController_Text" xml:space="preserve">
+    <value>Camera</value>
+  </data>
+  <data name="OldEntityController_Text" xml:space="preserve">
+    <value>Entity {0} ({1})</value>
+  </data>
+  <data name="OldSLSTEntryController_Text" xml:space="preserve">
+    <value>Old Sort List ({0})</value>
+  </data>
+  <data name="ProtoSceneryEntryController_Text" xml:space="preserve">
+    <value>Prototype Scenery ({0})</value>
   </data>
 </root>

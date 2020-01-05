@@ -214,6 +214,42 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Prototype GOOL ({0}).
+        /// </summary>
+        public static string GOOLv0EntryController_Text {
+            get {
+                return ResourceManager.GetString("GOOLv0EntryController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GOOL ({0}).
+        /// </summary>
+        public static string GOOLv1EntryController_Text {
+            get {
+                return ResourceManager.GetString("GOOLv1EntryController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GOOLv2 ({0}).
+        /// </summary>
+        public static string GOOLv2EntryController_Text {
+            get {
+                return ResourceManager.GetString("GOOLv2EntryController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GOOLv3 ({0}).
+        /// </summary>
+        public static string GOOLv3EntryController_Text {
+            get {
+                return ResourceManager.GetString("GOOLv3EntryController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Item.
         /// </summary>
         public static string ItemController_Text {
@@ -228,6 +264,15 @@ namespace Crash.UI.Properties {
         public static string Language {
             get {
                 return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Compressed Model ({0}).
+        /// </summary>
+        public static string ModelEntryController_Compressed_Text {
+            get {
+                return ResourceManager.GetString("ModelEntryController_Compressed_Text", resourceCulture);
             }
         }
         
@@ -286,6 +331,24 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Camera.
+        /// </summary>
+        public static string OldCameraController_Text {
+            get {
+                return ResourceManager.GetString("OldCameraController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entity {0} ({1}).
+        /// </summary>
+        public static string OldEntityController_Text {
+            get {
+                return ResourceManager.GetString("OldEntityController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Old Model ({0}).
         /// </summary>
         public static string OldModelEntryController_Text {
@@ -309,6 +372,15 @@ namespace Crash.UI.Properties {
         public static string OldSceneryEntryController_Text {
             get {
                 return ResourceManager.GetString("OldSceneryEntryController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Old Sort List ({0}).
+        /// </summary>
+        public static string OldSLSTEntryController_Text {
+            get {
+                return ResourceManager.GetString("OldSLSTEntryController_Text", resourceCulture);
             }
         }
         
@@ -367,6 +439,15 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Prototype Scenery ({0}).
+        /// </summary>
+        public static string ProtoSceneryEntryController_Text {
+            get {
+                return ResourceManager.GetString("ProtoSceneryEntryController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Proto Zone ({0}).
         /// </summary>
         public static string ProtoZoneEntryController_Text {
@@ -385,7 +466,7 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SLST ({0}).
+        ///   Looks up a localized string similar to Sort List ({0}).
         /// </summary>
         public static string SLSTEntryController_Text {
             get {

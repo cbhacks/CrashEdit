@@ -124,13 +124,13 @@
     <value>File</value>
   </data>
   <data name="Menu_File_Close" xml:space="preserve">
-    <value>Close</value>
+    <value>閉じる</value>
   </data>
   <data name="Menu_File_Exit" xml:space="preserve">
     <value>Exit</value>
   </data>
   <data name="Menu_File_Open" xml:space="preserve">
-    <value>オープン</value>
+    <value>開く</value>
   </data>
   <data name="Menu_File_PatchNSD" xml:space="preserve">
     <value>NSDをパッチする</value>

@@ -19,7 +19,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Sort List ({0})",SLSTEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.SLSTEntryController_Text,SLSTEntry.EName);
         }
 
         public override void InvalidateNodeImage()

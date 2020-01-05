@@ -28,7 +28,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Old Zone ({0})",OldZoneEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.OldZoneEntryController_Text,OldZoneEntry.EName);
         }
 
         public override void InvalidateNodeImage()

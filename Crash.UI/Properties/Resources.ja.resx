@@ -136,7 +136,7 @@
     <value>No options available.</value>
   </data>
   <data name="DemoEntryController_Text" xml:space="preserve">
-    <value>Demo ({0})</value>
+    <value>デモ ({0})</value>
   </data>
   <data name="EntryController_AcDelete" xml:space="preserve">
     <value>Delete Entry "{0}"</value>
@@ -157,10 +157,10 @@
     <value>Game Version Selection</value>
   </data>
   <data name="ModelEntryController_Text" xml:space="preserve">
-    <value>Model ({0})</value>
+    <value>モデル ({0})</value>
   </data>
   <data name="MusicEntryController_Text" xml:space="preserve">
-    <value>Music ({0})</value>
+    <value>音楽 ({0})</value>
   </data>
   <data name="NormalChunkController_Text" xml:space="preserve">
     <value>チャンク {0}</value>
@@ -169,19 +169,19 @@
     <value>Add Chunk</value>
   </data>
   <data name="NSFController_Text" xml:space="preserve">
-    <value>NSF File</value>
+    <value>NSFファイル</value>
   </data>
   <data name="OldAnimationEntryController_Text" xml:space="preserve">
     <value>オールドアニメーション ({0})</value>
   </data>
   <data name="OldModelEntryController_Text" xml:space="preserve">
-    <value>Old Model ({0})</value>
+    <value>オールドモデル ({0})</value>
   </data>
   <data name="OldMusicEntryController_Text" xml:space="preserve">
-    <value>Old Music ({0})</value>
+    <value>オールド音楽 ({0})</value>
   </data>
   <data name="OldSceneryEntryController_Text" xml:space="preserve">
-    <value>Old Scenery ({0})</value>
+    <value>オールド風景 ({0})</value>
   </data>
   <data name="OldSoundChunkController_Text" xml:space="preserve">
     <value>オールドサウンドチャンク {0}</value>
@@ -193,25 +193,25 @@
     <value>オールド Ｔ17 ({0})</value>
   </data>
   <data name="OldZoneEntryController_Text" xml:space="preserve">
-    <value>Old Zone ({0})</value>
+    <value>オールドゾーン ({0})</value>
   </data>
   <data name="PaletteEntryController_Text" xml:space="preserve">
     <value>パレット ({0})</value>
   </data>
   <data name="SceneryEntryController_Text" xml:space="preserve">
-    <value>Scenery ({0})</value>
+    <value>風景 ({0})</value>
   </data>
   <data name="SoundChunkController_Text" xml:space="preserve">
     <value>サウンドチャンク {0}</value>
   </data>
   <data name="SoundEntryController_Text" xml:space="preserve">
-    <value>Sound ({0})</value>
+    <value>サウンドエフェクト ({0})</value>
   </data>
   <data name="SpeechChunkController_Text" xml:space="preserve">
-    <value>Speech Chunk</value>
+    <value>スピーチチャンク {0}</value>
   </data>
   <data name="SpeechEntryController_Text" xml:space="preserve">
-    <value>Speech ({0})</value>
+    <value>スピーチ ({0})</value>
   </data>
   <data name="T11EntryController_Text" xml:space="preserve">
     <value>T11 ({0})</value>
@@ -232,7 +232,7 @@
     <value>T21 ({0})</value>
   </data>
   <data name="SLSTEntryController_Text" xml:space="preserve">
-    <value>SLST ({0})</value>
+    <value>ソートリスト ({0})</value>
   </data>
   <data name="T6EntryController_Text" xml:space="preserve">
     <value>T6 ({0})</value>
@@ -247,19 +247,19 @@
     <value>未加工のチャンク {1} (Ｔ{0})</value>
   </data>
   <data name="UnprocessedEntryController_Text" xml:space="preserve">
-    <value>Unprocessed ({0})</value>
+    <value>未加工のＴ{0} ({1})</value>
   </data>
   <data name="WavebankChunkController_Text" xml:space="preserve">
     <value>ウエーブバンクチャンク {0}</value>
   </data>
   <data name="WavebankEntryController_Text" xml:space="preserve">
-    <value>Wavebank ({0})</value>
+    <value>ウエーブバンク ({0})</value>
   </data>
   <data name="ZoneEntryController_Text" xml:space="preserve">
     <value>ゾーン ({0})</value>
   </data>
   <data name="ProtoZoneEntryController_Text" xml:space="preserve">
-    <value>Proto Zone ({0})</value>
+    <value>プロトタイプゾーン ({0})</value>
   </data>
   <data name="AnimationEntryController_Text" xml:space="preserve">
     <value>アニメーション ({0})</value>
@@ -278,5 +278,32 @@
   </data>
   <data name="ProtoAnimationEntryController_Text" xml:space="preserve">
     <value>プロトタイプアニメーション ({0})</value>
+  </data>
+  <data name="GOOLv0EntryController_Text" xml:space="preserve">
+    <value>プロトタイプGOOL ({0})</value>
+  </data>
+  <data name="GOOLv1EntryController_Text" xml:space="preserve">
+    <value>GOOL ({0})</value>
+  </data>
+  <data name="GOOLv2EntryController_Text" xml:space="preserve">
+    <value>GOOLv2 ({0})</value>
+  </data>
+  <data name="GOOLv3EntryController_Text" xml:space="preserve">
+    <value>GOOLv3 ({0})</value>
+  </data>
+  <data name="ModelEntryController_Compressed_Text" xml:space="preserve">
+    <value>圧縮モデル ({0})</value>
+  </data>
+  <data name="OldCameraController_Text" xml:space="preserve">
+    <value>カメラトレール</value>
+  </data>
+  <data name="OldEntityController_Text" xml:space="preserve">
+    <value>エンティティ {0} ({1})</value>
+  </data>
+  <data name="OldSLSTEntryController_Text" xml:space="preserve">
+    <value>オールドソートリスト ({0})</value>
+  </data>
+  <data name="ProtoSceneryEntryController_Text" xml:space="preserve">
+    <value>プロトタイプ風景 ({0})</value>
   </data>
 </root>
