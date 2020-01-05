@@ -69,7 +69,7 @@ namespace CrashEdit
             EntryChunkController.InsertNode(index,unprocessedentrycontroller);
             if (Node.IsSelected)
             {
-                Node.TreeView.SelectedNode = unprocessedentrycontroller.Node;
+                trv.SelectedNode = unprocessedentrycontroller.Node;
             }
             Dispose();
             trv.EndUpdate();

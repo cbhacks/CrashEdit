@@ -270,6 +270,9 @@
   <data name="FrameController_Text" xml:space="preserve">
     <value>Frame</value>
   </data>
+  <data name="ItemController_Text" xml:space="preserve">
+    <value>Item</value>
+  </data>
   <data name="Language" xml:space="preserve">
     <value>English</value>
   </data>
