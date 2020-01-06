@@ -16,18 +16,18 @@ namespace Crash
             {
                 ErrorManager.SignalError("OldSceneryEntry: Wrong number of items");
             }
-            int polygoncount = BitConv.FromInt32(items[0], 12);
-            int vertexcount = BitConv.FromInt32(items[0], 16);
-            int structcount = BitConv.FromInt32(items[0], 20);
-            if (items[1].Length != Aligner.Align(polygoncount * 8, 4))
+            int polygoncount = BitConv.FromInt32(items[0],0xC);
+            int vertexcount = BitConv.FromInt32(items[0],0x10);
+            int structcount = BitConv.FromInt32(items[0],0x14);
+            if (items[1].Length != polygoncount * 8)
             {
                 ErrorManager.SignalError("OldSceneryEntry: Polygon count mismatch");
             }
-            if (items[2].Length != Aligner.Align(vertexcount * 8, 4))
+            if (items[2].Length != vertexcount * 8)
             {
                 ErrorManager.SignalError("OldSceneryEntry: Vertex count mismatch");
             }
-            if (items[0].Length - 0x40 != Aligner.Align(structcount * 4, 4))
+            if (items[0].Length - 0x40 != structcount * 4)
             {
                 ErrorManager.SignalError("OldSceneryEntry: Struct count mismatch");
             }
@@ -62,7 +62,7 @@ namespace Crash
         {
             bool textured = (item[offset + 3] & 0x80) != 0;
             int size = textured ? 8 : 4;
-            if ((offset + size) >= item.Length) return null;
+            if ((offset + size) > item.Length) return null;
             byte[] data = new byte[size];
             Array.Copy(item,offset,data,0,size);
             if (textured)
