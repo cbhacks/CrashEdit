@@ -9,12 +9,13 @@ namespace Crash
     {
         private List<OldSceneryPolygon> polygons;
         private List<OldSceneryVertex> vertices;
-
-        public OldSceneryEntry(byte[] info,IEnumerable<OldSceneryPolygon> polygons,IEnumerable<OldSceneryVertex> vertices,byte[] extradata,int eid) : base(eid)
+        private List<OldModelStruct> structs;
+        public OldSceneryEntry(byte[] info, IEnumerable<OldSceneryPolygon> polygons, IEnumerable<OldSceneryVertex> vertices, IEnumerable<OldModelStruct> structs, byte[] extradata, int eid) : base(eid)
         {
             Info = info ?? throw new ArgumentNullException("info");
             this.polygons = new List<OldSceneryPolygon>(polygons);
             this.vertices = new List<OldSceneryVertex>(vertices);
+            this.structs = new List<OldModelStruct>(structs);
             ExtraData = extradata;
         }
 
@@ -24,25 +25,25 @@ namespace Crash
 
         public int XOffset
         {
-            get => BitConv.FromInt32(Info,0);
-            set => BitConv.ToInt32(Info,0,value);
+            get => BitConv.FromInt32(Info, 0);
+            set => BitConv.ToInt32(Info, 0, value);
         }
 
         public int YOffset
         {
-            get => BitConv.FromInt32(Info,4);
-            set => BitConv.ToInt32(Info,4,value);
+            get => BitConv.FromInt32(Info, 4);
+            set => BitConv.ToInt32(Info, 4, value);
         }
 
         public int ZOffset
         {
-            get => BitConv.FromInt32(Info,8);
-            set => BitConv.ToInt32(Info,8,value);
+            get => BitConv.FromInt32(Info, 8);
+            set => BitConv.ToInt32(Info, 8, value);
         }
 
         public IList<OldSceneryPolygon> Polygons => polygons;
         public IList<OldSceneryVertex> Vertices => vertices;
-
+        public IList<OldModelStruct> Structs => structs;
         public override UnprocessedEntry Unprocess()
         {
             byte[][] items = new byte [ExtraData == null ? 3 : 4][];

@@ -65,7 +65,8 @@ namespace CrashEdit
             {
                 vertices.Add(new OldSceneryVertex((short)((short)(protov.X/8.0)*8),(short)((short)(protov.Y/8.0)*8),(short)((short)(protov.Z/8.0)*8),0x7F,0x7F,0x7F,false));
             }
-            OldSceneryEntry newworld = new OldSceneryEntry(ProtoSceneryEntry.Info,polygons,vertices,null,ProtoSceneryEntry.EID);
+            List<OldModelStruct> structs = new List<OldModelStruct>(); // TODO: implement
+            OldSceneryEntry newworld = new OldSceneryEntry(ProtoSceneryEntry.Info,polygons,vertices,structs,null,ProtoSceneryEntry.EID);
             FileUtil.SaveFile(newworld.Save(), FileFilters.NSEntry, FileFilters.Any);
         }
     }
