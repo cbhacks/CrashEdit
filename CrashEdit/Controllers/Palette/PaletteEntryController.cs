@@ -1,12 +1,14 @@
 using Crash;
+using System;
+using System.Windows.Forms;
 
 namespace CrashEdit
 {
-    public sealed class PaletteEntryController : MysteryMultiItemEntryController
+    public sealed class PaletteEntryController : EntryController
     {
-        public PaletteEntryController(EntryChunkController entrychunkcontroller,PaletteEntry t18entry) : base(entrychunkcontroller,t18entry)
+        public PaletteEntryController(EntryChunkController entrychunkcontroller,PaletteEntry paletteentry) : base(entrychunkcontroller,paletteentry)
         {
-            PaletteEntry = t18entry;
+            PaletteEntry = paletteentry;
             InvalidateNode();
             InvalidateNodeImage();
         }
@@ -20,6 +22,14 @@ namespace CrashEdit
         {
             Node.ImageKey = "thing";
             Node.SelectedImageKey = "thing";
+        }
+
+        protected override Control CreateEditor()
+        {
+            // Hack for Mono so it doesn't crash.
+            if (Type.GetType("Mono.Runtime") != null)
+                return base.CreateEditor();
+            return new PaletteEntryBox(PaletteEntry);
         }
 
         public PaletteEntry PaletteEntry { get; }
