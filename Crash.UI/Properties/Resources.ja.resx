@@ -273,9 +273,6 @@
   <data name="ItemController_Text" xml:space="preserve">
     <value>アイテム</value>
   </data>
-  <data name="Language" xml:space="preserve">
-    <value>日本語</value>
-  </data>
   <data name="ProtoAnimationEntryController_Text" xml:space="preserve">
     <value>プロトタイプアニメーション ({0})</value>
   </data>

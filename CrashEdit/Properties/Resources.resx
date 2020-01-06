@@ -391,4 +391,7 @@
   <data name="EntityBox_TabSpecial" xml:space="preserve">
     <value>Special</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>English (Default)</value>
+  </data>
 </root>

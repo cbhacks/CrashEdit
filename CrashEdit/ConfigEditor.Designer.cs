@@ -30,6 +30,7 @@
         {
             this.dpdLang = new System.Windows.Forms.ComboBox();
             this.fraLang = new System.Windows.Forms.GroupBox();
+            this.cmdReset = new System.Windows.Forms.Button();
             this.fraLang.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,11 +55,22 @@
             this.fraLang.TabStop = false;
             this.fraLang.Text = "Language (requires restart)";
             // 
+            // cmdReset
+            // 
+            this.cmdReset.Location = new System.Drawing.Point(3, 68);
+            this.cmdReset.Name = "cmdReset";
+            this.cmdReset.Size = new System.Drawing.Size(100, 23);
+            this.cmdReset.TabIndex = 1;
+            this.cmdReset.Text = "Reset Settings";
+            this.cmdReset.UseVisualStyleBackColor = true;
+            this.cmdReset.Click += new System.EventHandler(this.cmdReset_Click);
+            // 
             // ConfigEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.Controls.Add(this.cmdReset);
             this.Controls.Add(this.fraLang);
             this.Name = "ConfigEditor";
             this.Size = new System.Drawing.Size(408, 372);
@@ -72,5 +84,6 @@
 
         private System.Windows.Forms.ComboBox dpdLang;
         private System.Windows.Forms.GroupBox fraLang;
+        private System.Windows.Forms.Button cmdReset;
     }
 }

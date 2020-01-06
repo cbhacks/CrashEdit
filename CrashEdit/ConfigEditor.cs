@@ -12,8 +12,8 @@ namespace CrashEdit
         {
             InitializeComponent();
             foreach (string lang in Languages)
-                dpdLang.Items.Add(Crash.UI.Properties.Resources.ResourceManager.GetString("Language", new System.Globalization.CultureInfo(lang)));
-            dpdLang.SelectedItem = Crash.UI.Properties.Resources.ResourceManager.GetString("Language", new System.Globalization.CultureInfo(Properties.Settings.Default.Language));
+                dpdLang.Items.Add(Properties.Resources.ResourceManager.GetString("Language", new System.Globalization.CultureInfo(lang)));
+            dpdLang.SelectedItem = Properties.Resources.ResourceManager.GetString("Language", new System.Globalization.CultureInfo(Properties.Settings.Default.Language));
             dpdLang.SelectedIndexChanged += new EventHandler(comboBox1_SelectedIndexChanged);
         }
 
@@ -21,6 +21,12 @@ namespace CrashEdit
         {
             Properties.Settings.Default.Language = Languages[dpdLang.SelectedIndex];
             Properties.Settings.Default.Save();
+        }
+
+        private void cmdReset_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Reset();
+            ((OldMainForm)TopLevelControl).ResetConfig();
         }
     }
 }

@@ -176,7 +176,7 @@ namespace CrashEdit
 
             TabPage configtab = new TabPage("CrashEdit")
             {
-                Tag = null
+                Tag = "CONFIG"
             };
             configtab.Controls.Add(new ConfigEditor() { Dock = DockStyle.Fill });
 
@@ -771,6 +771,16 @@ namespace CrashEdit
             }
             catch (LoadAbortedException)
             {
+            }
+        }
+
+        public void ResetConfig()
+        {
+            TabPage configtab = tbcTabs.TabPages["CrashEdit"];
+            if ((string)configtab.Tag == "CONFIG")
+            {
+                configtab.Controls.Clear();
+                configtab.Controls.Add(new ConfigEditor() { Dock = DockStyle.Fill });
             }
         }
     }

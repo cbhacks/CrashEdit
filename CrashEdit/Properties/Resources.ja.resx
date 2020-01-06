@@ -391,4 +391,7 @@
   <data name="EntityBox_TabSpecial" xml:space="preserve">
     <value>その他</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>日本語</value>
+  </data>
 </root>
