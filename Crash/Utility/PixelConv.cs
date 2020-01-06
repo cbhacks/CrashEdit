@@ -37,7 +37,7 @@ namespace Crash
                 case 0: a = a == 1 ? (byte)0xFF : (r+g+b == 0 ? (byte)0 : (byte)0xFF); break;
                 case 1: a = a == 1 ? (byte)0xFF : (r+g+b == 0 ? (byte)0 : (byte)0xFF); break;
                 case 2: a = a == 1 ? (byte)0xFF : (r+g+b == 0 ? (byte)0 : (byte)0xFF); break;
-                case 3: a = 0xFF; break;
+                case 3: a = (r+g+b == 0 ? (byte)0 : (byte)0xFF); break;
             }
             return (a << 24) | (r << 16) | (g << 8) | b;
         }
