@@ -9,8 +9,8 @@ namespace CrashEdit
         public TextureChunkController(NSFController nsfcontroller,TextureChunk texturechunk) : base(nsfcontroller,texturechunk)
         {
             TextureChunk = texturechunk;
-            AddMenu("Recalculate Checksum",Menu_Recalculate_Checksum);
-            AddMenu("Rename Entry",Menu_Rename_Entry);
+            AddMenu(Crash.UI.Properties.Resources.TextureChunkController_AcRecalcChecksum,Menu_Recalculate_Checksum);
+            AddMenu(Crash.UI.Properties.Resources.TextureChunkController_AcRename,Menu_Rename_Entry);
             InvalidateNode();
             InvalidateNodeImage();
         }

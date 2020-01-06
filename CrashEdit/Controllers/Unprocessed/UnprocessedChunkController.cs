@@ -8,7 +8,7 @@ namespace CrashEdit
         public UnprocessedChunkController(NSFController nsfcontroller,UnprocessedChunk unprocessedchunk) : base(nsfcontroller,unprocessedchunk)
         {
             UnprocessedChunk = unprocessedchunk;
-            AddMenu("Process Chunk", Menu_Process_Chunk);
+            AddMenu(Crash.UI.Properties.Resources.UnprocessedChunkController_AcProcess,Menu_Process_Chunk);
             InvalidateNode();
             InvalidateNodeImage();
         }

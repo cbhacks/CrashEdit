@@ -151,6 +151,24 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add New Entry.
+        /// </summary>
+        public static string EntryChunkController_AcAddNew {
+            get {
+                return ResourceManager.GetString("EntryChunkController_AcAddNew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Entry.
+        /// </summary>
+        public static string EntryChunkController_AcImport {
+            get {
+                return ResourceManager.GetString("EntryChunkController_AcImport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Entry &quot;{0}&quot;.
         /// </summary>
         public static string EntryController_AcDelete {
@@ -165,6 +183,24 @@ namespace Crash.UI.Properties {
         public static string EntryController_AcDeprocess {
             get {
                 return ResourceManager.GetString("EntryController_AcDeprocess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Entry &quot;{0}&quot;.
+        /// </summary>
+        public static string EntryController_AcExport {
+            get {
+                return ResourceManager.GetString("EntryController_AcExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename Entry &quot;{0}&quot;.
+        /// </summary>
+        public static string EntryController_AcRename {
+            get {
+                return ResourceManager.GetString("EntryController_AcRename", resourceCulture);
             }
         }
         
@@ -309,6 +345,78 @@ namespace Crash.UI.Properties {
         public static string NSFController_AcAddNormalChunk {
             get {
                 return ResourceManager.GetString("NSFController_AcAddNormalChunk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Old Sound Chunk.
+        /// </summary>
+        public static string NSFController_AcAddOldSoundChunk {
+            get {
+                return ResourceManager.GetString("NSFController_AcAddOldSoundChunk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Sound Chunk.
+        /// </summary>
+        public static string NSFController_AcAddSoundChunk {
+            get {
+                return ResourceManager.GetString("NSFController_AcAddSoundChunk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Speech Chunk.
+        /// </summary>
+        public static string NSFController_AcAddSpeechChunk {
+            get {
+                return ResourceManager.GetString("NSFController_AcAddSpeechChunk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Wavebank Chunk.
+        /// </summary>
+        public static string NSFController_AcAddWavebankChunk {
+            get {
+                return ResourceManager.GetString("NSFController_AcAddWavebankChunk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix Box Count.
+        /// </summary>
+        public static string NSFController_AcFixBoxCount {
+            get {
+                return ResourceManager.GetString("NSFController_AcFixBoxCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix Nitro Detonators.
+        /// </summary>
+        public static string NSFController_AcFixDetonator {
+            get {
+                return ResourceManager.GetString("NSFController_AcFixDetonator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Chunk.
+        /// </summary>
+        public static string NSFController_AcImportChunk {
+            get {
+                return ResourceManager.GetString("NSFController_AcImportChunk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show All Level Scenery.
+        /// </summary>
+        public static string NSFController_AcShowLevel {
+            get {
+                return ResourceManager.GetString("NSFController_AcShowLevel", resourceCulture);
             }
         }
         
@@ -565,6 +673,24 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Recalculate Checksum.
+        /// </summary>
+        public static string TextureChunkController_AcRecalcChecksum {
+            get {
+                return ResourceManager.GetString("TextureChunkController_AcRecalcChecksum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename Chunk.
+        /// </summary>
+        public static string TextureChunkController_AcRename {
+            get {
+                return ResourceManager.GetString("TextureChunkController_AcRename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Texture Chunk {1} ({0}).
         /// </summary>
         public static string TextureChunkController_Text {
@@ -588,6 +714,15 @@ namespace Crash.UI.Properties {
         public static string UnprocessedChunkController_Text {
             get {
                 return ResourceManager.GetString("UnprocessedChunkController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Process Entry.
+        /// </summary>
+        public static string UnprocessedEntryController_AcProcess {
+            get {
+                return ResourceManager.GetString("UnprocessedEntryController_AcProcess", resourceCulture);
             }
         }
         

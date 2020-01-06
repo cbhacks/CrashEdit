@@ -15,23 +15,23 @@ namespace CrashEdit
             {
                 AddNode(CreateChunkController(chunk));
             }
-            AddMenu("Add Chunk - Normal",Menu_Add_NormalChunk);
+            AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddNormalChunk,Menu_Add_NormalChunk);
             if (GameVersion != GameVersion.Crash2 && GameVersion != GameVersion.Crash3 && GameVersion != GameVersion.Crash1)
-                AddMenu("Add Chunk - Sound (Alpha)",Menu_Add_OldSoundChunk);
-            AddMenu("Add Chunk - Sound",Menu_Add_SoundChunk);
-            AddMenu("Add Chunk - Wavebank",Menu_Add_WavebankChunk);
-            AddMenu("Add Chunk - Speech",Menu_Add_SpeechChunk);
-            AddMenu("Import Chunk", Menu_Import_Chunk);
+                AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddOldSoundChunk,Menu_Add_OldSoundChunk);
+            AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddSoundChunk,Menu_Add_SoundChunk);
+            AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddWavebankChunk,Menu_Add_WavebankChunk);
+            AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddSpeechChunk,Menu_Add_SpeechChunk);
+            AddMenu(Crash.UI.Properties.Resources.NSFController_AcImportChunk,Menu_Import_Chunk);
             if (GameVersion == GameVersion.Crash2 || GameVersion == GameVersion.Crash3)
             {
                 AddMenuSeparator();
-                AddMenu("Fix Nitro Detonators",Menu_Fix_Detonator);
-                AddMenu("Fix Box Count",Menu_Fix_BoxCount);
+                AddMenu(Crash.UI.Properties.Resources.NSFController_AcFixDetonator,Menu_Fix_Detonator);
+                AddMenu(Crash.UI.Properties.Resources.NSFController_AcFixBoxCount,Menu_Fix_BoxCount);
                 AddMenuSeparator();
                 if (GameVersion == GameVersion.Crash2)
-                    AddMenu("Show Entire Level",Menu_ShowLevelC2);
+                    AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC2);
                 else if (GameVersion == GameVersion.Crash3)
-                    AddMenu("Show Entire Level",Menu_ShowLevelC3);
+                    AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC3);
             }
             InvalidateNode();
             InvalidateNodeImage();

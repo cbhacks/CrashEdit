@@ -11,8 +11,8 @@ namespace CrashEdit
         {
             EntryChunk = entrychunk;
             PopulateNodes();
-            AddMenu("Import Entry",Menu_Import_Entry);
-            AddMenu("Add New Entry",Menu_Add_Entry);
+            AddMenu(Crash.UI.Properties.Resources.EntryChunkController_AcImport,Menu_Import_Entry);
+            AddMenu(Crash.UI.Properties.Resources.EntryChunkController_AcAddNew,Menu_Add_Entry);
         }
 
         public void PopulateNodes()

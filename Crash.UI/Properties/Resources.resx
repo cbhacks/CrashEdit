@@ -306,4 +306,49 @@
   <data name="ProtoSceneryEntryController_Text" xml:space="preserve">
     <value>Prototype Scenery ({0})</value>
   </data>
+  <data name="EntryChunkController_AcAddNew" xml:space="preserve">
+    <value>Add New Entry</value>
+  </data>
+  <data name="EntryChunkController_AcImport" xml:space="preserve">
+    <value>Import Entry</value>
+  </data>
+  <data name="EntryController_AcExport" xml:space="preserve">
+    <value>Export Entry "{0}"</value>
+  </data>
+  <data name="EntryController_AcRename" xml:space="preserve">
+    <value>Rename Entry "{0}"</value>
+  </data>
+  <data name="NSFController_AcAddOldSoundChunk" xml:space="preserve">
+    <value>Add Old Sound Chunk</value>
+  </data>
+  <data name="NSFController_AcAddSoundChunk" xml:space="preserve">
+    <value>Add Sound Chunk</value>
+  </data>
+  <data name="NSFController_AcAddSpeechChunk" xml:space="preserve">
+    <value>Add Speech Chunk</value>
+  </data>
+  <data name="NSFController_AcAddWavebankChunk" xml:space="preserve">
+    <value>Add Wavebank Chunk</value>
+  </data>
+  <data name="NSFController_AcFixBoxCount" xml:space="preserve">
+    <value>Fix Box Count</value>
+  </data>
+  <data name="NSFController_AcFixDetonator" xml:space="preserve">
+    <value>Fix Nitro Detonators</value>
+  </data>
+  <data name="NSFController_AcImportChunk" xml:space="preserve">
+    <value>Import Chunk</value>
+  </data>
+  <data name="NSFController_AcShowLevel" xml:space="preserve">
+    <value>Show All Level Scenery</value>
+  </data>
+  <data name="TextureChunkController_AcRecalcChecksum" xml:space="preserve">
+    <value>Recalculate Checksum</value>
+  </data>
+  <data name="TextureChunkController_AcRename" xml:space="preserve">
+    <value>Rename Chunk</value>
+  </data>
+  <data name="UnprocessedEntryController_AcProcess" xml:space="preserve">
+    <value>Process Entry</value>
+  </data>
 </root>
