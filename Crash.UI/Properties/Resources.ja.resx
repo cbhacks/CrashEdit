@@ -348,4 +348,7 @@
   <data name="UnprocessedEntryController_AcProcess" xml:space="preserve">
     <value>エントリー「{0}」を　捌く</value>
   </data>
+  <data name="ZoneEntryController_AcAddEntity" xml:space="preserve">
+    <value>エンティティを　追加する</value>
+  </data>
 </root>

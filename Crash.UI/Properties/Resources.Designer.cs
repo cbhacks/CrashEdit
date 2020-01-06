@@ -745,6 +745,15 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Entity.
+        /// </summary>
+        public static string ZoneEntryController_AcAddEntity {
+            get {
+                return ResourceManager.GetString("ZoneEntryController_AcAddEntity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zone ({0}).
         /// </summary>
         public static string ZoneEntryController_Text {

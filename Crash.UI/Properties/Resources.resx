@@ -348,4 +348,7 @@
   <data name="UnprocessedEntryController_AcProcess" xml:space="preserve">
     <value>Process Entry</value>
   </data>
+  <data name="ZoneEntryController_AcAddEntity" xml:space="preserve">
+    <value>Add Entity</value>
+  </data>
 </root>
