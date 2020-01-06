@@ -15,6 +15,10 @@ namespace CrashEdit
             catch {
                 Properties.Settings.Default.Reset();
             }
+            if (Properties.Settings.Default.DefaultFormW < 640)
+                Properties.Settings.Default.DefaultFormW = 640;
+            if (Properties.Settings.Default.DefaultFormH < 480)
+                Properties.Settings.Default.DefaultFormH = 480;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             using (OldMainForm mainform = new OldMainForm())

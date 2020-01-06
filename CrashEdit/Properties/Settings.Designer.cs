@@ -34,5 +34,29 @@ namespace CrashEdit.Properties {
                 this["Language"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("747")]
+        public int DefaultFormW {
+            get {
+                return ((int)(this["DefaultFormW"]));
+            }
+            set {
+                this["DefaultFormW"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("560")]
+        public int DefaultFormH {
+            get {
+                return ((int)(this["DefaultFormH"]));
+            }
+            set {
+                this["DefaultFormH"] = value;
+            }
+        }
     }
 }

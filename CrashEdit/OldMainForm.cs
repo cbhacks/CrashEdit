@@ -176,9 +176,9 @@ namespace CrashEdit
 
             TabPage configtab = new TabPage("CrashEdit")
             {
-                Tag = "CONFIG"
+                Tag = new ConfigEditor() { Dock = DockStyle.Fill }
             };
-            configtab.Controls.Add(new ConfigEditor() { Dock = DockStyle.Fill });
+            configtab.Controls.Add((ConfigEditor)configtab.Tag);
 
             tbcTabs.TabPages.Add(configtab);
 
@@ -186,8 +186,8 @@ namespace CrashEdit
 
             dlgGameVersion = new GameVersionForm();
 
-            Width = 747;
-            Height = 560;
+            Width = Properties.Settings.Default.DefaultFormW;
+            Height = Properties.Settings.Default.DefaultFormH;
             Text = $"CrashEdit v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
             Controls.Add(tbcTabs);
             Controls.Add(tsToolbar);
@@ -776,11 +776,12 @@ namespace CrashEdit
 
         public void ResetConfig()
         {
-            TabPage configtab = tbcTabs.TabPages["CrashEdit"];
-            if ((string)configtab.Tag == "CONFIG")
+            TabPage configtab = tbcTabs.TabPages[0];
+            if (configtab.Tag is ConfigEditor)
             {
                 configtab.Controls.Clear();
-                configtab.Controls.Add(new ConfigEditor() { Dock = DockStyle.Fill });
+                configtab.Tag = new ConfigEditor() { Dock = DockStyle.Fill };
+                configtab.Controls.Add((ConfigEditor)configtab.Tag);
             }
         }
     }
