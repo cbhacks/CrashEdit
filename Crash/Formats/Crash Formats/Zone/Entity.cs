@@ -82,6 +82,8 @@ namespace Crash
         //private int? mode;
         [EntityPropertyField(0x2C)]
         private string name;
+        [EntityPropertyField(0x32)]
+        private int? zmod;
         [EntityPropertyField(0x4B)]
         private List<EntityPosition> positions = null;
         [EntityPropertyField(0x9F)]
@@ -100,8 +102,8 @@ namespace Crash
         private EntityUInt32Property neighbors = null;
         [EntityPropertyField(0x118)]
         private int? othersettings = null;
-        [EntityPropertyField(0x131)]
-        private EntityVictimProperty camerathing = null;
+        [EntityPropertyField(0x130)]
+        private EntityVictimProperty fov = null;
         [EntityPropertyField(0x13B)]
         private EntityInt32Property drawlista = null;
         [EntityPropertyField(0x13C)]
@@ -165,6 +167,12 @@ namespace Crash
         {
             get => name;
             set => name = value;
+        }
+
+        public int? ZMod
+        {
+            get => zmod;
+            set => zmod = value;
         }
 
         public IList<EntityPosition> Positions => positions;
@@ -241,7 +249,11 @@ namespace Crash
             set => othersettings = value;
         }
 
-        public EntityVictimProperty CameraThing => camerathing;
+        public EntityVictimProperty FOV
+        {
+            get => fov;
+            set => fov = value;
+        }
 
         public EntityInt32Property DrawListA
         {
@@ -329,7 +341,7 @@ namespace Crash
             set => bonusboxcount = value;
         }
 
-        public IDictionary<short, EntityProperty> ExtraProperties => extraproperties;
+        public IDictionary<short,EntityProperty> ExtraProperties => extraproperties;
 
         public byte[] Save()
         {

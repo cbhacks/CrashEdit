@@ -163,7 +163,7 @@
     <value>Music ({0})</value>
   </data>
   <data name="NormalChunkController_Text" xml:space="preserve">
-    <value>Chunk</value>
+    <value>Chunk {0}</value>
   </data>
   <data name="NSFController_AcAddNormalChunk" xml:space="preserve">
     <value>Add Chunk</value>
@@ -184,7 +184,7 @@
     <value>Old Scenery ({0})</value>
   </data>
   <data name="OldSoundChunkController_Text" xml:space="preserve">
-    <value>Old Sound Chunk</value>
+    <value>Old Sound Chunk {0}</value>
   </data>
   <data name="OldT15EntryController_Text" xml:space="preserve">
     <value>Old T15 ({0})</value>
@@ -202,7 +202,7 @@
     <value>Scenery ({0})</value>
   </data>
   <data name="SoundChunkController_Text" xml:space="preserve">
-    <value>Sound Chunk</value>
+    <value>Sound Chunk {0}</value>
   </data>
   <data name="SoundEntryController_Text" xml:space="preserve">
     <value>Sound ({0})</value>
@@ -232,25 +232,25 @@
     <value>T21 ({0})</value>
   </data>
   <data name="SLSTEntryController_Text" xml:space="preserve">
-    <value>SLST ({0})</value>
+    <value>Sort List ({0})</value>
   </data>
   <data name="T6EntryController_Text" xml:space="preserve">
     <value>T6 ({0})</value>
   </data>
   <data name="TextureChunkController_Text" xml:space="preserve">
-    <value>Texture Chunk ({0})</value>
+    <value>Texture Chunk {1} ({0})</value>
   </data>
   <data name="UnprocessedChunkController_AcProcess" xml:space="preserve">
     <value>Process Chunk</value>
   </data>
   <data name="UnprocessedChunkController_Text" xml:space="preserve">
-    <value>Unprocessed Chunk</value>
+    <value>Unprocessed Chunk {1} (T{0})</value>
   </data>
   <data name="UnprocessedEntryController_Text" xml:space="preserve">
-    <value>Unprocessed ({0})</value>
+    <value>Unprocessed T{0} ({1})</value>
   </data>
   <data name="WavebankChunkController_Text" xml:space="preserve">
-    <value>Wavebank Chunk</value>
+    <value>Wavebank Chunk {0}</value>
   </data>
   <data name="WavebankEntryController_Text" xml:space="preserve">
     <value>Wavebank ({0})</value>
@@ -263,5 +263,89 @@
   </data>
   <data name="AnimationEntryController_Text" xml:space="preserve">
     <value>Animation ({0})</value>
+  </data>
+  <data name="EntityController_Text" xml:space="preserve">
+    <value>Entity</value>
+  </data>
+  <data name="FrameController_Text" xml:space="preserve">
+    <value>Frame</value>
+  </data>
+  <data name="ItemController_Text" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="ProtoAnimationEntryController_Text" xml:space="preserve">
+    <value>Prototype Animation ({0})</value>
+  </data>
+  <data name="GOOLv0EntryController_Text" xml:space="preserve">
+    <value>Prototype GOOL ({0})</value>
+  </data>
+  <data name="GOOLv1EntryController_Text" xml:space="preserve">
+    <value>GOOL ({0})</value>
+  </data>
+  <data name="GOOLv2EntryController_Text" xml:space="preserve">
+    <value>GOOLv2 ({0})</value>
+  </data>
+  <data name="GOOLv3EntryController_Text" xml:space="preserve">
+    <value>GOOLv3 ({0})</value>
+  </data>
+  <data name="ModelEntryController_Compressed_Text" xml:space="preserve">
+    <value>Compressed Model ({0})</value>
+  </data>
+  <data name="OldCameraController_Text" xml:space="preserve">
+    <value>Camera</value>
+  </data>
+  <data name="OldEntityController_Text" xml:space="preserve">
+    <value>Entity {0} ({1})</value>
+  </data>
+  <data name="OldSLSTEntryController_Text" xml:space="preserve">
+    <value>Old Sort List ({0})</value>
+  </data>
+  <data name="ProtoSceneryEntryController_Text" xml:space="preserve">
+    <value>Prototype Scenery ({0})</value>
+  </data>
+  <data name="EntryChunkController_AcAddNew" xml:space="preserve">
+    <value>Add New Entry</value>
+  </data>
+  <data name="EntryChunkController_AcImport" xml:space="preserve">
+    <value>Import Entry</value>
+  </data>
+  <data name="EntryController_AcExport" xml:space="preserve">
+    <value>Export Entry "{0}"</value>
+  </data>
+  <data name="EntryController_AcRename" xml:space="preserve">
+    <value>Rename Entry "{0}"</value>
+  </data>
+  <data name="NSFController_AcAddOldSoundChunk" xml:space="preserve">
+    <value>Add Old Sound Chunk</value>
+  </data>
+  <data name="NSFController_AcAddSoundChunk" xml:space="preserve">
+    <value>Add Sound Chunk</value>
+  </data>
+  <data name="NSFController_AcAddSpeechChunk" xml:space="preserve">
+    <value>Add Speech Chunk</value>
+  </data>
+  <data name="NSFController_AcAddWavebankChunk" xml:space="preserve">
+    <value>Add Wavebank Chunk</value>
+  </data>
+  <data name="NSFController_AcFixBoxCount" xml:space="preserve">
+    <value>Fix Box Count</value>
+  </data>
+  <data name="NSFController_AcFixDetonator" xml:space="preserve">
+    <value>Fix Nitro Detonators</value>
+  </data>
+  <data name="NSFController_AcImportChunk" xml:space="preserve">
+    <value>Import Chunk</value>
+  </data>
+  <data name="NSFController_AcShowLevel" xml:space="preserve">
+    <value>Show All Level Scenery</value>
+  </data>
+  <data name="TextureChunkController_AcRecalcChecksum" xml:space="preserve">
+    <value>Recalculate Checksum</value>
+  </data>
+  <data name="TextureChunkController_AcRename" xml:space="preserve">
+    <value>Rename Chunk</value>
+  </data>
+  <data name="UnprocessedEntryController_AcProcess" xml:space="preserve">
+    <value>Process Entry</value>
   </data>
 </root>

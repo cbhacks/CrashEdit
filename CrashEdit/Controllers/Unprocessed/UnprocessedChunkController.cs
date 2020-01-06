@@ -8,14 +8,14 @@ namespace CrashEdit
         public UnprocessedChunkController(NSFController nsfcontroller,UnprocessedChunk unprocessedchunk) : base(nsfcontroller,unprocessedchunk)
         {
             UnprocessedChunk = unprocessedchunk;
-            AddMenu("Process Chunk", Menu_Process_Chunk);
+            AddMenu(Crash.UI.Properties.Resources.UnprocessedChunkController_AcProcess,Menu_Process_Chunk);
             InvalidateNode();
             InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Unprocessed Chunk {1} (T{0})",UnprocessedChunk.Type,NSFController.NSF.Chunks.IndexOf(UnprocessedChunk) * 2 + 1);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.UnprocessedChunkController_Text,UnprocessedChunk.Type,NSFController.NSF.Chunks.IndexOf(UnprocessedChunk) * 2 + 1);
         }
 
         public override void InvalidateNodeImage()

@@ -27,7 +27,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Prototype Zone ({0})",ProtoZoneEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.ProtoZoneEntryController_Text,ProtoZoneEntry.EName);
         }
 
         public override void InvalidateNodeImage()

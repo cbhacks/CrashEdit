@@ -13,7 +13,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Wavebank ({0})",WavebankEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.WavebankEntryController_Text,WavebankEntry.EName);
         }
 
         public override void InvalidateNodeImage()

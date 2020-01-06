@@ -53,7 +53,7 @@ namespace CrashEdit
 
             NSFController.Node.Expand();
 
-            trvMain = new TreeView
+            trvMain = new BufferedTreeView
             {
                 Dock = DockStyle.Fill,
                 ImageList = imglist,
@@ -78,12 +78,11 @@ namespace CrashEdit
 
         private void trvMain_AfterSelect(object sender,TreeViewEventArgs e)
         {
-            pnSplit.Panel2.Controls.Clear();
             if (e.Node != null)
             {
-                object tag = e.Node.Tag;
-                if (tag is Controller t)
+                if (e.Node.Tag is Controller t)
                 {
+                    pnSplit.Panel2.Controls.Clear();
                     pnSplit.Panel2.Controls.Add(t.Editor);
                     t.Editor.Invalidate();
                 }

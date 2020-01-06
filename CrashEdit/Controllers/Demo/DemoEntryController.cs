@@ -13,7 +13,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Demo ({0})",DemoEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.DemoEntryController_Text,DemoEntry.EName);
         }
 
         public override void InvalidateNodeImage()

@@ -62,7 +62,7 @@ namespace CrashEdit
         {
             tbbOpen = new ToolStripButton
             {
-                Text = "Open",
+                Text = Properties.Resources.Toolbar_Open,
                 ImageKey = "tb_open",
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
@@ -70,7 +70,7 @@ namespace CrashEdit
 
             tbbSave = new ToolStripButton
             {
-                Text = "Save",
+                Text = Properties.Resources.Toolbar_Save,
                 ImageKey = "tb_save",
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
@@ -78,7 +78,7 @@ namespace CrashEdit
 
             tbbPatchNSD = new ToolStripButton
             {
-                Text = "Patch NSD",
+                Text = Properties.Resources.Toolbar_PatchNSD,
                 ImageKey = "tb_patchnsd",
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
@@ -86,7 +86,7 @@ namespace CrashEdit
 
             tbbClose = new ToolStripButton
             {
-                Text = "Close",
+                Text = Properties.Resources.Toolbar_Close,
                 ImageKey = "tb_close",
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
@@ -94,7 +94,7 @@ namespace CrashEdit
 
             tbbFind = new ToolStripButton
             {
-                Text = "Find",
+                Text = Properties.Resources.Toolbar_Find,
                 ImageKey = "tb_find",
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
@@ -102,7 +102,7 @@ namespace CrashEdit
 
             tbbFindNext = new ToolStripButton
             {
-                Text = "Find Next",
+                Text = Properties.Resources.Toolbar_FindNext,
                 ImageKey = "tb_findnext",
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
@@ -172,16 +172,37 @@ namespace CrashEdit
             {
                 Dock = DockStyle.Fill
             };
+            tbcTabs.SelectedIndexChanged += tbcTabs_SelectedIndexChanged;
+
+            TabPage configtab = new TabPage("CrashEdit")
+            {
+                Tag = new ConfigEditor() { Dock = DockStyle.Fill }
+            };
+            configtab.Controls.Add((ConfigEditor)configtab.Tag);
+
+            tbcTabs.TabPages.Add(configtab);
+
+            tbcTabs_SelectedIndexChanged(null,null);
 
             dlgGameVersion = new GameVersionForm();
 
-            Width = 747;
-            Height = 560;
+            Width = Properties.Settings.Default.DefaultFormW;
+            Height = Properties.Settings.Default.DefaultFormH;
             Text = $"CrashEdit v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
             Controls.Add(tbcTabs);
             Controls.Add(tsToolbar);
 
             dlgMakeBINFile.Filter = "Playstation Disc Images (*.bin)|*.bin";
+        }
+
+        private void tbcTabs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TabPage tab = tbcTabs.SelectedTab;
+            tbbSave.Enabled =
+            tbbPatchNSD.Enabled =
+            tbbClose.Enabled =
+            tbbFind.Enabled =
+            tbbFindNext.Enabled = tab != null && tab.Tag is NSFBox;
         }
 
         void tbbPAL_Click(object sender, EventArgs e)
@@ -750,6 +771,17 @@ namespace CrashEdit
             }
             catch (LoadAbortedException)
             {
+            }
+        }
+
+        public void ResetConfig()
+        {
+            TabPage configtab = tbcTabs.TabPages[0];
+            if (configtab.Tag is ConfigEditor)
+            {
+                configtab.Controls.Clear();
+                configtab.Tag = new ConfigEditor() { Dock = DockStyle.Fill };
+                configtab.Controls.Add((ConfigEditor)configtab.Tag);
             }
         }
     }

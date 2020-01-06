@@ -17,7 +17,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Old Entity {0} ({1})",OldEntity.ID,OldEntity.Positions.Count);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.OldEntityController_Text,OldEntity.ID,OldEntity.Positions.Count);
         }
 
         public override void InvalidateNodeImage()

@@ -28,7 +28,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Old Zone ({0})",OldZoneEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.OldZoneEntryController_Text,OldZoneEntry.EName);
         }
 
         public override void InvalidateNodeImage()
@@ -41,9 +41,16 @@ namespace CrashEdit
         {
             int linkedsceneryentrycount = BitConv.FromInt32(OldZoneEntry.Header,0);
             OldSceneryEntry[] linkedsceneryentries = new OldSceneryEntry[linkedsceneryentrycount];
+            TextureChunk[][] totaltexturechunks = new TextureChunk[linkedsceneryentrycount][];
             for (int i = 0; i < linkedsceneryentrycount; i++)
             {
                 linkedsceneryentries[i] = FindEID<OldSceneryEntry>(BitConv.FromInt32(OldZoneEntry.Header,4 + i * 64));
+                TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(linkedsceneryentries[i].Info, 0x18)];
+                for (int j = 0; j < texturechunks.Length; ++j)
+                {
+                    texturechunks[j] = FindEID<TextureChunk>(BitConv.FromInt32(linkedsceneryentries[i].Info, 0x20 + j * 4));
+                }
+                totaltexturechunks[i] = texturechunks;
             }
             int linkedzoneentrycount = BitConv.FromInt32(OldZoneEntry.Header,528);
             OldZoneEntry[] linkedzoneentries = new OldZoneEntry[linkedzoneentrycount];
@@ -51,7 +58,7 @@ namespace CrashEdit
             {
                 linkedzoneentries[i] = FindEID<OldZoneEntry>(BitConv.FromInt32(OldZoneEntry.Header,532 + i * 4));
             }
-            return new UndockableControl(new OldZoneEntryViewer(OldZoneEntry,linkedsceneryentries,linkedzoneentries));
+            return new UndockableControl(new OldZoneEntryViewer(OldZoneEntry,linkedsceneryentries,totaltexturechunks,linkedzoneentries));
         }
 
         public OldZoneEntry OldZoneEntry { get; }

@@ -1,6 +1,8 @@
 using Crash;
-using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace CrashEdit
 {
@@ -8,18 +10,25 @@ namespace CrashEdit
     {
         private List<OldSceneryEntry> entries;
         private int displaylist;
+        private bool textures_enabled = true;
+        private bool init = false;
 
-        public OldSceneryEntryViewer(OldSceneryEntry entry)
+        private TextureChunk[][] texturechunks;
+        public OldSceneryEntryViewer(OldSceneryEntry entry,TextureChunk[] texturechunks)
         {
-            entries = new List<OldSceneryEntry>();
-            entries.Add(entry);
+            entries = new List<OldSceneryEntry>() { entry };
             displaylist = -1;
+            InitTextures(1);
+            this.texturechunks = new TextureChunk[1][];
+            this.texturechunks[0] = texturechunks;
         }
 
-        public OldSceneryEntryViewer(IEnumerable<OldSceneryEntry> entries)
+        public OldSceneryEntryViewer(IEnumerable<OldSceneryEntry> entries,TextureChunk[][] texturechunks)
         {
             this.entries = new List<OldSceneryEntry>(entries);
             displaylist = -1;
+            InitTextures(this.entries.Count);
+            this.texturechunks = texturechunks;
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -36,25 +45,87 @@ namespace CrashEdit
             }
         }
 
+        protected override bool IsInputKey(Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.T:
+                    return true;
+                default:
+                    return base.IsInputKey(keyData);
+            }
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            switch (e.KeyCode)
+            {
+                case Keys.T:
+                    textures_enabled = !textures_enabled;
+                    break;
+            }
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Combine);
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
+        }
+
         protected override void RenderObjects()
         {
+            if (!init)
+            {
+                init = true;
+                for (int i = 0; i < entries.Count; ++i)
+                {
+                    ConvertTexturesToGL(i, texturechunks[i], entries[i].Polygons, entries[i].Structs, entries[i].Info, 0x20);
+                }
+            }
+
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+            if (!textures_enabled)
+                GL.Disable(EnableCap.Texture2D);
+            else
+                GL.Enable(EnableCap.Texture2D);
+            float[] uvs = new float[8];
             if (displaylist == -1)
             {
                 displaylist = GL.GenLists(1);
                 GL.NewList(displaylist,ListMode.CompileAndExecute);
-                foreach (OldSceneryEntry entry in entries)
+                for (int e = 0; e < entries.Count; e++)
                 {
+                    OldSceneryEntry entry = entries[e];
                     if (entry != null)
                     {
-                        GL.Begin(PrimitiveType.Triangles);
-                        foreach (OldSceneryPolygon polygon in entry.Polygons)
+                        for (int p = 0; p < entry.Polygons.Count; p++)
                         {
+                            OldSceneryPolygon polygon = entry.Polygons[p];
                             if (polygon.VertexA >= entry.Vertices.Count || polygon.VertexB >= entry.Vertices.Count || polygon.VertexC >= entry.Vertices.Count) continue;
+                            OldModelStruct modelstruct = entry.Structs[polygon.ModelStruct];
+                            if (modelstruct is OldModelTexture tex)
+                            { 
+                                BindTexture(e, p);
+                                uvs[0] = tex.X3;
+                                uvs[1] = tex.Y3;
+                                uvs[2] = tex.X2;
+                                uvs[3] = tex.Y2;
+                                uvs[4] = tex.X1;
+                                uvs[5] = tex.Y1;
+                            }
+                            else
+                                UnbindTexture();
+                            GL.Begin(PrimitiveType.Triangles);
+                            GL.TexCoord2(uvs[0], uvs[1]);
                             RenderVertex(entry,entry.Vertices[polygon.VertexA]);
+                            GL.TexCoord2(uvs[2], uvs[3]);
                             RenderVertex(entry,entry.Vertices[polygon.VertexB]);
+                            GL.TexCoord2(uvs[4], uvs[5]);
                             RenderVertex(entry,entry.Vertices[polygon.VertexC]);
+                            GL.End();
                         }
-                        GL.End();
                     }
                 }
                 GL.EndList();

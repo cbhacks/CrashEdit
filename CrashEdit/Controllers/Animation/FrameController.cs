@@ -15,7 +15,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = "Frame";
+            Node.Text = Crash.UI.Properties.Resources.FrameController_Text;
         }
 
         public override void InvalidateNodeImage()

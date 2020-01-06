@@ -24,11 +24,11 @@ namespace CrashEdit
             }
             else if (Entity.ID != null)
             {
-                Node.Text = string.Format("Entity ID {0}",Entity.ID);
+                Node.Text = string.Format("{1} ID {0}",Entity.ID,Crash.UI.Properties.Resources.EntityController_Text);
             }
             else
             {
-                Node.Text = "Entity";
+                Node.Text = Crash.UI.Properties.Resources.EntityController_Text;
             }
         }
 

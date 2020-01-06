@@ -33,7 +33,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Music ({0})",MusicEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.MusicEntryController_Text,MusicEntry.EName);
         }
 
         public override void InvalidateNodeImage()

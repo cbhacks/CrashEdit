@@ -31,7 +31,7 @@ namespace CrashEdit
 
         protected void AddMenu(string text,ControllerMenuDelegate proc)
         {
-            EventHandler handler = delegate(object sender,EventArgs e)
+            void handler(object sender, EventArgs e)
             {
                 try
                 {
@@ -41,7 +41,7 @@ namespace CrashEdit
                 {
                     MessageBox.Show(ex.Message,text,MessageBoxButtons.OK,MessageBoxIcon.Error);
                 }
-            };
+            }
             ContextMenu.MenuItems.Add(text,handler);
         }
 

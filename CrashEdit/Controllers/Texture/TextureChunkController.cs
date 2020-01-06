@@ -9,15 +9,15 @@ namespace CrashEdit
         public TextureChunkController(NSFController nsfcontroller,TextureChunk texturechunk) : base(nsfcontroller,texturechunk)
         {
             TextureChunk = texturechunk;
-            AddMenu("Recalculate Checksum",Menu_Recalculate_Checksum);
-            AddMenu("Rename Entry",Menu_Rename_Entry);
+            AddMenu(Crash.UI.Properties.Resources.TextureChunkController_AcRecalcChecksum,Menu_Recalculate_Checksum);
+            AddMenu(Crash.UI.Properties.Resources.TextureChunkController_AcRename,Menu_Rename_Entry);
             InvalidateNode();
             InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Texture Chunk {1} ({0})",Entry.EIDToEName(TextureChunk.EID),NSFController.NSF.Chunks.IndexOf(TextureChunk) * 2 + 1);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.TextureChunkController_Text,Entry.EIDToEName(TextureChunk.EID),NSFController.NSF.Chunks.IndexOf(TextureChunk) * 2 + 1);
         }
 
         public override void InvalidateNodeImage()

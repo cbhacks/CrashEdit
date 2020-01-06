@@ -21,7 +21,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Old Scenery ({0})",OldSceneryEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.OldSceneryEntryController_Text,OldSceneryEntry.EName);
         }
 
         public override void InvalidateNodeImage()
@@ -32,7 +32,12 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            return new UndockableControl(new OldSceneryEntryViewer(OldSceneryEntry));
+            TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(OldSceneryEntry.Info, 0x18)];
+            for (int i = 0; i < texturechunks.Length; ++i)
+            {
+                texturechunks[i] = FindEID<TextureChunk>(BitConv.FromInt32(OldSceneryEntry.Info, 0x20 + i * 4));
+            }
+            return new UndockableControl(new OldSceneryEntryViewer(OldSceneryEntry, texturechunks));
         }
 
         public OldSceneryEntry OldSceneryEntry { get; }

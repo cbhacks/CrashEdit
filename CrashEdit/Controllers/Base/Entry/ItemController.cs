@@ -19,7 +19,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = "Item";
+            Node.Text = Crash.UI.Properties.Resources.ItemController_Text;
         }
 
         public override void InvalidateNodeImage()

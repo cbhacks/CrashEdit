@@ -14,7 +14,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Sound ({0})",SoundEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.SoundEntryController_Text,SoundEntry.EName);
         }
 
         public override void InvalidateNodeImage()

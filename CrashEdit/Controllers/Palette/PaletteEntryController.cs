@@ -13,7 +13,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("Palette ({0})",PaletteEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.PaletteEntryController_Text,PaletteEntry.EName);
         }
 
         public override void InvalidateNodeImage()
