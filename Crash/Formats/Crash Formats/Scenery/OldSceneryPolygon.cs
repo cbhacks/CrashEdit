@@ -15,14 +15,14 @@ namespace Crash
             int vertexa = (worda >> 20) & 0xFFF;
             int vertexb = (wordb >> 8) & 0xFFF;
             int vertexc = (wordb >> 20) & 0xFFF;
-            int texture = (worda >> 8) & 0xFFF;
+            int modelstruct = (worda >> 8) & 0xFFF;
             byte page = (byte)(worda >> 5 & 0b111);
             byte anim0 = (byte)(worda & 0x1F);
             byte unknown = (byte)(wordb & 0xFF);
-            return new OldSceneryPolygon(vertexa,vertexb,vertexc,texture,page,anim0,unknown);
+            return new OldSceneryPolygon(vertexa,vertexb,vertexc,modelstruct,page,anim0,unknown);
         }
 
-        public OldSceneryPolygon(int vertexa,int vertexb,int vertexc,int texture,byte page,byte anim0,byte unknown)
+        public OldSceneryPolygon(int vertexa,int vertexb,int vertexc,int modelstruct,byte page,byte anim0,byte unknown)
         {
             if (vertexa < 0 || vertexa > 0xFFF)
                 throw new ArgumentOutOfRangeException("vertexa");
@@ -30,12 +30,12 @@ namespace Crash
                 throw new ArgumentOutOfRangeException("vertexb");
             if (vertexc < 0 || vertexc > 0xFFF)
                 throw new ArgumentOutOfRangeException("vertexc");
-            if (texture < 0 || texture > 0xFFF)
+            if (modelstruct < 0 || modelstruct > 0xFFF)
                 throw new ArgumentOutOfRangeException("unknown1");
             VertexA = vertexa;
             VertexB = vertexb;
             VertexC = vertexc;
-            Texture = texture;
+            ModelStruct = modelstruct;
             Page = page;
             Anim0 = anim0;
             Unknown = unknown;
@@ -44,7 +44,7 @@ namespace Crash
         public int VertexA { get; }
         public int VertexB { get; }
         public int VertexC { get; }
-        public int Texture { get; }
+        public int ModelStruct { get; }
         public byte Page { get; }
         public byte Anim0 { get; }
         public byte Unknown { get; }
@@ -56,7 +56,7 @@ namespace Crash
             worda |= VertexA << 20;
             wordb |= VertexB << 8;
             wordb |= VertexC << 20;
-            worda |= Texture << 8;
+            worda |= ModelStruct << 8;
             worda |= Page << 5;
             worda |= Anim0;
             wordb |= Unknown;

@@ -48,7 +48,8 @@ namespace CrashEdit
         private bool allentries;
         private Form frmoctree;
 
-        public OldZoneEntryViewer(OldZoneEntry entry,OldSceneryEntry[] linkedsceneryentries,OldZoneEntry[] linkedentries) : base(linkedsceneryentries)
+        public OldZoneEntryViewer(OldZoneEntry entry,OldSceneryEntry[] linkedsceneryentries,TextureChunk[][] texturechunks,OldZoneEntry[] linkedentries) 
+            : base(linkedsceneryentries,texturechunks)
         {
             this.entry = entry;
             this.linkedentries = linkedentries;
@@ -185,6 +186,8 @@ namespace CrashEdit
 
         protected override void RenderObjects()
         {
+            GL.Disable(EnableCap.Texture2D);
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 1.0f);
             RenderEntry(entry,ref octreedisplaylists[0]);
             GL.Enable(EnableCap.PolygonStipple);
             for (int i = 0; i < linkedentries.Length; i++)
@@ -199,6 +202,8 @@ namespace CrashEdit
             GL.Disable(EnableCap.PolygonStipple);
             if (deletelists)
                 deletelists = false;
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
+            GL.Enable(EnableCap.Texture2D);
             base.RenderObjects();
         }
 
