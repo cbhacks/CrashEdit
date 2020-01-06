@@ -301,6 +301,9 @@
   <data name="Text_CloseDirtyFilePrompt" xml:space="preserve">
     <value>The file "{0}" has not been saved since it was last modified. Continue anyway?</value>
   </data>
+  <data name="Conifg_FraLang" xml:space="preserve">
+    <value>Language (requires restart)</value>
+  </data>
   <data name="EntityBox_ChkBonusBoxCount" xml:space="preserve">
     <value>Enabled (Bonus)</value>
   </data>

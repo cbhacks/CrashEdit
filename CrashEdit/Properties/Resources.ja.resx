@@ -301,6 +301,9 @@
   <data name="Text_CloseDirtyFilePrompt" xml:space="preserve">
     <value>The file "{0}" has not been saved since it was last modified. Continue anyway?</value>
   </data>
+  <data name="Conifg_FraLang" xml:space="preserve">
+    <value>言語　＊再起動するが必要です</value>
+  </data>
   <data name="EntityBox_ChkBonusBoxCount" xml:space="preserve">
     <value>使用可能（ボーナス）</value>
   </data>

@@ -101,6 +101,15 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Language (requires restart).
+        /// </summary>
+        internal static string Conifg_FraLang {
+            get {
+                return ResourceManager.GetString("Conifg_FraLang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enabled (Bonus).
         /// </summary>
         internal static string EntityBox_ChkBonusBoxCount {

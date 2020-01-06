@@ -48,7 +48,7 @@
             this.dpdLang.FormattingEnabled = true;
             this.dpdLang.Location = new System.Drawing.Point(6, 19);
             this.dpdLang.Name = "dpdLang";
-            this.dpdLang.Size = new System.Drawing.Size(150, 21);
+            this.dpdLang.Size = new System.Drawing.Size(175, 21);
             this.dpdLang.TabIndex = 0;
             // 
             // fraLang
@@ -58,14 +58,14 @@
             this.fraLang.Controls.Add(this.dpdLang);
             this.fraLang.Location = new System.Drawing.Point(3, 3);
             this.fraLang.Name = "fraLang";
-            this.fraLang.Size = new System.Drawing.Size(162, 59);
+            this.fraLang.Size = new System.Drawing.Size(187, 59);
             this.fraLang.TabIndex = 1;
             this.fraLang.TabStop = false;
             this.fraLang.Text = "Language (requires restart)";
             // 
             // cmdReset
             // 
-            this.cmdReset.Location = new System.Drawing.Point(147, 224);
+            this.cmdReset.Location = new System.Drawing.Point(3, 224);
             this.cmdReset.Name = "cmdReset";
             this.cmdReset.Size = new System.Drawing.Size(100, 23);
             this.cmdReset.TabIndex = 1;

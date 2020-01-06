@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CrashEdit.Properties;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -12,35 +13,36 @@ namespace CrashEdit
         {
             InitializeComponent();
             foreach (string lang in Languages)
-                dpdLang.Items.Add(Properties.Resources.ResourceManager.GetString("Language", new System.Globalization.CultureInfo(lang)));
-            dpdLang.SelectedItem = Properties.Resources.ResourceManager.GetString("Language", new System.Globalization.CultureInfo(Properties.Settings.Default.Language));
+                dpdLang.Items.Add(Resources.ResourceManager.GetString("Language", new System.Globalization.CultureInfo(lang)));
+            dpdLang.SelectedItem = Resources.ResourceManager.GetString("Language", new System.Globalization.CultureInfo(Settings.Default.Language));
             dpdLang.SelectedIndexChanged += new EventHandler(dpdLang_SelectedIndexChanged);
-            numW.Value = Properties.Settings.Default.DefaultFormW;
-            numH.Value = Properties.Settings.Default.DefaultFormH;
+            numW.Value = Settings.Default.DefaultFormW;
+            numH.Value = Settings.Default.DefaultFormH;
+            fraLang.Text = Resources.Conifg_FraLang;
         }
 
         private void dpdLang_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.Language = Languages[dpdLang.SelectedIndex];
-            Properties.Settings.Default.Save();
+            Settings.Default.Language = Languages[dpdLang.SelectedIndex];
+            Settings.Default.Save();
         }
 
         private void cmdReset_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.Reset();
+            Settings.Default.Reset();
             ((OldMainForm)TopLevelControl).ResetConfig();
         }
 
         private void numW_ValueChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DefaultFormW = (int)numW.Value;
-            Properties.Settings.Default.Save();
+            Settings.Default.DefaultFormW = (int)numW.Value;
+            Settings.Default.Save();
         }
 
         private void numH_ValueChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DefaultFormH = (int)numH.Value;
-            Properties.Settings.Default.Save();
+            Settings.Default.DefaultFormH = (int)numH.Value;
+            Settings.Default.Save();
         }
     }
 }
