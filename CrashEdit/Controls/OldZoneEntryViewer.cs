@@ -66,7 +66,8 @@ namespace CrashEdit
             allentries = false;
         }
 
-        public OldZoneEntryViewer(List<OldZoneEntry> entries, OldSceneryEntry[] linkedsceneryentries) : base(linkedsceneryentries)
+        public OldZoneEntryViewer(List<OldZoneEntry> entries, OldSceneryEntry[] linkedsceneryentries, TextureChunk[][] texturechunks)
+            : base(linkedsceneryentries, texturechunks)
         {
             this.entry = entries[0];
             entries.Remove(this.entry);
