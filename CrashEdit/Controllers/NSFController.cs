@@ -381,7 +381,7 @@ namespace CrashEdit
         {
             List<OldZoneEntry> entries = new List<OldZoneEntry>();
             List<OldSceneryEntry> sceneryEntries = new List<OldSceneryEntry>();
-            List<TextureChunk[]> texturechunks = new List<>(TextureChunk[]);
+            List<TextureChunk[]> texturechunks = new List<TextureChunk[]>();
 
             foreach (Chunk chunk in NSF.Chunks)
             {
