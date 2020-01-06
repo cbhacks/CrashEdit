@@ -74,6 +74,7 @@
     <Compile Include="Controls\BufferedTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\GetAllControls.cs" />
     <Compile Include="Controls\GOOLBox.cs">
       <SubType>UserControl</SubType>
     </Compile>

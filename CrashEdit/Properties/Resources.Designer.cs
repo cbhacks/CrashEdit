@@ -101,6 +101,276 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enabled (Bonus).
+        /// </summary>
+        internal static string EntityBox_ChkBonusBoxCount {
+            get {
+                return ResourceManager.GetString("EntityBox_ChkBonusBoxCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabled.
+        /// </summary>
+        internal static string EntityBox_ChkEnabled {
+            get {
+                return ResourceManager.GetString("EntityBox_ChkEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hex.
+        /// </summary>
+        internal static string EntityBox_ChkHex {
+            get {
+                return ResourceManager.GetString("EntityBox_ChkHex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        internal static string EntityBox_CmdAdd {
+            get {
+                return ResourceManager.GetString("EntityBox_CmdAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Append.
+        /// </summary>
+        internal static string EntityBox_CmdAppend {
+            get {
+                return ResourceManager.GetString("EntityBox_CmdAppend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert.
+        /// </summary>
+        internal static string EntityBox_CmdInsert {
+            get {
+                return ResourceManager.GetString("EntityBox_CmdInsert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interpolate.
+        /// </summary>
+        internal static string EntityBox_CmdInterpolate {
+            get {
+                return ResourceManager.GetString("EntityBox_CmdInterpolate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next.
+        /// </summary>
+        internal static string EntityBox_CmdNext {
+            get {
+                return ResourceManager.GetString("EntityBox_CmdNext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previous.
+        /// </summary>
+        internal static string EntityBox_CmdPrevious {
+            get {
+                return ResourceManager.GetString("EntityBox_CmdPrevious", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        internal static string EntityBox_CmdRemove {
+            get {
+                return ResourceManager.GetString("EntityBox_CmdRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Box Count.
+        /// </summary>
+        internal static string EntityBox_FraBoxCount {
+            get {
+                return ResourceManager.GetString("EntityBox_FraBoxCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DDA Section.
+        /// </summary>
+        internal static string EntityBox_FraDDASection {
+            get {
+                return ResourceManager.GetString("EntityBox_FraDDASection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DDA Death Count.
+        /// </summary>
+        internal static string EntityBox_FraDDASettings {
+            get {
+                return ResourceManager.GetString("EntityBox_FraDDASettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ID.
+        /// </summary>
+        internal static string EntityBox_FraID {
+            get {
+                return ResourceManager.GetString("EntityBox_FraID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        internal static string EntityBox_FraName {
+            get {
+                return ResourceManager.GetString("EntityBox_FraName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Other Settings.
+        /// </summary>
+        internal static string EntityBox_FraOtherSettings {
+            get {
+                return ResourceManager.GetString("EntityBox_FraOtherSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position(s).
+        /// </summary>
+        internal static string EntityBox_FraPosition {
+            get {
+                return ResourceManager.GetString("EntityBox_FraPosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scale Modifier.
+        /// </summary>
+        internal static string EntityBox_FraScaling {
+            get {
+                return ResourceManager.GetString("EntityBox_FraScaling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Argument(s).
+        /// </summary>
+        internal static string EntityBox_FraSettings {
+            get {
+                return ResourceManager.GetString("EntityBox_FraSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sort List.
+        /// </summary>
+        internal static string EntityBox_FraSLST {
+            get {
+                return ResourceManager.GetString("EntityBox_FraSLST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subtype.
+        /// </summary>
+        internal static string EntityBox_FraSubtype {
+            get {
+                return ResourceManager.GetString("EntityBox_FraSubtype", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time Trial Reward.
+        /// </summary>
+        internal static string EntityBox_FraTTReward {
+            get {
+                return ResourceManager.GetString("EntityBox_FraTTReward", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        internal static string EntityBox_FraType {
+            get {
+                return ResourceManager.GetString("EntityBox_FraType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Victims.
+        /// </summary>
+        internal static string EntityBox_FraVictims {
+            get {
+                return ResourceManager.GetString("EntityBox_FraVictims", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Depth Modifier.
+        /// </summary>
+        internal static string EntityBox_FraZMod {
+            get {
+                return ResourceManager.GetString("EntityBox_FraZMod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Camera.
+        /// </summary>
+        internal static string EntityBox_TabCamera {
+            get {
+                return ResourceManager.GetString("EntityBox_TabCamera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Draw Lists.
+        /// </summary>
+        internal static string EntityBox_TabDrawList {
+            get {
+                return ResourceManager.GetString("EntityBox_TabDrawList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        internal static string EntityBox_TabGeneral {
+            get {
+                return ResourceManager.GetString("EntityBox_TabGeneral", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load Lists.
+        /// </summary>
+        internal static string EntityBox_TabLoadList {
+            get {
+                return ResourceManager.GetString("EntityBox_TabLoadList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special.
+        /// </summary>
+        internal static string EntityBox_TabSpecial {
+            get {
+                return ResourceManager.GetString("EntityBox_TabSpecial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit.
         /// </summary>
         internal static string Menu_Edit {

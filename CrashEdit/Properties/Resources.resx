@@ -301,4 +301,94 @@
   <data name="Text_CloseDirtyFilePrompt" xml:space="preserve">
     <value>The file "{0}" has not been saved since it was last modified. Continue anyway?</value>
   </data>
+  <data name="EntityBox_ChkBonusBoxCount" xml:space="preserve">
+    <value>Enabled (Bonus)</value>
+  </data>
+  <data name="EntityBox_ChkEnabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="EntityBox_ChkHex" xml:space="preserve">
+    <value>Hex</value>
+  </data>
+  <data name="EntityBox_CmdAdd" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="EntityBox_CmdAppend" xml:space="preserve">
+    <value>Append</value>
+  </data>
+  <data name="EntityBox_CmdInsert" xml:space="preserve">
+    <value>Insert</value>
+  </data>
+  <data name="EntityBox_CmdInterpolate" xml:space="preserve">
+    <value>Interpolate</value>
+  </data>
+  <data name="EntityBox_CmdNext" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="EntityBox_CmdPrevious" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="EntityBox_CmdRemove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="EntityBox_FraBoxCount" xml:space="preserve">
+    <value>Box Count</value>
+  </data>
+  <data name="EntityBox_FraDDASection" xml:space="preserve">
+    <value>DDA Section</value>
+  </data>
+  <data name="EntityBox_FraDDASettings" xml:space="preserve">
+    <value>DDA Death Count</value>
+  </data>
+  <data name="EntityBox_FraID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="EntityBox_FraName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="EntityBox_FraOtherSettings" xml:space="preserve">
+    <value>Other Settings</value>
+  </data>
+  <data name="EntityBox_FraPosition" xml:space="preserve">
+    <value>Position(s)</value>
+  </data>
+  <data name="EntityBox_FraScaling" xml:space="preserve">
+    <value>Scale Modifier</value>
+  </data>
+  <data name="EntityBox_FraSettings" xml:space="preserve">
+    <value>Argument(s)</value>
+  </data>
+  <data name="EntityBox_FraSLST" xml:space="preserve">
+    <value>Sort List</value>
+  </data>
+  <data name="EntityBox_FraSubtype" xml:space="preserve">
+    <value>Subtype</value>
+  </data>
+  <data name="EntityBox_FraTTReward" xml:space="preserve">
+    <value>Time Trial Reward</value>
+  </data>
+  <data name="EntityBox_FraType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="EntityBox_FraVictims" xml:space="preserve">
+    <value>Victims</value>
+  </data>
+  <data name="EntityBox_FraZMod" xml:space="preserve">
+    <value>Depth Modifier</value>
+  </data>
+  <data name="EntityBox_TabCamera" xml:space="preserve">
+    <value>Camera</value>
+  </data>
+  <data name="EntityBox_TabDrawList" xml:space="preserve">
+    <value>Draw Lists</value>
+  </data>
+  <data name="EntityBox_TabGeneral" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="EntityBox_TabLoadList" xml:space="preserve">
+    <value>Load Lists</value>
+  </data>
+  <data name="EntityBox_TabSpecial" xml:space="preserve">
+    <value>Special</value>
+  </data>
 </root>

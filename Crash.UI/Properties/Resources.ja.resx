@@ -142,7 +142,7 @@
     <value>エントリー「{0}」を　削除する</value>
   </data>
   <data name="EntryController_AcDeprocess" xml:space="preserve">
-    <value>エントリー「{0}」を　削除する</value>
+    <value>エントリー「{0}」を　脱捌く</value>
   </data>
   <data name="GameVersionForm_Message" xml:space="preserve">
     <value>以下のリストからゲームバージョンを選択します。NTSC-UやNTSC-JやPALはサポートされて</value>

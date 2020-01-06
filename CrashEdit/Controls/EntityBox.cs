@@ -1,4 +1,5 @@
 using Crash;
+using CrashEdit.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -80,6 +81,63 @@ namespace CrashEdit
             neighborsettingindex = 0;
             fovframeindex = 0;
             fovindex = 0;
+            tabGeneral.Text = Resources.EntityBox_TabGeneral;
+            tabSpecial.Text = Resources.EntityBox_TabSpecial;
+            tabCamera.Text = Resources.EntityBox_TabCamera;
+            tabLoadLists.Text = Resources.EntityBox_TabLoadList;
+            tabDrawLists.Text = Resources.EntityBox_TabDrawList;
+            fraName.Text = Resources.EntityBox_FraName;
+            foreach (CheckBox chk in this.GetAll(typeof(CheckBox)))
+            {
+                if (chk.Text == "Enabled")
+                {
+                    chk.Text = Resources.EntityBox_ChkEnabled;
+                }
+            }
+            chkBonusBoxCount.Text = Resources.EntityBox_ChkBonusBoxCount;
+            fraID.Text = Resources.EntityBox_FraID;
+            fraType.Text = Resources.EntityBox_FraType;
+            fraSubtype.Text = Resources.EntityBox_FraSubtype;
+            fraPosition.Text = Resources.EntityBox_FraPosition;
+            fraSettings.Text = Resources.EntityBox_FraSettings;
+            foreach (Button cmd in this.GetAll(typeof(Button)))
+            {
+                if (cmd.Text == "Previous")
+                {
+                    cmd.Text = Resources.EntityBox_CmdPrevious;
+                }
+                else if (cmd.Text == "Next")
+                {
+                    cmd.Text = Resources.EntityBox_CmdNext;
+                }
+                else if (cmd.Text == "Remove")
+                {
+                    cmd.Text = Resources.EntityBox_CmdRemove;
+                }
+                else if (cmd.Text == "Insert")
+                {
+                    cmd.Text = Resources.EntityBox_CmdInsert;
+                }
+                else if (cmd.Text == "Append")
+                {
+                    cmd.Text = Resources.EntityBox_CmdAppend;
+                }
+                else if (cmd.Text == "Add")
+                {
+                    cmd.Text = Resources.EntityBox_CmdAdd;
+                }
+            }
+            chkSettingHex.Text = Resources.EntityBox_ChkHex;
+            cmdInterpolate.Text = Resources.EntityBox_CmdInterpolate;
+            fraVictims.Text = Resources.EntityBox_FraVictims;
+            fraBoxCount.Text = Resources.EntityBox_FraBoxCount;
+            fraDDASection.Text = Resources.EntityBox_FraDDASection;
+            fraDDASettings.Text = Resources.EntityBox_FraDDASettings;
+            fraOtherSettings.Text = Resources.EntityBox_FraOtherSettings;
+            fraZMod.Text = Resources.EntityBox_FraZMod;
+            fraScaling.Text = Resources.EntityBox_FraScaling;
+            fraTTReward.Text = Resources.EntityBox_FraTTReward;
+            fraSLST.Text = Resources.EntityBox_FraSLST;
         }
 
         private void InvalidateNodes()
@@ -247,7 +305,6 @@ namespace CrashEdit
                 cmdRemoveSetting.Enabled =
                 lblSettingA.Enabled =
                 lblSettingB.Enabled =
-                lblSettingC.Enabled =
                 numSettingA.Enabled =
                 numSettingB.Enabled =
                 numSettingC.Enabled = false;
@@ -260,7 +317,6 @@ namespace CrashEdit
                 cmdRemoveSetting.Enabled =
                 lblSettingA.Enabled =
                 lblSettingB.Enabled =
-                lblSettingC.Enabled =
                 numSettingA.Enabled =
                 numSettingB.Enabled =
                 numSettingC.Enabled = true;

@@ -57,7 +57,6 @@ namespace CrashEdit
             this.fraSettings = new System.Windows.Forms.GroupBox();
             this.chkSettingHex = new System.Windows.Forms.CheckBox();
             this.numSettingC = new System.Windows.Forms.NumericUpDown();
-            this.lblSettingC = new System.Windows.Forms.Label();
             this.lblSettingIndex = new System.Windows.Forms.Label();
             this.cmdNextSetting = new System.Windows.Forms.Button();
             this.cmdPreviousSetting = new System.Windows.Forms.Button();
@@ -661,7 +660,6 @@ namespace CrashEdit
             // 
             this.fraSettings.Controls.Add(this.chkSettingHex);
             this.fraSettings.Controls.Add(this.numSettingC);
-            this.fraSettings.Controls.Add(this.lblSettingC);
             this.fraSettings.Controls.Add(this.lblSettingIndex);
             this.fraSettings.Controls.Add(this.cmdNextSetting);
             this.fraSettings.Controls.Add(this.cmdPreviousSetting);
@@ -681,7 +679,7 @@ namespace CrashEdit
             // chkSettingHex
             // 
             this.chkSettingHex.AutoSize = true;
-            this.chkSettingHex.Location = new System.Drawing.Point(149, 104);
+            this.chkSettingHex.Location = new System.Drawing.Point(118, 105);
             this.chkSettingHex.Name = "chkSettingHex";
             this.chkSettingHex.Size = new System.Drawing.Size(45, 17);
             this.chkSettingHex.TabIndex = 8;
@@ -691,7 +689,7 @@ namespace CrashEdit
             // 
             // numSettingC
             // 
-            this.numSettingC.Location = new System.Drawing.Point(26, 104);
+            this.numSettingC.Location = new System.Drawing.Point(6, 104);
             this.numSettingC.Maximum = new decimal(new int[] {
             2147483647,
             0,
@@ -703,18 +701,9 @@ namespace CrashEdit
             0,
             -2147483648});
             this.numSettingC.Name = "numSettingC";
-            this.numSettingC.Size = new System.Drawing.Size(117, 20);
+            this.numSettingC.Size = new System.Drawing.Size(106, 20);
             this.numSettingC.TabIndex = 7;
             this.numSettingC.ValueChanged += new System.EventHandler(this.numSettingC_ValueChanged);
-            // 
-            // lblSettingC
-            // 
-            this.lblSettingC.AutoSize = true;
-            this.lblSettingC.Location = new System.Drawing.Point(6, 106);
-            this.lblSettingC.Name = "lblSettingC";
-            this.lblSettingC.Size = new System.Drawing.Size(14, 13);
-            this.lblSettingC.TabIndex = 6;
-            this.lblSettingC.Text = "C";
             // 
             // lblSettingIndex
             // 
@@ -900,7 +889,7 @@ namespace CrashEdit
             this.fraZMod.Controls.Add(this.numZMod);
             this.fraZMod.Location = new System.Drawing.Point(3, 239);
             this.fraZMod.Name = "fraZMod";
-            this.fraZMod.Size = new System.Drawing.Size(112, 70);
+            this.fraZMod.Size = new System.Drawing.Size(120, 70);
             this.fraZMod.TabIndex = 11;
             this.fraZMod.TabStop = false;
             this.fraZMod.Text = "Depth Modifier";
@@ -930,7 +919,7 @@ namespace CrashEdit
             0,
             -2147483648});
             this.numZMod.Name = "numZMod";
-            this.numZMod.Size = new System.Drawing.Size(100, 20);
+            this.numZMod.Size = new System.Drawing.Size(108, 20);
             this.numZMod.TabIndex = 1;
             this.numZMod.ValueChanged += new System.EventHandler(this.numZMod_ValueChanged);
             // 
@@ -938,12 +927,12 @@ namespace CrashEdit
             // 
             this.fraTTReward.Controls.Add(this.chkTTReward);
             this.fraTTReward.Controls.Add(this.numTTReward);
-            this.fraTTReward.Location = new System.Drawing.Point(239, 239);
+            this.fraTTReward.Location = new System.Drawing.Point(255, 239);
             this.fraTTReward.Name = "fraTTReward";
-            this.fraTTReward.Size = new System.Drawing.Size(112, 70);
+            this.fraTTReward.Size = new System.Drawing.Size(120, 70);
             this.fraTTReward.TabIndex = 12;
             this.fraTTReward.TabStop = false;
-            this.fraTTReward.Text = "TimeTrial Reward";
+            this.fraTTReward.Text = "Time Trial Reward";
             // 
             // chkTTReward
             // 
@@ -970,7 +959,7 @@ namespace CrashEdit
             0,
             -2147483648});
             this.numTTReward.Name = "numTTReward";
-            this.numTTReward.Size = new System.Drawing.Size(100, 20);
+            this.numTTReward.Size = new System.Drawing.Size(108, 20);
             this.numTTReward.TabIndex = 1;
             this.numTTReward.ValueChanged += new System.EventHandler(this.numTTReward_ValueChanged);
             // 
@@ -978,9 +967,9 @@ namespace CrashEdit
             // 
             this.fraOtherSettings.Controls.Add(this.chkOtherSettings);
             this.fraOtherSettings.Controls.Add(this.numOtherSettings);
-            this.fraOtherSettings.Location = new System.Drawing.Point(239, 163);
+            this.fraOtherSettings.Location = new System.Drawing.Point(255, 163);
             this.fraOtherSettings.Name = "fraOtherSettings";
-            this.fraOtherSettings.Size = new System.Drawing.Size(112, 70);
+            this.fraOtherSettings.Size = new System.Drawing.Size(120, 70);
             this.fraOtherSettings.TabIndex = 10;
             this.fraOtherSettings.TabStop = false;
             this.fraOtherSettings.Text = "Other Settings";
@@ -1010,7 +999,7 @@ namespace CrashEdit
             0,
             -2147483648});
             this.numOtherSettings.Name = "numOtherSettings";
-            this.numOtherSettings.Size = new System.Drawing.Size(100, 20);
+            this.numOtherSettings.Size = new System.Drawing.Size(108, 20);
             this.numOtherSettings.TabIndex = 1;
             this.numOtherSettings.ValueChanged += new System.EventHandler(this.numOtherSettings_ValueChanged);
             // 
@@ -1018,12 +1007,12 @@ namespace CrashEdit
             // 
             this.fraScaling.Controls.Add(this.chkScaling);
             this.fraScaling.Controls.Add(this.numScaling);
-            this.fraScaling.Location = new System.Drawing.Point(121, 239);
+            this.fraScaling.Location = new System.Drawing.Point(129, 239);
             this.fraScaling.Name = "fraScaling";
-            this.fraScaling.Size = new System.Drawing.Size(112, 70);
+            this.fraScaling.Size = new System.Drawing.Size(120, 70);
             this.fraScaling.TabIndex = 11;
             this.fraScaling.TabStop = false;
-            this.fraScaling.Text = "Scaling Factor";
+            this.fraScaling.Text = "Scale Modifier";
             // 
             // chkScaling
             // 
@@ -1050,7 +1039,7 @@ namespace CrashEdit
             0,
             -2147483648});
             this.numScaling.Name = "numScaling";
-            this.numScaling.Size = new System.Drawing.Size(100, 20);
+            this.numScaling.Size = new System.Drawing.Size(108, 20);
             this.numScaling.TabIndex = 1;
             this.numScaling.ValueChanged += new System.EventHandler(this.numScaling_ValueChanged);
             // 
@@ -1060,7 +1049,7 @@ namespace CrashEdit
             this.fraDDASection.Controls.Add(this.numDDASection);
             this.fraDDASection.Location = new System.Drawing.Point(3, 163);
             this.fraDDASection.Name = "fraDDASection";
-            this.fraDDASection.Size = new System.Drawing.Size(112, 70);
+            this.fraDDASection.Size = new System.Drawing.Size(120, 70);
             this.fraDDASection.TabIndex = 10;
             this.fraDDASection.TabStop = false;
             this.fraDDASection.Text = "DDA Section";
@@ -1090,7 +1079,7 @@ namespace CrashEdit
             0,
             -2147483648});
             this.numDDASection.Name = "numDDASection";
-            this.numDDASection.Size = new System.Drawing.Size(100, 20);
+            this.numDDASection.Size = new System.Drawing.Size(108, 20);
             this.numDDASection.TabIndex = 1;
             this.numDDASection.ValueChanged += new System.EventHandler(this.numDDASection_ValueChanged);
             // 
@@ -1098,9 +1087,9 @@ namespace CrashEdit
             // 
             this.fraDDASettings.Controls.Add(this.chkDDASettings);
             this.fraDDASettings.Controls.Add(this.numDDASettings);
-            this.fraDDASettings.Location = new System.Drawing.Point(121, 163);
+            this.fraDDASettings.Location = new System.Drawing.Point(129, 163);
             this.fraDDASettings.Name = "fraDDASettings";
-            this.fraDDASettings.Size = new System.Drawing.Size(112, 70);
+            this.fraDDASettings.Size = new System.Drawing.Size(120, 70);
             this.fraDDASettings.TabIndex = 9;
             this.fraDDASettings.TabStop = false;
             this.fraDDASettings.Text = "DDA Death Count";
@@ -1130,7 +1119,7 @@ namespace CrashEdit
             0,
             -2147483648});
             this.numDDASettings.Name = "numDDASettings";
-            this.numDDASettings.Size = new System.Drawing.Size(100, 20);
+            this.numDDASettings.Size = new System.Drawing.Size(108, 20);
             this.numDDASettings.TabIndex = 1;
             this.numDDASettings.ValueChanged += new System.EventHandler(this.numDDASettings_ValueChanged);
             // 
@@ -1907,7 +1896,7 @@ namespace CrashEdit
             this.fraSLST.Size = new System.Drawing.Size(206, 81);
             this.fraSLST.TabIndex = 1;
             this.fraSLST.TabStop = false;
-            this.fraSLST.Text = "SLST EID";
+            this.fraSLST.Text = "Sort List";
             // 
             // lblEIDErr1
             // 
@@ -3067,7 +3056,6 @@ namespace CrashEdit
         private System.Windows.Forms.NumericUpDown numPayloadPosition;
         private System.Windows.Forms.Label lblPayload;
         private System.Windows.Forms.NumericUpDown numSettingC;
-        private System.Windows.Forms.Label lblSettingC;
         private System.Windows.Forms.CheckBox chkSettingHex;
         private System.Windows.Forms.Label lblEIDErrB;
         private System.Windows.Forms.Button cmdInterpolate;

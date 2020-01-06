@@ -301,4 +301,94 @@
   <data name="Text_CloseDirtyFilePrompt" xml:space="preserve">
     <value>The file "{0}" has not been saved since it was last modified. Continue anyway?</value>
   </data>
+  <data name="EntityBox_ChkBonusBoxCount" xml:space="preserve">
+    <value>使用可能（ボーナス）</value>
+  </data>
+  <data name="EntityBox_ChkEnabled" xml:space="preserve">
+    <value>使用可能</value>
+  </data>
+  <data name="EntityBox_ChkHex" xml:space="preserve">
+    <value>16進法</value>
+  </data>
+  <data name="EntityBox_CmdAdd" xml:space="preserve">
+    <value>追加する</value>
+  </data>
+  <data name="EntityBox_CmdAppend" xml:space="preserve">
+    <value>追加する</value>
+  </data>
+  <data name="EntityBox_CmdInsert" xml:space="preserve">
+    <value>挿入する</value>
+  </data>
+  <data name="EntityBox_CmdInterpolate" xml:space="preserve">
+    <value>補間する</value>
+  </data>
+  <data name="EntityBox_CmdNext" xml:space="preserve">
+    <value>次へ</value>
+  </data>
+  <data name="EntityBox_CmdPrevious" xml:space="preserve">
+    <value>前へ</value>
+  </data>
+  <data name="EntityBox_CmdRemove" xml:space="preserve">
+    <value>削除する</value>
+  </data>
+  <data name="EntityBox_FraBoxCount" xml:space="preserve">
+    <value>ボックス量</value>
+  </data>
+  <data name="EntityBox_FraDDASection" xml:space="preserve">
+    <value>ＤＤＡセクション</value>
+  </data>
+  <data name="EntityBox_FraDDASettings" xml:space="preserve">
+    <value>ＤＤＡデス量</value>
+  </data>
+  <data name="EntityBox_FraID" xml:space="preserve">
+    <value>ＩＤ</value>
+  </data>
+  <data name="EntityBox_FraName" xml:space="preserve">
+    <value>名前</value>
+  </data>
+  <data name="EntityBox_FraOtherSettings" xml:space="preserve">
+    <value>ミスクセッティング</value>
+  </data>
+  <data name="EntityBox_FraPosition" xml:space="preserve">
+    <value>位置</value>
+  </data>
+  <data name="EntityBox_FraScaling" xml:space="preserve">
+    <value>スケールモディファイア</value>
+  </data>
+  <data name="EntityBox_FraSettings" xml:space="preserve">
+    <value>引数</value>
+  </data>
+  <data name="EntityBox_FraSLST" xml:space="preserve">
+    <value>ソートリスト</value>
+  </data>
+  <data name="EntityBox_FraSubtype" xml:space="preserve">
+    <value>サブタイプ</value>
+  </data>
+  <data name="EntityBox_FraTTReward" xml:space="preserve">
+    <value>タイムアタックリワード</value>
+  </data>
+  <data name="EntityBox_FraType" xml:space="preserve">
+    <value>タイプ</value>
+  </data>
+  <data name="EntityBox_FraVictims" xml:space="preserve">
+    <value>ビクティムズ</value>
+  </data>
+  <data name="EntityBox_FraZMod" xml:space="preserve">
+    <value>デプスモディファイア</value>
+  </data>
+  <data name="EntityBox_TabCamera" xml:space="preserve">
+    <value>カメラ</value>
+  </data>
+  <data name="EntityBox_TabDrawList" xml:space="preserve">
+    <value>ドローリスト</value>
+  </data>
+  <data name="EntityBox_TabGeneral" xml:space="preserve">
+    <value>一般</value>
+  </data>
+  <data name="EntityBox_TabLoadList" xml:space="preserve">
+    <value>ロードリスト</value>
+  </data>
+  <data name="EntityBox_TabSpecial" xml:space="preserve">
+    <value>その他</value>
+  </data>
 </root>
