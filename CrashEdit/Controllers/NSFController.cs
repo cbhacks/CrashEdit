@@ -28,11 +28,13 @@ namespace CrashEdit
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcFixDetonator,Menu_Fix_Detonator);
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcFixBoxCount,Menu_Fix_BoxCount);
                 AddMenuSeparator();
-                if (GameVersion == GameVersion.Crash2)
-                    AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC2);
-                else if (GameVersion == GameVersion.Crash3)
-                    AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC3);
             }
+            if (GameVersion == GameVersion.Crash1 || GameVersion == GameVersion.Crash1BetaMAR08 || GameVersion == GameVersion.Crash1BetaMAY11)
+                AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC1);
+            else if (GameVersion == GameVersion.Crash2)
+                AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC2);
+            else if (GameVersion == GameVersion.Crash3)
+                AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC3);
             InvalidateNode();
             InvalidateNodeImage();
         }
@@ -263,6 +265,36 @@ namespace CrashEdit
             }
         }
 
+        private void Menu_ShowLevelC1()
+        {
+            List<TextureChunk[]> sortedtexturechunks = new List<TextureChunk[]>();
+            List<OldSceneryEntry> sceneryentries = new List<OldSceneryEntry>();
+            foreach (Chunk chunk in NSF.Chunks)
+            {
+                if (chunk is EntryChunk entrychunk)
+                {
+                    foreach (Entry entry in entrychunk.Entries)
+                    {
+                        if (entry is OldSceneryEntry sceneryentry)
+                        {
+                            sceneryentries.Add(sceneryentry);
+                            TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(sceneryentry.Info,0x18)];
+                            for (int i = 0; i < texturechunks.Length; ++i)
+                            {
+                                texturechunks[i] = NSF.FindEID<TextureChunk>(BitConv.FromInt32(sceneryentry.Info,0x20+i*4));
+                            }
+                            sortedtexturechunks.Add(texturechunks);
+                        }
+                    }
+                }
+            }
+            Form frm = new Form() { Text = "Loading...", Width = 480, Height = 360 };
+            frm.Show();
+            OldSceneryEntryViewer viewer = new OldSceneryEntryViewer(sceneryentries,sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
+            frm.Controls.Add(viewer);
+            frm.Text = string.Empty;
+        }
+        
         private void Menu_ShowLevelC2()
         {
             List<TextureChunk[]> sortedtexturechunks = new List<TextureChunk[]>();
