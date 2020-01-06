@@ -6,7 +6,7 @@ namespace CrashEdit
 {
     public partial class ConfigEditor : UserControl
     {
-        public static readonly List<string> Languages = new List<string> { "en-US", "ja-JA" };
+        public static readonly List<string> Languages = new List<string> { "en-US", "ja-JP" };
 
         public ConfigEditor()
         {
