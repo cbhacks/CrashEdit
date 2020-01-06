@@ -399,9 +399,9 @@ namespace CrashEdit
                             {
                                 var sceneryEntry = NSF.FindEID<OldSceneryEntry>(BitConv.FromInt32(zoneentry.Header, 4 + i * 48));
                                 TextureChunk[] _texturechunks = new TextureChunk[BitConv.FromInt32(sceneryEntry.Info, 0x18)];
-                                for (int i = 0; i < _texturechunks.Length; ++i)
+                                for (int t = 0; t < _texturechunks.Length; ++t)
                                 {
-                                    _texturechunks[i] = FindEID<TextureChunk>(BitConv.FromInt32(sceneryEntry.Info, 0x20 + i * 4));
+                                    _texturechunks[t] = NSF.FindEID<TextureChunk>(BitConv.FromInt32(sceneryEntry.Info, 0x20 + t * 4));
                                 }
                                 sceneryEntries.Add(sceneryEntry);
                                 texturechunks.Add(_texturechunks);
