@@ -30,7 +30,12 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            return new UndockableControl(new ProtoSceneryEntryViewer(ProtoSceneryEntry));
+            TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(ProtoSceneryEntry.Info,0x18)];
+            for (int i = 0; i < texturechunks.Length; ++i)
+            {
+                texturechunks[i] = FindEID<TextureChunk>(BitConv.FromInt32(ProtoSceneryEntry.Info,0x20 + i * 4));
+            }
+            return new UndockableControl(new ProtoSceneryEntryViewer(ProtoSceneryEntry,texturechunks));
         }
 
         public ProtoSceneryEntry ProtoSceneryEntry { get; }

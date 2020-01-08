@@ -10,6 +10,9 @@ namespace Crash
                 throw new ArgumentNullException("data");
             if (data.Length != 8)
                 throw new ArgumentException("Value must be 8 bytes long.", "data");
+            byte r = data[2];
+            byte g = data[1];
+            byte b = data[0];
             byte blendmode = (byte)((data[3] >> 5) & 0x3);
             byte clutx = (byte)(data[3] & 0xF);
             uint texinfo = (uint)BitConv.FromInt32(data, 4);
@@ -19,9 +22,9 @@ namespace Crash
             byte xoffu = (byte)(texinfo >> 13 & 0x1F);
             byte cluty = (byte)(texinfo >> 6 & 0x7F);
             byte yoffu = (byte)(texinfo & 0x1F);
-            return new OldModelTexture(uvindex, clutx, cluty, xoffu, yoffu, bitflag, blendmode, segment);
+            return new OldModelTexture(uvindex,clutx,cluty,xoffu,yoffu,bitflag,blendmode,segment,r,g,b);
         }
-        public OldModelTexture(uint uvindex, byte clutx, byte cluty, byte xoffu, byte yoffu, bool bitflag, byte blendmode, byte segment)
+        public OldModelTexture(uint uvindex,byte clutx,byte cluty,byte xoffu,byte yoffu,bool bitflag,byte blendmode,byte segment,byte r,byte g,byte b)
         {
             UVIndex = uvindex;
             ClutX = clutx;
@@ -31,7 +34,15 @@ namespace Crash
             Segment = segment;
             BlendMode = blendmode;
             BitFlag = bitflag;
+            R = r;
+            G = g;
+            B = b;
         }
+        
+        public byte R { get; }
+        public byte G { get; }
+        public byte B { get; }
+
         public bool BitFlag { get; }
         public uint UVIndex { get; }
         public byte ClutX { get; } // 16-color (32-byte) segments

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Crash
+﻿namespace Crash
 {
     public interface OldModelStruct
     {
@@ -17,17 +11,17 @@ namespace Crash
 
         public static OldModelColor Load(byte[] data)
         {
-            byte r = data[2];
+            byte r = data[0];
             byte g = data[1];
-            byte b = data[0];
+            byte b = data[2];
             return new OldModelColor(r, g, b);
         }
 
         public OldModelColor(byte r, byte g, byte b)
         {
-            this.R = r;
-            this.G = g;
-            this.B = b;
+            R = r;
+            G = g;
+            B = b;
         }
     }
 }

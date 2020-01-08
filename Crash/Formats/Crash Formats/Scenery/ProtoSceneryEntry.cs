@@ -9,12 +9,14 @@ namespace Crash
     {
         private List<ProtoSceneryPolygon> polygons;
         private List<ProtoSceneryVertex> vertices;
+        private List<OldModelStruct> structs;
 
-        public ProtoSceneryEntry(byte[] info,IEnumerable<ProtoSceneryPolygon> polygons,IEnumerable<ProtoSceneryVertex> vertices,short? pad,int eid) : base(eid)
+        public ProtoSceneryEntry(byte[] info,IEnumerable<ProtoSceneryPolygon> polygons,IEnumerable<ProtoSceneryVertex> vertices,IEnumerable<OldModelStruct> structs,short? pad,int eid) : base(eid)
         {
             Info = info ?? throw new ArgumentNullException("info");
             this.polygons = new List<ProtoSceneryPolygon>(polygons);
             this.vertices = new List<ProtoSceneryVertex>(vertices);
+            this.structs = new List<OldModelStruct>(structs);
             Pad = pad;
         }
 
@@ -42,6 +44,7 @@ namespace Crash
 
         public IList<ProtoSceneryPolygon> Polygons => polygons;
         public IList<ProtoSceneryVertex> Vertices => vertices;
+        public IList<OldModelStruct> Structs => structs;
 
         public override UnprocessedEntry Unprocess()
         {

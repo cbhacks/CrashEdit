@@ -10,7 +10,8 @@ namespace Crash
         private List<OldSceneryPolygon> polygons;
         private List<OldSceneryVertex> vertices;
         private List<OldModelStruct> structs;
-        public OldSceneryEntry(byte[] info, IEnumerable<OldSceneryPolygon> polygons, IEnumerable<OldSceneryVertex> vertices, IEnumerable<OldModelStruct> structs, byte[] extradata, int eid) : base(eid)
+
+        public OldSceneryEntry(byte[] info,IEnumerable<OldSceneryPolygon> polygons,IEnumerable<OldSceneryVertex> vertices,IEnumerable<OldModelStruct> structs,byte[] extradata,int eid) : base(eid)
         {
             Info = info ?? throw new ArgumentNullException("info");
             this.polygons = new List<OldSceneryPolygon>(polygons);
@@ -44,6 +45,7 @@ namespace Crash
         public IList<OldSceneryPolygon> Polygons => polygons;
         public IList<OldSceneryVertex> Vertices => vertices;
         public IList<OldModelStruct> Structs => structs;
+
         public override UnprocessedEntry Unprocess()
         {
             byte[][] items = new byte [ExtraData == null ? 3 : 4][];

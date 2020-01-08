@@ -1,7 +1,9 @@
 using Crash;
+using OpenTK.Graphics.OpenGL;
+using System;
 using System.Drawing;
 using System.Collections.Generic;
-using OpenTK.Graphics.OpenGL;
+using System.Windows.Forms;
 
 namespace CrashEdit
 {
@@ -9,18 +11,25 @@ namespace CrashEdit
     {
         private List<ProtoSceneryEntry> entries;
         private int displaylist;
+        private bool textures_enabled = true;
+        private bool init = false;
 
-        public ProtoSceneryEntryViewer(ProtoSceneryEntry entry)
+        private TextureChunk[][] texturechunks;
+        public ProtoSceneryEntryViewer(ProtoSceneryEntry entry,TextureChunk[] texturechunks)
         {
-            entries = new List<ProtoSceneryEntry>();
-            entries.Add(entry);
+            entries = new List<ProtoSceneryEntry> { entry };
             displaylist = -1;
+            InitTextures(1);
+            this.texturechunks = new TextureChunk[1][];
+            this.texturechunks[0] = texturechunks;
         }
 
-        public ProtoSceneryEntryViewer(IEnumerable<ProtoSceneryEntry> entries)
+        public ProtoSceneryEntryViewer(IEnumerable<ProtoSceneryEntry> entries,TextureChunk[][] texturechunks)
         {
             this.entries = new List<ProtoSceneryEntry>(entries);
             displaylist = -1;
+            InitTextures(this.entries.Count);
+            this.texturechunks = texturechunks;
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -37,38 +46,91 @@ namespace CrashEdit
             }
         }
 
+        protected override bool IsInputKey(Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.T:
+                    return true;
+                default:
+                    return base.IsInputKey(keyData);
+            }
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            switch (e.KeyCode)
+            {
+                case Keys.T:
+                    textures_enabled = !textures_enabled;
+                    break;
+            }
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Combine);
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
+        }
+
         protected override void RenderObjects()
         {
+            if (!init)
+            {
+                init = true;
+                for (int i = 0; i < entries.Count; ++i)
+                {
+                    ConvertTexturesToGL(i, texturechunks[i],entries[i].Polygons,entries[i].Structs,entries[i].Info, 0x20);
+                }
+            }
+
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+            if (!textures_enabled)
+                GL.Disable(EnableCap.Texture2D);
+            else
+                GL.Enable(EnableCap.Texture2D);
             if (displaylist == -1)
             {
                 displaylist = GL.GenLists(1);
                 GL.NewList(displaylist,ListMode.CompileAndExecute);
-                foreach (ProtoSceneryEntry entry in entries)
+                for (int e = 0; e < entries.Count; e++)
                 {
+                    ProtoSceneryEntry entry = entries[e];
                     if (entry != null)
                     {
                         GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
-                        GL.Color3(Color.LightGray);
-                        GL.Begin(PrimitiveType.Triangles);
-                        foreach (ProtoSceneryPolygon polygon in entry.Polygons)
+                        for (int p = 0; p < entry.Polygons.Count; p++)
                         {
+                            ProtoSceneryPolygon polygon = entry.Polygons[p];
                             if (polygon.VertexA >= entry.Vertices.Count || polygon.VertexB >= entry.Vertices.Count || polygon.VertexC >= entry.Vertices.Count) continue;
-                            RenderVertex(entry,entry.Vertices[polygon.VertexA]);
-                            RenderVertex(entry,entry.Vertices[polygon.VertexB]);
-                            RenderVertex(entry,entry.Vertices[polygon.VertexC]);
+                            OldModelStruct modelstruct = entry.Structs[polygon.Texture];
+                            if (modelstruct is OldModelTexture tex)
+                            { 
+                                BindTexture(e,p);
+                                GL.Color3(tex.R,tex.G,tex.B);
+                                GL.Begin(PrimitiveType.Triangles);
+                                GL.TexCoord2(tex.X3,tex.Y3);
+                                RenderVertex(entry,entry.Vertices[polygon.VertexA]);
+                                GL.TexCoord2(tex.X2,tex.Y2);
+                                RenderVertex(entry,entry.Vertices[polygon.VertexB]);
+                                GL.TexCoord2(tex.X1,tex.Y1);
+                                RenderVertex(entry,entry.Vertices[polygon.VertexC]);
+                                GL.End();
+                            }
+                            else
+                            {
+                                UnbindTexture();
+                                OldModelColor col = (OldModelColor)modelstruct;
+                                GL.Color3(col.R,col.G,col.B);
+                                GL.Begin(PrimitiveType.Triangles);
+                                RenderVertex(entry,entry.Vertices[polygon.VertexA]);
+                                RenderVertex(entry,entry.Vertices[polygon.VertexB]);
+                                RenderVertex(entry,entry.Vertices[polygon.VertexC]);
+                                GL.End();
+                            }
                         }
-                        GL.End();
-                        GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Line);
-                        GL.Color3(Color.Black);
-                        GL.Begin(PrimitiveType.Triangles);
-                        foreach (ProtoSceneryPolygon polygon in entry.Polygons)
-                        {
-                            if (polygon.VertexA >= entry.Vertices.Count || polygon.VertexB >= entry.Vertices.Count || polygon.VertexC >= entry.Vertices.Count) continue;
-                            RenderVertex(entry,entry.Vertices[polygon.VertexA]);
-                            RenderVertex(entry,entry.Vertices[polygon.VertexB]);
-                            RenderVertex(entry,entry.Vertices[polygon.VertexC]);
-                        }
-                        GL.End();
                     }
                 }
                 GL.EndList();
