@@ -467,11 +467,11 @@ namespace CrashEdit
             GL.BindTexture(TextureTarget.Texture2D, 0);
         }
 
-        private long GenerateTextureHash(int textureoffset, OldModelTexture tex) // compresses a model texture's relevant texture info into a standard type that can be quickly looked up
+        private long GenerateTextureHash(int tpag, OldModelTexture tex) // compresses a model texture's relevant texture info into a standard type that can be quickly looked up
         {
             return (long)tex.ClutY
                 | (long)tex.ClutX << 7
-                | (long)textureoffset / 4 << 11
+                | (long)tpag << 11
                 | (long)tex.Left << 14
                 | (long)tex.Top << 24
                 | (long)tex.Width << 31
@@ -497,15 +497,14 @@ namespace CrashEdit
                 OldModelStruct modelstruct = oldmodelstructs[poly.ModelStruct];
                 if (modelstruct is OldModelColor || modelstruct == null)
                     continue;
-                int textureoffset = poly.Page*4;
                 OldModelTexture tex = (OldModelTexture)modelstruct;
-                long hash = GenerateTextureHash(textureoffset, tex);
+                long hash = GenerateTextureHash(poly.Page,tex);
                 if (!texturebucket.ContainsKey(hash))
                 {
                     TextureChunk texturechunk = null;
                     foreach (TextureChunk chunk in texturechunks)
                     {
-                        if (chunk.EID == BitConv.FromInt32(eid_list, eid_off + textureoffset))
+                        if (chunk.EID == BitConv.FromInt32(eid_list, eid_off + poly.Page*4))
                         {
                             texturechunk = chunk;
                             break;
@@ -514,13 +513,13 @@ namespace CrashEdit
                     if (texturechunk == null) throw new Exception("ConvertTexturesToGL: Texture chunk not found");
                     int w = tex.Width + 1;
                     int h = tex.Height + 1;
-                    int page = textureoffset / 2 + Convert.ToInt32(tex.BitFlag);
+                    int page = poly.Page * 2 + Convert.ToInt32(tex.BitFlag);
                     if (tex.BitFlag) // 8-bit
                     {
                         int[] palette = new int[256];
                         for (int j = 0; j < 256; ++j) // copy palette
                         {
-                            palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data,tex.ClutX*32+tex.ClutY*512+j*2), tex.BlendMode);
+                            palette[j] = PixelConv.Convert5551_8888_Old(BitConv.FromInt16(texturechunk.Data,tex.ClutX*32+tex.ClutY*512+j*2),tex.BlendMode);
                         }
                         for (int y = 0; y < h; ++y) // copy pixel data
                         {
@@ -535,7 +534,7 @@ namespace CrashEdit
                         int[] palette = new int[16];
                         for (int j = 0; j < 16; ++j) // copy palette
                         {
-                            palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data,tex.ClutX*32+tex.ClutY*512+j*2),tex.BlendMode);
+                            palette[j] = PixelConv.Convert5551_8888_Old(BitConv.FromInt16(texturechunk.Data,tex.ClutX*32+tex.ClutY*512+j*2),tex.BlendMode);
                         }
                         for (int y = 0; y < h; ++y) // copy pixels
                         {
@@ -602,15 +601,14 @@ namespace CrashEdit
                 OldModelStruct modelstruct = oldmodelstructs[poly.Texture];
                 if (modelstruct is OldModelColor || modelstruct == null)
                     continue;
-                int textureoffset = poly.Page*4;
                 OldModelTexture tex = (OldModelTexture)modelstruct;
-                long hash = GenerateTextureHash(textureoffset, tex);
+                long hash = GenerateTextureHash(poly.Page,tex);
                 if (!texturebucket.ContainsKey(hash))
                 {
                     TextureChunk texturechunk = null;
                     foreach (TextureChunk chunk in texturechunks)
                     {
-                        if (chunk.EID == BitConv.FromInt32(eid_list, eid_off + textureoffset))
+                        if (chunk.EID == BitConv.FromInt32(eid_list, eid_off + poly.Page*4))
                         {
                             texturechunk = chunk;
                             break;
@@ -619,13 +617,13 @@ namespace CrashEdit
                     if (texturechunk == null) throw new Exception("ConvertTexturesToGL: Texture chunk not found");
                     int w = tex.Width + 1;
                     int h = tex.Height + 1;
-                    int page = textureoffset / 2 + Convert.ToInt32(tex.BitFlag);
+                    int page = poly.Page * 2 + Convert.ToInt32(tex.BitFlag);
                     if (tex.BitFlag) // 8-bit
                     {
                         int[] palette = new int[256];
                         for (int j = 0; j < 256; ++j) // copy palette
                         {
-                            palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data,tex.ClutX*32+tex.ClutY*512+j*2),0);
+                            palette[j] = PixelConv.Convert5551_8888_Old(BitConv.FromInt16(texturechunk.Data,tex.ClutX*32+tex.ClutY*512+j*2),tex.BlendMode);
                         }
                         for (int y = 0; y < h; ++y) // copy pixel data
                         {
@@ -640,7 +638,7 @@ namespace CrashEdit
                         int[] palette = new int[16];
                         for (int j = 0; j < 16; ++j) // copy palette
                         {
-                            palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturechunk.Data,tex.ClutX*32+tex.ClutY*512+j*2),0);
+                            palette[j] = PixelConv.Convert5551_8888_Old(BitConv.FromInt16(texturechunk.Data,tex.ClutX*32+tex.ClutY*512+j*2),tex.BlendMode);
                         }
                         for (int y = 0; y < h; ++y) // copy pixels
                         {
