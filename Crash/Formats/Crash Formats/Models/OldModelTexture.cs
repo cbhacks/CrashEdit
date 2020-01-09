@@ -17,14 +17,14 @@ namespace Crash
             byte clutx = (byte)(data[3] & 0xF);
             uint texinfo = (uint)BitConv.FromInt32(data, 4);
             uint uvindex = ((texinfo >> 22) & 0x3FF);
-            bool bitflag = ((texinfo >> 20 & 1) == 1);
+            byte colormode = (byte)(texinfo >> 20 & 3);
             byte segment = (byte)(texinfo >> 18 & 3);
             byte xoffu = (byte)(texinfo >> 13 & 0x1F);
             byte cluty = (byte)(texinfo >> 6 & 0x7F);
             byte yoffu = (byte)(texinfo & 0x1F);
-            return new OldModelTexture(uvindex,clutx,cluty,xoffu,yoffu,bitflag,blendmode,segment,r,g,b);
+            return new OldModelTexture(uvindex,clutx,cluty,xoffu,yoffu,colormode,blendmode,segment,r,g,b);
         }
-        public OldModelTexture(uint uvindex,byte clutx,byte cluty,byte xoffu,byte yoffu,bool bitflag,byte blendmode,byte segment,byte r,byte g,byte b)
+        public OldModelTexture(uint uvindex,byte clutx,byte cluty,byte xoffu,byte yoffu,byte colormode,byte blendmode,byte segment,byte r,byte g,byte b)
         {
             UVIndex = uvindex;
             ClutX = clutx;
@@ -33,7 +33,7 @@ namespace Crash
             YOffU = yoffu;
             Segment = segment;
             BlendMode = blendmode;
-            BitFlag = bitflag;
+            ColorMode = colormode;
             R = r;
             G = g;
             B = b;
@@ -43,7 +43,7 @@ namespace Crash
         public byte G { get; }
         public byte B { get; }
 
-        public bool BitFlag { get; }
+        public byte ColorMode { get; }
         public uint UVIndex { get; }
         public byte ClutX { get; } // 16-color (32-byte) segments
         public byte ClutY { get; }
@@ -51,8 +51,8 @@ namespace Crash
         public byte YOffU { get; }
         public byte BlendMode { get; }
         public byte Segment { get; }
-        private float PageWidth => BitFlag ? 512F : 1024F;
-        private int XOff => ((BitFlag ? 128 : 256) * Segment) + ((BitFlag ? 4 : 8) * XOffU);
+        private float PageWidth => (float)Math.Pow(2,2-ColorMode) * 256;
+        private int XOff => ((int)(Math.Pow(2,2-ColorMode) * 64) * Segment) + ((int)Math.Pow(2,2-ColorMode)*2 * XOffU);
         private int YOff => YOffU * 4;
         public int Left => Math.Min(U1, Math.Min(U2, U3)) + XOff;
         private int Right => Math.Max(U1, Math.Max(U2, U3)) + XOff;
@@ -86,7 +86,7 @@ namespace Crash
             result[1] = 0;
             result[2] = 0;
             result[3] = (byte)(0x80 | (BlendMode << 5) | ClutX);
-            uint texinfo = (UVIndex << 22) | (Convert.ToUInt32(BitFlag) << 20) | ((uint)Segment << 18) | ((uint)XOffU << 13) | ((uint)ClutY << 6) | YOffU;
+            uint texinfo = (UVIndex << 22) | ((uint)ColorMode << 20) | ((uint)Segment << 18) | ((uint)XOffU << 13) | ((uint)ClutY << 6) | YOffU;
             BitConv.ToInt32(result, 4, (int)texinfo);
             return result;
         }

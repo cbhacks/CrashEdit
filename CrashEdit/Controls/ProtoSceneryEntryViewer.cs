@@ -100,7 +100,6 @@ namespace CrashEdit
                     ProtoSceneryEntry entry = entries[e];
                     if (entry != null)
                     {
-                        GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
                         for (int p = 0; p < entry.Polygons.Count; p++)
                         {
                             ProtoSceneryPolygon polygon = entry.Polygons[p];
