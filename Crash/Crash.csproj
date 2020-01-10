@@ -50,6 +50,8 @@
     <Compile Include="Action System\CommandManager.cs" />
     <Compile Include="Formats\Crash Formats\Animation\AnimationEntry.cs" />
     <Compile Include="Formats\Crash Formats\Animation\AnimationEntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Animation\ColoredAnimationEntry.cs" />
+    <Compile Include="Formats\Crash Formats\Animation\ColoredAnimationEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Animation\Frame.cs" />
     <Compile Include="Formats\Crash Formats\Animation\FrameVertex.cs" />
     <Compile Include="Formats\Crash Formats\Animation\ProtoAnimationEntry.cs" />
@@ -230,8 +232,6 @@
     <Compile Include="Formats\Crash Formats\T17\OldT17EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Palette\PaletteEntry.cs" />
     <Compile Include="Formats\Crash Formats\Palette\PaletteEntryLoader.cs" />
-    <Compile Include="Formats\Crash Formats\Animation\CutsceneAnimationEntry.cs" />
-    <Compile Include="Formats\Crash Formats\Animation\CutsceneAnimationEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T6\T6Entry.cs" />
     <Compile Include="Formats\Crash Formats\T6\T6EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Zone\NewZoneEntry.cs" />

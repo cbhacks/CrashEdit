@@ -70,6 +70,8 @@
     <Compile Include="ConfigEditor.Designer.cs">
       <DependentUpon>ConfigEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\Animation\ColoredAnimationEntryController.cs" />
+    <Compile Include="Controllers\Animation\ColoredFrameController.cs" />
     <Compile Include="Controllers\GOOL\GOOLEntryController.cs" />
     <Compile Include="Controls\BufferedTreeView.cs">
       <SubType>Component</SubType>
@@ -83,7 +85,6 @@
     </Compile>
     <Compile Include="DRNSF.cs" />
     <Compile Include="ISO2PSX.cs" />
-    <Compile Include="Controllers\Animation\CutsceneFrameController.cs" />
     <Compile Include="Controllers\Animation\AnimationEntryController.cs" />
     <Compile Include="Controllers\Animation\FrameController.cs" />
     <Compile Include="Controllers\Animation\ProtoAnimationEntryController.cs" />
@@ -102,7 +103,6 @@
     <Compile Include="Controllers\SLST\OldSLSTSourceController.cs" />
     <Compile Include="Controllers\SLST\SLSTSourceController.cs" />
     <Compile Include="Controllers\Texture\TextureChunkController.cs" />
-    <Compile Include="Controllers\Animation\CutsceneAnimationEntryController.cs" />
     <Compile Include="Controllers\Music\OldSEQController.cs" />
     <Compile Include="Controllers\Music\OldVHController.cs" />
     <Compile Include="Controllers\Music\OldMusicEntryController.cs" />

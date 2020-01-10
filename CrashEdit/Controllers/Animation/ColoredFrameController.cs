@@ -4,9 +4,9 @@ using System.Windows.Forms;
 
 namespace CrashEdit
 {
-    public sealed class CutsceneFrameController : Controller
+    public sealed class ColoredFrameController : Controller
     {
-        public CutsceneFrameController(CutsceneAnimationEntryController cutsceneanimationentrycontroller,OldFrame oldframe)
+        public ColoredFrameController(ColoredAnimationEntryController cutsceneanimationentrycontroller,OldFrame oldframe)
         {
             CutsceneAnimationEntryController = cutsceneanimationentrycontroller;
             OldFrame = oldframe;
@@ -36,7 +36,7 @@ namespace CrashEdit
             return new UndockableControl(new OldAnimationEntryViewer(OldFrame,true,modelentry,textures));
         }
 
-        public CutsceneAnimationEntryController CutsceneAnimationEntryController { get; }
+        public ColoredAnimationEntryController CutsceneAnimationEntryController { get; }
         public OldFrame OldFrame { get; }
 
         private void Menu_Export_OBJ()

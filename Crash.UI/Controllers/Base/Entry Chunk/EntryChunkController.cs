@@ -104,9 +104,9 @@ namespace Crash.UI
             {
                 Subcontrollers.Insert(e.Index,new DemoEntryController(this,(DemoEntry)e.Item));
             }
-            else if (e.Item is CutsceneAnimationEntry)
+            else if (e.Item is ColoredAnimationEntry)
             {
-                Subcontrollers.Insert(e.Index,new CutsceneAnimationEntryController(this,(CutsceneAnimationEntry)e.Item));
+                Subcontrollers.Insert(e.Index,new CutsceneAnimationEntryController(this,(ColoredAnimationEntry)e.Item));
             }
             else if (e.Item is SpeechEntry)
             {

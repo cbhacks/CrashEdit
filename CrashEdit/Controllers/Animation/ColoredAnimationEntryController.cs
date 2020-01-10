@@ -4,15 +4,15 @@ using System.Windows.Forms;
 
 namespace CrashEdit
 {
-    public sealed class CutsceneAnimationEntryController : EntryController
+    public sealed class ColoredAnimationEntryController : EntryController
     {
-        public CutsceneAnimationEntryController(EntryChunkController entrychunkcontroller,CutsceneAnimationEntry cutsceneanimationentry)
+        public ColoredAnimationEntryController(EntryChunkController entrychunkcontroller,ColoredAnimationEntry cutsceneanimationentry)
             : base(entrychunkcontroller,cutsceneanimationentry)
         {
             CutsceneAnimationEntry = cutsceneanimationentry;
             foreach (OldFrame frame in cutsceneanimationentry.Frames)
             {
-                AddNode(new CutsceneFrameController(this,frame));
+                AddNode(new ColoredFrameController(this,frame));
             }
             InvalidateNode();
             InvalidateNodeImage();
@@ -20,7 +20,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.CutsceneAnimationEntryController_Text,CutsceneAnimationEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.ColoredAnimationEntryController_Text,CutsceneAnimationEntry.EName);
         }
 
         public override void InvalidateNodeImage()
@@ -39,7 +39,7 @@ namespace CrashEdit
             return new UndockableControl(new OldAnimationEntryViewer(CutsceneAnimationEntry.Frames,true,modelentry,textures));
         }
 
-        public CutsceneAnimationEntry CutsceneAnimationEntry { get; }
+        public ColoredAnimationEntry CutsceneAnimationEntry { get; }
     }
 }
 

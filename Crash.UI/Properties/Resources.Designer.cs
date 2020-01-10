@@ -115,20 +115,20 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Colored Animation ({0}).
+        /// </summary>
+        public static string ColoredAnimationEntryController_Text {
+            get {
+                return ResourceManager.GetString("ColoredAnimationEntryController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No options available..
         /// </summary>
         public static string Controller_NoOptionsAvailable {
             get {
                 return ResourceManager.GetString("Controller_NoOptionsAvailable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cutscene Animation ({0}).
-        /// </summary>
-        public static string CutsceneAnimationEntryController_Text {
-            get {
-                return ResourceManager.GetString("CutsceneAnimationEntryController_Text", resourceCulture);
             }
         }
         

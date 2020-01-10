@@ -141,9 +141,9 @@ namespace CrashEdit
             {
                 return new DemoEntryController(this,(DemoEntry)entry);
             }
-            else if (entry is CutsceneAnimationEntry)
+            else if (entry is ColoredAnimationEntry)
             {
-                return new CutsceneAnimationEntryController(this,(CutsceneAnimationEntry)entry);
+                return new ColoredAnimationEntryController(this,(ColoredAnimationEntry)entry);
             }
             else if (entry is SpeechEntry)
             {

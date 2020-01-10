@@ -225,8 +225,8 @@
   <data name="T1EntryController_Text" xml:space="preserve">
     <value>T1 ({0})</value>
   </data>
-  <data name="CutsceneAnimationEntryController_Text" xml:space="preserve">
-    <value>Cutscene Animation ({0})</value>
+  <data name="ColoredAnimationEntryController_Text" xml:space="preserve">
+    <value>Colored Animation ({0})</value>
   </data>
   <data name="T21EntryController_Text" xml:space="preserve">
     <value>T21 ({0})</value>
