@@ -1,4 +1,5 @@
 using Crash;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -28,7 +29,11 @@ namespace CrashEdit
         protected override Control CreateEditor()
         {
             OldModelEntry modelentry = ProtoAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(ProtoFrame.ModelEID);
-            return new UndockableControl(new OldAnimationEntryViewer(ProtoFrame,modelentry));
+            Dictionary<int,TextureChunk> textures = new Dictionary<int,TextureChunk>();
+            foreach (OldModelStruct str in modelentry.Structs)
+                if (str is OldModelTexture tex && !textures.ContainsKey(tex.EID))
+                    textures.Add(tex.EID,ProtoAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<TextureChunk>(tex.EID));
+            return new UndockableControl(new OldAnimationEntryViewer(ProtoFrame,modelentry,textures));
         }
 
         public ProtoAnimationEntryController ProtoAnimationEntryController { get; }

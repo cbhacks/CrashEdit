@@ -2,29 +2,30 @@
 
 namespace Crash
 {
-    public struct OldSceneryTexture : OldModelStruct
+    public struct OldModelTexture : OldModelStruct
     {
-        public static OldSceneryTexture Load(byte[] data)
+        public static OldModelTexture Load(byte[] data)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
-            if (data.Length != 8)
-                throw new ArgumentException("Value must be 8 bytes long.", "data");
+            if (data.Length != 12)
+                throw new ArgumentException("Value must be 12 bytes long.", "data");
             byte r = data[0];
             byte g = data[1];
             byte b = data[2];
             byte blendmode = (byte)((data[3] >> 5) & 0x3);
             byte clutx = (byte)(data[3] & 0xF);
-            uint texinfo = (uint)BitConv.FromInt32(data, 4);
+            int eid = BitConv.FromInt32(data,4);
+            uint texinfo = (uint)BitConv.FromInt32(data,8);
             uint uvindex = ((texinfo >> 22) & 0x3FF);
             byte colormode = (byte)(texinfo >> 20 & 3);
             byte segment = (byte)(texinfo >> 18 & 3);
             byte xoffu = (byte)(texinfo >> 13 & 0x1F);
             byte cluty = (byte)(texinfo >> 6 & 0x7F);
             byte yoffu = (byte)(texinfo & 0x1F);
-            return new OldSceneryTexture(uvindex,clutx,cluty,xoffu,yoffu,colormode,blendmode,segment,r,g,b);
+            return new OldModelTexture(uvindex,clutx,cluty,xoffu,yoffu,colormode,blendmode,segment,r,g,b,eid);
         }
-        public OldSceneryTexture(uint uvindex,byte clutx,byte cluty,byte xoffu,byte yoffu,byte colormode,byte blendmode,byte segment,byte r,byte g,byte b)
+        public OldModelTexture(uint uvindex,byte clutx,byte cluty,byte xoffu,byte yoffu,byte colormode,byte blendmode,byte segment,byte r,byte g,byte b,int eid)
         {
             UVIndex = uvindex;
             ClutX = clutx;
@@ -37,11 +38,14 @@ namespace Crash
             R = r;
             G = g;
             B = b;
+            EID = eid;
         }
         
         public byte R { get; }
         public byte G { get; }
         public byte B { get; }
+
+        public int EID { get; }
 
         public byte ColorMode { get; }
         public uint UVIndex { get; }

@@ -74,6 +74,7 @@
     <Compile Include="Formats\Crash Formats\Models\ModelEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Models\ModelTransformedTriangle.cs" />
     <Compile Include="Formats\Crash Formats\Models\OldModelStruct.cs" />
+    <Compile Include="Formats\Crash Formats\Models\OldModelTexture.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\OldSceneryTexture.cs" />
     <Compile Include="Formats\Crash Formats\NSD\NewNSD.cs" />
     <Compile Include="Formats\Crash Formats\NSD\ProtoNSD.cs" />

@@ -16,20 +16,29 @@ namespace CrashEdit
         private Timer animatetimer;
         private bool isproto;
 
-        public OldAnimationEntryViewer(ProtoFrame frame,OldModelEntry model)
+        private Dictionary<int,TextureChunk> texturechunks;
+        private bool init;
+
+        public OldAnimationEntryViewer(ProtoFrame frame,OldModelEntry model,Dictionary<int,TextureChunk> texturechunks)
         {
             protoframes = new List<ProtoFrame> { frame };
             frames = new List<OldFrame>();
             this.model = model;
+            this.texturechunks = texturechunks;
+            init = false;
+            InitTextures(1);
             frameid = 0;
             isproto = true;
         }
 
-        public OldAnimationEntryViewer(IEnumerable<ProtoFrame> frames,OldModelEntry model)
+        public OldAnimationEntryViewer(IEnumerable<ProtoFrame> frames,OldModelEntry model,Dictionary<int,TextureChunk> texturechunks)
         {
             protoframes = new List<ProtoFrame>(frames);
             this.frames = new List<OldFrame>();
             this.model = model;
+            this.texturechunks = texturechunks;
+            init = false;
+            InitTextures(1);
             frameid = 0;
             isproto = true;
             animatetimer = new Timer();
@@ -43,20 +52,26 @@ namespace CrashEdit
             };
         }
 
-        public OldAnimationEntryViewer(OldFrame frame,OldModelEntry model)
+        public OldAnimationEntryViewer(OldFrame frame,OldModelEntry model,Dictionary<int,TextureChunk> texturechunks)
         {
             protoframes = new List<ProtoFrame>();
             frames = new List<OldFrame>() { frame };
             this.model = model;
+            this.texturechunks = texturechunks;
+            init = false;
+            InitTextures(1);
             frameid = 0;
             isproto = false;
         }
 
-        public OldAnimationEntryViewer(IEnumerable<OldFrame> frames,OldModelEntry model)
+        public OldAnimationEntryViewer(IEnumerable<OldFrame> frames,OldModelEntry model,Dictionary<int,TextureChunk> texturechunks)
         {
             protoframes = new List<ProtoFrame>();
             this.frames = new List<OldFrame>(frames);
             this.model = model;
+            this.texturechunks = texturechunks;
+            init = false;
+            InitTextures(1);
             frameid = 0;
             isproto = false;
             animatetimer = new Timer();
@@ -106,30 +121,58 @@ namespace CrashEdit
 
         protected override void RenderObjects()
         {
+            if (!init)
+            {
+                init = true;
+                ConvertTexturesToGL(0,texturechunks,model.Structs);
+            }
             if (isproto)
                 RenderFrame(protoframes[frameid % protoframes.Count]);
             else
                 RenderFrame(frames[frameid % frames.Count]);
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Combine);
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
+        }
+
         private void RenderFrame(ProtoFrame frame)
         {
             if (model != null)
             {
-                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-                GL.Begin(PrimitiveType.Triangles);
-                foreach (OldModelPolygon polygon in model.Polygons)
+                GL.Enable(EnableCap.Texture2D);
+                for (int i = 0; i < model.Polygons.Count; ++i)
                 {
-                    int coloroffset = 20 + (polygon.Unknown & 0x7FFF) * 4;
-                    byte r = model.Info[coloroffset + 0];
-                    byte g = model.Info[coloroffset + 1];
-                    byte b = model.Info[coloroffset + 2];
-                    GL.Color3(r,g,b);
-                    RenderVertex(frame, frame.Vertices[polygon.VertexA / 6]);
-                    RenderVertex(frame, frame.Vertices[polygon.VertexB / 6]);
-                    RenderVertex(frame, frame.Vertices[polygon.VertexC / 6]);
+                    OldModelPolygon polygon = model.Polygons[i];
+                    OldModelStruct str = model.Structs[polygon.Unknown & 0x7FFF];
+                    if (str is OldModelTexture tex)
+                    {
+                        BindTexture(0,polygon.Unknown & 0x7FFF);
+                        GL.Color3(tex.R,tex.G,tex.B);
+                        GL.Begin(PrimitiveType.Triangles);
+                        GL.TexCoord2(tex.X3,tex.Y3);
+                        RenderVertex(frame,frame.Vertices[polygon.VertexA / 6]);
+                        GL.TexCoord2(tex.X2,tex.Y2);
+                        RenderVertex(frame,frame.Vertices[polygon.VertexB / 6]);
+                        GL.TexCoord2(tex.X1,tex.Y1);
+                        RenderVertex(frame,frame.Vertices[polygon.VertexC / 6]);
+                        GL.End();
+                    }
+                    else
+                    {
+                        OldSceneryColor col = (OldSceneryColor)str;
+                        GL.Color3(col.R,col.G,col.B);
+                        GL.Begin(PrimitiveType.Triangles);
+                        RenderVertex(frame,frame.Vertices[polygon.VertexA / 6]);
+                        RenderVertex(frame,frame.Vertices[polygon.VertexB / 6]);
+                        RenderVertex(frame,frame.Vertices[polygon.VertexC / 6]);
+                        GL.End();
+                    }
                 }
-                GL.End();
+                GL.Disable(EnableCap.Texture2D);
             }
             else
             {
@@ -147,20 +190,37 @@ namespace CrashEdit
         {
             if (model != null)
             {
-                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-                GL.Begin(PrimitiveType.Triangles);
-                foreach (OldModelPolygon polygon in model.Polygons)
+                GL.Enable(EnableCap.Texture2D);
+                for (int i = 0; i < model.Polygons.Count; ++i)
                 {
-                    int coloroffset = 20 + (polygon.Unknown & 0x7FFF) * 4;
-                    byte r = model.Info[coloroffset + 0];
-                    byte g = model.Info[coloroffset + 1];
-                    byte b = model.Info[coloroffset + 2];
-                    GL.Color3(r,g,b);
-                    RenderVertex(frame, frame.Vertices[polygon.VertexA / 6]);
-                    RenderVertex(frame, frame.Vertices[polygon.VertexB / 6]);
-                    RenderVertex(frame, frame.Vertices[polygon.VertexC / 6]);
+                    OldModelPolygon polygon = model.Polygons[i];
+                    OldModelStruct str = model.Structs[polygon.Unknown & 0x7FFF];
+                    if (str is OldModelTexture tex)
+                    {
+                        BindTexture(0,polygon.Unknown & 0x7FFF);
+                        GL.Color3(tex.R,tex.G,tex.B);
+                        GL.Begin(PrimitiveType.Triangles);
+                        GL.TexCoord2(tex.X1,tex.Y1);
+                        RenderVertex(frame,frame.Vertices[polygon.VertexA / 6]);
+                        GL.TexCoord2(tex.X2,tex.Y2);
+                        RenderVertex(frame,frame.Vertices[polygon.VertexB / 6]);
+                        GL.TexCoord2(tex.X3,tex.Y3);
+                        RenderVertex(frame,frame.Vertices[polygon.VertexC / 6]);
+                        GL.End();
+                    }
+                    else
+                    {
+                        UnbindTexture();
+                        OldSceneryColor col = (OldSceneryColor)str;
+                        GL.Color3(col.R,col.G,col.B);
+                        GL.Begin(PrimitiveType.Triangles);
+                        RenderVertex(frame,frame.Vertices[polygon.VertexA / 6]);
+                        RenderVertex(frame,frame.Vertices[polygon.VertexB / 6]);
+                        RenderVertex(frame,frame.Vertices[polygon.VertexC / 6]);
+                        GL.End();
+                    }
                 }
-                GL.End();
+                GL.Disable(EnableCap.Texture2D);
             }
             else
             {

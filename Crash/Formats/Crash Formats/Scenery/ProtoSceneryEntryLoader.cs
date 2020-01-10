@@ -41,7 +41,7 @@ namespace Crash
             return new ProtoSceneryEntry(items[0],polygons,vertices,structs,pad,eid);
         }
 
-        private static OldModelStruct ConvertPolyItem(byte[] item, int offset)
+        internal static OldModelStruct ConvertPolyItem(byte[] item, int offset)
         {
             bool textured = (item[offset + 3] & 0x80) != 0;
             int size = textured ? 8 : 4;

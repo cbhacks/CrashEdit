@@ -33,7 +33,11 @@ namespace CrashEdit
         protected override Control CreateEditor()
         {
             OldModelEntry modelentry = EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(ProtoAnimationEntry.Frames[0].ModelEID);
-            return new UndockableControl(new OldAnimationEntryViewer(ProtoAnimationEntry.Frames,modelentry));
+            Dictionary<int,TextureChunk> textures = new Dictionary<int,TextureChunk>();
+            foreach (OldModelStruct str in modelentry.Structs)
+                if (str is OldModelTexture tex && !textures.ContainsKey(tex.EID))
+                    textures.Add(tex.EID,EntryChunkController.NSFController.NSF.FindEID<TextureChunk>(tex.EID));
+            return new UndockableControl(new OldAnimationEntryViewer(ProtoAnimationEntry.Frames,modelentry,textures));
         }
 
         public ProtoAnimationEntry ProtoAnimationEntry { get; }

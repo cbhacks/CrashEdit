@@ -418,7 +418,7 @@ namespace CrashEdit
                 //BitmapData data = bmp.LockBits(new Rectangle(Point.Empty, bmp.Size), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 //unsafe
                 //{
-                //    for (int j = 0; j < texturepages[i].Length / 128 * 128; ++j)
+                //    for (int j = 0; j < texturepages[i].Length; ++j)
                 //    {
                 //        *((int*)data.Scan0.ToPointer() + j) = texturepages[i][j];
                 //    }
@@ -427,14 +427,14 @@ namespace CrashEdit
                 GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Four, texturepages[i].Length/128, 128, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, texturepages[i]);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-                //string filename = $"tex_{i}_{textureIDs[list][i]}.png";
+                //string filename = $"tex_{i}_{texturepages[i].Length / 128}x128.png";
                 //bmp.Save(/*YOURPATHHERE*/ + filename, ImageFormat.Png);
                 //bmp.UnlockBits(data);
             }
             GL.BindTexture(TextureTarget.Texture2D, 0);
         }
 
-        private long GenerateTextureHash(ModelTexture tex) // compresses a model texture's relevant texture info into a standard type that can be quickly looked up
+        internal long GenerateTextureHash(ModelTexture tex) // compresses a model texture's relevant texture info into a standard type that can be quickly looked up
         {
             return (long)tex.ClutY
                 | (long)tex.ClutX << 7
@@ -485,16 +485,16 @@ namespace CrashEdit
             MakeGLTextures(list,texturebucket,ref texturepages);
         }
 
-        private long GenerateTextureHash(int tpag, OldSceneryTexture tex) // compresses a model texture's relevant texture info into a standard type that can be quickly looked up
+        internal long GenerateTextureHash(int tpag, OldSceneryTexture tex) // compresses a model texture's relevant texture info into a standard type that can be quickly looked up
         {
             return (long)tex.ClutY
                 | (long)tex.ClutX << 7
                 | (long)tpag << 11
                 | (long)tex.Left << 14
                 | (long)tex.Top << 24
-                | (long)tex.Width << 31
-                | (long)tex.Height << 41
-                | (long)tex.ColorMode << 48;
+                | (long)(tex.UVIndex % 5) << 31
+                | (long)(tex.UVIndex / 5 % 5) << 34
+                | (long)tex.ColorMode << 37;
         }
 
         protected void ConvertTexturesToGL(int list, TextureChunk[] texturechunks, IList<OldSceneryPolygon> oldscenerypolygons, IList<OldModelStruct> oldmodelstructs)
@@ -521,7 +521,7 @@ namespace CrashEdit
                 {
                     TextureChunk texturechunk = texturechunks[poly.Page];
                     int page = poly.Page*3 + tex.ColorMode;
-                    ConvertTextureDataTo32Bit(tex.Width+1,tex.Height+1,tex.Left,tex.Top,tex.ClutX,tex.ClutY,tex.ColorMode,tex.BlendMode,texturechunk.Data,true,ref texturepages[page]);
+                    ConvertTextureDataTo32Bit(tex.Width,tex.Height,tex.Left,tex.Top,tex.ClutX,tex.ClutY,tex.ColorMode,tex.BlendMode,texturechunk.Data,true,ref texturepages[page]);
                     texturebucket[hash] = page;
                 }
                 textures[list][i] = texturebucket[hash];
@@ -553,7 +553,49 @@ namespace CrashEdit
                 {
                     TextureChunk texturechunk = texturechunks[poly.Page];
                     int page = poly.Page*3 + tex.ColorMode;
-                    ConvertTextureDataTo32Bit(tex.Width+1,tex.Height+1,tex.Left,tex.Top,tex.ClutX,tex.ClutY,tex.ColorMode,tex.BlendMode,texturechunk.Data,true,ref texturepages[page]);
+                    ConvertTextureDataTo32Bit(tex.Width,tex.Height,tex.Left,tex.Top,tex.ClutX,tex.ClutY,tex.ColorMode,tex.BlendMode,texturechunk.Data,true,ref texturepages[page]);
+                    texturebucket[hash] = page;
+                }
+                textures[list][i] = texturebucket[hash];
+            }
+            MakeGLTextures(list,texturebucket,ref texturepages);
+        }
+
+        internal long GenerateTextureHash(int tpag, OldModelTexture tex) // compresses a model texture's relevant texture info into a standard type that can be quickly looked up
+        {
+            return (long)tex.ClutY
+                | (long)tex.ClutX << 7
+                | (long)tpag << 11
+                | (long)tex.Left << 14
+                | (long)tex.Top << 24
+                | (long)(tex.UVIndex % 5) << 31
+                | (long)(tex.UVIndex / 5 % 5) << 34
+                | (long)tex.ColorMode << 37;
+        }
+
+        protected void ConvertTexturesToGL(int list, Dictionary<int,TextureChunk> texturechunks, IList<OldModelStruct> modeltextures)
+        {
+            textureIDs[list] = new int[texturechunks.Count*3];
+            GL.GenTextures(textureIDs[list].Length, textureIDs[list]);
+            int[][] texturepages = new int[textureIDs[list].Length][]; // using indexed colors in GL would be dumb so we will convert each texture chunk into two 32-bit pages
+            for (int i = 0; i < texturechunks.Count; ++i)
+            {
+                texturepages[i*3+0] = new int[1024*128]; // 4bpp
+                texturepages[i*3+1] = new int[512*128]; // 8bpp
+                texturepages[i*3+2] = new int[256*128]; // 16bpp
+            }
+            List<int> textureeids = new List<int>(texturechunks.Keys);
+            textures[list] = new int[modeltextures.Count];
+            Dictionary<long, int> texturebucket = new Dictionary<long, int>();
+            for (int i = 0; i < modeltextures.Count; ++i)
+            {
+                if (!(modeltextures[i] is OldModelTexture tex))
+                    continue;
+                long hash = GenerateTextureHash(textureeids.IndexOf(tex.EID),tex);
+                if (!texturebucket.ContainsKey(hash))
+                {
+                    int page = textureeids.IndexOf(tex.EID)*3 + tex.ColorMode;
+                    ConvertTextureDataTo32Bit(tex.Width,tex.Height,tex.Left,tex.Top,tex.ClutX,tex.ClutY,tex.ColorMode,tex.BlendMode,texturechunks[tex.EID].Data,true,ref texturepages[page]);
                     texturebucket[hash] = page;
                 }
                 textures[list][i] = texturebucket[hash];
