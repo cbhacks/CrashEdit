@@ -121,7 +121,7 @@ namespace CrashEdit
 
         protected override void RenderObjects()
         {
-            if (!init)
+            if (!init && model != null)
             {
                 init = true;
                 ConvertTexturesToGL(0,texturechunks,model.Structs);
