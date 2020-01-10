@@ -125,9 +125,9 @@ namespace CrashEdit
             {
                 return new T15EntryController(this,(T15Entry)entry);
             }
-            else if (entry is OldT17Entry)
+            else if (entry is MapEntry)
             {
-                return new OldT17EntryController(this,(OldT17Entry)entry);
+                return new OldT17EntryController(this,(MapEntry)entry);
             }
             else if (entry is T17Entry)
             {

@@ -189,8 +189,8 @@
   <data name="OldT15EntryController_Text" xml:space="preserve">
     <value>オールド Ｔ15 ({0})</value>
   </data>
-  <data name="OldT17EntryController_Text" xml:space="preserve">
-    <value>オールド Ｔ17 ({0})</value>
+  <data name="MapEntryController_Text" xml:space="preserve">
+    <value>マップ ({0})</value>
   </data>
   <data name="OldZoneEntryController_Text" xml:space="preserve">
     <value>オールドゾーン ({0})</value>

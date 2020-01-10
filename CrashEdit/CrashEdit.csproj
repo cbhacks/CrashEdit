@@ -73,6 +73,7 @@
     <Compile Include="Controllers\Animation\ColoredAnimationEntryController.cs" />
     <Compile Include="Controllers\Animation\ColoredFrameController.cs" />
     <Compile Include="Controllers\GOOL\GOOLEntryController.cs" />
+    <Compile Include="Controllers\Map\MapEntryController.cs" />
     <Compile Include="Controls\BufferedTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -112,7 +113,6 @@
     <Compile Include="Controllers\Palette\PaletteEntryController.cs" />
     <Compile Include="Controllers\T6\T6EntryController.cs" />
     <Compile Include="Controllers\T15\OldT15EntryController.cs" />
-    <Compile Include="Controllers\T17\OldT17EntryController.cs" />
     <Compile Include="Controllers\Zone\NewEntityController.cs" />
     <Compile Include="Controllers\Zone\OldCameraController.cs" />
     <Compile Include="Controllers\Zone\ProtoZoneEntryController.cs" />

@@ -6,12 +6,12 @@ namespace CrashEdit
 {
     public sealed class OldT17EntryController : EntryController
     {
-        public OldT17EntryController(EntryChunkController entrychunkcontroller,OldT17Entry oldt17entry) : base(entrychunkcontroller,oldt17entry)
+        public OldT17EntryController(EntryChunkController entrychunkcontroller,MapEntry mapentry) : base(entrychunkcontroller,mapentry)
         {
-            OldT17Entry = oldt17entry;
-            AddNode(new ItemController(null,oldt17entry.Header));
-            AddNode(new ItemController(null,oldt17entry.Layout));
-            foreach (OldEntity entity in oldt17entry.Entities)
+            MapEntry = mapentry;
+            AddNode(new ItemController(null,mapentry.Header));
+            AddNode(new ItemController(null,mapentry.Layout));
+            foreach (OldEntity entity in mapentry.Entities)
             {
                 AddNode(new OldEntityController(this,entity));
             }
@@ -22,7 +22,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.OldT17EntryController_Text,OldT17Entry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.MapEntryController_Text,MapEntry.EName);
         }
 
         public override void InvalidateNodeImage()
@@ -36,7 +36,7 @@ namespace CrashEdit
             return new MapEntryViewer(this);
         }
 
-        public OldT17Entry OldT17Entry { get; }
+        public MapEntry MapEntry { get; }
 
         void Menu_AddEntity()
         {
@@ -49,7 +49,7 @@ namespace CrashEdit
                     {
                         foreach (Entry entry in entrychunk.Entries)
                         {
-                            if (entry is OldT17Entry zone)
+                            if (entry is MapEntry zone)
                             {
                                 foreach (OldEntity otherentity in zone.Entities)
                                 {
@@ -68,9 +68,9 @@ namespace CrashEdit
                 continue;
             }
             OldEntity newentity = OldEntity.Load(new OldEntity(0,0x00030018,id,0,0,0,0,0,new List<EntityPosition>() { new EntityPosition(0,0,0) },0).Save());
-            OldT17Entry.Entities.Add(newentity);
+            MapEntry.Entities.Add(newentity);
             AddNode(new OldEntityController(this,newentity));
-            OldT17Entry.EntityCount = OldT17Entry.Entities.Count;
+            MapEntry.EntityCount = MapEntry.Entities.Count;
         }
     }
 }

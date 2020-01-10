@@ -73,6 +73,7 @@
     <Compile Include="Controllers\Base\Entry\IEntryController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\Base\Chunk\ChunkController.cs" />
+    <Compile Include="Controllers\Map\MapEntryController.cs" />
     <Compile Include="Controllers\Mystery\MysteryUniItemEntryController.cs" />
     <Compile Include="Controllers\Mystery\MysteryMultiItemEntryController.cs" />
     <Compile Include="Controllers\Base\Entry\UnprocessedEntryController.cs" />
@@ -81,7 +82,6 @@
     <Compile Include="Controllers\Demo\DemoEntryController.cs" />
     <Compile Include="Controllers\Palette\PaletteEntryController.cs" />
     <Compile Include="Controllers\T17\T17EntryController.cs" />
-    <Compile Include="Controllers\T17\OldT17EntryController.cs" />
     <Compile Include="Controllers\T15\OldT15EntryController.cs" />
     <Compile Include="Controllers\T15\T15EntryController.cs" />
     <Compile Include="Controllers\Wavebank\WavebankEntryController.cs" />

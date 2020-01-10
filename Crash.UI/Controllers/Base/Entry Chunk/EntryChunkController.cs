@@ -88,9 +88,9 @@ namespace Crash.UI
             {
                 Subcontrollers.Insert(e.Index,new T15EntryController(this,(T15Entry)e.Item));
             }
-            else if (e.Item is OldT17Entry)
+            else if (e.Item is MapEntry)
             {
-                Subcontrollers.Insert(e.Index,new OldT17EntryController(this,(OldT17Entry)e.Item));
+                Subcontrollers.Insert(e.Index,new MapEntryController(this,(MapEntry)e.Item));
             }
             else if (e.Item is T17Entry)
             {

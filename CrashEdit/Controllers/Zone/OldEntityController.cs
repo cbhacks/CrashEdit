@@ -100,7 +100,7 @@ namespace CrashEdit
                     {
                         foreach (Entry entry in entrychunk.Entries)
                         {
-                            if (entry is OldT17Entry zone)
+                            if (entry is MapEntry zone)
                             {
                                 foreach (OldEntity otherentity in zone.Entities)
                                 {
@@ -118,17 +118,17 @@ namespace CrashEdit
                 ++id;
                 continue;
             }
-            ++OldT17EntryController.OldT17Entry.EntityCount;
+            ++OldT17EntryController.MapEntry.EntityCount;
             OldEntity newentity = OldEntity.Load(OldEntity.Save());
             newentity.ID = id;
-            OldT17EntryController.OldT17Entry.Entities.Add(newentity);
+            OldT17EntryController.MapEntry.Entities.Add(newentity);
             OldT17EntryController.AddNode(new OldEntityController(OldT17EntryController,newentity));
         }
 
         private void Menu_DeleteT17()
         {
-            --OldT17EntryController.OldT17Entry.EntityCount;
-            OldT17EntryController.OldT17Entry.Entities.Remove(OldEntity);
+            --OldT17EntryController.MapEntry.EntityCount;
+            OldT17EntryController.MapEntry.Entities.Remove(OldEntity);
             Dispose();
         }
     }

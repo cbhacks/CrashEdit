@@ -295,6 +295,15 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Map ({0}).
+        /// </summary>
+        public static string MapEntryController_Text {
+            get {
+                return ResourceManager.GetString("MapEntryController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Compressed Model ({0}).
         /// </summary>
         public static string ModelEntryController_Compressed_Text {
@@ -498,15 +507,6 @@ namespace Crash.UI.Properties {
         public static string OldT15EntryController_Text {
             get {
                 return ResourceManager.GetString("OldT15EntryController_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Old T17 ({0}).
-        /// </summary>
-        public static string OldT17EntryController_Text {
-            get {
-                return ResourceManager.GetString("OldT17EntryController_Text", resourceCulture);
             }
         }
         

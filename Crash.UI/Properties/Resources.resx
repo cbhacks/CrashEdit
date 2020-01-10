@@ -189,8 +189,8 @@
   <data name="OldT15EntryController_Text" xml:space="preserve">
     <value>Old T15 ({0})</value>
   </data>
-  <data name="OldT17EntryController_Text" xml:space="preserve">
-    <value>Old T17 ({0})</value>
+  <data name="MapEntryController_Text" xml:space="preserve">
+    <value>Map ({0})</value>
   </data>
   <data name="OldZoneEntryController_Text" xml:space="preserve">
     <value>Old Zone ({0})</value>
