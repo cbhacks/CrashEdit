@@ -15,6 +15,8 @@ namespace CrashEdit
         private int frameid;
         private Timer animatetimer;
         private bool isproto;
+        private bool colored;
+        private float r, g, b;
 
         private Dictionary<int,TextureChunk> texturechunks;
         private bool init;
@@ -26,6 +28,7 @@ namespace CrashEdit
             this.model = model;
             this.texturechunks = texturechunks;
             init = false;
+            colored = false;
             InitTextures(1);
             frameid = 0;
             isproto = true;
@@ -38,6 +41,7 @@ namespace CrashEdit
             this.model = model;
             this.texturechunks = texturechunks;
             init = false;
+            colored = false;
             InitTextures(1);
             frameid = 0;
             isproto = true;
@@ -52,24 +56,26 @@ namespace CrashEdit
             };
         }
 
-        public OldAnimationEntryViewer(OldFrame frame,OldModelEntry model,Dictionary<int,TextureChunk> texturechunks)
+        public OldAnimationEntryViewer(OldFrame frame,bool colored,OldModelEntry model,Dictionary<int,TextureChunk> texturechunks)
         {
             protoframes = new List<ProtoFrame>();
             frames = new List<OldFrame>() { frame };
             this.model = model;
             this.texturechunks = texturechunks;
+            this.colored = colored;
             init = false;
             InitTextures(1);
             frameid = 0;
             isproto = false;
         }
 
-        public OldAnimationEntryViewer(IEnumerable<OldFrame> frames,OldModelEntry model,Dictionary<int,TextureChunk> texturechunks)
+        public OldAnimationEntryViewer(IEnumerable<OldFrame> frames,bool colored,OldModelEntry model,Dictionary<int,TextureChunk> texturechunks)
         {
             protoframes = new List<ProtoFrame>();
             this.frames = new List<OldFrame>(frames);
             this.model = model;
             this.texturechunks = texturechunks;
+            this.colored = colored;
             init = false;
             InitTextures(1);
             frameid = 0;
@@ -200,6 +206,12 @@ namespace CrashEdit
                     {
                         BindTexture(0,polygon.Unknown & 0x7FFF);
                         GL.Color3(tex.R,tex.G,tex.B);
+                        if (colored)
+                        {
+                            r = tex.R / 128F;
+                            g = tex.G / 128F;
+                            b = tex.B / 128F;
+                        }
                         GL.Begin(PrimitiveType.Triangles);
                         GL.TexCoord2(tex.X1,tex.Y1);
                         RenderVertex(frame,frame.Vertices[polygon.VertexA / 6]);
@@ -214,6 +226,12 @@ namespace CrashEdit
                         UnbindTexture();
                         OldSceneryColor col = (OldSceneryColor)str;
                         GL.Color3(col.R,col.G,col.B);
+                        if (colored)
+                        {
+                            r = col.R / 128F;
+                            g = col.G / 128F;
+                            b = col.B / 128F;
+                        }
                         GL.Begin(PrimitiveType.Triangles);
                         RenderVertex(frame,frame.Vertices[polygon.VertexA / 6]);
                         RenderVertex(frame,frame.Vertices[polygon.VertexB / 6]);
@@ -243,6 +261,13 @@ namespace CrashEdit
 
         private void RenderVertex(OldFrame frame, OldFrameVertex vertex)
         {
+            if (colored)
+            {
+                byte nr = (byte)(vertex.NormalX * r);
+                byte ng = (byte)(vertex.NormalY * g);
+                byte nb = (byte)(vertex.NormalZ * b);
+                GL.Color3(nr,ng,nb);
+            }
             GL.Vertex3(vertex.X + frame.XOffset,vertex.Y + frame.YOffset,vertex.Z + frame.ZOffset);
         }
 
