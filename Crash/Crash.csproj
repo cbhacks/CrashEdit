@@ -74,7 +74,7 @@
     <Compile Include="Formats\Crash Formats\Models\ModelEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Models\ModelTransformedTriangle.cs" />
     <Compile Include="Formats\Crash Formats\Models\OldModelStruct.cs" />
-    <Compile Include="Formats\Crash Formats\Models\OldModelTexture.cs" />
+    <Compile Include="Formats\Crash Formats\Scenery\OldSceneryTexture.cs" />
     <Compile Include="Formats\Crash Formats\NSD\NewNSD.cs" />
     <Compile Include="Formats\Crash Formats\NSD\ProtoNSD.cs" />
     <Compile Include="Formats\Crash Formats\NSD\OldNSD.cs" />
@@ -82,6 +82,7 @@
     <Compile Include="Formats\Crash Formats\Scenery\NewSceneryEntry.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\NewSceneryVertex.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\NewSceneryEntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Scenery\OldSceneryColor.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryEntry.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryPolygon.cs" />

@@ -2,9 +2,9 @@
 
 namespace Crash
 {
-    public struct OldModelTexture : OldModelStruct
+    public struct OldSceneryTexture : OldModelStruct
     {
-        public static OldModelTexture Load(byte[] data)
+        public static OldSceneryTexture Load(byte[] data)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
@@ -22,9 +22,9 @@ namespace Crash
             byte xoffu = (byte)(texinfo >> 13 & 0x1F);
             byte cluty = (byte)(texinfo >> 6 & 0x7F);
             byte yoffu = (byte)(texinfo & 0x1F);
-            return new OldModelTexture(uvindex,clutx,cluty,xoffu,yoffu,colormode,blendmode,segment,r,g,b);
+            return new OldSceneryTexture(uvindex,clutx,cluty,xoffu,yoffu,colormode,blendmode,segment,r,g,b);
         }
-        public OldModelTexture(uint uvindex,byte clutx,byte cluty,byte xoffu,byte yoffu,byte colormode,byte blendmode,byte segment,byte r,byte g,byte b)
+        public OldSceneryTexture(uint uvindex,byte clutx,byte cluty,byte xoffu,byte yoffu,byte colormode,byte blendmode,byte segment,byte r,byte g,byte b)
         {
             UVIndex = uvindex;
             ClutX = clutx;

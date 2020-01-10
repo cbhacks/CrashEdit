@@ -65,9 +65,9 @@ namespace Crash
             byte[] data = new byte[size];
             Array.Copy(item,offset,data,0,size);
             if (textured)
-                return OldModelTexture.Load(data);
+                return OldSceneryTexture.Load(data);
             else
-                return OldModelColor.Load(data);
+                return OldSceneryColor.Load(data);
         }
     }
 }

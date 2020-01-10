@@ -104,7 +104,7 @@ namespace CrashEdit
                             OldSceneryPolygon polygon = entry.Polygons[p];
                             if (polygon.VertexA >= entry.Vertices.Count || polygon.VertexB >= entry.Vertices.Count || polygon.VertexC >= entry.Vertices.Count) continue;
                             OldModelStruct modelstruct = entry.Structs[polygon.ModelStruct];
-                            if (modelstruct is OldModelTexture tex)
+                            if (modelstruct is OldSceneryTexture tex)
                             { 
                                 BindTexture(e,p);
                                 GL.Begin(PrimitiveType.Triangles);

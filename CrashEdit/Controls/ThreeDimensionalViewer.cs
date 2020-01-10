@@ -467,7 +467,7 @@ namespace CrashEdit
             GL.BindTexture(TextureTarget.Texture2D, 0);
         }
 
-        private long GenerateTextureHash(int tpag, OldModelTexture tex) // compresses a model texture's relevant texture info into a standard type that can be quickly looked up
+        private long GenerateTextureHash(int tpag, OldSceneryTexture tex) // compresses a model texture's relevant texture info into a standard type that can be quickly looked up
         {
             return (long)tex.ClutY
                 | (long)tex.ClutX << 7
@@ -496,9 +496,9 @@ namespace CrashEdit
             {
                 OldSceneryPolygon poly = oldscenerypolygons[i];
                 OldModelStruct modelstruct = oldmodelstructs[poly.ModelStruct];
-                if (modelstruct is OldModelColor || modelstruct == null)
+                if (modelstruct is OldSceneryColor || modelstruct == null)
                     continue;
-                OldModelTexture tex = (OldModelTexture)modelstruct;
+                OldSceneryTexture tex = (OldSceneryTexture)modelstruct;
                 long hash = GenerateTextureHash(poly.Page,tex);
                 if (!texturebucket.ContainsKey(hash))
                 {
@@ -602,9 +602,9 @@ namespace CrashEdit
             {
                 ProtoSceneryPolygon poly = protoscenerypolygons[i];
                 OldModelStruct modelstruct = oldmodelstructs[poly.Texture];
-                if (modelstruct is OldModelColor || modelstruct == null)
+                if (modelstruct is OldSceneryColor || modelstruct == null)
                     continue;
-                OldModelTexture tex = (OldModelTexture)modelstruct;
+                OldSceneryTexture tex = (OldSceneryTexture)modelstruct;
                 long hash = GenerateTextureHash(poly.Page,tex);
                 if (!texturebucket.ContainsKey(hash))
                 {

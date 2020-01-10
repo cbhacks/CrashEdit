@@ -105,7 +105,7 @@ namespace CrashEdit
                             ProtoSceneryPolygon polygon = entry.Polygons[p];
                             if (polygon.VertexA >= entry.Vertices.Count || polygon.VertexB >= entry.Vertices.Count || polygon.VertexC >= entry.Vertices.Count) continue;
                             OldModelStruct modelstruct = entry.Structs[polygon.Texture];
-                            if (modelstruct is OldModelTexture tex)
+                            if (modelstruct is OldSceneryTexture tex)
                             { 
                                 BindTexture(e,p);
                                 GL.Color3(tex.R,tex.G,tex.B);
@@ -121,7 +121,7 @@ namespace CrashEdit
                             else
                             {
                                 UnbindTexture();
-                                OldModelColor col = (OldModelColor)modelstruct;
+                                OldSceneryColor col = (OldSceneryColor)modelstruct;
                                 GL.Color3(col.R,col.G,col.B);
                                 GL.Begin(PrimitiveType.Triangles);
                                 RenderVertex(entry,entry.Vertices[polygon.VertexA]);
