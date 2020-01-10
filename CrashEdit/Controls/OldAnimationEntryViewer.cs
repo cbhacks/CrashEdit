@@ -90,7 +90,7 @@ namespace CrashEdit
         // with other viewers which have a larger scale.
         protected override float ScaleFactor => 16;
 
-        protected override int CameraRangeMargin => 64;
+        protected override int CameraRangeMargin => 96;
 
         protected override IEnumerable<IPosition> CorePositions
         {
