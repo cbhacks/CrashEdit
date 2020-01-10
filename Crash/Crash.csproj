@@ -67,6 +67,8 @@
     <Compile Include="Formats\Crash Formats\GOOL\GOOLAnimationVertex.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOLChar.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOLSpriteFrame.cs" />
+    <Compile Include="Formats\Crash Formats\Image\ImageEntry.cs" />
+    <Compile Include="Formats\Crash Formats\Image\ImageEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Map\MapEntry.cs" />
     <Compile Include="Formats\Crash Formats\Map\MapEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Models\ModelEntry.cs" />
@@ -228,8 +230,6 @@
     <Compile Include="Formats\Crash Formats\Scenery\OldSceneryPolygon.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\OldSceneryVertex.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\SceneryQuad.cs" />
-    <Compile Include="Formats\Crash Formats\T15\OldT15Entry.cs" />
-    <Compile Include="Formats\Crash Formats\T15\OldT15EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Palette\PaletteEntry.cs" />
     <Compile Include="Formats\Crash Formats\Palette\PaletteEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T6\T6Entry.cs" />

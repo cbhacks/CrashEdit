@@ -286,6 +286,15 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Image ({0}).
+        /// </summary>
+        public static string ImageEntryController_Text {
+            get {
+                return ResourceManager.GetString("ImageEntryController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Item.
         /// </summary>
         public static string ItemController_Text {
@@ -498,15 +507,6 @@ namespace Crash.UI.Properties {
         public static string OldSoundChunkController_Text {
             get {
                 return ResourceManager.GetString("OldSoundChunkController_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Old T15 ({0}).
-        /// </summary>
-        public static string OldT15EntryController_Text {
-            get {
-                return ResourceManager.GetString("OldT15EntryController_Text", resourceCulture);
             }
         }
         

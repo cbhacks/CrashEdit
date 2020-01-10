@@ -80,9 +80,9 @@ namespace Crash.UI
             {
                 Subcontrollers.Insert(e.Index,new WavebankEntryController(this,(WavebankEntry)e.Item));
             }
-            else if (e.Item is OldT15Entry)
+            else if (e.Item is ImageEntry)
             {
-                Subcontrollers.Insert(e.Index,new OldT15EntryController(this,(OldT15Entry)e.Item));
+                Subcontrollers.Insert(e.Index,new ImageEntryController(this,(ImageEntry)e.Item));
             }
             else if (e.Item is T15Entry)
             {

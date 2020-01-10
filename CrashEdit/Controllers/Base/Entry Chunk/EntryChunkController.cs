@@ -117,9 +117,9 @@ namespace CrashEdit
             {
                 return new WavebankEntryController(this,(WavebankEntry)entry);
             }
-            else if (entry is OldT15Entry)
+            else if (entry is ImageEntry)
             {
-                return new OldT15EntryController(this,(OldT15Entry)entry);
+                return new ImageEntryController(this,(ImageEntry)entry);
             }
             else if (entry is T15Entry)
             {

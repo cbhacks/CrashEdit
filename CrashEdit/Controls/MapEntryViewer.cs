@@ -24,7 +24,7 @@ namespace CrashEdit
             int size = BitConv.FromInt32(ec.MapEntry.Header,0x4);
             for (int i = 0, s = BitConv.FromInt32(ec.MapEntry.Header,0); i < s; ++i)
             {
-                OldT15Entry imag = ec.EntryChunkController.NSFController.NSF.FindEID<OldT15Entry>(BitConv.FromInt32(ec.MapEntry.Header,0x1B0+i*4));
+                ImageEntry imag = ec.EntryChunkController.NSFController.NSF.FindEID<ImageEntry>(BitConv.FromInt32(ec.MapEntry.Header,0x1B0+i*4));
                 if (imag != null)
                 {
                     foreach (byte[] frame in imag.Items)

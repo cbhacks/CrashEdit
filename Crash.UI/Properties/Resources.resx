@@ -186,8 +186,8 @@
   <data name="OldSoundChunkController_Text" xml:space="preserve">
     <value>Old Sound Chunk {0}</value>
   </data>
-  <data name="OldT15EntryController_Text" xml:space="preserve">
-    <value>Old T15 ({0})</value>
+  <data name="ImageEntryController_Text" xml:space="preserve">
+    <value>Image ({0})</value>
   </data>
   <data name="MapEntryController_Text" xml:space="preserve">
     <value>Map ({0})</value>

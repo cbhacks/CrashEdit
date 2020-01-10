@@ -186,8 +186,8 @@
   <data name="OldSoundChunkController_Text" xml:space="preserve">
     <value>オールドサウンドチャンク {0}</value>
   </data>
-  <data name="OldT15EntryController_Text" xml:space="preserve">
-    <value>オールド Ｔ15 ({0})</value>
+  <data name="ImageEntryController_Text" xml:space="preserve">
+    <value>イメージ ({0})</value>
   </data>
   <data name="MapEntryController_Text" xml:space="preserve">
     <value>マップ ({0})</value>
