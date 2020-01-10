@@ -130,6 +130,11 @@ namespace CrashEdit
                     if (frmoctree == null || frmoctree.IsDisposed)
                     {
                         frmoctree = new Form();
+                        frmoctree.FormClosed += (object sender, FormClosedEventArgs ee) =>
+                        {
+                            octreeselection = -1;
+                            deletelists = true;
+                        };
                         UpdateOctreeFormList();
                         frmoctree.Show();
                     }
