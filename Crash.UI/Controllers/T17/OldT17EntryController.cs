@@ -1,6 +1,6 @@
 namespace Crash.UI
 {
-    public sealed class OldT17EntryController : MysteryMultiItemEntryController
+    public sealed class OldT17EntryController : EntryController
     {
         public OldT17EntryController(EntryChunkController up,OldT17Entry entry) : base(up,entry)
         {

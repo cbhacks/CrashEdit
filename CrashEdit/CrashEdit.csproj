@@ -80,6 +80,9 @@
     <Compile Include="Controls\GOOLBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Controls\MapEntryViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\PaletteEntryBox.cs">
       <SubType>UserControl</SubType>
     </Compile>

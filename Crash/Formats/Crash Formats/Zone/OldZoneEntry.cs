@@ -7,11 +7,11 @@ namespace Crash
         private List<OldCamera> cameras;
         private List<OldEntity> entities;
 
-        public OldZoneEntry(byte[] unknown1,byte[] unknown2,IEnumerable<OldCamera> cameras,IEnumerable<OldEntity> entities,int eid)
+        public OldZoneEntry(byte[] header,byte[] layout,IEnumerable<OldCamera> cameras,IEnumerable<OldEntity> entities,int eid)
             : base(eid)
         {
-            Header = unknown1;
-            Layout = unknown2;
+            Header = header;
+            Layout = layout;
             this.cameras = new List<OldCamera>(cameras);
             this.entities = new List<OldEntity>(entities);
         }

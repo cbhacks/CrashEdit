@@ -246,6 +246,8 @@ namespace Crash
 
         public T FindEID<T>(int eid) where T : class,IEntry
         {
+            if (eid == Entry.NullEID)
+                return null;
             foreach (Chunk chunk in Chunks)
             {
                 if (chunk is IEntry)

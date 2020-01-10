@@ -15,6 +15,16 @@ namespace CrashEdit
             InvalidateNodeImage();
         }
 
+        public OldEntityController(OldT17EntryController oldt17entrycontroller, OldEntity entity)
+        {
+            OldT17EntryController = oldt17entrycontroller;
+            OldEntity = entity;
+            AddMenu("Duplicate Entity",Menu_DuplicateT17);
+            AddMenu("Delete Entity",Menu_DeleteT17);
+            InvalidateNode();
+            InvalidateNodeImage();
+        }
+
         public override void InvalidateNode()
         {
             Node.Text = string.Format(Crash.UI.Properties.Resources.OldEntityController_Text,OldEntity.ID,OldEntity.Positions.Count);
@@ -32,6 +42,7 @@ namespace CrashEdit
         }
 
         public OldZoneEntryController OldZoneEntryController { get; }
+        public OldT17EntryController OldT17EntryController { get; }
 
         public OldEntity OldEntity { get; }
 
@@ -75,6 +86,49 @@ namespace CrashEdit
         {
             --OldZoneEntryController.OldZoneEntry.EntityCount;
             OldZoneEntryController.OldZoneEntry.Entities.Remove(OldEntity);
+            Dispose();
+        }
+        
+        private void Menu_DuplicateT17()
+        {
+            short id = 6;
+            while (true)
+            {
+                foreach (Chunk chunk in OldT17EntryController.EntryChunkController.NSFController.NSF.Chunks)
+                {
+                    if (chunk is EntryChunk entrychunk)
+                    {
+                        foreach (Entry entry in entrychunk.Entries)
+                        {
+                            if (entry is OldT17Entry zone)
+                            {
+                                foreach (OldEntity otherentity in zone.Entities)
+                                {
+                                    if (otherentity.ID == id)
+                                    {
+                                        goto FOUND_ID;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            FOUND_ID:
+                ++id;
+                continue;
+            }
+            ++OldT17EntryController.OldT17Entry.EntityCount;
+            OldEntity newentity = OldEntity.Load(OldEntity.Save());
+            newentity.ID = id;
+            OldT17EntryController.OldT17Entry.Entities.Add(newentity);
+            OldT17EntryController.AddNode(new OldEntityController(OldT17EntryController,newentity));
+        }
+
+        private void Menu_DeleteT17()
+        {
+            --OldT17EntryController.OldT17Entry.EntityCount;
+            OldT17EntryController.OldT17Entry.Entities.Remove(OldEntity);
             Dispose();
         }
     }
