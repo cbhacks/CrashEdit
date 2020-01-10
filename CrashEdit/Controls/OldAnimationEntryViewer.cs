@@ -153,16 +153,17 @@ namespace CrashEdit
                         BindTexture(0,polygon.Unknown & 0x7FFF);
                         GL.Color3(tex.R,tex.G,tex.B);
                         GL.Begin(PrimitiveType.Triangles);
-                        GL.TexCoord2(tex.X3,tex.Y3);
+                        GL.TexCoord2(tex.X1,tex.Y1);
                         RenderVertex(frame,frame.Vertices[polygon.VertexA / 6]);
                         GL.TexCoord2(tex.X2,tex.Y2);
                         RenderVertex(frame,frame.Vertices[polygon.VertexB / 6]);
-                        GL.TexCoord2(tex.X1,tex.Y1);
+                        GL.TexCoord2(tex.X3,tex.Y3);
                         RenderVertex(frame,frame.Vertices[polygon.VertexC / 6]);
                         GL.End();
                     }
                     else
                     {
+                        UnbindTexture();
                         OldSceneryColor col = (OldSceneryColor)str;
                         GL.Color3(col.R,col.G,col.B);
                         GL.Begin(PrimitiveType.Triangles);
