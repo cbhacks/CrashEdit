@@ -82,7 +82,7 @@ namespace CrashEdit
                 init = true;
                 for (int i = 0; i < entries.Count; ++i)
                 {
-                    ConvertTexturesToGL(i, texturechunks[i],entries[i].Polygons,entries[i].Structs,entries[i].Info, 0x20);
+                    ConvertTexturesToGL(i,texturechunks[i],entries[i].Polygons,entries[i].Structs);
                 }
             }
 
