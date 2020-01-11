@@ -101,7 +101,7 @@ namespace CrashEdit
                 init = true;
                 for (int i = 0; i < entries.Count; ++i)
                 {
-                    ConvertTexturesToGL(i, texturechunks[i], entries[i].Textures, entries[i].Info, 0x2C);
+                    ConvertTexturesToGL(i, texturechunks[i], entries[i].Textures);
                 }
             }
 

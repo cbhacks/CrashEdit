@@ -446,7 +446,7 @@ namespace CrashEdit
                 | (long)tex.ColorMode << 48; // 50 bits total
         }
 
-        protected void ConvertTexturesToGL(int list, TextureChunk[] texturechunks, IList<ModelTexture> modeltextures, byte[] eid_list, int eid_off)
+        protected void ConvertTexturesToGL(int list, TextureChunk[] texturechunks, IList<ModelTexture> modeltextures)
         {
             textureIDs[list] = new int[texturechunks.Length*3];
             GL.GenTextures(textureIDs[list].Length, textureIDs[list]);

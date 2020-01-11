@@ -588,7 +588,7 @@ namespace CrashEdit
             NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
             byte[] nsfdata = nsfbox.NSF.Save();
             byte[] olddata = File.ReadAllBytes(filename);
-            if ((nsfdata.Length == olddata.Length && nsfdata.SequenceEqual(olddata)) || MessageBox.Show("There are unsaved changes. Are you sure you want to close the NSF file?", "Close Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if ((nsfdata.Length == olddata.Length && nsfdata.SequenceEqual(olddata)) || MessageBox.Show("Are you sure you want to close the NSF file?", "Close Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 TabPage tab = tbcTabs.SelectedTab;
                 if (tab != null)

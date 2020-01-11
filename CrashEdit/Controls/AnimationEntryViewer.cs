@@ -108,7 +108,7 @@ namespace CrashEdit
             if (!init)
             {
                 init = true;
-                ConvertTexturesToGL(0, texturechunks, model.Textures, model.Info, 0xC);
+                ConvertTexturesToGL(0, texturechunks, model.Textures);
             }
             if (interi == 0 || frameid == 0)
             {
