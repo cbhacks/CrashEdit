@@ -208,7 +208,7 @@
     <value>Sound ({0})</value>
   </data>
   <data name="SpeechChunkController_Text" xml:space="preserve">
-    <value>Speech Chunk</value>
+    <value>Speech Chunk {0}</value>
   </data>
   <data name="SpeechEntryController_Text" xml:space="preserve">
     <value>Speech ({0})</value>

@@ -592,7 +592,7 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Speech Chunk.
+        ///   Looks up a localized string similar to Speech Chunk {0}.
         /// </summary>
         public static string SpeechChunkController_Text {
             get {
