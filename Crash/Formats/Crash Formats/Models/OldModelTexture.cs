@@ -55,8 +55,9 @@ namespace Crash
         public byte YOffU { get; }
         public byte BlendMode { get; }
         public byte Segment { get; }
-        private float PageWidth => (float)Math.Pow(2,2-ColorMode) * 256;
-        private int XOff => ((int)(Math.Pow(2,2-ColorMode) * 64) * Segment) + ((int)Math.Pow(2,2-ColorMode)*2 * XOffU);
+
+        private float PageWidth => (1 << (2-ColorMode)) * 256F;
+        private int XOff => ((1 << (2-ColorMode)) * 64 * Segment) + ((1 << (2-ColorMode))*2 * XOffU);
         private int YOff => YOffU * 4;
         public int Left => Math.Min(U1, Math.Min(U2, U3)) + XOff;
         private int Right => Math.Max(U1, Math.Max(U2, U3)) + XOff;

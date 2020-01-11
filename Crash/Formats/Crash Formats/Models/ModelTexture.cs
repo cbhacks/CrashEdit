@@ -19,16 +19,16 @@ namespace Crash
             byte v2 = data[5];
             byte segment = (byte)(data[6] & 0xF);
             byte blendmode = (byte)((data[6] >> 5) & 0x3);
-            bool bitflag = data[6] >> 7 == 1;
-            byte textureoffset = data[7];
+            byte colormode = (byte)((data[6] >> 7 | data[7] << 1 & 2) & 0x3);
+            byte textureoffset = (byte)(data[7] >> 2 & 0x3F);
             byte u3 = data[8];
             byte v3 = data[9];
             byte u4 = data[10];
             byte v4 = data[11];
-            return new ModelTexture(u1,v1,cluty1,clutx,cluty2,u2,v2,bitflag,blendmode,segment,textureoffset,u3,v3,u4,v4);
+            return new ModelTexture(u1,v1,cluty1,clutx,cluty2,u2,v2,colormode,blendmode,segment,textureoffset,u3,v3,u4,v4);
         }
 
-        public ModelTexture(byte u1,byte v1,byte cluty1,byte clutx,byte cluty2,byte u2,byte v2,bool bitflag,byte blendmode,byte segment,byte textureoffset,byte u3,byte v3,byte u4,byte v4)
+        public ModelTexture(byte u1,byte v1,byte cluty1,byte clutx,byte cluty2,byte u2,byte v2,byte colormode,byte blendmode,byte segment,byte textureoffset,byte u3,byte v3,byte u4,byte v4)
         {
             U1 = u1;
             V1 = v1;
@@ -43,11 +43,11 @@ namespace Crash
             ClutY2 = cluty2;
             Segment = segment;
             BlendMode = blendmode;
-            BitFlag = bitflag;
-            TextureOffset = textureoffset;
+            ColorMode = colormode;
+            Page = textureoffset;
         }
 
-        public bool BitFlag { get; }
+        public byte ColorMode { get; }
         public byte U1 { get; }
         public byte V1 { get; }
         public byte U2 { get; }
@@ -61,10 +61,10 @@ namespace Crash
         public byte ClutY2 { get; }
         public byte BlendMode { get; }
         public byte Segment { get; }
-        public byte TextureOffset { get; }
+        public byte Page { get; }
 
-        private float PageWidth => BitFlag ? 512F : 1024F;
-        private int XOff => (BitFlag ? 128 : 256) * Segment;
+        private float PageWidth => (float)Math.Pow(2,2-ColorMode) * 256;
+        private int XOff => (1 << (2-ColorMode)) * 64 * Segment;
         public int Left => Math.Min(U1, Math.Min(U2, U3)) + XOff;
         private int Right => Math.Max(U1, Math.Max(U2, U3)) + XOff;
         public int Top => Math.Min(V1, Math.Min(V2, V3));
@@ -90,8 +90,8 @@ namespace Crash
             result[3] = ClutY2;
             result[4] = U2;
             result[5] = V2;
-            result[6] = (byte)((Convert.ToByte(BitFlag) << 7) | (BlendMode << 5) | Segment);
-            result[7] = TextureOffset;
+            result[6] = (byte)((ColorMode << 7) | (BlendMode << 5) | Segment);
+            result[7] = (byte)((Page << 2) | (ColorMode >> 1));
             result[8] = U3;
             result[9] = V3;
             result[10] = U4;

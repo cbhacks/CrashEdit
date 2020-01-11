@@ -438,23 +438,24 @@ namespace CrashEdit
         {
             return (long)tex.ClutY
                 | (long)tex.ClutX << 7
-                | (long)tex.TextureOffset / 4 << 11
+                | (long)tex.Page / 4 << 11
                 | (long)tex.Left << 14
                 | (long)tex.Top << 24
                 | (long)tex.Width << 31
                 | (long)tex.Height << 41
-                | (tex.BitFlag ? 1L : 0L) << 48;
+                | (long)tex.ColorMode << 48; // 50 bits total
         }
 
         protected void ConvertTexturesToGL(int list, TextureChunk[] texturechunks, IList<ModelTexture> modeltextures, byte[] eid_list, int eid_off)
         {
-            textureIDs[list] = new int[texturechunks.Length*2];
+            textureIDs[list] = new int[texturechunks.Length*3];
             GL.GenTextures(textureIDs[list].Length, textureIDs[list]);
             int[][] texturepages = new int[textureIDs[list].Length][]; // using indexed colors in GL would be dumb so we will convert each texture chunk into two 32-bit pages
             for (int i = 0; i < texturechunks.Length; ++i)
             {
-                texturepages[i*2+0] = new int[1024*128]; // 4bpp
-                texturepages[i*2+1] = new int[512*128]; // 8bpp
+                texturepages[i*3+0] = new int[1024*128]; // 4bpp
+                texturepages[i*3+1] = new int[512*128]; // 8bpp
+                texturepages[i*3+2] = new int[256*128]; // 16bpp
             }
             textures[list] = new int[modeltextures.Count];
             Dictionary<long, int> texturebucket = new Dictionary<long, int>();
@@ -464,20 +465,9 @@ namespace CrashEdit
                 long hash = GenerateTextureHash(tex);
                 if (!texturebucket.ContainsKey(hash))
                 {
-                    if (tex.TextureOffset / 4 >= texturechunks.Length) throw new Exception("ConvertTexturesToGL: Texture chunk index out of bounds");
-                    if (tex.TextureOffset % 4 != 0) throw new Exception("ConvertTexturesToGL: Texture chunk index is unaligned");
-                    TextureChunk texturechunk = null;
-                    foreach (TextureChunk chunk in texturechunks)
-                    {
-                        if (chunk.EID == BitConv.FromInt32(eid_list,eid_off + tex.TextureOffset))
-                        {
-                            texturechunk = chunk;
-                            break;
-                        }
-                    }
-                    if (texturechunk == null) throw new Exception("ConvertTexturesToGL: Texture chunk not found");
-                    int page = tex.TextureOffset / 2 + Convert.ToInt32(tex.BitFlag);
-                    ConvertTextureDataTo32Bit(tex.Width+1,tex.Height+1,tex.Left,tex.Top,tex.ClutX,tex.ClutY,Convert.ToByte(tex.BitFlag),tex.BlendMode,texturechunk.Data,true,ref texturepages[page]);
+                    TextureChunk texturechunk = texturechunks[tex.Page];
+                    int page = tex.Page*3 + tex.ColorMode;
+                    ConvertTextureDataTo32Bit(tex.Width+1,tex.Height+1,tex.Left,tex.Top,tex.ClutX,tex.ClutY,tex.ColorMode,tex.BlendMode,texturechunk.Data,true,ref texturepages[page]);
                     texturebucket[hash] = page;
                 }
                 textures[list][i] = texturebucket[hash];
