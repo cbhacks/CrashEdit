@@ -419,7 +419,9 @@
     <Content Include="Resources\objects_012_crimson.gif" />
     <Content Include="Resources\objects_012_gray.gif" />
     <Content Include="Resources\objects_012_lime.gif" />
+    <None Include="Resources\objects_012_red.gif" />
     <Content Include="Resources\objects_012_violet.gif" />
+    <None Include="Resources\objects_012_yellow.gif" />
     <Content Include="Resources\objects_020.gif" />
     <Content Include="Resources\objects_028.gif" />
     <Content Include="Resources\objects_029.gif" />

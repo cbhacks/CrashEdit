@@ -27,8 +27,16 @@ namespace CrashEdit
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "crimsonb";
-            Node.SelectedImageKey = "crimsonb";
+            if (ModelEntry.Positions == null)
+            {
+                Node.ImageKey = "crimsonb";
+                Node.SelectedImageKey = "crimsonb";
+            }
+            else
+            {
+                Node.ImageKey = "redb";
+                Node.SelectedImageKey = "redb";
+            }
         }
 
         protected override Control CreateEditor()

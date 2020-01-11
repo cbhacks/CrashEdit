@@ -32,6 +32,8 @@ namespace CrashEdit
                 imglist.Images.Add("limeb",OldResources.LimeBuckle);
                 imglist.Images.Add("blueb",OldResources.BlueBuckle);
                 imglist.Images.Add("violetb",OldResources.VioletBuckle);
+                imglist.Images.Add("redb",OldResources.RedBuckle);
+                imglist.Images.Add("yellowb",OldResources.YellowBuckle);
             }
             catch
             {
