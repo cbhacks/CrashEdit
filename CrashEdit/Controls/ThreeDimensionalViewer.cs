@@ -200,7 +200,7 @@ namespace CrashEdit
             }
             else if (mouseright)
             {
-                range -= (int)((e.Y - mousey) * fullrange / 256 * (range / (float)(fullrange * 8) * 0.8F + 0.2F));
+                range -= (int)((e.Y - mousey) * fullrange / 256 * (range / (fullrange*8 * 0.67F + 0.33F)));
                 if (range < 5)
                     range = 5;
                 else if (range > fullrange * 8)
@@ -290,7 +290,7 @@ namespace CrashEdit
             GL.ClearColor(0.025f,0.025f,0.025f,1);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.MatrixMode(MatrixMode.Projection);
-            var proj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver3,(float)Width/Height,256,1280000);
+            var proj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver3,(float)Width/Height,128,1280000);
             GL.LoadMatrix(ref proj);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
