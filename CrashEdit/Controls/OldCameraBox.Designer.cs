@@ -29,6 +29,7 @@ namespace CrashEdit
         private void InitializeComponent()
         {
             this.fraPosition = new System.Windows.Forms.GroupBox();
+            this.cmdPosInterpolate = new System.Windows.Forms.Button();
             this.cmdFirstPosition = new System.Windows.Forms.Button();
             this.cmdLastPosition = new System.Windows.Forms.Button();
             this.lblZRot = new System.Windows.Forms.Label();
@@ -120,7 +121,6 @@ namespace CrashEdit
             this.numPathItem1 = new System.Windows.Forms.NumericUpDown();
             this.fraCount = new System.Windows.Forms.GroupBox();
             this.numNeighborCount = new System.Windows.Forms.NumericUpDown();
-            this.cmdPosInterpolate = new System.Windows.Forms.Button();
             this.fraPosition.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numZRot)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numYRot)).BeginInit();
@@ -205,6 +205,18 @@ namespace CrashEdit
             this.fraPosition.TabIndex = 1;
             this.fraPosition.TabStop = false;
             this.fraPosition.Text = "Position(s)";
+            // 
+            // cmdPosInterpolate
+            // 
+            this.cmdPosInterpolate.AutoSize = true;
+            this.cmdPosInterpolate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.cmdPosInterpolate.Location = new System.Drawing.Point(9, 130);
+            this.cmdPosInterpolate.Name = "cmdPosInterpolate";
+            this.cmdPosInterpolate.Size = new System.Drawing.Size(67, 23);
+            this.cmdPosInterpolate.TabIndex = 16;
+            this.cmdPosInterpolate.Text = "Interpolate";
+            this.cmdPosInterpolate.UseVisualStyleBackColor = true;
+            this.cmdPosInterpolate.Click += new System.EventHandler(this.cmdPosInterpolate_Click);
             // 
             // cmdFirstPosition
             // 
@@ -767,11 +779,6 @@ namespace CrashEdit
             this.numZoom.Name = "numZoom";
             this.numZoom.Size = new System.Drawing.Size(60, 20);
             this.numZoom.TabIndex = 19;
-            this.numZoom.Value = new decimal(new int[] {
-            32768,
-            0,
-            0,
-            -2147483648});
             this.numZoom.ValueChanged += new System.EventHandler(this.numZoom_ValueChanged);
             // 
             // fraMode
@@ -832,6 +839,7 @@ namespace CrashEdit
             // 
             // numXDir
             // 
+            this.numXDir.DecimalPlaces = 5;
             this.numXDir.Location = new System.Drawing.Point(42, 19);
             this.numXDir.Maximum = new decimal(new int[] {
             7,
@@ -850,6 +858,7 @@ namespace CrashEdit
             // 
             // numYDir
             // 
+            this.numYDir.DecimalPlaces = 5;
             this.numYDir.Location = new System.Drawing.Point(42, 45);
             this.numYDir.Maximum = new decimal(new int[] {
             7,
@@ -868,6 +877,7 @@ namespace CrashEdit
             // 
             // numZDir
             // 
+            this.numZDir.DecimalPlaces = 5;
             this.numZDir.Location = new System.Drawing.Point(42, 71);
             this.numZDir.Maximum = new decimal(new int[] {
             7,
@@ -1369,18 +1379,6 @@ namespace CrashEdit
             this.numNeighborCount.Size = new System.Drawing.Size(54, 20);
             this.numNeighborCount.TabIndex = 39;
             this.numNeighborCount.ValueChanged += new System.EventHandler(this.numNeighborCount_ValueChanged);
-            // 
-            // cmdPosInterpolate
-            // 
-            this.cmdPosInterpolate.AutoSize = true;
-            this.cmdPosInterpolate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.cmdPosInterpolate.Location = new System.Drawing.Point(9, 130);
-            this.cmdPosInterpolate.Name = "cmdPosInterpolate";
-            this.cmdPosInterpolate.Size = new System.Drawing.Size(67, 23);
-            this.cmdPosInterpolate.TabIndex = 16;
-            this.cmdPosInterpolate.Text = "Interpolate";
-            this.cmdPosInterpolate.UseVisualStyleBackColor = true;
-            this.cmdPosInterpolate.Click += new System.EventHandler(this.cmdPosInterpolate_Click);
             // 
             // OldCameraBox
             // 
