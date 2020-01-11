@@ -1,4 +1,5 @@
 using Crash;
+using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -85,6 +86,15 @@ namespace CrashEdit
             {
                 Size = bitmap.Size,
                 Image = bitmap
+            };
+            picture.MouseClick += delegate (object sender,MouseEventArgs e)
+            {
+                if (e.Button == MouseButtons.Right)
+                {
+                    MemoryStream w = new MemoryStream();
+                    bitmap.Save(w,ImageFormat.Png);
+                    FileUtil.SaveFile(w.ToArray(),FileFilters.PNG);
+                }
             };
             Controls.Add(picture);
             AutoScroll = true;

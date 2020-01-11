@@ -17,5 +17,6 @@ namespace CrashEdit
         public const string DLS = "Downloadable Sounds Files (*.dls)|*.dls";
         public const string MIDI = "MIDI Files (*.mid)|*.mid";
         public const string SVTX = "Vertex Animation Files (*.svtx)|*.svtx";
+        public const string PNG = "Portable Network Graphics (*.png)|*.png";
     }
 }
