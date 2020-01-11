@@ -357,7 +357,7 @@ namespace CrashEdit
 
         private void Menu_Import_Chunk()
         {
-            byte[][] datas = FileUtil.OpenFiles(FileFilters.NSEntry, FileFilters.Any);
+            byte[][] datas = FileUtil.OpenFiles(FileFilters.Any);
             if (datas == null)
                 return;
             bool process = MessageBox.Show("Do you want to process the imported chunks?", "Import Chunk", MessageBoxButtons.YesNo) == DialogResult.Yes;
