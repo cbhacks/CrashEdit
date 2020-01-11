@@ -17,7 +17,7 @@ namespace CrashEdit
 
         static OldMainForm()
         {
-            imglist = new ImageList();
+            imglist = new ImageList { ColorDepth = ColorDepth.Depth32Bit };
             try
             {
                 imglist.Images.Add("default",OldResources.FileImage);
