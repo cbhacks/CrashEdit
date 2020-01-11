@@ -41,7 +41,7 @@ namespace CrashEdit
                     foreach (byte[] frame in imag.Items)
                     {
                         int palette = BitConv.FromInt32(frame,0);
-                        if (palette == -2) // null
+                        if (palette == -2 || palette == -3 || palette == -4) // null, font, icon
                         {
                             ++imagecount;
                         }
