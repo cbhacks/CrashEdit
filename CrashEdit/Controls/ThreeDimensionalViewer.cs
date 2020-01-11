@@ -438,7 +438,7 @@ namespace CrashEdit
         {
             return (long)tex.ClutY
                 | (long)tex.ClutX << 7
-                | (long)tex.Page / 4 << 11
+                | (long)tex.Page << 11
                 | (long)tex.Left << 14
                 | (long)tex.Top << 24
                 | (long)tex.Width << 31

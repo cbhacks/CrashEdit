@@ -179,12 +179,12 @@ namespace CrashEdit
                         else
                             UnbindTexture();
                         GL.Begin(PrimitiveType.Triangles);
-                        GL.TexCoord2(uvs[0], uvs[1]);
-                        RenderVertex(entry, entry.Vertices[t.VertexA]);
-                        GL.TexCoord2(uvs[2], uvs[3]);
-                        RenderVertex(entry, entry.Vertices[t.VertexB]);
-                        GL.TexCoord2(uvs[4], uvs[5]);
-                        RenderVertex(entry, entry.Vertices[t.VertexC]);
+                        GL.TexCoord2(uvs[0],uvs[1]);
+                        RenderVertex(entry,entry.Vertices[t.VertexA]);
+                        GL.TexCoord2(uvs[2],uvs[3]);
+                        RenderVertex(entry,entry.Vertices[t.VertexB]);
+                        GL.TexCoord2(uvs[4],uvs[5]);
+                        RenderVertex(entry,entry.Vertices[t.VertexC]);
                         GL.End();
                     }
                     foreach (var q in entry.Quads)
@@ -247,14 +247,14 @@ namespace CrashEdit
                         else
                             UnbindTexture();
                         GL.Begin(PrimitiveType.Quads);
-                        GL.TexCoord2(uvs[0], uvs[1]);
-                        RenderVertex(entry, entry.Vertices[q.VertexA]);
-                        GL.TexCoord2(uvs[2], uvs[3]);
-                        RenderVertex(entry, entry.Vertices[q.VertexB]);
-                        GL.TexCoord2(uvs[4], uvs[5]);
-                        RenderVertex(entry, entry.Vertices[q.VertexC]);
-                        GL.TexCoord2(uvs[6], uvs[7]);
-                        RenderVertex(entry, entry.Vertices[q.VertexD]);
+                        GL.TexCoord2(uvs[0],uvs[1]);
+                        RenderVertex(entry,entry.Vertices[q.VertexA]);
+                        GL.TexCoord2(uvs[2],uvs[3]);
+                        RenderVertex(entry,entry.Vertices[q.VertexB]);
+                        GL.TexCoord2(uvs[4],uvs[5]);
+                        RenderVertex(entry,entry.Vertices[q.VertexC]);
+                        GL.TexCoord2(uvs[6],uvs[7]);
+                        RenderVertex(entry,entry.Vertices[q.VertexD]);
                         GL.End();
                     }
                 }
@@ -287,12 +287,12 @@ namespace CrashEdit
                     BindTexture(i,tex);
                     SetBlendMode(entry.Textures[tex].BlendMode);
                     GL.Begin(PrimitiveType.Triangles);
-                    GL.TexCoord2(entry.Textures[tex].X2, entry.Textures[tex].Y2);
-                    RenderVertex(entry, entry.Vertices[tri.VertexA]);
-                    GL.TexCoord2(entry.Textures[tex].X1, entry.Textures[tex].Y1);
-                    RenderVertex(entry, entry.Vertices[tri.VertexB]);
-                    GL.TexCoord2(entry.Textures[tex].X3, entry.Textures[tex].Y3);
-                    RenderVertex(entry, entry.Vertices[tri.VertexC]);
+                    GL.TexCoord2(entry.Textures[tex].X2,entry.Textures[tex].Y2);
+                    RenderVertex(entry,entry.Vertices[tri.VertexA]);
+                    GL.TexCoord2(entry.Textures[tex].X1,entry.Textures[tex].Y1);
+                    RenderVertex(entry,entry.Vertices[tri.VertexB]);
+                    GL.TexCoord2(entry.Textures[tex].X3,entry.Textures[tex].Y3);
+                    RenderVertex(entry,entry.Vertices[tri.VertexC]);
                     GL.End();
                 }
                 foreach (var fake in fakes)
@@ -322,14 +322,14 @@ namespace CrashEdit
                     BindTexture(i,tex);
                     SetBlendMode(entry.Textures[tex].BlendMode);
                     GL.Begin(PrimitiveType.Quads);
-                    GL.TexCoord2(entry.Textures[tex].X2, entry.Textures[tex].Y2);
-                    RenderVertex(entry, entry.Vertices[quad.VertexA]);
-                    GL.TexCoord2(entry.Textures[tex].X1, entry.Textures[tex].Y1);
-                    RenderVertex(entry, entry.Vertices[quad.VertexB]);
-                    GL.TexCoord2(entry.Textures[tex].X3, entry.Textures[tex].Y3);
-                    RenderVertex(entry, entry.Vertices[quad.VertexC]);
-                    GL.TexCoord2(entry.Textures[tex].X4, entry.Textures[tex].Y4);
-                    RenderVertex(entry, entry.Vertices[quad.VertexD]);
+                    GL.TexCoord2(entry.Textures[tex].X2,entry.Textures[tex].Y2);
+                    RenderVertex(entry,entry.Vertices[quad.VertexA]);
+                    GL.TexCoord2(entry.Textures[tex].X1,entry.Textures[tex].Y1);
+                    RenderVertex(entry,entry.Vertices[quad.VertexB]);
+                    GL.TexCoord2(entry.Textures[tex].X3,entry.Textures[tex].Y3);
+                    RenderVertex(entry,entry.Vertices[quad.VertexC]);
+                    GL.TexCoord2(entry.Textures[tex].X4,entry.Textures[tex].Y4);
+                    RenderVertex(entry,entry.Vertices[quad.VertexD]);
                     GL.End();
                 }
                 foreach (var fake in fakes)
