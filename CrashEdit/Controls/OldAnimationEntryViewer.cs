@@ -17,6 +17,8 @@ namespace CrashEdit
         private bool isproto;
         private bool colored;
         private float r, g, b;
+        private bool texturesenabled = true;
+        private bool normalsenabled = false;
 
         private Dictionary<int,TextureChunk> texturechunks;
         private bool init;
@@ -138,6 +140,32 @@ namespace CrashEdit
                 RenderFrame(frames[frameid % frames.Count]);
         }
 
+        protected override bool IsInputKey(Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.N:
+                case Keys.T:
+                    return true;
+                default:
+                    return base.IsInputKey(keyData);
+            }
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            switch (e.KeyCode)
+            {
+                case Keys.N:
+                    normalsenabled = !normalsenabled;
+                    break;
+                case Keys.T:
+                    texturesenabled = !texturesenabled;
+                    break;
+            }
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -149,7 +177,10 @@ namespace CrashEdit
         {
             if (model != null)
             {
-                GL.Enable(EnableCap.Texture2D);
+                if (texturesenabled)
+                    GL.Enable(EnableCap.Texture2D);
+                else
+                    GL.Disable(EnableCap.Texture2D);
                 for (int i = 0; i < model.Polygons.Count; ++i)
                 {
                     OldModelPolygon polygon = model.Polygons[i];
@@ -191,16 +222,31 @@ namespace CrashEdit
                 }
                 GL.End();
             }
+            if (normalsenabled)
+            {
+                GL.Begin(PrimitiveType.Lines);
+                GL.Color3(Color.Cyan);
+                foreach (OldFrameVertex vertex in frame.Vertices)
+                {
+                    GL.Vertex3(vertex.X + frame.XOffset,vertex.Y + frame.YOffset,vertex.Z + frame.ZOffset);
+                    GL.Vertex3(vertex.X + (sbyte)vertex.NormalX / 127F * 4 + frame.XOffset,
+                        vertex.Y + (sbyte)vertex.NormalY / 127F * 4 + frame.YOffset,
+                        vertex.Z + (sbyte)vertex.NormalZ / 127F * 4 + frame.ZOffset);
+                }
+                GL.End();
+            }
         }
 
         private void RenderFrame(OldFrame frame)
         {
             if (model != null)
             {
-                GL.Enable(EnableCap.Texture2D);
-                for (int i = 0; i < model.Polygons.Count; ++i)
+                if (texturesenabled)
+                    GL.Enable(EnableCap.Texture2D);
+                else
+                    GL.Disable(EnableCap.Texture2D);
+                foreach (OldModelPolygon polygon in model.Polygons)
                 {
-                    OldModelPolygon polygon = model.Polygons[i];
                     OldModelStruct str = model.Structs[polygon.Unknown & 0x7FFF];
                     if (str is OldModelTexture tex)
                     {
@@ -248,6 +294,19 @@ namespace CrashEdit
                 foreach (OldFrameVertex vertex in frame.Vertices)
                 {
                     RenderVertex(frame, vertex);
+                }
+                GL.End();
+            }
+            if (!colored && normalsenabled)
+            {
+                GL.Begin(PrimitiveType.Lines);
+                GL.Color3(Color.Cyan);
+                foreach (OldFrameVertex vertex in frame.Vertices)
+                {
+                    GL.Vertex3(vertex.X + frame.XOffset,vertex.Y + frame.YOffset,vertex.Z + frame.ZOffset);
+                    GL.Vertex3(vertex.X + (sbyte)vertex.NormalX / 127F * 4 + frame.XOffset,
+                        vertex.Y + (sbyte)vertex.NormalY / 127F * 4 + frame.YOffset,
+                        vertex.Z + (sbyte)vertex.NormalZ / 127F * 4 + frame.ZOffset);
                 }
                 GL.End();
             }
