@@ -15,7 +15,7 @@ namespace CrashEdit
             InvalidateNodeImage();
         }
 
-        public OldEntityController(OldT17EntryController oldt17entrycontroller, OldEntity entity)
+        public OldEntityController(MapEntryController oldt17entrycontroller, OldEntity entity)
         {
             OldT17EntryController = oldt17entrycontroller;
             OldEntity = entity;
@@ -42,7 +42,7 @@ namespace CrashEdit
         }
 
         public OldZoneEntryController OldZoneEntryController { get; }
-        public OldT17EntryController OldT17EntryController { get; }
+        public MapEntryController OldT17EntryController { get; }
 
         public OldEntity OldEntity { get; }
 

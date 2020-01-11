@@ -1,15 +1,15 @@
 using Crash;
-using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Windows.Forms;
 
 namespace CrashEdit
 {
     public sealed class MapEntryViewer : UserControl
     {
-        public MapEntryViewer(OldT17EntryController ec)
+        public MapEntryViewer(MapEntryController ec)
         {
             Dock = DockStyle.Fill;
             List<byte[]> palettes = new List<byte[]>();

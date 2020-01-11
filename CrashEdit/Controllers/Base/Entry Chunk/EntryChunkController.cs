@@ -127,7 +127,7 @@ namespace CrashEdit
             }
             else if (entry is MapEntry)
             {
-                return new OldT17EntryController(this,(MapEntry)entry);
+                return new MapEntryController(this,(MapEntry)entry);
             }
             else if (entry is T17Entry)
             {

@@ -4,9 +4,9 @@ using System.Windows.Forms;
 
 namespace CrashEdit
 {
-    public sealed class OldT17EntryController : EntryController
+    public sealed class MapEntryController : EntryController
     {
-        public OldT17EntryController(EntryChunkController entrychunkcontroller,MapEntry mapentry) : base(entrychunkcontroller,mapentry)
+        public MapEntryController(EntryChunkController entrychunkcontroller,MapEntry mapentry) : base(entrychunkcontroller,mapentry)
         {
             MapEntry = mapentry;
             AddNode(new ItemController(null,mapentry.Header));
