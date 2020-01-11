@@ -1,12 +1,13 @@
 using Crash;
 using Crash.UI;
+using DiscUtils.Iso9660;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using System.Collections.Generic;
-using DiscUtils.Iso9660;
 
 namespace CrashEdit
 {
@@ -583,7 +584,11 @@ namespace CrashEdit
         
         public void CloseNSF()
         {
-            if (MessageBox.Show("Are you sure you want to close the NSF file?", "Close Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            string filename = tbcTabs.SelectedTab.Text;
+            NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
+            byte[] nsfdata = nsfbox.NSF.Save();
+            byte[] olddata = File.ReadAllBytes(filename);
+            if ((nsfdata.Length == olddata.Length && nsfdata.SequenceEqual(olddata)) || MessageBox.Show("There are unsaved changes. Are you sure you want to close the NSF file?", "Close Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 TabPage tab = tbcTabs.SelectedTab;
                 if (tab != null)
