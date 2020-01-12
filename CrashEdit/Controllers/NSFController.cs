@@ -371,6 +371,7 @@ namespace CrashEdit
         {
             List<ProtoZoneEntry> entries = new List<ProtoZoneEntry>();
             List<ProtoSceneryEntry> sceneryEntries = new List<ProtoSceneryEntry>();
+            List<TextureChunk[]> texturechunks = new List<TextureChunk[]>();
 
             foreach (Chunk chunk in NSF.Chunks)
             {
@@ -386,7 +387,14 @@ namespace CrashEdit
                             int linkedsceneryentrycount = BitConv.FromInt32(zoneentry.Header, 0);
                             for (int i = 0; i < linkedsceneryentrycount; i++)
                             {
-                                sceneryEntries.Add(NSF.FindEID<ProtoSceneryEntry>(BitConv.FromInt32(zoneentry.Header, 4 + i * 48)));
+                                var sceneryEntry = NSF.FindEID<ProtoSceneryEntry>(BitConv.FromInt32(zoneentry.Header, 4 + i * 48));
+                                TextureChunk[] _texturechunks = new TextureChunk[BitConv.FromInt32(sceneryEntry.Info, 0x18)];
+                                for (int t = 0; t < _texturechunks.Length; ++t)
+                                {
+                                    _texturechunks[t] = NSF.FindEID<TextureChunk>(BitConv.FromInt32(sceneryEntry.Info, 0x20 + t * 4));
+                                }
+                                sceneryEntries.Add(sceneryEntry);
+                                texturechunks.Add(_texturechunks);
                             }
 
                             entries.Add(entry as ProtoZoneEntry);
@@ -402,7 +410,7 @@ namespace CrashEdit
             else
             {
                 Form form = new Form { Text = "Loading...", Width = 480, Height = 360 };
-                ProtoZoneEntryViewer viewer = new ProtoZoneEntryViewer(entries, sceneryEntries.ToArray()) { Dock = DockStyle.Fill };
+                ProtoZoneEntryViewer viewer = new ProtoZoneEntryViewer(entries, sceneryEntries.ToArray(), texturechunks.ToArray()) { Dock = DockStyle.Fill };
                 form.Controls.Add(viewer);
                 form.Show();
                 form.Text = string.Empty;
