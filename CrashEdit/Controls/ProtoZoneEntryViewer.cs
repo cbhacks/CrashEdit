@@ -66,7 +66,7 @@ namespace CrashEdit
             allentries = false;
             flipoctree = false;
         }
-        public ProtoZoneEntryViewer(List<ProtoZoneEntry> entries, ProtoSceneryEntry[] linkedsceneryentries) : base(linkedsceneryentries)
+        public ProtoZoneEntryViewer(List<ProtoZoneEntry> entries, ProtoSceneryEntry[] linkedsceneryentries, TextureChunk[][] texturechunks) : base(linkedsceneryentries, texturechunks)
         {
             this.entry = entries[0];
             entries.Remove(this.entry);
@@ -82,6 +82,7 @@ namespace CrashEdit
             deletelists = false;
             polygonmode = false;
             allentries = false;
+            flipoctree = false;
         }
 
         protected override IEnumerable<IPosition> CorePositions
