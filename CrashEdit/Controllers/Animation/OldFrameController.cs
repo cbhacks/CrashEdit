@@ -1,4 +1,5 @@
 using Crash;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -32,7 +33,11 @@ namespace CrashEdit
 
             OldFrameBox framebox = new OldFrameBox(this);
             framebox.Dock = DockStyle.Fill;
-            OldAnimationEntryViewer viewerbox = new OldAnimationEntryViewer(OldFrame, modelentry) { Dock = DockStyle.Fill };
+            Dictionary<int,TextureChunk> textures = new Dictionary<int,TextureChunk>();
+            foreach (OldModelStruct str in modelentry.Structs)
+                if (str is OldModelTexture tex && !textures.ContainsKey(tex.EID))
+                    textures.Add(tex.EID,OldAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<TextureChunk>(tex.EID));
+            OldAnimationEntryViewer viewerbox = new OldAnimationEntryViewer(OldFrame,false,modelentry,textures) { Dock = DockStyle.Fill };
 
             TabPage edittab = new TabPage("Editor");
             edittab.Controls.Add(framebox);

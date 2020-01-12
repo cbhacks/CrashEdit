@@ -1,4 +1,5 @@
 using Crash;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -14,6 +15,7 @@ namespace CrashEdit
             {
                 AddNode(new NewEntityController(this,entity));
             }
+            AddMenu(Crash.UI.Properties.Resources.ZoneEntryController_AcAddEntity,Menu_AddEntity);
             InvalidateNode();
             InvalidateNodeImage();
         }
@@ -54,5 +56,40 @@ namespace CrashEdit
         }
 
         public NewZoneEntry NewZoneEntry { get; }
+
+        void Menu_AddEntity()
+        {
+            short id = 10;
+            while (true)
+            {
+                foreach (Chunk chunk in EntryChunkController.NSFController.NSF.Chunks)
+                {
+                    if (chunk is EntryChunk entrychunk)
+                    {
+                        foreach (Entry entry in entrychunk.Entries)
+                        {
+                            if (entry is ZoneEntry zone)
+                            {
+                                foreach (Entity otherentity in zone.Entities)
+                                {
+                                    if (otherentity.ID == id)
+                                    {
+                                        goto FOUND_ID;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            FOUND_ID:
+                ++id;
+                continue;
+            }
+            Entity newentity = Entity.Load(new Entity(new Dictionary<short,EntityProperty>()).Save());
+            NewZoneEntry.Entities.Add(newentity);
+            AddNode(new NewEntityController(this,newentity));
+            NewZoneEntry.EntityCount = NewZoneEntry.Entities.Count;
+        }
     }
 }

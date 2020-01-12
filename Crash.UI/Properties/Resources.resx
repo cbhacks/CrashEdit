@@ -186,11 +186,11 @@
   <data name="OldSoundChunkController_Text" xml:space="preserve">
     <value>Old Sound Chunk {0}</value>
   </data>
-  <data name="OldT15EntryController_Text" xml:space="preserve">
-    <value>Old T15 ({0})</value>
+  <data name="ImageEntryController_Text" xml:space="preserve">
+    <value>Image ({0})</value>
   </data>
-  <data name="OldT17EntryController_Text" xml:space="preserve">
-    <value>Old T17 ({0})</value>
+  <data name="MapEntryController_Text" xml:space="preserve">
+    <value>Map ({0})</value>
   </data>
   <data name="OldZoneEntryController_Text" xml:space="preserve">
     <value>Old Zone ({0})</value>
@@ -208,7 +208,7 @@
     <value>Sound ({0})</value>
   </data>
   <data name="SpeechChunkController_Text" xml:space="preserve">
-    <value>Speech Chunk</value>
+    <value>Speech Chunk {0}</value>
   </data>
   <data name="SpeechEntryController_Text" xml:space="preserve">
     <value>Speech ({0})</value>
@@ -225,8 +225,8 @@
   <data name="T1EntryController_Text" xml:space="preserve">
     <value>T1 ({0})</value>
   </data>
-  <data name="CutsceneAnimationEntryController_Text" xml:space="preserve">
-    <value>Cutscene Animation ({0})</value>
+  <data name="ColoredAnimationEntryController_Text" xml:space="preserve">
+    <value>Colored Animation ({0})</value>
   </data>
   <data name="T21EntryController_Text" xml:space="preserve">
     <value>T21 ({0})</value>
@@ -347,5 +347,8 @@
   </data>
   <data name="UnprocessedEntryController_AcProcess" xml:space="preserve">
     <value>Process Entry</value>
+  </data>
+  <data name="ZoneEntryController_AcAddEntity" xml:space="preserve">
+    <value>Add Entity</value>
   </data>
 </root>

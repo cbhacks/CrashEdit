@@ -193,6 +193,12 @@ namespace CrashEdit
         [Resource("VioletBuckle")]
         private static Image violetbuckle = null;
 
+        [Resource("RedBuckle")]
+        private static Image redbuckle = null;
+
+        [Resource("YellowBuckle")]
+        private static Image yellowbuckle = null;
+
         static OldResources()
         {
             ResourceManager manager = new ResourceManager("CrashEdit.OldResources",Assembly.GetExecutingAssembly());
@@ -282,6 +288,8 @@ namespace CrashEdit
         public static Image GreyBuckle => greybuckle;
         public static Image LimeBuckle => limebuckle;
         public static Image VioletBuckle => violetbuckle;
+        public static Image RedBuckle => redbuckle;
+        public static Image YellowBuckle => yellowbuckle;
 
         [AttributeUsage(AttributeTargets.Field)]
         private class ResourceAttribute : Attribute

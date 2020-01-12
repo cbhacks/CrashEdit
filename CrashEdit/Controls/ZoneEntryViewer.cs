@@ -140,6 +140,11 @@ namespace CrashEdit
                     if (frmoctree == null || frmoctree.IsDisposed)
                     {
                         frmoctree = new Form();
+                        frmoctree.FormClosed += (object sender, FormClosedEventArgs ee) =>
+                        {
+                            octreeselection = -1;
+                            deletelists = true;
+                        };
                         UpdateOctreeFormList();
                         frmoctree.Show();
                     }
@@ -584,19 +589,24 @@ namespace CrashEdit
             GL.Color3(Color.White);
             LoadBoxSideTexture(subtype);
             GL.PushMatrix();
+            GL.Color3(93/128F,93/128F,93/128F);
+            RenderBoxFace();
+            GL.Rotate(90,0,1,0);
+            GL.Color3(51/128F,51/128F,76/128F);
             RenderBoxFace();
             GL.Rotate(90,0,1,0);
             RenderBoxFace();
             GL.Rotate(90,0,1,0);
-            RenderBoxFace();
-            GL.Rotate(90,0,1,0);
+            GL.Color3(115/128F,115/128F,92/128F);
             RenderBoxFace();
             GL.PopMatrix();
             LoadBoxTopTexture(subtype);
             GL.PushMatrix();
             GL.Rotate(90,1,0,0);
+            GL.Color3(33/128F,33/128F,59/128F);
             RenderBoxFace();
             GL.Rotate(180,1,0,0);
+            GL.Color3(115/128F,115/128F,92/128F);
             RenderBoxFace();
             GL.PopMatrix();
             GL.Disable(EnableCap.Texture2D);

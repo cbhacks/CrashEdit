@@ -117,17 +117,17 @@ namespace CrashEdit
             {
                 return new WavebankEntryController(this,(WavebankEntry)entry);
             }
-            else if (entry is OldT15Entry)
+            else if (entry is ImageEntry)
             {
-                return new OldT15EntryController(this,(OldT15Entry)entry);
+                return new ImageEntryController(this,(ImageEntry)entry);
             }
             else if (entry is T15Entry)
             {
                 return new T15EntryController(this,(T15Entry)entry);
             }
-            else if (entry is OldT17Entry)
+            else if (entry is MapEntry)
             {
-                return new OldT17EntryController(this,(OldT17Entry)entry);
+                return new MapEntryController(this,(MapEntry)entry);
             }
             else if (entry is T17Entry)
             {
@@ -141,9 +141,9 @@ namespace CrashEdit
             {
                 return new DemoEntryController(this,(DemoEntry)entry);
             }
-            else if (entry is CutsceneAnimationEntry)
+            else if (entry is ColoredAnimationEntry)
             {
-                return new CutsceneAnimationEntryController(this,(CutsceneAnimationEntry)entry);
+                return new ColoredAnimationEntryController(this,(ColoredAnimationEntry)entry);
             }
             else if (entry is SpeechEntry)
             {

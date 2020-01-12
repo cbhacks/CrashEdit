@@ -22,6 +22,10 @@ namespace Crash
         public int VB2EID { get; }
         public int VB3EID { get; }
 
+        // FIXME? - resaving of unused instrument metadata causes mismatches in
+        // various game versions
+        public override bool IgnoreResaveErrors => true;
+
         public VH VH
         {
             get => vh;

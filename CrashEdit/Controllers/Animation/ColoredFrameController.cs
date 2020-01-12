@@ -1,11 +1,12 @@
 using Crash;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CrashEdit
 {
-    public sealed class CutsceneFrameController : Controller
+    public sealed class ColoredFrameController : Controller
     {
-        public CutsceneFrameController(CutsceneAnimationEntryController cutsceneanimationentrycontroller,OldFrame oldframe)
+        public ColoredFrameController(ColoredAnimationEntryController cutsceneanimationentrycontroller,OldFrame oldframe)
         {
             CutsceneAnimationEntryController = cutsceneanimationentrycontroller;
             OldFrame = oldframe;
@@ -28,10 +29,14 @@ namespace CrashEdit
         protected override Control CreateEditor()
         {
             OldModelEntry modelentry = CutsceneAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(OldFrame.ModelEID);
-            return new UndockableControl(new OldAnimationEntryViewer(OldFrame,modelentry));
+            Dictionary<int,TextureChunk> textures = new Dictionary<int,TextureChunk>();
+            foreach (OldModelStruct str in modelentry.Structs)
+                if (str is OldModelTexture tex && !textures.ContainsKey(tex.EID))
+                    textures.Add(tex.EID,CutsceneAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<TextureChunk>(tex.EID));
+            return new UndockableControl(new OldAnimationEntryViewer(OldFrame,true,modelentry,textures));
         }
 
-        public CutsceneAnimationEntryController CutsceneAnimationEntryController { get; }
+        public ColoredAnimationEntryController CutsceneAnimationEntryController { get; }
         public OldFrame OldFrame { get; }
 
         private void Menu_Export_OBJ()

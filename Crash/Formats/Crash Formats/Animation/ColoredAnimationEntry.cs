@@ -2,11 +2,11 @@ using System.Collections.Generic;
 
 namespace Crash
 {
-    public sealed class CutsceneAnimationEntry : Entry
+    public sealed class ColoredAnimationEntry : Entry
     {
         private List<OldFrame> frames;
 
-        public CutsceneAnimationEntry(IEnumerable<OldFrame> frames,int eid) : base(eid)
+        public ColoredAnimationEntry(IEnumerable<OldFrame> frames,int eid) : base(eid)
         {
             this.frames = new List<OldFrame>(frames);
         }

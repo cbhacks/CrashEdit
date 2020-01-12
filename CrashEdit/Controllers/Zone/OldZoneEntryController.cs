@@ -20,8 +20,8 @@ namespace CrashEdit
             {
                 AddNode(new OldEntityController(this,entity));
             }
-            AddMenu("Add Camera", Menu_AddCamera);
-            AddMenu("Add Entity", Menu_AddEntity);
+            AddMenu("Add Camera",Menu_AddCamera);
+            AddMenu("Add Entity",Menu_AddEntity);
             InvalidateNode();
             InvalidateNodeImage();
         }

@@ -80,17 +80,17 @@ namespace Crash.UI
             {
                 Subcontrollers.Insert(e.Index,new WavebankEntryController(this,(WavebankEntry)e.Item));
             }
-            else if (e.Item is OldT15Entry)
+            else if (e.Item is ImageEntry)
             {
-                Subcontrollers.Insert(e.Index,new OldT15EntryController(this,(OldT15Entry)e.Item));
+                Subcontrollers.Insert(e.Index,new ImageEntryController(this,(ImageEntry)e.Item));
             }
             else if (e.Item is T15Entry)
             {
                 Subcontrollers.Insert(e.Index,new T15EntryController(this,(T15Entry)e.Item));
             }
-            else if (e.Item is OldT17Entry)
+            else if (e.Item is MapEntry)
             {
-                Subcontrollers.Insert(e.Index,new OldT17EntryController(this,(OldT17Entry)e.Item));
+                Subcontrollers.Insert(e.Index,new MapEntryController(this,(MapEntry)e.Item));
             }
             else if (e.Item is T17Entry)
             {
@@ -104,9 +104,9 @@ namespace Crash.UI
             {
                 Subcontrollers.Insert(e.Index,new DemoEntryController(this,(DemoEntry)e.Item));
             }
-            else if (e.Item is CutsceneAnimationEntry)
+            else if (e.Item is ColoredAnimationEntry)
             {
-                Subcontrollers.Insert(e.Index,new CutsceneAnimationEntryController(this,(CutsceneAnimationEntry)e.Item));
+                Subcontrollers.Insert(e.Index,new CutsceneAnimationEntryController(this,(ColoredAnimationEntry)e.Item));
             }
             else if (e.Item is SpeechEntry)
             {

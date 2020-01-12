@@ -115,20 +115,20 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Colored Animation ({0}).
+        /// </summary>
+        public static string ColoredAnimationEntryController_Text {
+            get {
+                return ResourceManager.GetString("ColoredAnimationEntryController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No options available..
         /// </summary>
         public static string Controller_NoOptionsAvailable {
             get {
                 return ResourceManager.GetString("Controller_NoOptionsAvailable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cutscene Animation ({0}).
-        /// </summary>
-        public static string CutsceneAnimationEntryController_Text {
-            get {
-                return ResourceManager.GetString("CutsceneAnimationEntryController_Text", resourceCulture);
             }
         }
         
@@ -286,11 +286,29 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Image ({0}).
+        /// </summary>
+        public static string ImageEntryController_Text {
+            get {
+                return ResourceManager.GetString("ImageEntryController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Item.
         /// </summary>
         public static string ItemController_Text {
             get {
                 return ResourceManager.GetString("ItemController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Map ({0}).
+        /// </summary>
+        public static string MapEntryController_Text {
+            get {
+                return ResourceManager.GetString("MapEntryController_Text", resourceCulture);
             }
         }
         
@@ -493,24 +511,6 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Old T15 ({0}).
-        /// </summary>
-        public static string OldT15EntryController_Text {
-            get {
-                return ResourceManager.GetString("OldT15EntryController_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Old T17 ({0}).
-        /// </summary>
-        public static string OldT17EntryController_Text {
-            get {
-                return ResourceManager.GetString("OldT17EntryController_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Old Zone ({0}).
         /// </summary>
         public static string OldZoneEntryController_Text {
@@ -592,7 +592,7 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Speech Chunk.
+        ///   Looks up a localized string similar to Speech Chunk {0}.
         /// </summary>
         public static string SpeechChunkController_Text {
             get {
@@ -741,6 +741,15 @@ namespace Crash.UI.Properties {
         public static string WavebankEntryController_Text {
             get {
                 return ResourceManager.GetString("WavebankEntryController_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Entity.
+        /// </summary>
+        public static string ZoneEntryController_AcAddEntity {
+            get {
+                return ResourceManager.GetString("ZoneEntryController_AcAddEntity", resourceCulture);
             }
         }
         

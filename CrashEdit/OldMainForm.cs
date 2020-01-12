@@ -1,12 +1,13 @@
 using Crash;
 using Crash.UI;
+using DiscUtils.Iso9660;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using System.Collections.Generic;
-using DiscUtils.Iso9660;
 
 namespace CrashEdit
 {
@@ -16,7 +17,7 @@ namespace CrashEdit
 
         static OldMainForm()
         {
-            imglist = new ImageList();
+            imglist = new ImageList { ColorDepth = ColorDepth.Depth32Bit };
             try
             {
                 imglist.Images.Add("default",OldResources.FileImage);
@@ -583,7 +584,11 @@ namespace CrashEdit
         
         public void CloseNSF()
         {
-            if (MessageBox.Show("Are you sure you want to close the NSF file?", "Close Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            string filename = tbcTabs.SelectedTab.Text;
+            NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
+            byte[] nsfdata = nsfbox.NSF.Save();
+            byte[] olddata = File.ReadAllBytes(filename);
+            if ((nsfdata.Length == olddata.Length && nsfdata.SequenceEqual(olddata)) || MessageBox.Show("Are you sure you want to close the NSF file?", "Close Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 TabPage tab = tbcTabs.SelectedTab;
                 if (tab != null)

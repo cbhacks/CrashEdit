@@ -343,9 +343,9 @@ namespace CrashEdit
 
         private void UpdateDir()
         {
-            numXDir.Value = camera.XDir / 4096;
-            numYDir.Value = camera.YDir / 4096;
-            numZDir.Value = camera.ZDir / 4096;
+            numXDir.Value = (decimal)(camera.XDir / 4096.0);
+            numYDir.Value = (decimal)(camera.YDir / 4096.0);
+            numZDir.Value = (decimal)(camera.ZDir / 4096.0);
         }
 
         private void numXDir_ValueChanged(object sender,EventArgs e)
@@ -370,7 +370,7 @@ namespace CrashEdit
 
         private void cmdAvgDistCalc_Click(object sender, EventArgs e)
         {
-            if (camera.Positions.Count <= 1)
+            if (camera.Positions.Count <= 1 || (camera.XDir == 0 && camera.YDir == 0 && camera.ZDir == 0))
             {
                 numAvgDist.Value = 0;
                 return;
@@ -383,7 +383,7 @@ namespace CrashEdit
                 if (i == 0) continue;
                 var p1 = camera.Positions[i-1];
                 var p2 = camera.Positions[i];
-                dist += Math.Sqrt(Math.Pow(p2.X - p1.X, 2) + Math.Pow(p2.Y - p1.Y, 2) + Math.Pow(p2.Z - p1.Z, 2));
+                dist += Math.Sqrt(Math.Pow((p2.X - p1.X) * (camera.XDir / 4096.0), 2) + Math.Pow((p2.Y - p1.Y) * (camera.YDir / 4096.0), 2) + Math.Pow((p2.Z - p1.Z) * (camera.ZDir / 4096.0), 2));
             }
 
             numAvgDist.Value = (short)(dist / (camera.Positions.Count-1));

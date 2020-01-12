@@ -1,3 +1,5 @@
+using System;
+
 namespace Crash
 {
     [EntryType(7,GameVersion.Crash1BetaMAR08)]
@@ -7,6 +9,8 @@ namespace Crash
     {
         public override Entry Load(byte[][] items,int eid)
         {
+            if (items == null)
+                throw new ArgumentNullException("items");
             if (items.Length < 2)
             {
                 ErrorManager.SignalError("OldZoneEntry: Wrong number of items");

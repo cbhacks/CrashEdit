@@ -41,9 +41,9 @@ namespace Crash
             Unknown = unknown;
         }
 
-        public int VertexA { get; }
-        public int VertexB { get; }
-        public int VertexC { get; }
+        public int VertexA { get; set; }
+        public int VertexB { get; set; }
+        public int VertexC { get; set; }
         public int ModelStruct { get; }
         public byte Page { get; }
         public byte Anim0 { get; }

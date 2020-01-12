@@ -49,7 +49,7 @@ namespace CrashEdit
         private Form frmoctree;
         private bool flipoctree;
 
-        public ProtoZoneEntryViewer(ProtoZoneEntry entry,ProtoSceneryEntry[] linkedsceneryentries,ProtoZoneEntry[] linkedentries) : base(linkedsceneryentries)
+        public ProtoZoneEntryViewer(ProtoZoneEntry entry,ProtoSceneryEntry[] linkedsceneryentries,TextureChunk[][] texturechunks,ProtoZoneEntry[] linkedentries) : base(linkedsceneryentries,texturechunks)
         {
             this.entry = entry;
             this.linkedentries = linkedentries;
@@ -153,6 +153,11 @@ namespace CrashEdit
                     if (frmoctree == null || frmoctree.IsDisposed)
                     {
                         frmoctree = new Form();
+                        frmoctree.FormClosed += (object sender, FormClosedEventArgs ee) =>
+                        {
+                            octreeselection = -1;
+                            deletelists = true;
+                        };
                         UpdateOctreeFormList();
                         frmoctree.Show();
                     }
@@ -213,6 +218,8 @@ namespace CrashEdit
 
         protected override void RenderObjects()
         {
+            GL.Disable(EnableCap.Texture2D);
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 1.0f);
             RenderEntry(entry,ref octreedisplaylists[0]);
             GL.Enable(EnableCap.PolygonStipple);
             for (int i = 0; i < linkedentries.Length; i++)
@@ -225,7 +232,10 @@ namespace CrashEdit
                 RenderLinkedEntry(linkedentry,ref octreedisplaylists[i + 1]);
             }
             GL.Disable(EnableCap.PolygonStipple);
-            if (deletelists) deletelists = false;
+            if (deletelists)
+                deletelists = false;
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
+            GL.Enable(EnableCap.Texture2D);
             base.RenderObjects();
         }
 

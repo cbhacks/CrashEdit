@@ -5,7 +5,7 @@ namespace Crash
     [EntryType(20,GameVersion.Crash1BetaMAR08)]
     [EntryType(20,GameVersion.Crash1BetaMAY11)]
     [EntryType(20,GameVersion.Crash1)]
-    public sealed class CutsceneAnimationEntryLoader : EntryLoader
+    public sealed class ColoredAnimationEntryLoader : EntryLoader
     {
         public override Entry Load(byte[][] items,int eid)
         {
@@ -16,7 +16,7 @@ namespace Crash
             {
                 frames[i] = OldFrame.Load(items[i]);
             }
-            return new CutsceneAnimationEntry(frames,eid);
+            return new ColoredAnimationEntry(frames,eid);
         }
     }
 }

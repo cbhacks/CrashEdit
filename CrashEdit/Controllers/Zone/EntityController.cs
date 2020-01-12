@@ -116,6 +116,16 @@ namespace CrashEdit
 
         private void Menu_Delete()
         {
+            int index = -1;
+            if (ZoneEntry.Entities.IndexOf(Entity) < ZoneEntry.CameraCount)
+            {
+                --ZoneEntry.CameraCount;
+            }
+            else
+            {
+                index = ZoneEntry.Entities.IndexOf(Entity) - ZoneEntry.CameraCount;
+                --ZoneEntry.EntityCount;
+            }
             if (Entity.ID.HasValue)
             {
                 foreach (Chunk chunk in ZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
@@ -126,6 +136,15 @@ namespace CrashEdit
                         {
                             if (entry is ZoneEntry zone)
                             {
+                                int zoneindex = -1;
+                                for (int z = 0, s = BitConv.FromInt32(zone.Header,0x190); z < s; ++z)
+                                {
+                                    if (BitConv.FromInt32(zone.Header,0x194+z*4) == ZoneEntry.EID)
+                                    {
+                                        zoneindex = z;
+                                        break;
+                                    }
+                                }
                                 foreach (Entity otherentity in zone.Entities)
                                 {
                                     if (otherentity.DrawListA != null)
@@ -136,6 +155,12 @@ namespace CrashEdit
                                             {
                                                 if ((row.Values[i] & 0xFFFF00) >> 8 == Entity.ID.Value)
                                                     row.Values.RemoveAt(i);
+                                                else if ((row.Values[i] & 0xFF) == zoneindex && ((row.Values[i] & 0xFF000000) >> 24) > index)
+                                                {
+                                                    int newindex = (int)(row.Values[i] & 0xFF000000) >> 24;
+                                                    row.Values[i] &= 0xFFFFFF;
+                                                    row.Values[i] |= --newindex << 24;
+                                                }
                                             }
                                         }
                                     }
@@ -147,6 +172,12 @@ namespace CrashEdit
                                             {
                                                 if ((row.Values[i] & 0xFFFF00) >> 8 == Entity.ID.Value)
                                                     row.Values.RemoveAt(i);
+                                                else if ((row.Values[i] & 0xFF) == zoneindex && ((row.Values[i] & 0xFF000000) >> 24) > index)
+                                                {
+                                                    int newindex = (int)(row.Values[i] & 0xFF000000) >> 24;
+                                                    row.Values[i] &= 0xFFFFFF;
+                                                    row.Values[i] |= --newindex << 24;
+                                                }
                                             }
                                         }
                                     }
@@ -156,10 +187,6 @@ namespace CrashEdit
                     }
                 }
             }
-            if (ZoneEntry.Entities.IndexOf(Entity) < ZoneEntry.CameraCount)
-                --ZoneEntry.CameraCount;
-            else
-                --ZoneEntry.EntityCount;
             ZoneEntry.Entities.Remove(Entity);
             Dispose();
         }

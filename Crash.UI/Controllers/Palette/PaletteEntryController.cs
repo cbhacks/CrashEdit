@@ -1,6 +1,6 @@
 namespace Crash.UI
 {
-    public sealed class PaletteEntryController : MysteryMultiItemEntryController
+    public sealed class PaletteEntryController : EntryController
     {
         public PaletteEntryController(EntryChunkController up,PaletteEntry entry) : base(up,entry)
         {

@@ -81,7 +81,7 @@ namespace CrashEdit
                 init = true;
                 for (int i = 0; i < entries.Count; ++i)
                 {
-                    ConvertTexturesToGL(i, texturechunks[i], entries[i].Polygons, entries[i].Structs, entries[i].Info, 0x20);
+                    ConvertTexturesToGL(i,texturechunks[i],entries[i].Polygons,entries[i].Structs);
                 }
             }
 
@@ -90,7 +90,6 @@ namespace CrashEdit
                 GL.Disable(EnableCap.Texture2D);
             else
                 GL.Enable(EnableCap.Texture2D);
-            float[] uvs = new float[8];
             if (displaylist == -1)
             {
                 displaylist = GL.GenLists(1);
@@ -105,26 +104,27 @@ namespace CrashEdit
                             OldSceneryPolygon polygon = entry.Polygons[p];
                             if (polygon.VertexA >= entry.Vertices.Count || polygon.VertexB >= entry.Vertices.Count || polygon.VertexC >= entry.Vertices.Count) continue;
                             OldModelStruct modelstruct = entry.Structs[polygon.ModelStruct];
-                            if (modelstruct is OldModelTexture tex)
+                            if (modelstruct is OldSceneryTexture tex)
                             { 
-                                BindTexture(e, p);
-                                uvs[0] = tex.X3;
-                                uvs[1] = tex.Y3;
-                                uvs[2] = tex.X2;
-                                uvs[3] = tex.Y2;
-                                uvs[4] = tex.X1;
-                                uvs[5] = tex.Y1;
+                                BindTexture(e,p);
+                                GL.Begin(PrimitiveType.Triangles);
+                                GL.TexCoord2(tex.X3,tex.Y3);
+                                RenderVertex(entry,entry.Vertices[polygon.VertexA]);
+                                GL.TexCoord2(tex.X2,tex.Y2);
+                                RenderVertex(entry,entry.Vertices[polygon.VertexB]);
+                                GL.TexCoord2(tex.X1,tex.Y1);
+                                RenderVertex(entry,entry.Vertices[polygon.VertexC]);
+                                GL.End();
                             }
                             else
+                            {
                                 UnbindTexture();
-                            GL.Begin(PrimitiveType.Triangles);
-                            GL.TexCoord2(uvs[0], uvs[1]);
-                            RenderVertex(entry,entry.Vertices[polygon.VertexA]);
-                            GL.TexCoord2(uvs[2], uvs[3]);
-                            RenderVertex(entry,entry.Vertices[polygon.VertexB]);
-                            GL.TexCoord2(uvs[4], uvs[5]);
-                            RenderVertex(entry,entry.Vertices[polygon.VertexC]);
-                            GL.End();
+                                GL.Begin(PrimitiveType.Triangles);
+                                RenderVertex(entry,entry.Vertices[polygon.VertexA]);
+                                RenderVertex(entry,entry.Vertices[polygon.VertexB]);
+                                RenderVertex(entry,entry.Vertices[polygon.VertexC]);
+                                GL.End();
+                            }
                         }
                     }
                 }
