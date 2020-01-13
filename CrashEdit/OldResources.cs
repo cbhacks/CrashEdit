@@ -14,6 +14,9 @@ namespace CrashEdit
         [Resource("NSFIcon")]
         private static Icon nsficon = null;
 
+        [Resource("CBHacksIcon")]
+        private static Icon cbhacksicon = null;
+
         [Resource("ArrowImage")]
         private static Image arrowimage = null;
 
@@ -236,6 +239,7 @@ namespace CrashEdit
 
         public static Icon NSDIcon => nsdicon;
         public static Icon NSFIcon => nsficon;
+        public static Icon CBHacksIcon => cbhacksicon;
         public static Image ArrowImage => arrowimage;
         public static Image BinocularsImage => binocularsimage;
         public static Image BinocularsNextImage => binocularsnextimage;

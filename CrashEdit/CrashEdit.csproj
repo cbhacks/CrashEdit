@@ -42,8 +42,7 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Resources\Icons\cbhacks-logo-new.ico</ApplicationIcon>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -394,6 +393,7 @@
     <Content Include="Resources\Computer_File_063.gif" />
     <Content Include="Resources\Computer_File_064.gif" />
     <Content Include="Resources\Computer_File_068.gif" />
+    <Content Include="Resources\Icons\cbhacks-logo-new.ico" />
     <Content Include="Resources\Icons\NSD.ico" />
     <Content Include="Resources\Icons\NSF.ico" />
     <Content Include="Resources\Images\Arrow.gif" />

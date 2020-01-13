@@ -187,6 +187,7 @@ namespace CrashEdit
 
             dlgGameVersion = new GameVersionForm();
 
+            Icon = OldResources.CBHacksIcon;
             Width = Properties.Settings.Default.DefaultFormW;
             Height = Properties.Settings.Default.DefaultFormH;
             Text = $"CrashEdit v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
