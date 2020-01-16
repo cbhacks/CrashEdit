@@ -12,6 +12,6 @@
 
         public override string Name => "SKRT";
         public override string Format => DefaultFormatLR;
-        public override string Comment => $"seekrot({GetArg('L')}, " + (Args['R'].Value == DoubleStackRef ? "[top], [top-1], 0)" : $"{GetArg('R')}, 0x100, 0)");
+        public override string Comment => $"seekrot({GetArg('L')}, " + (Args['R'].Value == DoubleStackRef ? "[top-1], [top])" : $"{GetArg('R')}, 0x100)");
     }
 }
