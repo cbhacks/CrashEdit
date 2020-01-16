@@ -1,18 +1,14 @@
 using Crash;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CrashEdit
 {
     public sealed class GOOLBox : UserControl
     {
-        private GOOLEntry goolentry;
-
         private ListBox lstCode;
 
         public GOOLBox(GOOLEntry goolentry)
         {
-            this.goolentry = goolentry;
             lstCode = new ListBox
             {
                 Dock = DockStyle.Fill
@@ -80,6 +76,8 @@ namespace CrashEdit
                     for (int j = 0; j < goolentry.StateDescriptors.Count; ++j)
                     {
                         GOOLStateDescriptor desc = goolentry.StateDescriptors[j];
+                        if (goolentry.Data[desc.GOOLID] != goolentry.EID)
+                            continue;
                         int cpc = desc.CPC & 0x3FFF;
                         int tpc = desc.TPC & 0x3FFF;
                         int epc = desc.EPC & 0x3FFF;
