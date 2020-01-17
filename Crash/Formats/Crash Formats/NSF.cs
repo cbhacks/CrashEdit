@@ -280,7 +280,7 @@ namespace Crash
             return data;
         }
 
-        public ValueTuple<int[], IList<NSDLink>> MakeNSDIndex()
+        public Tuple<int[],IList<NSDLink>> MakeNSDIndex()
         {
             foreach (Chunk chunk in Chunks)
             {
@@ -329,7 +329,7 @@ namespace Crash
             }
             while (curkey < 256)
                 hashkeymap[curkey++] = index.Count - 1;
-            return (hashkeymap, index);
+            return new Tuple<int[],IList<NSDLink>>(hashkeymap,index);
         }
     }
 }
