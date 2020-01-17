@@ -1,6 +1,5 @@
-﻿using System.Resources;
-using System.Reflection;
-using System.Runtime.CompilerServices;
+﻿using System.Reflection;
+using System.Resources;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
@@ -30,7 +29,7 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("0.2.70.0")]
-[assembly: AssemblyFileVersion("0.2.70.0")]
+[assembly: AssemblyVersion("0.2.76.0")]
+[assembly: AssemblyFileVersion("0.2.76.0")]
 [assembly: NeutralResourcesLanguage("en")]
 
