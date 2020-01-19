@@ -219,7 +219,6 @@ namespace CrashEdit
                                 {
                                     ++tex;
                                     anim = model.AnimatedTextures[tex];
-                                    if (!anim.IsLOD) System.Diagnostics.Debugger.Break();
                                     tex = anim.Offset - 1 + anim.LOD0;
                                 }
                             }
@@ -256,7 +255,7 @@ namespace CrashEdit
                     GL.Begin(PrimitiveType.Triangles);
                     if (normals_enabled)
                         GL.Color3(Color.White);
-                    if ((tri.Subtype == 0 || tri.Subtype == 1 || tri.Subtype == 2) ^ tri.Type == 2)
+                    if ((tri.Subtype == 0 || tri.Subtype == 2) || ((tri.Subtype == 1) ^ tri.Type == 2))
                     {
                         for (int j = 0; j < 3; ++j)
                         {
@@ -272,8 +271,8 @@ namespace CrashEdit
                             RenderVertex(f1,f2,tri.Vertex[j] + f1.SpecialVertexCount,f2 != null ? tri.Vertex[j] + f2.SpecialVertexCount : 0);
                         }
                     }
-                    if ((tri.Subtype == 0 || tri.Subtype == 2 || tri.Subtype == 3) ^ tri.Type == 2)
-                    { 
+                    if ((tri.Subtype == 0 || tri.Subtype == 2) || ((tri.Subtype == 3) ^ tri.Type == 2))
+                    {
                         for (int j = 2; j >= 0; --j)
                         {
                             SceneryColor c = model.Colors[tri.Color[j]];
