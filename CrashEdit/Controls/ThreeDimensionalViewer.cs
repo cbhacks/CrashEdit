@@ -11,6 +11,8 @@ namespace CrashEdit
 {
     public abstract class ThreeDimensionalViewer : GLControl
     {
+        protected static readonly CullFaceMode[] cullFaceModes = { CullFaceMode.Back, CullFaceMode.Front, CullFaceMode.FrontAndBack };
+
         private static Bitmap lastimage = null;
         private static int defaulttexture = 0;
 

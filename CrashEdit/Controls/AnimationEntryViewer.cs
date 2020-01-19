@@ -24,6 +24,7 @@ namespace CrashEdit
         private bool collision_enabled = false;
         private bool textures_enabled = true;
         private bool normals_enabled = false;
+        private int cullmode = 0;
 
         public AnimationEntryViewer(Frame frame,ModelEntry model,TextureChunk[] texturechunks)
         {
@@ -137,6 +138,7 @@ namespace CrashEdit
                 case Keys.C:
                 case Keys.N:
                 case Keys.T:
+                case Keys.U:
                     return true;
                 default:
                     return base.IsInputKey(keyData);
@@ -156,6 +158,9 @@ namespace CrashEdit
                     break;
                 case Keys.T:
                     textures_enabled = !textures_enabled;
+                    break;
+                case Keys.U:
+                    cullmode = ++cullmode % 3;
                     break;
             }
         }
@@ -178,7 +183,11 @@ namespace CrashEdit
             //RenderPoints(f2);
             if (model != null)
             {
-                GL.Enable(EnableCap.CullFace);
+                if (cullmode < 2)
+                {
+                    GL.Enable(EnableCap.CullFace);
+                    GL.CullFace(cullFaceModes[cullmode]);
+                }
                 if (textures_enabled)
                     GL.Enable(EnableCap.Texture2D);
                 else
