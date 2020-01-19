@@ -178,172 +178,125 @@ namespace CrashEdit
             //RenderPoints(f2);
             if (model != null)
             {
+                if (textures_enabled)
+                    GL.Enable(EnableCap.Texture2D);
+                else
+                    GL.Disable(EnableCap.Texture2D);
                 GL.PushMatrix();
                 GL.Scale(BitConv.FromInt32(model.Info,0), BitConv.FromInt32(model.Info,4), BitConv.FromInt32(model.Info,8));
-                if (textures_enabled)
+                float[] uvs = new float[6];
+                for (int i = 0; i < model.Triangles.Count; ++i)
                 {
-                    float[] uvs = new float[6];
-                    for (int i = 0; i < model.Triangles.Count; ++i)
+                    var tri = model.Triangles[i];
+                    if (tri.Tex != 0 || tri.Animated)
                     {
-                        var tri = model.Triangles[i];
-                        if (tri.Tex != 0 || tri.Animated)
+                        bool untex = false;
+                        int tex = tri.Tex - 1;
+                        if (tri.Animated)
                         {
-                            bool untex = false;
-                            int tex = tri.Tex - 1;
-                            if (tri.Animated)
+                            ++tex;
+                            var anim = model.AnimatedTextures[tex];
+                            if (anim.Offset == 0)
+                                untex = true;
+                            else if (anim.IsLOD)
                             {
-                                ++tex;
-                                var anim = model.AnimatedTextures[tex];
-                                if (anim.Offset == 0)
-                                    untex = true;
-                                else if (anim.IsLOD)
-                                {
-                                    tex = anim.Offset - 1 + anim.LOD0; // we render the closest LOD for now
-                                }
-                                else
-                                {
-                                    tex = anim.Offset - 1 + (int)((textureframe / (1 + anim.Latency) + anim.Delay) & anim.Mask);
-                                    if (anim.Leap)
-                                    {
-                                        ++tex;
-                                        anim = model.AnimatedTextures[tex];
-                                        if (!anim.IsLOD) System.Diagnostics.Debugger.Break();
-                                        tex = anim.Offset - 1 + anim.LOD0;
-                                    }
-                                }
-                            }
-                            if (untex)
-                            {
-                                UnbindTexture();
+                                tex = anim.Offset - 1 + anim.LOD0; // we render the closest LOD for now
                             }
                             else
                             {
-                                BindTexture(0,tex);
-                                switch (tri.Type)
+                                tex = anim.Offset - 1 + (int)((textureframe / (1 + anim.Latency) + anim.Delay) & anim.Mask);
+                                if (anim.Leap)
                                 {
-                                    case 0:
-                                    case 1:
-                                        uvs[0] = model.Textures[tex].X3;
-                                        uvs[1] = model.Textures[tex].Y3;
-                                        uvs[4] = model.Textures[tex].X1;
-                                        uvs[5] = model.Textures[tex].Y1;
-                                        break;
-                                    case 2:
-                                        uvs[0] = model.Textures[tex].X1;
-                                        uvs[1] = model.Textures[tex].Y1;
-                                        uvs[4] = model.Textures[tex].X3;
-                                        uvs[5] = model.Textures[tex].Y3;
-                                        break;
+                                    ++tex;
+                                    anim = model.AnimatedTextures[tex];
+                                    if (!anim.IsLOD) System.Diagnostics.Debugger.Break();
+                                    tex = anim.Offset - 1 + anim.LOD0;
                                 }
-                                uvs[2] = model.Textures[tex].X2;
-                                uvs[3] = model.Textures[tex].Y2;
                             }
+                        }
+                        if (untex)
+                        {
+                            UnbindTexture();
                         }
                         else
-                            UnbindTexture();
-                        GL.Begin(PrimitiveType.Triangles);
-                        if (normals_enabled)
-                            GL.Color3(Color.White);
-                        for (int j = 0; j < 3; ++j)
                         {
-                            SceneryColor c = model.Colors[tri.Color[j]];
-                            if (!normals_enabled)
-                                GL.Color3(c.Red,c.Green,c.Blue);
-                            else
-                                GL.Normal3((sbyte)c.Red / 127.0,(sbyte)c.Green / 127.0,(sbyte)c.Blue / 127.0);
-                            GL.TexCoord2(uvs[2 * j + 0], uvs[2 * j + 1]);
-                            RenderVertex(f1,f2,tri.Vertex[j] + f1.SpecialVertexCount,f2 != null ? tri.Vertex[j] + f2.SpecialVertexCount : 0);
-                        }
-                        GL.End();
-                        if (normals_enabled)
-                        {
-                            GL.Disable(EnableCap.Lighting);
-                            GL.Disable(EnableCap.Texture2D);
-                            GL.Color3(Color.Cyan);
-                            GL.Begin(PrimitiveType.Lines);
-                            for (int j = 0; j < 3; ++j)
+                            BindTexture(0,tex);
+                            switch (tri.Type)
                             {
-                                Vector3 v;
-                                if (f2 == null)
-                                {
-                                    FrameVertex vertex = f1.Vertices[tri.Vertex[j] + f1.SpecialVertexCount];
-                                    v = new Vector3(vertex.X + f1.XOffset / 4, vertex.Z + f1.YOffset / 4, vertex.Y + f1.ZOffset / 4);
-                                }
-                                else
-                                {
-                                    FrameVertex v1 = f1.Vertices[tri.Vertex[j] + f1.SpecialVertexCount];
-                                    FrameVertex v2 = f2.Vertices[tri.Vertex[j] + f2.SpecialVertexCount];
-                                    int x1 = v1.X + f1.XOffset / 4;
-                                    int x2 = v2.X + f2.XOffset / 4;
-                                    int y1 = v1.Z + f1.YOffset / 4;
-                                    int y2 = v2.Z + f2.YOffset / 4;
-                                    int z1 = v1.Y + f1.ZOffset / 4;
-                                    int z2 = v2.Y + f2.ZOffset / 4;
-                                    v = new Vector3(x1 + (x2 - x1) / (float)interp * interi, y1 + (y2 - y1) / (float)interp * interi, z1 + (z2 - z1) / (float)interp * interi);
-                                }
-                                SceneryColor c = model.Colors[tri.Color[j]];
-                                GL.Vertex3(v);
-                                GL.Vertex3(v + new Vector3((sbyte)c.Red,(sbyte)c.Green,(sbyte)c.Blue) / 127 * 64);
+                                case 0:
+                                case 1:
+                                    uvs[0] = model.Textures[tex].X3;
+                                    uvs[1] = model.Textures[tex].Y3;
+                                    uvs[4] = model.Textures[tex].X1;
+                                    uvs[5] = model.Textures[tex].Y1;
+                                    break;
+                                case 2:
+                                    uvs[0] = model.Textures[tex].X1;
+                                    uvs[1] = model.Textures[tex].Y1;
+                                    uvs[4] = model.Textures[tex].X3;
+                                    uvs[5] = model.Textures[tex].Y3;
+                                    break;
                             }
-                            GL.End();
-                            GL.Enable(EnableCap.Texture2D);
-                            GL.Enable(EnableCap.Lighting);
+                            uvs[2] = model.Textures[tex].X2;
+                            uvs[3] = model.Textures[tex].Y2;
                         }
                     }
-                }
-                else
-                {
-                    for (int i = 0; i < model.Triangles.Count; ++i)
+                    else
+                        UnbindTexture();
+                    GL.Begin(PrimitiveType.Triangles);
+                    if (normals_enabled)
+                        GL.Color3(Color.White);
+                    for (int j = 0; j < 3; ++j)
                     {
-                        GL.Begin(PrimitiveType.Triangles);
-                        var tri = model.Triangles[i];
-                        if (normals_enabled)
-                            GL.Color3(Color.White);
+                        SceneryColor c = model.Colors[tri.Color[j]];
+                        if (!normals_enabled)
+                            GL.Color3(c.Red,c.Green,c.Blue);
+                        else
+                            GL.Normal3((sbyte)c.Red / 127.0,(sbyte)c.Green / 127.0,(sbyte)c.Blue / 127.0);
+                        GL.TexCoord2(uvs[2 * j + 0], uvs[2 * j + 1]);
+                        RenderVertex(f1,f2,tri.Vertex[j] + f1.SpecialVertexCount,f2 != null ? tri.Vertex[j] + f2.SpecialVertexCount : 0);
+                    }
+                    GL.End();
+                    if (normals_enabled)
+                    {
+                        GL.Disable(EnableCap.Lighting);
+                        GL.Disable(EnableCap.Texture2D);
+                        GL.Color3(Color.Cyan);
+                        GL.Begin(PrimitiveType.Lines);
                         for (int j = 0; j < 3; ++j)
                         {
-                            SceneryColor c = model.Colors[tri.Color[j]];
-                            if (!normals_enabled)
-                                GL.Color3(c.Red,c.Green,c.Blue);
+                            Vector3 v;
+                            if (f2 == null)
+                            {
+                                FrameVertex vertex = f1.Vertices[tri.Vertex[j] + f1.SpecialVertexCount];
+                                v = new Vector3(vertex.X + f1.XOffset / 4, vertex.Z + f1.YOffset / 4, vertex.Y + f1.ZOffset / 4);
+                            }
                             else
-                                GL.Normal3((sbyte)c.Red / 127.0,(sbyte)c.Green / 127.0,(sbyte)c.Blue / 127.0);
-                            RenderVertex(f1,f2,tri.Vertex[j] + f1.SpecialVertexCount,f2 != null ? tri.Vertex[j] + f2.SpecialVertexCount : 0);
+                            {
+                                FrameVertex v1 = f1.Vertices[tri.Vertex[j] + f1.SpecialVertexCount];
+                                FrameVertex v2 = f2.Vertices[tri.Vertex[j] + f2.SpecialVertexCount];
+                                int x1 = v1.X + f1.XOffset / 4;
+                                int x2 = v2.X + f2.XOffset / 4;
+                                int y1 = v1.Z + f1.YOffset / 4;
+                                int y2 = v2.Z + f2.YOffset / 4;
+                                int z1 = v1.Y + f1.ZOffset / 4;
+                                int z2 = v2.Y + f2.ZOffset / 4;
+                                v = new Vector3(x1 + (x2 - x1) / (float)interp * interi, y1 + (y2 - y1) / (float)interp * interi, z1 + (z2 - z1) / (float)interp * interi);
+                            }
+                            SceneryColor c = model.Colors[tri.Color[j]];
+                            GL.Vertex3(v);
+                            GL.Vertex3(v + new Vector3((sbyte)c.Red,(sbyte)c.Green,(sbyte)c.Blue) / 127 * 64);
                         }
                         GL.End();
-                        if (normals_enabled)
-                        {
-                            GL.Disable(EnableCap.Lighting);
-                            GL.Color3(Color.Cyan);
-                            GL.Begin(PrimitiveType.Lines);
-                            for (int j = 0; j < 3; ++j)
-                            {
-                                Vector3 v;
-                                if (f2 == null)
-                                {
-                                    FrameVertex vertex = f1.Vertices[tri.Vertex[j] + f1.SpecialVertexCount];
-                                    v = new Vector3(vertex.X + f1.XOffset / 4, vertex.Z + f1.YOffset / 4, vertex.Y + f1.ZOffset / 4);
-                                }
-                                else
-                                {
-                                    FrameVertex v1 = f1.Vertices[tri.Vertex[j] + f1.SpecialVertexCount];
-                                    FrameVertex v2 = f2.Vertices[tri.Vertex[j] + f2.SpecialVertexCount];
-                                    int x1 = v1.X + f1.XOffset / 4;
-                                    int x2 = v2.X + f2.XOffset / 4;
-                                    int y1 = v1.Z + f1.YOffset / 4;
-                                    int y2 = v2.Z + f2.YOffset / 4;
-                                    int z1 = v1.Y + f1.ZOffset / 4;
-                                    int z2 = v2.Y + f2.ZOffset / 4;
-                                    v = new Vector3(x1 + (x2 - x1) / (float)interp * interi, y1 + (y2 - y1) / (float)interp * interi, z1 + (z2 - z1) / (float)interp * interi);
-                                }
-                                SceneryColor c = model.Colors[tri.Color[j]];
-                                GL.Vertex3(v);
-                                GL.Vertex3(v + new Vector3((sbyte)c.Red,(sbyte)c.Green,(sbyte)c.Blue) / 127 * 64);
-                            }
-                            GL.End();
-                            GL.Enable(EnableCap.Lighting);
-                        }
+                        GL.Enable(EnableCap.Texture2D);
+                        GL.Enable(EnableCap.Lighting);
                     }
                 }
                 GL.PopMatrix();
+                if (textures_enabled)
+                    GL.Disable(EnableCap.Texture2D);
+                else
+                    GL.Enable(EnableCap.Texture2D);
             }
             else
             {
