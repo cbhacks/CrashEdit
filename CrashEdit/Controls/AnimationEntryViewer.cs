@@ -178,6 +178,7 @@ namespace CrashEdit
             //RenderPoints(f2);
             if (model != null)
             {
+                GL.Enable(EnableCap.CullFace);
                 if (textures_enabled)
                     GL.Enable(EnableCap.Texture2D);
                 else
@@ -246,21 +247,44 @@ namespace CrashEdit
                     GL.Begin(PrimitiveType.Triangles);
                     if (normals_enabled)
                         GL.Color3(Color.White);
-                    for (int j = 0; j < 3; ++j)
+                    if ((tri.Subtype == 0 || tri.Subtype == 1 || tri.Subtype == 2) ^ tri.Type == 2)
                     {
-                        SceneryColor c = model.Colors[tri.Color[j]];
-                        if (!normals_enabled)
-                            GL.Color3(c.Red,c.Green,c.Blue);
-                        else
-                            GL.Normal3((sbyte)c.Red / 127.0,(sbyte)c.Green / 127.0,(sbyte)c.Blue / 127.0);
-                        GL.TexCoord2(uvs[2 * j + 0], uvs[2 * j + 1]);
-                        RenderVertex(f1,f2,tri.Vertex[j] + f1.SpecialVertexCount,f2 != null ? tri.Vertex[j] + f2.SpecialVertexCount : 0);
+                        for (int j = 0; j < 3; ++j)
+                        {
+                            SceneryColor c = model.Colors[tri.Color[j]];
+                            if (!normals_enabled)
+                                GL.Color3(c.Red,c.Green,c.Blue);
+                            else
+                            {
+                                var normal = new Vector3d((sbyte)c.Red / 127.0,(sbyte)c.Green / 127.0,(sbyte)c.Blue / 127.0);
+                                GL.Normal3(normal);
+                            }
+                            GL.TexCoord2(uvs[2 * j + 0], uvs[2 * j + 1]);
+                            RenderVertex(f1,f2,tri.Vertex[j] + f1.SpecialVertexCount,f2 != null ? tri.Vertex[j] + f2.SpecialVertexCount : 0);
+                        }
+                    }
+                    if ((tri.Subtype == 0 || tri.Subtype == 2 || tri.Subtype == 3) ^ tri.Type == 2)
+                    { 
+                        for (int j = 2; j >= 0; --j)
+                        {
+                            SceneryColor c = model.Colors[tri.Color[j]];
+                            if (!normals_enabled)
+                                GL.Color3(c.Red,c.Green,c.Blue);
+                            else
+                            {
+                                var normal = new Vector3d((sbyte)c.Red / 127.0,(sbyte)c.Green / 127.0,(sbyte)c.Blue / 127.0);
+                                GL.Normal3(normal);
+                            }
+                            GL.TexCoord2(uvs[2 * j + 0], uvs[2 * j + 1]);
+                            RenderVertex(f1,f2,tri.Vertex[j] + f1.SpecialVertexCount,f2 != null ? tri.Vertex[j] + f2.SpecialVertexCount : 0);
+                        }
                     }
                     GL.End();
                     if (normals_enabled)
                     {
                         GL.Disable(EnableCap.Lighting);
-                        GL.Disable(EnableCap.Texture2D);
+                        if (textures_enabled)
+                            GL.Disable(EnableCap.Texture2D);
                         GL.Color3(Color.Cyan);
                         GL.Begin(PrimitiveType.Lines);
                         for (int j = 0; j < 3; ++j)
@@ -285,13 +309,15 @@ namespace CrashEdit
                             }
                             SceneryColor c = model.Colors[tri.Color[j]];
                             GL.Vertex3(v);
-                            GL.Vertex3(v + new Vector3((sbyte)c.Red,(sbyte)c.Green,(sbyte)c.Blue) / 127 * 64);
+                            GL.Vertex3(v + new Vector3((sbyte)c.Red,(sbyte)c.Green,(sbyte)c.Blue) / 127 * 8);
                         }
                         GL.End();
-                        GL.Enable(EnableCap.Texture2D);
+                        if (textures_enabled)
+                            GL.Enable(EnableCap.Texture2D);
                         GL.Enable(EnableCap.Lighting);
                     }
                 }
+                GL.Disable(EnableCap.CullFace);
                 GL.PopMatrix();
                 if (textures_enabled)
                     GL.Disable(EnableCap.Texture2D);
