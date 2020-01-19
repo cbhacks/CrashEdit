@@ -195,9 +195,8 @@ namespace CrashEdit
                 GL.PushMatrix();
                 GL.Scale(BitConv.FromInt32(model.Info,0), BitConv.FromInt32(model.Info,4), BitConv.FromInt32(model.Info,8));
                 float[] uvs = new float[6];
-                for (int i = 0; i < model.Triangles.Count; ++i)
+                foreach (ModelTransformedTriangle tri in model.Triangles)
                 {
-                    var tri = model.Triangles[i];
                     if (tri.Tex != 0 || tri.Animated)
                     {
                         bool untex = false;
