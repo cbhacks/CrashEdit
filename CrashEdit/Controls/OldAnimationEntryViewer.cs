@@ -18,7 +18,7 @@ namespace CrashEdit
         private bool colored;
         private float r, g, b;
         private bool texturesenabled = true;
-        private bool normalsenabled = false;
+        private bool normalsenabled = true;
 
         private Dictionary<int,TextureChunk> texturechunks;
         private bool init;
@@ -93,12 +93,8 @@ namespace CrashEdit
             };
         }
 
-        // Final animation scale is tiny,
-        // we need to increase it to stay consistent
-        // with other viewers which have a larger scale.
-        protected override float ScaleFactor => 16;
-
         protected override int CameraRangeMargin => 96;
+        protected override float ScaleFactor => 3.5F;
 
         protected override IEnumerable<IPosition> CorePositions
         {
@@ -181,6 +177,10 @@ namespace CrashEdit
                     GL.Enable(EnableCap.Texture2D);
                 else
                     GL.Disable(EnableCap.Texture2D);
+                if (normalsenabled)
+                    GL.Enable(EnableCap.Lighting);
+                else
+                    GL.Disable(EnableCap.Lighting);
                 for (int i = 0; i < model.Polygons.Count; ++i)
                 {
                     OldModelPolygon polygon = model.Polygons[i];
@@ -211,6 +211,7 @@ namespace CrashEdit
                     }
                 }
                 GL.Disable(EnableCap.Texture2D);
+                GL.Disable(EnableCap.Lighting);
             }
             else
             {
@@ -245,6 +246,10 @@ namespace CrashEdit
                     GL.Enable(EnableCap.Texture2D);
                 else
                     GL.Disable(EnableCap.Texture2D);
+                if (normalsenabled)
+                    GL.Enable(EnableCap.Lighting);
+                else
+                    GL.Disable(EnableCap.Lighting);
                 foreach (OldModelPolygon polygon in model.Polygons)
                 {
                     OldModelStruct str = model.Structs[polygon.Unknown & 0x7FFF];
@@ -286,6 +291,7 @@ namespace CrashEdit
                     }
                 }
                 GL.Disable(EnableCap.Texture2D);
+                GL.Disable(EnableCap.Lighting);
             }
             else
             {
@@ -326,6 +332,10 @@ namespace CrashEdit
                 byte ng = (byte)(vertex.NormalY * g);
                 byte nb = (byte)(vertex.NormalZ * b);
                 GL.Color3(nr,ng,nb);
+            }
+            else if (normalsenabled)
+            {
+                GL.Normal3(-(sbyte)vertex.NormalX/127F,-(sbyte)vertex.NormalY/127F,-(sbyte)vertex.NormalZ/127F);
             }
             GL.Vertex3(vertex.X + frame.XOffset,vertex.Y + frame.YOffset,vertex.Z + frame.ZOffset);
         }
