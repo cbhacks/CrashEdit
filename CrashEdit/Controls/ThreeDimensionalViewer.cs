@@ -152,6 +152,12 @@ namespace CrashEdit
             GL.Enable(EnableCap.Blend);
             GL.DepthFunc(DepthFunction.Lequal);
             GL.AlphaFunc(AlphaFunction.Greater, 0);
+            GL.Light(LightName.Light0, LightParameter.Position, new float[] { 0, 0, 0, 1 });
+            GL.Light(LightName.Light0, LightParameter.Diffuse, new float[] { 5, 5, 5, 1 });
+            GL.LightModel(LightModelParameter.LightModelTwoSide, 1);
+            GL.LightModel(LightModelParameter.LightModelAmbient, new float[] { 0.25F, 0.25F, 0.25F, 1 });
+            GL.Enable(EnableCap.Light0);
+            GL.Enable(EnableCap.ColorMaterial);
             SetBlendMode(3);
             ResetCamera();
         }

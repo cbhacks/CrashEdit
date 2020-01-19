@@ -3,6 +3,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
 namespace CrashEdit
@@ -22,6 +23,7 @@ namespace CrashEdit
         private int interp = 2;
         private bool collision_enabled = false;
         private bool textures_enabled = true;
+        private bool normals_enabled = false;
 
         public AnimationEntryViewer(Frame frame,ModelEntry model,TextureChunk[] texturechunks)
         {
@@ -110,6 +112,10 @@ namespace CrashEdit
                 init = true;
                 ConvertTexturesToGL(0, texturechunks, model.Textures);
             }
+            if (normals_enabled)
+            {
+                GL.Enable(EnableCap.Lighting);
+            }
             if (interi == 0 || frameid == 0)
             {
                 RenderFrame(frames[frameid]);
@@ -118,6 +124,10 @@ namespace CrashEdit
             {
                 RenderFrame(frames[frameid-1], frames[frameid]);
             }
+            if (normals_enabled)
+            {
+                GL.Disable(EnableCap.Lighting);
+            }
         }
 
         protected override bool IsInputKey(Keys keyData)
@@ -125,6 +135,7 @@ namespace CrashEdit
             switch (keyData)
             {
                 case Keys.C:
+                case Keys.N:
                 case Keys.T:
                     return true;
                 default:
@@ -139,6 +150,9 @@ namespace CrashEdit
             {
                 case Keys.C:
                     collision_enabled = !collision_enabled;
+                    break;
+                case Keys.N:
+                    normals_enabled = !normals_enabled;
                     break;
                 case Keys.T:
                     textures_enabled = !textures_enabled;
@@ -228,30 +242,106 @@ namespace CrashEdit
                         else
                             UnbindTexture();
                         GL.Begin(PrimitiveType.Triangles);
+                        if (normals_enabled)
+                            GL.Color3(Color.White);
                         for (int j = 0; j < 3; ++j)
                         {
-                            int c = tri.Color[j];
-                            GL.Color3(model.Colors[c].Red, model.Colors[c].Green, model.Colors[c].Blue);
+                            SceneryColor c = model.Colors[tri.Color[j]];
+                            if (!normals_enabled)
+                                GL.Color3(c.Red,c.Green,c.Blue);
+                            else
+                                GL.Normal3((sbyte)c.Red / 127.0,(sbyte)c.Green / 127.0,(sbyte)c.Blue / 127.0);
                             GL.TexCoord2(uvs[2 * j + 0], uvs[2 * j + 1]);
                             RenderVertex(f1,f2,tri.Vertex[j] + f1.SpecialVertexCount,f2 != null ? tri.Vertex[j] + f2.SpecialVertexCount : 0);
                         }
                         GL.End();
+                        if (normals_enabled)
+                        {
+                            GL.Disable(EnableCap.Lighting);
+                            GL.Disable(EnableCap.Texture2D);
+                            GL.Color3(Color.Cyan);
+                            GL.Begin(PrimitiveType.Lines);
+                            for (int j = 0; j < 3; ++j)
+                            {
+                                Vector3 v;
+                                if (f2 == null)
+                                {
+                                    FrameVertex vertex = f1.Vertices[tri.Vertex[j] + f1.SpecialVertexCount];
+                                    v = new Vector3(vertex.X + f1.XOffset / 4, vertex.Z + f1.YOffset / 4, vertex.Y + f1.ZOffset / 4);
+                                }
+                                else
+                                {
+                                    FrameVertex v1 = f1.Vertices[tri.Vertex[j] + f1.SpecialVertexCount];
+                                    FrameVertex v2 = f2.Vertices[tri.Vertex[j] + f2.SpecialVertexCount];
+                                    int x1 = v1.X + f1.XOffset / 4;
+                                    int x2 = v2.X + f2.XOffset / 4;
+                                    int y1 = v1.Z + f1.YOffset / 4;
+                                    int y2 = v2.Z + f2.YOffset / 4;
+                                    int z1 = v1.Y + f1.ZOffset / 4;
+                                    int z2 = v2.Y + f2.ZOffset / 4;
+                                    v = new Vector3(x1 + (x2 - x1) / (float)interp * interi, y1 + (y2 - y1) / (float)interp * interi, z1 + (z2 - z1) / (float)interp * interi);
+                                }
+                                SceneryColor c = model.Colors[tri.Color[j]];
+                                GL.Vertex3(v);
+                                GL.Vertex3(v + new Vector3((sbyte)c.Red,(sbyte)c.Green,(sbyte)c.Blue) / 127 * 64);
+                            }
+                            GL.End();
+                            GL.Enable(EnableCap.Texture2D);
+                            GL.Enable(EnableCap.Lighting);
+                        }
                     }
                 }
                 else
                 {
-                    GL.Begin(PrimitiveType.Triangles);
                     for (int i = 0; i < model.Triangles.Count; ++i)
                     {
+                        GL.Begin(PrimitiveType.Triangles);
                         var tri = model.Triangles[i];
+                        if (normals_enabled)
+                            GL.Color3(Color.White);
                         for (int j = 0; j < 3; ++j)
                         {
-                            int c = tri.Color[j];
-                            GL.Color3(model.Colors[c].Red, model.Colors[c].Green, model.Colors[c].Blue);
+                            SceneryColor c = model.Colors[tri.Color[j]];
+                            if (!normals_enabled)
+                                GL.Color3(c.Red,c.Green,c.Blue);
+                            else
+                                GL.Normal3((sbyte)c.Red / 127.0,(sbyte)c.Green / 127.0,(sbyte)c.Blue / 127.0);
                             RenderVertex(f1,f2,tri.Vertex[j] + f1.SpecialVertexCount,f2 != null ? tri.Vertex[j] + f2.SpecialVertexCount : 0);
                         }
+                        GL.End();
+                        if (normals_enabled)
+                        {
+                            GL.Disable(EnableCap.Lighting);
+                            GL.Color3(Color.Cyan);
+                            GL.Begin(PrimitiveType.Lines);
+                            for (int j = 0; j < 3; ++j)
+                            {
+                                Vector3 v;
+                                if (f2 == null)
+                                {
+                                    FrameVertex vertex = f1.Vertices[tri.Vertex[j] + f1.SpecialVertexCount];
+                                    v = new Vector3(vertex.X + f1.XOffset / 4, vertex.Z + f1.YOffset / 4, vertex.Y + f1.ZOffset / 4);
+                                }
+                                else
+                                {
+                                    FrameVertex v1 = f1.Vertices[tri.Vertex[j] + f1.SpecialVertexCount];
+                                    FrameVertex v2 = f2.Vertices[tri.Vertex[j] + f2.SpecialVertexCount];
+                                    int x1 = v1.X + f1.XOffset / 4;
+                                    int x2 = v2.X + f2.XOffset / 4;
+                                    int y1 = v1.Z + f1.YOffset / 4;
+                                    int y2 = v2.Z + f2.YOffset / 4;
+                                    int z1 = v1.Y + f1.ZOffset / 4;
+                                    int z2 = v2.Y + f2.ZOffset / 4;
+                                    v = new Vector3(x1 + (x2 - x1) / (float)interp * interi, y1 + (y2 - y1) / (float)interp * interi, z1 + (z2 - z1) / (float)interp * interi);
+                                }
+                                SceneryColor c = model.Colors[tri.Color[j]];
+                                GL.Vertex3(v);
+                                GL.Vertex3(v + new Vector3((sbyte)c.Red,(sbyte)c.Green,(sbyte)c.Blue) / 127 * 64);
+                            }
+                            GL.End();
+                            GL.Enable(EnableCap.Lighting);
+                        }
                     }
-                    GL.End();
                 }
                 GL.PopMatrix();
             }
@@ -325,11 +415,6 @@ namespace CrashEdit
                 int z2 = v2.Y + f2.ZOffset / 4;
                 GL.Vertex3(x1 + (x2 - x1) / (float)interp * interi, y1 + (y2 - y1) / (float)interp * interi, z1 + (z2 - z1) / (float)interp * interi);
             }
-        }
-
-        private void UncompressFrame(ref Frame frame)
-        {
-            frame = UncompressFrame(frame);
         }
 
         private Frame UncompressFrame(Frame frame)
