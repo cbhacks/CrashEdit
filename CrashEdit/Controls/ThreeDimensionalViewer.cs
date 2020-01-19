@@ -156,7 +156,7 @@ namespace CrashEdit
             GL.AlphaFunc(AlphaFunction.Greater, 0);
             // Lighting settings. Lighting must be enabled for them to take effect, logically
             GL.Light(LightName.Light0, LightParameter.Position, new float[] { 0, 0, 0, 1 });
-            GL.Light(LightName.Light0, LightParameter.Diffuse, new float[] { 5, 5, 5, 1 }); // default diffuse intensity is pathetically low
+            GL.Light(LightName.Light0, LightParameter.Diffuse, new float[] { 4, 4, 4, 1 }); // default diffuse intensity is pathetically low
             GL.LightModel(LightModelParameter.LightModelTwoSide, 1);
             GL.Enable(EnableCap.Light0);
             GL.Enable(EnableCap.ColorMaterial);
