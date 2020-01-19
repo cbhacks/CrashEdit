@@ -32,14 +32,15 @@
             this.fraLang = new System.Windows.Forms.GroupBox();
             this.cmdReset = new System.Windows.Forms.Button();
             this.fraSize = new System.Windows.Forms.GroupBox();
-            this.numW = new System.Windows.Forms.NumericUpDown();
-            this.numH = new System.Windows.Forms.NumericUpDown();
-            this.lblW = new System.Windows.Forms.Label();
             this.lblH = new System.Windows.Forms.Label();
+            this.lblW = new System.Windows.Forms.Label();
+            this.numH = new System.Windows.Forms.NumericUpDown();
+            this.numW = new System.Windows.Forms.NumericUpDown();
+            this.chkNormalDisplay = new System.Windows.Forms.CheckBox();
             this.fraLang.SuspendLayout();
             this.fraSize.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numW)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numH)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numW)).BeginInit();
             this.SuspendLayout();
             // 
             // dpdLang
@@ -53,12 +54,10 @@
             // 
             // fraLang
             // 
-            this.fraLang.AutoSize = true;
-            this.fraLang.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.fraLang.Controls.Add(this.dpdLang);
             this.fraLang.Location = new System.Drawing.Point(3, 3);
             this.fraLang.Name = "fraLang";
-            this.fraLang.Size = new System.Drawing.Size(187, 59);
+            this.fraLang.Size = new System.Drawing.Size(187, 49);
             this.fraLang.TabIndex = 1;
             this.fraLang.TabStop = false;
             this.fraLang.Text = "Language (requires restart)";
@@ -75,41 +74,34 @@
             // 
             // fraSize
             // 
-            this.fraSize.AutoSize = true;
-            this.fraSize.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.fraSize.Controls.Add(this.lblH);
             this.fraSize.Controls.Add(this.lblW);
             this.fraSize.Controls.Add(this.numH);
             this.fraSize.Controls.Add(this.numW);
-            this.fraSize.Location = new System.Drawing.Point(3, 68);
+            this.fraSize.Location = new System.Drawing.Point(3, 58);
             this.fraSize.Name = "fraSize";
-            this.fraSize.Size = new System.Drawing.Size(131, 84);
+            this.fraSize.Size = new System.Drawing.Size(131, 74);
             this.fraSize.TabIndex = 1;
             this.fraSize.TabStop = false;
             this.fraSize.Text = "Default Window Size";
             // 
-            // numW
+            // lblH
             // 
-            this.numW.Location = new System.Drawing.Point(50, 19);
-            this.numW.Maximum = new decimal(new int[] {
-            8192,
-            0,
-            0,
-            0});
-            this.numW.Minimum = new decimal(new int[] {
-            640,
-            0,
-            0,
-            0});
-            this.numW.Name = "numW";
-            this.numW.Size = new System.Drawing.Size(75, 20);
-            this.numW.TabIndex = 0;
-            this.numW.Value = new decimal(new int[] {
-            640,
-            0,
-            0,
-            0});
-            this.numW.ValueChanged += new System.EventHandler(this.numW_ValueChanged);
+            this.lblH.AutoSize = true;
+            this.lblH.Location = new System.Drawing.Point(6, 47);
+            this.lblH.Name = "lblH";
+            this.lblH.Size = new System.Drawing.Size(38, 13);
+            this.lblH.TabIndex = 3;
+            this.lblH.Text = "Height";
+            // 
+            // lblW
+            // 
+            this.lblW.AutoSize = true;
+            this.lblW.Location = new System.Drawing.Point(6, 21);
+            this.lblW.Name = "lblW";
+            this.lblW.Size = new System.Drawing.Size(35, 13);
+            this.lblW.TabIndex = 2;
+            this.lblW.Text = "Width";
             // 
             // numH
             // 
@@ -134,29 +126,48 @@
             0});
             this.numH.ValueChanged += new System.EventHandler(this.numH_ValueChanged);
             // 
-            // lblW
+            // numW
             // 
-            this.lblW.AutoSize = true;
-            this.lblW.Location = new System.Drawing.Point(6, 21);
-            this.lblW.Name = "lblW";
-            this.lblW.Size = new System.Drawing.Size(35, 13);
-            this.lblW.TabIndex = 2;
-            this.lblW.Text = "Width";
+            this.numW.Location = new System.Drawing.Point(50, 19);
+            this.numW.Maximum = new decimal(new int[] {
+            8192,
+            0,
+            0,
+            0});
+            this.numW.Minimum = new decimal(new int[] {
+            640,
+            0,
+            0,
+            0});
+            this.numW.Name = "numW";
+            this.numW.Size = new System.Drawing.Size(75, 20);
+            this.numW.TabIndex = 0;
+            this.numW.Value = new decimal(new int[] {
+            640,
+            0,
+            0,
+            0});
+            this.numW.ValueChanged += new System.EventHandler(this.numW_ValueChanged);
             // 
-            // lblH
+            // chkNormalDisplay
             // 
-            this.lblH.AutoSize = true;
-            this.lblH.Location = new System.Drawing.Point(6, 47);
-            this.lblH.Name = "lblH";
-            this.lblH.Size = new System.Drawing.Size(38, 13);
-            this.lblH.TabIndex = 3;
-            this.lblH.Text = "Height";
+            this.chkNormalDisplay.AutoSize = true;
+            this.chkNormalDisplay.Checked = true;
+            this.chkNormalDisplay.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkNormalDisplay.Location = new System.Drawing.Point(3, 138);
+            this.chkNormalDisplay.Name = "chkNormalDisplay";
+            this.chkNormalDisplay.Size = new System.Drawing.Size(101, 17);
+            this.chkNormalDisplay.TabIndex = 0;
+            this.chkNormalDisplay.Text = "Display Normals";
+            this.chkNormalDisplay.UseVisualStyleBackColor = true;
+            this.chkNormalDisplay.CheckedChanged += new System.EventHandler(this.chkNormalDisplay_CheckedChanged);
             // 
             // ConfigEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.Controls.Add(this.chkNormalDisplay);
             this.Controls.Add(this.fraSize);
             this.Controls.Add(this.cmdReset);
             this.Controls.Add(this.fraLang);
@@ -165,8 +176,8 @@
             this.fraLang.ResumeLayout(false);
             this.fraSize.ResumeLayout(false);
             this.fraSize.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numW)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numH)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numW)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -182,5 +193,6 @@
         private System.Windows.Forms.Label lblW;
         private System.Windows.Forms.NumericUpDown numH;
         private System.Windows.Forms.NumericUpDown numW;
+        private System.Windows.Forms.CheckBox chkNormalDisplay;
     }
 }

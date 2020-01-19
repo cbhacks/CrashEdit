@@ -58,5 +58,17 @@ namespace CrashEdit.Properties {
                 this["DefaultFormH"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DisplayNormals {
+            get {
+                return ((bool)(this["DisplayNormals"]));
+            }
+            set {
+                this["DisplayNormals"] = value;
+            }
+        }
     }
 }

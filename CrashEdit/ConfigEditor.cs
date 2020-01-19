@@ -44,5 +44,11 @@ namespace CrashEdit
             Settings.Default.DefaultFormH = (int)numH.Value;
             Settings.Default.Save();
         }
+
+        private void chkNormalDisplay_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.DisplayNormals = chkNormalDisplay.Checked;
+            Settings.Default.Save();
+        }
     }
 }

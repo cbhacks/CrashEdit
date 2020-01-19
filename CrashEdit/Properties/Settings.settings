@@ -11,5 +11,8 @@
     <Setting Name="DefaultFormH" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">560</Value>
     </Setting>
+    <Setting Name="DisplayNormals" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

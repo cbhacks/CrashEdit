@@ -287,7 +287,7 @@ namespace CrashEdit
                         }
                     }
                     GL.End();
-                    if (normals_enabled)
+                    if (normals_enabled && Properties.Settings.Default.DisplayNormals)
                     {
                         GL.Disable(EnableCap.Lighting);
                         if (textures_enabled)

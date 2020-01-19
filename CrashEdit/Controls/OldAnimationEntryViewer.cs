@@ -222,7 +222,7 @@ namespace CrashEdit
                 }
                 GL.End();
             }
-            if (normalsenabled)
+            if (normalsenabled && Properties.Settings.Default.DisplayNormals)
             {
                 GL.Begin(PrimitiveType.Lines);
                 GL.Color3(Color.Cyan);
@@ -297,7 +297,7 @@ namespace CrashEdit
                 }
                 GL.End();
             }
-            if (!colored && normalsenabled)
+            if (!colored && normalsenabled && Properties.Settings.Default.DisplayNormals)
             {
                 GL.Begin(PrimitiveType.Lines);
                 GL.Color3(Color.Cyan);
