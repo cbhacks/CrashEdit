@@ -99,7 +99,7 @@ namespace CrashEdit
             };
             inputtimer.Tick += delegate (object sender,EventArgs e)
             {
-                int speed = 50 + range / 66;
+                int speed = 1 + range / 66;
                 int changex = 0;
                 int changey = 0;
                 int changez = 0;
@@ -298,7 +298,7 @@ namespace CrashEdit
             GL.ClearColor(0.025f,0.025f,0.025f,1);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.MatrixMode(MatrixMode.Projection);
-            var proj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver3,(float)Width/Height,128,1280000);
+            var proj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver3,(float)Width/Height,128/ScaleFactor,1280000/ScaleFactor);
             GL.LoadMatrix(ref proj);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
@@ -321,12 +321,12 @@ namespace CrashEdit
             int maxz = int.MinValue;
             foreach (IPosition position in CorePositions)
             {
-                minx = (int)Math.Min(minx,position.X * ScaleFactor);
-                miny = (int)Math.Min(miny,position.Y * ScaleFactor);
-                minz = (int)Math.Min(minz,position.Z * ScaleFactor);
-                maxx = (int)Math.Max(maxx,position.X * ScaleFactor);
-                maxy = (int)Math.Max(maxy,position.Y * ScaleFactor);
-                maxz = (int)Math.Max(maxz,position.Z * ScaleFactor);
+                minx = (int)Math.Min(minx,position.X*ScaleFactor);
+                miny = (int)Math.Min(miny,position.Y*ScaleFactor);
+                minz = (int)Math.Min(minz,position.Z*ScaleFactor);
+                maxx = (int)Math.Max(maxx,position.X*ScaleFactor);
+                maxy = (int)Math.Max(maxy,position.Y*ScaleFactor);
+                maxz = (int)Math.Max(maxz,position.Z*ScaleFactor);
             }
             midx = (maxx + minx) / 2;
             midy = (maxy + miny) / 2;
@@ -335,7 +335,7 @@ namespace CrashEdit
             range = Math.Max(range,maxx - minx);
             range = Math.Max(range,maxy - miny);
             range = Math.Max(range,maxz - minz);
-            range += (int)(CameraRangeMargin * ScaleFactor);
+            range += (int)(CameraRangeMargin*ScaleFactor);
             rotx = 0;
             roty = 0;
             fullrange = range;

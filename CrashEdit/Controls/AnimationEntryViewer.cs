@@ -82,24 +82,21 @@ namespace CrashEdit
         private int MinScale => model != null ? Math.Min(BitConv.FromInt32(model.Info, 8), Math.Min(BitConv.FromInt32(model.Info, 0), BitConv.FromInt32(model.Info, 4))) : 0x1000;
         private int MaxScale => model != null ? Math.Max(BitConv.FromInt32(model.Info, 8), Math.Max(BitConv.FromInt32(model.Info, 0), BitConv.FromInt32(model.Info, 4))) : 0x1000;
 
-        protected override int CameraRangeMargin => 0x60000;
-
-        // Final animation scale is ginormous,
-        // we need to reduce it to stay consistent
-        // with other viewers which have a smaller scale.
-        protected override float ScaleFactor => 1 / 128F;
+        protected override int CameraRangeMargin => 128;
+        protected override float ScaleFactor => 8;
 
         protected override IEnumerable<IPosition> CorePositions
         {
             get
             {
+                var vec = new Vector3(BitConv.FromInt32(model.Info,0),BitConv.FromInt32(model.Info,4),BitConv.FromInt32(model.Info,8))/MinScale;
                 foreach (Frame frame in frames)
                 {
                     foreach (FrameVertex vertex in frame.Vertices)
                     {
-                        int x = (vertex.X + frame.XOffset / 4) * BitConv.FromInt32(model.Info,0);
-                        int y = (vertex.Z + frame.YOffset / 4) * BitConv.FromInt32(model.Info,4);
-                        int z = (vertex.Y + frame.ZOffset / 4) * BitConv.FromInt32(model.Info,8);
+                        float x = (vertex.X + frame.XOffset / 4) * vec.X;
+                        float y = (vertex.Z + frame.YOffset / 4) * vec.Y;
+                        float z = (vertex.Y + frame.ZOffset / 4) * vec.Z;
                         yield return new Position(x,y,z);
                     }
                 }
@@ -172,12 +169,7 @@ namespace CrashEdit
             GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
         }
 
-        private void RenderFrame(Frame f1)
-        {
-            RenderFrame(f1, null);
-        }
-
-        private void RenderFrame(Frame f1, Frame f2)
+        private void RenderFrame(Frame f1, Frame f2 = null)
         {
             //LoadTexture(OldResources.PointTexture);
             //RenderPoints(f2);
@@ -193,7 +185,7 @@ namespace CrashEdit
                 else
                     GL.Disable(EnableCap.Texture2D);
                 GL.PushMatrix();
-                GL.Scale(BitConv.FromInt32(model.Info,0), BitConv.FromInt32(model.Info,4), BitConv.FromInt32(model.Info,8));
+                GL.Scale(new Vector3(BitConv.FromInt32(model.Info,0),BitConv.FromInt32(model.Info,4),BitConv.FromInt32(model.Info,8))/MinScale);
                 float[] uvs = new float[6];
                 foreach (ModelTransformedTriangle tri in model.Triangles)
                 {
@@ -523,7 +515,7 @@ namespace CrashEdit
             int ycol2 = BitConv.FromInt32(frame.Settings,32+col*40);
             int zcol2 = BitConv.FromInt32(frame.Settings,36+col*40);
             GL.PushMatrix();
-            GL.Scale(4, 4, 4);
+            GL.Scale(new Vector3(4F/MinScale));
             GL.Translate(xglobal, yglobal, zglobal);
             GL.Begin(PrimitiveType.QuadStrip);
             GL.Vertex3(xcol1, ycol1, zcol1);
