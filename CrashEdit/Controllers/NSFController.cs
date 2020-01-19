@@ -192,13 +192,13 @@ namespace CrashEdit
             List<Entity> willys = new List<Entity>();
             foreach (Chunk chunk in NSF.Chunks)
             {
-                if (chunk is EntryChunk)
+                if (chunk is EntryChunk entrychunk)
                 {
-                    foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                    foreach (Entry entry in entrychunk.Entries)
                     {
-                        if (entry is ZoneEntry)
+                        if (entry is ZoneEntry zone2)
                         {
-                            foreach (Entity entity in ((NewZoneEntry)entry).Entities)
+                            foreach (Entity entity in zone2.Entities)
                             {
                                 if (entity.Type == 0 && entity.Subtype == 0)
                                 {
@@ -220,9 +220,9 @@ namespace CrashEdit
                                 }
                             }
                         }
-                        if (entry is NewZoneEntry)
+                        if (entry is NewZoneEntry zone3)
                         {
-                            foreach (Entity entity in ((ZoneEntry)entry).Entities)
+                            foreach (Entity entity in zone3.Entities)
                             {
                                 if (entity.Type == 0 && entity.Subtype == 0)
                                 {
