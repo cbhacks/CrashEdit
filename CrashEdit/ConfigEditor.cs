@@ -18,6 +18,7 @@ namespace CrashEdit
             dpdLang.SelectedIndexChanged += new EventHandler(dpdLang_SelectedIndexChanged);
             numW.Value = Settings.Default.DefaultFormW;
             numH.Value = Settings.Default.DefaultFormH;
+            chkNormalDisplay.Checked = Settings.Default.DisplayNormals;
             fraLang.Text = Resources.Conifg_FraLang;
         }
 
