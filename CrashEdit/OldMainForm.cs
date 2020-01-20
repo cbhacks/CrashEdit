@@ -357,11 +357,10 @@ namespace CrashEdit
 
         public void PatchNSD(string filename, NSFController nsfc)
         {
-            //if (MessageBox.Show("The chunk contents in this NSF may be moved in accordance to the patched NSD. Continue anyway?", "Patch NSD", MessageBoxButtons.YesNo) == DialogResult.No) return;
+            NSF nsf = nsfc.NSF;
+            byte[] data = File.ReadAllBytes(filename);
             try
             {
-                NSF nsf = nsfc.NSF;
-                byte[] data = File.ReadAllBytes(filename);
                 switch (nsfc.GameVersion)
                 {
                     case GameVersion.Crash1BetaMAR08:
@@ -390,7 +389,7 @@ namespace CrashEdit
                         break;
                     default:
                         MessageBox.Show("NSD patching is not supported for this game version.", "Patch NSD", MessageBoxButtons.OK);
-                        break;
+                        return;
                 }
                 nsfc.Node.TreeView.BeginUpdate();
                 foreach (TreeNode node in nsfc.Node.Nodes) // nsd patching might have moved entries, recreate every single controller just in case
@@ -417,6 +416,7 @@ namespace CrashEdit
                     }
                 }
                 nsfc.Node.TreeView.EndUpdate();
+                if (MessageBox.Show("The chunk contents in this NSF may have been moved in accordance to the patched NSD and needs to be resaved.", "Patch NSD", MessageBoxButtons.YesNo) == DialogResult.No) return;
             }
             catch (LoadAbortedException)
             {
