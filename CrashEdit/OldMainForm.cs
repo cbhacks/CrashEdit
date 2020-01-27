@@ -7,7 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace CrashEdit
 {
@@ -48,6 +50,7 @@ namespace CrashEdit
         private ToolStripMenuItem tbxConvertVHVB;
         private ToolStripMenuItem tbxConvertVAB;
         private ToolStripDropDownButton tbbExtra;
+        private ToolStripButton tbbPlay;
         private TabControl tbcTabs;
         private GameVersionForm dlgGameVersion;
         private ToolStripButton tbbPAL;
@@ -153,6 +156,13 @@ namespace CrashEdit
             };
             tbbPAL.Click += new EventHandler(tbbPAL_Click);
 
+            tbbPlay = new ToolStripButton
+            {
+                Text = "Play",
+                TextImageRelation = TextImageRelation.ImageAboveText
+            };
+            tbbPlay.Click += new EventHandler(tbbPlay_Click);
+
             tsToolbar = new ToolStrip
             {
                 Dock = DockStyle.Top,
@@ -168,6 +178,8 @@ namespace CrashEdit
             tsToolbar.Items.Add(new ToolStripSeparator());
             tsToolbar.Items.Add(tbbExtra);
             tsToolbar.Items.Add(tbbPAL);
+            tsToolbar.Items.Add(new ToolStripSeparator());
+            tsToolbar.Items.Add(tbbPlay);
 
             tbcTabs = new TabControl
             {
@@ -204,12 +216,91 @@ namespace CrashEdit
             tbbPatchNSD.Enabled =
             tbbClose.Enabled =
             tbbFind.Enabled =
-            tbbFindNext.Enabled = tab != null && tab.Tag is NSFBox;
+            tbbFindNext.Enabled =
+            tbbPlay.Enabled = tab != null && tab.Tag is NSFBox;
         }
 
         void tbbPAL_Click(object sender, EventArgs e)
         {
             PAL = tbbPAL.Checked;
+        }
+
+        void tbbPlay_Click(object sender, EventArgs e)
+        {
+            var tab = tbcTabs.SelectedTab;
+            if (tab == null || !(tab.Tag is NSFBox))
+                return;
+
+            var nsfBox = (NSFBox)tab.Tag;
+            var nsf = nsfBox.NSF;
+
+            var nsfFilename = tbcTabs.SelectedTab.Text;
+
+            var nsfFilenameBase = Path.GetFileName(nsfFilename);
+            if (nsfFilenameBase.Length != 12) {
+                MessageBox.Show($"NSF filename '{nsfFilenameBase}' is not appropriate!", "Playtest", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            var levelID = int.Parse(nsfFilenameBase.Substring(6, 2), System.Globalization.NumberStyles.HexNumber);
+
+            string nsdFilename;
+            if (nsfFilename.EndsWith("F"))
+            {
+                nsdFilename = nsfFilename.Remove(nsfFilename.Length - 1);
+                nsdFilename += "D";
+            }
+            else if (nsfFilename.EndsWith("f"))
+            {
+                nsdFilename = nsfFilename.Remove(nsfFilename.Length - 1);
+                nsdFilename += "d";
+            }
+            else
+            {
+                MessageBox.Show(string.Format("Can't figure out NSD filename. Make sure NSF file ends in \"f\" (case-insensitive)!\n\nFOO.NSF -> FOO.NSD\n\n{0} -> ???", nsfFilename), "Playtest",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                return;
+            }
+
+            if (!File.Exists(nsdFilename)) {
+                MessageBox.Show($"NSD file '{nsdFilename}' does not exist!", "Playtest", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            string exeFilename = null;
+            var isofsPath = Path.GetDirectoryName(Path.GetDirectoryName(nsfFilename));
+            foreach (string s in Directory.GetFiles(isofsPath)) {
+                if (Regex.IsMatch(Path.GetFileName(s).ToUpper(), @"^(S[CL][UEP]S_\d\d\d\.\d\d|PSX\.EXE)$")) {
+                    exeFilename = s;
+                    break;
+                }
+            }
+            if (exeFilename == null) {
+                MessageBox.Show("Could not find exe file (PSX.EXE, SCUS_123.45, SLES_123.45, etc).", "Playtest", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            string basePath;
+            do {
+                basePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            } while (Directory.Exists(basePath));
+            Directory.CreateDirectory(basePath);
+
+            var fs = new CDBuilder();
+            fs.AddFile("S0\\" + Path.GetFileName(nsfFilename) + ";1", nsf.Save());
+            fs.AddFile("S0\\" + Path.GetFileName(nsdFilename) + ";1", nsdFilename);
+            fs.AddFile("PSX.EXE;1", exeFilename);
+
+            string binPath = Path.Combine(basePath, "game.bin");
+            using (var bin = new FileStream(binPath, FileMode.Create, FileAccess.Write))
+            using (var iso = fs.Build()) {
+                ISO2PSX.Run(iso, bin);
+            }
+
+            var regionStr = PAL ? "pal" : "ntsc";
+
+            Task.Run(() => {
+                ExternalTool.Invoke("pcsx-hdbg", $"gamefile=\"{binPath}\" bootlevel={levelID} region={regionStr}");
+                Directory.Delete(basePath, true);
+            });
         }
 
         public static int GetRate()

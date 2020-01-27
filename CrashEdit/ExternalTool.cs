@@ -50,9 +50,11 @@ namespace CrashEdit
 
         public static int Invoke(string name, string args)
         {
-            var psi = new ProcessStartInfo(FindEXE(name))
+            var exe = FindEXE(name);
+            var psi = new ProcessStartInfo(exe)
             {
                 Arguments = args,
+                WorkingDirectory = Path.GetDirectoryName(exe),
                 UseShellExecute = false
             };
             using (var proc = Process.Start(psi)) {
