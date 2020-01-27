@@ -246,7 +246,7 @@ namespace CrashEdit
                     GL.Enable(EnableCap.Texture2D);
                 else
                     GL.Disable(EnableCap.Texture2D);
-                if (normalsenabled)
+                if (normalsenabled && !colored)
                     GL.Enable(EnableCap.Lighting);
                 else
                     GL.Disable(EnableCap.Lighting);
@@ -321,6 +321,10 @@ namespace CrashEdit
 
         private void RenderVertex(ProtoFrame frame, OldFrameVertex vertex)
         {
+            if (normalsenabled)
+            {
+                GL.Normal3(-(sbyte)vertex.NormalX / 127F, -(sbyte)vertex.NormalY / 127F, -(sbyte)vertex.NormalZ / 127F);
+            }
             GL.Vertex3(vertex.X + frame.XOffset,vertex.Y + frame.YOffset,vertex.Z + frame.ZOffset);
         }
 
