@@ -3,23 +3,25 @@ using System.Diagnostics;
 
 namespace CrashEdit
 {
-    public static class DRNSF
+    public static class ExternalTool
     {
-        private static string FindEXEInDir(DirectoryInfo dir)
+        private static string FindEXEInDir(string name, DirectoryInfo dir)
         {
-            // Search for "drnsf.exe", "drnsf.cmd", "drnsf", etc.
+            name = name.ToLower();
+
+            // Search for "foo.exe", "foo.cmd", "foo", etc.
             foreach (var file in dir.GetFiles()) {
-                if (Path.GetFileNameWithoutExtension(file.Name).ToLower() == "drnsf") {
+                if (Path.GetFileNameWithoutExtension(file.Name).ToLower() == name) {
                     return file.FullName;
                 }
             }
 
-            // Otherwise, recursively check each subdirectory named "drnsf".
+            // Otherwise, recursively check each subdirectory named "foo".
             foreach (var subdir in dir.GetDirectories()) {
-                if (subdir.Name.ToLower() != "drnsf")
+                if (subdir.Name.ToLower() != name)
                     continue;
 
-                var result = FindEXEInDir(subdir);
+                var result = FindEXEInDir(name, subdir);
                 if (result != null) {
                     return result;
                 }
@@ -29,33 +31,33 @@ namespace CrashEdit
             return null;
         }
 
-        public static string FindEXE()
+        public static string FindEXE(string name)
         {
             var cePath = System.Reflection.Assembly.GetEntryAssembly().Location;
             var ceDir = Path.GetDirectoryName(cePath);
             var dir = new DirectoryInfo(ceDir);
 
-            var result = FindEXEInDir(dir);
+            var result = FindEXEInDir(name, dir);
             if (result != null)
                 return result;
 
-            result = FindEXEInDir(dir.Parent);
+            result = FindEXEInDir(name, dir.Parent);
             if (result != null)
                 return result;
 
             throw new FileNotFoundException();
         }
 
-        public static int Invoke(string args)
+        public static int Invoke(string name, string args)
         {
-            var psi = new ProcessStartInfo(FindEXE())
+            var psi = new ProcessStartInfo(FindEXE(name))
             {
                 Arguments = args,
                 UseShellExecute = false
             };
-            using (var drnsf = Process.Start(psi)) {
-                drnsf.WaitForExit();
-                return drnsf.ExitCode;
+            using (var proc = Process.Start(psi)) {
+                proc.WaitForExit();
+                return proc.ExitCode;
             }
         }
     }

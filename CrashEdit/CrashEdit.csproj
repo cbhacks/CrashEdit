@@ -87,7 +87,7 @@
     <Compile Include="Controls\PaletteEntryBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DRNSF.cs" />
+    <Compile Include="ExternalTool.cs" />
     <Compile Include="ISO2PSX.cs" />
     <Compile Include="Controllers\Animation\AnimationEntryController.cs" />
     <Compile Include="Controllers\Animation\FrameController.cs" />

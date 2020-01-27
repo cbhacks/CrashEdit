@@ -697,7 +697,7 @@ namespace CrashEdit
 
             log.AppendLine("Launching DRNSF to apply selected region...");
             try {
-                if (DRNSF.Invoke($"{imprintOpt} -- \"{dlgMakeBINFile.FileName}\"") != 0) {
+                if (ExternalTool.Invoke("drnsf", $"{imprintOpt} -- \"{dlgMakeBINFile.FileName}\"") != 0) {
                     log.AppendLine("DRNSF returned an error. No region has been applied.");
                     log.AppendLine();
                 } else {
