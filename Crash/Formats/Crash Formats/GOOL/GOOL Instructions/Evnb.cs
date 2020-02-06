@@ -12,6 +12,6 @@
 
         public override string Name => "EVNB";
         public override string Format => "[EEEEEEEEEEEE] (RRRRRR) AAA (LLL)";
-        public override string Comment => $"cascade event {GetArg('E')} to {GetArg('L')} for every object" + (Args['A'].Value > 0 ? $" with {GetArg('A')} arguments (starting at {GetArg('R')})" : "");
+        public override string Comment => $"{(Args['R'].Value > 0 ? $"if {GetArg('R')}, " : "")}broadcast event {GetArg('E')} to {GetArg('L')} for every object" + (Args['A'].Value > 0 ? $" with {GetArg('A')} argument(s)" : "");
     }
 }

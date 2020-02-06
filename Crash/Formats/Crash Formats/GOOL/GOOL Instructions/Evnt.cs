@@ -12,6 +12,6 @@
 
         public override string Name => "EVNT";
         public override string Format => "[EEEEEEEEEEEE] (RRRRRR) AAA (LLL)";
-        public override string Comment => $"send event {GetArg('E')} to {GetArg('L')}" + (Args['A'].Value > 0 ? $" with {GetArg('A')} arguments (starting at {GetArg('R')})" : "");
+        public override string Comment => $"{(Args['R'].Value > 0 ? $"if {GetArg('R')}, " : "")}send event {GetArg('E')} to {GetArg('L')}" + (Args['A'].Value > 0 ? $" with {GetArg('A')} argument(s)" : "");
     }
 }
