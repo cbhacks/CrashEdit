@@ -12,6 +12,6 @@
 
         public override string Name => "RND";
         public override string Format => "[BBBBBBBBBBBB] [AAAAAAAAAAAA]";
-        public override string Comment => $"{GetArg('B')} + (rand() % {GetArg('A')})";
+        public override string Comment => $"rand({GetArg('B')}, {GetArg('A')})";
     }
 }
