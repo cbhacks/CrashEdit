@@ -11,7 +11,7 @@
         public Misc(int value,GOOLEntry gool) : base(value,gool) { }
 
         public override string Name => "MISC";
-        public override string Format => "[XXXXXXXXXXXX] LLL SSSSS PPPP";
+        public override string Format => "[XXXXXXXXXXXX] (LLL) SSSSS PPPP";
         public override string Comment => string.Empty;
     }
 }

@@ -6,11 +6,11 @@
     [GOOLInstruction(29,GameVersion.Crash1BetaMAY11)]
     [GOOLInstruction(29,GameVersion.Crash2)]
     [GOOLInstruction(29,GameVersion.Crash3)]
-    public sealed class Prs : GOOLInstruction
+    public sealed class Sin : GOOLInstruction
     {
-        public Prs(int value,GOOLEntry gool) : base(value,gool) { }
+        public Sin(int value,GOOLEntry gool) : base(value,gool) { }
 
-        public override string Name => "PRS";
+        public override string Name => "SIN";
         public override string Format => DefaultFormat;
         public override string Comment => string.Empty;
     }
