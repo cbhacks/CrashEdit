@@ -65,5 +65,22 @@ namespace CrashEdit
                 return false;
             }
         }
+
+        public static bool SaveFile(string defaultname,byte[] data,params string[] filters)
+        {
+            if (data == null)
+                throw new ArgumentNullException("data");
+            savefiledlg.Filter = string.Join("|",filters);
+            savefiledlg.FileName = defaultname;
+            if (savefiledlg.ShowDialog(Owner) == DialogResult.OK)
+            {
+                File.WriteAllBytes(savefiledlg.FileName,data);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
