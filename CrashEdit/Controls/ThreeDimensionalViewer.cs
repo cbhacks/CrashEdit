@@ -361,7 +361,7 @@ namespace CrashEdit
             textures = new int[count][];
         }
 
-        internal void ConvertTextureDataTo32Bit(int w,int h,int l,int t,int cx,int cy,byte colormode,byte blendmode,byte[] texturedata,bool oldblend,ref int[] pixeldata)
+        internal void ConvertTextureDataTo32Bit(int w,int h,int l,int t,int cx,int cy,byte colormode,byte blendmode,byte[] texturedata,ref int[] pixeldata)
         {
             if (colormode == 2) // 16-bit
             {
@@ -369,8 +369,7 @@ namespace CrashEdit
                 {
                     for (int x = 0; x < w; ++x)
                     {
-                        pixeldata[l+x+(t+y)*256] = oldblend ? PixelConv.Convert5551_8888_Old(BitConv.FromInt16(texturedata,(l+x)*2 + (t+y) * 512),blendmode)
-                            : PixelConv.Convert5551_8888(BitConv.FromInt16(texturedata,(l+x)*2 + (t+y) * 512),blendmode);
+                        pixeldata[l+x+(t+y)*256] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturedata,(l+x)*2 + (t+y) * 512),blendmode);
                     }
                 }
             }
@@ -379,8 +378,7 @@ namespace CrashEdit
                 int[] palette = new int[256];
                 for (int j = 0; j < 256; ++j) // copy palette
                 {
-                    palette[j] = oldblend ? PixelConv.Convert5551_8888_Old(BitConv.FromInt16(texturedata,cx*32+cy*512+j*2),blendmode)
-                        : PixelConv.Convert5551_8888(BitConv.FromInt16(texturedata,cx*32+cy*512+j*2),blendmode);
+                    palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturedata,cx*32+cy*512+j*2),blendmode);
                 }
                 for (int y = 0; y < h; ++y) // copy pixel data
                 {
@@ -395,8 +393,7 @@ namespace CrashEdit
                 int[] palette = new int[16];
                 for (int j = 0; j < 16; ++j) // copy palette
                 {
-                    palette[j] = oldblend ? PixelConv.Convert5551_8888_Old(BitConv.FromInt16(texturedata,cx*32+cy*512+j*2),blendmode)
-                        : PixelConv.Convert5551_8888(BitConv.FromInt16(texturedata,cx*32+cy*512+j*2),blendmode);
+                    palette[j] = PixelConv.Convert5551_8888(BitConv.FromInt16(texturedata,cx*32+cy*512+j*2),blendmode);
                 }
                 for (int y = 0; y < h; ++y) // copy pixels
                 {
@@ -475,7 +472,7 @@ namespace CrashEdit
                 {
                     TextureChunk texturechunk = texturechunks[tex.Page];
                     int page = tex.Page*3 + tex.ColorMode;
-                    ConvertTextureDataTo32Bit(tex.Width+1,tex.Height+1,tex.Left,tex.Top,tex.ClutX,tex.ClutY,tex.ColorMode,tex.BlendMode,texturechunk.Data,false,ref texturepages[page]);
+                    ConvertTextureDataTo32Bit(tex.Width+1,tex.Height+1,tex.Left,tex.Top,tex.ClutX,tex.ClutY,tex.ColorMode,tex.BlendMode,texturechunk.Data,ref texturepages[page]);
                     texturebucket[hash] = page;
                 }
                 textures[list][i] = texturebucket[hash];
@@ -519,7 +516,7 @@ namespace CrashEdit
                 {
                     TextureChunk texturechunk = texturechunks[poly.Page];
                     int page = poly.Page*3 + tex.ColorMode;
-                    ConvertTextureDataTo32Bit(tex.Width,tex.Height,tex.Left,tex.Top,tex.ClutX,tex.ClutY,tex.ColorMode,tex.BlendMode,texturechunk.Data,true,ref texturepages[page]);
+                    ConvertTextureDataTo32Bit(tex.Width,tex.Height,tex.Left,tex.Top,tex.ClutX,tex.ClutY,tex.ColorMode,tex.BlendMode,texturechunk.Data,ref texturepages[page]);
                     texturebucket[hash] = page;
                 }
                 textures[list][i] = texturebucket[hash];
@@ -551,7 +548,7 @@ namespace CrashEdit
                 {
                     TextureChunk texturechunk = texturechunks[poly.Page];
                     int page = poly.Page*3 + tex.ColorMode;
-                    ConvertTextureDataTo32Bit(tex.Width,tex.Height,tex.Left,tex.Top,tex.ClutX,tex.ClutY,tex.ColorMode,tex.BlendMode,texturechunk.Data,true,ref texturepages[page]);
+                    ConvertTextureDataTo32Bit(tex.Width,tex.Height,tex.Left,tex.Top,tex.ClutX,tex.ClutY,tex.ColorMode,tex.BlendMode,texturechunk.Data,ref texturepages[page]);
                     texturebucket[hash] = page;
                 }
                 textures[list][i] = texturebucket[hash];
@@ -593,7 +590,7 @@ namespace CrashEdit
                 if (!texturebucket.ContainsKey(hash))
                 {
                     int page = textureeids.IndexOf(tex.EID)*3 + tex.ColorMode;
-                    ConvertTextureDataTo32Bit(tex.Width,tex.Height,tex.Left,tex.Top,tex.ClutX,tex.ClutY,tex.ColorMode,tex.BlendMode,texturechunks[tex.EID].Data,true,ref texturepages[page]);
+                    ConvertTextureDataTo32Bit(tex.Width,tex.Height,tex.Left,tex.Top,tex.ClutX,tex.ClutY,tex.ColorMode,tex.BlendMode,texturechunks[tex.EID].Data,ref texturepages[page]);
                     texturebucket[hash] = page;
                 }
                 textures[list][i] = texturebucket[hash];
