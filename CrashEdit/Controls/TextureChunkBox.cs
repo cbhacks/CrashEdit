@@ -54,7 +54,6 @@ namespace CrashEdit
                 TabPage page = new TabPage("Monochrome 8");
                 page.Controls.Add(picture);
                 tbcTabs.TabPages.Add(page);
-                tbcTabs.SelectedTab = page;
             }
             {
                 Bitmap bitmap = new Bitmap(256,128,PixelFormat.Format16bppArgb1555);
@@ -88,6 +87,7 @@ namespace CrashEdit
                 TabPage page = new TabPage("BGR555");
                 page.Controls.Add(picture);
                 tbcTabs.TabPages.Add(page);
+                tbcTabs.SelectedTab = page;
             }
             Controls.Add(tbcTabs);
         }
