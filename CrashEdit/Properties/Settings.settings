@@ -12,7 +12,7 @@
       <Value Profile="(Default)">560</Value>
     </Setting>
     <Setting Name="DisplayNormals" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>
