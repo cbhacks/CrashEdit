@@ -664,6 +664,15 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open viewer.
+        /// </summary>
+        public static string TextureChunkController_AcOpenViewer {
+            get {
+                return ResourceManager.GetString("TextureChunkController_AcOpenViewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recalculate Checksum.
         /// </summary>
         public static string TextureChunkController_AcRecalcChecksum {

@@ -47,7 +47,7 @@ namespace Crash
             Page = textureoffset;
         }
 
-        public byte ColorMode { get; }
+        public byte ColorMode { get; set; }
         public byte U1 { get; }
         public byte V1 { get; }
         public byte U2 { get; }
@@ -56,14 +56,14 @@ namespace Crash
         public byte V3 { get; }
         public byte U4 { get; }
         public byte V4 { get; }
-        public byte ClutX { get; } // 16-color (32-byte) segments
-        public byte ClutY1 { get; }
-        public byte ClutY2 { get; }
-        public byte BlendMode { get; }
+        public byte ClutX { get; set; } // 16-color (32-byte) segments
+        public byte ClutY1 { get; set; }
+        public byte ClutY2 { get; set; }
+        public byte BlendMode { get; set; }
         public byte Segment { get; }
         public byte Page { get; }
 
-        private float PageWidth => (float)Math.Pow(2,2-ColorMode) * 256;
+        public float PageWidth => (float)Math.Pow(2,2-ColorMode) * 256;
         private int XOff => (1 << (2-ColorMode)) * 64 * Segment;
         public int Left => Math.Min(U1, Math.Min(U2, U3)) + XOff;
         private int Right => Math.Max(U1, Math.Max(U2, U3)) + XOff;

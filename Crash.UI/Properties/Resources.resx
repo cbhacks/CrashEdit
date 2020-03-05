@@ -351,4 +351,7 @@
   <data name="ZoneEntryController_AcAddEntity" xml:space="preserve">
     <value>Add Entity</value>
   </data>
+  <data name="TextureChunkController_AcOpenViewer" xml:space="preserve">
+    <value>Open viewer</value>
+  </data>
 </root>

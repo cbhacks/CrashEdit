@@ -1,4 +1,5 @@
 using Crash;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
@@ -9,8 +10,13 @@ namespace CrashEdit
     {
         private TabControl tbcTabs;
 
+        private TextureViewer frmViewer = null;
+
+        private TextureChunk texturechunk;
+
         public TextureChunkBox(TextureChunk chunk)
         {
+            texturechunk = chunk;
             tbcTabs = new TabControl();
             tbcTabs.Dock = DockStyle.Fill;
             {
@@ -44,6 +50,7 @@ namespace CrashEdit
                 PictureBox picture = new PictureBox();
                 picture.Dock = DockStyle.Fill;
                 picture.Image = bitmap;
+                picture.DoubleClick += new EventHandler(OpenViewer);
                 TabPage page = new TabPage("Monochrome 8");
                 page.Controls.Add(picture);
                 tbcTabs.TabPages.Add(page);
@@ -77,11 +84,27 @@ namespace CrashEdit
                 PictureBox picture = new PictureBox();
                 picture.Dock = DockStyle.Fill;
                 picture.Image = bitmap;
+                picture.DoubleClick += new EventHandler(OpenViewer);
                 TabPage page = new TabPage("BGR555");
                 page.Controls.Add(picture);
                 tbcTabs.TabPages.Add(page);
             }
             Controls.Add(tbcTabs);
+        }
+
+        private void OpenViewer(object sender, EventArgs e)
+        {
+            if (frmViewer == null)
+            {
+                frmViewer = new TextureViewer(texturechunk);
+                frmViewer.FormClosing += delegate (object sender2, FormClosingEventArgs e2)
+                {
+                    frmViewer = null;
+                };
+                frmViewer.Show(this);
+            }
+            else
+                frmViewer.Select();
         }
     }
 }

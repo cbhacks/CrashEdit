@@ -11,6 +11,7 @@ namespace CrashEdit
             TextureChunk = texturechunk;
             AddMenu(Crash.UI.Properties.Resources.TextureChunkController_AcRecalcChecksum,Menu_Recalculate_Checksum);
             AddMenu(Crash.UI.Properties.Resources.TextureChunkController_AcRename,Menu_Rename_Entry);
+            AddMenu(Crash.UI.Properties.Resources.TextureChunkController_AcOpenViewer,Menu_Open_Viewer);
             InvalidateNode();
             InvalidateNodeImage();
         }
@@ -61,6 +62,23 @@ namespace CrashEdit
                     InvalidateNode();
                 }
             }
+        }
+
+        private TextureViewer frmViewer = null;
+
+        private void Menu_Open_Viewer()
+        {
+            if (frmViewer == null)
+            {
+                frmViewer = new TextureViewer(TextureChunk);
+                frmViewer.FormClosing += delegate (object sender2, FormClosingEventArgs e2)
+                {
+                    frmViewer = null;
+                };
+                frmViewer.Show(Node.TreeView);
+            }
+            else
+                frmViewer.Select();
         }
     }
 }

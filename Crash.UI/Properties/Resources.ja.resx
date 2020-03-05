@@ -351,4 +351,7 @@
   <data name="ZoneEntryController_AcAddEntity" xml:space="preserve">
     <value>エンティティを　追加する</value>
   </data>
+  <data name="TextureChunkController_AcOpenViewer" xml:space="preserve">
+    <value>ビューアーを開く</value>
+  </data>
 </root>
