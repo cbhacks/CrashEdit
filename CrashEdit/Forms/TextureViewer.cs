@@ -50,7 +50,7 @@ namespace CrashEdit
                 {
                     MemoryStream w = new MemoryStream();
                     ((Bitmap)pictureBox1.Image).Clone(selectedregion, PixelFormat.Format32bppArgb).Save(w, ImageFormat.Png);
-                    FileUtil.SaveFile($"{chunk.EName}_{C1numCY.Value}_{C1numCX.Value}", w.ToArray(), FileFilters.PNG);
+                    FileUtil.SaveFile($"{chunk.EName}_{TexCY}_{TexCX}", w.ToArray(), FileFilters.PNG);
                 }
             };
 
