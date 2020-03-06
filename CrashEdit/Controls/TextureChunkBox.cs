@@ -66,11 +66,7 @@ namespace CrashEdit
                         for (int x = 0;x < 256;x++)
                         {
                             short color = BitConv.FromInt16(chunk.Data,x * 2 + y * 512);
-                            byte alpha;
-                            byte red;
-                            byte green;
-                            byte blue;
-                            PixelConv.Unpack1555(color,out alpha,out blue,out green,out red);
+                            PixelConv.Unpack1555(color,out byte alpha,out byte blue,out byte green,out byte red);
                             color = PixelConv.Pack1555(1,red,green,blue);
                             System.Runtime.InteropServices.Marshal.WriteInt16(bdata.Scan0,x * 2 + y * bdata.Stride,color);
                         }
