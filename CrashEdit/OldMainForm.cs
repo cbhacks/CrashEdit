@@ -442,39 +442,52 @@ namespace CrashEdit
                     return;
                 }
                 NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
-                PatchNSD(filename,nsfbox.NSFController);
+                bool exists = true;
+                if (!File.Exists(filename))
+                {
+                    //if (MessageBox.Show("NSD file does not exist. Create one?", "Patch NSD", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information) != DialogResult.Yes)
+                    {
+                        return;
+                    }
+                    if (nsfbox.NSFController.GameVersion != GameVersion.Crash1BetaMAR08 && MessageBox.Show("Default NSD file is not a valid NSD file and needs to be manually fixed using a hex editor. Continue anyway?", "Patch NSD", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+                    {
+                        return;
+                    }
+                    exists = false;
+                }
+                PatchNSD(filename,exists,nsfbox.NSFController);
             }
         }
 
-        public void PatchNSD(string filename, NSFController nsfc)
+        public void PatchNSD(string filename, bool exists, NSFController nsfc)
         {
             NSF nsf = nsfc.NSF;
-            byte[] data = File.ReadAllBytes(filename);
+            byte[] data = exists ? File.ReadAllBytes(filename) : null;
             try
             {
                 switch (nsfc.GameVersion)
                 {
                     case GameVersion.Crash1BetaMAR08:
                         {
-                            ProtoNSD nsd = ProtoNSD.Load(data);
+                            ProtoNSD nsd = data != null ? ProtoNSD.Load(data) : new ProtoNSD(new int[256], 0, new NSDLink[0]);
                             PatchNSD(nsd, nsf, filename);
                         }
                         break;
                     case GameVersion.Crash1:
                         {
-                            OldNSD nsd = OldNSD.Load(data);
+                            OldNSD nsd = data != null ? OldNSD.Load(data) : new OldNSD(new int[256], 0, new int[4], 0, 0, new int[64], new NSDLink[0], 1, 0x3F, Entry.NullEID, 0, 0, new int[64], new byte[0xFC]);
                             PatchNSD(nsd, nsf, filename);
                         }
                         break;
                     case GameVersion.Crash2:
                         {
-                            NSD nsd = NSD.Load(data);
+                            NSD nsd = data != null ? NSD.Load(data) : new NSD(new int[256], 0, new int[4], 0, 0, new int[64], new NSDLink[0], 0, 0x3F, 0, new int[64], new byte[0xFC], new NSDSpawnPoint[1] { new NSDSpawnPoint(Entry.NullEID, 0, 0, 0, 0, 0) }, new byte[0]);
                             PatchNSD(nsd, nsf, filename);
                         }
                         break;
                     case GameVersion.Crash3:
                         {
-                            NewNSD nsd = NewNSD.Load(data);
+                            NewNSD nsd = data != null ? NewNSD.Load(data) : new NewNSD(new int[256], 0, new int[4], 0, 0, new int[64], new NSDLink[0], 0, 0x3F, 0, new int[128], new byte[0xFC], new NSDSpawnPoint[1] { new NSDSpawnPoint(Entry.NullEID, 0, 0, 0, 0, 0) }, new byte[0]);
                             PatchNSD(nsd, nsf, filename);
                         }
                         break;
@@ -507,7 +520,10 @@ namespace CrashEdit
                     }
                 }
                 nsfc.Node.TreeView.EndUpdate();
-                if (MessageBox.Show("The chunk contents in this NSF may have been moved in accordance to the patched NSD and needs to be resaved.", "Patch NSD", MessageBoxButtons.YesNo) == DialogResult.No) return;
+                if (MessageBox.Show("The chunk contents in this NSF may have been moved in accordance to the patched NSD and needs to be resaved. Save NSF?", "Patch NSD", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    SaveNSF();
+                }
             }
             catch (LoadAbortedException)
             {
@@ -520,6 +536,7 @@ namespace CrashEdit
             var indexdata = nsf.MakeNSDIndex();
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
+            PatchNSDGoolMap(nsd.GOOLMap, nsf);
 
             // patch object entity count
             nsd.EntityCount = 0;
@@ -588,6 +605,7 @@ namespace CrashEdit
             var indexdata = nsf.MakeNSDIndex();
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
+            PatchNSDGoolMap(nsd.GOOLMap, nsf);
 
             // patch object entity count
             nsd.EntityCount = 0;
@@ -656,6 +674,7 @@ namespace CrashEdit
             var indexdata = nsf.MakeNSDIndex();
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
+            PatchNSDGoolMap(nsd.GOOLMap, nsf);
             if (MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
@@ -671,6 +690,30 @@ namespace CrashEdit
             if (MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
+            }
+        }
+
+        public void PatchNSDGoolMap(int[] map, NSF nsf)
+        {
+            for (int i = 0; i < map.Length; ++i)
+            {
+                map[i] = Entry.NullEID;
+            }
+            foreach (Chunk chunk in nsf.Chunks)
+            {
+                if (chunk is EntryChunk entrychunk)
+                {
+                    foreach (Entry entry in entrychunk.Entries)
+                    {
+                        if (entry is GOOLEntry gool)
+                        {
+                            if (gool.Format == 1)
+                            {
+                                map[BitConv.FromInt32(gool.Header, 0)] = gool.EID;
+                            }
+                        }
+                    }
+                }
             }
         }
         
