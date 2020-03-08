@@ -1,4 +1,6 @@
 using Crash;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace CrashEdit
 {
@@ -20,6 +22,11 @@ namespace CrashEdit
         {
             Node.ImageKey = "crimsonb";
             Node.SelectedImageKey = "crimsonb";
+        }
+
+        protected override Control CreateEditor()
+        {
+            return new Label { Text = string.Format("Polygon count: {0}", BitConv.FromInt32(OldModelEntry.Info, 0)), TextAlign = ContentAlignment.MiddleCenter };
         }
 
         public OldModelEntry OldModelEntry { get; }
