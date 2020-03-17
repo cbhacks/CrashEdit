@@ -12,6 +12,6 @@
 
         public override string Name => "SPD";
         public override string Format => DefaultFormat;
-        public override string Comment => $"{GetArg('A')} + {ObjectFields.landvel} * {GetArg('B')} / 1024";
+        public override string Comment => $"spd({GetArg('A')}, {GetArg('B')})";
     }
 }

@@ -12,6 +12,6 @@
 
         public override string Name => "SEEK";
         public override string Format => DefaultFormatLR;
-        public override string Comment => $"seek({GetArg('L')}, " + (Args['R'].Value == DoubleStackRef ? "[top-1], [top])" : $"{GetArg('R')}, 0x100)");
+        public override string Comment => $"seek({GetArg('L')}, " + (Args['R'].Value == DoubleStackRef ? "[sp-1], [sp])" : $"{GetArg('R')}, 0x100)");
     }
 }
