@@ -1,4 +1,5 @@
 using Crash;
+using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace CrashEdit
         private bool isproto;
         private bool colored;
         private float r, g, b;
+        private bool collisionenabled = true;
         private bool texturesenabled = true;
         private bool normalsenabled = true;
 
@@ -93,20 +95,27 @@ namespace CrashEdit
             };
         }
 
-        protected override int CameraRangeMargin => 96;
-        protected override float ScaleFactor => 3.5F;
+        private int MinScale => model != null ? Math.Min(BitConv.FromInt32(model.Info, 12), Math.Min(BitConv.FromInt32(model.Info, 4), BitConv.FromInt32(model.Info, 8))) : 0x1000;
+        private int MaxScale => model != null ? Math.Max(BitConv.FromInt32(model.Info, 12), Math.Max(BitConv.FromInt32(model.Info, 4), BitConv.FromInt32(model.Info, 8))) : 0x1000;
+
+        protected override int CameraRangeMargin => 128;
+        protected override float ScaleFactor => 8;
 
         protected override IEnumerable<IPosition> CorePositions
         {
             get
             {
+                var vec = new Vector3(BitConv.FromInt32(model.Info,4),BitConv.FromInt32(model.Info,8),BitConv.FromInt32(model.Info,12))/MinScale;
                 foreach (OldFrame frame in frames)
                 {
                     foreach (OldFrameVertex vertex in frame.Vertices)
                     {
-                        int x = vertex.X + frame.XOffset;
-                        int y = vertex.Y + frame.YOffset;
-                        int z = vertex.Z + frame.ZOffset;
+                        float x = vertex.X + frame.XOffset;
+                        float y = vertex.Y + frame.YOffset;
+                        float z = vertex.Z + frame.ZOffset;
+                        x *= vec.X;
+                        y *= vec.Y;
+                        z *= vec.Z;
                         yield return new Position(x,y,z);
                     }
                 }
@@ -114,9 +123,12 @@ namespace CrashEdit
                 {
                     foreach (OldFrameVertex vertex in frame.Vertices)
                     {
-                        int x = vertex.X + frame.XOffset;
-                        int y = vertex.Y + frame.YOffset;
-                        int z = vertex.Z + frame.ZOffset;
+                        float x = vertex.X + frame.XOffset;
+                        float y = vertex.Y + frame.YOffset;
+                        float z = vertex.Z + frame.ZOffset;
+                        x *= vec.X;
+                        y *= vec.Y;
+                        z *= vec.Z;
                         yield return new Position(x,y,z);
                     }
                 }
@@ -140,6 +152,7 @@ namespace CrashEdit
         {
             switch (keyData)
             {
+                case Keys.C:
                 case Keys.N:
                 case Keys.T:
                     return true;
@@ -153,6 +166,9 @@ namespace CrashEdit
             base.OnKeyDown(e);
             switch (e.KeyCode)
             {
+                case Keys.C:
+                    collisionenabled = !collisionenabled;
+                    break;
                 case Keys.N:
                     normalsenabled = !normalsenabled;
                     break;
@@ -250,6 +266,8 @@ namespace CrashEdit
                     GL.Enable(EnableCap.Lighting);
                 else
                     GL.Disable(EnableCap.Lighting);
+                GL.PushMatrix();
+                GL.Scale(new Vector3(BitConv.FromInt32(model.Info,4),BitConv.FromInt32(model.Info,8),BitConv.FromInt32(model.Info,12))/MinScale);
                 foreach (OldModelPolygon polygon in model.Polygons)
                 {
                     OldModelStruct str = model.Structs[polygon.Unknown & 0x7FFF];
@@ -290,6 +308,7 @@ namespace CrashEdit
                         GL.End();
                     }
                 }
+                GL.PopMatrix();
                 GL.Disable(EnableCap.Texture2D);
                 GL.Disable(EnableCap.Lighting);
             }
@@ -316,7 +335,10 @@ namespace CrashEdit
                 }
                 GL.End();
             }
-            //RenderCollision(frame);
+            if (collisionenabled)
+            {
+                RenderCollision(frame);
+            }
         }
 
         private void RenderVertex(ProtoFrame frame, OldFrameVertex vertex)
@@ -354,16 +376,11 @@ namespace CrashEdit
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
             RenderCollisionBox(frame);
             GL.DepthMask(true);
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
         }
 
         private void RenderCollisionBox(OldFrame frame)
         {
-            int xoffset = frame.XOffset;
-            int yoffset = frame.YOffset;
-            int zoffset = frame.ZOffset;
-            int xglobal = frame.XGlobal;
-            int yglobal = frame.YGlobal;
-            int zglobal = frame.ZGlobal;
             int xcol1 = frame.X1;
             int xcol2 = frame.X2;
             int ycol1 = frame.Y1;
@@ -371,9 +388,10 @@ namespace CrashEdit
             int zcol1 = frame.Z1;
             int zcol2 = frame.Z2;
             GL.PushMatrix();
-            //GL.Translate(xoffset,yoffset,zoffset);
-            GL.Scale(0.00125f,0.00125f,0.00125f);
-            GL.Translate(xglobal*2,yglobal*2,zglobal*2);
+            GL.Translate(128,128,128);
+            //GL.Scale(0.00125f,0.00125f,0.00125f);
+            GL.Scale(new Vector3(4F/MinScale));
+            GL.Translate(frame.XGlobal,frame.YGlobal,frame.ZGlobal);
             GL.Begin(PrimitiveType.QuadStrip);
             GL.Vertex3(xcol1,ycol1,zcol1);
             GL.Vertex3(xcol1,ycol2,zcol1);
