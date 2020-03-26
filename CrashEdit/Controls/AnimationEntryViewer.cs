@@ -84,8 +84,8 @@ namespace CrashEdit
         private int MinScale => model != null ? Math.Min(BitConv.FromInt32(model.Info, 8), Math.Min(BitConv.FromInt32(model.Info, 0), BitConv.FromInt32(model.Info, 4))) : 0x1000;
         private int MaxScale => model != null ? Math.Max(BitConv.FromInt32(model.Info, 8), Math.Max(BitConv.FromInt32(model.Info, 0), BitConv.FromInt32(model.Info, 4))) : 0x1000;
 
-        protected override int CameraRangeMargin => 128;
-        protected override float ScaleFactor => 8;
+        protected override int CameraRangeMargin => 256;
+        protected override float ScaleFactor => 12;
 
         protected override IEnumerable<IPosition> CorePositions
         {
