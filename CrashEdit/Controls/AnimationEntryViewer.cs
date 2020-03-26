@@ -21,13 +21,14 @@ namespace CrashEdit
         private Timer animatetimer;
         private int interi;
         private int interp = 2;
-        private bool collision_enabled = Properties.Settings.Default.DisplayFrameCollision;
+        private bool collision_enabled;
         private bool textures_enabled = true;
         private bool normals_enabled = false;
         private int cullmode = 0;
 
         public AnimationEntryViewer(Frame frame,ModelEntry model,TextureChunk[] texturechunks)
         {
+            collision_enabled = Properties.Settings.Default.DisplayFrameCollision;
             frames = new List<Frame>();
             this.model = model;
             if (model.Positions != null) // FIXME this later
@@ -42,6 +43,7 @@ namespace CrashEdit
 
         public AnimationEntryViewer(IEnumerable<Frame> frames,ModelEntry model,TextureChunk[] texturechunks)
         {
+            collision_enabled = Properties.Settings.Default.DisplayFrameCollision;
             this.frames = new List<Frame>();
             this.model = model;
             frameid = 0;

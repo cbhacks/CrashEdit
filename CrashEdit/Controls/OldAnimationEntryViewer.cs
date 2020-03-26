@@ -18,7 +18,7 @@ namespace CrashEdit
         private bool isproto;
         private bool colored;
         private float r, g, b;
-        private bool collisionenabled = Properties.Settings.Default.DisplayFrameCollision;
+        private bool collisionenabled;
         private bool texturesenabled = true;
         private bool normalsenabled = true;
         private int cullmode = 0;
@@ -28,6 +28,7 @@ namespace CrashEdit
 
         public OldAnimationEntryViewer(ProtoFrame frame,OldModelEntry model,Dictionary<int,TextureChunk> texturechunks)
         {
+            collisionenabled = Properties.Settings.Default.DisplayFrameCollision;
             protoframes = new List<ProtoFrame> { frame };
             frames = new List<OldFrame>();
             this.model = model;
@@ -41,6 +42,7 @@ namespace CrashEdit
 
         public OldAnimationEntryViewer(IEnumerable<ProtoFrame> frames,OldModelEntry model,Dictionary<int,TextureChunk> texturechunks)
         {
+            collisionenabled = Properties.Settings.Default.DisplayFrameCollision;
             protoframes = new List<ProtoFrame>(frames);
             this.frames = new List<OldFrame>();
             this.model = model;
@@ -63,6 +65,7 @@ namespace CrashEdit
 
         public OldAnimationEntryViewer(OldFrame frame,bool colored,OldModelEntry model,Dictionary<int,TextureChunk> texturechunks)
         {
+            collisionenabled = Properties.Settings.Default.DisplayFrameCollision;
             protoframes = new List<ProtoFrame>();
             frames = new List<OldFrame>() { frame };
             this.model = model;
@@ -76,6 +79,7 @@ namespace CrashEdit
 
         public OldAnimationEntryViewer(IEnumerable<OldFrame> frames,bool colored,OldModelEntry model,Dictionary<int,TextureChunk> texturechunks)
         {
+            collisionenabled = Properties.Settings.Default.DisplayFrameCollision;
             protoframes = new List<ProtoFrame>();
             this.frames = new List<OldFrame>(frames);
             this.model = model;

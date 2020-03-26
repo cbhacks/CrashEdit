@@ -19,6 +19,7 @@ namespace CrashEdit
             numW.Value = Settings.Default.DefaultFormW;
             numH.Value = Settings.Default.DefaultFormH;
             chkNormalDisplay.Checked = Settings.Default.DisplayNormals;
+            chkCollisionDisplay.Checked = Settings.Default.DisplayFrameCollision;
             fraLang.Text = Resources.Conifg_FraLang;
         }
 
