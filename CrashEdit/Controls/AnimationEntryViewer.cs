@@ -24,6 +24,7 @@ namespace CrashEdit
         private bool collision_enabled;
         private bool textures_enabled = true;
         private bool normals_enabled = false;
+        private bool interp_startend = false;
         private int cullmode = 0;
 
         public AnimationEntryViewer(Frame frame,ModelEntry model,TextureChunk[] texturechunks)
