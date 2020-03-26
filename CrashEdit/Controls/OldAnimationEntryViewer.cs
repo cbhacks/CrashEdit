@@ -18,9 +18,10 @@ namespace CrashEdit
         private bool isproto;
         private bool colored;
         private float r, g, b;
-        private bool collisionenabled = true;
+        private bool collisionenabled = false;
         private bool texturesenabled = true;
         private bool normalsenabled = true;
+        private int cullmode = 0;
 
         private Dictionary<int,TextureChunk> texturechunks;
         private bool init;
@@ -155,6 +156,7 @@ namespace CrashEdit
                 case Keys.C:
                 case Keys.N:
                 case Keys.T:
+                case Keys.U:
                     return true;
                 default:
                     return base.IsInputKey(keyData);
@@ -175,6 +177,9 @@ namespace CrashEdit
                 case Keys.T:
                     texturesenabled = !texturesenabled;
                     break;
+                case Keys.U:
+                    cullmode = ++cullmode % 3;
+                    break;
             }
         }
 
@@ -189,6 +194,11 @@ namespace CrashEdit
         {
             if (model != null)
             {
+                if (cullmode < 2)
+                {
+                    GL.Enable(EnableCap.CullFace);
+                    GL.CullFace(cullFaceModes[cullmode]);
+                }
                 if (texturesenabled)
                     GL.Enable(EnableCap.Texture2D);
                 else
@@ -197,6 +207,8 @@ namespace CrashEdit
                     GL.Enable(EnableCap.Lighting);
                 else
                     GL.Disable(EnableCap.Lighting);
+                GL.PushMatrix();
+                GL.Scale(new Vector3(BitConv.FromInt32(model.Info,4),BitConv.FromInt32(model.Info,8),BitConv.FromInt32(model.Info,12))/MinScale);
                 for (int i = 0; i < model.Polygons.Count; ++i)
                 {
                     OldModelPolygon polygon = model.Polygons[i];
@@ -208,10 +220,10 @@ namespace CrashEdit
                         GL.Begin(PrimitiveType.Triangles);
                         GL.TexCoord2(tex.X1,tex.Y1);
                         RenderVertex(frame,frame.Vertices[polygon.VertexA / 6]);
-                        GL.TexCoord2(tex.X2,tex.Y2);
-                        RenderVertex(frame,frame.Vertices[polygon.VertexB / 6]);
                         GL.TexCoord2(tex.X3,tex.Y3);
                         RenderVertex(frame,frame.Vertices[polygon.VertexC / 6]);
+                        GL.TexCoord2(tex.X2,tex.Y2);
+                        RenderVertex(frame,frame.Vertices[polygon.VertexB / 6]);
                         GL.End();
                     }
                     else
@@ -221,11 +233,13 @@ namespace CrashEdit
                         GL.Color3(col.R,col.G,col.B);
                         GL.Begin(PrimitiveType.Triangles);
                         RenderVertex(frame,frame.Vertices[polygon.VertexA / 6]);
-                        RenderVertex(frame,frame.Vertices[polygon.VertexB / 6]);
                         RenderVertex(frame,frame.Vertices[polygon.VertexC / 6]);
+                        RenderVertex(frame,frame.Vertices[polygon.VertexB / 6]);
                         GL.End();
                     }
                 }
+                GL.Disable(EnableCap.CullFace);
+                GL.PopMatrix();
                 GL.Disable(EnableCap.Texture2D);
                 GL.Disable(EnableCap.Lighting);
             }
@@ -258,6 +272,11 @@ namespace CrashEdit
         {
             if (model != null)
             {
+                if (cullmode < 2)
+                {
+                    GL.Enable(EnableCap.CullFace);
+                    GL.CullFace(cullFaceModes[cullmode]);
+                }
                 if (texturesenabled)
                     GL.Enable(EnableCap.Texture2D);
                 else
@@ -284,10 +303,10 @@ namespace CrashEdit
                         GL.Begin(PrimitiveType.Triangles);
                         GL.TexCoord2(tex.X1,tex.Y1);
                         RenderVertex(frame,frame.Vertices[polygon.VertexA / 6]);
-                        GL.TexCoord2(tex.X2,tex.Y2);
-                        RenderVertex(frame,frame.Vertices[polygon.VertexB / 6]);
                         GL.TexCoord2(tex.X3,tex.Y3);
                         RenderVertex(frame,frame.Vertices[polygon.VertexC / 6]);
+                        GL.TexCoord2(tex.X2,tex.Y2);
+                        RenderVertex(frame,frame.Vertices[polygon.VertexB / 6]);
                         GL.End();
                     }
                     else
@@ -303,11 +322,12 @@ namespace CrashEdit
                         }
                         GL.Begin(PrimitiveType.Triangles);
                         RenderVertex(frame,frame.Vertices[polygon.VertexA / 6]);
-                        RenderVertex(frame,frame.Vertices[polygon.VertexB / 6]);
                         RenderVertex(frame,frame.Vertices[polygon.VertexC / 6]);
+                        RenderVertex(frame,frame.Vertices[polygon.VertexB / 6]);
                         GL.End();
                     }
                 }
+                GL.Disable(EnableCap.CullFace);
                 GL.PopMatrix();
                 GL.Disable(EnableCap.Texture2D);
                 GL.Disable(EnableCap.Lighting);
@@ -345,7 +365,7 @@ namespace CrashEdit
         {
             if (normalsenabled)
             {
-                GL.Normal3(-(sbyte)vertex.NormalX / 127F, -(sbyte)vertex.NormalY / 127F, -(sbyte)vertex.NormalZ / 127F);
+                GL.Normal3((sbyte)vertex.NormalX / 127F,(sbyte)vertex.NormalY / 127F,(sbyte)vertex.NormalZ / 127F);
             }
             GL.Vertex3(vertex.X + frame.XOffset,vertex.Y + frame.YOffset,vertex.Z + frame.ZOffset);
         }
@@ -361,7 +381,7 @@ namespace CrashEdit
             }
             else if (normalsenabled)
             {
-                GL.Normal3(-(sbyte)vertex.NormalX/127F,-(sbyte)vertex.NormalY/127F,-(sbyte)vertex.NormalZ/127F);
+                GL.Normal3((sbyte)vertex.NormalX/127F,(sbyte)vertex.NormalY/127F,(sbyte)vertex.NormalZ/127F);
             }
             GL.Vertex3(vertex.X + frame.XOffset,vertex.Y + frame.YOffset,vertex.Z + frame.ZOffset);
         }
