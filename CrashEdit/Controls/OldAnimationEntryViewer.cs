@@ -18,7 +18,7 @@ namespace CrashEdit
         private bool isproto;
         private bool colored;
         private float r, g, b;
-        private bool collisionenabled = false;
+        private bool collisionenabled = Properties.Settings.Default.DisplayFrameCollision;
         private bool texturesenabled = true;
         private bool normalsenabled = true;
         private int cullmode = 0;

@@ -37,6 +37,7 @@
             this.numH = new System.Windows.Forms.NumericUpDown();
             this.numW = new System.Windows.Forms.NumericUpDown();
             this.chkNormalDisplay = new System.Windows.Forms.CheckBox();
+            this.chkCollisionDisplay = new System.Windows.Forms.CheckBox();
             this.fraLang.SuspendLayout();
             this.fraSize.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numH)).BeginInit();
@@ -156,17 +157,31 @@
             this.chkNormalDisplay.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkNormalDisplay.Location = new System.Drawing.Point(3, 138);
             this.chkNormalDisplay.Name = "chkNormalDisplay";
-            this.chkNormalDisplay.Size = new System.Drawing.Size(101, 17);
+            this.chkNormalDisplay.Size = new System.Drawing.Size(99, 17);
             this.chkNormalDisplay.TabIndex = 0;
-            this.chkNormalDisplay.Text = "Display Normals";
+            this.chkNormalDisplay.Text = "Display normals";
             this.chkNormalDisplay.UseVisualStyleBackColor = true;
             this.chkNormalDisplay.CheckedChanged += new System.EventHandler(this.chkNormalDisplay_CheckedChanged);
+            // 
+            // chkCollisionDisplay
+            // 
+            this.chkCollisionDisplay.AutoSize = true;
+            this.chkCollisionDisplay.Checked = true;
+            this.chkCollisionDisplay.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkCollisionDisplay.Location = new System.Drawing.Point(3, 161);
+            this.chkCollisionDisplay.Name = "chkCollisionDisplay";
+            this.chkCollisionDisplay.Size = new System.Drawing.Size(178, 17);
+            this.chkCollisionDisplay.TabIndex = 2;
+            this.chkCollisionDisplay.Text = "Display frame collision by default";
+            this.chkCollisionDisplay.UseVisualStyleBackColor = true;
+            this.chkCollisionDisplay.CheckedChanged += new System.EventHandler(this.chkCollisionDisplay_CheckedChanged);
             // 
             // ConfigEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.Controls.Add(this.chkCollisionDisplay);
             this.Controls.Add(this.chkNormalDisplay);
             this.Controls.Add(this.fraSize);
             this.Controls.Add(this.cmdReset);
@@ -194,5 +209,6 @@
         private System.Windows.Forms.NumericUpDown numH;
         private System.Windows.Forms.NumericUpDown numW;
         private System.Windows.Forms.CheckBox chkNormalDisplay;
+        private System.Windows.Forms.CheckBox chkCollisionDisplay;
     }
 }

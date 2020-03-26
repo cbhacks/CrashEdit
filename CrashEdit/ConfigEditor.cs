@@ -51,5 +51,11 @@ namespace CrashEdit
             Settings.Default.DisplayNormals = chkNormalDisplay.Checked;
             Settings.Default.Save();
         }
+
+        private void chkCollisionDisplay_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.DisplayFrameCollision = chkCollisionDisplay.Checked;
+            Settings.Default.Save();
+        }
     }
 }

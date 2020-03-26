@@ -70,5 +70,17 @@ namespace CrashEdit.Properties {
                 this["DisplayNormals"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DisplayFrameCollision {
+            get {
+                return ((bool)(this["DisplayFrameCollision"]));
+            }
+            set {
+                this["DisplayFrameCollision"] = value;
+            }
+        }
     }
 }

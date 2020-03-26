@@ -21,7 +21,7 @@ namespace CrashEdit
         private Timer animatetimer;
         private int interi;
         private int interp = 2;
-        private bool collision_enabled = false;
+        private bool collision_enabled = Properties.Settings.Default.DisplayFrameCollision;
         private bool textures_enabled = true;
         private bool normals_enabled = false;
         private int cullmode = 0;
