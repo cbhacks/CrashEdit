@@ -74,9 +74,13 @@ namespace CrashEdit
             };
             animatetimer.Tick += delegate (object sender,EventArgs e)
             {
-                animatetimer.Interval = 1000 / OldMainForm.GetRate() / interp;
-                interi = ++interi % interp;
-                frameid = (frameid + (interi == 1 ? 1 : 0)) % this.frames.Count;
+                animatetimer.Interval = (int)(1000.0f / OldMainForm.GetRate() / interp);
+                ++interi;
+                if (interi == interp)
+                {
+                    interi = 0;
+                    frameid = (frameid + 1) % this.frames.Count;
+                }
                 Refresh();
             };
         }
@@ -116,13 +120,21 @@ namespace CrashEdit
             {
                 GL.Enable(EnableCap.Lighting);
             }
-            if (interi == 0 || frameid == 0)
+            if ((frameid + 1) == frames.Count)
             {
-                RenderFrame(frames[frameid]);
+                if (interp_startend)
+                {
+                    RenderFrame(frames[frameid], frames[0]);
+                }
+                else
+                {
+                    RenderFrame(frames[frameid]);
+                    interi = interp - 1;
+                }
             }
             else
             {
-                RenderFrame(frames[frameid-1], frames[frameid]);
+                RenderFrame(frames[frameid], frames[frameid+1]);
             }
             if (normals_enabled)
             {
@@ -135,6 +147,7 @@ namespace CrashEdit
             switch (keyData)
             {
                 case Keys.C:
+                case Keys.I:
                 case Keys.N:
                 case Keys.T:
                 case Keys.U:
@@ -151,6 +164,9 @@ namespace CrashEdit
             {
                 case Keys.C:
                     collision_enabled = !collision_enabled;
+                    break;
+                case Keys.I:
+                    interp_startend = !interp_startend;
                     break;
                 case Keys.N:
                     normals_enabled = !normals_enabled;
