@@ -39,15 +39,14 @@ namespace CrashHacks.Scripts.Animation
 
         public override void Run(object value,GameVersion gameversion)
         {
-            if (value is T1Entry)
+            if (value is AnimationEntry entry)
             {
-                T1Entry entry = (T1Entry)value;
-                List<byte[]> items = new List<byte[]>(entry.Items);
-                items.Reverse();
-                entry.Items.Clear();
-                foreach (byte[] item in items)
+                List<Frame> frames = new List<Frame>(entry.Frames);
+                frames.Reverse();
+                entry.Frames.Clear();
+                foreach (Frame frame in frames)
                 {
-                    entry.Items.Add(item);
+                    entry.Frames.Add(frame);
                 }
             }
         }

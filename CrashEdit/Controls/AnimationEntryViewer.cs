@@ -32,7 +32,7 @@ namespace CrashEdit
             collision_enabled = Properties.Settings.Default.DisplayFrameCollision;
             frames = new List<Frame>();
             this.model = model;
-            if (model.Positions != null) // FIXME this later
+            if (model != null && model.Positions != null) // FIXME this later
                 frames.Add(UncompressFrame(frame));
             else
                 frames.Add(LoadFrame(frame));
@@ -47,14 +47,12 @@ namespace CrashEdit
             collision_enabled = Properties.Settings.Default.DisplayFrameCollision;
             this.frames = new List<Frame>();
             this.model = model;
-            frameid = 0;
             interi = 0;
-            if (model.Positions != null)
+            if (model != null && model.Positions != null)
             {
                 foreach (Frame frame in frames)
                 {
                     this.frames.Add(UncompressFrame(frame));
-                    frameid++;
                 }
             }
             else
@@ -62,7 +60,6 @@ namespace CrashEdit
                 foreach (Frame frame in frames)
                 {
                     this.frames.Add(LoadFrame(frame));
-                    frameid++;
                 }
             }
             this.texturechunks = texturechunks;
@@ -91,19 +88,22 @@ namespace CrashEdit
 
         protected override int CameraRangeMargin => 256;
         protected override float ScaleFactor => 12;
+        protected override float FarPlane => (float)MaxScale/MinScale*256*4;
+        protected override float NearPlane => (float)MaxScale/MinScale;
 
         protected override IEnumerable<IPosition> CorePositions
         {
             get
             {
-                var vec = new Vector3(BitConv.FromInt32(model.Info,0),BitConv.FromInt32(model.Info,4),BitConv.FromInt32(model.Info,8))/MinScale;
+                var vec = model != null ? new Vector3(BitConv.FromInt32(model.Info,0),BitConv.FromInt32(model.Info,4),BitConv.FromInt32(model.Info,8))/MinScale : new Vector3(1,1,1);
                 foreach (Frame frame in frames)
                 {
                     foreach (FrameVertex vertex in frame.Vertices)
                     {
-                        float x = (vertex.X + frame.XOffset / 4) * vec.X;
-                        float y = (vertex.Z + frame.YOffset / 4) * vec.Y;
-                        float z = (vertex.Y + frame.ZOffset / 4) * vec.Z;
+                        float f = frame.IsNew ? 4.0f * 8 : 4.0f;
+                        float x = (vertex.X + frame.XOffset / f) * vec.X;
+                        float y = (vertex.Z + frame.YOffset / f) * vec.Y;
+                        float z = (vertex.Y + frame.ZOffset / f) * vec.Z;
                         yield return new Position(x,y,z);
                     }
                 }
@@ -112,7 +112,7 @@ namespace CrashEdit
 
         protected override void RenderObjects()
         {
-            if (!init)
+            if (!init && model != null)
             {
                 init = true;
                 ConvertTexturesToGL(0, texturechunks, model.Textures);
@@ -152,6 +152,7 @@ namespace CrashEdit
                 case Keys.N:
                 case Keys.T:
                 case Keys.U:
+                case Keys.Enter:
                     return true;
                 default:
                     return base.IsInputKey(keyData);
@@ -360,7 +361,7 @@ namespace CrashEdit
                     fcol = f1;
                 else
                     fcol = f2;
-                for (int i = 0; i < fcol.Collision; ++i)
+                for (int i = 0; i < fcol.Collision.Count; ++i)
                 {
                     RenderCollision(fcol, i);
                 }
@@ -395,22 +396,24 @@ namespace CrashEdit
 
         private void RenderVertex(Frame f1, Frame f2, int id1, int id2)
         {
+            float f = f1.IsNew ? 4.0f * 8 : 4.0f;
             if (f2 == null)
             {
                 FrameVertex vertex = f1.Vertices[id1];
-                GL.Vertex3(vertex.X + f1.XOffset / 4, vertex.Z + f1.YOffset / 4, vertex.Y + f1.ZOffset / 4);
+                GL.Vertex3(vertex.X + f1.XOffset / f, vertex.Z + f1.YOffset / f, vertex.Y + f1.ZOffset / f);
             }
             else
             {
+                float fac = (float)interi / interp;
                 FrameVertex v1 = f1.Vertices[id1];
                 FrameVertex v2 = f2.Vertices[id2];
-                int x1 = v1.X + f1.XOffset / 4;
-                int x2 = v2.X + f2.XOffset / 4;
-                int y1 = v1.Z + f1.YOffset / 4;
-                int y2 = v2.Z + f2.YOffset / 4;
-                int z1 = v1.Y + f1.ZOffset / 4;
-                int z2 = v2.Y + f2.ZOffset / 4;
-                GL.Vertex3(x1 + (x2 - x1) / (float)interp * interi, y1 + (y2 - y1) / (float)interp * interi, z1 + (z2 - z1) / (float)interp * interi);
+                float x1 = v1.X + f1.XOffset / f;
+                float x2 = v2.X + f2.XOffset / f;
+                float y1 = v1.Z + f1.YOffset / f;
+                float y2 = v2.Z + f2.YOffset / f;
+                float z1 = v1.Y + f1.ZOffset / f;
+                float z2 = v2.Y + f2.ZOffset / f;
+                GL.Vertex3(x1 + (x2 - x1) * fac, y1 + (y2 - y1) * fac, z1 + (z2 - z1) * fac);
             }
         }
 
@@ -471,6 +474,7 @@ namespace CrashEdit
         private Frame LoadFrame(Frame frame)
         {
             if (frame.Decompressed) return frame; // already loaded (no decompression was necessary though)
+            if (frame.Temporals.Length < frame.Vertices.Count * 8 * 3) return frame; // failsafe
             bool[] uncompressedbitstream = new bool[frame.Temporals.Length];
             for (int i = 0; i < uncompressedbitstream.Length / 32;++i)
             {
@@ -511,6 +515,10 @@ namespace CrashEdit
 
         private void RenderCollision(Frame frame, int col)
         {
+            if (normals_enabled)
+            {
+                GL.Disable(EnableCap.Lighting);
+            }
             GL.DepthMask(false);
             GL.Color4(0f, 1f, 0f, 0.2f);
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
@@ -520,44 +528,39 @@ namespace CrashEdit
             RenderCollisionBox(frame, col);
             GL.DepthMask(true);
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+            if (normals_enabled)
+            {
+                GL.Enable(EnableCap.Lighting);
+            }
         }
 
         private void RenderCollisionBox(Frame frame, int col)
         {
-            int xglobal = BitConv.FromInt32(frame.Settings,4+col*40);
-            int yglobal = BitConv.FromInt32(frame.Settings,8+col*40);
-            int zglobal = BitConv.FromInt32(frame.Settings,12+col*40);
-            int xcol1 = BitConv.FromInt32(frame.Settings,16+col*40);
-            int ycol1 = BitConv.FromInt32(frame.Settings,20+col*40);
-            int zcol1 = BitConv.FromInt32(frame.Settings,24+col*40);
-            int xcol2 = BitConv.FromInt32(frame.Settings,28+col*40);
-            int ycol2 = BitConv.FromInt32(frame.Settings,32+col*40);
-            int zcol2 = BitConv.FromInt32(frame.Settings,36+col*40);
             GL.PushMatrix();
-            GL.Scale(new Vector3(4F/MinScale));
-            GL.Translate(xglobal, yglobal, zglobal);
+            GL.Scale(new Vector3((frame.IsNew?0.5F:4F)/MinScale));
+            GL.Translate(frame.Collision[col].XO, frame.Collision[col].YO, frame.Collision[col].ZO);
             GL.Begin(PrimitiveType.QuadStrip);
-            GL.Vertex3(xcol1, ycol1, zcol1);
-            GL.Vertex3(xcol1, ycol2, zcol1);
-            GL.Vertex3(xcol2, ycol1, zcol1);
-            GL.Vertex3(xcol2, ycol2, zcol1);
-            GL.Vertex3(xcol2, ycol1, zcol2);
-            GL.Vertex3(xcol2, ycol2, zcol2);
-            GL.Vertex3(xcol1, ycol1, zcol2);
-            GL.Vertex3(xcol1, ycol2, zcol2);
-            GL.Vertex3(xcol1, ycol1, zcol1);
-            GL.Vertex3(xcol1, ycol2, zcol1);
+            GL.Vertex3(frame.Collision[col].X1, frame.Collision[col].Y1, frame.Collision[col].Z1);
+            GL.Vertex3(frame.Collision[col].X1, frame.Collision[col].Y2, frame.Collision[col].Z1);
+            GL.Vertex3(frame.Collision[col].X2, frame.Collision[col].Y1, frame.Collision[col].Z1);
+            GL.Vertex3(frame.Collision[col].X2, frame.Collision[col].Y2, frame.Collision[col].Z1);
+            GL.Vertex3(frame.Collision[col].X2, frame.Collision[col].Y1, frame.Collision[col].Z2);
+            GL.Vertex3(frame.Collision[col].X2, frame.Collision[col].Y2, frame.Collision[col].Z2);
+            GL.Vertex3(frame.Collision[col].X1, frame.Collision[col].Y1, frame.Collision[col].Z2);
+            GL.Vertex3(frame.Collision[col].X1, frame.Collision[col].Y2, frame.Collision[col].Z2);
+            GL.Vertex3(frame.Collision[col].X1, frame.Collision[col].Y1, frame.Collision[col].Z1);
+            GL.Vertex3(frame.Collision[col].X1, frame.Collision[col].Y2, frame.Collision[col].Z1);
             GL.End();
             GL.Begin(PrimitiveType.Quads);
-            GL.Vertex3(xcol1, ycol1, zcol1);
-            GL.Vertex3(xcol2, ycol1, zcol1);
-            GL.Vertex3(xcol2, ycol1, zcol2);
-            GL.Vertex3(xcol1, ycol1, zcol2);
+            GL.Vertex3(frame.Collision[col].X1, frame.Collision[col].Y1, frame.Collision[col].Z1);
+            GL.Vertex3(frame.Collision[col].X2, frame.Collision[col].Y1, frame.Collision[col].Z1);
+            GL.Vertex3(frame.Collision[col].X2, frame.Collision[col].Y1, frame.Collision[col].Z2);
+            GL.Vertex3(frame.Collision[col].X1, frame.Collision[col].Y1, frame.Collision[col].Z2);
 
-            GL.Vertex3(xcol1, ycol2, zcol1);
-            GL.Vertex3(xcol2, ycol2, zcol1);
-            GL.Vertex3(xcol2, ycol2, zcol2);
-            GL.Vertex3(xcol1, ycol2, zcol2);
+            GL.Vertex3(frame.Collision[col].X1, frame.Collision[col].Y2, frame.Collision[col].Z1);
+            GL.Vertex3(frame.Collision[col].X2, frame.Collision[col].Y2, frame.Collision[col].Z1);
+            GL.Vertex3(frame.Collision[col].X2, frame.Collision[col].Y2, frame.Collision[col].Z2);
+            GL.Vertex3(frame.Collision[col].X1, frame.Collision[col].Y2, frame.Collision[col].Z2);
             GL.End();
             GL.PopMatrix();
         }

@@ -24,10 +24,6 @@ namespace Crash.UI
             {
                 Subcontrollers.Insert(e.Index,new AnimationEntryController(this,(AnimationEntry)e.Item));
             }
-            else if (e.Item is T1Entry)
-            {
-                Subcontrollers.Insert(e.Index,new T1EntryController(this,(T1Entry)e.Item));
-            }
             else if (e.Item is OldModelEntry)
             {
                 Subcontrollers.Insert(e.Index,new OldModelEntryController(this,(OldModelEntry)e.Item));

@@ -48,10 +48,9 @@ namespace CrashHacks.Scripts.Animation
 
         public override void Run(object value,GameVersion gameversion)
         {
-            if (value is NSF)
+            if (value is NSF nsf)
             {
-                NSF nsf = (NSF)value;
-                List<T1Entry> entries = new List<T1Entry>();
+                List<AnimationEntry> entries = new List<AnimationEntry>();
                 foreach (Chunk chunk in nsf.Chunks)
                 {
                     if (chunk is EntryChunk)
@@ -59,29 +58,29 @@ namespace CrashHacks.Scripts.Animation
                         EntryChunk entrychunk = (EntryChunk)chunk;
                         foreach (Entry entry in entrychunk.Entries)
                         {
-                            if (entry is T1Entry)
+                            if (entry is AnimationEntry anim)
                             {
-                                entries.Add((T1Entry)entry);
+                                entries.Add(anim);
                             }
                         }
                     }
                 }
-                List<T1Entry> sourceentries = new List<T1Entry>();
+                List<AnimationEntry> sourceentries = new List<AnimationEntry>();
                 for (int i = 0;i < entries.Count;i++)
                 {
-                    sourceentries.Insert(random.Next(i),new T1Entry(entries[i].Items,entries[i].EID));
+                    sourceentries.Insert(random.Next(i),new AnimationEntry(entries[i].Frames,entries[i].IsNew,entries[i].EID));
                 }
-                foreach (T1Entry entry in entries)
+                foreach (AnimationEntry entry in entries)
                 {
                     for (int i = 0;i < sourceentries.Count;i++)
                     {
-                        T1Entry sourceentry = sourceentries[i];
-                        if (sourceentry.Items.Count == entry.Items.Count && sourceentry.Save().Length <= entry.Save().Length)
+                        AnimationEntry sourceentry = sourceentries[i];
+                        if (sourceentry.Frames.Count == entry.Frames.Count && sourceentry.Save().Length <= entry.Save().Length)
                         {
-                            entry.Items.Clear();
-                            foreach (byte[] item in sourceentry.Items)
+                            entry.Frames.Clear();
+                            foreach (Frame frame in sourceentry.Frames)
                             {
-                                entry.Items.Add(item);
+                                entry.Frames.Add(frame);
                             }
                             sourceentries.RemoveAt(i);
                             break;

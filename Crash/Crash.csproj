@@ -52,12 +52,11 @@
     <Compile Include="Formats\Crash Formats\Animation\AnimationEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Animation\ColoredAnimationEntry.cs" />
     <Compile Include="Formats\Crash Formats\Animation\ColoredAnimationEntryLoader.cs" />
+    <Compile Include="Formats\Crash Formats\Animation\FrameCollision.cs" />
     <Compile Include="Formats\Crash Formats\Animation\Frame.cs" />
     <Compile Include="Formats\Crash Formats\Animation\FrameVertex.cs" />
     <Compile Include="Formats\Crash Formats\Animation\ProtoAnimationEntry.cs" />
     <Compile Include="Formats\Crash Formats\Animation\ProtoAnimationEntryLoader.cs" />
-    <Compile Include="Formats\Crash Formats\Animation\T1Entry.cs" />
-    <Compile Include="Formats\Crash Formats\Animation\T1EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Base\Entry\ENameComparer.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Acev.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Rjev.cs" />

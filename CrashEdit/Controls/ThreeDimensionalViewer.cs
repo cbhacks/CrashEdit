@@ -135,6 +135,8 @@ namespace CrashEdit
         }
 
         protected virtual float ScaleFactor => 1;
+        protected virtual float NearPlane => 128;
+        protected virtual float FarPlane => 1280000;
         protected virtual int CameraRangeMargin => 0;
         protected virtual int CameraRangeMinimum => 5;
 
@@ -299,7 +301,7 @@ namespace CrashEdit
             GL.ClearColor(0.025f,0.025f,0.025f,1);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.MatrixMode(MatrixMode.Projection);
-            var proj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver3,(float)Width/Height,128*ScaleFactor,1280000*ScaleFactor);
+            var proj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver3,(float)Width/Height,NearPlane*ScaleFactor,FarPlane*ScaleFactor);
             GL.LoadMatrix(ref proj);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();

@@ -98,7 +98,6 @@
     <Compile Include="Controllers\Scenery\OldSceneryEntryController.cs" />
     <Compile Include="Controllers\Models\ModelEntryController.cs" />
     <Compile Include="Controllers\Models\OldModelEntryController.cs" />
-    <Compile Include="Controllers\T1\T1EntryController.cs" />
     <Compile Include="Controllers\Animation\OldAnimationEntryController.cs" />
     <Compile Include="Controllers\Base\Entry\EntryController.cs" />
     <Compile Include="Controllers\Base\Chunk\UnprocessedChunkController.cs" />

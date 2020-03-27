@@ -6,13 +6,16 @@ namespace Crash
     {
         private List<Frame> frames;
 
-        public AnimationEntry(IEnumerable<Frame> frames,int eid) : base(eid)
+        public AnimationEntry(IEnumerable<Frame> frames,bool isnew,int eid) : base(eid)
         {
             this.frames = new List<Frame>(frames);
+            IsNew = isnew;
         }
 
         public override int Type => 1;
         public IList<Frame> Frames => frames;
+
+        public bool IsNew { get; }
 
         public override UnprocessedEntry Unprocess()
         {

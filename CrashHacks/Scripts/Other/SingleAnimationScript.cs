@@ -1,9 +1,17 @@
 using Crash;
+using System;
 
 namespace CrashHacks.Scripts.Other
 {
     public sealed class SingleAnimationScript : Script
     {
+        private Random random;
+
+        public SingleAnimationScript()
+        {
+            this.random = new Random();
+        }
+
         public override string Name
         {
             get { return "SingleAnimationScript"; }
@@ -37,16 +45,12 @@ namespace CrashHacks.Scripts.Other
 
         public override void Run(object value,GameVersion gameversion)
         {
-            if (value is T1Entry)
+            if (value is AnimationEntry entry)
             {
-                T1Entry entry = (T1Entry)value;
-                byte[] data = System.IO.File.ReadAllBytes(@"U:\T1.bin");
-                for (int i = 0;i < entry.Items.Count;i++)
+                int f = random.Next(entry.Frames.Count);
+                for (int i = 0;i < entry.Frames.Count;i++)
                 {
-                    if (entry.Items[i].Length >= data.Length)
-                    {
-                        entry.Items[i] = data;
-                    }
+                    entry.Frames[i] = entry.Frames[f];
                 }
             }
         }

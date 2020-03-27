@@ -77,6 +77,12 @@
     <Compile Include="Controls\BufferedTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\Crash3AnimationSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Crash3AnimationSelector.Designer.cs">
+      <DependentUpon>Crash3AnimationSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\GetAllControls.cs" />
     <Compile Include="Controls\GOOLBox.cs">
       <SubType>UserControl</SubType>
@@ -162,7 +168,6 @@
     <Compile Include="Controllers\Scenery\SceneryEntryController.cs" />
     <Compile Include="Controllers\Mystery\MysteryMultiItemEntryController.cs" />
     <Compile Include="Controllers\Mystery\MysteryUniItemEntryController.cs" />
-    <Compile Include="Controllers\T1\T1EntryController.cs" />
     <Compile Include="Controllers\Wavebank\WavebankChunkController.cs" />
     <Compile Include="Controllers\Base\Entry Chunk\EntryChunkController.cs" />
     <Compile Include="Controllers\Base\Entry\EntryController.cs" />
@@ -333,6 +338,9 @@
   <ItemGroup>
     <EmbeddedResource Include="ConfigEditor.resx">
       <DependentUpon>ConfigEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Crash3AnimationSelector.resx">
+      <DependentUpon>Crash3AnimationSelector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\OldFrameBox.resx">
       <DependentUpon>OldFrameBox.cs</DependentUpon>

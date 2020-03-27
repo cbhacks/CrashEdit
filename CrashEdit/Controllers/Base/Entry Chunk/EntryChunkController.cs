@@ -37,10 +37,6 @@ namespace CrashEdit
             {
                 return new OldAnimationEntryController(this,(OldAnimationEntry)entry);
             }
-            else if (entry is T1Entry)
-            {
-                return new T1EntryController(this,(T1Entry)entry);
-            }
             else if (entry is OldModelEntry)
             {
                 return new OldModelEntryController(this,(OldModelEntry)entry);

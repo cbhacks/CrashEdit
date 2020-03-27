@@ -75,6 +75,8 @@ namespace CrashEdit
 
         protected override int CameraRangeMargin => 128;
         protected override float ScaleFactor => 8;
+        protected override float NearPlane => 4;
+        protected override float FarPlane => 64000;
 
         protected override IEnumerable<IPosition> CorePositions
         {

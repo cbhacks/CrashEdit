@@ -42,7 +42,7 @@ namespace CrashEdit
         protected override Control CreateEditor()
         {
             if (ModelEntry.Positions == null)
-                return new Label { Text = string.Format("Polygon count: {0}\nVertex count: {1}", BitConv.FromInt32(ModelEntry.Info, 0x44), BitConv.FromInt32(ModelEntry.Info, 0x38)), TextAlign = ContentAlignment.MiddleCenter };
+                return new Label { Text = string.Format("Polygon count: {0}\nVertex count: {1}",ModelEntry.PolyCount,ModelEntry.VertexCount), TextAlign = ContentAlignment.MiddleCenter };
             else
             {
                 int totalbits = ModelEntry.Positions.Count * 8 * 3;
@@ -53,7 +53,7 @@ namespace CrashEdit
                     bits += 1+pos.YBits;
                     bits += 1+pos.ZBits;
                 }
-                return new Label { Text = string.Format("Polygon count: {0}\nVertex count: {1}\nCompression ratio: {2:0.0}%",BitConv.FromInt32(ModelEntry.Info, 0x44),BitConv.FromInt32(ModelEntry.Info, 0x38),(double)bits/totalbits * 100.0), TextAlign = ContentAlignment.MiddleCenter };
+                return new Label { Text = string.Format("Polygon count: {0}\nVertex count: {1}\nCompression ratio: {2:0.0}%",ModelEntry.PolyCount,ModelEntry.VertexCount,(double)bits/totalbits * 100.0), TextAlign = ContentAlignment.MiddleCenter };
             }
         }
 
