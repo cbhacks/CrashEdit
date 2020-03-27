@@ -27,5 +27,10 @@
             else
                 return $"{num}";
         }
+
+        public static float GetFac(float a, float b, float f)
+        {
+            return a + (b - a) * f;
+        }
     }
 }

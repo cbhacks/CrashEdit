@@ -9,12 +9,12 @@ namespace Crash
         {
             if (items == null)
                 throw new ArgumentNullException("items");
-            ProtoFrame[] frames = new ProtoFrame [items.Length];
+            OldFrame[] frames = new OldFrame [items.Length];
             for (int i = 0;i < frames.Length;i++)
             {
-                frames[i] = ProtoFrame.Load(items[i]);
+                frames[i] = OldFrame.Load(items[i]);
             }
-            return new ProtoAnimationEntry(frames,frames[0].NotProto,eid);
+            return new ProtoAnimationEntry(frames,!frames[0].Proto,eid);
         }
     }
 }

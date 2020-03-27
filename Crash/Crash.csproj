@@ -56,7 +56,6 @@
     <Compile Include="Formats\Crash Formats\Animation\FrameVertex.cs" />
     <Compile Include="Formats\Crash Formats\Animation\ProtoAnimationEntry.cs" />
     <Compile Include="Formats\Crash Formats\Animation\ProtoAnimationEntryLoader.cs" />
-    <Compile Include="Formats\Crash Formats\Animation\ProtoFrame.cs" />
     <Compile Include="Formats\Crash Formats\Animation\T1Entry.cs" />
     <Compile Include="Formats\Crash Formats\Animation\T1EntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Base\Entry\ENameComparer.cs" />

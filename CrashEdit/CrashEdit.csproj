@@ -116,7 +116,6 @@
     <Compile Include="Controllers\Animation\AnimationEntryController.cs" />
     <Compile Include="Controllers\Animation\FrameController.cs" />
     <Compile Include="Controllers\Animation\ProtoAnimationEntryController.cs" />
-    <Compile Include="Controllers\Animation\ProtoFrameController.cs" />
     <Compile Include="Controllers\Base\Chunk\ChunkController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\ControllerMenuDelegate.cs" />

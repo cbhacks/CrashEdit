@@ -167,10 +167,15 @@ namespace CrashEdit
             0});
             this.numNZ.Location = new System.Drawing.Point(142, 104);
             this.numNZ.Maximum = new decimal(new int[] {
-            255,
+            127,
             0,
             0,
             0});
+            this.numNZ.Minimum = new decimal(new int[] {
+            128,
+            0,
+            0,
+            -2147483648});
             this.numNZ.Name = "numNZ";
             this.numNZ.Size = new System.Drawing.Size(52, 20);
             this.numNZ.TabIndex = 13;
@@ -185,10 +190,15 @@ namespace CrashEdit
             0});
             this.numNY.Location = new System.Drawing.Point(142, 78);
             this.numNY.Maximum = new decimal(new int[] {
-            255,
+            127,
             0,
             0,
             0});
+            this.numNY.Minimum = new decimal(new int[] {
+            128,
+            0,
+            0,
+            -2147483648});
             this.numNY.Name = "numNY";
             this.numNY.Size = new System.Drawing.Size(52, 20);
             this.numNY.TabIndex = 11;
@@ -203,10 +213,15 @@ namespace CrashEdit
             0});
             this.numNX.Location = new System.Drawing.Point(142, 52);
             this.numNX.Maximum = new decimal(new int[] {
-            255,
+            127,
             0,
             0,
             0});
+            this.numNX.Minimum = new decimal(new int[] {
+            128,
+            0,
+            0,
+            -2147483648});
             this.numNX.Name = "numNX";
             this.numNX.Size = new System.Drawing.Size(52, 20);
             this.numNX.TabIndex = 9;
@@ -769,12 +784,12 @@ namespace CrashEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(fraG1);
-            this.Controls.Add(fraG2);
-            this.Controls.Add(fraGG);
-            this.Controls.Add(fraOffset);
-            this.Controls.Add(fraUnknown);
-            this.Controls.Add(fraVertice);
+            this.Controls.Add(this.fraG1);
+            this.Controls.Add(this.fraG2);
+            this.Controls.Add(this.fraGG);
+            this.Controls.Add(this.fraOffset);
+            this.Controls.Add(this.fraUnknown);
+            this.Controls.Add(this.fraVertice);
             this.Name = "OldFrameBox";
             this.Size = new System.Drawing.Size(398, 454);
             this.fraVertice.ResumeLayout(false);

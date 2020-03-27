@@ -4,16 +4,16 @@ namespace Crash
 {
     public sealed class ProtoAnimationEntry : Entry
     {
-        private List<ProtoFrame> frames;
+        private List<OldFrame> frames;
 
-        public ProtoAnimationEntry(IEnumerable<ProtoFrame> frames,bool notproto,int eid) : base(eid)
+        public ProtoAnimationEntry(IEnumerable<OldFrame> frames,bool notproto,int eid) : base(eid)
         {
-            this.frames = new List<ProtoFrame>(frames);
+            this.frames = new List<OldFrame>(frames);
             NotProto = notproto;
         }
 
         public override int Type => 1;
-        public IList<ProtoFrame> Frames => frames;
+        public IList<OldFrame> Frames => frames;
 
         public bool NotProto { get; }
 

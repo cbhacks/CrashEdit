@@ -11,62 +11,26 @@ namespace CrashEdit
     public sealed class OldAnimationEntryViewer : ThreeDimensionalViewer
     {
         private List<OldFrame> frames;
-        private List<ProtoFrame> protoframes;
         private OldModelEntry model;
         private int frameid;
         private Timer animatetimer;
+        private int interi;
+        private int interp = 2;
         private bool isproto;
         private bool colored;
         private float r, g, b;
         private bool collisionenabled;
         private bool texturesenabled = true;
         private bool normalsenabled = true;
+        private bool interp_startend = false;
         private int cullmode = 0;
 
         private Dictionary<int,TextureChunk> texturechunks;
         private bool init;
 
-        public OldAnimationEntryViewer(ProtoFrame frame,OldModelEntry model,Dictionary<int,TextureChunk> texturechunks)
-        {
-            collisionenabled = Properties.Settings.Default.DisplayFrameCollision;
-            protoframes = new List<ProtoFrame> { frame };
-            frames = new List<OldFrame>();
-            this.model = model;
-            this.texturechunks = texturechunks;
-            init = false;
-            colored = false;
-            InitTextures(1);
-            frameid = 0;
-            isproto = true;
-        }
-
-        public OldAnimationEntryViewer(IEnumerable<ProtoFrame> frames,OldModelEntry model,Dictionary<int,TextureChunk> texturechunks)
-        {
-            collisionenabled = Properties.Settings.Default.DisplayFrameCollision;
-            protoframes = new List<ProtoFrame>(frames);
-            this.frames = new List<OldFrame>();
-            this.model = model;
-            this.texturechunks = texturechunks;
-            init = false;
-            colored = false;
-            InitTextures(1);
-            frameid = 0;
-            isproto = true;
-            animatetimer = new Timer();
-            animatetimer.Interval = 1000 / OldMainForm.GetRate();
-            animatetimer.Enabled = true;
-            animatetimer.Tick += delegate (object sender,EventArgs e)
-            {
-                animatetimer.Interval = 1000 / OldMainForm.GetRate();
-                frameid = ++frameid % protoframes.Count;
-                Refresh();
-            };
-        }
-
         public OldAnimationEntryViewer(OldFrame frame,bool colored,OldModelEntry model,Dictionary<int,TextureChunk> texturechunks)
         {
             collisionenabled = Properties.Settings.Default.DisplayFrameCollision;
-            protoframes = new List<ProtoFrame>();
             frames = new List<OldFrame>() { frame };
             this.model = model;
             this.texturechunks = texturechunks;
@@ -80,7 +44,6 @@ namespace CrashEdit
         public OldAnimationEntryViewer(IEnumerable<OldFrame> frames,bool colored,OldModelEntry model,Dictionary<int,TextureChunk> texturechunks)
         {
             collisionenabled = Properties.Settings.Default.DisplayFrameCollision;
-            protoframes = new List<ProtoFrame>();
             this.frames = new List<OldFrame>(frames);
             this.model = model;
             this.texturechunks = texturechunks;
@@ -89,13 +52,20 @@ namespace CrashEdit
             InitTextures(1);
             frameid = 0;
             isproto = false;
-            animatetimer = new Timer();
-            animatetimer.Interval = 1000 / OldMainForm.GetRate();
-            animatetimer.Enabled = true;
+            animatetimer = new Timer
+            {
+                Interval = 1000 / OldMainForm.GetRate() / interp,
+                Enabled = true
+            };
             animatetimer.Tick += delegate (object sender,EventArgs e)
             {
-                animatetimer.Interval = 1000 / OldMainForm.GetRate();
-                frameid = ++frameid % this.frames.Count;
+                animatetimer.Interval = (int)(1000.0f / OldMainForm.GetRate() / interp);
+                ++interi;
+                if (interi == interp)
+                {
+                    interi = 0;
+                    frameid = (frameid + 1) % this.frames.Count;
+                }
                 Refresh();
             };
         }
@@ -110,21 +80,8 @@ namespace CrashEdit
         {
             get
             {
-                var vec = new Vector3(BitConv.FromInt32(model.Info,4),BitConv.FromInt32(model.Info,8),BitConv.FromInt32(model.Info,12))/MinScale;
+                var vec = model != null ? new Vector3(BitConv.FromInt32(model.Info,4),BitConv.FromInt32(model.Info,8),BitConv.FromInt32(model.Info,12))/MinScale : new Vector3(1,1,1);
                 foreach (OldFrame frame in frames)
-                {
-                    foreach (OldFrameVertex vertex in frame.Vertices)
-                    {
-                        float x = vertex.X + frame.XOffset;
-                        float y = vertex.Y + frame.YOffset;
-                        float z = vertex.Z + frame.ZOffset;
-                        x *= vec.X;
-                        y *= vec.Y;
-                        z *= vec.Z;
-                        yield return new Position(x,y,z);
-                    }
-                }
-                foreach (ProtoFrame frame in protoframes)
                 {
                     foreach (OldFrameVertex vertex in frame.Vertices)
                     {
@@ -147,10 +104,22 @@ namespace CrashEdit
                 init = true;
                 ConvertTexturesToGL(0,texturechunks,model.Structs);
             }
-            if (isproto)
-                RenderFrame(protoframes[frameid % protoframes.Count]);
+            if ((frameid + 1) == frames.Count)
+            {
+                if (interp_startend)
+                {
+                    RenderFrame(frames[frameid], frames[0]);
+                }
+                else
+                {
+                    RenderFrame(frames[frameid]);
+                    interi = interp - 1;
+                }
+            }
             else
-                RenderFrame(frames[frameid % frames.Count]);
+            {
+                RenderFrame(frames[frameid], frames[frameid+1]);
+            }
         }
 
         protected override bool IsInputKey(Keys keyData)
@@ -194,85 +163,7 @@ namespace CrashEdit
             GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
         }
 
-        private void RenderFrame(ProtoFrame frame)
-        {
-            if (model != null)
-            {
-                if (cullmode < 2)
-                {
-                    GL.Enable(EnableCap.CullFace);
-                    GL.CullFace(cullFaceModes[cullmode]);
-                }
-                if (texturesenabled)
-                    GL.Enable(EnableCap.Texture2D);
-                else
-                    GL.Disable(EnableCap.Texture2D);
-                if (normalsenabled)
-                    GL.Enable(EnableCap.Lighting);
-                else
-                    GL.Disable(EnableCap.Lighting);
-                GL.PushMatrix();
-                GL.Scale(new Vector3(BitConv.FromInt32(model.Info,4),BitConv.FromInt32(model.Info,8),BitConv.FromInt32(model.Info,12))/MinScale);
-                for (int i = 0; i < model.Polygons.Count; ++i)
-                {
-                    OldModelPolygon polygon = model.Polygons[i];
-                    OldModelStruct str = model.Structs[polygon.Unknown & 0x7FFF];
-                    if (str is OldModelTexture tex)
-                    {
-                        BindTexture(0,polygon.Unknown & 0x7FFF);
-                        GL.Color3(tex.R,tex.G,tex.B);
-                        GL.Begin(PrimitiveType.Triangles);
-                        GL.TexCoord2(tex.X1,tex.Y1);
-                        RenderVertex(frame,frame.Vertices[polygon.VertexA / 6]);
-                        GL.TexCoord2(tex.X3,tex.Y3);
-                        RenderVertex(frame,frame.Vertices[polygon.VertexC / 6]);
-                        GL.TexCoord2(tex.X2,tex.Y2);
-                        RenderVertex(frame,frame.Vertices[polygon.VertexB / 6]);
-                        GL.End();
-                    }
-                    else
-                    {
-                        UnbindTexture();
-                        OldSceneryColor col = (OldSceneryColor)str;
-                        GL.Color3(col.R,col.G,col.B);
-                        GL.Begin(PrimitiveType.Triangles);
-                        RenderVertex(frame,frame.Vertices[polygon.VertexA / 6]);
-                        RenderVertex(frame,frame.Vertices[polygon.VertexC / 6]);
-                        RenderVertex(frame,frame.Vertices[polygon.VertexB / 6]);
-                        GL.End();
-                    }
-                }
-                GL.Disable(EnableCap.CullFace);
-                GL.PopMatrix();
-                GL.Disable(EnableCap.Texture2D);
-                GL.Disable(EnableCap.Lighting);
-            }
-            else
-            {
-                GL.Color3(Color.White);
-                GL.Begin(PrimitiveType.Points);
-                foreach (OldFrameVertex vertex in frame.Vertices)
-                {
-                    RenderVertex(frame, vertex);
-                }
-                GL.End();
-            }
-            if (normalsenabled && Properties.Settings.Default.DisplayNormals)
-            {
-                GL.Begin(PrimitiveType.Lines);
-                GL.Color3(Color.Cyan);
-                foreach (OldFrameVertex vertex in frame.Vertices)
-                {
-                    GL.Vertex3(vertex.X + frame.XOffset,vertex.Y + frame.YOffset,vertex.Z + frame.ZOffset);
-                    GL.Vertex3(vertex.X + (sbyte)vertex.NormalX / 127F * 4 + frame.XOffset,
-                        vertex.Y + (sbyte)vertex.NormalY / 127F * 4 + frame.YOffset,
-                        vertex.Z + (sbyte)vertex.NormalZ / 127F * 4 + frame.ZOffset);
-                }
-                GL.End();
-            }
-        }
-
-        private void RenderFrame(OldFrame frame)
+        private void RenderFrame(OldFrame frame, OldFrame f2 = null)
         {
             if (model != null)
             {
@@ -306,11 +197,11 @@ namespace CrashEdit
                         }
                         GL.Begin(PrimitiveType.Triangles);
                         GL.TexCoord2(tex.X1,tex.Y1);
-                        RenderVertex(frame,frame.Vertices[polygon.VertexA / 6]);
+                        RenderVertex(frame,f2,polygon.VertexA / 6);
                         GL.TexCoord2(tex.X3,tex.Y3);
-                        RenderVertex(frame,frame.Vertices[polygon.VertexC / 6]);
+                        RenderVertex(frame,f2,polygon.VertexC / 6);
                         GL.TexCoord2(tex.X2,tex.Y2);
-                        RenderVertex(frame,frame.Vertices[polygon.VertexB / 6]);
+                        RenderVertex(frame,f2,polygon.VertexB / 6);
                         GL.End();
                     }
                     else
@@ -325,9 +216,9 @@ namespace CrashEdit
                             b = col.B / 128F;
                         }
                         GL.Begin(PrimitiveType.Triangles);
-                        RenderVertex(frame,frame.Vertices[polygon.VertexA / 6]);
-                        RenderVertex(frame,frame.Vertices[polygon.VertexC / 6]);
-                        RenderVertex(frame,frame.Vertices[polygon.VertexB / 6]);
+                        RenderVertex(frame,f2,polygon.VertexA / 6);
+                        RenderVertex(frame,f2,polygon.VertexC / 6);
+                        RenderVertex(frame,f2,polygon.VertexB / 6);
                         GL.End();
                     }
                 }
@@ -340,9 +231,9 @@ namespace CrashEdit
             {
                 GL.Color3(Color.White);
                 GL.Begin(PrimitiveType.Points);
-                foreach (OldFrameVertex vertex in frame.Vertices)
+                for (int i = 0, m = frame.Vertices.Count; i < m; ++i)
                 {
-                    RenderVertex(frame, vertex);
+                    RenderVertex(frame, f2, i);
                 }
                 GL.End();
             }
@@ -353,9 +244,9 @@ namespace CrashEdit
                 foreach (OldFrameVertex vertex in frame.Vertices)
                 {
                     GL.Vertex3(vertex.X + frame.XOffset,vertex.Y + frame.YOffset,vertex.Z + frame.ZOffset);
-                    GL.Vertex3(vertex.X + (sbyte)vertex.NormalX / 127F * 4 + frame.XOffset,
-                        vertex.Y + (sbyte)vertex.NormalY / 127F * 4 + frame.YOffset,
-                        vertex.Z + (sbyte)vertex.NormalZ / 127F * 4 + frame.ZOffset);
+                    GL.Vertex3(vertex.X + vertex.NormalX / 127F * 4 + frame.XOffset,
+                        vertex.Y + vertex.NormalY / 127F * 4 + frame.YOffset,
+                        vertex.Z + vertex.NormalZ / 127F * 4 + frame.ZOffset);
                 }
                 GL.End();
             }
@@ -365,29 +256,39 @@ namespace CrashEdit
             }
         }
 
-        private void RenderVertex(ProtoFrame frame, OldFrameVertex vertex)
+        private void RenderVertex(OldFrame f1, OldFrame f2, int id)
         {
-            if (normalsenabled)
+            float f = (float)interi / interp;
+            if (f2 == null)
             {
-                GL.Normal3((sbyte)vertex.NormalX / 127F,(sbyte)vertex.NormalY / 127F,(sbyte)vertex.NormalZ / 127F);
+                f2 = f1;
             }
-            GL.Vertex3(vertex.X + frame.XOffset,vertex.Y + frame.YOffset,vertex.Z + frame.ZOffset);
-        }
-
-        private void RenderVertex(OldFrame frame, OldFrameVertex vertex)
-        {
+            OldFrameVertex v1 = f1.Vertices[id];
+            OldFrameVertex v2 = f2.Vertices[id];
+            int x1 = v1.X + f1.XOffset;
+            int x2 = v2.X + f2.XOffset;
+            int y1 = v1.Y + f1.YOffset;
+            int y2 = v2.Y + f2.YOffset;
+            int z1 = v1.Z + f1.ZOffset;
+            int z2 = v2.Z + f2.ZOffset;
+            int nx1 = v1.NormalX;
+            int nx2 = v2.NormalX;
+            int ny1 = v1.NormalY;
+            int ny2 = v2.NormalY;
+            int nz1 = v1.NormalZ;
+            int nz2 = v2.NormalZ;
             if (colored)
             {
-                byte nr = (byte)(vertex.NormalX * r);
-                byte ng = (byte)(vertex.NormalY * g);
-                byte nb = (byte)(vertex.NormalZ * b);
+                byte nr = (byte)(NumberExt.GetFac(nx1,nx2,f) * r);
+                byte ng = (byte)(NumberExt.GetFac(ny1,ny2,f) * g);
+                byte nb = (byte)(NumberExt.GetFac(nz1,nz2,f) * b);
                 GL.Color3(nr,ng,nb);
             }
             else if (normalsenabled)
             {
-                GL.Normal3((sbyte)vertex.NormalX/127F,(sbyte)vertex.NormalY/127F,(sbyte)vertex.NormalZ/127F);
+                GL.Normal3(NumberExt.GetFac(nx1,nx2,f)/127F,NumberExt.GetFac(ny1,ny2,f)/127F,NumberExt.GetFac(nz1,nz2,f)/127F);
             }
-            GL.Vertex3(vertex.X + frame.XOffset,vertex.Y + frame.YOffset,vertex.Z + frame.ZOffset);
+            GL.Vertex3(NumberExt.GetFac(x1,x2,f),NumberExt.GetFac(y1,y2,f),NumberExt.GetFac(z1,z2,f));
         }
 
         private void RenderCollision(OldFrame frame)

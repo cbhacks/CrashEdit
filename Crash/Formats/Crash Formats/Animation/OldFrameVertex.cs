@@ -13,13 +13,13 @@ namespace Crash
             byte x = data[0];
             byte y = data[1];
             byte z = data[2];
-            byte normalx = data[3];
-            byte normaly = data[4];
-            byte normalz = data[5];
+            sbyte normalx = (sbyte)data[3];
+            sbyte normaly = (sbyte)data[4];
+            sbyte normalz = (sbyte)data[5];
             return new OldFrameVertex(x,y,z,normalx,normaly,normalz);
         }
 
-        public OldFrameVertex(byte x,byte y,byte z,byte normalx,byte normaly,byte normalz)
+        public OldFrameVertex(byte x,byte y,byte z,sbyte normalx,sbyte normaly,sbyte normalz)
         {
             X = x;
             Y = y;
@@ -32,9 +32,9 @@ namespace Crash
         public byte X { get; }
         public byte Y { get; }
         public byte Z { get; }
-        public byte NormalX { get; }
-        public byte NormalY { get; }
-        public byte NormalZ { get; }
+        public sbyte NormalX { get; }
+        public sbyte NormalY { get; }
+        public sbyte NormalZ { get; }
 
         double IPosition.X => X;
         double IPosition.Y => Y;
@@ -46,9 +46,9 @@ namespace Crash
             data[0] = X;
             data[1] = Y;
             data[2] = Z;
-            data[3] = NormalX;
-            data[4] = NormalY;
-            data[5] = NormalZ;
+            data[3] = (byte)NormalX;
+            data[4] = (byte)NormalY;
+            data[5] = (byte)NormalZ;
             return data;
         }
     }

@@ -176,7 +176,7 @@ namespace CrashEdit
             if (!vertexdirty)
             {
                 OldFrameVertex pos = frame.Vertices[vertexindex];
-                frame.Vertices[vertexindex] = new OldFrameVertex(pos.X, pos.Y, pos.Z, (byte)numNX.Value, pos.NormalY, pos.NormalZ);
+                frame.Vertices[vertexindex] = new OldFrameVertex(pos.X, pos.Y, pos.Z, (sbyte)numNX.Value, pos.NormalY, pos.NormalZ);
             }
         }
 
@@ -185,7 +185,7 @@ namespace CrashEdit
             if (!vertexdirty)
             {
                 OldFrameVertex pos = frame.Vertices[vertexindex];
-                frame.Vertices[vertexindex] = new OldFrameVertex(pos.X, pos.Y, pos.Z, pos.NormalX, (byte)numNY.Value, pos.NormalZ);
+                frame.Vertices[vertexindex] = new OldFrameVertex(pos.X, pos.Y, pos.Z, pos.NormalX, (sbyte)numNY.Value, pos.NormalZ);
             }
         }
 
@@ -194,7 +194,7 @@ namespace CrashEdit
             if (!vertexdirty)
             {
                 OldFrameVertex pos = frame.Vertices[vertexindex];
-                frame.Vertices[vertexindex] = new OldFrameVertex(pos.X, pos.Y, pos.Z, pos.NormalX, pos.NormalY, (byte)numNZ.Value);
+                frame.Vertices[vertexindex] = new OldFrameVertex(pos.X, pos.Y, pos.Z, pos.NormalX, pos.NormalY, (sbyte)numNZ.Value);
             }
         }
 
@@ -224,6 +224,10 @@ namespace CrashEdit
 
         private void UpdateFactorG()
         {
+            if (frame.Proto)
+            {
+                fraGG.Visible = false;
+            }
             numXG.Value = frame.XGlobal;
             numYG.Value = frame.YGlobal;
             numZG.Value = frame.ZGlobal;

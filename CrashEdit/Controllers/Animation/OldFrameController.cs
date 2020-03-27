@@ -6,8 +6,19 @@ namespace CrashEdit
 {
     public sealed class OldFrameController : Controller
     {
+        public OldFrameController(ProtoAnimationEntryController protoanimationentrycontroller, OldFrame oldframe)
+        {
+            ProtoAnimationEntryController = protoanimationentrycontroller;
+            OldAnimationEntryController = null;
+            OldFrame = oldframe;
+            AddMenu("Export as OBJ", Menu_Export_OBJ);
+            InvalidateNode();
+            InvalidateNodeImage();
+        }
+
         public OldFrameController(OldAnimationEntryController oldanimationentrycontroller,OldFrame oldframe)
         {
+            ProtoAnimationEntryController = null;
             OldAnimationEntryController = oldanimationentrycontroller;
             OldFrame = oldframe;
             AddMenu("Export as OBJ", Menu_Export_OBJ);
@@ -29,14 +40,15 @@ namespace CrashEdit
         protected override Control CreateEditor()
         {
             TabControl tbcTabs = new TabControl() { Dock = DockStyle.Fill };
-            OldModelEntry modelentry = OldAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(OldFrame.ModelEID);
+            EntryController entry = OldAnimationEntryController != null ? (EntryController)OldAnimationEntryController : (EntryController)ProtoAnimationEntryController;
+            OldModelEntry modelentry = entry.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(OldFrame.ModelEID);
 
             OldFrameBox framebox = new OldFrameBox(this);
             framebox.Dock = DockStyle.Fill;
             Dictionary<int,TextureChunk> textures = new Dictionary<int,TextureChunk>();
             foreach (OldModelStruct str in modelentry.Structs)
                 if (str is OldModelTexture tex && !textures.ContainsKey(tex.EID))
-                    textures.Add(tex.EID,OldAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<TextureChunk>(tex.EID));
+                    textures.Add(tex.EID, entry.EntryChunkController.NSFController.NSF.FindEID<TextureChunk>(tex.EID));
             OldAnimationEntryViewer viewerbox = new OldAnimationEntryViewer(OldFrame,false,modelentry,textures) { Dock = DockStyle.Fill };
 
             TabPage edittab = new TabPage("Editor");
@@ -51,12 +63,14 @@ namespace CrashEdit
             return tbcTabs;
         }
 
+        public ProtoAnimationEntryController ProtoAnimationEntryController { get; }
         public OldAnimationEntryController OldAnimationEntryController { get; }
         public OldFrame OldFrame { get; }
 
         private void Menu_Export_OBJ()
         {
-            OldModelEntry modelentry = OldAnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(OldFrame.ModelEID);
+            EntryController entry = OldAnimationEntryController != null ? (EntryController)OldAnimationEntryController : (EntryController)ProtoAnimationEntryController;
+            OldModelEntry modelentry = entry.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(OldFrame.ModelEID);
             if (modelentry == null)
             {
                 throw new GUIException("The linked model entry could not be found.");
