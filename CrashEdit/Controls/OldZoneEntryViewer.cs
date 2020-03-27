@@ -633,6 +633,7 @@ namespace CrashEdit
             switch (subtype)
             {
                 case 0: // TNT
+                case 16: // TNT AutoGrav
                     LoadTexture(OldResources.TNTBoxTopTexture);
                     break;
                 case 2: // Empty
@@ -642,6 +643,8 @@ namespace CrashEdit
                 case 9: // Doctor
                 case 10: // Pickup
                 case 11: // POW
+                case 17: // Pickup AutoGrav
+                case 20: // Empty AutoGrav
                     LoadTexture(OldResources.EmptyBoxTexture);
                     break;
                 case 4: // Continue
@@ -663,9 +666,11 @@ namespace CrashEdit
             switch (subtype)
             {
                 case 0: // TNT
+                case 16: // TNT AutoGrav
                     LoadTexture(OldResources.TNTBoxTexture);
                     break;
                 case 2: // Empty
+                case 20: // Empty AutoGrav
                     LoadTexture(OldResources.EmptyBoxTexture);
                     break;
                 case 3: // Spring
@@ -690,12 +695,14 @@ namespace CrashEdit
                     LoadTexture(OldResources.DoctorBoxTexture);
                     break;
                 case 10: // Pickup
+                case 17: // Pickup AutoGrav
                     LoadTexture(OldResources.PickupBoxTexture);
                     break;
                 case 11: // POW
                     LoadTexture(OldResources.POWBoxTexture);
                     break;
                 case 13: // Ghost
+                case 19: // Ghost Iron
                     LoadTexture(OldResources.UnknownBoxTopTexture);
                     break;
                 case 15: // Iron Spring
