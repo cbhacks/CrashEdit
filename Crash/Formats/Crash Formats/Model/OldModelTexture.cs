@@ -14,6 +14,7 @@ namespace Crash
             byte g = data[1];
             byte b = data[2];
             byte blendmode = (byte)((data[3] >> 5) & 0x3);
+            bool n = (data[3] & 0x10) != 0;
             byte clutx = (byte)(data[3] & 0xF);
             int eid = BitConv.FromInt32(data,4);
             int texinfo = BitConv.FromInt32(data,8);
@@ -23,9 +24,9 @@ namespace Crash
             byte xoffu = (byte)(texinfo >> 13 & 0x1F);
             byte cluty = (byte)(texinfo >> 6 & 0x7F);
             byte yoffu = (byte)(texinfo & 0x1F);
-            return new OldModelTexture(uvindex,clutx,cluty,xoffu,yoffu,colormode,blendmode,segment,r,g,b,eid);
+            return new OldModelTexture(uvindex,clutx,cluty,xoffu,yoffu,colormode,blendmode,segment,r,g,b,n,eid);
         }
-        public OldModelTexture(int uvindex,byte clutx,byte cluty,byte xoffu,byte yoffu,byte colormode,byte blendmode,byte segment,byte r,byte g,byte b,int eid)
+        public OldModelTexture(int uvindex,byte clutx,byte cluty,byte xoffu,byte yoffu,byte colormode,byte blendmode,byte segment,byte r,byte g,byte b,bool n,int eid)
         {
             UVIndex = uvindex;
             ClutX = clutx;
@@ -38,12 +39,14 @@ namespace Crash
             R = r;
             G = g;
             B = b;
+            N = n;
             EID = eid;
         }
         
         public byte R { get; }
         public byte G { get; }
         public byte B { get; }
+        public bool N { get; }
 
         public int EID { get; }
 
@@ -81,10 +84,10 @@ namespace Crash
         public byte[] Save()
         {
             byte[] result = new byte[8];
-            result[0] = 0;
-            result[1] = 0;
-            result[2] = 0;
-            result[3] = (byte)(0x80 | (BlendMode << 5) | ClutX);
+            result[0] = R;
+            result[1] = G;
+            result[2] = B;
+            result[3] = (byte)(0x80 | (BlendMode << 5) | (Convert.ToByte(N) << 4) | ClutX);
             uint texinfo = ((uint)UVIndex << 22) | ((uint)ColorMode << 20) | ((uint)Segment << 18) | ((uint)XOffU << 13) | ((uint)ClutY << 6) | YOffU;
             BitConv.ToInt32(result, 4, (int)texinfo);
             return result;

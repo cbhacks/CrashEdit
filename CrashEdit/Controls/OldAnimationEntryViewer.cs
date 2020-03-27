@@ -195,6 +195,10 @@ namespace CrashEdit
                             g = tex.G / 128F;
                             b = tex.B / 128F;
                         }
+                        if (tex.N && cullmode < 2)
+                        {
+                            GL.Disable(EnableCap.CullFace);
+                        }
                         GL.Begin(PrimitiveType.Triangles);
                         GL.TexCoord2(tex.X1,tex.Y1);
                         RenderVertex(frame,f2,polygon.VertexA / 6);
@@ -203,6 +207,10 @@ namespace CrashEdit
                         GL.TexCoord2(tex.X2,tex.Y2);
                         RenderVertex(frame,f2,polygon.VertexB / 6);
                         GL.End();
+                        if (tex.N && cullmode < 2)
+                        {
+                            GL.Enable(EnableCap.CullFace);
+                        }
                     }
                     else
                     {
@@ -215,11 +223,19 @@ namespace CrashEdit
                             g = col.G / 128F;
                             b = col.B / 128F;
                         }
+                        if (col.N && cullmode < 2)
+                        {
+                            GL.Disable(EnableCap.CullFace);
+                        }
                         GL.Begin(PrimitiveType.Triangles);
                         RenderVertex(frame,f2,polygon.VertexA / 6);
                         RenderVertex(frame,f2,polygon.VertexC / 6);
                         RenderVertex(frame,f2,polygon.VertexB / 6);
                         GL.End();
+                        if (col.N && cullmode < 2)
+                        {
+                            GL.Enable(EnableCap.CullFace);
+                        }
                     }
                 }
                 GL.Disable(EnableCap.CullFace);
