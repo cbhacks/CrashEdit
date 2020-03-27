@@ -271,21 +271,27 @@ namespace CrashEdit
             int y2 = v2.Y + f2.YOffset;
             int z1 = v1.Z + f1.ZOffset;
             int z2 = v2.Z + f2.ZOffset;
-            int nx1 = v1.NormalX;
-            int nx2 = v2.NormalX;
-            int ny1 = v1.NormalY;
-            int ny2 = v2.NormalY;
-            int nz1 = v1.NormalZ;
-            int nz2 = v2.NormalZ;
             if (colored)
             {
-                byte nr = (byte)(NumberExt.GetFac(nx1,nx2,f) * r);
-                byte ng = (byte)(NumberExt.GetFac(ny1,ny2,f) * g);
-                byte nb = (byte)(NumberExt.GetFac(nz1,nz2,f) * b);
+                int r1 = (byte)v1.NormalX;
+                int r2 = (byte)v2.NormalX;
+                int g1 = (byte)v1.NormalY;
+                int g2 = (byte)v2.NormalY;
+                int b1 = (byte)v1.NormalZ;
+                int b2 = (byte)v2.NormalZ;
+                byte nr = (byte)(NumberExt.GetFac(r1,r2,f) * r);
+                byte ng = (byte)(NumberExt.GetFac(g1,g2,f) * g);
+                byte nb = (byte)(NumberExt.GetFac(b1,b2,f) * b);
                 GL.Color3(nr,ng,nb);
             }
             else if (normalsenabled)
             {
+                int nx1 = v1.NormalX;
+                int nx2 = v2.NormalX;
+                int ny1 = v1.NormalY;
+                int ny2 = v2.NormalY;
+                int nz1 = v1.NormalZ;
+                int nz2 = v2.NormalZ;
                 GL.Normal3(NumberExt.GetFac(nx1,nx2,f)/127F,NumberExt.GetFac(ny1,ny2,f)/127F,NumberExt.GetFac(nz1,nz2,f)/127F);
             }
             GL.Vertex3(NumberExt.GetFac(x1,x2,f),NumberExt.GetFac(y1,y2,f),NumberExt.GetFac(z1,z2,f));
