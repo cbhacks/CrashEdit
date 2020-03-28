@@ -32,7 +32,7 @@ namespace CrashEdit
             collision_enabled = Properties.Settings.Default.DisplayFrameCollision;
             frames = new List<Frame>();
             this.model = model;
-            if (model != null && model.Positions != null) // FIXME this later
+            if (model != null && model.Positions != null)
                 frames.Add(UncompressFrame(frame));
             else
                 frames.Add(LoadFrame(frame));
