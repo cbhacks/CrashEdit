@@ -45,6 +45,23 @@ namespace Crash
             BlendMode = blendmode;
             ColorMode = colormode;
             Page = textureoffset;
+
+            PageWidth = (float)(1 << (2-ColorMode)) * 256;
+            XOff = (1 << (2-ColorMode)) * 64 * Segment;
+            Left = Math.Min(U1, Math.Min(U2, U3)) + XOff;
+            Right = Math.Max(U1, Math.Max(U2, U3)) + XOff;
+            Top = Math.Min(V1, Math.Min(V2, V3));
+            Bottom = Math.Max(V1, Math.Max(V2, V3));
+            Width = Right - Left;
+            Height = Bottom - Top;
+            X1 = ((U1 + XOff) - Left) / (float)(Right - Left) * ((Width+1)/PageWidth) + Left/PageWidth;
+            X2 = ((U2 + XOff) - Left) / (float)(Right - Left) * ((Width+1)/PageWidth) + Left/PageWidth;
+            X3 = ((U3 + XOff) - Left) / (float)(Right - Left) * ((Width+1)/PageWidth) + Left/PageWidth;
+            X4 = ((U4 + XOff) - Left) / (float)(Right - Left) * ((Width+1)/PageWidth) + Left/PageWidth;
+            Y1 = (V1 - Top) / (float)(Bottom - Top) * ((Height+1)/128F) + Top/128F;
+            Y2 = (V2 - Top) / (float)(Bottom - Top) * ((Height+1)/128F) + Top/128F;
+            Y3 = (V3 - Top) / (float)(Bottom - Top) * ((Height+1)/128F) + Top/128F;
+            Y4 = (V4 - Top) / (float)(Bottom - Top) * ((Height+1)/128F) + Top/128F;
         }
 
         public byte ColorMode { get; set; }
@@ -63,23 +80,23 @@ namespace Crash
         public byte Segment { get; }
         public byte Page { get; }
 
-        public float PageWidth => (float)Math.Pow(2,2-ColorMode) * 256;
-        private int XOff => (1 << (2-ColorMode)) * 64 * Segment;
-        public int Left => Math.Min(U1, Math.Min(U2, U3)) + XOff;
-        private int Right => Math.Max(U1, Math.Max(U2, U3)) + XOff;
-        public int Top => Math.Min(V1, Math.Min(V2, V3));
-        private int Bottom => Math.Max(V1, Math.Max(V2, V3));
-        public int Width => Right - Left;
-        public int Height => Bottom - Top;
         public int ClutY => (ClutY2 << 2) | (ClutY1 >> 2 & 0x3);
-        public float X1 => ((U1 + XOff) - Left) / (float)(Right - Left) * ((Width+1)/PageWidth) + Left/PageWidth;
-        public float X2 => ((U2 + XOff) - Left) / (float)(Right - Left) * ((Width+1)/PageWidth) + Left/PageWidth;
-        public float X3 => ((U3 + XOff) - Left) / (float)(Right - Left) * ((Width+1)/PageWidth) + Left/PageWidth;
-        public float X4 => ((U4 + XOff) - Left) / (float)(Right - Left) * ((Width+1)/PageWidth) + Left/PageWidth;
-        public float Y1 => (V1 - Top) / (float)(Bottom - Top) * ((Height+1)/128F) + Top/128F;
-        public float Y2 => (V2 - Top) / (float)(Bottom - Top) * ((Height+1)/128F) + Top/128F;
-        public float Y3 => (V3 - Top) / (float)(Bottom - Top) * ((Height+1)/128F) + Top/128F;
-        public float Y4 => (V4 - Top) / (float)(Bottom - Top) * ((Height+1)/128F) + Top/128F;
+        public float PageWidth { get; }
+        private int XOff { get; }
+        public int Left { get; }
+        private int Right { get; }
+        public int Top { get; }
+        private int Bottom { get; }
+        public int Width { get; }
+        public int Height { get; }
+        public float X1 { get; }
+        public float X2 { get; }
+        public float X3 { get; }
+        public float X4 { get; }
+        public float Y1 { get; }
+        public float Y2 { get; }
+        public float Y3 { get; }
+        public float Y4 { get; }
 
         public byte[] Save()
         {

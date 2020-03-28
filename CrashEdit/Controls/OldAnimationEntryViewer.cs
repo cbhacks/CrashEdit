@@ -16,7 +16,6 @@ namespace CrashEdit
         private Timer animatetimer;
         private int interi;
         private int interp = 2;
-        private bool isproto;
         private bool colored;
         private float r, g, b;
         private bool collisionenabled;
@@ -38,7 +37,6 @@ namespace CrashEdit
             init = false;
             InitTextures(1);
             frameid = 0;
-            isproto = false;
         }
 
         public OldAnimationEntryViewer(IEnumerable<OldFrame> frames,bool colored,OldModelEntry model,Dictionary<int,TextureChunk> texturechunks)
@@ -51,7 +49,6 @@ namespace CrashEdit
             init = false;
             InitTextures(1);
             frameid = 0;
-            isproto = false;
             animatetimer = new Timer
             {
                 Interval = 1000 / OldMainForm.GetRate() / interp,

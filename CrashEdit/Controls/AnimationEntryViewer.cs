@@ -241,24 +241,25 @@ namespace CrashEdit
                         else
                         {
                             BindTexture(0,tex);
+                            var t = model.Textures[tex];
                             switch (tri.Type)
                             {
                                 case 0:
                                 case 1:
-                                    uvs[0] = model.Textures[tex].X3;
-                                    uvs[1] = model.Textures[tex].Y3;
-                                    uvs[4] = model.Textures[tex].X1;
-                                    uvs[5] = model.Textures[tex].Y1;
+                                    uvs[0] = t.X3;
+                                    uvs[1] = t.Y3;
+                                    uvs[4] = t.X1;
+                                    uvs[5] = t.Y1;
                                     break;
                                 case 2:
-                                    uvs[0] = model.Textures[tex].X1;
-                                    uvs[1] = model.Textures[tex].Y1;
-                                    uvs[4] = model.Textures[tex].X3;
-                                    uvs[5] = model.Textures[tex].Y3;
+                                    uvs[0] = t.X1;
+                                    uvs[1] = t.Y1;
+                                    uvs[4] = t.X3;
+                                    uvs[5] = t.Y3;
                                     break;
                             }
-                            uvs[2] = model.Textures[tex].X2;
-                            uvs[3] = model.Textures[tex].Y2;
+                            uvs[2] = t.X2;
+                            uvs[3] = t.Y2;
                         }
                     }
                     else
