@@ -178,7 +178,6 @@
             this.C1numY.Name = "C1numY";
             this.C1numY.Size = new System.Drawing.Size(60, 20);
             this.C1numY.TabIndex = 3;
-            this.C1numY.ValueChanged += new System.EventHandler(this.C1numY_ValueChanged);
             // 
             // C1numX
             // 
@@ -191,7 +190,6 @@
             this.C1numX.Name = "C1numX";
             this.C1numX.Size = new System.Drawing.Size(60, 20);
             this.C1numX.TabIndex = 2;
-            this.C1numX.ValueChanged += new System.EventHandler(this.C1numX_ValueChanged);
             // 
             // label5
             // 
@@ -240,7 +238,6 @@
             this.C1dpdH.Name = "C1dpdH";
             this.C1dpdH.Size = new System.Drawing.Size(56, 21);
             this.C1dpdH.TabIndex = 3;
-            this.C1dpdH.SelectedIndexChanged += new System.EventHandler(this.C1dpdH_SelectedIndexChanged);
             // 
             // C1dpdW
             // 
@@ -256,7 +253,6 @@
             this.C1dpdW.Name = "C1dpdW";
             this.C1dpdW.Size = new System.Drawing.Size(56, 21);
             this.C1dpdW.TabIndex = 2;
-            this.C1dpdW.SelectedIndexChanged += new System.EventHandler(this.C1dpdW_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -302,7 +298,6 @@
             this.C1numCY.Name = "C1numCY";
             this.C1numCY.Size = new System.Drawing.Size(50, 20);
             this.C1numCY.TabIndex = 3;
-            this.C1numCY.ValueChanged += new System.EventHandler(this.C1numCY_ValueChanged);
             // 
             // C1numCX
             // 
@@ -320,7 +315,6 @@
             0,
             0,
             0});
-            this.C1numCX.ValueChanged += new System.EventHandler(this.C1numCX_ValueChanged);
             // 
             // label2
             // 
@@ -365,7 +359,6 @@
             this.C1dpdBlend.Name = "C1dpdBlend";
             this.C1dpdBlend.Size = new System.Drawing.Size(110, 21);
             this.C1dpdBlend.TabIndex = 0;
-            this.C1dpdBlend.SelectedIndexChanged += new System.EventHandler(this.C1dpdBlend_SelectedIndexChanged);
             // 
             // groupBox1
             // 
@@ -391,7 +384,6 @@
             this.C1dpdColor.Name = "C1dpdColor";
             this.C1dpdColor.Size = new System.Drawing.Size(80, 21);
             this.C1dpdColor.TabIndex = 0;
-            this.C1dpdColor.SelectedIndexChanged += new System.EventHandler(this.C1dpdCol_SelectedIndexChanged);
             // 
             // tabC2
             // 
@@ -434,7 +426,6 @@
             this.C2numY.Name = "C2numY";
             this.C2numY.Size = new System.Drawing.Size(60, 20);
             this.C2numY.TabIndex = 3;
-            this.C2numY.ValueChanged += new System.EventHandler(this.C2numY_ValueChanged);
             // 
             // C2numX
             // 
@@ -447,7 +438,6 @@
             this.C2numX.Name = "C2numX";
             this.C2numX.Size = new System.Drawing.Size(60, 20);
             this.C2numX.TabIndex = 2;
-            this.C2numX.ValueChanged += new System.EventHandler(this.C2numX_ValueChanged);
             // 
             // label7
             // 
@@ -505,7 +495,6 @@
             0,
             0,
             0});
-            this.C2numH.ValueChanged += new System.EventHandler(this.C2numH_ValueChanged);
             // 
             // label9
             // 
@@ -538,7 +527,6 @@
             0,
             0,
             0});
-            this.C2numW.ValueChanged += new System.EventHandler(this.C2numW_ValueChanged);
             // 
             // label10
             // 
@@ -576,7 +564,6 @@
             this.C2numCY.Name = "C2numCY";
             this.C2numCY.Size = new System.Drawing.Size(50, 20);
             this.C2numCY.TabIndex = 3;
-            this.C2numCY.ValueChanged += new System.EventHandler(this.C2numCY_ValueChanged);
             // 
             // C2numCX
             // 
@@ -594,7 +581,6 @@
             0,
             0,
             0});
-            this.C2numCX.ValueChanged += new System.EventHandler(this.C2numCX_ValueChanged);
             // 
             // label11
             // 
@@ -641,7 +627,6 @@
             this.C2dpdBlend.Name = "C2dpdBlend";
             this.C2dpdBlend.Size = new System.Drawing.Size(110, 21);
             this.C2dpdBlend.TabIndex = 0;
-            this.C2dpdBlend.SelectedIndexChanged += new System.EventHandler(this.C2dpdBlend_SelectedIndexChanged);
             // 
             // groupBox10
             // 
@@ -667,7 +652,6 @@
             this.C2dpdColor.Name = "C2dpdColor";
             this.C2dpdColor.Size = new System.Drawing.Size(80, 21);
             this.C2dpdColor.TabIndex = 0;
-            this.C2dpdColor.SelectedIndexChanged += new System.EventHandler(this.C2dpdColor_SelectedIndexChanged);
             // 
             // TextureViewer
             // 

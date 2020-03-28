@@ -16,8 +16,6 @@ namespace CrashEdit
         }
 
         private TextureChunk chunk;
-        private OldModelTexture c1tex;
-        private ModelTexture c2tex;
         private TextureType textype;
         private Rectangle selectedregion;
 
@@ -29,8 +27,6 @@ namespace CrashEdit
             Text = string.Format("Texture Viewer [{0}] - Right-click to save texture region to file", texturechunk.EName);
 
             InitializeComponent();
-            UpdateC1Tab();
-            UpdateC2Tab();
 
             tabC1.Enter += delegate (object sender, EventArgs e)
             {
@@ -46,11 +42,13 @@ namespace CrashEdit
 
             pictureBox1.MouseClick += delegate (object sender, MouseEventArgs e)
             {
-                if (e.Button == MouseButtons.Right && pictureBox1.Image != null && pictureBox1.Image is Bitmap)
+                if (e.Button == MouseButtons.Right && pictureBox1.Image != null && pictureBox1.Image is Bitmap bmp)
                 {
-                    MemoryStream w = new MemoryStream();
-                    ((Bitmap)pictureBox1.Image).Clone(selectedregion, PixelFormat.Format32bppArgb).Save(w, ImageFormat.Png);
-                    FileUtil.SaveFile($"{chunk.EName}_{TexCY}_{TexCX}", w.ToArray(), FileFilters.PNG);
+                    using (MemoryStream w = new MemoryStream())
+                    {
+                        bmp.Clone(selectedregion, PixelFormat.Format32bppArgb).Save(w, ImageFormat.Png);
+                        FileUtil.SaveFile($"{chunk.EName}_{TexCY}_{TexCX}", w.ToArray(), FileFilters.PNG);
+                    }
                 }
             };
 
@@ -58,17 +56,41 @@ namespace CrashEdit
             {
                 dpd.SelectedIndex = 0;
             }
+
+            C1dpdColor.SelectedIndexChanged += new EventHandler(Control_UpdatePicture);
+            C1dpdBlend.SelectedIndexChanged += new EventHandler(Control_UpdatePicture);
+            C1dpdW.SelectedIndexChanged += new EventHandler(Control_UpdatePicture);
+            C1dpdH.SelectedIndexChanged += new EventHandler(Control_UpdatePicture);
+            C2dpdColor.SelectedIndexChanged += new EventHandler(Control_UpdatePicture);
+            C2dpdBlend.SelectedIndexChanged += new EventHandler(Control_UpdatePicture);
+            C1numX.ValueChanged += new EventHandler(Control_UpdatePicture);
+            C1numY.ValueChanged += new EventHandler(Control_UpdatePicture);
+            C1numCX.ValueChanged += new EventHandler(Control_UpdatePicture);
+            C1numCY.ValueChanged += new EventHandler(Control_UpdatePicture);
+            C2numX.ValueChanged += new EventHandler(Control_UpdatePicture);
+            C2numY.ValueChanged += new EventHandler(Control_UpdatePicture);
+            C2numCX.ValueChanged += new EventHandler(Control_UpdatePicture);
+            C2numCY.ValueChanged += new EventHandler(Control_UpdatePicture);
+            C2numW.ValueChanged += new EventHandler(Control_UpdatePicture);
+            C2numH.ValueChanged += new EventHandler(Control_UpdatePicture);
+
+            UpdatePicture();
         }
 
-        internal int TexPWidth => textype == TextureType.Crash1 ? (int)c1tex.PageWidth : (int)c2tex.PageWidth;
-        internal int TexColorMode => textype == TextureType.Crash1 ? c1tex.ColorMode : c2tex.ColorMode;
-        internal int TexBlendMode => textype == TextureType.Crash1 ? c1tex.BlendMode : c2tex.BlendMode;
-        internal int TexX => textype == TextureType.Crash1 ? c1tex.XOff : (int)C2numX.Value;
-        internal int TexY => textype == TextureType.Crash1 ? c1tex.YOff : (int)C2numY.Value;
+        internal int TexPWidth => (1 << (2-TexColorMode)) * 256;
+        internal int TexColorMode => textype == TextureType.Crash1 ? C1dpdColor.SelectedIndex : C2dpdColor.SelectedIndex;
+        internal int TexBlendMode => textype == TextureType.Crash1 ? C1dpdBlend.SelectedIndex : C2dpdBlend.SelectedIndex;
+        internal int TexX => textype == TextureType.Crash1 ? ((64 << (2-C1dpdColor.SelectedIndex)) * ((int)C1numX.Value / 32)) + ((2 << (2-C1dpdColor.SelectedIndex)) * (int)C1numX.Value) : (int)C2numX.Value;
+        internal int TexY => textype == TextureType.Crash1 ? (int)C1numY.Value * 4 : (int)C2numY.Value;
         internal int TexW => textype == TextureType.Crash1 ? 4 << C1dpdW.SelectedIndex : (int)C2numW.Value;
         internal int TexH => textype == TextureType.Crash1 ? 4 << C1dpdH.SelectedIndex : (int)C2numH.Value;
-        internal int TexCX => textype == TextureType.Crash1 ? c1tex.ClutX : c2tex.ClutX;
-        internal int TexCY => textype == TextureType.Crash1 ? c1tex.ClutY : c2tex.ClutY;
+        internal int TexCX => textype == TextureType.Crash1 ? (int)C1numCX.Value : (int)C2numCX.Value;
+        internal int TexCY => textype == TextureType.Crash1 ? (int)C1numCY.Value : (int)C2numCY.Value;
+
+        private void Control_UpdatePicture(object sender, EventArgs e)
+        {
+            UpdatePicture();
+        }
 
         private void UpdatePicture()
         {
@@ -78,20 +100,24 @@ namespace CrashEdit
             Rectangle brect = new Rectangle(Point.Empty, bitmap.Size);
             BitmapData bdata = bitmap.LockBits(brect, ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
             short[] palette = null;
-            if (TexColorMode == 0)
+            int colormode = TexColorMode;
+            if (colormode == 0)
             {
+                int clutx = TexCX;
+                int cluty = TexCY;
                 palette = new short[16];
                 for (int x = 0; x < 16; ++x)
                 {
-                    palette[x] = BitConv.FromInt16(chunk.Data, TexCY * 512 + (TexCX * 16 + x) * 2);
+                    palette[x] = BitConv.FromInt16(chunk.Data, cluty * 512 + (clutx * 16 + x) * 2);
                 }
             }
-            else if (TexColorMode == 1)
+            else if (colormode == 1)
             {
+                int cluty = TexCY;
                 palette = new short[256];
                 for (int x = 0; x < 256; ++x)
                 {
-                    palette[x] = BitConv.FromInt16(chunk.Data, TexCY * 512 + x * 2);
+                    palette[x] = BitConv.FromInt16(chunk.Data, cluty * 512 + x * 2);
                 }
             }
             try
@@ -100,9 +126,9 @@ namespace CrashEdit
                 {
                     for (int x = 0; x < pw; x++)
                     {
-                        short color = TexColorMode == 0 ? palette[chunk.Data[x / 2 + y * 512] >> ((x & 1) == 0 ? 0 : 4) & 0xF] :
-                                      TexColorMode == 1 ? palette[chunk.Data[x + y * 512]] :
-                                      TexColorMode == 2 ? BitConv.FromInt16(chunk.Data, x * 2 + y * 512)
+                        short color = colormode == 0 ? palette[chunk.Data[x / 2 + y * 512] >> ((x & 1) == 0 ? 0 : 4) & 0xF] :
+                                      colormode == 1 ? palette[chunk.Data[x + y * 512]] :
+                                      colormode == 2 ? BitConv.FromInt16(chunk.Data, x * 2 + y * 512)
                                       : (short)0;
                         System.Runtime.InteropServices.Marshal.WriteInt32(bdata.Scan0, x * 4 + y * bdata.Stride, PixelConv.Convert5551_8888(color, TexBlendMode));
                     }
@@ -145,129 +171,6 @@ namespace CrashEdit
             pictureBox1.Image = bitmap;
             pictureBox1.Size = bitmap.Size;
             Width = pw + 16;
-        }
-
-        private void UpdateC1Tab()
-        {
-            c1tex.ColorMode = (byte)C1dpdColor.SelectedIndex;
-            c1tex.BlendMode = (byte)C1dpdBlend.SelectedIndex;
-            c1tex.ClutX = (byte)C1numCX.Value;
-            c1tex.ClutY = (byte)C1numCY.Value;
-            c1tex.Segment = (byte)(C1numX.Value / 32);
-            c1tex.XOffU = (byte)(C1numX.Value % 32);
-            c1tex.YOffU = (byte)C1numY.Value;
-            c1tex.UVIndex = C1dpdW.SelectedIndex + 5 * C1dpdH.SelectedIndex;
-            UpdatePicture();
-        }
-
-        private void C1dpdCol_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            c1tex.ColorMode = (byte)C1dpdColor.SelectedIndex;
-            C1numCX.Enabled = c1tex.ColorMode <= 0;
-            C1numCY.Enabled = c1tex.ColorMode <= 1;
-            UpdatePicture();
-        }
-
-        private void C1numX_ValueChanged(object sender, EventArgs e)
-        {
-            c1tex.Segment = (byte)(C1numX.Value / 32);
-            c1tex.XOffU = (byte)(C1numX.Value % 32);
-            UpdatePicture();
-        }
-
-        private void C1numY_ValueChanged(object sender, EventArgs e)
-        {
-            c1tex.YOffU = (byte)C1numY.Value;
-            UpdatePicture();
-        }
-
-        private void C1dpdW_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            c1tex.UVIndex = C1dpdW.SelectedIndex + 5 * C1dpdH.SelectedIndex;
-            UpdatePicture();
-        }
-
-        private void C1dpdH_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            c1tex.UVIndex = C1dpdW.SelectedIndex + 5 * C1dpdH.SelectedIndex;
-            UpdatePicture();
-        }
-
-        private void C1numCX_ValueChanged(object sender, EventArgs e)
-        {
-            c1tex.ClutX = (byte)C1numCX.Value;
-            UpdatePicture();
-        }
-
-        private void C1numCY_ValueChanged(object sender, EventArgs e)
-        {
-            c1tex.ClutY = (byte)C1numCY.Value;
-            UpdatePicture();
-        }
-
-        private void C1dpdBlend_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            c1tex.BlendMode = (byte)C1dpdBlend.SelectedIndex;
-            UpdatePicture();
-        }
-
-        private void UpdateC2Tab()
-        {
-            c2tex.ColorMode = (byte)C2dpdColor.SelectedIndex;
-            c2tex.BlendMode = (byte)C2dpdBlend.SelectedIndex;
-            c2tex.ClutX = (byte)C2numCX.Value;
-            byte cy = (byte)C2numCY.Value;
-            c2tex.ClutY1 = (byte)((cy & 0x3) << 2);
-            c2tex.ClutY2 = (byte)(cy >> 0x2 & 0x3F);
-            UpdatePicture();
-        }
-
-        private void C2numX_ValueChanged(object sender, EventArgs e)
-        {
-            UpdatePicture();
-        }
-
-        private void C2numY_ValueChanged(object sender, EventArgs e)
-        {
-            UpdatePicture();
-        }
-
-        private void C2numW_ValueChanged(object sender, EventArgs e)
-        {
-            UpdatePicture();
-        }
-
-        private void C2numH_ValueChanged(object sender, EventArgs e)
-        {
-            UpdatePicture();
-        }
-
-        private void C2numCX_ValueChanged(object sender, EventArgs e)
-        {
-            c2tex.ClutX = (byte)C2numCX.Value;
-            UpdatePicture();
-        }
-
-        private void C2numCY_ValueChanged(object sender, EventArgs e)
-        {
-            byte cy = (byte)C2numCY.Value;
-            c2tex.ClutY1 = (byte)((cy & 0x3) << 2);
-            c2tex.ClutY2 = (byte)(cy >> 0x2 & 0x3F);
-            UpdatePicture();
-        }
-
-        private void C2dpdColor_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            c2tex.ColorMode = (byte)C2dpdColor.SelectedIndex;
-            C2numCX.Enabled = c2tex.ColorMode <= 0;
-            C2numCY.Enabled = c2tex.ColorMode <= 1;
-            UpdatePicture();
-        }
-
-        private void C2dpdBlend_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            c2tex.BlendMode = (byte)C2dpdBlend.SelectedIndex;
-            UpdatePicture();
         }
     }
 }
