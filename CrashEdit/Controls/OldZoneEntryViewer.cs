@@ -562,7 +562,23 @@ namespace CrashEdit
             GL.Translate(0,50,0);
             GL.Color3(Color.White);
             LoadPickupTexture(subtype);
-            RenderSprite();
+            GL.Enable(EnableCap.Texture2D);
+            GL.PushMatrix();
+            GL.Rotate(-rotx,0,1,0);
+            GL.Rotate(-roty,1,0,0);
+            ScalePickup(subtype);
+            GL.Begin(PrimitiveType.Quads);
+            GL.TexCoord2(0,0);
+            GL.Vertex2(-50,+50);
+            GL.TexCoord2(1,0);
+            GL.Vertex2(+50,+50);
+            GL.TexCoord2(1,1);
+            GL.Vertex2(+50,-50);
+            GL.TexCoord2(0,1);
+            GL.Vertex2(-50,-50);
+            GL.End();
+            GL.PopMatrix();
+            GL.Disable(EnableCap.Texture2D);
         }
 
         private void RenderBox(int subtype)
@@ -613,17 +629,82 @@ namespace CrashEdit
         {
             switch (subtype)
             {
+                case 0: // Lime
+                    LoadTexture(OldResources.LimeTexture);
+                    break;
+                case 1: // Coconut
+                    LoadTexture(OldResources.CoconutTexture);
+                    break;
+                case 2: // Pineapple
+                    LoadTexture(OldResources.PineappleTexture);
+                    break;
+                case 3: // Strawberry
+                    LoadTexture(OldResources.StrawberryTexture);
+                    break;
+                case 4: // Mango
+                    LoadTexture(OldResources.MangoTexture);
+                    break;
                 case 5: // Life
                     LoadTexture(OldResources.LifeTexture);
                     break;
                 case 6: // Mask
                     LoadTexture(OldResources.MaskTexture);
                     break;
+                case 7: // Lemon
+                    LoadTexture(OldResources.LemonTexture);
+                    break;
+                case 8: // YYY
+                    LoadTexture(OldResources.YYYTexture);
+                    break;
+                case 11: // Grape
+                    LoadTexture(OldResources.GrapeTexture);
+                    break;
                 case 16: // Apple
                     LoadTexture(OldResources.AppleTexture);
                     break;
+                case 18: // Cortex
+                    LoadTexture(OldResources.CortexTexture);
+                    break;
+                case 19: // Brio
+                    LoadTexture(OldResources.BrioTexture);
+                    break;
+                case 20: // Tawna
+                    LoadTexture(OldResources.TawnaTexture);
+                    break;
                 default:
                     LoadTexture(OldResources.UnknownPickupTexture);
+                    break;
+            }
+        }
+
+        private void ScalePickup(int subtype)
+        {
+            switch (subtype)
+            {
+                case 0: // Lime
+                case 1: // Coconut
+                case 4: // Mango
+                case 7: // Lemon
+                case 8: // YYY
+                    GL.Scale(0.7f,0.7f,1);
+                    break;
+                case 2: // Pineapple
+                    GL.Scale(0.7f,1.4f,1);
+                    break;
+                case 3: // Strawberry
+                    GL.Scale(0.8f,0.8f,1);
+                    break;
+                case 5: // Life
+                case 6: // Mask
+                case 18: // Cortex
+                case 20: // Tawna
+                    GL.Scale(1.8f,1.125f,1);
+                    break;
+                case 16: // Apple
+                    GL.Scale(0.675f,0.84375f,1);
+                    break;
+                case 19: // Brio
+                    GL.Scale(1.8f,1.8f,1);
                     break;
             }
         }

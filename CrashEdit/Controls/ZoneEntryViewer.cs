@@ -560,7 +560,23 @@ namespace CrashEdit
             GL.Translate(0,50,0);
             GL.Color3(Color.White);
             LoadPickupTexture(subtype);
-            RenderSprite();
+            GL.Enable(EnableCap.Texture2D);
+            GL.PushMatrix();
+            GL.Rotate(-rotx,0,1,0);
+            GL.Rotate(-roty,1,0,0);
+            ScalePickup(subtype);
+            GL.Begin(PrimitiveType.Quads);
+            GL.TexCoord2(0,0);
+            GL.Vertex2(-50,+50);
+            GL.TexCoord2(1,0);
+            GL.Vertex2(+50,+50);
+            GL.TexCoord2(1,1);
+            GL.Vertex2(+50,-50);
+            GL.TexCoord2(0,1);
+            GL.Vertex2(-50,-50);
+            GL.End();
+            GL.PopMatrix();
+            GL.Disable(EnableCap.Texture2D);
         }
 
         private void RenderBox(int subtype)
@@ -622,6 +638,20 @@ namespace CrashEdit
                     break;
                 default:
                     LoadTexture(OldResources.UnknownPickupTexture);
+                    break;
+            }
+        }
+
+        private void ScalePickup(int subtype)
+        {
+            switch (subtype)
+            {
+                case 5: // Life
+                case 6: // Mask
+                    GL.Scale(1.8f,1.125f,1);
+                    break;
+                case 16: // Apple
+                    GL.Scale(0.675f,0.84375f,1);
                     break;
             }
         }

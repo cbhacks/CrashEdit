@@ -69,12 +69,15 @@ namespace CrashEdit
         private static Bitmap pointtexture = null;
 
         [Resource("MaskTexture")]
+        [ExternalTexture(10,3,2,2)]
         private static Bitmap masktexture = null;
 
         [Resource("LifeTexture")]
+        [ExternalTexture(0,4,2,1)]
         private static Bitmap lifetexture = null;
 
         [Resource("AppleTexture")]
+        [ExternalTexture(0,3)]
         private static Bitmap appletexture = null;
 
         [Resource("TNTBoxTexture")]
@@ -202,6 +205,50 @@ namespace CrashEdit
         [Resource("YellowBuckle")]
         private static Image yellowbuckle = null;
 
+        [Resource("UnknownPickupTexture")]
+        [ExternalTexture(1,3)]
+        private static Bitmap fruitlime = null;
+
+        [Resource("UnknownPickupTexture")]
+        [ExternalTexture(2,3)]
+        private static Bitmap fruitcoconut = null;
+
+        [Resource("UnknownPickupTexture")]
+        [ExternalTexture(12,3,1,2)]
+        private static Bitmap fruitpineapple = null;
+
+        [Resource("UnknownPickupTexture")]
+        [ExternalTexture(3,3)]
+        private static Bitmap fruitstrawberry = null;
+
+        [Resource("UnknownPickupTexture")]
+        [ExternalTexture(4,3)]
+        private static Bitmap fruitmango = null;
+
+        [Resource("UnknownPickupTexture")]
+        [ExternalTexture(5,3)]
+        private static Bitmap fruitlemon = null;
+
+        [Resource("UnknownPickupTexture")]
+        [ExternalTexture(6,3)]
+        private static Bitmap fruityyy = null;
+
+        [Resource("UnknownPickupTexture")]
+        [ExternalTexture(7,3)]
+        private static Bitmap fruitgrape = null;
+
+        [Resource("UnknownPickupTexture")]
+        [ExternalTexture(2,4,2,1)]
+        private static Bitmap fruitcortex = null;
+
+        [Resource("UnknownPickupTexture")]
+        [ExternalTexture(8,3,2,2)]
+        private static Bitmap fruitbrio = null;
+
+        [Resource("UnknownPickupTexture")]
+        [ExternalTexture(4,4,2,1)]
+        private static Bitmap fruittawna = null;
+
         static OldResources()
         {
             ResourceManager manager = new ResourceManager("CrashEdit.OldResources",Assembly.GetExecutingAssembly());
@@ -223,12 +270,16 @@ namespace CrashEdit
                     {
                         foreach (ExternalTextureAttribute attribute in field.GetCustomAttributes(typeof(ExternalTextureAttribute),false))
                         {
-                            Bitmap texture = new Bitmap(32,32);
+                            int w = attribute.W * 32;
+                            int h = attribute.H * 32;
                             int x = attribute.X * 32;
                             int y = attribute.Y * 32;
+                            if (texturespng.Width < x+w || texturespng.Height < y+h)
+                                continue;
+                            Bitmap texture = new Bitmap(w,h);
                             using (Graphics g = Graphics.FromImage(texture))
                             {
-                                g.DrawImage(texturespng,new Rectangle(0,0,32,32),new Rectangle(x,y,32,32),GraphicsUnit.Pixel);
+                                g.DrawImage(texturespng,new Rectangle(0,0,w,h),new Rectangle(x,y,w,h),GraphicsUnit.Pixel);
                             }
                             field.SetValue(null,texture);
                         }
@@ -294,6 +345,17 @@ namespace CrashEdit
         public static Image VioletBuckle => violetbuckle;
         public static Image RedBuckle => redbuckle;
         public static Image YellowBuckle => yellowbuckle;
+        public static Bitmap LimeTexture => fruitlime;
+        public static Bitmap CoconutTexture => fruitcoconut;
+        public static Bitmap StrawberryTexture => fruitstrawberry;
+        public static Bitmap MangoTexture => fruitmango;
+        public static Bitmap LemonTexture => fruitlemon;
+        public static Bitmap YYYTexture => fruityyy;
+        public static Bitmap GrapeTexture => fruitgrape;
+        public static Bitmap PineappleTexture => fruitpineapple;
+        public static Bitmap CortexTexture => fruitcortex;
+        public static Bitmap BrioTexture => fruitbrio;
+        public static Bitmap TawnaTexture => fruittawna;
 
         [AttributeUsage(AttributeTargets.Field)]
         private class ResourceAttribute : Attribute
@@ -309,14 +371,18 @@ namespace CrashEdit
         [AttributeUsage(AttributeTargets.Field)]
         private class ExternalTextureAttribute : Attribute
         {
-            public ExternalTextureAttribute(int x,int y)
+            public ExternalTextureAttribute(int x,int y,int w = 1,int h = 1)
             {
                 X = x;
                 Y = y;
+                W = w;
+                H = h;
             }
 
             public int X { get; }
             public int Y { get; }
+            public int W { get; }
+            public int H { get; }
         }
     }
 }
