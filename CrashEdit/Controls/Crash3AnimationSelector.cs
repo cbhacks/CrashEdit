@@ -105,7 +105,14 @@ namespace CrashEdit
                         }
                         if (sender != null)
                         {
-                            Program.C3AnimLinks.Add(anim.EID, modelentry.EID);
+                            if (Program.C3AnimLinks.ContainsKey(anim.EID))
+                            {
+                                Program.C3AnimLinks[anim.EID] = modelentry.EID;
+                            }
+                            else
+                            {
+                                Program.C3AnimLinks.Add(anim.EID, modelentry.EID);
+                            }
                             Program.SaveC3AnimLinks();
                         }
                     }
