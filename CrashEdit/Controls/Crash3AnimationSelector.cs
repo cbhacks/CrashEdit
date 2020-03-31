@@ -16,10 +16,17 @@ namespace CrashEdit
             this.nsf = nsf;
             this.anim = anim;
             this.frame = null;
+            rewardcontrol = null;
+
             Dock = DockStyle.Fill;
             InitializeComponent();
 
-            rewardcontrol = null;
+            if (Program.C3AnimLinks.ContainsKey(anim.EID))
+            {
+                txtEName.Text = Entry.EIDToEName(Program.C3AnimLinks[anim.EID]);
+                OnKeyDown_Func(null, new KeyEventArgs(Keys.Enter));
+            }
+
             txtEName.KeyDown += new KeyEventHandler(OnKeyDown_Func);
         }
 
@@ -28,10 +35,13 @@ namespace CrashEdit
             this.nsf = nsf;
             this.anim = null;
             this.frame = frame;
+            rewardcontrol = null;
+
+
+
             Dock = DockStyle.Fill;
             InitializeComponent();
 
-            rewardcontrol = null;
             txtEName.KeyDown += new KeyEventHandler(OnKeyDown_Func);
         }
 
@@ -77,6 +87,10 @@ namespace CrashEdit
                         }
                         if (anim != null)
                         {
+                            if (sender != null)
+                            {
+                                Program.C3AnimLinks.Add(anim.EID, modelentry.EID);
+                            }
                             rewardcontrol = new UndockableControl(new AnimationEntryViewer(anim.Frames,modelentry,texturechunks));
                         }
                         else
@@ -103,7 +117,7 @@ namespace CrashEdit
                     lblEIDErr.Visible = true;
                 }
             }
-            else if (rewardcontrol != null & e.KeyCode == Keys.Enter)
+            else if (rewardcontrol != null && e.KeyCode == Keys.Enter)
             {
                 Controls.Remove(rewardcontrol);
                 rewardcontrol.Dispose();

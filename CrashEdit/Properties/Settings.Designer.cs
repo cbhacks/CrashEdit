@@ -82,5 +82,17 @@ namespace CrashEdit.Properties {
                 this["DisplayFrameCollision"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseAnimLinks {
+            get {
+                return ((bool)(this["UseAnimLinks"]));
+            }
+            set {
+                this["UseAnimLinks"] = value;
+            }
+        }
     }
 }

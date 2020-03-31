@@ -20,6 +20,7 @@ namespace CrashEdit
             numH.Value = Settings.Default.DefaultFormH;
             chkNormalDisplay.Checked = Settings.Default.DisplayNormals;
             chkCollisionDisplay.Checked = Settings.Default.DisplayFrameCollision;
+            chkUseAnimLinks.Checked = Settings.Default.UseAnimLinks;
             fraLang.Text = Resources.Conifg_FraLang;
         }
 
@@ -56,6 +57,12 @@ namespace CrashEdit
         private void chkCollisionDisplay_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Default.DisplayFrameCollision = chkCollisionDisplay.Checked;
+            Settings.Default.Save();
+        }
+
+        private void chkUseAnimLinks_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.UseAnimLinks = chkUseAnimLinks.Checked;
             Settings.Default.Save();
         }
     }

@@ -38,6 +38,7 @@
             this.numW = new System.Windows.Forms.NumericUpDown();
             this.chkNormalDisplay = new System.Windows.Forms.CheckBox();
             this.chkCollisionDisplay = new System.Windows.Forms.CheckBox();
+            this.chkUseAnimLinks = new System.Windows.Forms.CheckBox();
             this.fraLang.SuspendLayout();
             this.fraSize.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numH)).BeginInit();
@@ -176,11 +177,25 @@
             this.chkCollisionDisplay.UseVisualStyleBackColor = true;
             this.chkCollisionDisplay.CheckedChanged += new System.EventHandler(this.chkCollisionDisplay_CheckedChanged);
             // 
+            // chkUseAnimLinks
+            // 
+            this.chkUseAnimLinks.AutoSize = true;
+            this.chkUseAnimLinks.Checked = true;
+            this.chkUseAnimLinks.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkUseAnimLinks.Location = new System.Drawing.Point(3, 184);
+            this.chkUseAnimLinks.Name = "chkUseAnimLinks";
+            this.chkUseAnimLinks.Size = new System.Drawing.Size(231, 17);
+            this.chkUseAnimLinks.TabIndex = 3;
+            this.chkUseAnimLinks.Text = "(Crash 3) Used saved animation-model links";
+            this.chkUseAnimLinks.UseVisualStyleBackColor = true;
+            this.chkUseAnimLinks.CheckedChanged += new System.EventHandler(this.chkUseAnimLinks_CheckedChanged);
+            // 
             // ConfigEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.Controls.Add(this.chkUseAnimLinks);
             this.Controls.Add(this.chkCollisionDisplay);
             this.Controls.Add(this.chkNormalDisplay);
             this.Controls.Add(this.fraSize);
@@ -210,5 +225,6 @@
         private System.Windows.Forms.NumericUpDown numW;
         private System.Windows.Forms.CheckBox chkNormalDisplay;
         private System.Windows.Forms.CheckBox chkCollisionDisplay;
+        private System.Windows.Forms.CheckBox chkUseAnimLinks;
     }
 }

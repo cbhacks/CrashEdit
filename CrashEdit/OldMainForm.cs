@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace CrashEdit
 {
@@ -207,6 +208,24 @@ namespace CrashEdit
             Controls.Add(tsToolbar);
 
             dlgMakeBINFile.Filter = "Playstation Disc Images (*.bin)|*.bin";
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            using (XmlWriter writer = XmlWriter.Create("CrashEdit.exe.animmodel.config", new XmlWriterSettings() { Indent = true, IndentChars = "\t" }))
+            {
+                writer.WriteStartElement("animmodels");
+                foreach (var kvp in Program.C3AnimLinks)
+                {
+                    writer.WriteStartElement("animmodel");
+                    writer.WriteAttributeString("anim", Entry.EIDToEName(kvp.Key));
+                    writer.WriteAttributeString("model", Entry.EIDToEName(kvp.Value));
+                    writer.WriteEndElement();
+                }
+                writer.WriteEndElement();
+                writer.Flush();
+            }
         }
 
         private void tbcTabs_SelectedIndexChanged(object sender, EventArgs e)
