@@ -30,17 +30,21 @@ namespace CrashEdit
             txtEName.KeyDown += new KeyEventHandler(OnKeyDown_Func);
         }
 
-        public Crash3AnimationSelector(Frame frame, NSF nsf)
+        public Crash3AnimationSelector(AnimationEntry anim, Frame frame, NSF nsf)
         {
             this.nsf = nsf;
-            this.anim = null;
+            this.anim = anim;
             this.frame = frame;
             rewardcontrol = null;
 
-
-
             Dock = DockStyle.Fill;
             InitializeComponent();
+
+            if (Program.C3AnimLinks.ContainsKey(anim.EID))
+            {
+                txtEName.Text = Entry.EIDToEName(Program.C3AnimLinks[anim.EID]);
+                OnKeyDown_Func(null, new KeyEventArgs(Keys.Enter));
+            }
 
             txtEName.KeyDown += new KeyEventHandler(OnKeyDown_Func);
         }
@@ -55,7 +59,7 @@ namespace CrashEdit
                     ModelEntry modelentry = nsf.FindEID<ModelEntry>(Entry.ENameToEID(txtEName.Text));
                     if (modelentry != null)
                     {
-                        if (anim != null)
+                        if (frame == null)
                         {
                             foreach (Frame f in anim.Frames)
                             {
@@ -85,22 +89,22 @@ namespace CrashEdit
                         {
                             texturechunks[i] = nsf.FindEID<TextureChunk>(BitConv.FromInt32(modelentry.Info,0xC+i*4));
                         }
-                        if (anim != null)
+                        if (frame == null)
                         {
-                            if (sender != null)
-                            {
-                                Program.C3AnimLinks.Add(anim.EID, modelentry.EID);
-                            }
                             rewardcontrol = new UndockableControl(new AnimationEntryViewer(anim.Frames,modelentry,texturechunks));
                         }
                         else
                         {
                             rewardcontrol = new UndockableControl(new AnimationEntryViewer(frame,modelentry,texturechunks));
                         }
+                        if (sender != null)
+                        {
+                            Program.C3AnimLinks.Add(anim.EID, modelentry.EID);
+                        }
                     }
                     else
                     {
-                        if (anim != null)
+                        if (frame == null)
                         {
                             rewardcontrol = new UndockableControl(new AnimationEntryViewer(anim.Frames,null,null));
                         }

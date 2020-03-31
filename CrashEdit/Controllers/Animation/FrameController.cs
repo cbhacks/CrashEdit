@@ -38,7 +38,7 @@ namespace CrashEdit
             }
             else
             {
-                return new Crash3AnimationSelector(Frame, AnimationEntryController.EntryChunkController.NSFController.NSF);
+                return new Crash3AnimationSelector(AnimationEntryController.AnimationEntry, Frame, AnimationEntryController.EntryChunkController.NSFController.NSF);
             }
         }
 
