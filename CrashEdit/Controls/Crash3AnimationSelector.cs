@@ -78,6 +78,12 @@ namespace CrashEdit
                             return;
                         }
                     }
+                    else
+                    {
+                        lblEIDErr.Visible = true;
+                        lblEIDErr.Text = "Model does not exist.";
+                        return;
+                    }
                     foreach (Control control in Controls)
                     {
                         control.Visible = control.Enabled = false;
