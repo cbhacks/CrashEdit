@@ -65,7 +65,7 @@ https://docs.google.com/document/d/1yZX49fsW7VpN7ODnFbugFIpSGbajqPsFHUqMdti5IOk/
 
 The NSF file contains the actual game data for the level and is what CrashEdit is designed to read and manipulate. An NSF file consists of __entries__. Each entry has a 5-character name, and represents a game asset such as a sound effect or 3D model. The following entry types are recognized and supported by CrashEdit:
 
-* __Animation Entry:__ One animation used by a game object. Each frame is a full set of vertices. CrashEdit currently only supports animation from the first and second Crash games.
+* __Animation Entry:__ One animation used by a game object. Each frame is a full set of vertices.
 * __Model Entry:__ One model used by a game object. Polygon data is stored in a Model Entry, but vertex data is stored in an Animation Entry.
 * __Scenery Entry:__ One section of the 3D model for a level's scenery.
 * __Sort List Entry:__ A list of values that indicate what polygons should be drawn on-screen and in what order. These require world indexing, which means they'll only operate along with a Zone Entry.
