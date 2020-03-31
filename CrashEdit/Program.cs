@@ -9,6 +9,48 @@ namespace CrashEdit
     internal static class Program
     {
         public static Dictionary<int,int> C3AnimLinks = new Dictionary<int,int>();
+        public static void SaveC3AnimLinks()
+        {
+            using (XmlWriter writer = XmlWriter.Create("CrashEdit.exe.animmodel.config", new XmlWriterSettings() { Indent = true, IndentChars = "\t" }))
+            {
+                writer.WriteStartElement("animmodels");
+                foreach (var kvp in C3AnimLinks)
+                {
+                    writer.WriteStartElement("animmodel");
+                    writer.WriteAttributeString("anim", Entry.EIDToEName(kvp.Key));
+                    writer.WriteAttributeString("model", Entry.EIDToEName(kvp.Value));
+                    writer.WriteEndElement();
+                }
+                writer.WriteEndElement();
+                writer.Flush();
+            }
+        }
+
+        public static void LoadC3AnimLinks()
+        {
+            XmlReader r = null;
+            try
+            {
+                r = XmlReader.Create("CrashEdit.exe.animmodel.config");
+            }
+            catch (System.IO.FileNotFoundException) { }
+            while (r.Read())
+            {
+                switch (r.NodeType)
+                {
+                    case XmlNodeType.Element:
+                        if (r.Name == "animmodel")
+                        {
+                            string anim = r.GetAttribute("anim");
+                            string model = r.GetAttribute("model");
+                            C3AnimLinks.Add(Entry.ENameToEID(anim), Entry.ENameToEID(model));
+                        }
+                        break;
+                }
+            }
+            r.Close();
+            r.Dispose();
+        }
 
         [STAThread]
         internal static void Main(string[] args)
@@ -24,27 +66,7 @@ namespace CrashEdit
                 Properties.Settings.Default.DefaultFormW = 640;
             if (Properties.Settings.Default.DefaultFormH < 480)
                 Properties.Settings.Default.DefaultFormH = 480;
-            try
-            {
-                using (XmlReader r = XmlReader.Create("CrashEdit.exe.animmodel.config"))
-                {
-                    while (r.Read())
-                    {
-                        switch (r.NodeType)
-                        {
-                            case XmlNodeType.Element:
-                                if (r.Name == "animmodel")
-                                {
-                                    string anim = r.GetAttribute("anim");
-                                    string model = r.GetAttribute("model");
-                                    C3AnimLinks.Add(Entry.ENameToEID(anim), Entry.ENameToEID(model));
-                                }
-                                break;
-                        }
-                    }
-                }
-            }
-            catch (System.IO.FileNotFoundException) { }
+            LoadC3AnimLinks();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             using (OldMainForm mainform = new OldMainForm())

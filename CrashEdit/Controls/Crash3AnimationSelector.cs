@@ -21,7 +21,7 @@ namespace CrashEdit
             Dock = DockStyle.Fill;
             InitializeComponent();
 
-            if (Program.C3AnimLinks.ContainsKey(anim.EID))
+            if (Properties.Settings.Default.UseAnimLinks && Program.C3AnimLinks.ContainsKey(anim.EID))
             {
                 txtEName.Text = Entry.EIDToEName(Program.C3AnimLinks[anim.EID]);
                 OnKeyDown_Func(null, new KeyEventArgs(Keys.Enter));
@@ -40,7 +40,7 @@ namespace CrashEdit
             Dock = DockStyle.Fill;
             InitializeComponent();
 
-            if (Program.C3AnimLinks.ContainsKey(anim.EID))
+            if (Properties.Settings.Default.UseAnimLinks && Program.C3AnimLinks.ContainsKey(anim.EID))
             {
                 txtEName.Text = Entry.EIDToEName(Program.C3AnimLinks[anim.EID]);
                 OnKeyDown_Func(null, new KeyEventArgs(Keys.Enter));
@@ -106,6 +106,7 @@ namespace CrashEdit
                         if (sender != null)
                         {
                             Program.C3AnimLinks.Add(anim.EID, modelentry.EID);
+                            Program.SaveC3AnimLinks();
                         }
                     }
                     else
