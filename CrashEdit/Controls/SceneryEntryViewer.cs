@@ -110,7 +110,7 @@ namespace CrashEdit
                 GL.Disable(EnableCap.Texture2D);
             else
                 GL.Enable(EnableCap.Texture2D);
-            float[] uvs = new float[8];
+            double[] uvs = new double[8];
             if (displaylist == -1)
             {
                 displaylist = GL.GenLists(1);

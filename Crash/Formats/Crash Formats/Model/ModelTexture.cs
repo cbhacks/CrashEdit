@@ -46,22 +46,36 @@ namespace Crash
             ColorMode = colormode;
             Page = textureoffset;
 
-            PageWidth = (float)(1 << (2-ColorMode)) * 256;
-            XOff = (1 << (2-ColorMode)) * 64 * Segment;
-            Left = Math.Min(U1, Math.Min(U2, U3)) + XOff;
-            Right = Math.Max(U1, Math.Max(U2, U3)) + XOff;
+            double pw = 256 << (2-ColorMode);
+            int xoff = (1 << (2-ColorMode)) * 64 * Segment;
+            Left = Math.Min(U1, Math.Min(U2, U3)) + xoff;
             Top = Math.Min(V1, Math.Min(V2, V3));
-            Bottom = Math.Max(V1, Math.Max(V2, V3));
-            Width = Right - Left;
-            Height = Bottom - Top;
-            X1 = ((U1 + XOff) - Left) / (float)(Right - Left) * ((Width+1)/PageWidth) + Left/PageWidth;
-            X2 = ((U2 + XOff) - Left) / (float)(Right - Left) * ((Width+1)/PageWidth) + Left/PageWidth;
-            X3 = ((U3 + XOff) - Left) / (float)(Right - Left) * ((Width+1)/PageWidth) + Left/PageWidth;
-            X4 = ((U4 + XOff) - Left) / (float)(Right - Left) * ((Width+1)/PageWidth) + Left/PageWidth;
-            Y1 = (V1 - Top) / (float)(Bottom - Top) * ((Height+1)/128F) + Top/128F;
-            Y2 = (V2 - Top) / (float)(Bottom - Top) * ((Height+1)/128F) + Top/128F;
-            Y3 = (V3 - Top) / (float)(Bottom - Top) * ((Height+1)/128F) + Top/128F;
-            Y4 = (V4 - Top) / (float)(Bottom - Top) * ((Height+1)/128F) + Top/128F;
+            Width = Math.Max(U1, Math.Max(U2, U3)) + xoff - Left;
+            Height = Math.Max(V1, Math.Max(V2, V3)) - Top;
+            int tx1 = U1+xoff;
+            int tx2 = U2+xoff;
+            int tx3 = U3+xoff;
+            int tx4 = U4+xoff;
+            if (tx1 > tx2 || tx1 > tx3) ++tx1;
+            if (tx2 > tx1 || tx2 > tx3) ++tx2;
+            if (tx3 > tx2 || tx3 > tx1) ++tx3;
+            if (tx4 > tx2 || tx4 > tx3 || tx4 > tx1) ++tx4;
+            X1 = tx1/pw;
+            X2 = tx2/pw;
+            X3 = tx3/pw;
+            X4 = tx4/pw;
+            int ty1 = V1;
+            int ty2 = V2;
+            int ty3 = V3;
+            int ty4 = V4;
+            if (ty1 > ty2 || ty1 > ty3) ++ty1;
+            if (ty2 > ty1 || ty2 > ty3) ++ty2;
+            if (ty3 > ty2 || ty3 > ty1) ++ty3;
+            if (ty4 > ty2 || ty4 > ty3 || ty4 > ty1) ++ty4;
+            Y1 = ty1/128.0;
+            Y2 = ty2/128.0;
+            Y3 = ty3/128.0;
+            Y4 = ty4/128.0;
         }
 
         public byte ColorMode { get; set; }
@@ -81,22 +95,18 @@ namespace Crash
         public byte Page { get; }
 
         public int ClutY => (ClutY2 << 2) | (ClutY1 >> 2 & 0x3);
-        public float PageWidth { get; }
-        private int XOff { get; }
         public int Left { get; }
-        private int Right { get; }
         public int Top { get; }
-        private int Bottom { get; }
         public int Width { get; }
         public int Height { get; }
-        public float X1 { get; }
-        public float X2 { get; }
-        public float X3 { get; }
-        public float X4 { get; }
-        public float Y1 { get; }
-        public float Y2 { get; }
-        public float Y3 { get; }
-        public float Y4 { get; }
+        public double X1 { get; }
+        public double X2 { get; }
+        public double X3 { get; }
+        public double X4 { get; }
+        public double Y1 { get; }
+        public double Y2 { get; }
+        public double Y3 { get; }
+        public double Y4 { get; }
 
         public byte[] Save()
         {

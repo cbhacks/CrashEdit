@@ -206,7 +206,7 @@ namespace CrashEdit
                     GL.Disable(EnableCap.Texture2D);
                 GL.PushMatrix();
                 GL.Scale(new Vector3(BitConv.FromInt32(model.Info,0),BitConv.FromInt32(model.Info,4),BitConv.FromInt32(model.Info,8))/MinScale);
-                float[] uvs = new float[6];
+                double[] uvs = new double[6];
                 foreach (ModelTransformedTriangle tri in model.Triangles)
                 {
                     if (tri.Tex != 0 || tri.Animated)
