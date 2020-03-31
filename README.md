@@ -69,11 +69,14 @@ The NSF file contains the actual game data for the level and is what CrashEdit i
 * __Model Entry:__ One model used by a game object. Polygon data is stored in a Model Entry, but vertex data is stored in an Animation Entry.
 * __Scenery Entry:__ One section of the 3D model for a level's scenery.
 * __Sort List Entry:__ A list of values that indicate what polygons should be drawn on-screen and in what order. These require world indexing, which means they'll only operate along with a Zone Entry.
-* __Texture Chunk:__ Not a real entry type. A single 64 KB page whose data will be directly uploaded to VRAM on load.
+* __Texture Chunk:__ Not a real entry type. A single 64 KB page whose data will be directly uploaded to VRAM on load. Double-click to open a texture viewer window.
 * __Zone Entry:__ Describes one level "zone", including objects in that zone as well as the zone's camera configuration and collision octrees.
 * __GOOL Entry:__ One dynamically-linked object executable. Contains all object code as GOOL bytecode (and also R3000A MIPS for Crash 2 and 3) for a specified object type as a series of code blocks, including animation references. Crash 3 GOOL is not fully supported.
 * __Sound Entry:__ A sound effect. This entry only contains the raw sound data without any metadata such as the sample rate.
 * __Music Entry:__ A set of music tracks in SEQ format (very similar to MIDI format), and the associated VH file (wavebank header file). Each level zone will refer to a single music entry which will be used for playback while the camera is in that zone.
+* __Image Entry:__ A list of 16x16 bitmaps, meant for use with a Map Entry. Each bitmap can be in one of many formats.
+* __Map Entry:__ Describes a "map", composed of a background image, followed by several "map entities" which are overlayed. CrashEdit only supports the background layer. Right-click the image to save to a file.
+* __Pallette Entry:__ A list of 256-color pallettes, meant for use with 8-bit Image Entries.
 * __Wavebank Entry:__ Part of the level's wavebank data (VB file). Crash music is in MIDI format, but does not use General MIDI (GM) instruments. Instead, a custom instrument set is used for each level theme. The audio data for this instrument set (wavebank) is very large, so it must be split into multiple entries (up to a maximum of 7).
 * __Speech Entry:__ Similar to the _sound entry_, but localized (supporting multiple languages). Long dialogue or any other streamed audio is often split up into multiple of these entries due to size constraints.
 
