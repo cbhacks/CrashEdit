@@ -80,7 +80,7 @@ namespace CrashEdit
         internal int TexPWidth => (1 << (2-TexColorMode)) * 256;
         internal int TexColorMode => textype == TextureType.Crash1 ? C1dpdColor.SelectedIndex : C2dpdColor.SelectedIndex;
         internal int TexBlendMode => textype == TextureType.Crash1 ? C1dpdBlend.SelectedIndex : C2dpdBlend.SelectedIndex;
-        internal int TexX => textype == TextureType.Crash1 ? ((64 << (2-C1dpdColor.SelectedIndex)) * ((int)C1numX.Value / 32)) + ((2 << (2-C1dpdColor.SelectedIndex)) * (int)C1numX.Value) : (int)C2numX.Value;
+        internal int TexX => textype == TextureType.Crash1 ? (2 << (2-C1dpdColor.SelectedIndex)) * (int)C1numX.Value : (int)C2numX.Value;
         internal int TexY => textype == TextureType.Crash1 ? (int)C1numY.Value * 4 : (int)C2numY.Value;
         internal int TexW => textype == TextureType.Crash1 ? 4 << C1dpdW.SelectedIndex : (int)C2numW.Value;
         internal int TexH => textype == TextureType.Crash1 ? 4 << C1dpdH.SelectedIndex : (int)C2numH.Value;
