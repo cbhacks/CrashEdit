@@ -120,6 +120,7 @@ namespace CrashEdit
                     palette[x] = BitConv.FromInt16(chunk.Data, cluty * 512 + x * 2);
                 }
             }
+            int blendmode = TexBlendMode;
             try
             {
                 for (int y = 0; y < ph; y++)
@@ -130,7 +131,7 @@ namespace CrashEdit
                                       colormode == 1 ? palette[chunk.Data[x + y * 512]] :
                                       colormode == 2 ? BitConv.FromInt16(chunk.Data, x * 2 + y * 512)
                                       : (short)0;
-                        System.Runtime.InteropServices.Marshal.WriteInt32(bdata.Scan0, x * 4 + y * bdata.Stride, PixelConv.Convert5551_8888(color, TexBlendMode));
+                        System.Runtime.InteropServices.Marshal.WriteInt32(bdata.Scan0, x * 4 + y * bdata.Stride, PixelConv.Convert5551_8888(color, blendmode));
                     }
                 }
             }
@@ -170,7 +171,8 @@ namespace CrashEdit
             }
             pictureBox1.Image = bitmap;
             pictureBox1.Size = bitmap.Size;
-            Width = pw + 16;
+            if (Width != pw + 16)
+                Width = pw + 16;
         }
     }
 }
