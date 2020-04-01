@@ -15,8 +15,8 @@ namespace Crash
             byte b = data[2];
             byte blendmode = (byte)((data[3] >> 5) & 0x3);
             byte clutx = (byte)(data[3] & 0xF);
-            uint texinfo = (uint)BitConv.FromInt32(data, 4);
-            uint uvindex = ((texinfo >> 22) & 0x3FF);
+            int texinfo = BitConv.FromInt32(data, 4);
+            int uvindex = (texinfo >> 22) & 0x3FF;
             byte colormode = (byte)(texinfo >> 20 & 3);
             byte segment = (byte)(texinfo >> 18 & 3);
             byte xoffu = (byte)(texinfo >> 13 & 0x1F);
@@ -24,7 +24,7 @@ namespace Crash
             byte yoffu = (byte)(texinfo & 0x1F);
             return new OldSceneryTexture(uvindex,clutx,cluty,xoffu,yoffu,colormode,blendmode,segment,r,g,b);
         }
-        public OldSceneryTexture(uint uvindex,byte clutx,byte cluty,byte xoffu,byte yoffu,byte colormode,byte blendmode,byte segment,byte r,byte g,byte b)
+        public OldSceneryTexture(int uvindex,byte clutx,byte cluty,byte xoffu,byte yoffu,byte colormode,byte blendmode,byte segment,byte r,byte g,byte b)
         {
             UVIndex = uvindex;
             ClutX = clutx;
@@ -38,27 +38,27 @@ namespace Crash
             G = g;
             B = b;
             
-            Width = 4 << ((int)UVIndex % 5);
-            Height = 4 << (((int)UVIndex / 5) % 5);
-            FlipWinding = (int)UVIndex / 25;
-            U1 = Width * ((0x30FF0C >> FlipWinding) & 1);
-            V1 = Height * ((0xF3CC30 >> FlipWinding) & 1);
-            U2 = Width * ((0x8799E1 >> FlipWinding) & 1);
-            V2 = Height * ((0x9E7186 >> FlipWinding) & 1);
-            U3 = Width * ((0x4B66D2 >> FlipWinding) & 1);
-            V3 = Height * ((0x6DB249 >> FlipWinding) & 1);
-            PageWidth = (float)(1 << (2-ColorMode)) * 256;
-            XOff = ((64 << (2-ColorMode)) * Segment) + ((2 << (2-ColorMode)) * XOffU);
-            YOff = YOffU * 4;
-            Left = Math.Min(U1, Math.Min(U2, U3)) + XOff;
-            Top = Math.Min(V1, Math.Min(V2, V3)) + YOff;
+            Width = 4 << (UVIndex % 5);
+            Height = 4 << ((UVIndex / 5) % 5);
+            int winding = UVIndex / 25;
+            int u1 = Width * ((0x30FF0C >> winding) & 1);
+            int v1 = Height * ((0xF3CC30 >> winding) & 1);
+            int u2 = Width * ((0x8799E1 >> winding) & 1);
+            int v2 = Height * ((0x9E7186 >> winding) & 1);
+            int u3 = Width * ((0x4B66D2 >> winding) & 1);
+            int v3 = Height * ((0x6DB249 >> winding) & 1);
+            double pw = 256 << (2-ColorMode);
+            int xoff = ((64 << (2-ColorMode)) * Segment) + ((2 << (2-ColorMode)) * XOffU);
+            int yoff = YOffU * 4;
+            Left = Math.Min(u1, Math.Min(u2, u3)) + xoff;
+            Top = Math.Min(v1, Math.Min(v2, v3)) + yoff;
 
-            X1 = (U1 + XOff) / PageWidth;
-            X2 = (U2 + XOff) / PageWidth;
-            X3 = (U3 + XOff) / PageWidth;
-            Y1 = (V1 + YOff) / 128F;
-            Y2 = (V2 + YOff) / 128F;
-            Y3 = (V3 + YOff) / 128F;
+            X1 = (u1 + xoff) / pw;
+            X2 = (u2 + xoff) / pw;
+            X3 = (u3 + xoff) / pw;
+            Y1 = (v1 + yoff) / 128.0;
+            Y2 = (v2 + yoff) / 128.0;
+            Y3 = (v3 + yoff) / 128.0;
         }
         
         public byte R { get; }
@@ -66,7 +66,7 @@ namespace Crash
         public byte B { get; }
 
         public byte ColorMode { get; }
-        public uint UVIndex { get; }
+        public int UVIndex { get; }
         public byte ClutX { get; } // 16-color (32-byte) segments
         public byte ClutY { get; }
         public byte XOffU { get; }
@@ -74,27 +74,17 @@ namespace Crash
         public byte BlendMode { get; }
         public byte Segment { get; }
 
-        private float PageWidth { get; }
-        private int XOff { get; }
-        private int YOff { get; }
         public int Left { get; }
         public int Top { get; }
         public int Width { get; }
         public int Height { get; }
-        public int FlipWinding { get; }
-        public int U1 { get; }
-        public int V1 { get; }
-        public int U2 { get; }
-        public int V2 { get; }
-        public int U3 { get; }
-        public int V3 { get; }
 
-        public float X1 { get; }
-        public float X2 { get; }
-        public float X3 { get; }
-        public float Y1 { get; }
-        public float Y2 { get; }
-        public float Y3 { get; }
+        public double X1 { get; }
+        public double X2 { get; }
+        public double X3 { get; }
+        public double Y1 { get; }
+        public double Y2 { get; }
+        public double Y3 { get; }
 
         public byte[] Save()
         {
@@ -103,7 +93,7 @@ namespace Crash
             result[1] = 0;
             result[2] = 0;
             result[3] = (byte)(0x80 | (BlendMode << 5) | ClutX);
-            uint texinfo = (UVIndex << 22) | ((uint)ColorMode << 20) | ((uint)Segment << 18) | ((uint)XOffU << 13) | ((uint)ClutY << 6) | YOffU;
+            uint texinfo = ((uint)UVIndex << 22) | ((uint)ColorMode << 20) | ((uint)Segment << 18) | ((uint)XOffU << 13) | ((uint)ClutY << 6) | YOffU;
             BitConv.ToInt32(result, 4, (int)texinfo);
             return result;
         }
