@@ -57,7 +57,7 @@ namespace Crash
                     temporals[i * 32 + j] = (val >> (31 - j) & 0x1) == 1;
                 }
             }
-            return new Frame(xoffset,yoffset,zoffset,unknown,modeleid,headersize,collision,vertices,specialvertexcount,temporals);
+            return new Frame(xoffset,yoffset,zoffset,unknown,modeleid,headersize,collision,vertices,specialvertexcount,temporals,false);
         }
 
         public static Frame LoadNew(byte[] data)
@@ -72,9 +72,10 @@ namespace Crash
             short yoffset = BitConv.FromInt16(data,2);
             short zoffset = BitConv.FromInt16(data,4);
             short unknown = BitConv.FromInt16(data,6);
-            if (BitConv.FromInt32(data,8) != 0 && BitConv.FromInt32(data,12) != 0)
+            int unknown2 = BitConv.FromInt32(data,8);
+            if (BitConv.FromInt32(data,12) != 0)
             {
-                ErrorManager.SignalIgnorableError("NewFrame: Reserved values are not blank");
+                ErrorManager.SignalIgnorableError("NewFrame: Reserved value is not blank");
             }
             int vertexcount = BitConv.FromInt32(data,16);
             if (vertexcount < 0 || vertexcount > Chunk.Length / 3)
@@ -115,34 +116,20 @@ namespace Crash
                     temporals[i * 32 + j] = (val >> (31 - j) & 0x1) == 1;
                 }
             }
-            return new Frame(xoffset,yoffset,zoffset,unknown,headersize,collision,vertices,specialvertexcount,temporals);
+            return new Frame(xoffset,yoffset,zoffset,unknown,unknown2,headersize,collision,vertices,specialvertexcount,temporals,true);
         }
 
         private List<FrameCollision> collision;
         private List<FrameVertex> vertices;
 
-        public Frame(short xoffset,short yoffset,short zoffset,short unknown,int modeleid,int headersize,IEnumerable<FrameCollision> collision,IEnumerable<FrameVertex> vertices,int specialvertexcount, bool[] temporals)
+        public Frame(short xoffset,short yoffset,short zoffset,short unknown,int modeleid,int headersize,IEnumerable<FrameCollision> collision,IEnumerable<FrameVertex> vertices,int specialvertexcount, bool[] temporals,bool isnew)
         {
-            IsNew = false;
+            IsNew = isnew;
             XOffset = xoffset;
             YOffset = yoffset;
             ZOffset = zoffset;
             Unknown = unknown;
             ModelEID = modeleid;
-            HeaderSize = headersize;
-            SpecialVertexCount = specialvertexcount;
-            this.collision = new List<FrameCollision>(collision);
-            this.vertices = new List<FrameVertex>(vertices);
-            Temporals = temporals;
-        }
-
-        public Frame(short xoffset,short yoffset,short zoffset,short unknown,int headersize,IEnumerable<FrameCollision> collision,IEnumerable<FrameVertex> vertices,int specialvertexcount, bool[] temporals)
-        {
-            IsNew = true;
-            XOffset = xoffset;
-            YOffset = yoffset;
-            ZOffset = zoffset;
-            Unknown = unknown;
             HeaderSize = headersize;
             SpecialVertexCount = specialvertexcount;
             this.collision = new List<FrameCollision>(collision);
@@ -220,7 +207,7 @@ namespace Crash
             BitConv.ToInt16(result,2,YOffset);
             BitConv.ToInt16(result,4,ZOffset);
             BitConv.ToInt16(result,6,Unknown);
-            BitConv.ToInt32(result,8,0);
+            BitConv.ToInt32(result,8,ModelEID);
             BitConv.ToInt32(result,12,0);
             BitConv.ToInt32(result,16,vertices.Count);
             BitConv.ToInt32(result,20,collision.Count);
