@@ -77,7 +77,6 @@ namespace CrashEdit
             UpdatePicture();
         }
 
-        internal int TexPWidth => (1 << (2-TexColorMode)) * 256;
         internal int TexColorMode => textype == TextureType.Crash1 ? C1dpdColor.SelectedIndex : C2dpdColor.SelectedIndex;
         internal int TexBlendMode => textype == TextureType.Crash1 ? C1dpdBlend.SelectedIndex : C2dpdBlend.SelectedIndex;
         internal int TexX => textype == TextureType.Crash1 ? (2 << (2-C1dpdColor.SelectedIndex)) * (int)C1numX.Value : (int)C2numX.Value;
@@ -94,7 +93,7 @@ namespace CrashEdit
 
         private void UpdatePicture()
         {
-            int pw = TexPWidth;
+            int pw = 256 << (2-TexColorMode);
             int ph = 128;
             Bitmap bitmap = new Bitmap(pw + 64, ph + 64, PixelFormat.Format32bppArgb); // we give the image some buffer space for the selection graphic
             Rectangle brect = new Rectangle(Point.Empty, bitmap.Size);
