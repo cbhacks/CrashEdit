@@ -21,10 +21,14 @@ namespace CrashEdit
             Dock = DockStyle.Fill;
             InitializeComponent();
 
-            if (Properties.Settings.Default.UseAnimLinks && Program.C3AnimLinks.ContainsKey(anim.EID))
+            if (Properties.Settings.Default.UseAnimLinks)
             {
-                txtEName.Text = Entry.EIDToEName(Program.C3AnimLinks[anim.EID]);
-                OnKeyDown_Func(null, new KeyEventArgs(Keys.Enter));
+                Program.LoadC3AnimLinks();
+                if (Program.C3AnimLinks.ContainsKey(anim.EID))
+                {
+                    txtEName.Text = Entry.EIDToEName(Program.C3AnimLinks[anim.EID]);
+                    OnKeyDown_Func(null, new KeyEventArgs(Keys.Enter));
+                }
             }
 
             txtEName.KeyDown += new KeyEventHandler(OnKeyDown_Func);
@@ -40,10 +44,14 @@ namespace CrashEdit
             Dock = DockStyle.Fill;
             InitializeComponent();
 
-            if (Properties.Settings.Default.UseAnimLinks && Program.C3AnimLinks.ContainsKey(anim.EID))
+            if (Properties.Settings.Default.UseAnimLinks)
             {
-                txtEName.Text = Entry.EIDToEName(Program.C3AnimLinks[anim.EID]);
-                OnKeyDown_Func(null, new KeyEventArgs(Keys.Enter));
+                Program.LoadC3AnimLinks();
+                if (Program.C3AnimLinks.ContainsKey(anim.EID))
+                {
+                    txtEName.Text = Entry.EIDToEName(Program.C3AnimLinks[anim.EID]);
+                    OnKeyDown_Func(null, new KeyEventArgs(Keys.Enter));
+                }
             }
 
             txtEName.KeyDown += new KeyEventHandler(OnKeyDown_Func);

@@ -34,6 +34,7 @@ namespace CrashEdit
                 r = XmlReader.Create("CrashEdit.exe.animmodel.config");
             }
             catch (System.IO.FileNotFoundException) { }
+            C3AnimLinks.Clear();
             while (r.Read())
             {
                 switch (r.NodeType)
