@@ -24,9 +24,9 @@ namespace CrashEdit
             if (Properties.Settings.Default.UseAnimLinks)
             {
                 Program.LoadC3AnimLinks();
-                if (Program.C3AnimLinks.ContainsKey(anim.EID))
+                if (Program.C3AnimLinks.ContainsKey(anim.EName))
                 {
-                    txtEName.Text = Entry.EIDToEName(Program.C3AnimLinks[anim.EID]);
+                    txtEName.Text = Program.C3AnimLinks[anim.EName];
                     OnKeyDown_Func(null, new KeyEventArgs(Keys.Enter));
                 }
             }
@@ -47,9 +47,9 @@ namespace CrashEdit
             if (Properties.Settings.Default.UseAnimLinks)
             {
                 Program.LoadC3AnimLinks();
-                if (Program.C3AnimLinks.ContainsKey(anim.EID))
+                if (Program.C3AnimLinks.ContainsKey(anim.EName))
                 {
-                    txtEName.Text = Entry.EIDToEName(Program.C3AnimLinks[anim.EID]);
+                    txtEName.Text = Program.C3AnimLinks[anim.EName];
                     OnKeyDown_Func(null, new KeyEventArgs(Keys.Enter));
                 }
             }
@@ -113,13 +113,13 @@ namespace CrashEdit
                         }
                         if (sender != null)
                         {
-                            if (Program.C3AnimLinks.ContainsKey(anim.EID))
+                            if (Program.C3AnimLinks.ContainsKey(anim.EName))
                             {
-                                Program.C3AnimLinks[anim.EID] = modelentry.EID;
+                                Program.C3AnimLinks[anim.EName] = modelentry.EName;
                             }
                             else
                             {
-                                Program.C3AnimLinks.Add(anim.EID, modelentry.EID);
+                                Program.C3AnimLinks.Add(anim.EName, modelentry.EName);
                             }
                             Program.SaveC3AnimLinks();
                         }

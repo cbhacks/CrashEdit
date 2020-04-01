@@ -8,7 +8,7 @@ namespace CrashEdit
 {
     internal static class Program
     {
-        public static Dictionary<int,int> C3AnimLinks = new Dictionary<int,int>();
+        public static SortedDictionary<string,string> C3AnimLinks = new SortedDictionary<string,string>(new ENameComparer());
         public static void SaveC3AnimLinks()
         {
             using (XmlWriter writer = XmlWriter.Create("CrashEdit.exe.animmodel.config", new XmlWriterSettings() { Indent = true, IndentChars = "\t" }))
@@ -17,8 +17,8 @@ namespace CrashEdit
                 foreach (var kvp in C3AnimLinks)
                 {
                     writer.WriteStartElement("animmodel");
-                    writer.WriteAttributeString("anim", Entry.EIDToEName(kvp.Key));
-                    writer.WriteAttributeString("model", Entry.EIDToEName(kvp.Value));
+                    writer.WriteAttributeString("anim", kvp.Key);
+                    writer.WriteAttributeString("model", kvp.Value);
                     writer.WriteEndElement();
                 }
                 writer.WriteEndElement();
@@ -44,7 +44,7 @@ namespace CrashEdit
                         {
                             string anim = r.GetAttribute("anim");
                             string model = r.GetAttribute("model");
-                            C3AnimLinks.Add(Entry.ENameToEID(anim), Entry.ENameToEID(model));
+                            C3AnimLinks.Add(anim, model);
                         }
                         break;
                 }
