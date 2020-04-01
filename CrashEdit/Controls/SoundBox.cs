@@ -44,16 +44,8 @@ namespace CrashEdit
             cmdExport.Click += new EventHandler(cmdExport_Click);
 
             numSampleRate = new NumericUpDown();
-            numSampleRate.Maximum = new decimal(new int[] {
-            32767,
-            0,
-            0,
-            0});
-            numSampleRate.Minimum = new decimal(new int[] {
-            32768,
-            0,
-            0,
-            -2147483648});
+            numSampleRate.Maximum = 88200;
+            numSampleRate.Minimum = 0;
             numSampleRate.Name = "numSampleRate";
             numSampleRate.Value = 11025;
 
