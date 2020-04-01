@@ -280,7 +280,7 @@ namespace CrashEdit
                                 GL.Normal3(normal);
                             }
                             GL.TexCoord2(uvs[2 * j + 0], uvs[2 * j + 1]);
-                            RenderVertex(f1,f2,tri.Vertex[j] + f1.SpecialVertexCount,f2 != null ? tri.Vertex[j] + f2.SpecialVertexCount : 0);
+                            RenderVertex(f1,f2,tri.Vertex[j] + f1.SpecialVertexCount);
                         }
                     }
                     if ((tri.Subtype == 0 || tri.Subtype == 2) || ((tri.Subtype == 3) ^ tri.Type == 2))
@@ -296,7 +296,7 @@ namespace CrashEdit
                                 GL.Normal3(normal);
                             }
                             GL.TexCoord2(uvs[2 * j + 0], uvs[2 * j + 1]);
-                            RenderVertex(f1,f2,tri.Vertex[j] + f1.SpecialVertexCount,f2 != null ? tri.Vertex[j] + f2.SpecialVertexCount : 0);
+                            RenderVertex(f1,f2,tri.Vertex[j] + f1.SpecialVertexCount);
                         }
                     }
                     GL.End();
@@ -350,7 +350,7 @@ namespace CrashEdit
                 GL.Begin(PrimitiveType.Points);
                 for (int i = 0; i < f1.Vertices.Count; ++i)
                 {
-                    RenderVertex(f1,f2,i,i);
+                    RenderVertex(f1,f2,i);
                 }
                 GL.End();
             }
@@ -395,19 +395,19 @@ namespace CrashEdit
             GL.Disable(EnableCap.Texture2D);
         }
 
-        private void RenderVertex(Frame f1, Frame f2, int id1, int id2)
+        private void RenderVertex(Frame f1, Frame f2, int id)
         {
             float f = f1.IsNew ? 4.0f * 8 : 4.0f;
             if (f2 == null)
             {
-                FrameVertex vertex = f1.Vertices[id1];
+                FrameVertex vertex = f1.Vertices[id];
                 GL.Vertex3(vertex.X + f1.XOffset / f, vertex.Z + f1.YOffset / f, vertex.Y + f1.ZOffset / f);
             }
             else
             {
                 float fac = (float)interi / interp;
-                FrameVertex v1 = f1.Vertices[id1];
-                FrameVertex v2 = f2.Vertices[id2];
+                FrameVertex v1 = f1.Vertices[id];
+                FrameVertex v2 = f2.Vertices[id];
                 float x1 = v1.X + f1.XOffset / f;
                 float x2 = v2.X + f2.XOffset / f;
                 float y1 = v1.Z + f1.YOffset / f;
