@@ -197,6 +197,7 @@ namespace Crash
                 case GOOLVersion.Version1:
                     return ins is Cfl r1 && r1.Args['T'].Value == 2;
                 case GOOLVersion.Version2:
+                case GOOLVersion.Version3:
                     return ins is Ret;
                 default:
                     return false;
@@ -222,6 +223,7 @@ namespace Crash
                 case GOOLVersion.Version1:
                     return ((ObjectColors1)col).ToString();
                 case GOOLVersion.Version2:
+                case GOOLVersion.Version3:
                     return ((ObjectColors2)col).ToString();
                 default:
                     return col.ToString();

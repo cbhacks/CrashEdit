@@ -257,9 +257,10 @@ namespace CrashEdit
                             BitConv.ToInt32(items[0],0x4,0x100); // default category: 1 (0 is Crash?)
                             BitConv.ToInt32(items[0],0x8,1); // default format: complete GOOL entry
                             BitConv.ToInt32(items[0],0xC,(int)ObjectFields.mem4); // mem0-3 can be used as local variables
-                            newentry = new GOOLEntry(GOOLInterpreter.GetVersion(NSFController.GameVersion),
+                            var goolver = GOOLInterpreter.GetVersion(NSFController.GameVersion);
+                            newentry = new GOOLEntry(goolver,
                                 items[0],
-                                GOOLInterpreter.GetVersion(NSFController.GameVersion) == GOOLVersion.Version2 ? new byte[4] { 0x0, 0x40, 0x89, 0x31 } : new byte[4] { 0x0, 0x40, 0x89, 0x82 }, // RET instruction
+                                goolver == GOOLVersion.Version2 || goolver == GOOLVersion.Version3 ? new byte[4] { 0x0, 0x40, 0x89, 0x31 } : new byte[4] { 0x0, 0x40, 0x89, 0x82 }, // RET instruction
                                 new int[1] { newentrywindow.EID },
                                 new short[1] { 0 },
                                 new List<GOOLStateDescriptor>() { new GOOLStateDescriptor(0x1,0x0,0x0,0x3FFF,0x3FFF,0x0) },
