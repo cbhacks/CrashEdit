@@ -8,6 +8,7 @@ namespace Crash
         protected const string DefaultFormat = "[AAAAAAAAAAAA] [BBBBBBBBBBBB]";
         protected const string DefaultFormatLR = "[LLLLLLLLLLLL] [RRRRRRRRRRRR]";
         protected const string DefaultFormatDS = "[DDDDDDDDDDDD] [SSSSSSSSSSSS]";
+        protected const string DefaultFormatDS2 = "{DDDDDDDDDDDD} [SSSSSSSSSSSS]";
         protected const string NullFormat = "000001111101";
         protected const int NullRef = 0xBE0;
         protected const int DoubleStackRef = 0xBF0;
@@ -44,8 +45,8 @@ namespace Crash
             for (int i = 0; i < Format.Length; ++i)
             {
                 char c = Format[i];
-                if (char.IsWhiteSpace(c) && !char.IsLetter(c) && (c != '-' && c != '0' && c != '1' && c != '[' && c != ']' && c != '(' && c != ')')) continue;
-                if (c == '[')
+                if (char.IsWhiteSpace(c) && !char.IsLetter(c) && (c != '-' && c != '0' && c != '1' && c != '[' && c != ']' && c != '(' && c != ')' && c != '{' && c != '}')) continue;
+                if (c == '[' || c == '{')
                 {
                     if (type != GOOLArgumentTypes.None)
                         ErrorManager.SignalError("GOOLInstruction: Bad format");
@@ -58,7 +59,7 @@ namespace Crash
                         lasta = c;
                         lastv = 0;
                     }
-                    type = GOOLArgumentTypes.Ref;
+                    type = c == '[' ? GOOLArgumentTypes.Ref : GOOLArgumentTypes.DestRef;
                 }
                 else if (c == '(')
                 {
@@ -75,9 +76,9 @@ namespace Crash
                     }
                     type = GOOLArgumentTypes.ProcessField;
                 }
-                else if (c == ']')
+                else if (c == ']' || c == '}')
                 {
-                    if (type != GOOLArgumentTypes.Ref)
+                    if (type != (c == ']' ? GOOLArgumentTypes.Ref : GOOLArgumentTypes.DestRef))
                         ErrorManager.SignalError("GOOLInstruction: Bad format");
                     if (vbits - lastbits < 12)
                     {
@@ -157,6 +158,8 @@ namespace Crash
             {
                 case GOOLArgumentTypes.Ref:
                     return GetRefVal(args[a].Value);
+                case GOOLArgumentTypes.DestRef:
+                    return GetDestRefVal(args[a].Value);
                 case GOOLArgumentTypes.ProcessField:
                     return ((ObjectFields)args[a].Value).ToString();
                 default:
@@ -187,11 +190,12 @@ namespace Crash
         {
             if ((val & 0x800) == 0)
             {
+                int off = val & 0x3FF;
                 if ((val & 0x400) == 0)
                 {
                     if (GOOL.Format == 1) // external GOOL entries will logically not have local data...
                     {
-                        int cval = GOOL.Data[val & 0x3FF];
+                        int cval = GOOL.Data[off];
                         if (cval >= 0x2000000 && (cval & 1) == 1)
                             return $"({Entry.EIDToEName(cval)})";
                         else
@@ -199,14 +203,14 @@ namespace Crash
                     }
                     else
                     {
-                        return $"[pool$({(val & 0x3FF).TransformedString()})]";
+                        return $"[pool$({off.TransformedString()})]";
                     }
                 }
                 else
                 {
                     if (GOOL.Format == 0) // local GOOL entries will logically not have external data...
                     {
-                        int cval = GOOL.Data[val & 0x3FF];
+                        int cval = GOOL.Data[off];
                         if (cval >= 0x2000000 && (cval & 1) == 1)
                             return $"({Entry.EIDToEName(cval)})";
                         else
@@ -214,7 +218,7 @@ namespace Crash
                     }
                     else
                     {
-                        return $"[ext$({(val & 0x3FF).TransformedString()})]";
+                        return $"[ext$({off.TransformedString()})]";
                     }
                 }
             }
@@ -250,7 +254,7 @@ namespace Crash
                     if (link == 0)
                         return ((ObjectFields)(val & 0x3F)).ToString();
                     else
-                        return $"{ObjectFields.self + (val >> 6 & 0x7)}->{(ObjectFields)(val & 0x3F)}";
+                        return $"{ObjectFields.self + link}->{(ObjectFields)(val & 0x3F)}";
                 }
                 if ((val & 0x1FF) == 0x1F)
                     return "[sp]";
@@ -258,6 +262,30 @@ namespace Crash
                     return ((ObjectFields)(val & 0x1FF)).ToString();
             }
             return "[null]";
+        }
+
+        private string GetDestRefVal(int val)
+        {
+            if ((val & 0x400) == 0)
+            {
+                int n = BitConv.SignExtendInt32(val,7);
+                return string.Format("{0}[{1}]", n >= 0 ? "stack" : "arg", (n < 0 ? -n - 1 : n).TransformedString());
+            }
+            else
+            {
+                if ((val & 0x200) == 0)
+                {
+                    int link = val >> 6 & 0x7;
+                    if (link == 0)
+                        return ((ObjectFields)(val & 0x3F)).ToString();
+                    else
+                        return $"{ObjectFields.self + link}->{(ObjectFields)(val & 0x3F)}";
+                }
+                if ((val & 0x1FF) == 0x1F)
+                    return "[sp]";
+                else
+                    return ((ObjectFields)(val & 0x1FF)).ToString();
+            }
         }
     }
 }

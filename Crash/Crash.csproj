@@ -58,7 +58,14 @@
     <Compile Include="Formats\Crash Formats\Animation\ProtoAnimationEntry.cs" />
     <Compile Include="Formats\Crash Formats\Animation\ProtoAnimationEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Base\Entry\ENameComparer.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Atan.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Cos.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Jalr.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Sin.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Arrs.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Arrl.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Acev.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Psin.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Rjev.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOLAnimation.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOLAnimationFont.cs" />
@@ -106,11 +113,9 @@
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Dbg.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Pad.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Ntry.cs" />
-    <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Stck.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Efls.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Evnb.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Evnc.cs" />
-    <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Sin.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Path.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Pshp.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Skrt.cs" />

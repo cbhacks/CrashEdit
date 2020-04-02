@@ -10,7 +10,7 @@
 
         public override string Name => "JAL";
         public override string Format => "IIIIIIIIIIIIII (RRRRRR) VVVV";
-        public override string Comment => $"jump and link to {Args['I'].Value}" + (Args['V'].Value > 0 ? $" with {GetArg('V')} arguments" : string.Empty);
+        public override string Comment => $"jump and link to {Args['I'].Value}" + (Args['V'].Value > 0 ? $" with {GetArg('V')} argument(s)" : string.Empty);
     }
 
     [GOOLInstruction(59,GameVersion.Crash2)]
@@ -21,6 +21,6 @@
 
         public override string Name => "JAL";
         public override string Format => "IIIIIIIIIIIIII E 00000 VVVV";
-        public override string Comment => $"jump and link to {Args['I'].Value}" + (Args['E'].Value == 1 ? " (external)" : string.Empty) + (Args['V'].Value > 0 ? $" with {GetArg('V')} arguments" : string.Empty);
+        public override string Comment => $"jump and link to {Args['I'].Value}" + (Args['E'].Value == 1 ? " (external)" : string.Empty) + (Args['V'].Value > 0 ? $" with {GetArg('V')} argument(s)" : string.Empty);
     }
 }
