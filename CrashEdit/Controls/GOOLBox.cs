@@ -23,15 +23,23 @@ namespace CrashEdit
             if (BitConv.FromInt32(goolentry.Header, 8) == 1)
             {
                 lstCode.Items.Add("");
-                lstCode.Items.Add("Interrupts:");
+                bool addedinterrupts = false;
                 for (int i = 0; i < interruptcount; ++i)
                 {
                     if (goolentry.StateMap[i] == 255)
                         continue;
-                    else if ((goolentry.StateMap[i] & 0x8000) != 0)
-                        lstCode.Items.Add($"\tInterrupt {i}: Sub_{goolentry.StateMap[i] & 0x3FFF}");
                     else
-                        lstCode.Items.Add($"\tInterrupt {i}: State_{goolentry.StateMap[i]}");
+                    {
+                        if (!addedinterrupts)
+                        {
+                            lstCode.Items.Add("Interrupts:");
+                            addedinterrupts = true;
+                        }
+                        if ((goolentry.StateMap[i] & 0x8000) != 0)
+                            lstCode.Items.Add($"\tInterrupt {i}: Sub_{goolentry.StateMap[i] & 0x3FFF}");
+                        else
+                            lstCode.Items.Add($"\tInterrupt {i}: State_{goolentry.StateMap[i]}");
+                    }
                 }
 
                 lstCode.Items.Add($"Available Subtypes: {goolentry.StateMap.Length - interruptcount}");
