@@ -109,7 +109,6 @@ namespace CrashEdit
                 if (returned)
                 {
                     lstCode.Items.Add($"Sub_{i}:");
-                    returned = false;
                 }
                 GOOLInstruction ins = goolentry.Instructions[i];
                 if (ins is MIPSInstruction)
