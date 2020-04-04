@@ -28,13 +28,16 @@ namespace CrashEdit
 
         public static void LoadC3AnimLinks()
         {
-            XmlReader r = null;
+            C3AnimLinks.Clear();
+            XmlReader r;
             try
             {
                 r = XmlReader.Create("CrashEdit.exe.animmodel.config");
             }
-            catch (System.IO.FileNotFoundException) { }
-            C3AnimLinks.Clear();
+            catch (System.IO.FileNotFoundException)
+            {
+                return;
+            }
             while (r.Read())
             {
                 switch (r.NodeType)

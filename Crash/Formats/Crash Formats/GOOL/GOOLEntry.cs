@@ -48,11 +48,8 @@ namespace Crash
                             throw ex.InnerException;
                         }
                     }
-                    else
-                        return new GOOLInvalidInstruction(ins, this);
                 }
-                else
-                    return new GOOLInvalidInstruction(ins, this);
+                return new GOOLInvalidInstruction(ins,this);
             }
             else
             {
