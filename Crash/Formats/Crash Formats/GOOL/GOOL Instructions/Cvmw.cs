@@ -11,7 +11,7 @@
         public Cvmw(int value,GOOLEntry gool) : base(value,gool) { }
 
         public override string Name => "CVMW";
-        public override string Format => "[CCCCCCCCCCCC] LLL IIIIII ---";
+        public override string Format => "[CCCCCCCCCCCC] LLL IIIIII 000";
         public override string Comment => $"{(ObjectFields)Args['L'].Value}->{GOOLInterpreter.GetColor(GOOL.Version,Args['I'].Value)} = {GetArg('C')}";
     }
 }

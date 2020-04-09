@@ -7,7 +7,7 @@
         public Cst(int value,GOOLEntry gool) : base(value,gool) { }
 
         public override string Name => "CST";
-        public override string Format => "SSSSSSSSSS AAAA (RRRRRR) 00 10";
-        public override string Comment => $"change to state {GetArg('S')} with {GetArg('A')} arguments";
+        public override string Format => "SSSSSSSSSSSSSS (RRRRRR) 00 10";
+        public override string Comment => $"change to state {GetArg('S')}";
     }
 }

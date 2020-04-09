@@ -1,16 +1,16 @@
 ﻿namespace Crash.GOOLIns
 {
-    [GOOLInstruction(137,GameVersion.Crash1)]
-    [GOOLInstruction(137,GameVersion.Crash1Beta1995)]
-    [GOOLInstruction(137,GameVersion.Crash1BetaMAR08)]
-    [GOOLInstruction(137,GameVersion.Crash1BetaMAY11)]
-    [GOOLInstruction(62,GameVersion.Crash2)]
-    [GOOLInstruction(62,GameVersion.Crash3)]
-    public sealed class Acev : GOOLInstruction
+    [GOOLInstruction(136,GameVersion.Crash1)]
+    [GOOLInstruction(136,GameVersion.Crash1Beta1995)]
+    [GOOLInstruction(136,GameVersion.Crash1BetaMAR08)]
+    [GOOLInstruction(136,GameVersion.Crash1BetaMAY11)]
+    [GOOLInstruction(61,GameVersion.Crash2)]
+    [GOOLInstruction(61,GameVersion.Crash3)]
+    public sealed class Evhr : GOOLInstruction
     {
-        public Acev(int value, GOOLEntry gool) : base(value,gool) {}
+        public Evhr(int value, GOOLEntry gool) : base(value,gool) {}
 
-        public override string Name => "ACEV";
+        public override string Name => "EVHR";
         public override string Format => "IIIIIIIIII VVVV (RRRRRR) CC TT";
         public override string Comment
         {
@@ -24,7 +24,7 @@
                     else if (Args['C'].Value == 2)
                         str += $"if not {GetArg('R')}, ";
                 }
-                str += "accept event";
+                str += "reject event";
 
                 if (Args['T'].Value == 0)
                 {

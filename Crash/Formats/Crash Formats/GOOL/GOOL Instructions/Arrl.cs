@@ -8,6 +8,6 @@
 
         public override string Name => "ARRL";
         public override string Format => DefaultFormatLR;
-        public override string Comment => $"[sp] = {GetArg('L')}[{GetArg('R')}]";
+        public override string Comment => $"{GetArg('L')}[{GetArg('R')}]";
     }
 }

@@ -6,12 +6,12 @@
     [GOOLInstruction(33,GameVersion.Crash1BetaMAY11)]
     [GOOLInstruction(33,GameVersion.Crash2)]
     [GOOLInstruction(33,GameVersion.Crash3)]
-    public sealed class Angd : GOOLInstruction
+    public sealed class Degd : GOOLInstruction
     {
-        public Angd(int value,GOOLEntry gool) : base(value,gool) { }
+        public Degd(int value,GOOLEntry gool) : base(value,gool) { }
 
-        public override string Name => "ANGD";
+        public override string Name => "DEGD";
         public override string Format => DefaultFormatLR;
-        public override string Comment => $"angdist({GetArg('L')},{GetArg('R')})";
+        public override string Comment => $"degdist({GetArg('L')},{GetArg('R')})";
     }
 }

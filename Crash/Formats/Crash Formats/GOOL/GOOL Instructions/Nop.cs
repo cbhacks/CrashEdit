@@ -11,7 +11,7 @@
         public Nop(int value,GOOLEntry gool) : base(value,gool) { }
 
         public override string Name => "NOP";
-        public override string Format => "------------------------";
+        public override string Format => "101111100000101111100000".Reverse();
         public override string Comment => "no operation";
     }
 }

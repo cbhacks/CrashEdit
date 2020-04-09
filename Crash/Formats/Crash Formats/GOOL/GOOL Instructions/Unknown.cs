@@ -1,6 +1,5 @@
 ﻿namespace Crash.GOOLIns
 {
-    [GOOLInstruction(46,GameVersion.Crash2)]
     [GOOLInstruction(72,GameVersion.Crash2)]
     [GOOLInstruction(72,GameVersion.Crash3)]
     [GOOLInstruction(74,GameVersion.Crash2)]
@@ -23,6 +22,7 @@
         public override string Comment => string.Empty;
     }
     
+    [GOOLInstruction(46,GameVersion.Crash2)]
     [GOOLInstruction(46,GameVersion.Crash3)]
     public sealed class Unknown2 : GOOLInstruction
     {

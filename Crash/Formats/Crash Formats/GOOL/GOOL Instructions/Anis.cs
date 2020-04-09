@@ -2,7 +2,6 @@
 {
     [GOOLInstruction(39,GameVersion.Crash1)]
     [GOOLInstruction(39,GameVersion.Crash1BetaMAY11)]
-    [GOOLInstruction(39,GameVersion.Crash2)]
     public sealed class Anis : GOOLInstruction
     {
         public Anis(int value,GOOLEntry gool) : base(value,gool) { }
@@ -12,6 +11,7 @@
         public override string Comment => $"{GetArg('D')} = &anim[{GetArg('S')}]";
     }
     
+    [GOOLInstruction(39,GameVersion.Crash2)]
     [GOOLInstruction(39,GameVersion.Crash3)]
     public sealed class Anis2 : GOOLInstruction
     {
