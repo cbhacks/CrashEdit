@@ -17,7 +17,8 @@ namespace CrashEdit
         private TableLayoutPanel pnOptions;
         private Button cmdPlay;
         private Button cmdExport;
-        private NumericUpDown numSampleRate;
+        private TrackBar trkSampleRate;
+        private Label lblSampleRate;
 
         public SoundBox(SampleSet samples)
         {
@@ -33,21 +34,38 @@ namespace CrashEdit
             tsToolbar.Dock = DockStyle.Top;
             tsToolbar.Items.Add(tbbExport);
 
+            trkSampleRate = new TrackBar()
+            {
+                Minimum = 0,
+                Maximum = 16 * 256,
+                TickFrequency = 128,
+                Value = 1024,
+                Dock = DockStyle.Fill
+            };
+            trkSampleRate.ValueChanged += (object sender, EventArgs e) => {
+                int smpe = (int)(trkSampleRate.Value / 256.0 * (11025 / 4.0));
+                cmdPlay.Text = string.Format("Play ({0}Hz)", smpe);
+                cmdExport.Text = string.Format("Export ({0}Hz)", smpe);
+                lblSampleRate.Text = string.Format("Sample Rate: {0:0.000}", trkSampleRate.Value / 256.0);
+            };
+
+            int smp = (int)(trkSampleRate.Value / 256.0 * (11025 / 4.0));
             cmdPlay = new Button();
             cmdPlay.Dock = DockStyle.Fill;
-            cmdPlay.Text = "Play";
+            cmdPlay.Text = string.Format("Play ({0}Hz)", smp);
             cmdPlay.Click += new EventHandler(cmdPlay_Click);
 
             cmdExport = new Button();
             cmdExport.Dock = DockStyle.Fill;
-            cmdExport.Text = "Export";
+            cmdExport.Text = string.Format("Export ({0}Hz)", smp);
             cmdExport.Click += new EventHandler(cmdExport_Click);
 
-            numSampleRate = new NumericUpDown();
-            numSampleRate.Maximum = 88200;
-            numSampleRate.Minimum = 0;
-            numSampleRate.Name = "numSampleRate";
-            numSampleRate.Value = 11025;
+            lblSampleRate = new Label()
+            {
+                Text = string.Format("Sample Rate: {0:0.000}", trkSampleRate.Value / 256.0),
+                TextAlign = System.Drawing.ContentAlignment.TopRight,
+                Dock = DockStyle.Fill
+            };
 
             pnOptions = new TableLayoutPanel();
             pnOptions.Dock = DockStyle.Fill;
@@ -59,7 +77,8 @@ namespace CrashEdit
             pnOptions.RowStyles.Add(new RowStyle(SizeType.Percent,50));
             pnOptions.Controls.Add(cmdPlay,0,0);
             pnOptions.Controls.Add(cmdExport,1,0);
-            pnOptions.Controls.Add(numSampleRate,0,1);
+            pnOptions.Controls.Add(trkSampleRate,1,1);
+            pnOptions.Controls.Add(lblSampleRate,0,1);
 
             Controls.Add(pnOptions);
             Controls.Add(tsToolbar);
@@ -67,12 +86,12 @@ namespace CrashEdit
 
         void cmdPlay_Click(object sender, EventArgs e)
         {
-            Play((int)numSampleRate.Value);
+            Play((int)(trkSampleRate.Value / 256.0 * (11025 / 4.0)));
         }
 
         void cmdExport_Click(object sender, EventArgs e)
         {
-            ExportWave((int)numSampleRate.Value);
+            ExportWave((int)(trkSampleRate.Value / 256.0 * (11025 / 4.0)));
         }
 
         public SoundBox(SoundEntry entry)
