@@ -13,6 +13,6 @@ namespace Crash
         }
 
         public override short Type => 2;
-        protected override int Alignment => 16;
+        public override int Alignment => 16;
     }
 }

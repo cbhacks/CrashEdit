@@ -19,7 +19,7 @@ namespace Crash
 
         public EvList<Entry> Entries { get; set; }
 
-        protected abstract int Alignment { get; }
+        public abstract int Alignment { get; }
 
         public void ProcessAll(GameVersion gameversion)
         {

@@ -33,7 +33,7 @@ namespace CrashEdit
             lstEntryList.Items.Clear();
             foreach (Entry entry in controller.EntryChunk.Entries)
             {
-                var this_size = entry.Save().Length;
+                var this_size = Aligner.Align(entry.Save().Length, controller.EntryChunk.Alignment);
                 lstEntryList.Items.Add(string.Format("{0}: {1} bytes", entry.EName, this_size));
                 totalsize += this_size;
             }
