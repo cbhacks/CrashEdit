@@ -279,6 +279,15 @@ namespace CrashEdit
                 return;
             }
 
+            string warpscusFilename = null;
+            isofsPath += "\\S0";
+            foreach (string s in Directory.GetFiles(isofsPath)) {
+                if (Regex.IsMatch(Path.GetFileName(s).ToUpper(), @"^WARPSC[UEP]S\.BIN$")) {
+                    warpscusFilename = s;
+                    break;
+                }
+            }
+
             string basePath;
             do {
                 basePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
@@ -289,6 +298,10 @@ namespace CrashEdit
             fs.AddFile("S0\\" + Path.GetFileName(nsfFilename) + ";1", nsf.Save());
             fs.AddFile("S0\\" + Path.GetFileName(nsdFilename) + ";1", nsdFilename);
             fs.AddFile("PSX.EXE;1", exeFilename);
+            if (warpscusFilename != null)
+            {
+                fs.AddFile("S0\\" + Path.GetFileName(warpscusFilename) + ";1", warpscusFilename);
+            }
 
             string binPath = Path.Combine(basePath, "game.bin");
             using (var bin = new FileStream(binPath, FileMode.Create, FileAccess.Write))
