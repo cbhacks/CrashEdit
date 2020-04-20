@@ -7,7 +7,7 @@
         public Cst(int value,GOOLEntry gool) : base(value,gool) { }
 
         public override string Name => "CST";
-        public override string Format => "SSSSSSSSSSSSSS (RRRRRR) 00 10";
-        public override string Comment => $"change to state {GetArg('S')}";
+        public override string Format => "SSSSSSSSSS VVVV (RRRRRR) 00 10";
+        public override string Comment => $"change to state {GetArg('S')}" + (Args['V'].Value > 0 ? $" with {GetArg('V')} argument(s)" : string.Empty);
     }
 }

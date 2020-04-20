@@ -7,7 +7,7 @@
         public Ceqz(int value,GOOLEntry gool) : base(value,gool) { }
 
         public override string Name => "CEQZ";
-        public override string Format => "SSSSSSSSSSSSSS (RRRRRR) 01 10";
-        public override string Comment => $"if {(ObjectFields)Args['R'].Value} is false, change to state {GetArg('S')}";
+        public override string Format => "SSSSSSSSSS VVVV (RRRRRR) 01 10";
+        public override string Comment => $"if {(ObjectFields)Args['R'].Value} is false, change to state {GetArg('S')}" + (Args['V'].Value > 0 ? $" with {GetArg('V')} argument(s)" : string.Empty);
     }
 }
