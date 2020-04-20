@@ -58,15 +58,15 @@ namespace CrashEdit
                     int stategooleid = goolentry.Data[goolentry.StateDescriptors[i].GOOLID];
                     lstCode.Items.Add($"State_{i} [{Entry.EIDToEName(stategooleid)}] (State Flags: {string.Format("0x{0:X}",goolentry.StateDescriptors[i].StateFlags)} | C-Flags: {string.Format("0x{0:X}",goolentry.StateDescriptors[i].CFlags)})");
                     if (epc != 0x3FFF)
-                        lstCode.Items.Add($"\tEPC: {epc}");
+                        lstCode.Items.Add($"\tEPC: {epc}" + ((goolentry.StateDescriptors[i].EPC & 0x4000) == 0x4000 ? " (external)" : ""));
                     else
                         lstCode.Items.Add("\tEvent block unavailable.");
                     if (tpc != 0x3FFF)
-                        lstCode.Items.Add($"\tTPC: {tpc}");
+                        lstCode.Items.Add($"\tTPC: {tpc}" + ((goolentry.StateDescriptors[i].TPC & 0x4000) == 0x4000 ? " (external)" : ""));
                     else
                         lstCode.Items.Add("\tTrans block unavailable.");
                     if (cpc != 0x3FFF)
-                        lstCode.Items.Add($"\tCPC: {cpc}");
+                        lstCode.Items.Add($"\tCPC: {cpc}" + ((goolentry.StateDescriptors[i].CPC & 0x4000) == 0x4000 ? " (external)" : ""));
                     else
                         lstCode.Items.Add("\tCode block unavailable.");
                 }
