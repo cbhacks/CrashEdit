@@ -209,7 +209,16 @@ namespace Crash
                     }
                     else
                     {
-                        return $"[pool$({off.TransformedString()})]";
+                        if (GOOL.ParentGOOL != null)
+                        {
+                            int cval = GOOL.ParentGOOL.Data[off];
+                            if (IntIsEID(cval))
+                                return $"({Entry.EIDToEName(cval)})";
+                            else
+                                return $"({cval.TransformedString()})";
+                        }
+                        else
+                            return $"[pool$({off.TransformedString()})]";
                     }
                 }
                 else

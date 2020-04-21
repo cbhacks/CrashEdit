@@ -59,7 +59,7 @@ namespace Crash
 
         private List<GOOLInstruction> instructions;
         private List<GOOLStateDescriptor> statedescriptors;
-        //private List<GOOLAnimation> anims;
+        private List<int> externals;
 
         public GOOLEntry(GOOLVersion version,byte[] header,byte[] instructions,int[] data,short[] statemap,IEnumerable<GOOLStateDescriptor> statedescriptors,byte[] anims,int eid) : base(eid)
         {
@@ -92,10 +92,21 @@ namespace Crash
             }
             Data = data;
             StateMap = statemap;
+            externals = new List<int>();
             if (statedescriptors == null)
                 this.statedescriptors = null;
             else
+            {
                 this.statedescriptors = new List<GOOLStateDescriptor>(statedescriptors);
+                foreach (var state in this.statedescriptors)
+                {
+                    int ext_eid = Data[state.GOOLID];
+                    if (ext_eid != eid && !externals.Contains(ext_eid))
+                    {
+                        externals.Add(ext_eid);
+                    }
+                }
+            }
             Anims = anims;
         }
 
@@ -112,6 +123,9 @@ namespace Crash
         public int Format => BitConv.FromInt32(Header,8);
 
         public IList<GOOLInstruction> Instructions => instructions;
+
+        public IList<int> Externals => externals;
+        public GOOLEntry ParentGOOL { get; set; }
 
         public override UnprocessedEntry Unprocess()
         {

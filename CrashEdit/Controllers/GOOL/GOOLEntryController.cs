@@ -9,6 +9,14 @@ namespace CrashEdit
         public GOOLEntryController(EntryChunkController entrychunkcontroller,GOOLEntry goolentry) : base(entrychunkcontroller,goolentry)
         {
             GOOLEntry = goolentry;
+            foreach (int ext_eid in goolentry.Externals)
+            {
+                GOOLEntry ext_gool = EntryChunkController.NSFController.NSF.FindEID<GOOLEntry>(ext_eid);
+                if (ext_gool != null)
+                {
+                    ext_gool.ParentGOOL = goolentry;
+                }
+            }
             InvalidateNode();
             InvalidateNodeImage();
             //if (GOOLEntry.Version == GOOLVersion.Version0)
