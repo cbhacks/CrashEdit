@@ -442,7 +442,7 @@ namespace CrashEdit
             GL.BindTexture(TextureTarget.Texture2D, 0);
         }
 
-        internal long GenerateTextureHash(ModelTexture tex) // compresses a model texture's relevant texture info into a standard type that can be quickly looked up
+        internal long GenerateTextureHash(ref ModelTexture tex) // compresses a model texture's relevant texture info into a standard type that can be quickly looked up
         {
             return (long)tex.ClutY
                 | (long)tex.ClutX << 7
@@ -451,30 +451,35 @@ namespace CrashEdit
                 | (long)tex.Top << 24
                 | (long)tex.Width << 31
                 | (long)tex.Height << 41
-                | (long)tex.ColorMode << 48; // 50 bits total
+                | (long)tex.ColorMode << 48
+                | (long)tex.BlendMode << 50; // 52 bits total
         }
 
         protected void ConvertTexturesToGL(int list, TextureChunk[] texturechunks, IList<ModelTexture> modeltextures)
         {
-            textureIDs[list] = new int[texturechunks.Length*3];
+            textureIDs[list] = new int[texturechunks.Length*6];
             GL.GenTextures(textureIDs[list].Length, textureIDs[list]);
             int[][] texturepages = new int[textureIDs[list].Length][]; // using indexed colors in GL would be dumb so we will convert each texture chunk into two 32-bit pages
             for (int i = 0; i < texturechunks.Length; ++i)
             {
-                texturepages[i*3+0] = new int[1024*128]; // 4bpp
-                texturepages[i*3+1] = new int[512*128]; // 8bpp
-                texturepages[i*3+2] = new int[256*128]; // 16bpp
+                texturepages[i*6+0] = new int[1024*128]; // 4bpp
+                texturepages[i*6+1] = new int[512*128]; // 8bpp
+                texturepages[i*6+2] = new int[256*128]; // 16bpp
+                // transparency
+                texturepages[i*6+3] = new int[1024*128]; // 4bpp
+                texturepages[i*6+4] = new int[512*128]; // 8bpp
+                texturepages[i*6+5] = new int[256*128]; // 16bpp
             }
             textures[list] = new int[modeltextures.Count];
             Dictionary<long, int> texturebucket = new Dictionary<long, int>();
             for (int i = 0; i < modeltextures.Count; ++i)
             {
                 ModelTexture tex = modeltextures[i];
-                long hash = GenerateTextureHash(tex);
+                long hash = GenerateTextureHash(ref tex);
                 if (!texturebucket.ContainsKey(hash))
                 {
                     TextureChunk texturechunk = texturechunks[tex.Page];
-                    int page = tex.Page*3 + tex.ColorMode;
+                    int page = tex.Page*6 + tex.ColorMode + (tex.BlendMode == 0 ? 3 : 0);
                     ConvertTextureDataTo32Bit(tex.Width+1,tex.Height+1,tex.Left,tex.Top,tex.ClutX,tex.ClutY,tex.ColorMode,tex.BlendMode,texturechunk.Data,ref texturepages[page]);
                     texturebucket[hash] = page;
                 }
@@ -483,7 +488,7 @@ namespace CrashEdit
             MakeGLTextures(list,texturebucket,ref texturepages);
         }
 
-        internal long GenerateTextureHash(int tpag, OldSceneryTexture tex) // compresses a model texture's relevant texture info into a standard type that can be quickly looked up
+        internal long GenerateTextureHash(int tpag, ref OldSceneryTexture tex) // compresses a model texture's relevant texture info into a standard type that can be quickly looked up
         {
             return (long)tex.ClutY
                 | (long)tex.ClutX << 7
@@ -492,18 +497,24 @@ namespace CrashEdit
                 | (long)tex.Top << 24
                 | (long)(tex.UVIndex % 5) << 31
                 | (long)(tex.UVIndex / 5 % 5) << 34
-                | (long)tex.ColorMode << 37;
+                | (long)tex.ColorMode << 37
+                | (long)tex.BlendMode << 39; // 41 bits total
         }
 
         protected void ConvertTexturesToGL(int list, TextureChunk[] texturechunks, IList<OldSceneryPolygon> oldscenerypolygons, IList<OldModelStruct> oldmodelstructs)
         {
-            textureIDs[list] = new int[texturechunks.Length * 3];
+            textureIDs[list] = new int[texturechunks.Length*6];
+            GL.GenTextures(textureIDs[list].Length, textureIDs[list]);
             int[][] texturepages = new int[textureIDs[list].Length][]; // using indexed colors in GL would be dumb so we will convert each texture chunk into two 32-bit pages
             for (int i = 0; i < texturechunks.Length; ++i)
             {
-                texturepages[i*3+0] = new int[1024*128]; // 4bpp
-                texturepages[i*3+1] = new int[512*128]; // 8bpp
-                texturepages[i*3+2] = new int[256*128]; // 16bpp
+                texturepages[i*6+0] = new int[1024*128]; // 4bpp
+                texturepages[i*6+1] = new int[512*128]; // 8bpp
+                texturepages[i*6+2] = new int[256*128]; // 16bpp
+                // transparency
+                texturepages[i*6+3] = new int[1024*128]; // 4bpp
+                texturepages[i*6+4] = new int[512*128]; // 8bpp
+                texturepages[i*6+5] = new int[256*128]; // 16bpp
             }
             textures[list] = new int[oldscenerypolygons.Count];
             Dictionary<long, int> texturebucket = new Dictionary<long, int>();
@@ -514,11 +525,11 @@ namespace CrashEdit
                 if (modelstruct is OldSceneryColor || modelstruct == null)
                     continue;
                 OldSceneryTexture tex = (OldSceneryTexture)modelstruct;
-                long hash = GenerateTextureHash(poly.Page,tex);
+                long hash = GenerateTextureHash(poly.Page,ref tex);
                 if (!texturebucket.ContainsKey(hash))
                 {
                     TextureChunk texturechunk = texturechunks[poly.Page];
-                    int page = poly.Page*3 + tex.ColorMode;
+                    int page = poly.Page*6 + tex.ColorMode + (tex.BlendMode == 0 ? 3 : 0);
                     ConvertTextureDataTo32Bit(tex.Width,tex.Height,tex.Left,tex.Top,tex.ClutX,tex.ClutY,tex.ColorMode,tex.BlendMode,texturechunk.Data,ref texturepages[page]);
                     texturebucket[hash] = page;
                 }
@@ -529,13 +540,18 @@ namespace CrashEdit
         
         protected void ConvertTexturesToGL(int list, TextureChunk[] texturechunks, IList<ProtoSceneryPolygon> protoscenerypolygons, IList<OldModelStruct> oldmodelstructs)
         {
-            textureIDs[list] = new int[texturechunks.Length * 3];
+            textureIDs[list] = new int[texturechunks.Length*6];
+            GL.GenTextures(textureIDs[list].Length, textureIDs[list]);
             int[][] texturepages = new int[textureIDs[list].Length][]; // using indexed colors in GL would be dumb so we will convert each texture chunk into two 32-bit pages
             for (int i = 0; i < texturechunks.Length; ++i)
             {
-                texturepages[i*3+0] = new int[1024*128]; // 4bpp
-                texturepages[i*3+1] = new int[512*128]; // 8bpp
-                texturepages[i*3+2] = new int[256*128]; // 16bpp
+                texturepages[i*6+0] = new int[1024*128]; // 4bpp
+                texturepages[i*6+1] = new int[512*128]; // 8bpp
+                texturepages[i*6+2] = new int[256*128]; // 16bpp
+                // transparency
+                texturepages[i*6+3] = new int[1024*128]; // 4bpp
+                texturepages[i*6+4] = new int[512*128]; // 8bpp
+                texturepages[i*6+5] = new int[256*128]; // 16bpp
             }
             textures[list] = new int[protoscenerypolygons.Count];
             Dictionary<long, int> texturebucket = new Dictionary<long, int>();
@@ -546,11 +562,11 @@ namespace CrashEdit
                 if (modelstruct is OldSceneryColor || modelstruct == null)
                     continue;
                 OldSceneryTexture tex = (OldSceneryTexture)modelstruct;
-                long hash = GenerateTextureHash(poly.Page,tex);
+                long hash = GenerateTextureHash(poly.Page,ref tex);
                 if (!texturebucket.ContainsKey(hash))
                 {
                     TextureChunk texturechunk = texturechunks[poly.Page];
-                    int page = poly.Page*3 + tex.ColorMode;
+                    int page = poly.Page*6 + tex.ColorMode + (tex.BlendMode == 0 ? 3 : 0);
                     ConvertTextureDataTo32Bit(tex.Width,tex.Height,tex.Left,tex.Top,tex.ClutX,tex.ClutY,tex.ColorMode,tex.BlendMode,texturechunk.Data,ref texturepages[page]);
                     texturebucket[hash] = page;
                 }
@@ -559,7 +575,7 @@ namespace CrashEdit
             MakeGLTextures(list,texturebucket,ref texturepages);
         }
 
-        internal long GenerateTextureHash(int tpag, OldModelTexture tex) // compresses a model texture's relevant texture info into a standard type that can be quickly looked up
+        internal long GenerateTextureHash(int tpag, ref OldModelTexture tex) // compresses a model texture's relevant texture info into a standard type that can be quickly looked up
         {
             return (long)tex.ClutY
                 | (long)tex.ClutX << 7
@@ -568,19 +584,24 @@ namespace CrashEdit
                 | (long)tex.Top << 24
                 | (long)(tex.UVIndex % 5) << 31
                 | (long)(tex.UVIndex / 5 % 5) << 34
-                | (long)tex.ColorMode << 37;
+                | (long)tex.ColorMode << 37
+                | (long)tex.BlendMode << 39; // 41 bits total
         }
 
         protected void ConvertTexturesToGL(int list, Dictionary<int,TextureChunk> texturechunks, IList<OldModelStruct> modeltextures)
         {
-            textureIDs[list] = new int[texturechunks.Count*3];
+            textureIDs[list] = new int[texturechunks.Count*6];
             GL.GenTextures(textureIDs[list].Length, textureIDs[list]);
             int[][] texturepages = new int[textureIDs[list].Length][]; // using indexed colors in GL would be dumb so we will convert each texture chunk into two 32-bit pages
             for (int i = 0; i < texturechunks.Count; ++i)
             {
-                texturepages[i*3+0] = new int[1024*128]; // 4bpp
-                texturepages[i*3+1] = new int[512*128]; // 8bpp
-                texturepages[i*3+2] = new int[256*128]; // 16bpp
+                texturepages[i*6+0] = new int[1024*128]; // 4bpp
+                texturepages[i*6+1] = new int[512*128]; // 8bpp
+                texturepages[i*6+2] = new int[256*128]; // 16bpp
+                // transparency
+                texturepages[i*6+3] = new int[1024*128]; // 4bpp
+                texturepages[i*6+4] = new int[512*128]; // 8bpp
+                texturepages[i*6+5] = new int[256*128]; // 16bpp
             }
             List<int> textureeids = new List<int>(texturechunks.Keys);
             textures[list] = new int[modeltextures.Count];
@@ -589,10 +610,10 @@ namespace CrashEdit
             {
                 if (!(modeltextures[i] is OldModelTexture tex))
                     continue;
-                long hash = GenerateTextureHash(textureeids.IndexOf(tex.EID),tex);
+                long hash = GenerateTextureHash(textureeids.IndexOf(tex.EID),ref tex);
                 if (!texturebucket.ContainsKey(hash))
                 {
-                    int page = textureeids.IndexOf(tex.EID)*3 + tex.ColorMode;
+                    int page = textureeids.IndexOf(tex.EID)*6 + tex.ColorMode + (tex.BlendMode == 0 ? 3 : 0);
                     ConvertTextureDataTo32Bit(tex.Width,tex.Height,tex.Left,tex.Top,tex.ClutX,tex.ClutY,tex.ColorMode,tex.BlendMode,texturechunks[tex.EID].Data,ref texturepages[page]);
                     texturebucket[hash] = page;
                 }
