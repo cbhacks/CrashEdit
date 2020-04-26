@@ -1,6 +1,7 @@
 ﻿using CrashEdit.Properties;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -21,6 +22,7 @@ namespace CrashEdit
             chkNormalDisplay.Checked = Settings.Default.DisplayNormals;
             chkCollisionDisplay.Checked = Settings.Default.DisplayFrameCollision;
             chkUseAnimLinks.Checked = Settings.Default.UseAnimLinks;
+            picClearCol.BackColor = Settings.Default.ClearColor;
             fraLang.Text = Resources.Conifg_FraLang;
         }
 
@@ -64,6 +66,15 @@ namespace CrashEdit
         {
             Settings.Default.UseAnimLinks = chkUseAnimLinks.Checked;
             Settings.Default.Save();
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            if (cdlClearCol.ShowDialog(this) == DialogResult.OK)
+            {
+                picClearCol.BackColor = Settings.Default.ClearColor = cdlClearCol.Color;
+                Settings.Default.Save();
+            }
         }
     }
 }

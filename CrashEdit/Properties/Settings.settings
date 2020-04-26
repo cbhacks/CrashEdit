@@ -20,5 +20,8 @@
     <Setting Name="UseAnimLinks" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="ClearColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">6, 6, 6</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

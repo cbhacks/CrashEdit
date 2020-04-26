@@ -39,10 +39,15 @@
             this.chkNormalDisplay = new System.Windows.Forms.CheckBox();
             this.chkCollisionDisplay = new System.Windows.Forms.CheckBox();
             this.chkUseAnimLinks = new System.Windows.Forms.CheckBox();
+            this.cdlClearCol = new System.Windows.Forms.ColorDialog();
+            this.fraClearCol = new System.Windows.Forms.GroupBox();
+            this.picClearCol = new System.Windows.Forms.PictureBox();
             this.fraLang.SuspendLayout();
             this.fraSize.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numH)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numW)).BeginInit();
+            this.fraClearCol.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picClearCol)).BeginInit();
             this.SuspendLayout();
             // 
             // dpdLang
@@ -190,11 +195,38 @@
             this.chkUseAnimLinks.UseVisualStyleBackColor = true;
             this.chkUseAnimLinks.CheckedChanged += new System.EventHandler(this.chkUseAnimLinks_CheckedChanged);
             // 
+            // cdlClearCol
+            // 
+            this.cdlClearCol.AnyColor = true;
+            this.cdlClearCol.FullOpen = true;
+            this.cdlClearCol.SolidColorOnly = true;
+            // 
+            // fraClearCol
+            // 
+            this.fraClearCol.Controls.Add(this.picClearCol);
+            this.fraClearCol.Location = new System.Drawing.Point(140, 58);
+            this.fraClearCol.Name = "fraClearCol";
+            this.fraClearCol.Size = new System.Drawing.Size(72, 74);
+            this.fraClearCol.TabIndex = 4;
+            this.fraClearCol.TabStop = false;
+            this.fraClearCol.Text = "Clear Color";
+            // 
+            // picClearCol
+            // 
+            this.picClearCol.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picClearCol.Location = new System.Drawing.Point(6, 19);
+            this.picClearCol.Name = "picClearCol";
+            this.picClearCol.Size = new System.Drawing.Size(60, 49);
+            this.picClearCol.TabIndex = 0;
+            this.picClearCol.TabStop = false;
+            this.picClearCol.Click += new System.EventHandler(this.pictureBox1_Click);
+            // 
             // ConfigEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.Controls.Add(this.fraClearCol);
             this.Controls.Add(this.chkUseAnimLinks);
             this.Controls.Add(this.chkCollisionDisplay);
             this.Controls.Add(this.chkNormalDisplay);
@@ -202,12 +234,14 @@
             this.Controls.Add(this.cmdReset);
             this.Controls.Add(this.fraLang);
             this.Name = "ConfigEditor";
-            this.Size = new System.Drawing.Size(250, 250);
+            this.Size = new System.Drawing.Size(433, 250);
             this.fraLang.ResumeLayout(false);
             this.fraSize.ResumeLayout(false);
             this.fraSize.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numH)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numW)).EndInit();
+            this.fraClearCol.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picClearCol)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -226,5 +260,8 @@
         private System.Windows.Forms.CheckBox chkNormalDisplay;
         private System.Windows.Forms.CheckBox chkCollisionDisplay;
         private System.Windows.Forms.CheckBox chkUseAnimLinks;
+        private System.Windows.Forms.ColorDialog cdlClearCol;
+        private System.Windows.Forms.GroupBox fraClearCol;
+        private System.Windows.Forms.PictureBox picClearCol;
     }
 }
