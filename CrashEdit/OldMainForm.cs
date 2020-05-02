@@ -511,31 +511,41 @@ namespace CrashEdit
                         return;
                 }
                 nsfc.Node.TreeView.BeginUpdate();
-                foreach (TreeNode node in nsfc.Node.Nodes) // nsd patching might have moved entries, recreate every single controller just in case
+                bool order_updated = false;
+                foreach (TreeNode node in nsfc.Node.Nodes) // nsd patching might have moved entries, recreate moved entry chunks if that's the case
                 {
                     if (node.Tag is EntryChunkController entrychunkcontroller)
                     {
-                        TreeNode[] nodes = new TreeNode[node.Nodes.Count];
                         int i = 0;
+                        TreeNode[] nodes = new TreeNode[node.Nodes.Count];
                         foreach (TreeNode oldnode in node.Nodes)
                         {
                             nodes[i++] = oldnode;
                         }
                         for (i = 0; i < nodes.Length; ++i)
                         {
-                            if (nodes[i].Tag != null)
+                            EntryController c = (EntryController)nodes[i].Tag;
+                            if (c.Entry != entrychunkcontroller.EntryChunk.Entries[i])
                             {
-                                if (nodes[i].Tag is Controller t)
+                                for (i = 0; i < nodes.Length; ++i)
                                 {
-                                    t.Dispose();
+                                    if (nodes[i].Tag != null)
+                                    {
+                                        if (nodes[i].Tag is Controller t)
+                                        {
+                                            t.Dispose();
+                                        }
+                                    }
                                 }
+                                entrychunkcontroller.PopulateNodes();
+                                order_updated = true;
+                                break;
                             }
                         }
-                        entrychunkcontroller.PopulateNodes();
                     }
                 }
                 nsfc.Node.TreeView.EndUpdate();
-                if (MessageBox.Show("The chunk contents in this NSF may have been moved in accordance to the patched NSD and needs to be resaved. Save NSF?", "Patch NSD", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (order_updated && MessageBox.Show("The chunk contents in this NSF may have been moved in accordance to the patched NSD and needs to be resaved. Continue?", "Patch NSD", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     SaveNSF();
                 }
