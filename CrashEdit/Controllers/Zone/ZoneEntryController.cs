@@ -59,7 +59,7 @@ namespace CrashEdit
 
         void Menu_AddEntity()
         {
-            short id = 15;
+            short id = 10;
             while (true)
             {
                 foreach (Chunk chunk in EntryChunkController.NSFController.NSF.Chunks)
