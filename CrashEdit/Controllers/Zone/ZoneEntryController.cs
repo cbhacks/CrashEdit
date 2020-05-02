@@ -90,7 +90,7 @@ namespace CrashEdit
             newentity.ID = id;
             ZoneEntry.Entities.Add(newentity);
             AddNode(new EntityController(this,newentity));
-            ZoneEntry.EntityCount = ZoneEntry.Entities.Count;
+            ++ZoneEntry.EntityCount;
         }
     }
 }
