@@ -87,6 +87,7 @@ namespace CrashEdit
                 continue;
             }
             Entity newentity = Entity.Load(new Entity(new Dictionary<short,EntityProperty>()).Save());
+            newentity.ID = id;
             ZoneEntry.Entities.Add(newentity);
             AddNode(new EntityController(this,newentity));
             ZoneEntry.EntityCount = ZoneEntry.Entities.Count;
