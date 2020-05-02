@@ -67,14 +67,14 @@ namespace CrashEdit
             frameid = 0;
             animatetimer = new Timer
             {
-                Interval = (int)(1000.0 / OldMainForm.GetRate() / 2 / (interp / 2)),
+                Interval = 1000 / OldMainForm.GetRate() / 2 / (interp / 2),
                 Enabled = true
             };
             animatetimer.Tick += delegate (object sender,EventArgs e)
             {
-                animatetimer.Interval = (int)(1000.0 / OldMainForm.GetRate() / 2 / (interp / 2));
+                animatetimer.Interval = 1000 / OldMainForm.GetRate() / 2 / (interp / 2);
                 ++interi;
-                if (interi == interp)
+                if (interi >= interp)
                 {
                     interi = 0;
                     frameid = (frameid + 1) % this.frames.Count;
