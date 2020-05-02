@@ -1,4 +1,5 @@
 using Crash;
+using CrashEdit.Properties;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
@@ -20,7 +21,7 @@ namespace CrashEdit
         private int frameid;
         private Timer animatetimer;
         private int interi;
-        private int interp = 2;
+        private int interp = 4;
         private bool collision_enabled;
         private bool textures_enabled = true;
         private bool normals_enabled = false;
@@ -29,7 +30,7 @@ namespace CrashEdit
 
         public AnimationEntryViewer(Frame frame,ModelEntry model,TextureChunk[] texturechunks)
         {
-            collision_enabled = Properties.Settings.Default.DisplayFrameCollision;
+            collision_enabled = Settings.Default.DisplayFrameCollision;
             frames = new List<Frame>();
             this.model = model;
             if (model != null && model.Positions != null)
@@ -44,7 +45,7 @@ namespace CrashEdit
 
         public AnimationEntryViewer(IEnumerable<Frame> frames,ModelEntry model,TextureChunk[] texturechunks)
         {
-            collision_enabled = Properties.Settings.Default.DisplayFrameCollision;
+            collision_enabled = Settings.Default.DisplayFrameCollision;
             this.frames = new List<Frame>();
             this.model = model;
             interi = 0;
@@ -82,9 +83,9 @@ namespace CrashEdit
                 Refresh();
             };
         }
-        
-        private int MinScale => model != null ? Math.Min(BitConv.FromInt32(model.Info, 8), Math.Min(BitConv.FromInt32(model.Info, 0), BitConv.FromInt32(model.Info, 4))) : 0x1000;
-        private int MaxScale => model != null ? Math.Max(BitConv.FromInt32(model.Info, 8), Math.Max(BitConv.FromInt32(model.Info, 0), BitConv.FromInt32(model.Info, 4))) : 0x1000;
+
+        private int MinScale => model != null ? Math.Min(BitConv.FromInt32(model.Info, 8), Math.Min(BitConv.FromInt32(model.Info, 0), BitConv.FromInt32(model.Info, 4))) : 0x640;
+        private int MaxScale => model != null ? Math.Max(BitConv.FromInt32(model.Info, 8), Math.Max(BitConv.FromInt32(model.Info, 0), BitConv.FromInt32(model.Info, 4))) : 0x640;
 
         protected override int CameraRangeMargin => 256;
         protected override float ScaleFactor => 12;
@@ -199,6 +200,37 @@ namespace CrashEdit
             //RenderPoints(f2);
             if (model != null)
             {
+                if (Settings.Default.DisplayAnimGrid)
+                {
+                    GL.PushMatrix();
+                    GL.Scale(new Vector3((f1.IsNew ? 0.5F : 4F) * 102400 / MinScale));
+                    GL.Begin(PrimitiveType.Lines);
+                    GL.Color3(Color.Red);
+                    GL.Vertex3(-0.5F, 0, 0);
+                    GL.Vertex3(+0.5F, 0, 0);
+                    GL.Color3(Color.Green);
+                    GL.Vertex3(0, -0.5F, 0);
+                    GL.Vertex3(0, +0.5F, 0);
+                    GL.Color3(Color.Blue);
+                    GL.Vertex3(0, 0, -0.5F);
+                    GL.Vertex3(0, 0, +0.5F);
+                    GL.Color3(Color.Gray);
+                    int gridamt = Settings.Default.AnimGridLen;
+                    float gridlen = 1.0F * gridamt - 0.5F;
+                    for (int i = 0; i < gridamt; ++i)
+                    {
+                        GL.Vertex3(+0.5F + i * 1F, 0, +gridlen);
+                        GL.Vertex3(+0.5F + i * 1F, 0, -gridlen);
+                        GL.Vertex3(-0.5F - i * 1F, 0, +gridlen);
+                        GL.Vertex3(-0.5F - i * 1F, 0, -gridlen);
+                        GL.Vertex3(+gridlen, 0, +0.5F + i * 1F);
+                        GL.Vertex3(-gridlen, 0, +0.5F + i * 1F);
+                        GL.Vertex3(+gridlen, 0, -0.5F - i * 1F);
+                        GL.Vertex3(-gridlen, 0, -0.5F - i * 1F);
+                    }
+                    GL.End();
+                    GL.PopMatrix();
+                }
                 if (cullmode < 2)
                 {
                     GL.Enable(EnableCap.CullFace);
@@ -304,7 +336,7 @@ namespace CrashEdit
                         }
                     }
                     GL.End();
-                    if (normals_enabled && Properties.Settings.Default.DisplayNormals)
+                    if (normals_enabled && Settings.Default.DisplayNormals)
                     {
                         GL.Disable(EnableCap.Lighting);
                         if (textures_enabled)

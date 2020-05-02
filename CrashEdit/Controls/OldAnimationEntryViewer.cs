@@ -1,4 +1,5 @@
 using Crash;
+using CrashEdit.Properties;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
@@ -29,7 +30,7 @@ namespace CrashEdit
 
         public OldAnimationEntryViewer(OldFrame frame,bool colored,OldModelEntry model,Dictionary<int,TextureChunk> texturechunks)
         {
-            collisionenabled = Properties.Settings.Default.DisplayFrameCollision;
+            collisionenabled = Settings.Default.DisplayFrameCollision;
             frames = new List<OldFrame>() { frame };
             this.model = model;
             this.texturechunks = texturechunks;
@@ -41,7 +42,7 @@ namespace CrashEdit
 
         public OldAnimationEntryViewer(IEnumerable<OldFrame> frames,bool colored,OldModelEntry model,Dictionary<int,TextureChunk> texturechunks)
         {
-            collisionenabled = Properties.Settings.Default.DisplayFrameCollision;
+            collisionenabled = Settings.Default.DisplayFrameCollision;
             this.frames = new List<OldFrame>(frames);
             this.model = model;
             this.texturechunks = texturechunks;
@@ -56,9 +57,9 @@ namespace CrashEdit
             };
             animatetimer.Tick += delegate (object sender,EventArgs e)
             {
-                animatetimer.Interval = (int)(1000.0f / OldMainForm.GetRate() / interp);
+                animatetimer.Interval = 1000 / OldMainForm.GetRate() / interp;
                 ++interi;
-                if (interi == interp)
+                if (interi >= interp)
                 {
                     interi = 0;
                     frameid = (frameid + 1) % this.frames.Count;
@@ -80,6 +81,7 @@ namespace CrashEdit
             get
             {
                 var vec = model != null ? new Vector3(BitConv.FromInt32(model.Info,4),BitConv.FromInt32(model.Info,8),BitConv.FromInt32(model.Info,12))/MinScale : new Vector3(1,1,1);
+                yield return new Position(128,128,128);
                 foreach (OldFrame frame in frames)
                 {
                     foreach (OldFrameVertex vertex in frame.Vertices)
@@ -166,6 +168,38 @@ namespace CrashEdit
         {
             if (model != null)
             {
+                if (Settings.Default.DisplayAnimGrid)
+                {
+                    GL.PushMatrix();
+                    GL.Translate(128, 128, 128);
+                    GL.Scale(new Vector3(102400*4F/MinScale));
+                    GL.Begin(PrimitiveType.Lines);
+                    GL.Color3(Color.Red);
+                    GL.Vertex3(-0.5F, 0, 0);
+                    GL.Vertex3(+0.5F, 0, 0);
+                    GL.Color3(Color.Green);
+                    GL.Vertex3(0, -0.5F, 0);
+                    GL.Vertex3(0, +0.5F, 0);
+                    GL.Color3(Color.Blue);
+                    GL.Vertex3(0, 0, -0.5F);
+                    GL.Vertex3(0, 0, +0.5F);
+                    GL.Color3(Color.Gray);
+                    int gridamt = Settings.Default.AnimGridLen;
+                    float gridlen = 1.0F * gridamt - 0.5F;
+                    for (int i = 0; i < gridamt; ++i)
+                    {
+                        GL.Vertex3(+0.5F + i * 1F, 0, +gridlen);
+                        GL.Vertex3(+0.5F + i * 1F, 0, -gridlen);
+                        GL.Vertex3(-0.5F - i * 1F, 0, +gridlen);
+                        GL.Vertex3(-0.5F - i * 1F, 0, -gridlen);
+                        GL.Vertex3(+gridlen, 0, +0.5F + i * 1F);
+                        GL.Vertex3(-gridlen, 0, +0.5F + i * 1F);
+                        GL.Vertex3(+gridlen, 0, -0.5F - i * 1F);
+                        GL.Vertex3(-gridlen, 0, -0.5F - i * 1F);
+                    }
+                    GL.End();
+                    GL.PopMatrix();
+                }
                 if (cullmode < 2)
                 {
                     GL.Enable(EnableCap.CullFace);
@@ -252,7 +286,7 @@ namespace CrashEdit
                 }
                 GL.End();
             }
-            if (!colored && normalsenabled && Properties.Settings.Default.DisplayNormals)
+            if (!colored && normalsenabled && Settings.Default.DisplayNormals)
             {
                 GL.Begin(PrimitiveType.Lines);
                 GL.Color3(Color.Cyan);
@@ -335,7 +369,6 @@ namespace CrashEdit
             int zcol2 = frame.Z2;
             GL.PushMatrix();
             GL.Translate(128,128,128);
-            //GL.Scale(0.00125f,0.00125f,0.00125f);
             GL.Scale(new Vector3(4F/MinScale));
             GL.Translate(frame.XGlobal,frame.YGlobal,frame.ZGlobal);
             GL.Begin(PrimitiveType.QuadStrip);

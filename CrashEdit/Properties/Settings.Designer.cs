@@ -118,5 +118,29 @@ namespace CrashEdit.Properties {
                 this["DeleteInvalidEntries"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DisplayAnimGrid {
+            get {
+                return ((bool)(this["DisplayAnimGrid"]));
+            }
+            set {
+                this["DisplayAnimGrid"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("4")]
+        public int AnimGridLen {
+            get {
+                return ((int)(this["AnimGridLen"]));
+            }
+            set {
+                this["AnimGridLen"] = value;
+            }
+        }
     }
 }

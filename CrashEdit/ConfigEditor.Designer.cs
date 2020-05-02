@@ -43,12 +43,18 @@
             this.fraClearCol = new System.Windows.Forms.GroupBox();
             this.picClearCol = new System.Windows.Forms.PictureBox();
             this.chkDeleteInvalidEntries = new System.Windows.Forms.CheckBox();
+            this.fraAnimGrid = new System.Windows.Forms.GroupBox();
+            this.chkAnimGrid = new System.Windows.Forms.CheckBox();
+            this.lblAnimGrid = new System.Windows.Forms.Label();
+            this.numAnimGrid = new System.Windows.Forms.NumericUpDown();
             this.fraLang.SuspendLayout();
             this.fraSize.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numH)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numW)).BeginInit();
             this.fraClearCol.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picClearCol)).BeginInit();
+            this.fraAnimGrid.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numAnimGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // dpdLang
@@ -235,11 +241,62 @@
             this.chkDeleteInvalidEntries.UseVisualStyleBackColor = true;
             this.chkDeleteInvalidEntries.CheckedChanged += new System.EventHandler(this.chkDeleteInvalidEntries_CheckedChanged);
             // 
+            // fraAnimGrid
+            // 
+            this.fraAnimGrid.Controls.Add(this.numAnimGrid);
+            this.fraAnimGrid.Controls.Add(this.lblAnimGrid);
+            this.fraAnimGrid.Controls.Add(this.chkAnimGrid);
+            this.fraAnimGrid.Location = new System.Drawing.Point(219, 58);
+            this.fraAnimGrid.Name = "fraAnimGrid";
+            this.fraAnimGrid.Size = new System.Drawing.Size(184, 74);
+            this.fraAnimGrid.TabIndex = 6;
+            this.fraAnimGrid.TabStop = false;
+            this.fraAnimGrid.Text = "Animation Viewer World Grid";
+            // 
+            // chkAnimGrid
+            // 
+            this.chkAnimGrid.AutoSize = true;
+            this.chkAnimGrid.Location = new System.Drawing.Point(6, 19);
+            this.chkAnimGrid.Name = "chkAnimGrid";
+            this.chkAnimGrid.Size = new System.Drawing.Size(65, 17);
+            this.chkAnimGrid.TabIndex = 0;
+            this.chkAnimGrid.Text = "Enabled";
+            this.chkAnimGrid.UseVisualStyleBackColor = true;
+            this.chkAnimGrid.CheckedChanged += new System.EventHandler(this.chkAnimGrid_CheckedChanged);
+            // 
+            // lblAnimGrid
+            // 
+            this.lblAnimGrid.AutoSize = true;
+            this.lblAnimGrid.Location = new System.Drawing.Point(7, 46);
+            this.lblAnimGrid.Name = "lblAnimGrid";
+            this.lblAnimGrid.Size = new System.Drawing.Size(43, 13);
+            this.lblAnimGrid.TabIndex = 1;
+            this.lblAnimGrid.Text = "Amount";
+            // 
+            // numAnimGrid
+            // 
+            this.numAnimGrid.Location = new System.Drawing.Point(56, 42);
+            this.numAnimGrid.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+            this.numAnimGrid.Name = "numAnimGrid";
+            this.numAnimGrid.Size = new System.Drawing.Size(80, 20);
+            this.numAnimGrid.TabIndex = 2;
+            this.numAnimGrid.Value = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.numAnimGrid.ValueChanged += new System.EventHandler(this.numAnimGrid_ValueChanged);
+            // 
             // ConfigEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.Controls.Add(this.fraAnimGrid);
             this.Controls.Add(this.chkDeleteInvalidEntries);
             this.Controls.Add(this.fraClearCol);
             this.Controls.Add(this.chkUseAnimLinks);
@@ -257,6 +314,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.numW)).EndInit();
             this.fraClearCol.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picClearCol)).EndInit();
+            this.fraAnimGrid.ResumeLayout(false);
+            this.fraAnimGrid.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numAnimGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -279,5 +339,9 @@
         private System.Windows.Forms.GroupBox fraClearCol;
         private System.Windows.Forms.PictureBox picClearCol;
         private System.Windows.Forms.CheckBox chkDeleteInvalidEntries;
+        private System.Windows.Forms.GroupBox fraAnimGrid;
+        private System.Windows.Forms.NumericUpDown numAnimGrid;
+        private System.Windows.Forms.Label lblAnimGrid;
+        private System.Windows.Forms.CheckBox chkAnimGrid;
     }
 }

@@ -23,6 +23,8 @@ namespace CrashEdit
             chkUseAnimLinks.Checked = Settings.Default.UseAnimLinks;
             picClearCol.BackColor = Settings.Default.ClearColor;
             chkDeleteInvalidEntries.Checked = Settings.Default.DeleteInvalidEntries;
+            chkAnimGrid.Checked = Settings.Default.DisplayAnimGrid;
+            numAnimGrid.Value = Settings.Default.AnimGridLen;
             fraLang.Text = Resources.Conifg_FraLang;
         }
 
@@ -80,6 +82,18 @@ namespace CrashEdit
         private void chkDeleteInvalidEntries_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Default.DeleteInvalidEntries = chkDeleteInvalidEntries.Checked;
+            Settings.Default.Save();
+        }
+
+        private void chkAnimGrid_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.DisplayAnimGrid = chkAnimGrid.Checked;
+            Settings.Default.Save();
+        }
+
+        private void numAnimGrid_ValueChanged(object sender, EventArgs e)
+        {
+            Settings.Default.AnimGridLen = (int)numAnimGrid.Value;
             Settings.Default.Save();
         }
     }
