@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Xml;
+using CrashEdit.Properties;
 
 namespace CrashEdit
 {
@@ -594,6 +595,7 @@ namespace CrashEdit
                                         values.Sort(delegate (int a, int b) {
                                             return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
                                         });
+                                        if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.FindEID<IEntry>(eid) == null);
                                     }
                                 }
                                 if (ent.LoadListB != null)
@@ -604,6 +606,7 @@ namespace CrashEdit
                                         values.Sort(delegate (int a, int b) {
                                             return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
                                         });
+                                        if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.FindEID<IEntry>(eid) == null);
                                     }
                                 }
                             }
@@ -663,6 +666,7 @@ namespace CrashEdit
                                         values.Sort(delegate (int a, int b) {
                                             return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
                                         });
+                                        if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.FindEID<IEntry>(eid) == null);
                                     }
                                 }
                                 if (ent.LoadListB != null)
@@ -673,6 +677,7 @@ namespace CrashEdit
                                         values.Sort(delegate (int a, int b) {
                                             return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
                                         });
+                                        if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.FindEID<IEntry>(eid) == null);
                                     }
                                 }
                             }

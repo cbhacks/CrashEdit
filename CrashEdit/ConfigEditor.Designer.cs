@@ -42,6 +42,7 @@
             this.cdlClearCol = new System.Windows.Forms.ColorDialog();
             this.fraClearCol = new System.Windows.Forms.GroupBox();
             this.picClearCol = new System.Windows.Forms.PictureBox();
+            this.chkDeleteInvalidEntries = new System.Windows.Forms.CheckBox();
             this.fraLang.SuspendLayout();
             this.fraSize.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numH)).BeginInit();
@@ -71,7 +72,7 @@
             // 
             // cmdReset
             // 
-            this.cmdReset.Location = new System.Drawing.Point(3, 224);
+            this.cmdReset.Location = new System.Drawing.Point(3, 230);
             this.cmdReset.Name = "cmdReset";
             this.cmdReset.Size = new System.Drawing.Size(100, 23);
             this.cmdReset.TabIndex = 1;
@@ -187,7 +188,7 @@
             this.chkUseAnimLinks.AutoSize = true;
             this.chkUseAnimLinks.Checked = true;
             this.chkUseAnimLinks.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkUseAnimLinks.Location = new System.Drawing.Point(3, 184);
+            this.chkUseAnimLinks.Location = new System.Drawing.Point(3, 207);
             this.chkUseAnimLinks.Name = "chkUseAnimLinks";
             this.chkUseAnimLinks.Size = new System.Drawing.Size(231, 17);
             this.chkUseAnimLinks.TabIndex = 3;
@@ -221,11 +222,25 @@
             this.picClearCol.TabStop = false;
             this.picClearCol.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
+            // chkDeleteInvalidEntries
+            // 
+            this.chkDeleteInvalidEntries.AutoSize = true;
+            this.chkDeleteInvalidEntries.Checked = true;
+            this.chkDeleteInvalidEntries.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDeleteInvalidEntries.Location = new System.Drawing.Point(3, 184);
+            this.chkDeleteInvalidEntries.Name = "chkDeleteInvalidEntries";
+            this.chkDeleteInvalidEntries.Size = new System.Drawing.Size(280, 17);
+            this.chkDeleteInvalidEntries.TabIndex = 5;
+            this.chkDeleteInvalidEntries.Text = "(Patch NSD) Delete non-existent entries from load lists";
+            this.chkDeleteInvalidEntries.UseVisualStyleBackColor = true;
+            this.chkDeleteInvalidEntries.CheckedChanged += new System.EventHandler(this.chkDeleteInvalidEntries_CheckedChanged);
+            // 
             // ConfigEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.Controls.Add(this.chkDeleteInvalidEntries);
             this.Controls.Add(this.fraClearCol);
             this.Controls.Add(this.chkUseAnimLinks);
             this.Controls.Add(this.chkCollisionDisplay);
@@ -234,7 +249,7 @@
             this.Controls.Add(this.cmdReset);
             this.Controls.Add(this.fraLang);
             this.Name = "ConfigEditor";
-            this.Size = new System.Drawing.Size(433, 250);
+            this.Size = new System.Drawing.Size(433, 288);
             this.fraLang.ResumeLayout(false);
             this.fraSize.ResumeLayout(false);
             this.fraSize.PerformLayout();
@@ -263,5 +278,6 @@
         private System.Windows.Forms.ColorDialog cdlClearCol;
         private System.Windows.Forms.GroupBox fraClearCol;
         private System.Windows.Forms.PictureBox picClearCol;
+        private System.Windows.Forms.CheckBox chkDeleteInvalidEntries;
     }
 }

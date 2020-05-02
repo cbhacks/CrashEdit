@@ -106,5 +106,17 @@ namespace CrashEdit.Properties {
                 this["ClearColor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DeleteInvalidEntries {
+            get {
+                return ((bool)(this["DeleteInvalidEntries"]));
+            }
+            set {
+                this["DeleteInvalidEntries"] = value;
+            }
+        }
     }
 }

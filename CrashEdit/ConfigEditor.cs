@@ -1,7 +1,6 @@
 ﻿using CrashEdit.Properties;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -23,6 +22,7 @@ namespace CrashEdit
             chkCollisionDisplay.Checked = Settings.Default.DisplayFrameCollision;
             chkUseAnimLinks.Checked = Settings.Default.UseAnimLinks;
             picClearCol.BackColor = Settings.Default.ClearColor;
+            chkDeleteInvalidEntries.Checked = Settings.Default.DeleteInvalidEntries;
             fraLang.Text = Resources.Conifg_FraLang;
         }
 
@@ -75,6 +75,12 @@ namespace CrashEdit
                 picClearCol.BackColor = Settings.Default.ClearColor = cdlClearCol.Color;
                 Settings.Default.Save();
             }
+        }
+
+        private void chkDeleteInvalidEntries_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.DeleteInvalidEntries = chkDeleteInvalidEntries.Checked;
+            Settings.Default.Save();
         }
     }
 }
