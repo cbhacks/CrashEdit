@@ -67,12 +67,12 @@ namespace CrashEdit
             frameid = 0;
             animatetimer = new Timer
             {
-                Interval = 1000 / OldMainForm.GetRate() / interp,
+                Interval = (int)(1000.0 / OldMainForm.GetRate() / 2 / (interp / 2)),
                 Enabled = true
             };
             animatetimer.Tick += delegate (object sender,EventArgs e)
             {
-                animatetimer.Interval = (int)(1000.0f / OldMainForm.GetRate() / interp);
+                animatetimer.Interval = (int)(1000.0 / OldMainForm.GetRate() / 2 / (interp / 2));
                 ++interi;
                 if (interi == interp)
                 {
@@ -150,6 +150,7 @@ namespace CrashEdit
                 case Keys.C:
                 case Keys.I:
                 case Keys.N:
+                case Keys.P:
                 case Keys.T:
                 case Keys.U:
                 case Keys.Enter:
@@ -172,6 +173,9 @@ namespace CrashEdit
                     break;
                 case Keys.N:
                     normals_enabled = !normals_enabled;
+                    break;
+                case Keys.P:
+                    interp = interp == 2 ? 4 : 2;
                     break;
                 case Keys.T:
                     textures_enabled = !textures_enabled;
@@ -357,11 +361,7 @@ namespace CrashEdit
             UnbindTexture();
             if (collision_enabled)
             {
-                Frame fcol;
-                if (f2 == null)
-                    fcol = f1;
-                else
-                    fcol = f2;
+                Frame fcol = f1;
                 for (int i = 0; i < fcol.Collision.Count; ++i)
                 {
                     RenderCollision(fcol, i);
