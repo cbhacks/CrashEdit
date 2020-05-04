@@ -281,8 +281,7 @@ namespace CrashEdit
             }
 
             string warpscusFilename = null;
-            isofsPath += "\\S0";
-            foreach (string s in Directory.GetFiles(isofsPath)) {
+            foreach (string s in Directory.GetFiles(Path.Combine(isofsPath, "S0"))) {
                 if (Regex.IsMatch(Path.GetFileName(s).ToUpper(), @"^WARPSC[UEP]S\.BIN$")) {
                     warpscusFilename = s;
                     break;
