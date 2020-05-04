@@ -97,19 +97,19 @@
     <Compile Include="Forms\ErrorReporter.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ErrorReporter.designer.cs">
+    <Compile Include="Forms\ErrorReporter.Designer.cs">
       <DependentUpon>ErrorReporter.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\InterpolatorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\InterpolatorForm.designer.cs">
+    <Compile Include="Forms\InterpolatorForm.Designer.cs">
       <DependentUpon>InterpolatorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\NewEntryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\NewEntryForm.designer.cs">
+    <Compile Include="Forms\NewEntryForm.Designer.cs">
       <DependentUpon>NewEntryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\TextureViewer.cs">
