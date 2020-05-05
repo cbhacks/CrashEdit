@@ -34,6 +34,7 @@ namespace CrashEdit
             this.fraSubtype = new System.Windows.Forms.GroupBox();
             this.numSubtype = new System.Windows.Forms.NumericUpDown();
             this.fraPosition = new System.Windows.Forms.GroupBox();
+            this.cmdInterpolate = new System.Windows.Forms.Button();
             this.lblPositionIndex = new System.Windows.Forms.Label();
             this.cmdNextPosition = new System.Windows.Forms.Button();
             this.cmdPreviousPosition = new System.Windows.Forms.Button();
@@ -63,7 +64,6 @@ namespace CrashEdit
             this.numB = new System.Windows.Forms.NumericUpDown();
             this.numA = new System.Windows.Forms.NumericUpDown();
             this.numFlags = new System.Windows.Forms.NumericUpDown();
-            this.cmdInterpolate = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -158,6 +158,16 @@ namespace CrashEdit
             this.fraPosition.TabIndex = 1;
             this.fraPosition.TabStop = false;
             this.fraPosition.Text = "Position(s)";
+            // 
+            // cmdInterpolate
+            // 
+            this.cmdInterpolate.Location = new System.Drawing.Point(6, 130);
+            this.cmdInterpolate.Name = "cmdInterpolate";
+            this.cmdInterpolate.Size = new System.Drawing.Size(75, 23);
+            this.cmdInterpolate.TabIndex = 8;
+            this.cmdInterpolate.Text = "Interpolate";
+            this.cmdInterpolate.UseVisualStyleBackColor = true;
+            this.cmdInterpolate.Click += new System.EventHandler(this.cmdInterpolate_Click);
             // 
             // lblPositionIndex
             // 
@@ -440,11 +450,11 @@ namespace CrashEdit
             this.lblC.AutoSize = true;
             this.lblC.Location = new System.Drawing.Point(6, 99);
             this.lblC.Name = "lblC";
-            this.lblC.Size = new System.Drawing.Size(44, 13);
+            this.lblC.Size = new System.Drawing.Size(48, 13);
             this.lblC.TabIndex = 7;
-            this.lblC.Text = "Mode C";
+            this.lblC.Text = "Vector Z";
             // 
-            // numModeB
+            // numC
             // 
             this.numC.Location = new System.Drawing.Point(62, 97);
             this.numC.Maximum = new decimal(new int[] {
@@ -457,7 +467,7 @@ namespace CrashEdit
             0,
             0,
             -2147483648});
-            this.numC.Name = "numModeB";
+            this.numC.Name = "numC";
             this.numC.Size = new System.Drawing.Size(86, 20);
             this.numC.TabIndex = 6;
             this.numC.ValueChanged += new System.EventHandler(this.numC_ValueChanged);
@@ -467,18 +477,18 @@ namespace CrashEdit
             this.lblB.AutoSize = true;
             this.lblB.Location = new System.Drawing.Point(6, 73);
             this.lblB.Name = "lblB";
-            this.lblB.Size = new System.Drawing.Size(44, 13);
+            this.lblB.Size = new System.Drawing.Size(48, 13);
             this.lblB.TabIndex = 5;
-            this.lblB.Text = "Mode B";
+            this.lblB.Text = "Vector Y";
             // 
             // lblA
             // 
             this.lblA.AutoSize = true;
             this.lblA.Location = new System.Drawing.Point(6, 47);
             this.lblA.Name = "lblA";
-            this.lblA.Size = new System.Drawing.Size(44, 13);
+            this.lblA.Size = new System.Drawing.Size(48, 13);
             this.lblA.TabIndex = 4;
-            this.lblA.Text = "Mode A";
+            this.lblA.Text = "Vector X";
             // 
             // lblFlags
             // 
@@ -489,7 +499,7 @@ namespace CrashEdit
             this.lblFlags.TabIndex = 3;
             this.lblFlags.Text = "Flags";
             // 
-            // numModeA
+            // numB
             // 
             this.numB.Location = new System.Drawing.Point(62, 71);
             this.numB.Maximum = new decimal(new int[] {
@@ -502,12 +512,12 @@ namespace CrashEdit
             0,
             0,
             -2147483648});
-            this.numB.Name = "numModeA";
+            this.numB.Name = "numB";
             this.numB.Size = new System.Drawing.Size(86, 20);
             this.numB.TabIndex = 4;
             this.numB.ValueChanged += new System.EventHandler(this.numB_ValueChanged);
             // 
-            // numFlags
+            // numA
             // 
             this.numA.Location = new System.Drawing.Point(62, 45);
             this.numA.Maximum = new decimal(new int[] {
@@ -520,7 +530,7 @@ namespace CrashEdit
             0,
             0,
             -2147483648});
-            this.numA.Name = "numFlags";
+            this.numA.Name = "numA";
             this.numA.Size = new System.Drawing.Size(86, 20);
             this.numA.TabIndex = 3;
             this.numA.ValueChanged += new System.EventHandler(this.numA_ValueChanged);
@@ -538,16 +548,6 @@ namespace CrashEdit
             this.numFlags.Size = new System.Drawing.Size(86, 20);
             this.numFlags.TabIndex = 2;
             this.numFlags.ValueChanged += new System.EventHandler(this.numUnknown_ValueChanged);
-            // 
-            // cmdInterpolate
-            // 
-            this.cmdInterpolate.Location = new System.Drawing.Point(6, 130);
-            this.cmdInterpolate.Name = "cmdInterpolate";
-            this.cmdInterpolate.Size = new System.Drawing.Size(75, 23);
-            this.cmdInterpolate.TabIndex = 8;
-            this.cmdInterpolate.Text = "Interpolate";
-            this.cmdInterpolate.UseVisualStyleBackColor = true;
-            this.cmdInterpolate.Click += new System.EventHandler(this.cmdInterpolate_Click);
             // 
             // OldEntityBox
             // 
