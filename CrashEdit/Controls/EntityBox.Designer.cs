@@ -679,6 +679,8 @@ namespace CrashEdit
             // chkSettingHex
             // 
             this.chkSettingHex.AutoSize = true;
+            this.chkSettingHex.Checked = true;
+            this.chkSettingHex.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkSettingHex.Location = new System.Drawing.Point(118, 105);
             this.chkSettingHex.Name = "chkSettingHex";
             this.chkSettingHex.Size = new System.Drawing.Size(45, 17);
@@ -689,17 +691,13 @@ namespace CrashEdit
             // 
             // numSettingC
             // 
+            this.numSettingC.Hexadecimal = true;
             this.numSettingC.Location = new System.Drawing.Point(6, 104);
             this.numSettingC.Maximum = new decimal(new int[] {
-            2147483647,
+            -1,
             0,
             0,
             0});
-            this.numSettingC.Minimum = new decimal(new int[] {
-            -2147483648,
-            0,
-            0,
-            -2147483648});
             this.numSettingC.Name = "numSettingC";
             this.numSettingC.Size = new System.Drawing.Size(106, 20);
             this.numSettingC.TabIndex = 7;

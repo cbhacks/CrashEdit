@@ -380,8 +380,8 @@ namespace CrashEdit
             if (!settingdirty)
             {
                 EntitySetting s = entity.Settings[settingindex];
-                int c = (int)numSettingC.Value;
-                entity.Settings[settingindex] = new EntitySetting((byte)c, c >> 8);
+                long c = (long)numSettingC.Value;
+                entity.Settings[settingindex] = new EntitySetting((byte)c, ((int)c >> 8));
                 settingdirty = true;
                 numSettingA.Value = entity.Settings[settingindex].ValueA;
                 numSettingB.Value = entity.Settings[settingindex].ValueB;
@@ -1653,11 +1653,11 @@ namespace CrashEdit
             }
             lblPayload.Visible = true;
             lblPayload.Text = $"Payload is {loadedchunks.Count} normal chunks";
-            if (loadedchunks.Count < 21)
+            if (loadedchunks.Count < 20)
             {
                 lblPayload.ForeColor = Color.Green;
             }
-            else if (loadedchunks.Count == 21)
+            else if (loadedchunks.Count <= 21)
             {
                 lblPayload.ForeColor = Color.Goldenrod;
             }
@@ -1670,8 +1670,21 @@ namespace CrashEdit
         private void chkSettingHex_CheckedChanged(object sender, EventArgs e)
         {
             numSettingC.Hexadecimal = chkSettingHex.Checked;
-            numSettingC.Minimum = int.MinValue;
-            numSettingC.Maximum = int.MaxValue;
+            // this is fucking stupid
+            numSettingC.Minimum = long.MinValue;
+            numSettingC.Maximum = long.MaxValue;
+            if (numSettingC.Hexadecimal)
+            {
+                numSettingC.Value = unchecked((uint)(long)numSettingC.Value);
+                numSettingC.Minimum = uint.MinValue;
+                numSettingC.Maximum = uint.MaxValue;
+            }
+            else
+            {
+                numSettingC.Value = unchecked((int)(long)numSettingC.Value);
+                numSettingC.Minimum = int.MinValue;
+                numSettingC.Maximum = int.MaxValue;
+            }
         }
 
         private void cmdInterpolate_Click(object sender, EventArgs e)
