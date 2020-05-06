@@ -151,7 +151,7 @@
                 case 9:
                     SetInsParams("addiu", MIPSInstructionFormats.ArithmeticLogicImmediate); break;
                 case 10:
-                    SetInsParams("subi", MIPSInstructionFormats.ArithmeticLogicImmediate); break;
+                    SetInsParams("slti", MIPSInstructionFormats.ArithmeticLogicImmediate); break;
                 case 11:
                     SetInsParams("sltiu", MIPSInstructionFormats.ArithmeticLogicImmediate); break;
                 case 12:
