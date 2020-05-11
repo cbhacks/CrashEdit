@@ -157,8 +157,16 @@ namespace CrashEdit
         private static Bitmap slotboxtexture = null;
 
         [Resource("UnknownBoxTexture")]
+        [ExternalTexture(3,2)]
+        private static Bitmap time1boxtexture = null;
+
+        [Resource("UnknownBoxTexture")]
+        [ExternalTexture(4,2)]
+        private static Bitmap time2boxtexture = null;
+
+        [Resource("UnknownBoxTexture")]
         [ExternalTexture(5,2)]
-        private static Bitmap timeboxtexture = null;
+        private static Bitmap time3boxtexture = null;
 
         [Resource("UnknownBoxTopTexture")]
         [ExternalTexture(2,2)]
@@ -330,7 +338,9 @@ namespace CrashEdit
         public static Bitmap SlotBoxTexture => slotboxtexture;
         public static Bitmap SpringBoxTexture => springboxtexture;
         public static Bitmap SteelBoxTexture => steelboxtexture;
-        public static Bitmap TimeBoxTexture => timeboxtexture;
+        public static Bitmap Time1BoxTexture => time1boxtexture;
+        public static Bitmap Time2BoxTexture => time2boxtexture;
+        public static Bitmap Time3BoxTexture => time3boxtexture;
         public static Bitmap TimeBoxTopTexture => timeboxtoptexture;
         public static Bitmap TNTBoxTexture => tntboxtexture;
         public static Bitmap TNTBoxTopTexture => tntboxtoptexture;
