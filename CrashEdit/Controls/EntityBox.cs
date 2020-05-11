@@ -31,35 +31,8 @@ namespace CrashEdit
         private int fovframeindex;
         private int fovindex;
 
-        public EntityBox(NewEntityController controller)
+        internal void MainInit()
         {
-            this.controller = controller;
-            entity = controller.Entity;
-            InitializeComponent();
-            UpdateName();
-            UpdatePosition();
-            UpdateType();
-            UpdateSubtype();
-            UpdateSettings();
-            UpdateID();
-            positionindex = 0;
-            victimindex = 0;
-            loadlistarowindex = 0;
-            loadlistaeidindex = 0;
-            loadlistbrowindex = 0;
-            loadlistbeidindex = 0;
-            drawlistarowindex = 0;
-            drawlistaentityindex = 0;
-            drawlistbrowindex = 0;
-            drawlistbentityindex = 0;
-            neighborindex = 0;
-            neighborsettingindex = 0;
-        }
-
-        public EntityBox(EntityController controller)
-        {
-            this.controller = controller;
-            entity = controller.Entity;
             InitializeComponent();
             UpdateName();
             UpdatePosition();
@@ -138,6 +111,21 @@ namespace CrashEdit
             fraScaling.Text = Resources.EntityBox_FraScaling;
             fraTTReward.Text = Resources.EntityBox_FraTTReward;
             fraSLST.Text = Resources.EntityBox_FraSLST;
+            chkSettingHex_CheckedChanged(null, null);
+        }
+
+        public EntityBox(NewEntityController controller)
+        {
+            this.controller = controller;
+            entity = controller.Entity;
+            MainInit();
+        }
+
+        public EntityBox(EntityController controller)
+        {
+            this.controller = controller;
+            entity = controller.Entity;
+            MainInit();
         }
 
         private void InvalidateNodes()
@@ -322,7 +310,7 @@ namespace CrashEdit
                 numSettingC.Enabled = true;
                 numSettingA.Value = entity.Settings[settingindex].ValueA;
                 numSettingB.Value = entity.Settings[settingindex].ValueB;
-                numSettingC.Value = entity.Settings[settingindex].ValueA | (entity.Settings[settingindex].ValueB << 8);
+                SetCVal(entity.Settings[settingindex].ValueA | (entity.Settings[settingindex].ValueB << 8));
             }
             settingdirty = false;
         }
@@ -358,7 +346,7 @@ namespace CrashEdit
                 EntitySetting s = entity.Settings[settingindex];
                 entity.Settings[settingindex] = new EntitySetting((byte)numSettingA.Value,s.ValueB);
                 settingdirty = true;
-                numSettingC.Value = (int)(entity.Settings[settingindex].ValueA | (entity.Settings[settingindex].ValueB << 8));
+                SetCVal(entity.Settings[settingindex].ValueA | (entity.Settings[settingindex].ValueB << 8));
                 settingdirty = false;
             }
         }
@@ -370,8 +358,27 @@ namespace CrashEdit
                 EntitySetting s = entity.Settings[settingindex];
                 entity.Settings[settingindex] = new EntitySetting(s.ValueA,(int)numSettingB.Value);
                 settingdirty = true;
-                numSettingC.Value = (int)(entity.Settings[settingindex].ValueA | (entity.Settings[settingindex].ValueB << 8));
+                SetCVal(entity.Settings[settingindex].ValueA | (entity.Settings[settingindex].ValueB << 8));
                 settingdirty = false;
+            }
+        }
+
+        internal void SetCVal(long val)
+        {
+            // this is fucking stupid
+            numSettingC.Minimum = long.MinValue;
+            numSettingC.Maximum = long.MaxValue;
+            if (numSettingC.Hexadecimal)
+            {
+                numSettingC.Value = unchecked((uint)val);
+                numSettingC.Minimum = uint.MinValue;
+                numSettingC.Maximum = uint.MaxValue;
+            }
+            else
+            {
+                numSettingC.Value = unchecked((int)val);
+                numSettingC.Minimum = int.MinValue;
+                numSettingC.Maximum = int.MaxValue;
             }
         }
 
@@ -1670,21 +1677,7 @@ namespace CrashEdit
         private void chkSettingHex_CheckedChanged(object sender, EventArgs e)
         {
             numSettingC.Hexadecimal = chkSettingHex.Checked;
-            // this is fucking stupid
-            numSettingC.Minimum = long.MinValue;
-            numSettingC.Maximum = long.MaxValue;
-            if (numSettingC.Hexadecimal)
-            {
-                numSettingC.Value = unchecked((uint)(long)numSettingC.Value);
-                numSettingC.Minimum = uint.MinValue;
-                numSettingC.Maximum = uint.MaxValue;
-            }
-            else
-            {
-                numSettingC.Value = unchecked((int)(long)numSettingC.Value);
-                numSettingC.Minimum = int.MinValue;
-                numSettingC.Maximum = int.MaxValue;
-            }
+            SetCVal((long)numSettingC.Value);
         }
 
         private void cmdInterpolate_Click(object sender, EventArgs e)

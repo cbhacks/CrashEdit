@@ -695,9 +695,14 @@ namespace CrashEdit
             this.numSettingC.Location = new System.Drawing.Point(6, 104);
             this.numSettingC.Maximum = new decimal(new int[] {
             -1,
-            0,
+            2147483647,
             0,
             0});
+            this.numSettingC.Minimum = new decimal(new int[] {
+            0,
+            -2147483648,
+            0,
+            -2147483648});
             this.numSettingC.Name = "numSettingC";
             this.numSettingC.Size = new System.Drawing.Size(106, 20);
             this.numSettingC.TabIndex = 7;
