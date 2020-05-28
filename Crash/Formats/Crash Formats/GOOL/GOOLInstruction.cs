@@ -199,7 +199,7 @@ namespace Crash
                 int off = val & 0x3FF;
                 if ((val & 0x400) == 0)
                 {
-                    if (GOOL.Format == 1) // external GOOL entries will logically not have local data...
+                    if (GOOL.Format == 1 && off < GOOL.Data.Length) // external GOOL entries will logically not have local data...
                     {
                         int cval = GOOL.Data[off];
                         if (IntIsEID(cval))
@@ -209,7 +209,7 @@ namespace Crash
                     }
                     else
                     {
-                        if (GOOL.ParentGOOL != null)
+                        if (GOOL.ParentGOOL != null && GOOL.Format == 0 && off < GOOL.ParentGOOL.Data.Length)
                         {
                             int cval = GOOL.ParentGOOL.Data[off];
                             if (IntIsEID(cval))
@@ -223,7 +223,7 @@ namespace Crash
                 }
                 else
                 {
-                    if (GOOL.Format == 0) // local GOOL entries will logically not have external data...
+                    if (GOOL.Format == 0 && off < GOOL.Data.Length) // local GOOL entries will logically not have external data...
                     {
                         int cval = GOOL.Data[off];
                         if (IntIsEID(cval))

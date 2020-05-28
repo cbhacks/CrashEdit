@@ -214,9 +214,9 @@
                     case MIPSInstructionFormats.ArithmeticLogicImmediate:
                         return $"{GetMIPSReg(rt)},{GetMIPSReg(rs)},{imm.TransformedString()}";
                     case MIPSInstructionFormats.Branch:
-                        return $"{GetMIPSReg(rs)},{imm.TransformedString()}";
+                        return $"{GetMIPSReg(rs)},{imm}";
                     case MIPSInstructionFormats.BranchTarget:
-                        return $"{GetMIPSReg(rs)},{GetMIPSReg(rt)},{imm.TransformedString()}";
+                        return $"{GetMIPSReg(rs)},{GetMIPSReg(rt)},{imm}";
                     case MIPSInstructionFormats.Jump:
                         return $"{ofs}";
                     case MIPSInstructionFormats.JumpAndLinkRegister:
@@ -231,7 +231,7 @@
                     case MIPSInstructionFormats.MoveTo:
                         return $"{GetMIPSReg(rd)}";
                     case MIPSInstructionFormats.MultDiv:
-                        return $"{GetMIPSReg(rt)},{GetMIPSReg(rs)}";
+                        return $"{GetMIPSReg(rs)},{GetMIPSReg(rt)}";
                     case MIPSInstructionFormats.Shift:
                         return $"{GetMIPSReg(rd)},{GetMIPSReg(rt)},{shamt}";
                     case MIPSInstructionFormats.ShiftVariable:

@@ -71,7 +71,7 @@ namespace Crash
             {
                 int encins = BitConv.FromInt32(instructions,i*4);
                 GOOLInstruction ins = LoadInstruction(encins,mips);
-                if ((version == GOOLVersion.Version2 || version == GOOLVersion.Version3) && (ins.Opcode == 142 || ins.Opcode == 174 || encins == 0x26D6FFE4 || encins == 0x00002821 || encins == 0x34050001 || (uint)encins == 0x8C670094U))
+                if (version == GOOLVersion.Version3 && (ins.Opcode == 142 || ins.Opcode == 174 || encins == 0x26D6FFE4 || encins == 0x00002821 || encins == 0x34050001 || (uint)encins == 0x8C670094U))
                 {
                     mips = true;
                     ins = LoadInstruction(BitConv.FromInt32(instructions,i*4),mips);
