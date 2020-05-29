@@ -208,13 +208,23 @@ namespace CrashEdit
                                 {
                                     switch (entity.Subtype)
                                     {
-                                        case 5: // iron
-                                        case 7: // action
-                                        case 15: // iron spring
-                                        case 24: // nitro action
+                                        case 0: // tnt
+                                        case 2: // empty
+                                        case 3: // spring
+                                        case 4: // continue
+                                        case 6: // fruit
+                                        case 8: // life
+                                        case 9: // doctor
+                                        case 10: // pickup
+                                        case 11: // pow
+                                        case 13: // ghost
+                                        case 17: // auto pickup
+                                        case 18: // nitro
+                                        case 20: // auto empty
+                                        case 21: // empty 2
+                                            boxcount++;
                                             break;
                                         default:
-                                            boxcount++;
                                             break;
                                     }
                                 }
@@ -232,15 +242,24 @@ namespace CrashEdit
                                 {
                                     switch (entity.Subtype)
                                     {
-                                        case 5: // iron
-                                        case 7: // action
-                                        case 15: // iron spring
-                                        case 24: // nitro action
-                                        case 27: // iron continue
-                                        case 28: // clock
+                                        case 0: // tnt
+                                        case 2: // empty
+                                        case 3: // spring
+                                        case 4: // continue
+                                        case 6: // fruit
+                                        case 8: // life
+                                        case 9: // doctor
+                                        case 10: // pickup
+                                        case 11: // pow
+                                        case 13: // ghost
+                                        case 17: // auto pickup
+                                        case 18: // nitro
+                                        case 20: // auto empty
+                                        case 21: // empty 2
+                                        case 25: // slot
+                                            boxcount++;
                                             break;
                                         default:
-                                            boxcount++;
                                             break;
                                     }
                                 }
