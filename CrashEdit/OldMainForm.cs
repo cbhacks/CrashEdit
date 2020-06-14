@@ -280,6 +280,14 @@ namespace CrashEdit
                 return;
             }
 
+            string kdatFilename = null;
+            foreach (string s in Directory.GetFiles(Path.Combine(isofsPath, "S3"))) {
+                if (Path.GetFileName(s).ToUpper() == "KDAT.DAT") {
+                    kdatFilename = s;
+                    break;
+                }
+            }
+
             string warpscusFilename = null;
             foreach (string s in Directory.GetFiles(Path.Combine(isofsPath, "S0"))) {
                 if (Regex.IsMatch(Path.GetFileName(s).ToUpper(), @"^WARPSC[UEP]S\.BIN$")) {
@@ -298,10 +306,8 @@ namespace CrashEdit
             fs.AddFile("S0\\" + Path.GetFileName(nsfFilename) + ";1", nsf.Save());
             fs.AddFile("S0\\" + Path.GetFileName(nsdFilename) + ";1", nsdFilename);
             fs.AddFile("PSX.EXE;1", exeFilename);
-            if (warpscusFilename != null)
-            {
-                fs.AddFile("S0\\" + Path.GetFileName(warpscusFilename) + ";1", warpscusFilename);
-            }
+            if (warpscusFilename != null) fs.AddFile("S0\\" + Path.GetFileName(warpscusFilename) + ";1", warpscusFilename);
+            if (kdatFilename != null) fs.AddFile("S3\\" + Path.GetFileName(kdatFilename) + ";1", kdatFilename);
 
             string binPath = Path.Combine(basePath, "game.bin");
             using (var bin = new FileStream(binPath, FileMode.Create, FileAccess.Write))
