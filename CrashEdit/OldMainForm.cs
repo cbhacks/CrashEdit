@@ -10,7 +10,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Threading.Tasks;
-using System.Xml;
 using CrashEdit.Properties;
 
 namespace CrashEdit
@@ -68,7 +67,7 @@ namespace CrashEdit
         {
             tbbOpen = new ToolStripButton
             {
-                Text = Properties.Resources.Toolbar_Open,
+                Text = Resources.Toolbar_Open,
                 ImageKey = "tb_open",
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
@@ -76,7 +75,7 @@ namespace CrashEdit
 
             tbbSave = new ToolStripButton
             {
-                Text = Properties.Resources.Toolbar_Save,
+                Text = Resources.Toolbar_Save,
                 ImageKey = "tb_save",
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
@@ -84,7 +83,7 @@ namespace CrashEdit
 
             tbbPatchNSD = new ToolStripButton
             {
-                Text = Properties.Resources.Toolbar_PatchNSD,
+                Text = Resources.Toolbar_PatchNSD,
                 ImageKey = "tb_patchnsd",
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
@@ -92,7 +91,7 @@ namespace CrashEdit
 
             tbbClose = new ToolStripButton
             {
-                Text = Properties.Resources.Toolbar_Close,
+                Text = Resources.Toolbar_Close,
                 ImageKey = "tb_close",
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
@@ -100,7 +99,7 @@ namespace CrashEdit
 
             tbbFind = new ToolStripButton
             {
-                Text = Properties.Resources.Toolbar_Find,
+                Text = Resources.Toolbar_Find,
                 ImageKey = "tb_find",
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
@@ -108,7 +107,7 @@ namespace CrashEdit
 
             tbbFindNext = new ToolStripButton
             {
-                Text = Properties.Resources.Toolbar_FindNext,
+                Text = Resources.Toolbar_FindNext,
                 ImageKey = "tb_findnext",
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
@@ -202,8 +201,8 @@ namespace CrashEdit
             dlgGameVersion = new GameVersionForm();
 
             Icon = OldResources.CBHacksIcon;
-            Width = Properties.Settings.Default.DefaultFormW;
-            Height = Properties.Settings.Default.DefaultFormH;
+            Width = Settings.Default.DefaultFormW;
+            Height = Settings.Default.DefaultFormH;
             Text = $"CrashEdit v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
             Controls.Add(tbcTabs);
             Controls.Add(tsToolbar);
@@ -302,8 +301,14 @@ namespace CrashEdit
             } while (Directory.Exists(basePath));
             Directory.CreateDirectory(basePath);
 
+            File.Copy(nsfFilename, Path.Combine(basePath, Path.GetFileName(nsfFilename)));
+            File.Copy(nsdFilename, Path.Combine(basePath, Path.GetFileName(nsdFilename)));
+            nsfFilename = Path.Combine(basePath, Path.GetFileName(nsfFilename));
+            nsdFilename = Path.Combine(basePath, Path.GetFileName(nsdFilename));
+            PatchNSD(nsdFilename, true, nsfBox.NSFController, true);
+            SaveNSF(nsfFilename, nsf, true);
             var fs = new CDBuilder();
-            fs.AddFile("S0\\" + Path.GetFileName(nsfFilename) + ";1", nsf.Save());
+            fs.AddFile("S0\\" + Path.GetFileName(nsfFilename) + ";1", nsfFilename);
             fs.AddFile("S0\\" + Path.GetFileName(nsdFilename) + ";1", nsdFilename);
             fs.AddFile("PSX.EXE;1", exeFilename);
             if (warpscusFilename != null) fs.AddFile("S0\\" + Path.GetFileName(warpscusFilename) + ";1", warpscusFilename);
@@ -335,7 +340,7 @@ namespace CrashEdit
 
         void tbbSave_Click(object sender,EventArgs e)
         {
-            SaveNSF();
+            SaveNSF(false);
         }
 
         void tbbPatchNSD_Click(object sender,EventArgs e)
@@ -407,22 +412,22 @@ namespace CrashEdit
             tbcTabs.SelectedTab = nsftab;
         }
 
-        public void SaveNSF()
+        public void SaveNSF(bool ignore_warnings)
         {
             if (tbcTabs.SelectedTab != null)
             {
                 string filename = tbcTabs.SelectedTab.Text;
                 NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
-                SaveNSF(filename,nsfbox.NSF);
+                SaveNSF(filename,nsfbox.NSF,ignore_warnings);
             }
         }
 
-        public void SaveNSF(string filename,NSF nsf)
+        public void SaveNSF(string filename,NSF nsf,bool ignore_warnings)
         {
             try
             {
                 byte[] nsfdata = nsf.Save();
-                if (MessageBox.Show("Are you sure you want to overwrite this file?","Save Confirmation Prompt",MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (ignore_warnings ? true : MessageBox.Show("Are you sure you want to overwrite this file?","Save Confirmation Prompt",MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     File.WriteAllBytes(filename,nsfdata);
                 }
@@ -475,11 +480,11 @@ namespace CrashEdit
                     }
                     exists = false;
                 }
-                PatchNSD(filename,exists,nsfbox.NSFController);
+                PatchNSD(filename,exists,nsfbox.NSFController,false);
             }
         }
 
-        public void PatchNSD(string filename, bool exists, NSFController nsfc)
+        public void PatchNSD(string filename, bool exists, NSFController nsfc, bool ignore_warnings)
         {
             NSF nsf = nsfc.NSF;
             byte[] data = exists ? File.ReadAllBytes(filename) : null;
@@ -490,29 +495,29 @@ namespace CrashEdit
                     case GameVersion.Crash1BetaMAR08:
                         {
                             ProtoNSD nsd = data != null ? ProtoNSD.Load(data) : new ProtoNSD(new int[256], 0, new NSDLink[0]);
-                            PatchNSD(nsd, nsf, filename);
+                            PatchNSD(nsd, nsf, filename, ignore_warnings);
                         }
                         break;
                     case GameVersion.Crash1:
                         {
                             OldNSD nsd = data != null ? OldNSD.Load(data) : new OldNSD(new int[256], 0, new int[4], 0, 0, new int[64], new NSDLink[0], 1, 0x3F, Entry.NullEID, 0, 0, new int[64], new byte[0xFC]);
-                            PatchNSD(nsd, nsf, filename);
+                            PatchNSD(nsd, nsf, filename, ignore_warnings);
                         }
                         break;
                     case GameVersion.Crash2:
                         {
                             NSD nsd = data != null ? NSD.Load(data) : new NSD(new int[256], 0, new int[4], 0, 0, new int[64], new NSDLink[0], 0, 0x3F, 0, new int[64], new byte[0xFC], new NSDSpawnPoint[1] { new NSDSpawnPoint(Entry.NullEID, 0, 0, 0, 0, 0) }, new byte[0]);
-                            PatchNSD(nsd, nsf, filename);
+                            PatchNSD(nsd, nsf, filename, ignore_warnings);
                         }
                         break;
                     case GameVersion.Crash3:
                         {
                             NewNSD nsd = data != null ? NewNSD.Load(data) : new NewNSD(new int[256], 0, new int[4], 0, 0, new int[64], new NSDLink[0], 0, 0x3F, 0, new int[128], new byte[0xFC], new NSDSpawnPoint[1] { new NSDSpawnPoint(Entry.NullEID, 0, 0, 0, 0, 0) }, new byte[0]);
-                            PatchNSD(nsd, nsf, filename);
+                            PatchNSD(nsd, nsf, filename, ignore_warnings);
                         }
                         break;
                     default:
-                        MessageBox.Show("NSD patching is not supported for this game version.", "Patch NSD", MessageBoxButtons.OK);
+                        if (!ignore_warnings) MessageBox.Show("NSD patching is not supported for this game version.", "Patch NSD", MessageBoxButtons.OK);
                         return;
                 }
                 nsfc.Node.TreeView.BeginUpdate();
@@ -550,9 +555,9 @@ namespace CrashEdit
                     }
                 }
                 nsfc.Node.TreeView.EndUpdate();
-                if (order_updated && MessageBox.Show("The chunk contents in this NSF may have been moved in accordance to the patched NSD and needs to be resaved. Continue?", "Patch NSD", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (ignore_warnings ? true : (order_updated && MessageBox.Show("The chunk contents in this NSF may have been moved in accordance to the patched NSD and needs to be resaved. Continue?", "Patch NSD", MessageBoxButtons.YesNo) == DialogResult.Yes))
                 {
-                    SaveNSF();
+                    SaveNSF(true);
                 }
             }
             catch (LoadAbortedException)
@@ -560,7 +565,7 @@ namespace CrashEdit
             }
         }
 
-        public void PatchNSD(NewNSD nsd, NSF nsf, string path)
+        public void PatchNSD(NewNSD nsd, NSF nsf, string path, bool ignore_warnings)
         {
             nsd.ChunkCount = nsf.Chunks.Count;
             var indexdata = nsf.MakeNSDIndex();
@@ -583,11 +588,11 @@ namespace CrashEdit
                 }
             }
 
-            if (MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ignore_warnings ? true : MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
             }
-            if (MessageBox.Show("Do you want to sort all loadlists according to the NSD?", "Loadlist autosorter", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (!ignore_warnings && MessageBox.Show("Do you want to sort all loadlists according to the NSD?", "Loadlist autosorter", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 int[] eids = new int[nsd.Index.Count];
                 for (int i = 0; i < eids.Length; ++i)
@@ -631,7 +636,7 @@ namespace CrashEdit
             }
         }
 
-        public void PatchNSD(NSD nsd, NSF nsf, string path)
+        public void PatchNSD(NSD nsd, NSF nsf, string path, bool ignore_warnings)
         {
             nsd.ChunkCount = nsf.Chunks.Count;
             var indexdata = nsf.MakeNSDIndex();
@@ -654,11 +659,11 @@ namespace CrashEdit
                 }
             }
 
-            if (MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ignore_warnings ? true : MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
             }
-            if (MessageBox.Show("Do you want to sort all loadlists according to the NSD?", "Loadlist autosorter", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (!ignore_warnings && MessageBox.Show("Do you want to sort all loadlists according to the NSD?", "Loadlist autosorter", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 int[] eids = new int[nsd.Index.Count];
                 for (int i = 0; i < eids.Length; ++i)
@@ -702,26 +707,26 @@ namespace CrashEdit
             }
         }
 
-        public void PatchNSD(OldNSD nsd, NSF nsf, string path)
+        public void PatchNSD(OldNSD nsd, NSF nsf, string path, bool ignore_warnings)
         {
             nsd.ChunkCount = nsf.Chunks.Count;
             var indexdata = nsf.MakeNSDIndex();
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
             PatchNSDGoolMap(nsd.GOOLMap, nsf);
-            if (MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ignore_warnings ? true : MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
             }
         }
 
-        public void PatchNSD(ProtoNSD nsd, NSF nsf, string path)
+        public void PatchNSD(ProtoNSD nsd, NSF nsf, string path, bool ignore_warnings)
         {
             nsd.ChunkCount = nsf.Chunks.Count;
             var indexdata = nsf.MakeNSDIndex();
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
-            if (MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ignore_warnings ? true : MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
             }
