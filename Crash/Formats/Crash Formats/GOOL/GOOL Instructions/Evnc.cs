@@ -1,9 +1,9 @@
 ﻿namespace Crash.GOOLIns
 {
-    [GOOLInstruction(143,GameVersion.Crash1)]
-    [GOOLInstruction(143,GameVersion.Crash1Beta1995)]
-    [GOOLInstruction(143,GameVersion.Crash1BetaMAR08)]
-    [GOOLInstruction(143,GameVersion.Crash1BetaMAY11)]
+    [GOOLInstruction(144,GameVersion.Crash1)]
+    [GOOLInstruction(144,GameVersion.Crash1Beta1995)]
+    [GOOLInstruction(144,GameVersion.Crash1BetaMAR08)]
+    [GOOLInstruction(144,GameVersion.Crash1BetaMAY11)]
     [GOOLInstruction(69,GameVersion.Crash2)]
     [GOOLInstruction(69,GameVersion.Crash3)]
     public sealed class Evnc : GOOLInstruction
