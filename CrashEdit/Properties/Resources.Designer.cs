@@ -103,9 +103,9 @@ namespace CrashEdit.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Language (requires restart).
         /// </summary>
-        internal static string Conifg_FraLang {
+        internal static string Config_FraLang {
             get {
-                return ResourceManager.GetString("Conifg_FraLang", resourceCulture);
+                return ResourceManager.GetString("Config_FraLang", resourceCulture);
             }
         }
         
@@ -218,7 +218,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DDA Death Count.
+        ///   Looks up a localized string similar to DDA Death/1-Up Count.
         /// </summary>
         internal static string EntityBox_FraDDASettings {
             get {

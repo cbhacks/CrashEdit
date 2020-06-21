@@ -295,7 +295,7 @@
     <value>Camera</value>
   </data>
   <data name="OldEntityController_Text" xml:space="preserve">
-    <value>Entity {0} ({1})</value>
+    <value>Entity {0} ({1}-{2})</value>
   </data>
   <data name="OldSLSTEntryController_Text" xml:space="preserve">
     <value>Old Sort List ({0})</value>

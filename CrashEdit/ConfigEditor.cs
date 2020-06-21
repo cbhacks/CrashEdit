@@ -25,7 +25,7 @@ namespace CrashEdit
             chkDeleteInvalidEntries.Checked = Settings.Default.DeleteInvalidEntries;
             chkAnimGrid.Checked = Settings.Default.DisplayAnimGrid;
             numAnimGrid.Value = Settings.Default.AnimGridLen;
-            fraLang.Text = Resources.Conifg_FraLang;
+            fraLang.Text = Resources.Config_FraLang;
         }
 
         private void dpdLang_SelectedIndexChanged(object sender, EventArgs e)

@@ -301,7 +301,7 @@
   <data name="Text_CloseDirtyFilePrompt" xml:space="preserve">
     <value>The file "{0}" has not been saved since it was last modified. Continue anyway?</value>
   </data>
-  <data name="Conifg_FraLang" xml:space="preserve">
+  <data name="Config_FraLang" xml:space="preserve">
     <value>言語　＊再起動するが必要です</value>
   </data>
   <data name="EntityBox_ChkBonusBoxCount" xml:space="preserve">
@@ -338,13 +338,13 @@
     <value>ボックス量</value>
   </data>
   <data name="EntityBox_FraDDASection" xml:space="preserve">
-    <value>ＤＤＡセクション</value>
+    <value>DDAセクション</value>
   </data>
   <data name="EntityBox_FraDDASettings" xml:space="preserve">
-    <value>ＤＤＡデス量</value>
+    <value>DDAデス／1UP量</value>
   </data>
   <data name="EntityBox_FraID" xml:space="preserve">
-    <value>ＩＤ</value>
+    <value>ID</value>
   </data>
   <data name="EntityBox_FraName" xml:space="preserve">
     <value>名前</value>

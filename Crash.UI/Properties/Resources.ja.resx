@@ -295,7 +295,7 @@
     <value>カメラトレール</value>
   </data>
   <data name="OldEntityController_Text" xml:space="preserve">
-    <value>エンティティ {0} ({1})</value>
+    <value>エンティティ {0} ({1}-{2})</value>
   </data>
   <data name="OldSLSTEntryController_Text" xml:space="preserve">
     <value>オールドソートリスト ({0})</value>

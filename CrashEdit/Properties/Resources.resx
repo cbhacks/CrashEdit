@@ -301,7 +301,7 @@
   <data name="Text_CloseDirtyFilePrompt" xml:space="preserve">
     <value>The file "{0}" has not been saved since it was last modified. Continue anyway?</value>
   </data>
-  <data name="Conifg_FraLang" xml:space="preserve">
+  <data name="Config_FraLang" xml:space="preserve">
     <value>Language (requires restart)</value>
   </data>
   <data name="EntityBox_ChkBonusBoxCount" xml:space="preserve">
@@ -341,7 +341,7 @@
     <value>DDA Section</value>
   </data>
   <data name="EntityBox_FraDDASettings" xml:space="preserve">
-    <value>DDA Death Count</value>
+    <value>DDA Death/1-Up Count</value>
   </data>
   <data name="EntityBox_FraID" xml:space="preserve">
     <value>ID</value>
