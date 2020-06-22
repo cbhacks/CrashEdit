@@ -24,26 +24,21 @@ namespace Crash
             return new SampleSet(samplelines);
         }
 
-        private List<SampleLine> samplelines;
-
         public SampleSet(IEnumerable<SampleLine> samplelines)
         {
             if (samplelines == null)
                 throw new ArgumentNullException("samplelines");
-            this.samplelines = new List<SampleLine>(samplelines);
+            SampleLines = new List<SampleLine>(samplelines);
         }
 
-        public IList<SampleLine> SampleLines
-        {
-            get { return samplelines; }
-        }
+        public List<SampleLine> SampleLines { get; }
 
         public byte[] Save()
         {
-            byte[] data = new byte [samplelines.Count * 16];
-            for (int i = 0;i < samplelines.Count;i++)
+            byte[] data = new byte [SampleLines.Count * 16];
+            for (int i = 0;i < SampleLines.Count;i++)
             {
-                samplelines[i].Save().CopyTo(data,i * 16);
+                SampleLines[i].Save().CopyTo(data,i * 16);
             }
             return data;
         }
@@ -53,7 +48,7 @@ namespace Crash
             double s0 = 0;
             double s1 = 0;
             List<byte> data = new List<byte>();
-            foreach (SampleLine line in samplelines)
+            foreach (SampleLine line in SampleLines)
             {
                 if ((line.Flags & SampleLineFlags.LoopEnd) != 0)
                 {

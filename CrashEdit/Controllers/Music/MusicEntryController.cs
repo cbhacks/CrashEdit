@@ -27,6 +27,8 @@ namespace CrashEdit
             AddMenu("Export Linked VB",Menu_Export_Linked_VB);
             AddMenu("Export Linked VAB",Menu_Export_Linked_VAB);
             AddMenu("Export Linked VAB as DLS",Menu_Export_Linked_VAB_DLS);
+            AddMenuSeparator();
+            AddMenu("Import Linked VB",Menu_Import_Linked_VB);
             InvalidateNode();
             InvalidateNodeImage();
         }
@@ -155,5 +157,57 @@ namespace CrashEdit
             byte[] data = vab.ToDLS().Save();
             FileUtil.SaveFile(data,FileFilters.DLS,FileFilters.Any);
         }
+
+        private void Menu_Import_Linked_VB()
+        {
+            byte[] data = FileUtil.OpenFile(FileFilters.VB,FileFilters.Any);
+            var samples = SampleSet.Load(data).SampleLines;
+            var vbEntries = new List<WavebankEntry>();
+            WavebankEntry vb0entry = FindEID<WavebankEntry>(MusicEntry.VB0EID);
+            WavebankEntry vb1entry = FindEID<WavebankEntry>(MusicEntry.VB1EID);
+            WavebankEntry vb2entry = FindEID<WavebankEntry>(MusicEntry.VB2EID);
+            WavebankEntry vb3entry = FindEID<WavebankEntry>(MusicEntry.VB3EID);
+            WavebankEntry vb4entry = FindEID<WavebankEntry>(MusicEntry.VB4EID);
+            WavebankEntry vb5entry = FindEID<WavebankEntry>(MusicEntry.VB5EID);
+            WavebankEntry vb6entry = FindEID<WavebankEntry>(MusicEntry.VB6EID);
+            if (vb0entry != null)
+                vbEntries.Add(vb0entry);
+            if (vb1entry != null)
+                vbEntries.Add(vb1entry);
+            if (vb2entry != null)
+                vbEntries.Add(vb2entry);
+            if (vb3entry != null)
+                vbEntries.Add(vb3entry);
+            if (vb4entry != null)
+                vbEntries.Add(vb4entry);
+            if (vb5entry != null)
+                vbEntries.Add(vb5entry);
+            if (vb6entry != null)
+                vbEntries.Add(vb6entry);
+
+            foreach (var vbEntry in vbEntries)
+            {
+                vbEntry.Samples.SampleLines.Clear();
+                if (samples.Count > 0)
+                {
+                    if (samples.Count <= WavebankEntry.MaxSampleLines)
+                    {
+                        vbEntry.Samples.SampleLines.AddRange(samples);
+                        samples.Clear();
+                    }
+                    else
+                    {
+                        vbEntry.Samples.SampleLines.AddRange(samples.GetRange(0, WavebankEntry.MaxSampleLines));
+                        samples.RemoveRange(0, WavebankEntry.MaxSampleLines);
+                    }
+                }
+            }
+
+            if (samples.Count > 0)
+            {
+                throw new GUIException("VB too large for the number of linked wavebank entries.\n\nThe imported data has been truncated.");
+            }
+        }
+
     }
 }

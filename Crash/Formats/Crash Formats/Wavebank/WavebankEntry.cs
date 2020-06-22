@@ -4,6 +4,8 @@ namespace Crash
 {
     public sealed class WavebankEntry : Entry
     {
+        public const int MaxSampleLines = 4089;
+
         public WavebankEntry(int id,SampleSet samples,int eid) : base(eid)
         {
             ID = id;
