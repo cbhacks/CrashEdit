@@ -28,6 +28,7 @@ namespace Crash
                 if (Entries[i] is UnprocessedEntry)
                 {
                     ErrorManager.EnterSkipRegion();
+                    ErrorManager.EnterSubject(Entries[i]);
                     try
                     {
                         Entries[i] = ((UnprocessedEntry)Entries[i]).Process(gameversion);
@@ -38,6 +39,7 @@ namespace Crash
                     finally
                     {
                         ErrorManager.ExitSkipRegion();
+                        ErrorManager.ExitSubject();
                     }
                 }
             }

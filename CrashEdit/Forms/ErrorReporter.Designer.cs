@@ -35,6 +35,7 @@ namespace CrashEdit
             this.lblMessage = new System.Windows.Forms.Label();
             this.pnOptions = new System.Windows.Forms.Panel();
             this.optIgnore = new System.Windows.Forms.RadioButton();
+            this.optIgnoreAll = new System.Windows.Forms.RadioButton();
             this.optSkip = new System.Windows.Forms.RadioButton();
             this.optAbort = new System.Windows.Forms.RadioButton();
             this.optBreak = new System.Windows.Forms.RadioButton();
@@ -70,12 +71,13 @@ namespace CrashEdit
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.pnOptions.Controls.Add(this.optIgnore);
+            this.pnOptions.Controls.Add(this.optIgnoreAll);
             this.pnOptions.Controls.Add(this.optSkip);
             this.pnOptions.Controls.Add(this.optAbort);
             this.pnOptions.Controls.Add(this.optBreak);
             this.pnOptions.Location = new System.Drawing.Point(12,84);
             this.pnOptions.Name = "pnOptions";
-            this.pnOptions.Size = new System.Drawing.Size(390,99);
+            this.pnOptions.Size = new System.Drawing.Size(390,122);
             this.pnOptions.TabIndex = 2;
             // 
             // optIgnore
@@ -113,17 +115,27 @@ namespace CrashEdit
             // optBreak
             // 
             this.optBreak.AutoSize = true;
-            this.optBreak.Location = new System.Drawing.Point(5,72);
+            this.optBreak.Location = new System.Drawing.Point(5,95);
             this.optBreak.Name = "optBreak";
             this.optBreak.Size = new System.Drawing.Size(209,17);
             this.optBreak.TabIndex = 0;
             this.optBreak.Text = "Break out to a debugger. (Experts only)";
             this.optBreak.UseVisualStyleBackColor = true;
             // 
+            // optIgnoreAll
+            // 
+            this.optIgnoreAll.AutoSize = true;
+            this.optIgnoreAll.Location = new System.Drawing.Point(5,72);
+            this.optIgnoreAll.Name = "optIgnoreAll";
+            this.optIgnoreAll.Size = new System.Drawing.Size(204,17);
+            this.optIgnoreAll.TabIndex = 3;
+            this.optIgnoreAll.Text = "Ignore the error and all others for this object.";
+            this.optIgnoreAll.UseVisualStyleBackColor = true;
+            // 
             // cmdOK
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdOK.Location = new System.Drawing.Point(327,196);
+            this.cmdOK.Location = new System.Drawing.Point(327,219);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(75,23);
             this.cmdOK.TabIndex = 3;
@@ -136,7 +148,7 @@ namespace CrashEdit
             this.AcceptButton = this.cmdOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(414,231);
+            this.ClientSize = new System.Drawing.Size(414,254);
             this.ControlBox = false;
             this.Controls.Add(this.cmdOK);
             this.Controls.Add(this.pnOptions);
@@ -164,6 +176,7 @@ namespace CrashEdit
         private System.Windows.Forms.RadioButton optAbort;
         private System.Windows.Forms.RadioButton optBreak;
         private System.Windows.Forms.RadioButton optIgnore;
+        private System.Windows.Forms.RadioButton optIgnoreAll;
         private System.Windows.Forms.Button cmdOK;
     }
 }

@@ -23,6 +23,7 @@ namespace CrashEdit
             lblMessage.Text = e.Message;
             optSkip.Enabled = e.CanSkip;
             optIgnore.Enabled = e.CanIgnore;
+            optIgnoreAll.Enabled = e.CanIgnore && (e.Subject != null);
             if (lastcheckedwasskip && e.CanSkip)
             {
                 optSkip.Checked = true;
@@ -53,6 +54,11 @@ namespace CrashEdit
             else if (optIgnore.Checked)
             {
                 e.Response = ErrorResponse.Ignore;
+                lastcheckedwasskip = false;
+            }
+            else if (optIgnoreAll.Checked)
+            {
+                e.Response = ErrorResponse.IgnoreAll;
                 lastcheckedwasskip = false;
             }
             else if (optBreak.Checked)

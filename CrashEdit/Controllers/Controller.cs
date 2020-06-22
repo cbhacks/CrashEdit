@@ -1,3 +1,4 @@
+using Crash;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -35,11 +36,16 @@ namespace CrashEdit
             {
                 try
                 {
+                    ErrorManager.EnterSubject(new Object());
                     proc();
                 }
                 catch (GUIException ex)
                 {
                     MessageBox.Show(ex.Message,text,MessageBoxButtons.OK,MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    ErrorManager.ExitSubject();
                 }
             }
             ContextMenu.MenuItems.Add(text,handler);

@@ -5,6 +5,7 @@ namespace Crash
         Break,
         Abort,
         Skip,
-        Ignore
+        Ignore,
+        IgnoreAll
     }
 }
