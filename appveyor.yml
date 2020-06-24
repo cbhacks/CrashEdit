@@ -8,6 +8,11 @@ environment:
     secure: i2KP8L+z+Txf6sYqGwZ8d7I+kDxQfLRBfLimncCKu8xPv3oF6hFsvVKFRVh/Tnd+
 configuration: Debug
 platform: Any CPU
+assembly_info:
+  patch: true
+  file: Version.cs
+  assembly_version: '0.2.{build}'
+  assembly_file_version: '0.2.{build}'
 build_script:
   - msbuild CrashEdit.sln
 after_build:

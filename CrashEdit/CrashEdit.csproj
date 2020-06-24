@@ -262,6 +262,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="FileFilters.cs" />
+    <Compile Include="..\Version.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FileUtil.cs" />
     <Compile Include="InputWindow.cs">
