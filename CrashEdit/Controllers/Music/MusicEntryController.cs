@@ -28,7 +28,7 @@ namespace CrashEdit
             AddMenu("Export Linked VAB",Menu_Export_Linked_VAB);
             AddMenu("Export Linked VAB as DLS",Menu_Export_Linked_VAB_DLS);
             AddMenuSeparator();
-            AddMenu("Import Linked VB",Menu_Import_Linked_VB);
+            AddMenu("Replace Linked VB",Menu_Replace_Linked_VB);
             InvalidateNode();
             InvalidateNodeImage();
         }
@@ -158,7 +158,7 @@ namespace CrashEdit
             FileUtil.SaveFile(data,FileFilters.DLS,FileFilters.Any);
         }
 
-        private void Menu_Import_Linked_VB()
+        private void Menu_Replace_Linked_VB()
         {
             byte[] data = FileUtil.OpenFile(FileFilters.VB,FileFilters.Any);
             var samples = SampleSet.Load(data).SampleLines;
