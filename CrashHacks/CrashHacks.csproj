@@ -55,6 +55,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Version.cs" />
     <Compile Include="ISO2PSX.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="MainForm.cs">
