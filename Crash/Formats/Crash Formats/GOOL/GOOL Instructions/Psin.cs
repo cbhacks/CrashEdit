@@ -12,6 +12,6 @@
 
         public override string Name => "PSIN";
         public override string Format => DefaultFormat;
-        public override string Comment => string.Empty;
+        public override string Comment => $"sin({GetArg('L')},{GetArg('R')})";
     }
 }
