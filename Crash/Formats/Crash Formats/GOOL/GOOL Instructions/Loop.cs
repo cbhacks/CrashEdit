@@ -6,11 +6,11 @@
     [GOOLInstruction(19,GameVersion.Crash1BetaMAY11)]
     [GOOLInstruction(19,GameVersion.Crash2)]
     [GOOLInstruction(19,GameVersion.Crash3)]
-    public sealed class Nsek : GOOLInstruction
+    public sealed class Loop : GOOLInstruction
     {
-        public Nsek(int value,GOOLEntry gool) : base(value,gool) { }
+        public Loop(int value,GOOLEntry gool) : base(value,gool) { }
 
-        public override string Name => "NSEK";
+        public override string Name => "LOOP";
         public override string Format => DefaultFormatLR;
         public override string Comment => string.Empty;
     }

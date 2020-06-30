@@ -61,6 +61,7 @@
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Atan.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Cos.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Jalr.cs" />
+    <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Loop.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Sin.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Arrs.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Arrl.cs" />
@@ -109,7 +110,6 @@
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Eflv.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Evnb.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Evnc.cs" />
-    <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Nsek.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Pshp.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Dsek.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Tick.cs" />
