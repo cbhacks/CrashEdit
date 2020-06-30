@@ -12,6 +12,6 @@
 
         public override string Name => "LOOP";
         public override string Format => DefaultFormatLR;
-        public override string Comment => string.Empty;
+        public override string Comment => $"loop({GetArg('L')}, " + (Args['R'].Value == DoubleStackRef ? "[sp-1], [sp])" : $"{GetArg('R')}, 0x100)");
     }
 }
