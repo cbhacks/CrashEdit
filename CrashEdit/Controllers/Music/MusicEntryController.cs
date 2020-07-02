@@ -1,4 +1,5 @@
 using Crash;
+using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
@@ -29,6 +30,7 @@ namespace CrashEdit
             AddMenu("Export Linked VAB as DLS",Menu_Export_Linked_VAB_DLS);
             AddMenuSeparator();
             AddMenu("Replace Linked VB",Menu_Replace_Linked_VB);
+            AddMenu("Replace Linked VAB",Menu_Replace_Linked_VAB);
             InvalidateNode();
             InvalidateNodeImage();
         }
@@ -161,7 +163,61 @@ namespace CrashEdit
         private void Menu_Replace_Linked_VB()
         {
             byte[] data = FileUtil.OpenFile(FileFilters.VB,FileFilters.Any);
-            var samples = SampleSet.Load(data).SampleLines;
+            if (data == null) return;
+            ReplaceLinkedVB(SampleSet.Load(data).SampleLines);
+        }
+
+        private void Menu_Replace_Linked_VAB()
+        {
+            try
+            {
+                byte[] vab_data = FileUtil.OpenFile(FileFilters.VAB, FileFilters.Any);
+
+                if (vab_data == null) throw new LoadAbortedException();
+
+                VH vh = VH.Load(vab_data);
+
+                int vb_offset = 2592+32*16*vh.Programs.Count;
+                if ((vab_data.Length - vb_offset) % 16 != 0)
+                {
+                    ErrorManager.SignalIgnorableError("extra feature: VB size is invalid");
+                }
+                vh.VBSize = (vab_data.Length - vb_offset) / 16;
+                var vb = new List<SampleLine>();
+                byte[] line_data = new byte[16];
+                for (int i = 0; i < vh.VBSize; i++)
+                {
+                    Array.Copy(vab_data, vb_offset + i * 16, line_data, 0, 16);
+                    vb.Add(SampleLine.Load(line_data));
+                }
+
+                MusicEntry vhentry = FindEID<MusicEntry>(MusicEntry.VHEID);
+                if (vhentry == null)
+                {
+                    throw new GUIException("The linked music entry could not be found.");
+                }
+                if (vhentry.VH == null)
+                {
+                    throw new GUIException("The linked music entry was found but does not contain a VH file.");
+                }
+
+                if (vhentry != MusicEntry)
+                {
+                    throw new GUIException("This operation can only be done on the Music Entry which contains its own VH file.");
+                }
+
+                vhentry.VH = vh;
+                ReplaceLinkedVB(vb);
+                ((Controller)Node.Nodes[0].Tag).Dispose();
+                InsertNode(0, new VHController(this, vh));
+            }
+            catch (LoadAbortedException)
+            {
+            }
+        }
+
+        private void ReplaceLinkedVB(List<SampleLine> samples)
+        {
             var vbEntries = new List<WavebankEntry>();
             WavebankEntry vb0entry = FindEID<WavebankEntry>(MusicEntry.VB0EID);
             WavebankEntry vb1entry = FindEID<WavebankEntry>(MusicEntry.VB1EID);
