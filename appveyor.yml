@@ -17,6 +17,7 @@ build_script:
   - msbuild CrashEdit.sln
 after_build:
   - mkdir pkg
+  - copy .\README.md pkg
   - copy .\CrashEdit\bin\Debug\Crash.dll pkg
   - copy .\CrashEdit\bin\Debug\Crash.UI.dll pkg
   - copy .\CrashEdit\bin\Debug\CrashEdit.exe pkg
