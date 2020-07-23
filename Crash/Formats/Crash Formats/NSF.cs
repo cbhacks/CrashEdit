@@ -313,7 +313,14 @@ namespace Crash
                     {
                         if (!newindex.ContainsKey(entry.HashKey))
                             newindex.Add(entry.HashKey, new SortedDictionary<string, int>(new ENameComparer()));
-                        newindex[entry.HashKey].Add(entry.EName, i * 2 + 1);
+                        if (newindex[entry.HashKey].ContainsKey(entry.EName))
+                        {
+                            ErrorManager.SignalIgnorableError(string.Format("NSF.MakeNSDIndex: Duplicate entry {0}", entry.EName));
+                        }
+                        else
+                        {
+                            newindex[entry.HashKey].Add(entry.EName, i * 2 + 1);
+                        }
                     }
                 }
             }
