@@ -279,19 +279,25 @@ namespace CrashEdit
                 return;
             }
 
+            string kdatDir = Path.Combine(isofsPath, "S3");
             string kdatFilename = null;
-            foreach (string s in Directory.GetFiles(Path.Combine(isofsPath, "S3"))) {
-                if (Path.GetFileName(s).ToUpper() == "KDAT.DAT") {
-                    kdatFilename = s;
-                    break;
+            if (Directory.Exists(kdatDir)) {
+                foreach (string s in Directory.GetFiles(kdatDir)) {
+                    if (Path.GetFileName(s).ToUpper() == "KDAT.DAT") {
+                        kdatFilename = s;
+                        break;
+                    }
                 }
             }
 
+            string warpscusDir = Path.Combine(isofsPath, "S0");
             string warpscusFilename = null;
-            foreach (string s in Directory.GetFiles(Path.Combine(isofsPath, "S0"))) {
-                if (Regex.IsMatch(Path.GetFileName(s).ToUpper(), @"^WARPSC[UEP]S\.BIN$")) {
-                    warpscusFilename = s;
-                    break;
+            if (Directory.Exists(warpscusDir)) {
+                foreach (string s in Directory.GetFiles(warpscusDir)) {
+                    if (Regex.IsMatch(Path.GetFileName(s).ToUpper(), @"^WARPSC[UEP]S\.BIN$")) {
+                        warpscusFilename = s;
+                        break;
+                    }
                 }
             }
 
