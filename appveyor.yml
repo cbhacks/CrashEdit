@@ -21,6 +21,8 @@ after_build:
   - copy .\CrashEdit\bin\Debug\Crash.dll pkg
   - copy .\CrashEdit\bin\Debug\Crash.UI.dll pkg
   - copy .\CrashEdit\bin\Debug\CrashEdit.exe pkg
+  - copy .\CrashEdit\bin\Debug\ja\Crash.UI.resources.dll pkg
+  - copy .\CrashEdit\bin\Debug\ja\CrashEdit.resources.dll pkg
   - copy .\CrashHacks\bin\Debug\CrashHacks.exe pkg
   - copy .\OpenTK.dll pkg
   - copy .\OpenTK.GLControl.dll pkg
