@@ -8,6 +8,8 @@ namespace CrashEdit
         public InputWindow()
         {
             InitializeComponent();
+
+            cmdCancel.Text = Properties.Resources.InputWindow_cmdCancel;
         }
 
         public string Input => txtInput.Text;

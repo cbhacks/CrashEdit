@@ -75,6 +75,15 @@ namespace CrashEdit
             C2numH.ValueChanged += new EventHandler(Control_UpdatePicture);
 
             UpdatePicture();
+
+            groupBox1.Text = Properties.Resources.TextureViewer_groupBox1;
+            groupBox2.Text = Properties.Resources.TextureViewer_groupBox2;
+            groupBox4.Text = Properties.Resources.TextureViewer_groupBox4;
+            groupBox5.Text = Properties.Resources.TextureViewer_groupBox5;
+            groupBox6.Text = Properties.Resources.TextureViewer_groupBox5;
+            groupBox7.Text = Properties.Resources.TextureViewer_groupBox4;
+            groupBox9.Text = Properties.Resources.TextureViewer_groupBox2;
+            groupBox10.Text = Properties.Resources.TextureViewer_groupBox1;
         }
 
         internal int TexColorMode => textype == TextureType.Crash1 ? C1dpdColor.SelectedIndex : C2dpdColor.SelectedIndex;

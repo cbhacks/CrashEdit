@@ -38,6 +38,20 @@ namespace CrashEdit
             numEnd.Maximum = positions.Count;
             numEnd_ValueChanged(null,null);
             UpdatePosition();
+
+            Text = Properties.Resources.InterpolatorForm;
+            cmdCancel.Text = Properties.Resources.InterpolatorForm_cmdCancel;
+            cmdFirst.Text = Properties.Resources.InterpolatorForm_cmdFirst;
+            cmdLast.Text = Properties.Resources.InterpolatorForm_cmdLast;
+            cmdNext.Text = Properties.Resources.InterpolatorForm_cmdNext;
+            cmdOK.Text = Properties.Resources.InterpolatorForm_cmdOK;
+            cmdPrev.Text = Properties.Resources.InterpolatorForm_cmdPrev;
+            fraAmount.Text = Properties.Resources.InterpolatorForm_fraAmount;
+            fraBound.Text = Properties.Resources.InterpolatorForm_fraBound;
+            fraFunction.Text = Properties.Resources.InterpolatorForm_fraFunction;
+            fraOrder.Text = Properties.Resources.InterpolatorForm_fraOrder;
+            fraPosition.Text = Properties.Resources.InterpolatorForm_fraPosition;
+            fraTension.Text = Properties.Resources.InterpolatorForm_fraTension;
         }
         
         private double Tension => (double)numTension.Value;

@@ -121,31 +121,31 @@
     <value>キャンセル</value>
   </data>
   <data name="ChunkController_AcDelete" xml:space="preserve">
-    <value>チャンクを　削除する</value>
+    <value>チャンクの削除</value>
   </data>
   <data name="ChunkController_AcDeleteWithEName" xml:space="preserve">
-    <value>チャンク「{0}」を　削除する</value>
+    <value>チャンク 「{0}」 の削除</value>
   </data>
   <data name="ChunkController_AcDeprocess" xml:space="preserve">
-    <value>チャンクを　脱捌く</value>
+    <value>チャンクの未処理化</value>
   </data>
   <data name="ChunkController_AcDeprocessWithEName" xml:space="preserve">
-    <value>チャンク「{0}」を　脱捌く</value>
+    <value>チャンク 「{0}」 の未処理化</value>
   </data>
   <data name="Controller_NoOptionsAvailable" xml:space="preserve">
-    <value>No options available.</value>
+    <value>利用可能なオプションはありません</value>
   </data>
   <data name="DemoEntryController_Text" xml:space="preserve">
     <value>デモ ({0})</value>
   </data>
   <data name="EntryController_AcDelete" xml:space="preserve">
-    <value>エントリー「{0}」を　削除する</value>
+    <value>エントリ 「{0}」 の削除</value>
   </data>
   <data name="EntryController_AcDeprocess" xml:space="preserve">
-    <value>エントリー「{0}」を　脱捌く</value>
+    <value>エントリ 「{0}」 の未処理化</value>
   </data>
   <data name="GameVersionForm_Message" xml:space="preserve">
-    <value>以下のリストからゲームバージョンを選択します。NTSC-UやNTSC-JやPALはサポートされて</value>
+    <value>ゲームバージョンを選択してください。NTSC-U 版、NTSC-J 版及び PAL 版は全てサポートされています。</value>
   </data>
   <data name="GameVersionForm_Prerelease" xml:space="preserve">
     <value>プレリリース版</value>
@@ -166,25 +166,25 @@
     <value>チャンク {0}</value>
   </data>
   <data name="NSFController_AcAddNormalChunk" xml:space="preserve">
-    <value>チャンクを　追加する</value>
+    <value>チャンクの追加</value>
   </data>
   <data name="NSFController_Text" xml:space="preserve">
     <value>NSFファイル</value>
   </data>
   <data name="OldAnimationEntryController_Text" xml:space="preserve">
-    <value>オールドアニメーション ({0})</value>
+    <value>旧アニメーション ({0})</value>
   </data>
   <data name="OldModelEntryController_Text" xml:space="preserve">
-    <value>オールドモデル ({0})</value>
+    <value>旧モデル ({0})</value>
   </data>
   <data name="OldMusicEntryController_Text" xml:space="preserve">
-    <value>オールド音楽 ({0})</value>
+    <value>旧音楽 ({0})</value>
   </data>
   <data name="OldSceneryEntryController_Text" xml:space="preserve">
-    <value>オールド風景 ({0})</value>
+    <value>旧風景 ({0})</value>
   </data>
   <data name="OldSoundChunkController_Text" xml:space="preserve">
-    <value>オールドサウンドチャンク {0}</value>
+    <value>旧サウンドチャンク {0}</value>
   </data>
   <data name="ImageEntryController_Text" xml:space="preserve">
     <value>イメージ ({0})</value>
@@ -193,7 +193,7 @@
     <value>マップ ({0})</value>
   </data>
   <data name="OldZoneEntryController_Text" xml:space="preserve">
-    <value>オールドゾーン ({0})</value>
+    <value>旧ゾーン ({0})</value>
   </data>
   <data name="PaletteEntryController_Text" xml:space="preserve">
     <value>パレット ({0})</value>
@@ -205,7 +205,7 @@
     <value>サウンドチャンク {0}</value>
   </data>
   <data name="SoundEntryController_Text" xml:space="preserve">
-    <value>サウンドエフェクト ({0})</value>
+    <value>サウンド ({0})</value>
   </data>
   <data name="SpeechChunkController_Text" xml:space="preserve">
     <value>スピーチチャンク {0}</value>
@@ -226,7 +226,7 @@
     <value>T1 ({0})</value>
   </data>
   <data name="ColoredAnimationEntryController_Text" xml:space="preserve">
-    <value>カラードアニメーション ({0})</value>
+    <value>色付きアニメーション ({0})</value>
   </data>
   <data name="T21EntryController_Text" xml:space="preserve">
     <value>T21 ({0})</value>
@@ -238,10 +238,10 @@
     <value>T6 ({0})</value>
   </data>
   <data name="TextureChunkController_Text" xml:space="preserve">
-    <value>テキスチャーチャンク {1} ({0})</value>
+    <value>テクスチャチャンク {1} ({0})</value>
   </data>
   <data name="UnprocessedChunkController_AcProcess" xml:space="preserve">
-    <value>チャンクを　捌く</value>
+    <value>チャンクの処理化</value>
   </data>
   <data name="UnprocessedChunkController_Text" xml:space="preserve">
     <value>未処理のチャンク {1} (Ｔ{0})</value>
@@ -250,10 +250,10 @@
     <value>未処理のＴ{0} ({1})</value>
   </data>
   <data name="WavebankChunkController_Text" xml:space="preserve">
-    <value>ウエーブバンクチャンク {0}</value>
+    <value>Wavebank チャンク {0}</value>
   </data>
   <data name="WavebankEntryController_Text" xml:space="preserve">
-    <value>ウエーブバンク ({0})</value>
+    <value>Wavebank ({0})</value>
   </data>
   <data name="ZoneEntryController_Text" xml:space="preserve">
     <value>ゾーン ({0})</value>
@@ -292,64 +292,64 @@
     <value>圧縮モデル ({0})</value>
   </data>
   <data name="OldCameraController_Text" xml:space="preserve">
-    <value>カメラトレール</value>
+    <value>カメラ</value>
   </data>
   <data name="OldEntityController_Text" xml:space="preserve">
     <value>エンティティ {0} ({1}-{2})</value>
   </data>
   <data name="OldSLSTEntryController_Text" xml:space="preserve">
-    <value>オールドソートリスト ({0})</value>
+    <value>旧ソートリスト ({0})</value>
   </data>
   <data name="ProtoSceneryEntryController_Text" xml:space="preserve">
     <value>プロトタイプ風景 ({0})</value>
   </data>
   <data name="EntryChunkController_AcAddNew" xml:space="preserve">
-    <value>新しいエントリーを　追加する</value>
+    <value>エントリの追加</value>
   </data>
   <data name="EntryChunkController_AcImport" xml:space="preserve">
-    <value>エントリーを　インポートする</value>
+    <value>エントリをインポート</value>
   </data>
   <data name="EntryController_AcExport" xml:space="preserve">
-    <value>エントリー「{0}」を　エクスポートする</value>
+    <value>エントリ 「{0}」 をエクスポート</value>
   </data>
   <data name="EntryController_AcRename" xml:space="preserve">
-    <value>エントリー「{0}」名を　変える</value>
+    <value>エントリ 「{0}」 の名前を変更</value>
   </data>
   <data name="NSFController_AcAddOldSoundChunk" xml:space="preserve">
-    <value>オールドサウンドチャンクを　追加する</value>
+    <value>旧サウンドチャンクの追加</value>
   </data>
   <data name="NSFController_AcAddSoundChunk" xml:space="preserve">
-    <value>サウンドチャンクを　追加する</value>
+    <value>サウンドチャンクの追加</value>
   </data>
   <data name="NSFController_AcAddSpeechChunk" xml:space="preserve">
-    <value>スピーチチャンクを　追加する</value>
+    <value>スピーチチャンクの追加</value>
   </data>
   <data name="NSFController_AcAddWavebankChunk" xml:space="preserve">
-    <value>ウエーブバンクチャンクを　追加する</value>
+    <value>Wavebank チャンクの追加</value>
   </data>
   <data name="NSFController_AcFixBoxCount" xml:space="preserve">
-    <value>ボックス量を　修正する</value>
+    <value>箱数の修正</value>
   </data>
   <data name="NSFController_AcFixDetonator" xml:space="preserve">
-    <value>ニトロスイッチを　修正する</value>
+    <value>！箱 (緑) の修正</value>
   </data>
   <data name="NSFController_AcImportChunk" xml:space="preserve">
-    <value>チャンクを　インポートする</value>
+    <value>チャンクのインポート</value>
   </data>
   <data name="NSFController_AcShowLevel" xml:space="preserve">
-    <value>全ての風景を　見せるね</value>
+    <value>ステージ全体を表示</value>
   </data>
   <data name="TextureChunkController_AcRecalcChecksum" xml:space="preserve">
-    <value>チェックサムを　再計算</value>
+    <value>チェックサムの再計算</value>
   </data>
   <data name="TextureChunkController_AcRename" xml:space="preserve">
-    <value>チャンク名を　変える</value>
+    <value>チャンク名の変更</value>
   </data>
   <data name="UnprocessedEntryController_AcProcess" xml:space="preserve">
-    <value>エントリー「{0}」を　捌く</value>
+    <value>エントリ 「{0}」 の処理化</value>
   </data>
   <data name="ZoneEntryController_AcAddEntity" xml:space="preserve">
-    <value>エンティティを　追加する</value>
+    <value>エンティティの追加</value>
   </data>
   <data name="TextureChunkController_AcOpenViewer" xml:space="preserve">
     <value>ビューアーを開く</value>
