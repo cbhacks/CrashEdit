@@ -26,6 +26,18 @@ namespace CrashEdit
             chkAnimGrid.Checked = Settings.Default.DisplayAnimGrid;
             numAnimGrid.Value = Settings.Default.AnimGridLen;
             fraLang.Text = Resources.Config_FraLang;
+            fraSize.Text = Properties.Resources.Config_fraSize;
+            lblW.Text = Properties.Resources.Config_lblW;
+            lblH.Text = Properties.Resources.Config_lblH;
+            fraClearCol.Text = Properties.Resources.Config_fraClearCol;
+            fraAnimGrid.Text = Properties.Resources.Config_fraAnimGrid;
+            chkAnimGrid.Text = Properties.Resources.Config_chkAnimGrid;
+            lblAnimGrid.Text = Properties.Resources.Config_lblAnimGrid;
+            chkNormalDisplay.Text = Properties.Resources.Config_chkNormalDisplay;
+            chkCollisionDisplay.Text = Properties.Resources.Config_chkCollisionDisplay;
+            chkDeleteInvalidEntries.Text = Properties.Resources.Config_chkDeleteInvalidEntries;
+            chkUseAnimLinks.Text = Properties.Resources.Config_chkUseAnimLinks;
+            cmdReset.Text = Properties.Resources.Config_cmdReset;
         }
 
         private void dpdLang_SelectedIndexChanged(object sender, EventArgs e)

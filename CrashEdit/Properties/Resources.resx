@@ -397,4 +397,340 @@
   <data name="Language" xml:space="preserve">
     <value>English (Default)</value>
   </data>
+  <data name="ErrorReporter_Abort" xml:space="preserve">
+    <value>Abort this operation.</value>
+  </data>
+  <data name="ErrorReporter_Break" xml:space="preserve">
+    <value>Break out to a debugger. (Experts only)</value>
+  </data>
+  <data name="ErrorReporter_Ignore" xml:space="preserve">
+    <value>Ignore the error and continue anyway.</value>
+  </data>
+  <data name="ErrorReporter_IgnoreAll" xml:space="preserve">
+    <value>Ignore the error and all others for this object.</value>
+  </data>
+  <data name="ErrorReporter_Skip" xml:space="preserve">
+    <value>Skip this object, leaving it unprocessed.</value>
+  </data>
+  <data name="ErrorReporter_Title" xml:space="preserve">
+    <value>An error occurred.</value>
+  </data>
+  <data name="Config_chkAnimGrid" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="Config_chkCollisionDisplay" xml:space="preserve">
+    <value>Display frame collision by default</value>
+  </data>
+  <data name="Config_chkDeleteInvalidEntries" xml:space="preserve">
+    <value>(Patch NSD) Delete non-existent entries from load lists</value>
+  </data>
+  <data name="Config_chkNormalDisplay" xml:space="preserve">
+    <value>Display normals</value>
+  </data>
+  <data name="Config_chkUseAnimLinks" xml:space="preserve">
+    <value>(Crash 3) Used saved animation-model links</value>
+  </data>
+  <data name="Config_cmdReset" xml:space="preserve">
+    <value>Reset Settings</value>
+  </data>
+  <data name="Config_fraAnimGrid" xml:space="preserve">
+    <value>Animation Viewer World Grid</value>
+  </data>
+  <data name="Config_fraClearCol" xml:space="preserve">
+    <value>Clear Color</value>
+  </data>
+  <data name="Config_fraSize" xml:space="preserve">
+    <value>Default Window Size</value>
+  </data>
+  <data name="Config_lblAnimGrid" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="Config_lblH" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="Config_lblW" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="Crash3AnimationSelector_Desc" xml:space="preserve">
+    <value>Type in a Model (or Compressed Model) name and press Enter.</value>
+  </data>
+  <data name="Entirybox_cmdClearAllVictims" xml:space="preserve">
+    <value>Clear All</value>
+  </data>
+  <data name="Entirybox_cmdLoadListVerify" xml:space="preserve">
+    <value>Verify List Integrity</value>
+  </data>
+  <data name="Entirybox_cmdPayload" xml:space="preserve">
+    <value>Check Payload</value>
+  </data>
+  <data name="Entirybox_fraCameraIndex" xml:space="preserve">
+    <value>Camera Index</value>
+  </data>
+  <data name="Entirybox_fraCameraSubIndex" xml:space="preserve">
+    <value>Camera SubIndex</value>
+  </data>
+  <data name="Entirybox_fraDrawListA" xml:space="preserve">
+    <value>Draw List A</value>
+  </data>
+  <data name="Entirybox_fraDrawListB" xml:space="preserve">
+    <value>Draw List B</value>
+  </data>
+  <data name="Entirybox_fraEIDA" xml:space="preserve">
+    <value>Entries</value>
+  </data>
+  <data name="Entirybox_fraEIDB" xml:space="preserve">
+    <value>Entries</value>
+  </data>
+  <data name="Entirybox_fraEntityA" xml:space="preserve">
+    <value>Entities</value>
+  </data>
+  <data name="Entirybox_fraEntityB" xml:space="preserve">
+    <value>Entities</value>
+  </data>
+  <data name="Entirybox_fraFOV" xml:space="preserve">
+    <value>Field-of-View Timeline</value>
+  </data>
+  <data name="Entirybox_fraFOVFrame" xml:space="preserve">
+    <value>Field-of-View</value>
+  </data>
+  <data name="Entirybox_fraLoadListA" xml:space="preserve">
+    <value>Load List A</value>
+  </data>
+  <data name="Entirybox_fraLoadListB" xml:space="preserve">
+    <value>Load List B</value>
+  </data>
+  <data name="Entirybox_fraLoadListPayload" xml:space="preserve">
+    <value>Verify Load Lists</value>
+  </data>
+  <data name="Entirybox_fraNeighbor" xml:space="preserve">
+    <value>Neighbors</value>
+  </data>
+  <data name="Entirybox_fraNeighborSetting" xml:space="preserve">
+    <value>Neighbor</value>
+  </data>
+  <data name="Entirybox_lblFOVPosition" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="Entirybox_lblMetavalueDrawA" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="Entirybox_lblMetavalueDrawB" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="Entirybox_lblMetavalueLoadA" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="Entirybox_lblMetavalueLoadB" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="Entirybox_lblNeighborCamera" xml:space="preserve">
+    <value>Cam. Index</value>
+  </data>
+  <data name="Entirybox_lblNeighborFlag" xml:space="preserve">
+    <value>Flag</value>
+  </data>
+  <data name="Entirybox_lblNeighborLink" xml:space="preserve">
+    <value>Link Type</value>
+  </data>
+  <data name="Entirybox_lblNeighborPosition" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="Entirybox_lblNeighborZone" xml:space="preserve">
+    <value>Zone Index</value>
+  </data>
+  <data name="Entirybox_lblPayloadPosition" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="EntityBox_fraAvgDist" xml:space="preserve">
+    <value>Point Distance</value>
+  </data>
+  <data name="EntityBox_FraMode" xml:space="preserve">
+    <value>Camera Mode</value>
+  </data>
+  <data name="InputWindow_cmdCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="InterpolatorForm" xml:space="preserve">
+    <value>Interpolate Path</value>
+  </data>
+  <data name="InterpolatorForm_cmdCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="InterpolatorForm_cmdFirst" xml:space="preserve">
+    <value>First</value>
+  </data>
+  <data name="InterpolatorForm_cmdLast" xml:space="preserve">
+    <value>Last</value>
+  </data>
+  <data name="InterpolatorForm_cmdNext" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="InterpolatorForm_cmdOK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="InterpolatorForm_cmdPrev" xml:space="preserve">
+    <value>Prev</value>
+  </data>
+  <data name="InterpolatorForm_fraAmount" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="InterpolatorForm_fraBound" xml:space="preserve">
+    <value>Start/End Position</value>
+  </data>
+  <data name="InterpolatorForm_fraFunction" xml:space="preserve">
+    <value>Progress Function</value>
+  </data>
+  <data name="InterpolatorForm_fraOrder" xml:space="preserve">
+    <value>Order</value>
+  </data>
+  <data name="InterpolatorForm_fraPosition" xml:space="preserve">
+    <value>Positions</value>
+  </data>
+  <data name="InterpolatorForm_fraTension" xml:space="preserve">
+    <value>Tension</value>
+  </data>
+  <data name="NewEntryForm" xml:space="preserve">
+    <value>New Entry</value>
+  </data>
+  <data name="NewEntryForm_fraName" xml:space="preserve">
+    <value>Entry Name</value>
+  </data>
+  <data name="NewEntryForm_fraType" xml:space="preserve">
+    <value>Entry Type</value>
+  </data>
+  <data name="OldMainForm_tbbExtra" xml:space="preserve">
+    <value>Extra Features</value>
+  </data>
+  <data name="OldMainForm_tbxConvertVAB" xml:space="preserve">
+    <value>Convert VAB to DLS</value>
+  </data>
+  <data name="OldMainForm_tbxConvertVHVB" xml:space="preserve">
+    <value>Convert VH+VB to DLS</value>
+  </data>
+  <data name="OldMainForm_tbxMakeBIN" xml:space="preserve">
+    <value>Make BIN (no region)</value>
+  </data>
+  <data name="OldMainForm_tbxMakeBINEUR" xml:space="preserve">
+    <value>Make BIN (PAL)</value>
+  </data>
+  <data name="OldMainForm_tbxMakeBINJAP" xml:space="preserve">
+    <value>Make BIN (NTSC-J)</value>
+  </data>
+  <data name="OldMainForm_tbxMakeBINUSA" xml:space="preserve">
+    <value>Make BIN (NTSC-U/C)</value>
+  </data>
+  <data name="TextureViewer_groupBox1" xml:space="preserve">
+    <value>Color Mode</value>
+  </data>
+  <data name="TextureViewer_groupBox2" xml:space="preserve">
+    <value>Blend Mode</value>
+  </data>
+  <data name="TextureViewer_groupBox4" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="TextureViewer_groupBox5" xml:space="preserve">
+    <value>Offset</value>
+  </data>
+  <data name="CloseNSF" xml:space="preserve">
+    <value>Are you sure you want to close the NSF file?</value>
+  </data>
+  <data name="Close_ConfirmationPrompt" xml:space="preserve">
+    <value>Close Confirmation Prompt</value>
+  </data>
+  <data name="PatchNSD1" xml:space="preserve">
+    <value>Are you sure you want to overwrite the NSD file?</value>
+  </data>
+  <data name="PatchNSD2" xml:space="preserve">
+    <value>Do you want to sort all loadlists according to the NSD?</value>
+  </data>
+  <data name="PatchNSD3" xml:space="preserve">
+    <value>The chunk contents in this NSF may have been moved in accordance to the patched NSD and needs to be resaved. Continue?</value>
+  </data>
+  <data name="PatchNSD_Error1" xml:space="preserve">
+    <value>Can't figure out NSD filename. Make sure NSF file ends in \"f\" (case-insensitive)!\n\nFOO.NSF -&gt; FOO.NSD\n\n{0} -&gt; ???</value>
+  </data>
+  <data name="PatchNSD_Error2" xml:space="preserve">
+    <value>NSD patching is not supported for this game version.</value>
+  </data>
+  <data name="PatchNSD_Title1" xml:space="preserve">
+    <value>Patch NSD</value>
+  </data>
+  <data name="PatchNSD_Title2" xml:space="preserve">
+    <value>Loadlist autosorter</value>
+  </data>
+  <data name="SaveNSF" xml:space="preserve">
+    <value>Are you sure you want to overwrite this file?</value>
+  </data>
+  <data name="SaveNSF_Error1" xml:space="preserve">
+    <value>A packing error occurred. The chunk containing entry '{0}' has over 64 KB of data.</value>
+  </data>
+  <data name="SaveNSF_Error2" xml:space="preserve">
+    <value>An IO error occurred.\n\n</value>
+  </data>
+  <data name="SaveNSF_Error3" xml:space="preserve">
+    <value>An unauthorized access error occurred.\n\n</value>
+  </data>
+  <data name="SaveNSF_Title" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Save_ConfirmationPrompt" xml:space="preserve">
+    <value>Save Confirmation Prompt</value>
+  </data>
+  <data name="ConvertVAB_Error" xml:space="preserve">
+    <value>extra feature: VB size is invalid</value>
+  </data>
+  <data name="ConvertVHVB_Error" xml:space="preserve">
+    <value>extra feature: VB size does not match size specified in VH</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>Done.</value>
+  </data>
+  <data name="MakeBIN1" xml:space="preserve">
+    <value>The selected drive or folder does not contain SYSTEM.CNF or PSX.EXE. At least one of these is required for a bootable PSX CD image. Continue anyway?</value>
+  </data>
+  <data name="MakeBIN2" xml:space="preserve">
+    <value>Created BIN file without region OK.</value>
+  </data>
+  <data name="MakeBin3" xml:space="preserve">
+    <value>Created matching CUE file.</value>
+  </data>
+  <data name="MakeBin4" xml:space="preserve">
+    <value>Failed to create CUE file: {0}</value>
+  </data>
+  <data name="MakeBin5" xml:space="preserve">
+    <value>CUE file already exists, will not be modified.</value>
+  </data>
+  <data name="MakeBin_DRNSF1" xml:space="preserve">
+    <value>Launching DRNSF to apply selected region...</value>
+  </data>
+  <data name="MakeBin_DRNSF2" xml:space="preserve">
+    <value>DRNSF returned an error. No region has been applied.</value>
+  </data>
+  <data name="MakeBin_DRNSF3" xml:space="preserve">
+    <value>Region applied successfully.</value>
+  </data>
+  <data name="MakeBin_DRNSF4" xml:space="preserve">
+    <value>Could not find DRNSF exe. Please place this in the same directory as CrashEdit.</value>
+  </data>
+  <data name="MakeBin_DRNSF5" xml:space="preserve">
+    <value>Failed to launch DRNSF. Reason: {0}</value>
+  </data>
+  <data name="MakeBIN_Title" xml:space="preserve">
+    <value>Make BIN</value>
+  </data>
+  <data name="Playtest_Error1" xml:space="preserve">
+    <value>NSF filename '{0}' is not appropriate!</value>
+  </data>
+  <data name="Playtest_Error2" xml:space="preserve">
+    <value>Can't figure out NSD filename. Make sure NSF file ends in \"f\" (case-insensitive)!\n\nFOO.NSF -&gt; FOO.NSD\n\n{0} -&gt; ???</value>
+  </data>
+  <data name="Playtest_Error3" xml:space="preserve">
+    <value>NSD file '{0}' does not exist!</value>
+  </data>
+  <data name="Playtest_Error4" xml:space="preserve">
+    <value>Could not find exe file (PSX.EXE, SCUS_123.45, SLES_123.45, etc).</value>
+  </data>
+  <data name="Playtest_Title" xml:space="preserve">
+    <value>Playtest</value>
+  </data>
 </root>

@@ -16,6 +16,13 @@ namespace CrashEdit
 
             InitializeComponent();
             ErrorManager.Signal += ErrorManager_Signal;
+
+            lblTitle.Text = Properties.Resources.ErrorReporter_Title;
+            optAbort.Text = Properties.Resources.ErrorReporter_Abort;
+            optSkip.Text = Properties.Resources.ErrorReporter_Skip;
+            optIgnore.Text = Properties.Resources.ErrorReporter_Ignore;
+            optIgnoreAll.Text = Properties.Resources.ErrorReporter_IgnoreAll;
+            optBreak.Text = Properties.Resources.ErrorReporter_Break;
         }
 
         private void ErrorManager_Signal(object sender,ErrorSignalEventArgs e)

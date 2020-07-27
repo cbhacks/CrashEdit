@@ -32,6 +32,8 @@ namespace CrashEdit
             }
 
             txtEName.KeyDown += new KeyEventHandler(OnKeyDown_Func);
+
+            lblDesc.Text = Properties.Resources.Crash3AnimationSelector_Desc;
         }
 
         public Crash3AnimationSelector(AnimationEntry anim, Frame frame, NSF nsf)
@@ -55,6 +57,8 @@ namespace CrashEdit
             }
 
             txtEName.KeyDown += new KeyEventHandler(OnKeyDown_Func);
+
+            lblDesc.Text = Properties.Resources.Crash3AnimationSelector_Desc;
         }
 
         private void OnKeyDown_Func(object sender, KeyEventArgs e)

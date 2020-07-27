@@ -61,6 +61,24 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close Confirmation Prompt.
+        /// </summary>
+        internal static string Close_ConfirmationPrompt {
+            get {
+                return ResourceManager.GetString("Close_ConfirmationPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to close the NSF file?.
+        /// </summary>
+        internal static string CloseNSF {
+            get {
+                return ResourceManager.GetString("CloseNSF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Computer_File_053 {
@@ -101,11 +119,416 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enabled.
+        /// </summary>
+        internal static string Config_chkAnimGrid {
+            get {
+                return ResourceManager.GetString("Config_chkAnimGrid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display frame collision by default.
+        /// </summary>
+        internal static string Config_chkCollisionDisplay {
+            get {
+                return ResourceManager.GetString("Config_chkCollisionDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (Patch NSD) Delete non-existent entries from load lists.
+        /// </summary>
+        internal static string Config_chkDeleteInvalidEntries {
+            get {
+                return ResourceManager.GetString("Config_chkDeleteInvalidEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display normals.
+        /// </summary>
+        internal static string Config_chkNormalDisplay {
+            get {
+                return ResourceManager.GetString("Config_chkNormalDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (Crash 3) Used saved animation-model links.
+        /// </summary>
+        internal static string Config_chkUseAnimLinks {
+            get {
+                return ResourceManager.GetString("Config_chkUseAnimLinks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset Settings.
+        /// </summary>
+        internal static string Config_cmdReset {
+            get {
+                return ResourceManager.GetString("Config_cmdReset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Animation Viewer World Grid.
+        /// </summary>
+        internal static string Config_fraAnimGrid {
+            get {
+                return ResourceManager.GetString("Config_fraAnimGrid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear Color.
+        /// </summary>
+        internal static string Config_fraClearCol {
+            get {
+                return ResourceManager.GetString("Config_fraClearCol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language (requires restart).
         /// </summary>
         internal static string Config_FraLang {
             get {
                 return ResourceManager.GetString("Config_FraLang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default Window Size.
+        /// </summary>
+        internal static string Config_fraSize {
+            get {
+                return ResourceManager.GetString("Config_fraSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Amount.
+        /// </summary>
+        internal static string Config_lblAnimGrid {
+            get {
+                return ResourceManager.GetString("Config_lblAnimGrid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Width.
+        /// </summary>
+        internal static string Config_lblH {
+            get {
+                return ResourceManager.GetString("Config_lblH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Height.
+        /// </summary>
+        internal static string Config_lblW {
+            get {
+                return ResourceManager.GetString("Config_lblW", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to extra feature: VB size is invalid.
+        /// </summary>
+        internal static string ConvertVAB_Error {
+            get {
+                return ResourceManager.GetString("ConvertVAB_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to extra feature: VB size does not match size specified in VH.
+        /// </summary>
+        internal static string ConvertVHVB_Error {
+            get {
+                return ResourceManager.GetString("ConvertVHVB_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type in a Model (or Compressed Model) name and press Enter..
+        /// </summary>
+        internal static string Crash3AnimationSelector_Desc {
+            get {
+                return ResourceManager.GetString("Crash3AnimationSelector_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done..
+        /// </summary>
+        internal static string Done {
+            get {
+                return ResourceManager.GetString("Done", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear All.
+        /// </summary>
+        internal static string Entirybox_cmdClearAllVictims {
+            get {
+                return ResourceManager.GetString("Entirybox_cmdClearAllVictims", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verify List Integrity.
+        /// </summary>
+        internal static string Entirybox_cmdLoadListVerify {
+            get {
+                return ResourceManager.GetString("Entirybox_cmdLoadListVerify", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check Payload.
+        /// </summary>
+        internal static string Entirybox_cmdPayload {
+            get {
+                return ResourceManager.GetString("Entirybox_cmdPayload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Camera Index.
+        /// </summary>
+        internal static string Entirybox_fraCameraIndex {
+            get {
+                return ResourceManager.GetString("Entirybox_fraCameraIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Camera SubIndex.
+        /// </summary>
+        internal static string Entirybox_fraCameraSubIndex {
+            get {
+                return ResourceManager.GetString("Entirybox_fraCameraSubIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Draw List A.
+        /// </summary>
+        internal static string Entirybox_fraDrawListA {
+            get {
+                return ResourceManager.GetString("Entirybox_fraDrawListA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Draw List B.
+        /// </summary>
+        internal static string Entirybox_fraDrawListB {
+            get {
+                return ResourceManager.GetString("Entirybox_fraDrawListB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entries.
+        /// </summary>
+        internal static string Entirybox_fraEIDA {
+            get {
+                return ResourceManager.GetString("Entirybox_fraEIDA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entries.
+        /// </summary>
+        internal static string Entirybox_fraEIDB {
+            get {
+                return ResourceManager.GetString("Entirybox_fraEIDB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entities.
+        /// </summary>
+        internal static string Entirybox_fraEntityA {
+            get {
+                return ResourceManager.GetString("Entirybox_fraEntityA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entities.
+        /// </summary>
+        internal static string Entirybox_fraEntityB {
+            get {
+                return ResourceManager.GetString("Entirybox_fraEntityB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field-of-View Timeline.
+        /// </summary>
+        internal static string Entirybox_fraFOV {
+            get {
+                return ResourceManager.GetString("Entirybox_fraFOV", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field-of-View.
+        /// </summary>
+        internal static string Entirybox_fraFOVFrame {
+            get {
+                return ResourceManager.GetString("Entirybox_fraFOVFrame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load List A.
+        /// </summary>
+        internal static string Entirybox_fraLoadListA {
+            get {
+                return ResourceManager.GetString("Entirybox_fraLoadListA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load List B.
+        /// </summary>
+        internal static string Entirybox_fraLoadListB {
+            get {
+                return ResourceManager.GetString("Entirybox_fraLoadListB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verify Load Lists.
+        /// </summary>
+        internal static string Entirybox_fraLoadListPayload {
+            get {
+                return ResourceManager.GetString("Entirybox_fraLoadListPayload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Neighbors.
+        /// </summary>
+        internal static string Entirybox_fraNeighbor {
+            get {
+                return ResourceManager.GetString("Entirybox_fraNeighbor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Neighbor.
+        /// </summary>
+        internal static string Entirybox_fraNeighborSetting {
+            get {
+                return ResourceManager.GetString("Entirybox_fraNeighborSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        internal static string Entirybox_lblFOVPosition {
+            get {
+                return ResourceManager.GetString("Entirybox_lblFOVPosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        internal static string Entirybox_lblMetavalueDrawA {
+            get {
+                return ResourceManager.GetString("Entirybox_lblMetavalueDrawA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        internal static string Entirybox_lblMetavalueDrawB {
+            get {
+                return ResourceManager.GetString("Entirybox_lblMetavalueDrawB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        internal static string Entirybox_lblMetavalueLoadA {
+            get {
+                return ResourceManager.GetString("Entirybox_lblMetavalueLoadA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        internal static string Entirybox_lblMetavalueLoadB {
+            get {
+                return ResourceManager.GetString("Entirybox_lblMetavalueLoadB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cam. Index.
+        /// </summary>
+        internal static string Entirybox_lblNeighborCamera {
+            get {
+                return ResourceManager.GetString("Entirybox_lblNeighborCamera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flag.
+        /// </summary>
+        internal static string Entirybox_lblNeighborFlag {
+            get {
+                return ResourceManager.GetString("Entirybox_lblNeighborFlag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Link Type.
+        /// </summary>
+        internal static string Entirybox_lblNeighborLink {
+            get {
+                return ResourceManager.GetString("Entirybox_lblNeighborLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        internal static string Entirybox_lblNeighborPosition {
+            get {
+                return ResourceManager.GetString("Entirybox_lblNeighborPosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zone Index.
+        /// </summary>
+        internal static string Entirybox_lblNeighborZone {
+            get {
+                return ResourceManager.GetString("Entirybox_lblNeighborZone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        internal static string Entirybox_lblPayloadPosition {
+            get {
+                return ResourceManager.GetString("Entirybox_lblPayloadPosition", resourceCulture);
             }
         }
         
@@ -200,6 +623,15 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Point Distance.
+        /// </summary>
+        internal static string EntityBox_fraAvgDist {
+            get {
+                return ResourceManager.GetString("EntityBox_fraAvgDist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Box Count.
         /// </summary>
         internal static string EntityBox_FraBoxCount {
@@ -232,6 +664,15 @@ namespace CrashEdit.Properties {
         internal static string EntityBox_FraID {
             get {
                 return ResourceManager.GetString("EntityBox_FraID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Camera Mode.
+        /// </summary>
+        internal static string EntityBox_FraMode {
+            get {
+                return ResourceManager.GetString("EntityBox_FraMode", resourceCulture);
             }
         }
         
@@ -380,11 +821,290 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Abort this operation..
+        /// </summary>
+        internal static string ErrorReporter_Abort {
+            get {
+                return ResourceManager.GetString("ErrorReporter_Abort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Break out to a debugger. (Experts only).
+        /// </summary>
+        internal static string ErrorReporter_Break {
+            get {
+                return ResourceManager.GetString("ErrorReporter_Break", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ignore the error and continue anyway..
+        /// </summary>
+        internal static string ErrorReporter_Ignore {
+            get {
+                return ResourceManager.GetString("ErrorReporter_Ignore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ignore the error and all others for this object..
+        /// </summary>
+        internal static string ErrorReporter_IgnoreAll {
+            get {
+                return ResourceManager.GetString("ErrorReporter_IgnoreAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skip this object, leaving it unprocessed..
+        /// </summary>
+        internal static string ErrorReporter_Skip {
+            get {
+                return ResourceManager.GetString("ErrorReporter_Skip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred..
+        /// </summary>
+        internal static string ErrorReporter_Title {
+            get {
+                return ResourceManager.GetString("ErrorReporter_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string InputWindow_cmdCancel {
+            get {
+                return ResourceManager.GetString("InputWindow_cmdCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interpolate Path.
+        /// </summary>
+        internal static string InterpolatorForm {
+            get {
+                return ResourceManager.GetString("InterpolatorForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string InterpolatorForm_cmdCancel {
+            get {
+                return ResourceManager.GetString("InterpolatorForm_cmdCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First.
+        /// </summary>
+        internal static string InterpolatorForm_cmdFirst {
+            get {
+                return ResourceManager.GetString("InterpolatorForm_cmdFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last.
+        /// </summary>
+        internal static string InterpolatorForm_cmdLast {
+            get {
+                return ResourceManager.GetString("InterpolatorForm_cmdLast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next.
+        /// </summary>
+        internal static string InterpolatorForm_cmdNext {
+            get {
+                return ResourceManager.GetString("InterpolatorForm_cmdNext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        internal static string InterpolatorForm_cmdOK {
+            get {
+                return ResourceManager.GetString("InterpolatorForm_cmdOK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prev.
+        /// </summary>
+        internal static string InterpolatorForm_cmdPrev {
+            get {
+                return ResourceManager.GetString("InterpolatorForm_cmdPrev", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Amount.
+        /// </summary>
+        internal static string InterpolatorForm_fraAmount {
+            get {
+                return ResourceManager.GetString("InterpolatorForm_fraAmount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start/End Position.
+        /// </summary>
+        internal static string InterpolatorForm_fraBound {
+            get {
+                return ResourceManager.GetString("InterpolatorForm_fraBound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Progress Function.
+        /// </summary>
+        internal static string InterpolatorForm_fraFunction {
+            get {
+                return ResourceManager.GetString("InterpolatorForm_fraFunction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Order.
+        /// </summary>
+        internal static string InterpolatorForm_fraOrder {
+            get {
+                return ResourceManager.GetString("InterpolatorForm_fraOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Positions.
+        /// </summary>
+        internal static string InterpolatorForm_fraPosition {
+            get {
+                return ResourceManager.GetString("InterpolatorForm_fraPosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tension.
+        /// </summary>
+        internal static string InterpolatorForm_fraTension {
+            get {
+                return ResourceManager.GetString("InterpolatorForm_fraTension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to English (Default).
         /// </summary>
         internal static string Language {
             get {
                 return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launching DRNSF to apply selected region....
+        /// </summary>
+        internal static string MakeBin_DRNSF1 {
+            get {
+                return ResourceManager.GetString("MakeBin_DRNSF1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DRNSF returned an error. No region has been applied..
+        /// </summary>
+        internal static string MakeBin_DRNSF2 {
+            get {
+                return ResourceManager.GetString("MakeBin_DRNSF2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Region applied successfully..
+        /// </summary>
+        internal static string MakeBin_DRNSF3 {
+            get {
+                return ResourceManager.GetString("MakeBin_DRNSF3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find DRNSF exe. Please place this in the same directory as CrashEdit..
+        /// </summary>
+        internal static string MakeBin_DRNSF4 {
+            get {
+                return ResourceManager.GetString("MakeBin_DRNSF4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to launch DRNSF. Reason: {0}.
+        /// </summary>
+        internal static string MakeBin_DRNSF5 {
+            get {
+                return ResourceManager.GetString("MakeBin_DRNSF5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make BIN.
+        /// </summary>
+        internal static string MakeBIN_Title {
+            get {
+                return ResourceManager.GetString("MakeBIN_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected drive or folder does not contain SYSTEM.CNF or PSX.EXE. At least one of these is required for a bootable PSX CD image. Continue anyway?.
+        /// </summary>
+        internal static string MakeBIN1 {
+            get {
+                return ResourceManager.GetString("MakeBIN1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created BIN file without region OK..
+        /// </summary>
+        internal static string MakeBIN2 {
+            get {
+                return ResourceManager.GetString("MakeBIN2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created matching CUE file..
+        /// </summary>
+        internal static string MakeBin3 {
+            get {
+                return ResourceManager.GetString("MakeBin3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to create CUE file: {0}.
+        /// </summary>
+        internal static string MakeBin4 {
+            get {
+                return ResourceManager.GetString("MakeBin4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CUE file already exists, will not be modified..
+        /// </summary>
+        internal static string MakeBin5 {
+            get {
+                return ResourceManager.GetString("MakeBin5", resourceCulture);
             }
         }
         
@@ -565,6 +1285,33 @@ namespace CrashEdit.Properties {
         internal static string Menu_Undo_UndoNone {
             get {
                 return ResourceManager.GetString("Menu_Undo_UndoNone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Entry.
+        /// </summary>
+        internal static string NewEntryForm {
+            get {
+                return ResourceManager.GetString("NewEntryForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entry Name.
+        /// </summary>
+        internal static string NewEntryForm_fraName {
+            get {
+                return ResourceManager.GetString("NewEntryForm_fraName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entry Type.
+        /// </summary>
+        internal static string NewEntryForm_fraType {
+            get {
+                return ResourceManager.GetString("NewEntryForm_fraType", resourceCulture);
             }
         }
         
@@ -759,6 +1506,132 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extra Features.
+        /// </summary>
+        internal static string OldMainForm_tbbExtra {
+            get {
+                return ResourceManager.GetString("OldMainForm_tbbExtra", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert VAB to DLS.
+        /// </summary>
+        internal static string OldMainForm_tbxConvertVAB {
+            get {
+                return ResourceManager.GetString("OldMainForm_tbxConvertVAB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert VH+VB to DLS.
+        /// </summary>
+        internal static string OldMainForm_tbxConvertVHVB {
+            get {
+                return ResourceManager.GetString("OldMainForm_tbxConvertVHVB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make BIN (no region).
+        /// </summary>
+        internal static string OldMainForm_tbxMakeBIN {
+            get {
+                return ResourceManager.GetString("OldMainForm_tbxMakeBIN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make BIN (PAL).
+        /// </summary>
+        internal static string OldMainForm_tbxMakeBINEUR {
+            get {
+                return ResourceManager.GetString("OldMainForm_tbxMakeBINEUR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make BIN (NTSC-J).
+        /// </summary>
+        internal static string OldMainForm_tbxMakeBINJAP {
+            get {
+                return ResourceManager.GetString("OldMainForm_tbxMakeBINJAP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make BIN (NTSC-U/C).
+        /// </summary>
+        internal static string OldMainForm_tbxMakeBINUSA {
+            get {
+                return ResourceManager.GetString("OldMainForm_tbxMakeBINUSA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t figure out NSD filename. Make sure NSF file ends in \&quot;f\&quot; (case-insensitive)!\n\nFOO.NSF -&gt; FOO.NSD\n\n{0} -&gt; ???.
+        /// </summary>
+        internal static string PatchNSD_Error1 {
+            get {
+                return ResourceManager.GetString("PatchNSD_Error1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NSD patching is not supported for this game version..
+        /// </summary>
+        internal static string PatchNSD_Error2 {
+            get {
+                return ResourceManager.GetString("PatchNSD_Error2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Patch NSD.
+        /// </summary>
+        internal static string PatchNSD_Title1 {
+            get {
+                return ResourceManager.GetString("PatchNSD_Title1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loadlist autosorter.
+        /// </summary>
+        internal static string PatchNSD_Title2 {
+            get {
+                return ResourceManager.GetString("PatchNSD_Title2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to overwrite the NSD file?.
+        /// </summary>
+        internal static string PatchNSD1 {
+            get {
+                return ResourceManager.GetString("PatchNSD1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to sort all loadlists according to the NSD?.
+        /// </summary>
+        internal static string PatchNSD2 {
+            get {
+                return ResourceManager.GetString("PatchNSD2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The chunk contents in this NSF may have been moved in accordance to the patched NSD and needs to be resaved. Continue?.
+        /// </summary>
+        internal static string PatchNSD3 {
+            get {
+                return ResourceManager.GetString("PatchNSD3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap People_014 {
@@ -819,11 +1692,146 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NSF filename &apos;{0}&apos; is not appropriate!.
+        /// </summary>
+        internal static string Playtest_Error1 {
+            get {
+                return ResourceManager.GetString("Playtest_Error1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t figure out NSD filename. Make sure NSF file ends in \&quot;f\&quot; (case-insensitive)!\n\nFOO.NSF -&gt; FOO.NSD\n\n{0} -&gt; ???.
+        /// </summary>
+        internal static string Playtest_Error2 {
+            get {
+                return ResourceManager.GetString("Playtest_Error2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NSD file &apos;{0}&apos; does not exist!.
+        /// </summary>
+        internal static string Playtest_Error3 {
+            get {
+                return ResourceManager.GetString("Playtest_Error3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find exe file (PSX.EXE, SCUS_123.45, SLES_123.45, etc)..
+        /// </summary>
+        internal static string Playtest_Error4 {
+            get {
+                return ResourceManager.GetString("Playtest_Error4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Playtest.
+        /// </summary>
+        internal static string Playtest_Title {
+            get {
+                return ResourceManager.GetString("Playtest_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Confirmation Prompt.
+        /// </summary>
+        internal static string Save_ConfirmationPrompt {
+            get {
+                return ResourceManager.GetString("Save_ConfirmationPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to overwrite this file?.
+        /// </summary>
+        internal static string SaveNSF {
+            get {
+                return ResourceManager.GetString("SaveNSF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A packing error occurred. The chunk containing entry &apos;{0}&apos; has over 64 KB of data..
+        /// </summary>
+        internal static string SaveNSF_Error1 {
+            get {
+                return ResourceManager.GetString("SaveNSF_Error1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An IO error occurred.\n\n.
+        /// </summary>
+        internal static string SaveNSF_Error2 {
+            get {
+                return ResourceManager.GetString("SaveNSF_Error2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An unauthorized access error occurred.\n\n.
+        /// </summary>
+        internal static string SaveNSF_Error3 {
+            get {
+                return ResourceManager.GetString("SaveNSF_Error3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        internal static string SaveNSF_Title {
+            get {
+                return ResourceManager.GetString("SaveNSF_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The file &quot;{0}&quot; has not been saved since it was last modified. Continue anyway?.
         /// </summary>
         internal static string Text_CloseDirtyFilePrompt {
             get {
                 return ResourceManager.GetString("Text_CloseDirtyFilePrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color Mode.
+        /// </summary>
+        internal static string TextureViewer_groupBox1 {
+            get {
+                return ResourceManager.GetString("TextureViewer_groupBox1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Blend Mode.
+        /// </summary>
+        internal static string TextureViewer_groupBox2 {
+            get {
+                return ResourceManager.GetString("TextureViewer_groupBox2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size.
+        /// </summary>
+        internal static string TextureViewer_groupBox4 {
+            get {
+                return ResourceManager.GetString("TextureViewer_groupBox4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Offset.
+        /// </summary>
+        internal static string TextureViewer_groupBox5 {
+            get {
+                return ResourceManager.GetString("TextureViewer_groupBox5", resourceCulture);
             }
         }
         

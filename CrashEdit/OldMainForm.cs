@@ -114,31 +114,31 @@ namespace CrashEdit
             tbbFindNext.Click += new EventHandler(tbbFindNext_Click);
 
             tbxMakeBIN = new ToolStripMenuItem();
-            tbxMakeBIN.Text = "Make BIN (no region)";
+            tbxMakeBIN.Text = Properties.Resources.OldMainForm_tbxMakeBIN;
             tbxMakeBIN.Click += new EventHandler(tbxMakeBIN_Click);
 
             tbxMakeBINUSA = new ToolStripMenuItem();
-            tbxMakeBINUSA.Text = "Make BIN (NTSC-U/C)";
+            tbxMakeBINUSA.Text = Properties.Resources.OldMainForm_tbxMakeBINUSA;
             tbxMakeBINUSA.Click += new EventHandler(tbxMakeBIN_Click);
 
             tbxMakeBINEUR = new ToolStripMenuItem();
-            tbxMakeBINEUR.Text = "Make BIN (PAL)";
+            tbxMakeBINEUR.Text = Properties.Resources.OldMainForm_tbxMakeBINEUR;
             tbxMakeBINEUR.Click += new EventHandler(tbxMakeBIN_Click);
 
             tbxMakeBINJAP = new ToolStripMenuItem();
-            tbxMakeBINJAP.Text = "Make BIN (NTSC-J)";
+            tbxMakeBINJAP.Text = Properties.Resources.OldMainForm_tbxMakeBINJAP;
             tbxMakeBINJAP.Click += new EventHandler(tbxMakeBIN_Click);
 
             tbxConvertVHVB = new ToolStripMenuItem();
-            tbxConvertVHVB.Text = "Convert VH+VB to DLS";
+            tbxConvertVHVB.Text = Properties.Resources.OldMainForm_tbxConvertVHVB;
             tbxConvertVHVB.Click += new EventHandler(tbxConvertVHVB_Click);
 
             tbxConvertVAB = new ToolStripMenuItem();
-            tbxConvertVAB.Text = "Convert VAB to DLS";
+            tbxConvertVAB.Text = Properties.Resources.OldMainForm_tbxConvertVAB;
             tbxConvertVAB.Click += new EventHandler(tbxConvertVAB_Click);
 
             tbbExtra = new ToolStripDropDownButton();
-            tbbExtra.Text = "Extra Features";
+            tbbExtra.Text = Properties.Resources.OldMainForm_tbbExtra;
             tbbExtra.DropDown = new ToolStripDropDown { LayoutStyle = ToolStripLayoutStyle.VerticalStackWithOverflow };
             tbbExtra.DropDown.Items.Add(tbxMakeBIN);
             tbbExtra.DropDown.Items.Add(tbxMakeBINUSA);
@@ -239,7 +239,7 @@ namespace CrashEdit
 
             var nsfFilenameBase = Path.GetFileName(nsfFilename);
             if (nsfFilenameBase.Length != 12) {
-                MessageBox.Show($"NSF filename '{nsfFilenameBase}' is not appropriate!", "Playtest", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(string.Format(Resources.Playtest_Error1, nsfFilename), Resources.Playtest_Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             var levelID = int.Parse(nsfFilenameBase.Substring(6, 2), System.Globalization.NumberStyles.HexNumber);
@@ -257,12 +257,12 @@ namespace CrashEdit
             }
             else
             {
-                MessageBox.Show(string.Format("Can't figure out NSD filename. Make sure NSF file ends in \"f\" (case-insensitive)!\n\nFOO.NSF -> FOO.NSD\n\n{0} -> ???", nsfFilename), "Playtest",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show(string.Format(Resources.Playtest_Error2, nsfFilename), Resources.Playtest_Title, MessageBoxButtons.OK,MessageBoxIcon.Error);
                 return;
             }
 
             if (!File.Exists(nsdFilename)) {
-                MessageBox.Show($"NSD file '{nsdFilename}' does not exist!", "Playtest", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(string.Format(Resources.Playtest_Error3, nsdFilename), Resources.Playtest_Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -275,7 +275,7 @@ namespace CrashEdit
                 }
             }
             if (exeFilename == null) {
-                MessageBox.Show("Could not find exe file (PSX.EXE, SCUS_123.45, SLES_123.45, etc).", "Playtest", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Resources.Playtest_Error4, Resources.Playtest_Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -433,22 +433,22 @@ namespace CrashEdit
             try
             {
                 byte[] nsfdata = nsf.Save();
-                if (ignore_warnings ? true : MessageBox.Show("Are you sure you want to overwrite this file?","Save Confirmation Prompt",MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (ignore_warnings ? true : MessageBox.Show(Resources.SaveNSF, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     File.WriteAllBytes(filename,nsfdata);
                 }
             }
             catch (PackingException ex)
             {
-                MessageBox.Show(string.Format("A packing error occurred. The chunk containing entry '{0}' has over 64 KB of data.",Entry.EIDToEName(ex.EID)),"Save",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show(string.Format(Resources.SaveNSF_Error1, Entry.EIDToEName(ex.EID)), Resources.SaveNSF_Title, MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
             catch (IOException ex)
             {
-                MessageBox.Show("An IO error occurred.\n\n" + ex.Message,"Save",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show(Resources.SaveNSF_Error2 + ex.Message, Resources.SaveNSF_Title, MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
             catch (UnauthorizedAccessException ex)
             {
-                MessageBox.Show("An unauthorized access error occurred.\n\n" + ex.Message,"Save",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show(Resources.SaveNSF_Error3 + ex.Message, Resources.SaveNSF_Title, MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
         }
 
@@ -469,7 +469,7 @@ namespace CrashEdit
                 }
                 else
                 {
-                    MessageBox.Show(string.Format("Can't figure out NSD filename. Make sure NSF file ends in \"f\" (case-insensitive)!\n\nFOO.NSF -> FOO.NSD\n\n{0} -> ???", filename), "Patch NSD",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    MessageBox.Show(string.Format(Resources.PatchNSD_Error1, filename), Resources.PatchNSD_Title1, MessageBoxButtons.OK,MessageBoxIcon.Error);
                     return;
                 }
                 NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
@@ -523,7 +523,7 @@ namespace CrashEdit
                         }
                         break;
                     default:
-                        if (!ignore_warnings) MessageBox.Show("NSD patching is not supported for this game version.", "Patch NSD", MessageBoxButtons.OK);
+                        if (!ignore_warnings) MessageBox.Show(Resources.PatchNSD_Error2, Resources.PatchNSD_Title1, MessageBoxButtons.OK);
                         return;
                 }
                 nsfc.Node.TreeView.BeginUpdate();
@@ -561,7 +561,7 @@ namespace CrashEdit
                     }
                 }
                 nsfc.Node.TreeView.EndUpdate();
-                if (ignore_warnings ? true : (order_updated && MessageBox.Show("The chunk contents in this NSF may have been moved in accordance to the patched NSD and needs to be resaved. Continue?", "Patch NSD", MessageBoxButtons.YesNo) == DialogResult.Yes))
+                if (ignore_warnings ? true : (order_updated && MessageBox.Show(Resources.PatchNSD3, Resources.PatchNSD_Title1, MessageBoxButtons.YesNo) == DialogResult.Yes))
                 {
                     SaveNSF(true);
                 }
@@ -594,11 +594,11 @@ namespace CrashEdit
                 }
             }
 
-            if (ignore_warnings ? true : MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ignore_warnings ? true : MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
             }
-            if (!ignore_warnings && MessageBox.Show("Do you want to sort all loadlists according to the NSD?", "Loadlist autosorter", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (!ignore_warnings && MessageBox.Show(Resources.PatchNSD2, Resources.PatchNSD_Title2, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 int[] eids = new int[nsd.Index.Count];
                 for (int i = 0; i < eids.Length; ++i)
@@ -665,11 +665,11 @@ namespace CrashEdit
                 }
             }
 
-            if (ignore_warnings ? true : MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ignore_warnings ? true : MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
             }
-            if (!ignore_warnings && MessageBox.Show("Do you want to sort all loadlists according to the NSD?", "Loadlist autosorter", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (!ignore_warnings && MessageBox.Show(Resources.PatchNSD2, Resources.PatchNSD_Title2, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 int[] eids = new int[nsd.Index.Count];
                 for (int i = 0; i < eids.Length; ++i)
@@ -720,7 +720,7 @@ namespace CrashEdit
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
             PatchNSDGoolMap(nsd.GOOLMap, nsf);
-            if (ignore_warnings ? true : MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ignore_warnings ? true : MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
             }
@@ -732,7 +732,7 @@ namespace CrashEdit
             var indexdata = nsf.MakeNSDIndex();
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
-            if (ignore_warnings ? true : MessageBox.Show("Are you sure you want to overwrite the NSD file?", "Save Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ignore_warnings ? true : MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
             }
@@ -776,7 +776,7 @@ namespace CrashEdit
                 nsfdata = null;
             }
             byte[] olddata = File.ReadAllBytes(filename);
-            if (nsfdata == null || (nsfdata.Length == olddata.Length && nsfdata.SequenceEqual(olddata)) || MessageBox.Show("Are you sure you want to close the NSF file?", "Close Confirmation Prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (nsfdata == null || (nsfdata.Length == olddata.Length && nsfdata.SequenceEqual(olddata)) || MessageBox.Show(Resources.CloseNSF, Resources.Close_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 TabPage tab = tbcTabs.SelectedTab;
                 if (tab != null)
@@ -832,7 +832,7 @@ namespace CrashEdit
             string exefile = Path.Combine(dlgMakeBINDir.SelectedPath, "PSX.EXE");
 
             if (!File.Exists(cnffile) && !File.Exists(exefile)) {
-                if (MessageBox.Show("The selected drive or folder does not contain SYSTEM.CNF or PSX.EXE. At least one of these is required for a bootable PSX CD image. Continue anyway?", "Make BIN", MessageBoxButtons.YesNo, MessageBoxIcon.Stop) != DialogResult.Yes)
+                if (MessageBox.Show(Resources.MakeBIN1, Resources.MakeBIN_Title, MessageBoxButtons.YesNo, MessageBoxIcon.Stop) != DialogResult.Yes)
                     return;
             }
 
@@ -847,7 +847,7 @@ namespace CrashEdit
                 ISO2PSX.Run(iso, bin);
             }
 
-            log.AppendLine("Created BIN file without region OK.");
+            log.AppendLine(Resources.MakeBIN2);
             log.AppendLine();
 
             string cueFilename = Path.ChangeExtension(dlgMakeBINFile.FileName, ".cue");
@@ -858,14 +858,14 @@ namespace CrashEdit
                         cue.WriteLine("  TRACK 01 MODE2/2352");
                         cue.WriteLine("    INDEX 01 00:00:00");
                     }
-                    log.AppendLine("Created matching CUE file.");
+                    log.AppendLine(Resources.MakeBin3);
                     log.AppendLine();
                 } catch (IOException ex) {
-                    log.AppendLine($"Failed to create CUE file: {ex}");
+                    log.AppendLine(string.Format(Resources.MakeBin4, ex));
                     log.AppendLine();
                 }
             } else {
-                log.AppendLine("CUE file already exists, will not be modified.");
+                log.AppendLine(Resources.MakeBin5);
                 log.AppendLine();
             }
 
@@ -877,28 +877,28 @@ namespace CrashEdit
             } else if (sender == tbxMakeBINJAP) {
                 imprintOpt = ":cdxa-imprint --psx-scei";
             } else {
-                log.Append("Done.");
+                log.Append(Resources.Done);
                 MessageBox.Show(log.ToString());
                 return;
             }
 
-            log.AppendLine("Launching DRNSF to apply selected region...");
+            log.AppendLine(Resources.MakeBin_DRNSF1);
             try {
                 if (ExternalTool.Invoke("drnsf", $"{imprintOpt} -- \"{dlgMakeBINFile.FileName}\"") != 0) {
-                    log.AppendLine("DRNSF returned an error. No region has been applied.");
+                    log.AppendLine(Resources.MakeBin_DRNSF2);
                     log.AppendLine();
                 } else {
-                    log.AppendLine("Region applied successfully.");
+                    log.AppendLine(Resources.MakeBin_DRNSF3);
                     log.AppendLine();
                 }
             } catch (FileNotFoundException) {
-                log.AppendLine("Could not find DRNSF exe. Please place this in the same directory as CrashEdit.");
+                log.AppendLine(Resources.MakeBin_DRNSF4);
                 log.AppendLine();
             } catch (Exception ex) {
-                log.AppendLine($"Failed to launch DRNSF. Reason: {ex}");
+                log.AppendLine(string.Format(Resources.MakeBin_DRNSF5, ex));
                 log.AppendLine();
             }
-            log.Append("Done.");
+            log.Append(Resources.Done);
             MessageBox.Show(log.ToString());
         }
 
@@ -915,7 +915,7 @@ namespace CrashEdit
 
                 if (vb_data.Length / 16 != vh.VBSize)
                 {
-                    ErrorManager.SignalIgnorableError("extra feature: VB size does not match size specified in VH");
+                    ErrorManager.SignalIgnorableError(Resources.ConvertVHVB_Error);
                 }
                 SampleLine[] vb = new SampleLine [vb_data.Length / 16];
                 byte[] line_data = new byte[16];
@@ -947,7 +947,7 @@ namespace CrashEdit
                 int vb_offset = 2592+32*16*vh.Programs.Count;
                 if ((vab_data.Length - vb_offset) % 16 != 0)
                 {
-                    ErrorManager.SignalIgnorableError("extra feature: VB size is invalid");
+                    ErrorManager.SignalIgnorableError(Resources.ConvertVAB_Error);
                 }
                 vh.VBSize = (vab_data.Length - vb_offset) / 16;
                 SampleLine[] vb = new SampleLine [vh.VBSize];

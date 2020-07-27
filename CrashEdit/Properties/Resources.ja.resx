@@ -118,73 +118,73 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Menu_Edit" xml:space="preserve">
-    <value>Edit </value>
+    <value>編集</value>
   </data>
   <data name="Menu_File" xml:space="preserve">
-    <value>File</value>
+    <value>ファイル</value>
   </data>
   <data name="Menu_File_Close" xml:space="preserve">
     <value>閉じる</value>
   </data>
   <data name="Menu_File_Exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>終了</value>
   </data>
   <data name="Menu_File_Open" xml:space="preserve">
     <value>開く</value>
   </data>
   <data name="Menu_File_PatchNSD" xml:space="preserve">
-    <value>NSDをパッチする</value>
+    <value>NSDパッチ</value>
   </data>
   <data name="Menu_File_Save" xml:space="preserve">
-    <value>Save</value>
+    <value>保存</value>
   </data>
   <data name="Menu_File_SaveAs" xml:space="preserve">
-    <value>Save As</value>
+    <value>名前を付けて保存</value>
   </data>
   <data name="Menu_Find" xml:space="preserve">
-    <value>見つける</value>
+    <value>検索</value>
   </data>
   <data name="Menu_Find_EntryID" xml:space="preserve">
-    <value>Entry ID</value>
+    <value>エントリ ID</value>
   </data>
   <data name="Menu_Find_EntryName" xml:space="preserve">
-    <value>Entry Name</value>
+    <value>エントリ名</value>
   </data>
   <data name="Menu_Find_Find" xml:space="preserve">
-    <value>見つける</value>
+    <value>検索</value>
   </data>
   <data name="Menu_Find_FindNext" xml:space="preserve">
-    <value>次を</value>
+    <value>次を検索</value>
   </data>
   <data name="Menu_Find_ObjectName" xml:space="preserve">
-    <value>Object Name</value>
+    <value>オブジェクト名</value>
   </data>
   <data name="Menu_Undo" xml:space="preserve">
-    <value>Undo</value>
+    <value>取り消し</value>
   </data>
   <data name="Menu_Undo_CurrentState" xml:space="preserve">
-    <value>Current State</value>
+    <value>現在の状態</value>
   </data>
   <data name="Menu_Undo_RedoAction" xml:space="preserve">
-    <value>Redo {0}</value>
+    <value>やり直し {0}</value>
   </data>
   <data name="Menu_Undo_RedoNone" xml:space="preserve">
-    <value>Nothing to redo</value>
+    <value>やり直し可能なものはありません</value>
   </data>
   <data name="Menu_Undo_UndoAction" xml:space="preserve">
-    <value>Undo {0}</value>
+    <value>取り消し {0}</value>
   </data>
   <data name="Menu_Undo_UndoNone" xml:space="preserve">
-    <value>Nothing to undo</value>
+    <value>取り消し可能なものはありません</value>
   </data>
   <data name="Toolbar_Close" xml:space="preserve">
     <value>閉じる</value>
   </data>
   <data name="Toolbar_Find" xml:space="preserve">
-    <value>見つける</value>
+    <value>検索</value>
   </data>
   <data name="Toolbar_FindNext" xml:space="preserve">
-    <value>次を</value>
+    <value>次を検索</value>
   </data>
   <data name="Toolbar_GotoEID" xml:space="preserve">
     <value>Goto EID</value>
@@ -193,19 +193,19 @@
     <value>開く</value>
   </data>
   <data name="Toolbar_PatchNSD" xml:space="preserve">
-    <value>NSDをパッチする</value>
+    <value>NSDパッチ</value>
   </data>
   <data name="Toolbar_RedoAction" xml:space="preserve">
-    <value>Redo {0}</value>
+    <value>やり直し {0}</value>
   </data>
   <data name="Toolbar_RedoNone" xml:space="preserve">
-    <value>Redo</value>
+    <value>やり直し</value>
   </data>
   <data name="Toolbar_Save" xml:space="preserve">
-    <value>保存する</value>
+    <value>保存</value>
   </data>
   <data name="Toolbar_UndoAction" xml:space="preserve">
-    <value>Undo {0}</value>
+    <value>取り消し {0}</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Computer_File_063" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -236,7 +236,7 @@
     <value>..\Resources\objects_070.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Toolbar_UndoNone" xml:space="preserve">
-    <value>Undo</value>
+    <value>取り消し</value>
   </data>
   <data name="Computer_File_053" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Computer_File_053.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -299,31 +299,31 @@
     <value>..\Resources\People_020_red.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Text_CloseDirtyFilePrompt" xml:space="preserve">
-    <value>The file "{0}" has not been saved since it was last modified. Continue anyway?</value>
+    <value>ファイル "{0}" は保存されていません。続行しますか？</value>
   </data>
   <data name="Config_FraLang" xml:space="preserve">
-    <value>言語　＊再起動するが必要です</value>
+    <value>言語　＊再起動が必要です</value>
   </data>
   <data name="EntityBox_ChkBonusBoxCount" xml:space="preserve">
-    <value>使用可能（ボーナス）</value>
+    <value>有効化 (ボーナス)</value>
   </data>
   <data name="EntityBox_ChkEnabled" xml:space="preserve">
-    <value>使用可能</value>
+    <value>有効化</value>
   </data>
   <data name="EntityBox_ChkHex" xml:space="preserve">
     <value>16進法</value>
   </data>
   <data name="EntityBox_CmdAdd" xml:space="preserve">
-    <value>追加する</value>
+    <value>追加</value>
   </data>
   <data name="EntityBox_CmdAppend" xml:space="preserve">
-    <value>追加する</value>
+    <value>追加</value>
   </data>
   <data name="EntityBox_CmdInsert" xml:space="preserve">
-    <value>挿入する</value>
+    <value>挿入</value>
   </data>
   <data name="EntityBox_CmdInterpolate" xml:space="preserve">
-    <value>補間する</value>
+    <value>補間</value>
   </data>
   <data name="EntityBox_CmdNext" xml:space="preserve">
     <value>次へ</value>
@@ -332,16 +332,16 @@
     <value>前へ</value>
   </data>
   <data name="EntityBox_CmdRemove" xml:space="preserve">
-    <value>削除する</value>
+    <value>削除</value>
   </data>
   <data name="EntityBox_FraBoxCount" xml:space="preserve">
-    <value>ボックス量</value>
+    <value>箱数</value>
   </data>
   <data name="EntityBox_FraDDASection" xml:space="preserve">
-    <value>DDAセクション</value>
+    <value>DDA セクション</value>
   </data>
   <data name="EntityBox_FraDDASettings" xml:space="preserve">
-    <value>DDAデス／1UP量</value>
+    <value>DDA デス数</value>
   </data>
   <data name="EntityBox_FraID" xml:space="preserve">
     <value>ID</value>
@@ -350,13 +350,13 @@
     <value>名前</value>
   </data>
   <data name="EntityBox_FraOtherSettings" xml:space="preserve">
-    <value>ミスクセッティング</value>
+    <value>その他の設定</value>
   </data>
   <data name="EntityBox_FraPosition" xml:space="preserve">
-    <value>位置</value>
+    <value>ポジション</value>
   </data>
   <data name="EntityBox_FraScaling" xml:space="preserve">
-    <value>スケールモディファイア</value>
+    <value>スケールの設定</value>
   </data>
   <data name="EntityBox_FraSettings" xml:space="preserve">
     <value>引数</value>
@@ -368,22 +368,22 @@
     <value>サブタイプ</value>
   </data>
   <data name="EntityBox_FraTTReward" xml:space="preserve">
-    <value>タイムアタックリワード</value>
+    <value>タイムアタック報酬</value>
   </data>
   <data name="EntityBox_FraType" xml:space="preserve">
     <value>タイプ</value>
   </data>
   <data name="EntityBox_FraVictims" xml:space="preserve">
-    <value>ビクティムズ</value>
+    <value>Victims</value>
   </data>
   <data name="EntityBox_FraZMod" xml:space="preserve">
-    <value>デプスモディファイア</value>
+    <value>深さの設定</value>
   </data>
   <data name="EntityBox_TabCamera" xml:space="preserve">
     <value>カメラ</value>
   </data>
   <data name="EntityBox_TabDrawList" xml:space="preserve">
-    <value>ドローリスト</value>
+    <value>描画リスト</value>
   </data>
   <data name="EntityBox_TabGeneral" xml:space="preserve">
     <value>一般</value>
@@ -396,5 +396,341 @@
   </data>
   <data name="Language" xml:space="preserve">
     <value>日本語</value>
+  </data>
+  <data name="ErrorReporter_Abort" xml:space="preserve">
+    <value>オプションを破棄</value>
+  </data>
+  <data name="ErrorReporter_Break" xml:space="preserve">
+    <value>デバッガーを起動 (上級者向け)</value>
+  </data>
+  <data name="ErrorReporter_Ignore" xml:space="preserve">
+    <value>エラーを無視して続行</value>
+  </data>
+  <data name="ErrorReporter_IgnoreAll" xml:space="preserve">
+    <value>このオブジェクトに対するエラーを全て無視して続行</value>
+  </data>
+  <data name="ErrorReporter_Skip" xml:space="preserve">
+    <value>このオブジェクトをスキップして未処理の状態にする</value>
+  </data>
+  <data name="ErrorReporter_Title" xml:space="preserve">
+    <value>エラーが発生しました。</value>
+  </data>
+  <data name="Config_chkAnimGrid" xml:space="preserve">
+    <value>有効化</value>
+  </data>
+  <data name="Config_chkCollisionDisplay" xml:space="preserve">
+    <value>フレームコリジョンをデフォルトで表示する</value>
+  </data>
+  <data name="Config_chkDeleteInvalidEntries" xml:space="preserve">
+    <value>(NSDパッチ) 存在しないエントリをロードリストから削除する</value>
+  </data>
+  <data name="Config_chkNormalDisplay" xml:space="preserve">
+    <value>法線を表示する</value>
+  </data>
+  <data name="Config_chkUseAnimLinks" xml:space="preserve">
+    <value>(クラッシュ 3) 保存したアニメーションリンクを使用する</value>
+  </data>
+  <data name="Config_cmdReset" xml:space="preserve">
+    <value>設定のリセット</value>
+  </data>
+  <data name="Config_fraAnimGrid" xml:space="preserve">
+    <value>アニメーションビューワーのグリッド線</value>
+  </data>
+  <data name="Config_fraClearCol" xml:space="preserve">
+    <value>クリア</value>
+  </data>
+  <data name="Config_fraSize" xml:space="preserve">
+    <value>ウィンドウのサイズ</value>
+  </data>
+  <data name="Config_lblAnimGrid" xml:space="preserve">
+    <value>数</value>
+  </data>
+  <data name="Config_lblH" xml:space="preserve">
+    <value>高さ</value>
+  </data>
+  <data name="Config_lblW" xml:space="preserve">
+    <value>幅</value>
+  </data>
+  <data name="Crash3AnimationSelector_Desc" xml:space="preserve">
+    <value>モデル  (または圧縮モデル) の名前を入力してエンターキーを押してください。</value>
+  </data>
+  <data name="Entirybox_cmdClearAllVictims" xml:space="preserve">
+    <value>すべて削除</value>
+  </data>
+  <data name="Entirybox_cmdLoadListVerify" xml:space="preserve">
+    <value>検証</value>
+  </data>
+  <data name="Entirybox_cmdPayload" xml:space="preserve">
+    <value>ﾍﾟｲﾛｰﾄﾞをﾁｪｯｸ</value>
+  </data>
+  <data name="Entirybox_fraCameraIndex" xml:space="preserve">
+    <value>カメラ インデックス</value>
+  </data>
+  <data name="Entirybox_fraCameraSubIndex" xml:space="preserve">
+    <value>カメラ サブインデックス</value>
+  </data>
+  <data name="Entirybox_fraDrawListA" xml:space="preserve">
+    <value>描画リスト A</value>
+  </data>
+  <data name="Entirybox_fraDrawListB" xml:space="preserve">
+    <value>描画リスト B</value>
+  </data>
+  <data name="Entirybox_fraEIDA" xml:space="preserve">
+    <value>エントリ</value>
+  </data>
+  <data name="Entirybox_fraEIDB" xml:space="preserve">
+    <value>エントリ</value>
+  </data>
+  <data name="Entirybox_fraEntityA" xml:space="preserve">
+    <value>エンティティ</value>
+  </data>
+  <data name="Entirybox_fraEntityB" xml:space="preserve">
+    <value>エンティティ</value>
+  </data>
+  <data name="Entirybox_fraFOV" xml:space="preserve">
+    <value>FOVの設定</value>
+  </data>
+  <data name="Entirybox_fraFOVFrame" xml:space="preserve">
+    <value>FOV</value>
+  </data>
+  <data name="Entirybox_fraLoadListA" xml:space="preserve">
+    <value>ロードリスト A</value>
+  </data>
+  <data name="Entirybox_fraLoadListB" xml:space="preserve">
+    <value>ロードリスト B</value>
+  </data>
+  <data name="Entirybox_fraLoadListPayload" xml:space="preserve">
+    <value>ロードリストの整合性チェック</value>
+  </data>
+  <data name="Entirybox_fraNeighbor" xml:space="preserve">
+    <value>隣接の設定</value>
+  </data>
+  <data name="Entirybox_fraNeighborSetting" xml:space="preserve">
+    <value>隣接</value>
+  </data>
+  <data name="Entirybox_lblFOVPosition" xml:space="preserve">
+    <value>ポジション</value>
+  </data>
+  <data name="Entirybox_lblMetavalueDrawA" xml:space="preserve">
+    <value>ポジション</value>
+  </data>
+  <data name="Entirybox_lblMetavalueDrawB" xml:space="preserve">
+    <value>ポジション</value>
+  </data>
+  <data name="Entirybox_lblMetavalueLoadA" xml:space="preserve">
+    <value>ポジション</value>
+  </data>
+  <data name="Entirybox_lblMetavalueLoadB" xml:space="preserve">
+    <value>ポジション</value>
+  </data>
+  <data name="Entirybox_lblNeighborCamera" xml:space="preserve">
+    <value>ｶﾒﾗ index</value>
+  </data>
+  <data name="Entirybox_lblNeighborFlag" xml:space="preserve">
+    <value>フラグ</value>
+  </data>
+  <data name="Entirybox_lblNeighborLink" xml:space="preserve">
+    <value>リンクタイプ</value>
+  </data>
+  <data name="Entirybox_lblNeighborPosition" xml:space="preserve">
+    <value>ポジション</value>
+  </data>
+  <data name="Entirybox_lblNeighborZone" xml:space="preserve">
+    <value>ｿﾞｰﾝ index</value>
+  </data>
+  <data name="Entirybox_lblPayloadPosition" xml:space="preserve">
+    <value>ポジション</value>
+  </data>
+  <data name="EntityBox_fraAvgDist" xml:space="preserve">
+    <value>ポイントの距離</value>
+  </data>
+  <data name="EntityBox_FraMode" xml:space="preserve">
+    <value>カメラ モード</value>
+  </data>
+  <data name="InputWindow_cmdCancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="InterpolatorForm" xml:space="preserve">
+    <value>パスの補完</value>
+  </data>
+  <data name="InterpolatorForm_cmdCancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="InterpolatorForm_cmdFirst" xml:space="preserve">
+    <value>最初</value>
+  </data>
+  <data name="InterpolatorForm_cmdLast" xml:space="preserve">
+    <value>最後</value>
+  </data>
+  <data name="InterpolatorForm_cmdNext" xml:space="preserve">
+    <value>次へ</value>
+  </data>
+  <data name="InterpolatorForm_cmdOK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="InterpolatorForm_cmdPrev" xml:space="preserve">
+    <value>前へ</value>
+  </data>
+  <data name="InterpolatorForm_fraAmount" xml:space="preserve">
+    <value>数</value>
+  </data>
+  <data name="InterpolatorForm_fraBound" xml:space="preserve">
+    <value>開始/終了位置</value>
+  </data>
+  <data name="InterpolatorForm_fraFunction" xml:space="preserve">
+    <value>進歩関数</value>
+  </data>
+  <data name="InterpolatorForm_fraOrder" xml:space="preserve">
+    <value>オーダー</value>
+  </data>
+  <data name="InterpolatorForm_fraPosition" xml:space="preserve">
+    <value>ポジション</value>
+  </data>
+  <data name="InterpolatorForm_fraTension" xml:space="preserve">
+    <value>テンション</value>
+  </data>
+  <data name="NewEntryForm" xml:space="preserve">
+    <value>新規エントリ</value>
+  </data>
+  <data name="NewEntryForm_fraName" xml:space="preserve">
+    <value>エントリ名</value>
+  </data>
+  <data name="NewEntryForm_fraType" xml:space="preserve">
+    <value>エントリのタイプ</value>
+  </data>
+  <data name="OldMainForm_tbbExtra" xml:space="preserve">
+    <value>ツール</value>
+  </data>
+  <data name="OldMainForm_tbxConvertVAB" xml:space="preserve">
+    <value>VAB を DLS に変換</value>
+  </data>
+  <data name="OldMainForm_tbxConvertVHVB" xml:space="preserve">
+    <value>VH+VB を DLS に変換</value>
+  </data>
+  <data name="OldMainForm_tbxMakeBIN" xml:space="preserve">
+    <value>BIN の作成 (リージョンなし)</value>
+  </data>
+  <data name="OldMainForm_tbxMakeBINEUR" xml:space="preserve">
+    <value>BIN の作成 (PAL)</value>
+  </data>
+  <data name="OldMainForm_tbxMakeBINJAP" xml:space="preserve">
+    <value>BIN の作成 (NTSC-J)</value>
+  </data>
+  <data name="OldMainForm_tbxMakeBINUSA" xml:space="preserve">
+    <value>BIN の作成 (NTSC-U/C)</value>
+  </data>
+  <data name="TextureViewer_groupBox1" xml:space="preserve">
+    <value>カラーモード</value>
+  </data>
+  <data name="TextureViewer_groupBox2" xml:space="preserve">
+    <value>ブレンドモード</value>
+  </data>
+  <data name="TextureViewer_groupBox4" xml:space="preserve">
+    <value>サイズ</value>
+  </data>
+  <data name="TextureViewer_groupBox5" xml:space="preserve">
+    <value>オフセット</value>
+  </data>
+  <data name="CloseNSF" xml:space="preserve">
+    <value>NSFファイルを閉じてもよろしいですか？</value>
+  </data>
+  <data name="Close_ConfirmationPrompt" xml:space="preserve">
+    <value>ファイルを閉じる</value>
+  </data>
+  <data name="PatchNSD1" xml:space="preserve">
+    <value>NSD ファイルを上書きしてもよろしいですか？</value>
+  </data>
+  <data name="PatchNSD2" xml:space="preserve">
+    <value>NSD に従いロードリストを整理しますか？</value>
+  </data>
+  <data name="PatchNSD3" xml:space="preserve">
+    <value>この NSF のチャンク内のエントリはパッチ後の NSD に従い移動される可能性があります。続行しますか？</value>
+  </data>
+  <data name="PatchNSD_Error1" xml:space="preserve">
+    <value>NSD ファイルが見つかりません。ファイルが \"f\" (大小文字問わず)!\n\nFOO.NSF -&gt; FOO.NSD\n\n{0} -&gt; ??? に存在することを確認してください。</value>
+  </data>
+  <data name="PatchNSD_Error2" xml:space="preserve">
+    <value>NSD パッチはこのゲームには対応していません。</value>
+  </data>
+  <data name="PatchNSD_Title1" xml:space="preserve">
+    <value>NSD パッチ</value>
+  </data>
+  <data name="PatchNSD_Title2" xml:space="preserve">
+    <value>ロードリストの整理</value>
+  </data>
+  <data name="SaveNSF" xml:space="preserve">
+    <value>NSF ファイルを上書きしてもよろしいですか？</value>
+  </data>
+  <data name="SaveNSF_Error1" xml:space="preserve">
+    <value>エラーが発生しました。エントリ '{0}' を含むチャンクは64KBを超えています。</value>
+  </data>
+  <data name="SaveNSF_Error2" xml:space="preserve">
+    <value>IOエラー。\n\n</value>
+  </data>
+  <data name="SaveNSF_Error3" xml:space="preserve">
+    <value>不正なアクセスです。\n\n</value>
+  </data>
+  <data name="SaveNSF_Title" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Save_ConfirmationPrompt" xml:space="preserve">
+    <value>保存の確認</value>
+  </data>
+  <data name="ConvertVAB_Error" xml:space="preserve">
+    <value>VB のサイズが有効ではありません</value>
+  </data>
+  <data name="ConvertVHVB_Error" xml:space="preserve">
+    <value>VB のサイズが VH で指定されたものと一致しません</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>完了。</value>
+  </data>
+  <data name="MakeBIN1" xml:space="preserve">
+    <value>選択したドライブまたはフォルダには SYSTEM.CNF または PSX.EXE が含まれていません。 起動可能な PSX CD イメージの作成には少なくともこれらのファイルがが必要です。 それでも続行しますか？</value>
+  </data>
+  <data name="MakeBIN2" xml:space="preserve">
+    <value>リージョンなしの BIN ファイルを作成しました。</value>
+  </data>
+  <data name="MakeBin3" xml:space="preserve">
+    <value>CUE ファイルを作成しました。</value>
+  </data>
+  <data name="MakeBin4" xml:space="preserve">
+    <value>CUE ファイルの作成に失敗しました: {0}</value>
+  </data>
+  <data name="MakeBin5" xml:space="preserve">
+    <value>CUE ファイルは既に存在するため、変更されません。</value>
+  </data>
+  <data name="MakeBin_DRNSF1" xml:space="preserve">
+    <value>選択されたリージョンを適用するためDRNSFを起動しています．．．</value>
+  </data>
+  <data name="MakeBin_DRNSF2" xml:space="preserve">
+    <value>DRNSFがエラーを返しました。リージョンは適用されていません。</value>
+  </data>
+  <data name="MakeBin_DRNSF3" xml:space="preserve">
+    <value>リージョンは正常に適用されました。</value>
+  </data>
+  <data name="MakeBin_DRNSF4" xml:space="preserve">
+    <value>DRNSF exe が見つかりませんでした。CrashEdit と同じディレクトリに配置してください。</value>
+  </data>
+  <data name="MakeBin_DRNSF5" xml:space="preserve">
+    <value>DRNSFの起動に失敗しました。原因: {0}</value>
+  </data>
+  <data name="MakeBIN_Title" xml:space="preserve">
+    <value>BIN の作成</value>
+  </data>
+  <data name="Playtest_Error1" xml:space="preserve">
+    <value>NSF ファイル名 '{0}' は適切ではありません！</value>
+  </data>
+  <data name="Playtest_Error2" xml:space="preserve">
+    <value>NSD ファイルが見つかりません。ファイルが \"f\" (大小文字問わず)!\n\nFOO.NSF -&gt; FOO.NSD\n\n{0} -&gt; ??? に存在することを確認してください。</value>
+  </data>
+  <data name="Playtest_Error3" xml:space="preserve">
+    <value>NSD ファイル '{0}' が存在しません！</value>
+  </data>
+  <data name="Playtest_Error4" xml:space="preserve">
+    <value>exe ファイル (PSX.EXE, SCUS_123.45, SLES_123.45, etc) が見つかりませんでした。</value>
+  </data>
+  <data name="Playtest_Title" xml:space="preserve">
+    <value>プレイテスト</value>
   </data>
 </root>
