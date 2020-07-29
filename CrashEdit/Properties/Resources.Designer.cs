@@ -155,6 +155,15 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (Patch NSD) Always save NSF after NSD patching.
+        /// </summary>
+        internal static string Config_chkPatchNSDSavesNSF {
+            get {
+                return ResourceManager.GetString("Config_chkPatchNSDSavesNSF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to (Crash 3) Used saved animation-model links.
         /// </summary>
         internal static string Config_chkUseAnimLinks {

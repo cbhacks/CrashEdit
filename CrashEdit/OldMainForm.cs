@@ -565,6 +565,10 @@ namespace CrashEdit
                 {
                     SaveNSF(true);
                 }
+                else if (Settings.Default.PatchNSDSavesNSF)
+                {
+                    SaveNSF(false);
+                }
             }
             catch (LoadAbortedException)
             {

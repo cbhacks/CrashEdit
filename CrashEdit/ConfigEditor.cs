@@ -26,18 +26,19 @@ namespace CrashEdit
             chkAnimGrid.Checked = Settings.Default.DisplayAnimGrid;
             numAnimGrid.Value = Settings.Default.AnimGridLen;
             fraLang.Text = Resources.Config_FraLang;
-            fraSize.Text = Properties.Resources.Config_fraSize;
-            lblW.Text = Properties.Resources.Config_lblW;
-            lblH.Text = Properties.Resources.Config_lblH;
-            fraClearCol.Text = Properties.Resources.Config_fraClearCol;
-            fraAnimGrid.Text = Properties.Resources.Config_fraAnimGrid;
-            chkAnimGrid.Text = Properties.Resources.Config_chkAnimGrid;
-            lblAnimGrid.Text = Properties.Resources.Config_lblAnimGrid;
-            chkNormalDisplay.Text = Properties.Resources.Config_chkNormalDisplay;
-            chkCollisionDisplay.Text = Properties.Resources.Config_chkCollisionDisplay;
-            chkDeleteInvalidEntries.Text = Properties.Resources.Config_chkDeleteInvalidEntries;
-            chkUseAnimLinks.Text = Properties.Resources.Config_chkUseAnimLinks;
-            cmdReset.Text = Properties.Resources.Config_cmdReset;
+            fraSize.Text = Resources.Config_fraSize;
+            lblW.Text = Resources.Config_lblW;
+            lblH.Text = Resources.Config_lblH;
+            fraClearCol.Text = Resources.Config_fraClearCol;
+            fraAnimGrid.Text = Resources.Config_fraAnimGrid;
+            chkAnimGrid.Text = Resources.Config_chkAnimGrid;
+            lblAnimGrid.Text = Resources.Config_lblAnimGrid;
+            chkNormalDisplay.Text = Resources.Config_chkNormalDisplay;
+            chkCollisionDisplay.Text = Resources.Config_chkCollisionDisplay;
+            chkDeleteInvalidEntries.Text = Resources.Config_chkDeleteInvalidEntries;
+            chkUseAnimLinks.Text = Resources.Config_chkUseAnimLinks;
+            chkPatchNSDSavesNSF.Text = Resources.Config_chkPatchNSDSavesNSF;
+            cmdReset.Text = Resources.Config_cmdReset;
         }
 
         private void dpdLang_SelectedIndexChanged(object sender, EventArgs e)
@@ -106,6 +107,12 @@ namespace CrashEdit
         private void numAnimGrid_ValueChanged(object sender, EventArgs e)
         {
             Settings.Default.AnimGridLen = (int)numAnimGrid.Value;
+            Settings.Default.Save();
+        }
+
+        private void chkPatchNSDSavesNSF_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.PatchNSDSavesNSF = chkPatchNSDSavesNSF.Checked;
             Settings.Default.Save();
         }
     }

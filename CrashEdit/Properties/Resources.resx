@@ -733,4 +733,7 @@
   <data name="Playtest_Title" xml:space="preserve">
     <value>Playtest</value>
   </data>
+  <data name="Config_chkPatchNSDSavesNSF" xml:space="preserve">
+    <value>(Patch NSD) Always save NSF after NSD patching</value>
+  </data>
 </root>
