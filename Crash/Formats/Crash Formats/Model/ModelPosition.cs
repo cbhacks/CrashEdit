@@ -33,7 +33,6 @@ namespace Crash
 
         public byte[] Save()
         {
-            //ErrorManager.SignalError("ModelPosition cannot be saved.");
             byte[] result = new byte[4];
             result[0] = (byte)((XBits << 6) | (ZBits << 3) | YBits);
             result[1] = (byte)((Y << 1) | (XBits >> 2));
