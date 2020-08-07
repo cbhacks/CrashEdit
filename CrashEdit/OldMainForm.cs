@@ -653,7 +653,7 @@ namespace CrashEdit
             var indexdata = nsf.MakeNSDIndex();
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
-            PatchNSDGoolMap(nsd.GOOLMap, nsf);
+            PatchNSDGoolMap(nsd.GOOLMap, nsf, ignore_warnings);
 
             // patch object entity count
             nsd.EntityCount = 0;
@@ -724,7 +724,7 @@ namespace CrashEdit
             var indexdata = nsf.MakeNSDIndex();
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
-            PatchNSDGoolMap(nsd.GOOLMap, nsf);
+            PatchNSDGoolMap(nsd.GOOLMap, nsf, ignore_warnings);
 
             // patch object entity count
             nsd.EntityCount = 0;
@@ -795,7 +795,7 @@ namespace CrashEdit
             var indexdata = nsf.MakeNSDIndex();
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
-            PatchNSDGoolMap(nsd.GOOLMap, nsf);
+            PatchNSDGoolMap(nsd.GOOLMap, nsf, ignore_warnings);
             if (ignore_warnings ? true : MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
@@ -814,7 +814,7 @@ namespace CrashEdit
             }
         }
 
-        public void PatchNSDGoolMap(int[] map, NSF nsf)
+        public void PatchNSDGoolMap(int[] map, NSF nsf, bool ignore_warnings)
         {
             for (int i = 0; i < map.Length; ++i)
             {
@@ -830,7 +830,19 @@ namespace CrashEdit
                         {
                             if (gool.Format == 1)
                             {
-                                map[BitConv.FromInt32(gool.Header, 0)] = gool.EID;
+                                int gool_id = BitConv.FromInt32(gool.Header, 0);
+                                if (gool_id >= map.Length)
+                                {
+                                    if (!ignore_warnings) MessageBox.Show(string.Format("GOOL entry {0} has invalid object typeID {1} (cannot be larger than {2}).", gool.EName, gool_id, map.Length - 1), Resources.Save_ConfirmationPrompt, MessageBoxButtons.OK);
+                                }
+                                else if (gool_id < 0)
+                                {
+                                    if (!ignore_warnings) MessageBox.Show(string.Format("GOOL entry {0} has invalid object typeID {1} (cannot be negative).", gool.EName, gool_id), Resources.Save_ConfirmationPrompt, MessageBoxButtons.OK);
+                                }
+                                else
+                                {
+                                    map[BitConv.FromInt32(gool.Header, 0)] = gool.EID;
+                                }
                             }
                         }
                     }
