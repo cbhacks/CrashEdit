@@ -59,17 +59,20 @@ namespace CrashEdit
         [STAThread]
         internal static void Main(string[] args)
         {
+            Properties.Settings.Default.Upgrade();
             try
             {
                 Properties.Resources.Culture = Crash.UI.Properties.Resources.Culture = new System.Globalization.CultureInfo(Properties.Settings.Default.Language);
             }
             catch {
-                Properties.Settings.Default.Reset();
+                Properties.Settings.Default.Language = "en";
             }
             if (Properties.Settings.Default.DefaultFormW < 640)
                 Properties.Settings.Default.DefaultFormW = 640;
             if (Properties.Settings.Default.DefaultFormH < 480)
                 Properties.Settings.Default.DefaultFormH = 480;
+            Properties.Settings.Default.Save();
+            Properties.Settings.Default.Reload();
             LoadC3AnimLinks();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

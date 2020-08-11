@@ -21,7 +21,7 @@ namespace CrashEdit
             chkNormalDisplay.Checked = Settings.Default.DisplayNormals;
             chkCollisionDisplay.Checked = Settings.Default.DisplayFrameCollision;
             chkUseAnimLinks.Checked = Settings.Default.UseAnimLinks;
-            picClearCol.BackColor = Settings.Default.ClearColor;
+            cdlClearCol.Color = picClearCol.BackColor = System.Drawing.Color.FromArgb(Settings.Default.ClearColorRGB);
             chkDeleteInvalidEntries.Checked = Settings.Default.DeleteInvalidEntries;
             chkAnimGrid.Checked = Settings.Default.DisplayAnimGrid;
             numAnimGrid.Value = Settings.Default.AnimGridLen;
@@ -45,6 +45,7 @@ namespace CrashEdit
         {
             Settings.Default.Language = Languages[dpdLang.SelectedIndex];
             Settings.Default.Save();
+            Settings.Default.Reload();
         }
 
         private void cmdReset_Click(object sender, EventArgs e)
@@ -57,38 +58,45 @@ namespace CrashEdit
         {
             Settings.Default.DefaultFormW = (int)numW.Value;
             Settings.Default.Save();
+            Settings.Default.Reload();
         }
 
         private void numH_ValueChanged(object sender, EventArgs e)
         {
             Settings.Default.DefaultFormH = (int)numH.Value;
             Settings.Default.Save();
+            Settings.Default.Reload();
         }
 
         private void chkNormalDisplay_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Default.DisplayNormals = chkNormalDisplay.Checked;
             Settings.Default.Save();
+            Settings.Default.Reload();
         }
 
         private void chkCollisionDisplay_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Default.DisplayFrameCollision = chkCollisionDisplay.Checked;
             Settings.Default.Save();
+            Settings.Default.Reload();
         }
 
         private void chkUseAnimLinks_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Default.UseAnimLinks = chkUseAnimLinks.Checked;
             Settings.Default.Save();
+            Settings.Default.Reload();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             if (cdlClearCol.ShowDialog(this) == DialogResult.OK)
             {
-                picClearCol.BackColor = Settings.Default.ClearColor = cdlClearCol.Color;
+                Settings.Default.ClearColorRGB = cdlClearCol.Color.ToArgb();
+                picClearCol.BackColor = System.Drawing.Color.FromArgb(Settings.Default.ClearColorRGB);
                 Settings.Default.Save();
+                Settings.Default.Reload();
             }
         }
 
@@ -96,24 +104,28 @@ namespace CrashEdit
         {
             Settings.Default.DeleteInvalidEntries = chkDeleteInvalidEntries.Checked;
             Settings.Default.Save();
+            Settings.Default.Reload();
         }
 
         private void chkAnimGrid_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Default.DisplayAnimGrid = chkAnimGrid.Checked;
             Settings.Default.Save();
+            Settings.Default.Reload();
         }
 
         private void numAnimGrid_ValueChanged(object sender, EventArgs e)
         {
             Settings.Default.AnimGridLen = (int)numAnimGrid.Value;
             Settings.Default.Save();
+            Settings.Default.Reload();
         }
 
         private void chkPatchNSDSavesNSF_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Default.PatchNSDSavesNSF = chkPatchNSDSavesNSF.Checked;
             Settings.Default.Save();
+            Settings.Default.Reload();
         }
     }
 }

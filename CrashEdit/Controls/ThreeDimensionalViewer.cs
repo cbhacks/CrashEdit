@@ -299,7 +299,7 @@ namespace CrashEdit
             lastimage = null;
             MakeCurrent();
             GL.Viewport(Location,Size);
-            GL.ClearColor(Settings.Default.ClearColor);
+            GL.ClearColor(Color.FromArgb(Settings.Default.ClearColorRGB));
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.MatrixMode(MatrixMode.Projection);
             var proj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver3,(float)Width/Height,NearPlane*ScaleFactor,FarPlane*ScaleFactor);

@@ -97,18 +97,6 @@ namespace CrashEdit.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("6, 6, 6")]
-        public global::System.Drawing.Color ClearColor {
-            get {
-                return ((global::System.Drawing.Color)(this["ClearColor"]));
-            }
-            set {
-                this["ClearColor"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool DeleteInvalidEntries {
             get {
@@ -152,6 +140,18 @@ namespace CrashEdit.Properties {
             }
             set {
                 this["PatchNSDSavesNSF"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-16382458")]
+        public int ClearColorRGB {
+            get {
+                return ((int)(this["ClearColorRGB"]));
+            }
+            set {
+                this["ClearColorRGB"] = value;
             }
         }
     }
