@@ -59,7 +59,12 @@ namespace CrashEdit
         [STAThread]
         internal static void Main(string[] args)
         {
-            Properties.Settings.Default.Upgrade();
+            if (Properties.Settings.Default.UpgradeSettings)
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.UpgradeSettings = false;
+                Properties.Settings.Default.Save();
+            }
             try
             {
                 Properties.Resources.Culture = Crash.UI.Properties.Resources.Culture = new System.Globalization.CultureInfo(Properties.Settings.Default.Language);
@@ -72,7 +77,6 @@ namespace CrashEdit
             if (Properties.Settings.Default.DefaultFormH < 480)
                 Properties.Settings.Default.DefaultFormH = 480;
             Properties.Settings.Default.Save();
-            Properties.Settings.Default.Reload();
             LoadC3AnimLinks();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

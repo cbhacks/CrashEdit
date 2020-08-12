@@ -35,5 +35,8 @@
     <Setting Name="ClearColorRGB" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">-16382458</Value>
     </Setting>
+    <Setting Name="UpgradeSettings" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
