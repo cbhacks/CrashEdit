@@ -454,91 +454,91 @@
   <data name="Crash3AnimationSelector_Desc" xml:space="preserve">
     <value>Type in a Model (or Compressed Model) name and press Enter.</value>
   </data>
-  <data name="Entirybox_cmdClearAllVictims" xml:space="preserve">
+  <data name="EntityBox_cmdClearAllVictims" xml:space="preserve">
     <value>Clear All</value>
   </data>
-  <data name="Entirybox_cmdLoadListVerify" xml:space="preserve">
+  <data name="EntityBox_cmdLoadListVerify" xml:space="preserve">
     <value>Verify List Integrity</value>
   </data>
-  <data name="Entirybox_cmdPayload" xml:space="preserve">
+  <data name="EntityBox_cmdPayload" xml:space="preserve">
     <value>Check Payload</value>
   </data>
-  <data name="Entirybox_fraCameraIndex" xml:space="preserve">
+  <data name="EntityBox_fraCameraIndex" xml:space="preserve">
     <value>Camera Index</value>
   </data>
-  <data name="Entirybox_fraCameraSubIndex" xml:space="preserve">
+  <data name="EntityBox_fraCameraSubIndex" xml:space="preserve">
     <value>Camera SubIndex</value>
   </data>
-  <data name="Entirybox_fraDrawListA" xml:space="preserve">
+  <data name="EntityBox_fraDrawListA" xml:space="preserve">
     <value>Draw List A</value>
   </data>
-  <data name="Entirybox_fraDrawListB" xml:space="preserve">
+  <data name="EntityBox_fraDrawListB" xml:space="preserve">
     <value>Draw List B</value>
   </data>
-  <data name="Entirybox_fraEIDA" xml:space="preserve">
+  <data name="EntityBox_fraEIDA" xml:space="preserve">
     <value>Entries</value>
   </data>
-  <data name="Entirybox_fraEIDB" xml:space="preserve">
+  <data name="EntityBox_fraEIDB" xml:space="preserve">
     <value>Entries</value>
   </data>
-  <data name="Entirybox_fraEntityA" xml:space="preserve">
+  <data name="EntityBox_fraEntityA" xml:space="preserve">
     <value>Entities</value>
   </data>
-  <data name="Entirybox_fraEntityB" xml:space="preserve">
+  <data name="EntityBox_fraEntityB" xml:space="preserve">
     <value>Entities</value>
   </data>
-  <data name="Entirybox_fraFOV" xml:space="preserve">
+  <data name="EntityBox_fraFOV" xml:space="preserve">
     <value>Field-of-View Timeline</value>
   </data>
-  <data name="Entirybox_fraFOVFrame" xml:space="preserve">
+  <data name="EntityBox_fraFOVFrame" xml:space="preserve">
     <value>Field-of-View</value>
   </data>
-  <data name="Entirybox_fraLoadListA" xml:space="preserve">
+  <data name="EntityBox_fraLoadListA" xml:space="preserve">
     <value>Load List A</value>
   </data>
-  <data name="Entirybox_fraLoadListB" xml:space="preserve">
+  <data name="EntityBox_fraLoadListB" xml:space="preserve">
     <value>Load List B</value>
   </data>
-  <data name="Entirybox_fraLoadListPayload" xml:space="preserve">
+  <data name="EntityBox_fraLoadListPayload" xml:space="preserve">
     <value>Verify Load Lists</value>
   </data>
-  <data name="Entirybox_fraNeighbor" xml:space="preserve">
+  <data name="EntityBox_fraNeighbor" xml:space="preserve">
     <value>Neighbors</value>
   </data>
-  <data name="Entirybox_fraNeighborSetting" xml:space="preserve">
+  <data name="EntityBox_fraNeighborSetting" xml:space="preserve">
     <value>Neighbor</value>
   </data>
-  <data name="Entirybox_lblFOVPosition" xml:space="preserve">
+  <data name="EntityBox_lblFOVPosition" xml:space="preserve">
     <value>Position</value>
   </data>
-  <data name="Entirybox_lblMetavalueDrawA" xml:space="preserve">
+  <data name="EntityBox_lblMetavalueDrawA" xml:space="preserve">
     <value>Position</value>
   </data>
-  <data name="Entirybox_lblMetavalueDrawB" xml:space="preserve">
+  <data name="EntityBox_lblMetavalueDrawB" xml:space="preserve">
     <value>Position</value>
   </data>
-  <data name="Entirybox_lblMetavalueLoadA" xml:space="preserve">
+  <data name="EntityBox_lblMetavalueLoadA" xml:space="preserve">
     <value>Position</value>
   </data>
-  <data name="Entirybox_lblMetavalueLoadB" xml:space="preserve">
+  <data name="EntityBox_lblMetavalueLoadB" xml:space="preserve">
     <value>Position</value>
   </data>
-  <data name="Entirybox_lblNeighborCamera" xml:space="preserve">
+  <data name="EntityBox_lblNeighborCamera" xml:space="preserve">
     <value>Cam. Index</value>
   </data>
-  <data name="Entirybox_lblNeighborFlag" xml:space="preserve">
+  <data name="EntityBox_lblNeighborFlag" xml:space="preserve">
     <value>Flag</value>
   </data>
-  <data name="Entirybox_lblNeighborLink" xml:space="preserve">
+  <data name="EntityBox_lblNeighborLink" xml:space="preserve">
     <value>Link Type</value>
   </data>
-  <data name="Entirybox_lblNeighborPosition" xml:space="preserve">
+  <data name="EntityBox_lblNeighborPosition" xml:space="preserve">
     <value>Position</value>
   </data>
-  <data name="Entirybox_lblNeighborZone" xml:space="preserve">
+  <data name="EntityBox_lblNeighborZone" xml:space="preserve">
     <value>Zone Index</value>
   </data>
-  <data name="Entirybox_lblPayloadPosition" xml:space="preserve">
+  <data name="EntityBox_lblPayloadPosition" xml:space="preserve">
     <value>Position</value>
   </data>
   <data name="EntityBox_fraAvgDist" xml:space="preserve">

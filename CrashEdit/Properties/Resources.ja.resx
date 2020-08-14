@@ -454,91 +454,91 @@
   <data name="Crash3AnimationSelector_Desc" xml:space="preserve">
     <value>モデル  (または圧縮モデル) の名前を入力してエンターキーを押してください。</value>
   </data>
-  <data name="Entirybox_cmdClearAllVictims" xml:space="preserve">
+  <data name="EntityBox_cmdClearAllVictims" xml:space="preserve">
     <value>すべて削除</value>
   </data>
-  <data name="Entirybox_cmdLoadListVerify" xml:space="preserve">
+  <data name="EntityBox_cmdLoadListVerify" xml:space="preserve">
     <value>検証</value>
   </data>
-  <data name="Entirybox_cmdPayload" xml:space="preserve">
+  <data name="EntityBox_cmdPayload" xml:space="preserve">
     <value>ﾍﾟｲﾛｰﾄﾞをﾁｪｯｸ</value>
   </data>
-  <data name="Entirybox_fraCameraIndex" xml:space="preserve">
+  <data name="EntityBox_fraCameraIndex" xml:space="preserve">
     <value>カメラ インデックス</value>
   </data>
-  <data name="Entirybox_fraCameraSubIndex" xml:space="preserve">
+  <data name="EntityBox_fraCameraSubIndex" xml:space="preserve">
     <value>カメラ サブインデックス</value>
   </data>
-  <data name="Entirybox_fraDrawListA" xml:space="preserve">
+  <data name="EntityBox_fraDrawListA" xml:space="preserve">
     <value>描画リスト A</value>
   </data>
-  <data name="Entirybox_fraDrawListB" xml:space="preserve">
+  <data name="EntityBox_fraDrawListB" xml:space="preserve">
     <value>描画リスト B</value>
   </data>
-  <data name="Entirybox_fraEIDA" xml:space="preserve">
+  <data name="EntityBox_fraEIDA" xml:space="preserve">
     <value>エントリ</value>
   </data>
-  <data name="Entirybox_fraEIDB" xml:space="preserve">
+  <data name="EntityBox_fraEIDB" xml:space="preserve">
     <value>エントリ</value>
   </data>
-  <data name="Entirybox_fraEntityA" xml:space="preserve">
+  <data name="EntityBox_fraEntityA" xml:space="preserve">
     <value>エンティティ</value>
   </data>
-  <data name="Entirybox_fraEntityB" xml:space="preserve">
+  <data name="EntityBox_fraEntityB" xml:space="preserve">
     <value>エンティティ</value>
   </data>
-  <data name="Entirybox_fraFOV" xml:space="preserve">
+  <data name="EntityBox_fraFOV" xml:space="preserve">
     <value>FOVの設定</value>
   </data>
-  <data name="Entirybox_fraFOVFrame" xml:space="preserve">
+  <data name="EntityBox_fraFOVFrame" xml:space="preserve">
     <value>FOV</value>
   </data>
-  <data name="Entirybox_fraLoadListA" xml:space="preserve">
+  <data name="EntityBox_fraLoadListA" xml:space="preserve">
     <value>ロードリスト A</value>
   </data>
-  <data name="Entirybox_fraLoadListB" xml:space="preserve">
+  <data name="EntityBox_fraLoadListB" xml:space="preserve">
     <value>ロードリスト B</value>
   </data>
-  <data name="Entirybox_fraLoadListPayload" xml:space="preserve">
+  <data name="EntityBox_fraLoadListPayload" xml:space="preserve">
     <value>ロードリストの整合性チェック</value>
   </data>
-  <data name="Entirybox_fraNeighbor" xml:space="preserve">
+  <data name="EntityBox_fraNeighbor" xml:space="preserve">
     <value>隣接の設定</value>
   </data>
-  <data name="Entirybox_fraNeighborSetting" xml:space="preserve">
+  <data name="EntityBox_fraNeighborSetting" xml:space="preserve">
     <value>隣接</value>
   </data>
-  <data name="Entirybox_lblFOVPosition" xml:space="preserve">
+  <data name="EntityBox_lblFOVPosition" xml:space="preserve">
     <value>ポジション</value>
   </data>
-  <data name="Entirybox_lblMetavalueDrawA" xml:space="preserve">
+  <data name="EntityBox_lblMetavalueDrawA" xml:space="preserve">
     <value>ポジション</value>
   </data>
-  <data name="Entirybox_lblMetavalueDrawB" xml:space="preserve">
+  <data name="EntityBox_lblMetavalueDrawB" xml:space="preserve">
     <value>ポジション</value>
   </data>
-  <data name="Entirybox_lblMetavalueLoadA" xml:space="preserve">
+  <data name="EntityBox_lblMetavalueLoadA" xml:space="preserve">
     <value>ポジション</value>
   </data>
-  <data name="Entirybox_lblMetavalueLoadB" xml:space="preserve">
+  <data name="EntityBox_lblMetavalueLoadB" xml:space="preserve">
     <value>ポジション</value>
   </data>
-  <data name="Entirybox_lblNeighborCamera" xml:space="preserve">
+  <data name="EntityBox_lblNeighborCamera" xml:space="preserve">
     <value>ｶﾒﾗ index</value>
   </data>
-  <data name="Entirybox_lblNeighborFlag" xml:space="preserve">
+  <data name="EntityBox_lblNeighborFlag" xml:space="preserve">
     <value>フラグ</value>
   </data>
-  <data name="Entirybox_lblNeighborLink" xml:space="preserve">
+  <data name="EntityBox_lblNeighborLink" xml:space="preserve">
     <value>リンクタイプ</value>
   </data>
-  <data name="Entirybox_lblNeighborPosition" xml:space="preserve">
+  <data name="EntityBox_lblNeighborPosition" xml:space="preserve">
     <value>ポジション</value>
   </data>
-  <data name="Entirybox_lblNeighborZone" xml:space="preserve">
+  <data name="EntityBox_lblNeighborZone" xml:space="preserve">
     <value>ｿﾞｰﾝ index</value>
   </data>
-  <data name="Entirybox_lblPayloadPosition" xml:space="preserve">
+  <data name="EntityBox_lblPayloadPosition" xml:space="preserve">
     <value>ポジション</value>
   </data>
   <data name="EntityBox_fraAvgDist" xml:space="preserve">

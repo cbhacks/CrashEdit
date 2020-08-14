@@ -718,7 +718,7 @@ namespace Crash.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Process Entry.
+        ///   Looks up a localized string similar to Process Entry &quot;{0}&quot;.
         /// </summary>
         public static string UnprocessedEntryController_AcProcess {
             get {

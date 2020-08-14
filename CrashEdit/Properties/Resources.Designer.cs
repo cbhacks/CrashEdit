@@ -281,267 +281,6 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clear All.
-        /// </summary>
-        internal static string Entirybox_cmdClearAllVictims {
-            get {
-                return ResourceManager.GetString("Entirybox_cmdClearAllVictims", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Verify List Integrity.
-        /// </summary>
-        internal static string Entirybox_cmdLoadListVerify {
-            get {
-                return ResourceManager.GetString("Entirybox_cmdLoadListVerify", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Check Payload.
-        /// </summary>
-        internal static string Entirybox_cmdPayload {
-            get {
-                return ResourceManager.GetString("Entirybox_cmdPayload", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Camera Index.
-        /// </summary>
-        internal static string Entirybox_fraCameraIndex {
-            get {
-                return ResourceManager.GetString("Entirybox_fraCameraIndex", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Camera SubIndex.
-        /// </summary>
-        internal static string Entirybox_fraCameraSubIndex {
-            get {
-                return ResourceManager.GetString("Entirybox_fraCameraSubIndex", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Draw List A.
-        /// </summary>
-        internal static string Entirybox_fraDrawListA {
-            get {
-                return ResourceManager.GetString("Entirybox_fraDrawListA", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Draw List B.
-        /// </summary>
-        internal static string Entirybox_fraDrawListB {
-            get {
-                return ResourceManager.GetString("Entirybox_fraDrawListB", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Entries.
-        /// </summary>
-        internal static string Entirybox_fraEIDA {
-            get {
-                return ResourceManager.GetString("Entirybox_fraEIDA", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Entries.
-        /// </summary>
-        internal static string Entirybox_fraEIDB {
-            get {
-                return ResourceManager.GetString("Entirybox_fraEIDB", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Entities.
-        /// </summary>
-        internal static string Entirybox_fraEntityA {
-            get {
-                return ResourceManager.GetString("Entirybox_fraEntityA", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Entities.
-        /// </summary>
-        internal static string Entirybox_fraEntityB {
-            get {
-                return ResourceManager.GetString("Entirybox_fraEntityB", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Field-of-View Timeline.
-        /// </summary>
-        internal static string Entirybox_fraFOV {
-            get {
-                return ResourceManager.GetString("Entirybox_fraFOV", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Field-of-View.
-        /// </summary>
-        internal static string Entirybox_fraFOVFrame {
-            get {
-                return ResourceManager.GetString("Entirybox_fraFOVFrame", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Load List A.
-        /// </summary>
-        internal static string Entirybox_fraLoadListA {
-            get {
-                return ResourceManager.GetString("Entirybox_fraLoadListA", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Load List B.
-        /// </summary>
-        internal static string Entirybox_fraLoadListB {
-            get {
-                return ResourceManager.GetString("Entirybox_fraLoadListB", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Verify Load Lists.
-        /// </summary>
-        internal static string Entirybox_fraLoadListPayload {
-            get {
-                return ResourceManager.GetString("Entirybox_fraLoadListPayload", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Neighbors.
-        /// </summary>
-        internal static string Entirybox_fraNeighbor {
-            get {
-                return ResourceManager.GetString("Entirybox_fraNeighbor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Neighbor.
-        /// </summary>
-        internal static string Entirybox_fraNeighborSetting {
-            get {
-                return ResourceManager.GetString("Entirybox_fraNeighborSetting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Position.
-        /// </summary>
-        internal static string Entirybox_lblFOVPosition {
-            get {
-                return ResourceManager.GetString("Entirybox_lblFOVPosition", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Position.
-        /// </summary>
-        internal static string Entirybox_lblMetavalueDrawA {
-            get {
-                return ResourceManager.GetString("Entirybox_lblMetavalueDrawA", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Position.
-        /// </summary>
-        internal static string Entirybox_lblMetavalueDrawB {
-            get {
-                return ResourceManager.GetString("Entirybox_lblMetavalueDrawB", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Position.
-        /// </summary>
-        internal static string Entirybox_lblMetavalueLoadA {
-            get {
-                return ResourceManager.GetString("Entirybox_lblMetavalueLoadA", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Position.
-        /// </summary>
-        internal static string Entirybox_lblMetavalueLoadB {
-            get {
-                return ResourceManager.GetString("Entirybox_lblMetavalueLoadB", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cam. Index.
-        /// </summary>
-        internal static string Entirybox_lblNeighborCamera {
-            get {
-                return ResourceManager.GetString("Entirybox_lblNeighborCamera", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Flag.
-        /// </summary>
-        internal static string Entirybox_lblNeighborFlag {
-            get {
-                return ResourceManager.GetString("Entirybox_lblNeighborFlag", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Link Type.
-        /// </summary>
-        internal static string Entirybox_lblNeighborLink {
-            get {
-                return ResourceManager.GetString("Entirybox_lblNeighborLink", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Position.
-        /// </summary>
-        internal static string Entirybox_lblNeighborPosition {
-            get {
-                return ResourceManager.GetString("Entirybox_lblNeighborPosition", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Zone Index.
-        /// </summary>
-        internal static string Entirybox_lblNeighborZone {
-            get {
-                return ResourceManager.GetString("Entirybox_lblNeighborZone", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Position.
-        /// </summary>
-        internal static string Entirybox_lblPayloadPosition {
-            get {
-                return ResourceManager.GetString("Entirybox_lblPayloadPosition", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Enabled (Bonus).
         /// </summary>
         internal static string EntityBox_ChkBonusBoxCount {
@@ -587,6 +326,15 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear All.
+        /// </summary>
+        internal static string EntityBox_cmdClearAllVictims {
+            get {
+                return ResourceManager.GetString("EntityBox_cmdClearAllVictims", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Insert.
         /// </summary>
         internal static string EntityBox_CmdInsert {
@@ -605,11 +353,29 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Verify List Integrity.
+        /// </summary>
+        internal static string EntityBox_cmdLoadListVerify {
+            get {
+                return ResourceManager.GetString("EntityBox_cmdLoadListVerify", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Next.
         /// </summary>
         internal static string EntityBox_CmdNext {
             get {
                 return ResourceManager.GetString("EntityBox_CmdNext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check Payload.
+        /// </summary>
+        internal static string EntityBox_cmdPayload {
+            get {
+                return ResourceManager.GetString("EntityBox_cmdPayload", resourceCulture);
             }
         }
         
@@ -650,6 +416,24 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Camera Index.
+        /// </summary>
+        internal static string EntityBox_fraCameraIndex {
+            get {
+                return ResourceManager.GetString("EntityBox_fraCameraIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Camera SubIndex.
+        /// </summary>
+        internal static string EntityBox_fraCameraSubIndex {
+            get {
+                return ResourceManager.GetString("EntityBox_fraCameraSubIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DDA Section.
         /// </summary>
         internal static string EntityBox_FraDDASection {
@@ -668,11 +452,110 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Draw List A.
+        /// </summary>
+        internal static string EntityBox_fraDrawListA {
+            get {
+                return ResourceManager.GetString("EntityBox_fraDrawListA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Draw List B.
+        /// </summary>
+        internal static string EntityBox_fraDrawListB {
+            get {
+                return ResourceManager.GetString("EntityBox_fraDrawListB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entries.
+        /// </summary>
+        internal static string EntityBox_fraEIDA {
+            get {
+                return ResourceManager.GetString("EntityBox_fraEIDA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entries.
+        /// </summary>
+        internal static string EntityBox_fraEIDB {
+            get {
+                return ResourceManager.GetString("EntityBox_fraEIDB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entities.
+        /// </summary>
+        internal static string EntityBox_fraEntityA {
+            get {
+                return ResourceManager.GetString("EntityBox_fraEntityA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entities.
+        /// </summary>
+        internal static string EntityBox_fraEntityB {
+            get {
+                return ResourceManager.GetString("EntityBox_fraEntityB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field-of-View Timeline.
+        /// </summary>
+        internal static string EntityBox_fraFOV {
+            get {
+                return ResourceManager.GetString("EntityBox_fraFOV", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field-of-View.
+        /// </summary>
+        internal static string EntityBox_fraFOVFrame {
+            get {
+                return ResourceManager.GetString("EntityBox_fraFOVFrame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ID.
         /// </summary>
         internal static string EntityBox_FraID {
             get {
                 return ResourceManager.GetString("EntityBox_FraID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load List A.
+        /// </summary>
+        internal static string EntityBox_fraLoadListA {
+            get {
+                return ResourceManager.GetString("EntityBox_fraLoadListA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load List B.
+        /// </summary>
+        internal static string EntityBox_fraLoadListB {
+            get {
+                return ResourceManager.GetString("EntityBox_fraLoadListB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verify Load Lists.
+        /// </summary>
+        internal static string EntityBox_fraLoadListPayload {
+            get {
+                return ResourceManager.GetString("EntityBox_fraLoadListPayload", resourceCulture);
             }
         }
         
@@ -691,6 +574,24 @@ namespace CrashEdit.Properties {
         internal static string EntityBox_FraName {
             get {
                 return ResourceManager.GetString("EntityBox_FraName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Neighbors.
+        /// </summary>
+        internal static string EntityBox_fraNeighbor {
+            get {
+                return ResourceManager.GetString("EntityBox_fraNeighbor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Neighbor.
+        /// </summary>
+        internal static string EntityBox_fraNeighborSetting {
+            get {
+                return ResourceManager.GetString("EntityBox_fraNeighborSetting", resourceCulture);
             }
         }
         
@@ -781,6 +682,105 @@ namespace CrashEdit.Properties {
         internal static string EntityBox_FraZMod {
             get {
                 return ResourceManager.GetString("EntityBox_FraZMod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        internal static string EntityBox_lblFOVPosition {
+            get {
+                return ResourceManager.GetString("EntityBox_lblFOVPosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        internal static string EntityBox_lblMetavalueDrawA {
+            get {
+                return ResourceManager.GetString("EntityBox_lblMetavalueDrawA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        internal static string EntityBox_lblMetavalueDrawB {
+            get {
+                return ResourceManager.GetString("EntityBox_lblMetavalueDrawB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        internal static string EntityBox_lblMetavalueLoadA {
+            get {
+                return ResourceManager.GetString("EntityBox_lblMetavalueLoadA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        internal static string EntityBox_lblMetavalueLoadB {
+            get {
+                return ResourceManager.GetString("EntityBox_lblMetavalueLoadB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cam. Index.
+        /// </summary>
+        internal static string EntityBox_lblNeighborCamera {
+            get {
+                return ResourceManager.GetString("EntityBox_lblNeighborCamera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flag.
+        /// </summary>
+        internal static string EntityBox_lblNeighborFlag {
+            get {
+                return ResourceManager.GetString("EntityBox_lblNeighborFlag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Link Type.
+        /// </summary>
+        internal static string EntityBox_lblNeighborLink {
+            get {
+                return ResourceManager.GetString("EntityBox_lblNeighborLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        internal static string EntityBox_lblNeighborPosition {
+            get {
+                return ResourceManager.GetString("EntityBox_lblNeighborPosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zone Index.
+        /// </summary>
+        internal static string EntityBox_lblNeighborZone {
+            get {
+                return ResourceManager.GetString("EntityBox_lblNeighborZone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        internal static string EntityBox_lblPayloadPosition {
+            get {
+                return ResourceManager.GetString("EntityBox_lblPayloadPosition", resourceCulture);
             }
         }
         

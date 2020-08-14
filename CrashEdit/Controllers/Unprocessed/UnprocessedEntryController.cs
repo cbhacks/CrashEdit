@@ -7,7 +7,7 @@ namespace CrashEdit
         public UnprocessedEntryController(EntryChunkController entrychunkcontroller,UnprocessedEntry unprocessedentry) : base(entrychunkcontroller,unprocessedentry)
         {
             UnprocessedEntry = unprocessedentry;
-            AddMenu(Crash.UI.Properties.Resources.UnprocessedEntryController_AcProcess,Menu_Process_Entry);
+            AddMenu(string.Format(Crash.UI.Properties.Resources.UnprocessedEntryController_AcProcess,UnprocessedEntry.EName),Menu_Process_Entry);
             InvalidateNode();
             InvalidateNodeImage();
         }

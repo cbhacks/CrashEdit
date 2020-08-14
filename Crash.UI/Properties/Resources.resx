@@ -346,7 +346,7 @@
     <value>Rename Chunk</value>
   </data>
   <data name="UnprocessedEntryController_AcProcess" xml:space="preserve">
-    <value>Process Entry</value>
+    <value>Process Entry "{0}"</value>
   </data>
   <data name="ZoneEntryController_AcAddEntity" xml:space="preserve">
     <value>Add Entity</value>
