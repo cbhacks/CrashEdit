@@ -120,7 +120,12 @@ namespace Crash
         public IList<GOOLStateDescriptor> StateDescriptors => statedescriptors;
         public byte[] Anims;
 
+        public int ID => BitConv.FromInt32(Header,0);
+        public int Category => BitConv.FromInt32(Header,4);
         public int Format => BitConv.FromInt32(Header,8);
+        public int StackStart => BitConv.FromInt32(Header,12);
+        public int EventCount => BitConv.FromInt32(Header,16);
+        public int EntryCount => BitConv.FromInt32(Header,20);
 
         public IList<GOOLInstruction> Instructions => instructions;
 

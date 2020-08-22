@@ -13,18 +13,17 @@ namespace CrashEdit
             {
                 Dock = DockStyle.Fill
             };
-            int interruptcount = BitConv.FromInt32(goolentry.Header,16);
-            lstCode.Items.Add($"Type: {BitConv.FromInt32(goolentry.Header,0)}");
-            lstCode.Items.Add($"Category: {BitConv.FromInt32(goolentry.Header,4) / 0x100}");
+            lstCode.Items.Add($"Type: {goolentry.ID}");
+            lstCode.Items.Add($"Category: {goolentry.Category / 0x100}");
             lstCode.Items.Add($"Format: {goolentry.Format}");
-            lstCode.Items.Add(string.Format("Stack Start: {0} ({1})",(ObjectFields)BitConv.FromInt32(goolentry.Header,12),(BitConv.FromInt32(goolentry.Header,12)*4+GOOLInterpreter.GetProcessOff(goolentry.Version)).TransformedString()));
-            lstCode.Items.Add($"Interrupt Count: {interruptcount}");
-            lstCode.Items.Add($"unknown: {BitConv.FromInt32(goolentry.Header,20)}");
-            if (BitConv.FromInt32(goolentry.Header, 8) == 1)
+            lstCode.Items.Add(string.Format("Stack Start: {0} ({1})",(ObjectFields)goolentry.StackStart,(goolentry.StackStart*4+GOOLInterpreter.GetProcessOff(goolentry.Version)).TransformedString()));
+            lstCode.Items.Add($"Interrupt Count: {goolentry.EventCount}");
+            lstCode.Items.Add($"Entry Count: {goolentry.EntryCount}");
+            if (goolentry.Format == 1)
             {
                 lstCode.Items.Add("");
                 bool addedinterrupts = false;
-                for (int i = 0; i < interruptcount; ++i)
+                for (int i = 0; i < goolentry.EventCount; ++i)
                 {
                     if (goolentry.StateMap[i] == 255)
                         continue;
@@ -42,11 +41,11 @@ namespace CrashEdit
                     }
                 }
 
-                lstCode.Items.Add($"Available Subtypes: {goolentry.StateMap.Length - interruptcount}");
-                for (int i = interruptcount; i < goolentry.StateMap.Length; ++i)
+                lstCode.Items.Add($"Available Subtypes: {goolentry.StateMap.Length - goolentry.EventCount}");
+                for (int i = goolentry.EventCount; i < goolentry.StateMap.Length; ++i)
                 {
-                    if (i > interruptcount && i+1 == goolentry.StateMap.Length && goolentry.StateMap[i] == 0) continue;
-                    lstCode.Items.Add($"\tSubtype {i - interruptcount}: {(goolentry.StateMap[i] == 255 ? "invalid" : $"State_{goolentry.StateMap[i]}")}");
+                    if (i > goolentry.EventCount && i+1 == goolentry.StateMap.Length && goolentry.StateMap[i] == 0) continue;
+                    lstCode.Items.Add($"\tSubtype {i - goolentry.EventCount}: {(goolentry.StateMap[i] == 255 ? "invalid" : $"State_{goolentry.StateMap[i]}")}");
                 }
 
                 lstCode.Items.Add("");
