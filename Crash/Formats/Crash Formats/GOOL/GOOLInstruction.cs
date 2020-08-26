@@ -206,7 +206,7 @@ namespace Crash
                         if (GOOL.ParentGOOL != null && GOOL.Format == 0 && off < GOOL.ParentGOOL.Data.Length)
                         {
                             int cval = GOOL.ParentGOOL.Data[off];
-                            if (off < GOOL.EntryCount)
+                            if (off < GOOL.ParentGOOL.EntryCount)
                                 return $"({Entry.EIDToEName(cval)})";
                             else
                                 return $"({cval.TransformedString()})";
