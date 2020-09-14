@@ -637,7 +637,7 @@ namespace CrashEdit
                 {
                     SaveNSF(true);
                 }
-                else if (Settings.Default.PatchNSDSavesNSF)
+                else if (!ignore_warnings && Settings.Default.PatchNSDSavesNSF)
                 {
                     SaveNSF(false);
                 }
