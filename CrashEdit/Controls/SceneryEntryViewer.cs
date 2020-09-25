@@ -59,7 +59,7 @@ namespace CrashEdit
                 {
                     foreach (SceneryVertex vertex in entry.Vertices)
                     {
-                        yield return new Position(entry.XOffset + vertex.X * 16,entry.YOffset + vertex.Y * 16,entry.ZOffset + vertex.Z * 16);
+                        yield return new Position(entry.XOffset + (vertex.X << 4),entry.YOffset + (vertex.Y << 4),entry.ZOffset + (vertex.Z << 4));
                     }
                 }
             }
@@ -457,7 +457,7 @@ namespace CrashEdit
         {
             SceneryColor color = entry.Colors[vertex.Color];
             GL.Color3(color.Red,color.Green,color.Blue);
-            GL.Vertex3(entry.XOffset + vertex.X * 16,entry.YOffset + vertex.Y * 16,entry.ZOffset + vertex.Z * 16);
+            GL.Vertex3(entry.XOffset + (vertex.X << 4),entry.YOffset + (vertex.Y << 4),entry.ZOffset + (vertex.Z << 4));
         }
     }
 }
