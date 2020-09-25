@@ -127,6 +127,8 @@ namespace CrashEdit
             int value = (ushort)BitConv.FromInt16(data, offset);
             if ((value & 1) != 0)
             {
+                if (OctreeSelection != -1 && OctreeSelection != value)
+                    return;
                 Color color;
                 if (!octreevalues.TryGetValue((short)value, out color))
                 {
@@ -136,8 +138,6 @@ namespace CrashEdit
                     color = Color.FromArgb(255, colorbuf[0], colorbuf[1], colorbuf[2]);
                     octreevalues.Add((short)value, color);
                 }
-                if (OctreeSelection != -1 && OctreeSelection != value)
-                    return;
                 Color c1 = Color.FromArgb(Math.Min(color.R+ 0, 0xFF), Math.Min(color.G+ 0, 0xFF), Math.Min(color.B+ 0, 0xFF));
                 Color c2 = Color.FromArgb(Math.Min(color.R+ 4, 0xFF), Math.Min(color.G+ 4, 0xFF), Math.Min(color.B+ 4, 0xFF));
                 Color c3 = Color.FromArgb(Math.Min(color.R+ 8, 0xFF), Math.Min(color.G+ 8, 0xFF), Math.Min(color.B+ 8, 0xFF));
