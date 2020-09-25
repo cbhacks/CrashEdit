@@ -138,10 +138,10 @@ namespace CrashEdit
                 }
                 if (OctreeSelection != -1 && OctreeSelection != value)
                     return;
-                Color c1 = Color.FromArgb(Math.Min(color.R+ 4, 0xFF), Math.Min(color.G+ 4, 0xFF), Math.Min(color.B+ 4, 0xFF));
-                Color c2 = Color.FromArgb(Math.Min(color.R+ 8, 0xFF), Math.Min(color.G+ 8, 0xFF), Math.Min(color.B+ 8, 0xFF));
-                Color c3 = Color.FromArgb(Math.Min(color.R+12, 0xFF), Math.Min(color.G+12, 0xFF), Math.Min(color.B+12, 0xFF));
-                Color c4 = Color.FromArgb(Math.Min(color.R+16, 0xFF), Math.Min(color.G+16, 0xFF), Math.Min(color.B+16, 0xFF));
+                Color c1 = Color.FromArgb(Math.Min(color.R+ 0, 0xFF), Math.Min(color.G+ 0, 0xFF), Math.Min(color.B+ 0, 0xFF));
+                Color c2 = Color.FromArgb(Math.Min(color.R+ 4, 0xFF), Math.Min(color.G+ 4, 0xFF), Math.Min(color.B+ 4, 0xFF));
+                Color c3 = Color.FromArgb(Math.Min(color.R+ 8, 0xFF), Math.Min(color.G+ 8, 0xFF), Math.Min(color.B+ 8, 0xFF));
+                Color c4 = Color.FromArgb(Math.Min(color.R+12, 0xFF), Math.Min(color.G+12, 0xFF), Math.Min(color.B+12, 0xFF));
                 GL.Color3(color);
                 GL.Begin(PrimitiveType.Quads);
                 // Bottom
