@@ -336,9 +336,7 @@ namespace CrashEdit
             midy = (maxy + miny) / 2;
             midz = (maxz + minz) / 2;
             range = CameraRangeMinimum;
-            range = Math.Max(range,maxx - minx);
-            range = Math.Max(range,maxy - miny);
-            range = Math.Max(range,maxz - minz);
+            range = Math.Max(CameraRangeMinimum, (int)(Math.Sqrt(Math.Pow(maxx-midx, 2) + Math.Pow(maxy-midy, 2) + Math.Pow(maxz-midz, 2))*1.15));
             range += (int)(CameraRangeMargin*ScaleFactor);
             rotx = 0;
             roty = 0;
