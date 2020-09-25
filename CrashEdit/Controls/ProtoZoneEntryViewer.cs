@@ -1,6 +1,5 @@
 using Crash;
 using OpenTK.Graphics.OpenGL;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -39,31 +38,16 @@ namespace CrashEdit
 
         private ProtoZoneEntry entry;
         private ProtoZoneEntry[] linkedentries;
-        private bool renderoctree;
-        private int[] octreedisplaylists;
-        private Dictionary<short,Color> octreevalues;
-        private int octreeselection;
-        private bool deletelists;
-        private bool polygonmode;
-        private bool allentries;
-        private Form frmoctree;
+        private CommonZoneEntryViewer common;
         private bool flipoctree;
+
+        public string EntryName => entry.EName;
 
         public ProtoZoneEntryViewer(ProtoZoneEntry entry,ProtoSceneryEntry[] linkedsceneryentries,TextureChunk[][] texturechunks,ProtoZoneEntry[] linkedentries) : base(linkedsceneryentries,texturechunks)
         {
             this.entry = entry;
             this.linkedentries = linkedentries;
-            renderoctree = false;
-            octreedisplaylists = new int[linkedentries.Length + 1];
-            for (int i = 0; i < octreedisplaylists.Length; i++)
-            {
-                octreedisplaylists[i] = -1;
-            }
-            octreevalues = new Dictionary<short,Color>();
-            octreeselection = -1;
-            deletelists = false;
-            polygonmode = false;
-            allentries = false;
+            common = new CommonZoneEntryViewer(linkedentries.Length + 1);
             flipoctree = false;
         }
 
@@ -110,13 +94,11 @@ namespace CrashEdit
 
         protected override bool IsInputKey(Keys keyData)
         {
+            bool? settingsinput = common.IsInputKey(keyData);
+            if (settingsinput != null)
+                return settingsinput.Value;
             switch (keyData)
             {
-                case Keys.X:
-                case Keys.C:
-                case Keys.R:
-                case Keys.V:
-                case Keys.F:
                 case Keys.O:
                     return true;
                 default:
@@ -127,75 +109,13 @@ namespace CrashEdit
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
+            common.OnKeyDown(e);
             switch (e.KeyCode)
             {
-                case Keys.X:
-                    renderoctree = !renderoctree;
-                    break;
-                case Keys.C:
-                    if (frmoctree == null || frmoctree.IsDisposed)
-                    {
-                        frmoctree = new Form();
-                        frmoctree.FormClosed += (object sender, FormClosedEventArgs ee) =>
-                        {
-                            octreeselection = -1;
-                            deletelists = true;
-                        };
-                        UpdateOctreeFormList();
-                        frmoctree.Show();
-                    }
-                    else
-                    {
-                        frmoctree.Select();
-                    }
-                    break;
-                case Keys.R:
-                    deletelists = true;
-                    UpdateOctreeFormList();
-                    break;
-                case Keys.V:
-                    polygonmode = !polygonmode;
-                    break;
-                case Keys.F:
-                    allentries = !allentries;
-                    UpdateOctreeFormList();
-                    break;
                 case Keys.O:
                     flipoctree = !flipoctree;
-                    deletelists = true;
+                    common.DeleteLists = true;
                     break;
-            }
-        }
-
-        internal void UpdateOctreeFormList()
-        {
-            if (frmoctree != null && !frmoctree.IsDisposed)
-            {
-                frmoctree.Controls.Clear();
-                ListView lst = new ListView();
-                lst.Dock = DockStyle.Fill;
-                foreach (KeyValuePair<short,Color> color in octreevalues)
-                {
-                    ListViewItem lsi = new ListViewItem();
-                    lsi.Text = string.Format("{2:X2}:{1:X2}:{0:X1}",color.Key >> 1 & 0x7,color.Key >> 4 & 0x3F,color.Key >> 10 & 0x3F);
-                    lsi.BackColor = color.Value;
-                    lsi.ForeColor = color.Value.GetBrightness() >= 0.5 ? Color.Black : Color.White;
-                    lsi.Tag = color.Key;
-                    lst.Items.Add(lsi);
-                }
-                lst.SelectedIndexChanged += delegate (object sender,EventArgs ee)
-                {
-                    if (lst.SelectedItems.Count == 0)
-                    {
-                        octreeselection = -1;
-                    }
-                    else
-                    {
-                        octreeselection = (ushort)(short)lst.SelectedItems[0].Tag;
-                    }
-                    deletelists = true;
-                };
-                frmoctree.Controls.Add(lst);
             }
         }
 
@@ -203,7 +123,7 @@ namespace CrashEdit
         {
             GL.Disable(EnableCap.Texture2D);
             GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 1.0f);
-            RenderEntry(entry,ref octreedisplaylists[0]);
+            RenderEntry(entry,ref common.OctreeDisplayLists[0]);
             GL.Enable(EnableCap.PolygonStipple);
             for (int i = 0; i < linkedentries.Length; i++)
             {
@@ -212,11 +132,11 @@ namespace CrashEdit
                     continue;
                 if (linkedentry == null)
                     continue;
-                RenderLinkedEntry(linkedentry,ref octreedisplaylists[i + 1]);
+                RenderLinkedEntry(linkedentry,ref common.OctreeDisplayLists[i + 1]);
             }
             GL.Disable(EnableCap.PolygonStipple);
-            if (deletelists)
-                deletelists = false;
+            if (common.DeleteLists)
+                common.DeleteLists = false;
             GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
             GL.Enable(EnableCap.Texture2D);
             base.RenderObjects();
@@ -224,6 +144,7 @@ namespace CrashEdit
 
         private void RenderEntry(ProtoZoneEntry entry,ref int octreedisplaylist)
         {
+            common.CurrentEntry = entry;
             int xoffset = BitConv.FromInt32(entry.Layout,0);
             int yoffset = BitConv.FromInt32(entry.Layout,4);
             int zoffset = BitConv.FromInt32(entry.Layout,8);
@@ -232,14 +153,14 @@ namespace CrashEdit
             int z2 = BitConv.FromInt32(entry.Layout,20);
             GL.PushMatrix();
             GL.Translate(xoffset,yoffset,zoffset);
-            if (deletelists)
+            if (common.DeleteLists)
             {
                 GL.DeleteLists(octreedisplaylist,1);
                 octreedisplaylist = -1;
             }
-            if (renderoctree)
+            if (common.EnableOctree)
             {
-                if (!polygonmode)
+                if (!common.PolygonMode)
                     GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Line);
                 if (octreedisplaylist == -1)
                 {
@@ -251,7 +172,7 @@ namespace CrashEdit
                     if (ymax == 0) ymax = xmax;
                     int zmax = (ushort)BitConv.FromInt16(entry.Layout,0x22);
                     if (zmax == 0) zmax = ymax;
-                    RenderOctree(entry.Layout,0x1C,0,flipoctree ? -y2 : 0,flipoctree ? -z2 : 0,x2,y2,z2,xmax,ymax,zmax);
+                    common.RenderOctree(entry.Layout,0x1C,0,flipoctree ? -y2 : 0,flipoctree ? -z2 : 0,x2,y2,z2,xmax,ymax,zmax);
                     GL.PopMatrix();
                     GL.EndList();
                 }
@@ -294,6 +215,7 @@ namespace CrashEdit
 
         private void RenderLinkedEntry(ProtoZoneEntry entry,ref int octreedisplaylist)
         {
+            common.CurrentEntry = entry;
             int xoffset = BitConv.FromInt32(entry.Layout,0);
             int yoffset = BitConv.FromInt32(entry.Layout,4);
             int zoffset = BitConv.FromInt32(entry.Layout,8);
@@ -302,17 +224,17 @@ namespace CrashEdit
             int z2 = BitConv.FromInt32(entry.Layout,20);
             GL.PushMatrix();
             GL.Translate(xoffset,yoffset,zoffset);
-            if (allentries)
+            if (common.AllEntries)
             {
                 GL.Disable(EnableCap.PolygonStipple);
-                if (deletelists)
+                if (common.DeleteLists)
                 {
                     GL.DeleteLists(octreedisplaylist,1);
                     octreedisplaylist = -1;
                 }
-                if (renderoctree)
+                if (common.EnableOctree)
                 {
-                    if (!polygonmode)
+                    if (!common.PolygonMode)
                         GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Line);
                     if (octreedisplaylist == -1)
                     {
@@ -324,7 +246,7 @@ namespace CrashEdit
                         if (ymax == 0) ymax = xmax;
                         int zmax = (ushort)BitConv.FromInt16(entry.Layout,0x22);
                         if (zmax == 0) zmax = ymax;
-                        RenderOctree(entry.Layout,0x1C,0,flipoctree ? -y2 : 0,flipoctree ? -z2 : 0,x2,y2,z2,xmax,ymax,zmax);
+                        common.RenderOctree(entry.Layout,0x1C,0,flipoctree ? -y2 : 0,flipoctree ? -z2 : 0,x2,y2,z2,xmax,ymax,zmax);
                         GL.PopMatrix();
                         GL.EndList();
                     }
@@ -346,145 +268,6 @@ namespace CrashEdit
                 RenderCamera(camera);
             }
             GL.PopMatrix();
-        }
-
-        private void RenderOctree(byte[] data,int offset,double x,double y,double z,double w,double h,double d,int xmax,int ymax,int zmax)
-        {
-            int value = (ushort)BitConv.FromInt16(data,offset);
-            if ((value & 1) != 0)
-            {
-                if (flipoctree)
-                {
-                    GL.Scale(1, -1, -1);
-                }
-                Color color;
-                if (!octreevalues.TryGetValue((short)value,out color))
-                {
-                    byte[] colorbuf = new byte[3];
-                    Random random = new Random(value);
-                    random.NextBytes(colorbuf);
-                    color = Color.FromArgb(255,colorbuf[0],colorbuf[1],colorbuf[2]);
-                    octreevalues.Add((short)value,color);
-                }
-                if (octreeselection != -1 && octreeselection != value)
-                    return;
-                Color c1 = Color.FromArgb((color.R + 4) % 256,(color.G + 4) % 256,(color.B + 4) % 256);
-                Color c2 = Color.FromArgb((color.R + 8) % 256,(color.G + 8) % 256,(color.B + 8) % 256);
-                Color c3 = Color.FromArgb((color.R + 12) % 256,(color.G + 12) % 256,(color.B + 12) % 256);
-                Color c4 = Color.FromArgb((color.R + 16) % 256,(color.G + 16) % 256,(color.B + 16) % 256);
-                GL.Color3(color);
-                GL.Begin(PrimitiveType.Quads);
-                // Bottom
-                GL.Color3(c1);
-                GL.Vertex3(x + 0,y + 0,z + 0);
-                GL.Color3(c2);
-                GL.Vertex3(x + w,y + 0,z + 0);
-                GL.Color3(c3);
-                GL.Vertex3(x + w,y + 0,z + d);
-                GL.Color3(c4);
-                GL.Vertex3(x + 0,y + 0,z + d);
-
-                // Top
-                GL.Color3(c1);
-                GL.Vertex3(x + 0,y + h,z + 0);
-                GL.Color3(c2);
-                GL.Vertex3(x + w,y + h,z + 0);
-                GL.Color3(c3);
-                GL.Vertex3(x + w,y + h,z + d);
-                GL.Color3(c4);
-                GL.Vertex3(x + 0,y + h,z + d);
-
-                // Left
-                GL.Color3(c1);
-                GL.Vertex3(x + 0,y + 0,z + 0);
-                GL.Color3(c2);
-                GL.Vertex3(x + 0,y + h,z + 0);
-                GL.Color3(c3);
-                GL.Vertex3(x + 0,y + h,z + d);
-                GL.Color3(c4);
-                GL.Vertex3(x + 0,y + 0,z + d);
-
-                // Right
-                GL.Color3(c1);
-                GL.Vertex3(x + w,y + 0,z + 0);
-                GL.Color3(c2);
-                GL.Vertex3(x + w,y + h,z + 0);
-                GL.Color3(c3);
-                GL.Vertex3(x + w,y + h,z + d);
-                GL.Color3(c4);
-                GL.Vertex3(x + w,y + 0,z + d);
-
-                // Front
-                GL.Color3(c1);
-                GL.Vertex3(x + 0,y + 0,z + 0);
-                GL.Color3(c2);
-                GL.Vertex3(x + w,y + 0,z + 0);
-                GL.Color3(c3);
-                GL.Vertex3(x + w,y + h,z + 0);
-                GL.Color3(c4);
-                GL.Vertex3(x + 0,y + h,z + 0);
-
-                // Back
-                GL.Color3(c1);
-                GL.Vertex3(x + 0,y + 0,z + d);
-                GL.Color3(c2);
-                GL.Vertex3(x + w,y + 0,z + d);
-                GL.Color3(c3);
-                GL.Vertex3(x + w,y + h,z + d);
-                GL.Color3(c4);
-                GL.Vertex3(x + 0,y + h,z + d);
-                GL.End();
-                if (flipoctree)
-                {
-                    GL.Scale(1, -1, -1);
-                }
-            }
-            else if (value != 0)
-            {
-                RenderOctreeX(data,ref value,x,y,z,w,h,d,xmax,ymax,zmax);
-            }
-        }
-
-        private void RenderOctreeX(byte[] data,ref int offset,double x,double y,double z,double w,double h,double d,int xmax,int ymax,int zmax)
-        {
-            if (xmax > 0)
-            {
-                RenderOctreeY(data,ref offset,x + 0 / 2,y,z,w / 2,h,d,xmax - 1,ymax,zmax);
-                RenderOctreeY(data,ref offset,x + w / 2,y,z,w / 2,h,d,xmax - 1,ymax,zmax);
-            }
-            else
-            {
-                RenderOctreeY(data,ref offset,x,y,z,w,h,d,xmax - 1,ymax,zmax);
-            }
-        }
-
-        private void RenderOctreeY(byte[] data,ref int offset,double x,double y,double z,double w,double h,double d,int xmax,int ymax,int zmax)
-        {
-            if (ymax > 0)
-            {
-                RenderOctreeZ(data,ref offset,x,y + 0 / 2,z,w,h / 2,d,xmax,ymax - 1,zmax);
-                RenderOctreeZ(data,ref offset,x,y + h / 2,z,w,h / 2,d,xmax,ymax - 1,zmax);
-            }
-            else
-            {
-                RenderOctreeZ(data,ref offset,x,y,z,w,h,d,xmax,ymax - 1,zmax);
-            }
-        }
-
-        private void RenderOctreeZ(byte[] data,ref int offset,double x,double y,double z,double w,double h,double d,int xmax,int ymax,int zmax)
-        {
-            if (zmax > 0)
-            {
-                RenderOctree(data,offset,x,y,z + 0 / 2,w,h,d / 2,xmax,ymax,zmax - 1);
-                offset += 2;
-                RenderOctree(data,offset,x,y,z + d / 2,w,h,d / 2,xmax,ymax,zmax - 1);
-                offset += 2;
-            }
-            else
-            {
-                RenderOctree(data,offset,x,y,z,w,h,d,xmax,ymax,zmax - 1);
-                offset += 2;
-            }
         }
 
         private void RenderEntity(ProtoEntity entity)
