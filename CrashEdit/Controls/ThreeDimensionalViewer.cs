@@ -136,7 +136,7 @@ namespace CrashEdit
         }
 
         protected virtual float NearPlane => 100;
-        protected virtual float FarPlane => 400*1000;
+        protected virtual float FarPlane => 400*800;
         protected virtual int CameraRangeMargin => 0;
         protected virtual int CameraRangeMinimum => 5;
 
