@@ -168,6 +168,9 @@ namespace Crash
         public IList<ModelExtendedTexture> AnimatedTextures => animatedtextures;
         public IList<ModelPosition> Positions => positions;
 
+        public int ScaleX => BitConv.FromInt32(Info, 0);
+        public int ScaleY => BitConv.FromInt32(Info, 4);
+        public int ScaleZ => BitConv.FromInt32(Info, 8);
         public int VertexCount => BitConv.FromInt32(Info, 0x38);
         public int TPAGCount => BitConv.FromInt32(Info, 0x40);
         public int PolyCount => BitConv.FromInt32(Info, 0x44);

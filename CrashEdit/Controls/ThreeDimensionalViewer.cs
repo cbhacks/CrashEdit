@@ -135,9 +135,8 @@ namespace CrashEdit
             };
         }
 
-        protected virtual float ScaleFactor => 1;
-        protected virtual float NearPlane => 128;
-        protected virtual float FarPlane => 1280000;
+        protected virtual float NearPlane => 100;
+        protected virtual float FarPlane => 400*1000;
         protected virtual int CameraRangeMargin => 0;
         protected virtual int CameraRangeMinimum => 5;
 
@@ -159,8 +158,8 @@ namespace CrashEdit
             GL.AlphaFunc(AlphaFunction.Greater, 0);
             // Lighting settings. Lighting must be enabled for them to take effect, logically
             GL.Light(LightName.Light0, LightParameter.Position, new float[] { 0, 0, 0, 1 });
-            GL.Light(LightName.Light0, LightParameter.Ambient, new float[] { 0.05f, 0.05f, 0.05f, 1 }); // set some minimum light parameters so less shading doesn't make things too dark
-            GL.Light(LightName.Light0, LightParameter.ConstantAttenuation, 0.2f); // reduce direct light intensity
+            GL.Light(LightName.Light0, LightParameter.Ambient, new float[] { 0.1f, 0.1f, 0.1f, 1 }); // set some minimum light parameters so less shading doesn't make things too dark
+            GL.Light(LightName.Light0, LightParameter.ConstantAttenuation, 1.25F); // reduce direct light intensity
             GL.LightModel(LightModelParameter.LightModelTwoSide, 1);
             GL.Enable(EnableCap.Light0);
             GL.Enable(EnableCap.ColorMaterial);
@@ -302,7 +301,7 @@ namespace CrashEdit
             GL.ClearColor(Color.FromArgb(Settings.Default.ClearColorRGB));
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.MatrixMode(MatrixMode.Projection);
-            var proj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver3,(float)Width/Height,NearPlane*ScaleFactor,FarPlane*ScaleFactor);
+            var proj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver3,(float)Width/Height,NearPlane,FarPlane);
             GL.LoadMatrix(ref proj);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
@@ -310,7 +309,6 @@ namespace CrashEdit
             GL.Rotate(roty,1,0,0);
             GL.Rotate(rotx,0,1,0);
             GL.Translate(-midx,-midy,-midz);
-            GL.Scale(ScaleFactor,ScaleFactor,ScaleFactor);
             RenderObjects();
             SwapBuffers();
         }
@@ -325,21 +323,20 @@ namespace CrashEdit
             int maxz = int.MinValue;
             foreach (IPosition position in CorePositions)
             {
-                minx = (int)Math.Min(minx,position.X*ScaleFactor);
-                miny = (int)Math.Min(miny,position.Y*ScaleFactor);
-                minz = (int)Math.Min(minz,position.Z*ScaleFactor);
-                maxx = (int)Math.Max(maxx,position.X*ScaleFactor);
-                maxy = (int)Math.Max(maxy,position.Y*ScaleFactor);
-                maxz = (int)Math.Max(maxz,position.Z*ScaleFactor);
+                minx = (int)Math.Min(minx,position.X);
+                miny = (int)Math.Min(miny,position.Y);
+                minz = (int)Math.Min(minz,position.Z);
+                maxx = (int)Math.Max(maxx,position.X);
+                maxy = (int)Math.Max(maxy,position.Y);
+                maxz = (int)Math.Max(maxz,position.Z);
             }
             midx = (maxx + minx) / 2;
             midy = (maxy + miny) / 2;
             midz = (maxz + minz) / 2;
-            range = CameraRangeMinimum;
             range = Math.Max(CameraRangeMinimum, (int)(Math.Sqrt(Math.Pow(maxx-midx, 2) + Math.Pow(maxy-midy, 2) + Math.Pow(maxz-midz, 2))*1.15));
-            range += (int)(CameraRangeMargin*ScaleFactor);
+            range += CameraRangeMargin;
             rotx = 0;
-            roty = 0;
+            roty = 15;
             fullrange = range;
             Invalidate();
         }

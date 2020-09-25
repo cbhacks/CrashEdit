@@ -68,30 +68,34 @@ namespace CrashEdit
             };
         }
 
-        private int MinScale => model != null ? Math.Min(BitConv.FromInt32(model.Info, 12), Math.Min(BitConv.FromInt32(model.Info, 4), BitConv.FromInt32(model.Info, 8))) : 0x1000;
-        private int MaxScale => model != null ? Math.Max(BitConv.FromInt32(model.Info, 12), Math.Max(BitConv.FromInt32(model.Info, 4), BitConv.FromInt32(model.Info, 8))) : 0x1000;
-
-        protected override int CameraRangeMargin => 128;
-        protected override float ScaleFactor => 8;
-        protected override float NearPlane => 4;
-        protected override float FarPlane => 64000;
+        protected override int CameraRangeMargin => 400;
+        protected override float NearPlane => 40;
+        protected override float FarPlane => 400*200;
 
         protected override IEnumerable<IPosition> CorePositions
         {
             get
             {
-                var vec = model != null ? new Vector3(BitConv.FromInt32(model.Info,4),BitConv.FromInt32(model.Info,8),BitConv.FromInt32(model.Info,12))/MinScale : new Vector3(1,1,1);
-                yield return new Position(128,128,128);
+                int mdlX = 0x1000;
+                int mdlY = 0x1000;
+                int mdlZ = 0x1000;
+                if (model != null)
+                {
+                    mdlX = model.ScaleX;
+                    mdlY = model.ScaleY;
+                    mdlZ = model.ScaleZ;
+                }
+                yield return new Position(0,0,0);
                 foreach (OldFrame frame in frames)
                 {
                     foreach (OldFrameVertex vertex in frame.Vertices)
                     {
-                        float x = vertex.X + frame.XOffset;
-                        float y = vertex.Y + frame.YOffset;
-                        float z = vertex.Z + frame.ZOffset;
-                        x *= vec.X;
-                        y *= vec.Y;
-                        z *= vec.Z;
+                        int x = vertex.X-128 + frame.XOffset;
+                        int y = vertex.Y-128 + frame.YOffset;
+                        int z = vertex.Z-128 + frame.ZOffset;
+                        x = x*mdlX>>10;
+                        y = y*mdlY>>10;
+                        z = z*mdlZ>>10;
                         yield return new Position(x,y,z);
                     }
                 }
@@ -171,31 +175,29 @@ namespace CrashEdit
                 if (Settings.Default.DisplayAnimGrid)
                 {
                     GL.PushMatrix();
-                    GL.Translate(128, 128, 128);
-                    GL.Scale(new Vector3(102400*4F/MinScale));
                     GL.Begin(PrimitiveType.Lines);
                     GL.Color3(Color.Red);
-                    GL.Vertex3(-0.5F, 0, 0);
-                    GL.Vertex3(+0.5F, 0, 0);
+                    GL.Vertex3(-200, 0, 0);
+                    GL.Vertex3(+200, 0, 0);
                     GL.Color3(Color.Green);
-                    GL.Vertex3(0, -0.5F, 0);
-                    GL.Vertex3(0, +0.5F, 0);
+                    GL.Vertex3(0, -200, 0);
+                    GL.Vertex3(0, +200, 0);
                     GL.Color3(Color.Blue);
-                    GL.Vertex3(0, 0, -0.5F);
-                    GL.Vertex3(0, 0, +0.5F);
+                    GL.Vertex3(0, 0, -200);
+                    GL.Vertex3(0, 0, +200);
                     GL.Color3(Color.Gray);
                     int gridamt = Settings.Default.AnimGridLen;
-                    float gridlen = 1.0F * gridamt - 0.5F;
+                    int gridlen = 400 * gridamt - 200;
                     for (int i = 0; i < gridamt; ++i)
                     {
-                        GL.Vertex3(+0.5F + i * 1F, 0, +gridlen);
-                        GL.Vertex3(+0.5F + i * 1F, 0, -gridlen);
-                        GL.Vertex3(-0.5F - i * 1F, 0, +gridlen);
-                        GL.Vertex3(-0.5F - i * 1F, 0, -gridlen);
-                        GL.Vertex3(+gridlen, 0, +0.5F + i * 1F);
-                        GL.Vertex3(-gridlen, 0, +0.5F + i * 1F);
-                        GL.Vertex3(+gridlen, 0, -0.5F - i * 1F);
-                        GL.Vertex3(-gridlen, 0, -0.5F - i * 1F);
+                        GL.Vertex3(+200 + i * 400, 0, +gridlen);
+                        GL.Vertex3(+200 + i * 400, 0, -gridlen);
+                        GL.Vertex3(-200 - i * 400, 0, +gridlen);
+                        GL.Vertex3(-200 - i * 400, 0, -gridlen);
+                        GL.Vertex3(+gridlen, 0, +200 + i * 400);
+                        GL.Vertex3(-gridlen, 0, +200 + i * 400);
+                        GL.Vertex3(+gridlen, 0, -200 - i * 400);
+                        GL.Vertex3(-gridlen, 0, -200 - i * 400);
                     }
                     GL.End();
                     GL.PopMatrix();
@@ -214,7 +216,6 @@ namespace CrashEdit
                 else
                     GL.Disable(EnableCap.Lighting);
                 GL.PushMatrix();
-                GL.Scale(new Vector3(BitConv.FromInt32(model.Info,4),BitConv.FromInt32(model.Info,8),BitConv.FromInt32(model.Info,12))/MinScale);
                 foreach (OldModelPolygon polygon in model.Polygons)
                 {
                     OldModelStruct str = model.Structs[polygon.Unknown & 0x7FFF];
@@ -288,16 +289,18 @@ namespace CrashEdit
             }
             if (!colored && normalsenabled && Settings.Default.DisplayNormals)
             {
+                GL.PushMatrix();
+                GL.Scale(new Vector3d(model.ScaleX, model.ScaleY, model.ScaleZ)/256/4);
                 GL.Begin(PrimitiveType.Lines);
                 GL.Color3(Color.Cyan);
                 foreach (OldFrameVertex vertex in frame.Vertices)
                 {
-                    GL.Vertex3(vertex.X + frame.XOffset,vertex.Y + frame.YOffset,vertex.Z + frame.ZOffset);
-                    GL.Vertex3(vertex.X + vertex.NormalX / 127F * 4 + frame.XOffset,
-                        vertex.Y + vertex.NormalY / 127F * 4 + frame.YOffset,
-                        vertex.Z + vertex.NormalZ / 127F * 4 + frame.ZOffset);
+                    Vector3 v = new Vector3(vertex.X-128 + frame.XOffset,vertex.Y-128 + frame.YOffset,vertex.Z-128 + frame.ZOffset);
+                    GL.Vertex3(v);
+                    GL.Vertex3(v + new Vector3(vertex.NormalX,vertex.NormalY,vertex.NormalZ) / 127 * 4);
                 }
                 GL.End();
+                GL.PopMatrix();
             }
             if (collisionenabled)
             {
@@ -307,43 +310,75 @@ namespace CrashEdit
 
         private void RenderVertex(OldFrame f1, OldFrame f2, int id)
         {
-            float f = (float)interi / interp;
             if (f2 == null)
             {
-                f2 = f1;
+                OldFrameVertex v = f1.Vertices[id];
+                if (colored)
+                {
+                    GL.Color3((byte)((byte)v.NormalX * r),(byte)((byte)v.NormalY * g),(byte)((byte)v.NormalZ * b));
+                }
+                else if (normalsenabled)
+                {
+                    GL.Normal3(v.NormalX/127.0,v.NormalY/127.0,v.NormalZ/127.0);
+                }
+                float x = v.X-128 + f1.XOffset;
+                float y = v.Y-128 + f1.YOffset;
+                float z = v.Z-128 + f1.ZOffset;
+                if (model != null)
+                {
+                    GL.Vertex3(x*model.ScaleX/256/4,y*model.ScaleY/256/4,z*model.ScaleZ/256/4);
+                }
+                else
+                {
+                    GL.Vertex3(x,y,z);
+                }
             }
-            OldFrameVertex v1 = f1.Vertices[id];
-            OldFrameVertex v2 = f2.Vertices[id];
-            int x1 = v1.X + f1.XOffset;
-            int x2 = v2.X + f2.XOffset;
-            int y1 = v1.Y + f1.YOffset;
-            int y2 = v2.Y + f2.YOffset;
-            int z1 = v1.Z + f1.ZOffset;
-            int z2 = v2.Z + f2.ZOffset;
-            if (colored)
+            else
             {
-                int r1 = (byte)v1.NormalX;
-                int r2 = (byte)v2.NormalX;
-                int g1 = (byte)v1.NormalY;
-                int g2 = (byte)v2.NormalY;
-                int b1 = (byte)v1.NormalZ;
-                int b2 = (byte)v2.NormalZ;
-                byte nr = (byte)(NumberExt.GetFac(r1,r2,f) * r);
-                byte ng = (byte)(NumberExt.GetFac(g1,g2,f) * g);
-                byte nb = (byte)(NumberExt.GetFac(b1,b2,f) * b);
-                GL.Color3(nr,ng,nb);
+                float f = (float)interi / interp;
+                OldFrameVertex v1 = f1.Vertices[id];
+                OldFrameVertex v2 = f2.Vertices[id];
+                if (colored)
+                {
+                    int r1 = (byte)v1.NormalX;
+                    int r2 = (byte)v2.NormalX;
+                    int g1 = (byte)v1.NormalY;
+                    int g2 = (byte)v2.NormalY;
+                    int b1 = (byte)v1.NormalZ;
+                    int b2 = (byte)v2.NormalZ;
+                    byte nr = (byte)(NumberExt.GetFac(r1,r2,f) * r);
+                    byte ng = (byte)(NumberExt.GetFac(g1,g2,f) * g);
+                    byte nb = (byte)(NumberExt.GetFac(b1,b2,f) * b);
+                    GL.Color3(nr,ng,nb);
+                }
+                else if (normalsenabled)
+                {
+                    int nx1 = v1.NormalX;
+                    int nx2 = v2.NormalX;
+                    int ny1 = v1.NormalY;
+                    int ny2 = v2.NormalY;
+                    int nz1 = v1.NormalZ;
+                    int nz2 = v2.NormalZ;
+                    GL.Normal3(NumberExt.GetFac(nx1,nx2,f)/127.0,NumberExt.GetFac(ny1,ny2,f)/127.0,NumberExt.GetFac(nz1,nz2,f)/127.0);
+                }
+                int x1 = v1.X-128 + f1.XOffset;
+                int x2 = v2.X-128 + f2.XOffset;
+                int y1 = v1.Y-128 + f1.YOffset;
+                int y2 = v2.Y-128 + f2.YOffset;
+                int z1 = v1.Z-128 + f1.ZOffset;
+                int z2 = v2.Z-128 + f2.ZOffset;
+                if (model != null)
+                {
+                    float x = NumberExt.GetFac(x1,x2,f) * model.ScaleX/256/4;
+                    float y = NumberExt.GetFac(y1,y2,f) * model.ScaleY/256/4;
+                    float z = NumberExt.GetFac(z1,z2,f) * model.ScaleZ/256/4;
+                    GL.Vertex3(x,y,z);
+                }
+                else
+                {
+                    GL.Vertex3(NumberExt.GetFac(x1,x2,f),NumberExt.GetFac(y1,y2,f),NumberExt.GetFac(z1,z2,f));
+                }
             }
-            else if (normalsenabled)
-            {
-                int nx1 = v1.NormalX;
-                int nx2 = v2.NormalX;
-                int ny1 = v1.NormalY;
-                int ny2 = v2.NormalY;
-                int nz1 = v1.NormalZ;
-                int nz2 = v2.NormalZ;
-                GL.Normal3(NumberExt.GetFac(nx1,nx2,f)/127F,NumberExt.GetFac(ny1,ny2,f)/127F,NumberExt.GetFac(nz1,nz2,f)/127F);
-            }
-            GL.Vertex3(NumberExt.GetFac(x1,x2,f),NumberExt.GetFac(y1,y2,f),NumberExt.GetFac(z1,z2,f));
         }
 
         private void RenderCollision(OldFrame frame)
@@ -368,8 +403,7 @@ namespace CrashEdit
             int zcol1 = frame.Z1;
             int zcol2 = frame.Z2;
             GL.PushMatrix();
-            GL.Translate(128,128,128);
-            GL.Scale(new Vector3(4F/MinScale));
+            GL.Scale(new Vector3(1/256F));
             GL.Translate(frame.XGlobal,frame.YGlobal,frame.ZGlobal);
             GL.Begin(PrimitiveType.QuadStrip);
             GL.Vertex3(xcol1,ycol1,zcol1);

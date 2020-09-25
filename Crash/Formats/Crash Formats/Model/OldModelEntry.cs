@@ -22,6 +22,10 @@ namespace Crash
         public IList<OldModelPolygon> Polygons => polygons;
         public IList<OldModelStruct> Structs => structs;
 
+        public int ScaleX => BitConv.FromInt32(Info, 4);
+        public int ScaleY => BitConv.FromInt32(Info, 8);
+        public int ScaleZ => BitConv.FromInt32(Info, 12);
+
         public override UnprocessedEntry Unprocess()
         {
             byte[][] items = new byte [2][];
