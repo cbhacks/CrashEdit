@@ -1,5 +1,6 @@
 using Crash;
 using System;
+using System.ComponentModel;
 using System.IO;
 
 namespace CrashEdit
@@ -64,7 +65,7 @@ namespace CrashEdit
             BitConv.ToInt32(buffer, 12, addrMode);
         }
 
-        public static void Run(Stream input, Stream output)
+        public static void Run(Stream input, Stream output,BackgroundWorker backgroundworker = null)
         {
             byte[] buffer = new byte[2352];
             buffer[0x0] = 0;
@@ -110,6 +111,8 @@ namespace CrashEdit
                     seconds = 0;
                 }
                 output.Write(buffer,0,2352);
+                if (backgroundworker != null)
+                    backgroundworker.ReportProgress((int)(input.Position * 100 / input.Length));
             }
         }
     }
