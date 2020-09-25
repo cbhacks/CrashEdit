@@ -685,34 +685,34 @@
   <data name="Done" xml:space="preserve">
     <value>Done.</value>
   </data>
-  <data name="MakeBIN1" xml:space="preserve">
+  <data name="MakeBIN_NoSystemFiles" xml:space="preserve">
     <value>The selected drive or folder does not contain SYSTEM.CNF or PSX.EXE. At least one of these is required for a bootable PSX CD image. Continue anyway?</value>
   </data>
-  <data name="MakeBIN2" xml:space="preserve">
+  <data name="MakeBIN_NoRegOK" xml:space="preserve">
     <value>Created BIN file without region OK.</value>
   </data>
-  <data name="MakeBin3" xml:space="preserve">
+  <data name="MakeBIN_CueSuccess" xml:space="preserve">
     <value>Created matching CUE file.</value>
   </data>
-  <data name="MakeBin4" xml:space="preserve">
+  <data name="MakeBIN_CueFail" xml:space="preserve">
     <value>Failed to create CUE file: {0}</value>
   </data>
-  <data name="MakeBin5" xml:space="preserve">
+  <data name="MakeBIN_CueExists" xml:space="preserve">
     <value>CUE file already exists, will not be modified.</value>
   </data>
-  <data name="MakeBin_DRNSF1" xml:space="preserve">
+  <data name="MakeBIN_DRNSF_Launch" xml:space="preserve">
     <value>Launching DRNSF to apply selected region...</value>
   </data>
-  <data name="MakeBin_DRNSF2" xml:space="preserve">
+  <data name="MakeBIN_DRNSF_Error" xml:space="preserve">
     <value>DRNSF returned an error. No region has been applied.</value>
   </data>
-  <data name="MakeBin_DRNSF3" xml:space="preserve">
+  <data name="MakeBIN_DRNSF_Success" xml:space="preserve">
     <value>Region applied successfully.</value>
   </data>
-  <data name="MakeBin_DRNSF4" xml:space="preserve">
+  <data name="MakeBIN_DRNSF_Unavailable" xml:space="preserve">
     <value>Could not find DRNSF exe. Please place this in the same directory as CrashEdit.</value>
   </data>
-  <data name="MakeBin_DRNSF5" xml:space="preserve">
+  <data name="MakeBIN_DRNSF_Fail" xml:space="preserve">
     <value>Failed to launch DRNSF. Reason: {0}</value>
   </data>
   <data name="MakeBIN_Title" xml:space="preserve">

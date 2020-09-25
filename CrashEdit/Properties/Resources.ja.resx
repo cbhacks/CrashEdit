@@ -685,34 +685,34 @@
   <data name="Done" xml:space="preserve">
     <value>完了。</value>
   </data>
-  <data name="MakeBIN1" xml:space="preserve">
+  <data name="MakeBIN_NoSystemFiles" xml:space="preserve">
     <value>選択したドライブまたはフォルダには SYSTEM.CNF または PSX.EXE が含まれていません。 起動可能な PSX CD イメージの作成には少なくともこれらのファイルがが必要です。 それでも続行しますか？</value>
   </data>
-  <data name="MakeBIN2" xml:space="preserve">
+  <data name="MakeBIN_NoRegOK" xml:space="preserve">
     <value>リージョンなしの BIN ファイルを作成しました。</value>
   </data>
-  <data name="MakeBin3" xml:space="preserve">
+  <data name="MakeBIN_CueSuccess" xml:space="preserve">
     <value>CUE ファイルを作成しました。</value>
   </data>
-  <data name="MakeBin4" xml:space="preserve">
+  <data name="MakeBIN_CueFail" xml:space="preserve">
     <value>CUE ファイルの作成に失敗しました: {0}</value>
   </data>
-  <data name="MakeBin5" xml:space="preserve">
+  <data name="MakeBIN_CueExists" xml:space="preserve">
     <value>CUE ファイルは既に存在するため、変更されません。</value>
   </data>
-  <data name="MakeBin_DRNSF1" xml:space="preserve">
+  <data name="MakeBIN_DRNSF_Launch" xml:space="preserve">
     <value>選択されたリージョンを適用するためDRNSFを起動しています．．．</value>
   </data>
-  <data name="MakeBin_DRNSF2" xml:space="preserve">
+  <data name="MakeBIN_DRNSF_Error" xml:space="preserve">
     <value>DRNSFがエラーを返しました。リージョンは適用されていません。</value>
   </data>
-  <data name="MakeBin_DRNSF3" xml:space="preserve">
+  <data name="MakeBIN_DRNSF_Success" xml:space="preserve">
     <value>リージョンは正常に適用されました。</value>
   </data>
-  <data name="MakeBin_DRNSF4" xml:space="preserve">
+  <data name="MakeBIN_DRNSF_Unavailable" xml:space="preserve">
     <value>DRNSF exe が見つかりませんでした。CrashEdit と同じディレクトリに配置してください。</value>
   </data>
-  <data name="MakeBin_DRNSF5" xml:space="preserve">
+  <data name="MakeBIN_DRNSF_Fail" xml:space="preserve">
     <value>DRNSFの起動に失敗しました。原因: {0}</value>
   </data>
   <data name="MakeBIN_Title" xml:space="preserve">

@@ -1019,47 +1019,92 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Launching DRNSF to apply selected region....
+        ///   Looks up a localized string similar to CUE file already exists, will not be modified..
         /// </summary>
-        internal static string MakeBin_DRNSF1 {
+        internal static string MakeBIN_CueExists {
             get {
-                return ResourceManager.GetString("MakeBin_DRNSF1", resourceCulture);
+                return ResourceManager.GetString("MakeBIN_CueExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to create CUE file: {0}.
+        /// </summary>
+        internal static string MakeBIN_CueFail {
+            get {
+                return ResourceManager.GetString("MakeBIN_CueFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created matching CUE file..
+        /// </summary>
+        internal static string MakeBIN_CueSuccess {
+            get {
+                return ResourceManager.GetString("MakeBIN_CueSuccess", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to DRNSF returned an error. No region has been applied..
         /// </summary>
-        internal static string MakeBin_DRNSF2 {
+        internal static string MakeBIN_DRNSF_Error {
             get {
-                return ResourceManager.GetString("MakeBin_DRNSF2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Region applied successfully..
-        /// </summary>
-        internal static string MakeBin_DRNSF3 {
-            get {
-                return ResourceManager.GetString("MakeBin_DRNSF3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Could not find DRNSF exe. Please place this in the same directory as CrashEdit..
-        /// </summary>
-        internal static string MakeBin_DRNSF4 {
-            get {
-                return ResourceManager.GetString("MakeBin_DRNSF4", resourceCulture);
+                return ResourceManager.GetString("MakeBIN_DRNSF_Error", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Failed to launch DRNSF. Reason: {0}.
         /// </summary>
-        internal static string MakeBin_DRNSF5 {
+        internal static string MakeBIN_DRNSF_Fail {
             get {
-                return ResourceManager.GetString("MakeBin_DRNSF5", resourceCulture);
+                return ResourceManager.GetString("MakeBIN_DRNSF_Fail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launching DRNSF to apply selected region....
+        /// </summary>
+        internal static string MakeBIN_DRNSF_Launch {
+            get {
+                return ResourceManager.GetString("MakeBIN_DRNSF_Launch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Region applied successfully..
+        /// </summary>
+        internal static string MakeBIN_DRNSF_Success {
+            get {
+                return ResourceManager.GetString("MakeBIN_DRNSF_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find DRNSF exe. Please place this in the same directory as CrashEdit..
+        /// </summary>
+        internal static string MakeBIN_DRNSF_Unavailable {
+            get {
+                return ResourceManager.GetString("MakeBIN_DRNSF_Unavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created BIN file without region OK..
+        /// </summary>
+        internal static string MakeBIN_NoRegOK {
+            get {
+                return ResourceManager.GetString("MakeBIN_NoRegOK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected drive or folder does not contain SYSTEM.CNF or PSX.EXE. At least one of these is required for a bootable PSX CD image. Continue anyway?.
+        /// </summary>
+        internal static string MakeBIN_NoSystemFiles {
+            get {
+                return ResourceManager.GetString("MakeBIN_NoSystemFiles", resourceCulture);
             }
         }
         
@@ -1069,51 +1114,6 @@ namespace CrashEdit.Properties {
         internal static string MakeBIN_Title {
             get {
                 return ResourceManager.GetString("MakeBIN_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The selected drive or folder does not contain SYSTEM.CNF or PSX.EXE. At least one of these is required for a bootable PSX CD image. Continue anyway?.
-        /// </summary>
-        internal static string MakeBIN1 {
-            get {
-                return ResourceManager.GetString("MakeBIN1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Created BIN file without region OK..
-        /// </summary>
-        internal static string MakeBIN2 {
-            get {
-                return ResourceManager.GetString("MakeBIN2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Created matching CUE file..
-        /// </summary>
-        internal static string MakeBin3 {
-            get {
-                return ResourceManager.GetString("MakeBin3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Failed to create CUE file: {0}.
-        /// </summary>
-        internal static string MakeBin4 {
-            get {
-                return ResourceManager.GetString("MakeBin4", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to CUE file already exists, will not be modified..
-        /// </summary>
-        internal static string MakeBin5 {
-            get {
-                return ResourceManager.GetString("MakeBin5", resourceCulture);
             }
         }
         
