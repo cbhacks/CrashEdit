@@ -337,10 +337,7 @@ namespace CrashEdit
             if (kdatFilename != null) fs.AddFile("S3\\" + Path.GetFileName(kdatFilename) + ";1", kdatFilename);
 
             string binPath = Path.Combine(basePath, "game.bin");
-            using (var bin = new FileStream(binPath, FileMode.Create, FileAccess.Write))
-            using (var iso = fs.Build()) {
-                ISO2PSX.Run(iso, bin);
-            }
+            MakeBinWithProgressBar(fs, binPath);
 
             var regionStr = PAL ? "pal" : "ntsc";
 
@@ -948,6 +945,19 @@ namespace CrashEdit
             dlgProgress.Close();
         }
 
+        internal void MakeBinWithProgressBar(CDBuilder fs, string filename)
+        {
+            using (dlgProgress = new ProgressBarForm())
+            {
+                dlgProgress.ProgressBar.ForeColor = Color.Red;
+                dlgProgress.ProgressBar.Style = ProgressBarStyle.Blocks;
+                dlgProgress.ProgressBar.Value = 0;
+                dlgProgress.Text = Resources.MakeBIN_Making;
+                bgwMakeBIN.RunWorkerAsync(new object[] { fs, filename });
+                dlgProgress.ShowDialog(this);
+            }
+        }
+
         void tbxMakeBIN_Click(object sender,EventArgs e)
         {
 
@@ -968,15 +978,7 @@ namespace CrashEdit
             var fs = new CDBuilder();
             AddDirectoryToISO(fs, "", new DirectoryInfo(dlgMakeBINDir.SelectedPath));
 
-            using (dlgProgress = new ProgressBarForm())
-            {
-                dlgProgress.ProgressBar.ForeColor = Color.Red;
-                dlgProgress.ProgressBar.Style = ProgressBarStyle.Blocks;
-                dlgProgress.ProgressBar.Value = 0;
-                dlgProgress.Text = Resources.MakeBIN_Making;
-                bgwMakeBIN.RunWorkerAsync(new object[] { fs, dlgMakeBINFile.FileName });
-                dlgProgress.ShowDialog(this);
-            }
+            MakeBinWithProgressBar(fs, dlgMakeBINFile.FileName);
 
             var log = new StringBuilder();
             log.AppendLine(Resources.MakeBIN_NoRegOK);
