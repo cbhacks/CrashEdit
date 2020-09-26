@@ -927,9 +927,12 @@ namespace CrashEdit
 
         private void bgwMakeBIN_DoWork(object sender,DoWorkEventArgs e)
         {
+            object[] args = (object[])e.Argument;
+            CDBuilder fs = (CDBuilder)args[0];
+            string filename = (string)args[1];
             while (!dlgProgress.IsShown);
-            using (FileStream output = new FileStream(dlgMakeBINFile.FileName, FileMode.Create, FileAccess.Write))
-            using (Stream input = ((CDBuilder)e.Argument).Build())
+            using (FileStream output = new FileStream(filename, FileMode.Create, FileAccess.Write))
+            using (Stream input = fs.Build())
             {
                 ISO2PSX.Run(input, output, bgwMakeBIN);
             }
@@ -971,7 +974,7 @@ namespace CrashEdit
                 dlgProgress.ProgressBar.Style = ProgressBarStyle.Blocks;
                 dlgProgress.ProgressBar.Value = 0;
                 dlgProgress.Text = Resources.MakeBIN_Making;
-                bgwMakeBIN.RunWorkerAsync(fs);
+                bgwMakeBIN.RunWorkerAsync(new object[] { fs, dlgMakeBINFile.FileName });
                 dlgProgress.ShowDialog(this);
             }
 
