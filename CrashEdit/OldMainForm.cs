@@ -120,31 +120,31 @@ namespace CrashEdit
             tbbFindNext.Click += new EventHandler(tbbFindNext_Click);
 
             tbxMakeBIN = new ToolStripMenuItem();
-            tbxMakeBIN.Text = Properties.Resources.OldMainForm_tbxMakeBIN;
+            tbxMakeBIN.Text = Resources.OldMainForm_tbxMakeBIN;
             tbxMakeBIN.Click += new EventHandler(tbxMakeBIN_Click);
 
             tbxMakeBINUSA = new ToolStripMenuItem();
-            tbxMakeBINUSA.Text = Properties.Resources.OldMainForm_tbxMakeBINUSA;
+            tbxMakeBINUSA.Text = Resources.OldMainForm_tbxMakeBINUSA;
             tbxMakeBINUSA.Click += new EventHandler(tbxMakeBIN_Click);
 
             tbxMakeBINEUR = new ToolStripMenuItem();
-            tbxMakeBINEUR.Text = Properties.Resources.OldMainForm_tbxMakeBINEUR;
+            tbxMakeBINEUR.Text = Resources.OldMainForm_tbxMakeBINEUR;
             tbxMakeBINEUR.Click += new EventHandler(tbxMakeBIN_Click);
 
             tbxMakeBINJAP = new ToolStripMenuItem();
-            tbxMakeBINJAP.Text = Properties.Resources.OldMainForm_tbxMakeBINJAP;
+            tbxMakeBINJAP.Text = Resources.OldMainForm_tbxMakeBINJAP;
             tbxMakeBINJAP.Click += new EventHandler(tbxMakeBIN_Click);
 
             tbxConvertVHVB = new ToolStripMenuItem();
-            tbxConvertVHVB.Text = Properties.Resources.OldMainForm_tbxConvertVHVB;
+            tbxConvertVHVB.Text = Resources.OldMainForm_tbxConvertVHVB;
             tbxConvertVHVB.Click += new EventHandler(tbxConvertVHVB_Click);
 
             tbxConvertVAB = new ToolStripMenuItem();
-            tbxConvertVAB.Text = Properties.Resources.OldMainForm_tbxConvertVAB;
+            tbxConvertVAB.Text = Resources.OldMainForm_tbxConvertVAB;
             tbxConvertVAB.Click += new EventHandler(tbxConvertVAB_Click);
 
             tbbExtra = new ToolStripDropDownButton();
-            tbbExtra.Text = Properties.Resources.OldMainForm_tbbExtra;
+            tbbExtra.Text = Resources.OldMainForm_tbbExtra;
             tbbExtra.DropDown = new ToolStripDropDown { LayoutStyle = ToolStripLayoutStyle.VerticalStackWithOverflow };
             tbbExtra.DropDown.Items.Add(tbxMakeBIN);
             tbbExtra.DropDown.Items.Add(tbxMakeBINUSA);
