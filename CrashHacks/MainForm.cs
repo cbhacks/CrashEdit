@@ -60,9 +60,9 @@ namespace CrashHacks
                     if (script.CheckCompatibility(GameVersion.Crash2) == SupportLevel.Supported)
                         tooltip.AppendLine("\u2022 Crash Bandicoot 2: Cortex Strikes Back");
                     if (script.CheckCompatibility(GameVersion.Crash3) == SupportLevel.Supported)
-                        tooltip.AppendLine("\u2022 Crash Bandicoot 3: Warped");
+                        tooltip.AppendLine("\u2022 Crash Bandicoot: Warped");
                     if (script.CheckCompatibility(GameVersion.Crash1BetaMAR08) == SupportLevel.Supported)
-                        tooltip.AppendLine("\u2022 CB Prototype (March 8th)");
+                        tooltip.AppendLine("\u2022 CB Prototype (April 8th)");
                     if (script.CheckCompatibility(GameVersion.Crash1BetaMAY11) == SupportLevel.Supported)
                         tooltip.AppendLine("\u2022 CB Prototype (May 11th)");
                     if (script.CheckCompatibility(GameVersion.None) == SupportLevel.Supported)
