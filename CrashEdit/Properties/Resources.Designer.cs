@@ -1091,6 +1091,15 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Making BIN....
+        /// </summary>
+        internal static string MakeBIN_Making {
+            get {
+                return ResourceManager.GetString("MakeBIN_Making", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created BIN file without region OK..
         /// </summary>
         internal static string MakeBIN_NoRegOK {

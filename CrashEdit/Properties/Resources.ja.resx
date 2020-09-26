@@ -733,4 +733,7 @@
   <data name="Playtest_Title" xml:space="preserve">
     <value>プレイテスト</value>
   </data>
+  <data name="MakeBIN_Making" xml:space="preserve">
+    <value>BIN の作成</value>
+  </data>
 </root>

@@ -969,7 +969,7 @@ namespace CrashEdit
                 dlgProgress.ProgressBar.ForeColor = Color.Red;
                 dlgProgress.ProgressBar.Style = ProgressBarStyle.Blocks;
                 dlgProgress.ProgressBar.Value = 0;
-                dlgProgress.Text = "Making BIN...";
+                dlgProgress.Text = Resources.MakeBIN_Making;
                 bgwMakeBIN.RunWorkerAsync(fs);
                 dlgProgress.ShowDialog(this);
             }

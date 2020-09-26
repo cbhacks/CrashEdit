@@ -736,4 +736,7 @@
   <data name="Config_chkPatchNSDSavesNSF" xml:space="preserve">
     <value>(Patch NSD) Always save NSF after NSD patching</value>
   </data>
+  <data name="MakeBIN_Making" xml:space="preserve">
+    <value>Making BIN...</value>
+  </data>
 </root>
