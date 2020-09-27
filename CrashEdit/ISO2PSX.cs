@@ -111,8 +111,7 @@ namespace CrashEdit
                     seconds = 0;
                 }
                 output.Write(buffer,0,2352);
-                if (backgroundworker != null)
-                    backgroundworker.ReportProgress((int)(input.Position * 100 / input.Length));
+                backgroundworker?.ReportProgress((int)(input.Position * 100 / input.Length));
             }
         }
     }
