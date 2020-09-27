@@ -327,8 +327,11 @@ namespace CrashEdit
             File.Copy(nsdFilename, Path.Combine(basePath, Path.GetFileName(nsdFilename)));
             nsfFilename = Path.Combine(basePath, Path.GetFileName(nsfFilename));
             nsdFilename = Path.Combine(basePath, Path.GetFileName(nsdFilename));
-            PatchNSD(nsdFilename, true, nsfBox.NSFController, true);
+            bool temp_nsf_autosave_setting = Settings.Default.PatchNSDSavesNSF;
+            Settings.Default.PatchNSDSavesNSF = false;
+            PatchNSD(nsdFilename, true, nsfBox.NSFController, true, true);
             SaveNSF(nsfFilename, nsf, true);
+            Settings.Default.PatchNSDSavesNSF = temp_nsf_autosave_setting;
             var fs = new CDBuilder();
             fs.AddFile("S0\\" + Path.GetFileName(nsfFilename) + ";1", nsfFilename);
             fs.AddFile("S0\\" + Path.GetFileName(nsdFilename) + ";1", nsdFilename);
@@ -571,7 +574,7 @@ namespace CrashEdit
             }
         }
 
-        public void PatchNSD(string filename, bool exists, NSFController nsfc, bool ignore_warnings)
+        public void PatchNSD(string filename, bool exists, NSFController nsfc, bool ignore_warnings, bool no_nsf_overwrite = false)
         {
             NSF nsf = nsfc.NSF;
             byte[] data = exists ? File.ReadAllBytes(filename) : null;
@@ -646,13 +649,12 @@ namespace CrashEdit
                     }
                 }
                 nsfc.Node.TreeView.EndUpdate();
-                if (ignore_warnings ? true : (order_updated && MessageBox.Show(Resources.PatchNSD3, Resources.PatchNSD_Title1, MessageBoxButtons.YesNo) == DialogResult.Yes))
+                if (!no_nsf_overwrite)
                 {
-                    SaveNSF(true);
-                }
-                else if (!ignore_warnings && Settings.Default.PatchNSDSavesNSF)
-                {
-                    SaveNSF(false);
+                    if (ignore_warnings || Settings.Default.PatchNSDSavesNSF ? true : (order_updated && MessageBox.Show(Resources.PatchNSD3, Resources.PatchNSD_Title1, MessageBoxButtons.YesNo) == DialogResult.Yes))
+                    {
+                        SaveNSF(ignore_warnings);
+                    }
                 }
             }
             catch (LoadAbortedException)
