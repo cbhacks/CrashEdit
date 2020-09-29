@@ -61,6 +61,10 @@
       <Project>{FFBFB4B9-97BD-4D21-91DE-CAF7AE9DDB65}</Project>
       <Name>Crash</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ISO2PSX\ISO2PSX.csproj">
+      <Project>{4abb08f1-6a61-482e-ab24-21f5e3982896}</Project>
+      <Name>ISO2PSX</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigEditor.cs">
@@ -125,7 +129,6 @@
     <Compile Include="Forms\TextureViewer.Designer.cs">
       <DependentUpon>TextureViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="ISO2PSX.cs" />
     <Compile Include="Controllers\Animation\AnimationEntryController.cs" />
     <Compile Include="Controllers\Animation\FrameController.cs" />
     <Compile Include="Controllers\Animation\ProtoAnimationEntryController.cs" />
