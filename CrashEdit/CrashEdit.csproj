@@ -62,7 +62,7 @@
       <Name>Crash</Name>
     </ProjectReference>
     <ProjectReference Include="..\ISO2PSX\ISO2PSX.csproj">
-      <Project>{4abb08f1-6a61-482e-ab24-21f5e3982896}</Project>
+      <Project>{b25e0901-a824-4c47-b2b4-048b8c154ccc}</Project>
       <Name>ISO2PSX</Name>
     </ProjectReference>
   </ItemGroup>

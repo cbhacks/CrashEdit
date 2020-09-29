@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crash.UI", "Crash.UI\Crash.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrashHacks", "CrashHacks\CrashHacks.csproj", "{A6253B76-7091-403D-B96B-DB7DB78ACA87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISO2PSX", "ISO2PSX\ISO2PSX.csproj", "{4ABB08F1-6A61-482E-AB24-21F5E3982896}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISO2PSX", "ISO2PSX\ISO2PSX.csproj", "{B25E0901-A824-4C47-B2B4-048B8C154CCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{A6253B76-7091-403D-B96B-DB7DB78ACA87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6253B76-7091-403D-B96B-DB7DB78ACA87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6253B76-7091-403D-B96B-DB7DB78ACA87}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4ABB08F1-6A61-482E-AB24-21F5E3982896}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4ABB08F1-6A61-482E-AB24-21F5E3982896}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4ABB08F1-6A61-482E-AB24-21F5E3982896}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4ABB08F1-6A61-482E-AB24-21F5E3982896}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B25E0901-A824-4C47-B2B4-048B8C154CCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B25E0901-A824-4C47-B2B4-048B8C154CCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B25E0901-A824-4C47-B2B4-048B8C154CCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B25E0901-A824-4C47-B2B4-048B8C154CCC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
