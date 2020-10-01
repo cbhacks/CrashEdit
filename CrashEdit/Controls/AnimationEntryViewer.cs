@@ -113,7 +113,7 @@ namespace CrashEdit
                         x = x*mdlX>>10;
                         y = y*mdlY>>10;
                         z = z*mdlZ>>10;
-                        yield return new Position(x,y,z);
+                        yield return frame.IsNew ? new Position(x,y,z)*8 : new Position(x,y,z);
                     }
                 }
             }
@@ -445,7 +445,7 @@ namespace CrashEdit
             {
                 v *= new Vector3(model.ScaleX/256F/4,model.ScaleY/256F/4,model.ScaleZ/256F/4);
             }
-            return v;
+            return f1.IsNew ? v*8 : v;
         }
 
         private Frame UncompressFrame(Frame frame)
@@ -568,7 +568,7 @@ namespace CrashEdit
         private void RenderCollisionBox(Frame frame, int col)
         {
             GL.PushMatrix();
-            GL.Scale(new Vector3(1/(frame.IsNew?2048F:256F)));
+            GL.Scale(new Vector3(1/256F));
             GL.Translate(frame.Collision[col].XO, frame.Collision[col].YO, frame.Collision[col].ZO);
             GL.Begin(PrimitiveType.QuadStrip);
             GL.Vertex3(frame.Collision[col].X1, frame.Collision[col].Y1, frame.Collision[col].Z1);
