@@ -5,19 +5,19 @@ namespace Crash
     public static class PixelConv
     {
         internal static byte[] colorTable = new byte[256];
-        internal static byte GetColorIndex(int color)
-        {
-            for (int i = 0; i < 256; ++i)
-            {
-                if (colorTable[i] == color) return (byte)i;
-            }
-            throw new ArgumentOutOfRangeException("color", "Color must a valid 5-bit value.");
-        }
+        internal static byte[] colorTableInverse = new byte[32];
         static PixelConv()
         {
             for (int i = 0; i < 256; ++i)
             {
                 colorTable[i] = (byte)(i * 31 / 255);
+            }
+            for (int i = 0; i < 32; ++i)
+            {
+                for (int j = 0; j < 256; ++j)
+                {
+                    if (colorTable[j] == i) colorTableInverse[i] = (byte)j;
+                }
             }
         }
 
@@ -44,9 +44,9 @@ namespace Crash
 
         public static int Convert5551_8888(short p, int mode)
         {
-            byte r = GetColorIndex(p >> 0 & 0x1F);
-            byte g = GetColorIndex(p >> 5 & 0x1F);
-            byte b = GetColorIndex(p >> 10 & 0x1F);
+            byte r = colorTableInverse[p >> 0 & 0x1F];
+            byte g = colorTableInverse[p >> 5 & 0x1F];
+            byte b = colorTableInverse[p >> 10 & 0x1F];
             byte a = (byte)(p >> 15 & 1);
             switch (mode)
             {
