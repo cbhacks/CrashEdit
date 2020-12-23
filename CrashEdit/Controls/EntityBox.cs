@@ -426,7 +426,8 @@ namespace CrashEdit
             }
             else
             {
-                if (val > 0x7FFFFFFF) val = 0x7FFFFFFF;
+                if (val > 0xFFFFFFFF) val = 0x7FFFFFFF;
+                else if (val > 0x7FFFFFFF) val = -0x100000000 + val;
                 else if (val < -0x80000000) val = -0x80000000;
                 numSettingC.Value = unchecked((int)val);
             }
@@ -1692,7 +1693,7 @@ namespace CrashEdit
         private void chkSettingHex_CheckedChanged(object sender, EventArgs e)
         {
             numSettingC.Hexadecimal = chkSettingHex.Checked;
-            SetCVal(entity.Settings[settingindex].Value);
+            SetCVal((long)numSettingC.Value);
         }
 
         private void cmdInterpolate_Click(object sender, EventArgs e)
