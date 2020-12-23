@@ -9,17 +9,22 @@ namespace Crash
         {
             if (data.Length < 22)
                 ErrorManager.SignalError("OldEntity: Data is too short");
-            int garbage = BitConv.FromInt32(data,0);
-            int flags = BitConv.FromInt32(data,4);
+            short flags = BitConv.FromInt16(data,4);
+            byte spawn = data[6];
+            byte unk = data[7];
             short id = BitConv.FromInt16(data,8);
+            if (spawn != 3)
+            {
+                ErrorManager.SignalIgnorableError(string.Format("OldEntity: Entity {0} is unspawnable.", id));
+            }
             short positioncount = BitConv.FromInt16(data,10);
             if (data.Length < 22 + 6 * positioncount)
                 ErrorManager.SignalError("OldEntity: Data is too short");
             if (positioncount < 0)
                 ErrorManager.SignalError("OldEntity: Position count is negative");
-            short modea = BitConv.FromInt16(data,12);
-            short modeb = BitConv.FromInt16(data,14);
-            short modec = BitConv.FromInt16(data,16);
+            short vecx = BitConv.FromInt16(data,12);
+            short vecy = BitConv.FromInt16(data,14);
+            short vecz = BitConv.FromInt16(data,16);
             byte type = data[18];
             byte subtype = data[19];
             EntityPosition[] positions = new EntityPosition [positioncount];
@@ -31,33 +36,35 @@ namespace Crash
                 positions[i] = new EntityPosition(x,y,z);
             }
             short nullfield1 = BitConv.FromInt16(data,20 + positioncount * 6);
-            return new OldEntity(garbage,flags,id,modea,modeb,modec,type,subtype,positions,nullfield1);
+            return new OldEntity(flags,spawn,unk,id,vecx,vecy,vecz,type,subtype,positions,nullfield1);
         }
 
         private List<EntityPosition> positions = null;
 
-        public OldEntity(int garbage,int flags,short id,short modea,short modeb,short modec,byte type,byte subtype,IEnumerable<EntityPosition> positions,short nullfield1)
+        public OldEntity(short flags,byte spawn,byte unk,short id,short vecx,short vecy,short vecz,byte type,byte subtype,IEnumerable<EntityPosition> positions,short nullfield1)
         {
             if (positions == null)
                 throw new ArgumentNullException("index");
-            Garbage = garbage;
             Flags = flags;
+            Spawn = spawn;
+            Unk = unk;
             this.positions = new List<EntityPosition>(positions);
             ID = id;
-            ModeA = modea;
-            ModeB = modeb;
-            ModeC = modec;
+            VecX = vecx;
+            VecY = vecy;
+            VecZ = vecz;
             Type = type;
             Subtype = subtype;
             Nullfield1 = nullfield1;
         }
 
-        public int Flags { get; set; }
-        public int Garbage { get; set; }
+        public short Flags { get; set; }
+        public byte Spawn { get; set; }
+        public byte Unk { get; set; }
         public short ID { get; set; }
-        public short ModeA { get; set; }
-        public short ModeB { get; set; }
-        public short ModeC { get; set; }
+        public short VecX { get; set; }
+        public short VecY { get; set; }
+        public short VecZ { get; set; }
         public byte Type { get; set; }
         public byte Subtype { get; set; }
         public IList<EntityPosition> Positions => positions;
@@ -66,13 +73,15 @@ namespace Crash
         public byte[] Save()
         {
             byte[] result = new byte [22 + (6 * positions.Count)];
-            BitConv.ToInt32(result,0,Garbage);
-            BitConv.ToInt32(result,4,Flags);
+            BitConv.ToInt32(result,0,0);
+            BitConv.ToInt16(result,4,Flags);
+            result[6] = Spawn;
+            result[7] = Unk;
             BitConv.ToInt16(result,8,ID);
             BitConv.ToInt16(result,10,(short)positions.Count);
-            BitConv.ToInt16(result,12,ModeA);
-            BitConv.ToInt16(result,14,ModeB);
-            BitConv.ToInt16(result,16,ModeC);
+            BitConv.ToInt16(result,12,VecX);
+            BitConv.ToInt16(result,14,VecY);
+            BitConv.ToInt16(result,16,VecZ);
             result[18] = Type;
             result[19] = Subtype;
             for (int i = 0;i < positions.Count;++i)

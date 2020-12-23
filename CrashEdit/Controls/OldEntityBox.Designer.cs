@@ -28,6 +28,7 @@ namespace CrashEdit
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.numType = new System.Windows.Forms.NumericUpDown();
             this.fraType = new System.Windows.Forms.GroupBox();
             this.lblCodeName = new System.Windows.Forms.Label();
@@ -64,6 +65,9 @@ namespace CrashEdit
             this.numB = new System.Windows.Forms.NumericUpDown();
             this.numA = new System.Windows.Forms.NumericUpDown();
             this.numFlags = new System.Windows.Forms.NumericUpDown();
+            this.numSpawn = new System.Windows.Forms.NumericUpDown();
+            this.tipHover = new System.Windows.Forms.ToolTip(this.components);
+            this.fraSpawn = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.numType)).BeginInit();
             this.fraType.SuspendLayout();
             this.fraSubtype.SuspendLayout();
@@ -81,6 +85,8 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numA)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFlags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numSpawn)).BeginInit();
+            this.fraSpawn.SuspendLayout();
             this.SuspendLayout();
             // 
             // numType
@@ -92,7 +98,7 @@ namespace CrashEdit
             0,
             0});
             this.numType.Name = "numType";
-            this.numType.Size = new System.Drawing.Size(120, 20);
+            this.numType.Size = new System.Drawing.Size(77, 20);
             this.numType.TabIndex = 1;
             this.numType.ValueChanged += new System.EventHandler(this.numType_ValueChanged);
             // 
@@ -102,7 +108,7 @@ namespace CrashEdit
             this.fraType.Controls.Add(this.numType);
             this.fraType.Location = new System.Drawing.Point(209, 3);
             this.fraType.Name = "fraType";
-            this.fraType.Size = new System.Drawing.Size(132, 67);
+            this.fraType.Size = new System.Drawing.Size(89, 67);
             this.fraType.TabIndex = 4;
             this.fraType.TabStop = false;
             this.fraType.Text = "Type";
@@ -114,7 +120,7 @@ namespace CrashEdit
             this.lblCodeName.Name = "lblCodeName";
             this.lblCodeName.Size = new System.Drawing.Size(120, 19);
             this.lblCodeName.TabIndex = 9;
-            this.lblCodeName.Text = "GOOLC";
+            this.lblCodeName.Text = "(Unknown)";
             this.lblCodeName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // fraSubtype
@@ -122,7 +128,7 @@ namespace CrashEdit
             this.fraSubtype.Controls.Add(this.numSubtype);
             this.fraSubtype.Location = new System.Drawing.Point(209, 76);
             this.fraSubtype.Name = "fraSubtype";
-            this.fraSubtype.Size = new System.Drawing.Size(132, 46);
+            this.fraSubtype.Size = new System.Drawing.Size(89, 46);
             this.fraSubtype.TabIndex = 5;
             this.fraSubtype.TabStop = false;
             this.fraSubtype.Text = "Subtype";
@@ -131,7 +137,7 @@ namespace CrashEdit
             // 
             this.numSubtype.Location = new System.Drawing.Point(6, 20);
             this.numSubtype.Name = "numSubtype";
-            this.numSubtype.Size = new System.Drawing.Size(120, 20);
+            this.numSubtype.Size = new System.Drawing.Size(77, 20);
             this.numSubtype.TabIndex = 1;
             this.numSubtype.ValueChanged += new System.EventHandler(this.numSubtype_ValueChanged);
             // 
@@ -330,7 +336,7 @@ namespace CrashEdit
             this.fraID.Controls.Add(this.numID);
             this.fraID.Location = new System.Drawing.Point(209, 128);
             this.fraID.Name = "fraID";
-            this.fraID.Size = new System.Drawing.Size(132, 49);
+            this.fraID.Size = new System.Drawing.Size(89, 49);
             this.fraID.TabIndex = 3;
             this.fraID.TabStop = false;
             this.fraID.Text = "ID";
@@ -349,7 +355,7 @@ namespace CrashEdit
             0,
             -2147483648});
             this.numID.Name = "numID";
-            this.numID.Size = new System.Drawing.Size(120, 20);
+            this.numID.Size = new System.Drawing.Size(77, 20);
             this.numID.TabIndex = 1;
             this.numID.ValueChanged += new System.EventHandler(this.numID_ValueChanged);
             // 
@@ -360,12 +366,13 @@ namespace CrashEdit
             this.tbcTabs.Location = new System.Drawing.Point(0, 0);
             this.tbcTabs.Name = "tbcTabs";
             this.tbcTabs.SelectedIndex = 0;
-            this.tbcTabs.Size = new System.Drawing.Size(398, 454);
+            this.tbcTabs.Size = new System.Drawing.Size(349, 370);
             this.tbcTabs.TabIndex = 7;
             // 
             // tabGeneral
             // 
             this.tabGeneral.AutoScroll = true;
+            this.tabGeneral.Controls.Add(this.fraSpawn);
             this.tabGeneral.Controls.Add(this.fraSettings);
             this.tabGeneral.Controls.Add(this.fraType);
             this.tabGeneral.Controls.Add(this.fraSubtype);
@@ -373,7 +380,7 @@ namespace CrashEdit
             this.tabGeneral.Controls.Add(this.fraID);
             this.tabGeneral.Location = new System.Drawing.Point(4, 22);
             this.tabGeneral.Name = "tabGeneral";
-            this.tabGeneral.Size = new System.Drawing.Size(390, 428);
+            this.tabGeneral.Size = new System.Drawing.Size(341, 344);
             this.tabGeneral.TabIndex = 0;
             this.tabGeneral.Text = "General";
             this.tabGeneral.UseVisualStyleBackColor = true;
@@ -540,7 +547,7 @@ namespace CrashEdit
             this.numFlags.Hexadecimal = true;
             this.numFlags.Location = new System.Drawing.Point(62, 19);
             this.numFlags.Maximum = new decimal(new int[] {
-            -1,
+            65535,
             0,
             0,
             0});
@@ -549,13 +556,41 @@ namespace CrashEdit
             this.numFlags.TabIndex = 2;
             this.numFlags.ValueChanged += new System.EventHandler(this.numUnknown_ValueChanged);
             // 
+            // numSpawn
+            // 
+            this.numSpawn.Location = new System.Drawing.Point(6, 19);
+            this.numSpawn.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numSpawn.Name = "numSpawn";
+            this.numSpawn.Size = new System.Drawing.Size(77, 20);
+            this.numSpawn.TabIndex = 12;
+            this.numSpawn.ValueChanged += new System.EventHandler(this.numSpawn_ValueChanged);
+            // 
+            // tipHover
+            // 
+            this.tipHover.AutomaticDelay = 250;
+            // 
+            // fraSpawn
+            // 
+            this.fraSpawn.Controls.Add(this.numSpawn);
+            this.fraSpawn.Location = new System.Drawing.Point(209, 183);
+            this.fraSpawn.Name = "fraSpawn";
+            this.fraSpawn.Size = new System.Drawing.Size(89, 49);
+            this.fraSpawn.TabIndex = 4;
+            this.fraSpawn.TabStop = false;
+            this.fraSpawn.Text = "Spawn [?]";
+            this.tipHover.SetToolTip(this.fraSpawn, "Must be set to 3, or entity will not spawn!");
+            // 
             // OldEntityBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tbcTabs);
             this.Name = "OldEntityBox";
-            this.Size = new System.Drawing.Size(398, 454);
+            this.Size = new System.Drawing.Size(349, 370);
             ((System.ComponentModel.ISupportInitialize)(this.numType)).EndInit();
             this.fraType.ResumeLayout(false);
             this.fraSubtype.ResumeLayout(false);
@@ -576,6 +611,8 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numA)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFlags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numSpawn)).EndInit();
+            this.fraSpawn.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -618,5 +655,8 @@ namespace CrashEdit
         private System.Windows.Forms.CheckBox chkHexA;
         private System.Windows.Forms.CheckBox chkHexFlags;
         private System.Windows.Forms.Button cmdInterpolate;
+        private System.Windows.Forms.NumericUpDown numSpawn;
+        private System.Windows.Forms.ToolTip tipHover;
+        private System.Windows.Forms.GroupBox fraSpawn;
     }
 }

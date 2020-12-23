@@ -84,29 +84,29 @@ namespace CrashEdit
         private void UpdateSettings()
         {
             numFlags.Value = entity.Flags;
-            numModeA.Value = entity.ModeA;
-            numModeB.Value = entity.ModeB;
-            numModeC.Value = entity.ModeC;
+            numModeA.Value = entity.VecX;
+            numModeB.Value = entity.VecY;
+            numModeC.Value = entity.VecZ;
         }
 
         private void numA_ValueChanged(object sender, EventArgs e)
         {
-            entity.Flags = (int)numFlags.Value;
+            entity.Flags = (short)numFlags.Value;
         }
 
         private void numB_ValueChanged(object sender, EventArgs e)
         {
-            entity.ModeA = (short)numModeA.Value;
+            entity.VecX = (short)numModeA.Value;
         }
 
         private void numC_ValueChanged(object sender, EventArgs e)
         {
-            entity.ModeB = (short)numModeB.Value;
+            entity.VecY = (short)numModeB.Value;
         }
 
         private void numD_ValueChanged(object sender, EventArgs e)
         {
-            entity.ModeC = (short)numModeC.Value;
+            entity.VecZ = (short)numModeC.Value;
         }
 
         private void UpdateCodeString()

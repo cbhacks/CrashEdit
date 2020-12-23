@@ -1,6 +1,5 @@
 using Crash;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -192,29 +191,35 @@ namespace CrashEdit
         private void UpdateSettings()
         {
             numFlags.Value = entity.Flags;
-            numA.Value = entity.ModeA;
-            numB.Value = entity.ModeB;
-            numC.Value = entity.ModeC;
+            numA.Value = entity.VecX;
+            numB.Value = entity.VecY;
+            numC.Value = entity.VecZ;
+            numSpawn.Value = entity.Spawn;
         }
 
         private void numUnknown_ValueChanged(object sender,EventArgs e)
         {
-            entity.Flags = (int)numFlags.Value;
+            entity.Flags = (short)numFlags.Value;
         }
 
         private void numA_ValueChanged(object sender,EventArgs e)
         {
-            entity.ModeA = (short)numA.Value;
+            entity.VecX = (short)numA.Value;
         }
 
         private void numB_ValueChanged(object sender,EventArgs e)
         {
-            entity.ModeB = (short)numB.Value;
+            entity.VecY = (short)numB.Value;
         }
 
         private void numC_ValueChanged(object sender,EventArgs e)
         {
-            entity.ModeC = (short)numC.Value;
+            entity.VecZ = (short)numC.Value;
+        }
+
+        private void numSpawn_ValueChanged(object sender, EventArgs e)
+        {
+            entity.Spawn = (byte)numSpawn.Value;
         }
 
         private void UpdateCodeString() // TODO : use NSD gool map

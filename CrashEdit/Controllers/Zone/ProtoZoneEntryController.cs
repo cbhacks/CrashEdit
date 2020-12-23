@@ -1,4 +1,5 @@
 using Crash;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -70,9 +71,9 @@ namespace CrashEdit
         {
             byte[] header = new byte[0x378];
             // convert header
-            System.Array.Copy(ProtoZoneEntry.Header,0,header,0,0x228);
-            System.Array.Copy(ProtoZoneEntry.Header,0x228,header,0x234,0xB0);
-            System.Array.Copy(ProtoZoneEntry.Header,0x2EC,header,0x318,0x60);
+            Array.Copy(ProtoZoneEntry.Header,0,header,0,0x228);
+            Array.Copy(ProtoZoneEntry.Header,0x228,header,0x234,0xB0);
+            Array.Copy(ProtoZoneEntry.Header,0x2EC,header,0x318,0x60);
             BitConv.ToInt32(header,0x304,Entry.NullEID);
             // convert layout
             short xmax = BitConv.FromInt16(ProtoZoneEntry.Layout,0x1E);
@@ -101,7 +102,7 @@ namespace CrashEdit
                     z += (short)(delta.Z*2);
                     pos.Add(new EntityPosition(x,y,z));
                 }
-                entities.Add(new OldEntity(protoentity.Garbage,protoentity.Flags,(short)(protoentity.ID+5),protoentity.ModeA,protoentity.ModeB,protoentity.ModeC,protoentity.Type,protoentity.Subtype,pos,protoentity.Nullfield1));
+                entities.Add(new OldEntity(protoentity.Flags,protoentity.Spawn,protoentity.Unk,(short)(protoentity.ID+5),protoentity.VecX,protoentity.VecY,protoentity.VecZ,protoentity.Type,protoentity.Subtype,pos,protoentity.Nullfield1));
             }
             OldZoneEntry newzone = new OldZoneEntry(header,layout,ProtoZoneEntry.Cameras,entities,ProtoZoneEntry.EID);
             FileUtil.SaveFile(newzone.Save(),FileFilters.NSEntry,FileFilters.Any);
