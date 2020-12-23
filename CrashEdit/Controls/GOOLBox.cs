@@ -128,11 +128,11 @@ namespace CrashEdit
             if (goolcount != goolentry.Instructions.Count)
             {
                 lstCode.Items.Add("");
-                str = string.Format("Instructions: {0:0.00}% GOOL", goolcount * 100F / goolentry.Instructions.Count);
+                str = string.Format("Instructions: {0:P} GOOL", (float)goolcount / goolentry.Instructions.Count);
                 if (mipscount > 0)
-                    str += string.Format(", {0:0.00}% MIPS", mipscount * 100F / goolentry.Instructions.Count);
+                    str += string.Format(", {0:P} MIPS", (float)mipscount / goolentry.Instructions.Count);
                 if (goolentry.Instructions.Count - mipscount - goolcount > 0)
-                    str += string.Format(", {0:0.00}% invalid", (goolentry.Instructions.Count - mipscount - goolcount) * 100F / goolentry.Instructions.Count);
+                    str += string.Format(", {0:P} invalid", (float)(goolentry.Instructions.Count - mipscount - goolcount) / goolentry.Instructions.Count);
                 lstCode.Items.Add(str);
             }
 
