@@ -524,7 +524,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ID.
+        ///   Looks up a localized string similar to ID &amp;&amp; Look-up ID.
         /// </summary>
         internal static string EntityBox_FraID {
             get {
@@ -641,15 +641,6 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Subtype.
-        /// </summary>
-        internal static string EntityBox_FraSubtype {
-            get {
-                return ResourceManager.GetString("EntityBox_FraSubtype", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Time Trial Reward.
         /// </summary>
         internal static string EntityBox_FraTTReward {
@@ -659,7 +650,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type.
+        ///   Looks up a localized string similar to Type &amp;&amp; Subtype.
         /// </summary>
         internal static string EntityBox_FraType {
             get {
@@ -682,6 +673,18 @@ namespace CrashEdit.Properties {
         internal static string EntityBox_FraZMod {
             get {
                 return ResourceManager.GetString("EntityBox_FraZMod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to as Number: {0:F3}
+        ///as Angle: {1:F}deg
+        ///as Time: {2:F}s
+        ///as Meters: {3:F3}m.
+        /// </summary>
+        internal static string EntityBox_lblArgAs {
+            get {
+                return ResourceManager.GetString("EntityBox_lblArgAs", resourceCulture);
             }
         }
         

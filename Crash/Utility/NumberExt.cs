@@ -32,5 +32,22 @@
         {
             return a + (b - a) * f;
         }
+
+        /// <summary>
+        /// Convert a long number representing an unsigned 32-bit integer into a signed 32-bit integer.
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static int UInt32ToInt32(this long n)
+        {
+            if ((n & 0x80000000) != 0)
+            {
+                return -2147483648 + (int)(n & 0x7FFFFFFF);
+            }
+            else
+            {
+                return (int)n;
+            }
+        }
     }
 }

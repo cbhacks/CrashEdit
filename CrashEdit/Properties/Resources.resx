@@ -344,7 +344,8 @@
     <value>DDA Death/1-Up Count</value>
   </data>
   <data name="EntityBox_FraID" xml:space="preserve">
-    <value>ID</value>
+    <value>ID &amp;&amp; Look-up ID</value>
+    <comment>Two &amp; are used because &amp; is used to select the mnemonic character in titles.</comment>
   </data>
   <data name="EntityBox_FraName" xml:space="preserve">
     <value>Name</value>
@@ -364,14 +365,12 @@
   <data name="EntityBox_FraSLST" xml:space="preserve">
     <value>Sort List</value>
   </data>
-  <data name="EntityBox_FraSubtype" xml:space="preserve">
-    <value>Subtype</value>
-  </data>
   <data name="EntityBox_FraTTReward" xml:space="preserve">
     <value>Time Trial Reward</value>
   </data>
   <data name="EntityBox_FraType" xml:space="preserve">
-    <value>Type</value>
+    <value>Type &amp;&amp; Subtype</value>
+    <comment>Two &amp; are used because &amp; is used to select the mnemonic character in titles.</comment>
   </data>
   <data name="EntityBox_FraVictims" xml:space="preserve">
     <value>Victims</value>
@@ -738,5 +737,11 @@
   </data>
   <data name="MakeBIN_Making" xml:space="preserve">
     <value>Making BIN...</value>
+  </data>
+  <data name="EntityBox_lblArgAs" xml:space="preserve">
+    <value>as Number: {0:F3}
+as Angle: {1:F}deg
+as Time: {2:F}s
+as Meters: {3:F3}m</value>
   </data>
 </root>

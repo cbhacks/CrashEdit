@@ -9,9 +9,7 @@ namespace Crash
 
         protected override EntitySetting LoadElement(byte[] data)
         {
-            byte a = data[0];
-            int b = BitConv.FromInt24(data,1);
-            return new EntitySetting(a,b);
+            return new EntitySetting(BitConv.FromInt32(data,0));
         }
 
         protected override EntityProperty Load(IEnumerable<EntityPropertyRow<EntitySetting>> rows)

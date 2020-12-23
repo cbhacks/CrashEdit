@@ -31,6 +31,8 @@ namespace CrashEdit
         private int fovframeindex;
         private int fovindex;
 
+        private Timer argtexttimer;
+
         internal void MainInit()
         {
             InitializeComponent();
@@ -70,7 +72,6 @@ namespace CrashEdit
             chkBonusBoxCount.Text = Resources.EntityBox_ChkBonusBoxCount;
             fraID.Text = Resources.EntityBox_FraID;
             fraType.Text = Resources.EntityBox_FraType;
-            fraSubtype.Text = Resources.EntityBox_FraSubtype;
             fraPosition.Text = Resources.EntityBox_FraPosition;
             fraSettings.Text = Resources.EntityBox_FraSettings;
             foreach (Button cmd in this.GetAll(typeof(Button)))
@@ -111,38 +112,50 @@ namespace CrashEdit
             fraScaling.Text = Resources.EntityBox_FraScaling;
             fraTTReward.Text = Resources.EntityBox_FraTTReward;
             fraSLST.Text = Resources.EntityBox_FraSLST;
-            cmdClearAllVictims.Text = Properties.Resources.EntityBox_cmdClearAllVictims;
+            cmdClearAllVictims.Text = Resources.EntityBox_cmdClearAllVictims;
             fraMode.Text = Resources.EntityBox_FraMode;
-            fraAvgDist.Text = Properties.Resources.EntityBox_fraAvgDist;
-            fraCameraIndex.Text = Properties.Resources.EntityBox_fraCameraIndex;
-            fraCameraSubIndex.Text = Properties.Resources.EntityBox_fraCameraSubIndex;
-            fraNeighbor.Text = Properties.Resources.EntityBox_fraNeighbor;
-            lblNeighborPosition.Text = Properties.Resources.EntityBox_lblNeighborPosition;
-            fraNeighborSetting.Text = Properties.Resources.EntityBox_fraNeighborSetting;
-            lblNeighborCamera.Text = Properties.Resources.EntityBox_lblNeighborCamera;
-            lblNeighborFlag.Text = Properties.Resources.EntityBox_lblNeighborFlag;
-            lblNeighborLink.Text = Properties.Resources.EntityBox_lblNeighborLink;
-            lblNeighborZone.Text = Properties.Resources.EntityBox_lblNeighborZone;
-            fraFOV.Text = Properties.Resources.EntityBox_fraFOV;
-            lblFOVPosition.Text = Properties.Resources.EntityBox_lblFOVPosition;
-            fraFOVFrame.Text = Properties.Resources.EntityBox_fraFOVFrame;
-            fraLoadListA.Text = Properties.Resources.EntityBox_fraLoadListA;
-            fraLoadListB.Text = Properties.Resources.EntityBox_fraLoadListB;
-            lblMetavalueLoadA.Text = Properties.Resources.EntityBox_lblMetavalueLoadA;
-            lblMetavalueLoadB.Text = Properties.Resources.EntityBox_lblMetavalueLoadB;
-            fraEIDA.Text = Properties.Resources.EntityBox_fraEIDA;
-            fraEIDB.Text = Properties.Resources.EntityBox_fraEIDB;
-            fraLoadListPayload.Text = Properties.Resources.EntityBox_fraLoadListPayload;
-            cmdLoadListVerify.Text = Properties.Resources.EntityBox_cmdLoadListVerify;
-            lblPayloadPosition.Text = Properties.Resources.EntityBox_lblPayloadPosition;
-            cmdPayload.Text = Properties.Resources.EntityBox_cmdPayload;
-            fraDrawListA.Text = Properties.Resources.EntityBox_fraDrawListA;
-            fraDrawListB.Text = Properties.Resources.EntityBox_fraDrawListB;
-            lblMetavalueDrawA.Text = Properties.Resources.EntityBox_lblMetavalueDrawA;
-            lblMetavalueDrawB.Text = Properties.Resources.EntityBox_lblMetavalueDrawB;
-            fraEntityA.Text = Properties.Resources.EntityBox_fraEntityA;
-            fraEntityB.Text = Properties.Resources.EntityBox_fraEntityB;
+            fraAvgDist.Text = Resources.EntityBox_fraAvgDist;
+            fraCameraIndex.Text = Resources.EntityBox_fraCameraIndex;
+            fraCameraSubIndex.Text = Resources.EntityBox_fraCameraSubIndex;
+            fraNeighbor.Text = Resources.EntityBox_fraNeighbor;
+            lblNeighborPosition.Text = Resources.EntityBox_lblNeighborPosition;
+            fraNeighborSetting.Text = Resources.EntityBox_fraNeighborSetting;
+            lblNeighborCamera.Text = Resources.EntityBox_lblNeighborCamera;
+            lblNeighborFlag.Text = Resources.EntityBox_lblNeighborFlag;
+            lblNeighborLink.Text = Resources.EntityBox_lblNeighborLink;
+            lblNeighborZone.Text = Resources.EntityBox_lblNeighborZone;
+            fraFOV.Text = Resources.EntityBox_fraFOV;
+            lblFOVPosition.Text = Resources.EntityBox_lblFOVPosition;
+            fraFOVFrame.Text = Resources.EntityBox_fraFOVFrame;
+            fraLoadListA.Text = Resources.EntityBox_fraLoadListA;
+            fraLoadListB.Text = Resources.EntityBox_fraLoadListB;
+            lblMetavalueLoadA.Text = Resources.EntityBox_lblMetavalueLoadA;
+            lblMetavalueLoadB.Text = Resources.EntityBox_lblMetavalueLoadB;
+            fraEIDA.Text = Resources.EntityBox_fraEIDA;
+            fraEIDB.Text = Resources.EntityBox_fraEIDB;
+            fraLoadListPayload.Text = Resources.EntityBox_fraLoadListPayload;
+            cmdLoadListVerify.Text = Resources.EntityBox_cmdLoadListVerify;
+            lblPayloadPosition.Text = Resources.EntityBox_lblPayloadPosition;
+            cmdPayload.Text = Resources.EntityBox_cmdPayload;
+            fraDrawListA.Text = Resources.EntityBox_fraDrawListA;
+            fraDrawListB.Text = Resources.EntityBox_fraDrawListB;
+            lblMetavalueDrawA.Text = Resources.EntityBox_lblMetavalueDrawA;
+            lblMetavalueDrawB.Text = Resources.EntityBox_lblMetavalueDrawB;
+            fraEntityA.Text = Resources.EntityBox_fraEntityA;
+            fraEntityB.Text = Resources.EntityBox_fraEntityB;
+            lblArgAs.Text = MakeArgAsText();
             chkSettingHex_CheckedChanged(null, null);
+
+            // use a Timer because of PAL switch
+            argtexttimer = new Timer()
+            {
+                Enabled = true,
+                Interval = 40
+            };
+            argtexttimer.Tick += (object sender, EventArgs e) =>
+            {
+                lblArgAs.Text = MakeArgAsText();
+            };
         }
 
         public EntityBox(NewEntityController controller)
@@ -162,6 +175,16 @@ namespace CrashEdit
         private void InvalidateNodes()
         {
             controller.InvalidateNode();
+        }
+
+        internal string MakeArgAsText()
+        {
+            int arg = entity.Settings.Count > 0 ? entity.Settings[settingindex].Value : 0;
+            return string.Format(Resources.EntityBox_lblArgAs,
+                arg / 256F,
+                arg / (float)0x1000 * 360,
+                arg / (OldMainForm.PAL ? 25F : 30F),
+                arg / (256F*400));
         }
 
         private void UpdateName()
@@ -209,10 +232,10 @@ namespace CrashEdit
             if (positionindex >= entity.Positions.Count)
             {
                 lblPositionIndex.Text = "-- / --";
-                cmdPreviousPosition.Enabled = false;
-                cmdNextPosition.Enabled = false;
-                cmdInsertPosition.Enabled = false;
-                cmdRemovePosition.Enabled = false;
+                cmdPreviousPosition.Enabled =
+                cmdNextPosition.Enabled =
+                cmdInsertPosition.Enabled =
+                cmdRemovePosition.Enabled =
                 cmdInterpolate.Enabled = false;
                 lblX.Enabled = lblY.Enabled = lblZ.Enabled = numX.Enabled = numY.Enabled = numZ.Enabled = false;
             }
@@ -319,11 +342,10 @@ namespace CrashEdit
             if (settingindex >= entity.Settings.Count)
             {
                 lblSettingIndex.Text = "-- / --";
+                lblArgAs.Enabled =
                 cmdPreviousSetting.Enabled =
                 cmdNextSetting.Enabled =
                 cmdRemoveSetting.Enabled =
-                lblSettingA.Enabled =
-                lblSettingB.Enabled =
                 numSettingA.Enabled =
                 numSettingB.Enabled =
                 numSettingC.Enabled = false;
@@ -331,17 +353,17 @@ namespace CrashEdit
             else
             {
                 lblSettingIndex.Text = $"{settingindex+1} / {entity.Settings.Count}";
+                lblArgAs.Text = MakeArgAsText();
                 cmdPreviousSetting.Enabled = settingindex > 0;
                 cmdNextSetting.Enabled = settingindex < entity.Settings.Count-1;
                 cmdRemoveSetting.Enabled =
-                lblSettingA.Enabled =
-                lblSettingB.Enabled =
+                lblArgAs.Enabled =
                 numSettingA.Enabled =
                 numSettingB.Enabled =
                 numSettingC.Enabled = true;
                 numSettingA.Value = entity.Settings[settingindex].ValueA;
                 numSettingB.Value = entity.Settings[settingindex].ValueB;
-                SetCVal(entity.Settings[settingindex].ValueA | (entity.Settings[settingindex].ValueB << 8));
+                SetCVal(entity.Settings[settingindex].Value); settingdirty = true; // SetCVal automatically turns this bool off
             }
             settingdirty = false;
         }
@@ -376,9 +398,8 @@ namespace CrashEdit
             {
                 EntitySetting s = entity.Settings[settingindex];
                 entity.Settings[settingindex] = new EntitySetting((byte)numSettingA.Value,s.ValueB);
-                settingdirty = true;
-                SetCVal(entity.Settings[settingindex].ValueA | (entity.Settings[settingindex].ValueB << 8));
-                settingdirty = false;
+                SetCVal(entity.Settings[settingindex].Value);
+                lblArgAs.Text = MakeArgAsText();
             }
         }
 
@@ -388,42 +409,41 @@ namespace CrashEdit
             {
                 EntitySetting s = entity.Settings[settingindex];
                 entity.Settings[settingindex] = new EntitySetting(s.ValueA,(int)numSettingB.Value);
-                settingdirty = true;
-                SetCVal(entity.Settings[settingindex].ValueA | (entity.Settings[settingindex].ValueB << 8));
-                settingdirty = false;
+                SetCVal(entity.Settings[settingindex].Value);
+                lblArgAs.Text = MakeArgAsText();
             }
         }
 
         internal void SetCVal(long val)
         {
+            settingdirty = true;
             // this is fucking stupid
-            numSettingC.Minimum = long.MinValue;
-            numSettingC.Maximum = long.MaxValue;
             if (numSettingC.Hexadecimal)
             {
+                if (val > 0xFFFFFFFF) val = 0xFFFFFFFF;
+                else if (val < 0) val &= 0xFFFFFFFF;
                 numSettingC.Value = unchecked((uint)val);
-                numSettingC.Minimum = uint.MinValue;
-                numSettingC.Maximum = uint.MaxValue;
             }
             else
             {
+                if (val > 0x7FFFFFFF) val = 0x7FFFFFFF;
+                else if (val < -0x80000000) val = -0x80000000;
                 numSettingC.Value = unchecked((int)val);
-                numSettingC.Minimum = int.MinValue;
-                numSettingC.Maximum = int.MaxValue;
             }
+            settingdirty = false;
         }
 
         private void numSettingC_ValueChanged(object sender, EventArgs e)
         {
             if (!settingdirty)
             {
-                EntitySetting s = entity.Settings[settingindex];
-                long c = (long)numSettingC.Value;
-                entity.Settings[settingindex] = new EntitySetting((byte)c, ((int)c >> 8));
+                SetCVal((long)numSettingC.Value);
+                entity.Settings[settingindex] = new EntitySetting(((long)numSettingC.Value).UInt32ToInt32());
                 settingdirty = true;
                 numSettingA.Value = entity.Settings[settingindex].ValueA;
                 numSettingB.Value = entity.Settings[settingindex].ValueB;
                 settingdirty = false;
+                lblArgAs.Text = MakeArgAsText();
             }
         }
 
@@ -1672,7 +1692,7 @@ namespace CrashEdit
         private void chkSettingHex_CheckedChanged(object sender, EventArgs e)
         {
             numSettingC.Hexadecimal = chkSettingHex.Checked;
-            SetCVal((long)numSettingC.Value);
+            SetCVal(entity.Settings[settingindex].Value);
         }
 
         private void cmdInterpolate_Click(object sender, EventArgs e)

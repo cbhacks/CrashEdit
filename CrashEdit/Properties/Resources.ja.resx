@@ -344,7 +344,7 @@
     <value>DDA デス数</value>
   </data>
   <data name="EntityBox_FraID" xml:space="preserve">
-    <value>ID</value>
+    <value>ID＆検索ID</value>
   </data>
   <data name="EntityBox_FraName" xml:space="preserve">
     <value>名前</value>
@@ -364,14 +364,11 @@
   <data name="EntityBox_FraSLST" xml:space="preserve">
     <value>ソートリスト</value>
   </data>
-  <data name="EntityBox_FraSubtype" xml:space="preserve">
-    <value>サブタイプ</value>
-  </data>
   <data name="EntityBox_FraTTReward" xml:space="preserve">
     <value>タイムアタック報酬</value>
   </data>
   <data name="EntityBox_FraType" xml:space="preserve">
-    <value>タイプ</value>
+    <value>タイプ＆サブタイプ</value>
   </data>
   <data name="EntityBox_FraVictims" xml:space="preserve">
     <value>Victims</value>

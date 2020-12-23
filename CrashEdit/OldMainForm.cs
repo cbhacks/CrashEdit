@@ -65,7 +65,7 @@ namespace CrashEdit
         private BackgroundWorker bgwMakeBIN;
         private ProgressBarForm dlgProgress;
 
-        private static bool PAL = false;
+        public static bool PAL { get; private set; } = false;
         private const int RateNTSC = 30;
         private const int RatePAL = 25;
 

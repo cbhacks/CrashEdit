@@ -17,8 +17,7 @@ namespace Crash
 
         protected override void SaveElement(byte[] data,EntitySetting value)
         {
-            data[0] = value.ValueA;
-            BitConv.ToInt24(data,1,value.ValueB);
+            BitConv.ToInt32(data,0,value.Value);
         }
     }
 }

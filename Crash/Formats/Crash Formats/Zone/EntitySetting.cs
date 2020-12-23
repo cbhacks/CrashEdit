@@ -8,12 +8,16 @@ namespace Crash
         {
             if (valueb < -8388608 || valueb > 8388607)
                 throw new ArgumentOutOfRangeException("valueb");
-            ValueA = valuea;
-            ValueB = valueb;
+            Value = valuea | (valueb << 8);
         }
 
-        public byte ValueA { get; }
-        public int ValueB { get; }
-        public int ValueInt => ValueA | (ValueB << 8);
+        public EntitySetting(int value)
+        {
+            Value = value;
+        }
+
+        public byte ValueA => (byte)(Value);
+        public int ValueB => (Value & -256) >> 8;
+        public int Value { get; }
     }
 }
