@@ -12,11 +12,8 @@ namespace CrashEdit
         private Controller controller;
         private Entity entity;
 
-        private bool positiondirty;
         private int positionindex;
-        private bool settingdirty;
         private int settingindex;
-        private bool victimdirty;
         private int victimindex;
         private int loadlistarowindex;
         private int loadlistaeidindex;
@@ -32,6 +29,9 @@ namespace CrashEdit
         private int fovindex;
 
         private Timer argtexttimer;
+
+        internal Stack<bool> dirty = new Stack<bool>();
+        internal bool Dirty => dirty.Count > 0 && dirty.Peek();
 
         internal void MainInit()
         {
@@ -216,7 +216,7 @@ namespace CrashEdit
 
         private void UpdatePosition()
         {
-            positiondirty = true;
+            dirty.Push(true);
             if (positionindex >= entity.Positions.Count)
             {
                 positionindex = entity.Positions.Count-1;
@@ -252,7 +252,7 @@ namespace CrashEdit
                 numZ.Value = entity.Positions[positionindex].Z;
                 cmdInterpolate.Enabled = entity.Positions.Count >= 2;
             }
-            positiondirty = false;
+            dirty.Pop();
         }
 
         private void cmdPreviousPosition_Click(object sender,EventArgs e)
@@ -299,7 +299,7 @@ namespace CrashEdit
 
         private void numX_ValueChanged(object sender,EventArgs e)
         {
-            if (!positiondirty)
+            if (!Dirty)
             {
                 EntityPosition pos = entity.Positions[positionindex];
                 entity.Positions[positionindex] = new EntityPosition((short)numX.Value,pos.Y,pos.Z);
@@ -308,7 +308,7 @@ namespace CrashEdit
 
         private void numY_ValueChanged(object sender,EventArgs e)
         {
-            if (!positiondirty)
+            if (!Dirty)
             {
                 EntityPosition pos = entity.Positions[positionindex];
                 entity.Positions[positionindex] = new EntityPosition(pos.X,(short)numY.Value,pos.Z);
@@ -317,7 +317,7 @@ namespace CrashEdit
 
         private void numZ_ValueChanged(object sender,EventArgs e)
         {
-            if (!positiondirty)
+            if (!Dirty)
             {
                 EntityPosition pos = entity.Positions[positionindex];
                 entity.Positions[positionindex] = new EntityPosition(pos.X,pos.Y,(short)numZ.Value);
@@ -326,7 +326,7 @@ namespace CrashEdit
 
         private void UpdateSettings()
         {
-            settingdirty = true;
+            dirty.Push(true);
             if (settingindex >= entity.Settings.Count)
             {
                 settingindex = entity.Settings.Count - 1;
@@ -363,9 +363,9 @@ namespace CrashEdit
                 numSettingC.Enabled = true;
                 numSettingA.Value = entity.Settings[settingindex].ValueA;
                 numSettingB.Value = entity.Settings[settingindex].ValueB;
-                SetCVal(entity.Settings[settingindex].Value); settingdirty = true; // SetCVal automatically turns this bool off
+                SetCVal(entity.Settings[settingindex].Value);
             }
-            settingdirty = false;
+            dirty.Pop();
         }
 
         private void cmdPreviousSetting_Click(object sender,EventArgs e)
@@ -394,7 +394,7 @@ namespace CrashEdit
 
         private void numSettingA_ValueChanged(object sender,EventArgs e)
         {
-            if (!settingdirty)
+            if (!Dirty)
             {
                 EntitySetting s = entity.Settings[settingindex];
                 entity.Settings[settingindex] = new EntitySetting((byte)numSettingA.Value,s.ValueB);
@@ -405,7 +405,7 @@ namespace CrashEdit
 
         private void numSettingB_ValueChanged(object sender,EventArgs e)
         {
-            if (!settingdirty)
+            if (!Dirty)
             {
                 EntitySetting s = entity.Settings[settingindex];
                 entity.Settings[settingindex] = new EntitySetting(s.ValueA,(int)numSettingB.Value);
@@ -416,7 +416,7 @@ namespace CrashEdit
 
         internal void SetCVal(long val)
         {
-            settingdirty = true;
+            dirty.Push(true);
             // this is fucking stupid
             if (numSettingC.Hexadecimal)
             {
@@ -430,19 +430,19 @@ namespace CrashEdit
                 else if (val < -0x80000000) val = -0x80000000;
                 numSettingC.Value = unchecked((int)val);
             }
-            settingdirty = false;
+            dirty.Pop();
         }
 
         private void numSettingC_ValueChanged(object sender, EventArgs e)
         {
-            if (!settingdirty)
+            if (!Dirty)
             {
                 SetCVal((long)numSettingC.Value);
                 entity.Settings[settingindex] = new EntitySetting(((long)numSettingC.Value).UInt32ToInt32());
-                settingdirty = true;
+                dirty.Push(true);
                 numSettingA.Value = entity.Settings[settingindex].ValueA;
                 numSettingB.Value = entity.Settings[settingindex].ValueB;
-                settingdirty = false;
+                dirty.Pop();
                 lblArgAs.Text = MakeArgAsText();
             }
         }
@@ -624,7 +624,7 @@ namespace CrashEdit
 
         private void UpdateVictim()
         {
-            victimdirty = true;
+            dirty.Push(true);
             if (victimindex >= entity.Victims.Count)
             {
                 victimindex = entity.Victims.Count-1;
@@ -655,7 +655,7 @@ namespace CrashEdit
                 cmdClearAllVictims.Enabled = true;
                 numVictimID.Value = entity.Victims[victimindex].VictimID;
             }
-            victimdirty = false;
+            dirty.Pop();
         }
 
         private void cmdPreviousVictim_Click(object sender,EventArgs e)
@@ -692,7 +692,7 @@ namespace CrashEdit
 
         private void numVictimID_ValueChanged(object sender,EventArgs e)
         {
-            if (!victimdirty)
+            if (!Dirty)
             {
                 entity.Victims[victimindex] = new EntityVictim((short)numVictimID.Value);
             }
