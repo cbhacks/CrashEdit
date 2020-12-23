@@ -61,7 +61,6 @@ namespace CrashEdit
             OldEntity newentity = OldEntity.Load(new OldEntity(0x0018,3,0,id,0,0,0,0,0,new List<EntityPosition>() { new EntityPosition(0,0,0) },0).Save());
             MapEntry.Entities.Add(newentity);
             AddNode(new OldEntityController(this,newentity));
-            MapEntry.EntityCount = MapEntry.Entities.Count;
         }
     }
 }

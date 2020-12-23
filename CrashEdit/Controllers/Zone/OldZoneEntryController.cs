@@ -68,7 +68,6 @@ namespace CrashEdit
             OldCamera newcam = OldCamera.Load(new OldCamera(Entry.ENameToEID("NONE!"),0,0,new OldCameraNeighbor[4],0,0,0,0,1600,0,0,0,0,0,0,new List<OldCameraPosition>(),0).Save());
             OldZoneEntry.Cameras.Add(newcam);
             InsertNode(2 + OldZoneEntry.Cameras.Count - 1,new OldCameraController(this,newcam));
-            OldZoneEntry.CameraCount = OldZoneEntry.Cameras.Count;
         }
 
         void Menu_AddEntity()
@@ -94,7 +93,6 @@ namespace CrashEdit
             OldEntity newentity = OldEntity.Load(new OldEntity(0x0018,3,0,id,0,0,0,0,0,new List<EntityPosition>() { new EntityPosition(0,0,0) },0).Save());
             OldZoneEntry.Entities.Add(newentity);
             AddNode(new OldEntityController(this,newentity));
-            OldZoneEntry.EntityCount = OldZoneEntry.Entities.Count;
         }
     }
 }

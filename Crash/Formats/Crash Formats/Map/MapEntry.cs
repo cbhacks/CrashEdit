@@ -18,15 +18,9 @@ namespace Crash
         public byte[] Layout { get; }
         public IList<OldEntity> Entities => entities;
 
-        public int EntityCount
-        {
-            get => BitConv.FromInt32(Header,0xC);
-            set => BitConv.ToInt32(Header,0xC,value);
-        }
-
         public override UnprocessedEntry Unprocess()
         {
-            EntityCount = entities.Count;
+            BitConv.ToInt32(Header,0xC,entities.Count);
             byte[][] items = new byte[2 + entities.Count][];
             items[0] = Header;
             items[1] = Layout;

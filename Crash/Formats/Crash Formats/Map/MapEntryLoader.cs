@@ -14,7 +14,7 @@ namespace Crash
                 throw new ArgumentNullException("items");
             if (items.Length < 2)
             {
-                ErrorManager.SignalError("OldZoneEntry: Wrong number of items");
+                ErrorManager.SignalError("MapEntry: Wrong number of items");
             }
             byte[] header = items[0];
             byte[] layout = items[1];

@@ -28,18 +28,6 @@ namespace Crash
             set => BitConv.ToInt32(Header,0x204,value);
         }
 
-        public int CameraCount
-        {
-            get => BitConv.FromInt32(Header,0x208);
-            set => BitConv.ToInt32(Header,0x208,value);
-        }
-
-        public int EntityCount
-        {
-            get => BitConv.FromInt32(Header,0x20C);
-            set => BitConv.ToInt32(Header,0x20C,value);
-        }
-
         public int ZoneCount
         {
             get => BitConv.FromInt32(Header,0x210);
@@ -48,8 +36,8 @@ namespace Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            CameraCount = cameras.Count;
-            EntityCount = entities.Count;
+            BitConv.ToInt32(Header,0x208,cameras.Count);
+            BitConv.ToInt32(Header,0x20C,entities.Count);
             byte[][] items = new byte[2 + entities.Count + cameras.Count][];
             items[0] = Header;
             items[1] = Layout;

@@ -17,10 +17,10 @@ namespace CrashEdit
 
         public OldEntityController(MapEntryController oldt17entrycontroller, OldEntity entity)
         {
-            OldT17EntryController = oldt17entrycontroller;
+            MapEntryController = oldt17entrycontroller;
             OldEntity = entity;
-            AddMenu("Duplicate Entity",Menu_DuplicateT17);
-            AddMenu("Delete Entity",Menu_DeleteT17);
+            AddMenu("Duplicate Entity",Menu_MapDuplicate);
+            AddMenu("Delete Entity",Menu_MapDelete);
             InvalidateNode();
             InvalidateNodeImage();
         }
@@ -42,7 +42,7 @@ namespace CrashEdit
         }
 
         public OldZoneEntryController OldZoneEntryController { get; }
-        public MapEntryController OldT17EntryController { get; }
+        public MapEntryController MapEntryController { get; }
 
         public OldEntity OldEntity { get; }
 
@@ -66,7 +66,6 @@ namespace CrashEdit
                 ++id;
                 continue;
             }
-            ++OldZoneEntryController.OldZoneEntry.EntityCount;
             OldEntity newentity = OldEntity.Load(OldEntity.Save());
             newentity.ID = id;
             OldZoneEntryController.OldZoneEntry.Entities.Add(newentity);
@@ -75,17 +74,16 @@ namespace CrashEdit
 
         private void Menu_Delete()
         {
-            --OldZoneEntryController.OldZoneEntry.EntityCount;
             OldZoneEntryController.OldZoneEntry.Entities.Remove(OldEntity);
             Dispose();
         }
         
-        private void Menu_DuplicateT17()
+        private void Menu_MapDuplicate()
         {
             short id = 6;
             while (true)
             {
-                foreach (MapEntry zone in OldT17EntryController.EntryChunkController.NSFController.NSF.GetEntries<MapEntry>())
+                foreach (MapEntry zone in MapEntryController.EntryChunkController.NSFController.NSF.GetEntries<MapEntry>())
                 {
                     foreach (OldEntity otherentity in zone.Entities)
                     {
@@ -100,17 +98,15 @@ namespace CrashEdit
                 ++id;
                 continue;
             }
-            ++OldT17EntryController.MapEntry.EntityCount;
             OldEntity newentity = OldEntity.Load(OldEntity.Save());
             newentity.ID = id;
-            OldT17EntryController.MapEntry.Entities.Add(newentity);
-            OldT17EntryController.AddNode(new OldEntityController(OldT17EntryController,newentity));
+            MapEntryController.MapEntry.Entities.Add(newentity);
+            MapEntryController.AddNode(new OldEntityController(MapEntryController,newentity));
         }
 
-        private void Menu_DeleteT17()
+        private void Menu_MapDelete()
         {
-            --OldT17EntryController.MapEntry.EntityCount;
-            OldT17EntryController.MapEntry.Entities.Remove(OldEntity);
+            MapEntryController.MapEntry.Entities.Remove(OldEntity);
             Dispose();
         }
     }

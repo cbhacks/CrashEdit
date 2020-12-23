@@ -55,7 +55,6 @@ namespace CrashEdit
         private void Menu_DeleteOld()
         {
             OldZoneEntry.Cameras.Remove(Camera);
-            OldZoneEntry.CameraCount = OldZoneEntry.Cameras.Count;
             Dispose();
         }
     }
