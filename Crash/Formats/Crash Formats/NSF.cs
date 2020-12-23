@@ -270,6 +270,33 @@ namespace Crash
             return null;
         }
 
+        public List<T> GetEntries<T>() where T : class,IEntry
+        {
+            List<T> entries = new List<T>();
+            foreach (Chunk chunk in Chunks)
+            {
+                if (chunk is IEntry)
+                {
+                    IEntry entry = (IEntry)chunk;
+                    if (entry is T)
+                    {
+                        entries.Add((T)entry);
+                    }
+                }
+                if (chunk is EntryChunk entrychunk)
+                {
+                    foreach (Entry entry in entrychunk.Entries)
+                    {
+                        if (entry is T e)
+                        {
+                            entries.Add(e);
+                        }
+                    }
+                }
+            }
+            return entries;
+        }
+
         public byte[] Save()
         {
             byte[] data = new byte [Chunks.Count * Chunk.Length];

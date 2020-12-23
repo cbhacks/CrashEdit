@@ -50,21 +50,7 @@ namespace CrashHacks.Scripts.Animation
         {
             if (value is NSF nsf)
             {
-                List<AnimationEntry> entries = new List<AnimationEntry>();
-                foreach (Chunk chunk in nsf.Chunks)
-                {
-                    if (chunk is EntryChunk)
-                    {
-                        EntryChunk entrychunk = (EntryChunk)chunk;
-                        foreach (Entry entry in entrychunk.Entries)
-                        {
-                            if (entry is AnimationEntry anim)
-                            {
-                                entries.Add(anim);
-                            }
-                        }
-                    }
-                }
+                List<AnimationEntry> entries = nsf.GetEntries<AnimationEntry>();
                 List<AnimationEntry> sourceentries = new List<AnimationEntry>();
                 for (int i = 0;i < entries.Count;i++)
                 {

@@ -62,22 +62,13 @@ namespace CrashEdit
             short id = 10;
             while (true)
             {
-                foreach (Chunk chunk in EntryChunkController.NSFController.NSF.Chunks)
+                foreach (ZoneEntry zone in EntryChunkController.NSFController.NSF.GetEntries<ZoneEntry>())
                 {
-                    if (chunk is EntryChunk entrychunk)
+                    foreach (Entity otherentity in zone.Entities)
                     {
-                        foreach (Entry entry in entrychunk.Entries)
+                        if (otherentity.ID == id)
                         {
-                            if (entry is ZoneEntry zone)
-                            {
-                                foreach (Entity otherentity in zone.Entities)
-                                {
-                                    if (otherentity.ID == id)
-                                    {
-                                        goto FOUND_ID;
-                                    }
-                                }
-                            }
+                            goto FOUND_ID;
                         }
                     }
                 }

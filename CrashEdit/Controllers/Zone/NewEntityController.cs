@@ -56,33 +56,24 @@ namespace CrashEdit
             }
             int maxid = 1;
             List<EntityPropertyRow<int>> drawlists = new List<EntityPropertyRow<int>>();
-            foreach (Chunk chunk in NewZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
+            foreach (NewZoneEntry zone in NewZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<NewZoneEntry>())
             {
-                if (chunk is EntryChunk entrychunk)
+                foreach (Entity otherentity in zone.Entities)
                 {
-                    foreach (Entry entry in entrychunk.Entries)
+                    if (otherentity.ID.HasValue)
                     {
-                        if (entry is NewZoneEntry zone)
+                        if (otherentity.ID.Value > maxid)
                         {
-                            foreach (Entity otherentity in zone.Entities)
-                            {
-                                if (otherentity.ID.HasValue)
-                                {
-                                    if (otherentity.ID.Value > maxid)
-                                    {
-                                        maxid = otherentity.ID.Value;
-                                    }
-                                }
-                                if (otherentity.DrawListA != null)
-                                {
-                                    drawlists.AddRange(otherentity.DrawListA.Rows);
-                                }
-                                if (otherentity.DrawListB != null)
-                                {
-                                    drawlists.AddRange(otherentity.DrawListB.Rows);
-                                }
-                            }
+                            maxid = otherentity.ID.Value;
                         }
+                    }
+                    if (otherentity.DrawListA != null)
+                    {
+                        drawlists.AddRange(otherentity.DrawListA.Rows);
+                    }
+                    if (otherentity.DrawListB != null)
+                    {
+                        drawlists.AddRange(otherentity.DrawListB.Rows);
                     }
                 }
             }
@@ -128,58 +119,49 @@ namespace CrashEdit
             }
             if (Entity.ID.HasValue)
             {
-                foreach (Chunk chunk in NewZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
+                foreach (NewZoneEntry zone in NewZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<NewZoneEntry>())
                 {
-                    if (chunk is EntryChunk entrychunk)
+                    int zoneindex = -1;
+                    for (int z = 0, s = BitConv.FromInt32(zone.Header, 0x190); z < s; ++z)
                     {
-                        foreach (Entry entry in entrychunk.Entries)
+                        if (BitConv.FromInt32(zone.Header, 0x194 + z * 4) == NewZoneEntry.EID)
                         {
-                            if (entry is NewZoneEntry zone)
+                            zoneindex = z;
+                            break;
+                        }
+                    }
+                    foreach (Entity otherentity in zone.Entities)
+                    {
+                        if (otherentity.DrawListA != null)
+                        {
+                            foreach (EntityPropertyRow<int> row in otherentity.DrawListA.Rows)
                             {
-                                int zoneindex = -1;
-                                for (int z = 0, s = BitConv.FromInt32(zone.Header, 0x190); z < s; ++z)
+                                for (int i = row.Values.Count - 1; i >= 0; --i)
                                 {
-                                    if (BitConv.FromInt32(zone.Header, 0x194 + z * 4) == NewZoneEntry.EID)
+                                    if ((row.Values[i] & 0xFFFF00) >> 8 == Entity.ID.Value)
+                                        row.Values.RemoveAt(i);
+                                    else if ((row.Values[i] & 0xFF) == zoneindex && ((row.Values[i] & 0xFF000000) >> 24) > index)
                                     {
-                                        zoneindex = z;
-                                        break;
+                                        int newindex = (int)(row.Values[i] & 0xFF000000) >> 24;
+                                        row.Values[i] &= 0xFFFFFF;
+                                        row.Values[i] |= --newindex << 24;
                                     }
                                 }
-                                foreach (Entity otherentity in zone.Entities)
+                            }
+                        }
+                        if (otherentity.DrawListB != null)
+                        {
+                            foreach (EntityPropertyRow<int> row in otherentity.DrawListB.Rows)
+                            {
+                                for (int i = row.Values.Count - 1; i >= 0; --i)
                                 {
-                                    if (otherentity.DrawListA != null)
+                                    if ((row.Values[i] & 0xFFFF00) >> 8 == Entity.ID.Value)
+                                        row.Values.RemoveAt(i);
+                                    else if ((row.Values[i] & 0xFF) == zoneindex && ((row.Values[i] & 0xFF000000) >> 24) > index)
                                     {
-                                        foreach (EntityPropertyRow<int> row in otherentity.DrawListA.Rows)
-                                        {
-                                            for (int i = row.Values.Count - 1; i >= 0; --i)
-                                            {
-                                                if ((row.Values[i] & 0xFFFF00) >> 8 == Entity.ID.Value)
-                                                    row.Values.RemoveAt(i);
-                                                else if ((row.Values[i] & 0xFF) == zoneindex && ((row.Values[i] & 0xFF000000) >> 24) > index)
-                                                {
-                                                    int newindex = (int)(row.Values[i] & 0xFF000000) >> 24;
-                                                    row.Values[i] &= 0xFFFFFF;
-                                                    row.Values[i] |= --newindex << 24;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (otherentity.DrawListB != null)
-                                    {
-                                        foreach (EntityPropertyRow<int> row in otherentity.DrawListB.Rows)
-                                        {
-                                            for (int i = row.Values.Count - 1; i >= 0; --i)
-                                            {
-                                                if ((row.Values[i] & 0xFFFF00) >> 8 == Entity.ID.Value)
-                                                    row.Values.RemoveAt(i);
-                                                else if ((row.Values[i] & 0xFF) == zoneindex && ((row.Values[i] & 0xFF000000) >> 24) > index)
-                                                {
-                                                    int newindex = (int)(row.Values[i] & 0xFF000000) >> 24;
-                                                    row.Values[i] &= 0xFFFFFF;
-                                                    row.Values[i] |= --newindex << 24;
-                                                }
-                                            }
-                                        }
+                                        int newindex = (int)(row.Values[i] & 0xFF000000) >> 24;
+                                        row.Values[i] &= 0xFFFFFF;
+                                        row.Values[i] |= --newindex << 24;
                                     }
                                 }
                             }

@@ -51,22 +51,13 @@ namespace CrashEdit
             short id = 6;
             while (true)
             {
-                foreach (Chunk chunk in OldZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
+                foreach (OldZoneEntry zone in OldZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<OldZoneEntry>())
                 {
-                    if (chunk is EntryChunk entrychunk)
+                    foreach (OldEntity otherentity in zone.Entities)
                     {
-                        foreach (Entry entry in entrychunk.Entries)
+                        if (otherentity.ID == id)
                         {
-                            if (entry is OldZoneEntry zone)
-                            {
-                                foreach (OldEntity otherentity in zone.Entities)
-                                {
-                                    if (otherentity.ID == id)
-                                    {
-                                        goto FOUND_ID;
-                                    }
-                                }
-                            }
+                            goto FOUND_ID;
                         }
                     }
                 }
@@ -94,22 +85,13 @@ namespace CrashEdit
             short id = 6;
             while (true)
             {
-                foreach (Chunk chunk in OldT17EntryController.EntryChunkController.NSFController.NSF.Chunks)
+                foreach (MapEntry zone in OldT17EntryController.EntryChunkController.NSFController.NSF.GetEntries<MapEntry>())
                 {
-                    if (chunk is EntryChunk entrychunk)
+                    foreach (OldEntity otherentity in zone.Entities)
                     {
-                        foreach (Entry entry in entrychunk.Entries)
+                        if (otherentity.ID == id)
                         {
-                            if (entry is MapEntry zone)
-                            {
-                                foreach (OldEntity otherentity in zone.Entities)
-                                {
-                                    if (otherentity.ID == id)
-                                    {
-                                        goto FOUND_ID;
-                                    }
-                                }
-                            }
+                            goto FOUND_ID;
                         }
                     }
                 }

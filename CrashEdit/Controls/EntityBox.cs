@@ -1088,26 +1088,17 @@ namespace CrashEdit
         {
             if (controller is EntityController c)
             {
-                foreach (Chunk chunk in c.ZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
+                foreach (ZoneEntry zone in c.ZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<ZoneEntry>())
                 {
-                    if (chunk is EntryChunk)
+                    foreach (Entity otherentity in zone.Entities)
                     {
-                        foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                        if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityA.Value)
                         {
-                            if (entry is ZoneEntry zone)
+                            for (int i = 0; i < c.ZoneEntryController.ZoneEntry.ZoneCount; ++i)
                             {
-                                foreach (Entity otherentity in zone.Entities)
+                                if (zone.EID == BitConv.FromInt32(c.ZoneEntryController.ZoneEntry.Header, 0x194 + i * 4))
                                 {
-                                    if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityA.Value)
-                                    {
-                                        for (int i = 0; i < c.ZoneEntryController.ZoneEntry.ZoneCount; ++i)
-                                        {
-                                            if (entry.EID == BitConv.FromInt32(c.ZoneEntryController.ZoneEntry.Header, 0x194 + i * 4))
-                                            {
-                                                entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
-                                            }
-                                        }
-                                    }
+                                    entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
                                 }
                             }
                         }
@@ -1116,26 +1107,17 @@ namespace CrashEdit
             }
             else if (controller is NewEntityController nc)
             {
-                foreach (Chunk chunk in nc.NewZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
+                foreach (NewZoneEntry zone in nc.NewZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<NewZoneEntry>())
                 {
-                    if (chunk is EntryChunk)
+                    foreach (Entity otherentity in zone.Entities)
                     {
-                        foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                        if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityA.Value)
                         {
-                            if (entry is NewZoneEntry zone)
+                            for (int i = 0; i < nc.NewZoneEntryController.NewZoneEntry.ZoneCount; ++i)
                             {
-                                foreach (Entity otherentity in zone.Entities)
+                                if (zone.EID == BitConv.FromInt32(nc.NewZoneEntryController.NewZoneEntry.Header, 0x194 + i * 4))
                                 {
-                                    if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityA.Value)
-                                    {
-                                        for (int i = 0; i < nc.NewZoneEntryController.NewZoneEntry.ZoneCount; ++i)
-                                        {
-                                            if (entry.EID == BitConv.FromInt32(nc.NewZoneEntryController.NewZoneEntry.Header, 0x194 + i * 4))
-                                            {
-                                                entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
-                                            }
-                                        }
-                                    }
+                                    entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
                                 }
                             }
                         }
@@ -1287,26 +1269,17 @@ namespace CrashEdit
         {
             if (controller is EntityController c)
             {
-                foreach (Chunk chunk in c.ZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
+                foreach (ZoneEntry zone in c.ZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<ZoneEntry>())
                 {
-                    if (chunk is EntryChunk entrychunk)
+                    foreach (Entity otherentity in zone.Entities)
                     {
-                        foreach (Entry entry in entrychunk.Entries)
+                        if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityB.Value)
                         {
-                            if (entry is ZoneEntry zone)
+                            for (int i = 0; i < c.ZoneEntryController.ZoneEntry.ZoneCount; ++i)
                             {
-                                foreach (Entity otherentity in zone.Entities)
+                                if (zone.EID == BitConv.FromInt32(c.ZoneEntryController.ZoneEntry.Header, 0x194 + i * 4))
                                 {
-                                    if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityB.Value)
-                                    {
-                                        for (int i = 0; i < c.ZoneEntryController.ZoneEntry.ZoneCount; ++i)
-                                        {
-                                            if (entry.EID == BitConv.FromInt32(c.ZoneEntryController.ZoneEntry.Header, 0x194 + i * 4))
-                                            {
-                                                entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
-                                            }
-                                        }
-                                    }
+                                    entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
                                 }
                             }
                         }
@@ -1315,26 +1288,17 @@ namespace CrashEdit
             }
             else if (controller is NewEntityController nc)
             {
-                foreach (Chunk chunk in nc.NewZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
+                foreach (NewZoneEntry zone in nc.NewZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<NewZoneEntry>())
                 {
-                    if (chunk is EntryChunk entrychunk)
+                    foreach (Entity otherentity in zone.Entities)
                     {
-                        foreach (Entry entry in entrychunk.Entries)
+                        if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityB.Value)
                         {
-                            if (entry is NewZoneEntry zone)
+                            for (int i = 0; i < nc.NewZoneEntryController.NewZoneEntry.ZoneCount; ++i)
                             {
-                                foreach (Entity otherentity in zone.Entities)
+                                if (zone.EID == BitConv.FromInt32(nc.NewZoneEntryController.NewZoneEntry.Header, 0x194 + i * 4))
                                 {
-                                    if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityB.Value)
-                                    {
-                                        for (int i = 0; i < nc.NewZoneEntryController.NewZoneEntry.ZoneCount; ++i)
-                                        {
-                                            if (entry.EID == BitConv.FromInt32(nc.NewZoneEntryController.NewZoneEntry.Header, 0x194 + i * 4))
-                                            {
-                                                entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
-                                            }
-                                        }
-                                    }
+                                    entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
                                 }
                             }
                         }
@@ -1690,7 +1654,7 @@ namespace CrashEdit
                 }
             }
             lblPayload.Visible = true;
-            lblPayload.Text = $"Payload is {loadedchunks.Count} normal chunks";
+            lblPayload.Text = $"Payload is ~{loadedchunks.Count} normal chunks";
             if (loadedchunks.Count < 20)
             {
                 lblPayload.ForeColor = Color.Green;

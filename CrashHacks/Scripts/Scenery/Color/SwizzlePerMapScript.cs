@@ -40,7 +40,7 @@ namespace CrashHacks.Scripts.Scenery.Color
 
         public override void Run(object value,GameVersion gameversion)
         {
-            if (value is NSF)
+            if (value is NSF nsf)
             {
                 int r_r = rand.Next(2);
                 int r_g = rand.Next(2);
@@ -58,32 +58,20 @@ namespace CrashHacks.Scripts.Scenery.Color
                 if (r_s == 0) r_s = 1;
                 if (g_s == 0) g_s = 1;
                 if (b_s == 0) b_s = 1;
-                foreach (Chunk ck in ((NSF)value).Chunks)
+                foreach (SceneryEntry entry in nsf.GetEntries<SceneryEntry>())
                 {
-                    if (!(ck is EntryChunk))
+                    for (int i = 0;i < entry.Colors.Count;i++)
                     {
-                        continue;
-                    }
-                    foreach (Entry en in ((EntryChunk)ck).Entries)
-                    {
-                        if (!(en is SceneryEntry))
-                        {
-                            continue;
-                        }
-                        SceneryEntry entry = (SceneryEntry)en;
-                        for (int i = 0;i < entry.Colors.Count;i++)
-                        {
-                            SceneryColor color = entry.Colors[i];
-                            int r = color.Red;
-                            int g = color.Green;
-                            int b = color.Blue;
-                            entry.Colors[i] = new SceneryColor(
-                                (byte)((r_r * r + r_g * g + r_b * b) / r_s),
-                                (byte)((g_r * r + g_g * g + g_b * b) / g_s),
-                                (byte)((b_r * r + b_g * g + b_b * b) / b_s),
-                                color.Extra
-                            );
-                        }
+                        SceneryColor color = entry.Colors[i];
+                        int r = color.Red;
+                        int g = color.Green;
+                        int b = color.Blue;
+                        entry.Colors[i] = new SceneryColor(
+                            (byte)((r_r * r + r_g * g + r_b * b) / r_s),
+                            (byte)((g_r * r + g_g * g + g_b * b) / g_s),
+                            (byte)((b_r * r + b_g * g + b_b * b) / b_s),
+                            color.Extra
+                        );
                     }
                 }
             }

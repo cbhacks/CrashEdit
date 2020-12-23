@@ -445,64 +445,46 @@ namespace CrashEdit
                 switch (nsfbox.NSFController.GameVersion)
                 {
                 case GameVersion.Crash1:
-                    foreach (Chunk chunk in nsf.Chunks)
+                    foreach (OldZoneEntry zone in nsf.GetEntries<OldZoneEntry>())
                     {
-                        if (chunk is EntryChunk entrychunk)
+                        foreach (OldEntity entity in zone.Entities)
                         {
-                            foreach (Entry entry in entrychunk.Entries)
+                            if (entity.ID >= 0x130)
                             {
-                                if (entry is OldZoneEntry zone)
-                                {
-                                    foreach (OldEntity entity in zone.Entities)
-                                    {
-                                        if (entity.ID >= 0x130)
-                                        {
-                                            MessageBox.Show(string.Format("An entity (ID {0}) exceeds maximum ID of 303.", entity.ID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                        }
-                                        else if (entity.ID <= 0)
-                                        {
-                                            MessageBox.Show(string.Format("An entity has invalid ID {0}.", entity.ID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                        }
-                                    }
-                                }
+                                MessageBox.Show(string.Format("An entity (ID {0}) exceeds maximum ID of 303.", entity.ID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
+                            else if (entity.ID <= 0)
+                            {
+                                MessageBox.Show(string.Format("An entity has invalid ID {0}.", entity.ID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             }
                         }
                     }
                     break;
                 case GameVersion.Crash2:
-                    foreach (Chunk chunk in nsf.Chunks)
-                    {
-                        if (chunk is EntryChunk entrychunk)
+                    foreach (ZoneEntry zone in nsf.GetEntries<ZoneEntry>())
                         {
-                            foreach (Entry entry in entrychunk.Entries)
+                        foreach (Entity entity in zone.Entities)
+                        {
+                            if ((entity.ID != null && entity.ID >= 0x400) || (entity.AlternateID != null && entity.AlternateID >= 0x400))
                             {
-                                if (entry is ZoneEntry zone)
+                                if (entity.Name != null)
                                 {
-                                    foreach (Entity entity in zone.Entities)
-                                    {
-                                        if ((entity.ID != null && entity.ID >= 0x400) || (entity.AlternateID != null && entity.AlternateID >= 0x400))
-                                        {
-                                            if (entity.Name != null)
-                                            {
-                                                MessageBox.Show(string.Format("Entity {0} (ID {1}) exceeds maximum ID of 1023.", entity.Name, entity.ID != null ? entity.ID : entity.AlternateID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                            }
-                                            else
-                                            {
-                                                MessageBox.Show(string.Format("An entity (ID {0}) exceeds maximum ID of 1023.", entity.ID != null ? entity.ID : entity.AlternateID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                            }
-                                        }
-                                        else if ((entity.ID != null && entity.ID <= 0) || (entity.AlternateID != null && entity.AlternateID <= 0))
-                                        {
-                                            if (entity.Name != null)
-                                            {
-                                                MessageBox.Show(string.Format("Entity {0} has invalid ID {1}.", entity.Name, entity.ID != null ? entity.ID : entity.AlternateID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                            }
-                                            else
-                                            {
-                                                MessageBox.Show(string.Format("An entity has invalid ID {0}.", entity.ID != null ? entity.ID : entity.AlternateID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                            }
-                                        }
-                                    }
+                                    MessageBox.Show(string.Format("Entity {0} (ID {1}) exceeds maximum ID of 1023.", entity.Name, entity.ID != null ? entity.ID : entity.AlternateID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                }
+                                else
+                                {
+                                    MessageBox.Show(string.Format("An entity (ID {0}) exceeds maximum ID of 1023.", entity.ID != null ? entity.ID : entity.AlternateID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                }
+                            }
+                            else if ((entity.ID != null && entity.ID <= 0) || (entity.AlternateID != null && entity.AlternateID <= 0))
+                            {
+                                if (entity.Name != null)
+                                {
+                                    MessageBox.Show(string.Format("Entity {0} has invalid ID {1}.", entity.Name, entity.ID != null ? entity.ID : entity.AlternateID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                }
+                                else
+                                {
+                                    MessageBox.Show(string.Format("An entity has invalid ID {0}.", entity.ID != null ? entity.ID : entity.AlternateID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                                 }
                             }
                         }
@@ -672,18 +654,10 @@ namespace CrashEdit
 
             // patch object entity count
             nsd.EntityCount = 0;
-            foreach (Chunk chunk in nsf.Chunks)
-            {
-                if (!(chunk is EntryChunk))
-                    continue;
-                foreach (Entry entry in ((EntryChunk)chunk).Entries)
-                {
-                    if (entry is NewZoneEntry zone)
-                        foreach (Entity ent in zone.Entities)
-                            if (ent.ID != null)
-                                ++nsd.EntityCount;
-                }
-            }
+            foreach (NewZoneEntry zone in nsf.GetEntries<NewZoneEntry>())
+                foreach (Entity ent in zone.Entities)
+                    if (ent.ID != null)
+                        ++nsd.EntityCount;
 
             if (ignore_warnings ? true : MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
@@ -694,38 +668,30 @@ namespace CrashEdit
                 int[] eids = new int[nsd.Index.Count];
                 for (int i = 0; i < eids.Length; ++i)
                     eids[i] = nsd.Index[i].EntryID;
-                foreach (Chunk chunk in nsf.Chunks)
+                foreach (NewZoneEntry zone in nsf.GetEntries<NewZoneEntry>())
                 {
-                    if (!(chunk is EntryChunk))
-                        continue;
-                    foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                    foreach (Entity ent in zone.Entities)
                     {
-                        if (entry is NewZoneEntry zone)
+                        if (ent.LoadListA != null)
                         {
-                            foreach (Entity ent in zone.Entities)
+                            foreach (EntityPropertyRow<int> row in ent.LoadListA.Rows)
                             {
-                                if (ent.LoadListA != null)
-                                {
-                                    foreach (EntityPropertyRow<int> row in ent.LoadListA.Rows)
-                                    {
-                                        List<int> values = (List<int>)row.Values;
-                                        values.Sort(delegate (int a, int b) {
-                                            return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
-                                        });
-                                        if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.FindEID<IEntry>(eid) == null);
-                                    }
-                                }
-                                if (ent.LoadListB != null)
-                                {
-                                    foreach (EntityPropertyRow<int> row in ent.LoadListB.Rows)
-                                    {
-                                        List<int> values = (List<int>)row.Values;
-                                        values.Sort(delegate (int a, int b) {
-                                            return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
-                                        });
-                                        if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.FindEID<IEntry>(eid) == null);
-                                    }
-                                }
+                                List<int> values = (List<int>)row.Values;
+                                values.Sort(delegate (int a, int b) {
+                                    return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
+                                });
+                                if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.FindEID<IEntry>(eid) == null);
+                            }
+                        }
+                        if (ent.LoadListB != null)
+                        {
+                            foreach (EntityPropertyRow<int> row in ent.LoadListB.Rows)
+                            {
+                                List<int> values = (List<int>)row.Values;
+                                values.Sort(delegate (int a, int b) {
+                                    return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
+                                });
+                                if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.FindEID<IEntry>(eid) == null);
                             }
                         }
                     }
@@ -743,18 +709,10 @@ namespace CrashEdit
 
             // patch object entity count
             nsd.EntityCount = 0;
-            foreach (Chunk chunk in nsf.Chunks)
-            {
-                if (!(chunk is EntryChunk))
-                    continue;
-                foreach (Entry entry in ((EntryChunk)chunk).Entries)
-                {
-                    if (entry is ZoneEntry zone)
-                        foreach (Entity ent in zone.Entities)
-                            if (ent.ID != null)
-                                ++nsd.EntityCount;
-                }
-            }
+            foreach (ZoneEntry zone in nsf.GetEntries<ZoneEntry>())
+                foreach (Entity ent in zone.Entities)
+                    if (ent.ID != null)
+                        ++nsd.EntityCount;
 
             if (ignore_warnings ? true : MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
@@ -765,38 +723,30 @@ namespace CrashEdit
                 int[] eids = new int[nsd.Index.Count];
                 for (int i = 0; i < eids.Length; ++i)
                     eids[i] = nsd.Index[i].EntryID;
-                foreach (Chunk chunk in nsf.Chunks)
+                foreach (ZoneEntry zone in nsf.GetEntries<ZoneEntry>())
                 {
-                    if (!(chunk is EntryChunk))
-                        continue;
-                    foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                    foreach (Entity ent in zone.Entities)
                     {
-                        if (entry is ZoneEntry zone)
+                        if (ent.LoadListA != null)
                         {
-                            foreach (Entity ent in zone.Entities)
+                            foreach (EntityPropertyRow<int> row in ent.LoadListA.Rows)
                             {
-                                if (ent.LoadListA != null)
-                                {
-                                    foreach (EntityPropertyRow<int> row in ent.LoadListA.Rows)
-                                    {
-                                        List<int> values = (List<int>)row.Values;
-                                        values.Sort(delegate (int a, int b) {
-                                            return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
-                                        });
-                                        if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.FindEID<IEntry>(eid) == null);
-                                    }
-                                }
-                                if (ent.LoadListB != null)
-                                {
-                                    foreach (EntityPropertyRow<int> row in ent.LoadListB.Rows)
-                                    {
-                                        List<int> values = (List<int>)row.Values;
-                                        values.Sort(delegate (int a, int b) {
-                                            return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
-                                        });
-                                        if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.FindEID<IEntry>(eid) == null);
-                                    }
-                                }
+                                List<int> values = (List<int>)row.Values;
+                                values.Sort(delegate (int a, int b) {
+                                    return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
+                                });
+                                if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.FindEID<IEntry>(eid) == null);
+                            }
+                        }
+                        if (ent.LoadListB != null)
+                        {
+                            foreach (EntityPropertyRow<int> row in ent.LoadListB.Rows)
+                            {
+                                List<int> values = (List<int>)row.Values;
+                                values.Sort(delegate (int a, int b) {
+                                    return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
+                                });
+                                if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.FindEID<IEntry>(eid) == null);
                             }
                         }
                     }
@@ -835,31 +785,22 @@ namespace CrashEdit
             {
                 map[i] = Entry.NullEID;
             }
-            foreach (Chunk chunk in nsf.Chunks)
+            foreach (GOOLEntry gool in nsf.GetEntries<GOOLEntry>())
             {
-                if (chunk is EntryChunk entrychunk)
+                if (gool.Format == 1)
                 {
-                    foreach (Entry entry in entrychunk.Entries)
+                    int gool_id = BitConv.FromInt32(gool.Header, 0);
+                    if (gool_id >= map.Length)
                     {
-                        if (entry is GOOLEntry gool)
-                        {
-                            if (gool.Format == 1)
-                            {
-                                int gool_id = BitConv.FromInt32(gool.Header, 0);
-                                if (gool_id >= map.Length)
-                                {
-                                    if (!ignore_warnings) MessageBox.Show(string.Format("GOOL entry {0} has invalid object typeID {1} (cannot be larger than {2}).", gool.EName, gool_id, map.Length - 1), Resources.Save_ConfirmationPrompt, MessageBoxButtons.OK);
-                                }
-                                else if (gool_id < 0)
-                                {
-                                    if (!ignore_warnings) MessageBox.Show(string.Format("GOOL entry {0} has invalid object typeID {1} (cannot be negative).", gool.EName, gool_id), Resources.Save_ConfirmationPrompt, MessageBoxButtons.OK);
-                                }
-                                else
-                                {
-                                    map[BitConv.FromInt32(gool.Header, 0)] = gool.EID;
-                                }
-                            }
-                        }
+                        if (!ignore_warnings) MessageBox.Show(string.Format("GOOL entry {0} has invalid object typeID {1} (cannot be larger than {2}).", gool.EName, gool_id, map.Length - 1), Resources.Save_ConfirmationPrompt, MessageBoxButtons.OK);
+                    }
+                    else if (gool_id < 0)
+                    {
+                        if (!ignore_warnings) MessageBox.Show(string.Format("GOOL entry {0} has invalid object typeID {1} (cannot be negative).", gool.EName, gool_id), Resources.Save_ConfirmationPrompt, MessageBoxButtons.OK);
+                    }
+                    else
+                    {
+                        map[BitConv.FromInt32(gool.Header, 0)] = gool.EID;
                     }
                 }
             }

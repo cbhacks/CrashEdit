@@ -9,8 +9,8 @@ namespace CrashEdit
         {
             ProtoZoneEntryController = oldzoneentrycontroller;
             Entity = entity;
-            AddMenu("Duplicate Entity",Menu_Duplicate);
-            AddMenu("Delete Entity",Menu_Delete);
+            //AddMenu("Duplicate Entity",Menu_Duplicate);
+            //AddMenu("Delete Entity",Menu_Delete);
             InvalidateNode();
             InvalidateNodeImage();
         }
@@ -35,45 +35,36 @@ namespace CrashEdit
 
         public ProtoEntity Entity { get; }
 
-        private void Menu_Duplicate()
-        {
-            short maxid = 1;
-            foreach (Chunk chunk in ProtoZoneEntryController.EntryChunkController.NSFController.NSF.Chunks)
-            {
-                if (chunk is EntryChunk)
-                {
-                    foreach (Entry entry in ((EntryChunk)chunk).Entries)
-                    {
-                        if (entry is ProtoZoneEntry)
-                        {
-                            foreach (ProtoEntity otherentity in ((ProtoZoneEntry)entry).Entities)
-                            {
-                                if (otherentity.ID > maxid)
-                                {
-                                    maxid = otherentity.ID;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            maxid++;
-            int newindex = ProtoZoneEntryController.ProtoZoneEntry.Entities.Count;
-            newindex -= BitConv.FromInt32(ProtoZoneEntryController.ProtoZoneEntry.Header,0x208);
-            int entitycount = BitConv.FromInt32(ProtoZoneEntryController.ProtoZoneEntry.Header,0x20C);
-            BitConv.ToInt32(ProtoZoneEntryController.ProtoZoneEntry.Header,0x20C,entitycount + 1);
-            ProtoEntity newentity = ProtoEntity.Load(Entity.Save());
-            newentity.ID = maxid;
-            ProtoZoneEntryController.ProtoZoneEntry.Entities.Add(newentity);
-            ProtoZoneEntryController.AddNode(new ProtoEntityController(ProtoZoneEntryController,newentity));
-        }
+        //private void Menu_Duplicate()
+        //{
+        //    short maxid = 1;
+        //    foreach (ProtoZoneEntry zone in ProtoZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<ProtoZoneEntry>())
+        //    {
+        //        foreach (ProtoEntity otherentity in zone.Entities)
+        //        {
+        //            if (otherentity.ID > maxid)
+        //            {
+        //                maxid = otherentity.ID;
+        //            }
+        //        }
+        //    }
+        //    maxid++;
+        //    int newindex = ProtoZoneEntryController.ProtoZoneEntry.Entities.Count;
+        //    newindex -= BitConv.FromInt32(ProtoZoneEntryController.ProtoZoneEntry.Header,0x208);
+        //    int entitycount = BitConv.FromInt32(ProtoZoneEntryController.ProtoZoneEntry.Header,0x20C);
+        //    BitConv.ToInt32(ProtoZoneEntryController.ProtoZoneEntry.Header,0x20C,entitycount + 1);
+        //    ProtoEntity newentity = ProtoEntity.Load(Entity.Save());
+        //    newentity.ID = maxid;
+        //    ProtoZoneEntryController.ProtoZoneEntry.Entities.Add(newentity);
+        //    ProtoZoneEntryController.AddNode(new ProtoEntityController(ProtoZoneEntryController,newentity));
+        //}
 
-        private void Menu_Delete()
-        {
-            int entitycount = BitConv.FromInt32(ProtoZoneEntryController.ProtoZoneEntry.Header,0x20C);
-            BitConv.ToInt32(ProtoZoneEntryController.ProtoZoneEntry.Header,0x20C,entitycount - 1);
-            ProtoZoneEntryController.ProtoZoneEntry.Entities.Remove(Entity);
-            Dispose();
-        }
+        //private void Menu_Delete()
+        //{
+        //    int entitycount = BitConv.FromInt32(ProtoZoneEntryController.ProtoZoneEntry.Header,0x20C);
+        //    BitConv.ToInt32(ProtoZoneEntryController.ProtoZoneEntry.Header,0x20C,entitycount - 1);
+        //    ProtoZoneEntryController.ProtoZoneEntry.Entities.Remove(Entity);
+        //    Dispose();
+        //}
     }
 }

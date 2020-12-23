@@ -226,9 +226,9 @@ namespace CrashHacks
                         foreach (Chunk chunk in nsf.Chunks)
                         {
                             script.Run(chunk,gameversion);
-                            if (chunk is EntryChunk)
+                            if (chunk is EntryChunk entrychunk)
                             {
-                                foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                                foreach (Entry entry in entrychunk.Entries)
                                 {
                                     script.Run(entry,gameversion);
                                 }

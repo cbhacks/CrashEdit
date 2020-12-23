@@ -133,45 +133,36 @@ namespace CrashEdit
         {
             List<Entity> nitros = new List<Entity>();
             List<Entity> detonators = new List<Entity>();
-            foreach (Chunk chunk in NSF.Chunks)
+            foreach (NewZoneEntry entry in NSF.GetEntries<NewZoneEntry>())
             {
-                if (chunk is EntryChunk)
+                foreach (Entity entity in entry.Entities)
                 {
-                    foreach (Entry entry in ((EntryChunk)chunk).Entries)
+                    if (entity.Type == 34)
                     {
-                        if (entry is NewZoneEntry)
+                        if (entity.Subtype == 18 && entity.ID.HasValue)
                         {
-                            foreach (Entity entity in ((NewZoneEntry)entry).Entities)
-                            {
-                                if (entity.Type == 34)
-                                {
-                                    if (entity.Subtype == 18 && entity.ID.HasValue)
-                                    {
-                                        nitros.Add(entity);
-                                    }
-                                    else if (entity.Subtype == 24)
-                                    {
-                                        detonators.Add(entity);
-                                    }
-                                }
-                            }
+                            nitros.Add(entity);
                         }
-                        if (entry is ZoneEntry)
+                        else if (entity.Subtype == 24)
                         {
-                            foreach (Entity entity in ((ZoneEntry)entry).Entities)
-                            {
-                                if (entity.Type == 34)
-                                {
-                                    if (entity.Subtype == 18 && entity.ID.HasValue)
-                                    {
-                                        nitros.Add(entity);
-                                    }
-                                    else if (entity.Subtype == 24)
-                                    {
-                                        detonators.Add(entity);
-                                    }
-                                }
-                            }
+                            detonators.Add(entity);
+                        }
+                    }
+                }
+            }
+            foreach (ZoneEntry entry in NSF.GetEntries<ZoneEntry>())
+            {
+                foreach (Entity entity in entry.Entities)
+                {
+                    if (entity.Type == 34)
+                    {
+                        if (entity.Subtype == 18 && entity.ID.HasValue)
+                        {
+                            nitros.Add(entity);
+                        }
+                        else if (entity.Subtype == 24)
+                        {
+                            detonators.Add(entity);
                         }
                     }
                 }
@@ -190,87 +181,78 @@ namespace CrashEdit
         {
             int boxcount = 0;
             List<Entity> willys = new List<Entity>();
-            foreach (Chunk chunk in NSF.Chunks)
+            foreach (ZoneEntry zone in NSF.GetEntries<ZoneEntry>())
             {
-                if (chunk is EntryChunk entrychunk)
+                foreach (Entity entity in zone.Entities)
                 {
-                    foreach (Entry entry in entrychunk.Entries)
+                    if (entity.Type == 0 && entity.Subtype == 0)
                     {
-                        if (entry is ZoneEntry zone2)
+                        willys.Add(entity);
+                    }
+                    else if (entity.Type == 34)
+                    {
+                        switch (entity.Subtype)
                         {
-                            foreach (Entity entity in zone2.Entities)
-                            {
-                                if (entity.Type == 0 && entity.Subtype == 0)
-                                {
-                                    willys.Add(entity);
-                                }
-                                else if (entity.Type == 34)
-                                {
-                                    switch (entity.Subtype)
-                                    {
-                                        case 0: // tnt
-                                        case 2: // empty
-                                        case 3: // spring
-                                        case 4: // continue
-                                        case 6: // fruit
-                                        case 8: // life
-                                        case 9: // doctor
-                                        case 10: // pickup
-                                        case 11: // pow
-                                        case 13: // ghost
-                                        case 17: // auto pickup
-                                        case 18: // nitro
-                                        case 20: // auto empty
-                                        case 21: // empty 2
-                                            boxcount++;
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                }
-                            }
+                            case 0: // tnt
+                            case 2: // empty
+                            case 3: // spring
+                            case 4: // continue
+                            case 6: // fruit
+                            case 8: // life
+                            case 9: // doctor
+                            case 10: // pickup
+                            case 11: // pow
+                            case 13: // ghost
+                            case 17: // auto pickup
+                            case 18: // nitro
+                            case 20: // auto empty
+                            case 21: // empty 2
+                                boxcount++;
+                                break;
+                            default:
+                                break;
                         }
-                        if (entry is NewZoneEntry zone3)
+                    }
+                }
+            }
+            foreach (NewZoneEntry zone in NSF.GetEntries<NewZoneEntry>())
+            {
+                foreach (Entity entity in zone.Entities)
+                {
+                    if (entity.Type == 0 && entity.Subtype == 0)
+                    {
+                        willys.Add(entity);
+                    }
+                    else if (entity.Type == 34)
+                    {
+                        switch (entity.Subtype)
                         {
-                            foreach (Entity entity in zone3.Entities)
-                            {
-                                if (entity.Type == 0 && entity.Subtype == 0)
-                                {
-                                    willys.Add(entity);
-                                }
-                                else if (entity.Type == 34)
-                                {
-                                    switch (entity.Subtype)
-                                    {
-                                        case 0: // tnt
-                                        case 2: // empty
-                                        case 3: // spring
-                                        case 4: // continue
-                                        case 6: // fruit
-                                        case 8: // life
-                                        case 9: // doctor
-                                        case 10: // pickup
-                                        case 11: // pow
-                                        case 13: // ghost
-                                        case 17: // auto pickup
-                                        case 18: // nitro
-                                        case 20: // auto empty
-                                        case 21: // empty 2
-                                        case 25: // slot
-                                            boxcount++;
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                }
-                                else if (entity.Type == 36)
-                                {
-                                    if (entity.Subtype == 1)
-                                    {
-                                        boxcount++;
-                                    }
-                                }
-                            }
+                            case 0: // tnt
+                            case 2: // empty
+                            case 3: // spring
+                            case 4: // continue
+                            case 6: // fruit
+                            case 8: // life
+                            case 9: // doctor
+                            case 10: // pickup
+                            case 11: // pow
+                            case 13: // ghost
+                            case 17: // auto pickup
+                            case 18: // nitro
+                            case 20: // auto empty
+                            case 21: // empty 2
+                            case 25: // slot
+                                boxcount++;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else if (entity.Type == 36)
+                    {
+                        if (entity.Subtype == 1)
+                        {
+                            boxcount++;
                         }
                     }
                 }
@@ -288,24 +270,15 @@ namespace CrashEdit
         {
             List<TextureChunk[]> sortedtexturechunks = new List<TextureChunk[]>();
             List<OldSceneryEntry> sceneryentries = new List<OldSceneryEntry>();
-            foreach (Chunk chunk in NSF.Chunks)
+            foreach (OldSceneryEntry entry in NSF.GetEntries<OldSceneryEntry>())
             {
-                if (chunk is EntryChunk entrychunk)
+                sceneryentries.Add(entry);
+                TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info,0x18)];
+                for (int i = 0; i < texturechunks.Length; ++i)
                 {
-                    foreach (Entry entry in entrychunk.Entries)
-                    {
-                        if (entry is OldSceneryEntry sceneryentry)
-                        {
-                            sceneryentries.Add(sceneryentry);
-                            TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(sceneryentry.Info,0x18)];
-                            for (int i = 0; i < texturechunks.Length; ++i)
-                            {
-                                texturechunks[i] = NSF.FindEID<TextureChunk>(BitConv.FromInt32(sceneryentry.Info,0x20+i*4));
-                            }
-                            sortedtexturechunks.Add(texturechunks);
-                        }
-                    }
+                    texturechunks[i] = NSF.FindEID<TextureChunk>(BitConv.FromInt32(entry.Info,0x20+i*4));
                 }
+                sortedtexturechunks.Add(texturechunks);
             }
             Form frm = new Form() { Text = "Loading...", Width = 480, Height = 360 };
             frm.Show();
@@ -318,24 +291,15 @@ namespace CrashEdit
         {
             List<TextureChunk[]> sortedtexturechunks = new List<TextureChunk[]>();
             List<SceneryEntry> sceneryentries = new List<SceneryEntry>();
-            foreach (Chunk chunk in NSF.Chunks)
+            foreach (SceneryEntry entry in NSF.GetEntries<SceneryEntry>())
             {
-                if (chunk is EntryChunk entrychunk)
+                sceneryentries.Add(entry);
+                TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info,0x28)];
+                for (int i = 0; i < texturechunks.Length; ++i)
                 {
-                    foreach (Entry entry in entrychunk.Entries)
-                    {
-                        if (entry is SceneryEntry sceneryentry)
-                        {
-                            sceneryentries.Add(sceneryentry);
-                            TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(sceneryentry.Info,0x28)];
-                            for (int i = 0; i < texturechunks.Length; ++i)
-                            {
-                                texturechunks[i] = NSF.FindEID<TextureChunk>(BitConv.FromInt32(sceneryentry.Info,0x2C+i*4));
-                            }
-                            sortedtexturechunks.Add(texturechunks);
-                        }
-                    }
+                    texturechunks[i] = NSF.FindEID<TextureChunk>(BitConv.FromInt32(entry.Info,0x2C+i*4));
                 }
+                sortedtexturechunks.Add(texturechunks);
             }
             Form frm = new Form() { Text = "Loading...", Width = 480, Height = 360 };
             frm.Show();
@@ -348,24 +312,15 @@ namespace CrashEdit
         {
             List<TextureChunk[]> sortedtexturechunks = new List<TextureChunk[]>();
             List<NewSceneryEntry> sceneryentries = new List<NewSceneryEntry>();
-            foreach (Chunk chunk in NSF.Chunks)
+            foreach (NewSceneryEntry entry in NSF.GetEntries<NewSceneryEntry>())
             {
-                if (chunk is EntryChunk entrychunk)
+                sceneryentries.Add(entry);
+                TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info,0x28)];
+                for (int i = 0; i < texturechunks.Length; ++i)
                 {
-                    foreach (Entry entry in entrychunk.Entries)
-                    {
-                        if (entry is NewSceneryEntry newsceneryentry)
-                        {
-                            sceneryentries.Add(newsceneryentry);
-                            TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(newsceneryentry.Info,0x28)];
-                            for (int i = 0; i < texturechunks.Length; ++i)
-                            {
-                                texturechunks[i] = NSF.FindEID<TextureChunk>(BitConv.FromInt32(newsceneryentry.Info,0x2C+i*4));
-                            }
-                            sortedtexturechunks.Add(texturechunks);
-                        }
-                    }
+                    texturechunks[i] = NSF.FindEID<TextureChunk>(BitConv.FromInt32(entry.Info,0x2C+i*4));
                 }
+                sortedtexturechunks.Add(texturechunks);
             }
             Form frm = new Form() { Text = "Loading...", Width = 480, Height = 360 };
             frm.Show();
