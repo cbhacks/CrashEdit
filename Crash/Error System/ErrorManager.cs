@@ -29,6 +29,7 @@ namespace Crash
             }
 
             e.CanSkip = skipdepth > 0;
+            if (!e.CanSkip && e.Response == ErrorResponse.Skip) e.Response = ErrorResponse.Abort;
             Signal?.Invoke(null, e);
             switch (e.Response)
             {
@@ -38,9 +39,9 @@ namespace Crash
                     SignalErrorWithArgs(e);
                     break;
                 case ErrorResponse.Abort:
-                    throw new LoadAbortedException();
+                    throw new LoadAbortedException(e.Message);
                 case ErrorResponse.Skip:
-                    throw new LoadSkippedException();
+                    throw new LoadSkippedException(e.Message);
                 case ErrorResponse.Ignore:
                     break;
                 case ErrorResponse.IgnoreAll:
@@ -62,6 +63,7 @@ namespace Crash
         {
             ErrorSignalEventArgs e = new ErrorSignalEventArgs(message);
             e.CanIgnore = true;
+            e.Response = ErrorResponse.Ignore;
             SignalErrorWithArgs(e);
         }
 

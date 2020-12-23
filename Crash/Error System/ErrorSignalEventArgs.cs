@@ -7,7 +7,7 @@ namespace Crash
         public ErrorSignalEventArgs(string message)
         {
             Message = message;
-            Response = ErrorResponse.Abort;
+            Response = ErrorResponse.Skip;
             CanSkip = false;
             CanIgnore = false;
             Subject = null;
