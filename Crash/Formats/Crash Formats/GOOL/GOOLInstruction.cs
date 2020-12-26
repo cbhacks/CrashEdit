@@ -260,9 +260,9 @@ namespace Crash
                 if ((val & 0x200) == 0)
                 {
                     int link = val >> 6 & 0x7;
-                    if (link == 0)
-                        return ((ObjectFields)(val & 0x3F)).ToString();
-                    else
+                    //if (link == 0)
+                    //    return ((ObjectFields)(val & 0x3F)).ToString();
+                    //else
                         return $"{ObjectFields.self + link}->{(ObjectFields)(val & 0x3F)}";
                 }
                 if ((val & 0x1FF) == 0x1F)
