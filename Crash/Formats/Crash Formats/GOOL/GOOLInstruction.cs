@@ -20,7 +20,7 @@ namespace Crash
         public abstract string Comment { get; }
         public virtual string Arguments => GetArguments();
         public GOOLEntry GOOL { get; }
-        public int Value { get; }
+        public int Value { get; set; }
         public int UnusedArg { get; private set; }
         public int Opcode => Value >> 24 & 0xFF;
         public IDictionary<char, GOOLArgument> Args => args;
