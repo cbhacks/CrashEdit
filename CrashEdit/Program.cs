@@ -29,31 +29,33 @@ namespace CrashEdit
         public static void LoadC3AnimLinks()
         {
             C3AnimLinks.Clear();
-            XmlReader r;
+            XmlReader r = XmlReader.Create("CrashEdit.exe.animmodel.config");
             try
             {
-                r = XmlReader.Create("CrashEdit.exe.animmodel.config");
+                while (r.Read())
+                {
+                    switch (r.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            if (r.Name == "animmodel")
+                            {
+                                string anim = r.GetAttribute("anim");
+                                string model = r.GetAttribute("model");
+                                C3AnimLinks.Add(anim, model);
+                            }
+                            break;
+                    }
+                }
             }
             catch (System.IO.FileNotFoundException)
             {
                 return;
             }
-            while (r.Read())
+            finally
             {
-                switch (r.NodeType)
-                {
-                    case XmlNodeType.Element:
-                        if (r.Name == "animmodel")
-                        {
-                            string anim = r.GetAttribute("anim");
-                            string model = r.GetAttribute("model");
-                            C3AnimLinks.Add(anim, model);
-                        }
-                        break;
-                }
+                r.Close();
+                r.Dispose();
             }
-            r.Close();
-            r.Dispose();
         }
 
         [STAThread]
