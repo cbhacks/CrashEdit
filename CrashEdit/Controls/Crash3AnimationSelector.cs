@@ -68,7 +68,7 @@ namespace CrashEdit
                 lblEIDErr.Text = Entry.CheckEIDErrors(txtEName.Text, false);
                 if (lblEIDErr.Text == string.Empty)
                 {
-                    ModelEntry modelentry = nsf.FindEID<ModelEntry>(Entry.ENameToEID(txtEName.Text));
+                    ModelEntry modelentry = nsf.GetEntry<ModelEntry>(Entry.ENameToEID(txtEName.Text));
                     if (modelentry != null)
                     {
                         if (frame == null)
@@ -105,7 +105,7 @@ namespace CrashEdit
                         TextureChunk[] texturechunks = new TextureChunk[modelentry.TPAGCount];
                         for (int i = 0; i < texturechunks.Length; ++i)
                         {
-                            texturechunks[i] = nsf.FindEID<TextureChunk>(BitConv.FromInt32(modelentry.Info,0xC+i*4));
+                            texturechunks[i] = nsf.GetEntry<TextureChunk>(BitConv.FromInt32(modelentry.Info,0xC+i*4));
                         }
                         if (frame == null)
                         {

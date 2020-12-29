@@ -11,7 +11,7 @@ namespace CrashEdit
             GOOLEntry = goolentry;
             foreach (int ext_eid in goolentry.Externals)
             {
-                GOOLEntry ext_gool = EntryChunkController.NSFController.NSF.FindEID<GOOLEntry>(ext_eid);
+                GOOLEntry ext_gool = EntryChunkController.NSFController.NSF.GetEntry<GOOLEntry>(ext_eid);
                 if (ext_gool != null)
                 {
                     ext_gool.ParentGOOL = goolentry;

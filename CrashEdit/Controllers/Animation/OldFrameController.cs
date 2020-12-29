@@ -41,14 +41,14 @@ namespace CrashEdit
         {
             TabControl tbcTabs = new TabControl() { Dock = DockStyle.Fill };
             EntryController entry = OldAnimationEntryController != null ? (EntryController)OldAnimationEntryController : (EntryController)ProtoAnimationEntryController;
-            OldModelEntry modelentry = entry.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(OldFrame.ModelEID);
+            OldModelEntry modelentry = entry.EntryChunkController.NSFController.NSF.GetEntry<OldModelEntry>(OldFrame.ModelEID);
 
             OldFrameBox framebox = new OldFrameBox(this);
             framebox.Dock = DockStyle.Fill;
             Dictionary<int,TextureChunk> textures = new Dictionary<int,TextureChunk>();
             foreach (OldModelStruct str in modelentry.Structs)
                 if (str is OldModelTexture tex && !textures.ContainsKey(tex.EID))
-                    textures.Add(tex.EID, entry.EntryChunkController.NSFController.NSF.FindEID<TextureChunk>(tex.EID));
+                    textures.Add(tex.EID, entry.EntryChunkController.NSFController.NSF.GetEntry<TextureChunk>(tex.EID));
             OldAnimationEntryViewer viewerbox = new OldAnimationEntryViewer(OldFrame,false,modelentry,textures) { Dock = DockStyle.Fill };
 
             TabPage edittab = new TabPage("Editor");
@@ -70,7 +70,7 @@ namespace CrashEdit
         private void Menu_Export_OBJ()
         {
             EntryController entry = OldAnimationEntryController != null ? (EntryController)OldAnimationEntryController : (EntryController)ProtoAnimationEntryController;
-            OldModelEntry modelentry = entry.EntryChunkController.NSFController.NSF.FindEID<OldModelEntry>(OldFrame.ModelEID);
+            OldModelEntry modelentry = entry.EntryChunkController.NSFController.NSF.GetEntry<OldModelEntry>(OldFrame.ModelEID);
             if (modelentry == null)
             {
                 throw new GUIException("The linked model entry could not be found.");

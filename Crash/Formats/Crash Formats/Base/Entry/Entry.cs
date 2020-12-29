@@ -167,10 +167,10 @@ namespace Crash
             }
             if (nsf != null)
             {
-                IEntry existingentry = nsf.FindEID<Entry>(eid);
+                IEntry existingentry = nsf.GetEntry<Entry>(eid);
                 if (existingentry == null)
                 {
-                    existingentry = nsf.FindEID<TextureChunk>(eid);
+                    existingentry = nsf.GetEntry<TextureChunk>(eid);
                 }
                 if (existingentry != null)
                 {

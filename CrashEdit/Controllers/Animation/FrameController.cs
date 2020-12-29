@@ -28,11 +28,11 @@ namespace CrashEdit
         {
             if (!Frame.IsNew)
             {
-                ModelEntry modelentry = AnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<ModelEntry>(Frame.ModelEID);
+                ModelEntry modelentry = AnimationEntryController.EntryChunkController.NSFController.NSF.GetEntry<ModelEntry>(Frame.ModelEID);
                 TextureChunk[] texturechunks = new TextureChunk[8];
                 for (int i = 0; i < 8; ++i)
                 {
-                    texturechunks[i] = AnimationEntryController.EntryChunkController.NSFController.NSF.FindEID<TextureChunk>(BitConv.FromInt32(modelentry.Info,0xC+i*4));
+                    texturechunks[i] = AnimationEntryController.EntryChunkController.NSFController.NSF.GetEntry<TextureChunk>(BitConv.FromInt32(modelentry.Info,0xC+i*4));
                 }
                 return new UndockableControl(new AnimationEntryViewer(Frame,modelentry,texturechunks));
             }

@@ -15,7 +15,7 @@ namespace CrashEdit
             List<byte[]> palettes = new List<byte[]>();
             for (int i = 0; i < 4; ++i)
             {
-                PaletteEntry ipal = ec.EntryChunkController.NSFController.NSF.FindEID<PaletteEntry>(BitConv.FromInt32(ec.MapEntry.Header,0x78+i*4));
+                PaletteEntry ipal = ec.EntryChunkController.NSFController.NSF.GetEntry<PaletteEntry>(BitConv.FromInt32(ec.MapEntry.Header,0x78+i*4));
                 if (ipal != null)
                 {
                     palettes.AddRange(ipal.Palettes);
@@ -24,7 +24,7 @@ namespace CrashEdit
             int imagecount = 0;
             for (int i = 0, s = BitConv.FromInt32(ec.MapEntry.Header,0); i < s; ++i)
             {
-                ImageEntry imag = ec.EntryChunkController.NSFController.NSF.FindEID<ImageEntry>(BitConv.FromInt32(ec.MapEntry.Header,0x1B0+i*4));
+                ImageEntry imag = ec.EntryChunkController.NSFController.NSF.GetEntry<ImageEntry>(BitConv.FromInt32(ec.MapEntry.Header,0x1B0+i*4));
                 imagecount += imag.Items.Count;
             }
             int size = BitConv.FromInt32(ec.MapEntry.Header,0x4);
@@ -36,7 +36,7 @@ namespace CrashEdit
             {
             for (int i = 0, s = BitConv.FromInt32(ec.MapEntry.Header,0); i < s; ++i)
             {
-                ImageEntry imag = ec.EntryChunkController.NSFController.NSF.FindEID<ImageEntry>(BitConv.FromInt32(ec.MapEntry.Header,0x1B0+i*4));
+                ImageEntry imag = ec.EntryChunkController.NSFController.NSF.GetEntry<ImageEntry>(BitConv.FromInt32(ec.MapEntry.Header,0x1B0+i*4));
                 if (imag != null)
                 {
                     foreach (byte[] frame in imag.Items)

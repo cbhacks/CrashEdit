@@ -1650,7 +1650,7 @@ namespace CrashEdit
                 entries = new HashSet<Entry>();
                 foreach (int eid in loadedentries)
                 {
-                    entries.Add(c2c.ZoneEntryController.EntryChunkController.NSFController.NSF.FindEID<Entry>(eid));
+                    entries.Add(c2c.ZoneEntryController.EntryChunkController.NSFController.NSF.GetEntry<Entry>(eid));
                 }
             }
             else if (controller is NewEntityController c3c)
@@ -1659,7 +1659,7 @@ namespace CrashEdit
                 entries = new HashSet<Entry>();
                 foreach (int eid in loadedentries)
                 {
-                    entries.Add(c3c.NewZoneEntryController.EntryChunkController.NSFController.NSF.FindEID<Entry>(eid));
+                    entries.Add(c3c.NewZoneEntryController.EntryChunkController.NSFController.NSF.GetEntry<Entry>(eid));
                 }
             }
             HashSet<Chunk> loadedchunks = new HashSet<Chunk>();

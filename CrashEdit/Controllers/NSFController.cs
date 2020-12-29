@@ -276,7 +276,7 @@ namespace CrashEdit
                 TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info,0x18)];
                 for (int i = 0; i < texturechunks.Length; ++i)
                 {
-                    texturechunks[i] = NSF.FindEID<TextureChunk>(BitConv.FromInt32(entry.Info,0x20+i*4));
+                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info,0x20+i*4));
                 }
                 sortedtexturechunks.Add(texturechunks);
             }
@@ -297,7 +297,7 @@ namespace CrashEdit
                 TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info,0x28)];
                 for (int i = 0; i < texturechunks.Length; ++i)
                 {
-                    texturechunks[i] = NSF.FindEID<TextureChunk>(BitConv.FromInt32(entry.Info,0x2C+i*4));
+                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info,0x2C+i*4));
                 }
                 sortedtexturechunks.Add(texturechunks);
             }
@@ -318,7 +318,7 @@ namespace CrashEdit
                 TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info,0x28)];
                 for (int i = 0; i < texturechunks.Length; ++i)
                 {
-                    texturechunks[i] = NSF.FindEID<TextureChunk>(BitConv.FromInt32(entry.Info,0x2C+i*4));
+                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info,0x2C+i*4));
                 }
                 sortedtexturechunks.Add(texturechunks);
             }

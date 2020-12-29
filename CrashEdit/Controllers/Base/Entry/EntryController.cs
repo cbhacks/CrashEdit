@@ -43,7 +43,7 @@ namespace CrashEdit
 
         protected T FindEID<T>(int eid) where T : class,IEntry
         {
-            return EntryChunkController.NSFController.NSF.FindEID<T>(eid);
+            return EntryChunkController.NSFController.NSF.GetEntry<T>(eid);
         }
 
         private void Menu_Export_Entry()

@@ -680,7 +680,7 @@ namespace CrashEdit
                                 values.Sort(delegate (int a, int b) {
                                     return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
                                 });
-                                if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.FindEID<IEntry>(eid) == null);
+                                if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.GetEntry<IEntry>(eid) == null);
                             }
                         }
                         if (ent.LoadListB != null)
@@ -691,7 +691,7 @@ namespace CrashEdit
                                 values.Sort(delegate (int a, int b) {
                                     return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
                                 });
-                                if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.FindEID<IEntry>(eid) == null);
+                                if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.GetEntry<IEntry>(eid) == null);
                             }
                         }
                     }
@@ -735,7 +735,7 @@ namespace CrashEdit
                                 values.Sort(delegate (int a, int b) {
                                     return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
                                 });
-                                if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.FindEID<IEntry>(eid) == null);
+                                if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.GetEntry<IEntry>(eid) == null);
                             }
                         }
                         if (ent.LoadListB != null)
@@ -746,7 +746,7 @@ namespace CrashEdit
                                 values.Sort(delegate (int a, int b) {
                                     return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
                                 });
-                                if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.FindEID<IEntry>(eid) == null);
+                                if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.GetEntry<IEntry>(eid) == null);
                             }
                         }
                     }
