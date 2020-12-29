@@ -108,27 +108,19 @@ namespace Crash
             return new string(str);
         }
 
-        // thanks to NeoKesha for this
         public static int ENameToEID(string str)
         {
-            int EID = 1;
-            for (byte i = 0; i < 5; i++)
+            if (str.Length != 5)
+                throw new ArgumentException("ENameToEID: Incorrect length for EName.");
+            int eid = 1;
+            for (int i = 0; i < 5; i++)
             {
-                byte chr_id = SeekCharId(str[i]);
-                EID |= chr_id << (25 - 6 * i);
+                int c = ENameCharacterSet.IndexOf(str[i]);
+                if (c == -1)
+                    throw new ArgumentException(string.Format("ENameToEID: Invalid EName character: {0}.", str[i]));
+                eid |= c << (25 - 6 * i);
             }
-            return EID;
-        }
-
-        // And this
-        public static byte SeekCharId(char chr)
-        {
-            byte i = 0;
-            for (; i < 64; ++i)
-            {
-                if (ENameCharacterSet[i] == chr) return i;
-            }
-            throw new ArgumentException("Entry: invalid character for EName");
+            return eid;
         }
 
         public Entry(int eid)
