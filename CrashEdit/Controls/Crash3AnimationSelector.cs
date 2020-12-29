@@ -68,7 +68,7 @@ namespace CrashEdit
                 lblEIDErr.Text = Entry.CheckEIDErrors(txtEName.Text, false);
                 if (lblEIDErr.Text == string.Empty)
                 {
-                    ModelEntry modelentry = nsf.GetEntry<ModelEntry>(Entry.ENameToEID(txtEName.Text));
+                    ModelEntry modelentry = nsf.GetEntry<ModelEntry>(txtEName.Text);
                     if (modelentry != null)
                     {
                         if (frame == null)
