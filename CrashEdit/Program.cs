@@ -29,6 +29,7 @@ namespace CrashEdit
         public static void LoadC3AnimLinks()
         {
             C3AnimLinks.Clear();
+            if (!System.IO.File.Exists("CrashEdit.exe.animmodel.config")) return;
             XmlReader r = XmlReader.Create("CrashEdit.exe.animmodel.config");
             try
             {
@@ -46,10 +47,6 @@ namespace CrashEdit
                             break;
                     }
                 }
-            }
-            catch (System.IO.FileNotFoundException)
-            {
-                return;
             }
             finally
             {
