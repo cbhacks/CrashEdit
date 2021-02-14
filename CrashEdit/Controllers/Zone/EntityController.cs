@@ -20,11 +20,11 @@ namespace CrashEdit
         {
             if (Entity.Name != null && Entity.ID != null)
             {
-                Node.Text = string.Format("{0} - ID {1}",Entity.Name,Entity.ID);
+                Node.Text = $"{Entity.Name} [ID {Entity.ID}]";
             }
             else if (Entity.ID != null)
             {
-                Node.Text = string.Format("{1} ID {0}",Entity.ID,Crash.UI.Properties.Resources.EntityController_Text);
+                Node.Text = $"{Crash.UI.Properties.Resources.EntityController_Text} [ID {Entity.ID}]";
             }
             else
             {
