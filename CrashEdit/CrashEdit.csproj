@@ -53,6 +53,10 @@
   </Target>
   -->
   <ItemGroup>
+    <ProjectReference Include="..\CrashEdit.Main.csproj">
+      <Project>{ff8431dc-537f-4523-8f38-03fdd36879d5}</Project>
+      <Name>CrashEdit.Main</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Crash.UI\Crash.UI.csproj">
       <Project>{3B43FB3E-338F-4FA2-9B43-C6E4DE63DC8E}</Project>
       <Name>Crash.UI</Name>
