@@ -15,6 +15,7 @@
 
     <ItemGroup>
         <Compile Include="Core/**/*.cs" />
+        <Compile Include="Crash/**/*.cs" />
     </ItemGroup>
 
 </Project>

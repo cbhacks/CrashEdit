@@ -120,13 +120,13 @@
     <None Include="Resources\media-optical-5.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CrashEdit.Main.csproj">
+      <Project>{ff8431dc-537f-4523-8f38-03fdd36879d5}</Project>
+      <Name>CrashEdit.Main</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Crash.UI\Crash.UI.csproj">
       <Project>{3b43fb3e-338f-4fa2-9b43-c6e4de63dc8e}</Project>
       <Name>Crash.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Crash\Crash.csproj">
-      <Project>{ffbfb4b9-97bd-4d21-91de-caf7ae9ddb65}</Project>
-      <Name>Crash</Name>
     </ProjectReference>
     <ProjectReference Include="..\ISO2PSX\ISO2PSX.csproj">
       <Project>{b25e0901-a824-4c47-b2b4-048b8c154ccc}</Project>

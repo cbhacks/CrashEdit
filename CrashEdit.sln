@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrashEdit.Main", "CrashEdit.Main.csproj", "{ff8431dc-537f-4523-8f38-03fdd36879d5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crash", "Crash\Crash.csproj", "{FFBFB4B9-97BD-4D21-91DE-CAF7AE9DDB65}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrashEdit", "CrashEdit\CrashEdit.csproj", "{ECE059C1-0706-45F3-B897-7026376F49A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crash.UI", "Crash.UI\Crash.UI.csproj", "{3B43FB3E-338F-4FA2-9B43-C6E4DE63DC8E}"
@@ -25,10 +23,6 @@ Global
 		{ff8431dc-537f-4523-8f38-03fdd36879d5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ff8431dc-537f-4523-8f38-03fdd36879d5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ff8431dc-537f-4523-8f38-03fdd36879d5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FFBFB4B9-97BD-4D21-91DE-CAF7AE9DDB65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FFBFB4B9-97BD-4D21-91DE-CAF7AE9DDB65}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FFBFB4B9-97BD-4D21-91DE-CAF7AE9DDB65}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FFBFB4B9-97BD-4D21-91DE-CAF7AE9DDB65}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ECE059C1-0706-45F3-B897-7026376F49A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ECE059C1-0706-45F3-B897-7026376F49A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECE059C1-0706-45F3-B897-7026376F49A9}.Release|Any CPU.ActiveCfg = Release|Any CPU

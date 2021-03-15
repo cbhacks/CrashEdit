@@ -65,10 +65,6 @@
       <Project>{ff8431dc-537f-4523-8f38-03fdd36879d5}</Project>
       <Name>CrashEdit.Main</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Crash\Crash.csproj">
-      <Project>{FFBFB4B9-97BD-4D21-91DE-CAF7AE9DDB65}</Project>
-      <Name>Crash</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Action System\Action.cs" />
