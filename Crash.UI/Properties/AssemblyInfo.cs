@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Unofficial Crash Bandicoot 1/2/3 Level Editor UI library")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("cbhacks")]
-[assembly: AssemblyProduct("Crash.UI.Properties")]
+[assembly: AssemblyProduct("CrashEdit.CrashUI.Properties")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

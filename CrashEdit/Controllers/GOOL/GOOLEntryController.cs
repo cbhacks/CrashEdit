@@ -1,8 +1,8 @@
-using Crash;
-using Crash.GOOLIns;
+using CrashEdit.Crash;
+using CrashEdit.Crash.GOOLIns;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class GOOLEntryController : EntryController
     {
@@ -28,16 +28,16 @@ namespace CrashEdit
             switch (GOOLEntry.Version)
             {
                 case GOOLVersion.Version0:
-                    Node.Text = string.Format(Crash.UI.Properties.Resources.GOOLv0EntryController_Text,GOOLEntry.EName);
+                    Node.Text = string.Format(CrashUI.Properties.Resources.GOOLv0EntryController_Text,GOOLEntry.EName);
                     break;
                 case GOOLVersion.Version1:
-                    Node.Text = string.Format(Crash.UI.Properties.Resources.GOOLv1EntryController_Text,GOOLEntry.EName);
+                    Node.Text = string.Format(CrashUI.Properties.Resources.GOOLv1EntryController_Text,GOOLEntry.EName);
                     break;
                 case GOOLVersion.Version2:
-                    Node.Text = string.Format(Crash.UI.Properties.Resources.GOOLv2EntryController_Text,GOOLEntry.EName);
+                    Node.Text = string.Format(CrashUI.Properties.Resources.GOOLv2EntryController_Text,GOOLEntry.EName);
                     break;
                 case GOOLVersion.Version3:
-                    Node.Text = string.Format(Crash.UI.Properties.Resources.GOOLv3EntryController_Text,GOOLEntry.EName);
+                    Node.Text = string.Format(CrashUI.Properties.Resources.GOOLv3EntryController_Text,GOOLEntry.EName);
                     break;
             }
         }

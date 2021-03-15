@@ -1,8 +1,8 @@
-using Crash;
+using CrashEdit.Crash;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class NewEntityController : Controller
     {
@@ -24,11 +24,11 @@ namespace CrashEdit
             }
             else if (Entity.ID != null)
             {
-                Node.Text = string.Format("{1} ID {0}",Entity.ID,Crash.UI.Properties.Resources.EntityController_Text);
+                Node.Text = string.Format("{1} ID {0}",Entity.ID,CrashUI.Properties.Resources.EntityController_Text);
             }
             else
             {
-                Node.Text = Crash.UI.Properties.Resources.EntityController_Text;
+                Node.Text = CrashUI.Properties.Resources.EntityController_Text;
             }
         }
 

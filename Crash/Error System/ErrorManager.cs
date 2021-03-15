@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     public static class ErrorManager
     {

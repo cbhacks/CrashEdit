@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public sealed class GOOLInstructionAttribute : Attribute

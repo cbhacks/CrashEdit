@@ -1,6 +1,6 @@
 using System;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntryType(3,GameVersion.Crash2)]
     public sealed class SceneryEntryLoader : EntryLoader

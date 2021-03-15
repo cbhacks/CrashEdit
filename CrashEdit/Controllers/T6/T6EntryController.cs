@@ -1,6 +1,6 @@
-using Crash;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class T6EntryController : MysteryUniItemEntryController
     {

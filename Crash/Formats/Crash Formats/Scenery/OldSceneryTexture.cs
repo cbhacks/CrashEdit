@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     public struct OldSceneryTexture : OldModelStruct
     {

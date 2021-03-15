@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class EvList<T> : IList<T>
     {

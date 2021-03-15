@@ -1,7 +1,7 @@
-using Crash;
-using Crash.UI;
-using CrashEdit.Forms;
-using CrashEdit.Properties;
+using CrashEdit.Crash;
+using CrashEdit.CrashUI;
+using CrashEdit.CE.Forms;
+using CrashEdit.CE.Properties;
 using DiscUtils.Iso9660;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class OldMainForm : Form
     {

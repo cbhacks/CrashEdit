@@ -1,8 +1,8 @@
-using Crash;
+using CrashEdit.Crash;
 using System;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class PaletteEntryController : EntryController
     {
@@ -15,7 +15,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.PaletteEntryController_Text,PaletteEntry.EName);
+            Node.Text = string.Format(CrashUI.Properties.Resources.PaletteEntryController_Text,PaletteEntry.EName);
         }
 
         public override void InvalidateNodeImage()

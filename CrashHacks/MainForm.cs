@@ -6,8 +6,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
 using System.IO;
-using Crash;
-using Crash.UI;
+using CrashEdit.Crash;
+using CrashEdit.CrashUI;
 using DiscUtils.Iso9660;
 
 namespace CrashHacks

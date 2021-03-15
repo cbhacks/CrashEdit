@@ -1,4 +1,4 @@
-using Crash;
+using CrashEdit.Crash;
 
 namespace CrashHacks.Scripts.Scenery.Color
 {

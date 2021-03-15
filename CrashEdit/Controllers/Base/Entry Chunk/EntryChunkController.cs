@@ -1,9 +1,9 @@
-using Crash;
+using CrashEdit.Crash;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public abstract class EntryChunkController : ChunkController
     {
@@ -11,8 +11,8 @@ namespace CrashEdit
         {
             EntryChunk = entrychunk;
             PopulateNodes();
-            AddMenu(Crash.UI.Properties.Resources.EntryChunkController_AcImport,Menu_Import_Entry);
-            AddMenu(Crash.UI.Properties.Resources.EntryChunkController_AcAddNew,Menu_Add_Entry);
+            AddMenu(CrashUI.Properties.Resources.EntryChunkController_AcImport,Menu_Import_Entry);
+            AddMenu(CrashUI.Properties.Resources.EntryChunkController_AcAddNew,Menu_Add_Entry);
         }
 
         public void PopulateNodes()

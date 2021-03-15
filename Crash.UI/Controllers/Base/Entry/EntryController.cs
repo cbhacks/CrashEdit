@@ -1,4 +1,6 @@
-namespace Crash.UI
+using CrashEdit.Crash;
+
+namespace CrashEdit.CrashUI
 {
     public abstract class EntryController : Controller,IEntryController
     {

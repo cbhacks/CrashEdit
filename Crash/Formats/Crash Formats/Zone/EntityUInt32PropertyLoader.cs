@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntityPropertyType(3)]
     public sealed class EntityUInt32PropertyLoader : EntityBasicPropertyLoader<uint>

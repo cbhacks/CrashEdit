@@ -1,7 +1,7 @@
 using System.IO;
 using System.Diagnostics;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public static class ExternalTool
     {

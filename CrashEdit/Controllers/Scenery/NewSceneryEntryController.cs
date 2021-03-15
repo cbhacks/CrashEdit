@@ -1,7 +1,7 @@
-using Crash;
+using CrashEdit.Crash;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class NewSceneryEntryController : EntryController
     {
@@ -19,7 +19,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.SceneryEntryController_Text,SceneryEntry.EName);
+            Node.Text = string.Format(CrashUI.Properties.Resources.SceneryEntryController_Text,SceneryEntry.EName);
         }
 
         public override void InvalidateNodeImage()

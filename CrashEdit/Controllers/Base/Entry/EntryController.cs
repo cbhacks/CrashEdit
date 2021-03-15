@@ -1,7 +1,7 @@
-using Crash;
+using CrashEdit.Crash;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public abstract class EntryController : Controller
     {
@@ -9,12 +9,12 @@ namespace CrashEdit
         {
             EntryChunkController = entrychunkcontroller;
             Entry = entry;
-            AddMenu(string.Format(Crash.UI.Properties.Resources.EntryController_AcExport,entry.EName),Menu_Export_Entry);
-            AddMenu(string.Format(Crash.UI.Properties.Resources.EntryController_AcDelete,entry.EName),Menu_Delete_Entry);
-            AddMenu(string.Format(Crash.UI.Properties.Resources.EntryController_AcRename,entry.EName),Menu_Rename_Entry);
+            AddMenu(string.Format(CrashUI.Properties.Resources.EntryController_AcExport,entry.EName),Menu_Export_Entry);
+            AddMenu(string.Format(CrashUI.Properties.Resources.EntryController_AcDelete,entry.EName),Menu_Delete_Entry);
+            AddMenu(string.Format(CrashUI.Properties.Resources.EntryController_AcRename,entry.EName),Menu_Rename_Entry);
             if (!(this is UnprocessedEntryController))
             {
-                AddMenu(string.Format(Crash.UI.Properties.Resources.EntryController_AcDeprocess,entry.EName),Menu_Unprocess_Entry);
+                AddMenu(string.Format(CrashUI.Properties.Resources.EntryController_AcDeprocess,entry.EName),Menu_Unprocess_Entry);
             }
         }
 
@@ -86,12 +86,12 @@ namespace CrashEdit
                     Entry.EID = newentrywindow.EID;
                     InvalidateNode();
                     EntryChunkController.Editor.Invalidate();
-                    ContextMenu.MenuItems[0].Text = string.Format(Crash.UI.Properties.Resources.EntryController_AcExport,Entry.EName);
-                    ContextMenu.MenuItems[1].Text = string.Format(Crash.UI.Properties.Resources.EntryController_AcDelete,Entry.EName);
-                    ContextMenu.MenuItems[2].Text = string.Format(Crash.UI.Properties.Resources.EntryController_AcRename,Entry.EName);
+                    ContextMenu.MenuItems[0].Text = string.Format(CrashUI.Properties.Resources.EntryController_AcExport,Entry.EName);
+                    ContextMenu.MenuItems[1].Text = string.Format(CrashUI.Properties.Resources.EntryController_AcDelete,Entry.EName);
+                    ContextMenu.MenuItems[2].Text = string.Format(CrashUI.Properties.Resources.EntryController_AcRename,Entry.EName);
                     if (!(this is UnprocessedEntryController))
                     {
-                        ContextMenu.MenuItems[3].Text = string.Format(Crash.UI.Properties.Resources.EntryController_AcDeprocess,Entry.EName);
+                        ContextMenu.MenuItems[3].Text = string.Format(CrashUI.Properties.Resources.EntryController_AcDeprocess,Entry.EName);
                     }
                 }
             }

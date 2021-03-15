@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     public class Frame
     {

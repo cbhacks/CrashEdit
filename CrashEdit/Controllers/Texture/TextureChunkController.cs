@@ -1,24 +1,24 @@
-using Crash;
+using CrashEdit.Crash;
 using System;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class TextureChunkController : ChunkController
     {
         public TextureChunkController(NSFController nsfcontroller,TextureChunk texturechunk) : base(nsfcontroller,texturechunk)
         {
             TextureChunk = texturechunk;
-            AddMenu(Crash.UI.Properties.Resources.TextureChunkController_AcRecalcChecksum,Menu_Recalculate_Checksum);
-            AddMenu(Crash.UI.Properties.Resources.TextureChunkController_AcRename,Menu_Rename_Entry);
-            AddMenu(Crash.UI.Properties.Resources.TextureChunkController_AcOpenViewer,Menu_Open_Viewer);
+            AddMenu(CrashUI.Properties.Resources.TextureChunkController_AcRecalcChecksum,Menu_Recalculate_Checksum);
+            AddMenu(CrashUI.Properties.Resources.TextureChunkController_AcRename,Menu_Rename_Entry);
+            AddMenu(CrashUI.Properties.Resources.TextureChunkController_AcOpenViewer,Menu_Open_Viewer);
             InvalidateNode();
             InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.TextureChunkController_Text,Entry.EIDToEName(TextureChunk.EID),NSFController.NSF.Chunks.IndexOf(TextureChunk) * 2 + 1);
+            Node.Text = string.Format(CrashUI.Properties.Resources.TextureChunkController_Text,Entry.EIDToEName(TextureChunk.EID),NSFController.NSF.Chunks.IndexOf(TextureChunk) * 2 + 1);
         }
 
         public override void InvalidateNodeImage()

@@ -1,6 +1,6 @@
-using Crash;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class SLSTEntryController : EntryController
     {
@@ -19,7 +19,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.SLSTEntryController_Text,SLSTEntry.EName);
+            Node.Text = string.Format(CrashUI.Properties.Resources.SLSTEntryController_Text,SLSTEntry.EName);
         }
 
         public override void InvalidateNodeImage()

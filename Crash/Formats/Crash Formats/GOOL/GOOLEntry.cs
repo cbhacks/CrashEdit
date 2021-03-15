@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class GOOLEntry : Entry
     {

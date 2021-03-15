@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class EntityPositionProperty : EntityBasicProperty<EntityPosition>
     {

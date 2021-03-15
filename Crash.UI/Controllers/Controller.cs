@@ -1,8 +1,9 @@
+using CrashEdit.Crash;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Crash.UI
+namespace CrashEdit.CrashUI
 {
     public abstract class Controller : IDisposable
     {

@@ -3,7 +3,7 @@ using System.IO;
 using System.Xml;
 using System.Collections.Generic;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class ProtoSceneryEntry : Entry
     {

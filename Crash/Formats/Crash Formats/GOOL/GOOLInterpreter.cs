@@ -1,6 +1,6 @@
-﻿using Crash.GOOLIns;
+﻿using CrashEdit.Crash.GOOLIns;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     public enum GOOLVersion
     {

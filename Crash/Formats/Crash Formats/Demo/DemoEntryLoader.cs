@@ -1,4 +1,4 @@
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntryType(19,GameVersion.Crash1BetaMAY11)]
     [EntryType(19,GameVersion.Crash1)]

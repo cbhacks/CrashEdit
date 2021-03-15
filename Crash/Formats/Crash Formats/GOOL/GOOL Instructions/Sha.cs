@@ -1,4 +1,4 @@
-﻿namespace Crash.GOOLIns
+﻿namespace CrashEdit.Crash.GOOLIns
 {
     [GOOLInstruction(21,GameVersion.Crash1)]
     [GOOLInstruction(21,GameVersion.Crash1Beta1995)]

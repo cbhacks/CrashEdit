@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntityPropertyType(5)]
     public sealed class EntitySettingPropertyLoader : EntityBasicPropertyLoader<EntitySetting>

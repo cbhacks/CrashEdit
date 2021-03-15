@@ -1,5 +1,5 @@
-using Crash;
-using CrashEdit.Properties;
+using CrashEdit.Crash;
+using CrashEdit.CE.Properties;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public abstract class ThreeDimensionalViewer : GLControl
     {

@@ -1,7 +1,8 @@
+using CrashEdit.Crash;
 using System;
 using System.Windows.Forms;
 
-namespace Crash.UI
+namespace CrashEdit.CrashUI
 {
     public partial class GameVersionForm : Form
     {

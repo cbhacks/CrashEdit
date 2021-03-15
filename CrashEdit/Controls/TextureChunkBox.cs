@@ -1,10 +1,10 @@
-using Crash;
+using CrashEdit.Crash;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class TextureChunkBox : UserControl
     {

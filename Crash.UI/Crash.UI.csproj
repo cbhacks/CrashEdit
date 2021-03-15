@@ -8,7 +8,7 @@
     <ProjectGuid>{3B43FB3E-338F-4FA2-9B43-C6E4DE63DC8E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Crash.UI</RootNamespace>
+    <RootNamespace>CrashEdit.CrashUI</RootNamespace>
     <AssemblyName>Crash.UI</AssemblyName>
     <StartupObject>
     </StartupObject>

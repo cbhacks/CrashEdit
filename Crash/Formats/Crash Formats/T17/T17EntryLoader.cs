@@ -1,6 +1,6 @@
 using System;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntryType(17,GameVersion.Crash3)]
     public sealed class T17EntryLoader : EntryLoader

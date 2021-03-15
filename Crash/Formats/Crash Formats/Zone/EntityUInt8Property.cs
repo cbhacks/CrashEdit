@@ -1,7 +1,7 @@
 using System.Reflection;
 using System.Collections.Generic;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class EntityUInt8Property : EntityBasicProperty<byte>
     {

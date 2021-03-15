@@ -1,6 +1,6 @@
-using Crash;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class ImageEntryController : MysteryMultiItemEntryController
     {
@@ -13,7 +13,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.ImageEntryController_Text,ImageEntry.EName);
+            Node.Text = string.Format(CrashUI.Properties.Resources.ImageEntryController_Text,ImageEntry.EName);
         }
 
         public override void InvalidateNodeImage()

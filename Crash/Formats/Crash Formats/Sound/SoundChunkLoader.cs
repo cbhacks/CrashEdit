@@ -1,6 +1,6 @@
 using System;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     [ChunkType(3)]
     public sealed class SoundChunkLoader : EntryChunkLoader

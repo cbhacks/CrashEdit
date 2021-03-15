@@ -1,20 +1,20 @@
-using Crash;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class UnprocessedEntryController : MysteryMultiItemEntryController
     {
         public UnprocessedEntryController(EntryChunkController entrychunkcontroller,UnprocessedEntry unprocessedentry) : base(entrychunkcontroller,unprocessedentry)
         {
             UnprocessedEntry = unprocessedentry;
-            AddMenu(string.Format(Crash.UI.Properties.Resources.UnprocessedEntryController_AcProcess,UnprocessedEntry.EName),Menu_Process_Entry);
+            AddMenu(string.Format(CrashUI.Properties.Resources.UnprocessedEntryController_AcProcess,UnprocessedEntry.EName),Menu_Process_Entry);
             InvalidateNode();
             InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.UnprocessedEntryController_Text,UnprocessedEntry.Type,UnprocessedEntry.EName);
+            Node.Text = string.Format(CrashUI.Properties.Resources.UnprocessedEntryController_Text,UnprocessedEntry.Type,UnprocessedEntry.EName);
         }
 
         public override void InvalidateNodeImage()

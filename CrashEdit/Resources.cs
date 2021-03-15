@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Resources;
 using System.Reflection;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     internal static class Resources
     {

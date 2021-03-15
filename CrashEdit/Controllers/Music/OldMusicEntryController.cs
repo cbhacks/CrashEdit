@@ -1,8 +1,8 @@
-using Crash;
+using CrashEdit.Crash;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class OldMusicEntryController : EntryController
     {
@@ -28,7 +28,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.OldMusicEntryController_Text,OldMusicEntry.EName);
+            Node.Text = string.Format(CrashUI.Properties.Resources.OldMusicEntryController_Text,OldMusicEntry.EName);
         }
 
         public override void InvalidateNodeImage()

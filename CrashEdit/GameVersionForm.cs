@@ -1,4 +1,4 @@
-using Crash;
+using CrashEdit.Crash;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class GameVersionForm : Form
     {

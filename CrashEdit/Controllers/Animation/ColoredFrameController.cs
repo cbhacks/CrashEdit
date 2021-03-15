@@ -1,8 +1,8 @@
-using Crash;
+using CrashEdit.Crash;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class ColoredFrameController : Controller
     {
@@ -17,7 +17,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = Crash.UI.Properties.Resources.FrameController_Text;
+            Node.Text = CrashUI.Properties.Resources.FrameController_Text;
         }
 
         public override void InvalidateNodeImage()

@@ -1,15 +1,15 @@
-using Crash;
+using CrashEdit.Crash;
 using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class MainControl : UserControl
     {
         private GameVersion gameversion;
-        private Dictionary<Crash.UI.Controller,ControllerData> controllers;
+        private Dictionary<CrashUI.Controller,ControllerData> controllers;
         private ControllerData nsfcd;
         private ControllerData activecd;
 
@@ -20,10 +20,10 @@ namespace CrashEdit
             InitializeComponent();
             FileInfo = fileinfo;
             this.gameversion = gameversion;
-            controllers = new Dictionary<Crash.UI.Controller,ControllerData>();
+            controllers = new Dictionary<CrashUI.Controller,ControllerData>();
             byte[] data = File.ReadAllBytes(fileinfo.FullName);
             NSF nsf = NSF.LoadAndProcess(data,gameversion);
-            NSFController = new Crash.UI.NSFController(nsf);
+            NSFController = new CrashUI.NSFController(nsf);
             nsfcd = new ControllerData(this,NSFController);
             controllers.Add(NSFController,nsfcd);
             uxTree.Nodes.Add(nsfcd.Node);
@@ -70,9 +70,9 @@ namespace CrashEdit
 
         public FileInfo FileInfo { get; set; }
 
-        public Crash.UI.NSFController NSFController { get; }
+        public CrashUI.NSFController NSFController { get; }
 
-        public Crash.UI.Controller SelectedController
+        public CrashUI.Controller SelectedController
         {
             get
             {
@@ -94,7 +94,7 @@ namespace CrashEdit
             private MainControl maincontrol;
             private Control control;
 
-            public ControllerData(MainControl maincontrol,Crash.UI.Controller controller)
+            public ControllerData(MainControl maincontrol,CrashUI.Controller controller)
             {
                 this.maincontrol = maincontrol;
                 Controller = controller;
@@ -105,7 +105,7 @@ namespace CrashEdit
                 Node.Tag = this;
             }
 
-            public Crash.UI.Controller Controller { get; }
+            public CrashUI.Controller Controller { get; }
 
             public TreeNode Node { get; }
 
@@ -159,17 +159,17 @@ namespace CrashEdit
             }
         }
 
-        private void nsfc_DeepItemAdded(object sender,EvListEventArgs<Crash.UI.Controller> e)
+        private void nsfc_DeepItemAdded(object sender,EvListEventArgs<CrashUI.Controller> e)
         {
-            TreeNode parentnode = controllers[(Crash.UI.Controller)sender].Node;
+            TreeNode parentnode = controllers[(CrashUI.Controller)sender].Node;
             ControllerData newdata = new ControllerData(this,e.Item);
             controllers.Add(e.Item,newdata);
             parentnode.Nodes.Insert(e.Index,newdata.Node);
         }
 
-        private void nsfc_DeepItemRemoved(object sender,EvListEventArgs<Crash.UI.Controller> e)
+        private void nsfc_DeepItemRemoved(object sender,EvListEventArgs<CrashUI.Controller> e)
         {
-            TreeNode parentnode = controllers[(Crash.UI.Controller)sender].Node;
+            TreeNode parentnode = controllers[(CrashUI.Controller)sender].Node;
             controllers[e.Item].Dispose();
             controllers.Remove(e.Item);
             parentnode.Nodes.RemoveAt(e.Index);

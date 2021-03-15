@@ -1,6 +1,6 @@
 using System;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntryType(15,GameVersion.Crash2)]
     [EntryType(15,GameVersion.Crash3)]

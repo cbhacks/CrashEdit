@@ -1,6 +1,6 @@
 using System;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntryType(1,GameVersion.Crash2)]
     public sealed class AnimationEntryLoader : EntryLoader

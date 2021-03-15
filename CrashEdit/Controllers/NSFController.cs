@@ -1,9 +1,9 @@
-using Crash;
+using CrashEdit.Crash;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class NSFController : Controller
     {
@@ -15,33 +15,33 @@ namespace CrashEdit
             {
                 AddNode(CreateChunkController(chunk));
             }
-            AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddNormalChunk,Menu_Add_NormalChunk);
+            AddMenu(CrashUI.Properties.Resources.NSFController_AcAddNormalChunk,Menu_Add_NormalChunk);
             if (GameVersion != GameVersion.Crash2 && GameVersion != GameVersion.Crash3 && GameVersion != GameVersion.Crash1)
-                AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddOldSoundChunk,Menu_Add_OldSoundChunk);
-            AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddSoundChunk,Menu_Add_SoundChunk);
-            AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddWavebankChunk,Menu_Add_WavebankChunk);
-            AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddSpeechChunk,Menu_Add_SpeechChunk);
-            AddMenu(Crash.UI.Properties.Resources.NSFController_AcImportChunk,Menu_Import_Chunk);
+                AddMenu(CrashUI.Properties.Resources.NSFController_AcAddOldSoundChunk,Menu_Add_OldSoundChunk);
+            AddMenu(CrashUI.Properties.Resources.NSFController_AcAddSoundChunk,Menu_Add_SoundChunk);
+            AddMenu(CrashUI.Properties.Resources.NSFController_AcAddWavebankChunk,Menu_Add_WavebankChunk);
+            AddMenu(CrashUI.Properties.Resources.NSFController_AcAddSpeechChunk,Menu_Add_SpeechChunk);
+            AddMenu(CrashUI.Properties.Resources.NSFController_AcImportChunk,Menu_Import_Chunk);
             if (GameVersion == GameVersion.Crash2 || GameVersion == GameVersion.Crash3)
             {
                 AddMenuSeparator();
-                AddMenu(Crash.UI.Properties.Resources.NSFController_AcFixDetonator,Menu_Fix_Detonator);
-                AddMenu(Crash.UI.Properties.Resources.NSFController_AcFixBoxCount,Menu_Fix_BoxCount);
+                AddMenu(CrashUI.Properties.Resources.NSFController_AcFixDetonator,Menu_Fix_Detonator);
+                AddMenu(CrashUI.Properties.Resources.NSFController_AcFixBoxCount,Menu_Fix_BoxCount);
                 AddMenuSeparator();
             }
             if (GameVersion == GameVersion.Crash1 || GameVersion == GameVersion.Crash1BetaMAR08 || GameVersion == GameVersion.Crash1BetaMAY11)
-                AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC1);
+                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC1);
             else if (GameVersion == GameVersion.Crash2)
-                AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC2);
+                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC2);
             else if (GameVersion == GameVersion.Crash3)
-                AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC3);
+                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC3);
             InvalidateNode();
             InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = Crash.UI.Properties.Resources.NSFController_Text;
+            Node.Text = CrashUI.Properties.Resources.NSFController_Text;
         }
 
         public override void InvalidateNodeImage()

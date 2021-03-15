@@ -1,7 +1,7 @@
-using Crash;
+using CrashEdit.Crash;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public abstract class MysteryUniItemEntryController : EntryController
     {

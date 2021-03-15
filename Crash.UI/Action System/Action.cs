@@ -1,8 +1,9 @@
+using CrashEdit.Crash;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Crash.UI
+namespace CrashEdit.CrashUI
 {
     public abstract class Action
     {

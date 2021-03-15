@@ -1,6 +1,6 @@
 using System;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntryType(1,GameVersion.Crash1Beta1995)]
     public sealed class ProtoAnimationEntryLoader : EntryLoader

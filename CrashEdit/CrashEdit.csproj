@@ -8,9 +8,9 @@
     <ProjectGuid>{ECE059C1-0706-45F3-B897-7026376F49A9}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CrashEdit</RootNamespace>
+    <RootNamespace>CrashEdit.CE</RootNamespace>
     <AssemblyName>CrashEdit</AssemblyName>
-    <StartupObject>CrashEdit.Program</StartupObject>
+    <StartupObject>CrashEdit.CE.Program</StartupObject>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>

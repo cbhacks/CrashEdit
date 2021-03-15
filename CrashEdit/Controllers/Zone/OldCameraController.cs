@@ -1,7 +1,7 @@
-using Crash;
+using CrashEdit.Crash;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class OldCameraController : Controller
     {
@@ -25,7 +25,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = Crash.UI.Properties.Resources.OldCameraController_Text;
+            Node.Text = CrashUI.Properties.Resources.OldCameraController_Text;
         }
 
         public override void InvalidateNodeImage()

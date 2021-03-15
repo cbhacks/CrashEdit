@@ -1,8 +1,8 @@
-using Crash;
+using CrashEdit.Crash;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class NewZoneEntryController : EntryController
     {
@@ -15,7 +15,7 @@ namespace CrashEdit
             {
                 AddNode(new NewEntityController(this,entity));
             }
-            AddMenu(Crash.UI.Properties.Resources.ZoneEntryController_AcAddEntity,Menu_AddEntity);
+            AddMenu(CrashUI.Properties.Resources.ZoneEntryController_AcAddEntity,Menu_AddEntity);
             InvalidateNode();
             InvalidateNodeImage();
         }

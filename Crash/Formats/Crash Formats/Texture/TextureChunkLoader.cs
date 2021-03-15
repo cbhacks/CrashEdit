@@ -1,6 +1,6 @@
 using System;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     [ChunkType(1)]
     public sealed class TextureChunkLoader : ChunkLoader

@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     [Serializable]
     public class GUIException : Exception

@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using System.Collections.Generic;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     public abstract class Entry : IEntry
     {

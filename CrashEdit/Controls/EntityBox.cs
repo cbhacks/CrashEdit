@@ -1,11 +1,11 @@
-using Crash;
-using CrashEdit.Properties;
+using CrashEdit.Crash;
+using CrashEdit.CE.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class EntityBox : UserControl
     {

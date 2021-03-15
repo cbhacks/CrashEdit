@@ -1,21 +1,21 @@
-using Crash;
+using CrashEdit.Crash;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class UnprocessedChunkController : ChunkController
     {
         public UnprocessedChunkController(NSFController nsfcontroller,UnprocessedChunk unprocessedchunk) : base(nsfcontroller,unprocessedchunk)
         {
             UnprocessedChunk = unprocessedchunk;
-            AddMenu(Crash.UI.Properties.Resources.UnprocessedChunkController_AcProcess,Menu_Process_Chunk);
+            AddMenu(CrashUI.Properties.Resources.UnprocessedChunkController_AcProcess,Menu_Process_Chunk);
             InvalidateNode();
             InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.UnprocessedChunkController_Text,UnprocessedChunk.Type,NSFController.NSF.Chunks.IndexOf(UnprocessedChunk) * 2 + 1);
+            Node.Text = string.Format(CrashUI.Properties.Resources.UnprocessedChunkController_Text,UnprocessedChunk.Type,NSFController.NSF.Chunks.IndexOf(UnprocessedChunk) * 2 + 1);
         }
 
         public override void InvalidateNodeImage()

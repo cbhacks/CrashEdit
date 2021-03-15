@@ -1,11 +1,11 @@
-﻿using Crash;
+﻿using CrashEdit.Crash;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public class CommonZoneEntryViewer
     {

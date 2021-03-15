@@ -1,6 +1,6 @@
 using System;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     [ChunkType(4)]
     public sealed class WavebankChunkLoader : EntryChunkLoader

@@ -1,11 +1,11 @@
-using Crash;
-using Crash.UI;
+using CrashEdit.Crash;
+using CrashEdit.CrashUI;
 using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class MainForm : Form
     {
@@ -62,7 +62,7 @@ namespace CrashEdit
             tbiFindNext.Text = Properties.Resources.Toolbar_FindNext;
             tbiGotoEID.Text = Properties.Resources.Toolbar_GotoEID;
 
-            foreach (Crash.UI.Action action in Crash.UI.Action.AllActions)
+            foreach (CrashUI.Action action in CrashUI.Action.AllActions)
             {
                 ToolStripMenuItem tsi = new ToolStripMenuItem
                 {
@@ -110,7 +110,7 @@ namespace CrashEdit
                 }
                 foreach (ToolStripItem tsi in mnuEdit.DropDownItems)
                 {
-                    Crash.UI.Action action = (Crash.UI.Action)tsi.Tag;
+                    CrashUI.Action action = (CrashUI.Action)tsi.Tag;
                     if (action.CheckCompatibility(maincontrol.SelectedController))
                     {
                         tsi.Text = action.GetText(maincontrol.SelectedController);
@@ -272,7 +272,7 @@ namespace CrashEdit
         private void mniEditAction_Click(object sender,EventArgs e)
         {
             MainControl maincontrol = (MainControl)uxTabs.SelectedTab.Tag;
-            Crash.UI.Action action = (Crash.UI.Action)((ToolStripItem)sender).Tag;
+            CrashUI.Action action = (CrashUI.Action)((ToolStripItem)sender).Tag;
             Command command = action.Activate(maincontrol.SelectedController);
             if (command == null)
             {

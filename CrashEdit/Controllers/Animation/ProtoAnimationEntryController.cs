@@ -1,8 +1,8 @@
-using Crash;
+using CrashEdit.Crash;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class ProtoAnimationEntryController : EntryController
     {
@@ -21,7 +21,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(ProtoAnimationEntry.NotProto ? Crash.UI.Properties.Resources.OldAnimationEntryController_Text : Crash.UI.Properties.Resources.ProtoAnimationEntryController_Text, ProtoAnimationEntry.EName); // fucking hell
+            Node.Text = string.Format(ProtoAnimationEntry.NotProto ? CrashUI.Properties.Resources.OldAnimationEntryController_Text : CrashUI.Properties.Resources.ProtoAnimationEntryController_Text, ProtoAnimationEntry.EName); // fucking hell
         }
 
         public override void InvalidateNodeImage()

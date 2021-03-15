@@ -1,4 +1,4 @@
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     partial class MainForm
     {
@@ -121,7 +121,7 @@ namespace CrashEdit
             // tbiOpen
             // 
             this.tbiOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbiOpen.Image = global::CrashEdit.Properties.Resources.Computer_File_064;
+            this.tbiOpen.Image = global::CrashEdit.CE.Properties.Resources.Computer_File_064;
             this.tbiOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbiOpen.Name = "tbiOpen";
             this.tbiOpen.Size = new System.Drawing.Size(23, 22);
@@ -131,7 +131,7 @@ namespace CrashEdit
             // tbiSave
             // 
             this.tbiSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbiSave.Image = global::CrashEdit.Properties.Resources.objects_029;
+            this.tbiSave.Image = global::CrashEdit.CE.Properties.Resources.objects_029;
             this.tbiSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbiSave.Name = "tbiSave";
             this.tbiSave.Size = new System.Drawing.Size(23, 22);
@@ -141,7 +141,7 @@ namespace CrashEdit
             // tbiClose
             // 
             this.tbiClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbiClose.Image = global::CrashEdit.Properties.Resources.Computer_File_063;
+            this.tbiClose.Image = global::CrashEdit.CE.Properties.Resources.Computer_File_063;
             this.tbiClose.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbiClose.Name = "tbiClose";
             this.tbiClose.Size = new System.Drawing.Size(23, 22);
@@ -156,7 +156,7 @@ namespace CrashEdit
             // tbiPatchNSD
             // 
             this.tbiPatchNSD.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbiPatchNSD.Image = global::CrashEdit.Properties.Resources.objects_070;
+            this.tbiPatchNSD.Image = global::CrashEdit.CE.Properties.Resources.objects_070;
             this.tbiPatchNSD.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbiPatchNSD.Name = "tbiPatchNSD";
             this.tbiPatchNSD.Size = new System.Drawing.Size(23, 22);
@@ -171,7 +171,7 @@ namespace CrashEdit
             // tbiFind
             // 
             this.tbiFind.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbiFind.Image = global::CrashEdit.Properties.Resources.objects_036;
+            this.tbiFind.Image = global::CrashEdit.CE.Properties.Resources.objects_036;
             this.tbiFind.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbiFind.Name = "tbiFind";
             this.tbiFind.Size = new System.Drawing.Size(23, 22);
@@ -181,7 +181,7 @@ namespace CrashEdit
             // tbiFindNext
             // 
             this.tbiFindNext.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbiFindNext.Image = global::CrashEdit.Properties.Resources.objects_037;
+            this.tbiFindNext.Image = global::CrashEdit.CE.Properties.Resources.objects_037;
             this.tbiFindNext.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbiFindNext.Name = "tbiFindNext";
             this.tbiFindNext.Size = new System.Drawing.Size(23, 22);
@@ -191,7 +191,7 @@ namespace CrashEdit
             // tbiGotoEID
             // 
             this.tbiGotoEID.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbiGotoEID.Image = global::CrashEdit.Properties.Resources.objects_028;
+            this.tbiGotoEID.Image = global::CrashEdit.CE.Properties.Resources.objects_028;
             this.tbiGotoEID.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbiGotoEID.Name = "tbiGotoEID";
             this.tbiGotoEID.Size = new System.Drawing.Size(23, 22);
@@ -206,7 +206,7 @@ namespace CrashEdit
             // tbiUndo
             // 
             this.tbiUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbiUndo.Image = global::CrashEdit.Properties.Resources.objects_079;
+            this.tbiUndo.Image = global::CrashEdit.CE.Properties.Resources.objects_079;
             this.tbiUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbiUndo.Name = "tbiUndo";
             this.tbiUndo.Size = new System.Drawing.Size(23, 22);
@@ -216,7 +216,7 @@ namespace CrashEdit
             // tbiRedo
             // 
             this.tbiRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbiRedo.Image = global::CrashEdit.Properties.Resources.objects_020;
+            this.tbiRedo.Image = global::CrashEdit.CE.Properties.Resources.objects_020;
             this.tbiRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbiRedo.Name = "tbiRedo";
             this.tbiRedo.Size = new System.Drawing.Size(23, 22);
@@ -277,7 +277,7 @@ namespace CrashEdit
             // 
             // mniFileOpen
             // 
-            this.mniFileOpen.Image = global::CrashEdit.Properties.Resources.Computer_File_064;
+            this.mniFileOpen.Image = global::CrashEdit.CE.Properties.Resources.Computer_File_064;
             this.mniFileOpen.Name = "mniFileOpen";
             this.mniFileOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.mniFileOpen.Size = new System.Drawing.Size(181, 22);
@@ -291,7 +291,7 @@ namespace CrashEdit
             // 
             // mniFileSave
             // 
-            this.mniFileSave.Image = global::CrashEdit.Properties.Resources.objects_029;
+            this.mniFileSave.Image = global::CrashEdit.CE.Properties.Resources.objects_029;
             this.mniFileSave.Name = "mniFileSave";
             this.mniFileSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.mniFileSave.Size = new System.Drawing.Size(181, 22);
@@ -312,7 +312,7 @@ namespace CrashEdit
             // 
             // mniFilePatchNSD
             // 
-            this.mniFilePatchNSD.Image = global::CrashEdit.Properties.Resources.objects_070;
+            this.mniFilePatchNSD.Image = global::CrashEdit.CE.Properties.Resources.objects_070;
             this.mniFilePatchNSD.Name = "mniFilePatchNSD";
             this.mniFilePatchNSD.Size = new System.Drawing.Size(181, 22);
             this.mniFilePatchNSD.Text = "<PATCH NSD>";
@@ -325,7 +325,7 @@ namespace CrashEdit
             // 
             // mniFileClose
             // 
-            this.mniFileClose.Image = global::CrashEdit.Properties.Resources.Computer_File_063;
+            this.mniFileClose.Image = global::CrashEdit.CE.Properties.Resources.Computer_File_063;
             this.mniFileClose.Name = "mniFileClose";
             this.mniFileClose.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
             this.mniFileClose.Size = new System.Drawing.Size(181, 22);
@@ -366,7 +366,7 @@ namespace CrashEdit
             // 
             // mniFindFind
             // 
-            this.mniFindFind.Image = global::CrashEdit.Properties.Resources.objects_036;
+            this.mniFindFind.Image = global::CrashEdit.CE.Properties.Resources.objects_036;
             this.mniFindFind.Name = "mniFindFind";
             this.mniFindFind.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
             this.mniFindFind.Size = new System.Drawing.Size(195, 22);
@@ -375,7 +375,7 @@ namespace CrashEdit
             // 
             // mniFindFindNext
             // 
-            this.mniFindFindNext.Image = global::CrashEdit.Properties.Resources.objects_037;
+            this.mniFindFindNext.Image = global::CrashEdit.CE.Properties.Resources.objects_037;
             this.mniFindFindNext.Name = "mniFindFindNext";
             this.mniFindFindNext.ShortcutKeys = System.Windows.Forms.Keys.F3;
             this.mniFindFindNext.Size = new System.Drawing.Size(195, 22);
@@ -389,7 +389,7 @@ namespace CrashEdit
             // 
             // mniFindEntryID
             // 
-            this.mniFindEntryID.Image = global::CrashEdit.Properties.Resources.objects_028;
+            this.mniFindEntryID.Image = global::CrashEdit.CE.Properties.Resources.objects_028;
             this.mniFindEntryID.Name = "mniFindEntryID";
             this.mniFindEntryID.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
             this.mniFindEntryID.Size = new System.Drawing.Size(195, 22);
@@ -427,7 +427,7 @@ namespace CrashEdit
             // 
             // mniUndoRedo
             // 
-            this.mniUndoRedo.Image = global::CrashEdit.Properties.Resources.objects_020;
+            this.mniUndoRedo.Image = global::CrashEdit.CE.Properties.Resources.objects_020;
             this.mniUndoRedo.Name = "mniUndoRedo";
             this.mniUndoRedo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
             this.mniUndoRedo.Size = new System.Drawing.Size(189, 22);
@@ -437,14 +437,14 @@ namespace CrashEdit
             // mniUndoCurrentState
             // 
             this.mniUndoCurrentState.Enabled = false;
-            this.mniUndoCurrentState.Image = global::CrashEdit.Properties.Resources.objects_028;
+            this.mniUndoCurrentState.Image = global::CrashEdit.CE.Properties.Resources.objects_028;
             this.mniUndoCurrentState.Name = "mniUndoCurrentState";
             this.mniUndoCurrentState.Size = new System.Drawing.Size(189, 22);
             this.mniUndoCurrentState.Text = "<CURRENT STATE>";
             // 
             // mniUndoUndo
             // 
-            this.mniUndoUndo.Image = global::CrashEdit.Properties.Resources.objects_079;
+            this.mniUndoUndo.Image = global::CrashEdit.CE.Properties.Resources.objects_079;
             this.mniUndoUndo.Name = "mniUndoUndo";
             this.mniUndoUndo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
             this.mniUndoUndo.Size = new System.Drawing.Size(189, 22);

@@ -1,6 +1,6 @@
 using System;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntryType(13,GameVersion.Crash1BetaMAR08)]
     public sealed class OldMusicEntryLoader : EntryLoader

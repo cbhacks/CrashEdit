@@ -1,6 +1,6 @@
 using System;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     [ChunkType(0)]
     public sealed class NormalChunkLoader : EntryChunkLoader

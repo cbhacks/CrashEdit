@@ -1,8 +1,8 @@
-using Crash;
+using CrashEdit.Crash;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class OldModelEntryController : EntryController
     {
@@ -15,7 +15,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.OldModelEntryController_Text,OldModelEntry.EName);
+            Node.Text = string.Format(CrashUI.Properties.Resources.OldModelEntryController_Text,OldModelEntry.EName);
         }
 
         public override void InvalidateNodeImage()

@@ -1,8 +1,8 @@
-using Crash;
+using CrashEdit.Crash;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class ProtoSceneryEntryController : EntryController
     {
@@ -19,7 +19,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.ProtoSceneryEntryController_Text,ProtoSceneryEntry.EName);
+            Node.Text = string.Format(CrashUI.Properties.Resources.ProtoSceneryEntryController_Text,ProtoSceneryEntry.EName);
         }
 
         public override void InvalidateNodeImage()

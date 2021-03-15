@@ -1,7 +1,7 @@
-using Crash;
+using CrashEdit.Crash;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class SpeechEntryController : EntryController
     {
@@ -14,7 +14,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.SpeechEntryController_Text,SpeechEntry.EName);
+            Node.Text = string.Format(CrashUI.Properties.Resources.SpeechEntryController_Text,SpeechEntry.EName);
         }
 
         public override void InvalidateNodeImage()

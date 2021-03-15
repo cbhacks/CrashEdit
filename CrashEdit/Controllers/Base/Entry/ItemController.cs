@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class ItemController : Controller
     {
@@ -19,7 +19,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = Crash.UI.Properties.Resources.ItemController_Text;
+            Node.Text = CrashUI.Properties.Resources.ItemController_Text;
         }
 
         public override void InvalidateNodeImage()

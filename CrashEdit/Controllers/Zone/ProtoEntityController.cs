@@ -1,7 +1,7 @@
-using Crash;
+using CrashEdit.Crash;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class ProtoEntityController : Controller
     {
@@ -17,7 +17,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.OldEntityController_Text,Entity.ID,Entity.Type,Entity.Subtype);
+            Node.Text = string.Format(CrashUI.Properties.Resources.OldEntityController_Text,Entity.ID,Entity.Type,Entity.Subtype);
         }
 
         public override void InvalidateNodeImage()

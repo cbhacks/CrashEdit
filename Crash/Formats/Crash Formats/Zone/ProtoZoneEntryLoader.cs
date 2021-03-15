@@ -1,4 +1,4 @@
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntryType(7,GameVersion.Crash1Beta1995)]
     public sealed class ProtoZoneEntryLoader : EntryLoader

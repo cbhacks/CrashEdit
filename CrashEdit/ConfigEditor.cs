@@ -1,9 +1,9 @@
-﻿using CrashEdit.Properties;
+﻿using CrashEdit.CE.Properties;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class ConfigEditor : UserControl
     {

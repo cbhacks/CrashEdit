@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace CrashEdit.Forms
+namespace CrashEdit.CE.Forms
 {
     public partial class ProgressBarForm : Form
     {

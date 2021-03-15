@@ -1,10 +1,10 @@
-using Crash;
+using CrashEdit.Crash;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Xml;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     internal static class Program
     {
@@ -66,7 +66,7 @@ namespace CrashEdit
             }
             try
             {
-                Properties.Resources.Culture = Crash.UI.Properties.Resources.Culture = new System.Globalization.CultureInfo(Properties.Settings.Default.Language);
+                Properties.Resources.Culture = CrashUI.Properties.Resources.Culture = new System.Globalization.CultureInfo(Properties.Settings.Default.Language);
             }
             catch {
                 Properties.Settings.Default.Language = "en";

@@ -1,8 +1,8 @@
-using Crash;
+using CrashEdit.Crash;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class ModelEntryController : EntryController
     {
@@ -17,11 +17,11 @@ namespace CrashEdit
         {
             if (ModelEntry.Positions == null)
             {
-                Node.Text = string.Format(Crash.UI.Properties.Resources.ModelEntryController_Text,ModelEntry.EName);
+                Node.Text = string.Format(CrashUI.Properties.Resources.ModelEntryController_Text,ModelEntry.EName);
             }
             else
             {
-                Node.Text = string.Format(Crash.UI.Properties.Resources.ModelEntryController_Compressed_Text,ModelEntry.EName);
+                Node.Text = string.Format(CrashUI.Properties.Resources.ModelEntryController_Compressed_Text,ModelEntry.EName);
             }
         }
 

@@ -1,8 +1,8 @@
-using Crash;
+using CrashEdit.Crash;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class ZoneEntryController : EntryController
     {
@@ -15,14 +15,14 @@ namespace CrashEdit
             {
                 AddNode(new EntityController(this,entity));
             }
-            AddMenu(Crash.UI.Properties.Resources.ZoneEntryController_AcAddEntity,Menu_AddEntity);
+            AddMenu(CrashUI.Properties.Resources.ZoneEntryController_AcAddEntity,Menu_AddEntity);
             InvalidateNode();
             InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.ZoneEntryController_Text,ZoneEntry.EName);
+            Node.Text = string.Format(CrashUI.Properties.Resources.ZoneEntryController_Text,ZoneEntry.EName);
         }
 
         public override void InvalidateNodeImage()

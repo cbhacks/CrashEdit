@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Resources;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     internal static class OldResources
     {
@@ -259,7 +259,7 @@ namespace CrashEdit
 
         static OldResources()
         {
-            ResourceManager manager = new ResourceManager("CrashEdit.OldResources",Assembly.GetExecutingAssembly());
+            ResourceManager manager = new ResourceManager("CrashEdit.CE.OldResources",Assembly.GetExecutingAssembly());
             foreach (FieldInfo field in typeof(OldResources).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
             {
                 foreach (ResourceAttribute attribute in field.GetCustomAttributes(typeof(ResourceAttribute),false))

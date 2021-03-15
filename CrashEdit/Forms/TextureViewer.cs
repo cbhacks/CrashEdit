@@ -1,11 +1,11 @@
-﻿using Crash;
+﻿using CrashEdit.Crash;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class TextureViewer : Form
     {

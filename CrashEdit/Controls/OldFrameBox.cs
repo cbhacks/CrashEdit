@@ -1,8 +1,8 @@
-using Crash;
+using CrashEdit.Crash;
 using System;
 using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class OldFrameBox : UserControl
     {

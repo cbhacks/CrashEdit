@@ -1,6 +1,7 @@
+using CrashEdit.Crash;
 using System;
 
-namespace Crash.UI
+namespace CrashEdit.CrashUI
 {
     public abstract class EntryChunkController : ChunkController
     {
