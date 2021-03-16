@@ -40,9 +40,9 @@ namespace CrashEdit.Crash
         public byte[] Save()
         {
             byte[] data = new byte [12];
-            int worda = Texture | (Page << 12);
+            int worda = (int)Texture | (Page << 12);
             int wordb = (VertexC >> 8 & 0xF) | (Unknown << 4);
-            int wordc = VertexA | (VertexB << 12) | ((VertexC & 0xFF) << 24);
+            int wordc = (int)VertexA | (VertexB << 12) | ((VertexC & 0xFF) << 24);
             BitConv.ToInt32(data,0,worda);
             BitConv.ToInt32(data,4,wordb);
             BitConv.ToInt32(data,8,wordc);

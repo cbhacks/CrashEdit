@@ -63,8 +63,8 @@ namespace CrashEdit.Crash
         public byte[] SaveXY()
         {
             byte[] data = new byte [4];
-            int xdata = (int)((X << 4) | UnknownX);
-            int ydata = (int)((Y << 4) | UnknownY);
+            int xdata = (int)(X << 4) | UnknownX;
+            int ydata = (int)(Y << 4) | UnknownY;
             BitConv.ToInt16(data,0,(short)xdata);
             BitConv.ToInt16(data,2,(short)ydata);
             return data;
@@ -73,7 +73,7 @@ namespace CrashEdit.Crash
         public byte[] SaveZ()
         {
             byte[] data = new byte [2];
-            int zdata = (int)((Z << 4) | UnknownZ);
+            int zdata = (int)(Z << 4) | UnknownZ;
             BitConv.ToInt16(data,0,(short)zdata);
             return data;
         }

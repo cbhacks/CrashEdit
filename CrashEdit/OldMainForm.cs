@@ -542,15 +542,7 @@ namespace CrashEdit.CE
                 bool exists = true;
                 if (!File.Exists(filename))
                 {
-                    //if (MessageBox.Show("NSD file does not exist. Create one?", "Patch NSD", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information) != DialogResult.Yes)
-                    {
-                        return;
-                    }
-                    if (nsfbox.NSFController.GameVersion != GameVersion.Crash1BetaMAR08 && MessageBox.Show("Default NSD file is not a valid NSD file and needs to be manually fixed using a hex editor. Continue anyway?", "Patch NSD", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
-                    {
-                        return;
-                    }
-                    exists = false;
+                    return;
                 }
                 PatchNSD(filename,exists,nsfbox.NSFController,false);
             }

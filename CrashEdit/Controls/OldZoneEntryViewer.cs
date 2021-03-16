@@ -103,9 +103,6 @@ namespace CrashEdit.CE
         {
             base.OnKeyDown(e);
             common.OnKeyDown(e);
-            switch (e.KeyCode)
-            {
-            }
         }
 
         protected override void RenderObjects()
