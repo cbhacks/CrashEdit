@@ -288,18 +288,6 @@
     <Compile Include="HexBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="MainControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MainControl.Designer.cs">
-      <DependentUpon>MainControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="OldMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -397,13 +385,6 @@
     <EmbeddedResource Include="Forms\InputWindow.resx">
       <SubType>Designer</SubType>
       <DependentUpon>InputWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainControl.resx">
-      <DependentUpon>MainControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OldResources.resx">
       <SubType>Designer</SubType>
