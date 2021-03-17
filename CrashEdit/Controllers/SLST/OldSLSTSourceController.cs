@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
-    public sealed class OldSLSTSourceController : Controller
+    public sealed class OldSLSTSourceController : LegacyController
     {
         public OldSLSTSourceController(OldSLSTEntryController oldslstentrycontroller,OldSLSTSource oldslstsource) : base(oldslstentrycontroller, oldslstsource)
         {

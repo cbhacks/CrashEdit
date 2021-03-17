@@ -2,7 +2,7 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
-    public sealed class ItemController : Controller
+    public sealed class ItemController : LegacyController
     {
         public ItemController(MysteryMultiItemEntryController mysteryentrycontroller,byte[] item) : base(mysteryentrycontroller, item)
         {

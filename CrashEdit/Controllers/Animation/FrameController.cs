@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
-    public sealed class FrameController : Controller
+    public sealed class FrameController : LegacyController
     {
         public FrameController(AnimationEntryController animationentrycontroller,Frame frame) : base(animationentrycontroller, frame)
         {

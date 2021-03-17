@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
-    public sealed class SLSTDeltaController : Controller
+    public sealed class SLSTDeltaController : LegacyController
     {
         public SLSTDeltaController(SLSTEntryController slstentrycontroller,SLSTDelta slstdelta) : base(slstentrycontroller, slstdelta)
         {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace CrashEdit.CE
 {
-    public sealed class EntityController : Controller
+    public sealed class EntityController : LegacyController
     {
         public EntityController(ZoneEntryController zoneentrycontroller,Entity entity) : base(zoneentrycontroller, entity)
         {

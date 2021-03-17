@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
-    public sealed class OldFrameController : Controller
+    public sealed class OldFrameController : LegacyController
     {
         public OldFrameController(ProtoAnimationEntryController protoanimationentrycontroller, OldFrame oldframe) : base(protoanimationentrycontroller, oldframe)
         {

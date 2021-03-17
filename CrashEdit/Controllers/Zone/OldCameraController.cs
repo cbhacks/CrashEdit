@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
-    public sealed class OldCameraController : Controller
+    public sealed class OldCameraController : LegacyController
     {
         public OldCameraController(ProtoZoneEntryController protozoneentrycontroller,OldCamera camera) : base(protozoneentrycontroller, camera)
         {

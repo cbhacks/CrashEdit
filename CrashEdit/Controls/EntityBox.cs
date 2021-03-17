@@ -9,7 +9,7 @@ namespace CrashEdit.CE
 {
     public partial class EntityBox : UserControl
     {
-        private Controller controller;
+        private LegacyController controller;
         private Entity entity;
 
         private int positionindex;

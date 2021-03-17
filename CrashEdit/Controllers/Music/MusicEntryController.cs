@@ -208,7 +208,7 @@ namespace CrashEdit.CE
 
                 vhentry.VH = vh;
                 ReplaceLinkedVB(vb);
-                ((Controller)Node.Nodes[0].Tag).Dispose();
+                ((LegacyController)Node.Nodes[0].Tag).Dispose();
                 InsertNode(0, new VHController(this, vh));
             }
             catch (LoadAbortedException)

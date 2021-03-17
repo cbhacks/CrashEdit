@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
-    public abstract class EntryController : Controller
+    public abstract class EntryController : LegacyController
     {
         public EntryController(EntryChunkController entrychunkcontroller,Entry entry) : base(entrychunkcontroller, entry)
         {
@@ -21,7 +21,7 @@ namespace CrashEdit.CE
         public EntryChunkController EntryChunkController { get; private set; }
         public Entry Entry { get; }
 
-        public override bool Move(Controller newcontroller,bool commit)
+        public override bool Move(LegacyController newcontroller,bool commit)
         {
             if (newcontroller is EntryChunkController)
             {

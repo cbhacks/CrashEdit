@@ -2,7 +2,7 @@ using CrashEdit.Crash;
 
 namespace CrashEdit.CE
 {
-    public abstract class ChunkController : Controller
+    public abstract class ChunkController : LegacyController
     {
         public ChunkController(NSFController nsfcontroller,Chunk chunk) : base(nsfcontroller, chunk)
         {

@@ -2,7 +2,7 @@ using CrashEdit.Crash;
 
 namespace CrashEdit.CE
 {
-    public sealed class VHController : Controller
+    public sealed class VHController : LegacyController
     {
         public VHController(MusicEntryController musicentrycontroller,VH vh) : base(musicentrycontroller, vh)
         {

@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
-    public sealed class ColoredFrameController : Controller
+    public sealed class ColoredFrameController : LegacyController
     {
         public ColoredFrameController(ColoredAnimationEntryController cutsceneanimationentrycontroller,OldFrame oldframe) : base(cutsceneanimationentrycontroller, oldframe)
         {

@@ -609,7 +609,7 @@ namespace CrashEdit.CE
                                     }
                                     if (nodes[i].Tag != null)
                                     {
-                                        if (nodes[i].Tag is Controller t)
+                                        if (nodes[i].Tag is LegacyController t)
                                         {
                                             t.Dispose();
                                         }

@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
-    public sealed class OldEntityController : Controller
+    public sealed class OldEntityController : LegacyController
     {
         public OldEntityController(OldZoneEntryController oldzoneentrycontroller,OldEntity entity) : base(oldzoneentrycontroller, entity)
         {

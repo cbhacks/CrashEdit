@@ -2,7 +2,7 @@ using CrashEdit.Crash;
 
 namespace CrashEdit.CE
 {
-    public sealed class SEQController : Controller
+    public sealed class SEQController : LegacyController
     {
         public SEQController(MusicEntryController musicentrycontroller,SEQ seq) : base(musicentrycontroller, seq)
         {

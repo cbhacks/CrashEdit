@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
-    public sealed class NSFController : Controller
+    public sealed class NSFController : LegacyController
     {
         public NSFController(NSF nsf,GameVersion gameversion) : base(null, nsf)
         {

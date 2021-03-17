@@ -5,14 +5,14 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
-    public abstract class Controller : IDisposable
+    public abstract class LegacyController : IDisposable
     {
-        private Controller parent;
+        private LegacyController parent;
         private object resource;
 
         private Control editor;
 
-        public Controller(Controller parent, object resource)
+        public LegacyController(LegacyController parent, object resource)
         {
             this.parent = parent;
             this.resource = resource;
@@ -26,12 +26,12 @@ namespace CrashEdit.CE
             editor = null;
         }
 
-        public void AddNode(Controller controller)
+        public void AddNode(LegacyController controller)
         {
             Node.Nodes.Add(controller.Node);
         }
 
-        public void InsertNode(int index,Controller controller)
+        public void InsertNode(int index,LegacyController controller)
         {
             Node.Nodes.Insert(index,controller.Node);
         }
@@ -110,7 +110,7 @@ namespace CrashEdit.CE
             }
         }
 
-        public virtual bool Move(Controller newcontroller,bool commit)
+        public virtual bool Move(LegacyController newcontroller,bool commit)
         {
             return false;
         }
@@ -127,7 +127,7 @@ namespace CrashEdit.CE
             {
                 if (nodes[i].Tag != null)
                 {
-                    if (nodes[i].Tag is Controller t)
+                    if (nodes[i].Tag is LegacyController t)
                     {
                         t.Dispose();
                     }

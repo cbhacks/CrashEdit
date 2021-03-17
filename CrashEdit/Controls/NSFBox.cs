@@ -82,7 +82,7 @@ namespace CrashEdit.CE
         {
             if (e.Node != null)
             {
-                if (e.Node.Tag is Controller t)
+                if (e.Node.Tag is LegacyController t)
                 {
                     pnSplit.Panel2.Controls.Clear();
                     pnSplit.Panel2.Controls.Add(t.Editor);
@@ -104,7 +104,7 @@ namespace CrashEdit.CE
                 return;
             }
             TreeNode node = (TreeNode)e.Data.GetData(typeof(TreeNode));
-            Controller item = (Controller)node.Tag;
+            LegacyController item = (LegacyController)node.Tag;
             Point droppoint = trvMain.PointToClient(new Point(e.X,e.Y));
             TreeNode dropnode = trvMain.GetNodeAt(droppoint);
             if (dropnode == null)
@@ -117,7 +117,7 @@ namespace CrashEdit.CE
                 e.Effect = DragDropEffects.None;
                 return;
             }
-            Controller destination = (Controller)dropnode.Tag;
+            LegacyController destination = (LegacyController)dropnode.Tag;
             if (item == destination)
             {
                 e.Effect = DragDropEffects.None;
@@ -140,7 +140,7 @@ namespace CrashEdit.CE
                 return;
             }
             TreeNode node = (TreeNode)e.Data.GetData(typeof(TreeNode));
-            Controller item = (Controller)node.Tag;
+            LegacyController item = (LegacyController)node.Tag;
             Point droppoint = trvMain.PointToClient(new Point(e.X,e.Y));
             TreeNode dropnode = trvMain.GetNodeAt(droppoint);
             if (dropnode == null)
@@ -151,7 +151,7 @@ namespace CrashEdit.CE
             {
                 return;
             }
-            Controller destination = (Controller)dropnode.Tag;
+            LegacyController destination = (LegacyController)dropnode.Tag;
             if (item == destination)
             {
                 return;
