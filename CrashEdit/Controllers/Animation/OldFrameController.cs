@@ -6,7 +6,7 @@ namespace CrashEdit.CE
 {
     public sealed class OldFrameController : Controller
     {
-        public OldFrameController(ProtoAnimationEntryController protoanimationentrycontroller, OldFrame oldframe)
+        public OldFrameController(ProtoAnimationEntryController protoanimationentrycontroller, OldFrame oldframe) : base(protoanimationentrycontroller, oldframe)
         {
             ProtoAnimationEntryController = protoanimationentrycontroller;
             OldAnimationEntryController = null;
@@ -16,7 +16,7 @@ namespace CrashEdit.CE
             InvalidateNodeImage();
         }
 
-        public OldFrameController(OldAnimationEntryController oldanimationentrycontroller,OldFrame oldframe)
+        public OldFrameController(OldAnimationEntryController oldanimationentrycontroller,OldFrame oldframe) : base(oldanimationentrycontroller, oldframe)
         {
             ProtoAnimationEntryController = null;
             OldAnimationEntryController = oldanimationentrycontroller;

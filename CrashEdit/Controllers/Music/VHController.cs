@@ -4,7 +4,7 @@ namespace CrashEdit.CE
 {
     public sealed class VHController : Controller
     {
-        public VHController(MusicEntryController musicentrycontroller,VH vh)
+        public VHController(MusicEntryController musicentrycontroller,VH vh) : base(musicentrycontroller, vh)
         {
             MusicEntryController = musicentrycontroller;
             VH = vh;

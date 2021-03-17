@@ -5,7 +5,7 @@ namespace CrashEdit.CE
 {
     public abstract class EntryController : Controller
     {
-        public EntryController(EntryChunkController entrychunkcontroller,Entry entry)
+        public EntryController(EntryChunkController entrychunkcontroller,Entry entry) : base(entrychunkcontroller, entry)
         {
             EntryChunkController = entrychunkcontroller;
             Entry = entry;

@@ -5,7 +5,7 @@ namespace CrashEdit.CE
 {
     public sealed class FrameController : Controller
     {
-        public FrameController(AnimationEntryController animationentrycontroller,Frame frame)
+        public FrameController(AnimationEntryController animationentrycontroller,Frame frame) : base(animationentrycontroller, frame)
         {
             AnimationEntryController = animationentrycontroller;
             Frame = frame;

@@ -4,7 +4,7 @@ namespace CrashEdit.CE
 {
     public abstract class ChunkController : Controller
     {
-        public ChunkController(NSFController nsfcontroller,Chunk chunk)
+        public ChunkController(NSFController nsfcontroller,Chunk chunk) : base(nsfcontroller, chunk)
         {
             NSFController = nsfcontroller;
             Chunk = chunk;

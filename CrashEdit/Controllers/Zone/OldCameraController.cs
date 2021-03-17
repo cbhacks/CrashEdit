@@ -5,7 +5,7 @@ namespace CrashEdit.CE
 {
     public sealed class OldCameraController : Controller
     {
-        public OldCameraController(ProtoZoneEntryController protozoneentrycontroller,OldCamera camera)
+        public OldCameraController(ProtoZoneEntryController protozoneentrycontroller,OldCamera camera) : base(protozoneentrycontroller, camera)
         {
             ProtoZoneEntryController = protozoneentrycontroller;
             Camera = camera;
@@ -14,7 +14,7 @@ namespace CrashEdit.CE
             InvalidateNode();
         }
 
-        public OldCameraController(OldZoneEntryController oldzoneentrycontroller,OldCamera camera)
+        public OldCameraController(OldZoneEntryController oldzoneentrycontroller,OldCamera camera) : base(oldzoneentrycontroller, camera)
         {
             OldZoneEntryController = oldzoneentrycontroller;
             Camera = camera;

@@ -5,7 +5,7 @@ namespace CrashEdit.CE
 {
     public sealed class OldSLSTDeltaController : Controller
     {
-        public OldSLSTDeltaController(OldSLSTEntryController oldslstentrycontroller,OldSLSTDelta oldslstdelta)
+        public OldSLSTDeltaController(OldSLSTEntryController oldslstentrycontroller,OldSLSTDelta oldslstdelta) : base(oldslstentrycontroller, oldslstdelta)
         {
             OldSLSTEntryController = oldslstentrycontroller;
             OldSLSTDelta = oldslstdelta;

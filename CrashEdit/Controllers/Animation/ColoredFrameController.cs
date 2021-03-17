@@ -6,7 +6,7 @@ namespace CrashEdit.CE
 {
     public sealed class ColoredFrameController : Controller
     {
-        public ColoredFrameController(ColoredAnimationEntryController cutsceneanimationentrycontroller,OldFrame oldframe)
+        public ColoredFrameController(ColoredAnimationEntryController cutsceneanimationentrycontroller,OldFrame oldframe) : base(cutsceneanimationentrycontroller, oldframe)
         {
             CutsceneAnimationEntryController = cutsceneanimationentrycontroller;
             OldFrame = oldframe;

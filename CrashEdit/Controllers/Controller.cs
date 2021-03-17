@@ -7,10 +7,16 @@ namespace CrashEdit.CE
 {
     public abstract class Controller : IDisposable
     {
+        private Controller parent;
+        private object resource;
+
         private Control editor;
 
-        public Controller()
+        public Controller(Controller parent, object resource)
         {
+            this.parent = parent;
+            this.resource = resource;
+
             ContextMenu = new ContextMenu();
             Node = new TreeNode
             {

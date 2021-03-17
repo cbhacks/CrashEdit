@@ -4,7 +4,7 @@ namespace CrashEdit.CE
 {
     public sealed class ItemController : Controller
     {
-        public ItemController(MysteryMultiItemEntryController mysteryentrycontroller,byte[] item)
+        public ItemController(MysteryMultiItemEntryController mysteryentrycontroller,byte[] item) : base(mysteryentrycontroller, item)
         {
             MysteryEntryController = mysteryentrycontroller;
             Item = item;

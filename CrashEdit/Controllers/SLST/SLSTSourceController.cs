@@ -5,7 +5,7 @@ namespace CrashEdit.CE
 {
     public sealed class SLSTSourceController : Controller
     {
-        public SLSTSourceController(SLSTEntryController slstentrycontroller,SLSTSource slstsource)
+        public SLSTSourceController(SLSTEntryController slstentrycontroller,SLSTSource slstsource) : base(slstentrycontroller, slstsource)
         {
             SLSTEntryController = slstentrycontroller;
             SLSTSource = slstsource;

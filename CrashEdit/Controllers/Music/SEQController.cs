@@ -4,7 +4,7 @@ namespace CrashEdit.CE
 {
     public sealed class SEQController : Controller
     {
-        public SEQController(MusicEntryController musicentrycontroller,SEQ seq)
+        public SEQController(MusicEntryController musicentrycontroller,SEQ seq) : base(musicentrycontroller, seq)
         {
             MusicEntryController = musicentrycontroller;
             SEQ = seq;

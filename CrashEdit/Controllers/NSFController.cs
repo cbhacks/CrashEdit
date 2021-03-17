@@ -7,7 +7,7 @@ namespace CrashEdit.CE
 {
     public sealed class NSFController : Controller
     {
-        public NSFController(NSF nsf,GameVersion gameversion)
+        public NSFController(NSF nsf,GameVersion gameversion) : base(null, nsf)
         {
             NSF = nsf;
             GameVersion = gameversion;

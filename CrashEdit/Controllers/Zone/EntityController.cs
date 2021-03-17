@@ -6,7 +6,7 @@ namespace CrashEdit.CE
 {
     public sealed class EntityController : Controller
     {
-        public EntityController(ZoneEntryController zoneentrycontroller,Entity entity)
+        public EntityController(ZoneEntryController zoneentrycontroller,Entity entity) : base(zoneentrycontroller, entity)
         {
             ZoneEntryController = zoneentrycontroller;
             Entity = entity;

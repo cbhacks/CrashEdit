@@ -4,7 +4,7 @@ namespace CrashEdit.CE
 {
     public sealed class OldSEQController : Controller
     {
-        public OldSEQController(OldMusicEntryController oldmusicentrycontroller,SEQ seq)
+        public OldSEQController(OldMusicEntryController oldmusicentrycontroller,SEQ seq) : base(oldmusicentrycontroller, seq)
         {
             OldMusicEntryController = oldmusicentrycontroller;
             SEQ = seq;

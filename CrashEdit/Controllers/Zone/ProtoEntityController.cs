@@ -5,7 +5,7 @@ namespace CrashEdit.CE
 {
     public sealed class ProtoEntityController : Controller
     {
-        public ProtoEntityController(ProtoZoneEntryController oldzoneentrycontroller,ProtoEntity entity)
+        public ProtoEntityController(ProtoZoneEntryController oldzoneentrycontroller,ProtoEntity entity) : base(oldzoneentrycontroller, entity)
         {
             ProtoZoneEntryController = oldzoneentrycontroller;
             Entity = entity;

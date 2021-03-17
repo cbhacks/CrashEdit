@@ -4,7 +4,7 @@ namespace CrashEdit.CE
 {
     public sealed class OldVHController : Controller
     {
-        public OldVHController(OldMusicEntryController oldmusicentrycontroller,VH vh)
+        public OldVHController(OldMusicEntryController oldmusicentrycontroller,VH vh) : base(oldmusicentrycontroller, vh)
         {
             OldMusicEntryController = oldmusicentrycontroller;
             VH = vh;

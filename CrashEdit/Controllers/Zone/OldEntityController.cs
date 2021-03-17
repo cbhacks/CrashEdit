@@ -5,7 +5,7 @@ namespace CrashEdit.CE
 {
     public sealed class OldEntityController : Controller
     {
-        public OldEntityController(OldZoneEntryController oldzoneentrycontroller,OldEntity entity)
+        public OldEntityController(OldZoneEntryController oldzoneentrycontroller,OldEntity entity) : base(oldzoneentrycontroller, entity)
         {
             OldZoneEntryController = oldzoneentrycontroller;
             OldEntity = entity;
@@ -15,7 +15,7 @@ namespace CrashEdit.CE
             InvalidateNodeImage();
         }
 
-        public OldEntityController(MapEntryController oldt17entrycontroller, OldEntity entity)
+        public OldEntityController(MapEntryController oldt17entrycontroller, OldEntity entity) : base(oldt17entrycontroller, entity)
         {
             MapEntryController = oldt17entrycontroller;
             OldEntity = entity;
