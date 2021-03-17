@@ -1642,7 +1642,7 @@ namespace CrashEdit.CE
                     }
                 }
             }
-            EvList<Chunk> chunks = null;
+            List<Chunk> chunks = null;
             HashSet<Entry> entries = null;
             if (controller is EntityController c2c)
             {

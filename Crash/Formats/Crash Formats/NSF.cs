@@ -213,10 +213,10 @@ namespace CrashEdit.Crash
         {
             if (chunks == null)
                 throw new ArgumentNullException("chunks");
-            Chunks = new EvList<Chunk>(chunks);
+            Chunks = new List<Chunk>(chunks);
         }
 
-        public EvList<Chunk> Chunks { get; }
+        public List<Chunk> Chunks { get; }
 
         public void ProcessAll(GameVersion gameversion)
         {
@@ -327,7 +327,7 @@ namespace CrashEdit.Crash
                         }
                         return c;
                     });
-                    entrychunk.Entries = new EvList<Entry>(entries);
+                    entrychunk.Entries = new List<Entry>(entries);
                 }
             }
             SortedDictionary<int, SortedDictionary<string, int>> newindex = new SortedDictionary<int, SortedDictionary<string, int>>();

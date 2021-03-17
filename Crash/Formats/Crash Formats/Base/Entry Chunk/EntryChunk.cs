@@ -7,17 +7,17 @@ namespace CrashEdit.Crash
     {
         public EntryChunk()
         {
-            Entries = new EvList<Entry>();
+            Entries = new List<Entry>();
         }
 
         public EntryChunk(IEnumerable<Entry> entries)
         {
             if (entries == null)
                 throw new ArgumentNullException("entries");
-            Entries = new EvList<Entry>(entries);
+            Entries = new List<Entry>(entries);
         }
 
-        public EvList<Entry> Entries { get; set; }
+        public List<Entry> Entries { get; set; }
 
         public abstract int Alignment { get; }
 
