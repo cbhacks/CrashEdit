@@ -21,23 +21,29 @@ namespace CrashEdit.CE
         public EntryChunkController EntryChunkController { get; private set; }
         public Entry Entry { get; }
 
-        public override bool Move(LegacyController newcontroller,bool commit)
+        public override bool CanMoveTo(LegacyController newcontroller)
         {
-            if (newcontroller is EntryChunkController)
-            {
-                if (commit)
-                {
-                    EntryChunkController.EntryChunk.Entries.Remove(Entry);
-                    Node.Remove();
-                    EntryChunkController = (EntryChunkController)newcontroller;
-                    EntryChunkController.EntryChunk.Entries.Add(Entry);
-                    EntryChunkController.Node.Nodes.Add(Node);
-                }
+            if (newcontroller is EntryChunkController) {
                 return true;
+            } else {
+                return base.CanMoveTo(newcontroller);
+            }
+        }
+
+        public override LegacyController MoveTo(LegacyController newcontroller)
+        {
+            if (newcontroller is EntryChunkController newecc)
+            {
+                EntryChunkController.EntryChunk.Entries.Remove(Entry);
+                newecc.EntryChunk.Entries.Add(Entry);
+                var replacement = newecc.CreateEntryController(Entry);
+                newecc.AddNode(replacement);
+                Dispose();
+                return replacement;
             }
             else
             {
-                return base.Move(newcontroller,commit);
+                return base.MoveTo(newcontroller);
             }
         }
 

@@ -110,9 +110,14 @@ namespace CrashEdit.CE
             }
         }
 
-        public virtual bool Move(LegacyController newcontroller,bool commit)
+        public virtual bool CanMoveTo(LegacyController newcontroller)
         {
             return false;
+        }
+
+        public virtual LegacyController MoveTo(LegacyController newcontroller)
+        {
+            throw new NotSupportedException();
         }
 
         public virtual void Dispose()

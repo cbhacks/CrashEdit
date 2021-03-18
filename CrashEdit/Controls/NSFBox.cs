@@ -123,7 +123,7 @@ namespace CrashEdit.CE
                 e.Effect = DragDropEffects.None;
                 return;
             }
-            if (item.Move(destination,false))
+            if (item.CanMoveTo(destination))
             {
                 e.Effect = DragDropEffects.Move;
             }
@@ -156,7 +156,7 @@ namespace CrashEdit.CE
             {
                 return;
             }
-            item.Move(destination,true);
+            item = item.MoveTo(destination);
             item.Node.EnsureVisible();
             trvMain.SelectedNode = item.Node;
         }
