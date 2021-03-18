@@ -5,18 +5,12 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
-    public abstract class LegacyController : IDisposable
+    public abstract class LegacyController : CrashEdit.LegacyController, IDisposable
     {
-        private LegacyController parent;
-        private object resource;
-
         private Control editor;
 
-        public LegacyController(LegacyController parent, object resource)
+        public LegacyController(LegacyController parent, object resource) : base(parent, resource)
         {
-            this.parent = parent;
-            this.resource = resource;
-
             ContextMenu = new ContextMenu();
             Node = new TreeNode
             {
@@ -29,11 +23,13 @@ namespace CrashEdit.CE
         public void AddNode(LegacyController controller)
         {
             Node.Nodes.Add(controller.Node);
+            LegacySubcontrollers.Add(controller);
         }
 
         public void InsertNode(int index,LegacyController controller)
         {
             Node.Nodes.Insert(index,controller.Node);
+            LegacySubcontrollers.Insert(index, controller);
         }
 
         protected void AddMenu(string text,ControllerMenuDelegate proc)
@@ -64,6 +60,9 @@ namespace CrashEdit.CE
 
         public abstract void InvalidateNode();
         public abstract void InvalidateNodeImage();
+
+        public override string NodeText => Node.Text;
+        public override string NodeImage => Node.ImageKey;
 
         protected virtual Control CreateEditor()
         {
@@ -122,6 +121,7 @@ namespace CrashEdit.CE
 
         public virtual void Dispose()
         {
+            Parent?.LegacySubcontrollers?.Remove(this);
             TreeNode[] nodes = new TreeNode[Node.Nodes.Count];
             int i = 0;
             foreach(TreeNode node in Node.Nodes)

@@ -43,8 +43,10 @@ namespace CrashEdit.CE
 
         private List<TreeNode> searchresults;
 
+        private TabControl tbcLegacy;
         private SplitContainer pnSplit;
         private TreeView trvMain;
+        private MainControl uxNew;
 
         public NSFBox(NSF nsf, GameVersion gameversion)
         {
@@ -69,10 +71,35 @@ namespace CrashEdit.CE
             trvMain.DragOver += new DragEventHandler(trvMain_DragOver);
             trvMain.DragDrop += new DragEventHandler(trvMain_DragDrop);
 
+            uxNew = new MainControl {
+                Dock = DockStyle.Fill,
+                RootController = NSFController.Modern
+            };
+            uxNew.ResourceTree.ImageList = imglist;
+
+            tbcLegacy = new TabControl {
+                Dock = DockStyle.Fill
+            };
+
             pnSplit = new SplitContainer { Dock = DockStyle.Fill };
             pnSplit.Panel1.Controls.Add(trvMain);
 
-            Controls.Add(pnSplit);
+            var tpLegacy = new TabPage("Legacy");
+            tpLegacy.Controls.Add(pnSplit);
+            tbcLegacy.TabPages.Add(tpLegacy);
+
+            var tpNew = new TabPage("New");
+            tpNew.Controls.Add(uxNew);
+            tbcLegacy.TabPages.Add(tpNew);
+
+            tbcLegacy.Selected += (_, e) => {
+                if (e.TabPage == tpNew) {
+                    uxNew.RootController.Sync();
+                    uxNew.Sync();
+                }
+            };
+
+            Controls.Add(tbcLegacy);
         }
 
         public NSF NSF { get; }

@@ -7,6 +7,10 @@
     </PropertyGroup>
 
     <PropertyGroup>
+        <LangVersion>8.0</LangVersion>
+    </PropertyGroup>
+
+    <PropertyGroup>
         <Company>cbhacks</Company>
         <Description>Unofficial Crash Bandicoot 1/2/3 Level Editor</Description>
         <AssemblyTitle>CrashEdit 'Main' module</AssemblyTitle>
@@ -16,6 +20,10 @@
     <ItemGroup>
         <Compile Include="Core/**/*.cs" />
         <Compile Include="Crash/**/*.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="System.Windows.Forms" />
     </ItemGroup>
 
 </Project>
