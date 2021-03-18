@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace CrashEdit {
 
-    public class MainControl : UserControl {
+    public class MainControl : UserControl, IVerbExecutor {
 
         public MainControl() {
             Split = new SplitContainer {
@@ -13,7 +13,7 @@ namespace CrashEdit {
             };
             Controls.Add(Split);
 
-            ResourceTree = new ResourceTreeView {
+            ResourceTree = new ResourceTreeView(this) {
                 Dock = DockStyle.Fill
             };
             Split.Panel1.Controls.Add(ResourceTree);
@@ -38,6 +38,18 @@ namespace CrashEdit {
 
         public void Sync() {
             ResourceTree.Sync();
+        }
+
+        public void ExecuteVerb(Verb verb) {
+            if (verb == null)
+                throw new ArgumentNullException();
+
+            verb.Execute();
+
+            if (RootController != null) {
+                RootController.Sync();
+                Sync();
+            }
         }
 
     }

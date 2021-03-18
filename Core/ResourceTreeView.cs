@@ -8,6 +8,15 @@ namespace CrashEdit {
 
     public class ResourceTreeView : TreeView {
 
+        public ResourceTreeView(IVerbExecutor executor) {
+            if (executor == null)
+                throw new ArgumentNullException();
+
+            Executor = executor;
+        }
+
+        public IVerbExecutor Executor { get; }
+
         private Controller? _rootController;
 
         public Controller? RootController {
@@ -76,6 +85,7 @@ namespace CrashEdit {
                 }
             }
             foreach (var node in obsoleteNodes) {
+                DisposeNode(node);
                 node.Remove();
             }
 
@@ -95,12 +105,35 @@ namespace CrashEdit {
                     // This subcontroller is new, so a new node must be made.
                     node = new TreeNode();
                     node.Tag = subctlr;
+                    node.ContextMenuStrip = new VerbContextMenuStrip(Executor) {
+                        Subject = subctlr
+                    };
                     tree.Insert(i, node);
                 }
 
                 SyncNode(node, subctlr);
                 i++;
             }
+        }
+
+        private void DisposeNode(TreeNode node) {
+            if (node.Tag is Controller) {
+                node.ContextMenuStrip.Dispose();
+                node.ContextMenuStrip = null;
+                foreach (TreeNode subnode in node.Nodes) {
+                    DisposeNode(subnode);
+                }
+            }
+        }
+
+        protected override void Dispose(bool disposing) {
+            if (disposing) {
+                foreach (TreeNode node in Nodes) {
+                    DisposeNode(node);
+                }
+                Nodes.Clear();
+            }
+            base.Dispose(disposing);
         }
 
     }

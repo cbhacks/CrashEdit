@@ -50,6 +50,7 @@ namespace CrashEdit.CE
                     ErrorManager.ExitSubject();
                 }
             }
+            LegacyVerbs.Add(new LegacyVerb(text, new Action(proc)));
             ContextMenu.MenuItems.Add(text,handler);
         }
 
