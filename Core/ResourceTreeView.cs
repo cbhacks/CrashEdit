@@ -1,7 +1,9 @@
 #nullable enable
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace CrashEdit {
@@ -13,6 +15,7 @@ namespace CrashEdit {
                 throw new ArgumentNullException();
 
             Executor = executor;
+            AllowDrop = true;
         }
 
         public IVerbExecutor Executor { get; }
@@ -134,6 +137,106 @@ namespace CrashEdit {
                 Nodes.Clear();
             }
             base.Dispose(disposing);
+        }
+
+        protected class DragDropHelper {
+
+            public DragDropHelper(Controller src, List<TransitiveVerb> verbs) {
+                if (src == null)
+                    throw new ArgumentNullException();
+                if (verbs == null)
+                    throw new ArgumentNullException();
+
+                Source = src;
+                Verbs = verbs;
+            }
+
+            public Controller Source { get; }
+
+            public List<TransitiveVerb> Verbs { get; }
+
+        }
+
+        protected override void OnItemDrag(ItemDragEventArgs e) {
+            if (e.Item is TreeNode node) {
+                if (node.Tag is Controller ctlr) {
+                    // Find all transitive verbs which can accept the to-be-dragged
+                    // controller as a source controller.
+                    var verbs = Verb.AllVerbs
+                        .OfType<TransitiveVerb>()
+                        .Where(x => x.ApplicableForSource(ctlr))
+                        .ToList();
+
+                    if (verbs.Count > 0) {
+                        DoDragDrop(new DragDropHelper(ctlr, verbs), DragDropEffects.Move);
+
+                        // We handled this drag attempt ourselves, don't raise the event.
+                        return;
+                    }
+                }
+            }
+
+            base.OnItemDrag(e);
+        }
+
+        protected override void OnDragOver(DragEventArgs e) {
+            if (!e.Data.GetDataPresent(typeof(DragDropHelper))) {
+                // Not our drag operation.
+                base.OnDragOver(e);
+                return;
+            }
+            var helper = (DragDropHelper)e.Data.GetData(typeof(DragDropHelper));
+
+            // Find the controller for the node being dragged over.
+            var targetNode = GetNodeAt(PointToClient(new Point(e.X, e.Y)));
+            var targetCtlr = targetNode?.Tag as Controller;
+            if (targetCtlr == null) {
+                // No node at the target location, or the node has no controller.
+                e.Effect = DragDropEffects.None;
+                return;
+            }
+
+            // Determine if there are any transitive verbs applicable to this drag.
+            bool canDrop = helper.Verbs
+                .Where(x => x.ApplicableForTransit(helper.Source, targetCtlr))
+                .Any();
+
+            e.Effect = canDrop ? DragDropEffects.Move : DragDropEffects.None;
+        }
+
+        protected override void OnDragDrop(DragEventArgs e) {
+            if (!e.Data.GetDataPresent(typeof(DragDropHelper))) {
+                // Not our drag operation.
+                base.OnDragOver(e);
+                return;
+            }
+            var helper = (DragDropHelper)e.Data.GetData(typeof(DragDropHelper));
+
+            // Find the controller for the node being dragged over.
+            var targetNode = GetNodeAt(PointToClient(new Point(e.X, e.Y)));
+            var targetCtlr = targetNode?.Tag as Controller;
+            if (targetCtlr == null) {
+                // No node at the target location, or the node has no controller.
+                e.Effect = DragDropEffects.None;
+                return;
+            }
+
+            // Build the list of verbs available for the user to choose from.
+            var choices = new List<Verb>();
+            foreach (var verb in helper.Verbs) {
+                if (!verb.ApplicableForTransit(helper.Source, targetCtlr))
+                    continue;
+
+                var newVerb = (TransitiveVerb)verb.Clone();
+                newVerb.Source = helper.Source;
+                newVerb.Destination = targetCtlr;
+                choices.Add(newVerb);
+            }
+
+            // Present the options to the user and potentially execute one.
+            Executor.ExecuteVerbChoice(choices);
+
+            e.Effect = DragDropEffects.Move;
         }
 
     }

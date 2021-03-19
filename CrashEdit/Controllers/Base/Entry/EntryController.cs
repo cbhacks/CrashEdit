@@ -21,7 +21,7 @@ namespace CrashEdit.CE
         public EntryChunkController EntryChunkController { get; private set; }
         public Entry Entry { get; }
 
-        public override bool CanMoveTo(LegacyController newcontroller)
+        public override bool CanMoveTo(CrashEdit.LegacyController newcontroller)
         {
             if (newcontroller is EntryChunkController) {
                 return true;
@@ -30,7 +30,7 @@ namespace CrashEdit.CE
             }
         }
 
-        public override LegacyController MoveTo(LegacyController newcontroller)
+        public override CrashEdit.LegacyController MoveTo(CrashEdit.LegacyController newcontroller)
         {
             if (newcontroller is EntryChunkController newecc)
             {

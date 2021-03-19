@@ -183,7 +183,7 @@ namespace CrashEdit.CE
             {
                 return;
             }
-            item = item.MoveTo(destination);
+            item = (LegacyController)item.MoveTo(destination);
             item.Node.EnsureVisible();
             trvMain.SelectedNode = item.Node;
         }

@@ -58,6 +58,8 @@ namespace CrashEdit.CE
         [STAThread]
         internal static void Main(string[] args)
         {
+            Registrar.Init();
+
             if (Properties.Settings.Default.UpgradeSettings)
             {
                 Properties.Settings.Default.Upgrade();

@@ -32,6 +32,14 @@ namespace CrashEdit {
 
         public abstract string NodeImage { get; }
 
+        public virtual bool CanMoveTo(LegacyController dest) {
+            return false;
+        }
+
+        public virtual LegacyController MoveTo(LegacyController dest) {
+            throw new NotSupportedException();
+        }
+
     }
 
     public sealed class LegacyVerb : Verb {
@@ -52,6 +60,46 @@ namespace CrashEdit {
 
         public override void Execute() {
             Proc();
+        }
+
+    }
+
+    public sealed class LegacyMoveVerb : TransitiveVerb {
+
+        public override string Text => "Move here";
+
+        public override bool ApplicableForSource(Controller src) {
+            if (src == null)
+                throw new ArgumentNullException();
+
+            return (src.Legacy != null);
+        }
+
+        public override bool ApplicableForTransit(Controller src, Controller dest) {
+            if (src == null)
+                throw new ArgumentNullException();
+            if (dest == null)
+                throw new ArgumentNullException();
+
+            if (src.Legacy == null)
+                return false;
+            if (dest.Legacy == null)
+                return false;
+
+            return src.Legacy.CanMoveTo(dest.Legacy);
+        }
+
+        public override void Execute() {
+            if (Source == null)
+                throw new InvalidOperationException();
+            if (Destination == null)
+                throw new InvalidOperationException();
+            if (Source.Legacy == null)
+                throw new InvalidOperationException();
+            if (Destination.Legacy == null)
+                throw new InvalidOperationException();
+
+            Source.Legacy.MoveTo(Destination.Legacy);
         }
 
     }

@@ -1,6 +1,7 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CrashEdit {
@@ -50,6 +51,18 @@ namespace CrashEdit {
                 RootController.Sync();
                 Sync();
             }
+        }
+
+        public void ExecuteVerbChoice(List<Verb> verbs) {
+            if (verbs == null)
+                throw new ArgumentNullException();
+
+            // Don't bother if there are no choices.
+            if (verbs.Count == 0)
+                return;
+
+            // TODO let the user choose one
+            ExecuteVerb(verbs[0]);
         }
 
     }
