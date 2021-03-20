@@ -133,7 +133,9 @@ namespace CrashEdit {
 
         protected override void OnBeforeExpand(TreeViewCancelEventArgs e) {
             if (e.Node.Tag is Controller ctlr) {
+                BeginUpdate();
                 SyncTree(e.Node.Nodes, ctlr, false);
+                EndUpdate();
             }
             base.OnBeforeExpand(e);
         }
