@@ -38,7 +38,7 @@ namespace CrashEdit {
             if (RootController == null) {
                 Nodes.Clear();
             } else {
-                SyncTree(Nodes, RootController);
+                SyncTree(Nodes, RootController, false);
             }
             EndUpdate();
         }
@@ -52,11 +52,11 @@ namespace CrashEdit {
             if (ctlr != RootController) {
                 // Don't infinitely recurse on root, which specially includes itself
                 // in SyncTree().
-                SyncTree(node.Nodes, ctlr);
+                SyncTree(node.Nodes, ctlr, !node.IsExpanded);
             }
         }
 
-        private void SyncTree(TreeNodeCollection tree, Controller ctlr) {
+        private void SyncTree(TreeNodeCollection tree, Controller ctlr, bool elide) {
             var existingNodes = new Dictionary<Controller, TreeNode>();
 
             // Find all existing nodes and their matching controllers.
@@ -114,7 +114,9 @@ namespace CrashEdit {
                     tree.Insert(i, node);
                 }
 
-                SyncNode(node, subctlr);
+                if (!elide) {
+                    SyncNode(node, subctlr);
+                }
                 i++;
             }
         }
@@ -127,6 +129,13 @@ namespace CrashEdit {
                     DisposeNode(subnode);
                 }
             }
+        }
+
+        protected override void OnBeforeExpand(TreeViewCancelEventArgs e) {
+            if (e.Node.Tag is Controller ctlr) {
+                SyncTree(e.Node.Nodes, ctlr, false);
+            }
+            base.OnBeforeExpand(e);
         }
 
         protected override void Dispose(bool disposing) {
