@@ -9,8 +9,8 @@ namespace CrashEdit.CE
         public ZoneEntryController(EntryChunkController entrychunkcontroller,ZoneEntry zoneentry) : base(entrychunkcontroller,zoneentry)
         {
             ZoneEntry = zoneentry;
-            AddNode(new ItemController(null,zoneentry.Header));
-            AddNode(new ItemController(null,zoneentry.Layout));
+            AddNode(new ItemController(this,zoneentry.Header));
+            AddNode(new ItemController(this,zoneentry.Layout));
             foreach (Entity entity in zoneentry.Entities)
             {
                 AddNode(new EntityController(this,entity));

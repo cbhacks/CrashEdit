@@ -10,7 +10,7 @@ namespace CrashEdit.CE
             OldSceneryEntry = oldsceneryentry;
             if (oldsceneryentry.ExtraData != null)
             {
-                AddNode(new ItemController(null,oldsceneryentry.ExtraData));
+                AddNode(new ItemController(this,oldsceneryentry.ExtraData));
             }
             AddMenuSeparator();
             AddMenu("Export as OBJ",Menu_Export_OBJ);

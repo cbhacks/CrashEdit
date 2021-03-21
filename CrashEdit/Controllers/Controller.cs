@@ -22,12 +22,18 @@ namespace CrashEdit.CE
 
         public void AddNode(LegacyController controller)
         {
+            if (controller.Parent != this) {
+                throw new Exception();
+            }
             Node.Nodes.Add(controller.Node);
             LegacySubcontrollers.Add(controller);
         }
 
         public void InsertNode(int index,LegacyController controller)
         {
+            if (controller.Parent != this) {
+                throw new Exception();
+            }
             Node.Nodes.Insert(index,controller.Node);
             LegacySubcontrollers.Insert(index, controller);
         }

@@ -7,12 +7,12 @@ namespace CrashEdit.CE
         public OldSLSTEntryController(EntryChunkController entrychunkcontroller,OldSLSTEntry oldslstentry) : base(entrychunkcontroller,oldslstentry)
         {
             OldSLSTEntry = oldslstentry;
-            AddNode(new OldSLSTSourceController(null,oldslstentry.Start));
+            AddNode(new OldSLSTSourceController(this,oldslstentry.Start));
             foreach (OldSLSTDelta delta in oldslstentry.Deltas)
             {
                 AddNode(new OldSLSTDeltaController(this,delta));
             }
-            AddNode(new OldSLSTSourceController(null,oldslstentry.End));
+            AddNode(new OldSLSTSourceController(this,oldslstentry.End));
             InvalidateNode();
             InvalidateNodeImage();
         }

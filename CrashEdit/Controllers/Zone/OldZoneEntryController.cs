@@ -10,8 +10,8 @@ namespace CrashEdit.CE
             : base(entrychunkcontroller,zoneentry)
         {
             OldZoneEntry = zoneentry;
-            AddNode(new ItemController(null,zoneentry.Header));
-            AddNode(new ItemController(null,zoneentry.Layout));
+            AddNode(new ItemController(this,zoneentry.Header));
+            AddNode(new ItemController(this,zoneentry.Layout));
             foreach (OldCamera camera in zoneentry.Cameras)
             {
                 AddNode(new OldCameraController(this,camera));

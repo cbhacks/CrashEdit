@@ -4,11 +4,11 @@ namespace CrashEdit.CE
 {
     public sealed class ItemController : LegacyController
     {
-        public ItemController(MysteryMultiItemEntryController mysteryentrycontroller,byte[] item) : base(mysteryentrycontroller, item)
+        public ItemController(LegacyController parent,byte[] item) : base(parent, item)
         {
-            MysteryEntryController = mysteryentrycontroller;
+            MysteryEntryController = parent as MysteryMultiItemEntryController;
             Item = item;
-            if (mysteryentrycontroller != null)
+            if (MysteryEntryController != null)
             {
                 AddMenu("Replace Item",Menu_Replace_Item);
                 AddMenu("Delete Item",Menu_Delete_Item);
