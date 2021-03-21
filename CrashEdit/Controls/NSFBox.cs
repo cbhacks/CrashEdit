@@ -71,9 +71,8 @@ namespace CrashEdit.CE
             trvMain.DragOver += new DragEventHandler(trvMain_DragOver);
             trvMain.DragDrop += new DragEventHandler(trvMain_DragDrop);
 
-            uxNew = new MainControl {
-                Dock = DockStyle.Fill,
-                RootController = NSFController.Modern
+            uxNew = new MainControl(NSFController.Modern) {
+                Dock = DockStyle.Fill
             };
             uxNew.ResourceTree.ImageList = imglist;
 

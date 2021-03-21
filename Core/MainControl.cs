@@ -8,30 +8,25 @@ namespace CrashEdit {
 
     public class MainControl : UserControl, IVerbExecutor {
 
-        public MainControl() {
+        public MainControl(Controller rootController) {
+            if (rootController == null)
+                throw new ArgumentNullException();
+
+            RootController = rootController;
+
             Split = new SplitContainer {
                 Dock = DockStyle.Fill
             };
             Controls.Add(Split);
 
             ResourceTree = new ResourceTreeView(this) {
-                Dock = DockStyle.Fill
+                Dock = DockStyle.Fill,
+                RootController = RootController
             };
             Split.Panel1.Controls.Add(ResourceTree);
         }
 
-        private Controller? _rootController;
-
-        public Controller? RootController {
-            get { return _rootController; }
-            set {
-                if (_rootController == value)
-                    return;
-
-                _rootController = value;
-                ResourceTree.RootController = value;
-            }
-        }
+        public Controller RootController { get; }
 
         public SplitContainer Split { get; }
 
@@ -47,10 +42,8 @@ namespace CrashEdit {
 
             verb.Execute();
 
-            if (RootController != null) {
-                RootController.Sync();
-                Sync();
-            }
+            RootController.Sync();
+            Sync();
         }
 
         public void ExecuteVerbChoice(List<Verb> verbs) {
