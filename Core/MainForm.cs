@@ -18,7 +18,7 @@ namespace CrashEdit {
 
             // Toolbar
             ToolStrip = new ToolStrip {
-                ImageList = Resources2.ImageList
+                ImageList = Embeds.ImageList
             };
             Controls.Add(ToolStrip);
 
@@ -97,7 +97,7 @@ namespace CrashEdit {
 
             // Menubar
             MenuStrip = new MenuStrip {
-                ImageList = Resources2.ImageList
+                ImageList = Embeds.ImageList
             };
             Controls.Add(MenuStrip);
 
@@ -105,7 +105,7 @@ namespace CrashEdit {
             EditMenu = new ToolStripMenuItem {
                 Text = "&Edit"
             };
-            EditMenu.DropDown.ImageList = Resources2.ImageList;
+            EditMenu.DropDown.ImageList = Embeds.ImageList;
             MenuStrip.Items.Add(EditMenu);
 
             // Menubar -> Edit -> Find

@@ -6,12 +6,12 @@ using System.Windows.Forms;
 
 namespace CrashEdit {
 
-    public static class Resources2 {
+    public static class Embeds {
 
-        public const string Prefix = "CrashEdit.Main.Resources.";
+        public const string Prefix = "CrashEdit.Main.Embeds.";
 
-        static Resources2() {
-            var asm = typeof(Resources2).Assembly;
+        static Embeds() {
+            var asm = typeof(Embeds).Assembly;
             foreach (var fullName in asm.GetManifestResourceNames()) {
                 if (!fullName.StartsWith(Prefix))
                     continue;
