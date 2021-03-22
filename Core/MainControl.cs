@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace CrashEdit {
 
-    public class MainControl : UserControl, IVerbExecutor {
+    public class MainControl : UserControl, IWorkspaceHost, IVerbExecutor {
 
         public MainControl(Controller rootController) {
             if (rootController == null)
@@ -21,12 +21,54 @@ namespace CrashEdit {
 
             ResourceTree = new ResourceTreeView(this) {
                 Dock = DockStyle.Fill,
-                RootController = RootController
+                RootController = RootController,
+                HideSelection = false
+            };
+            ResourceTree.SelectedControllerChanged += (sender, e) => {
+                _activeController = ResourceTree.SelectedController;
+                OnActiveControllerChanged(EventArgs.Empty);
             };
             Split.Panel1.Controls.Add(ResourceTree);
         }
 
         public Controller RootController { get; }
+
+        private Controller? _activeController;
+
+        public Controller? ActiveController {
+            get { return _activeController; }
+            set {
+                if (_activeController == value)
+                    return;
+
+                // This raises an event which sets the field.
+                ResourceTree.SelectedController = value;
+            }
+        }
+
+        public event EventHandler? ActiveControllerChanged;
+
+        private string _searchQuery = "";
+
+        public string SearchQuery {
+            get { return _searchQuery; }
+            set {
+                if (_searchQuery == value)
+                    return;
+
+                _searchQuery = value;
+
+                var queryLowerCase = value.ToLower();
+                if (value == "") {
+                    SearchPredicate = null;
+                } else {
+                    SearchPredicate = (x =>
+                        x.Text.ToLower().Contains(queryLowerCase));
+                }
+            }
+        }
+
+        public Predicate<Controller>? SearchPredicate { get; private set; }
 
         public SplitContainer Split { get; }
 
@@ -56,6 +98,12 @@ namespace CrashEdit {
 
             // TODO let the user choose one
             ExecuteVerb(verbs[0]);
+        }
+
+        protected virtual void OnActiveControllerChanged(EventArgs e) {
+            if (ActiveControllerChanged != null) {
+                ActiveControllerChanged(this, e);
+            }
         }
 
     }

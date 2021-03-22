@@ -17,7 +17,7 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
-    public sealed class OldMainForm : Form
+    public sealed class OldMainForm : MainForm
     {
         private static ImageList imglist;
 
@@ -172,7 +172,6 @@ namespace CrashEdit.CE
 
             tsToolbar = new ToolStrip
             {
-                Dock = DockStyle.Top,
                 ImageList = imglist
             };
             tsToolbar.Items.Add(tbbOpen);
@@ -188,10 +187,7 @@ namespace CrashEdit.CE
             tsToolbar.Items.Add(new ToolStripSeparator());
             tsToolbar.Items.Add(tbbPlay);
 
-            tbcTabs = new TabControl
-            {
-                Dock = DockStyle.Fill
-            };
+            tbcTabs = TabControl;
             tbcTabs.SelectedIndexChanged += tbcTabs_SelectedIndexChanged;
 
             TabPage configtab = new TabPage("CrashEdit")
@@ -220,7 +216,6 @@ namespace CrashEdit.CE
             Width = Settings.Default.DefaultFormW;
             Height = Settings.Default.DefaultFormH;
             Text = $"CrashEdit v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
-            Controls.Add(tbcTabs);
             Controls.Add(tsToolbar);
 
             dlgMakeBINFile.Filter = "Playstation Disc Images (*.bin)|*.bin";
@@ -423,6 +418,7 @@ namespace CrashEdit.CE
             {
                 Dock = DockStyle.Fill
             };
+            nsfbox.uxNew.ActiveControllerChanged += MainControl_ActiveControllerChanged;
 
             TabPage nsftab = new TabPage(filename)
             {
@@ -1046,5 +1042,8 @@ namespace CrashEdit.CE
                 configtab.Controls.Add((ConfigEditor)configtab.Tag);
             }
         }
+
+        public override IWorkspaceHost ActiveWorkspaceHost =>
+            (TabControl.SelectedTab?.Tag as NSFBox)?.uxNew;
     }
 }

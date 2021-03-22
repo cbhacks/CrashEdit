@@ -46,7 +46,7 @@ namespace CrashEdit.CE
         private TabControl tbcLegacy;
         private SplitContainer pnSplit;
         private TreeView trvMain;
-        private MainControl uxNew;
+        public MainControl uxNew;
 
         public NSFBox(NSF nsf, GameVersion gameversion)
         {

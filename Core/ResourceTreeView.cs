@@ -28,10 +28,78 @@ namespace CrashEdit {
                 if (_rootController == value)
                     return;
 
+                // Clear the existing selection.
+                SelectedNode = null;
+                if (_selectedController != null) {
+                    _selectedController = null;
+                    OnSelectedControllerChanged(EventArgs.Empty);
+                }
+
                 _rootController = value;
                 Sync();
             }
         }
+
+        public Controller? _selectedController;
+
+        public Controller? SelectedController {
+            get { return _selectedController; }
+            set {
+                if (_selectedController == value)
+                    return;
+
+                if (value == null) {
+                    // AfterSelect won't raise when the new selection is null.
+                    SelectedNode = null;
+
+                    _selectedController = null;
+                    OnSelectedControllerChanged(EventArgs.Empty);
+                } else if (value == RootController) {
+                    // Event will be raised here to set the selected controller.
+                    SelectedNode = Nodes
+                        .OfType<TreeNode>()
+                        .Where(x => x.Tag == RootController)
+                        .Single();
+                } else {
+                    // Find the controller path to the root.
+                    var path = new List<Controller>();
+                    for (var ctlr = value; ctlr != RootController; ctlr = ctlr?.Parent) {
+                        if (ctlr == null) {
+                            // No path was found.
+                            throw new ArgumentException();
+                        }
+
+                        path.Add(ctlr);
+                    }
+                    path.Reverse();
+
+                    // Keep in mind, the root controller's child controllers have *sibling*
+                    // nodes, so the root controller is not in the node path.
+
+                    // Walk the computed path backwards by tree node.
+                    TreeNode? node = null;
+                    var nodeGroup = Nodes;
+                    foreach (var ctlr in path) {
+                        // Unexpanded nodes have incomplete descendants, so they must be
+                        // expanded before traversal can continue.
+                        if (node != null) {
+                            node.Expand();
+                        }
+
+                        node = nodeGroup
+                            .OfType<TreeNode>()
+                            .Where(x => x.Tag == ctlr)
+                            .Single();
+                        nodeGroup = node.Nodes;
+                    }
+
+                    // Event will be raised here to set the selected controller.
+                    SelectedNode = node;
+                }
+            }
+        }
+
+        public event EventHandler? SelectedControllerChanged;
 
         public void Sync() {
             BeginUpdate();
@@ -44,8 +112,8 @@ namespace CrashEdit {
         }
 
         private void SyncNode(TreeNode node, Controller ctlr) {
-            node.Text = ctlr.Legacy?.NodeText ?? ctlr.Resource.GetType().ToString();
-            node.ImageKey = ctlr.Legacy?.NodeImage ?? "";
+            node.Text = ctlr.Text;
+            node.ImageKey = ctlr.ImageKey;
             node.SelectedImageKey = node.ImageKey;
 
             // Synchronize the child node list.
@@ -138,6 +206,21 @@ namespace CrashEdit {
                 EndUpdate();
             }
             base.OnBeforeExpand(e);
+        }
+
+        protected virtual void OnSelectedControllerChanged(EventArgs e) {
+            if (SelectedControllerChanged != null) {
+                SelectedControllerChanged(this, e);
+            }
+        }
+
+        protected override void OnAfterSelect(TreeViewEventArgs e) {
+            if (e.Node.Tag is Controller ctlr) {
+                if (_selectedController != ctlr) {
+                    _selectedController = ctlr;
+                    OnSelectedControllerChanged(EventArgs.Empty);
+                }
+            }
         }
 
         protected override void Dispose(bool disposing) {

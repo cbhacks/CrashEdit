@@ -27,10 +27,20 @@ namespace CrashEdit {
 
         public object Resource { get; }
 
+        public Controller? Parent => ParentGroup?.Owner;
+
         public SubcontrollerGroup? ParentGroup { get; }
 
         public List<SubcontrollerGroup> SubcontrollerGroups { get; } =
             new List<SubcontrollerGroup>();
+
+        public string Text =>
+            Legacy?.NodeText ??
+            Resource.GetType().ToString();
+
+        public string ImageKey =>
+            Legacy?.NodeImage ??
+            "";
 
         public LegacyController? Legacy { get; }
 

@@ -20,6 +20,7 @@
     <ItemGroup>
         <Compile Include="Core/**/*.cs" />
         <Compile Include="Crash/**/*.cs" />
+        <EmbeddedResource Include="Resources/**/*" />
     </ItemGroup>
 
     <ItemGroup>

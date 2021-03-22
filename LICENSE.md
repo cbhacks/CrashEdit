@@ -3,6 +3,9 @@ provided other than "free":
 http://freeiconsweb.com/gif_icons.htm 
 (Link is dead, can't find a replacement, sorry)
 
+Some images are part of various free icon packages from Aha-Soft, CC-BY 3.0 US.
+<https://www.aha-soft.com/> / <https://www.small-icons.com>
+
 `Crash.Audio.SampleLine::ToPCM` and `Crash.Audio.ADPCMConv` are based
 directly off of some code from nextvolume's psxsdk (vag2wav.c), which claims
 it's "Based on VAG-Depack 0.1 by bITmASTER".
