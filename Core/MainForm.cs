@@ -137,6 +137,19 @@ namespace CrashEdit {
                 Command = new FindPreviousCommand(this),
                 ShortcutKeys = Keys.Shift | Keys.F3
             });
+
+            // Menubar -> View
+            ViewMenu = new ToolStripMenuItem {
+                Text = "&View"
+            };
+            ViewMenu.DropDown.ImageList = Embeds.ImageList;
+            MenuStrip.Items.Add(ViewMenu);
+
+            // Menubar -> View -> Undock
+            ViewMenu.DropDownItems.Add(new ToolStripCommandMenuItem {
+                Command = new UndockCommand(this),
+                ShortcutKeys = Keys.Control | Keys.D
+            });
         }
 
         public TabControl TabControl { get; }
@@ -144,6 +157,8 @@ namespace CrashEdit {
         public MenuStrip MenuStrip { get; }
 
         public ToolStripMenuItem EditMenu { get; }
+
+        public ToolStripMenuItem ViewMenu { get; }
 
         public ToolStrip ToolStrip { get; }
 
