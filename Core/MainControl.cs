@@ -26,9 +26,15 @@ namespace CrashEdit {
             };
             ResourceTree.SelectedControllerChanged += (sender, e) => {
                 _activeController = ResourceTree.SelectedController;
+                ResourceBox.ActiveController = _activeController;
                 OnActiveControllerChanged(EventArgs.Empty);
             };
             Split.Panel1.Controls.Add(ResourceTree);
+
+            ResourceBox = new ResourceBox {
+                Dock = DockStyle.Fill
+            };
+            Split.Panel2.Controls.Add(ResourceBox);
         }
 
         public Controller RootController { get; }
@@ -74,8 +80,11 @@ namespace CrashEdit {
 
         public ResourceTreeView ResourceTree { get; }
 
+        public ResourceBox ResourceBox { get; }
+
         public void Sync() {
             ResourceTree.Sync();
+            ResourceBox.Sync();
         }
 
         public void ExecuteVerb(Verb verb) {

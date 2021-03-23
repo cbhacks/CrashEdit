@@ -27,7 +27,9 @@ namespace CrashEdit.CE
             Node.SelectedImageKey = "limeb";
         }
 
-        protected override Control CreateEditor()
+        public override bool EditorAvailable => true;
+
+        public override Control CreateEditor()
         {
             if (!AnimationEntry.IsNew)
             {

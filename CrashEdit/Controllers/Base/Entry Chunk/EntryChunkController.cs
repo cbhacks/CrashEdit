@@ -25,7 +25,9 @@ namespace CrashEdit.CE
 
         public EntryChunk EntryChunk { get; }
 
-        protected override Control CreateEditor() => new EntryChunkBox(this);
+        public override bool EditorAvailable => true;
+
+        public override Control CreateEditor() => new EntryChunkBox(this);
 
         internal EntryController CreateEntryController(Entry entry)
         {

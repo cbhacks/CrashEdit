@@ -39,7 +39,9 @@ namespace CrashEdit.CE
             }
         }
 
-        protected override Control CreateEditor()
+        public override bool EditorAvailable => true;
+
+        public override Control CreateEditor()
         {
             if (ModelEntry.Positions == null)
                 return new Label { Text = string.Format("Polygon count: {0}\nVertex count: {1}",ModelEntry.PolyCount,ModelEntry.VertexCount), TextAlign = ContentAlignment.MiddleCenter };

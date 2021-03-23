@@ -23,7 +23,9 @@ namespace CrashEdit.CE
             Node.SelectedImageKey = "speaker";
         }
 
-        protected override Control CreateEditor()
+        public override bool EditorAvailable => true;
+
+        public override Control CreateEditor()
         {
             return new SoundBox(SpeechEntry);
         }

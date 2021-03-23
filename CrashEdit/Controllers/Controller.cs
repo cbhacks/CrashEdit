@@ -71,7 +71,7 @@ namespace CrashEdit.CE
         public override string NodeText => Node.Text;
         public override string NodeImage => Node.ImageKey;
 
-        protected virtual Control CreateEditor()
+        public override Control CreateEditor()
         {
             Label label = new Label
             {

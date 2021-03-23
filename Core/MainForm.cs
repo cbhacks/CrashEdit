@@ -22,6 +22,12 @@ namespace CrashEdit {
             };
             Controls.Add(ToolStrip);
 
+            // Toolbar -> Undock
+            ToolStrip.Items.Add(new ToolStripCommandButton {
+                DisplayStyle = ToolStripItemDisplayStyle.Image,
+                Command = new UndockCommand(this)
+            });
+
             // Right-side toolbar items below -- they must be added in
             // reverse order (i.e. right to left) !
 

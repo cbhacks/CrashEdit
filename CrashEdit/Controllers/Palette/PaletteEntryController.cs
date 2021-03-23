@@ -24,7 +24,9 @@ namespace CrashEdit.CE
             Node.SelectedImageKey = "yellowb";
         }
 
-        protected override Control CreateEditor()
+        public override bool EditorAvailable => Type.GetType("Mono.Runtime") == null;
+
+        public override Control CreateEditor()
         {
             // Hack for Mono so it doesn't crash.
             if (Type.GetType("Mono.Runtime") != null)

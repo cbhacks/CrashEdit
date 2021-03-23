@@ -28,7 +28,9 @@ namespace CrashEdit.CE
             Node.SelectedImageKey = "blueb";
         }
 
-        protected override Control CreateEditor()
+        public override bool EditorAvailable => true;
+
+        public override Control CreateEditor()
         {
             TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(ProtoSceneryEntry.Info,0x18)];
             for (int i = 0; i < texturechunks.Length; ++i)

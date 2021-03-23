@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace CrashEdit {
 
@@ -31,6 +32,12 @@ namespace CrashEdit {
         public abstract string NodeText { get; }
 
         public abstract string NodeImage { get; }
+
+        public virtual bool EditorAvailable => false;
+
+        public virtual Control CreateEditor() {
+            throw new NotSupportedException();
+        }
 
         public virtual bool CanMoveTo(LegacyController dest) {
             return false;
@@ -100,6 +107,23 @@ namespace CrashEdit {
                 throw new InvalidOperationException();
 
             Source.Legacy.MoveTo(Destination.Legacy);
+        }
+
+    }
+
+    public sealed class LegacyEditor : Editor {
+
+        public override string Text => "Legacy";
+
+        public override bool ApplicableForSubject(Controller subj) {
+            if (subj == null)
+                throw new ArgumentNullException();
+
+            return (subj.Legacy?.EditorAvailable == true);
+        }
+
+        protected override Control MakeControl() {
+            return Subject.Legacy!.CreateEditor();
         }
 
     }

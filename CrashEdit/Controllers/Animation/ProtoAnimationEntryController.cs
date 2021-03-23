@@ -30,7 +30,9 @@ namespace CrashEdit.CE
             Node.SelectedImageKey = "limeb";
         }
 
-        protected override Control CreateEditor()
+        public override bool EditorAvailable => true;
+
+        public override Control CreateEditor()
         {
             OldModelEntry modelentry = EntryChunkController.NSFController.NSF.GetEntry<OldModelEntry>(ProtoAnimationEntry.Frames[0].ModelEID);
             Dictionary<int,TextureChunk> textures = new Dictionary<int,TextureChunk>();

@@ -37,7 +37,9 @@ namespace CrashEdit.CE
             Node.SelectedImageKey = "violetb";
         }
 
-        protected override Control CreateEditor()
+        public override bool EditorAvailable => true;
+
+        public override Control CreateEditor()
         {
             int linkedsceneryentrycount = BitConv.FromInt32(ProtoZoneEntry.Header,0);
             ProtoSceneryEntry[] linkedsceneryentries = new ProtoSceneryEntry[linkedsceneryentrycount];

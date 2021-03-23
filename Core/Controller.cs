@@ -42,11 +42,28 @@ namespace CrashEdit {
             Legacy?.NodeImage ??
             "";
 
+        public bool Dead { get; private set; }
+
+        public void Kill() {
+            if (Dead)
+                throw new InvalidOperationException();
+
+            Dead = true;
+            foreach (var ctlrGroup in SubcontrollerGroups) {
+                foreach (var ctlr in ctlrGroup.Members) {
+                    ctlr.Kill();
+                }
+            }
+        }
+
         public LegacyController? Legacy { get; }
 
         public LegacySubcontrollerGroup? LegacyGroup { get; }
 
         public void Sync() {
+            if (Dead)
+                throw new InvalidOperationException();
+
             foreach (var subctlrGroup in SubcontrollerGroups) {
                 subctlrGroup.Sync();
             }
@@ -82,11 +99,17 @@ namespace CrashEdit {
         }
 
         public override void Sync() {
+            var missingMembers = new HashSet<Controller>(Members);
             Members.Clear();
             Members.AddRange(Owner.Legacy!.LegacySubcontrollers.Select(x => x.Modern));
 
             foreach (var subctlr in Members) {
                 subctlr.Sync();
+                missingMembers.Remove(subctlr);
+            }
+
+            foreach (var subctlr in missingMembers) {
+                subctlr.Kill();
             }
         }
 

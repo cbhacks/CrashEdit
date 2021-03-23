@@ -34,7 +34,9 @@ namespace CrashEdit.CE
             Node.SelectedImageKey = "arrow";
         }
 
-        protected override Control CreateEditor()
+        public override bool EditorAvailable => true;
+
+        public override Control CreateEditor()
         {
             return new OldCameraBox(this);
         }

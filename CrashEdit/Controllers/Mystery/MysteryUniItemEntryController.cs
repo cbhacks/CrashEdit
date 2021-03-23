@@ -10,7 +10,9 @@ namespace CrashEdit.CE
             MysteryEntry = mysteryentry;
         }
 
-        protected override Control CreateEditor()
+        public override bool EditorAvailable => true;
+
+        public override Control CreateEditor()
         {
             return new MysteryBox(MysteryEntry.Data);
         }
