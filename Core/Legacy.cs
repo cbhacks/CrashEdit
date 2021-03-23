@@ -29,15 +29,17 @@ namespace CrashEdit {
         public List<LegacyVerb> LegacyVerbs { get; } =
             new List<LegacyVerb>();
 
-        public abstract string NodeText { get; }
+        public string NodeText { get; set; } = "";
 
-        public abstract string NodeImage { get; }
+        public string NodeImageKey { get; set; } = "";
 
         public virtual bool EditorAvailable => false;
 
         public virtual Control CreateEditor() {
             throw new NotSupportedException();
         }
+
+        public bool NeedsNewEditor { get; set; }
 
         public virtual bool CanMoveTo(LegacyController dest) {
             return false;
@@ -57,11 +59,13 @@ namespace CrashEdit {
             if (proc == null)
                 throw new ArgumentNullException();
 
-            Text = text;
+            _text = text;
             Proc = proc;
         }
 
-        public override string Text { get; }
+        public string _text;
+
+        public override string Text => _text;
 
         private Action Proc { get; }
 
@@ -123,7 +127,41 @@ namespace CrashEdit {
         }
 
         protected override Control MakeControl() {
-            return Subject.Legacy!.CreateEditor();
+            return new LegacyEditorControlWrapper(Subject.Legacy!);
+        }
+
+        public override void Sync() {
+            ((LegacyEditorControlWrapper)Control).Sync();
+        }
+
+    }
+
+    public sealed class LegacyEditorControlWrapper : UserControl {
+
+        public LegacyEditorControlWrapper(LegacyController legacyCtlr) {
+            if (legacyCtlr == null)
+                throw new ArgumentNullException();
+
+            LegacyController = legacyCtlr;
+            legacyCtlr.NeedsNewEditor = false;
+            InnerControl = legacyCtlr.CreateEditor();
+            InnerControl.Dock = DockStyle.Fill;
+            Controls.Add(InnerControl);
+        }
+
+        public LegacyController LegacyController { get; }
+
+        public Control InnerControl { get; private set; }
+
+        public void Sync() {
+            if (LegacyController.NeedsNewEditor) {
+                LegacyController.NeedsNewEditor = false;
+                Controls.Remove(InnerControl);
+                InnerControl.Dispose();
+                InnerControl = LegacyController.CreateEditor();
+                InnerControl.Dock = DockStyle.Fill;
+                Controls.Add(InnerControl);
+            }
         }
 
     }

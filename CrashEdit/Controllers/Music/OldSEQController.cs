@@ -19,13 +19,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = "SEQ";
+            NodeText = "SEQ";
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "arrow";
-            Node.SelectedImageKey = "arrow";
+            NodeImageKey = "arrow";
         }
 
         public OldMusicEntryController OldMusicEntryController { get; }
@@ -45,7 +44,7 @@ namespace CrashEdit.CE
         private void Menu_Delete_SEQ()
         {
             OldMusicEntryController.OldMusicEntry.SEP.SEQs.Remove(SEQ);
-            Dispose();
+            RemoveSelf();
         }
 
         private void Menu_Export_SEQ()

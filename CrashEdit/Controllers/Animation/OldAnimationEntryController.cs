@@ -19,13 +19,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(CrashUI.Properties.Resources.OldAnimationEntryController_Text,OldAnimationEntry.EName);
+            NodeText = string.Format(CrashUI.Properties.Resources.OldAnimationEntryController_Text,OldAnimationEntry.EName);
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "limeb";
-            Node.SelectedImageKey = "limeb";
+            NodeImageKey = "limeb";
         }
 
         public override bool EditorAvailable => true;

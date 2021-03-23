@@ -13,13 +13,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(CrashUI.Properties.Resources.SpeechChunkController_Text,NSFController.NSF.Chunks.IndexOf(SpeechChunk) * 2 + 1);
+            NodeText = string.Format(CrashUI.Properties.Resources.SpeechChunkController_Text,NSFController.NSF.Chunks.IndexOf(SpeechChunk) * 2 + 1);
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "whitej";
-            Node.SelectedImageKey = "whitej";
+            NodeImageKey = "whitej";
         }
 
         public SpeechChunk SpeechChunk { get; }

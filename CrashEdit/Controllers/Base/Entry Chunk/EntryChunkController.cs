@@ -188,14 +188,14 @@ namespace CrashEdit.CE
                 {
                 }
             }
-            InvalidateEditor();
+            NeedsNewEditor = true;
         }
 
         private void Menu_Add_Entry()
         {
             using (NewEntryForm newentrywindow = new NewEntryForm(NSFController))
             {
-                if (newentrywindow.ShowDialog(Node.TreeView.TopLevelControl) == DialogResult.OK)
+                if (newentrywindow.ShowDialog() == DialogResult.OK)
                 {
                     //Dictionary<int, EntryLoader> loaders = Entry.GetLoaders(NSFController.GameVersion);
                     Entry newentry = null;
@@ -276,7 +276,7 @@ namespace CrashEdit.CE
                     {
                         EntryChunk.Entries.Add(newentry);
                         AddNode(CreateEntryController(newentry));
-                        Editor.Invalidate();
+                        NeedsNewEditor = true;
                     }
                 }
             }

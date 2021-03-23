@@ -13,13 +13,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("T17 ({0})",T17Entry.EName);
+            NodeText = string.Format("T17 ({0})",T17Entry.EName);
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "thing";
-            Node.SelectedImageKey = "thing";
+            NodeImageKey = "thing";
         }
 
         public T17Entry T17Entry { get; }

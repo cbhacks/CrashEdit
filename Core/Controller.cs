@@ -39,7 +39,7 @@ namespace CrashEdit {
             Resource.GetType().ToString();
 
         public string ImageKey =>
-            Legacy?.NodeImage ??
+            Legacy?.NodeImageKey ??
             "";
 
         public bool Dead { get; private set; }

@@ -28,24 +28,23 @@ namespace CrashEdit.CE
             switch (GOOLEntry.Version)
             {
                 case GOOLVersion.Version0:
-                    Node.Text = string.Format(CrashUI.Properties.Resources.GOOLv0EntryController_Text,GOOLEntry.EName);
+                    NodeText = string.Format(CrashUI.Properties.Resources.GOOLv0EntryController_Text,GOOLEntry.EName);
                     break;
                 case GOOLVersion.Version1:
-                    Node.Text = string.Format(CrashUI.Properties.Resources.GOOLv1EntryController_Text,GOOLEntry.EName);
+                    NodeText = string.Format(CrashUI.Properties.Resources.GOOLv1EntryController_Text,GOOLEntry.EName);
                     break;
                 case GOOLVersion.Version2:
-                    Node.Text = string.Format(CrashUI.Properties.Resources.GOOLv2EntryController_Text,GOOLEntry.EName);
+                    NodeText = string.Format(CrashUI.Properties.Resources.GOOLv2EntryController_Text,GOOLEntry.EName);
                     break;
                 case GOOLVersion.Version3:
-                    Node.Text = string.Format(CrashUI.Properties.Resources.GOOLv3EntryController_Text,GOOLEntry.EName);
+                    NodeText = string.Format(CrashUI.Properties.Resources.GOOLv3EntryController_Text,GOOLEntry.EName);
                     break;
             }
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "codeb";
-            Node.SelectedImageKey = "codeb";
+            NodeImageKey = "codeb";
         }
 
         public override bool EditorAvailable => true;

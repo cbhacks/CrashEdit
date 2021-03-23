@@ -22,13 +22,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(CrashUI.Properties.Resources.MapEntryController_Text,MapEntry.EName);
+            NodeText = string.Format(CrashUI.Properties.Resources.MapEntryController_Text,MapEntry.EName);
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "thing";
-            Node.SelectedImageKey = "thing";
+            NodeImageKey = "thing";
         }
 
         public override bool EditorAvailable => true;

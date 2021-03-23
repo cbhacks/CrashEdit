@@ -38,7 +38,7 @@ namespace CrashEdit.CE
                 newecc.EntryChunk.Entries.Add(Entry);
                 var replacement = newecc.CreateEntryController(Entry);
                 newecc.AddNode(replacement);
-                Dispose();
+                RemoveSelf();
                 return replacement;
             }
             else
@@ -60,25 +60,18 @@ namespace CrashEdit.CE
         private void Menu_Delete_Entry()
         {
             EntryChunkController.EntryChunk.Entries.Remove(Entry);
-            EntryChunkController.Editor.Invalidate();
-            Dispose();
+            EntryChunkController.NeedsNewEditor = true;
+            RemoveSelf();
         }
 
         private void Menu_Unprocess_Entry()
         {
-            var trv = Node.TreeView;
-            trv.BeginUpdate();
             int index = EntryChunkController.EntryChunk.Entries.IndexOf(Entry);
             UnprocessedEntry unprocessedentry = Entry.Unprocess();
             EntryChunkController.EntryChunk.Entries[index] = unprocessedentry;
             UnprocessedEntryController unprocessedentrycontroller = new UnprocessedEntryController(EntryChunkController,unprocessedentry);
             EntryChunkController.InsertNode(index,unprocessedentrycontroller);
-            if (Node.IsSelected)
-            {
-                trv.SelectedNode = unprocessedentrycontroller.Node;
-            }
-            Dispose();
-            trv.EndUpdate();
+            RemoveSelf();
         }
 
         private void Menu_Rename_Entry()
@@ -87,17 +80,17 @@ namespace CrashEdit.CE
             {
                 newentrywindow.Text = "Rename Entry";
                 newentrywindow.SetRenameMode(Entry.EName);
-                if (newentrywindow.ShowDialog(Node.TreeView.TopLevelControl) == DialogResult.OK)
+                if (newentrywindow.ShowDialog() == DialogResult.OK)
                 {
                     Entry.EID = newentrywindow.EID;
                     InvalidateNode();
-                    EntryChunkController.Editor.Invalidate();
-                    ContextMenu.MenuItems[0].Text = string.Format(CrashUI.Properties.Resources.EntryController_AcExport,Entry.EName);
-                    ContextMenu.MenuItems[1].Text = string.Format(CrashUI.Properties.Resources.EntryController_AcDelete,Entry.EName);
-                    ContextMenu.MenuItems[2].Text = string.Format(CrashUI.Properties.Resources.EntryController_AcRename,Entry.EName);
+                    EntryChunkController.NeedsNewEditor = true;
+                    LegacyVerbs[0]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcExport,Entry.EName);
+                    LegacyVerbs[1]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcDelete,Entry.EName);
+                    LegacyVerbs[2]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcRename,Entry.EName);
                     if (!(this is UnprocessedEntryController))
                     {
-                        ContextMenu.MenuItems[3].Text = string.Format(CrashUI.Properties.Resources.EntryController_AcDeprocess,Entry.EName);
+                        LegacyVerbs[3]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcDeprocess,Entry.EName);
                     }
                 }
             }

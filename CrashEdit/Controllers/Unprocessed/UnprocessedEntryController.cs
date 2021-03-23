@@ -14,13 +14,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(CrashUI.Properties.Resources.UnprocessedEntryController_Text,UnprocessedEntry.Type,UnprocessedEntry.EName);
+            NodeText = string.Format(CrashUI.Properties.Resources.UnprocessedEntryController_Text,UnprocessedEntry.Type,UnprocessedEntry.EName);
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "thing";
-            Node.SelectedImageKey = "thing";
+            NodeImageKey = "thing";
         }
 
         public UnprocessedEntry UnprocessedEntry { get; }
@@ -36,18 +35,11 @@ namespace CrashEdit.CE
             {
                 return;
             }
-            var trv = Node.TreeView;
-            trv.BeginUpdate();
             int index = EntryChunkController.EntryChunk.Entries.IndexOf(UnprocessedEntry);
             EntryChunkController.EntryChunk.Entries[index] = processedentry;
             EntryController processedentrycontroller = EntryChunkController.CreateEntryController(processedentry);
             EntryChunkController.InsertNode(index,processedentrycontroller);
-            if (Node.IsSelected)
-            {
-                Node.TreeView.SelectedNode = processedentrycontroller.Node;
-            }
-            Dispose();
-            trv.EndUpdate();
+            RemoveSelf();
         }
     }
 }

@@ -21,13 +21,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(ProtoAnimationEntry.NotProto ? CrashUI.Properties.Resources.OldAnimationEntryController_Text : CrashUI.Properties.Resources.ProtoAnimationEntryController_Text, ProtoAnimationEntry.EName); // fucking hell
+            NodeText = string.Format(ProtoAnimationEntry.NotProto ? CrashUI.Properties.Resources.OldAnimationEntryController_Text : CrashUI.Properties.Resources.ProtoAnimationEntryController_Text, ProtoAnimationEntry.EName); // fucking hell
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "limeb";
-            Node.SelectedImageKey = "limeb";
+            NodeImageKey = "limeb";
         }
 
         public override bool EditorAvailable => true;

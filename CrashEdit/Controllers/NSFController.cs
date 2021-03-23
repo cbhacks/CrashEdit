@@ -41,13 +41,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = CrashUI.Properties.Resources.NSFController_Text;
+            NodeText = CrashUI.Properties.Resources.NSFController_Text;
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "nsf";
-            Node.SelectedImageKey = "nsf";
+            NodeImageKey = "nsf";
         }
 
         public NSF NSF { get; }

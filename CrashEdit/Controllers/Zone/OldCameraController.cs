@@ -25,13 +25,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = CrashUI.Properties.Resources.OldCameraController_Text;
+            NodeText = CrashUI.Properties.Resources.OldCameraController_Text;
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "arrow";
-            Node.SelectedImageKey = "arrow";
+            NodeImageKey = "arrow";
         }
 
         public override bool EditorAvailable => true;
@@ -51,13 +50,13 @@ namespace CrashEdit.CE
         {
             ProtoZoneEntry.Cameras.Remove(Camera);
             ProtoZoneEntry.CameraCount = ProtoZoneEntry.Cameras.Count;
-            Dispose();
+            RemoveSelf();
         }
         
         private void Menu_DeleteOld()
         {
             OldZoneEntry.Cameras.Remove(Camera);
-            Dispose();
+            RemoveSelf();
         }
     }
 }

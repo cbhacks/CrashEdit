@@ -13,13 +13,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(CrashUI.Properties.Resources.NormalChunkController_Text,NSFController.NSF.Chunks.IndexOf(NormalChunk) * 2 + 1);
+            NodeText = string.Format(CrashUI.Properties.Resources.NormalChunkController_Text,NSFController.NSF.Chunks.IndexOf(NormalChunk) * 2 + 1);
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "yellowj";
-            Node.SelectedImageKey = "yellowj";
+            NodeImageKey = "yellowj";
         }
 
         public NormalChunk NormalChunk { get; }

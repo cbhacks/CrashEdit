@@ -20,22 +20,21 @@ namespace CrashEdit.CE
         {
             if (Entity.Name != null && Entity.ID != null)
             {
-                Node.Text = string.Format("{0} - ID {1}",Entity.Name,Entity.ID);
+                NodeText = string.Format("{0} - ID {1}",Entity.Name,Entity.ID);
             }
             else if (Entity.ID != null)
             {
-                Node.Text = string.Format("{1} ID {0}",Entity.ID,CrashUI.Properties.Resources.EntityController_Text);
+                NodeText = string.Format("{1} ID {0}",Entity.ID,CrashUI.Properties.Resources.EntityController_Text);
             }
             else
             {
-                Node.Text = CrashUI.Properties.Resources.EntityController_Text;
+                NodeText = CrashUI.Properties.Resources.EntityController_Text;
             }
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "arrow";
-            Node.SelectedImageKey = "arrow";
+            NodeImageKey = "arrow";
         }
 
         public override bool EditorAvailable => true;
@@ -172,7 +171,7 @@ namespace CrashEdit.CE
                 }
             }
             NewZoneEntry.Entities.Remove(Entity);
-            Dispose();
+            RemoveSelf();
         }
     }
 }

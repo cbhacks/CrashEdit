@@ -17,11 +17,11 @@ namespace CrashEdit.CE
         {
             if (ModelEntry.Positions == null)
             {
-                Node.Text = string.Format(CrashUI.Properties.Resources.ModelEntryController_Text,ModelEntry.EName);
+                NodeText = string.Format(CrashUI.Properties.Resources.ModelEntryController_Text,ModelEntry.EName);
             }
             else
             {
-                Node.Text = string.Format(CrashUI.Properties.Resources.ModelEntryController_Compressed_Text,ModelEntry.EName);
+                NodeText = string.Format(CrashUI.Properties.Resources.ModelEntryController_Compressed_Text,ModelEntry.EName);
             }
         }
 
@@ -29,13 +29,11 @@ namespace CrashEdit.CE
         {
             if (ModelEntry.Positions == null)
             {
-                Node.ImageKey = "crimsonb";
-                Node.SelectedImageKey = "crimsonb";
+                NodeImageKey = "crimsonb";
             }
             else
             {
-                Node.ImageKey = "redb";
-                Node.SelectedImageKey = "redb";
+                NodeImageKey = "redb";
             }
         }
 

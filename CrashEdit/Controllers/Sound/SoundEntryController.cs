@@ -14,13 +14,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(CrashUI.Properties.Resources.SoundEntryController_Text,SoundEntry.EName);
+            NodeText = string.Format(CrashUI.Properties.Resources.SoundEntryController_Text,SoundEntry.EName);
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "speaker";
-            Node.SelectedImageKey = "speaker";
+            NodeImageKey = "speaker";
         }
 
         public override bool EditorAvailable => true;

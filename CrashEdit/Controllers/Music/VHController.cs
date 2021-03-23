@@ -18,13 +18,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = "VH";
+            NodeText = "VH";
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "arrow";
-            Node.SelectedImageKey = "arrow";
+            NodeImageKey = "arrow";
         }
 
         public MusicEntryController MusicEntryController { get; }
@@ -43,7 +42,7 @@ namespace CrashEdit.CE
         private void Menu_Delete_VH()
         {
             MusicEntryController.MusicEntry.VH = null;
-            Dispose();
+            RemoveSelf();
         }
 
         private void Menu_Export_VH()

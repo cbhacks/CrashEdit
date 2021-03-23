@@ -13,13 +13,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(CrashUI.Properties.Resources.WavebankChunkController_Text,NSFController.NSF.Chunks.IndexOf(WavebankChunk) * 2 + 1);
+            NodeText = string.Format(CrashUI.Properties.Resources.WavebankChunkController_Text,NSFController.NSF.Chunks.IndexOf(WavebankChunk) * 2 + 1);
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "musicred";
-            Node.SelectedImageKey = "musicred";
+            NodeImageKey = "musicred";
         }
 
         public WavebankChunk WavebankChunk { get; }

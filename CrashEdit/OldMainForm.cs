@@ -45,8 +45,6 @@ namespace CrashEdit.CE
         private ToolStripButton tbbSave;
         private ToolStripButton tbbPatchNSD;
         private ToolStripButton tbbClose;
-        private ToolStripButton tbbFind;
-        private ToolStripButton tbbFindNext;
         private ToolStripMenuItem tbxMakeBIN;
         private ToolStripMenuItem tbxMakeBINUSA;
         private ToolStripMenuItem tbxMakeBINEUR;
@@ -102,22 +100,6 @@ namespace CrashEdit.CE
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
             tbbClose.Click += new EventHandler(tbbClose_Click);
-
-            tbbFind = new ToolStripButton
-            {
-                Text = Resources.Toolbar_Find,
-                ImageKey = "tb_find",
-                TextImageRelation = TextImageRelation.ImageAboveText
-            };
-            tbbFind.Click += new EventHandler(tbbFind_Click);
-
-            tbbFindNext = new ToolStripButton
-            {
-                Text = Resources.Toolbar_FindNext,
-                ImageKey = "tb_findnext",
-                TextImageRelation = TextImageRelation.ImageAboveText
-            };
-            tbbFindNext.Click += new EventHandler(tbbFindNext_Click);
 
             tbxMakeBIN = new ToolStripMenuItem();
             tbxMakeBIN.Text = Resources.OldMainForm_tbxMakeBIN;
@@ -179,9 +161,6 @@ namespace CrashEdit.CE
             tsToolbar.Items.Add(tbbPatchNSD);
             tsToolbar.Items.Add(tbbClose);
             tsToolbar.Items.Add(new ToolStripSeparator());
-            tsToolbar.Items.Add(tbbFind);
-            tsToolbar.Items.Add(tbbFindNext);
-            tsToolbar.Items.Add(new ToolStripSeparator());
             tsToolbar.Items.Add(tbbExtra);
             tsToolbar.Items.Add(tbbPAL);
             tsToolbar.Items.Add(new ToolStripSeparator());
@@ -227,8 +206,6 @@ namespace CrashEdit.CE
             tbbSave.Enabled =
             tbbPatchNSD.Enabled =
             tbbClose.Enabled =
-            tbbFind.Enabled =
-            tbbFindNext.Enabled =
             tbbPlay.Enabled = tab != null && tab.Tag is NSFBox;
         }
 
@@ -370,16 +347,6 @@ namespace CrashEdit.CE
             CloseNSF();
         }
 
-        void tbbFind_Click(object sender,EventArgs e)
-        {
-            Find();
-        }
-
-        void tbbFindNext_Click(object sender,EventArgs e)
-        {
-            FindNext();
-        }
-
         public void OpenNSF()
         {
             using (OpenFileDialog dialog = new OpenFileDialog())
@@ -418,7 +385,7 @@ namespace CrashEdit.CE
             {
                 Dock = DockStyle.Fill
             };
-            nsfbox.uxNew.ActiveControllerChanged += MainControl_ActiveControllerChanged;
+            nsfbox.ActiveControllerChanged += MainControl_ActiveControllerChanged;
 
             TabPage nsftab = new TabPage(filename)
             {
@@ -541,6 +508,9 @@ namespace CrashEdit.CE
                     return;
                 }
                 PatchNSD(filename,exists,nsfbox.NSFController,false);
+                nsfbox.RootController.Sync();
+                nsfbox.Sync();
+                OnResyncSuggested(EventArgs.Empty);
             }
         }
 
@@ -580,45 +550,21 @@ namespace CrashEdit.CE
                         if (!ignore_warnings) MessageBox.Show(Resources.PatchNSD_Error2, Resources.PatchNSD_Title1, MessageBoxButtons.OK);
                         return;
                 }
-                nsfc.Node.TreeView.BeginUpdate();
                 bool order_updated = false;
-                foreach (TreeNode node in nsfc.Node.Nodes) // nsd patching might have moved entries, recreate moved entry chunks if that's the case
+                foreach (var ecc in nsfc.LegacySubcontrollers.OfType<EntryChunkController>()) // nsd patching might have moved entries, recreate moved entry chunks if that's the case
                 {
-                    if (node.Tag is EntryChunkController entrychunkcontroller)
+                    for (int i = 0; i < ecc.LegacySubcontrollers.Count; i++)
                     {
-                        int i = 0;
-                        TreeNode[] nodes = new TreeNode[node.Nodes.Count];
-                        foreach (TreeNode oldnode in node.Nodes)
+                        var c = (EntryController)ecc.LegacySubcontrollers[i];
+                        if (c.Entry != ecc.EntryChunk.Entries[i])
                         {
-                            nodes[i++] = oldnode;
-                        }
-                        for (i = 0; i < nodes.Length; ++i)
-                        {
-                            EntryController c = (EntryController)nodes[i].Tag;
-                            if (c.Entry != entrychunkcontroller.EntryChunk.Entries[i])
-                            {
-                                for (i = 0; i < nodes.Length; ++i)
-                                {
-                                    if (nodes[i].IsSelected)
-                                    {
-                                        nodes[i].TreeView.SelectedNode = nodes[i].Parent;
-                                    }
-                                    if (nodes[i].Tag != null)
-                                    {
-                                        if (nodes[i].Tag is LegacyController t)
-                                        {
-                                            t.Dispose();
-                                        }
-                                    }
-                                }
-                                entrychunkcontroller.PopulateNodes();
-                                order_updated = true;
-                                break;
-                            }
+                            ecc.LegacySubcontrollers.Clear();
+                            ecc.PopulateNodes();
+                            order_updated = true;
+                            break;
                         }
                     }
                 }
-                nsfc.Node.TreeView.EndUpdate();
                 if (!no_nsf_overwrite)
                 {
                     if (ignore_warnings || Settings.Default.PatchNSDSavesNSF ? true : (order_updated && MessageBox.Show(Resources.PatchNSD3, Resources.PatchNSD_Title1, MessageBoxButtons.YesNo) == DialogResult.Yes))
@@ -816,30 +762,6 @@ namespace CrashEdit.CE
                     tbcTabs.TabPages.Remove(tab);
                     tab.Dispose();
                 }
-            }
-        }
-
-        public void Find()
-        {
-            if (tbcTabs.SelectedTab != null)
-            {
-                NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
-                using (InputWindow inputwindow = new InputWindow())
-                {
-                    if (inputwindow.ShowDialog(this) == DialogResult.OK)
-                    {
-                        nsfbox.Find(inputwindow.Input);
-                    }
-                }
-            }
-        }
-
-        public void FindNext()
-        {
-            if (tbcTabs.SelectedTab != null)
-            {
-                NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
-                nsfbox.FindNext();
             }
         }
 
@@ -1042,8 +964,5 @@ namespace CrashEdit.CE
                 configtab.Controls.Add((ConfigEditor)configtab.Tag);
             }
         }
-
-        public override IWorkspaceHost ActiveWorkspaceHost =>
-            (TabControl.SelectedTab?.Tag as NSFBox)?.uxNew;
     }
 }

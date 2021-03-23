@@ -17,13 +17,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(CrashUI.Properties.Resources.OldEntityController_Text,Entity.ID,Entity.Type,Entity.Subtype);
+            NodeText = string.Format(CrashUI.Properties.Resources.OldEntityController_Text,Entity.ID,Entity.Type,Entity.Subtype);
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "arrow";
-            Node.SelectedImageKey = "arrow";
+            NodeImageKey = "arrow";
         }
 
         public override bool EditorAvailable => true;

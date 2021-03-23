@@ -60,6 +60,8 @@ namespace CrashEdit {
 
         protected abstract Control MakeControl();
 
+        public abstract void Sync();
+
         public bool IsDisposed { get; private set; }
 
         public void Dispose() {

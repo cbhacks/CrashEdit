@@ -28,13 +28,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(CrashUI.Properties.Resources.OldMusicEntryController_Text,OldMusicEntry.EName);
+            NodeText = string.Format(CrashUI.Properties.Resources.OldMusicEntryController_Text,OldMusicEntry.EName);
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "music";
-            Node.SelectedImageKey = "music";
+            NodeImageKey = "music";
         }
 
         public OldMusicEntry OldMusicEntry { get; }

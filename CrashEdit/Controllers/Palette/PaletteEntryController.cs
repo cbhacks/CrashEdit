@@ -15,13 +15,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(CrashUI.Properties.Resources.PaletteEntryController_Text,PaletteEntry.EName);
+            NodeText = string.Format(CrashUI.Properties.Resources.PaletteEntryController_Text,PaletteEntry.EName);
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "yellowb";
-            Node.SelectedImageKey = "yellowb";
+            NodeImageKey = "yellowb";
         }
 
         public override bool EditorAvailable => Type.GetType("Mono.Runtime") == null;

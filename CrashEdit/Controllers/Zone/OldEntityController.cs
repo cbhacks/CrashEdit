@@ -27,13 +27,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(CrashUI.Properties.Resources.OldEntityController_Text,OldEntity.ID,OldEntity.Type,OldEntity.Subtype);
+            NodeText = string.Format(CrashUI.Properties.Resources.OldEntityController_Text,OldEntity.ID,OldEntity.Type,OldEntity.Subtype);
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "arrow";
-            Node.SelectedImageKey = "arrow";
+            NodeImageKey = "arrow";
         }
 
         public override bool EditorAvailable => true;
@@ -77,7 +76,7 @@ namespace CrashEdit.CE
         private void Menu_Delete()
         {
             OldZoneEntryController.OldZoneEntry.Entities.Remove(OldEntity);
-            Dispose();
+            RemoveSelf();
         }
         
         private void Menu_MapDuplicate()
@@ -109,7 +108,7 @@ namespace CrashEdit.CE
         private void Menu_MapDelete()
         {
             MapEntryController.MapEntry.Entities.Remove(OldEntity);
-            Dispose();
+            RemoveSelf();
         }
     }
 }

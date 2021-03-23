@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace CrashEdit.CE
 {
-    public sealed class NSFBox : UserControl
+    public sealed class NSFBox : MainControl
     {
         private static ImageList imglist;
 
@@ -41,229 +41,18 @@ namespace CrashEdit.CE
             }
         }
 
-        private List<TreeNode> searchresults;
-
-        private TabControl tbcLegacy;
-        private SplitContainer pnSplit;
-        private TreeView trvMain;
-        public MainControl uxNew;
-
-        public NSFBox(NSF nsf, GameVersion gameversion)
+        public NSFBox(NSF nsf, GameVersion gameversion) : base(new NSFController(nsf, gameversion).Modern)
         {
             NSF = nsf;
-            NSFController = new NSFController(nsf, gameversion);
+            NSFController = (NSFController)RootController.Legacy;
 
-            searchresults = new List<TreeNode>();
+            RootController.Sync();
+            Sync();
 
-            NSFController.Node.Expand();
-
-            trvMain = new BufferedTreeView
-            {
-                Dock = DockStyle.Fill,
-                ImageList = imglist,
-                HideSelection = false,
-                SelectedNode = NSFController.Node,
-                AllowDrop = true
-            };
-            trvMain.Nodes.Add(NSFController.Node);
-            trvMain.AfterSelect += new TreeViewEventHandler(trvMain_AfterSelect);
-            trvMain.ItemDrag += new ItemDragEventHandler(trvMain_ItemDrag);
-            trvMain.DragOver += new DragEventHandler(trvMain_DragOver);
-            trvMain.DragDrop += new DragEventHandler(trvMain_DragDrop);
-
-            uxNew = new MainControl(NSFController.Modern) {
-                Dock = DockStyle.Fill
-            };
-            uxNew.ResourceTree.ImageList = imglist;
-
-            tbcLegacy = new TabControl {
-                Dock = DockStyle.Fill
-            };
-
-            pnSplit = new SplitContainer { Dock = DockStyle.Fill };
-            pnSplit.Panel1.Controls.Add(trvMain);
-
-            var tpLegacy = new TabPage("Legacy");
-            tpLegacy.Controls.Add(pnSplit);
-            tbcLegacy.TabPages.Add(tpLegacy);
-
-            var tpNew = new TabPage("New");
-            tpNew.Controls.Add(uxNew);
-            tbcLegacy.TabPages.Add(tpNew);
-
-            tbcLegacy.Selected += (_, e) => {
-                if (e.TabPage == tpNew) {
-                    uxNew.RootController.Sync();
-                    uxNew.Sync();
-                }
-            };
-
-            Controls.Add(tbcLegacy);
+            ResourceTree.ImageList = imglist;
         }
 
         public NSF NSF { get; }
         public NSFController NSFController { get; }
-
-        private void trvMain_AfterSelect(object sender,TreeViewEventArgs e)
-        {
-            if (e.Node != null)
-            {
-                if (e.Node.Tag is LegacyController t)
-                {
-                    pnSplit.Panel2.Controls.Clear();
-                    pnSplit.Panel2.Controls.Add(t.Editor);
-                    t.Editor.Invalidate();
-                }
-            }
-        }
-
-        private void trvMain_ItemDrag(object sender,ItemDragEventArgs e)
-        {
-            DoDragDrop(e.Item,DragDropEffects.All);
-        }
-
-        private void trvMain_DragOver(object sender,DragEventArgs e)
-        {
-            if (!e.Data.GetDataPresent(typeof(TreeNode)))
-            {
-                e.Effect = DragDropEffects.None;
-                return;
-            }
-            TreeNode node = (TreeNode)e.Data.GetData(typeof(TreeNode));
-            LegacyController item = (LegacyController)node.Tag;
-            Point droppoint = trvMain.PointToClient(new Point(e.X,e.Y));
-            TreeNode dropnode = trvMain.GetNodeAt(droppoint);
-            if (dropnode == null)
-            {
-                e.Effect = DragDropEffects.None;
-                return;
-            }
-            if (node.TreeView != dropnode.TreeView)
-            {
-                e.Effect = DragDropEffects.None;
-                return;
-            }
-            LegacyController destination = (LegacyController)dropnode.Tag;
-            if (item == destination)
-            {
-                e.Effect = DragDropEffects.None;
-                return;
-            }
-            if (item.CanMoveTo(destination))
-            {
-                e.Effect = DragDropEffects.Move;
-            }
-            else
-            {
-                e.Effect = DragDropEffects.None;
-            }
-        }
-
-        private void trvMain_DragDrop(object sender,DragEventArgs e)
-        {
-            if (!e.Data.GetDataPresent(typeof(TreeNode)))
-            {
-                return;
-            }
-            TreeNode node = (TreeNode)e.Data.GetData(typeof(TreeNode));
-            LegacyController item = (LegacyController)node.Tag;
-            Point droppoint = trvMain.PointToClient(new Point(e.X,e.Y));
-            TreeNode dropnode = trvMain.GetNodeAt(droppoint);
-            if (dropnode == null)
-            {
-                return;
-            }
-            if (node.TreeView != dropnode.TreeView)
-            {
-                return;
-            }
-            LegacyController destination = (LegacyController)dropnode.Tag;
-            if (item == destination)
-            {
-                return;
-            }
-            item = (LegacyController)item.MoveTo(destination);
-            item.Node.EnsureVisible();
-            trvMain.SelectedNode = item.Node;
-        }
-
-        public void Find(string term)
-        {
-            term = term.ToUpper();
-            searchresults.Clear();
-            foreach (TreeNode node in trvMain.Nodes)
-            {
-                FindNode(term,node);
-            }
-            FindNext();
-        }
-
-        public void FindNext()
-        {
-            if (searchresults.Count > 0)
-            {
-                trvMain.SelectedNode = searchresults[0];
-                searchresults.RemoveAt(0);
-            }
-            else
-            {
-                MessageBox.Show("No results found.");
-            }
-        }
-
-        private void FindNode(string term,TreeNode node)
-        {
-            if (node.Text.ToUpper().Contains(term))
-            {
-                searchresults.Add(node);
-            }
-            foreach (TreeNode childnode in node.Nodes)
-            {
-                FindNode(term,childnode);
-            }
-        }
-
-        public void GotoEID(int eid)
-        {
-            TreeNode node = FindEID(eid,NSFController.Node);
-            if (node != null)
-            {
-                node.EnsureVisible();
-                trvMain.SelectedNode = node;
-            }
-            else
-            {
-                MessageBox.Show("No results found.");
-            }
-        }
-
-        private TreeNode FindEID(int eid,TreeNode node)
-        {
-            if (node.Tag is EntryController)
-            {
-                if (((EntryController)node.Tag).Entry.EID == eid)
-                {
-                    return node;
-                }
-            }
-            foreach (TreeNode childnode in node.Nodes)
-            {
-                TreeNode result = FindEID(eid,childnode);
-                if (result != null)
-                {
-                    return result;
-                }
-            }
-            return null;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                NSFController.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }

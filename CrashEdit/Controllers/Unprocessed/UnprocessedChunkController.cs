@@ -15,13 +15,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(CrashUI.Properties.Resources.UnprocessedChunkController_Text,UnprocessedChunk.Type,NSFController.NSF.Chunks.IndexOf(UnprocessedChunk) * 2 + 1);
+            NodeText = string.Format(CrashUI.Properties.Resources.UnprocessedChunkController_Text,UnprocessedChunk.Type,NSFController.NSF.Chunks.IndexOf(UnprocessedChunk) * 2 + 1);
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "yellowj";
-            Node.SelectedImageKey = "yellowj";
+            NodeImageKey = "yellowj";
         }
 
         public override bool EditorAvailable => true;
@@ -44,8 +43,6 @@ namespace CrashEdit.CE
             {
                 return;
             }
-            var trv = Node.TreeView;
-            trv.BeginUpdate();
             int index = NSFController.NSF.Chunks.IndexOf(UnprocessedChunk);
             NSFController.NSF.Chunks[index] = processedchunk;
             if (processedchunk is EntryChunk)
@@ -54,12 +51,7 @@ namespace CrashEdit.CE
             }
             ChunkController processedchunkcontroller = NSFController.CreateChunkController(processedchunk);
             NSFController.InsertNode(index, processedchunkcontroller);
-            if (Node.IsSelected)
-            {
-                Node.TreeView.SelectedNode = processedchunkcontroller.Node;
-            }
-            Dispose();
-            trv.EndUpdate();
+            RemoveSelf();
         }
     }
 }

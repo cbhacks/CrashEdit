@@ -18,13 +18,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(CrashUI.Properties.Resources.TextureChunkController_Text,Entry.EIDToEName(TextureChunk.EID),NSFController.NSF.Chunks.IndexOf(TextureChunk) * 2 + 1);
+            NodeText = string.Format(CrashUI.Properties.Resources.TextureChunkController_Text,Entry.EIDToEName(TextureChunk.EID),NSFController.NSF.Chunks.IndexOf(TextureChunk) * 2 + 1);
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "image";
-            Node.SelectedImageKey = "image";
+            NodeImageKey = "image";
         }
 
         public override bool EditorAvailable => Type.GetType("Mono.Runtime") == null;
@@ -58,7 +57,7 @@ namespace CrashEdit.CE
             {
                 newentrywindow.Text = "Rename Entry";
                 newentrywindow.SetRenameMode(TextureChunk.EName);
-                if (newentrywindow.ShowDialog(Node.TreeView.TopLevelControl) == DialogResult.OK)
+                if (newentrywindow.ShowDialog() == DialogResult.OK)
                 {
                     TextureChunk.EID = newentrywindow.EID;
                     InvalidateNode();
@@ -77,7 +76,7 @@ namespace CrashEdit.CE
                 {
                     frmViewer = null;
                 };
-                frmViewer.Show(Node.TreeView);
+                frmViewer.Show();
             }
             else
                 frmViewer.Select();

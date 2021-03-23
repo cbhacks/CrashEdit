@@ -37,13 +37,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(CrashUI.Properties.Resources.MusicEntryController_Text,MusicEntry.EName);
+            NodeText = string.Format(CrashUI.Properties.Resources.MusicEntryController_Text,MusicEntry.EName);
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "music";
-            Node.SelectedImageKey = "music";
+            NodeImageKey = "music";
         }
 
         public MusicEntry MusicEntry { get; }
@@ -208,7 +207,7 @@ namespace CrashEdit.CE
 
                 vhentry.VH = vh;
                 ReplaceLinkedVB(vb);
-                ((LegacyController)Node.Nodes[0].Tag).Dispose();
+                LegacySubcontrollers.RemoveAt(0);
                 InsertNode(0, new VHController(this, vh));
             }
             catch (LoadAbortedException)

@@ -19,13 +19,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = CrashUI.Properties.Resources.ItemController_Text;
+            NodeText = CrashUI.Properties.Resources.ItemController_Text;
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "arrow";
-            Node.SelectedImageKey = "arrow";
+            NodeImageKey = "arrow";
         }
 
         public override bool EditorAvailable => true;
@@ -36,7 +35,7 @@ namespace CrashEdit.CE
         }
 
         public MysteryMultiItemEntryController MysteryEntryController { get; }
-        public byte[] Item { get; private set; }
+        public byte[] Item { get; }
 
         private void Menu_Replace_Item()
         {
@@ -44,16 +43,15 @@ namespace CrashEdit.CE
             byte[] data = FileUtil.OpenFile(FileFilters.Any);
             if (data != null)
             {
-                Item = data;
                 MysteryEntryController.MysteryEntry.Items[i] = data;
-                InvalidateEditor();
+                MysteryEntryController.LegacySubcontrollers[i] = new ItemController(MysteryEntryController, data);
             }
         }
 
         private void Menu_Delete_Item()
         {
             MysteryEntryController.MysteryEntry.Items.Remove(Item);
-            Dispose();
+            RemoveSelf();
         }
     }
 }

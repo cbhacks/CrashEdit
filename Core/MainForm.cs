@@ -149,7 +149,8 @@ namespace CrashEdit {
 
         public ToolStripTextBox SearchBox { get; }
 
-        public abstract IWorkspaceHost? ActiveWorkspaceHost { get; }
+        public IWorkspaceHost? ActiveWorkspaceHost =>
+            TabControl.SelectedTab?.Tag as MainControl;
 
         public void ShowError(string msg) {
             MessageBox.Show(

@@ -15,13 +15,12 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(CrashUI.Properties.Resources.OldModelEntryController_Text,OldModelEntry.EName);
+            NodeText = string.Format(CrashUI.Properties.Resources.OldModelEntryController_Text,OldModelEntry.EName);
         }
 
         public override void InvalidateNodeImage()
         {
-            Node.ImageKey = "crimsonb";
-            Node.SelectedImageKey = "crimsonb";
+            NodeImageKey = "crimsonb";
         }
 
         public override bool EditorAvailable => true;
