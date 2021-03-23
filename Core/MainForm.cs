@@ -107,6 +107,22 @@ namespace CrashEdit {
             };
             Controls.Add(MenuStrip);
 
+            // Menubar -> File
+            FileMenu = new ToolStripMenuItem {
+                Text = "&File"
+            };
+            FileMenu.DropDown.ImageList = Embeds.ImageList;
+            MenuStrip.Items.Add(FileMenu);
+
+            // Menubar -> File -> Exit
+            var exitMenuItem = new ToolStripMenuItem {
+                Text = "&Exit"
+            };
+            exitMenuItem.Click += (sender, e) => {
+                Application.Exit();
+            };
+            FileMenu.DropDownItems.Add(exitMenuItem);
+
             // Menubar -> Edit
             EditMenu = new ToolStripMenuItem {
                 Text = "&Edit"
@@ -155,6 +171,8 @@ namespace CrashEdit {
         public TabControl TabControl { get; }
 
         public MenuStrip MenuStrip { get; }
+
+        public ToolStripMenuItem FileMenu { get; }
 
         public ToolStripMenuItem EditMenu { get; }
 
