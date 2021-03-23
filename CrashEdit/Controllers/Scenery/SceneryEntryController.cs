@@ -36,7 +36,7 @@ namespace CrashEdit.CE
             {
                 texturechunks[i] = FindEID<TextureChunk>(BitConv.FromInt32(SceneryEntry.Info,0x2C+i*4));
             }
-            return new UndockableControl(new SceneryEntryViewer(SceneryEntry,texturechunks));
+            return new SceneryEntryViewer(SceneryEntry,texturechunks);
         }
 
         public SceneryEntry SceneryEntry { get; }

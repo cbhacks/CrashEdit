@@ -40,11 +40,11 @@ namespace CrashEdit.CE
                     {
                         texturechunks[i] = FindEID<TextureChunk>(BitConv.FromInt32(modelentry.Info,0xC+i*4));
                     }
-                    return new UndockableControl(new AnimationEntryViewer(AnimationEntry.Frames,modelentry,texturechunks));
+                    return new AnimationEntryViewer(AnimationEntry.Frames,modelentry,texturechunks);
                 }
                 else
                 {
-                    return new UndockableControl(new AnimationEntryViewer(AnimationEntry.Frames,null,null));
+                    return new AnimationEntryViewer(AnimationEntry.Frames,null,null);
                 }
             }
             else

@@ -35,7 +35,7 @@ namespace CrashEdit.CE
                 {
                     texturechunks[i] = AnimationEntryController.EntryChunkController.NSFController.NSF.GetEntry<TextureChunk>(BitConv.FromInt32(modelentry.Info,0xC+i*4));
                 }
-                return new UndockableControl(new AnimationEntryViewer(Frame,modelentry,texturechunks));
+                return new AnimationEntryViewer(Frame,modelentry,texturechunks);
             }
             else
             {

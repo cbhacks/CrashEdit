@@ -55,7 +55,7 @@ namespace CrashEdit.CE
             TabPage edittab = new TabPage("Editor");
             edittab.Controls.Add(framebox);
             TabPage viewertab = new TabPage("Viewer");
-            viewertab.Controls.Add(new UndockableControl(viewerbox));
+            viewertab.Controls.Add(viewerbox);
 
             tbcTabs.TabPages.Add(viewertab);
             tbcTabs.TabPages.Add(edittab);

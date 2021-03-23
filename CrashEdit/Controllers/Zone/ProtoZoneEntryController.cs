@@ -63,7 +63,7 @@ namespace CrashEdit.CE
             {
                 linkedzoneentries[i] = FindEID<ProtoZoneEntry>(BitConv.FromInt32(ProtoZoneEntry.Header,532 + i * 4));
             }
-            return new UndockableControl(new ProtoZoneEntryViewer(ProtoZoneEntry,linkedsceneryentries,totaltexturechunks,linkedzoneentries));
+            return new ProtoZoneEntryViewer(ProtoZoneEntry,linkedsceneryentries,totaltexturechunks,linkedzoneentries);
         }
 
         public ProtoZoneEntry ProtoZoneEntry { get; }

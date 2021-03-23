@@ -34,7 +34,7 @@ namespace CrashEdit.CE
             foreach (OldModelStruct str in modelentry.Structs)
                 if (str is OldModelTexture tex && !textures.ContainsKey(tex.EID))
                     textures.Add(tex.EID,CutsceneAnimationEntryController.EntryChunkController.NSFController.NSF.GetEntry<TextureChunk>(tex.EID));
-            return new UndockableControl(new OldAnimationEntryViewer(OldFrame,true,modelentry,textures));
+            return new OldAnimationEntryViewer(OldFrame,true,modelentry,textures);
         }
 
         public ColoredAnimationEntryController CutsceneAnimationEntryController { get; }

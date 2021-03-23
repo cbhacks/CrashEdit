@@ -109,11 +109,11 @@ namespace CrashEdit.CE
                         }
                         if (frame == null)
                         {
-                            rewardcontrol = new UndockableControl(new AnimationEntryViewer(anim.Frames,modelentry,texturechunks));
+                            rewardcontrol = new AnimationEntryViewer(anim.Frames,modelentry,texturechunks);
                         }
                         else
                         {
-                            rewardcontrol = new UndockableControl(new AnimationEntryViewer(frame,modelentry,texturechunks));
+                            rewardcontrol = new AnimationEntryViewer(frame,modelentry,texturechunks);
                         }
                         if (sender != null)
                         {
@@ -132,11 +132,11 @@ namespace CrashEdit.CE
                     {
                         if (frame == null)
                         {
-                            rewardcontrol = new UndockableControl(new AnimationEntryViewer(anim.Frames,null,null));
+                            rewardcontrol = new AnimationEntryViewer(anim.Frames,null,null);
                         }
                         else
                         {
-                            rewardcontrol = new UndockableControl(new AnimationEntryViewer(frame,null,null));
+                            rewardcontrol = new AnimationEntryViewer(frame,null,null);
                         }
                     }
                     rewardcontrol.Dock = DockStyle.Fill;
