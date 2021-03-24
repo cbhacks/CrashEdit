@@ -59,6 +59,7 @@ namespace CrashEdit.CE
         internal static void Main(string[] args)
         {
             Registrar.Init();
+            Registrar.RegisterAssembly(typeof(Program).Assembly);
 
             if (Properties.Settings.Default.UpgradeSettings)
             {

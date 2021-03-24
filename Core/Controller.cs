@@ -3,22 +3,74 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace CrashEdit {
 
     public sealed class Controller {
 
-        public Controller(object resource, SubcontrollerGroup? parentGroup) {
+        public static Controller Make(object resource, SubcontrollerGroup? parentGroup) {
+            if (resource == null)
+                throw new ArgumentNullException();
+            if (parentGroup is LegacySubcontrollerGroup)
+                throw new ArgumentException();
+
+            var type = resource.GetType();
+            while (type != null) {
+                if (LegacyController.OrphanControllerTypes.TryGetValue(type, out var legacyCtlrType)) {
+                    var args = new object?[] {resource, parentGroup};
+                    var legacyCtlr = (LegacyController)Activator.CreateInstance(legacyCtlrType, args);
+                    return legacyCtlr.Modern;
+                }
+                type = type.BaseType;
+            }
+
+            return new Controller(resource, parentGroup);
+        }
+
+        private Controller(object resource, SubcontrollerGroup? parentGroup) {
             if (resource == null)
                 throw new ArgumentNullException();
 
             Resource = resource;
             ParentGroup = parentGroup;
+
+            var type = resource.GetType();
+            foreach (var property in type.GetProperties()) {
+                var attr = property
+                    .GetCustomAttributes(typeof(SubresourceAttribute), true)
+                    .SingleOrDefault();
+
+                if (attr == null) {
+                    // Not a subresource.
+                } else if (attr is SubresourceSlotAttribute slotAttr) {
+                    // Single (possibly null) subresource.
+                    SubcontrollerGroups.Add(new SlotSubcontrollerGroup(this, property, slotAttr));
+                } else {
+                    throw new NotImplementedException();
+                }
+            }
+
+            SubcontrollerGroups.Sort((x, y) => x.Order - y.Order);
         }
 
         public Controller(LegacyController legacy) : this(legacy.Resource, legacy.Parent?.Modern?.LegacyGroup) {
             if (legacy == null)
                 throw new ArgumentNullException();
+            if (legacy.Parent == null)
+                throw new ArgumentException();
+
+            Legacy = legacy;
+            LegacyGroup = new LegacySubcontrollerGroup(this);
+            SubcontrollerGroups.Add(LegacyGroup);
+        }
+
+        public Controller(LegacyController legacy, SubcontrollerGroup? parentGroup) : this(legacy.Resource, parentGroup) {
+            if (legacy == null)
+                throw new ArgumentNullException();
+            if (legacy.Parent != null)
+                throw new ArgumentException();
 
             Legacy = legacy;
             LegacyGroup = new LegacySubcontrollerGroup(this);
@@ -71,6 +123,8 @@ namespace CrashEdit {
 
     }
 
+    public abstract class SubresourceAttribute : Attribute {}
+
     public abstract class SubcontrollerGroup {
 
         public SubcontrollerGroup(Controller owner) {
@@ -85,7 +139,57 @@ namespace CrashEdit {
         public List<Controller> Members { get; } =
             new List<Controller>();
 
+        public abstract int Order { get; }
+
         public abstract void Sync();
+
+    }
+
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class SubresourceSlotAttribute : SubresourceAttribute {
+
+        public SubresourceSlotAttribute([CallerLineNumber] int order = 0) {
+            Order = order;
+        }
+
+        public int Order { get; }
+
+    }
+
+    public sealed class SlotSubcontrollerGroup : SubcontrollerGroup {
+
+        public SlotSubcontrollerGroup(Controller owner, PropertyInfo property, SubresourceSlotAttribute attr) : base(owner) {
+            if (property == null)
+                throw new ArgumentNullException();
+
+            Property = property;
+            Attribute = attr;
+            Sync();
+        }
+
+        public PropertyInfo Property { get; }
+
+        public SubresourceSlotAttribute Attribute { get; }
+
+        public override int Order => Attribute.Order;
+
+        public override void Sync() {
+            object value = Property.GetValue(Owner.Resource);
+
+            if (value == null) {
+                if (Members.Count != 0) {
+                    Members[0].Kill();
+                    Members.Clear();
+                }
+            } else if (Members.Count == 0) {
+                Members.Add(Controller.Make(value, this));
+            } else if (Members[0].Resource != value) {
+                Members[0].Kill();
+                Members[0] = Controller.Make(value, this);
+            } else {
+                Members[0].Sync();
+            }
+        }
 
     }
 
@@ -97,6 +201,8 @@ namespace CrashEdit {
 
             Sync();
         }
+
+        public override int Order => int.MaxValue;
 
         public override void Sync() {
             var missingMembers = new HashSet<Controller>(Members);

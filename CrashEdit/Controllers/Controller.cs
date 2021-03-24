@@ -11,6 +11,8 @@ namespace CrashEdit.CE
         {
         }
 
+        public LegacyController(SubcontrollerGroup parentGroup, object resource) : base(parentGroup, resource) {}
+
         public void AddNode(LegacyController controller)
         {
             if (controller.Parent != this) {

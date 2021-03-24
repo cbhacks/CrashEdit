@@ -17,6 +17,15 @@ namespace CrashEdit {
             Modern = new Controller(this);
         }
 
+        public LegacyController(SubcontrollerGroup? parentGroup, object resource) {
+            if (resource == null)
+                throw new ArgumentNullException();
+
+            Parent = null;
+            Resource = resource;
+            Modern = new Controller(this, parentGroup);
+        }
+
         public Controller Modern { get; }
 
         public LegacyController? Parent { get; }
@@ -48,6 +57,31 @@ namespace CrashEdit {
         public virtual LegacyController MoveTo(LegacyController dest) {
             throw new NotSupportedException();
         }
+
+        public static Dictionary<Type, Type> OrphanControllerTypes =
+            new Dictionary<Type, Type>();
+
+        [TypeProcessor]
+        private static void ProcessOrphanControllerType(Type type) {
+            var attrs = type.GetCustomAttributes(typeof(OrphanLegacyControllerAttribute), false);
+            foreach (OrphanLegacyControllerAttribute attr in attrs) {
+                OrphanControllerTypes.Add(attr.ResourceType, type);
+            }
+        }
+
+    }
+
+    [AttributeUsage(AttributeTargets.Class)]
+    public sealed class OrphanLegacyControllerAttribute : Attribute {
+
+        public OrphanLegacyControllerAttribute(Type resType) {
+            if (resType == null)
+                throw new ArgumentNullException();
+
+            ResourceType = resType;
+        }
+
+        public Type ResourceType { get; }
 
     }
 

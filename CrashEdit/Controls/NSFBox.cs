@@ -41,9 +41,9 @@ namespace CrashEdit.CE
             }
         }
 
-        public NSFBox(NSF nsf, GameVersion gameversion) : base(new NSFController(nsf, gameversion).Modern)
+        public NSFBox(LevelWorkspace ws) : base(Controller.Make(ws, null))
         {
-            NSF = nsf;
+            NSF = ws.NSF;
             NSFController = (NSFController)RootController.Legacy;
 
             RootController.Sync();

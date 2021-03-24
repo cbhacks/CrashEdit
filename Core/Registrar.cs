@@ -45,7 +45,7 @@ namespace CrashEdit {
             RegisterAssembly(Assembly.GetExecutingAssembly());
         }
 
-        private static void RegisterAssembly(Assembly assembly) {
+        public static void RegisterAssembly(Assembly assembly) {
             if (!RegisteredAssemblies.Add(assembly))
                 return;
 

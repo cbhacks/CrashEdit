@@ -5,12 +5,12 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(NSF))]
     public sealed class NSFController : LegacyController
     {
-        public NSFController(NSF nsf,GameVersion gameversion) : base(null, nsf)
+        public NSFController(NSF nsf,SubcontrollerGroup parentGroup) : base(parentGroup, nsf)
         {
             NSF = nsf;
-            GameVersion = gameversion;
             foreach (Chunk chunk in nsf.Chunks)
             {
                 AddNode(CreateChunkController(chunk));
@@ -50,7 +50,10 @@ namespace CrashEdit.CE
         }
 
         public NSF NSF { get; }
-        public GameVersion GameVersion { get; }
+
+        public GameVersion GameVersion =>
+            (Modern.Parent.Resource as LevelWorkspace)?.GameVersion ??
+            GameVersion.None;
 
         public ChunkController CreateChunkController(Chunk chunk)
         {

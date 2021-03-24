@@ -381,7 +381,10 @@ namespace CrashEdit.CE
 
         public void OpenNSF(string filename,NSF nsf,GameVersion gameversion)
         {
-            NSFBox nsfbox = new NSFBox(nsf, gameversion)
+            var ws = new LevelWorkspace();
+            ws.NSF = nsf;
+            ws.GameVersion = gameversion;
+            NSFBox nsfbox = new NSFBox(ws)
             {
                 Dock = DockStyle.Fill
             };
