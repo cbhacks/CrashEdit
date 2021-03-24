@@ -40,7 +40,8 @@ namespace CrashEdit.CE
         }
 
         public abstract void InvalidateNode();
-        public abstract void InvalidateNodeImage();
+
+        public virtual void InvalidateNodeImage() {}
 
         public void RemoveSelf()
         {

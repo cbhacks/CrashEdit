@@ -33,7 +33,7 @@ namespace CrashEdit.CE
 
         public override void InvalidateNodeImage()
         {
-            NodeImageKey = "music";
+            NodeImageKey = "MusicNoteBlue";
         }
 
         public OldMusicEntry OldMusicEntry { get; }

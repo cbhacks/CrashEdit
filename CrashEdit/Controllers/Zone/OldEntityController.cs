@@ -30,11 +30,6 @@ namespace CrashEdit.CE
             NodeText = string.Format(CrashUI.Properties.Resources.OldEntityController_Text,OldEntity.ID,OldEntity.Type,OldEntity.Subtype);
         }
 
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "arrow";
-        }
-
         public override bool EditorAvailable => true;
 
         public override Control CreateEditor()

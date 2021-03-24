@@ -20,11 +20,6 @@ namespace CrashEdit.CE
             NodeText = "VH";
         }
 
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "arrow";
-        }
-
         public OldMusicEntryController OldMusicEntryController { get; }
         public VH VH { get; private set; }
 

@@ -19,7 +19,7 @@ namespace CrashEdit.CE
 
         public override void InvalidateNodeImage()
         {
-            NodeImageKey = "speaker";
+            NodeImageKey = "SpeakerBlue";
         }
 
         public override bool EditorAvailable => true;

@@ -24,7 +24,7 @@ namespace CrashEdit.CE
 
         public override void InvalidateNodeImage()
         {
-            NodeImageKey = "greyb";
+            NodeImageKey = "ThingGray";
         }
 
         public SLSTEntry SLSTEntry { get; }

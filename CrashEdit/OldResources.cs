@@ -8,23 +8,8 @@ namespace CrashEdit.CE
 {
     internal static class OldResources
     {
-        [Resource("NSDIcon")]
-        private static Icon nsdicon = null;
-
-        [Resource("NSFIcon")]
-        private static Icon nsficon = null;
-
         [Resource("CBHacksIcon")]
         private static Icon cbhacksicon = null;
-
-        [Resource("ArrowImage")]
-        private static Image arrowimage = null;
-
-        [Resource("BinocularsImage")]
-        private static Image binocularsimage = null;
-
-        [Resource("BinocularsNextImage")]
-        private static Image binocularsnextimage = null;
 
         [Resource("FileImage")]
         private static Image fileimage = null;
@@ -32,38 +17,11 @@ namespace CrashEdit.CE
         [Resource("FolderImage")]
         private static Image folderimage = null;
 
-        [Resource("ImageImage")]
-        private static Image imageimage = null;
-
-        [Resource("MusicImage")]
-        private static Image musicimage = null;
-
-        [Resource("MusicRedImage")]
-        private static Image musicredimage = null;
-
-        [Resource("MusicYellowImage")]
-        private static Image musicyellowimage = null;
-
         [Resource("OpenImage")]
         private static Image openimage = null;
 
         [Resource("SaveImage")]
         private static Image saveimage = null;
-
-        [Resource("SpeakerImage")]
-        private static Image speakerimage = null;
-
-        [Resource("ThingImage")]
-        private static Image thingimage = null;
-
-        [Resource("BlueJournalImage")]
-        private static Image bluejournalimage = null;
-
-        [Resource("WhiteJournalImage")]
-        private static Image whitejournalimage = null;
-
-        [Resource("YellowJournalImage")]
-        private static Image yellowjournalimage = null;
 
         [Resource("PointTexture")]
         private static Bitmap pointtexture = null;
@@ -189,30 +147,6 @@ namespace CrashEdit.CE
         [Resource("UnknownPickupTexture")]
         private static Bitmap unknownpickuptexture = null;
 
-        [Resource("GreyBuckle")]
-        private static Image greybuckle = null;
-
-        [Resource("CodeBuckle")]
-        private static Image codebuckle = null;
-
-        [Resource("CrimsonBuckle")]
-        private static Image crimsonbuckle = null;
-
-        [Resource("LimeBuckle")]
-        private static Image limebuckle = null;
-
-        [Resource("BlueBuckle")]
-        private static Image bluebuckle = null;
-
-        [Resource("VioletBuckle")]
-        private static Image violetbuckle = null;
-
-        [Resource("RedBuckle")]
-        private static Image redbuckle = null;
-
-        [Resource("YellowBuckle")]
-        private static Image yellowbuckle = null;
-
         [Resource("UnknownPickupTexture")]
         [ExternalTexture(1,3)]
         private static Bitmap fruitlime = null;
@@ -296,25 +230,11 @@ namespace CrashEdit.CE
             }
         }
 
-        public static Icon NSDIcon => nsdicon;
-        public static Icon NSFIcon => nsficon;
         public static Icon CBHacksIcon => cbhacksicon;
-        public static Image ArrowImage => arrowimage;
-        public static Image BinocularsImage => binocularsimage;
-        public static Image BinocularsNextImage => binocularsnextimage;
         public static Image FileImage => fileimage;
         public static Image FolderImage => folderimage;
-        public static Image ImageImage => imageimage;
-        public static Image MusicImage => musicimage;
-        public static Image MusicRedImage => musicredimage;
-        public static Image MusicYellowImage => musicyellowimage;
         public static Image OpenImage => openimage;
         public static Image SaveImage => saveimage;
-        public static Image SpeakerImage => speakerimage;
-        public static Image ThingImage => thingimage;
-        public static Image BlueJournalImage => bluejournalimage;
-        public static Image WhiteJournalImage => whitejournalimage;
-        public static Image YellowJournalImage => yellowjournalimage;
         public static Bitmap AppleTexture => appletexture;
         public static Bitmap LifeTexture => lifetexture;
         public static Bitmap MaskTexture => masktexture;
@@ -347,14 +267,6 @@ namespace CrashEdit.CE
         public static Bitmap UnknownBoxTexture => unknownboxtexture;
         public static Bitmap UnknownBoxTopTexture => unknownboxtoptexture;
         public static Bitmap UnknownPickupTexture => unknownpickuptexture;
-        public static Image BlueBuckle => bluebuckle;
-        public static Image CodeBuckle => codebuckle;
-        public static Image CrimsonBuckle => crimsonbuckle;
-        public static Image GreyBuckle => greybuckle;
-        public static Image LimeBuckle => limebuckle;
-        public static Image VioletBuckle => violetbuckle;
-        public static Image RedBuckle => redbuckle;
-        public static Image YellowBuckle => yellowbuckle;
         public static Bitmap LimeTexture => fruitlime;
         public static Bitmap CoconutTexture => fruitcoconut;
         public static Bitmap StrawberryTexture => fruitstrawberry;

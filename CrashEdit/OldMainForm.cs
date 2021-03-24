@@ -31,8 +31,6 @@ namespace CrashEdit.CE
                 imglist.Images.Add("tb_save",OldResources.SaveImage);
                 imglist.Images.Add("tb_patchnsd",OldResources.SaveImage);
                 imglist.Images.Add("tb_close",OldResources.FolderImage);
-                imglist.Images.Add("tb_find",OldResources.BinocularsImage);
-                imglist.Images.Add("tb_findnext",OldResources.BinocularsNextImage);
             }
             catch
             {

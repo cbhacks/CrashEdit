@@ -18,7 +18,7 @@ namespace CrashEdit.CE
 
         public override void InvalidateNodeImage()
         {
-            NodeImageKey = "yellowj";
+            NodeImageKey = "JournalOrange";
         }
 
         public NormalChunk NormalChunk { get; }

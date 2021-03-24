@@ -118,53 +118,17 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="NSDIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources/Icons/NSD.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
-  </data>
-  <data name="NSFIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources/Icons/NSF.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
-  </data>
-  <data name="ArrowImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources/Images/Arrow.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
-  </data>
-  <data name="BinocularsImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources/Images/Binoculars.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
-  </data>
-  <data name="BinocularsNextImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources/Images/BinocularsNext.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
-  </data>
   <data name="FileImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Images/File.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
   <data name="FolderImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Images/Folder.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
-  <data name="ImageImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources/Images/Image.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
-  </data>
-  <data name="MusicImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources/Images/Music.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
-  </data>
   <data name="OpenImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Images/Open.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
   <data name="SaveImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Images/Save.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
-  </data>
-  <data name="SpeakerImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources/Images/Speaker.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
-  </data>
-  <data name="ThingImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources/Images/Thing.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
-  </data>
-  <data name="BlueJournalImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources/Images/BlueJournal.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
-  </data>
-  <data name="WhiteJournalImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources/Images/WhiteJournal.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
-  </data>
-  <data name="YellowJournalImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources/Images/YellowJournal.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
   </data>
   <data name="ActionBoxTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/ActivatorBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
@@ -237,35 +201,5 @@
   </data>
   <data name="UnknownPickupTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources/Textures/UnknownPickup.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral</value>
-  </data>
-  <data name="BlueBuckle" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\objects_012_blue.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="CodeBuckle" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\objects_012_code.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="CrimsonBuckle" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\objects_012_crimson.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="GreyBuckle" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\objects_012_gray.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="LimeBuckle" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\objects_012_lime.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="VioletBuckle" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\objects_012_violet.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="MusicRedImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\objects_006_red.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="MusicYellowImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\objects_006_yellow.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="RedBuckle" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\objects_012_red.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="YellowBuckle" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\objects_012_yellow.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

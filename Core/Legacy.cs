@@ -40,7 +40,7 @@ namespace CrashEdit {
 
         public string NodeText { get; set; } = "";
 
-        public string NodeImageKey { get; set; } = "";
+        public string? NodeImageKey { get; set; }
 
         public virtual bool EditorAvailable => false;
 

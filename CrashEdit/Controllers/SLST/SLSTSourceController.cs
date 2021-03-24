@@ -18,11 +18,6 @@ namespace CrashEdit.CE
             NodeText = "Source";
         }
 
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "arrow";
-        }
-
         public override bool EditorAvailable => true;
 
         public override Control CreateEditor()

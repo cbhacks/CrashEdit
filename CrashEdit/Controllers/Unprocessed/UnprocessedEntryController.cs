@@ -19,7 +19,7 @@ namespace CrashEdit.CE
 
         public override void InvalidateNodeImage()
         {
-            NodeImageKey = "thing";
+            NodeImageKey = "ThingOrange";
         }
 
         public UnprocessedEntry UnprocessedEntry { get; }

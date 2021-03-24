@@ -18,7 +18,7 @@ namespace CrashEdit.CE
 
         public override void InvalidateNodeImage()
         {
-            NodeImageKey = "image";
+            NodeImageKey = "Painting";
         }
 
         public ImageEntry ImageEntry { get; }

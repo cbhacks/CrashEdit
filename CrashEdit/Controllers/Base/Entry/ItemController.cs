@@ -22,11 +22,6 @@ namespace CrashEdit.CE
             NodeText = CrashUI.Properties.Resources.ItemController_Text;
         }
 
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "arrow";
-        }
-
         public override bool EditorAvailable => true;
 
         public override Control CreateEditor()

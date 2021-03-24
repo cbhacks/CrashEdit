@@ -18,7 +18,7 @@ namespace CrashEdit.CE
 
         public override void InvalidateNodeImage()
         {
-            NodeImageKey = "thing";
+            NodeImageKey = "ThingOrange";
         }
 
         public T6Entry T6Entry { get; }

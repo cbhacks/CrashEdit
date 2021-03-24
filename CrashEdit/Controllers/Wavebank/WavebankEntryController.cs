@@ -18,7 +18,7 @@ namespace CrashEdit.CE
 
         public override void InvalidateNodeImage()
         {
-            NodeImageKey = "musicyellow";
+            NodeImageKey = "MusicNoteYellow";
         }
 
         public WavebankEntry WavebankEntry { get; }

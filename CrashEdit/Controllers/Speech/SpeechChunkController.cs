@@ -18,7 +18,7 @@ namespace CrashEdit.CE
 
         public override void InvalidateNodeImage()
         {
-            NodeImageKey = "whitej";
+            NodeImageKey = "JournalWhite";
         }
 
         public SpeechChunk SpeechChunk { get; }

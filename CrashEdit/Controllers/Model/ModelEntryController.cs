@@ -29,11 +29,11 @@ namespace CrashEdit.CE
         {
             if (ModelEntry.Positions == null)
             {
-                NodeImageKey = "crimsonb";
+                NodeImageKey = "ThingCrimson";
             }
             else
             {
-                NodeImageKey = "redb";
+                NodeImageKey = "ThingRed";
             }
         }
 

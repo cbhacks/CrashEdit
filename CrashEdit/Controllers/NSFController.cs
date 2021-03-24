@@ -46,7 +46,7 @@ namespace CrashEdit.CE
 
         public override void InvalidateNodeImage()
         {
-            NodeImageKey = "nsf";
+            NodeImageKey = "File";
         }
 
         public NSF NSF { get; }

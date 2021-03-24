@@ -20,7 +20,7 @@ namespace CrashEdit.CE
 
         public override void InvalidateNodeImage()
         {
-            NodeImageKey = "yellowb";
+            NodeImageKey = "ThingYellow";
         }
 
         public override bool EditorAvailable => Type.GetType("Mono.Runtime") == null;

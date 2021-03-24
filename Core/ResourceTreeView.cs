@@ -16,6 +16,7 @@ namespace CrashEdit {
 
             Executor = executor;
             AllowDrop = true;
+            ImageList = Embeds.ImageList;
         }
 
         public IVerbExecutor Executor { get; }

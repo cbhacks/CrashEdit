@@ -22,11 +22,6 @@ namespace CrashEdit.CE
             NodeText = "SEQ";
         }
 
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "arrow";
-        }
-
         public OldMusicEntryController OldMusicEntryController { get; }
         public SEQ SEQ { get; private set; }
 

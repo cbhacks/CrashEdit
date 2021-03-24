@@ -92,7 +92,7 @@ namespace CrashEdit {
 
         public string ImageKey =>
             Legacy?.NodeImageKey ??
-            "";
+            "Arrow";
 
         public bool Dead { get; private set; }
 

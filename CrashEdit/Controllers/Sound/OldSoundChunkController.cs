@@ -18,7 +18,7 @@ namespace CrashEdit.CE
 
         public override void InvalidateNodeImage()
         {
-            NodeImageKey = "bluej";
+            NodeImageKey = "JournalBlue";
         }
 
         public OldSoundChunk OldSoundChunk { get; }
