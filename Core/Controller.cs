@@ -88,10 +88,12 @@ namespace CrashEdit {
 
         public string Text =>
             Legacy?.NodeText ??
+            (Resource as IResource)?.Title ??
             Resource.GetType().ToString();
 
         public string ImageKey =>
             Legacy?.NodeImageKey ??
+            (Resource as IResource)?.ImageKey ??
             "Arrow";
 
         public bool Dead { get; private set; }

@@ -23,6 +23,7 @@ Images and their sources are listed below. Some have been modified or adapted.
 |RecordLast     |![img](RecordLast.gif)     |Aha-Soft      |
 |RecordNext     |![img](RecordNext.gif)     |Aha-Soft      |
 |RecordPrevious |![img](RecordPrevious.gif) |Aha-Soft      |
+|Sitemap        |![img](Sitemap.png)        |FatCow        |
 |SpeakerBlue    |![img](SpeakerBlue.gif)    |Free Icons Web|
 |SpeakerWhite   |![img](SpeakerWhite.gif)   |Free Icons Web|
 |ThingBlue      |![img](ThingBlue.gif)      |Free Icons Web|
