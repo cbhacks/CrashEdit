@@ -151,7 +151,8 @@ namespace CrashEdit {
 
     public sealed class LegacyEditor : Editor {
 
-        public override string Text => "Legacy";
+        public override string Text =>
+            (Control as LegacyEditorControlWrapper)?.InnerControl?.GetType()?.Name ?? "Legacy";
 
         public override bool ApplicableForSubject(Controller subj) {
             if (subj == null)
