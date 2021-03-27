@@ -166,6 +166,8 @@ namespace CrashEdit {
                 Command = new UndockCommand(this),
                 ShortcutKeys = Keys.Control | Keys.D
             });
+
+            ExportDialog = new SaveFileDialog();
         }
 
         public TabControl TabControl { get; }
@@ -185,6 +187,8 @@ namespace CrashEdit {
         public IWorkspaceHost? ActiveWorkspaceHost =>
             TabControl.SelectedTab?.Tag as MainControl;
 
+        public SaveFileDialog ExportDialog { get; }
+
         public void ShowError(string msg) {
             MessageBox.Show(
                 this,
@@ -192,6 +196,27 @@ namespace CrashEdit {
                 "CrashEdit Error",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
+        }
+
+        public bool ShowExportDialog(out string? filename, string[] fileFilters) {
+            if (fileFilters == null)
+                throw new ArgumentNullException();
+
+            var filter = string.Join("|", fileFilters);
+            if (filter != "") {
+                filter += '|';
+            }
+            filter += "All files (*.*)|*.*";
+            ExportDialog.Filter = filter;
+            ExportDialog.FilterIndex = 1;
+
+            if (ExportDialog.ShowDialog(this) == DialogResult.OK) {
+                filename = ExportDialog.FileName;
+                return true;
+            } else {
+                filename = null;
+                return false;
+            }
         }
 
         public event EventHandler? ResyncSuggested;

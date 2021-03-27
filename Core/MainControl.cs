@@ -8,10 +8,13 @@ namespace CrashEdit {
 
     public class MainControl : UserControl, IWorkspaceHost, IVerbExecutor {
 
-        public MainControl(Controller rootController) {
+        public MainControl(IUserInterface ui, Controller rootController) {
+            if (ui == null)
+                throw new ArgumentNullException();
             if (rootController == null)
                 throw new ArgumentNullException();
 
+            Ui = ui;
             RootController = rootController;
 
             Split = new SplitContainer {
@@ -36,6 +39,8 @@ namespace CrashEdit {
             };
             Split.Panel2.Controls.Add(ResourceBox);
         }
+
+        public IUserInterface Ui { get; }
 
         public Controller RootController { get; }
 
@@ -91,7 +96,7 @@ namespace CrashEdit {
             if (verb == null)
                 throw new ArgumentNullException();
 
-            verb.Execute();
+            verb.Execute(Ui);
 
             RootController.Sync();
             Sync();

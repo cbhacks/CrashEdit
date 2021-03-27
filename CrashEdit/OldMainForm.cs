@@ -382,7 +382,7 @@ namespace CrashEdit.CE
             var ws = new LevelWorkspace();
             ws.NSF = nsf;
             ws.GameVersion = gameversion;
-            NSFBox nsfbox = new NSFBox(ws)
+            NSFBox nsfbox = new NSFBox(this, ws)
             {
                 Dock = DockStyle.Fill
             };

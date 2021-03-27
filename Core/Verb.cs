@@ -9,7 +9,9 @@ namespace CrashEdit {
 
         public abstract string Text { get; }
 
-        public abstract void Execute();
+        public virtual string ImageKey => "";
+
+        public abstract void Execute(IUserInterface ui);
 
         public virtual object Clone() {
             return MemberwiseClone();
@@ -37,6 +39,14 @@ namespace CrashEdit {
         void ExecuteVerb(Verb verb);
 
         void ExecuteVerbChoice(List<Verb> verbs);
+
+    }
+
+    public abstract class DirectVerb : Verb {
+
+        public Controller? Subject { get; set; }
+
+        public abstract bool ApplicableForSubject(Controller subj);
 
     }
 

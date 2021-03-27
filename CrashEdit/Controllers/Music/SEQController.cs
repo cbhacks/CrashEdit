@@ -11,7 +11,6 @@ namespace CrashEdit.CE
             AddMenu("Replace SEQ",Menu_Replace_SEQ);
             AddMenu("Delete SEQ",Menu_Delete_SEQ);
             AddMenuSeparator();
-            AddMenu("Export SEQ",Menu_Export_SEQ);
             AddMenu("Export SEQ as MIDI",Menu_Export_SEQ_MIDI);
             InvalidateNode();
             InvalidateNodeImage();
@@ -40,12 +39,6 @@ namespace CrashEdit.CE
         {
             MusicEntryController.MusicEntry.SEP.SEQs.Remove(SEQ);
             RemoveSelf();
-        }
-
-        private void Menu_Export_SEQ()
-        {
-            byte[] data = SEQ.Save();
-            FileUtil.SaveFile(data,FileFilters.SEQ,FileFilters.Any);
         }
 
         private void Menu_Export_SEQ_MIDI()

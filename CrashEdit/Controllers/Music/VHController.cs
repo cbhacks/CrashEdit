@@ -10,8 +10,6 @@ namespace CrashEdit.CE
             VH = vh;
             AddMenu("Replace VH",Menu_Replace_VH);
             AddMenu("Delete VH",Menu_Delete_VH);
-            AddMenuSeparator();
-            AddMenu("Export VH",Menu_Export_VH);
             InvalidateNode();
             InvalidateNodeImage();
         }
@@ -38,12 +36,6 @@ namespace CrashEdit.CE
         {
             MusicEntryController.MusicEntry.VH = null;
             RemoveSelf();
-        }
-
-        private void Menu_Export_VH()
-        {
-            byte[] data = VH.Save();
-            FileUtil.SaveFile(data,FileFilters.VH,FileFilters.Any);
         }
     }
 }

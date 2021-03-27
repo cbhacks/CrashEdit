@@ -1,6 +1,7 @@
 #nullable enable
 
 using System;
+using System.Linq;
 using System.ComponentModel;
 using System.Windows.Forms;
 
@@ -13,6 +14,7 @@ namespace CrashEdit {
                 throw new ArgumentNullException();
 
             Executor = executor;
+            ImageList = Embeds.ImageList;
         }
 
         public IVerbExecutor Executor { get; }
@@ -24,6 +26,22 @@ namespace CrashEdit {
                 e.Cancel = true;
             } else {
                 Items.Clear();
+
+                var directVerbs = Verb.AllVerbs
+                    .OfType<DirectVerb>()
+                    .Where(x => x.ApplicableForSubject(Subject))
+                    .ToList();
+                foreach (var verb in directVerbs) {
+                    var item = new ToolStripMenuItem();
+                    item.Text = verb.Text;
+                    item.ImageKey = verb.ImageKey;
+                    item.Click += (sender, e) => {
+                        var newVerb = (DirectVerb)verb.Clone();
+                        newVerb.Subject = Subject;
+                        Executor.ExecuteVerb(newVerb);
+                    };
+                    Items.Add(item);
+                }
 
                 if (Subject.Legacy != null) {
                     foreach (var legacyVerb in Subject.Legacy.LegacyVerbs) {

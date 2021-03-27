@@ -103,7 +103,10 @@ namespace CrashEdit {
 
         private Action Proc { get; }
 
-        public override void Execute() {
+        public override void Execute(IUserInterface ui) {
+            if (ui == null)
+                throw new ArgumentNullException();
+
             Proc();
         }
 
@@ -134,7 +137,9 @@ namespace CrashEdit {
             return src.Legacy.CanMoveTo(dest.Legacy);
         }
 
-        public override void Execute() {
+        public override void Execute(IUserInterface ui) {
+            if (ui == null)
+                throw new ArgumentNullException();
             if (Source == null)
                 throw new InvalidOperationException();
             if (Destination == null)

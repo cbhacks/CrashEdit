@@ -9,7 +9,6 @@ namespace CrashEdit.CE
         {
             EntryChunkController = entrychunkcontroller;
             Entry = entry;
-            AddMenu(string.Format(CrashUI.Properties.Resources.EntryController_AcExport,entry.EName),Menu_Export_Entry);
             AddMenu(string.Format(CrashUI.Properties.Resources.EntryController_AcDelete,entry.EName),Menu_Delete_Entry);
             AddMenu(string.Format(CrashUI.Properties.Resources.EntryController_AcRename,entry.EName),Menu_Rename_Entry);
             if (!(this is UnprocessedEntryController))
@@ -52,11 +51,6 @@ namespace CrashEdit.CE
             return EntryChunkController.NSFController.NSF.GetEntry<T>(eid);
         }
 
-        private void Menu_Export_Entry()
-        {
-            FileUtil.SaveFile(Entry.Save(),FileFilters.NSEntry,FileFilters.Any);
-        }
-
         private void Menu_Delete_Entry()
         {
             EntryChunkController.EntryChunk.Entries.Remove(Entry);
@@ -85,12 +79,11 @@ namespace CrashEdit.CE
                     Entry.EID = newentrywindow.EID;
                     InvalidateNode();
                     EntryChunkController.NeedsNewEditor = true;
-                    LegacyVerbs[0]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcExport,Entry.EName);
-                    LegacyVerbs[1]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcDelete,Entry.EName);
-                    LegacyVerbs[2]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcRename,Entry.EName);
+                    LegacyVerbs[0]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcDelete,Entry.EName);
+                    LegacyVerbs[1]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcRename,Entry.EName);
                     if (!(this is UnprocessedEntryController))
                     {
-                        LegacyVerbs[3]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcDeprocess,Entry.EName);
+                        LegacyVerbs[2]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcDeprocess,Entry.EName);
                     }
                 }
             }

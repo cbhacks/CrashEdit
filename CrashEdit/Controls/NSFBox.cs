@@ -7,7 +7,7 @@ namespace CrashEdit.CE
 {
     public sealed class NSFBox : MainControl
     {
-        public NSFBox(LevelWorkspace ws) : base(Controller.Make(ws, null))
+        public NSFBox(IUserInterface ui, LevelWorkspace ws) : base(ui, Controller.Make(ws, null))
         {
             NSF = ws.NSF;
             NSFController = (NSFController)RootController.Legacy;
