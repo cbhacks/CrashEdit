@@ -119,6 +119,7 @@ namespace CrashEdit {
                 ActivePanelUndockForm = new Form() {
                     Text = ActiveController!.Text,
                     Icon = Embeds.GetIcon(ActiveController.ImageKey),
+                    ClientSize = ActivePanel.Size,
                     Tag = ActivePanel
                 };
                 ActivePanelUndockForm.FormClosing += UndockForm_FormClosing;
