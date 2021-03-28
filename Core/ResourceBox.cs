@@ -117,7 +117,8 @@ namespace CrashEdit {
             if (ActivePanelUndockForm == null) {
                 // Create the new undock form.
                 ActivePanelUndockForm = new Form() {
-                    Text = "Undocked Editor",
+                    Text = ActiveController!.Text,
+                    Icon = Embeds.GetIcon(ActiveController.ImageKey),
                     Tag = ActivePanel
                 };
                 ActivePanelUndockForm.FormClosing += UndockForm_FormClosing;
@@ -192,6 +193,14 @@ namespace CrashEdit {
                 Controls.Remove(panel);
                 AllPanels.Remove(ctlr);
                 panel.Dispose();
+            }
+
+            // Update undock form titlebars and icons.
+            foreach (var kvp in UndockForms) {
+                var ctlr = kvp.Key.Controller;
+                var form = kvp.Value;
+                form.Text = ctlr.Text;
+                form.Icon = Embeds.GetIcon(ctlr.ImageKey);
             }
         }
 
