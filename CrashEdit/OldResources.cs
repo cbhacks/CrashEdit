@@ -11,18 +11,6 @@ namespace CrashEdit.CE
         [Resource("CBHacksIcon")]
         private static Icon cbhacksicon = null;
 
-        [Resource("FileImage")]
-        private static Image fileimage = null;
-
-        [Resource("FolderImage")]
-        private static Image folderimage = null;
-
-        [Resource("OpenImage")]
-        private static Image openimage = null;
-
-        [Resource("SaveImage")]
-        private static Image saveimage = null;
-
         [Resource("PointTexture")]
         private static Bitmap pointtexture = null;
 
@@ -231,10 +219,6 @@ namespace CrashEdit.CE
         }
 
         public static Icon CBHacksIcon => cbhacksicon;
-        public static Image FileImage => fileimage;
-        public static Image FolderImage => folderimage;
-        public static Image OpenImage => openimage;
-        public static Image SaveImage => saveimage;
         public static Bitmap AppleTexture => appletexture;
         public static Bitmap LifeTexture => lifetexture;
         public static Bitmap MaskTexture => masktexture;

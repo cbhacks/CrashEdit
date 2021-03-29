@@ -19,26 +19,6 @@ namespace CrashEdit.CE
 {
     public sealed class OldMainForm : MainForm
     {
-        private static ImageList imglist;
-
-        static OldMainForm()
-        {
-            imglist = new ImageList { ColorDepth = ColorDepth.Depth32Bit };
-            try
-            {
-                imglist.Images.Add("default",OldResources.FileImage);
-                imglist.Images.Add("tb_open",OldResources.OpenImage);
-                imglist.Images.Add("tb_save",OldResources.SaveImage);
-                imglist.Images.Add("tb_patchnsd",OldResources.SaveImage);
-                imglist.Images.Add("tb_close",OldResources.FolderImage);
-            }
-            catch
-            {
-                imglist.Images.Clear();
-            }
-        }
-
-        private ToolStrip tsToolbar;
         private ToolStripButton tbbOpen;
         private ToolStripButton tbbSave;
         private ToolStripButton tbbPatchNSD;
@@ -49,7 +29,7 @@ namespace CrashEdit.CE
         private ToolStripMenuItem tbxMakeBINJAP;
         private ToolStripMenuItem tbxConvertVHVB;
         private ToolStripMenuItem tbxConvertVAB;
-        private ToolStripDropDownButton tbbExtra;
+        private ToolStripMenuItem tbbExtra;
         private ToolStripButton tbbPlay;
         private TabControl tbcTabs;
         private GameVersionForm dlgGameVersion;
@@ -70,7 +50,8 @@ namespace CrashEdit.CE
             tbbOpen = new ToolStripButton
             {
                 Text = Resources.Toolbar_Open,
-                ImageKey = "tb_open",
+                ImageKey = "FolderOpen",
+                DisplayStyle = ToolStripItemDisplayStyle.Image,
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
             tbbOpen.Click += new EventHandler(tbbOpen_Click);
@@ -78,7 +59,8 @@ namespace CrashEdit.CE
             tbbSave = new ToolStripButton
             {
                 Text = Resources.Toolbar_Save,
-                ImageKey = "tb_save",
+                ImageKey = "Floppy",
+                DisplayStyle = ToolStripItemDisplayStyle.Image,
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
             tbbSave.Click += new EventHandler(tbbSave_Click);
@@ -86,7 +68,8 @@ namespace CrashEdit.CE
             tbbPatchNSD = new ToolStripButton
             {
                 Text = Resources.Toolbar_PatchNSD,
-                ImageKey = "tb_patchnsd",
+                ImageKey = "Floppy",
+                DisplayStyle = ToolStripItemDisplayStyle.Image,
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
             tbbPatchNSD.Click += new EventHandler(tbbPatchNSD_Click);
@@ -94,7 +77,8 @@ namespace CrashEdit.CE
             tbbClose = new ToolStripButton
             {
                 Text = Resources.Toolbar_Close,
-                ImageKey = "tb_close",
+                ImageKey = "Folder",
+                DisplayStyle = ToolStripItemDisplayStyle.Image,
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
             tbbClose.Click += new EventHandler(tbbClose_Click);
@@ -123,9 +107,8 @@ namespace CrashEdit.CE
             tbxConvertVAB.Text = Resources.OldMainForm_tbxConvertVAB;
             tbxConvertVAB.Click += new EventHandler(tbxConvertVAB_Click);
 
-            tbbExtra = new ToolStripDropDownButton();
+            tbbExtra = new ToolStripMenuItem();
             tbbExtra.Text = Resources.OldMainForm_tbbExtra;
-            tbbExtra.DropDown = new ToolStripDropDown { LayoutStyle = ToolStripLayoutStyle.VerticalStackWithOverflow };
             tbbExtra.DropDown.Items.Add(tbxMakeBIN);
             tbbExtra.DropDown.Items.Add(tbxMakeBINUSA);
             tbbExtra.DropDown.Items.Add(tbxMakeBINEUR);
@@ -150,19 +133,17 @@ namespace CrashEdit.CE
             };
             tbbPlay.Click += new EventHandler(tbbPlay_Click);
 
-            tsToolbar = new ToolStrip
-            {
-                ImageList = imglist
-            };
-            tsToolbar.Items.Add(tbbOpen);
-            tsToolbar.Items.Add(tbbSave);
-            tsToolbar.Items.Add(tbbPatchNSD);
-            tsToolbar.Items.Add(tbbClose);
-            tsToolbar.Items.Add(new ToolStripSeparator());
-            tsToolbar.Items.Add(tbbExtra);
-            tsToolbar.Items.Add(tbbPAL);
-            tsToolbar.Items.Add(new ToolStripSeparator());
-            tsToolbar.Items.Add(tbbPlay);
+            ToolStrip.Items.Insert(0, tbbOpen);
+            ToolStrip.Items.Insert(1, tbbSave);
+            ToolStrip.Items.Insert(2, new ToolStripSeparator());
+            ToolStrip.Items.Insert(3, tbbPatchNSD);
+            ToolStrip.Items.Insert(4, new ToolStripSeparator());
+            ToolStrip.Items.Insert(5, tbbClose);
+            ToolStrip.Items.Insert(6, new ToolStripSeparator());
+            ToolStrip.Items.Insert(7, tbbPAL);
+            ToolStrip.Items.Insert(8, tbbPlay);
+            ToolStrip.Items.Insert(9, new ToolStripSeparator());
+            MenuStrip.Items.Add(tbbExtra);
 
             tbcTabs = TabControl;
             tbcTabs.SelectedIndexChanged += tbcTabs_SelectedIndexChanged;
@@ -193,7 +174,6 @@ namespace CrashEdit.CE
             Width = Settings.Default.DefaultFormW;
             Height = Settings.Default.DefaultFormH;
             Text = $"CrashEdit v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
-            Controls.Add(tsToolbar);
 
             dlgMakeBINFile.Filter = "Playstation Disc Images (*.bin)|*.bin";
         }
