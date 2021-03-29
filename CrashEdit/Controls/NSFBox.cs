@@ -14,6 +14,8 @@ namespace CrashEdit.CE
 
             RootController.Sync();
             Sync();
+
+            ResourceTree.Nodes[1].Expand();
         }
 
         public NSF NSF { get; }
