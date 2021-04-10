@@ -16,7 +16,11 @@ namespace Crash
             {
                 for (int j = 0; j < 256; ++j)
                 {
-                    if (colorTable[j] == i) colorTableInverse[i] = (byte)j;
+                    if (colorTable[j] == i)
+                    {
+                        colorTableInverse[i] = (byte)j;
+                        break;
+                    }
                 }
             }
         }
