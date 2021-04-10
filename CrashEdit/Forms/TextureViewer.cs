@@ -107,39 +107,39 @@ namespace CrashEdit
             Bitmap bitmap = new Bitmap(pw + 64, ph + 64, PixelFormat.Format32bppArgb); // we give the image some buffer space for the selection graphic
             Rectangle brect = new Rectangle(Point.Empty, bitmap.Size);
             BitmapData bdata = bitmap.LockBits(brect, ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-            short[] palette = null;
+            int[] palette = null;
             int colormode = TexColorMode;
+            int blendmode = TexBlendMode;
             if (colormode == 0)
             {
                 int clutx = TexCX;
                 int cluty = TexCY;
-                palette = new short[16];
+                palette = new int[16];
                 for (int x = 0; x < 16; ++x)
                 {
-                    palette[x] = BitConv.FromInt16(chunk.Data, cluty * 512 + (clutx * 16 + x) * 2);
+                    palette[x] = PixelConv.Convert5551_8888(BitConv.FromInt16(chunk.Data, cluty * 512 + (clutx * 16 + x) * 2), blendmode);
                 }
             }
             else if (colormode == 1)
             {
                 int cluty = TexCY;
-                palette = new short[256];
+                palette = new int[256];
                 for (int x = 0; x < 256; ++x)
                 {
-                    palette[x] = BitConv.FromInt16(chunk.Data, cluty * 512 + x * 2);
+                    palette[x] = PixelConv.Convert5551_8888(BitConv.FromInt16(chunk.Data, cluty * 512 + x * 2), blendmode);
                 }
             }
-            int blendmode = TexBlendMode;
             try
             {
                 for (int y = 0; y < ph; y++)
                 {
                     for (int x = 0; x < pw; x++)
                     {
-                        short color = colormode == 0 ? palette[chunk.Data[x / 2 + y * 512] >> ((x & 1) == 0 ? 0 : 4) & 0xF] :
-                                      colormode == 1 ? palette[chunk.Data[x + y * 512]] :
-                                      colormode == 2 ? BitConv.FromInt16(chunk.Data, x * 2 + y * 512)
-                                      : (short)0;
-                        System.Runtime.InteropServices.Marshal.WriteInt32(bdata.Scan0, x * 4 + y * bdata.Stride, PixelConv.Convert5551_8888(color, blendmode));
+                        int pixel = colormode == 0 ? palette[chunk.Data[x / 2 + y * 512] >> ((x & 1) == 0 ? 0 : 4) & 0xF] :
+                                    colormode == 1 ? palette[chunk.Data[x + y * 512]] :
+                                    colormode == 2 ? PixelConv.Convert5551_8888(BitConv.FromInt16(chunk.Data, x * 2 + y * 512), blendmode)
+                                    : throw new Exception("invalid colormode");
+                        System.Runtime.InteropServices.Marshal.WriteInt32(bdata.Scan0, x * 4 + y * bdata.Stride, pixel);
                     }
                 }
             }
