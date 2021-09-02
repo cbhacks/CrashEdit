@@ -1,7 +1,7 @@
 Images and their sources are listed below. Some have been modified or adapted.
 
 | Name          | Image                     | Source       |
-|===============|===========================|==============|
+| ------------- | ------------------------- | ------------ |
 |Anchor         |![img](Anchor.gif)         |Aha-Soft      |
 |Arrow          |![img](Arrow.gif)          |Free Icons Web|
 |File           |![img](File.gif)           |Free Icons Web|
