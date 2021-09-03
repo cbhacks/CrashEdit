@@ -46,7 +46,7 @@ namespace CrashEdit {
                     // Not a subresource.
                 } else if (attr is SubresourceSlotAttribute slotAttr) {
                     // Single (possibly null) subresource.
-                    SubcontrollerGroups.Add(new SlotSubcontrollerGroup(this, property, slotAttr));
+                    SubcontrollerGroups.Add(new SubcontrollerSlotGroup(this, property, slotAttr));
                 } else {
                     throw new NotImplementedException();
                 }
@@ -158,9 +158,9 @@ namespace CrashEdit {
 
     }
 
-    public sealed class SlotSubcontrollerGroup : SubcontrollerGroup {
+    public sealed class SubcontrollerSlotGroup : SubcontrollerGroup {
 
-        public SlotSubcontrollerGroup(Controller owner, PropertyInfo property, SubresourceSlotAttribute attr) : base(owner) {
+        public SubcontrollerSlotGroup(Controller owner, PropertyInfo property, SubresourceSlotAttribute attr) : base(owner) {
             if (property == null)
                 throw new ArgumentNullException();
 
