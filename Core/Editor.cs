@@ -76,7 +76,7 @@ namespace CrashEdit {
         public static List<Editor> AllEditors { get; } =
             new List<Editor>();
 
-        [TypeProcessor]
+        [Registrar.TypeProcessor]
         private static void ProcessEditorType(Type type) {
             if (!typeof(Editor).IsAssignableFrom(type))
                 return;

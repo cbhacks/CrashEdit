@@ -6,15 +6,6 @@ using System.Reflection;
 
 namespace CrashEdit {
 
-    [AttributeUsage(AttributeTargets.Method)]
-    public sealed class AssemblyProcessorAttribute : Attribute {}
-
-    [AttributeUsage(AttributeTargets.Method)]
-    public sealed class TypeProcessorAttribute : Attribute {}
-
-    [AttributeUsage(AttributeTargets.Method)]
-    public sealed class FunctionProcessorAttribute : Attribute {}
-
     public static class Registrar {
 
         private static HashSet<Assembly> RegisteredAssemblies { get; } =
@@ -25,6 +16,15 @@ namespace CrashEdit {
 
         private static HashSet<MethodInfo> RegisteredFunctions { get; } =
             new HashSet<MethodInfo>();
+
+        [AttributeUsage(AttributeTargets.Method)]
+        public sealed class AssemblyProcessorAttribute : Attribute {}
+
+        [AttributeUsage(AttributeTargets.Method)]
+        public sealed class TypeProcessorAttribute : Attribute {}
+
+        [AttributeUsage(AttributeTargets.Method)]
+        public sealed class FunctionProcessorAttribute : Attribute {}
 
         private delegate void AssemblyProcessor(Assembly assembly);
 

@@ -61,7 +61,7 @@ namespace CrashEdit {
         public static Dictionary<Type, Type> OrphanControllerTypes =
             new Dictionary<Type, Type>();
 
-        [TypeProcessor]
+        [Registrar.TypeProcessor]
         private static void ProcessOrphanControllerType(Type type) {
             var attrs = type.GetCustomAttributes(typeof(OrphanLegacyControllerAttribute), false);
             foreach (OrphanLegacyControllerAttribute attr in attrs) {

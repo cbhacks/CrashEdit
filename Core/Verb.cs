@@ -20,7 +20,7 @@ namespace CrashEdit {
         public static List<Verb> AllVerbs { get; } =
             new List<Verb>();
 
-        [TypeProcessor]
+        [Registrar.TypeProcessor]
         private static void ProcessVerbType(Type type) {
             if (!typeof(Verb).IsAssignableFrom(type))
                 return;

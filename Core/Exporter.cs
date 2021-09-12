@@ -16,7 +16,7 @@ namespace CrashEdit {
         public static List<Exporter> AllExporters { get; } =
             new List<Exporter>();
 
-        [TypeProcessor]
+        [Registrar.TypeProcessor]
         private static void ProcessExporterType(Type type) {
             if (!typeof(Exporter).IsAssignableFrom(type))
                 return;
