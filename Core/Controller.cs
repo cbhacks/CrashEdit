@@ -3,8 +3,6 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace CrashEdit {
 
@@ -123,110 +121,6 @@ namespace CrashEdit {
                 subctlrGroup.Sync();
             }
         }
-
-    }
-
-    public abstract class SubresourceAttribute : Attribute {}
-
-    public abstract class SubcontrollerGroup {
-
-        public SubcontrollerGroup(Controller owner) {
-            if (owner == null)
-                throw new ArgumentNullException();
-
-            Owner = owner;
-        }
-
-        public Controller Owner { get; }
-
-        public List<Controller> Members { get; } =
-            new List<Controller>();
-
-        public abstract int Order { get; }
-
-        public abstract void Sync();
-
-        public abstract string MakeTextForMember(Controller ctlr);
-
-    }
-
-    [AttributeUsage(AttributeTargets.Property)]
-    public sealed class SubresourceSlotAttribute : SubresourceAttribute {
-
-        public SubresourceSlotAttribute([CallerLineNumber] int order = 0) {
-            Order = order;
-        }
-
-        public int Order { get; }
-
-    }
-
-    public sealed class SubcontrollerSlotGroup : SubcontrollerGroup {
-
-        public SubcontrollerSlotGroup(Controller owner, PropertyInfo property, SubresourceSlotAttribute attr) : base(owner) {
-            if (property == null)
-                throw new ArgumentNullException();
-
-            Property = property;
-            Attribute = attr;
-            Sync();
-        }
-
-        public PropertyInfo Property { get; }
-
-        public SubresourceSlotAttribute Attribute { get; }
-
-        public override int Order => Attribute.Order;
-
-        public override void Sync() {
-            object value = Property.GetValue(Owner.Resource);
-
-            if (value == null) {
-                if (Members.Count != 0) {
-                    Members[0].Kill();
-                    Members.Clear();
-                }
-            } else if (Members.Count == 0) {
-                Members.Add(Controller.Make(value, this));
-            } else if (Members[0].Resource != value) {
-                Members[0].Kill();
-                Members[0] = Controller.Make(value, this);
-            } else {
-                Members[0].Sync();
-            }
-        }
-
-        public override string MakeTextForMember(Controller ctlr) => Property.Name;
-
-    }
-
-    public sealed class LegacySubcontrollerGroup : SubcontrollerGroup {
-
-        public LegacySubcontrollerGroup(Controller owner) : base(owner) {
-            if (owner.Legacy == null)
-                throw new Exception();
-
-            Sync();
-        }
-
-        public override int Order => int.MaxValue;
-
-        public override void Sync() {
-            var missingMembers = new HashSet<Controller>(Members);
-            Members.Clear();
-            Members.AddRange(Owner.Legacy!.LegacySubcontrollers.Select(x => x.Modern));
-
-            foreach (var subctlr in Members) {
-                subctlr.Sync();
-                missingMembers.Remove(subctlr);
-            }
-
-            foreach (var subctlr in missingMembers) {
-                subctlr.Kill();
-            }
-        }
-
-        public override string MakeTextForMember(Controller ctlr) => "?";
 
     }
 

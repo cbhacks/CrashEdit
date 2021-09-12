@@ -34,32 +34,4 @@ namespace CrashEdit {
 
     }
 
-    public interface IVerbExecutor {
-
-        void ExecuteVerb(Verb verb);
-
-        void ExecuteVerbChoice(List<Verb> verbs);
-
-    }
-
-    public abstract class DirectVerb : Verb {
-
-        public Controller? Subject { get; set; }
-
-        public abstract bool ApplicableForSubject(Controller subj);
-
-    }
-
-    public abstract class TransitiveVerb : Verb {
-
-        public Controller? Source { get; set; }
-
-        public Controller? Destination { get; set; }
-
-        public abstract bool ApplicableForSource(Controller src);
-
-        public abstract bool ApplicableForTransit(Controller src, Controller dest);
-
-    }
-
 }
