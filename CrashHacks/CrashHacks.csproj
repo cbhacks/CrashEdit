@@ -47,10 +47,7 @@
   </Target>
   -->
   <ItemGroup>
-    <Reference Include="DiscUtils, Version=0.10.0.0, Culture=neutral, PublicKeyToken=60a04f11f1df810d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DiscUtils.dll</HintPath>
-    </Reference>
+    <PackageReference Include="DiscUtils.Iso9660" Version="0.16.4" />
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
