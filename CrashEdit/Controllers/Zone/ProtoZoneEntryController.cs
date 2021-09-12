@@ -11,8 +11,6 @@ namespace CrashEdit.CE
             : base(entrychunkcontroller,zoneentry)
         {
             ProtoZoneEntry = zoneentry;
-            AddNode(new ItemController(this,zoneentry.Header));
-            AddNode(new ItemController(this,zoneentry.Layout));
             foreach (OldCamera camera in zoneentry.Cameras)
             {
                 AddNode(new OldCameraController(this,camera));

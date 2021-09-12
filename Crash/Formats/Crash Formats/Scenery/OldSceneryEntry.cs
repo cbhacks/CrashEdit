@@ -22,6 +22,8 @@ namespace CrashEdit.Crash
 
         public override int Type => 3;
         public byte[] Info { get; }
+
+        [SubresourceSlot]
         public byte[] ExtraData { get; }
 
         public int XOffset

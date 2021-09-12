@@ -14,8 +14,13 @@ namespace CrashEdit.Crash
         }
 
         public override int Type => 17;
+
+        [SubresourceSlot]
         public byte[] Header { get; }
+
+        [SubresourceSlot]
         public byte[] Layout { get; }
+
         public IList<OldEntity> Entities => entities;
 
         public override UnprocessedEntry Unprocess()

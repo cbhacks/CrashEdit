@@ -14,8 +14,13 @@ namespace CrashEdit.Crash
         }
 
         public override int Type => 7;
+
+        [SubresourceSlot]
         public byte[] Header { get; }
+
+        [SubresourceSlot]
         public byte[] Layout { get; }
+
         public IList<Entity> Entities => entities;
 
         public int InfoCount

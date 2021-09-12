@@ -9,8 +9,6 @@ namespace CrashEdit.CE
         public MapEntryController(EntryChunkController entrychunkcontroller,MapEntry mapentry) : base(entrychunkcontroller,mapentry)
         {
             MapEntry = mapentry;
-            AddNode(new ItemController(this,mapentry.Header));
-            AddNode(new ItemController(this,mapentry.Layout));
             foreach (OldEntity entity in mapentry.Entities)
             {
                 AddNode(new OldEntityController(this,entity));

@@ -8,10 +8,6 @@ namespace CrashEdit.CE
         public OldSceneryEntryController(EntryChunkController entrychunkcontroller,OldSceneryEntry oldsceneryentry) : base(entrychunkcontroller,oldsceneryentry)
         {
             OldSceneryEntry = oldsceneryentry;
-            if (oldsceneryentry.ExtraData != null)
-            {
-                AddNode(new ItemController(this,oldsceneryentry.ExtraData));
-            }
             AddMenuSeparator();
             AddMenu("Export as OBJ",Menu_Export_OBJ);
             AddMenu("Export as COLLADA",Menu_Export_COLLADA);

@@ -89,6 +89,7 @@ namespace CrashEdit {
         public string Text =>
             Legacy?.NodeText ??
             (Resource as IResource)?.Title ??
+            ParentGroup?.MakeTextForMember(this) ??
             Resource.GetType().ToString();
 
         public string ImageKey =>
@@ -145,6 +146,8 @@ namespace CrashEdit {
 
         public abstract void Sync();
 
+        public abstract string MakeTextForMember(Controller ctlr);
+
     }
 
     [AttributeUsage(AttributeTargets.Property)]
@@ -193,6 +196,8 @@ namespace CrashEdit {
             }
         }
 
+        public override string MakeTextForMember(Controller ctlr) => Property.Name;
+
     }
 
     public sealed class LegacySubcontrollerGroup : SubcontrollerGroup {
@@ -220,6 +225,8 @@ namespace CrashEdit {
                 subctlr.Kill();
             }
         }
+
+        public override string MakeTextForMember(Controller ctlr) => "?";
 
     }
 
