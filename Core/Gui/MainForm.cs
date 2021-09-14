@@ -167,6 +167,7 @@ namespace CrashEdit {
                 ShortcutKeys = Keys.Control | Keys.D
             });
 
+            ImportDialog = new OpenFileDialog();
             ExportDialog = new SaveFileDialog();
         }
 
@@ -187,6 +188,8 @@ namespace CrashEdit {
         public IWorkspaceHost? ActiveWorkspaceHost =>
             TabControl.SelectedTab?.Tag as MainControl;
 
+        public OpenFileDialog ImportDialog { get; }
+
         public SaveFileDialog ExportDialog { get; }
 
         public void ShowError(string msg) {
@@ -196,6 +199,27 @@ namespace CrashEdit {
                 "CrashEdit Error",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
+        }
+
+        public bool ShowImportDialog(out string? filename, string[] fileFilters) {
+            if (fileFilters == null)
+                throw new ArgumentNullException();
+
+            var filter = string.Join("|", fileFilters);
+            if (filter != "") {
+                filter += '|';
+            }
+            filter += "All files (*.*)|*.*";
+            ImportDialog.Filter = filter;
+            ImportDialog.FilterIndex = 1;
+
+            if (ImportDialog.ShowDialog(this) == DialogResult.OK) {
+                filename = ImportDialog.FileName;
+                return true;
+            } else {
+                filename = null;
+                return false;
+            }
         }
 
         public bool ShowExportDialog(out string? filename, string[] fileFilters) {

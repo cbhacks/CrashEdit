@@ -16,10 +16,10 @@ namespace CrashEdit.Crash
         public override int Type => 17;
 
         [SubresourceSlot]
-        public byte[] Header { get; }
+        public byte[] Header { get; set; }
 
         [SubresourceSlot]
-        public byte[] Layout { get; }
+        public byte[] Layout { get; set; }
 
         public IList<OldEntity> Entities => entities;
 

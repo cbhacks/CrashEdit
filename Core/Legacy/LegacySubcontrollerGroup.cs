@@ -17,6 +17,8 @@ namespace CrashEdit {
 
         public override int Order => int.MaxValue;
 
+        public override Type ResourceType => throw new NotImplementedException();
+
         public override void Sync() {
             var missingMembers = new HashSet<Controller>(Members);
             Members.Clear();

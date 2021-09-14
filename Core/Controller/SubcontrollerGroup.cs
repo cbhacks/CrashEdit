@@ -21,9 +21,15 @@ namespace CrashEdit {
 
         public abstract int Order { get; }
 
+        public abstract Type ResourceType { get; }
+
         public virtual bool CanRemove => false;
 
         public virtual void Remove(Controller subctlr) => throw new NotImplementedException();
+
+        public virtual bool CanReplace => false;
+
+        public virtual void Replace(Controller subctlr, object newRes) => throw new NotImplementedException();
 
         public abstract void Sync();
 

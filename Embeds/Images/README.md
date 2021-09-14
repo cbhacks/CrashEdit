@@ -6,6 +6,7 @@ Images and their sources are listed below. Some have been modified or adapted.
 |Arrow          |![img](Arrow.gif)          |Free Icons Web|
 |Erase          |![img](Erase.gif)          |Aha-Soft      |
 |File           |![img](File.gif)           |Free Icons Web|
+|Fire           |![img](Fire.png)           |FatCow        |
 |Floppy         |![img](Floppy.gif)         |Free Icons Web|
 |Folder         |![img](Folder.gif)         |Free Icons Web|
 |FolderOpen     |![img](FolderOpen.gif)     |Free Icons Web|

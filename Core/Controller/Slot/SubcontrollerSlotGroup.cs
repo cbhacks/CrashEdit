@@ -22,6 +22,8 @@ namespace CrashEdit {
 
         public override int Order => Attribute.Order;
 
+        public override Type ResourceType => Property.PropertyType;
+
         public bool CanSet => Property.SetMethod?.IsPublic ?? false;
 
         public bool CanSetNull => CanSet && Attribute.AllowNull;
@@ -37,6 +39,21 @@ namespace CrashEdit {
                 throw new Exception();
 
             Property.SetValue(Owner.Resource, null);
+        }
+
+        public override bool CanReplace => CanSet && Property.GetValue(Owner.Resource) != null;
+
+        public override void Replace(Controller subctlr, object newRes) {
+            if (subctlr == null)
+                throw new ArgumentNullException();
+            if (newRes == null)
+                throw new ArgumentNullException();
+            if (!CanReplace)
+                throw new InvalidOperationException();
+            if (Members.Count == 0 || Members[0] != subctlr)
+                throw new Exception();
+
+            Property.SetValue(Owner.Resource, newRes);
         }
 
         public override void Sync() {
