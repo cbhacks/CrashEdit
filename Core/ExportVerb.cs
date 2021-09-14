@@ -8,7 +8,7 @@ namespace CrashEdit {
 
     public sealed class ExportVerb : DirectVerb {
 
-        public override string Text => "Export";
+        public override string Text => "Export to file...";
 
         public override string ImageKey => "Floppy";
 
