@@ -4,6 +4,7 @@ Images and their sources are listed below. Some have been modified or adapted.
 | ------------- | ------------------------- | ------------ |
 |Anchor         |![img](Anchor.gif)         |Aha-Soft      |
 |Arrow          |![img](Arrow.gif)          |Free Icons Web|
+|Erase          |![img](Erase.gif)          |Aha-Soft      |
 |File           |![img](File.gif)           |Free Icons Web|
 |Floppy         |![img](Floppy.gif)         |Free Icons Web|
 |Folder         |![img](Folder.gif)         |Free Icons Web|

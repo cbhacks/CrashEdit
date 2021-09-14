@@ -14,6 +14,8 @@ namespace CrashEdit {
 
         public int Order { get; }
 
+        public bool AllowNull { get; set; }
+
     }
 
 }

@@ -21,6 +21,10 @@ namespace CrashEdit {
 
         public abstract int Order { get; }
 
+        public virtual bool CanRemove => false;
+
+        public virtual void Remove(Controller subctlr) => throw new NotImplementedException();
+
         public abstract void Sync();
 
         public abstract string MakeTextForMember(Controller ctlr);
