@@ -21,7 +21,13 @@ namespace CrashEdit {
 
         public abstract int Order { get; }
 
+        public abstract string Text { get; }
+
         public abstract Type ResourceType { get; }
+
+        public virtual bool CanAdd => false;
+
+        public virtual void Add(object res) => throw new NotImplementedException();
 
         public virtual bool CanRemove => false;
 

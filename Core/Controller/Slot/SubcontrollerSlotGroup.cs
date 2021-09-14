@@ -22,11 +22,24 @@ namespace CrashEdit {
 
         public override int Order => Attribute.Order;
 
+        public override string Text => Property.Name;
+
         public override Type ResourceType => Property.PropertyType;
 
         public bool CanSet => Property.SetMethod?.IsPublic ?? false;
 
         public bool CanSetNull => CanSet && Attribute.AllowNull;
+
+        public override bool CanAdd => CanSet && Property.GetValue(Owner.Resource) == null;
+
+        public override void Add(object res) {
+            if (res == null)
+                throw new ArgumentNullException();
+            if (!CanAdd)
+                throw new InvalidOperationException();
+
+            Property.SetValue(Owner.Resource, res);
+        }
 
         public override bool CanRemove => CanSetNull && Property.GetValue(Owner.Resource) != null;
 

@@ -17,6 +17,8 @@ namespace CrashEdit {
 
         public override int Order => int.MaxValue;
 
+        public override string Text => throw new NotImplementedException();
+
         public override Type ResourceType => throw new NotImplementedException();
 
         public override void Sync() {
