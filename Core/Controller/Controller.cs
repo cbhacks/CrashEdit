@@ -45,6 +45,9 @@ namespace CrashEdit {
                 } else if (attr is SubresourceSlotAttribute slotAttr) {
                     // Single (possibly null) subresource.
                     SubcontrollerGroups.Add(new SubcontrollerSlotGroup(this, property, slotAttr));
+                } else if (attr is SubresourceListAttribute listAttr) {
+                    // List of zero or more subresources.
+                    SubcontrollerGroups.Add(new SubcontrollerListGroup(this, property, listAttr));
                 } else {
                     throw new NotImplementedException();
                 }

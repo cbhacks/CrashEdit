@@ -14,6 +14,7 @@ namespace CrashEdit.Crash
             this.items = new List<byte[]>(items);
         }
 
+        [SubresourceList]
         public IList<byte[]> Items => items;
 
         public override UnprocessedEntry Unprocess()
