@@ -165,7 +165,6 @@
     <Compile Include="Controllers\Sound\SoundEntryController.cs" />
     <Compile Include="Controllers\Sound\OldSoundChunkController.cs" />
     <Compile Include="Controllers\Unprocessed\UnprocessedChunkController.cs" />
-    <Compile Include="Controllers\Base\Entry\ItemController.cs" />
     <Compile Include="Controllers\Zone\EntityController.cs" />
     <Compile Include="Controllers\Zone\NewZoneEntryController.cs" />
     <Compile Include="Controllers\Zone\ZoneEntryController.cs" />
