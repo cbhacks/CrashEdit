@@ -27,7 +27,10 @@ namespace CrashEdit.Crash
         public int VB4EID { get; }
         public int VB5EID { get; }
         public int VB6EID { get; }
+
+        [SubresourceSlot(AllowNull = true)]
         public VH VH { get; set; }
+
         public SEP SEP { get; }
 
         // FIXME? - resaving of unused instrument metadata causes mismatches in

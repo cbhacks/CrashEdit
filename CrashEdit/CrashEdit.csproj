@@ -148,7 +148,6 @@
     <Compile Include="Controllers\SLST\SLSTSourceController.cs" />
     <Compile Include="Controllers\Texture\TextureChunkController.cs" />
     <Compile Include="Controllers\Music\OldSEQController.cs" />
-    <Compile Include="Controllers\Music\OldVHController.cs" />
     <Compile Include="Controllers\Music\OldMusicEntryController.cs" />
     <Compile Include="Controllers\Palette\PaletteEntryController.cs" />
     <Compile Include="Controllers\T6\T6EntryController.cs" />
@@ -170,7 +169,6 @@
     <Compile Include="Controllers\Zone\ZoneEntryController.cs" />
     <Compile Include="Controllers\Unprocessed\UnprocessedEntryController.cs" />
     <Compile Include="Controllers\SLST\SLSTEntryController.cs" />
-    <Compile Include="Controllers\Music\VHController.cs" />
     <Compile Include="Controllers\Demo\DemoEntryController.cs" />
     <Compile Include="Controllers\T15\T15EntryController.cs" />
     <Compile Include="Controllers\T21\T21EntryController.cs" />

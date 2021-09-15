@@ -10,16 +10,11 @@ namespace CrashEdit.CE
         public MusicEntryController(EntryChunkController entrychunkcontroller,MusicEntry musicentry) : base(entrychunkcontroller,musicentry)
         {
             MusicEntry = musicentry;
-            if (musicentry.VH != null)
-            {
-                AddNode(new VHController(this,musicentry.VH));
-            }
             foreach (SEQ seq in musicentry.SEP.SEQs)
             {
                 AddNode(new SEQController(this,seq));
             }
             AddMenuSeparator();
-            AddMenu("Import VH",Menu_Import_VH);
             AddMenu("Import SEQ",Menu_Import_SEQ);
             AddMenuSeparator();
             AddMenu("Export SEP",Menu_Export_SEP);
@@ -93,21 +88,6 @@ namespace CrashEdit.CE
             VH vh = FindLinkedVH();
             SampleLine[] vb = FindLinkedVB();
             return VAB.Join(vh,vb);
-        }
-
-        private void Menu_Import_VH()
-        {
-            if (MusicEntry.VH != null)
-            {
-                throw new GUIException("This music entry already contains a VH file.");
-            }
-            byte[] data = FileUtil.OpenFile(FileFilters.VH,FileFilters.VAB,FileFilters.Any);
-            if (data != null)
-            {
-                VH vh = VH.Load(data);
-                MusicEntry.VH = vh;
-                InsertNode(0,new VHController(this,vh));
-            }
         }
 
         private void Menu_Import_SEQ()
@@ -200,15 +180,8 @@ namespace CrashEdit.CE
                     throw new GUIException("The linked music entry was found but does not contain a VH file.");
                 }
 
-                if (vhentry != MusicEntry)
-                {
-                    throw new GUIException("This operation can only be done on the Music Entry which contains its own VH file.");
-                }
-
                 vhentry.VH = vh;
                 ReplaceLinkedVB(vb);
-                LegacySubcontrollers.RemoveAt(0);
-                InsertNode(0, new VHController(this, vh));
             }
             catch (LoadAbortedException)
             {

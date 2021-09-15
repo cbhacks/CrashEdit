@@ -26,6 +26,7 @@ namespace CrashEdit.Crash
         // various game versions
         public override bool IgnoreResaveErrors => true;
 
+        [SubresourceSlot]
         public VH VH
         {
             get => vh;

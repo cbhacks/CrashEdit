@@ -9,7 +9,6 @@ namespace CrashEdit.CE
         public OldMusicEntryController(EntryChunkController entrychunkcontroller,OldMusicEntry oldmusicentry) : base(entrychunkcontroller,oldmusicentry)
         {
             OldMusicEntry = oldmusicentry;
-            AddNode(new OldVHController(this,oldmusicentry.VH));
             foreach (SEQ seq in oldmusicentry.SEP.SEQs)
             {
                 AddNode(new OldSEQController(this,seq));
