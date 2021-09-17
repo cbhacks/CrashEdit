@@ -1,6 +1,7 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CrashEdit {
@@ -240,6 +241,24 @@ namespace CrashEdit {
             } else {
                 filename = null;
                 return false;
+            }
+        }
+
+        public UserChoice? ShowChoiceDialog(string msg, IEnumerable<UserChoice> choices) {
+            if (msg == null)
+                throw new ArgumentNullException();
+            if (choices == null)
+                throw new ArgumentNullException();
+
+            using (var dialog = new ChoiceDialog()) {
+                dialog.MessageText = msg;
+                dialog.AddChoices(choices);
+                var result = dialog.ShowDialog(this);
+                if (result == DialogResult.OK) {
+                    return dialog.SelectedChoice;
+                } else {
+                    return null;
+                }
             }
         }
 

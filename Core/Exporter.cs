@@ -9,6 +9,8 @@ namespace CrashEdit {
 
         public abstract Type ResourceType { get; }
 
+        public abstract string Text { get; }
+
         public abstract bool Export(IUserInterface ui, out ReadOnlySpan<byte> buf, object res);
 
         public virtual string[] FileFilters => new string[0];

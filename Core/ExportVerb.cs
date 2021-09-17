@@ -35,8 +35,23 @@ namespace CrashEdit {
             if (exporters.Count == 0)
                 throw new InvalidOperationException();
 
-            var exporter = exporters[0];
-            // TODO - multiple choices?
+            Exporter exporter;
+            if (exporters.Count == 1) {
+                exporter = exporters[0];
+            } else {
+                var choices = exporters.Select(
+                    x => new UserChoice {
+                        Text = x.Text,
+                        ImageKey = "Floppy",
+                        Tag = x,
+                    });
+
+                var choice = ui.ShowChoiceDialog("Choose an export format.", choices);
+                if (choice == null) {
+                    return;
+                }
+                exporter = (Exporter)choice.Tag!;
+            }
 
             // Convert the resource to raw data for export.
             if (!exporter.Export(ui, out var buf, Subject.Resource)) {

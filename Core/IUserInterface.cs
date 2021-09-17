@@ -1,6 +1,7 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 
 namespace CrashEdit {
 
@@ -11,6 +12,8 @@ namespace CrashEdit {
         bool ShowImportDialog(out string? filename, string[] fileFilters);
 
         bool ShowExportDialog(out string? filename, string[] fileFilters);
+
+        UserChoice? ShowChoiceDialog(string msg, IEnumerable<UserChoice> choices);
 
     }
 

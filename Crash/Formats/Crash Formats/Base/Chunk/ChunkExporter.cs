@@ -6,6 +6,8 @@ namespace CrashEdit.Crash {
 
     public sealed class ChunkExporter : Exporter<Chunk> {
 
+        public override string Text => "Crash Bandicoot NSF chunk (page)";
+
         public override string[] FileFilters => new string[] {
             "nschunk files (*.nschunk)|*.nschunk;*.NSCHUNK"
         };

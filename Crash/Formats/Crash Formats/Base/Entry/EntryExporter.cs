@@ -6,6 +6,8 @@ namespace CrashEdit.Crash {
 
     public sealed class EntryExporter : Exporter<Entry> {
 
+        public override string Text => "Crash Bandicoot NSF entry";
+
         public override string[] FileFilters => new string[] {
             "nsentry files (*.nsentry)|*.nsentry;*.NSENTRY"
         };

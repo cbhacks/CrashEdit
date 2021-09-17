@@ -6,6 +6,8 @@ namespace CrashEdit.Crash {
 
     public sealed class SeqExporter : Exporter<SEQ> {
 
+        public override string Text => "PlayStation SEQ";
+
         public override string[] FileFilters => new string[] {
             "PlayStation SEQ files (*.seq)|*.seq;*.SEQ"
         };
