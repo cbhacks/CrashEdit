@@ -13,10 +13,9 @@ namespace CrashEdit.CE
             AddMenu("Duplicate Entity",Menu_Duplicate);
             AddMenu("Delete Entity",Menu_Delete);
             InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
+        public void InvalidateNode()
         {
             if (Entity.Name != null && Entity.ID != null)
             {

@@ -40,10 +40,6 @@ namespace CrashEdit.CE
             // FIXME
         }
 
-        public virtual void InvalidateNode() {}
-
-        public virtual void InvalidateNodeImage() {}
-
         public void RemoveSelf()
         {
             Parent?.LegacySubcontrollers?.Remove(this);

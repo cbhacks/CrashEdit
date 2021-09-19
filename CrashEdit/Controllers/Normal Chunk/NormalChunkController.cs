@@ -11,12 +11,12 @@ namespace CrashEdit.CE
             InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
+        public void InvalidateNode()
         {
             NodeText = string.Format(CrashUI.Properties.Resources.NormalChunkController_Text,NSFController.NSF.Chunks.IndexOf(NormalChunk) * 2 + 1);
         }
 
-        public override void InvalidateNodeImage()
+        public void InvalidateNodeImage()
         {
             NodeImageKey = "JournalOrange";
         }

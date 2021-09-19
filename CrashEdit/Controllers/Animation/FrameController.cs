@@ -10,10 +10,9 @@ namespace CrashEdit.CE
             AnimationEntryController = animationentrycontroller;
             Frame = frame;
             InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
+        public void InvalidateNode()
         {
             NodeText = CrashUI.Properties.Resources.FrameController_Text;
         }

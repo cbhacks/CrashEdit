@@ -10,7 +10,6 @@ namespace CrashEdit.CE
             ProtoZoneEntryController = protozoneentrycontroller;
             Camera = camera;
             AddMenu("Delete Camera",Menu_DeleteProto);
-            InvalidateNodeImage();
             InvalidateNode();
         }
 
@@ -20,10 +19,9 @@ namespace CrashEdit.CE
             Camera = camera;
             AddMenu("Delete Camera",Menu_DeleteOld);
             InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
+        public void InvalidateNode()
         {
             NodeText = CrashUI.Properties.Resources.OldCameraController_Text;
         }

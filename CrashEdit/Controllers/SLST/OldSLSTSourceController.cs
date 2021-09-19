@@ -10,10 +10,9 @@ namespace CrashEdit.CE
             OldSLSTEntryController = oldslstentrycontroller;
             OldSLSTSource = oldslstsource;
             InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
+        public void InvalidateNode()
         {
             NodeText = "Source";
         }

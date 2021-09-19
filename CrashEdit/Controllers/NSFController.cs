@@ -39,12 +39,12 @@ namespace CrashEdit.CE
             InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
+        public void InvalidateNode()
         {
             NodeText = CrashUI.Properties.Resources.NSFController_Text;
         }
 
-        public override void InvalidateNodeImage()
+        public void InvalidateNodeImage()
         {
             NodeImageKey = "File";
         }

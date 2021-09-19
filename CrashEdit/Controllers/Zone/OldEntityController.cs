@@ -12,7 +12,6 @@ namespace CrashEdit.CE
             AddMenu("Duplicate Entity",Menu_Duplicate);
             AddMenu("Delete Entity",Menu_Delete);
             InvalidateNode();
-            InvalidateNodeImage();
         }
 
         public OldEntityController(MapEntryController oldt17entrycontroller, OldEntity entity) : base(oldt17entrycontroller, entity)
@@ -22,10 +21,9 @@ namespace CrashEdit.CE
             AddMenu("Duplicate Entity",Menu_MapDuplicate);
             AddMenu("Delete Entity",Menu_MapDelete);
             InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
+        public void InvalidateNode()
         {
             NodeText = string.Format(CrashUI.Properties.Resources.OldEntityController_Text,OldEntity.ID,OldEntity.Type,OldEntity.Subtype);
         }

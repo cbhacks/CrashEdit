@@ -16,12 +16,12 @@ namespace CrashEdit.CE
             InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
+        public void InvalidateNode()
         {
             NodeText = string.Format(CrashUI.Properties.Resources.TextureChunkController_Text,Entry.EIDToEName(TextureChunk.EID),NSFController.NSF.Chunks.IndexOf(TextureChunk) * 2 + 1);
         }
 
-        public override void InvalidateNodeImage()
+        public void InvalidateNodeImage()
         {
             NodeImageKey = "Painting";
         }

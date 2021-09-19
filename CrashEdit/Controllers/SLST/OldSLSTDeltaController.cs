@@ -10,10 +10,9 @@ namespace CrashEdit.CE
             OldSLSTEntryController = oldslstentrycontroller;
             OldSLSTDelta = oldslstdelta;
             InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
+        public void InvalidateNode()
         {
             NodeText = "Delta";
         }

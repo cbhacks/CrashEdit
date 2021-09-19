@@ -174,7 +174,11 @@ namespace CrashEdit.CE
 
         private void InvalidateNodes()
         {
-            controller.InvalidateNode();
+            if (controller is EntityController c) {
+                c.InvalidateNode();
+            } else if (controller is NewEntityController nc) {
+                nc.InvalidateNode();
+            }
         }
 
         internal string MakeArgAsText()
