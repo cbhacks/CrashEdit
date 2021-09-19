@@ -20,18 +20,6 @@ namespace CrashEdit.CE
             }
             AddMenu("Add Camera",Menu_AddCamera);
             AddMenu("Add Entity",Menu_AddEntity);
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            NodeText = string.Format(CrashUI.Properties.Resources.OldZoneEntryController_Text,OldZoneEntry.EName);
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "ThingViolet";
         }
 
         public override bool EditorAvailable => true;

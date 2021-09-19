@@ -11,6 +11,9 @@ namespace CrashEdit.Crash
             this.frames = new List<OldFrame>(frames);
         }
 
+        public override string Title => $"Old Animation ({EName})";
+        public override string ImageKey => "ThingLime";
+
         public override int Type => 1;
         public IList<OldFrame> Frames => frames;
 

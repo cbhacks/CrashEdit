@@ -19,6 +19,9 @@ namespace CrashEdit.Crash
             VH = vh;
         }
 
+        public override string Title => $"Music ({EName})";
+        public override string ImageKey => "MusicNoteBlue";
+
         public override int Type => 13;
         public int VHEID { get; }
         public int VB0EID { get; }

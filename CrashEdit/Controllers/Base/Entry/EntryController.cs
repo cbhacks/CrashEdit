@@ -77,7 +77,6 @@ namespace CrashEdit.CE
                 if (newentrywindow.ShowDialog() == DialogResult.OK)
                 {
                     Entry.EID = newentrywindow.EID;
-                    InvalidateNode();
                     EntryChunkController.NeedsNewEditor = true;
                     LegacyVerbs[0]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcDelete,Entry.EName);
                     LegacyVerbs[1]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcRename,Entry.EName);

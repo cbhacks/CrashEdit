@@ -17,34 +17,8 @@ namespace CrashEdit.CE
                     ext_gool.ParentGOOL = goolentry;
                 }
             }
-            InvalidateNode();
-            InvalidateNodeImage();
             //if (GOOLEntry.Version == GOOLVersion.Version0)
             //    AddMenu("Export as Crash 1 GOOL", Menu_ExportAsC1);
-        }
-
-        public override void InvalidateNode()
-        {
-            switch (GOOLEntry.Version)
-            {
-                case GOOLVersion.Version0:
-                    NodeText = string.Format(CrashUI.Properties.Resources.GOOLv0EntryController_Text,GOOLEntry.EName);
-                    break;
-                case GOOLVersion.Version1:
-                    NodeText = string.Format(CrashUI.Properties.Resources.GOOLv1EntryController_Text,GOOLEntry.EName);
-                    break;
-                case GOOLVersion.Version2:
-                    NodeText = string.Format(CrashUI.Properties.Resources.GOOLv2EntryController_Text,GOOLEntry.EName);
-                    break;
-                case GOOLVersion.Version3:
-                    NodeText = string.Format(CrashUI.Properties.Resources.GOOLv3EntryController_Text,GOOLEntry.EName);
-                    break;
-            }
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "ThingCode";
         }
 
         public override bool EditorAvailable => true;

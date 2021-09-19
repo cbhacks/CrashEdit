@@ -110,6 +110,16 @@ namespace CrashEdit.Crash
             Anims = anims;
         }
 
+        public override string Title => Version switch {
+            GOOLVersion.Version0 => $"Prototype GOOL ({EName})",
+            GOOLVersion.Version1 => $"GOOL ({EName})",
+            GOOLVersion.Version2 => $"GOOLv2 ({EName})",
+            GOOLVersion.Version3 => $"GOOLv3 ({EName})",
+            _ => $"GOOL ({EName})",
+        };
+
+        public override string ImageKey => "ThingCode";
+
         public override int Type => 11;
 
         public GOOLVersion Version { get; }

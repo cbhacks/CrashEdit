@@ -12,6 +12,9 @@ namespace CrashEdit.Crash
             Samples = samples ?? throw new ArgumentNullException("samples");
         }
 
+        public override string Title => $"Wavebank ({EName})";
+        public override string ImageKey => "MusicNoteYellow";
+
         public override int Type => 14;
         public int ID { get; }
         public SampleSet Samples { get; }

@@ -9,18 +9,6 @@ namespace CrashEdit.CE
         public OldModelEntryController(EntryChunkController entrychunkcontroller,OldModelEntry oldmodelentry) : base(entrychunkcontroller,oldmodelentry)
         {
             OldModelEntry = oldmodelentry;
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            NodeText = string.Format(CrashUI.Properties.Resources.OldModelEntryController_Text,OldModelEntry.EName);
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "ThingCrimson";
         }
 
         public override bool EditorAvailable => true;

@@ -8,18 +8,6 @@ namespace CrashEdit.CE
         public SpeechEntryController(EntryChunkController entrychunkcontroller,SpeechEntry speechentry) : base(entrychunkcontroller,speechentry)
         {
             SpeechEntry = speechentry;
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            NodeText = string.Format(CrashUI.Properties.Resources.SpeechEntryController_Text,SpeechEntry.EName);
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "SpeakerWhite";
         }
 
         public override bool EditorAvailable => true;

@@ -18,18 +18,6 @@ namespace CrashEdit.CE
             AddMenuSeparator();
             AddMenu("Replace Linked VB",Menu_Replace_Linked_VB);
             AddMenu("Replace Linked VAB",Menu_Replace_Linked_VAB);
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            NodeText = string.Format(CrashUI.Properties.Resources.MusicEntryController_Text,MusicEntry.EName);
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "MusicNoteBlue";
         }
 
         public MusicEntry MusicEntry { get; }

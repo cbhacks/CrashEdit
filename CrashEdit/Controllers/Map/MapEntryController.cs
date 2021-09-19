@@ -14,18 +14,6 @@ namespace CrashEdit.CE
                 AddNode(new OldEntityController(this,entity));
             }
             AddMenu("Add Entity",Menu_AddEntity);
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            NodeText = string.Format(CrashUI.Properties.Resources.MapEntryController_Text,MapEntry.EName);
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "ThingOrange";
         }
 
         public override bool EditorAvailable => true;

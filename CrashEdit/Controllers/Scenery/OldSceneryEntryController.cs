@@ -11,18 +11,6 @@ namespace CrashEdit.CE
             AddMenuSeparator();
             AddMenu("Export as OBJ",Menu_Export_OBJ);
             AddMenu("Export as COLLADA",Menu_Export_COLLADA);
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            NodeText = string.Format(CrashUI.Properties.Resources.OldSceneryEntryController_Text,OldSceneryEntry.EName);
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "ThingBlue";
         }
 
         public override bool EditorAvailable => true;

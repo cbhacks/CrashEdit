@@ -12,6 +12,13 @@ namespace CrashEdit.Crash
             NotProto = notproto;
         }
 
+        public override string Title =>
+            NotProto ?
+            $"Old Animation ({EName})" :
+            $"Prototype Animation ({EName})";
+
+        public override string ImageKey => "ThingLime";
+
         public override int Type => 1;
         public IList<OldFrame> Frames => frames;
 

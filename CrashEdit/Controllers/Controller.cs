@@ -40,7 +40,7 @@ namespace CrashEdit.CE
             // FIXME
         }
 
-        public abstract void InvalidateNode();
+        public virtual void InvalidateNode() {}
 
         public virtual void InvalidateNodeImage() {}
 

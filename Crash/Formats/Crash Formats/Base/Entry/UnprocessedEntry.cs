@@ -11,6 +11,9 @@ namespace CrashEdit.Crash
             this.type = type;
         }
 
+        public override string Title => $"Unprocessed T{Type} ({EName})";
+        public override string ImageKey => "ThingOrange";
+
         public override int Type => type;
         public int HeaderLength => 20 + Items.Count * 4;
 

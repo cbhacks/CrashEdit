@@ -159,6 +159,16 @@ namespace CrashEdit.Crash
             }
         }
 
+        public override string Title =>
+            (Positions == null) ?
+            $"Model ({EName})" :
+            $"Compressed Model ({EName})";
+
+        public override string ImageKey =>
+            (Positions == null) ?
+            "ThingCrimson" :
+            "ThingRed";
+
         public override int Type => 2;
         public byte[] Info { get; }
         public uint[] PolyData { get; }

@@ -13,18 +13,6 @@ namespace CrashEdit.CE
             AddMenu("Export as OBJ",Menu_Export_OBJ);
             AddMenu("Export as COLLADA",Menu_Export_COLLADA);
             AddMenu("Export as Crash 1 WGEO", Menu_ExportAsC1);
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            NodeText = string.Format(CrashUI.Properties.Resources.ProtoSceneryEntryController_Text,ProtoSceneryEntry.EName);
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "ThingBlue";
         }
 
         public override bool EditorAvailable => true;

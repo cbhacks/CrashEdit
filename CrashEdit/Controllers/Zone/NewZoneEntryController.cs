@@ -14,18 +14,6 @@ namespace CrashEdit.CE
                 AddNode(new NewEntityController(this,entity));
             }
             AddMenu(CrashUI.Properties.Resources.ZoneEntryController_AcAddEntity,Menu_AddEntity);
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            NodeText = string.Format("Zone ({0})",NewZoneEntry.EName);
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "ThingViolet";
         }
 
         public override bool EditorAvailable => true;

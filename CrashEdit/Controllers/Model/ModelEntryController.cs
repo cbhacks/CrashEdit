@@ -9,32 +9,6 @@ namespace CrashEdit.CE
         public ModelEntryController(EntryChunkController entrychunkcontroller,ModelEntry modelentry) : base(entrychunkcontroller,modelentry)
         {
             ModelEntry = modelentry;
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            if (ModelEntry.Positions == null)
-            {
-                NodeText = string.Format(CrashUI.Properties.Resources.ModelEntryController_Text,ModelEntry.EName);
-            }
-            else
-            {
-                NodeText = string.Format(CrashUI.Properties.Resources.ModelEntryController_Compressed_Text,ModelEntry.EName);
-            }
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            if (ModelEntry.Positions == null)
-            {
-                NodeImageKey = "ThingCrimson";
-            }
-            else
-            {
-                NodeImageKey = "ThingRed";
-            }
         }
 
         public override bool EditorAvailable => true;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace CrashEdit.Crash
 {
-    public abstract class Entry : IEntry
+    public abstract class Entry : IEntry, IResource
     {
         public const int Magic = 0x100FFFF;
         public const int NullEID = 0x6396347F;
@@ -127,6 +127,9 @@ namespace CrashEdit.Crash
         {
             EID = eid;
         }
+
+        public abstract string Title { get; }
+        public abstract string ImageKey { get; }
 
         public abstract int Type { get; }
         public int EID { get; set; }

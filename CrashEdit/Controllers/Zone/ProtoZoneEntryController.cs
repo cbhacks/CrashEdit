@@ -20,18 +20,6 @@ namespace CrashEdit.CE
                 AddNode(new ProtoEntityController(this,entity));
             }
             AddMenu("Export as Crash 1 ZDAT", Menu_ExportAsC1);
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            NodeText = string.Format(CrashUI.Properties.Resources.ProtoZoneEntryController_Text,ProtoZoneEntry.EName);
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "ThingViolet";
         }
 
         public override bool EditorAvailable => true;

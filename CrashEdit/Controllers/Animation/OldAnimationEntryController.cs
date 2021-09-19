@@ -13,18 +13,6 @@ namespace CrashEdit.CE
             {
                 AddNode(new OldFrameController(this,frame));
             }
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            NodeText = string.Format(CrashUI.Properties.Resources.OldAnimationEntryController_Text,OldAnimationEntry.EName);
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "ThingLime";
         }
 
         public override bool EditorAvailable => true;

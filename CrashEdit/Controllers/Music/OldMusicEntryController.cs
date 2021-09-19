@@ -13,18 +13,6 @@ namespace CrashEdit.CE
             AddMenu("Export Linked VB",Menu_Export_Linked_VB);
             AddMenu("Export Linked VAB",Menu_Export_Linked_VAB);
             AddMenu("Export Linked VAB as DLS",Menu_Export_Linked_VAB_DLS);
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            NodeText = string.Format(CrashUI.Properties.Resources.OldMusicEntryController_Text,OldMusicEntry.EName);
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "MusicNoteBlue";
         }
 
         public OldMusicEntry OldMusicEntry { get; }

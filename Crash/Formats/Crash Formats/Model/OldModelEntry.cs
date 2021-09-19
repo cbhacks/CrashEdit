@@ -17,6 +17,9 @@ namespace CrashEdit.Crash
             this.structs = new List<OldModelStruct>(structs);
         }
 
+        public override string Title => $"Old Model ({EName})";
+        public override string ImageKey => "ThingCrimson";
+
         public override int Type => 2;
         public byte[] Info { get; }
         public IList<OldModelPolygon> Polygons => polygons;

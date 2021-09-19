@@ -9,6 +9,9 @@ namespace CrashEdit.Crash
             Samples = samples ?? throw new ArgumentNullException("samples");
         }
 
+        public override string Title => $"Sound ({EName})";
+        public override string ImageKey => "SpeakerBlue";
+
         public override int Type => 12;
         public SampleSet Samples { get; }
 

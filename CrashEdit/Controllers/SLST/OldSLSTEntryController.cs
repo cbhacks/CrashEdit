@@ -13,18 +13,6 @@ namespace CrashEdit.CE
                 AddNode(new OldSLSTDeltaController(this,delta));
             }
             AddNode(new OldSLSTSourceController(this,oldslstentry.End));
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            NodeText = string.Format(CrashUI.Properties.Resources.OldSLSTEntryController_Text,OldSLSTEntry.EName);
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "ThingGray";
         }
 
         public OldSLSTEntry OldSLSTEntry { get; }

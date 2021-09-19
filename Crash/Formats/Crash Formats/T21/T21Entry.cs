@@ -8,6 +8,9 @@ namespace CrashEdit.Crash
         {
         }
 
+        public override string Title => $"T21 ({EName})";
+        public override string ImageKey => "Painting";
+
         public override int Type => 21;
     }
 }

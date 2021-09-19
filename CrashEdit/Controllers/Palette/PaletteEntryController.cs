@@ -9,18 +9,6 @@ namespace CrashEdit.CE
         public PaletteEntryController(EntryChunkController entrychunkcontroller,PaletteEntry paletteentry) : base(entrychunkcontroller,paletteentry)
         {
             PaletteEntry = paletteentry;
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            NodeText = string.Format(CrashUI.Properties.Resources.PaletteEntryController_Text,PaletteEntry.EName);
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "ThingYellow";
         }
 
         public override bool EditorAvailable => Type.GetType("Mono.Runtime") == null;

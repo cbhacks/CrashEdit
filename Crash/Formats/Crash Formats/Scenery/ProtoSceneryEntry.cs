@@ -20,6 +20,9 @@ namespace CrashEdit.Crash
             Pad = pad;
         }
 
+        public override string Title => $"Prototype Scenery ({EName})";
+        public override string ImageKey => "ThingBlue";
+
         public override int Type => 3;
         public byte[] Info { get; }
         public short? Pad { get; }

@@ -16,6 +16,9 @@ namespace CrashEdit.Crash
             this.entities = new List<ProtoEntity>(entities);
         }
 
+        public override string Title => $"Proto Zone ({EName})";
+        public override string ImageKey => "ThingViolet";
+
         public override int Type => 7;
 
         [SubresourceSlot]

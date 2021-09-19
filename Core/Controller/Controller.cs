@@ -90,14 +90,14 @@ namespace CrashEdit {
             new List<SubcontrollerGroup>();
 
         public string Text =>
-            Legacy?.NodeText ??
             (Resource as IResource)?.Title ??
+            Legacy?.NodeText ??
             ParentGroup?.MakeTextForMember(this) ??
             Resource.GetType().ToString();
 
         public string ImageKey =>
-            Legacy?.NodeImageKey ??
             (Resource as IResource)?.ImageKey ??
+            Legacy?.NodeImageKey ??
             "Arrow";
 
         public bool Dead { get; private set; }

@@ -9,6 +9,9 @@ namespace CrashEdit.Crash
             Palettes = new List<byte[]>(items).ToArray();
         }
 
+        public override string Title => $"Palette ({EName})";
+        public override string ImageKey => "ThingYellow";
+
         public override int Type => 18;
         public byte[][] Palettes { get; }
 

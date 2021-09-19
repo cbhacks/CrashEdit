@@ -24,6 +24,9 @@ namespace CrashEdit.Crash
             this.animatedtextures = new List<ModelExtendedTexture>(animatedtextures);
         }
 
+        public override string Title => $"Scenery ({EName})";
+        public override string ImageKey => "ThingBlue";
+
         public override int Type => 3;
         public byte[] Info { get; }
         public IList<NewSceneryVertex> Vertices => vertices;

@@ -13,6 +13,9 @@ namespace CrashEdit.Crash
             this.entities = new List<OldEntity>(entities);
         }
 
+        public override string Title => $"Map ({EName})";
+        public override string ImageKey => "ThingOrange";
+
         public override int Type => 17;
 
         [SubresourceSlot]

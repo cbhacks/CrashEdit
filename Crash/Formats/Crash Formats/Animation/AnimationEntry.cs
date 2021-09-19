@@ -12,6 +12,9 @@ namespace CrashEdit.Crash
             IsNew = isnew;
         }
 
+        public override string Title => $"Animation ({EName})";
+        public override string ImageKey => "ThingLime";
+
         public override int Type => 1;
         public IList<Frame> Frames => frames;
 

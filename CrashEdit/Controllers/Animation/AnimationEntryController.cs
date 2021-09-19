@@ -12,18 +12,6 @@ namespace CrashEdit.CE
             {
                 AddNode(new FrameController(this,frame));
             }
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            NodeText = string.Format(CrashUI.Properties.Resources.AnimationEntryController_Text,AnimationEntry.EName);
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "ThingLime";
         }
 
         public override bool EditorAvailable => true;

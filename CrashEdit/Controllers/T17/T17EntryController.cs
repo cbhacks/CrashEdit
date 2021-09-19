@@ -7,18 +7,6 @@ namespace CrashEdit.CE
         public T17EntryController(EntryChunkController entrychunkcontroller,T17Entry t17entry) : base(entrychunkcontroller,t17entry)
         {
             T17Entry = t17entry;
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            NodeText = string.Format("T17 ({0})",T17Entry.EName);
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "ThingOrange";
         }
 
         public T17Entry T17Entry { get; }

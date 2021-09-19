@@ -16,6 +16,9 @@ namespace CrashEdit.Crash
             End = end;
         }
 
+        public override string Title => $"Old Sort List ({EName})";
+        public override string ImageKey => "ThingGray";
+
         public override int Type => 4;
         public IList<OldSLSTDelta> Deltas => deltas;
         public OldSLSTSource Start { get; }

@@ -20,6 +20,9 @@ namespace CrashEdit.Crash
             ExtraData = extradata;
         }
 
+        public override string Title => $"Old Scenery ({EName})";
+        public override string ImageKey => "ThingBlue";
+
         public override int Type => 3;
         public byte[] Info { get; }
 

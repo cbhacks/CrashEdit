@@ -15,18 +15,6 @@ namespace CrashEdit.CE
             }
             if (!ProtoAnimationEntry.NotProto)
                 AddMenu("Export as Crash 1 SVTX", Menu_ExportAsC1);
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            NodeText = string.Format(ProtoAnimationEntry.NotProto ? CrashUI.Properties.Resources.OldAnimationEntryController_Text : CrashUI.Properties.Resources.ProtoAnimationEntryController_Text, ProtoAnimationEntry.EName); // fucking hell
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            NodeImageKey = "ThingLime";
         }
 
         public override bool EditorAvailable => true;
