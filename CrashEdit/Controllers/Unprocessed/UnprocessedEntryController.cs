@@ -2,7 +2,7 @@ using CrashEdit.Crash;
 
 namespace CrashEdit.CE
 {
-    public sealed class UnprocessedEntryController : MysteryMultiItemEntryController
+    public sealed class UnprocessedEntryController : EntryController
     {
         public UnprocessedEntryController(EntryChunkController entrychunkcontroller,UnprocessedEntry unprocessedentry) : base(entrychunkcontroller,unprocessedentry)
         {

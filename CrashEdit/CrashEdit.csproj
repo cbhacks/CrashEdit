@@ -77,7 +77,6 @@
     <Compile Include="Controllers\Animation\ColoredAnimationEntryController.cs" />
     <Compile Include="Controllers\Animation\ColoredFrameController.cs" />
     <Compile Include="Controllers\GOOL\GOOLEntryController.cs" />
-    <Compile Include="Controllers\Image\ImageEntryController.cs" />
     <Compile Include="Controllers\Map\MapEntryController.cs" />
     <Compile Include="Controls\BufferedTreeView.cs">
       <SubType>Component</SubType>
@@ -149,7 +148,6 @@
     <Compile Include="Controllers\Texture\TextureChunkController.cs" />
     <Compile Include="Controllers\Music\OldMusicEntryController.cs" />
     <Compile Include="Controllers\Palette\PaletteEntryController.cs" />
-    <Compile Include="Controllers\T6\T6EntryController.cs" />
     <Compile Include="Controllers\Zone\NewEntityController.cs" />
     <Compile Include="Controllers\Zone\OldCameraController.cs" />
     <Compile Include="Controllers\Zone\ProtoZoneEntryController.cs" />
@@ -158,7 +156,6 @@
     <Compile Include="Controllers\Zone\OldZoneEntryController.cs" />
     <Compile Include="Controllers\Model\OldModelEntryController.cs" />
     <Compile Include="Controllers\Scenery\OldSceneryEntryController.cs" />
-    <Compile Include="Controllers\Wavebank\WavebankEntryController.cs" />
     <Compile Include="Controllers\Speech\SpeechEntryController.cs" />
     <Compile Include="Controllers\Sound\SoundEntryController.cs" />
     <Compile Include="Controllers\Sound\OldSoundChunkController.cs" />
@@ -168,12 +165,7 @@
     <Compile Include="Controllers\Zone\ZoneEntryController.cs" />
     <Compile Include="Controllers\Unprocessed\UnprocessedEntryController.cs" />
     <Compile Include="Controllers\SLST\SLSTEntryController.cs" />
-    <Compile Include="Controllers\Demo\DemoEntryController.cs" />
-    <Compile Include="Controllers\T15\T15EntryController.cs" />
-    <Compile Include="Controllers\T21\T21EntryController.cs" />
-    <Compile Include="Controllers\T17\T17EntryController.cs" />
     <Compile Include="Controllers\Scenery\SceneryEntryController.cs" />
-    <Compile Include="Controllers\Mystery\MysteryMultiItemEntryController.cs" />
     <Compile Include="Controllers\Mystery\MysteryUniItemEntryController.cs" />
     <Compile Include="Controllers\Wavebank\WavebankChunkController.cs" />
     <Compile Include="Controllers\Base\Entry Chunk\EntryChunkController.cs" />

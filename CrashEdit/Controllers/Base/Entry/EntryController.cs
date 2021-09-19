@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
-    public abstract class EntryController : LegacyController
+    public class EntryController : LegacyController
     {
         public EntryController(EntryChunkController entrychunkcontroller,Entry entry) : base(entrychunkcontroller, entry)
         {

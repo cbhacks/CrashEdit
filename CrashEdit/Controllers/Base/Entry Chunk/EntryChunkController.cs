@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
-    public abstract class EntryChunkController : ChunkController
+    public class EntryChunkController : ChunkController
     {
         public EntryChunkController(NSFController nsfcontroller,EntryChunk entrychunk) : base(nsfcontroller,entrychunk)
         {
@@ -75,10 +75,6 @@ namespace CrashEdit.CE
             {
                 return new OldSLSTEntryController(this,(OldSLSTEntry)entry);
             }
-            else if (entry is T6Entry)
-            {
-                return new T6EntryController(this,(T6Entry)entry);
-            }
             else if (entry is ProtoZoneEntry)
             {
                 return new ProtoZoneEntryController(this,(ProtoZoneEntry)entry);
@@ -111,33 +107,13 @@ namespace CrashEdit.CE
             {
                 return new MusicEntryController(this,(MusicEntry)entry);
             }
-            else if (entry is WavebankEntry)
-            {
-                return new WavebankEntryController(this,(WavebankEntry)entry);
-            }
-            else if (entry is ImageEntry)
-            {
-                return new ImageEntryController(this,(ImageEntry)entry);
-            }
-            else if (entry is T15Entry)
-            {
-                return new T15EntryController(this,(T15Entry)entry);
-            }
             else if (entry is MapEntry)
             {
                 return new MapEntryController(this,(MapEntry)entry);
             }
-            else if (entry is T17Entry)
-            {
-                return new T17EntryController(this,(T17Entry)entry);
-            }
             else if (entry is PaletteEntry)
             {
                 return new PaletteEntryController(this,(PaletteEntry)entry);
-            }
-            else if (entry is DemoEntry)
-            {
-                return new DemoEntryController(this,(DemoEntry)entry);
             }
             else if (entry is ColoredAnimationEntry)
             {
@@ -147,17 +123,17 @@ namespace CrashEdit.CE
             {
                 return new SpeechEntryController(this,(SpeechEntry)entry);
             }
-            else if (entry is T21Entry)
-            {
-                return new T21EntryController(this,(T21Entry)entry);
-            }
             else if (entry is UnprocessedEntry)
             {
                 return new UnprocessedEntryController(this,(UnprocessedEntry)entry);
             }
+            else if (entry is MysteryUniItemEntry)
+            {
+                return new MysteryUniItemEntryController(this, (MysteryUniItemEntry)entry);
+            }
             else
             {
-                throw new NotImplementedException();
+                return new EntryController(this, entry);
             }
         }
 
