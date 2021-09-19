@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace CrashEdit.Crash
 {
@@ -9,7 +10,7 @@ namespace CrashEdit.Crash
         public OldMusicEntry(int vb0eid,int vb1eid,int vb2eid,int vb3eid,VH vh,SEP sep,int eid) : base(eid)
         {
             this.vh = vh ?? throw new ArgumentNullException("vh");
-            SEP = sep ?? throw new ArgumentNullException("sep");
+            Tracks.AddRange(sep.SEQs);
             VB0EID = vb0eid;
             VB1EID = vb1eid;
             VB2EID = vb2eid;
@@ -38,19 +39,20 @@ namespace CrashEdit.Crash
             }
         }
 
-        public SEP SEP { get; }
+        [SubresourceList]
+        public List<SEQ> Tracks { get; } = new List<SEQ>();
 
         public override UnprocessedEntry Unprocess()
         {
             byte[][] items = new byte [3][];
             items[0] = new byte [20];
-            BitConv.ToInt32(items[0],0,SEP.SEQs.Count);
+            BitConv.ToInt32(items[0],0,Tracks.Count);
             BitConv.ToInt32(items[0],4,VB0EID);
             BitConv.ToInt32(items[0],8,VB1EID);
             BitConv.ToInt32(items[0],12,VB2EID);
             BitConv.ToInt32(items[0],16,VB3EID);
             items[1] = vh.Save();
-            items[2] = SEP.Save();
+            items[2] = new SEP(Tracks).Save();
             return new UnprocessedEntry(items,EID,Type);
         }
     }

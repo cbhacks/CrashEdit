@@ -147,7 +147,6 @@
     <Compile Include="Controllers\SLST\OldSLSTSourceController.cs" />
     <Compile Include="Controllers\SLST\SLSTSourceController.cs" />
     <Compile Include="Controllers\Texture\TextureChunkController.cs" />
-    <Compile Include="Controllers\Music\OldSEQController.cs" />
     <Compile Include="Controllers\Music\OldMusicEntryController.cs" />
     <Compile Include="Controllers\Palette\PaletteEntryController.cs" />
     <Compile Include="Controllers\T6\T6EntryController.cs" />
@@ -179,7 +178,6 @@
     <Compile Include="Controllers\Wavebank\WavebankChunkController.cs" />
     <Compile Include="Controllers\Base\Entry Chunk\EntryChunkController.cs" />
     <Compile Include="Controllers\Base\Entry\EntryController.cs" />
-    <Compile Include="Controllers\Music\SEQController.cs" />
     <Compile Include="Controllers\Music\MusicEntryController.cs" />
     <Compile Include="Controllers\Normal Chunk\NormalChunkController.cs" />
     <Compile Include="Controllers\Sound\SoundChunkController.cs" />

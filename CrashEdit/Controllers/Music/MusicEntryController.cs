@@ -10,14 +10,6 @@ namespace CrashEdit.CE
         public MusicEntryController(EntryChunkController entrychunkcontroller,MusicEntry musicentry) : base(entrychunkcontroller,musicentry)
         {
             MusicEntry = musicentry;
-            foreach (SEQ seq in musicentry.SEP.SEQs)
-            {
-                AddNode(new SEQController(this,seq));
-            }
-            AddMenuSeparator();
-            AddMenu("Import SEQ",Menu_Import_SEQ);
-            AddMenuSeparator();
-            AddMenu("Export SEP",Menu_Export_SEP);
             AddMenuSeparator();
             AddMenu("Export Linked VH",Menu_Export_Linked_VH);
             AddMenu("Export Linked VB",Menu_Export_Linked_VB);
@@ -88,23 +80,6 @@ namespace CrashEdit.CE
             VH vh = FindLinkedVH();
             SampleLine[] vb = FindLinkedVB();
             return VAB.Join(vh,vb);
-        }
-
-        private void Menu_Import_SEQ()
-        {
-            byte[] data = FileUtil.OpenFile(FileFilters.SEQ,FileFilters.Any);
-            if (data != null)
-            {
-                SEQ seq = SEQ.Load(data);
-                MusicEntry.SEP.SEQs.Add(seq);
-                AddNode(new SEQController(this,seq));
-            }
-        }
-
-        private void Menu_Export_SEP()
-        {
-            byte[] data = MusicEntry.SEP.Save();
-            FileUtil.SaveFile(data,FileFilters.SEP,FileFilters.Any);
         }
 
         private void Menu_Export_Linked_VH()

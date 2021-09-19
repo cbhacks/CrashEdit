@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace CrashEdit.Crash
 {
@@ -6,7 +7,7 @@ namespace CrashEdit.Crash
     {
         public MusicEntry(int vheid,int vb0eid,int vb1eid,int vb2eid,int vb3eid,int vb4eid,int vb5eid,int vb6eid,VH vh,SEP sep,int eid) : base(eid)
         {
-            SEP = sep ?? throw new ArgumentNullException("sep");
+            Tracks.AddRange(sep.SEQs);
             VHEID = vheid;
             VB0EID = vb0eid;
             VB1EID = vb1eid;
@@ -31,7 +32,8 @@ namespace CrashEdit.Crash
         [SubresourceSlot(AllowNull = true)]
         public VH VH { get; set; }
 
-        public SEP SEP { get; }
+        [SubresourceList]
+        public List<SEQ> Tracks { get; } = new List<SEQ>();
 
         // FIXME? - resaving of unused instrument metadata causes mismatches in
         // various game versions
@@ -41,7 +43,7 @@ namespace CrashEdit.Crash
         {
             byte[][] items = new byte [3][];
             items[0] = new byte [36];
-            BitConv.ToInt32(items[0],0,SEP.SEQs.Count);
+            BitConv.ToInt32(items[0],0,Tracks.Count);
             BitConv.ToInt32(items[0],4,VHEID);
             BitConv.ToInt32(items[0],8,VB0EID);
             BitConv.ToInt32(items[0],12,VB1EID);
@@ -58,7 +60,7 @@ namespace CrashEdit.Crash
             {
                 items[1] = new byte [0];
             }
-            items[2] = SEP.Save();
+            items[2] = new SEP(Tracks).Save();
             return new UnprocessedEntry(items,EID,Type);
         }
     }
