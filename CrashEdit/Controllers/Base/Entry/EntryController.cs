@@ -17,7 +17,7 @@ namespace CrashEdit.CE
             }
         }
 
-        public EntryChunkController EntryChunkController { get; private set; }
+        protected EntryChunkController EntryChunkController { get; }
         public Entry Entry { get; }
 
         public override bool CanMoveTo(CrashEdit.LegacyController newcontroller)
@@ -48,7 +48,7 @@ namespace CrashEdit.CE
 
         protected T FindEID<T>(int eid) where T : class,IEntry
         {
-            return EntryChunkController.NSFController.NSF.GetEntry<T>(eid);
+            return GetEntry<T>(eid);
         }
 
         private void Menu_Delete_Entry()
@@ -70,7 +70,7 @@ namespace CrashEdit.CE
 
         private void Menu_Rename_Entry()
         {
-            using (NewEntryForm newentrywindow = new NewEntryForm(EntryChunkController.NSFController))
+            using (NewEntryForm newentrywindow = new NewEntryForm(GetNSF(), GameVersion))
             {
                 newentrywindow.Text = "Rename Entry";
                 newentrywindow.SetRenameMode(Entry.EName);

@@ -15,7 +15,7 @@ namespace CrashEdit.CE
             }
         }
 
-        public NSFController NSFController { get; }
+        protected NSFController NSFController { get; }
         public Chunk Chunk { get; }
 
         private void Menu_Delete_Chunk()

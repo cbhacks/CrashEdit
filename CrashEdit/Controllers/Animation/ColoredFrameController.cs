@@ -24,11 +24,11 @@ namespace CrashEdit.CE
 
         public override Control CreateEditor()
         {
-            OldModelEntry modelentry = CutsceneAnimationEntryController.EntryChunkController.NSFController.NSF.GetEntry<OldModelEntry>(OldFrame.ModelEID);
+            OldModelEntry modelentry = GetEntry<OldModelEntry>(OldFrame.ModelEID);
             Dictionary<int,TextureChunk> textures = new Dictionary<int,TextureChunk>();
             foreach (OldModelStruct str in modelentry.Structs)
                 if (str is OldModelTexture tex && !textures.ContainsKey(tex.EID))
-                    textures.Add(tex.EID,CutsceneAnimationEntryController.EntryChunkController.NSFController.NSF.GetEntry<TextureChunk>(tex.EID));
+                    textures.Add(tex.EID,GetEntry<TextureChunk>(tex.EID));
             return new OldAnimationEntryViewer(OldFrame,true,modelentry,textures);
         }
 
@@ -37,7 +37,7 @@ namespace CrashEdit.CE
 
         private void Menu_Export_OBJ()
         {
-            OldModelEntry modelentry = CutsceneAnimationEntryController.EntryChunkController.NSFController.NSF.GetEntry<OldModelEntry>(OldFrame.ModelEID);
+            OldModelEntry modelentry = GetEntry<OldModelEntry>(OldFrame.ModelEID);
             if (modelentry == null)
             {
                 throw new GUIException("The linked model entry could not be found.");

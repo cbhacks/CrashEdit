@@ -19,12 +19,12 @@ namespace CrashEdit.CE
 
         private NSF nsf;
 
-        public NewEntryForm(NSFController nsfc)
+        public NewEntryForm(NSF nsf, GameVersion gameVersion)
         {
-            nsf = nsfc.NSF;
+            this.nsf = nsf;
             InitializeComponent();
             dpdType.Items.Add(EntryTypeUnprocessed);
-            switch (nsfc.GameVersion)
+            switch (gameVersion)
             {
                 case GameVersion.Crash1BetaMAR08:
                 case GameVersion.Crash1BetaMAY11:

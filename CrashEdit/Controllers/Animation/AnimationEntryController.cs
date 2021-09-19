@@ -49,7 +49,7 @@ namespace CrashEdit.CE
             }
             else
             {
-                return new Crash3AnimationSelector(AnimationEntry, EntryChunkController.NSFController.NSF);
+                return new Crash3AnimationSelector(AnimationEntry, GetNSF());
             }
         }
 

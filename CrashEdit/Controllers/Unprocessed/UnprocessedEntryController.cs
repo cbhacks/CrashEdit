@@ -29,7 +29,7 @@ namespace CrashEdit.CE
             Entry processedentry;
             try
             {
-                processedentry = UnprocessedEntry.Process(EntryChunkController.NSFController.GameVersion);
+                processedentry = UnprocessedEntry.Process(GameVersion);
             }
             catch (LoadAbortedException)
             {

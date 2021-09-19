@@ -53,7 +53,7 @@ namespace CrashEdit.CE
 
         private void Menu_Rename_Entry()
         {
-            using (NewEntryForm newentrywindow = new NewEntryForm(NSFController))
+            using (NewEntryForm newentrywindow = new NewEntryForm(GetNSF(), GameVersion))
             {
                 newentrywindow.Text = "Rename Entry";
                 newentrywindow.SetRenameMode(TextureChunk.EName);

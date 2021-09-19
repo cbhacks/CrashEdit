@@ -51,10 +51,6 @@ namespace CrashEdit.CE
 
         public NSF NSF { get; }
 
-        public GameVersion GameVersion =>
-            (Modern.Parent.Resource as LevelWorkspace)?.GameVersion ??
-            GameVersion.None;
-
         public ChunkController CreateChunkController(Chunk chunk)
         {
             if (chunk is NormalChunk)

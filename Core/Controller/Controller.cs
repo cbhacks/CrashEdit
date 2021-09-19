@@ -82,6 +82,8 @@ namespace CrashEdit {
 
         public Controller? Parent => ParentGroup?.Owner;
 
+        public Controller? Root => Parent?.Root ?? this;
+
         public SubcontrollerGroup? ParentGroup { get; }
 
         public List<SubcontrollerGroup> SubcontrollerGroups { get; } =

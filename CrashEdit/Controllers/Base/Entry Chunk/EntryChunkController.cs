@@ -193,7 +193,7 @@ namespace CrashEdit.CE
 
         private void Menu_Add_Entry()
         {
-            using (NewEntryForm newentrywindow = new NewEntryForm(NSFController))
+            using (NewEntryForm newentrywindow = new NewEntryForm(GetNSF(), GameVersion))
             {
                 if (newentrywindow.ShowDialog() == DialogResult.OK)
                 {

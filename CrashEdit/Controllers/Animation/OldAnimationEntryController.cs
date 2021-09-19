@@ -31,12 +31,12 @@ namespace CrashEdit.CE
 
         public override Control CreateEditor()
         {
-            OldModelEntry modelentry = EntryChunkController.NSFController.NSF.GetEntry<OldModelEntry>(OldAnimationEntry.Frames[0].ModelEID);
+            OldModelEntry modelentry = GetEntry<OldModelEntry>(OldAnimationEntry.Frames[0].ModelEID);
             Dictionary<int,TextureChunk> textures = new Dictionary<int,TextureChunk>();
             if (modelentry != null)
                 foreach (OldModelStruct str in modelentry.Structs)
                     if (str is OldModelTexture tex && !textures.ContainsKey(tex.EID))
-                        textures.Add(tex.EID,EntryChunkController.NSFController.NSF.GetEntry<TextureChunk>(tex.EID));
+                        textures.Add(tex.EID,GetEntry<TextureChunk>(tex.EID));
             return new OldAnimationEntryViewer(OldAnimationEntry.Frames,false,modelentry,textures);
         }
 

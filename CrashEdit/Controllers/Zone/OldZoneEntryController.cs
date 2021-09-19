@@ -74,7 +74,7 @@ namespace CrashEdit.CE
             short id = 6;
             while (true)
             {
-                foreach (OldZoneEntry zone in EntryChunkController.NSFController.NSF.GetEntries<OldZoneEntry>())
+                foreach (OldZoneEntry zone in GetEntries<OldZoneEntry>())
                 {
                     foreach (OldEntity otherentity in zone.Entities)
                     {

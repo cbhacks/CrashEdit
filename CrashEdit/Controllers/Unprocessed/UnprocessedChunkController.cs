@@ -15,7 +15,7 @@ namespace CrashEdit.CE
 
         public override void InvalidateNode()
         {
-            NodeText = string.Format(CrashUI.Properties.Resources.UnprocessedChunkController_Text,UnprocessedChunk.Type,NSFController.NSF.Chunks.IndexOf(UnprocessedChunk) * 2 + 1);
+            NodeText = string.Format(CrashUI.Properties.Resources.UnprocessedChunkController_Text,UnprocessedChunk.Type,GetNSF().Chunks.IndexOf(UnprocessedChunk) * 2 + 1);
         }
 
         public override void InvalidateNodeImage()
@@ -37,14 +37,14 @@ namespace CrashEdit.CE
             Chunk processedchunk;
             try
             {
-                processedchunk = UnprocessedChunk.Process(NSFController.NSF.Chunks.IndexOf(UnprocessedChunk) * 2 + 1);
+                processedchunk = UnprocessedChunk.Process(GetNSF().Chunks.IndexOf(UnprocessedChunk) * 2 + 1);
             }
             catch (LoadAbortedException)
             {
                 return;
             }
-            int index = NSFController.NSF.Chunks.IndexOf(UnprocessedChunk);
-            NSFController.NSF.Chunks[index] = processedchunk;
+            int index = GetNSF().Chunks.IndexOf(UnprocessedChunk);
+            GetNSF().Chunks[index] = processedchunk;
             if (processedchunk is EntryChunk)
             {
                 ((EntryChunk)processedchunk).ProcessAll(NSFController.GameVersion);

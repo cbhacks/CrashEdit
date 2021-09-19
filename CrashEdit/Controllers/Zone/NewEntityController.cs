@@ -52,7 +52,7 @@ namespace CrashEdit.CE
             }
             int maxid = 1;
             List<EntityPropertyRow<int>> drawlists = new List<EntityPropertyRow<int>>();
-            foreach (NewZoneEntry zone in NewZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<NewZoneEntry>())
+            foreach (NewZoneEntry zone in GetEntries<NewZoneEntry>())
             {
                 foreach (Entity otherentity in zone.Entities)
                 {
@@ -115,7 +115,7 @@ namespace CrashEdit.CE
             }
             if (Entity.ID.HasValue)
             {
-                foreach (NewZoneEntry zone in NewZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<NewZoneEntry>())
+                foreach (NewZoneEntry zone in GetEntries<NewZoneEntry>())
                 {
                     int zoneindex = -1;
                     for (int z = 0, s = BitConv.FromInt32(zone.Header, 0x190); z < s; ++z)

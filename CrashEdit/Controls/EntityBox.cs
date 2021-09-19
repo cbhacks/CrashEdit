@@ -1109,7 +1109,7 @@ namespace CrashEdit.CE
         {
             if (controller is EntityController c)
             {
-                foreach (ZoneEntry zone in c.ZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<ZoneEntry>())
+                foreach (ZoneEntry zone in c.GetEntries<ZoneEntry>())
                 {
                     foreach (Entity otherentity in zone.Entities)
                     {
@@ -1128,7 +1128,7 @@ namespace CrashEdit.CE
             }
             else if (controller is NewEntityController nc)
             {
-                foreach (NewZoneEntry zone in nc.NewZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<NewZoneEntry>())
+                foreach (NewZoneEntry zone in nc.GetEntries<NewZoneEntry>())
                 {
                     foreach (Entity otherentity in zone.Entities)
                     {
@@ -1290,7 +1290,7 @@ namespace CrashEdit.CE
         {
             if (controller is EntityController c)
             {
-                foreach (ZoneEntry zone in c.ZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<ZoneEntry>())
+                foreach (ZoneEntry zone in c.GetEntries<ZoneEntry>())
                 {
                     foreach (Entity otherentity in zone.Entities)
                     {
@@ -1309,7 +1309,7 @@ namespace CrashEdit.CE
             }
             else if (controller is NewEntityController nc)
             {
-                foreach (NewZoneEntry zone in nc.NewZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<NewZoneEntry>())
+                foreach (NewZoneEntry zone in nc.GetEntries<NewZoneEntry>())
                 {
                     foreach (Entity otherentity in zone.Entities)
                     {
@@ -1646,20 +1646,20 @@ namespace CrashEdit.CE
             HashSet<Entry> entries = null;
             if (controller is EntityController c2c)
             {
-                chunks = c2c.ZoneEntryController.EntryChunkController.NSFController.NSF.Chunks;
+                chunks = c2c.GetNSF().Chunks;
                 entries = new HashSet<Entry>();
                 foreach (int eid in loadedentries)
                 {
-                    entries.Add(c2c.ZoneEntryController.EntryChunkController.NSFController.NSF.GetEntry<Entry>(eid));
+                    entries.Add(c2c.GetEntry<Entry>(eid));
                 }
             }
             else if (controller is NewEntityController c3c)
             {
-                chunks = c3c.NewZoneEntryController.EntryChunkController.NSFController.NSF.Chunks;
+                chunks = c3c.GetNSF().Chunks;
                 entries = new HashSet<Entry>();
                 foreach (int eid in loadedentries)
                 {
-                    entries.Add(c3c.NewZoneEntryController.EntryChunkController.NSFController.NSF.GetEntry<Entry>(eid));
+                    entries.Add(c3c.GetEntry<Entry>(eid));
                 }
             }
             HashSet<Chunk> loadedchunks = new HashSet<Chunk>();

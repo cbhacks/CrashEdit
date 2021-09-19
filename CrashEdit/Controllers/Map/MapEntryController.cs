@@ -42,7 +42,7 @@ namespace CrashEdit.CE
             short id = 1;
             while (true)
             {
-                foreach (MapEntry zone in EntryChunkController.NSFController.NSF.GetEntries<MapEntry>())
+                foreach (MapEntry zone in GetEntries<MapEntry>())
                 {
                     foreach (OldEntity otherentity in zone.Entities)
                     {
