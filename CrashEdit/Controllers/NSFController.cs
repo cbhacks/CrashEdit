@@ -290,10 +290,10 @@ namespace CrashEdit
         private void Menu_ShowLevelC2()
         {
             List<TextureChunk[]> sortedtexturechunks = new List<TextureChunk[]>();
-            List<SceneryEntry> sceneryentries = new List<SceneryEntry>();
+            var sceneryentries = new List<int>();
             foreach (SceneryEntry entry in NSF.GetEntries<SceneryEntry>())
             {
-                sceneryentries.Add(entry);
+                sceneryentries.Add(entry.EID);
                 TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info,0x28)];
                 for (int i = 0; i < texturechunks.Length; ++i)
                 {
@@ -303,7 +303,7 @@ namespace CrashEdit
             }
             Form frm = new Form() { Text = "Loading...", Width = 480, Height = 360 };
             frm.Show();
-            SceneryEntryViewer viewer = new SceneryEntryViewer(sceneryentries,sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
+            SceneryEntryViewer viewer = new SceneryEntryViewer(NSF, sceneryentries,sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
             frm.Controls.Add(viewer);
             frm.Text = string.Empty;
         }

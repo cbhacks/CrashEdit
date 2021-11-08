@@ -44,8 +44,8 @@ namespace CrashEdit
 
         public string EntryName => entry.EName;
 
-        public ZoneEntryViewer(ZoneEntry entry,SceneryEntry[] linkedsceneryentries,TextureChunk[][] texturechunks,ZoneEntry[] linkedentries)
-            : base(linkedsceneryentries,texturechunks)
+        public ZoneEntryViewer(NSF nsf, ZoneEntry entry,int[] linkedsceneryentries,TextureChunk[][] texturechunks,ZoneEntry[] linkedentries)
+            : base(nsf,linkedsceneryentries,texturechunks)
         {
             this.entry = entry;
             this.linkedentries = linkedentries;

@@ -8,7 +8,8 @@ namespace CrashEdit
 {
     public class SceneryEntryViewer : ThreeDimensionalViewer
     {
-        private List<SceneryEntry> entries;
+        private readonly NSF nsf;
+        private readonly List<int> eids;
         private int displaylist;
         private bool textures_enabled = true;
         private bool init = false;
@@ -19,9 +20,24 @@ namespace CrashEdit
         private List<SceneryTriangle>[] lasttris;
         private List<SceneryQuad>[] lastquads;
 
-        public SceneryEntryViewer(SceneryEntry entry,TextureChunk[] texturechunks)
+        private List<SceneryEntry> GetEntries()
         {
-            entries = new List<SceneryEntry>() { entry };
+            var list = new List<SceneryEntry>();
+            foreach (var eid in eids)
+            {
+                var entry = nsf.GetEntry<SceneryEntry>(eid);
+                if (entry != null)
+                {
+                    list.Add(entry);
+                }
+            }
+            return list;
+        }
+
+        public SceneryEntryViewer(NSF nsf, int entry,TextureChunk[] texturechunks)
+        {
+            this.nsf = nsf;
+            eids = new List<int>() { entry };
             displaylist = -1;
             InitTextures(1);
             this.texturechunks = new TextureChunk[1][];
@@ -32,17 +48,18 @@ namespace CrashEdit
             this.texturechunks[0] = texturechunks;
         }
 
-        public SceneryEntryViewer(IEnumerable<SceneryEntry> entries,TextureChunk[][] texturechunks)
+        public SceneryEntryViewer(NSF nsf, IEnumerable<int> entries,TextureChunk[][] texturechunks)
         {
-            this.entries = new List<SceneryEntry>(entries);
+            this.nsf = nsf;
+            eids = new List<int>(entries);
             displaylist = -1;
-            InitTextures(this.entries.Count);
+            InitTextures(eids.Count);
             this.texturechunks = texturechunks;
-            dyntris = new List<SceneryTriangle>[this.entries.Count];
-            dynquads = new List<SceneryQuad>[this.entries.Count];
-            lasttris = new List<SceneryTriangle>[this.entries.Count];
-            lastquads = new List<SceneryQuad>[this.entries.Count];
-            for (int i = 0; i < this.entries.Count; ++i)
+            dyntris = new List<SceneryTriangle>[eids.Count];
+            dynquads = new List<SceneryQuad>[eids.Count];
+            lasttris = new List<SceneryTriangle>[eids.Count];
+            lastquads = new List<SceneryQuad>[eids.Count];
+            for (int i = 0; i < eids.Count; ++i)
             {
                 dyntris[i] = new List<SceneryTriangle>();
                 dynquads[i] = new List<SceneryQuad>();
@@ -55,11 +72,11 @@ namespace CrashEdit
         {
             get
             {
-                foreach (SceneryEntry entry in entries)
+                foreach (var entry in GetEntries())
                 {
                     foreach (SceneryVertex vertex in entry.Vertices)
                     {
-                        yield return new Position(entry.XOffset + (vertex.X << 4),entry.YOffset + (vertex.Y << 4),entry.ZOffset + (vertex.Z << 4));
+                        yield return new Position(entry.XOffset + (vertex.X << 4), entry.YOffset + (vertex.Y << 4), entry.ZOffset + (vertex.Z << 4));
                     }
                 }
             }
@@ -96,6 +113,7 @@ namespace CrashEdit
 
         protected override void RenderObjects()
         {
+            var entries = GetEntries();
             if (!init)
             {
                 init = true;
@@ -266,7 +284,7 @@ namespace CrashEdit
             {
                 GL.CallList(displaylist);
             }
-            for (int i = 0; i < dyntris.Length; ++i)
+            for (int i = 0; i < entries.Count; ++i)
             {
                 SceneryEntry entry = entries[i];
                 List<SceneryTriangle> fakes = new List<SceneryTriangle>();
@@ -301,7 +319,7 @@ namespace CrashEdit
                     lasttris[i].Add(fake);
                 }
             }
-            for (int i = 0; i < dynquads.Length; ++i)
+            for (int i = 0; i < entries.Count; ++i)
             {
                 SceneryEntry entry = entries[i];
                 List<SceneryQuad> fakes = new List<SceneryQuad>();
@@ -340,7 +358,7 @@ namespace CrashEdit
             }
             SetBlendMode(1);
             GL.DepthMask(false);
-            for (int i = 0; i < lasttris.Length; ++i)
+            for (int i = 0; i < entries.Count; ++i)
             {
                 SceneryEntry entry = entries[i];
                 foreach (SceneryTriangle t in lasttris[i])
@@ -391,7 +409,7 @@ namespace CrashEdit
                     GL.End();
                 }
             }
-            for (int i = 0; i < lastquads.Length; ++i)
+            for (int i = 0; i < entries.Count; ++i)
             {
                 SceneryEntry entry = entries[i];
                 foreach (SceneryQuad q in lastquads[i])

@@ -21,6 +21,8 @@ namespace CrashEdit
         public EntryChunkController EntryChunkController { get; private set; }
         public Entry Entry { get; }
 
+        public NSF NSF => EntryChunkController.NSFController.NSF;
+
         public override bool Move(Controller newcontroller,bool commit)
         {
             if (newcontroller is EntryChunkController entrychunkcontroller)
@@ -42,7 +44,7 @@ namespace CrashEdit
 
         protected T FindEID<T>(int eid) where T : class,IEntry
         {
-            return EntryChunkController.NSFController.NSF.GetEntry<T>(eid);
+            return NSF.GetEntry<T>(eid);
         }
 
         private void Menu_Export_Entry()
