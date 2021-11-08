@@ -37,6 +37,7 @@ namespace CrashEdit
             Node.SelectedImageKey = "violetb";
         }
 
+        /*
         protected override Control CreateEditor()
         {
             int linkedsceneryentrycount = BitConv.FromInt32(OldZoneEntry.Header,0);
@@ -60,7 +61,7 @@ namespace CrashEdit
             }
             return new UndockableControl(new OldZoneEntryViewer(OldZoneEntry,linkedsceneryentries,totaltexturechunks,linkedzoneentries));
         }
-
+        */
         public OldZoneEntry OldZoneEntry { get; }
 
         void Menu_AddCamera()

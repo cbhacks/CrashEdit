@@ -31,6 +31,7 @@ namespace CrashEdit
             Node.SelectedImageKey = "violetb";
         }
 
+        /*
         protected override Control CreateEditor()
         {
             int linkedsceneryentrycount = BitConv.FromInt32(NewZoneEntry.Header,0);
@@ -54,7 +55,7 @@ namespace CrashEdit
             }
             return new UndockableControl(new NewZoneEntryViewer(NewZoneEntry,linkedsceneryentries,totaltexturechunks,linkedzoneentries));
         }
-
+        */
         public NewZoneEntry NewZoneEntry { get; }
 
         void Menu_AddEntity()

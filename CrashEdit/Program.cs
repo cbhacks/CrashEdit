@@ -3,11 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Xml;
+using System.Runtime.InteropServices;
 
 namespace CrashEdit
 {
     internal static class Program
     {
+        [DllImport("kernel32.dll")]
+        static extern bool AllocConsole();
+        [DllImport("kernel32.dll")]
+        static extern bool FreeConsole();
+
         public static SortedDictionary<string,string> C3AnimLinks = new SortedDictionary<string,string>(new ENameComparer());
         public static void SaveC3AnimLinks()
         {
@@ -58,6 +64,8 @@ namespace CrashEdit
         [STAThread]
         internal static void Main(string[] args)
         {
+            AllocConsole();
+
             if (Properties.Settings.Default.UpgradeSettings)
             {
                 Properties.Settings.Default.Upgrade();
@@ -85,6 +93,8 @@ namespace CrashEdit
                 FileUtil.Owner = mainform;
                 Application.Run(mainform);
             }
+
+            FreeConsole();
         }
     }
 }

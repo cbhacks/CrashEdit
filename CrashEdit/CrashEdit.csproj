@@ -81,9 +81,7 @@
     <Compile Include="Controls\BufferedTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\Crash3AnimationSelector.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Controls\Crash3AnimationSelector.cs" />
     <Compile Include="Controls\Crash3AnimationSelector.Designer.cs">
       <DependentUpon>Crash3AnimationSelector.cs</DependentUpon>
     </Compile>
@@ -97,7 +95,7 @@
     <Compile Include="Controls\PaletteEntryBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\CommonZoneEntryViewer.cs" />
+    <Compile Include="Controls\3D\CommonZoneEntryViewer.cs" />
     <Compile Include="ExternalTool.cs" />
     <Compile Include="Forms\ErrorReporter.cs">
       <SubType>Form</SubType>
@@ -187,9 +185,7 @@
     <Compile Include="Controllers\Sound\SoundChunkController.cs" />
     <Compile Include="Controllers\NSFController.cs" />
     <Compile Include="Controllers\Speech\SpeechChunkController.cs" />
-    <Compile Include="Controls\AnimationEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Controls\3D\AnimationEntryViewer.cs" />
     <Compile Include="Controls\OldFrameBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -202,12 +198,8 @@
     <Compile Include="Controls\OldCameraBox.Designer.cs">
       <DependentUpon>OldCameraBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProtoZoneEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ProtoSceneryEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Controls\3D\ProtoZoneEntryViewer.cs" />
+    <Compile Include="Controls\3D\ProtoSceneryEntryViewer.cs" />
     <Compile Include="Controls\ProtoEntityBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -220,18 +212,12 @@
     <Compile Include="Controls\OldEntityBox.Designer.cs">
       <DependentUpon>OldEntityBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\NewSceneryEntryViewer.cs">
+    <Compile Include="Controls\3D\NewSceneryEntryViewer.cs" />
+    <Compile Include="Controls\3D\SceneryEntryViewer.cs" />
+    <Compile Include="Controls\3D\OldAnimationEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\SceneryEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\OldAnimationEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\OldSceneryEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Controls\3D\OldSceneryEntryViewer.cs" />
     <Compile Include="Controls\EntryChunkBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -250,7 +236,7 @@
     <Compile Include="Controls\SLSTDeltaBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\ThreeDimensionalViewer.cs">
+    <Compile Include="Controls\3D\GLViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\EntityBox.cs">
@@ -259,15 +245,9 @@
     <Compile Include="Controls\EntityBox.Designer.cs">
       <DependentUpon>EntityBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\OldZoneEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\NewZoneEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ZoneEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Controls\3D\OldZoneEntryViewer.cs" />
+    <Compile Include="Controls\3D\NewZoneEntryViewer.cs" />
+    <Compile Include="Controls\3D\ZoneEntryViewer.cs" />
     <Compile Include="Controls\UndockableControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -326,6 +306,15 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Render\IGLDisposable.cs" />
+    <Compile Include="Render\ProjectionInfo.cs" />
+    <Compile Include="Render\RenderInfo.cs" />
+    <Compile Include="Render\Shader.cs" />
+    <Compile Include="Render\ShaderFuncs.cs" />
+    <Compile Include="Render\VAO.cs" />
+    <Compile Include="Utils\Color4Ext.cs" />
+    <Compile Include="Utils\ResourceLoad.cs" />
+    <Compile Include="Utils\StopwatchExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
@@ -418,6 +407,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Render\version.txt" />
     <Content Include="Resources\Computer_File_053.gif" />
     <Content Include="Resources\Computer_File_063.gif" />
     <Content Include="Resources\Computer_File_064.gif" />
@@ -448,6 +438,12 @@
     <Content Include="Resources\objects_012_crimson.gif" />
     <Content Include="Resources\objects_012_gray.gif" />
     <Content Include="Resources\objects_012_lime.gif" />
+    <EmbeddedResource Include="Render\Shaders\axes.vert" />
+    <EmbeddedResource Include="Render\Shaders\default4.frag" />
+    <EmbeddedResource Include="Render\Shaders\anim_c1.vert" />
+    <EmbeddedResource Include="Render\Shaders\test.vert" />
+    <EmbeddedResource Include="Render\Shaders\line-model.vert" />
+    <EmbeddedResource Include="Render\Shaders\line-static.vert" />
     <None Include="Resources\objects_012_red.gif" />
     <Content Include="Resources\objects_012_violet.gif" />
     <None Include="Resources\objects_012_yellow.gif" />
@@ -501,4 +497,5 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
 </Project>

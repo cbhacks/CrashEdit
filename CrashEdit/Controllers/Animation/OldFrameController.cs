@@ -40,16 +40,18 @@ namespace CrashEdit
         protected override Control CreateEditor()
         {
             TabControl tbcTabs = new TabControl() { Dock = DockStyle.Fill };
-            EntryController entry = OldAnimationEntryController != null ? (EntryController)OldAnimationEntryController : (EntryController)ProtoAnimationEntryController;
-            OldModelEntry modelentry = entry.EntryChunkController.NSFController.NSF.GetEntry<OldModelEntry>(OldFrame.ModelEID);
 
             OldFrameBox framebox = new OldFrameBox(this);
             framebox.Dock = DockStyle.Fill;
+            EntryController entry = OldAnimationEntryController != null ? (EntryController)OldAnimationEntryController : (EntryController)ProtoAnimationEntryController;
+            /*
+            OldModelEntry modelentry = entry.EntryChunkController.NSFController.NSF.GetEntry<OldModelEntry>(OldFrame.ModelEID);
             Dictionary<int,TextureChunk> textures = new Dictionary<int,TextureChunk>();
             foreach (OldModelStruct str in modelentry.Structs)
                 if (str is OldModelTexture tex && !textures.ContainsKey(tex.EID))
                     textures.Add(tex.EID, entry.EntryChunkController.NSFController.NSF.GetEntry<TextureChunk>(tex.EID));
-            OldAnimationEntryViewer viewerbox = new OldAnimationEntryViewer(OldFrame,false,modelentry,textures) { Dock = DockStyle.Fill };
+            */
+            OldAnimationEntryViewer viewerbox = new OldAnimationEntryViewer(entry.NSF, entry.Entry.EID, false, null) { Dock = DockStyle.Fill };
 
             TabPage edittab = new TabPage("Editor");
             edittab.Controls.Add(framebox);

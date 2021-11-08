@@ -30,6 +30,7 @@ namespace CrashEdit
             Node.SelectedImageKey = "limeb";
         }
 
+        /*
         protected override Control CreateEditor()
         {
             OldModelEntry modelentry = EntryChunkController.NSFController.NSF.GetEntry<OldModelEntry>(ProtoAnimationEntry.Frames[0].ModelEID);
@@ -39,6 +40,7 @@ namespace CrashEdit
                     textures.Add(tex.EID,EntryChunkController.NSFController.NSF.GetEntry<TextureChunk>(tex.EID));
             return new UndockableControl(new OldAnimationEntryViewer(ProtoAnimationEntry.Frames,false,modelentry,textures));
         }
+        */
 
         public ProtoAnimationEntry ProtoAnimationEntry { get; }
 

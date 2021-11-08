@@ -24,6 +24,7 @@ namespace CrashEdit
             Node.SelectedImageKey = "arrow";
         }
 
+        /*
         protected override Control CreateEditor()
         {
             if (!Frame.IsNew)
@@ -41,6 +42,7 @@ namespace CrashEdit
                 return new Crash3AnimationSelector(AnimationEntryController.AnimationEntry, Frame, AnimationEntryController.EntryChunkController.NSFController.NSF);
             }
         }
+        */
 
         public AnimationEntryController AnimationEntryController { get; }
         public Frame Frame { get; }

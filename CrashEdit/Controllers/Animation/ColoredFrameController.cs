@@ -26,6 +26,7 @@ namespace CrashEdit
             Node.SelectedImageKey = "arrow";
         }
 
+        /*
         protected override Control CreateEditor()
         {
             OldModelEntry modelentry = CutsceneAnimationEntryController.EntryChunkController.NSFController.NSF.GetEntry<OldModelEntry>(OldFrame.ModelEID);
@@ -35,6 +36,7 @@ namespace CrashEdit
                     textures.Add(tex.EID,CutsceneAnimationEntryController.EntryChunkController.NSFController.NSF.GetEntry<TextureChunk>(tex.EID));
             return new UndockableControl(new OldAnimationEntryViewer(OldFrame,true,modelentry,textures));
         }
+        */
 
         public ColoredAnimationEntryController CutsceneAnimationEntryController { get; }
         public OldFrame OldFrame { get; }

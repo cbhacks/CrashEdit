@@ -26,7 +26,7 @@ namespace CrashEdit
             Node.ImageKey = "limeb";
             Node.SelectedImageKey = "limeb";
         }
-
+        /*
         protected override Control CreateEditor()
         {
             if (!AnimationEntry.IsNew)
@@ -51,6 +51,7 @@ namespace CrashEdit
                 return new Crash3AnimationSelector(AnimationEntry, EntryChunkController.NSFController.NSF);
             }
         }
+        */
 
         public AnimationEntry AnimationEntry { get; }
     }

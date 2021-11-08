@@ -268,27 +268,30 @@ namespace CrashEdit
 
         private void Menu_ShowLevelC1()
         {
-            List<TextureChunk[]> sortedtexturechunks = new List<TextureChunk[]>();
-            List<OldSceneryEntry> sceneryentries = new List<OldSceneryEntry>();
-            foreach (OldSceneryEntry entry in NSF.GetEntries<OldSceneryEntry>())
-            {
-                sceneryentries.Add(entry);
-                TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info,0x18)];
-                for (int i = 0; i < texturechunks.Length; ++i)
+            /*
+                List<TextureChunk[]> sortedtexturechunks = new List<TextureChunk[]>();
+                List<OldSceneryEntry> sceneryentries = new List<OldSceneryEntry>();
+                foreach (OldSceneryEntry entry in NSF.GetEntries<OldSceneryEntry>())
                 {
-                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info,0x20+i*4));
+                    sceneryentries.Add(entry);
+                    TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info,0x18)];
+                    for (int i = 0; i < texturechunks.Length; ++i)
+                    {
+                        texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info,0x20+i*4));
+                    }
+                    sortedtexturechunks.Add(texturechunks);
                 }
-                sortedtexturechunks.Add(texturechunks);
-            }
-            Form frm = new Form() { Text = "Loading...", Width = 480, Height = 360 };
-            frm.Show();
-            OldSceneryEntryViewer viewer = new OldSceneryEntryViewer(sceneryentries,sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
-            frm.Controls.Add(viewer);
-            frm.Text = string.Empty;
+                Form frm = new Form() { Text = "Loading...", Width = 480, Height = 360 };
+                frm.Show();
+                OldSceneryEntryViewer viewer = new OldSceneryEntryViewer(sceneryentries,sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
+                frm.Controls.Add(viewer);
+                frm.Text = string.Empty;
+            */
         }
-        
+
         private void Menu_ShowLevelC2()
         {
+            /*
             List<TextureChunk[]> sortedtexturechunks = new List<TextureChunk[]>();
             var sceneryentries = new List<int>();
             foreach (SceneryEntry entry in NSF.GetEntries<SceneryEntry>())
@@ -306,10 +309,12 @@ namespace CrashEdit
             SceneryEntryViewer viewer = new SceneryEntryViewer(NSF, sceneryentries,sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
             frm.Controls.Add(viewer);
             frm.Text = string.Empty;
+            */
         }
 
         private void Menu_ShowLevelC3()
         {
+            /*
             List<TextureChunk[]> sortedtexturechunks = new List<TextureChunk[]>();
             List<NewSceneryEntry> sceneryentries = new List<NewSceneryEntry>();
             foreach (NewSceneryEntry entry in NSF.GetEntries<NewSceneryEntry>())
@@ -327,6 +332,7 @@ namespace CrashEdit
             NewSceneryEntryViewer viewer = new NewSceneryEntryViewer(sceneryentries,sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
             frm.Controls.Add(viewer);
             frm.Text = string.Empty;
+            */
         }
 
         private void Menu_Import_Chunk()

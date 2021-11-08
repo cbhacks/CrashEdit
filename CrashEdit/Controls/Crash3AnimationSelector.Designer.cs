@@ -1,4 +1,5 @@
-﻿namespace CrashEdit
+﻿/*
+namespace CrashEdit
 {
     partial class Crash3AnimationSelector
     {
@@ -87,3 +88,4 @@
         private System.Windows.Forms.Label lblEIDErr;
     }
 }
+*/

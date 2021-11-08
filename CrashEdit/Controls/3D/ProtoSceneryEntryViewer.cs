@@ -1,3 +1,4 @@
+/*
 using Crash;
 using OpenTK.Graphics.OpenGL;
 using System;
@@ -152,3 +153,4 @@ namespace CrashEdit
         }
     }
 }
+*/

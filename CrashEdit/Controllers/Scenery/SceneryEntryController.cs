@@ -28,6 +28,7 @@ namespace CrashEdit
             Node.SelectedImageKey = "blueb";
         }
 
+        /*
         protected override Control CreateEditor()
         {
             TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(SceneryEntry.Info,0x28)];
@@ -37,7 +38,7 @@ namespace CrashEdit
             }
             return new UndockableControl(new SceneryEntryViewer(NSF, SceneryEntry.EID, texturechunks));
         }
-
+        */
         public SceneryEntry SceneryEntry { get; }
 
         private void Menu_Export_OBJ()

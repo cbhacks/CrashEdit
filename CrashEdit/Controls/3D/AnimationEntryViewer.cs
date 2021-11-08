@@ -1,3 +1,4 @@
+/*
 using Crash;
 using CrashEdit.Properties;
 using OpenTK;
@@ -606,3 +607,4 @@ namespace CrashEdit
         }
     }
 }
+*/
