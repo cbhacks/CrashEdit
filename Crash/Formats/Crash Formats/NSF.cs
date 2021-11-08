@@ -249,52 +249,69 @@ namespace Crash
             return GetEntry<T>(Entry.ENameToEID(ename));
         }
 
+        const bool USE_OLD_LOOKUP = true;
         public T GetEntry<T>(int eid) where T : class,IEntry
         {
             if (eid == Entry.NullEID)
                 return null;
-            foreach (Chunk chunk in Chunks)
+            if (EntryMap.ContainsKey(eid))
             {
-                if (chunk is IEntry)
+                return EntryMap[eid] as T;
+            }
+            if (USE_OLD_LOOKUP)
+            {
+                foreach (Chunk chunk in Chunks)
                 {
-                    IEntry entry = (IEntry)chunk;
-                    if (entry.EID == eid && entry is T)
+                    if (chunk is IEntry)
                     {
-                        return (T)entry;
+                        IEntry entry = (IEntry)chunk;
+                        if (entry.EID == eid && entry is T)
+                        {
+                            return (T)entry;
+                        }
                     }
-                }
-                if (chunk is EntryChunk entrychunk)
-                {
-                    T entry = entrychunk.FindEID<T>(eid);
-                    if (entry != null)
+                    if (chunk is EntryChunk entrychunk)
                     {
-                        return entry;
+                        T entry = entrychunk.FindEID<T>(eid);
+                        if (entry != null)
+                        {
+                            return entry;
+                        }
                     }
                 }
             }
             return null;
         }
 
-        public List<T> GetEntries<T>() where T : class,IEntry
+        public List<T> GetEntries<T>() where T : IEntry
         {
             List<T> entries = new List<T>();
-            foreach (Chunk chunk in Chunks)
+            foreach (var val in EntryMap.Values)
             {
-                if (chunk is IEntry)
+                if (val is T want)
                 {
-                    IEntry entry = (IEntry)chunk;
-                    if (entry is T)
-                    {
-                        entries.Add((T)entry);
-                    }
+                    entries.Add(want);
                 }
-                if (chunk is EntryChunk entrychunk)
+            }
+            if (USE_OLD_LOOKUP)
+            {
+                foreach (Chunk chunk in Chunks)
                 {
-                    foreach (Entry entry in entrychunk.Entries)
+                    if (chunk is IEntry centry)
                     {
-                        if (entry is T e)
+                        if (centry is T c && !entries.Contains(c))
                         {
-                            entries.Add(e);
+                            entries.Add(c);
+                        }
+                    }
+                    else if (chunk is EntryChunk entrychunk)
+                    {
+                        foreach (Entry entry in entrychunk.Entries)
+                        {
+                            if (entry is T e && !entries.Contains(e))
+                            {
+                                entries.Add(e);
+                            }
                         }
                     }
                 }
