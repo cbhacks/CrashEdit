@@ -143,16 +143,6 @@ namespace Crash
             return Unprocess().Save();
         }
 
-        public bool ChunkAddTo()
-        {
-            if (Chunk != null && !Chunk.Entries.Contains(this))
-            {
-                Chunk.Entries.Add(this);
-                return true;
-            }
-            return false;
-        }
-
         public int ChunkIndexOf()
         {
             if (Chunk == null) return -1;
@@ -172,7 +162,21 @@ namespace Crash
         public bool ChunkAddTo(EntryChunk chunk)
         {
             Chunk = chunk;
-            return ChunkAddTo();
+            if (Chunk != null && !Chunk.Entries.Contains(this))
+            {
+                try
+                {
+                    Chunk.Entries.Add(this);
+                }
+                catch (ArgumentException)
+                {
+                    Chunk.Entries.Remove(this);
+                    throw new EntryAddException(EID);
+                    // return false;
+                }
+                return true;
+            }
+            return false;
         }
 
         public bool ChunkRemove()

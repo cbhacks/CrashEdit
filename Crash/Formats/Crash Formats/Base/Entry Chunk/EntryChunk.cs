@@ -5,9 +5,13 @@ namespace Crash
 {
     public abstract class EntryChunk : Chunk
     {
+        public const bool ALLOW_DUPLICATE_ENTRIES = false;
+
         public EntryChunk(NSF nsf) : base(nsf)
         {
             Entries = new EvList<Entry>();
+            Entries.ItemAdded += Entries_ItemAdded;
+            Entries.ItemRemoved += Entries_ItemRemoved;
         }
 
         public EntryChunk(IEnumerable<Entry> entries, NSF nsf) : base(nsf)
@@ -15,10 +19,30 @@ namespace Crash
             if (entries == null)
                 throw new ArgumentNullException("entries");
             Entries = new EvList<Entry>();
+            Entries.ItemAdded += Entries_ItemAdded;
+            Entries.ItemRemoved += Entries_ItemRemoved;
             foreach (var entry in entries)
             {
                 entry.ChunkAddTo(this);
             }
+        }
+
+        private void Entries_ItemAdded(object sender, EvListEventArgs<Entry> e)
+        {
+            if (ALLOW_DUPLICATE_ENTRIES && NSF.EntryMap.ContainsKey(e.Item.EID))
+            {
+                NSF.EntryMap[e.Item.EID] = e.Item;
+            }
+            else
+            {
+                NSF.EntryMap.Add(e.Item.EID, e.Item);
+            }
+        }
+
+        private void Entries_ItemRemoved(object sender, EvListEventArgs<Entry> e)
+        {
+            if (NSF.EntryMap[e.Item.EID] == e.Item)
+                NSF.EntryMap.Remove(e.Item.EID);
         }
 
         public EvList<Entry> Entries { get; set; }

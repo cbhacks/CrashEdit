@@ -179,11 +179,15 @@ namespace CrashEdit
                     else
                     {
                         entry.ChunkAddTo(EntryChunk);
-                        AddNode(new UnprocessedEntryController(this,entry));
+                        AddNode(new UnprocessedEntryController(this, entry));
                     }
                 }
                 catch (LoadAbortedException)
                 {
+                }
+                catch (EntryAddException ex)
+                {
+                    MessageBox.Show(ex.Message, "Error while importing entry", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             InvalidateEditor();

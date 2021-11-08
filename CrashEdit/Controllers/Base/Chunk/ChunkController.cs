@@ -30,6 +30,11 @@ namespace CrashEdit
             trv.BeginUpdate();
             int index = NSFController.NSF.Chunks.IndexOf(Chunk);
             UnprocessedChunk unprocessedchunk = Chunk.Unprocess(index * 2 + 1);
+            var oldchunk = NSFController.NSF.Chunks[index];
+            if (oldchunk is EntryChunk echunk)
+            {
+                echunk.Entries.Clear();
+            }
             NSFController.NSF.Chunks[index] = unprocessedchunk;
             UnprocessedChunkController unprocessedchunkcontroller = new UnprocessedChunkController(NSFController, unprocessedchunk);
             NSFController.InsertNode(index, unprocessedchunkcontroller);

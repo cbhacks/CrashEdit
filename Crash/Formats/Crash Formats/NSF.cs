@@ -212,20 +212,22 @@ namespace Crash
         public NSF()
         {
             Chunks = new EvList<Chunk>();
+            EntryMap = new Dictionary<int, IEntry>();
         }
 
         public EvList<Chunk> Chunks { get; }
+        public Dictionary<int, IEntry> EntryMap { get; set; }
 
         public void ProcessAll(GameVersion gameversion)
         {
             for (int i = 0;i < Chunks.Count;i++)
             {
-                if (Chunks[i] is UnprocessedChunk)
+                if (Chunks[i] is UnprocessedChunk uchunk)
                 {
                     ErrorManager.EnterSkipRegion();
                     try
                     {
-                        Chunks[i] = ((UnprocessedChunk)Chunks[i]).Process(i * 2 + 1);
+                        Chunks[i] = uchunk.Process(i * 2 + 1);
                     }
                     catch (LoadSkippedException)
                     {
@@ -235,9 +237,9 @@ namespace Crash
                         ErrorManager.ExitSkipRegion();
                     }
                 }
-                if (Chunks[i] is EntryChunk)
+                if (Chunks[i] is EntryChunk echunk)
                 {
-                    ((EntryChunk)Chunks[i]).ProcessAll(gameversion);
+                    echunk.ProcessAll(gameversion);
                 }
             }
         }

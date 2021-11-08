@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Action System\Command.cs" />
     <Compile Include="Action System\CommandManager.cs" />
+    <Compile Include="Error System\EntryAddException.cs" />
     <Compile Include="Formats\Crash Formats\Animation\AnimationEntry.cs" />
     <Compile Include="Formats\Crash Formats\Animation\AnimationEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Animation\ColoredAnimationEntry.cs" />

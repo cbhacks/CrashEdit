@@ -6,7 +6,7 @@ namespace Crash
 {
     public sealed class EvList<T> : IList<T>
     {
-        private List<T> list;
+        private readonly List<T> list;
 
         public event EvListEventHandler<T> ItemAdded;
         public event EvListEventHandler<T> ItemRemoved;
@@ -38,11 +38,12 @@ namespace Crash
             get { return list[i]; }
             set
             {
-                list[i] = value;
                 EvListEventArgs<T> e = new EvListEventArgs<T>();
                 e.Index = i;
-                e.Item = value;
+                e.Item = list[i];
+                list[i] = value;
                 ItemRemoved?.Invoke(this, e);
+                e.Item = value;
                 ItemAdded?.Invoke(this, e);
             }
         }
