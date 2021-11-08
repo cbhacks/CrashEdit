@@ -173,12 +173,12 @@ namespace CrashEdit
                     if (process)
                     {
                         Entry processedentry = entry.Process(NSFController.GameVersion);
-                        EntryChunk.Entries.Add(processedentry);
+                        processedentry.ChunkAddTo(EntryChunk);
                         AddNode(CreateEntryController(processedentry));
                     }
                     else
                     {
-                        EntryChunk.Entries.Add(entry);
+                        entry.ChunkAddTo(EntryChunk);
                         AddNode(new UnprocessedEntryController(this,entry));
                     }
                 }
@@ -272,7 +272,7 @@ namespace CrashEdit
                         throw new Exception("An error occurred making a new entry.");
                     else
                     {
-                        EntryChunk.Entries.Add(newentry);
+                        newentry.ChunkAddTo(EntryChunk);
                         AddNode(CreateEntryController(newentry));
                         Editor.Invalidate();
                     }

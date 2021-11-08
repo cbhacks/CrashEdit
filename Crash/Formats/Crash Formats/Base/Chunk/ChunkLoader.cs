@@ -2,6 +2,6 @@ namespace Crash
 {
     public abstract class ChunkLoader
     {
-        public abstract Chunk Load(int chunkid,byte[] data);
+        public abstract Chunk Load(int chunkid,byte[] data,NSF nsf);
     }
 }

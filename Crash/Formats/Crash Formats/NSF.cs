@@ -141,16 +141,16 @@ namespace Crash
         {
             if (data == null)
                 throw new ArgumentNullException("data");
+            var nsf = new NSF();
             int offset = 0;
             int? firstid = null;
             List<UnprocessedChunk> prelude = null;
-            List<Chunk> chunks = new List<Chunk>();
             List<bool> preludecompression = null;
             List<bool> chunkcompression = new List<bool>();
             while (offset < data.Length)
             {
                 byte[] chunkdata = ReadChunk(data,ref offset,out bool compressed);
-                UnprocessedChunk chunk = Chunk.Load(chunkdata);
+                UnprocessedChunk chunk = Chunk.Load(chunkdata, nsf);
                 if (firstid == null)
                 {
                     firstid = chunk.ID;
@@ -162,31 +162,31 @@ namespace Crash
                         ErrorManager.SignalError("NSF: Double prelude");
                     }
                     prelude = new List<UnprocessedChunk>();
-                    foreach (UnprocessedChunk unprocessedchunk in chunks)
+                    foreach (UnprocessedChunk unprocessedchunk in nsf.Chunks)
                     {
                         prelude.Add(unprocessedchunk);
                     }
-                    chunks.Clear();
+                    nsf.Chunks.Clear();
                     preludecompression = chunkcompression;
                     chunkcompression = new List<bool>();
                 }
                 chunkcompression.Add(compressed);
-                if (prelude != null && chunks.Count < prelude.Count)
+                if (prelude != null && nsf.Chunks.Count < prelude.Count)
                 {
                     for (int i = 0;i < Chunk.Length;i++)
                     {
-                        if (prelude[chunks.Count].Data[i] != chunk.Data[i])
+                        if (prelude[nsf.Chunks.Count].Data[i] != chunk.Data[i])
                         {
                             ErrorManager.SignalIgnorableError("NSF: Prelude data mismatch");
                             break;
                         }
                     }
                 }
-                chunks.Add(chunk);
+                nsf.Chunks.Add(chunk);
             }
             if (prelude != null)
             {
-                if (chunks.Count < prelude.Count) // error merging for now
+                if (nsf.Chunks.Count < prelude.Count) // error merging for now
                 {
                     ErrorManager.SignalIgnorableError("NSF: Prelude is longer than actual data");
                 }
@@ -199,7 +199,7 @@ namespace Crash
                     ErrorManager.SignalIgnorableError("NSF: Non-prelude chunk was compressed");
                 }
             }
-            return new NSF(chunks);
+            return nsf;
         }
 
         public static NSF LoadAndProcess(byte[] data,GameVersion gameversion)
@@ -209,11 +209,9 @@ namespace Crash
             return nsf;
         }
 
-        public NSF(IEnumerable<Chunk> chunks)
+        public NSF()
         {
-            if (chunks == null)
-                throw new ArgumentNullException("chunks");
-            Chunks = new EvList<Chunk>(chunks);
+            Chunks = new EvList<Chunk>();
         }
 
         public EvList<Chunk> Chunks { get; }

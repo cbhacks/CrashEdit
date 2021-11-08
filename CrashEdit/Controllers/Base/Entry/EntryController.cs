@@ -23,14 +23,13 @@ namespace CrashEdit
 
         public override bool Move(Controller newcontroller,bool commit)
         {
-            if (newcontroller is EntryChunkController)
+            if (newcontroller is EntryChunkController entrychunkcontroller)
             {
                 if (commit)
                 {
-                    EntryChunkController.EntryChunk.Entries.Remove(Entry);
+                    Entry.ChunkMoveTo(entrychunkcontroller.EntryChunk);
+                    EntryChunkController = entrychunkcontroller;
                     Node.Remove();
-                    EntryChunkController = (EntryChunkController)newcontroller;
-                    EntryChunkController.EntryChunk.Entries.Add(Entry);
                     EntryChunkController.Node.Nodes.Add(Node);
                 }
                 return true;
@@ -53,7 +52,7 @@ namespace CrashEdit
 
         private void Menu_Delete_Entry()
         {
-            EntryChunkController.EntryChunk.Entries.Remove(Entry);
+            Entry.ChunkRemove();
             EntryChunkController.Editor.Invalidate();
             Dispose();
         }
@@ -62,9 +61,9 @@ namespace CrashEdit
         {
             var trv = Node.TreeView;
             trv.BeginUpdate();
-            int index = EntryChunkController.EntryChunk.Entries.IndexOf(Entry);
+            int index = Entry.ChunkIndexOf();
             UnprocessedEntry unprocessedentry = Entry.Unprocess();
-            EntryChunkController.EntryChunk.Entries[index] = unprocessedentry;
+            unprocessedentry.ChunkReplaceWith(Entry);
             UnprocessedEntryController unprocessedentrycontroller = new UnprocessedEntryController(EntryChunkController,unprocessedentry);
             EntryChunkController.InsertNode(index,unprocessedentrycontroller);
             if (Node.IsSelected)

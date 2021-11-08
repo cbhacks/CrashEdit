@@ -4,7 +4,7 @@ namespace Crash
 {
     public abstract class EntryChunkLoader : ChunkLoader
     {
-        public sealed override Chunk Load(int chunkid,byte[] data)
+        public sealed override Chunk Load(int chunkid, byte[] data, NSF nsf)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
@@ -53,9 +53,9 @@ namespace Crash
                 Array.Copy(data,entrystart,entrydata,0,entrysize);
                 entries[i] = Entry.Load(entrydata);
             }
-            return Load(entries);
+            return Load(entries, nsf);
         }
 
-        public abstract Chunk Load(Entry[] entries);
+        public abstract Chunk Load(Entry[] entries, NSF nsf);
     }
 }

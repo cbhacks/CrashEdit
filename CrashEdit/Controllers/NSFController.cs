@@ -91,7 +91,7 @@ namespace CrashEdit
 
         private void Menu_Add_NormalChunk()
         {
-            NormalChunk chunk = new NormalChunk();
+            NormalChunk chunk = new NormalChunk(NSF);
             NSF.Chunks.Add(chunk);
             NormalChunkController controller = new NormalChunkController(this,chunk);
             AddNode(controller);
@@ -99,7 +99,7 @@ namespace CrashEdit
 
         private void Menu_Add_OldSoundChunk()
         {
-            OldSoundChunk chunk = new OldSoundChunk();
+            OldSoundChunk chunk = new OldSoundChunk(NSF);
             NSF.Chunks.Add(chunk);
             OldSoundChunkController controller = new OldSoundChunkController(this,chunk);
             AddNode(controller);
@@ -107,7 +107,7 @@ namespace CrashEdit
 
         private void Menu_Add_SoundChunk()
         {
-            SoundChunk chunk = new SoundChunk();
+            SoundChunk chunk = new SoundChunk(NSF);
             NSF.Chunks.Add(chunk);
             SoundChunkController controller = new SoundChunkController(this,chunk);
             AddNode(controller);
@@ -115,7 +115,7 @@ namespace CrashEdit
 
         private void Menu_Add_WavebankChunk()
         {
-            WavebankChunk chunk = new WavebankChunk();
+            WavebankChunk chunk = new WavebankChunk(NSF);
             NSF.Chunks.Add(chunk);
             WavebankChunkController controller = new WavebankChunkController(this,chunk);
             AddNode(controller);
@@ -123,7 +123,7 @@ namespace CrashEdit
 
         private void Menu_Add_SpeechChunk()
         {
-            SpeechChunk chunk = new SpeechChunk();
+            SpeechChunk chunk = new SpeechChunk(NSF);
             NSF.Chunks.Add(chunk);
             SpeechChunkController controller = new SpeechChunkController(this,chunk);
             AddNode(controller);
@@ -339,7 +339,7 @@ namespace CrashEdit
             {
                 try
                 {
-                    UnprocessedChunk chunk = Chunk.Load(data);
+                    UnprocessedChunk chunk = Chunk.Load(data, NSF);
                     if (process)
                     {
                         Chunk processedchunk = chunk.Process(NSF.Chunks.Count*2 + 1);

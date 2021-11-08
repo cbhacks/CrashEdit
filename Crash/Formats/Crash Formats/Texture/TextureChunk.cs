@@ -4,7 +4,7 @@ namespace Crash
 {
     public sealed class TextureChunk : Chunk,IEntry
     {
-        public TextureChunk(byte[] data)
+        public TextureChunk(byte[] data, NSF nsf) : base(nsf)
         {
             Data = data ?? throw new ArgumentNullException("data");
         }
@@ -21,7 +21,7 @@ namespace Crash
 
         public override UnprocessedChunk Unprocess(int chunkid)
         {
-            return new UnprocessedChunk(Data);
+            return new UnprocessedChunk(Data, NSF);
         }
     }
 }

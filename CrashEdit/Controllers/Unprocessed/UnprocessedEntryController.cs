@@ -38,8 +38,8 @@ namespace CrashEdit
             }
             var trv = Node.TreeView;
             trv.BeginUpdate();
-            int index = EntryChunkController.EntryChunk.Entries.IndexOf(UnprocessedEntry);
-            EntryChunkController.EntryChunk.Entries[index] = processedentry;
+            int index = UnprocessedEntry.ChunkIndexOf();
+            processedentry.ChunkReplaceWith(UnprocessedEntry);
             EntryController processedentrycontroller = EntryChunkController.CreateEntryController(processedentry);
             EntryChunkController.InsertNode(index,processedentrycontroller);
             if (Node.IsSelected)
