@@ -1,15 +1,19 @@
 ﻿using OpenTK;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Collections.Generic;
 
 namespace CrashEdit
 {
+    public enum RendererMoveMode { Free, Anchored }
+
     public class RenderInfo
     {
+
         public ProjectionInfo Projection;
         public ShaderContext ShaderContext;
+        public RendererMoveMode MoveMode;
 
         public const float InitialDistance = 10;
         public const float MinDistance = 2;
@@ -24,9 +28,10 @@ namespace CrashEdit
         public void Reset()
         {
             Distance = InitialDistance;
-            Projection.Trans = new Vector3(0, Distance, 0);
+            Projection.Trans = new Vector3(0, 0, 0);
             Projection.Rot = new Vector3(BaseRot, 0, 0);
             Projection.Scale = new Vector3(1);
+            MoveMode = RendererMoveMode.Anchored;
         }
 
         private bool masterexit;

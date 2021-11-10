@@ -225,12 +225,12 @@ namespace CrashEdit
             var d = movespeed * PerFrame * (render.Distance / RenderInfo.InitialDistance);
             if (KDown(Keys.ControlKey))
             {
-                if (KDown(Keys.W)) render.Projection.Trans.Y += d;
-                if (KDown(Keys.S)) render.Projection.Trans.Y -= d;
+                if (KDown(Keys.W)) render.Projection.Trans.Z += d;
+                if (KDown(Keys.S)) render.Projection.Trans.Z -= d;
                 if (KDown(Keys.A)) render.Projection.Trans.X += d;
                 if (KDown(Keys.D)) render.Projection.Trans.X -= d;
-                if (KDown(Keys.E)) render.Projection.Trans.Z += d;
-                if (KDown(Keys.Q)) render.Projection.Trans.Z -= d;
+                if (KDown(Keys.E)) render.Projection.Trans.Y += d;
+                if (KDown(Keys.Q)) render.Projection.Trans.Y -= d;
             }
             else
             {
@@ -279,7 +279,7 @@ namespace CrashEdit
                 var olddist = render.Distance;
                 float delta = (float)e.Delta / SystemInformation.MouseWheelScrollDelta * 1.5f;
                 render.Distance = Math.Max(RenderInfo.MinDistance, Math.Min(render.Distance - delta, RenderInfo.MaxDistance));
-                render.Projection.Trans -= (Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot)) * new Vector4(0, 0, render.Distance - olddist, 1)).Xyz;
+                // render.Projection.Trans -= (Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot)) * new Vector4(0, 0, render.Distance - olddist, 1)).Xyz;
             }
         }
 
@@ -344,7 +344,9 @@ namespace CrashEdit
                 render.Projection.Height = Height;
 
                 render.Projection.Perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45), render.Projection.Aspect, 0.1f, 16384);
-                render.Projection.View = Matrix4.CreateTranslation(render.Projection.Trans) * Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot));
+                var rot_mat = Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot));
+                var test_vec = (rot_mat * new Vector4(0, 0, render.Distance, 1)).Xyz;
+                render.Projection.View = Matrix4.CreateTranslation(render.Projection.Trans - test_vec) * rot_mat;
 
                 // render
                 Render();
