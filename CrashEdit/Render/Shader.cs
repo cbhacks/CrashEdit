@@ -16,7 +16,8 @@ namespace CrashEdit
             { "axes", new ShaderInfo("axes.vert", "default4.frag", func: RenderAxes) },
             { "line", new ShaderInfo("line-static.vert", "default4.frag") },
             { "line-model", new ShaderInfo("line-model.vert", "default4.frag", func: RenderLineModel) },
-            { "anim_c1", new ShaderInfo("anim_c1.vert", "default4.frag", func: RenderC1Anim) }
+            { "anim_c1", new ShaderInfo("anim_c1.vert", "default4.frag", func: RenderC1Anim) },
+            { "line-usercolor", new ShaderInfo("line-usercolor.vert", "default4.frag") }
         };
 
         public string VertShaderName { get; }
@@ -117,6 +118,7 @@ namespace CrashEdit
         }
 
         public void UniformMatrix4(string var_name, ref Matrix4 mat) => GL.UniformMatrix4(GL.GetUniformLocation(ID, var_name), false, ref mat);
+        public void UniformMatrix3(string var_name, ref Matrix3 mat) => GL.UniformMatrix3(GL.GetUniformLocation(ID, var_name), false, ref mat);
         public void UniformVec3(string var_name, ref Vector3 vec) => GL.Uniform3(GL.GetUniformLocation(ID, var_name), vec.X, vec.Y, vec.Z);
         public void UniformVec4(string var_name, ref Vector4 vec) => GL.Uniform4(GL.GetUniformLocation(ID, var_name), vec.X, vec.Y, vec.Z, vec.W);
         public void UniformVec4(string var_name, ref Color4 col) => GL.Uniform4(GL.GetUniformLocation(ID, var_name), col.R, col.G, col.B, col.A);

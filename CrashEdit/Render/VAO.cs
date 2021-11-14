@@ -82,6 +82,12 @@ namespace CrashEdit
             VertCount = positions.Length;
         }
 
+        public void UpdateNormals(Vector3[] positions)
+        {
+            UpdateAttrib("normal", positions, 12, 4);
+            VertCount = positions.Length;
+        }
+
         public void UpdateColors(float[] colors)
         {
             UpdateAttrib("color", colors, sizeof(float), 4);

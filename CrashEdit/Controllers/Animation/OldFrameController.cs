@@ -51,7 +51,7 @@ namespace CrashEdit
                 if (str is OldModelTexture tex && !textures.ContainsKey(tex.EID))
                     textures.Add(tex.EID, entry.EntryChunkController.NSFController.NSF.GetEntry<TextureChunk>(tex.EID));
             */
-            OldAnimationEntryViewer viewerbox = new OldAnimationEntryViewer(entry.NSF, entry.Entry.EID, false, null) { Dock = DockStyle.Fill };
+            OldAnimationEntryViewer viewerbox = new OldAnimationEntryViewer(entry.NSF, entry.Entry.EID, OldAnimationEntryController.OldAnimationEntry.Frames.IndexOf(OldFrame), false, null) { Dock = DockStyle.Fill };
 
             TabPage edittab = new TabPage("Editor");
             edittab.Controls.Add(framebox);

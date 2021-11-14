@@ -44,7 +44,13 @@ namespace CrashEdit
 
         internal static void RenderC1Anim(Shader sh, RenderInfo ri)
         {
+            ri.Projection.UserScale /= 3200;
+            ri.Projection.UserScale /= 128;
             sh.UniformVec3("trans", ref ri.Projection.UserTrans);
+            sh.UniformVec3("modelScale", ref ri.Projection.UserScale);
+
+            sh.UniformMatrix3("modelLightAmb", ref ri.Projection.UserMat3);
+            sh.UniformVec3("modelColorAmb", ref ri.Projection.UserColorAmb);
         }
     }
 }

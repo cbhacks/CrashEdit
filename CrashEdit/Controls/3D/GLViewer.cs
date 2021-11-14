@@ -62,6 +62,9 @@ namespace CrashEdit
         private readonly Dictionary<int, Vector4[]> SpherePosCache = new Dictionary<int, Vector4[]>();
         private int SpherePosLastUploaded = -1;
         protected VAO vaoSphereLine;
+        private readonly Dictionary<int, Vector4[]> GridPosCache = new Dictionary<int, Vector4[]>();
+        private int GridPosLastUploaded = -1;
+        protected VAO vaoGridLine;
 
         protected readonly RenderInfo render;
 
@@ -78,10 +81,13 @@ namespace CrashEdit
         private bool mouseleft = false;
         private int mousex = 0;
         private int mousey = 0;
-        private float movespeed = 30f;
+        private float movespeed = 7.5f;
         private float rotspeed = 0.5f;
+        private float zoomspeed = 1.0f;
 
-        private const float PerFrame = 1f / 60f;
+        private const float PerFrame = 1 / 60f;
+
+        protected abstract bool UseGrid { get; }
 
         protected void MakeLineSphere(int resolution)
         {
@@ -138,26 +144,40 @@ namespace CrashEdit
             vaoSphereLine.UpdatePositions(SpherePosCache[resolution]);
             SpherePosLastUploaded = resolution;
         }
+        protected void MakeLineGrid(int resolution)
+        {
+            if (resolution < 0)
+                throw new ArgumentOutOfRangeException(nameof(resolution), "Grid resolution cannot be less than 0.");
+            if (GridPosLastUploaded == resolution) return;
+
+            if (!GridPosCache.ContainsKey(resolution))
+            {
+                var pos = new Vector4[4 * resolution * 2];
+                var border = resolution * 1f - 0.5f;
+
+                var pi = 0;
+                for (int i = 0; i < resolution * 2; ++i)
+                {
+                    pos[pi++] = new Vector4(-border + i, 0, -border, 1);
+                    pos[pi++] = new Vector4(-border + i, 0, +border, 1);
+                    pos[pi++] = new Vector4(-border, 0, -border + i, 1);
+                    pos[pi++] = new Vector4(+border, 0, -border + i, 1);
+                }
+
+                GridPosCache.Add(resolution, pos);
+            }
+
+            vaoGridLine.UpdatePositions(GridPosCache[resolution]);
+            GridPosLastUploaded = resolution;
+
+        }
 
         public GLViewer() : base(GraphicsMode.Default, 4, 3, GraphicsContextFlags.Debug)
         {
             render = new RenderInfo(this);
         }
 
-        protected abstract IEnumerable<IPosition> CorePositions
-        {
-            get;
-        }
-
-        protected void CheckErrors()
-        {
-            var err = GL.GetError();
-            while (err != ErrorCode.NoError)
-            {
-                Console.WriteLine(string.Format("GL ERROR 0x{0:X}", err));
-                err = GL.GetError();
-            }
-        }
+        protected abstract IEnumerable<IPosition> CorePositions { get; }
 
         protected override void OnLoad(EventArgs e)
         {
@@ -201,11 +221,10 @@ namespace CrashEdit
             vaoAxes.UpdateColors(AxesCol);
 
             vaoSphereLine = new VAO(render.ShaderContext, "line-model", PrimitiveType.LineStrip);
+            vaoGridLine = new VAO(render.ShaderContext, "line-usercolor", PrimitiveType.Lines);
 
             // set the clear color to black
             GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
-            CheckErrors();
 
             // enable logic
             run = true;
@@ -277,7 +296,7 @@ namespace CrashEdit
             lock (render.mLock)
             {
                 var olddist = render.Distance;
-                float delta = (float)e.Delta / SystemInformation.MouseWheelScrollDelta * 1.5f;
+                float delta = (float)e.Delta / SystemInformation.MouseWheelScrollDelta * zoomspeed;
                 render.Distance = Math.Max(RenderInfo.MinDistance, Math.Min(render.Distance - delta, RenderInfo.MaxDistance));
                 // render.Projection.Trans -= (Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot)) * new Vector4(0, 0, render.Distance - olddist, 1)).Xyz;
             }
@@ -331,7 +350,7 @@ namespace CrashEdit
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            // MakeCurrent();
+            MakeCurrent();
 
             // Clear buffers
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -360,7 +379,21 @@ namespace CrashEdit
         protected virtual void Render()
         {
             // vaoTest.Render(render);
-            vaoAxes.Render(render);
+            if (UseGrid && Properties.Settings.Default.DisplayAnimGrid)
+            {
+                var old = render.Projection.Trans;
+                render.Projection.Trans = new Vector3(0);
+                vaoAxes.Render(render);
+                render.Projection.Trans = old;
+
+                MakeLineGrid(Properties.Settings.Default.AnimGridLen);
+                render.Projection.UserColor1 = Color4.Gray;
+                vaoGridLine.Render(render);
+            }
+            else
+            {
+                vaoAxes.Render(render);
+            }
         }
 
         public void ResetCamera()
@@ -383,8 +416,8 @@ namespace CrashEdit
             int midx = (maxx + minx) / 2;
             int midy = (maxy + miny) / 2;
             int midz = (maxz + minz) / 2;
-            render.Distance = Math.Max(10, (int)(Math.Sqrt(Math.Pow(maxx-midx, 2) + Math.Pow(maxy-midy, 2) + Math.Pow(maxz-midz, 2))*1.2));
-            render.Distance += 0;
+            //render.Distance = Math.Max(10, (int)(Math.Sqrt(Math.Pow(maxx-midx, 2) + Math.Pow(maxy-midy, 2) + Math.Pow(maxz-midz, 2))*1.2));
+            //render.Distance += 0;
             render.Projection.Rot.Y = 0;
             render.Projection.Rot.X = MathHelper.DegreesToRadians(15);
             Invalidate();

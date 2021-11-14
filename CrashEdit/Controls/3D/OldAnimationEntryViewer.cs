@@ -29,8 +29,11 @@ namespace CrashEdit
 
         private VAO vaoModel;
         private Vector4[] buf_vtx;
+        private Vector3[] buf_nor;
         private Color4[] buf_col;
         private int buf_idx;
+
+        protected override bool UseGrid => true;
 
         public OldAnimationEntryViewer(NSF nsf, int anim_eid, int frame, bool colored, Dictionary<int, int> texturechunks)
         {
@@ -102,7 +105,7 @@ namespace CrashEdit
             var anim = nsf.GetEntry<OldAnimationEntry>(eid_anim);
             if (anim != null)
             {
-                cur_frame = (int)(render.CurrentFrame / 2 % anim.Frames.Count);
+                cur_frame = frame_id == -1 ? (int)(render.CurrentFrame / 2 % anim.Frames.Count) : frame_id;
                 RenderFrame(nsf.GetEntry<OldAnimationEntry>(eid_anim).Frames[cur_frame]);
             }
         }
@@ -122,7 +125,12 @@ namespace CrashEdit
             if (model != null)
             {
                 if (frame2 != null && (frame2.ModelEID != frame.ModelEID || frame.Vertices.Count != frame2.Vertices.Count)) frame2 = null;
+                render.Projection.UserMat3.Row0 = new Vector3(-4096, 2048, 4096) / 0x1000;
+                render.Projection.UserMat3.Row1 = new Vector3(-3563, 2048, 4096) / 0x1000;
+                render.Projection.UserMat3.Row2 = new Vector3(4096, -2048, 0) / 0x1000;
+                render.Projection.UserColorAmb = new Vector3(614, 614, 614) / 0x200;
                 buf_vtx = new Vector4[model.Polygons.Count * 3];
+                buf_nor = new Vector3[model.Polygons.Count * 3];
                 buf_col = new Color4[model.Polygons.Count * 3];
                 foreach (OldModelPolygon polygon in model.Polygons)
                 {
@@ -148,7 +156,9 @@ namespace CrashEdit
                     }
                 }
                 render.Projection.UserTrans = new Vector3(frame.XOffset, frame.YOffset, frame.ZOffset);
+                render.Projection.UserScale = new Vector3(model.ScaleX, model.ScaleY, model.ScaleZ);
                 vaoModel.UpdatePositions(buf_vtx);
+                vaoModel.UpdateNormals(buf_nor);
                 vaoModel.UpdateColors(buf_col);
                 vaoModel.Render(render);
             }
@@ -162,7 +172,13 @@ namespace CrashEdit
                 float x = v.X-128;
                 float y = v.Y-128;
                 float z = v.Z-128;
-                buf_vtx[buf_idx++] = new Vector4(x, y, z, 1);
+                buf_vtx[buf_idx] = new Vector4(x, y, z, 1);
+                float nx = v.NormalX;
+                float ny = v.NormalY;
+                float nz = v.NormalZ;
+                buf_nor[buf_idx] = new Vector3(nx, ny, nz);
+                var test = render.Projection.UserMat3 * (Vector3.Normalize(buf_nor[buf_idx]));
+                buf_idx++;
             }
             else
             {

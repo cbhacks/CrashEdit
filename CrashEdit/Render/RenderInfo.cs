@@ -15,9 +15,9 @@ namespace CrashEdit
         public ShaderContext ShaderContext;
         public RendererMoveMode MoveMode;
 
-        public const float InitialDistance = 10;
-        public const float MinDistance = 2;
-        public const float MaxDistance = 40;
+        public const float InitialDistance = 5;
+        public const float MinDistance = 1;
+        public const float MaxDistance = 50;
 
         public const float BaseRot = 0;
         public const float MinRot = BaseRot - MathHelper.PiOver2;

@@ -444,6 +444,7 @@
     <EmbeddedResource Include="Render\Shaders\test.vert" />
     <EmbeddedResource Include="Render\Shaders\line-model.vert" />
     <EmbeddedResource Include="Render\Shaders\line-static.vert" />
+    <EmbeddedResource Include="Render\Shaders\line-usercolor.vert" />
     <None Include="Resources\objects_012_red.gif" />
     <Content Include="Resources\objects_012_violet.gif" />
     <None Include="Resources\objects_012_yellow.gif" />
