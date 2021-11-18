@@ -29,7 +29,7 @@ namespace CrashEdit.CE
             }
         }
 
-        public override CrashEdit.LegacyController MoveTo(CrashEdit.LegacyController newcontroller)
+        public override void MoveTo(CrashEdit.LegacyController newcontroller)
         {
             if (newcontroller is EntryChunkController newecc)
             {
@@ -38,11 +38,10 @@ namespace CrashEdit.CE
                 var replacement = newecc.CreateEntryController(Entry);
                 newecc.AddNode(replacement);
                 RemoveSelf();
-                return replacement;
             }
             else
             {
-                return base.MoveTo(newcontroller);
+                base.MoveTo(newcontroller);
             }
         }
 

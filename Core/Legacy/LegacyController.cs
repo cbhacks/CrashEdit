@@ -54,7 +54,7 @@ namespace CrashEdit {
             return false;
         }
 
-        public virtual LegacyController MoveTo(LegacyController dest) {
+        public virtual void MoveTo(LegacyController dest) {
             throw new NotSupportedException();
         }
 
