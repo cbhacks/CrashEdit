@@ -5,10 +5,11 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(ProtoZoneEntry))]
     public sealed class ProtoZoneEntryController : EntryController
     {
-        public ProtoZoneEntryController(EntryChunkController entrychunkcontroller,ProtoZoneEntry zoneentry)
-            : base(entrychunkcontroller,zoneentry)
+        public ProtoZoneEntryController(ProtoZoneEntry zoneentry, SubcontrollerGroup parentGroup)
+            : base(zoneentry, parentGroup)
         {
             ProtoZoneEntry = zoneentry;
             foreach (OldCamera camera in zoneentry.Cameras)

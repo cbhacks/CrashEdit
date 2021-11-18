@@ -3,9 +3,10 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(MysteryUniItemEntry))]
     public class MysteryUniItemEntryController : EntryController
     {
-        public MysteryUniItemEntryController(EntryChunkController entrychunkcontroller,MysteryUniItemEntry mysteryentry) : base(entrychunkcontroller,mysteryentry)
+        public MysteryUniItemEntryController(MysteryUniItemEntry mysteryentry, SubcontrollerGroup parentGroup) : base(mysteryentry, parentGroup)
         {
             MysteryEntry = mysteryentry;
         }

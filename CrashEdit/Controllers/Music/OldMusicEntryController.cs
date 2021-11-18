@@ -4,9 +4,10 @@ using System.Collections.Generic;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(OldMusicEntry))]
     public sealed class OldMusicEntryController : EntryController
     {
-        public OldMusicEntryController(EntryChunkController entrychunkcontroller,OldMusicEntry oldmusicentry) : base(entrychunkcontroller,oldmusicentry)
+        public OldMusicEntryController(OldMusicEntry oldmusicentry, SubcontrollerGroup parentGroup) : base(oldmusicentry, parentGroup)
         {
             OldMusicEntry = oldmusicentry;
             AddMenuSeparator();

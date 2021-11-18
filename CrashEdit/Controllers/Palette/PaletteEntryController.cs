@@ -4,9 +4,10 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(PaletteEntry))]
     public sealed class PaletteEntryController : EntryController
     {
-        public PaletteEntryController(EntryChunkController entrychunkcontroller,PaletteEntry paletteentry) : base(entrychunkcontroller,paletteentry)
+        public PaletteEntryController(PaletteEntry paletteentry, SubcontrollerGroup parentGroup) : base(paletteentry, parentGroup)
         {
             PaletteEntry = paletteentry;
         }

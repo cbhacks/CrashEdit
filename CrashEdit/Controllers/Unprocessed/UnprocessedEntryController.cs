@@ -2,9 +2,10 @@ using CrashEdit.Crash;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(UnprocessedEntry))]
     public sealed class UnprocessedEntryController : EntryController
     {
-        public UnprocessedEntryController(EntryChunkController entrychunkcontroller,UnprocessedEntry unprocessedentry) : base(entrychunkcontroller,unprocessedentry)
+        public UnprocessedEntryController(UnprocessedEntry unprocessedentry, SubcontrollerGroup parentGroup) : base(unprocessedentry, parentGroup)
         {
             UnprocessedEntry = unprocessedentry;
             AddMenu(string.Format(CrashUI.Properties.Resources.UnprocessedEntryController_AcProcess,UnprocessedEntry.EName),Menu_Process_Entry);
@@ -25,9 +26,6 @@ namespace CrashEdit.CE
             }
             int index = EntryChunkController.EntryChunk.Entries.IndexOf(UnprocessedEntry);
             EntryChunkController.EntryChunk.Entries[index] = processedentry;
-            EntryController processedentrycontroller = EntryChunkController.CreateEntryController(processedentry);
-            EntryChunkController.InsertNode(index,processedentrycontroller);
-            RemoveSelf();
         }
     }
 }

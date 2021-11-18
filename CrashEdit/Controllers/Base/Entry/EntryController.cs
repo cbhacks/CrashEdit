@@ -3,13 +3,12 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(Entry))]
     public class EntryController : LegacyController
     {
-        public EntryController(EntryChunkController entrychunkcontroller,Entry entry) : base(entrychunkcontroller, entry)
+        public EntryController(Entry entry, SubcontrollerGroup parentGroup) : base(parentGroup, entry)
         {
-            EntryChunkController = entrychunkcontroller;
             Entry = entry;
-            AddMenu(string.Format(CrashUI.Properties.Resources.EntryController_AcDelete,entry.EName),Menu_Delete_Entry);
             AddMenu(string.Format(CrashUI.Properties.Resources.EntryController_AcRename,entry.EName),Menu_Rename_Entry);
             if (!(this is UnprocessedEntryController))
             {
@@ -17,7 +16,7 @@ namespace CrashEdit.CE
             }
         }
 
-        protected EntryChunkController EntryChunkController { get; }
+        protected EntryChunkController EntryChunkController => (EntryChunkController)Modern.Parent.Legacy;
         public Entry Entry { get; }
 
         public override bool CanMoveTo(CrashEdit.LegacyController newcontroller)
@@ -35,9 +34,6 @@ namespace CrashEdit.CE
             {
                 EntryChunkController.EntryChunk.Entries.Remove(Entry);
                 newecc.EntryChunk.Entries.Add(Entry);
-                var replacement = newecc.CreateEntryController(Entry);
-                newecc.AddNode(replacement);
-                RemoveSelf();
             }
             else
             {
@@ -50,21 +46,11 @@ namespace CrashEdit.CE
             return GetEntry<T>(eid);
         }
 
-        private void Menu_Delete_Entry()
-        {
-            EntryChunkController.EntryChunk.Entries.Remove(Entry);
-            EntryChunkController.NeedsNewEditor = true;
-            RemoveSelf();
-        }
-
         private void Menu_Unprocess_Entry()
         {
             int index = EntryChunkController.EntryChunk.Entries.IndexOf(Entry);
             UnprocessedEntry unprocessedentry = Entry.Unprocess();
             EntryChunkController.EntryChunk.Entries[index] = unprocessedentry;
-            UnprocessedEntryController unprocessedentrycontroller = new UnprocessedEntryController(EntryChunkController,unprocessedentry);
-            EntryChunkController.InsertNode(index,unprocessedentrycontroller);
-            RemoveSelf();
         }
 
         private void Menu_Rename_Entry()

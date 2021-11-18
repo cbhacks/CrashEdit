@@ -4,9 +4,10 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(MapEntry))]
     public sealed class MapEntryController : EntryController
     {
-        public MapEntryController(EntryChunkController entrychunkcontroller,MapEntry mapentry) : base(entrychunkcontroller,mapentry)
+        public MapEntryController(MapEntry mapentry, SubcontrollerGroup parentGroup) : base(mapentry, parentGroup)
         {
             MapEntry = mapentry;
             foreach (OldEntity entity in mapentry.Entities)

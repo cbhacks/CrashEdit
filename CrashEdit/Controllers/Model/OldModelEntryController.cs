@@ -4,9 +4,10 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(OldModelEntry))]
     public sealed class OldModelEntryController : EntryController
     {
-        public OldModelEntryController(EntryChunkController entrychunkcontroller,OldModelEntry oldmodelentry) : base(entrychunkcontroller,oldmodelentry)
+        public OldModelEntryController(OldModelEntry oldmodelentry, SubcontrollerGroup parentGroup) : base(oldmodelentry, parentGroup)
         {
             OldModelEntry = oldmodelentry;
         }

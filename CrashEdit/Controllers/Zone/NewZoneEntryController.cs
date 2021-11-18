@@ -4,9 +4,10 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(NewZoneEntry))]
     public sealed class NewZoneEntryController : EntryController
     {
-        public NewZoneEntryController(EntryChunkController entrychunkcontroller,NewZoneEntry zoneentry) : base(entrychunkcontroller,zoneentry)
+        public NewZoneEntryController(NewZoneEntry zoneentry, SubcontrollerGroup parentGroup) : base(zoneentry, parentGroup)
         {
             NewZoneEntry = zoneentry;
             foreach (Entity entity in zoneentry.Entities)

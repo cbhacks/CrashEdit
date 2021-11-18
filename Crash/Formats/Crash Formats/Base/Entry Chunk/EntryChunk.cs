@@ -17,6 +17,7 @@ namespace CrashEdit.Crash
             Entries = new List<Entry>(entries);
         }
 
+        [SubresourceList]
         public List<Entry> Entries { get; set; }
 
         public abstract int Alignment { get; }

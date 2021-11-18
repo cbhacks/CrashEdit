@@ -4,10 +4,11 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(OldZoneEntry))]
     public sealed class OldZoneEntryController : EntryController
     {
-        public OldZoneEntryController(EntryChunkController entrychunkcontroller,OldZoneEntry zoneentry)
-            : base(entrychunkcontroller,zoneentry)
+        public OldZoneEntryController(OldZoneEntry zoneentry, SubcontrollerGroup parentGroup)
+            : base(zoneentry, parentGroup)
         {
             OldZoneEntry = zoneentry;
             foreach (OldCamera camera in zoneentry.Cameras)

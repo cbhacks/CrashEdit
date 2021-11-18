@@ -10,17 +10,8 @@ namespace CrashEdit.CE
         public EntryChunkController(NSFController nsfcontroller,EntryChunk entrychunk) : base(nsfcontroller,entrychunk)
         {
             EntryChunk = entrychunk;
-            PopulateNodes();
             AddMenu(CrashUI.Properties.Resources.EntryChunkController_AcImport,Menu_Import_Entry);
             AddMenu(CrashUI.Properties.Resources.EntryChunkController_AcAddNew,Menu_Add_Entry);
-        }
-
-        public void PopulateNodes()
-        {
-            foreach (Entry entry in EntryChunk.Entries)
-            {
-                AddNode(CreateEntryController(entry));
-            }
         }
 
         public EntryChunk EntryChunk { get; }
@@ -28,114 +19,6 @@ namespace CrashEdit.CE
         public override bool EditorAvailable => true;
 
         public override Control CreateEditor() => new EntryChunkBox(this);
-
-        internal EntryController CreateEntryController(Entry entry)
-        {
-            if (entry is ProtoAnimationEntry)
-            {
-                return new ProtoAnimationEntryController(this, (ProtoAnimationEntry)entry);
-            }
-            else if (entry is OldAnimationEntry)
-            {
-                return new OldAnimationEntryController(this,(OldAnimationEntry)entry);
-            }
-            else if (entry is OldModelEntry)
-            {
-                return new OldModelEntryController(this,(OldModelEntry)entry);
-            }
-            else if (entry is ModelEntry)
-            {
-                return new ModelEntryController(this, (ModelEntry)entry);
-            }
-            else if (entry is AnimationEntry)
-            {
-                return new AnimationEntryController(this, (AnimationEntry)entry);
-            }
-            else if (entry is ProtoSceneryEntry)
-            {
-                return new ProtoSceneryEntryController(this,(ProtoSceneryEntry)entry);
-            }
-            else if (entry is OldSceneryEntry)
-            {
-                return new OldSceneryEntryController(this,(OldSceneryEntry)entry);
-            }
-            else if (entry is SceneryEntry)
-            {
-                return new SceneryEntryController(this,(SceneryEntry)entry);
-            }
-            else if (entry is NewSceneryEntry)
-            {
-                return new NewSceneryEntryController(this,(NewSceneryEntry)entry);
-            }
-            else if (entry is SLSTEntry)
-            {
-                return new SLSTEntryController(this,(SLSTEntry)entry);
-            }
-            else if (entry is OldSLSTEntry)
-            {
-                return new OldSLSTEntryController(this,(OldSLSTEntry)entry);
-            }
-            else if (entry is ProtoZoneEntry)
-            {
-                return new ProtoZoneEntryController(this,(ProtoZoneEntry)entry);
-            }
-            else if (entry is OldZoneEntry)
-            {
-                return new OldZoneEntryController(this,(OldZoneEntry)entry);
-            }
-            else if (entry is ZoneEntry)
-            {
-                return new ZoneEntryController(this,(ZoneEntry)entry);
-            }
-            else if (entry is NewZoneEntry)
-            {
-                return new NewZoneEntryController(this,(NewZoneEntry)entry);
-            }
-            else if (entry is GOOLEntry)
-            {
-                return new GOOLEntryController(this,(GOOLEntry)entry);
-            }
-            else if (entry is SoundEntry)
-            {
-                return new SoundEntryController(this,(SoundEntry)entry);
-            }
-            else if (entry is OldMusicEntry)
-            {
-                return new OldMusicEntryController(this,(OldMusicEntry)entry);
-            }
-            else if (entry is MusicEntry)
-            {
-                return new MusicEntryController(this,(MusicEntry)entry);
-            }
-            else if (entry is MapEntry)
-            {
-                return new MapEntryController(this,(MapEntry)entry);
-            }
-            else if (entry is PaletteEntry)
-            {
-                return new PaletteEntryController(this,(PaletteEntry)entry);
-            }
-            else if (entry is ColoredAnimationEntry)
-            {
-                return new ColoredAnimationEntryController(this,(ColoredAnimationEntry)entry);
-            }
-            else if (entry is SpeechEntry)
-            {
-                return new SpeechEntryController(this,(SpeechEntry)entry);
-            }
-            else if (entry is UnprocessedEntry)
-            {
-                return new UnprocessedEntryController(this,(UnprocessedEntry)entry);
-            }
-            else if (entry is MysteryUniItemEntry)
-            {
-                return new MysteryUniItemEntryController(this, (MysteryUniItemEntry)entry);
-            }
-            else
-            {
-                return new EntryController(this, entry);
-            }
-        }
 
         private void Menu_Import_Entry()
         {
@@ -152,12 +35,10 @@ namespace CrashEdit.CE
                     {
                         Entry processedentry = entry.Process(NSFController.GameVersion);
                         EntryChunk.Entries.Add(processedentry);
-                        AddNode(CreateEntryController(processedentry));
                     }
                     else
                     {
                         EntryChunk.Entries.Add(entry);
-                        AddNode(new UnprocessedEntryController(this,entry));
                     }
                 }
                 catch (LoadAbortedException)
@@ -251,7 +132,6 @@ namespace CrashEdit.CE
                     else
                     {
                         EntryChunk.Entries.Add(newentry);
-                        AddNode(CreateEntryController(newentry));
                         NeedsNewEditor = true;
                     }
                 }

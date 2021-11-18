@@ -4,9 +4,10 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(ProtoAnimationEntry))]
     public sealed class ProtoAnimationEntryController : EntryController
     {
-        public ProtoAnimationEntryController(EntryChunkController entrychunkcontroller,ProtoAnimationEntry protoanimationentry) : base(entrychunkcontroller,protoanimationentry)
+        public ProtoAnimationEntryController(ProtoAnimationEntry protoanimationentry, SubcontrollerGroup parentGroup) : base(protoanimationentry, parentGroup)
         {
             ProtoAnimationEntry = protoanimationentry;
             foreach (OldFrame frame in protoanimationentry.Frames)

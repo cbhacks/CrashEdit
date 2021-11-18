@@ -3,9 +3,10 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(NewSceneryEntry))]
     public sealed class NewSceneryEntryController : EntryController
     {
-        public NewSceneryEntryController(EntryChunkController entrychunkcontroller,NewSceneryEntry sceneryentry) : base(entrychunkcontroller,sceneryentry)
+        public NewSceneryEntryController(NewSceneryEntry sceneryentry, SubcontrollerGroup parentGroup) : base(sceneryentry, parentGroup)
         {
             SceneryEntry = sceneryentry;
             AddMenuSeparator();

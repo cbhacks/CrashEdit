@@ -3,9 +3,10 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(SpeechEntry))]
     public sealed class SpeechEntryController : EntryController
     {
-        public SpeechEntryController(EntryChunkController entrychunkcontroller,SpeechEntry speechentry) : base(entrychunkcontroller,speechentry)
+        public SpeechEntryController(SpeechEntry speechentry, SubcontrollerGroup parentGroup) : base(speechentry, parentGroup)
         {
             SpeechEntry = speechentry;
         }

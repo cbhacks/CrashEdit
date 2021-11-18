@@ -2,9 +2,10 @@ using CrashEdit.Crash;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(SLSTEntry))]
     public sealed class SLSTEntryController : EntryController
     {
-        public SLSTEntryController(EntryChunkController entrychunkcontroller,SLSTEntry slstentry) : base(entrychunkcontroller,slstentry)
+        public SLSTEntryController(SLSTEntry slstentry, SubcontrollerGroup parentGroup) : base(slstentry, parentGroup)
         {
             SLSTEntry = slstentry;
             AddNode(new SLSTSourceController(this,slstentry.Start));

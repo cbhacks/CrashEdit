@@ -532,6 +532,9 @@ namespace CrashEdit.CE
                         return;
                 }
                 bool order_updated = false;
+                // FIXME - reimplement below to not use controller tree, or better yet rework entire NSD patching system
+                order_updated = true;
+                #if false
                 foreach (var ecc in nsfc.LegacySubcontrollers.OfType<EntryChunkController>()) // nsd patching might have moved entries, recreate moved entry chunks if that's the case
                 {
                     for (int i = 0; i < ecc.LegacySubcontrollers.Count; i++)
@@ -546,6 +549,7 @@ namespace CrashEdit.CE
                         }
                     }
                 }
+                #endif
                 if (!no_nsf_overwrite)
                 {
                     if (ignore_warnings || Settings.Default.PatchNSDSavesNSF ? true : (order_updated && MessageBox.Show(Resources.PatchNSD3, Resources.PatchNSD_Title1, MessageBoxButtons.YesNo) == DialogResult.Yes))

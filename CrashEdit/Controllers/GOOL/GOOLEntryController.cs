@@ -4,9 +4,10 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(GOOLEntry))]
     public sealed class GOOLEntryController : EntryController
     {
-        public GOOLEntryController(EntryChunkController entrychunkcontroller,GOOLEntry goolentry) : base(entrychunkcontroller,goolentry)
+        public GOOLEntryController(GOOLEntry goolentry, SubcontrollerGroup parentGroup) : base(goolentry, parentGroup)
         {
             GOOLEntry = goolentry;
             foreach (int ext_eid in goolentry.Externals)

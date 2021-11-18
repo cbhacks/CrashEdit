@@ -4,10 +4,11 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(ColoredAnimationEntry))]
     public sealed class ColoredAnimationEntryController : EntryController
     {
-        public ColoredAnimationEntryController(EntryChunkController entrychunkcontroller,ColoredAnimationEntry cutsceneanimationentry)
-            : base(entrychunkcontroller,cutsceneanimationentry)
+        public ColoredAnimationEntryController(ColoredAnimationEntry cutsceneanimationentry, SubcontrollerGroup parentGroup)
+            : base(cutsceneanimationentry, parentGroup)
         {
             CutsceneAnimationEntry = cutsceneanimationentry;
             foreach (OldFrame frame in cutsceneanimationentry.Frames)
