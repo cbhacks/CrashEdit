@@ -5,9 +5,10 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(EntryChunk))]
     public class EntryChunkController : ChunkController
     {
-        public EntryChunkController(NSFController nsfcontroller,EntryChunk entrychunk) : base(nsfcontroller,entrychunk)
+        public EntryChunkController(EntryChunk entrychunk, SubcontrollerGroup parentGroup) : base(entrychunk, parentGroup)
         {
             EntryChunk = entrychunk;
             AddMenu(CrashUI.Properties.Resources.EntryChunkController_AcImport,Menu_Import_Entry);

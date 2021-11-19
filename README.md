@@ -224,6 +224,7 @@ undesirable and should be avoided.
 
 The following properties are now subresources using the new system:
 
+ * (list) `NSF.Chunks`
  * (list) `EntryChunk.Entries`
  * (list) `MysteryMultiItemEntry.Items`
  * (slot) `OldSceneryEntry.ExtraData` (C1)

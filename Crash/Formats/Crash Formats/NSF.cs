@@ -216,6 +216,7 @@ namespace CrashEdit.Crash
             Chunks = new List<Chunk>(chunks);
         }
 
+        [SubresourceList]
         public List<Chunk> Chunks { get; }
 
         public void ProcessAll(GameVersion gameversion)

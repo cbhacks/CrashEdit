@@ -3,9 +3,10 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(UnprocessedChunk))]
     public sealed class UnprocessedChunkController : ChunkController
     {
-        public UnprocessedChunkController(NSFController nsfcontroller,UnprocessedChunk unprocessedchunk) : base(nsfcontroller,unprocessedchunk)
+        public UnprocessedChunkController(UnprocessedChunk unprocessedchunk, SubcontrollerGroup parentGroup) : base(unprocessedchunk, parentGroup)
         {
             UnprocessedChunk = unprocessedchunk;
             AddMenu(CrashUI.Properties.Resources.UnprocessedChunkController_AcProcess,Menu_Process_Chunk);
@@ -37,9 +38,6 @@ namespace CrashEdit.CE
             {
                 ((EntryChunk)processedchunk).ProcessAll(NSFController.GameVersion);
             }
-            ChunkController processedchunkcontroller = NSFController.CreateChunkController(processedchunk);
-            NSFController.InsertNode(index, processedchunkcontroller);
-            RemoveSelf();
         }
     }
 }

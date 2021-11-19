@@ -11,10 +11,6 @@ namespace CrashEdit.CE
         public NSFController(NSF nsf,SubcontrollerGroup parentGroup) : base(parentGroup, nsf)
         {
             NSF = nsf;
-            foreach (Chunk chunk in nsf.Chunks)
-            {
-                AddNode(CreateChunkController(chunk));
-            }
             AddMenu(CrashUI.Properties.Resources.NSFController_AcAddNormalChunk,Menu_Add_NormalChunk);
             if (GameVersion != GameVersion.Crash2 && GameVersion != GameVersion.Crash3 && GameVersion != GameVersion.Crash1)
                 AddMenu(CrashUI.Properties.Resources.NSFController_AcAddOldSoundChunk,Menu_Add_OldSoundChunk);
@@ -51,64 +47,34 @@ namespace CrashEdit.CE
 
         public NSF NSF { get; }
 
-        public ChunkController CreateChunkController(Chunk chunk)
-        {
-            if (chunk is TextureChunk)
-            {
-                return new TextureChunkController(this, (TextureChunk)chunk);
-            }
-            else if (chunk is UnprocessedChunk)
-            {
-                return new UnprocessedChunkController(this, (UnprocessedChunk)chunk);
-            }
-            else if (chunk is EntryChunk)
-            {
-                return new EntryChunkController(this, (EntryChunk)chunk);
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         private void Menu_Add_NormalChunk()
         {
             NormalChunk chunk = new NormalChunk();
             NSF.Chunks.Add(chunk);
-            var controller = new EntryChunkController(this,chunk);
-            AddNode(controller);
         }
 
         private void Menu_Add_OldSoundChunk()
         {
             OldSoundChunk chunk = new OldSoundChunk();
             NSF.Chunks.Add(chunk);
-            var controller = new EntryChunkController(this,chunk);
-            AddNode(controller);
         }
 
         private void Menu_Add_SoundChunk()
         {
             SoundChunk chunk = new SoundChunk();
             NSF.Chunks.Add(chunk);
-            var controller = new EntryChunkController(this,chunk);
-            AddNode(controller);
         }
 
         private void Menu_Add_WavebankChunk()
         {
             WavebankChunk chunk = new WavebankChunk();
             NSF.Chunks.Add(chunk);
-            var controller = new EntryChunkController(this,chunk);
-            AddNode(controller);
         }
 
         private void Menu_Add_SpeechChunk()
         {
             SpeechChunk chunk = new SpeechChunk();
             NSF.Chunks.Add(chunk);
-            var controller = new EntryChunkController(this,chunk);
-            AddNode(controller);
         }
 
         private void Menu_Fix_Detonator()
@@ -326,12 +292,10 @@ namespace CrashEdit.CE
                     {
                         Chunk processedchunk = chunk.Process();
                         NSF.Chunks.Add(processedchunk);
-                        AddNode(CreateChunkController(processedchunk));
                     }
                     else
                     {
                         NSF.Chunks.Add(chunk);
-                        AddNode(new UnprocessedChunkController(this,chunk));
                     }
                 }
                 catch (LoadAbortedException)
