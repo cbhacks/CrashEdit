@@ -25,6 +25,8 @@ This is an experimental version of CrashEdit.
    * Header and Layout for zones and (C1) maps
    * ExtraData for C1 map scenery
    * Items[0], Items[1], Items[2], etc. for unprocessed entries
+   * Frames[0], Frames[1], Frames[2], etc. for animation entries
+   * Start, End, Deltas[0], Deltas[1], etc. for sort lists
  * Changes to Undock feature
    * Activated with Ctrl-D instead of D
    * Available in the menu and toolbar

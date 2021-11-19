@@ -9,12 +9,6 @@ namespace CrashEdit.CE
         public FrameController(Frame frame, SubcontrollerGroup parentGroup) : base(parentGroup, frame)
         {
             Frame = frame;
-            InvalidateNode();
-        }
-
-        public void InvalidateNode()
-        {
-            NodeText = CrashUI.Properties.Resources.FrameController_Text;
         }
 
         public override bool EditorAvailable => true;

@@ -9,12 +9,6 @@ namespace CrashEdit.CE
         public SLSTSourceController(SLSTSource slstsource, SubcontrollerGroup parentGroup) : base(parentGroup, slstsource)
         {
             SLSTSource = slstsource;
-            InvalidateNode();
-        }
-
-        public void InvalidateNode()
-        {
-            NodeText = "Source";
         }
 
         public override bool EditorAvailable => true;

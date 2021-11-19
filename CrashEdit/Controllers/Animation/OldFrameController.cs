@@ -11,12 +11,6 @@ namespace CrashEdit.CE
         {
             OldFrame = oldframe;
             AddMenu("Export as OBJ", Menu_Export_OBJ);
-            InvalidateNode();
-        }
-
-        public void InvalidateNode()
-        {
-            NodeText = CrashUI.Properties.Resources.FrameController_Text;
         }
 
         public override bool EditorAvailable => true;

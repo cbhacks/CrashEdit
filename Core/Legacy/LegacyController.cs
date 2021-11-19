@@ -23,10 +23,6 @@ namespace CrashEdit {
         public List<LegacyVerb> LegacyVerbs { get; } =
             new List<LegacyVerb>();
 
-        public string NodeText { get; set; } = "";
-
-        public string? NodeImageKey { get; set; }
-
         public virtual bool EditorAvailable => false;
 
         public virtual Control CreateEditor() {

@@ -9,12 +9,6 @@ namespace CrashEdit.CE
         public OldSLSTDeltaController(OldSLSTDelta oldslstdelta, SubcontrollerGroup parentGroup) : base(parentGroup, oldslstdelta)
         {
             OldSLSTDelta = oldslstdelta;
-            InvalidateNode();
-        }
-
-        public void InvalidateNode()
-        {
-            NodeText = "Delta";
         }
 
         public override bool EditorAvailable => true;

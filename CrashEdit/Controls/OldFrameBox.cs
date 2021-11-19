@@ -26,11 +26,6 @@ namespace CrashEdit.CE
             vertexindex = 0;
         }
 
-        private void InvalidateNodes()
-        {
-            controller.InvalidateNode();
-        }
-
         private void UpdateVertice()
         {
             vertexdirty = true;
@@ -111,21 +106,18 @@ namespace CrashEdit.CE
         {
             vertexindex++;
             frame.Vertices.RemoveAt(vertexindex);
-            InvalidateNodes();
             UpdateVertice();
         }
 
         private void cmdInsertVertice_Click(object sender,EventArgs e)
         {
             frame.Vertices.Insert(vertexindex, frame.Vertices[vertexindex]);
-            InvalidateNodes();
             UpdateVertice();
         }
 
         private void cmdRemoveVertice_Click(object sender,EventArgs e)
         {
             frame.Vertices.RemoveAt(vertexindex);
-            InvalidateNodes();
             UpdateVertice();
         }
 
@@ -140,7 +132,6 @@ namespace CrashEdit.CE
             {
                 frame.Vertices.Add(new OldFrameVertex(0,0,0,0,0,0));
             }
-            InvalidateNodes();
             UpdateVertice();
         }
 

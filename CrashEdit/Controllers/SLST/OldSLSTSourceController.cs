@@ -9,12 +9,6 @@ namespace CrashEdit.CE
         public OldSLSTSourceController(OldSLSTSource oldslstsource, SubcontrollerGroup parentGroup) : base(parentGroup, oldslstsource)
         {
             OldSLSTSource = oldslstsource;
-            InvalidateNode();
-        }
-
-        public void InvalidateNode()
-        {
-            NodeText = "Source";
         }
 
         public override bool EditorAvailable => true;
