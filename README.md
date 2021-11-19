@@ -318,5 +318,4 @@ Each new C# source file begins with the `#nullable enable` directive.
 
 ### CI/CD changes
 
-The appveyor script has not been kept up to date with these changes and will
-not work. Likely this will be replaced with GitHub Actions in the future.
+The appveyor script has been removed.
