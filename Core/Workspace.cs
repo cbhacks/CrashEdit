@@ -10,6 +10,8 @@ namespace CrashEdit {
 
         public virtual string ImageKey => "Sitemap";
 
+        public virtual void Sync() {}
+
     }
 
 }
