@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace CrashEdit.Crash
 {
-    public sealed class Entity
+    public sealed class Entity : IResource
     {
         private static Dictionary<short,FieldInfo> propertyfields;
 
@@ -156,6 +156,13 @@ namespace CrashEdit.Crash
                 }
             }
         }
+
+        public string Title =>
+            (Name != null && ID != null) ? $"{Name} [ID {ID}]" :
+            (ID != null) ? $"Entity [ID {ID}]" :
+            "Entity";
+
+        public string ImageKey => "Arrow";
 
         //public int? Mode
         //{

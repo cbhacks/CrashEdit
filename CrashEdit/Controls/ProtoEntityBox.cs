@@ -23,11 +23,6 @@ namespace CrashEdit.CE
             UpdateCodeString();
         }
 
-        private void InvalidateNodes()
-        {
-            controller.InvalidateNode();
-        }
-
         private void UpdateStartPosition()
         {
             numX.Value = entity.StartX;

@@ -11,12 +11,6 @@ namespace CrashEdit.CE
             Entity = entity;
             //AddMenu("Duplicate Entity",Menu_Duplicate);
             //AddMenu("Delete Entity",Menu_Delete);
-            InvalidateNode();
-        }
-
-        public void InvalidateNode()
-        {
-            NodeText = string.Format(CrashUI.Properties.Resources.OldEntityController_Text,Entity.ID,Entity.Type,Entity.Subtype);
         }
 
         public override bool EditorAvailable => true;

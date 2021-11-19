@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CrashEdit.Crash
 {
-    public sealed class OldEntity
+    public sealed class OldEntity : IResource
     {
         public static OldEntity Load(byte[] data)
         {
@@ -57,6 +57,9 @@ namespace CrashEdit.Crash
             Subtype = subtype;
             Nullfield1 = nullfield1;
         }
+
+        public string Title => $"Entity {ID} ({Type}-{Subtype})";
+        public string ImageKey => "Arrow";
 
         public short Flags { get; set; }
         public byte Spawn { get; set; }

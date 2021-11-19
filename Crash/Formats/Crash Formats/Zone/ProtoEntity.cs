@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CrashEdit.Crash
 {
-    public sealed class ProtoEntity
+    public sealed class ProtoEntity : IResource
     {
         public static ProtoEntity Load(byte[] data)
         {
@@ -60,6 +60,9 @@ namespace CrashEdit.Crash
             StartY = starty;
             StartZ = startz;
         }
+
+        public string Title => $"Entity {ID} ({Type}-{Subtype})";
+        public string ImageKey => "Arrow";
 
         public short Flags { get; set; }
         public byte Spawn { get; set; }

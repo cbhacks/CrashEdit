@@ -24,11 +24,6 @@ namespace CrashEdit.CE
             positionindex = 0;
         }
 
-        private void InvalidateNodes()
-        {
-            controller.InvalidateNode();
-        }
-
         private void UpdatePosition()
         {
             positiondirty = true;
@@ -450,7 +445,6 @@ namespace CrashEdit.CE
                             ));
                     }
                     UpdatePosition();
-                    InvalidateNodes();
                 }
             }
         }

@@ -165,11 +165,6 @@ namespace CrashEdit.CE
             MainInit();
         }
 
-        private void InvalidateNodes()
-        {
-            controller.InvalidateNode();
-        }
-
         internal string MakeArgAsText()
         {
             int arg = entity.Settings.Count > 0 ? entity.Settings[settingindex].Value : 0;
@@ -198,13 +193,11 @@ namespace CrashEdit.CE
         {
             txtName.Enabled = chkName.Checked;
             entity.Name = chkName.Checked ? txtName.Text : null;
-            InvalidateNodes();
         }
 
         private void txtName_TextChanged(object sender,EventArgs e)
         {
             entity.Name = txtName.Text;
-            InvalidateNodes();
         }
 
         private void UpdatePosition()
@@ -270,8 +263,6 @@ namespace CrashEdit.CE
         {
             entity.Positions.RemoveAt(positionindex);
             UpdatePosition();
-            if (entity.Positions.Count == 0)
-                InvalidateNodes();
         }
 
         private void cmdAppendPosition_Click(object sender,EventArgs e)
@@ -286,8 +277,6 @@ namespace CrashEdit.CE
                 entity.Positions.Add(new EntityPosition(0,0,0));
             }
             UpdatePosition();
-            if (entity.Positions.Count == 1)
-                InvalidateNodes();
         }
 
         private void numX_ValueChanged(object sender,EventArgs e)
@@ -475,13 +464,11 @@ namespace CrashEdit.CE
                 chkID2.Checked = false;
                 entity.ID = null;
             }
-            InvalidateNodes();
         }
 
         private void numID_ValueChanged(object sender,EventArgs e)
         {
             entity.ID = (int)numID.Value;
-            InvalidateNodes();
         }
 
         private void chkID2_CheckedChanged(object sender,EventArgs e)

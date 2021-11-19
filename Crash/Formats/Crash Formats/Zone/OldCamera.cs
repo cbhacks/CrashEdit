@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CrashEdit.Crash
 {
-    public sealed class OldCamera
+    public sealed class OldCamera : IResource
     {
         public static OldCamera Load(byte[] data)
         {
@@ -82,6 +82,9 @@ namespace CrashEdit.Crash
             this.position = new List<OldCameraPosition>(position);
             Blank = blank;
         }
+
+        public string Title => "Camera";
+        public string ImageKey => "Arrow";
 
         public int SLSTEID { get; set; }
         public int Garbage { get; set; }

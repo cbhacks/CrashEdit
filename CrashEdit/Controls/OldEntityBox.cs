@@ -26,11 +26,6 @@ namespace CrashEdit.CE
             positionindex = 0;
         }
 
-        private void InvalidateNodes()
-        {
-            controller.InvalidateNode();
-        }
-
         private void UpdatePosition()
         {
             positiondirty = true;
@@ -97,21 +92,18 @@ namespace CrashEdit.CE
         {
             positionindex++;
             entity.Positions.RemoveAt(positionindex);
-            InvalidateNodes();
             UpdatePosition();
         }
 
         private void cmdInsertPosition_Click(object sender,EventArgs e)
         {
             entity.Positions.Insert(positionindex, entity.Positions[positionindex]);
-            InvalidateNodes();
             UpdatePosition();
         }
 
         private void cmdRemovePosition_Click(object sender,EventArgs e)
         {
             entity.Positions.RemoveAt(positionindex);
-            InvalidateNodes();
             UpdatePosition();
         }
 
@@ -126,7 +118,6 @@ namespace CrashEdit.CE
             {
                 entity.Positions.Add(new EntityPosition(0,0,0));
             }
-            InvalidateNodes();
             UpdatePosition();
         }
 
@@ -334,7 +325,6 @@ namespace CrashEdit.CE
                         entity.Positions.Insert(i+interpolator.Start,new EntityPosition(interpolator.NewPositions[i+1]));
                     }
                     UpdatePosition();
-                    InvalidateNodes();
                 }
             }
         }

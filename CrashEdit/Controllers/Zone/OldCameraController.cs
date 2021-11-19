@@ -10,12 +10,6 @@ namespace CrashEdit.CE
         {
             Camera = camera;
             AddMenu("Delete Camera",Menu_Delete);
-            InvalidateNode();
-        }
-
-        public void InvalidateNode()
-        {
-            NodeText = CrashUI.Properties.Resources.OldCameraController_Text;
         }
 
         public override bool EditorAvailable => true;
