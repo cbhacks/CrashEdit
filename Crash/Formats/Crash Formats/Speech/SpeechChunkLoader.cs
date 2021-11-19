@@ -5,7 +5,7 @@ namespace CrashEdit.Crash
     [ChunkType(5)]
     public sealed class SpeechChunkLoader : EntryChunkLoader
     {
-        public override Chunk Load(Entry[] entries)
+        public override EntryChunk Load(Entry[] entries)
         {
             if (entries == null)
                 throw new ArgumentNullException("entries");

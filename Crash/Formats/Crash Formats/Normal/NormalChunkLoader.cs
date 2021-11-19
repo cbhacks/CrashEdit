@@ -5,7 +5,7 @@ namespace CrashEdit.Crash
     [ChunkType(0)]
     public sealed class NormalChunkLoader : EntryChunkLoader
     {
-        public override Chunk Load(Entry[] entries)
+        public override EntryChunk Load(Entry[] entries)
         {
             if (entries == null)
                 throw new ArgumentNullException("entries");

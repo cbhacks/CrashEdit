@@ -18,7 +18,7 @@ namespace CrashEdit.Crash {
             if (res == null)
                 throw new ArgumentNullException();
 
-            buf = new ReadOnlySpan<byte>(res.Save(1));
+            buf = new ReadOnlySpan<byte>(res.Save());
             return true;
         }
 

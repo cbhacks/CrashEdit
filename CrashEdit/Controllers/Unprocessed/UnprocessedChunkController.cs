@@ -37,7 +37,7 @@ namespace CrashEdit.CE
             Chunk processedchunk;
             try
             {
-                processedchunk = UnprocessedChunk.Process(GetNSF().Chunks.IndexOf(UnprocessedChunk) * 2 + 1);
+                processedchunk = UnprocessedChunk.Process();
             }
             catch (LoadAbortedException)
             {

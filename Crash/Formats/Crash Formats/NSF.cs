@@ -227,7 +227,7 @@ namespace CrashEdit.Crash
                     ErrorManager.EnterSkipRegion();
                     try
                     {
-                        Chunks[i] = ((UnprocessedChunk)Chunks[i]).Process(i * 2 + 1);
+                        Chunks[i] = ((UnprocessedChunk)Chunks[i]).Process();
                     }
                     catch (LoadSkippedException)
                     {
@@ -307,7 +307,7 @@ namespace CrashEdit.Crash
             byte[] data = new byte [Chunks.Count * Chunk.Length];
             for (int i = 0;i < Chunks.Count;i++)
             {
-                Chunks[i].Save(i * 2 + 1).CopyTo(data,i * Chunk.Length);
+                Chunks[i].Save().CopyTo(data,i * Chunk.Length);
             }
             return data;
         }

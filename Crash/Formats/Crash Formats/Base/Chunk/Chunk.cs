@@ -55,11 +55,11 @@ namespace CrashEdit.Crash
 
         public abstract short Type { get; }
 
-        public abstract UnprocessedChunk Unprocess(int chunkid);
+        public abstract UnprocessedChunk Unprocess();
 
-        public virtual byte[] Save(int chunkid)
+        public virtual byte[] Save()
         {
-            return Unprocess(chunkid).Save(chunkid);
+            return Unprocess().Save();
         }
     }
 }

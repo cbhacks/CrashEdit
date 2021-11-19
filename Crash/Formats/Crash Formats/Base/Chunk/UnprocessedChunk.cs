@@ -18,11 +18,11 @@ namespace CrashEdit.Crash
 
         public byte[] Data { get; }
 
-        public Chunk Process(int chunkid)
+        public Chunk Process()
         {
             if (loaders.ContainsKey(Type))
             {
-                return loaders[Type].Load(chunkid,Data);
+                return loaders[Type].Load(Data);
             }
             else
             {
@@ -31,12 +31,12 @@ namespace CrashEdit.Crash
             }
         }
 
-        public override UnprocessedChunk Unprocess(int chunkid)
+        public override UnprocessedChunk Unprocess()
         {
             return this;
         }
 
-        public override byte[] Save(int chunkid)
+        public override byte[] Save()
         {
             return Data;
         }

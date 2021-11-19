@@ -5,7 +5,7 @@ namespace CrashEdit.Crash
     [ChunkType(4)]
     public sealed class WavebankChunkLoader : EntryChunkLoader
     {
-        public override Chunk Load(Entry[] entries)
+        public override EntryChunk Load(Entry[] entries)
         {
             if (entries == null)
                 throw new ArgumentNullException("entries");

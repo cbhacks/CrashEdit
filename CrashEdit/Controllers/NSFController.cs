@@ -340,7 +340,7 @@ namespace CrashEdit.CE
                     UnprocessedChunk chunk = Chunk.Load(data);
                     if (process)
                     {
-                        Chunk processedchunk = chunk.Process(NSF.Chunks.Count*2 + 1);
+                        Chunk processedchunk = chunk.Process();
                         NSF.Chunks.Add(processedchunk);
                         AddNode(CreateChunkController(processedchunk));
                     }

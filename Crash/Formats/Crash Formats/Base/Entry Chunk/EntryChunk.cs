@@ -17,6 +17,8 @@ namespace CrashEdit.Crash
             Entries = new List<Entry>(entries);
         }
 
+        public int ChunkId { get; set; }
+
         [SubresourceList]
         public List<Entry> Entries { get; set; }
 
@@ -58,12 +60,12 @@ namespace CrashEdit.Crash
             return null;
         }
 
-        public override UnprocessedChunk Unprocess(int chunkid)
+        public override UnprocessedChunk Unprocess()
         {
             byte[] data = new byte [Length];
             BitConv.ToInt16(data,0,Magic);
             BitConv.ToInt16(data,2,Type);
-            BitConv.ToInt32(data,4,chunkid);
+            BitConv.ToInt32(data,4,ChunkId);
             BitConv.ToInt32(data,8,Entries.Count);
             // Checksum is here, but calculated later
             int offset = 20 + Entries.Count * 4;

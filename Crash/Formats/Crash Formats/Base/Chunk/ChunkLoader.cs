@@ -2,6 +2,6 @@ namespace CrashEdit.Crash
 {
     public abstract class ChunkLoader
     {
-        public abstract Chunk Load(int chunkid,byte[] data);
+        public abstract Chunk Load(byte[] data);
     }
 }

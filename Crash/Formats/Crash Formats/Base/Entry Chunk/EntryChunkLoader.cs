@@ -4,20 +4,16 @@ namespace CrashEdit.Crash
 {
     public abstract class EntryChunkLoader : ChunkLoader
     {
-        public sealed override Chunk Load(int chunkid,byte[] data)
+        public sealed override Chunk Load(byte[] data)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
             if (data.Length != Chunk.Length)
                 throw new ArgumentException("Data must be 65536 bytes long.");
-            int id = BitConv.FromInt32(data,4);
+            int chunkid = BitConv.FromInt32(data,4);
             int entrycount = BitConv.FromInt32(data,8);
             int checksum = BitConv.FromInt32(data,12);
             int headersize = 20 + entrycount * 4;
-            if (id != chunkid)
-            {
-                ErrorManager.SignalIgnorableError("EntryChunk: Chunk id is incorrect");
-            }
             if (entrycount < 0)
             {
                 ErrorManager.SignalError("EntryChunk: Entry count is negative");
@@ -53,9 +49,11 @@ namespace CrashEdit.Crash
                 Array.Copy(data,entrystart,entrydata,0,entrysize);
                 entries[i] = Entry.Load(entrydata);
             }
-            return Load(entries);
+            var result = Load(entries);
+            result.ChunkId = chunkid;
+            return result;
         }
 
-        public abstract Chunk Load(Entry[] entries);
+        public abstract EntryChunk Load(Entry[] entries);
     }
 }

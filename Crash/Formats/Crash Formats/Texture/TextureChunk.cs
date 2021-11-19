@@ -19,7 +19,7 @@ namespace CrashEdit.Crash
         public int HashKey => EID >> 15 & 0xFF;
         public byte[] Data { get; }
 
-        public override UnprocessedChunk Unprocess(int chunkid)
+        public override UnprocessedChunk Unprocess()
         {
             return new UnprocessedChunk(Data);
         }
