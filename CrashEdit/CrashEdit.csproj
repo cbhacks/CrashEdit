@@ -75,7 +75,6 @@
       <DependentUpon>ConfigEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Controllers\Animation\ColoredAnimationEntryController.cs" />
-    <Compile Include="Controllers\Animation\ColoredFrameController.cs" />
     <Compile Include="Controllers\GOOL\GOOLEntryController.cs" />
     <Compile Include="Controllers\Map\MapEntryController.cs" />
     <Compile Include="Controls\BufferedTreeView.cs">

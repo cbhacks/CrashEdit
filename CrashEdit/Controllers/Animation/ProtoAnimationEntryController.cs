@@ -10,10 +10,6 @@ namespace CrashEdit.CE
         public ProtoAnimationEntryController(ProtoAnimationEntry protoanimationentry, SubcontrollerGroup parentGroup) : base(protoanimationentry, parentGroup)
         {
             ProtoAnimationEntry = protoanimationentry;
-            foreach (OldFrame frame in protoanimationentry.Frames)
-            {
-                AddNode(new OldFrameController(this,frame));
-            }
             if (!ProtoAnimationEntry.NotProto)
                 AddMenu("Export as Crash 1 SVTX", Menu_ExportAsC1);
         }

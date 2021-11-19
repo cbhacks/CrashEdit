@@ -58,6 +58,11 @@ This is an experimental version of CrashEdit.
      their incorrect CID
    * Patch NSD still uses computed CID's for entry chunks
  * Unprocessed chunks are labeled their raw ID field in hex
+ * C1 colored animation frames can now also use the existing normal C1 animation
+   frame editor; note however the UI has not been updated for this purpose:
+   * R/G/B Colors (unsigned) are displayed as X/Y/Z normals (signed)
+   * To enter color channel values below 128, enter them as-is
+   * To enter color channel values of 128 or greater, subtract 256 from them first
 
 
 ## Changes for developers
@@ -227,7 +232,11 @@ The following properties are now subresources using the new system:
  * (list) `NSF.Chunks`
  * (list) `EntryChunk.Entries`
  * (list) `MysteryMultiItemEntry.Items`
- * (slot) `OldSceneryEntry.ExtraData` (C1)
+ * (list) `AnimationEntry.Frames`
+ * (list) `OldAnimationEntry.Frames`
+ * (list) `ColoredAnimationEntry.Frames`
+ * (list) `ProtoAnimationEntry.Frames`
+ * (slot) `OldSceneryEntry.ExtraData`
  * (slot) `Header` and `Layout` in the zone entries and in `MapEntry`
  * (slot) `VH` in the music entries
  * (list) `Tracks` in the music entries, replacing `SEP` and `SEP.SEQs`
@@ -236,6 +245,7 @@ The following old-style controllers are completely removed:
 
  * `ItemController`
  * `MysteryMultiItemEntryController`
+ * `ColoredFrameController`
  * `VHController`
  * `OldVHController`
  * `SEQController`

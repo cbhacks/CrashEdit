@@ -3,9 +3,10 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(Frame))]
     public sealed class FrameController : LegacyController
     {
-        public FrameController(AnimationEntryController animationentrycontroller,Frame frame) : base(animationentrycontroller, frame)
+        public FrameController(Frame frame, SubcontrollerGroup parentGroup) : base(parentGroup, frame)
         {
             Frame = frame;
             InvalidateNode();

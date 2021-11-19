@@ -9,10 +9,6 @@ namespace CrashEdit.CE
         public AnimationEntryController(AnimationEntry animationentry, SubcontrollerGroup parentGroup) : base(animationentry, parentGroup)
         {
             AnimationEntry = animationentry;
-            foreach (Frame frame in animationentry.Frames)
-            {
-                AddNode(new FrameController(this,frame));
-            }
         }
 
         public override bool EditorAvailable => true;

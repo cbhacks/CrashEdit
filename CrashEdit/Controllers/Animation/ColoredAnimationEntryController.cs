@@ -11,10 +11,6 @@ namespace CrashEdit.CE
             : base(cutsceneanimationentry, parentGroup)
         {
             CutsceneAnimationEntry = cutsceneanimationentry;
-            foreach (OldFrame frame in cutsceneanimationentry.Frames)
-            {
-                AddNode(new ColoredFrameController(this,frame));
-            }
         }
 
         public override bool EditorAvailable => true;

@@ -10,10 +10,6 @@ namespace CrashEdit.CE
         public OldAnimationEntryController(OldAnimationEntry oldanimationentry, SubcontrollerGroup parentGroup) : base(oldanimationentry, parentGroup)
         {
             OldAnimationEntry = oldanimationentry;
-            foreach (OldFrame frame in oldanimationentry.Frames)
-            {
-                AddNode(new OldFrameController(this,frame));
-            }
         }
 
         public override bool EditorAvailable => true;
