@@ -9,6 +9,9 @@ namespace CrashEdit.Crash
             Data = data ?? throw new ArgumentNullException("data");
         }
 
+        public override string Title => $"Texture Chunk ({EName})";
+        public override string ImageKey => "Painting";
+
         public override short Type => 1;
         public int EID
         {

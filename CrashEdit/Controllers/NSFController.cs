@@ -53,33 +53,17 @@ namespace CrashEdit.CE
 
         public ChunkController CreateChunkController(Chunk chunk)
         {
-            if (chunk is NormalChunk)
-            {
-                return new NormalChunkController(this, (NormalChunk)chunk);
-            }
-            else if (chunk is TextureChunk)
+            if (chunk is TextureChunk)
             {
                 return new TextureChunkController(this, (TextureChunk)chunk);
-            }
-            else if (chunk is OldSoundChunk)
-            {
-                return new OldSoundChunkController(this, (OldSoundChunk)chunk);
-            }
-            else if (chunk is SoundChunk)
-            {
-                return new SoundChunkController(this, (SoundChunk)chunk);
-            }
-            else if (chunk is WavebankChunk)
-            {
-                return new WavebankChunkController(this, (WavebankChunk)chunk);
-            }
-            else if (chunk is SpeechChunk)
-            {
-                return new SpeechChunkController(this, (SpeechChunk)chunk);
             }
             else if (chunk is UnprocessedChunk)
             {
                 return new UnprocessedChunkController(this, (UnprocessedChunk)chunk);
+            }
+            else if (chunk is EntryChunk)
+            {
+                return new EntryChunkController(this, (EntryChunk)chunk);
             }
             else
             {
@@ -91,7 +75,7 @@ namespace CrashEdit.CE
         {
             NormalChunk chunk = new NormalChunk();
             NSF.Chunks.Add(chunk);
-            NormalChunkController controller = new NormalChunkController(this,chunk);
+            var controller = new EntryChunkController(this,chunk);
             AddNode(controller);
         }
 
@@ -99,7 +83,7 @@ namespace CrashEdit.CE
         {
             OldSoundChunk chunk = new OldSoundChunk();
             NSF.Chunks.Add(chunk);
-            OldSoundChunkController controller = new OldSoundChunkController(this,chunk);
+            var controller = new EntryChunkController(this,chunk);
             AddNode(controller);
         }
 
@@ -107,7 +91,7 @@ namespace CrashEdit.CE
         {
             SoundChunk chunk = new SoundChunk();
             NSF.Chunks.Add(chunk);
-            SoundChunkController controller = new SoundChunkController(this,chunk);
+            var controller = new EntryChunkController(this,chunk);
             AddNode(controller);
         }
 
@@ -115,7 +99,7 @@ namespace CrashEdit.CE
         {
             WavebankChunk chunk = new WavebankChunk();
             NSF.Chunks.Add(chunk);
-            WavebankChunkController controller = new WavebankChunkController(this,chunk);
+            var controller = new EntryChunkController(this,chunk);
             AddNode(controller);
         }
 
@@ -123,7 +107,7 @@ namespace CrashEdit.CE
         {
             SpeechChunk chunk = new SpeechChunk();
             NSF.Chunks.Add(chunk);
-            SpeechChunkController controller = new SpeechChunkController(this,chunk);
+            var controller = new EntryChunkController(this,chunk);
             AddNode(controller);
         }
 

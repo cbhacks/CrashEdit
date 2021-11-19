@@ -12,6 +12,9 @@ namespace CrashEdit.Crash
         {
         }
 
+        public override string Title => $"Wavebank Chunk {ChunkId}";
+        public override string ImageKey => "MusicNoteRed";
+
         public override short Type => 4;
         public override int Alignment => 16;
     }

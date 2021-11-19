@@ -12,6 +12,9 @@ namespace CrashEdit.Crash
         {
         }
 
+        public override string Title => $"Old Sound Chunk {ChunkId}";
+        public override string ImageKey => "JournalBlue";
+
         public override short Type => 2;
         public override int Alignment => 16;
     }

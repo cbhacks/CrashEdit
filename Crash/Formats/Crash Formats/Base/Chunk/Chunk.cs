@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace CrashEdit.Crash
 {
-    public abstract class Chunk
+    public abstract class Chunk : IResource
     {
         public const int Length = 65536;
         public const short Magic = 0x1234;
@@ -52,6 +52,9 @@ namespace CrashEdit.Crash
             }
             return new UnprocessedChunk(data);
         }
+
+        public abstract string Title { get; }
+        public abstract string ImageKey { get; }
 
         public abstract short Type { get; }
 

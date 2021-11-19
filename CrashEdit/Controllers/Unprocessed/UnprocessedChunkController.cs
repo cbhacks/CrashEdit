@@ -9,18 +9,6 @@ namespace CrashEdit.CE
         {
             UnprocessedChunk = unprocessedchunk;
             AddMenu(CrashUI.Properties.Resources.UnprocessedChunkController_AcProcess,Menu_Process_Chunk);
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public void InvalidateNode()
-        {
-            NodeText = string.Format(CrashUI.Properties.Resources.UnprocessedChunkController_Text,UnprocessedChunk.Type,GetNSF().Chunks.IndexOf(UnprocessedChunk) * 2 + 1);
-        }
-
-        public void InvalidateNodeImage()
-        {
-            NodeImageKey = "JournalOrange";
         }
 
         public override bool EditorAvailable => true;

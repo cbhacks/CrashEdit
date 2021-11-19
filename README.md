@@ -45,6 +45,19 @@ This is an experimental version of CrashEdit.
  * Export SEP is missing; this can be achieved by exporting the third item from
  an unprocessed music entry.
  * Patch NSD offers to save NSF even if entries were not moved around
+ * Texture chunks are no longer labeled with their CID
+ * New chunks are created with invalid CID 0
+ * When chunks are deleted, the CID's of chunks afterward are not adjusted
+
+
+### Other changes
+
+ * Entry chunks remember their CID, rather than computing it on save
+   * The CID displayed in the tree label is the CID stored in the entry chunk
+   * Entry chunks with incorrect CID's can be loaded and they will remember
+     their incorrect CID
+   * Patch NSD still uses computed CID's for entry chunks
+ * Unprocessed chunks are labeled their raw ID field in hex
 
 
 ## Changes for developers
@@ -233,6 +246,11 @@ The following old-style controllers are completely removed:
  * `T15EntryController`
  * `T17EntryController`
  * `T21EntryController`
+ * `NormalChunkController`
+ * `OldSoundChunkController`
+ * `SoundChunkController`
+ * `WavebankChunkController`
+ * `SpeechChunkController`
 
 Remaining old-style controllers (`LegacyController`) remain in place but are
 planned for removal. Where present, old-style controllers coexist with new-

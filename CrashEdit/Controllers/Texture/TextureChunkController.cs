@@ -12,18 +12,6 @@ namespace CrashEdit.CE
             AddMenu(CrashUI.Properties.Resources.TextureChunkController_AcRecalcChecksum,Menu_Recalculate_Checksum);
             AddMenu(CrashUI.Properties.Resources.TextureChunkController_AcRename,Menu_Rename_Entry);
             AddMenu(CrashUI.Properties.Resources.TextureChunkController_AcOpenViewer,Menu_Open_Viewer);
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public void InvalidateNode()
-        {
-            NodeText = string.Format(CrashUI.Properties.Resources.TextureChunkController_Text,Entry.EIDToEName(TextureChunk.EID),NSFController.NSF.Chunks.IndexOf(TextureChunk) * 2 + 1);
-        }
-
-        public void InvalidateNodeImage()
-        {
-            NodeImageKey = "Painting";
         }
 
         public override bool EditorAvailable => Type.GetType("Mono.Runtime") == null;
@@ -60,7 +48,6 @@ namespace CrashEdit.CE
                 if (newentrywindow.ShowDialog() == DialogResult.OK)
                 {
                     TextureChunk.EID = newentrywindow.EID;
-                    InvalidateNode();
                 }
             }
         }
