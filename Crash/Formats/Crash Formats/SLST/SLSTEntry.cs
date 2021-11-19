@@ -5,8 +5,6 @@ namespace CrashEdit.Crash
 {
     public sealed class SLSTEntry : Entry
     {
-        private List<SLSTDelta> deltas;
-
         public SLSTEntry(SLSTSource start, SLSTSource end, IEnumerable<SLSTDelta> deltas, int eid) : base(eid)
         {
             if (deltas == null)
