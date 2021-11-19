@@ -7,7 +7,6 @@ namespace CrashEdit.CE
     {
         public OldCameraController(ProtoZoneEntryController protozoneentrycontroller,OldCamera camera) : base(protozoneentrycontroller, camera)
         {
-            ProtoZoneEntryController = protozoneentrycontroller;
             Camera = camera;
             AddMenu("Delete Camera",Menu_DeleteProto);
             InvalidateNode();
@@ -15,7 +14,6 @@ namespace CrashEdit.CE
 
         public OldCameraController(OldZoneEntryController oldzoneentrycontroller,OldCamera camera) : base(oldzoneentrycontroller, camera)
         {
-            OldZoneEntryController = oldzoneentrycontroller;
             Camera = camera;
             AddMenu("Delete Camera",Menu_DeleteOld);
             InvalidateNode();
@@ -33,9 +31,9 @@ namespace CrashEdit.CE
             return new OldCameraBox(this);
         }
 
-        public ProtoZoneEntryController ProtoZoneEntryController { get; }
+        public ProtoZoneEntryController ProtoZoneEntryController => Modern.Parent.Legacy as ProtoZoneEntryController;
         public ProtoZoneEntry ProtoZoneEntry => ProtoZoneEntryController.ProtoZoneEntry;
-        public OldZoneEntryController OldZoneEntryController { get; }
+        public OldZoneEntryController OldZoneEntryController => Modern.Parent.Legacy as OldZoneEntryController;
         public OldZoneEntry OldZoneEntry => OldZoneEntryController.OldZoneEntry;
         public OldCamera Camera { get; }
         

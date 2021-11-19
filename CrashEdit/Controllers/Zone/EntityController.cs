@@ -8,7 +8,6 @@ namespace CrashEdit.CE
     {
         public EntityController(ZoneEntryController zoneentrycontroller,Entity entity) : base(zoneentrycontroller, entity)
         {
-            ZoneEntryController = zoneentrycontroller;
             Entity = entity;
             AddMenu("Duplicate Entity",Menu_Duplicate);
             AddMenu("Delete Entity",Menu_Delete);
@@ -38,7 +37,7 @@ namespace CrashEdit.CE
             return new EntityBox(this);
         }
 
-        public ZoneEntryController ZoneEntryController { get; }
+        public ZoneEntryController ZoneEntryController => (ZoneEntryController)Modern.Parent.Legacy;
         public ZoneEntry ZoneEntry => ZoneEntryController.ZoneEntry;
 
         public Entity Entity { get; }

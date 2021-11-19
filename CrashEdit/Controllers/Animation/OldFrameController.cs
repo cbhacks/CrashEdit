@@ -8,8 +8,6 @@ namespace CrashEdit.CE
     {
         public OldFrameController(ProtoAnimationEntryController protoanimationentrycontroller, OldFrame oldframe) : base(protoanimationentrycontroller, oldframe)
         {
-            ProtoAnimationEntryController = protoanimationentrycontroller;
-            OldAnimationEntryController = null;
             OldFrame = oldframe;
             AddMenu("Export as OBJ", Menu_Export_OBJ);
             InvalidateNode();
@@ -17,8 +15,6 @@ namespace CrashEdit.CE
 
         public OldFrameController(OldAnimationEntryController oldanimationentrycontroller,OldFrame oldframe) : base(oldanimationentrycontroller, oldframe)
         {
-            ProtoAnimationEntryController = null;
-            OldAnimationEntryController = oldanimationentrycontroller;
             OldFrame = oldframe;
             AddMenu("Export as OBJ", Menu_Export_OBJ);
             InvalidateNode();
@@ -57,8 +53,8 @@ namespace CrashEdit.CE
             return tbcTabs;
         }
 
-        public ProtoAnimationEntryController ProtoAnimationEntryController { get; }
-        public OldAnimationEntryController OldAnimationEntryController { get; }
+        public ProtoAnimationEntryController ProtoAnimationEntryController => Modern.Parent.Legacy as ProtoAnimationEntryController;
+        public OldAnimationEntryController OldAnimationEntryController => Modern.Parent.Legacy as OldAnimationEntryController;
         public OldFrame OldFrame { get; }
 
         private void Menu_Export_OBJ()

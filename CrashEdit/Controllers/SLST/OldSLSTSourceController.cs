@@ -7,7 +7,6 @@ namespace CrashEdit.CE
     {
         public OldSLSTSourceController(OldSLSTEntryController oldslstentrycontroller,OldSLSTSource oldslstsource) : base(oldslstentrycontroller, oldslstsource)
         {
-            OldSLSTEntryController = oldslstentrycontroller;
             OldSLSTSource = oldslstsource;
             InvalidateNode();
         }
@@ -24,7 +23,7 @@ namespace CrashEdit.CE
             return new OldSLSTSourceBox(OldSLSTSource);
         }
 
-        public OldSLSTEntryController OldSLSTEntryController { get; }
+        public OldSLSTEntryController OldSLSTEntryController => (OldSLSTEntryController)Modern.Parent.Legacy;
         public OldSLSTSource OldSLSTSource { get; }
     }
 }

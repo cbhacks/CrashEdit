@@ -7,7 +7,6 @@ namespace CrashEdit.CE
     {
         public FrameController(AnimationEntryController animationentrycontroller,Frame frame) : base(animationentrycontroller, frame)
         {
-            AnimationEntryController = animationentrycontroller;
             Frame = frame;
             InvalidateNode();
         }
@@ -37,7 +36,7 @@ namespace CrashEdit.CE
             }
         }
 
-        public AnimationEntryController AnimationEntryController { get; }
+        public AnimationEntryController AnimationEntryController => (AnimationEntryController)Modern.Parent.Legacy;
         public Frame Frame { get; }
     }
 }

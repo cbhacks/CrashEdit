@@ -7,7 +7,6 @@ namespace CrashEdit.CE
     {
         public OldEntityController(OldZoneEntryController oldzoneentrycontroller,OldEntity entity) : base(oldzoneentrycontroller, entity)
         {
-            OldZoneEntryController = oldzoneentrycontroller;
             OldEntity = entity;
             AddMenu("Duplicate Entity",Menu_Duplicate);
             AddMenu("Delete Entity",Menu_Delete);
@@ -16,7 +15,6 @@ namespace CrashEdit.CE
 
         public OldEntityController(MapEntryController oldt17entrycontroller, OldEntity entity) : base(oldt17entrycontroller, entity)
         {
-            MapEntryController = oldt17entrycontroller;
             OldEntity = entity;
             AddMenu("Duplicate Entity",Menu_MapDuplicate);
             AddMenu("Delete Entity",Menu_MapDelete);
@@ -35,8 +33,8 @@ namespace CrashEdit.CE
             return new OldEntityBox(this);
         }
 
-        public OldZoneEntryController OldZoneEntryController { get; }
-        public MapEntryController MapEntryController { get; }
+        public OldZoneEntryController OldZoneEntryController => Modern.Parent.Legacy as OldZoneEntryController;
+        public MapEntryController MapEntryController => Modern.Parent.Legacy as MapEntryController;
 
         public OldEntity OldEntity { get; }
 

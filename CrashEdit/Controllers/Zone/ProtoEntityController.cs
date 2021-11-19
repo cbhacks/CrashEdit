@@ -7,7 +7,6 @@ namespace CrashEdit.CE
     {
         public ProtoEntityController(ProtoZoneEntryController oldzoneentrycontroller,ProtoEntity entity) : base(oldzoneentrycontroller, entity)
         {
-            ProtoZoneEntryController = oldzoneentrycontroller;
             Entity = entity;
             //AddMenu("Duplicate Entity",Menu_Duplicate);
             //AddMenu("Delete Entity",Menu_Delete);
@@ -26,7 +25,7 @@ namespace CrashEdit.CE
             return new ProtoEntityBox(this);
         }
 
-        public ProtoZoneEntryController ProtoZoneEntryController { get; }
+        public ProtoZoneEntryController ProtoZoneEntryController => (ProtoZoneEntryController)Modern.Parent.Legacy;
 
         public ProtoEntity Entity { get; }
 

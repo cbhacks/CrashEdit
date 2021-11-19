@@ -8,7 +8,6 @@ namespace CrashEdit.CE
     {
         public ColoredFrameController(ColoredAnimationEntryController cutsceneanimationentrycontroller,OldFrame oldframe) : base(cutsceneanimationentrycontroller, oldframe)
         {
-            CutsceneAnimationEntryController = cutsceneanimationentrycontroller;
             OldFrame = oldframe;
             AddMenu("Export as OBJ", Menu_Export_OBJ);
             InvalidateNode();
@@ -31,7 +30,7 @@ namespace CrashEdit.CE
             return new OldAnimationEntryViewer(OldFrame,true,modelentry,textures);
         }
 
-        public ColoredAnimationEntryController CutsceneAnimationEntryController { get; }
+        public ColoredAnimationEntryController CutsceneAnimationEntryController => (ColoredAnimationEntryController)Modern.Parent.Legacy;
         public OldFrame OldFrame { get; }
 
         private void Menu_Export_OBJ()

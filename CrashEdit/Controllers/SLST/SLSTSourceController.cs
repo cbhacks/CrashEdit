@@ -7,7 +7,6 @@ namespace CrashEdit.CE
     {
         public SLSTSourceController(SLSTEntryController slstentrycontroller,SLSTSource slstsource) : base(slstentrycontroller, slstsource)
         {
-            SLSTEntryController = slstentrycontroller;
             SLSTSource = slstsource;
             InvalidateNode();
         }
@@ -24,7 +23,7 @@ namespace CrashEdit.CE
             return new SLSTSourceBox(SLSTSource);
         }
 
-        public SLSTEntryController SLSTEntryController { get; }
+        public SLSTEntryController SLSTEntryController => (SLSTEntryController)Modern.Parent.Legacy;
         public SLSTSource SLSTSource { get; }
     }
 }

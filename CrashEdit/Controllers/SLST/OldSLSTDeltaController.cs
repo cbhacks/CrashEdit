@@ -7,7 +7,6 @@ namespace CrashEdit.CE
     {
         public OldSLSTDeltaController(OldSLSTEntryController oldslstentrycontroller,OldSLSTDelta oldslstdelta) : base(oldslstentrycontroller, oldslstdelta)
         {
-            OldSLSTEntryController = oldslstentrycontroller;
             OldSLSTDelta = oldslstdelta;
             InvalidateNode();
         }
@@ -24,7 +23,7 @@ namespace CrashEdit.CE
             return new OldSLSTDeltaBox(OldSLSTDelta);
         }
 
-        public OldSLSTEntryController OldSLSTEntryController { get; }
+        public OldSLSTEntryController OldSLSTEntryController => (OldSLSTEntryController)Modern.Parent.Legacy;
         public OldSLSTDelta OldSLSTDelta { get; }
     }
 }
