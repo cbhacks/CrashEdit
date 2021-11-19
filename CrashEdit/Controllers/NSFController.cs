@@ -31,18 +31,6 @@ namespace CrashEdit.CE
                 AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC2);
             else if (GameVersion == GameVersion.Crash3)
                 AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC3);
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public void InvalidateNode()
-        {
-            NodeText = CrashUI.Properties.Resources.NSFController_Text;
-        }
-
-        public void InvalidateNodeImage()
-        {
-            NodeImageKey = "File";
         }
 
         public NSF NSF { get; }

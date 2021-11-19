@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CrashEdit.Crash
 {
-    public sealed class NSF
+    public sealed class NSF : IResource
     {
         private static byte[] ReadChunk(byte[] data,ref int offset,out bool compressed)
         {
@@ -215,6 +215,9 @@ namespace CrashEdit.Crash
                 throw new ArgumentNullException("chunks");
             Chunks = new List<Chunk>(chunks);
         }
+
+        public string Title => "NSF";
+        public string ImageKey => "File";
 
         [SubresourceList]
         public List<Chunk> Chunks { get; }
