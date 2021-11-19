@@ -4,13 +4,11 @@ namespace CrashEdit.Crash
 {
     public sealed class MapEntry : Entry
     {
-        private List<OldEntity> entities;
-
         public MapEntry(byte[] header,byte[] layout,IEnumerable<OldEntity> entities,int eid) : base(eid)
         {
             Header = header;
             Layout = layout;
-            this.entities = new List<OldEntity>(entities);
+            Entities.AddRange(entities);
         }
 
         public override string Title => $"Map ({EName})";
@@ -24,17 +22,18 @@ namespace CrashEdit.Crash
         [SubresourceSlot]
         public byte[] Layout { get; set; }
 
-        public IList<OldEntity> Entities => entities;
+        [SubresourceList]
+        public List<OldEntity> Entities { get; } = new List<OldEntity>();
 
         public override UnprocessedEntry Unprocess()
         {
-            BitConv.ToInt32(Header,0xC,entities.Count);
-            byte[][] items = new byte[2 + entities.Count][];
+            BitConv.ToInt32(Header,0xC,Entities.Count);
+            byte[][] items = new byte[2 + Entities.Count][];
             items[0] = Header;
             items[1] = Layout;
-            for (int i = 0; i < entities.Count; i++)
+            for (int i = 0; i < Entities.Count; i++)
             {
-                items[2 + i] = entities[i].Save();
+                items[2 + i] = Entities[i].Save();
             }
             return new UnprocessedEntry(items,EID,Type);
         }

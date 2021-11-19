@@ -3,21 +3,13 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(OldEntity))]
     public sealed class OldEntityController : LegacyController
     {
-        public OldEntityController(OldZoneEntryController oldzoneentrycontroller,OldEntity entity) : base(oldzoneentrycontroller, entity)
+        public OldEntityController(OldEntity entity, SubcontrollerGroup parentGroup) : base(parentGroup, entity)
         {
             OldEntity = entity;
             AddMenu("Duplicate Entity",Menu_Duplicate);
-            AddMenu("Delete Entity",Menu_Delete);
-            InvalidateNode();
-        }
-
-        public OldEntityController(MapEntryController oldt17entrycontroller, OldEntity entity) : base(oldt17entrycontroller, entity)
-        {
-            OldEntity = entity;
-            AddMenu("Duplicate Entity",Menu_MapDuplicate);
-            AddMenu("Delete Entity",Menu_MapDelete);
             InvalidateNode();
         }
 
@@ -40,6 +32,14 @@ namespace CrashEdit.CE
 
         private void Menu_Duplicate()
         {
+            if (OldZoneEntryController != null)
+                Menu_ZoneDuplicate();
+            else if (MapEntryController != null)
+                Menu_MapDuplicate();
+        }
+
+        private void Menu_ZoneDuplicate()
+        {
             short id = 6;
             while (true)
             {
@@ -61,13 +61,6 @@ namespace CrashEdit.CE
             OldEntity newentity = OldEntity.Load(OldEntity.Save());
             newentity.ID = id;
             OldZoneEntryController.OldZoneEntry.Entities.Add(newentity);
-            OldZoneEntryController.AddNode(new OldEntityController(OldZoneEntryController,newentity));
-        }
-
-        private void Menu_Delete()
-        {
-            OldZoneEntryController.OldZoneEntry.Entities.Remove(OldEntity);
-            RemoveSelf();
         }
         
         private void Menu_MapDuplicate()
@@ -93,13 +86,6 @@ namespace CrashEdit.CE
             OldEntity newentity = OldEntity.Load(OldEntity.Save());
             newentity.ID = id;
             MapEntryController.MapEntry.Entities.Add(newentity);
-            MapEntryController.AddNode(new OldEntityController(MapEntryController,newentity));
-        }
-
-        private void Menu_MapDelete()
-        {
-            MapEntryController.MapEntry.Entities.Remove(OldEntity);
-            RemoveSelf();
         }
     }
 }

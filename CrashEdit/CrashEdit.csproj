@@ -146,7 +146,6 @@
     <Compile Include="Controllers\Texture\TextureChunkController.cs" />
     <Compile Include="Controllers\Music\OldMusicEntryController.cs" />
     <Compile Include="Controllers\Palette\PaletteEntryController.cs" />
-    <Compile Include="Controllers\Zone\NewEntityController.cs" />
     <Compile Include="Controllers\Zone\OldCameraController.cs" />
     <Compile Include="Controllers\Zone\ProtoZoneEntryController.cs" />
     <Compile Include="Controllers\Zone\ProtoEntityController.cs" />

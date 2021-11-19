@@ -10,10 +10,6 @@ namespace CrashEdit.CE
         public MapEntryController(MapEntry mapentry, SubcontrollerGroup parentGroup) : base(mapentry, parentGroup)
         {
             MapEntry = mapentry;
-            foreach (OldEntity entity in mapentry.Entities)
-            {
-                AddNode(new OldEntityController(this,entity));
-            }
             AddMenu("Add Entity",Menu_AddEntity);
         }
 
@@ -48,7 +44,6 @@ namespace CrashEdit.CE
             }
             OldEntity newentity = OldEntity.Load(new OldEntity(0x0018,3,0,id,0,0,0,0,0,new List<EntityPosition>() { new EntityPosition(0,0,0) },0).Save());
             MapEntry.Entities.Add(newentity);
-            AddNode(new OldEntityController(this,newentity));
         }
     }
 }

@@ -9,7 +9,7 @@ namespace CrashEdit.CE
 {
     public partial class EntityBox : UserControl
     {
-        private LegacyController controller;
+        private EntityController controller;
         private Entity entity;
 
         private int positionindex;
@@ -158,13 +158,6 @@ namespace CrashEdit.CE
             };
         }
 
-        public EntityBox(NewEntityController controller)
-        {
-            this.controller = controller;
-            entity = controller.Entity;
-            MainInit();
-        }
-
         public EntityBox(EntityController controller)
         {
             this.controller = controller;
@@ -174,11 +167,7 @@ namespace CrashEdit.CE
 
         private void InvalidateNodes()
         {
-            if (controller is EntityController c) {
-                c.InvalidateNode();
-            } else if (controller is NewEntityController nc) {
-                nc.InvalidateNode();
-            }
+            controller.InvalidateNode();
         }
 
         internal string MakeArgAsText()
@@ -1111,8 +1100,9 @@ namespace CrashEdit.CE
 
         private void numEntityA_ValueChanged(object sender, EventArgs e)
         {
-            if (controller is EntityController c)
+            if (controller.ZoneEntryController != null)
             {
+                var c = controller;
                 foreach (ZoneEntry zone in c.GetEntries<ZoneEntry>())
                 {
                     foreach (Entity otherentity in zone.Entities)
@@ -1130,8 +1120,9 @@ namespace CrashEdit.CE
                     }
                 }
             }
-            else if (controller is NewEntityController nc)
+            else if (controller.NewZoneEntryController != null)
             {
+                var nc = controller;
                 foreach (NewZoneEntry zone in nc.GetEntries<NewZoneEntry>())
                 {
                     foreach (Entity otherentity in zone.Entities)
@@ -1292,8 +1283,9 @@ namespace CrashEdit.CE
 
         private void numEntityB_ValueChanged(object sender, EventArgs e)
         {
-            if (controller is EntityController c)
+            if (controller.ZoneEntryController != null)
             {
+                var c = controller;
                 foreach (ZoneEntry zone in c.GetEntries<ZoneEntry>())
                 {
                     foreach (Entity otherentity in zone.Entities)
@@ -1311,8 +1303,9 @@ namespace CrashEdit.CE
                     }
                 }
             }
-            else if (controller is NewEntityController nc)
+            else if (controller.NewZoneEntryController != null)
             {
+                var nc = controller;
                 foreach (NewZoneEntry zone in nc.GetEntries<NewZoneEntry>())
                 {
                     foreach (Entity otherentity in zone.Entities)
@@ -1648,23 +1641,11 @@ namespace CrashEdit.CE
             }
             List<Chunk> chunks = null;
             HashSet<Entry> entries = null;
-            if (controller is EntityController c2c)
+            chunks = controller.GetNSF().Chunks;
+            entries = new HashSet<Entry>();
+            foreach (int eid in loadedentries)
             {
-                chunks = c2c.GetNSF().Chunks;
-                entries = new HashSet<Entry>();
-                foreach (int eid in loadedentries)
-                {
-                    entries.Add(c2c.GetEntry<Entry>(eid));
-                }
-            }
-            else if (controller is NewEntityController c3c)
-            {
-                chunks = c3c.GetNSF().Chunks;
-                entries = new HashSet<Entry>();
-                foreach (int eid in loadedentries)
-                {
-                    entries.Add(c3c.GetEntry<Entry>(eid));
-                }
+                entries.Add(controller.GetEntry<Entry>(eid));
             }
             HashSet<Chunk> loadedchunks = new HashSet<Chunk>();
             foreach (Chunk chunk in chunks)

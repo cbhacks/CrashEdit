@@ -3,9 +3,10 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(ProtoEntity))]
     public sealed class ProtoEntityController : LegacyController
     {
-        public ProtoEntityController(ProtoZoneEntryController oldzoneentrycontroller,ProtoEntity entity) : base(oldzoneentrycontroller, entity)
+        public ProtoEntityController(ProtoEntity entity, SubcontrollerGroup parentGroup) : base(parentGroup, entity)
         {
             Entity = entity;
             //AddMenu("Duplicate Entity",Menu_Duplicate);
@@ -50,7 +51,6 @@ namespace CrashEdit.CE
         //    ProtoEntity newentity = ProtoEntity.Load(Entity.Save());
         //    newentity.ID = maxid;
         //    ProtoZoneEntryController.ProtoZoneEntry.Entities.Add(newentity);
-        //    ProtoZoneEntryController.AddNode(new ProtoEntityController(ProtoZoneEntryController,newentity));
         //}
 
         //private void Menu_Delete()
@@ -58,7 +58,6 @@ namespace CrashEdit.CE
         //    int entitycount = BitConv.FromInt32(ProtoZoneEntryController.ProtoZoneEntry.Header,0x20C);
         //    BitConv.ToInt32(ProtoZoneEntryController.ProtoZoneEntry.Header,0x20C,entitycount - 1);
         //    ProtoZoneEntryController.ProtoZoneEntry.Entities.Remove(Entity);
-        //    Dispose();
         //}
     }
 }

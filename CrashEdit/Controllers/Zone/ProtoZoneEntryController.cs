@@ -12,14 +12,6 @@ namespace CrashEdit.CE
             : base(zoneentry, parentGroup)
         {
             ProtoZoneEntry = zoneentry;
-            foreach (OldCamera camera in zoneentry.Cameras)
-            {
-                AddNode(new OldCameraController(this,camera));
-            }
-            foreach (ProtoEntity entity in zoneentry.Entities)
-            {
-                AddNode(new ProtoEntityController(this,entity));
-            }
             AddMenu("Export as Crash 1 ZDAT", Menu_ExportAsC1);
         }
 

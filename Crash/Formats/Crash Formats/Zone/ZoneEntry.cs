@@ -4,13 +4,11 @@ namespace CrashEdit.Crash
 {
     public sealed class ZoneEntry : Entry
     {
-        private List<Entity> entities;
-
         public ZoneEntry(byte[] header,byte[] layout,IEnumerable<Entity> entities,int eid) : base(eid)
         {
             Header = header;
             Layout = layout;
-            this.entities = new List<Entity>(entities);
+            Entities.AddRange(entities);
         }
 
         public override string Title => $"Zone ({EName})";
@@ -24,7 +22,8 @@ namespace CrashEdit.Crash
         [SubresourceSlot]
         public byte[] Layout { get; set; }
 
-        public IList<Entity> Entities => entities;
+        [SubresourceList]
+        public List<Entity> Entities { get; } = new List<Entity>();
 
         public int InfoCount
         {
@@ -52,12 +51,12 @@ namespace CrashEdit.Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte [2 + entities.Count][];
+            byte[][] items = new byte [2 + Entities.Count][];
             items[0] = Header;
             items[1] = Layout;
-            for (int i = 0;i < entities.Count;i++)
+            for (int i = 0;i < Entities.Count;i++)
             {
-                items[2 + i] = entities[i].Save();
+                items[2 + i] = Entities[i].Save();
             }
             return new UnprocessedEntry(items,EID,Type);
         }

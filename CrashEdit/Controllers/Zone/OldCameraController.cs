@@ -3,19 +3,13 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(OldCamera))]
     public sealed class OldCameraController : LegacyController
     {
-        public OldCameraController(ProtoZoneEntryController protozoneentrycontroller,OldCamera camera) : base(protozoneentrycontroller, camera)
+        public OldCameraController(OldCamera camera, SubcontrollerGroup parentGroup) : base(parentGroup, camera)
         {
             Camera = camera;
-            AddMenu("Delete Camera",Menu_DeleteProto);
-            InvalidateNode();
-        }
-
-        public OldCameraController(OldZoneEntryController oldzoneentrycontroller,OldCamera camera) : base(oldzoneentrycontroller, camera)
-        {
-            Camera = camera;
-            AddMenu("Delete Camera",Menu_DeleteOld);
+            AddMenu("Delete Camera",Menu_Delete);
             InvalidateNode();
         }
 
@@ -37,17 +31,14 @@ namespace CrashEdit.CE
         public OldZoneEntry OldZoneEntry => OldZoneEntryController.OldZoneEntry;
         public OldCamera Camera { get; }
         
-        private void Menu_DeleteProto()
+        private void Menu_Delete()
         {
-            ProtoZoneEntry.Cameras.Remove(Camera);
-            ProtoZoneEntry.CameraCount = ProtoZoneEntry.Cameras.Count;
-            RemoveSelf();
-        }
-        
-        private void Menu_DeleteOld()
-        {
-            OldZoneEntry.Cameras.Remove(Camera);
-            RemoveSelf();
+            if (ProtoZoneEntryController != null) {
+                ProtoZoneEntry.Cameras.Remove(Camera);
+                ProtoZoneEntry.CameraCount = ProtoZoneEntry.Cameras.Count;
+            } else {
+                OldZoneEntry.Cameras.Remove(Camera);
+            }
         }
     }
 }

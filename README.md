@@ -48,6 +48,8 @@ This is an experimental version of CrashEdit.
  * Texture chunks are no longer labeled with their CID
  * New chunks are created with invalid CID 0
  * When chunks are deleted, the CID's of chunks afterward are not adjusted
+ * New generalized "Delete" menu item (the one with red X icon) also appears on
+   entities, but does not properly update entity count, draw lists, etc.
 
 
 ### Other changes
@@ -248,6 +250,7 @@ The following old-style controllers are completely removed:
  * `ItemController`
  * `MysteryMultiItemEntryController`
  * `ColoredFrameController`
+ * `NewEntityController`
  * `VHController`
  * `OldVHController`
  * `SEQController`

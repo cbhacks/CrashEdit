@@ -10,10 +10,6 @@ namespace CrashEdit.CE
         public NewZoneEntryController(NewZoneEntry zoneentry, SubcontrollerGroup parentGroup) : base(zoneentry, parentGroup)
         {
             NewZoneEntry = zoneentry;
-            foreach (Entity entity in zoneentry.Entities)
-            {
-                AddNode(new NewEntityController(this,entity));
-            }
             AddMenu(CrashUI.Properties.Resources.ZoneEntryController_AcAddEntity,Menu_AddEntity);
         }
 
@@ -67,7 +63,6 @@ namespace CrashEdit.CE
             }
             Entity newentity = Entity.Load(new Entity(new Dictionary<short,EntityProperty>()).Save());
             NewZoneEntry.Entities.Add(newentity);
-            AddNode(new NewEntityController(this,newentity));
             NewZoneEntry.EntityCount = NewZoneEntry.Entities.Count;
         }
     }

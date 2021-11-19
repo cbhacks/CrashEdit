@@ -4,16 +4,13 @@ namespace CrashEdit.Crash
 {
     public sealed class ProtoZoneEntry : Entry
     {
-        private List<OldCamera> cameras;
-        private List<ProtoEntity> entities;
-
         public ProtoZoneEntry(byte[] header,byte[] layout,IEnumerable<OldCamera> cameras,IEnumerable<ProtoEntity> entities,int eid)
             : base(eid)
         {
             Header = header;
             Layout = layout;
-            this.cameras = new List<OldCamera>(cameras);
-            this.entities = new List<ProtoEntity>(entities);
+            Cameras.AddRange(cameras);
+            Entities.AddRange(entities);
         }
 
         public override string Title => $"Proto Zone ({EName})";
@@ -27,8 +24,11 @@ namespace CrashEdit.Crash
         [SubresourceSlot]
         public byte[] Layout { get; set; }
 
-        public IList<OldCamera> Cameras => cameras;
-        public IList<ProtoEntity> Entities => entities;
+        [SubresourceList]
+        public List<OldCamera> Cameras { get; } = new List<OldCamera>();
+
+        [SubresourceList]
+        public List<ProtoEntity> Entities { get; } = new List<ProtoEntity>();
 
         public int HeaderCount
         {
@@ -56,16 +56,16 @@ namespace CrashEdit.Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte[2 + entities.Count + cameras.Count][];
+            byte[][] items = new byte[2 + Entities.Count + Cameras.Count][];
             items[0] = Header;
             items[1] = Layout;
-            for (int i = 0; i < cameras.Count; i++)
+            for (int i = 0; i < Cameras.Count; i++)
             {
-                items[2 + i] = cameras[i].Save();
+                items[2 + i] = Cameras[i].Save();
             }
-            for (int i = 0; i < entities.Count; i++)
+            for (int i = 0; i < Entities.Count; i++)
             {
-                items[2 + cameras.Count + i] = entities[i].Save();
+                items[2 + Cameras.Count + i] = Entities[i].Save();
             }
             return new UnprocessedEntry(items,EID,Type);
         }

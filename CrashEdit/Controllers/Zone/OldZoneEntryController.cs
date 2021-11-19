@@ -11,14 +11,6 @@ namespace CrashEdit.CE
             : base(zoneentry, parentGroup)
         {
             OldZoneEntry = zoneentry;
-            foreach (OldCamera camera in zoneentry.Cameras)
-            {
-                AddNode(new OldCameraController(this,camera));
-            }
-            foreach (OldEntity entity in zoneentry.Entities)
-            {
-                AddNode(new OldEntityController(this,entity));
-            }
             AddMenu("Add Camera",Menu_AddCamera);
             AddMenu("Add Entity",Menu_AddEntity);
         }
@@ -55,7 +47,6 @@ namespace CrashEdit.CE
         {
             OldCamera newcam = OldCamera.Load(new OldCamera(Entry.ENameToEID("NONE!"),0,0,new OldCameraNeighbor[4],0,0,0,0,1600,0,0,0,0,0,0,new List<OldCameraPosition>(),0).Save());
             OldZoneEntry.Cameras.Add(newcam);
-            InsertNode(2 + OldZoneEntry.Cameras.Count - 1,new OldCameraController(this,newcam));
         }
 
         void Menu_AddEntity()
@@ -80,7 +71,6 @@ namespace CrashEdit.CE
             }
             OldEntity newentity = OldEntity.Load(new OldEntity(0x0018,3,0,id,0,0,0,0,0,new List<EntityPosition>() { new EntityPosition(0,0,0) },0).Save());
             OldZoneEntry.Entities.Add(newentity);
-            AddNode(new OldEntityController(this,newentity));
         }
     }
 }
