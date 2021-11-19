@@ -11,8 +11,6 @@ namespace CrashEdit {
         public static Controller Make(object resource, SubcontrollerGroup? parentGroup) {
             if (resource == null)
                 throw new ArgumentNullException();
-            if (parentGroup is LegacySubcontrollerGroup)
-                throw new ArgumentException();
 
             var type = resource.GetType();
             while (type != null) {
@@ -56,26 +54,11 @@ namespace CrashEdit {
             SubcontrollerGroups.Sort((x, y) => x.Order - y.Order);
         }
 
-        public Controller(LegacyController legacy) : this(legacy.Resource, legacy.Parent?.Modern?.LegacyGroup) {
-            if (legacy == null)
-                throw new ArgumentNullException();
-            if (legacy.Parent == null)
-                throw new ArgumentException();
-
-            Legacy = legacy;
-            LegacyGroup = new LegacySubcontrollerGroup(this);
-            SubcontrollerGroups.Add(LegacyGroup);
-        }
-
         public Controller(LegacyController legacy, SubcontrollerGroup? parentGroup) : this(legacy.Resource, parentGroup) {
             if (legacy == null)
                 throw new ArgumentNullException();
-            if (legacy.Parent != null)
-                throw new ArgumentException();
 
             Legacy = legacy;
-            LegacyGroup = new LegacySubcontrollerGroup(this);
-            SubcontrollerGroups.Add(LegacyGroup);
         }
 
         public object Resource { get; }
@@ -115,8 +98,6 @@ namespace CrashEdit {
         }
 
         public LegacyController? Legacy { get; }
-
-        public LegacySubcontrollerGroup? LegacyGroup { get; }
 
         public void Sync() {
             if (Dead)

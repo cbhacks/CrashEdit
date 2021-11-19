@@ -270,13 +270,10 @@ The following old-style controllers are completely removed:
  * `WavebankChunkController`
  * `SpeechChunkController`
 
-Remaining old-style controllers (`LegacyController`) remain in place but are
-planned for removal. Where present, old-style controllers coexist with new-
-style ones in a complicated manner. Every old-style controller object always
-has a single new-style `Controller` associated with it. The old-style `AddMenu`
-actions exist as `LegacyVerb` verbs which apply to the new controller. A
-`Controller` may have new subresource-attribute-based child controllers as well
-as old `AddNode` child controllers simultaneously.
+Remaining old-style controllers (`LegacyController`) remain in place for some
+resource types. When present, the old controller can provide one editor control
+as well as the `AddMenu`-style right-click menu options. A legacy controller type
+is associated with a resource type using the `OrphanLegacyController` attribute.
 
 
 ### Embeds

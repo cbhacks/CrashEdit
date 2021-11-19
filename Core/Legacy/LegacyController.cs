@@ -8,32 +8,17 @@ namespace CrashEdit {
 
     public abstract class LegacyController {
 
-        public LegacyController(LegacyController? parent, object resource) {
-            if (resource == null)
-                throw new ArgumentNullException();
-
-            Parent = parent;
-            Resource = resource;
-            Modern = new Controller(this);
-        }
-
         public LegacyController(SubcontrollerGroup? parentGroup, object resource) {
             if (resource == null)
                 throw new ArgumentNullException();
 
-            Parent = null;
             Resource = resource;
             Modern = new Controller(this, parentGroup);
         }
 
         public Controller Modern { get; }
 
-        public LegacyController? Parent { get; }
-
         public object Resource { get; }
-
-        public List<LegacyController> LegacySubcontrollers { get; } =
-            new List<LegacyController>();
 
         public List<LegacyVerb> LegacyVerbs { get; } =
             new List<LegacyVerb>();
