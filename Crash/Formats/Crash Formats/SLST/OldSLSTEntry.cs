@@ -11,7 +11,7 @@ namespace CrashEdit.Crash
         {
             if (deltas == null)
                 throw new ArgumentNullException("deltas");
-            this.deltas = new List<OldSLSTDelta>(deltas);
+            Deltas.AddRange(deltas);
             Start = start;
             End = end;
         }
@@ -20,19 +20,25 @@ namespace CrashEdit.Crash
         public override string ImageKey => "ThingGray";
 
         public override int Type => 4;
-        public IList<OldSLSTDelta> Deltas => deltas;
+
+        [SubresourceSlot]
         public OldSLSTSource Start { get; }
+
+        [SubresourceList]
+        public List<OldSLSTDelta> Deltas { get; } = new List<OldSLSTDelta>();
+
+        [SubresourceSlot]
         public OldSLSTSource End { get; }
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte [deltas.Count + 2][];
+            byte[][] items = new byte [Deltas.Count + 2][];
             items[0] = Start.Save();
-            for (int i = 0;i < deltas.Count;++i)
+            for (int i = 0;i < Deltas.Count;++i)
             {
-                items[1+i] = deltas[i].Save();
+                items[1+i] = Deltas[i].Save();
             }
-            items[1 + deltas.Count] = End.Save();
+            items[1 + Deltas.Count] = End.Save();
             return new UnprocessedEntry(items,EID,Type);
         }
     }

@@ -141,7 +141,6 @@
     <Compile Include="Controllers\Scenery\ProtoSceneryEntryController.cs" />
     <Compile Include="Controllers\SLST\OldSLSTDeltaController.cs" />
     <Compile Include="Controllers\SLST\SLSTDeltaController.cs" />
-    <Compile Include="Controllers\SLST\OldSLSTEntryController.cs" />
     <Compile Include="Controllers\SLST\OldSLSTSourceController.cs" />
     <Compile Include="Controllers\SLST\SLSTSourceController.cs" />
     <Compile Include="Controllers\Texture\TextureChunkController.cs" />
@@ -162,7 +161,6 @@
     <Compile Include="Controllers\Zone\NewZoneEntryController.cs" />
     <Compile Include="Controllers\Zone\ZoneEntryController.cs" />
     <Compile Include="Controllers\Unprocessed\UnprocessedEntryController.cs" />
-    <Compile Include="Controllers\SLST\SLSTEntryController.cs" />
     <Compile Include="Controllers\Scenery\SceneryEntryController.cs" />
     <Compile Include="Controllers\Mystery\MysteryUniItemEntryController.cs" />
     <Compile Include="Controllers\Base\Entry Chunk\EntryChunkController.cs" />

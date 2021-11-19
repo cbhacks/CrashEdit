@@ -3,9 +3,10 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(OldSLSTDelta))]
     public sealed class OldSLSTDeltaController : LegacyController
     {
-        public OldSLSTDeltaController(OldSLSTEntryController oldslstentrycontroller,OldSLSTDelta oldslstdelta) : base(oldslstentrycontroller, oldslstdelta)
+        public OldSLSTDeltaController(OldSLSTDelta oldslstdelta, SubcontrollerGroup parentGroup) : base(parentGroup, oldslstdelta)
         {
             OldSLSTDelta = oldslstdelta;
             InvalidateNode();
@@ -23,7 +24,6 @@ namespace CrashEdit.CE
             return new OldSLSTDeltaBox(OldSLSTDelta);
         }
 
-        public OldSLSTEntryController OldSLSTEntryController => (OldSLSTEntryController)Modern.Parent.Legacy;
         public OldSLSTDelta OldSLSTDelta { get; }
     }
 }

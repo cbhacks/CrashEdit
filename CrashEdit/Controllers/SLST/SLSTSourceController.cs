@@ -3,9 +3,10 @@ using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(SLSTSource))]
     public sealed class SLSTSourceController : LegacyController
     {
-        public SLSTSourceController(SLSTEntryController slstentrycontroller,SLSTSource slstsource) : base(slstentrycontroller, slstsource)
+        public SLSTSourceController(SLSTSource slstsource, SubcontrollerGroup parentGroup) : base(parentGroup, slstsource)
         {
             SLSTSource = slstsource;
             InvalidateNode();
@@ -23,7 +24,6 @@ namespace CrashEdit.CE
             return new SLSTSourceBox(SLSTSource);
         }
 
-        public SLSTEntryController SLSTEntryController => (SLSTEntryController)Modern.Parent.Legacy;
         public SLSTSource SLSTSource { get; }
     }
 }

@@ -237,6 +237,8 @@ The following properties are now subresources using the new system:
  * (list) `ColoredAnimationEntry.Frames`
  * (list) `ProtoAnimationEntry.Frames`
  * (slot) `OldSceneryEntry.ExtraData`
+ * (slot) `Start` and `End` in SLST entries
+ * (list) `Deltas` in SLST entries
  * (slot) `Header` and `Layout` in the zone entries and in `MapEntry`
  * (slot) `VH` in the music entries
  * (list) `Tracks` in the music entries, replacing `SEP` and `SEP.SEQs`
@@ -250,6 +252,8 @@ The following old-style controllers are completely removed:
  * `OldVHController`
  * `SEQController`
  * `OldSEQController`
+ * `SLSTEntryController`
+ * `OldSLSTEntryController`
  * `DemoEntryController`
  * `ImageEntryController`
  * `WavebankEntryController`
