@@ -117,8 +117,8 @@ namespace CrashEdit
             GL.DeleteProgram(ID);
         }
 
-        public void UniformMatrix4(string var_name, ref Matrix4 mat) => GL.UniformMatrix4(GL.GetUniformLocation(ID, var_name), false, ref mat);
-        public void UniformMatrix3(string var_name, ref Matrix3 mat) => GL.UniformMatrix3(GL.GetUniformLocation(ID, var_name), false, ref mat);
+        public void UniformMat4(string var_name, ref Matrix4 mat) => GL.UniformMatrix4(GL.GetUniformLocation(ID, var_name), false, ref mat);
+        public void UniformMat3(string var_name, ref Matrix3 mat) => GL.UniformMatrix3(GL.GetUniformLocation(ID, var_name), false, ref mat);
         public void UniformVec3(string var_name, ref Vector3 vec) => GL.Uniform3(GL.GetUniformLocation(ID, var_name), vec.X, vec.Y, vec.Z);
         public void UniformVec4(string var_name, ref Vector4 vec) => GL.Uniform4(GL.GetUniformLocation(ID, var_name), vec.X, vec.Y, vec.Z, vec.W);
         public void UniformVec4(string var_name, ref Color4 col) => GL.Uniform4(GL.GetUniformLocation(ID, var_name), col.R, col.G, col.B, col.A);

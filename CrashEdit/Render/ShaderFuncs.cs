@@ -11,8 +11,8 @@ namespace CrashEdit
 
         internal static void PreRenderDefault(Shader sh, RenderInfo ri)
         {
-            sh.UniformMatrix4("projectionMatrix", ref ri.Projection.Perspective);
-            sh.UniformMatrix4("viewMatrix", ref ri.Projection.View);
+            sh.UniformMat4("projectionMatrix", ref ri.Projection.Perspective);
+            sh.UniformMat4("viewMatrix", ref ri.Projection.View);
             sh.UniformVec3("viewTrans", ref ri.Projection.Trans);
             sh.UniformVec4("userColor1", ref ri.Projection.UserColor1);
             sh.UniformVec4("userColor2", ref ri.Projection.UserColor2);
@@ -23,7 +23,7 @@ namespace CrashEdit
         {
             Matrix4 model = Matrix4.CreateScale(2) * Matrix4.CreateTranslation(0, (float)Math.Sin(ri.CurrentFrame / 60f * Math.PI / 2) * 0.25f, -5);
 
-            sh.UniformMatrix4("modelMatrix", ref model);
+            sh.UniformMat4("modelMatrix", ref model);
         }
 
         internal static void RenderAxes(Shader sh, RenderInfo ri)
@@ -39,7 +39,7 @@ namespace CrashEdit
 
             sh.UniformVec3("trans", ref ri.Projection.UserTrans);
             sh.UniformVec3("scale", ref ri.Projection.UserScale);
-            sh.UniformMatrix4("modelMatrix", ref model);
+            sh.UniformMat4("modelMatrix", ref model);
         }
 
         internal static void RenderC1Anim(Shader sh, RenderInfo ri)
@@ -48,9 +48,6 @@ namespace CrashEdit
             ri.Projection.UserScale /= 128;
             sh.UniformVec3("trans", ref ri.Projection.UserTrans);
             sh.UniformVec3("modelScale", ref ri.Projection.UserScale);
-
-            sh.UniformMatrix3("modelLightAmb", ref ri.Projection.UserMat3);
-            sh.UniformVec3("modelColorAmb", ref ri.Projection.UserColorAmb);
         }
     }
 }

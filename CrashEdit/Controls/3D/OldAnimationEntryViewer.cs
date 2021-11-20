@@ -125,10 +125,10 @@ namespace CrashEdit
             if (model != null)
             {
                 if (frame2 != null && (frame2.ModelEID != frame.ModelEID || frame.Vertices.Count != frame2.Vertices.Count)) frame2 = null;
-                render.Projection.UserMat3.Row0 = new Vector3(-4096, 2048, 4096) / 0x1000;
-                render.Projection.UserMat3.Row1 = new Vector3(-3563, 2048, 4096) / 0x1000;
-                render.Projection.UserMat3.Row2 = new Vector3(4096, -2048, 0) / 0x1000;
-                render.Projection.UserColorAmb = new Vector3(614, 614, 614) / 0x200;
+                //render.Projection.UserMat3.Row0 = new Vector3(-4096, 2048, 4096) / 0x1000;
+                //render.Projection.UserMat3.Row1 = new Vector3(-3563, 2048, 4096) / 0x1000;
+                //render.Projection.UserMat3.Row2 = new Vector3(4096, -2048, 0) / 0x1000;
+                //render.Projection.UserColorAmb = new Vector3(614, 614, 614) / 0x200;
                 buf_vtx = new Vector4[model.Polygons.Count * 3];
                 buf_nor = new Vector3[model.Polygons.Count * 3];
                 buf_col = new Color4[model.Polygons.Count * 3];
