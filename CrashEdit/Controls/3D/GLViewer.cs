@@ -194,37 +194,35 @@ namespace CrashEdit
             base.OnLoad(e);
             MakeCurrent();
 
-            /*
-            // Enable debug callbacks.
-            GL.Enable(EnableCap.DebugOutput);
-            GL.DebugMessageCallback((source, type, id, severity, length, message, userParam) =>
-            {
-                string msg = Marshal.PtrToStringAnsi(message);
-                switch (severity)
-                {
-                    case DebugSeverity.DebugSeverityHigh:
-                        Console.WriteLine("OpenGL ERROR: " + msg);
-                        break;
-                    case DebugSeverity.DebugSeverityMedium:
-                        Console.WriteLine("OpenGL WARN: " + msg);
-                        break;
-                    case DebugSeverity.DebugSeverityLow:
-                        Console.WriteLine("OpenGL INFO: " + msg);
-                        break;
-                    default:
-                        Console.WriteLine("OpenGL OTHER: " + msg);
-                        break;
-                }
-            }, IntPtr.Zero);
-            */
             // version print
             Console.WriteLine($"OpenGL version: {GL.GetString(StringName.Version)}");
 
             int flags = GL.GetInteger(GetPName.ContextFlags);
-            Console.WriteLine($"flags: {flags}");
+            // Console.WriteLine($"flags: {flags}");
             if ((flags & (int)ContextFlagMask.ContextFlagDebugBit) != 0)
             {
-                Console.WriteLine("Debug on.");
+                Console.WriteLine("GL debug enabled.");
+                // Enable debug callbacks.
+                GL.Enable(EnableCap.DebugOutput);
+                GL.DebugMessageCallback((source, type, id, severity, length, message, userParam) =>
+                {
+                    string msg = Marshal.PtrToStringAnsi(message);
+                    switch (severity)
+                    {
+                        case DebugSeverity.DebugSeverityHigh:
+                            Console.WriteLine("OpenGL ERROR: " + msg);
+                            break;
+                        case DebugSeverity.DebugSeverityMedium:
+                            Console.WriteLine("OpenGL WARN: " + msg);
+                            break;
+                        case DebugSeverity.DebugSeverityLow:
+                            Console.WriteLine("OpenGL INFO: " + msg);
+                            break;
+                        default:
+                            Console.WriteLine("OpenGL OTHER: " + msg);
+                            break;
+                    }
+                }, IntPtr.Zero);
             }
 
             GL.Enable(EnableCap.DepthTest);

@@ -21,8 +21,8 @@ void main()
         if (colorMode == 0) {
             // 4 bit
             uvec4 t = imageLoad(vram16, ivec2(u/4, v));
-
-            texel_color = vec3(t.r, t.r, t.r);
+            texel_color = vec3(1.0);
+            texel_color = vec3(t.r, t.g, t.b);
         } else if (colorMode == 1) {
             // 8 bit
             uvec4 t = imageLoad(vram16, ivec2(u/2, v));

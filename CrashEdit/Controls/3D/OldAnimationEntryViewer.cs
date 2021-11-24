@@ -146,7 +146,7 @@ namespace CrashEdit
                                 var tpag = nsf.GetEntry<TextureChunk>(tex.EID);
                                 if (tpag != null)
                                 {
-                                    GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, i * 128, 1024, 128, PixelFormat.Rgba, PixelType.UnsignedShort5551, tpag.Data);
+                                    GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, i * 128, 1024, 128, PixelFormat.RedInteger, PixelType.UnsignedInt, tpag.Data);
                                 }
                                 tex_eids[i] = tex.EID;
                                 break;
@@ -200,7 +200,7 @@ namespace CrashEdit
                 render.Projection.UserTrans = new(frame.XOffset, frame.YOffset, frame.ZOffset);
                 render.Projection.UserScale = new(model.ScaleX, model.ScaleY, model.ScaleZ);
                 vaoModel.UpdatePositions(buf_vtx);
-                vaoModel.UpdateNormals(buf_nor);
+                //vaoModel.UpdateNormals(buf_nor);
                 vaoModel.UpdateColors(buf_col);
                 vaoModel.UpdateAttrib("uvc", buf_tex, 12, 3);
                 vaoModel.Render(render);

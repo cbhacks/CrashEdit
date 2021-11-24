@@ -44,24 +44,32 @@ namespace CrashEdit
 
         public void UpdateAttrib<T>(string name, T[] data, int eltsize, int eltcount) where T : struct
         {
-            GL.BindVertexArray(ID);
 
             int loc = GL.GetAttribLocation(Shader.ID, name);
 
-            // Create the vertex buffer object (VBO) for the data.
-            if (!Buffers.ContainsKey(name))
+            if (loc != -1)
             {
-                Buffers.Add(name, GL.GenBuffer());
-            }
-            int buf = Buffers[name];
-            // Bind the VBO and copy the data into it.
-            GL.BindBuffer(BufferTarget.ArrayBuffer, buf);
-            GL.BufferData(BufferTarget.ArrayBuffer, data.Length * eltsize, data, BufferUsageHint.DynamicDraw);
-            // setup the position attribute.
-            GL.VertexAttribPointer(loc, eltcount, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(loc);
+                GL.BindVertexArray(ID);
 
-            GL.BindVertexArray(0);
+                // Create the vertex buffer object (VBO) for the data.
+                if (!Buffers.ContainsKey(name))
+                {
+                    Buffers.Add(name, GL.GenBuffer());
+                }
+                int buf = Buffers[name];
+                // Bind the VBO and copy the data into it.
+                GL.BindBuffer(BufferTarget.ArrayBuffer, buf);
+                GL.BufferData(BufferTarget.ArrayBuffer, data.Length * eltsize, data, BufferUsageHint.DynamicDraw);
+                // setup the position attribute.
+                GL.VertexAttribPointer(loc, eltcount, VertexAttribPointerType.Float, false, 0, 0);
+                GL.EnableVertexAttribArray(loc);
+
+                GL.BindVertexArray(0);
+            }
+            else
+            {
+                Console.WriteLine($"Shader attrib {name} not found in shader {Shader.Name}");
+            }
         }
 
         public void UpdatePositions(Vector4[] positions)
