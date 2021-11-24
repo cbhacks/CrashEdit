@@ -64,12 +64,6 @@ namespace CrashEdit
             GL.BindVertexArray(0);
         }
 
-        public void UpdatePositions(float[] positions)
-        {
-            UpdateAttrib("position", positions, sizeof(float), 4);
-            VertCount = positions.Length / 4;
-        }
-
         public void UpdatePositions(Vector4[] positions)
         {
             UpdateAttrib("position", positions, 16, 4);
@@ -78,26 +72,26 @@ namespace CrashEdit
 
         public void UpdatePositions(Vector3[] positions)
         {
-            UpdateAttrib("position", positions, 12, 4);
+            UpdateAttrib("position", positions, 12, 3);
             VertCount = positions.Length;
         }
 
         public void UpdateNormals(Vector3[] positions)
         {
-            UpdateAttrib("normal", positions, 12, 4);
+            UpdateAttrib("normal", positions, 12, 3);
             VertCount = positions.Length;
-        }
-
-        public void UpdateColors(float[] colors)
-        {
-            UpdateAttrib("color", colors, sizeof(float), 4);
-            VertCount = colors.Length / 4;
         }
 
         public void UpdateColors(Color4[] colors)
         {
             UpdateAttrib("color", colors, 16, 4);
             VertCount = colors.Length;
+        }
+
+        public void UpdateUVs(Vector2[] uvs)
+        {
+            UpdateAttrib("uv", uvs, 8, 2);
+            VertCount = uvs.Length;
         }
 
         public void GLDispose()

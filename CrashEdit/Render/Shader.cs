@@ -16,7 +16,7 @@ namespace CrashEdit
             { "axes", new ShaderInfo("axes.vert", "default4.frag", func: RenderAxes) },
             { "line", new ShaderInfo("line-static.vert", "default4.frag") },
             { "line-model", new ShaderInfo("line-model.vert", "default4.frag", func: RenderLineModel) },
-            { "anim_c1", new ShaderInfo("anim_c1.vert", "default4.frag", func: RenderC1Anim) },
+            { "anim_c1", new ShaderInfo("anim_c1.vert", "anim_c1.frag", func: RenderC1Anim) },
             { "line-usercolor", new ShaderInfo("line-usercolor.vert", "default4.frag") }
         };
 
@@ -46,6 +46,7 @@ namespace CrashEdit
         private readonly Dictionary<string, int> fragshaders = new Dictionary<string, int>();
 
         // init shaders. Needs a GL context to be active.
+        // TODO see if shaders can be reused across contexts
         public void InitShaders()
         {
             if (shaders.Count != 0)
@@ -61,6 +62,12 @@ namespace CrashEdit
                     GL.ShaderSource(id, ResourceLoad.LoadTextFile("Render/Shaders/" + info.Value.VertShaderName));
                     GL.CompileShader(id);
 
+                    GL.GetShader(id, ShaderParameter.CompileStatus, out int s);
+                    if (s == 0)
+                    {
+                        Console.WriteLine(GL.GetShaderInfoLog(id));
+                    }
+
                     vertshaders.Add(info.Value.VertShaderName, id);
                 }
                 if (!fragshaders.ContainsKey(info.Value.FragShaderName))
@@ -68,6 +75,12 @@ namespace CrashEdit
                     var id = GL.CreateShader(ShaderType.FragmentShader);
                     GL.ShaderSource(id, ResourceLoad.LoadTextFile("Render/Shaders/" + info.Value.FragShaderName));
                     GL.CompileShader(id);
+
+                    GL.GetShader(id, ShaderParameter.CompileStatus, out int s);
+                    if (s == 0)
+                    {
+                        Console.WriteLine(GL.GetShaderInfoLog(id));
+                    }
 
                     fragshaders.Add(info.Value.FragShaderName, id);
                 }
@@ -117,12 +130,12 @@ namespace CrashEdit
             GL.DeleteProgram(ID);
         }
 
-        public void UniformMat4(string var_name, ref Matrix4 mat) => GL.UniformMatrix4(GL.GetUniformLocation(ID, var_name), false, ref mat);
-        public void UniformMat3(string var_name, ref Matrix3 mat) => GL.UniformMatrix3(GL.GetUniformLocation(ID, var_name), false, ref mat);
-        public void UniformVec3(string var_name, ref Vector3 vec) => GL.Uniform3(GL.GetUniformLocation(ID, var_name), vec.X, vec.Y, vec.Z);
-        public void UniformVec4(string var_name, ref Vector4 vec) => GL.Uniform4(GL.GetUniformLocation(ID, var_name), vec.X, vec.Y, vec.Z, vec.W);
-        public void UniformVec4(string var_name, ref Color4 col) => GL.Uniform4(GL.GetUniformLocation(ID, var_name), col.R, col.G, col.B, col.A);
-        public void UniformInt(string var_name, int val) => GL.Uniform1(GL.GetUniformLocation(ID, var_name), val);
+        public void UniformMat4(string name, ref Matrix4 mat) => GL.UniformMatrix4(GL.GetUniformLocation(ID, name), false, ref mat);
+        public void UniformMat3(string name, ref Matrix3 mat) => GL.UniformMatrix3(GL.GetUniformLocation(ID, name), false, ref mat);
+        public void UniformVec3(string name, ref Vector3 vec) => GL.Uniform3(GL.GetUniformLocation(ID, name), vec.X, vec.Y, vec.Z);
+        public void UniformVec4(string name, ref Vector4 vec) => GL.Uniform4(GL.GetUniformLocation(ID, name), vec.X, vec.Y, vec.Z, vec.W);
+        public void UniformVec4(string name, ref Color4 col) => GL.Uniform4(GL.GetUniformLocation(ID, name), col.R, col.G, col.B, col.A);
+        public void UniformInt(string name, int val) => GL.Uniform1(GL.GetUniformLocation(ID, name), val);
 
         public void Render(RenderInfo ri)
         {

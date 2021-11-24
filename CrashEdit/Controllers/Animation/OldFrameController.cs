@@ -43,15 +43,8 @@ namespace CrashEdit
 
             OldFrameBox framebox = new OldFrameBox(this);
             framebox.Dock = DockStyle.Fill;
-            EntryController entry = OldAnimationEntryController != null ? (EntryController)OldAnimationEntryController : (EntryController)ProtoAnimationEntryController;
-            /*
-            OldModelEntry modelentry = entry.EntryChunkController.NSFController.NSF.GetEntry<OldModelEntry>(OldFrame.ModelEID);
-            Dictionary<int,TextureChunk> textures = new Dictionary<int,TextureChunk>();
-            foreach (OldModelStruct str in modelentry.Structs)
-                if (str is OldModelTexture tex && !textures.ContainsKey(tex.EID))
-                    textures.Add(tex.EID, entry.EntryChunkController.NSFController.NSF.GetEntry<TextureChunk>(tex.EID));
-            */
-            OldAnimationEntryViewer viewerbox = new OldAnimationEntryViewer(entry.NSF, entry.Entry.EID, OldAnimationEntryController.OldAnimationEntry.Frames.IndexOf(OldFrame), false, null) { Dock = DockStyle.Fill };
+            EntryController entry = OldAnimationEntryController != null ? OldAnimationEntryController : ProtoAnimationEntryController;
+            OldAnimationEntryViewer viewerbox = new OldAnimationEntryViewer(entry.NSF, entry.Entry.EID, OldAnimationEntryController.OldAnimationEntry.Frames.IndexOf(OldFrame), false) { Dock = DockStyle.Fill };
 
             TabPage edittab = new TabPage("Editor");
             edittab.Controls.Add(framebox);

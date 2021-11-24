@@ -45,7 +45,7 @@
     <ApplicationIcon>Resources\Icons\cbhacks-logo-new.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-   <LangVersion>latest</LangVersion>
+    <LangVersion>10.0</LangVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -448,6 +448,7 @@
     <EmbeddedResource Include="Render\Shaders\line-model.vert" />
     <EmbeddedResource Include="Render\Shaders\line-static.vert" />
     <EmbeddedResource Include="Render\Shaders\line-usercolor.vert" />
+    <EmbeddedResource Include="Render\Shaders\anim_c1.frag" />
     <None Include="Resources\objects_012_red.gif" />
     <Content Include="Resources\objects_012_violet.gif" />
     <None Include="Resources\objects_012_yellow.gif" />

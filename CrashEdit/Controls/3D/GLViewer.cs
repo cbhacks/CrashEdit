@@ -41,23 +41,21 @@ namespace CrashEdit
             }
         }
 
-        readonly float[] AxesPos = new float[] {
-            // X, Y, Z, W
-            -0.5f, 0, 0, 1,
-            1, 0, 0, 1,
-            0, -0.5f, 0, 1,
-            0, 1, 0, 1,
-            0, 0, -0.5f, 1,
-            0, 0, 1, 1
+        readonly Vector4[] AxesPos = new Vector4[] {
+            new(-.5f, 0, 0, 1),
+            new(1, 0, 0, 1),
+            new(0, -.5f, 0, 1),
+            new(0, 1, 0, 1),
+            new(0, 0, -.5f, 1),
+            new(0, 0, 1, 1)
         };
-        readonly float[] AxesCol = new float[] {
-            // R, G, B, A
-            1, 0, 0, 1,
-            1, 0, 0, 1,
-            0, 1, 0, 1,
-            0, 1, 0, 1,
-            0, 0, 1, 1,
-            0, 0, 1, 1
+        readonly Color4[] AxesCol = new Color4[] {
+            new(1f, 0, 0, 1),
+            new(1f, 0, 0, 1),
+            new(0, 1f, 0, 1),
+            new(0, 1f, 0, 1),
+            new(0, 0, 1f, 1),
+            new(0, 0, 1f, 1)
         };
         private readonly Dictionary<int, Vector4[]> SpherePosCache = new Dictionary<int, Vector4[]>();
         private int SpherePosLastUploaded = -1;
@@ -172,18 +170,31 @@ namespace CrashEdit
 
         }
 
-        public GLViewer() : base(GraphicsMode.Default, 4, 3, GraphicsContextFlags.Debug)
+        public GLViewer() : base()
         {
             render = new RenderInfo(this);
         }
 
         protected abstract IEnumerable<IPosition> CorePositions { get; }
 
+        protected void CheckGLError(string msg = "")
+        {
+            ErrorCode err;
+            while ((err = GL.GetError()) != ErrorCode.NoError)
+            {
+                if (string.IsNullOrWhiteSpace(msg))
+                    Console.WriteLine(string.Format("GL error 0x{0:X}", (int)err));
+                else
+                    Console.WriteLine(string.Format("in {1}: GL error 0x{0:X}", (int)err, msg));
+            }
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             MakeCurrent();
 
+            /*
             // Enable debug callbacks.
             GL.Enable(EnableCap.DebugOutput);
             GL.DebugMessageCallback((source, type, id, severity, length, message, userParam) =>
@@ -205,8 +216,16 @@ namespace CrashEdit
                         break;
                 }
             }, IntPtr.Zero);
+            */
             // version print
-            Console.WriteLine("OpenGL version: " + GL.GetString(StringName.Version));
+            Console.WriteLine($"OpenGL version: {GL.GetString(StringName.Version)}");
+
+            int flags = GL.GetInteger(GetPName.ContextFlags);
+            Console.WriteLine($"flags: {flags}");
+            if ((flags & (int)ContextFlagMask.ContextFlagDebugBit) != 0)
+            {
+                Console.WriteLine("Debug on.");
+            }
 
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
@@ -418,6 +437,9 @@ namespace CrashEdit
             int midz = (maxz + minz) / 2;
             //render.Distance = Math.Max(10, (int)(Math.Sqrt(Math.Pow(maxx-midx, 2) + Math.Pow(maxy-midy, 2) + Math.Pow(maxz-midz, 2))*1.2));
             //render.Distance += 0;
+            render.Projection.Trans.X = midx;
+            render.Projection.Trans.Y = midy;
+            render.Projection.Trans.Z = midz;
             render.Projection.Rot.Y = 0;
             render.Projection.Rot.X = MathHelper.DegreesToRadians(15);
             Invalidate();
