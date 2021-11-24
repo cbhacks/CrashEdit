@@ -170,7 +170,7 @@ namespace CrashEdit
 
         }
 
-        public GLViewer() : base()
+        public GLViewer() : base(GraphicsMode.Default, 4, 3, GraphicsContextFlags.Debug)
         {
             render = new RenderInfo(this);
         }
