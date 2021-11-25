@@ -67,7 +67,13 @@ namespace CrashEdit
                 Stopwatch watch = Stopwatch.StartNew();
                 while (!masterexit)
                 {
-                    while (watch.ElapsedTicks <= nextframetick) ;
+                    while (watch.ElapsedTicks <= nextframetick)
+                    {
+                        if (nextframetick - watch.ElapsedTicks > StopwatchExt.TicksPerFrame / 15)
+                        {
+                            System.Threading.Thread.Sleep(1);
+                        }
+                    }
                     nextframetick += StopwatchExt.TicksPerFrame;
 
                     lock (mLock)
