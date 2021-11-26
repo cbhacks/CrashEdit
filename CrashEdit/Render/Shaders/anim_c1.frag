@@ -9,18 +9,18 @@ in flat int p_Tex;
 out vec4 f_col;
 
 int get_texel_bpp4(int u, int v) {
-    uint b = texture(vram8, vec2(u/2, v)).r;
-    return int(b >> (4*(u%2)));
+    uint b = texelFetch(vram8, ivec2(u/2, v), 0).r;
+    return int(b >> (4*(2-(u%2))));
 }
 
 int get_texel_bpp8(int u, int v) {
-    uint b = texture(vram8, vec2(u, v)).r;
+    uint b = texelFetch(vram8, ivec2(u, v), 0).r;
     return int(b);
 }
 
 uvec4 get_texel_bpp16(int u, int v) {
-    uint lo = texture(vram8, vec2(u*2, v)).r;
-    uint hi = texture(vram8, vec2(u*2+1, v)).r;
+    uint lo = texelFetch(vram8, ivec2(u*2, v), 0).r;
+    uint hi = texelFetch(vram8, ivec2(u*2+1, v), 0).r;
     uint t = lo | (hi << 8);
     return uvec4(t & 0x1F, (t>>5) & 0x1F, (t>>10) & 0x1F, (t>>15) & 0x1);
 }
@@ -33,7 +33,7 @@ void main()
         int tpage = (p_Tex >> 0) & 0x7;
         int cmode = (p_Tex >> 3) & 0x3;
         int bmode = (p_Tex >> 5) & 0x3;
-        int cx = (p_Tex >> 7) & 0xF;
+        int cx = ((p_Tex >> 7) & 0xF) * 16;
         int cy = (p_Tex >> 11) & 0x7F;
         int u = int(p_UV.x);
         int v = int(p_UV.y) + tpage * 128;

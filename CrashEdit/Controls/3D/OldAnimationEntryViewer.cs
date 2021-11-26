@@ -64,8 +64,10 @@ namespace CrashEdit
             vaoModel = new VAO(render.ShaderContext, "anim_c1", PrimitiveType.Triangles);
 
             tpage = GL.GenTexture();
-            //GL.ActiveTexture(TextureUnit.Texture0);
+            GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, tpage);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8ui, 512, 128 * 8, 0, PixelFormat.RedInteger, PixelType.UnsignedByte, IntPtr.Zero);
         }
 
