@@ -12,18 +12,17 @@ namespace CrashEdit
 {
     public sealed class OldAnimationEntryViewer : GLViewer, IGLDisposable
     {
-        private NSF nsf;
+        private readonly NSF nsf;
 
-        private int frame_id;
+        private readonly int eid_anim;
+        private readonly int frame_id;
         private int cur_frame;
-        private int eid_anim;
-        private int interi;
-        private int interp = 2;
         private bool colored;
         private bool collisionenabled;
         private bool texturesenabled = true;
         private bool normalsenabled = true;
-        private bool interp_startend = false;
+        private bool interpenabled = true;
+        private float interp;
         private int cullmode = 0;
 
         private int tpage;
@@ -75,7 +74,6 @@ namespace CrashEdit
         {
             get
             {
-                /*
                 var anim = nsf.GetEntry<OldAnimationEntry>(eid_anim);
                 if (anim != null)
                 {
@@ -88,17 +86,24 @@ namespace CrashEdit
                     foreach (OldFrame frame in frames)
                     {
                         var model = nsf.GetEntry<OldModelEntry>(frame.ModelEID);
+                        float mx = 1;
+                        float my = 1;
+                        float mz = 1;
                         if (model != null)
                         {
-                            var mx = (float)model.ScaleX / 3200 / 128;
-                            var my = (float)model.ScaleY / 3200 / 128;
-                            var mz = (float)model.ScaleZ / 3200 / 128;
-                            yield return new Position((frame.XOffset - 127) * mx, (frame.YOffset - 127) * my, (frame.ZOffset - 127) * mz);
-                            yield return new Position((frame.XOffset + 127) * mx, (frame.YOffset + 127) * my, (frame.ZOffset + 127) * mz);
+                            mx = (float)model.ScaleX / 3200 / 128;
+                            my = (float)model.ScaleY / 3200 / 128;
+                            mz = (float)model.ScaleZ / 3200 / 128;
+                        }
+                        foreach (var vert in frame.Vertices)
+                        {
+                            yield return (new Position(vert.X, vert.Y, vert.Z)
+                                        - new Position(128, 128, 128)
+                                        + new Position(frame.XOffset, frame.YOffset, frame.ZOffset)) * new Position(mx, my, mz);
                         }
                     }
                 }
-                */
+                
                 yield return new Position(0, 0, 0);
             }
         }
@@ -112,8 +117,20 @@ namespace CrashEdit
             var anim = nsf.GetEntry<OldAnimationEntry>(eid_anim);
             if (anim != null)
             {
-                cur_frame = frame_id == -1 ? (int)(render.CurrentFrame / 2 % anim.Frames.Count) : frame_id;
-                RenderFrame(nsf.GetEntry<OldAnimationEntry>(eid_anim).Frames[cur_frame]);
+                OldFrame f2 = null;
+                if (frame_id != -1)
+                {
+                    cur_frame = frame_id;
+                }
+                else
+                {
+                    cur_frame = (int)(render.CurrentFrame / 2 % anim.Frames.Count);
+                    if (interpenabled && (interp = render.CurrentFrame / 2f % anim.Frames.Count - cur_frame) != 0)
+                    {
+                        f2 = anim.Frames[(cur_frame + 1) % anim.Frames.Count];
+                    }
+                }
+                RenderFrame(anim.Frames[cur_frame], f2);
             }
         }
 
@@ -123,6 +140,7 @@ namespace CrashEdit
             if (KPress(Keys.C)) collisionenabled = !collisionenabled;
             if (KPress(Keys.N)) normalsenabled = !normalsenabled;
             if (KPress(Keys.T)) texturesenabled = !texturesenabled;
+            if (KPress(Keys.I)) interpenabled = !interpenabled;
             if (KPress(Keys.U)) cullmode = ++cullmode % 3;
         }
 
@@ -198,6 +216,10 @@ namespace CrashEdit
                     }
                 }
                 render.Projection.UserTrans = new(frame.XOffset, frame.YOffset, frame.ZOffset);
+                if (frame2 != null)
+                {
+                    render.Projection.UserTrans = MathExt.Lerp(render.Projection.UserTrans, new Vector3(frame2.XOffset, frame2.YOffset, frame2.ZOffset), interp);
+                }
                 render.Projection.UserScale = new(model.ScaleX, model.ScaleY, model.ScaleZ);
                 vaoModel.UpdatePositions(buf_vtx);
                 //vaoModel.UpdateNormals(buf_nor);
@@ -213,18 +235,17 @@ namespace CrashEdit
             if (f2 == null)
             {
                 OldFrameVertex v = f1.Vertices[id];
-                float x = v.X;
-                float y = v.Y;
-                float z = v.Z;
-                buf_vtx[buf_idx] = new(x, y, z);
-                float nx = v.NormalX;
-                float ny = v.NormalY;
-                float nz = v.NormalZ;
-                buf_nor[buf_idx] = new(nx, ny, nz);
+                buf_vtx[buf_idx] = new(v.X, v.Y, v.Z);
+                buf_nor[buf_idx] = new(v.NormalX, v.NormalY, v.NormalZ);
                 buf_idx++;
             }
             else
             {
+                OldFrameVertex v1 = f1.Vertices[id];
+                OldFrameVertex v2 = f2.Vertices[id];
+                buf_vtx[buf_idx] = MathExt.Lerp(new Vector3(v1.X, v1.Y, v1.Z), new Vector3(v2.X, v2.Y, v2.Z), interp);
+                buf_nor[buf_idx] = MathExt.Lerp(new Vector3(v1.NormalX, v1.NormalY, v1.NormalZ), new Vector3(v2.NormalX, v2.NormalY, v2.NormalZ), interp);
+                buf_idx++;
             }
         }
         /*

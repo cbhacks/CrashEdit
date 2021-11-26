@@ -315,7 +315,7 @@
     <Compile Include="Render\Shader.cs" />
     <Compile Include="Render\ShaderFuncs.cs" />
     <Compile Include="Render\VAO.cs" />
-    <Compile Include="Utils\Color4Ext.cs" />
+    <Compile Include="Utils\MathExt.cs" />
     <Compile Include="Utils\ResourceLoad.cs" />
     <Compile Include="Utils\StopwatchExt.cs" />
   </ItemGroup>

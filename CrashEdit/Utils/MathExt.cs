@@ -1,9 +1,24 @@
 ﻿using OpenTK.Graphics;
+using OpenTK;
 
 namespace CrashEdit
 {
-    public static class Color4Ext
+    public static class MathExt
     {
+        public static float Lerp (float a, float b, float amt)
+        {
+            if (amt <= 0) return a;
+            if (amt >= 1) return b;
+            return (b - a) * amt + a;
+        }
+
+        public static Vector3 Lerp(Vector3 a, Vector3 b, float amt)
+        {
+            if (amt <= 0) return a;
+            if (amt >= 1) return b;
+            return a + (b - a) * amt;
+        }
+
         public static Color4 Lerp(Color4 col1, Color4 col2, float amt)
         {
             if (amt <= 0) return col1;

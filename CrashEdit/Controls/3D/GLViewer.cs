@@ -405,29 +405,29 @@ namespace CrashEdit
 
         public void ResetCamera()
         {
-            int minx = int.MaxValue;
-            int miny = int.MaxValue;
-            int minz = int.MaxValue;
-            int maxx = int.MinValue;
-            int maxy = int.MinValue;
-            int maxz = int.MinValue;
+            float minx = float.MaxValue;
+            float miny = float.MaxValue;
+            float minz = float.MaxValue;
+            float maxx = float.MinValue;
+            float maxy = float.MinValue;
+            float maxz = float.MinValue;
             foreach (IPosition position in CorePositions)
             {
-                minx = (int)Math.Min(minx,position.X);
-                miny = (int)Math.Min(miny,position.Y);
-                minz = (int)Math.Min(minz,position.Z);
-                maxx = (int)Math.Max(maxx,position.X);
-                maxy = (int)Math.Max(maxy,position.Y);
-                maxz = (int)Math.Max(maxz,position.Z);
+                minx = (float)Math.Min(minx,position.X);
+                miny = (float)Math.Min(miny,position.Y);
+                minz = (float)Math.Min(minz,position.Z);
+                maxx = (float)Math.Max(maxx,position.X);
+                maxy = (float)Math.Max(maxy,position.Y);
+                maxz = (float)Math.Max(maxz,position.Z);
             }
-            int midx = (maxx + minx) / 2;
-            int midy = (maxy + miny) / 2;
-            int midz = (maxz + minz) / 2;
+            float midx = (maxx + minx) / 2;
+            float midy = (maxy + miny) / 2;
+            float midz = (maxz + minz) / 2;
             //render.Distance = Math.Max(10, (int)(Math.Sqrt(Math.Pow(maxx-midx, 2) + Math.Pow(maxy-midy, 2) + Math.Pow(maxz-midz, 2))*1.2));
             //render.Distance += 0;
             render.Projection.Trans.X = midx;
-            render.Projection.Trans.Y = midy;
-            render.Projection.Trans.Z = midz;
+            render.Projection.Trans.Y = -midy;
+            render.Projection.Trans.Z = -midz;
             render.Projection.Rot.Y = 0;
             render.Projection.Rot.X = MathHelper.DegreesToRadians(15);
             Invalidate();
