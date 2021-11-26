@@ -1,37 +1,56 @@
 ﻿#version 430 core
 
-uniform layout(binding=4, r16ui) readonly uimage2D vram16;
+layout(binding=0) uniform usampler2D vram8;
 
-in vec3 pass_Color;
-in vec3 pass_UVC;
+in vec3 p_Color;
+in vec2 p_UV;
+in flat int p_Tex;
 
 out vec4 f_col;
 
+int get_texel_bpp4(int u, int v) {
+    uint b = texture(vram8, vec2(u/2, v)).r;
+    return int(b >> (4*(u%2)));
+}
 
+int get_texel_bpp8(int u, int v) {
+    uint b = texture(vram8, vec2(u, v)).r;
+    return int(b);
+}
+
+uvec4 get_texel_bpp16(int u, int v) {
+    uint lo = texture(vram8, vec2(u*2, v)).r;
+    uint hi = texture(vram8, vec2(u*2+1, v)).r;
+    uint t = lo | (hi << 8);
+    return uvec4(t & 0x1F, (t>>5) & 0x1F, (t>>10) & 0x1F, (t>>15) & 0x1);
+}
 
 void main()
 {
-    if (pass_UVC.s < 0) {
-        f_col = vec4(pass_Color, 1.0);
+    if (p_Tex < 0) {
+        f_col = vec4(p_Color, 1.0);
     } else {
+        int tpage = (p_Tex >> 0) & 0x7;
+        int cmode = (p_Tex >> 3) & 0x3;
+        int bmode = (p_Tex >> 5) & 0x3;
+        int cx = (p_Tex >> 7) & 0xF;
+        int cy = (p_Tex >> 11) & 0x7F;
+        int u = int(p_UV.x);
+        int v = int(p_UV.y) + tpage * 128;
         vec3 texel_color;
-        int colorMode = int(pass_UVC.z);
-        int u = int(pass_UVC.x);
-        int v = int(pass_UVC.y);
-        if (colorMode == 0) {
+        if (cmode == 0) {
             // 4 bit
-            uvec4 t = imageLoad(vram16, ivec2(u/4, v));
-            texel_color = vec3(1.0);
-            texel_color = vec3(t.r, t.g, t.b);
-        } else if (colorMode == 1) {
+            uvec4 t = get_texel_bpp16(cx+get_texel_bpp4(u, v), cy);
+            texel_color = vec3(t)/31.0;
+        } else if (cmode == 1) {
             // 8 bit
-            uvec4 t = imageLoad(vram16, ivec2(u/2, v));
-            texel_color = vec3(1.0);
+            uvec4 t = get_texel_bpp16(cx+get_texel_bpp8(u, v), cy);
+            texel_color = vec3(t)/31.0;
         } else {
             // 16 bit
-            uvec4 t = imageLoad(vram16, ivec2(u, v));
-            texel_color = vec3(1.0);
+            uvec4 t = get_texel_bpp16(u, v);
+            texel_color = vec3(t)/31.0;
         }
-        f_col = vec4(pass_Color*2*texel_color, 1.0);
+        f_col = vec4(p_Color*2*texel_color, 1.0);
     }
 }

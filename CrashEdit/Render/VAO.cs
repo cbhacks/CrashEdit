@@ -15,7 +15,7 @@ namespace CrashEdit
         public Shader Shader { get; }
 
         public PrimitiveType Primitive { get; }
-        public int VertCount { get; private set; }
+        public int VertCount { get; set; }
 
         public static int GetPrimCount(PrimitiveType primitive, int verts)
         {
@@ -42,9 +42,8 @@ namespace CrashEdit
             ID = GL.GenVertexArray();
         }
 
-        public void UpdateAttrib<T>(string name, T[] data, int eltsize, int eltcount) where T : struct
+        public void UpdateAttrib<T>(int etype, string name, T[] data, int eltsize, int components) where T : struct
         {
-
             int loc = GL.GetAttribLocation(Shader.ID, name);
 
             if (loc != -1)
@@ -61,7 +60,22 @@ namespace CrashEdit
                 GL.BindBuffer(BufferTarget.ArrayBuffer, buf);
                 GL.BufferData(BufferTarget.ArrayBuffer, data.Length * eltsize, data, BufferUsageHint.DynamicDraw);
                 // setup the position attribute.
-                GL.VertexAttribPointer(loc, eltcount, VertexAttribPointerType.Float, false, 0, 0);
+                if (etype == 1)
+                {
+                    GL.VertexAttribIPointer(loc, components, VertexAttribIntegerType.Int, 0, IntPtr.Zero);
+                }
+                else if (etype == 2)
+                {
+                    GL.VertexAttribIPointer(loc, components, VertexAttribIntegerType.UnsignedShort, 0, IntPtr.Zero);
+                }
+                else if (etype == 3)
+                {
+                    GL.VertexAttribIPointer(loc, components, VertexAttribIntegerType.UnsignedByte, 0, IntPtr.Zero);
+                }
+                else if (etype == 0)
+                {
+                    GL.VertexAttribPointer(loc, components, VertexAttribPointerType.Float, false, 0, 0);
+                }
                 GL.EnableVertexAttribArray(loc);
 
                 GL.BindVertexArray(0);
@@ -74,32 +88,27 @@ namespace CrashEdit
 
         public void UpdatePositions(Vector4[] positions)
         {
-            UpdateAttrib("position", positions, 16, 4);
-            VertCount = positions.Length;
+            UpdateAttrib(0, "position", positions, 16, 4);
         }
 
         public void UpdatePositions(Vector3[] positions)
         {
-            UpdateAttrib("position", positions, 12, 3);
-            VertCount = positions.Length;
+            UpdateAttrib(0, "position", positions, 12, 3);
         }
 
         public void UpdateNormals(Vector3[] positions)
         {
-            UpdateAttrib("normal", positions, 12, 3);
-            VertCount = positions.Length;
+            UpdateAttrib(0, "normal", positions, 12, 3);
         }
 
         public void UpdateColors(Color4[] colors)
         {
-            UpdateAttrib("color", colors, 16, 4);
-            VertCount = colors.Length;
+            UpdateAttrib(0, "color", colors, 16, 4);
         }
 
         public void UpdateUVs(Vector2[] uvs)
         {
-            UpdateAttrib("uv", uvs, 8, 2);
-            VertCount = uvs.Length;
+            UpdateAttrib(0, "uv", uvs, 8, 2);
         }
 
         public void GLDispose()
@@ -109,7 +118,7 @@ namespace CrashEdit
             GL.DeleteVertexArray(ID);
         }
 
-        public void Render(RenderInfo ri)
+        public void Render(RenderInfo ri, int vertcount = -1)
         {
             // Bind the VAO
             GL.BindVertexArray(ID);
@@ -118,7 +127,7 @@ namespace CrashEdit
             Shader.Render(ri);
 
             // This draws the triangle.
-            GL.DrawArrays(Primitive, 0, VertCount);
+            GL.DrawArrays(Primitive, 0, vertcount == -1 ? VertCount : vertcount);
 
             if (ri.Projection.ColorModeStack.Count > 0)
             {

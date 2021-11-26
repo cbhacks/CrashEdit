@@ -80,7 +80,6 @@ namespace CrashEdit
                     {
                         _framehits++;
                         _framecounter = watch.ElapsedFrames();
-                        //Console.WriteLine(string.Format("{0} (f {1})", _framehits, _framecounter));
 
                         // reset frame counters when rate changes
                         if (cur_rate != OldMainForm.GetRate())

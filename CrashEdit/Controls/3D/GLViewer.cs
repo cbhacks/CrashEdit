@@ -140,6 +140,7 @@ namespace CrashEdit
                 SpherePosCache.Add(resolution, pos);
             }
             vaoSphereLine.UpdatePositions(SpherePosCache[resolution]);
+            vaoSphereLine.VertCount = SpherePosCache[resolution].Length;
             SpherePosLastUploaded = resolution;
         }
         protected void MakeLineGrid(int resolution)
@@ -166,6 +167,7 @@ namespace CrashEdit
             }
 
             vaoGridLine.UpdatePositions(GridPosCache[resolution]);
+            vaoGridLine.VertCount = GridPosCache[resolution].Length;
             GridPosLastUploaded = resolution;
 
         }
@@ -176,18 +178,6 @@ namespace CrashEdit
         }
 
         protected abstract IEnumerable<IPosition> CorePositions { get; }
-
-        protected void CheckGLError(string msg = "")
-        {
-            ErrorCode err;
-            while ((err = GL.GetError()) != ErrorCode.NoError)
-            {
-                if (string.IsNullOrWhiteSpace(msg))
-                    Console.WriteLine(string.Format("GL error 0x{0:X}", (int)err));
-                else
-                    Console.WriteLine(string.Format("in {1}: GL error 0x{0:X}", (int)err, msg));
-            }
-        }
 
         protected override void OnLoad(EventArgs e)
         {
@@ -400,7 +390,7 @@ namespace CrashEdit
             {
                 var old = render.Projection.Trans;
                 render.Projection.Trans = new Vector3(0);
-                vaoAxes.Render(render);
+                vaoAxes.Render(render, vertcount: 6);
                 render.Projection.Trans = old;
 
                 MakeLineGrid(Properties.Settings.Default.AnimGridLen);
@@ -409,7 +399,7 @@ namespace CrashEdit
             }
             else
             {
-                vaoAxes.Render(render);
+                vaoAxes.Render(render, vertcount: 6);
             }
         }
 
