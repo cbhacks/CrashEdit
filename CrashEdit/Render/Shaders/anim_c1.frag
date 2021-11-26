@@ -10,7 +10,11 @@ out vec4 f_col;
 
 int get_texel_bpp4(int u, int v) {
     uint b = texelFetch(vram8, ivec2(u/2, v), 0).r;
-    return int(b >> (4*(2-(u%2))));
+    if ((u % 2) == 0) {
+        return int(b & 0xF);
+    } else {
+        return int((b >> 4) & 0xF);
+    }
 }
 
 int get_texel_bpp8(int u, int v) {
