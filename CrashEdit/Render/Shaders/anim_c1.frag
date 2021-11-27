@@ -34,8 +34,8 @@ uvec4 get_texel_bpp16(int u, int v) {
 void main()
 {
     int enable = p_Tex & 0x1;
-    int cull = (p_Tex >> 16) & 0x1;
-    if (cull == 0) {
+    int nocull = (p_Tex >> 16) & 0x1;
+    if (nocull == 0) {
         if (cullmode == 0 && !gl_FrontFacing) discard;
         if (cullmode == 1 && gl_FrontFacing) discard;
     }

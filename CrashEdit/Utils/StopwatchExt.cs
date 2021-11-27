@@ -4,15 +4,9 @@ namespace CrashEdit
 {
     public static class StopwatchExt
     {
-        public static long ElapsedFrames(this Stopwatch watch)
-        {
-            return watch.ElapsedTicks / TicksPerFrame;
-        }
-
-        public static long ElapsedFrameTime(this Stopwatch watch)
-        {
-            return watch.ElapsedTicks % TicksPerFrame;
-        }
+        public static long ElapsedFrames(this Stopwatch watch) => watch.ElapsedTicks / TicksPerFrame;
+        public static double ElapsedFramesFull(this Stopwatch watch) => watch.ElapsedTicks / (double)TicksPerFrame;
+        public static long ElapsedFrameTime(this Stopwatch watch) => watch.ElapsedTicks % TicksPerFrame;
 
         public static long TicksPerFrame => Stopwatch.Frequency / 60;
     }

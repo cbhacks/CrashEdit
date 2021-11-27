@@ -122,12 +122,13 @@ namespace CrashEdit
                 }
                 else
                 {
-                    float prog = render.CurrentFrame / 2f % anim.Frames.Count;
+                    double prog = render.FullCurrentFrame / 2 % anim.Frames.Count;
                     cur_frame = (int)Math.Floor(prog);
                     if (interpenabled)
                     {
                         f2 = anim.Frames[(int)Math.Ceiling(prog) % anim.Frames.Count];
-                        interp = prog - cur_frame;
+                        interp = (float)(prog - cur_frame);
+                        Console.WriteLine(string.Format("Render frame {1}+{2}/{0} (i {3})", anim.Frames.Count, cur_frame, (int)Math.Ceiling(prog) % anim.Frames.Count, interp));
                     }
                 }
                 RenderFrame(anim.Frames[cur_frame], f2);

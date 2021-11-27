@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System;
 
 namespace CrashEdit
 {
     public enum RendererMoveMode { Free, Anchored }
 
-    public class RenderInfo
+    public class RenderInfo : IDisposable
     {
 
         public ProjectionInfo Projection;
@@ -28,48 +29,55 @@ namespace CrashEdit
         public void Reset()
         {
             Distance = InitialDistance;
-            Projection.Trans = new Vector3(0, 0, 0);
-            Projection.Rot = new Vector3(BaseRot, 0, 0);
-            Projection.Scale = new Vector3(1);
+            Projection.Trans = new(0, 0, 0);
+            Projection.Rot = new(BaseRot, 0, 0);
+            Projection.Scale = new(1);
             MoveMode = RendererMoveMode.Anchored;
         }
 
-        private bool masterexit;
-        private long _framecounter;
+        private bool masterexit = true;
         private long _framehits;
         private readonly Task _frametask;
         private readonly Timer _frametimer;
+        private Stopwatch _framewatch;
 
-        public long MissedFrames => _framecounter - _framehits;
         public long CurrentFrame => _framehits;
-        public long RealCurrentFrame => _framecounter;
+        public long RealCurrentFrame => _framewatch.ElapsedFrames();
+        public double FullCurrentFrame => _framewatch.ElapsedFramesFull();
+        public long MissedFrames => RealCurrentFrame - _framehits;
+        public bool Started => !masterexit;
 
-        public readonly object mLock = new object();
+        public readonly object mLock = new();
 
         public RenderInfo(GLViewer parent = null)
         {
-            ShaderContext = new ShaderContext();
+            ShaderContext = new();
 
             // window update
-            _frametimer = new Timer();
-            _frametimer.Interval = 10;
-            _frametimer.Tick += (sender, e) =>
+            if (parent != null)
             {
-                parent?.Invalidate();
-                _frametimer.Enabled = !masterexit;
-            };
+                _frametimer = new();
+                _frametimer.Interval = 10;
+                _frametimer.Tick += (sender, e) =>
+                {
+                    parent.Invalidate();
+                };
+                _frametimer.Enabled = true;
+            }
 
             // logic update
-            _frametask = new Task(() =>
+            _framewatch = Stopwatch.StartNew();
+            masterexit = false;
+            _frametask = new(() =>
             {
                 var cur_rate = OldMainForm.GetRate();
                 long nextframetick = StopwatchExt.TicksPerFrame;
-                Stopwatch watch = Stopwatch.StartNew();
+
                 while (!masterexit)
                 {
-                    while (watch.ElapsedTicks <= nextframetick)
+                    while (_framewatch.ElapsedTicks <= nextframetick)
                     {
-                        if (nextframetick - watch.ElapsedTicks > StopwatchExt.TicksPerFrame / 15)
+                        if (nextframetick - _framewatch.ElapsedTicks > StopwatchExt.TicksPerFrame / 15)
                         {
                             System.Threading.Thread.Sleep(1);
                         }
@@ -79,12 +87,11 @@ namespace CrashEdit
                     lock (mLock)
                     {
                         _framehits++;
-                        _framecounter = watch.ElapsedFrames();
 
                         // reset frame counters when rate changes
                         if (cur_rate != OldMainForm.GetRate())
                         {
-                            watch.Restart();
+                            _framewatch.Restart();
                             nextframetick = StopwatchExt.TicksPerFrame;
                             _framehits = 0;
                             cur_rate = OldMainForm.GetRate();
@@ -99,21 +106,20 @@ namespace CrashEdit
             });
 
             Projection.ColorModeStack = new Stack<ProjectionInfo.ColorModeEnum>();
-
             Reset();
-
             Start();
         }
 
         public void Start()
         {
             _frametask.Start();
-            _frametimer.Enabled = true;
         }
 
-        ~RenderInfo()
+        public void Dispose()
         {
             masterexit = true;
+            _frametask.Dispose();
+            _frametimer?.Dispose();
         }
     }
 }

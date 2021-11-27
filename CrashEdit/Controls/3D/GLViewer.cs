@@ -357,29 +357,32 @@ namespace CrashEdit
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            MakeCurrent();
-
-            // Clear buffers
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-            GL.Viewport(0, 0, Width, Height);
-
-            lock (render.mLock)
+            if (render.Started)
             {
-                render.Projection.Width = Width;
-                render.Projection.Height = Height;
+                MakeCurrent();
 
-                render.Projection.Perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45), render.Projection.Aspect, 0.1f, 16384);
-                var rot_mat = Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot));
-                var test_vec = (rot_mat * new Vector4(0, 0, render.Distance, 1)).Xyz;
-                render.Projection.View = Matrix4.CreateTranslation(render.Projection.Trans - test_vec) * rot_mat;
+                // Clear buffers
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-                // render
-                Render();
+                GL.Viewport(0, 0, Width, Height);
+
+                lock (render.mLock)
+                {
+                    render.Projection.Width = Width;
+                    render.Projection.Height = Height;
+
+                    render.Projection.Perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45), render.Projection.Aspect, 0.1f, 16384);
+                    var rot_mat = Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot));
+                    var test_vec = (rot_mat * new Vector4(0, 0, render.Distance, 1)).Xyz;
+                    render.Projection.View = Matrix4.CreateTranslation(render.Projection.Trans - test_vec) * rot_mat;
+
+                    // render
+                    Render();
+                }
+
+                // swap the front/back buffers so what we just rendered to the back buffer is displayed in the window.
+                Context.SwapBuffers();
             }
-
-            // swap the front/back buffers so what we just rendered to the back buffer is displayed in the window.
-            Context.SwapBuffers();
             base.OnPaint(e);
         }
 
@@ -426,9 +429,9 @@ namespace CrashEdit
             float midx = (maxx + minx) / 2;
             float midy = (maxy + miny) / 2;
             float midz = (maxz + minz) / 2;
-            //render.Distance = Math.Max(10, (int)(Math.Sqrt(Math.Pow(maxx-midx, 2) + Math.Pow(maxy-midy, 2) + Math.Pow(maxz-midz, 2))*1.2));
+            render.Distance = Math.Max(render.Distance, (float)(Math.Sqrt(Math.Pow(maxx-minx, 2) + Math.Pow(maxy-miny, 2) + Math.Pow(maxz-minz, 2))*1.2));
             //render.Distance += 0;
-            render.Projection.Trans.X = midx;
+            render.Projection.Trans.X = -midx;
             render.Projection.Trans.Y = -midy;
             render.Projection.Trans.Z = -midz;
             render.Projection.Rot.Y = 0;
