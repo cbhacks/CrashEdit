@@ -48,6 +48,7 @@ namespace CrashEdit
             ri.Projection.UserScale /= 128;
             sh.UniformVec3("trans", ref ri.Projection.UserTrans);
             sh.UniformVec3("modelScale", ref ri.Projection.UserScale);
+            sh.UniformInt("cullmode", ri.Projection.UserInt1);
         }
     }
 }

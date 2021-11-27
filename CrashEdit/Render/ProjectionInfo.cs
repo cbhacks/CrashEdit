@@ -24,6 +24,7 @@ namespace CrashEdit
         public Matrix3 UserMat3;
         public Vector3 UserColorAmb;
         public Vector3 UserColorDiff;
+        public int UserInt1;
 
         public enum ColorModeEnum { Default = 0, GradientY = 1, Solid = 2 };
         public ColorModeEnum ColorMode;

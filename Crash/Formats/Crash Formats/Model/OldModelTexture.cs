@@ -42,17 +42,17 @@ namespace Crash
             N = n;
             EID = eid;
             
-            Width = 4 << (UVIndex % 5);
-            Height = 4 << ((UVIndex / 5) % 5);
+            int w = 4 << (UVIndex % 5);
+            int h = 4 << ((UVIndex / 5) % 5);
             int xoff = ((64 << (2 - ColorMode)) * Segment) + ((2 << (2 - ColorMode)) * XOffU);
             int yoff = YOffU * 4;
             int winding = UVIndex / 25;
-            U1 = Width * ((0x30FF0C >> winding) & 1) + xoff;
-            V1 = Height * ((0xF3CC30 >> winding) & 1) + yoff;
-            U2 = Width * ((0x8799E1 >> winding) & 1) + xoff;
-            V2 = Height * ((0x9E7186 >> winding) & 1) + yoff;
-            U3 = Width * ((0x4B66D2 >> winding) & 1) + xoff;
-            V3 = Height * ((0x6DB249 >> winding) & 1) + yoff;
+            U1 = w * ((0x30FF0C >> winding) & 1) + xoff;
+            U2 = w * ((0x8799E1 >> winding) & 1) + xoff;
+            U3 = w * ((0x4B66D2 >> winding) & 1) + xoff;
+            V1 = h * ((0xF3CC30 >> winding) & 1) + yoff;
+            V2 = h * ((0x9E7186 >> winding) & 1) + yoff;
+            V3 = h * ((0x6DB249 >> winding) & 1) + yoff;
         }
         
         public byte R { get; }
@@ -76,8 +76,6 @@ namespace Crash
         public int V1 { get; }
         public int V2 { get; }
         public int V3 { get; }
-        public int Width { get; }
-        public int Height { get; }
 
         public byte[] Save()
         {
