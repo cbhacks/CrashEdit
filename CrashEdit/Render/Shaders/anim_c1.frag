@@ -39,9 +39,8 @@ void main()
         if (cullmode == 0 && !gl_FrontFacing) discard;
         if (cullmode == 1 && gl_FrontFacing) discard;
     }
-    if (enable == 0) {
-        f_col = vec4(p_Color, 1.0);
-    } else {
+    f_col = vec4(p_Color, 1.0);
+    if (enable == 1) {
         int tpage = p_Tex >> 17;
         int cmode = (p_Tex >> 1) & 0x3;
         int bmode = (p_Tex >> 3) & 0x3;
@@ -49,20 +48,21 @@ void main()
         int cy = ((p_Tex >> 9) & 0x7F) + tpage * 128;
         int u = int(p_UV.x);
         int v = int(p_UV.y) + tpage * 128;
-        vec3 texel_color;
+        uvec4 texel;
         if (cmode == 0) {
-            // 4 bit
-            uvec4 t = get_texel_bpp16(cx+get_texel_bpp4(u, v), cy);
-            texel_color = vec3(t)/31.0;
+            texel = get_texel_bpp16(cx+get_texel_bpp4(u, v), cy); // 4 bit
         } else if (cmode == 1) {
-            // 8 bit
-            uvec4 t = get_texel_bpp16(cx+get_texel_bpp8(u, v), cy);
-            texel_color = vec3(t)/31.0;
+            texel = get_texel_bpp16(cx+get_texel_bpp8(u, v), cy); // 8 bit
         } else {
-            // 16 bit
-            uvec4 t = get_texel_bpp16(u, v);
-            texel_color = vec3(t)/31.0;
+            texel = get_texel_bpp16(u, v); // 16 bit
         }
-        f_col = vec4(p_Color*2*texel_color, 1.0);
+        if (texel.x == 0 && texel.y == 0 && texel.z == 0 && texel.w == 0) discard; // useless texel
+
+        vec3 texel_color = vec3(texel)/31.0;
+        float texel_alpha = 1.0;
+        if (bmode == 0 && texel.w == 1) {
+            texel_alpha = 0.5;
+        }
+        f_col *= vec4(2 * texel_color, texel_alpha);
     }
 }

@@ -92,17 +92,11 @@ namespace CrashEdit
         public void KillShaders()
         {
             foreach (var shader in shaders.Values)
-            {
                 shader.GLDispose();
-            }
             foreach (var shader in vertshaders.Values)
-            {
                 GL.DeleteShader(shader);
-            }
             foreach (var shader in fragshaders.Values)
-            {
                 GL.DeleteShader(shader);
-            }
             shaders.Clear();
             vertshaders.Clear();
             fragshaders.Clear();

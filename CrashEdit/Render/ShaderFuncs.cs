@@ -28,9 +28,7 @@ namespace CrashEdit
 
         internal static void RenderAxes(Shader sh, RenderInfo ri)
         {
-            Vector4 trans = Matrix4.CreateFromQuaternion(new Quaternion(ri.Projection.Rot)) * new Vector4(0, 0, -ri.Distance, 1);
-
-            sh.UniformVec4("trans", ref trans);
+            sh.UniformVec3("trans", ref ri.Projection.UserTrans);
         }
 
         internal static void RenderLineModel(Shader sh, RenderInfo ri)

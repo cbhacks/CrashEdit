@@ -41,7 +41,7 @@ namespace CrashEdit
             }
         }
 
-        readonly Vector4[] AxesPos = new Vector4[] {
+        static readonly Vector4[] AxesPos = new Vector4[] {
             new(-.5f, 0, 0, 1),
             new(1, 0, 0, 1),
             new(0, -.5f, 0, 1),
@@ -49,7 +49,7 @@ namespace CrashEdit
             new(0, 0, -.5f, 1),
             new(0, 0, 1, 1)
         };
-        readonly Color4[] AxesCol = new Color4[] {
+        static readonly Color4[] AxesCol = new Color4[] {
             new(1f, 0, 0, 1),
             new(1f, 0, 0, 1),
             new(0, 1f, 0, 1),
@@ -57,10 +57,10 @@ namespace CrashEdit
             new(0, 0, 1f, 1),
             new(0, 0, 1f, 1)
         };
-        private readonly Dictionary<int, Vector4[]> SpherePosCache = new Dictionary<int, Vector4[]>();
+        private readonly Dictionary<int, Vector4[]> SpherePosCache = new();
         private int SpherePosLastUploaded = -1;
         protected VAO vaoSphereLine;
-        private readonly Dictionary<int, Vector4[]> GridPosCache = new Dictionary<int, Vector4[]>();
+        private readonly Dictionary<int, Vector4[]> GridPosCache = new();
         private int GridPosLastUploaded = -1;
         protected VAO vaoGridLine;
 
@@ -71,8 +71,8 @@ namespace CrashEdit
 
         private bool run = false;
 
-        private readonly HashSet<Keys> keysdown = new HashSet<Keys>();
-        private readonly HashSet<Keys> keyspressed = new HashSet<Keys>();
+        private readonly HashSet<Keys> keysdown = new();
+        private readonly HashSet<Keys> keyspressed = new();
         protected bool KDown(Keys key) => keysdown.Contains(key);
         protected bool KPress(Keys key) => keyspressed.Contains(key);
         private bool mouseright = false;
@@ -388,10 +388,7 @@ namespace CrashEdit
             // vaoTest.Render(render);
             if (UseGrid && Properties.Settings.Default.DisplayAnimGrid)
             {
-                var old = render.Projection.Trans;
-                render.Projection.Trans = new Vector3(0);
-                vaoAxes.Render(render, vertcount: 6);
-                render.Projection.Trans = old;
+                RenderAxes(new Vector3(0));
 
                 MakeLineGrid(Properties.Settings.Default.AnimGridLen);
                 render.Projection.UserColor1 = Color4.Gray;
@@ -399,8 +396,14 @@ namespace CrashEdit
             }
             else
             {
-                vaoAxes.Render(render, vertcount: 6);
+                RenderAxes(new Vector3(0));
             }
+        }
+
+        private void RenderAxes(Vector3 pos)
+        {
+            render.Projection.UserTrans = pos;
+            vaoAxes.Render(render, vertcount: 6);
         }
 
         public void ResetCamera()
