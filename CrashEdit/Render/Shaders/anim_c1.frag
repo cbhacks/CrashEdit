@@ -33,16 +33,20 @@ uvec4 get_texel_bpp16(int u, int v) {
 
 void main()
 {
-    if (cullmode == 0 && !gl_FrontFacing) discard;
-    if (cullmode == 1 && gl_FrontFacing) discard;
-    if (p_Tex < 0) {
+    int enable = p_Tex & 0x1;
+    int cull = (p_Tex >> 16) & 0x1;
+    if (cull == 0) {
+        if (cullmode == 0 && !gl_FrontFacing) discard;
+        if (cullmode == 1 && gl_FrontFacing) discard;
+    }
+    if (enable == 0) {
         f_col = vec4(p_Color, 1.0);
     } else {
-        int tpage = (p_Tex >> 0) & 0x7;
-        int cmode = (p_Tex >> 3) & 0x3;
-        int bmode = (p_Tex >> 5) & 0x3;
-        int cx = ((p_Tex >> 7) & 0xF) * 16;
-        int cy = ((p_Tex >> 11) & 0x7F) + tpage * 128;
+        int tpage = p_Tex >> 17;
+        int cmode = (p_Tex >> 1) & 0x3;
+        int bmode = (p_Tex >> 3) & 0x3;
+        int cx = ((p_Tex >> 5) & 0xF) * 16;
+        int cy = ((p_Tex >> 9) & 0x7F) + tpage * 128;
         int u = int(p_UV.x);
         int v = int(p_UV.y) + tpage * 128;
         vec3 texel_color;

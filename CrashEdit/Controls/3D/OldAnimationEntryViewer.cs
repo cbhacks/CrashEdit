@@ -188,7 +188,7 @@ namespace CrashEdit
                 buf_nor = new Vector3[nb];
                 buf_col = new Color4[nb];
                 buf_uv = new Vector2[nb];
-                buf_tex = new int[nb]; // page: 3, colormode: 2, blendmode: 2, clutx: 4, cluty: 7 (18 total)
+                buf_tex = new int[nb]; // enable: 1, colormode: 2, blendmode: 2, clutx: 4, cluty: 7, doubleface: 1, page: X (>17 total)
                 foreach (OldModelPolygon polygon in model.Polygons)
                 {
                     OldModelStruct str = model.Structs[polygon.Unknown & 0x7FFF];
@@ -200,11 +200,13 @@ namespace CrashEdit
                         buf_uv[buf_idx + 0] = new(tex.U3, tex.V3);
                         buf_uv[buf_idx + 1] = new(tex.U2, tex.V2);
                         buf_uv[buf_idx + 2] = new(tex.U1, tex.V1);
-                        buf_tex[buf_idx + 2] = tex_eids[tex.EID]
-                                            | (tex.ColorMode << 3)
-                                            | (tex.BlendMode << 5)
-                                            | (tex.ClutX << 7)
-                                            | (tex.ClutY << 11)
+                        buf_tex[buf_idx + 2] = 1
+                                            | (tex.ColorMode << 1)
+                                            | (tex.BlendMode << 3)
+                                            | (tex.ClutX << 5)
+                                            | (tex.ClutY << 9)
+                                            | (Convert.ToInt32(tex.N) << 16)
+                                            | (tex_eids[tex.EID] << 17)
                                             ;
                         RenderVertex(frame, frame2, polygon.VertexC / 6);
                         RenderVertex(frame, frame2, polygon.VertexB / 6);
@@ -216,7 +218,7 @@ namespace CrashEdit
                         buf_col[buf_idx + 0] = new(col.R, col.G, col.B, 255);
                         buf_col[buf_idx + 1] = buf_col[buf_idx];
                         buf_col[buf_idx + 2] = buf_col[buf_idx];
-                        buf_tex[buf_idx + 2] = -1;
+                        buf_tex[buf_idx + 2] = 0 | (Convert.ToInt32(col.N) << 16);
                         RenderVertex(frame, frame2, polygon.VertexC / 6);
                         RenderVertex(frame, frame2, polygon.VertexB / 6);
                         RenderVertex(frame, frame2, polygon.VertexA / 6);
@@ -310,6 +312,7 @@ namespace CrashEdit
         public new void GLDispose()
         {
             GL.DeleteTexture(tpage);
+            vaoModel.GLDispose();
             base.GLDispose();
         }
     }
