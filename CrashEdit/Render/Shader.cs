@@ -10,7 +10,7 @@ namespace CrashEdit
 
     public sealed partial class ShaderInfo
     {
-        internal static readonly Dictionary<string, ShaderInfo> Infos = new Dictionary<string, ShaderInfo>()
+        internal static readonly Dictionary<string, ShaderInfo> Infos = new()
         {
             { "test", new ShaderInfo("test.vert", "default4.frag", func: RenderTest) },
             { "axes", new ShaderInfo("axes.vert", "default4.frag", func: RenderAxes) },
@@ -41,9 +41,9 @@ namespace CrashEdit
         public int GetVertShader(string name) => vertshaders[name];
         public int GetFragShader(string name) => fragshaders[name];
 
-        private readonly Dictionary<string, Shader> shaders = new Dictionary<string, Shader>();
-        private readonly Dictionary<string, int> vertshaders = new Dictionary<string, int>();
-        private readonly Dictionary<string, int> fragshaders = new Dictionary<string, int>();
+        private readonly Dictionary<string, Shader> shaders = new();
+        private readonly Dictionary<string, int> vertshaders = new();
+        private readonly Dictionary<string, int> fragshaders = new();
 
         // init shaders. Needs a GL context to be active.
         // TODO see if shaders can be reused across contexts
@@ -95,7 +95,17 @@ namespace CrashEdit
             {
                 shader.GLDispose();
             }
+            foreach (var shader in vertshaders.Values)
+            {
+                GL.DeleteShader(shader);
+            }
+            foreach (var shader in fragshaders.Values)
+            {
+                GL.DeleteShader(shader);
+            }
             shaders.Clear();
+            vertshaders.Clear();
+            fragshaders.Clear();
         }
     }
 
