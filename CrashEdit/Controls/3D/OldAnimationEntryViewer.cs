@@ -116,7 +116,11 @@ namespace CrashEdit
             if (anim != null)
             {
                 OldFrame f2 = null;
-                if (frame_id != -1)
+                if (anim.Frames.Count == 1)
+                {
+                    cur_frame = 0;
+                }
+                else if (frame_id != -1)
                 {
                     cur_frame = frame_id;
                 }
