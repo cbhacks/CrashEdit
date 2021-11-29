@@ -552,13 +552,15 @@ namespace CrashEdit
             Invalidate();
         }
 
-        protected enum RenderPass { Solid, Additive, Subtractive }
+        protected enum RenderPass { Solid, Trans, Additive, Subtractive }
 
         protected void SetBlendForRenderPass(RenderPass pass)
         {
             switch (pass)
             {
+                default:
                 case RenderPass.Solid:
+                case RenderPass.Trans:
                     GL.DepthMask(true);
                     GL.BlendEquation(BlendEquationMode.FuncAdd);
                     GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);

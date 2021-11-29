@@ -63,12 +63,10 @@ void main()
         float texel_alpha = 1.0;
         if (texel.r == 0 && texel.g == 0 && texel.b == 0 && texel.a == 0) {
             texel_alpha = 0.0;
-        } else if (bmode == 0 && texel.w == 1) {
+        } else if (blendmask == texel.a && (bmode == 1 || bmode == 2 || bmode == 0)) {
+            texel_alpha = 0.0;
+        } else if (bmode == 0 && texel.a == 1) {
             texel_alpha = 0.5;
-        } else if (blendmask == 1 && (bmode == 1 || bmode == 2) && texel.a == 1) {
-            texel_alpha = 0.0;
-        } else if (blendmask == 0 && (bmode == 1 || bmode == 2) && texel.a != 1) {
-            texel_alpha = 0.0;
         }
         f_col *= vec4(2 * texel_color, texel_alpha);
     }

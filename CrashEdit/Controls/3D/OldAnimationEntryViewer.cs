@@ -196,6 +196,7 @@ namespace CrashEdit
 
                 // render stuff
                 RenderFramePass(model, tex_eids, frame, frame2, RenderPass.Solid);
+                RenderFramePass(model, tex_eids, frame, frame2, RenderPass.Trans);
                 RenderFramePass(model, tex_eids, frame, frame2, RenderPass.Subtractive);
                 RenderFramePass(model, tex_eids, frame, frame2, RenderPass.Additive);
             }
