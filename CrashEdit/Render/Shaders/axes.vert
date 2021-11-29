@@ -1,17 +1,16 @@
-﻿#version 330 core
+﻿#version 430 core
 
-layout(location = 0) in vec4 position;
-layout(location = 1) in vec4 color;
+in vec3 position;
 
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 
 uniform vec3 trans;
 
-out vec4 pass_Color;
+out vec4 p_Color;
 
-void main(void)
+void main()
 {
-    gl_Position = projectionMatrix * viewMatrix * (position - vec4(trans, 0));
-    pass_Color = color;
+    gl_Position = projectionMatrix * viewMatrix * vec4(position - trans, 1.0);
+    p_Color = vec4(normalize(abs(position)), 1.0);
 }

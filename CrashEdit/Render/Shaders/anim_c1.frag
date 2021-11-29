@@ -3,6 +3,8 @@
 layout(binding=0) uniform usampler2D vram8;
 
 uniform int cullmode;
+uniform int blendmask;  // if on, masks away blend-texels (additive/subtractive)
+                        // if off, masks away non-blend-texels
 
 in vec3 p_Color;
 in vec2 p_UV;
@@ -59,10 +61,14 @@ void main()
 
         vec3 texel_color = vec3(texel)/31.0;
         float texel_alpha = 1.0;
-        if (texel.x == 0 && texel.y == 0 && texel.z == 0 && texel.w == 0) {
+        if (texel.r == 0 && texel.g == 0 && texel.b == 0 && texel.a == 0) {
             texel_alpha = 0.0;
         } else if (bmode == 0 && texel.w == 1) {
             texel_alpha = 0.5;
+        } else if (blendmask == 1 && (bmode == 1 || bmode == 2) && texel.a == 1) {
+            texel_alpha = 0.0;
+        } else if (blendmask == 0 && (bmode == 1 || bmode == 2) && texel.a != 1) {
+            texel_alpha = 0.0;
         }
         f_col *= vec4(2 * texel_color, texel_alpha);
     }

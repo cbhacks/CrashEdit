@@ -41,21 +41,99 @@ namespace CrashEdit
             }
         }
 
-        static readonly Vector4[] AxesPos = new Vector4[] {
-            new(-.5f, 0, 0, 1),
-            new(1, 0, 0, 1),
-            new(0, -.5f, 0, 1),
-            new(0, 1, 0, 1),
-            new(0, 0, -.5f, 1),
-            new(0, 0, 1, 1)
+        static readonly Vector3[] AxesPos = new Vector3[6] {
+            new(-.5f, 0, 0),
+            new(1, 0, 0),
+            new(0, -.5f, 0),
+            new(0, 1, 0),
+            new(0, 0, -.5f),
+            new(0, 0, 1)
         };
-        static readonly Color4[] AxesCol = new Color4[] {
-            new(1f, 0, 0, 1),
-            new(1f, 0, 0, 1),
-            new(0, 1f, 0, 1),
-            new(0, 1f, 0, 1),
-            new(0, 0, 1f, 1),
-            new(0, 0, 1f, 1)
+        static readonly Vector3[] BoxLineVerts = new Vector3[24] {
+            // sides
+            new(-1, -1, -1),
+            new(-1, +1, -1),
+
+            new(+1, -1, -1),
+            new(+1, +1, -1),
+
+            new(+1, -1, +1),
+            new(+1, +1, +1),
+
+            new(-1, -1, +1),
+            new(-1, +1, +1),
+
+            // bottom
+            new(-1, -1, -1),
+            new(+1, -1, -1),
+
+            new(+1, -1, -1),
+            new(+1, -1, +1),
+
+            new(+1, -1, +1),
+            new(-1, -1, +1),
+
+            new(-1, -1, +1),
+            new(-1, -1, -1),
+
+            // top
+            new(-1, +1, -1),
+            new(+1, +1, -1),
+
+            new(+1, +1, -1),
+            new(+1, +1, +1),
+
+            new(+1, +1, +1),
+            new(-1, +1, +1),
+
+            new(-1, +1, +1),
+            new(-1, +1, -1)
+        };
+        static readonly Vector3[] BoxTriVerts = new Vector3[36] {
+            // sides
+            new(-1, -1, -1),
+            new(-1, +1, -1),
+            new(+1, +1, -1),
+            new(+1, +1, -1),
+            new(+1, -1, -1),
+            new(-1, -1, -1),
+
+            new(-1, -1, +1),
+            new(-1, +1, +1),
+            new(+1, +1, +1),
+            new(+1, +1, +1),
+            new(+1, -1, +1),
+            new(-1, -1, +1),
+
+            new(-1, -1, -1),
+            new(-1, +1, -1),
+            new(-1, +1, +1),
+            new(-1, +1, +1),
+            new(-1, -1, +1),
+            new(-1, -1, -1),
+
+            new(+1, -1, -1),
+            new(+1, +1, -1),
+            new(+1, +1, +1),
+            new(+1, +1, +1),
+            new(+1, -1, +1),
+            new(+1, -1, -1),
+
+            // bottom
+            new(-1, -1, -1),
+            new(+1, -1, -1),
+            new(+1, -1, +1),
+            new(+1, -1, +1),
+            new(-1, -1, +1),
+            new(-1, -1, -1),
+
+            // top
+            new(-1, +1, -1),
+            new(+1, +1, -1),
+            new(+1, +1, +1),
+            new(+1, +1, +1),
+            new(-1, +1, +1),
+            new(-1, +1, -1)
         };
         private readonly Dictionary<int, Vector4[]> SpherePosCache = new();
         private int SpherePosLastUploaded = -1;
@@ -66,6 +144,7 @@ namespace CrashEdit
 
         protected readonly RenderInfo render;
 
+        private VAO vaoBox;
         private VAO vaoAxes;
         // private VAO vaoText;
 
@@ -191,7 +270,7 @@ namespace CrashEdit
             // Console.WriteLine($"flags: {flags}");
             if ((flags & (int)ContextFlagMask.ContextFlagDebugBit) != 0)
             {
-                Console.WriteLine("GL debug enabled.");
+                // Console.WriteLine("GL debug enabled.");
                 // Enable debug callbacks.
                 GL.Enable(EnableCap.DebugOutput);
                 GL.DebugMessageCallback((source, type, id, severity, length, message, userParam) =>
@@ -225,13 +304,10 @@ namespace CrashEdit
             // init axes vao
             vaoAxes = new VAO(render.ShaderContext, "axes", PrimitiveType.Lines);
             vaoAxes.UpdatePositions(AxesPos);
-            vaoAxes.UpdateColors(AxesCol);
 
             vaoSphereLine = new VAO(render.ShaderContext, "line-model", PrimitiveType.LineStrip);
             vaoGridLine = new VAO(render.ShaderContext, "line-usercolor", PrimitiveType.Lines);
-
-            // set the clear color to black
-            GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            vaoBox = new VAO(render.ShaderContext, "box-model", PrimitiveType.Triangles);
 
             // enable logic
             run = true;
@@ -413,6 +489,32 @@ namespace CrashEdit
             vaoAxes.Render(render, vertcount: 6);
         }
 
+        protected void RenderBox(Vector3 pos, Vector3 size, Color4 col)
+        {
+            render.Projection.UserTrans = pos;
+            render.Projection.UserScale = size;
+            render.Projection.UserColor1 = col;
+            vaoBox.Primitive = PrimitiveType.Triangles;
+            vaoBox.UpdatePositions(BoxTriVerts);
+            vaoBox.Render(render, vertcount: BoxTriVerts.Length);
+        }
+
+        protected void RenderBoxLine(Vector3 pos, Vector3 size, Color4 col)
+        {
+            render.Projection.UserTrans = pos;
+            render.Projection.UserScale = size;
+            render.Projection.UserColor1 = col;
+            vaoBox.Primitive = PrimitiveType.Lines;
+            vaoBox.UpdatePositions(BoxLineVerts);
+            vaoBox.Render(render, vertcount: BoxLineVerts.Length);
+        }
+
+        protected void RenderBoxFilled(Vector3 pos, Vector3 size, Color4 col)
+        {
+            RenderBox(pos, size, col);
+            RenderBoxLine(pos, size, col);
+        }
+
         public void ResetCamera()
         {
             float minx = float.MaxValue;
@@ -485,6 +587,7 @@ namespace CrashEdit
 
             vaoAxes?.GLDispose();
             vaoSphereLine?.GLDispose();
+            vaoBox?.GLDispose();
         }
     }
 }

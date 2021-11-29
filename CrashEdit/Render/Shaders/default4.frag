@@ -1,9 +1,9 @@
-﻿#version 330 core
+﻿#version 430 core
 
-in vec4 pass_Color;
-out vec4 outputColor;
+in vec4 p_Color;
+out vec4 f_Color;
 
-void main(void)
+void main()
 {
-    outputColor = pass_Color;
+    f_Color = p_Color;
 }

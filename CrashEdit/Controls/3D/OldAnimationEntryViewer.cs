@@ -28,11 +28,11 @@ namespace CrashEdit
         private int tpage;
         private VAO vaoModel;
         private Vector3[] buf_vtx;
-        private Vector3[] buf_nor;
+        //private Vector3[] buf_nor;
         private Color4[] buf_col;
         private Vector2[] buf_uv;
         private int[] buf_tex;
-        private Dictionary<int, int> tex_eids;
+        private Dictionary<int, int> tex_eids = new();
         private int buf_idx;
 
         protected override bool UseGrid => true;
@@ -87,9 +87,9 @@ namespace CrashEdit
                     foreach (OldFrame frame in frames)
                     {
                         var model = nsf.GetEntry<OldModelEntry>(frame.ModelEID);
-                        float mx = 1;
-                        float my = 1;
-                        float mz = 1;
+                        float mx = 1 / 128f;
+                        float my = 1 / 128f;
+                        float mz = 1 / 128f;
                         if (model != null)
                         {
                             mx = (float)model.ScaleX / 3200 / 128;
@@ -153,7 +153,7 @@ namespace CrashEdit
         private void UploadTPAGs(OldModelEntry model)
         {
             // collect tpag eids
-            tex_eids = new();
+            tex_eids.Clear();
             foreach (OldModelStruct str in model.Structs)
             {
                 if (str is OldModelTexture tex && !tex_eids.ContainsKey(tex.EID))
@@ -192,7 +192,7 @@ namespace CrashEdit
                 // alloc buffers
                 int nb = model.Polygons.Count * 3;
                 buf_vtx = new Vector3[nb];
-                buf_nor = new Vector3[nb];
+                //buf_nor = new Vector3[nb];
                 buf_col = new Color4[nb];
                 buf_uv = new Vector2[nb];
                 buf_tex = new int[nb]; // enable: 1, colormode: 2, blendmode: 2, clutx: 4, cluty: 7, doubleface: 1, page: X (>17 total)
@@ -201,6 +201,20 @@ namespace CrashEdit
                 RenderFramePass(model, frame, frame2, RenderPass.Solid);
                 RenderFramePass(model, frame, frame2, RenderPass.Subtractive);
                 RenderFramePass(model, frame, frame2, RenderPass.Additive);
+            }
+
+            if (collisionenabled)
+            {
+                SetBlendForRenderPass(RenderPass.Solid);
+                GL.DepthMask(false);
+                var c1 = new Vector3(frame.X1, frame.Y1, frame.Z1) / 102400;
+                var c2 = new Vector3(frame.X2, frame.Y2, frame.Z2) / 102400;
+                var ct = new Vector3(frame.XGlobal, frame.YGlobal, frame.ZGlobal) / 102400;
+                var pos = (c1 + c2) / 2 + ct;
+                var size = (c2 - c1) / 2;
+                RenderBox(pos, size, new Color4(0, 1f, 0, 0.2f));
+                RenderBoxLine(pos, size, new Color4(0, 1f, 0, 1f));
+                GL.DepthMask(true);
             }
         }
 
@@ -213,7 +227,7 @@ namespace CrashEdit
                 OldModelStruct str = model.Structs[polygon.Unknown & 0x7FFF];
                 if (str is OldModelTexture tex)
                 {
-                    if (pass != RenderPass.Solid && (tex.BlendMode == 0 || tex.BlendMode == 3)) continue;
+                    //if (pass != RenderPass.Solid && (tex.BlendMode == 0 || tex.BlendMode == 3)) continue;
                     if (pass != RenderPass.Additive && tex.BlendMode == 1) continue;
                     if (pass != RenderPass.Subtractive && tex.BlendMode == 2) continue;
                     buf_col[buf_idx + 0] = new(tex.R, tex.G, tex.B, 255);
@@ -258,11 +272,12 @@ namespace CrashEdit
                 }
                 render.Projection.UserScale = new(model.ScaleX, model.ScaleY, model.ScaleZ);
                 render.Projection.UserInt1 = cullmode;
+                render.Projection.UserBool1 = pass == RenderPass.Solid;
 
-                vaoModel.UpdateAttrib(0, "position", buf_vtx, 12, 3, buf_idx);
-                //vaoModel.UpdateNormals(buf_nor);
-                vaoModel.UpdateColors(buf_col);
-                vaoModel.UpdateAttrib(0, "uv", buf_uv, 8, 2, buf_idx);
+                vaoModel.UpdatePositions(buf_vtx, buf_idx);
+                //vaoModel.UpdateNormals(buf_nor, buf_idx);
+                vaoModel.UpdateColors(buf_col, buf_idx);
+                vaoModel.UpdateUVs(buf_uv, buf_idx);
                 vaoModel.UpdateAttrib(1, "tex", buf_tex, 4, 1, buf_idx);
 
                 SetBlendForRenderPass(pass);
@@ -288,56 +303,6 @@ namespace CrashEdit
                 buf_idx++;
             }
         }
-        /*
-        private void RenderCollision(OldFrame frame)
-        {
-            GL.DepthMask(false);
-            GL.Color4(0f, 1f, 0f, 0.2f);
-            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-            RenderCollisionBox(frame);
-            GL.Color4(0f, 1f, 0f, 1f);
-            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-            RenderCollisionBox(frame);
-            GL.DepthMask(true);
-            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-        }
-
-        private void RenderCollisionBox(OldFrame frame)
-        {
-            int xcol1 = frame.X1;
-            int xcol2 = frame.X2;
-            int ycol1 = frame.Y1;
-            int ycol2 = frame.Y2;
-            int zcol1 = frame.Z1;
-            int zcol2 = frame.Z2;
-            GL.PushMatrix();
-            GL.Scale(new Vector3(1/256F));
-            GL.Translate(frame.XGlobal,frame.YGlobal,frame.ZGlobal);
-            GL.Begin(PrimitiveType.QuadStrip);
-            GL.Vertex3(xcol1,ycol1,zcol1);
-            GL.Vertex3(xcol1,ycol2,zcol1);
-            GL.Vertex3(xcol2,ycol1,zcol1);
-            GL.Vertex3(xcol2,ycol2,zcol1);
-            GL.Vertex3(xcol2,ycol1,zcol2);
-            GL.Vertex3(xcol2,ycol2,zcol2);
-            GL.Vertex3(xcol1,ycol1,zcol2);
-            GL.Vertex3(xcol1,ycol2,zcol2);
-            GL.Vertex3(xcol1,ycol1,zcol1);
-            GL.Vertex3(xcol1,ycol2,zcol1);
-            GL.End();
-            GL.Begin(PrimitiveType.Quads);
-            GL.Vertex3(xcol1,ycol1,zcol1);
-            GL.Vertex3(xcol2,ycol1,zcol1);
-            GL.Vertex3(xcol2,ycol1,zcol2);
-            GL.Vertex3(xcol1,ycol1,zcol2);
-
-            GL.Vertex3(xcol1,ycol2,zcol1);
-            GL.Vertex3(xcol2,ycol2,zcol1);
-            GL.Vertex3(xcol2,ycol2,zcol2);
-            GL.Vertex3(xcol1,ycol2,zcol2);
-            GL.End();
-            GL.PopMatrix();
-        }*/
 
         public new void GLDispose()
         {

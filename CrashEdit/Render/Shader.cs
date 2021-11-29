@@ -13,11 +13,12 @@ namespace CrashEdit
         internal static readonly Dictionary<string, ShaderInfo> Infos = new()
         {
             { "test", new ShaderInfo("test.vert", "default4.frag", func: RenderTest) },
-            { "axes", new ShaderInfo("axes.vert", "default4.frag", func: RenderAxes) },
+            { "axes", new ShaderInfo("axes.vert", "default4.frag") },
             { "line", new ShaderInfo("line-static.vert", "default4.frag") },
             { "line-model", new ShaderInfo("line-model.vert", "default4.frag", func: RenderLineModel) },
             { "anim_c1", new ShaderInfo("anim_c1.vert", "anim_c1.frag", func: RenderC1Anim) },
-            { "line-usercolor", new ShaderInfo("line-usercolor.vert", "default4.frag") }
+            { "line-usercolor", new ShaderInfo("line-usercolor.vert", "default4.frag") },
+            { "box-model", new ShaderInfo("box-model.vert", "default4.frag") }
         };
 
         public string VertShaderName { get; }
@@ -140,6 +141,7 @@ namespace CrashEdit
         public void UniformVec4(string name, ref Vector4 vec) => GL.Uniform4(GL.GetUniformLocation(ID, name), vec.X, vec.Y, vec.Z, vec.W);
         public void UniformVec4(string name, ref Color4 col) => GL.Uniform4(GL.GetUniformLocation(ID, name), col.R, col.G, col.B, col.A);
         public void UniformInt(string name, int val) => GL.Uniform1(GL.GetUniformLocation(ID, name), val);
+        public void UniformBool(string name, bool val) => GL.Uniform1(GL.GetUniformLocation(ID, name), Convert.ToInt32(val));
 
         public void Render(RenderInfo ri)
         {

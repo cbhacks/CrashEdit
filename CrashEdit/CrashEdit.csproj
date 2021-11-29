@@ -454,6 +454,7 @@
     <EmbeddedResource Include="Render\Shaders\anim_c1.frag" />
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="Render\Shaders\box-model.vert" />
     <None Include="Resources\objects_012_red.gif" />
     <Content Include="Resources\objects_012_violet.gif" />
     <None Include="Resources\objects_012_yellow.gif" />

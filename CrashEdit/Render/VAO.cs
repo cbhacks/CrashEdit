@@ -14,24 +14,8 @@ namespace CrashEdit
 
         public Shader Shader { get; }
 
-        public PrimitiveType Primitive { get; }
+        public PrimitiveType Primitive { get; set; }
         public int VertCount { get; set; }
-
-        public static int GetPrimCount(PrimitiveType primitive, int verts)
-        {
-            switch (primitive)
-            {
-                case PrimitiveType.Points: return verts;
-                case PrimitiveType.Lines: return verts / 2;
-                case PrimitiveType.Triangles: return verts / 3;
-                case PrimitiveType.Quads: return verts / 4;
-                case PrimitiveType.LineStrip: return verts - 1;
-                case PrimitiveType.LineLoop: return verts;
-                case PrimitiveType.TriangleFan: return verts - 2;
-                case PrimitiveType.TriangleStrip: return verts - 2;
-                default: throw new Exception(string.Format("invalid primitive type {0}", primitive));
-            }
-        }
 
         public VAO(ShaderContext context, string shadername, PrimitiveType prim)
         {
@@ -86,30 +70,11 @@ namespace CrashEdit
             }
         }
 
-        public void UpdatePositions(Vector4[] positions)
-        {
-            UpdateAttrib(0, "position", positions, 16, 4);
-        }
-
-        public void UpdatePositions(Vector3[] positions)
-        {
-            UpdateAttrib(0, "position", positions, 12, 3);
-        }
-
-        public void UpdateNormals(Vector3[] positions)
-        {
-            UpdateAttrib(0, "normal", positions, 12, 3);
-        }
-
-        public void UpdateColors(Color4[] colors)
-        {
-            UpdateAttrib(0, "color", colors, 16, 4);
-        }
-
-        public void UpdateUVs(Vector2[] uvs)
-        {
-            UpdateAttrib(0, "uv", uvs, 8, 2);
-        }
+        public void UpdatePositions(Vector4[] positions, int eltc = -1) => UpdateAttrib(0, "position", positions, 16, 4, eltc);
+        public void UpdatePositions(Vector3[] positions, int eltc = -1) => UpdateAttrib(0, "position", positions, 12, 3, eltc);
+        public void UpdateNormals(Vector3[] positions, int eltc = -1) => UpdateAttrib(0, "normal", positions, 12, 3, eltc);
+        public void UpdateColors(Color4[] colors, int eltc = -1) => UpdateAttrib(0, "color", colors, 16, 4, eltc);
+        public void UpdateUVs(Vector2[] uvs, int eltc = -1) => UpdateAttrib(0, "uv", uvs, 8, 2, eltc);
 
         public void GLDispose()
         {
