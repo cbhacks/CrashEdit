@@ -361,21 +361,23 @@ namespace CrashEdit
             {
                 MakeCurrent();
 
+                GL.Viewport(0, 0, Width, Height);
+
                 // Clear buffers
+                GL.DepthMask(true);
+                GL.ClearColor(Color.FromArgb(Properties.Settings.Default.ClearColorRGB));
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-                GL.Viewport(0, 0, Width, Height);
+                render.Projection.Width = Width;
+                render.Projection.Height = Height;
+
+                render.Projection.Perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45), render.Projection.Aspect, 0.1f, 16384);
+                var rot_mat = Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot));
+                var test_vec = (rot_mat * new Vector4(0, 0, render.Distance, 1)).Xyz;
+                render.Projection.View = Matrix4.CreateTranslation(render.Projection.Trans - test_vec) * rot_mat;
 
                 lock (render.mLock)
                 {
-                    render.Projection.Width = Width;
-                    render.Projection.Height = Height;
-
-                    render.Projection.Perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45), render.Projection.Aspect, 0.1f, 16384);
-                    var rot_mat = Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot));
-                    var test_vec = (rot_mat * new Vector4(0, 0, render.Distance, 1)).Xyz;
-                    render.Projection.View = Matrix4.CreateTranslation(render.Projection.Trans - test_vec) * rot_mat;
-
                     // render
                     Render();
                 }
@@ -388,6 +390,8 @@ namespace CrashEdit
 
         protected virtual void Render()
         {
+            SetBlendForRenderPass(RenderPass.Solid);
+
             // vaoTest.Render(render);
             if (UseGrid && Properties.Settings.Default.DisplayAnimGrid)
             {
@@ -437,6 +441,30 @@ namespace CrashEdit
             render.Projection.Rot.Y = 0;
             render.Projection.Rot.X = MathHelper.DegreesToRadians(15);
             Invalidate();
+        }
+
+        protected enum RenderPass { Solid, Additive, Subtractive }
+
+        protected void SetBlendForRenderPass(RenderPass pass)
+        {
+            switch (pass)
+            {
+                case RenderPass.Solid:
+                    GL.DepthMask(true);
+                    GL.BlendEquation(BlendEquationMode.FuncAdd);
+                    GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+                    break;
+                case RenderPass.Additive:
+                    GL.DepthMask(false);
+                    GL.BlendEquation(BlendEquationMode.FuncAdd);
+                    GL.BlendFunc(BlendingFactor.One, BlendingFactor.One);
+                    break;
+                case RenderPass.Subtractive:
+                    GL.DepthMask(false);
+                    GL.BlendEquation(BlendEquationMode.FuncReverseSubtract);
+                    GL.BlendFunc(BlendingFactor.One, BlendingFactor.One);
+                    break;
+            }
         }
 
         protected override void Dispose(bool disposing)

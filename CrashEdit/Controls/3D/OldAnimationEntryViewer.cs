@@ -32,6 +32,7 @@ namespace CrashEdit
         private Color4[] buf_col;
         private Vector2[] buf_uv;
         private int[] buf_tex;
+        private Dictionary<int, int> tex_eids;
         private int buf_idx;
 
         protected override bool UseGrid => true;
@@ -132,7 +133,7 @@ namespace CrashEdit
                     {
                         f2 = anim.Frames[(int)Math.Ceiling(prog) % anim.Frames.Count];
                         interp = (float)(prog - cur_frame);
-                        Console.WriteLine(string.Format("Render frame {1}+{2}/{0} (i {3})", anim.Frames.Count, cur_frame, (int)Math.Ceiling(prog) % anim.Frames.Count, interp));
+                        // Console.WriteLine(string.Format("Render frame {1}+{2}/{0} (i {3})", anim.Frames.Count, cur_frame, (int)Math.Ceiling(prog) % anim.Frames.Count, interp));
                     }
                 }
                 RenderFrame(anim.Frames[cur_frame], f2);
@@ -149,86 +150,107 @@ namespace CrashEdit
             if (KPress(Keys.U)) cullmode = ++cullmode % 3;
         }
 
+        private void UploadTPAGs(OldModelEntry model)
+        {
+            // collect tpag eids
+            tex_eids = new();
+            foreach (OldModelStruct str in model.Structs)
+            {
+                if (str is OldModelTexture tex && !tex_eids.ContainsKey(tex.EID))
+                {
+                    tex_eids[tex.EID] = tex_eids.Count;
+                }
+            }
+            // fill texture
+            GL.GetTextureLevelParameter(tpage, 0, GetTextureParameter.TextureHeight, out int tpage_h);
+            if (tpage_h < tex_eids.Count * 128)
+            {
+                // realloc if not enough texture mem
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8ui, 512, tex_eids.Count * 128, 0, PixelFormat.RedInteger, PixelType.UnsignedByte, IntPtr.Zero);
+            }
+            foreach (var kvp in tex_eids)
+            {
+                var tpag = nsf.GetEntry<TextureChunk>(kvp.Key);
+                if (tpag != null)
+                {
+                    GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, kvp.Value * 128, 512, 128, PixelFormat.RedInteger, PixelType.UnsignedByte, tpag.Data);
+                }
+            }
+        }
+
         private void RenderFrame(OldFrame frame, OldFrame frame2 = null)
         {
-            buf_idx = 0;
-            
             if (frame2 != null && (frame2.ModelEID != frame.ModelEID || frame.Vertices.Count != frame2.Vertices.Count)) frame2 = null;
 
             var model = nsf.GetEntry<OldModelEntry>(frame.ModelEID);
             if (model != null)
             {
+                // setup textures
                 GL.BindTexture(TextureTarget.Texture2D, tpage);
-                // collect tpag eids
-                Dictionary<int, int> tex_eids = new();
-                foreach (OldModelStruct str in model.Structs)
-                {
-                    if (str is OldModelTexture tex && !tex_eids.ContainsKey(tex.EID))
-                    {
-                        tex_eids[tex.EID] = tex_eids.Count;
-                    }
-                }
-                // fill texture
-                GL.GetTextureLevelParameter(tpage, 0, GetTextureParameter.TextureHeight, out int tpage_h);
-                if (tpage_h < tex_eids.Count * 128)
-                {
-                    // realloc if not enough texture mem
-                    GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8ui, 512, tex_eids.Count * 128, 0, PixelFormat.RedInteger, PixelType.UnsignedByte, IntPtr.Zero);
-                }
-                foreach (var kvp in tex_eids)
-                {
-                    var tpag = nsf.GetEntry<TextureChunk>(kvp.Key);
-                    if (tpag != null)
-                    {
-                        GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, kvp.Value * 128, 512, 128, PixelFormat.RedInteger, PixelType.UnsignedByte, tpag.Data);
-                    }
-                }
+                UploadTPAGs(model);
 
+                // alloc buffers
                 int nb = model.Polygons.Count * 3;
-                //render.Projection.UserMat3.Row0 = new Vector3(-4096, 2048, 4096) / 0x1000;
-                //render.Projection.UserMat3.Row1 = new Vector3(-3563, 2048, 4096) / 0x1000;
-                //render.Projection.UserMat3.Row2 = new Vector3(4096, -2048, 0) / 0x1000;
-                //render.Projection.UserColorAmb = new Vector3(614, 614, 614) / 0x200;
                 buf_vtx = new Vector3[nb];
                 buf_nor = new Vector3[nb];
                 buf_col = new Color4[nb];
                 buf_uv = new Vector2[nb];
                 buf_tex = new int[nb]; // enable: 1, colormode: 2, blendmode: 2, clutx: 4, cluty: 7, doubleface: 1, page: X (>17 total)
-                foreach (OldModelPolygon polygon in model.Polygons)
+
+                // render stuff
+                RenderFramePass(model, frame, frame2, RenderPass.Solid);
+                RenderFramePass(model, frame, frame2, RenderPass.Subtractive);
+                RenderFramePass(model, frame, frame2, RenderPass.Additive);
+            }
+        }
+
+        private void RenderFramePass(OldModelEntry model, OldFrame frame, OldFrame frame2, RenderPass pass)
+        {
+            buf_idx = 0;
+
+            foreach (OldModelPolygon polygon in model.Polygons)
+            {
+                OldModelStruct str = model.Structs[polygon.Unknown & 0x7FFF];
+                if (str is OldModelTexture tex)
                 {
-                    OldModelStruct str = model.Structs[polygon.Unknown & 0x7FFF];
-                    if (str is OldModelTexture tex)
-                    {
-                        buf_col[buf_idx + 0] = new(tex.R, tex.G, tex.B, 255);
-                        buf_col[buf_idx + 1] = buf_col[buf_idx];
-                        buf_col[buf_idx + 2] = buf_col[buf_idx];
-                        buf_uv[buf_idx + 0] = new(tex.U3, tex.V3);
-                        buf_uv[buf_idx + 1] = new(tex.U2, tex.V2);
-                        buf_uv[buf_idx + 2] = new(tex.U1, tex.V1);
-                        buf_tex[buf_idx + 2] = 1
-                                            | (tex.ColorMode << 1)
-                                            | (tex.BlendMode << 3)
-                                            | (tex.ClutX << 5)
-                                            | (tex.ClutY << 9)
-                                            | (Convert.ToInt32(tex.N) << 16)
-                                            | (tex_eids[tex.EID] << 17)
-                                            ;
-                        RenderVertex(frame, frame2, polygon.VertexC / 6);
-                        RenderVertex(frame, frame2, polygon.VertexB / 6);
-                        RenderVertex(frame, frame2, polygon.VertexA / 6);
-                    }
-                    else
-                    {
-                        OldSceneryColor col = (OldSceneryColor)str;
-                        buf_col[buf_idx + 0] = new(col.R, col.G, col.B, 255);
-                        buf_col[buf_idx + 1] = buf_col[buf_idx];
-                        buf_col[buf_idx + 2] = buf_col[buf_idx];
-                        buf_tex[buf_idx + 2] = 0 | (Convert.ToInt32(col.N) << 16);
-                        RenderVertex(frame, frame2, polygon.VertexC / 6);
-                        RenderVertex(frame, frame2, polygon.VertexB / 6);
-                        RenderVertex(frame, frame2, polygon.VertexA / 6);
-                    }
+                    if (pass != RenderPass.Solid && (tex.BlendMode == 0 || tex.BlendMode == 3)) continue;
+                    if (pass != RenderPass.Additive && tex.BlendMode == 1) continue;
+                    if (pass != RenderPass.Subtractive && tex.BlendMode == 2) continue;
+                    buf_col[buf_idx + 0] = new(tex.R, tex.G, tex.B, 255);
+                    buf_col[buf_idx + 1] = buf_col[buf_idx];
+                    buf_col[buf_idx + 2] = buf_col[buf_idx];
+                    buf_uv[buf_idx + 0] = new(tex.U3, tex.V3);
+                    buf_uv[buf_idx + 1] = new(tex.U2, tex.V2);
+                    buf_uv[buf_idx + 2] = new(tex.U1, tex.V1);
+                    buf_tex[buf_idx + 2] = 1
+                                        | (tex.ColorMode << 1)
+                                        | (tex.BlendMode << 3)
+                                        | (tex.ClutX << 5)
+                                        | (tex.ClutY << 9)
+                                        | (Convert.ToInt32(tex.N) << 16)
+                                        | (tex_eids[tex.EID] << 17)
+                                        ;
+                    RenderVertex(frame, frame2, polygon.VertexC / 6);
+                    RenderVertex(frame, frame2, polygon.VertexB / 6);
+                    RenderVertex(frame, frame2, polygon.VertexA / 6);
                 }
+                else
+                {
+                    if (pass != RenderPass.Solid) continue;
+                    OldSceneryColor col = (OldSceneryColor)str;
+                    buf_col[buf_idx + 0] = new(col.R, col.G, col.B, 255);
+                    buf_col[buf_idx + 1] = buf_col[buf_idx];
+                    buf_col[buf_idx + 2] = buf_col[buf_idx];
+                    buf_tex[buf_idx + 2] = 0 | (Convert.ToInt32(col.N) << 16);
+                    RenderVertex(frame, frame2, polygon.VertexC / 6);
+                    RenderVertex(frame, frame2, polygon.VertexB / 6);
+                    RenderVertex(frame, frame2, polygon.VertexA / 6);
+                }
+            }
+
+            if (buf_idx > 0)
+            {
+                // uniforms and static data
                 render.Projection.UserTrans = new(frame.XOffset, frame.YOffset, frame.ZOffset);
                 if (frame2 != null)
                 {
@@ -236,12 +258,15 @@ namespace CrashEdit
                 }
                 render.Projection.UserScale = new(model.ScaleX, model.ScaleY, model.ScaleZ);
                 render.Projection.UserInt1 = cullmode;
-                vaoModel.UpdatePositions(buf_vtx);
+
+                vaoModel.UpdateAttrib(0, "position", buf_vtx, 12, 3, buf_idx);
                 //vaoModel.UpdateNormals(buf_nor);
                 vaoModel.UpdateColors(buf_col);
-                vaoModel.UpdateAttrib(0, "uv", buf_uv, 8, 2);
-                vaoModel.UpdateAttrib(1, "tex", buf_tex, 4, 1);
-                vaoModel.Render(render, vertcount: nb);
+                vaoModel.UpdateAttrib(0, "uv", buf_uv, 8, 2, buf_idx);
+                vaoModel.UpdateAttrib(1, "tex", buf_tex, 4, 1, buf_idx);
+
+                SetBlendForRenderPass(pass);
+                vaoModel.Render(render, vertcount: buf_idx);
             }
         }
 
@@ -251,7 +276,7 @@ namespace CrashEdit
             {
                 OldFrameVertex v = f1.Vertices[id];
                 buf_vtx[buf_idx] = new(v.X, v.Y, v.Z);
-                buf_nor[buf_idx] = new(v.NormalX, v.NormalY, v.NormalZ);
+                //buf_nor[buf_idx] = new(v.NormalX, v.NormalY, v.NormalZ);
                 buf_idx++;
             }
             else
@@ -259,7 +284,7 @@ namespace CrashEdit
                 OldFrameVertex v1 = f1.Vertices[id];
                 OldFrameVertex v2 = f2.Vertices[id];
                 buf_vtx[buf_idx] = MathExt.Lerp(new Vector3(v1.X, v1.Y, v1.Z), new Vector3(v2.X, v2.Y, v2.Z), interp);
-                buf_nor[buf_idx] = MathExt.Lerp(new Vector3(v1.NormalX, v1.NormalY, v1.NormalZ), new Vector3(v2.NormalX, v2.NormalY, v2.NormalZ), interp);
+                //buf_nor[buf_idx] = MathExt.Lerp(new Vector3(v1.NormalX, v1.NormalY, v1.NormalZ), new Vector3(v2.NormalX, v2.NormalY, v2.NormalZ), interp);
                 buf_idx++;
             }
         }

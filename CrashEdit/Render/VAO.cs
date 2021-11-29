@@ -42,7 +42,7 @@ namespace CrashEdit
             ID = GL.GenVertexArray();
         }
 
-        public void UpdateAttrib<T>(int etype, string name, T[] data, int eltsize, int components) where T : struct
+        public void UpdateAttrib<T>(int etype, string name, T[] data, int eltsize, int components, int eltcount = -1) where T : struct
         {
             int loc = GL.GetAttribLocation(Shader.ID, name);
 
@@ -58,7 +58,7 @@ namespace CrashEdit
                 int buf = Buffers[name];
                 // Bind the VBO and copy the data into it.
                 GL.BindBuffer(BufferTarget.ArrayBuffer, buf);
-                GL.BufferData(BufferTarget.ArrayBuffer, data.Length * eltsize, data, BufferUsageHint.DynamicDraw);
+                GL.BufferData(BufferTarget.ArrayBuffer, (eltcount == -1 ? data.Length : eltcount) * eltsize, data, BufferUsageHint.DynamicDraw);
                 // setup the position attribute.
                 if (etype == 1)
                 {

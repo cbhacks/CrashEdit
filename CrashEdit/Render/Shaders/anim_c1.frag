@@ -56,11 +56,12 @@ void main()
         } else {
             texel = get_texel_bpp16(u, v); // 16 bit
         }
-        if (texel.x == 0 && texel.y == 0 && texel.z == 0 && texel.w == 0) discard; // useless texel
 
         vec3 texel_color = vec3(texel)/31.0;
         float texel_alpha = 1.0;
-        if (bmode == 0 && texel.w == 1) {
+        if (texel.x == 0 && texel.y == 0 && texel.z == 0 && texel.w == 0) {
+            texel_alpha = 0.0;
+        } else if (bmode == 0 && texel.w == 1) {
             texel_alpha = 0.5;
         }
         f_col *= vec4(2 * texel_color, texel_alpha);
