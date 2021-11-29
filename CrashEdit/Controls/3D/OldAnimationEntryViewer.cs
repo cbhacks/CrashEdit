@@ -16,9 +16,9 @@ namespace CrashEdit
 
         private readonly int eid_anim;
         private readonly int frame_id;
-        private int cur_frame;
+        private int cur_frame = 0;
         private bool colored;
-        private bool collisionenabled;
+        private bool collisionenabled = Settings.Default.DisplayFrameCollision;
         private bool texturesenabled = true;
         private bool normalsenabled = true;
         private bool interpenabled = true;
@@ -40,21 +40,17 @@ namespace CrashEdit
         public OldAnimationEntryViewer(NSF nsf, int anim_eid, int frame, bool colored)
         {
             this.nsf = nsf;
-            collisionenabled = Settings.Default.DisplayFrameCollision;
             eid_anim = anim_eid;
             frame_id = frame;
             this.colored = colored;
-            cur_frame = 0;
         }
 
         public OldAnimationEntryViewer(NSF nsf, int anim_eid, bool colored)
         {
             this.nsf = nsf;
-            collisionenabled = Settings.Default.DisplayFrameCollision;
             eid_anim = anim_eid;
             frame_id = -1;
             this.colored = colored;
-            cur_frame = 0;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -75,16 +71,28 @@ namespace CrashEdit
         {
             get
             {
-                var anim = nsf.GetEntry<OldAnimationEntry>(eid_anim);
-                if (anim != null)
+                IList<OldFrame> frames = null;
+                if (!colored)
                 {
-                    var frames = new List<OldFrame>();
+                    var anim = nsf.GetEntry<OldAnimationEntry>(eid_anim);
+                    if (anim != null)
+                        frames = anim.Frames;
+                }
+                else
+                {
+                    var anim = nsf.GetEntry<ColoredAnimationEntry>(eid_anim);
+                    if (anim != null)
+                        frames = anim.Frames;
+                }
+                if (frames != null)
+                {
+                    var usedframes = new List<OldFrame>();
                     if (frame_id != -1)
-                        frames.Add(anim.Frames[frame_id]);
+                        usedframes.Add(frames[frame_id]);
                     else
-                        frames.AddRange(anim.Frames);
+                        usedframes.AddRange(frames);
 
-                    foreach (OldFrame frame in frames)
+                    foreach (OldFrame frame in usedframes)
                     {
                         var model = nsf.GetEntry<OldModelEntry>(frame.ModelEID);
                         float mx = 1 / 128f;
@@ -113,11 +121,23 @@ namespace CrashEdit
         {
             base.Render();
 
-            var anim = nsf.GetEntry<OldAnimationEntry>(eid_anim);
-            if (anim != null)
+            IList<OldFrame> frames = null;
+            if (!colored)
+            {
+                var anim = nsf.GetEntry<OldAnimationEntry>(eid_anim);
+                if (anim != null)
+                    frames = anim.Frames;
+            }
+            else
+            {
+                var anim = nsf.GetEntry<ColoredAnimationEntry>(eid_anim);
+                if (anim != null)
+                    frames = anim.Frames;
+            }
+            if (frames != null)
             {
                 OldFrame f2 = null;
-                if (anim.Frames.Count == 1)
+                if (frames.Count == 1)
                 {
                     cur_frame = 0;
                 }
@@ -127,16 +147,16 @@ namespace CrashEdit
                 }
                 else
                 {
-                    double prog = render.FullCurrentFrame / 2 % anim.Frames.Count;
+                    double prog = render.FullCurrentFrame / 2 % frames.Count;
                     cur_frame = (int)Math.Floor(prog);
                     if (interpenabled)
                     {
-                        f2 = anim.Frames[(int)Math.Ceiling(prog) % anim.Frames.Count];
+                        f2 = frames[(int)Math.Ceiling(prog) % frames.Count];
                         interp = (float)(prog - cur_frame);
                         // Console.WriteLine(string.Format("Render frame {1}+{2}/{0} (i {3})", anim.Frames.Count, cur_frame, (int)Math.Ceiling(prog) % anim.Frames.Count, interp));
                     }
                 }
-                RenderFrame(anim.Frames[cur_frame], f2);
+                RenderFrame(frames[cur_frame], f2);
             }
         }
 
@@ -230,7 +250,10 @@ namespace CrashEdit
                     //if (pass != RenderPass.Solid && (tex.BlendMode == 0 || tex.BlendMode == 3)) continue;
                     if (pass != RenderPass.Additive && tex.BlendMode == 1) continue;
                     if (pass != RenderPass.Subtractive && tex.BlendMode == 2) continue;
-                    buf_col[buf_idx + 0] = new(tex.R, tex.G, tex.B, 255);
+                    if (!colored)
+                        buf_col[buf_idx] = new(tex.R, tex.G, tex.B, 255);
+                    else
+                        buf_col[buf_idx] = new(tex.R / (float)0x80, tex.G / (float)0x80, tex.B / (float)0x80, 255);
                     buf_col[buf_idx + 1] = buf_col[buf_idx];
                     buf_col[buf_idx + 2] = buf_col[buf_idx];
                     buf_uv[buf_idx + 0] = new(tex.U3, tex.V3);
@@ -252,7 +275,10 @@ namespace CrashEdit
                 {
                     if (pass != RenderPass.Solid) continue;
                     OldSceneryColor col = (OldSceneryColor)str;
-                    buf_col[buf_idx + 0] = new(col.R, col.G, col.B, 255);
+                    if (!colored)
+                        buf_col[buf_idx] = new(col.R, col.G, col.B, 255);
+                    else
+                        buf_col[buf_idx] = new(col.R / (float)0x80, col.G / (float)0x80, col.B / (float)0x80, 255);
                     buf_col[buf_idx + 1] = buf_col[buf_idx];
                     buf_col[buf_idx + 2] = buf_col[buf_idx];
                     buf_tex[buf_idx + 2] = 0 | (Convert.ToInt32(col.N) << 16);
@@ -291,6 +317,8 @@ namespace CrashEdit
             {
                 OldFrameVertex v = f1.Vertices[id];
                 buf_vtx[buf_idx] = new(v.X, v.Y, v.Z);
+                if (colored)
+                    buf_col[buf_idx] = new Color4(buf_col[buf_idx].R * v.Red, buf_col[buf_idx].G * v.Green, buf_col[buf_idx].B * v.Blue, 1);
                 //buf_nor[buf_idx] = new(v.NormalX, v.NormalY, v.NormalZ);
                 buf_idx++;
             }
@@ -299,6 +327,11 @@ namespace CrashEdit
                 OldFrameVertex v1 = f1.Vertices[id];
                 OldFrameVertex v2 = f2.Vertices[id];
                 buf_vtx[buf_idx] = MathExt.Lerp(new Vector3(v1.X, v1.Y, v1.Z), new Vector3(v2.X, v2.Y, v2.Z), interp);
+                if (colored)
+                    buf_col[buf_idx] = new Color4(buf_col[buf_idx].R * MathExt.Lerp(v1.Red, v2.Red, interp),
+                                                  buf_col[buf_idx].G * MathExt.Lerp(v1.Green, v2.Green, interp),
+                                                  buf_col[buf_idx].B * MathExt.Lerp(v1.Blue, v2.Blue, interp),
+                                                  1);
                 //buf_nor[buf_idx] = MathExt.Lerp(new Vector3(v1.NormalX, v1.NormalY, v1.NormalZ), new Vector3(v2.NormalX, v2.NormalY, v2.NormalZ), interp);
                 buf_idx++;
             }

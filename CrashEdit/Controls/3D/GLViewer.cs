@@ -477,10 +477,6 @@ namespace CrashEdit
                 render.Projection.UserColor1 = Color4.Gray;
                 vaoGridLine.Render(render);
             }
-            else
-            {
-                RenderAxes(new Vector3(0));
-            }
         }
 
         private void RenderAxes(Vector3 pos)

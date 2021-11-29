@@ -35,6 +35,12 @@ namespace Crash
         public sbyte NormalX { get; }
         public sbyte NormalY { get; }
         public sbyte NormalZ { get; }
+        public byte R => (byte)NormalX;
+        public byte G => (byte)NormalY;
+        public byte B => (byte)NormalZ;
+        public float Red => R / 255f;
+        public float Green => G / 255f;
+        public float Blue => B / 255f;
 
         double IPosition.X => X;
         double IPosition.Y => Y;
