@@ -17,7 +17,7 @@ namespace CrashEdit
         public RendererMoveMode MoveMode;
 
         public const float InitialDistance = 5;
-        public const float MinDistance = 1;
+        public const float MinDistance = 0.5f;
         public const float MaxDistance = 50;
 
         public const float BaseRot = 0;

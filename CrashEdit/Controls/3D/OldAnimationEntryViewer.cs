@@ -25,14 +25,12 @@ namespace CrashEdit
         private float interp;
         private int cullmode = 0;
 
-        private int tpage;
         private VAO vaoModel;
         private Vector3[] buf_vtx;
         //private Vector3[] buf_nor;
         private Color4[] buf_col;
         private Vector2[] buf_uv;
         private int[] buf_tex;
-        private Dictionary<int, int> tex_eids = new();
         private int buf_idx;
 
         protected override bool UseGrid => true;
@@ -58,13 +56,6 @@ namespace CrashEdit
             base.OnLoad(e);
 
             vaoModel = new VAO(render.ShaderContext, "anim_c1", PrimitiveType.Triangles);
-
-            tpage = GL.GenTexture();
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, tpage);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8ui, 512, 0, 0, PixelFormat.RedInteger, PixelType.UnsignedByte, IntPtr.Zero);
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -170,10 +161,10 @@ namespace CrashEdit
             if (KPress(Keys.U)) cullmode = ++cullmode % 3;
         }
 
-        private void UploadTPAGs(OldModelEntry model)
+        private Dictionary<int, int> CollectTPAGs(OldModelEntry model)
         {
             // collect tpag eids
-            tex_eids.Clear();
+            Dictionary<int, int> tex_eids = new();
             foreach (OldModelStruct str in model.Structs)
             {
                 if (str is OldModelTexture tex && !tex_eids.ContainsKey(tex.EID))
@@ -181,21 +172,7 @@ namespace CrashEdit
                     tex_eids[tex.EID] = tex_eids.Count;
                 }
             }
-            // fill texture
-            GL.GetTextureLevelParameter(tpage, 0, GetTextureParameter.TextureHeight, out int tpage_h);
-            if (tpage_h < tex_eids.Count * 128)
-            {
-                // realloc if not enough texture mem
-                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8ui, 512, tex_eids.Count * 128, 0, PixelFormat.RedInteger, PixelType.UnsignedByte, IntPtr.Zero);
-            }
-            foreach (var kvp in tex_eids)
-            {
-                var tpag = nsf.GetEntry<TextureChunk>(kvp.Key);
-                if (tpag != null)
-                {
-                    GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, kvp.Value * 128, 512, 128, PixelFormat.RedInteger, PixelType.UnsignedByte, tpag.Data);
-                }
-            }
+            return tex_eids;
         }
 
         private void RenderFrame(OldFrame frame, OldFrame frame2 = null)
@@ -206,8 +183,8 @@ namespace CrashEdit
             if (model != null)
             {
                 // setup textures
-                GL.BindTexture(TextureTarget.Texture2D, tpage);
-                UploadTPAGs(model);
+                var tex_eids = CollectTPAGs(model);
+                SetupTPAGs(nsf, tex_eids);
 
                 // alloc buffers
                 int nb = model.Polygons.Count * 3;
@@ -218,9 +195,9 @@ namespace CrashEdit
                 buf_tex = new int[nb]; // enable: 1, colormode: 2, blendmode: 2, clutx: 4, cluty: 7, doubleface: 1, page: X (>17 total)
 
                 // render stuff
-                RenderFramePass(model, frame, frame2, RenderPass.Solid);
-                RenderFramePass(model, frame, frame2, RenderPass.Subtractive);
-                RenderFramePass(model, frame, frame2, RenderPass.Additive);
+                RenderFramePass(model, tex_eids, frame, frame2, RenderPass.Solid);
+                RenderFramePass(model, tex_eids, frame, frame2, RenderPass.Subtractive);
+                RenderFramePass(model, tex_eids, frame, frame2, RenderPass.Additive);
             }
 
             if (collisionenabled)
@@ -238,7 +215,7 @@ namespace CrashEdit
             }
         }
 
-        private void RenderFramePass(OldModelEntry model, OldFrame frame, OldFrame frame2, RenderPass pass)
+        private void RenderFramePass(OldModelEntry model, Dictionary<int, int> tex_eids, OldFrame frame, OldFrame frame2, RenderPass pass)
         {
             buf_idx = 0;
 
@@ -339,7 +316,6 @@ namespace CrashEdit
 
         public new void GLDispose()
         {
-            GL.DeleteTexture(tpage);
             vaoModel.GLDispose();
             base.GLDispose();
         }

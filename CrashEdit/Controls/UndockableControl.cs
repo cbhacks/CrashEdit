@@ -22,7 +22,7 @@ namespace CrashEdit
         {
             switch (keyData)
             {
-                case Keys.T:
+                case Keys.P:
                     return true;
             }
             return base.IsInputKey(keyData);
@@ -33,7 +33,7 @@ namespace CrashEdit
             base.OnKeyDown(e);
             switch (e.KeyCode)
             {
-                case Keys.T:
+                case Keys.P:
                     if (form == null)
                     {
                         form = new Form

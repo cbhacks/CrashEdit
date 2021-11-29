@@ -72,4 +72,5 @@ void main()
         }
         f_col *= vec4(2 * texel_color, texel_alpha);
     }
+    if (f_col.a == 0.0) discard;
 }

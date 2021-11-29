@@ -144,6 +144,7 @@ namespace CrashEdit
 
         protected readonly RenderInfo render;
 
+        private int tpage;
         private VAO vaoBox;
         private VAO vaoAxes;
         // private VAO vaoText;
@@ -160,7 +161,7 @@ namespace CrashEdit
         private int mousey = 0;
         private float movespeed = 7.5f;
         private float rotspeed = 0.5f;
-        private float zoomspeed = 1.0f;
+        private float zoomspeed = 0.75f;
 
         private const float PerFrame = 1 / 60f;
 
@@ -309,6 +310,14 @@ namespace CrashEdit
             vaoGridLine = new VAO(render.ShaderContext, "line-usercolor", PrimitiveType.Lines);
             vaoBox = new VAO(render.ShaderContext, "box-model", PrimitiveType.Triangles);
 
+            // make texture
+            tpage = GL.GenTexture();
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, tpage);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8ui, 512, 0, 0, OpenTK.Graphics.OpenGL4.PixelFormat.RedInteger, PixelType.UnsignedByte, IntPtr.Zero);
+
             // enable logic
             run = true;
 
@@ -437,21 +446,23 @@ namespace CrashEdit
             {
                 MakeCurrent();
 
+                // set up viewport clip
                 GL.Viewport(0, 0, Width, Height);
+                render.Projection.Width = Width;
+                render.Projection.Height = Height;
 
                 // Clear buffers
                 GL.DepthMask(true);
                 GL.ClearColor(Color.FromArgb(Properties.Settings.Default.ClearColorRGB));
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-                render.Projection.Width = Width;
-                render.Projection.Height = Height;
-
+                // set up view matrices (45º FOV)
                 render.Projection.Perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45), render.Projection.Aspect, 0.1f, 16384);
                 var rot_mat = Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot));
                 var test_vec = (rot_mat * new Vector4(0, 0, render.Distance, 1)).Xyz;
                 render.Projection.View = Matrix4.CreateTranslation(render.Projection.Trans - test_vec) * rot_mat;
 
+                // mutex lock to prevent races with the renderinfo timer and using the renderinfo itself
                 lock (render.mLock)
                 {
                     // render
@@ -565,6 +576,27 @@ namespace CrashEdit
             }
         }
 
+        protected void SetupTPAGs(NSF nsf, Dictionary<int, int> tex_eids)
+        {
+            GL.BindTexture(TextureTarget.Texture2D, tpage);
+
+            // fill texture
+            GL.GetTextureLevelParameter(tpage, 0, GetTextureParameter.TextureHeight, out int tpage_h);
+            if (tpage_h < tex_eids.Count * 128)
+            {
+                // realloc if not enough texture mem
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8ui, 512, tex_eids.Count * 128, 0, OpenTK.Graphics.OpenGL4.PixelFormat.RedInteger, PixelType.UnsignedByte, IntPtr.Zero);
+            }
+            foreach (var kvp in tex_eids)
+            {
+                var tpag = nsf.GetEntry<TextureChunk>(kvp.Key);
+                if (tpag != null)
+                {
+                    GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, kvp.Value * 128, 512, 128, OpenTK.Graphics.OpenGL4.PixelFormat.RedInteger, PixelType.UnsignedByte, tpag.Data);
+                }
+            }
+        }
+        
         protected override void Dispose(bool disposing)
         {
             GLDispose();
@@ -573,12 +605,12 @@ namespace CrashEdit
 
         public void GLDispose()
         {
-            // Unbind all the resources by binding the targets to 0/null.
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindVertexArray(0);
             GL.UseProgram(0);
 
             // Delete all the resources.
+            GL.DeleteTexture(tpage);
             render.ShaderContext.KillShaders();
 
             vaoAxes?.GLDispose();
