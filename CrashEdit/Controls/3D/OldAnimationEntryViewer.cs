@@ -223,7 +223,6 @@ namespace CrashEdit
                 OldModelStruct str = model.Structs[polygon.Unknown & 0x7FFF];
                 if (str is OldModelTexture tex)
                 {
-                    //if (pass != RenderPass.Solid && (tex.BlendMode == 0 || tex.BlendMode == 3)) continue;
                     if (pass == RenderPass.Trans && tex.BlendMode != 0) continue;
                     if (pass == RenderPass.Additive && tex.BlendMode != 1) continue;
                     if (pass == RenderPass.Subtractive && tex.BlendMode != 2) continue;
