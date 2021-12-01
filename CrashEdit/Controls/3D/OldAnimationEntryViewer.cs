@@ -224,8 +224,9 @@ namespace CrashEdit
                 if (str is OldModelTexture tex)
                 {
                     //if (pass != RenderPass.Solid && (tex.BlendMode == 0 || tex.BlendMode == 3)) continue;
-                    if (pass != RenderPass.Additive && tex.BlendMode == 1) continue;
-                    if (pass != RenderPass.Subtractive && tex.BlendMode == 2) continue;
+                    if (pass == RenderPass.Trans && tex.BlendMode != 0) continue;
+                    if (pass == RenderPass.Additive && tex.BlendMode != 1) continue;
+                    if (pass == RenderPass.Subtractive && tex.BlendMode != 2) continue;
                     if (!colored)
                         buf_col[buf_idx] = new(tex.R, tex.G, tex.B, 255);
                     else
