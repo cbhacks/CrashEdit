@@ -42,6 +42,9 @@ namespace Crash
             set => BitConv.ToInt32(Info, 8, value);
         }
 
+        public int TPAGCount => BitConv.FromInt32(Info, 0x18);
+        public int GetTPAG(int idx) => BitConv.FromInt32(Info, 0x20 + 4 * idx);
+
         public IList<OldSceneryPolygon> Polygons => polygons;
         public IList<OldSceneryVertex> Vertices => vertices;
         public IList<OldModelStruct> Structs => structs;

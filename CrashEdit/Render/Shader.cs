@@ -17,6 +17,7 @@ namespace CrashEdit
             { "line", new ShaderInfo("line-static.vert", "default4.frag") },
             { "line-model", new ShaderInfo("line-model.vert", "default4.frag", func: RenderLineModel) },
             { "anim_c1", new ShaderInfo("anim_c1.vert", "anim_c1.frag", func: RenderC1Anim) },
+            { "world_c1", new ShaderInfo("world_c1.vert", "world_c1.frag") },
             { "line-usercolor", new ShaderInfo("line-usercolor.vert", "default4.frag") },
             { "box-model", new ShaderInfo("box-model.vert", "default4.frag") }
         };
@@ -93,7 +94,7 @@ namespace CrashEdit
         public void KillShaders()
         {
             foreach (var shader in shaders.Values)
-                shader.GLDispose();
+                shader.Dispose();
             foreach (var shader in vertshaders.Values)
                 GL.DeleteShader(shader);
             foreach (var shader in fragshaders.Values)
@@ -104,7 +105,7 @@ namespace CrashEdit
         }
     }
 
-    public class Shader : IGLDisposable
+    public class Shader : IDisposable
     {
 
         public ShaderInfo Info { get; }
@@ -130,7 +131,7 @@ namespace CrashEdit
             GL.LinkProgram(ID);
         }
 
-        public void GLDispose()
+        public void Dispose()
         {
             GL.DeleteProgram(ID);
         }

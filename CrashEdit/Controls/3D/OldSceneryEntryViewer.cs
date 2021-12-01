@@ -1,152 +1,177 @@
-/*
 using Crash;
-using OpenTK.Graphics.OpenGL;
+using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace CrashEdit
 {
-    public class OldSceneryEntryViewer : ThreeDimensionalViewer
+    public class OldSceneryEntryViewer : GLViewer
     {
-        private List<OldSceneryEntry> entries;
-        private int displaylist;
-        private bool textures_enabled = true;
-        private bool init = false;
+        private List<int> worlds;
 
-        private TextureChunk[][] texturechunks;
-        public OldSceneryEntryViewer(OldSceneryEntry entry,TextureChunk[] texturechunks)
+        private VAO vaoWorld;
+        private Vector3[] buf_vtx;
+        private Color4[] buf_col;
+        private Vector2[] buf_uv;
+        private int[] buf_tex;
+        private int buf_idx;
+
+        protected override bool UseGrid => true;
+
+        public OldSceneryEntryViewer(NSF nsf, int world) : base(nsf)
         {
-            entries = new List<OldSceneryEntry>() { entry };
-            displaylist = -1;
-            InitTextures(1);
-            this.texturechunks = new TextureChunk[1][];
-            this.texturechunks[0] = texturechunks;
+            worlds = new() { world };
         }
 
-        public OldSceneryEntryViewer(IEnumerable<OldSceneryEntry> entries,TextureChunk[][] texturechunks)
+        public OldSceneryEntryViewer(NSF nsf, IEnumerable<int> worlds) : base(nsf)
         {
-            this.entries = new List<OldSceneryEntry>(entries);
-            displaylist = -1;
-            InitTextures(this.entries.Count);
-            this.texturechunks = texturechunks;
+            this.worlds = new(worlds);
+        }
+
+        private IEnumerable<OldSceneryEntry> GetWorlds()
+        {
+            foreach (int eid in worlds)
+            {
+                var world = nsf.GetEntry<OldSceneryEntry>(eid);
+                if (world != null)
+                {
+                    yield return world;
+                }
+            }
         }
 
         protected override IEnumerable<IPosition> CorePositions
         {
             get
             {
-                foreach (OldSceneryEntry entry in entries)
+                foreach (var world in GetWorlds())
                 {
-                    foreach (OldSceneryVertex vertex in entry.Vertices)
+                    foreach (OldSceneryVertex vertex in world.Vertices)
                     {
-                        yield return new Position(entry.XOffset + vertex.X,entry.YOffset + vertex.Y,entry.ZOffset + vertex.Z);
+                        yield return new Position(world.XOffset + vertex.X, world.YOffset + vertex.Y, world.ZOffset + vertex.Z) / GameScales.WorldC1;
                     }
                 }
-            }
-        }
-
-        protected override bool IsInputKey(Keys keyData)
-        {
-            switch (keyData)
-            {
-                case Keys.T:
-                    return true;
-                default:
-                    return base.IsInputKey(keyData);
-            }
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            base.OnKeyDown(e);
-            switch (e.KeyCode)
-            {
-                case Keys.T:
-                    textures_enabled = !textures_enabled;
-                    break;
             }
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Combine);
-            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
+
+            vaoWorld = new VAO(render.ShaderContext, "world_c1", PrimitiveType.Triangles);
         }
 
-        protected override void RenderObjects()
+        private Dictionary<int, int> CollectTPAGs()
         {
-            if (!init)
+            // collect tpag eids
+            Dictionary<int, int> tex_eids = new();
+            foreach (var world in GetWorlds())
             {
-                init = true;
-                for (int i = 0; i < entries.Count; ++i)
+                for (int i = 0, m = world.TPAGCount; i < m; ++i)
                 {
-                    ConvertTexturesToGL(i,texturechunks[i],entries[i].Polygons,entries[i].Structs);
+                    int tpag_eid = world.GetTPAG(i);
+                    if (!tex_eids.ContainsKey(tpag_eid))
+                        tex_eids[tpag_eid] = tex_eids.Count;
                 }
             }
+            return tex_eids;
+        }
 
-            GL.BindTexture(TextureTarget.Texture2D, 0);
-            if (!textures_enabled)
-                GL.Disable(EnableCap.Texture2D);
-            else
-                GL.Enable(EnableCap.Texture2D);
-            if (displaylist == -1)
+        protected override void Render()
+        {
+            base.Render();
+
+            // setup textures
+            var tex_eids = CollectTPAGs();
+            SetupTPAGs(tex_eids);
+            foreach (var world in GetWorlds())
             {
-                displaylist = GL.GenLists(1);
-                GL.NewList(displaylist,ListMode.CompileAndExecute);
-                for (int e = 0; e < entries.Count; e++)
-                {
-                    OldSceneryEntry entry = entries[e];
-                    if (entry != null)
-                    {
-                        for (int p = 0; p < entry.Polygons.Count; p++)
-                        {
-                            OldSceneryPolygon polygon = entry.Polygons[p];
-                            if (polygon.VertexA >= entry.Vertices.Count || polygon.VertexB >= entry.Vertices.Count || polygon.VertexC >= entry.Vertices.Count) continue;
-                            OldModelStruct modelstruct = entry.Structs[polygon.ModelStruct];
-                            if (modelstruct is OldSceneryTexture tex)
-                            { 
-                                BindTexture(e,p);
-                                GL.Begin(PrimitiveType.Triangles);
-                                GL.TexCoord2(tex.X3,tex.Y3);
-                                RenderVertex(entry,entry.Vertices[polygon.VertexA]);
-                                GL.TexCoord2(tex.X2,tex.Y2);
-                                RenderVertex(entry,entry.Vertices[polygon.VertexB]);
-                                GL.TexCoord2(tex.X1,tex.Y1);
-                                RenderVertex(entry,entry.Vertices[polygon.VertexC]);
-                                GL.End();
-                            }
-                            else
-                            {
-                                UnbindTexture();
-                                GL.Begin(PrimitiveType.Triangles);
-                                RenderVertex(entry,entry.Vertices[polygon.VertexA]);
-                                RenderVertex(entry,entry.Vertices[polygon.VertexB]);
-                                RenderVertex(entry,entry.Vertices[polygon.VertexC]);
-                                GL.End();
-                            }
-                        }
-                    }
-                }
-                GL.EndList();
-            }
-            else
-            {
-                GL.CallList(displaylist);
+                RenderWorld(world, tex_eids);
             }
         }
 
-        private void RenderVertex(OldSceneryEntry entry,OldSceneryVertex vertex)
+        protected void RenderWorld(OldSceneryEntry world, Dictionary<int, int> tex_eids)
         {
-            GL.Color3(vertex.Red,vertex.Green,vertex.Blue);
-            GL.Vertex3(entry.XOffset + vertex.X,entry.YOffset + vertex.Y,entry.ZOffset + vertex.Z);
+            // alloc buffers
+            int nb = world.Polygons.Count * 3;
+            buf_vtx = new Vector3[nb];
+            buf_col = new Color4[nb];
+            buf_uv = new Vector2[nb];
+            buf_tex = new int[nb]; // enable: 1, colormode: 2, blendmode: 2, clutx: 4, cluty: 7, doubleface: 1, page: X (>17 total)
+
+            // render stuff
+            RenderWorldPass(world, tex_eids, RenderPass.Solid);
+            RenderWorldPass(world, tex_eids, RenderPass.Trans);
+            RenderWorldPass(world, tex_eids, RenderPass.Subtractive);
+            RenderWorldPass(world, tex_eids, RenderPass.Additive);
+        }
+
+        private void RenderWorldPass(OldSceneryEntry world, Dictionary<int, int> tex_eids, RenderPass pass)
+        {
+            buf_idx = 0;
+
+            foreach (OldSceneryPolygon polygon in world.Polygons)
+            {
+                OldModelStruct str = world.Structs[polygon.ModelStruct];
+                if (str is OldSceneryTexture tex)
+                {
+                    if (pass == RenderPass.Trans && tex.BlendMode != 0) continue;
+                    if (pass == RenderPass.Additive && tex.BlendMode != 1) continue;
+                    if (pass == RenderPass.Subtractive && tex.BlendMode != 2) continue;
+                    buf_uv[buf_idx + 0] = new(tex.U3, tex.V3);
+                    buf_uv[buf_idx + 1] = new(tex.U2, tex.V2);
+                    buf_uv[buf_idx + 2] = new(tex.U1, tex.V1);
+                    buf_tex[buf_idx + 2] = 1
+                                        | (tex.ColorMode << 1)
+                                        | (tex.BlendMode << 3)
+                                        | (tex.ClutX << 5)
+                                        | (tex.ClutY << 9)
+                                        | (tex_eids[world.GetTPAG(polygon.Page)] << 17)
+                                        ;
+                    RenderVertex(world.Vertices[polygon.VertexA]);
+                    RenderVertex(world.Vertices[polygon.VertexB]);
+                    RenderVertex(world.Vertices[polygon.VertexC]);
+                }
+                else
+                {
+                    if (pass != RenderPass.Solid) continue;
+                    buf_tex[buf_idx + 2] = 0;
+                    RenderVertex(world.Vertices[polygon.VertexA]);
+                    RenderVertex(world.Vertices[polygon.VertexB]);
+                    RenderVertex(world.Vertices[polygon.VertexC]);
+                }
+            }
+
+            if (buf_idx > 0)
+            {
+                // uniforms and static data
+                render.Projection.UserTrans = new(world.XOffset, world.YOffset, world.ZOffset);
+                render.BlendMask = pass == RenderPass.Solid;
+
+                vaoWorld.UpdatePositions(buf_vtx, buf_idx);
+                vaoWorld.UpdateColors(buf_col, buf_idx);
+                vaoWorld.UpdateUVs(buf_uv, buf_idx);
+                vaoWorld.UpdateAttrib(1, "tex", buf_tex, 4, 1, buf_idx);
+
+                SetBlendForRenderPass(pass);
+                vaoWorld.Render(render, vertcount: buf_idx);
+            }
+        }
+
+        private void RenderVertex(OldSceneryVertex vert)
+        {
+            buf_vtx[buf_idx] = new(vert.X, vert.Y, vert.Z);
+            buf_col[buf_idx] = new(vert.Red, vert.Green, vert.Blue, 255);
+            buf_idx++;
         }
 
         protected override void Dispose(bool disposing)
         {
+            vaoWorld?.Dispose();
+
             base.Dispose(disposing);
         }
     }
 }
-*/

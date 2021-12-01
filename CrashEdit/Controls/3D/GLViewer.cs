@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace CrashEdit
 {
-    public abstract class GLViewer : GLControl, IGLDisposable
+    public abstract class GLViewer : GLControl
     {
         protected static readonly CullFaceMode[] cullFaceModes = { CullFaceMode.Back, CullFaceMode.Front, CullFaceMode.FrontAndBack };
 
@@ -162,8 +162,9 @@ namespace CrashEdit
         private float movespeed = 7.5f;
         private float rotspeed = 0.5f;
         private float zoomspeed = 0.75f;
-
         private const float PerFrame = 1 / 60f;
+
+        protected readonly NSF nsf;
 
         protected abstract bool UseGrid { get; }
 
@@ -255,6 +256,12 @@ namespace CrashEdit
         public GLViewer() : base(GraphicsMode.Default, 4, 3, GraphicsContextFlags.Debug)
         {
             render = new RenderInfo(this);
+        }
+
+        public GLViewer(NSF nsf) : base(GraphicsMode.Default, 4, 3, GraphicsContextFlags.Debug)
+        {
+            render = new RenderInfo(this);
+            this.nsf = nsf;
         }
 
         protected abstract IEnumerable<IPosition> CorePositions { get; }
@@ -460,7 +467,7 @@ namespace CrashEdit
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
                 // set up view matrices (45º FOV)
-                render.Projection.Perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45), render.Projection.Aspect, 0.1f, 16384);
+                render.Projection.Perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45), render.Projection.Aspect, 0.25f, 8192);
                 var rot_mat = Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot));
                 var test_vec = (rot_mat * new Vector4(0, 0, render.Distance, 1)).Xyz;
                 render.Projection.View = Matrix4.CreateTranslation(render.Projection.Trans - test_vec) * rot_mat;
@@ -545,7 +552,7 @@ namespace CrashEdit
             float midx = (maxx + minx) / 2;
             float midy = (maxy + miny) / 2;
             float midz = (maxz + minz) / 2;
-            render.Distance = Math.Max(render.Distance, (float)(Math.Sqrt(Math.Pow(maxx-minx, 2) + Math.Pow(maxy-miny, 2) + Math.Pow(maxz-minz, 2))*1.2));
+            render.Distance = Math.Min(RenderInfo.MaxDistance, Math.Max(render.Distance, (float)(Math.Sqrt(Math.Pow(maxx-minx, 2) + Math.Pow(maxy-miny, 2) + Math.Pow(maxz-minz, 2))*1.2)));
             //render.Distance += 0;
             render.Projection.Trans.X = -midx;
             render.Projection.Trans.Y = -midy;
@@ -581,7 +588,7 @@ namespace CrashEdit
             }
         }
 
-        protected void SetupTPAGs(NSF nsf, Dictionary<int, int> tex_eids)
+        protected void SetupTPAGs(Dictionary<int, int> tex_eids)
         {
             GL.BindTexture(TextureTarget.Texture2D, tpage);
 
@@ -604,12 +611,6 @@ namespace CrashEdit
         
         protected override void Dispose(bool disposing)
         {
-            GLDispose();
-            base.Dispose(disposing);
-        }
-
-        public void GLDispose()
-        {
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindVertexArray(0);
             GL.UseProgram(0);
@@ -618,9 +619,11 @@ namespace CrashEdit
             GL.DeleteTexture(tpage);
             render.ShaderContext.KillShaders();
 
-            vaoAxes?.GLDispose();
-            vaoSphereLine?.GLDispose();
-            vaoBox?.GLDispose();
+            vaoAxes?.Dispose();
+            vaoSphereLine?.Dispose();
+            vaoBox?.Dispose();
+
+            base.Dispose(disposing);
         }
     }
 }

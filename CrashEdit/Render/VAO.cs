@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace CrashEdit
 {
-    public class VAO : IGLDisposable
+    public class VAO : IDisposable
     {
         public int ID { get; }
 
@@ -76,7 +76,7 @@ namespace CrashEdit
         public void UpdateColors(Color4[] colors, int eltc = -1) => UpdateAttrib(0, "color", colors, 16, 4, eltc);
         public void UpdateUVs(Vector2[] uvs, int eltc = -1) => UpdateAttrib(0, "uv", uvs, 8, 2, eltc);
 
-        public void GLDispose()
+        public void Dispose()
         {
             foreach (var buf in Buffers.Values)
                 GL.DeleteBuffer(buf);

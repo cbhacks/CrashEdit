@@ -9,10 +9,8 @@ using System.Windows.Forms;
 
 namespace CrashEdit
 {
-    public sealed class OldAnimationEntryViewer : GLViewer, IGLDisposable
+    public sealed class OldAnimationEntryViewer : GLViewer, IDisposable
     {
-        private readonly NSF nsf;
-
         private readonly int eid_anim;
         private readonly int frame_id;
         private int cur_frame = 0;
@@ -35,14 +33,12 @@ namespace CrashEdit
 
         public OldAnimationEntryViewer(NSF nsf, int anim_eid, int frame)
         {
-            this.nsf = nsf;
             eid_anim = anim_eid;
             frame_id = frame;
         }
 
-        public OldAnimationEntryViewer(NSF nsf, int anim_eid)
+        public OldAnimationEntryViewer(NSF nsf, int anim_eid) : base(nsf)
         {
-            this.nsf = nsf;
             eid_anim = anim_eid;
             frame_id = -1;
         }
@@ -92,9 +88,9 @@ namespace CrashEdit
                         float mz = 1 / 128f;
                         if (model != null)
                         {
-                            mx = (float)model.ScaleX / 3200 / 128;
-                            my = (float)model.ScaleY / 3200 / 128;
-                            mz = (float)model.ScaleZ / 3200 / 128;
+                            mx = (float)model.ScaleX / 3200 / GameScales.AnimC1;
+                            my = (float)model.ScaleY / 3200 / GameScales.AnimC1;
+                            mz = (float)model.ScaleZ / 3200 / GameScales.AnimC1;
                         }
                         foreach (var vert in frame.Vertices)
                         {
@@ -189,7 +185,7 @@ namespace CrashEdit
             {
                 // setup textures
                 var tex_eids = CollectTPAGs(model);
-                SetupTPAGs(nsf, tex_eids);
+                SetupTPAGs(tex_eids);
 
                 // alloc buffers
                 int nb = model.Polygons.Count * 3;
@@ -281,7 +277,7 @@ namespace CrashEdit
                 }
                 render.Projection.UserScale = new(model.ScaleX, model.ScaleY, model.ScaleZ);
                 render.Projection.UserInt1 = cullmode;
-                render.Projection.UserBool1 = pass == RenderPass.Solid;
+                render.BlendMask = pass == RenderPass.Solid;
 
                 vaoModel.UpdatePositions(buf_vtx, buf_idx);
                 //vaoModel.UpdateNormals(buf_nor, buf_idx);
@@ -320,10 +316,11 @@ namespace CrashEdit
             }
         }
 
-        public new void GLDispose()
+        protected override void Dispose(bool disposing)
         {
-            vaoModel.GLDispose();
-            base.GLDispose();
+            vaoModel?.Dispose();
+
+            base.Dispose(disposing);
         }
     }
 }

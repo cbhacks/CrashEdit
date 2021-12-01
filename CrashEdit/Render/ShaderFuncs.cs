@@ -22,6 +22,7 @@ namespace CrashEdit
             sh.UniformInt("colorMode", (int)ri.Projection.ColorMode);
 
             sh.UniformBool("enableTex", ri.EnableTexture);
+            sh.UniformBool("blendmask", ri.BlendMask);
         }
 
         internal static void RenderTest(Shader sh, RenderInfo ri)
@@ -41,10 +42,9 @@ namespace CrashEdit
         internal static void RenderC1Anim(Shader sh, RenderInfo ri)
         {
             ri.Projection.UserScale /= 3200;
-            ri.Projection.UserScale /= 128;
+            ri.Projection.UserScale /= GameScales.AnimC1;
             sh.UniformVec3("modelScale", ref ri.Projection.UserScale);
             sh.UniformInt("cullmode", ri.Projection.UserInt1);
-            sh.UniformBool("blendmask", ri.Projection.UserBool1);
         }
     }
 }
