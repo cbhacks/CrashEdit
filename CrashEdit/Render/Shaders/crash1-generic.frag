@@ -2,10 +2,11 @@
 
 layout(binding=0) uniform usampler2D vram8;
 
-uniform int cullmode;
+uniform int modeCull;
 uniform int blendmask;  // if on, masks away blend-texels (additive/subtractive)
                         // if off, masks away non-blend-texels
 uniform int enableTex;
+uniform int art;
 
 in vec3 p_Color;
 in vec2 p_UV;
@@ -37,10 +38,13 @@ uvec4 get_texel_bpp16(int u, int v) {
 void main()
 {
     int enable = p_Tex & 0x1;
-    int nocull = (p_Tex >> 16) & 0x1;
-    if (nocull == 0) {
-        if (cullmode == 0 && !gl_FrontFacing) discard;
-        if (cullmode == 1 && gl_FrontFacing) discard;
+    if (art == 1 && modeCull != 2) {
+        // crash 1 anim culling
+        int nocull = (p_Tex >> 16) & 0x1;
+        if (nocull == 0) {
+            if (modeCull == 0 && !gl_FrontFacing) discard;
+            if (modeCull == 1 && gl_FrontFacing) discard;
+        }
     }
     f_col = vec4(p_Color, 1.0);
     if (enable == 1 && enableTex != 0) {
@@ -60,16 +64,16 @@ void main()
             texel = get_texel_bpp16(u, v); // 16 bit
         }
 
-        vec3 texel_color = vec3(texel)/31.0;
         float texel_alpha = 1.0;
         if (texel.r == 0 && texel.g == 0 && texel.b == 0 && texel.a == 0) {
-            texel_alpha = 0.0;
+            discard;
         } else if (blendmask == texel.a && (bmode == 1 || bmode == 2 || bmode == 0)) {
-            texel_alpha = 0.0;
+            discard;
         } else if (bmode == 0 && texel.a == 1) {
             texel_alpha = 0.5;
         }
+
+        vec3 texel_color = vec3(texel)/31.0;
         f_col *= vec4(2 * texel_color, texel_alpha);
     }
-    if (f_col.a == 0.0) discard;
 }

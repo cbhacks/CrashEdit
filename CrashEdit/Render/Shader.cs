@@ -6,8 +6,6 @@ using System.Collections.Generic;
 
 namespace CrashEdit
 {
-    public delegate void ShaderRenderFunc(Shader sh, RenderInfo ri);
-
     public sealed partial class ShaderInfo
     {
         internal static readonly Dictionary<string, ShaderInfo> Infos = new()
@@ -16,8 +14,7 @@ namespace CrashEdit
             { "axes", new ShaderInfo("axes.vert", "default4.frag") },
             { "line", new ShaderInfo("line-static.vert", "default4.frag") },
             { "line-model", new ShaderInfo("line-model.vert", "default4.frag", func: RenderLineModel) },
-            { "anim_c1", new ShaderInfo("anim_c1.vert", "anim_c1.frag", func: RenderC1Anim) },
-            { "world_c1", new ShaderInfo("world_c1.vert", "world_c1.frag") },
+            { "crash1", new ShaderInfo("crash1-generic.vert", "crash1-generic.frag") },
             { "line-usercolor", new ShaderInfo("line-usercolor.vert", "default4.frag") },
             { "box-model", new ShaderInfo("box-model.vert", "default4.frag") }
         };
@@ -141,20 +138,21 @@ namespace CrashEdit
         public void UniformVec3(string name, ref Vector3 vec) => GL.Uniform3(GL.GetUniformLocation(ID, name), vec.X, vec.Y, vec.Z);
         public void UniformVec4(string name, ref Vector4 vec) => GL.Uniform4(GL.GetUniformLocation(ID, name), vec.X, vec.Y, vec.Z, vec.W);
         public void UniformVec4(string name, ref Color4 col) => GL.Uniform4(GL.GetUniformLocation(ID, name), col.R, col.G, col.B, col.A);
+        public void UniformFloat(string name, float val) => GL.Uniform1(GL.GetUniformLocation(ID, name), val);
         public void UniformInt(string name, int val) => GL.Uniform1(GL.GetUniformLocation(ID, name), val);
         public void UniformBool(string name, bool val) => GL.Uniform1(GL.GetUniformLocation(ID, name), Convert.ToInt32(val));
 
-        public void Render(RenderInfo ri)
+        public void Render(RenderInfo ri, VAO vao)
         {
             GL.UseProgram(ID);
             if (Info.PreRenderFunc == null)
-                ShaderInfo.PreRenderDefault(this, ri);
+                ShaderInfo.PreRenderDefault(this, ri, vao);
             else
-                Info.PreRenderFunc(this, ri);
+                Info.PreRenderFunc(this, ri, vao);
             if (Info.RenderFunc == null)
-                ShaderInfo.RenderDefault(this, ri);
+                ShaderInfo.RenderDefault(this, ri, vao);
             else
-                Info.RenderFunc(this, ri);
+                Info.RenderFunc(this, ri, vao);
         }
     }
 }

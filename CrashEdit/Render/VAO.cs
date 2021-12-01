@@ -89,15 +89,31 @@ namespace CrashEdit
             GL.BindVertexArray(ID);
 
             // Use/Bind the program
-            Shader.Render(ri);
+            Shader.Render(ri, this);
 
             // This draws the triangle.
             GL.DrawArrays(Primitive, 0, vertcount == -1 ? VertCount : vertcount);
-
-            if (ri.Projection.ColorModeStack.Count > 0)
-            {
-                ri.Projection.PopColorMode();
-            }
         }
+
+        #region USER DATA (these can be whatever you want)
+        public Vector3 UserTrans;
+        public Vector3 UserRot;
+        public Vector3 UserScale;
+        public Quaternion UserQuat;
+        public Vector4 UserAxis;
+        public Color4 UserColor1;
+        public Color4 UserColor2;
+        public Matrix3 UserMat3;
+        public Vector3 UserColorAmb;
+        public Vector3 UserColorDiff;
+        public float UserScaleScalar;
+        public int UserCullMode; // 0 - default, 1 - backface, 2 - no cull
+
+        public enum ColorModeEnum { Default = 0, GradientY = 1, Solid = 2 };
+        public ColorModeEnum ColorMode;
+
+        public enum ArtTypeEnum { Crash1World = 0, Crash1Anim = 1 };
+        public ArtTypeEnum ArtType;
+        #endregion
     }
 }

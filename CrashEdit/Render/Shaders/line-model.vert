@@ -11,23 +11,18 @@ uniform vec3 scale;
 
 uniform vec4 userColor1;
 uniform vec4 userColor2;
-uniform int colorMode;
+uniform int modeColor;
 
-out vec4 pass_Color;
+out vec4 p_Color;
 
-vec4 lerp(vec4 from, vec4 to, float amt)
-{
-    return from + (to - from) * amt;
-}
-
-void main(void)
+void main()
 {
     gl_Position = (projectionMatrix * viewMatrix * ((modelMatrix * ((vec4(scale, 1.0) * position)) + vec4(trans*2, 1.0))));
-    if (colorMode == 0) {
-        pass_Color = color;
-    } else if (colorMode == 1) {
-        pass_Color = lerp(userColor1, userColor2, (position.y+1)/2);
-    } else if (colorMode == 2) {
-        pass_Color = userColor1;
+    if (modeColor == 0) {
+        p_Color = color;
+    } else if (modeColor == 1) {
+        p_Color = mix(userColor1, userColor2, (position.y+1)/2);
+    } else if (modeColor == 2) {
+        p_Color = userColor1;
     }
 }

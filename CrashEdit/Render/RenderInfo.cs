@@ -107,7 +107,6 @@ namespace CrashEdit
                 }
             });
 
-            Projection.ColorModeStack = new Stack<ProjectionInfo.ColorModeEnum>();
             Reset();
             Start();
         }

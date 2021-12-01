@@ -60,7 +60,9 @@ namespace CrashEdit
         {
             base.OnLoad(e);
 
-            vaoWorld = new VAO(render.ShaderContext, "world_c1", PrimitiveType.Triangles);
+            vaoWorld = new(render.ShaderContext, "crash1", PrimitiveType.Triangles);
+            vaoWorld.ArtType = VAO.ArtTypeEnum.Crash1World;
+            vaoWorld.UserScaleScalar = GameScales.WorldC1;
         }
 
         private Dictionary<int, int> CollectTPAGs()
@@ -147,7 +149,7 @@ namespace CrashEdit
             if (buf_idx > 0)
             {
                 // uniforms and static data
-                render.Projection.UserTrans = new(world.XOffset, world.YOffset, world.ZOffset);
+                vaoWorld.UserTrans = new(world.XOffset, world.YOffset, world.ZOffset);
                 render.BlendMask = pass == RenderPass.Solid;
 
                 vaoWorld.UpdatePositions(buf_vtx, buf_idx);

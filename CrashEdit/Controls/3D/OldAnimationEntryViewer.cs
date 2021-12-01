@@ -47,7 +47,8 @@ namespace CrashEdit
         {
             base.OnLoad(e);
 
-            vaoModel = new VAO(render.ShaderContext, "anim_c1", PrimitiveType.Triangles);
+            vaoModel = new(render.ShaderContext, "crash1", PrimitiveType.Triangles);
+            vaoModel.ArtType = VAO.ArtTypeEnum.Crash1Anim;
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -88,9 +89,9 @@ namespace CrashEdit
                         float mz = 1 / 128f;
                         if (model != null)
                         {
-                            mx = (float)model.ScaleX / 3200 / GameScales.AnimC1;
-                            my = (float)model.ScaleY / 3200 / GameScales.AnimC1;
-                            mz = (float)model.ScaleZ / 3200 / GameScales.AnimC1;
+                            mx = model.ScaleX / GameScales.ModelC1 / GameScales.AnimC1;
+                            my = model.ScaleY / GameScales.ModelC1 / GameScales.AnimC1;
+                            mz = model.ScaleZ / GameScales.ModelC1 / GameScales.AnimC1;
                         }
                         foreach (var vert in frame.Vertices)
                         {
@@ -270,13 +271,13 @@ namespace CrashEdit
             if (buf_idx > 0)
             {
                 // uniforms and static data
-                render.Projection.UserTrans = new(frame.XOffset, frame.YOffset, frame.ZOffset);
+                vaoModel.UserTrans = new(frame.XOffset, frame.YOffset, frame.ZOffset);
                 if (frame2 != null)
                 {
-                    render.Projection.UserTrans = MathExt.Lerp(render.Projection.UserTrans, new Vector3(frame2.XOffset, frame2.YOffset, frame2.ZOffset), interp);
+                    vaoModel.UserTrans = MathExt.Lerp(vaoModel.UserTrans, new Vector3(frame2.XOffset, frame2.YOffset, frame2.ZOffset), interp);
                 }
-                render.Projection.UserScale = new(model.ScaleX, model.ScaleY, model.ScaleZ);
-                render.Projection.UserInt1 = cullmode;
+                vaoModel.UserScale = new Vector3(model.ScaleX, model.ScaleY, model.ScaleZ) / (GameScales.ModelC1 * GameScales.AnimC1);
+                vaoModel.UserCullMode = cullmode;
                 render.BlendMask = pass == RenderPass.Solid;
 
                 vaoModel.UpdatePositions(buf_vtx, buf_idx);

@@ -317,6 +317,8 @@ namespace CrashEdit
             vaoGridLine = new VAO(render.ShaderContext, "line-usercolor", PrimitiveType.Lines);
             vaoBox = new VAO(render.ShaderContext, "box-model", PrimitiveType.Triangles);
 
+            vaoGridLine.UserColor1 = Color4.Gray;
+
             // make texture
             tpage = GL.GenTexture();
             GL.ActiveTexture(TextureUnit.Texture0);
@@ -495,22 +497,21 @@ namespace CrashEdit
                 RenderAxes(new Vector3(0));
 
                 MakeLineGrid(Properties.Settings.Default.AnimGridLen);
-                render.Projection.UserColor1 = Color4.Gray;
                 vaoGridLine.Render(render);
             }
         }
 
         private void RenderAxes(Vector3 pos)
         {
-            render.Projection.UserTrans = pos;
+            vaoBox.UserTrans = pos;
             vaoAxes.Render(render, vertcount: 6);
         }
 
         protected void RenderBox(Vector3 pos, Vector3 size, Color4 col)
         {
-            render.Projection.UserTrans = pos;
-            render.Projection.UserScale = size;
-            render.Projection.UserColor1 = col;
+            vaoBox.UserTrans = pos;
+            vaoBox.UserScale = size;
+            vaoBox.UserColor1 = col;
             vaoBox.Primitive = PrimitiveType.Triangles;
             vaoBox.UpdatePositions(BoxTriVerts);
             vaoBox.Render(render, vertcount: BoxTriVerts.Length);
@@ -518,9 +519,9 @@ namespace CrashEdit
 
         protected void RenderBoxLine(Vector3 pos, Vector3 size, Color4 col)
         {
-            render.Projection.UserTrans = pos;
-            render.Projection.UserScale = size;
-            render.Projection.UserColor1 = col;
+            vaoBox.UserTrans = pos;
+            vaoBox.UserScale = size;
+            vaoBox.UserColor1 = col;
             vaoBox.Primitive = PrimitiveType.Lines;
             vaoBox.UpdatePositions(BoxLineVerts);
             vaoBox.Render(render, vertcount: BoxLineVerts.Length);
