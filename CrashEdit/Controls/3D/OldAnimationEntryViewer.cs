@@ -30,7 +30,7 @@ namespace CrashEdit
 
         protected override bool UseGrid => true;
 
-        public OldAnimationEntryViewer(NSF nsf, int anim_eid, int frame)
+        public OldAnimationEntryViewer(NSF nsf, int anim_eid, int frame) : base(nsf)
         {
             eid_anim = anim_eid;
             frame_id = frame;
