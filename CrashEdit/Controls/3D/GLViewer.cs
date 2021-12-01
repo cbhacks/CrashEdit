@@ -489,7 +489,7 @@ namespace CrashEdit
 
         protected virtual void Render()
         {
-            SetBlendForRenderPass(RenderPass.Solid);
+            SetBlendMode(BlendMode.Solid);
 
             // vaoTest.Render(render);
             if (UseGrid && Properties.Settings.Default.DisplayAnimGrid)
@@ -563,25 +563,24 @@ namespace CrashEdit
             Invalidate();
         }
 
-        protected enum RenderPass { Solid, Trans, Additive, Subtractive }
+        protected enum BlendMode { Trans = 0, Additive, Subtractive, Solid }
 
-        protected void SetBlendForRenderPass(RenderPass pass)
+        protected void SetBlendMode(BlendMode bmode)
         {
-            switch (pass)
+            switch (bmode)
             {
-                default:
-                case RenderPass.Solid:
-                case RenderPass.Trans:
+                case BlendMode.Solid:
+                case BlendMode.Trans:
                     GL.DepthMask(true);
                     GL.BlendEquation(BlendEquationMode.FuncAdd);
                     GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
                     break;
-                case RenderPass.Additive:
+                case BlendMode.Additive:
                     GL.DepthMask(false);
                     GL.BlendEquation(BlendEquationMode.FuncAdd);
                     GL.BlendFunc(BlendingFactor.One, BlendingFactor.One);
                     break;
-                case RenderPass.Subtractive:
+                case BlendMode.Subtractive:
                     GL.DepthMask(false);
                     GL.BlendEquation(BlendEquationMode.FuncReverseSubtract);
                     GL.BlendFunc(BlendingFactor.One, BlendingFactor.One);

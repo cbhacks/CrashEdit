@@ -3,8 +3,7 @@
 layout(binding=0) uniform usampler2D vram8;
 
 uniform int modeCull;
-uniform int blendmask;  // if on, masks away blend-texels (additive/subtractive)
-                        // if off, masks away non-blend-texels
+uniform int blendmask;
 uniform int enableTex;
 uniform int art;
 
@@ -51,6 +50,8 @@ void main()
         int tpage = p_Tex >> 17;
         int cmode = (p_Tex >> 1) & 0x3;
         int bmode = (p_Tex >> 3) & 0x3;
+        // discard wrong blend modes, but always let textures pass on solid render
+        if (bmode != blendmask && blendmask != 3) discard;
         int cx = ((p_Tex >> 5) & 0xF) * 16;
         int cy = ((p_Tex >> 9) & 0x7F) + tpage * 128;
         int u = int(p_UV.x);
@@ -67,7 +68,8 @@ void main()
         float texel_alpha = 1.0;
         if (texel.r == 0 && texel.g == 0 && texel.b == 0 && texel.a == 0) {
             discard;
-        } else if (blendmask == texel.a && (bmode == 1 || bmode == 2 || bmode == 0)) {
+        } else if (texel.a == 1 && blendmask == 3 && bmode != 3) {
+            // blend texel during solid render pass
             discard;
         } else if (bmode == 0 && texel.a == 1) {
             texel_alpha = 0.5;

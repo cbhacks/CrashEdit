@@ -114,6 +114,8 @@ namespace CrashEdit
 
         public enum ArtTypeEnum { Crash1World = 0, Crash1Anim = 1 };
         public ArtTypeEnum ArtType;
+
+        public int BlendMask;
         #endregion
     }
 }

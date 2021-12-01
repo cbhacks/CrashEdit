@@ -197,79 +197,50 @@ namespace CrashEdit
                 buf_tex = new int[nb]; // enable: 1, colormode: 2, blendmode: 2, clutx: 4, cluty: 7, doubleface: 1, page: X (>17 total)
 
                 // render stuff
-                RenderFramePass(model, tex_eids, frame, frame2, RenderPass.Solid);
-                RenderFramePass(model, tex_eids, frame, frame2, RenderPass.Trans);
-                RenderFramePass(model, tex_eids, frame, frame2, RenderPass.Subtractive);
-                RenderFramePass(model, tex_eids, frame, frame2, RenderPass.Additive);
-            }
+                buf_idx = 0;
 
-            if (collisionenabled)
-            {
-                SetBlendForRenderPass(RenderPass.Solid);
-                GL.DepthMask(false);
-                var c1 = new Vector3(frame.X1, frame.Y1, frame.Z1) / 102400;
-                var c2 = new Vector3(frame.X2, frame.Y2, frame.Z2) / 102400;
-                var ct = new Vector3(frame.XGlobal, frame.YGlobal, frame.ZGlobal) / 102400;
-                var pos = (c1 + c2) / 2 + ct;
-                var size = (c2 - c1) / 2;
-                RenderBox(pos, size, new Color4(0, 1f, 0, 0.2f));
-                RenderBoxLine(pos, size, new Color4(0, 1f, 0, 1f));
-                GL.DepthMask(true);
-            }
-        }
-
-        private void RenderFramePass(OldModelEntry model, Dictionary<int, int> tex_eids, OldFrame frame, OldFrame frame2, RenderPass pass)
-        {
-            buf_idx = 0;
-
-            foreach (OldModelPolygon polygon in model.Polygons)
-            {
-                OldModelStruct str = model.Structs[polygon.Unknown & 0x7FFF];
-                if (str is OldModelTexture tex)
+                foreach (OldModelPolygon polygon in model.Polygons)
                 {
-                    if (pass == RenderPass.Trans && tex.BlendMode != 0) continue;
-                    if (pass == RenderPass.Additive && tex.BlendMode != 1) continue;
-                    if (pass == RenderPass.Subtractive && tex.BlendMode != 2) continue;
-                    if (!colored)
-                        buf_col[buf_idx] = new(tex.R, tex.G, tex.B, 255);
+                    OldModelStruct str = model.Structs[polygon.Unknown & 0x7FFF];
+                    if (str is OldModelTexture tex)
+                    {
+                        if (!colored)
+                            buf_col[buf_idx] = new(tex.R, tex.G, tex.B, 255);
+                        else
+                            buf_col[buf_idx] = new(tex.R / (float)0x80, tex.G / (float)0x80, tex.B / (float)0x80, 255);
+                        buf_col[buf_idx + 1] = buf_col[buf_idx];
+                        buf_col[buf_idx + 2] = buf_col[buf_idx];
+                        buf_uv[buf_idx + 0] = new(tex.U3, tex.V3);
+                        buf_uv[buf_idx + 1] = new(tex.U2, tex.V2);
+                        buf_uv[buf_idx + 2] = new(tex.U1, tex.V1);
+                        buf_tex[buf_idx + 2] = 1
+                                            | (tex.ColorMode << 1)
+                                            | (tex.BlendMode << 3)
+                                            | (tex.ClutX << 5)
+                                            | (tex.ClutY << 9)
+                                            | (Convert.ToInt32(tex.N) << 16)
+                                            | (tex_eids[tex.EID] << 17)
+                                            ;
+                        RenderVertex(frame, frame2, polygon.VertexC / 6);
+                        RenderVertex(frame, frame2, polygon.VertexB / 6);
+                        RenderVertex(frame, frame2, polygon.VertexA / 6);
+                    }
                     else
-                        buf_col[buf_idx] = new(tex.R / (float)0x80, tex.G / (float)0x80, tex.B / (float)0x80, 255);
-                    buf_col[buf_idx + 1] = buf_col[buf_idx];
-                    buf_col[buf_idx + 2] = buf_col[buf_idx];
-                    buf_uv[buf_idx + 0] = new(tex.U3, tex.V3);
-                    buf_uv[buf_idx + 1] = new(tex.U2, tex.V2);
-                    buf_uv[buf_idx + 2] = new(tex.U1, tex.V1);
-                    buf_tex[buf_idx + 2] = 1
-                                        | (tex.ColorMode << 1)
-                                        | (tex.BlendMode << 3)
-                                        | (tex.ClutX << 5)
-                                        | (tex.ClutY << 9)
-                                        | (Convert.ToInt32(tex.N) << 16)
-                                        | (tex_eids[tex.EID] << 17)
-                                        ;
-                    RenderVertex(frame, frame2, polygon.VertexC / 6);
-                    RenderVertex(frame, frame2, polygon.VertexB / 6);
-                    RenderVertex(frame, frame2, polygon.VertexA / 6);
+                    {
+                        OldSceneryColor col = (OldSceneryColor)str;
+                        if (!colored)
+                            buf_col[buf_idx] = new(col.R, col.G, col.B, 255);
+                        else
+                            buf_col[buf_idx] = new(col.R / (float)0x80, col.G / (float)0x80, col.B / (float)0x80, 255);
+                        buf_col[buf_idx + 1] = buf_col[buf_idx];
+                        buf_col[buf_idx + 2] = buf_col[buf_idx];
+                        buf_tex[buf_idx + 2] = 0 | (Convert.ToInt32(col.N) << 16);
+                        RenderVertex(frame, frame2, polygon.VertexC / 6);
+                        RenderVertex(frame, frame2, polygon.VertexB / 6);
+                        RenderVertex(frame, frame2, polygon.VertexA / 6);
+                    }
                 }
-                else
-                {
-                    if (pass != RenderPass.Solid) continue;
-                    OldSceneryColor col = (OldSceneryColor)str;
-                    if (!colored)
-                        buf_col[buf_idx] = new(col.R, col.G, col.B, 255);
-                    else
-                        buf_col[buf_idx] = new(col.R / (float)0x80, col.G / (float)0x80, col.B / (float)0x80, 255);
-                    buf_col[buf_idx + 1] = buf_col[buf_idx];
-                    buf_col[buf_idx + 2] = buf_col[buf_idx];
-                    buf_tex[buf_idx + 2] = 0 | (Convert.ToInt32(col.N) << 16);
-                    RenderVertex(frame, frame2, polygon.VertexC / 6);
-                    RenderVertex(frame, frame2, polygon.VertexB / 6);
-                    RenderVertex(frame, frame2, polygon.VertexA / 6);
-                }
-            }
 
-            if (buf_idx > 0)
-            {
                 // uniforms and static data
                 vaoModel.UserTrans = new(frame.XOffset, frame.YOffset, frame.ZOffset);
                 if (frame2 != null)
@@ -278,17 +249,39 @@ namespace CrashEdit
                 }
                 vaoModel.UserScale = new Vector3(model.ScaleX, model.ScaleY, model.ScaleZ) / (GameScales.ModelC1 * GameScales.AnimC1);
                 vaoModel.UserCullMode = cullmode;
-                render.BlendMask = pass == RenderPass.Solid;
 
-                vaoModel.UpdatePositions(buf_vtx, buf_idx);
-                //vaoModel.UpdateNormals(buf_nor, buf_idx);
-                vaoModel.UpdateColors(buf_col, buf_idx);
-                vaoModel.UpdateUVs(buf_uv, buf_idx);
-                vaoModel.UpdateAttrib(1, "tex", buf_tex, 4, 1, buf_idx);
+                vaoModel.UpdatePositions(buf_vtx);
+                //vaoModel.UpdateNormals(buf_nor);
+                vaoModel.UpdateColors(buf_col);
+                vaoModel.UpdateUVs(buf_uv);
+                vaoModel.UpdateAttrib(1, "tex", buf_tex, 4, 1);
 
-                SetBlendForRenderPass(pass);
-                vaoModel.Render(render, vertcount: buf_idx);
+                RenderFramePass(BlendMode.Solid);
+                RenderFramePass(BlendMode.Trans);
+                RenderFramePass(BlendMode.Subtractive);
+                RenderFramePass(BlendMode.Additive);
             }
+
+            if (collisionenabled)
+            {
+                SetBlendMode(BlendMode.Solid);
+                GL.DepthMask(false);
+                var c1 = new Vector3(frame.X1, frame.Y1, frame.Z1) / GameScales.CollisionC1;
+                var c2 = new Vector3(frame.X2, frame.Y2, frame.Z2) / GameScales.CollisionC1;
+                var ct = new Vector3(frame.XGlobal, frame.YGlobal, frame.ZGlobal) / GameScales.CollisionC1;
+                var pos = (c1 + c2) / 2 + ct;
+                var size = (c2 - c1) / 2;
+                RenderBox(pos, size, new Color4(0, 1f, 0, 0.2f));
+                RenderBoxLine(pos, size, new Color4(0, 1f, 0, 1f));
+                GL.DepthMask(true);
+            }
+        }
+
+        private void RenderFramePass(BlendMode pass)
+        {
+            SetBlendMode(pass);
+            vaoModel.BlendMask = (int)pass;
+            vaoModel.Render(render, vertcount: buf_idx);
         }
 
         private void RenderVertex(OldFrame f1, OldFrame f2, int id)

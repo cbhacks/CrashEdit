@@ -25,9 +25,9 @@ namespace CrashEdit
             sh.UniformInt("modeCull", vao.UserCullMode);
             sh.UniformFloat("scaleScalar", vao.UserScaleScalar);
             sh.UniformInt("art", (int)vao.ArtType);
+            sh.UniformInt("blendmask", vao.BlendMask);
 
             sh.UniformBool("enableTex", ri.EnableTexture);
-            sh.UniformBool("blendmask", ri.BlendMask);
         }
 
         internal static void RenderTest(Shader sh, RenderInfo ri, VAO vao)

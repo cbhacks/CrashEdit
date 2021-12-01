@@ -104,14 +104,6 @@ namespace CrashEdit
             buf_tex = new int[nb]; // enable: 1, colormode: 2, blendmode: 2, clutx: 4, cluty: 7, doubleface: 1, page: X (>17 total)
 
             // render stuff
-            RenderWorldPass(world, tex_eids, RenderPass.Solid);
-            RenderWorldPass(world, tex_eids, RenderPass.Trans);
-            RenderWorldPass(world, tex_eids, RenderPass.Subtractive);
-            RenderWorldPass(world, tex_eids, RenderPass.Additive);
-        }
-
-        private void RenderWorldPass(OldSceneryEntry world, Dictionary<int, int> tex_eids, RenderPass pass)
-        {
             buf_idx = 0;
 
             foreach (OldSceneryPolygon polygon in world.Polygons)
@@ -119,9 +111,6 @@ namespace CrashEdit
                 OldModelStruct str = world.Structs[polygon.ModelStruct];
                 if (str is OldSceneryTexture tex)
                 {
-                    if (pass == RenderPass.Trans && tex.BlendMode != 0) continue;
-                    if (pass == RenderPass.Additive && tex.BlendMode != 1) continue;
-                    if (pass == RenderPass.Subtractive && tex.BlendMode != 2) continue;
                     buf_uv[buf_idx + 0] = new(tex.U3, tex.V3);
                     buf_uv[buf_idx + 1] = new(tex.U2, tex.V2);
                     buf_uv[buf_idx + 2] = new(tex.U1, tex.V1);
@@ -138,7 +127,6 @@ namespace CrashEdit
                 }
                 else
                 {
-                    if (pass != RenderPass.Solid) continue;
                     buf_tex[buf_idx + 2] = 0;
                     RenderVertex(world.Vertices[polygon.VertexA]);
                     RenderVertex(world.Vertices[polygon.VertexB]);
@@ -146,20 +134,26 @@ namespace CrashEdit
                 }
             }
 
-            if (buf_idx > 0)
-            {
-                // uniforms and static data
-                vaoWorld.UserTrans = new(world.XOffset, world.YOffset, world.ZOffset);
-                render.BlendMask = pass == RenderPass.Solid;
+            // uniforms and static data
+            vaoWorld.UserTrans = new(world.XOffset, world.YOffset, world.ZOffset);
 
-                vaoWorld.UpdatePositions(buf_vtx, buf_idx);
-                vaoWorld.UpdateColors(buf_col, buf_idx);
-                vaoWorld.UpdateUVs(buf_uv, buf_idx);
-                vaoWorld.UpdateAttrib(1, "tex", buf_tex, 4, 1, buf_idx);
+            vaoWorld.UpdatePositions(buf_vtx);
+            vaoWorld.UpdateColors(buf_col);
+            vaoWorld.UpdateUVs(buf_uv);
+            vaoWorld.UpdateAttrib(1, "tex", buf_tex, 4, 1);
 
-                SetBlendForRenderPass(pass);
-                vaoWorld.Render(render, vertcount: buf_idx);
-            }
+            // render passes
+            RenderWorldPass(BlendMode.Solid);
+            RenderWorldPass(BlendMode.Trans);
+            RenderWorldPass(BlendMode.Subtractive);
+            RenderWorldPass(BlendMode.Additive);
+        }
+
+        private void RenderWorldPass(BlendMode pass)
+        {
+            SetBlendMode(pass);
+            vaoWorld.BlendMask = (int)pass;
+            vaoWorld.Render(render, vertcount: buf_idx);
         }
 
         private void RenderVertex(OldSceneryVertex vert)
