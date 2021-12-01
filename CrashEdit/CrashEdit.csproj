@@ -202,7 +202,9 @@
       <DependentUpon>OldCameraBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\3D\ProtoZoneEntryViewer.cs" />
-    <Compile Include="Controls\3D\ProtoSceneryEntryViewer.cs" />
+    <Compile Include="Controls\3D\ProtoSceneryEntryViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\ProtoEntityBox.cs">
       <SubType>UserControl</SubType>
     </Compile>

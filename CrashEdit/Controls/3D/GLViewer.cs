@@ -145,7 +145,8 @@ namespace CrashEdit
         protected readonly RenderInfo render;
 
         private int tpage;
-        private VAO vaoBox;
+        private VAO vaoBoxTri;
+        private VAO vaoBoxLine;
         private VAO vaoAxes;
         // private VAO vaoText;
 
@@ -315,8 +316,11 @@ namespace CrashEdit
 
             vaoSphereLine = new VAO(render.ShaderContext, "line-model", PrimitiveType.LineStrip);
             vaoGridLine = new VAO(render.ShaderContext, "line-usercolor", PrimitiveType.Lines);
-            vaoBox = new VAO(render.ShaderContext, "box-model", PrimitiveType.Triangles);
+            vaoBoxTri = new VAO(render.ShaderContext, "box-model", PrimitiveType.Triangles);
+            vaoBoxLine = new VAO(render.ShaderContext, "box-model", PrimitiveType.Lines);
 
+            vaoBoxTri.UpdatePositions(BoxTriVerts);
+            vaoBoxLine.UpdatePositions(BoxLineVerts);
             vaoGridLine.UserColor1 = Color4.Gray;
 
             // make texture
@@ -503,28 +507,24 @@ namespace CrashEdit
 
         private void RenderAxes(Vector3 pos)
         {
-            vaoBox.UserTrans = pos;
+            vaoAxes.UserTrans = pos;
             vaoAxes.Render(render, vertcount: 6);
         }
 
         protected void RenderBox(Vector3 pos, Vector3 size, Color4 col)
         {
-            vaoBox.UserTrans = pos;
-            vaoBox.UserScale = size;
-            vaoBox.UserColor1 = col;
-            vaoBox.Primitive = PrimitiveType.Triangles;
-            vaoBox.UpdatePositions(BoxTriVerts);
-            vaoBox.Render(render, vertcount: BoxTriVerts.Length);
+            vaoBoxTri.UserTrans = pos;
+            vaoBoxTri.UserScale = size;
+            vaoBoxTri.UserColor1 = col;
+            vaoBoxTri.Render(render, vertcount: BoxTriVerts.Length);
         }
 
         protected void RenderBoxLine(Vector3 pos, Vector3 size, Color4 col)
         {
-            vaoBox.UserTrans = pos;
-            vaoBox.UserScale = size;
-            vaoBox.UserColor1 = col;
-            vaoBox.Primitive = PrimitiveType.Lines;
-            vaoBox.UpdatePositions(BoxLineVerts);
-            vaoBox.Render(render, vertcount: BoxLineVerts.Length);
+            vaoBoxLine.UserTrans = pos;
+            vaoBoxLine.UserScale = size;
+            vaoBoxLine.UserColor1 = col;
+            vaoBoxLine.Render(render, vertcount: BoxLineVerts.Length);
         }
 
         protected void RenderBoxFilled(Vector3 pos, Vector3 size, Color4 col)
@@ -621,7 +621,8 @@ namespace CrashEdit
 
             vaoAxes?.Dispose();
             vaoSphereLine?.Dispose();
-            vaoBox?.Dispose();
+            vaoBoxTri?.Dispose();
+            vaoBoxLine?.Dispose();
 
             base.Dispose(disposing);
         }

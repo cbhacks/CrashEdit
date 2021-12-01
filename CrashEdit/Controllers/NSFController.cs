@@ -31,6 +31,8 @@ namespace CrashEdit
             }
             if (GameVersion == GameVersion.Crash1 || GameVersion == GameVersion.Crash1BetaMAR08 || GameVersion == GameVersion.Crash1BetaMAY11)
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC1);
+            else if (GameVersion == GameVersion.Crash1Beta1995)
+                AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC1Proto);
             else if (GameVersion == GameVersion.Crash2)
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC2);
             else if (GameVersion == GameVersion.Crash3)
@@ -268,16 +270,30 @@ namespace CrashEdit
 
         private void Menu_ShowLevelC1()
         {
+            Form frm = new() { Text = "Loading...", Width = 480, Height = 360 };
+            frm.Show();
             List<int> worlds = new();
-            foreach (OldSceneryEntry entry in NSF.GetEntries<OldSceneryEntry>())
+            foreach (var entry in NSF.GetEntries<OldSceneryEntry>())
             {
                 worlds.Add(entry.EID);
             }
-            Form frm = new() { Text = "Loading...", Width = 480, Height = 360 };
             OldSceneryEntryViewer viewer = new(NSF, worlds) { Dock = DockStyle.Fill };
             frm.Controls.Add(viewer);
             frm.Text = string.Empty;
+        }
+
+        private void Menu_ShowLevelC1Proto()
+        {
+            Form frm = new() { Text = "Loading...", Width = 480, Height = 360 };
             frm.Show();
+            List<int> worlds = new();
+            foreach (var entry in NSF.GetEntries<ProtoSceneryEntry>())
+            {
+                worlds.Add(entry.EID);
+            }
+            ProtoSceneryEntryViewer viewer = new(NSF, worlds) { Dock = DockStyle.Fill };
+            frm.Controls.Add(viewer);
+            frm.Text = string.Empty;
         }
 
         private void Menu_ShowLevelC2()
