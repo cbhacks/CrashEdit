@@ -150,9 +150,9 @@ namespace CrashEdit
             }
         }
 
-        protected override void ActualRunLogic()
+        protected override void RunLogic()
         {
-            base.ActualRunLogic();
+            base.RunLogic();
             if (KPress(Keys.C)) collisionenabled = !collisionenabled;
             if (KPress(Keys.N)) normalsenabled = !normalsenabled;
             if (KPress(Keys.I)) interpenabled = !interpenabled;

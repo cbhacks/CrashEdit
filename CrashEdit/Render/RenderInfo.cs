@@ -100,7 +100,7 @@ namespace CrashEdit
 
                         if (parent != null)
                         {
-                            parent.RunLogic();
+                            parent.BeginRunLogic();
                         }
                     }
                 }

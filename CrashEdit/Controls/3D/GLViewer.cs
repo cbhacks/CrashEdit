@@ -324,14 +324,14 @@ namespace CrashEdit
             ResetCamera();
         }
 
-        public void RunLogic()
+        public void BeginRunLogic()
         {
             if (!run) return;
-            ActualRunLogic();
+            RunLogic();
             keyspressed.Clear();
         }
 
-        protected virtual void ActualRunLogic()
+        protected virtual void RunLogic()
         {
             var d = movespeed * PerFrame * (render.Distance / RenderInfo.InitialDistance);
             if (KDown(Keys.ControlKey))
