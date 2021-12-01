@@ -44,7 +44,7 @@ namespace CrashEdit
             OldFrameBox framebox = new OldFrameBox(this);
             framebox.Dock = DockStyle.Fill;
             EntryController entry = OldAnimationEntryController != null ? OldAnimationEntryController : ProtoAnimationEntryController;
-            OldAnimationEntryViewer viewerbox = new OldAnimationEntryViewer(entry.NSF, entry.Entry.EID, OldAnimationEntryController.OldAnimationEntry.Frames.IndexOf(OldFrame), false) { Dock = DockStyle.Fill };
+            OldAnimationEntryViewer viewerbox = new OldAnimationEntryViewer(entry.NSF, entry.Entry.EID, OldAnimationEntryController.OldAnimationEntry.Frames.IndexOf(OldFrame)) { Dock = DockStyle.Fill };
 
             TabPage edittab = new TabPage("Editor");
             edittab.Controls.Add(framebox);

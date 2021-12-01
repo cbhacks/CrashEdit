@@ -27,7 +27,7 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            return new OldAnimationEntryViewer(ColorAnimationEntryController.NSF, ColorAnimationEntryController.Entry.EID, ColorAnimationEntryController.ColoredAnimationEntry.Frames.IndexOf(OldFrame), true);
+            return new OldAnimationEntryViewer(ColorAnimationEntryController.NSF, ColorAnimationEntryController.Entry.EID, ColorAnimationEntryController.ColoredAnimationEntry.Frames.IndexOf(OldFrame));
         }
 
         public ColoredAnimationEntryController ColorAnimationEntryController { get; }

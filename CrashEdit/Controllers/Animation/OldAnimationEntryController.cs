@@ -30,7 +30,7 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            return new UndockableControl(new OldAnimationEntryViewer(NSF, Entry.EID, false));
+            return new UndockableControl(new OldAnimationEntryViewer(NSF, Entry.EID));
         }
 
         public OldAnimationEntry OldAnimationEntry { get; }

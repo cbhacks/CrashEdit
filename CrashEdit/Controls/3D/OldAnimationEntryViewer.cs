@@ -1,11 +1,10 @@
 using Crash;
 using CrashEdit.Properties;
 using OpenTK;
-using OpenTK.Graphics.OpenGL4;
 using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -34,20 +33,18 @@ namespace CrashEdit
 
         protected override bool UseGrid => true;
 
-        public OldAnimationEntryViewer(NSF nsf, int anim_eid, int frame, bool colored)
+        public OldAnimationEntryViewer(NSF nsf, int anim_eid, int frame)
         {
             this.nsf = nsf;
             eid_anim = anim_eid;
             frame_id = frame;
-            this.colored = colored;
         }
 
-        public OldAnimationEntryViewer(NSF nsf, int anim_eid, bool colored)
+        public OldAnimationEntryViewer(NSF nsf, int anim_eid)
         {
             this.nsf = nsf;
             eid_anim = anim_eid;
             frame_id = -1;
-            this.colored = colored;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -62,17 +59,22 @@ namespace CrashEdit
             get
             {
                 IList<OldFrame> frames = null;
-                if (!colored)
                 {
-                    var anim = nsf.GetEntry<OldAnimationEntry>(eid_anim);
-                    if (anim != null)
-                        frames = anim.Frames;
-                }
-                else
-                {
-                    var anim = nsf.GetEntry<ColoredAnimationEntry>(eid_anim);
-                    if (anim != null)
-                        frames = anim.Frames;
+                    var svtx = nsf.GetEntry<OldAnimationEntry>(eid_anim);
+                    if (svtx != null)
+                    {
+                        frames = svtx.Frames;
+                        colored = false;
+                    }
+                    else
+                    {
+                        var cvtx = nsf.GetEntry<ColoredAnimationEntry>(eid_anim);
+                        if (cvtx != null)
+                        {
+                            frames = cvtx.Frames;
+                            colored = true;
+                        }
+                    }
                 }
                 if (frames != null)
                 {
@@ -112,17 +114,22 @@ namespace CrashEdit
             base.Render();
 
             IList<OldFrame> frames = null;
-            if (!colored)
             {
-                var anim = nsf.GetEntry<OldAnimationEntry>(eid_anim);
-                if (anim != null)
-                    frames = anim.Frames;
-            }
-            else
-            {
-                var anim = nsf.GetEntry<ColoredAnimationEntry>(eid_anim);
-                if (anim != null)
-                    frames = anim.Frames;
+                var svtx = nsf.GetEntry<OldAnimationEntry>(eid_anim);
+                if (svtx != null)
+                {
+                    frames = svtx.Frames;
+                    colored = false;
+                }
+                else
+                {
+                    var cvtx = nsf.GetEntry<ColoredAnimationEntry>(eid_anim);
+                    if (cvtx != null)
+                    {
+                        frames = cvtx.Frames;
+                        colored = true;
+                    }
+                }
             }
             if (frames != null)
             {
