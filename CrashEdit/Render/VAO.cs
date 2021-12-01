@@ -66,7 +66,7 @@ namespace CrashEdit
             }
             else
             {
-                Console.WriteLine($"Shader attrib {name} not found in shader {Shader.Name}");
+                // Console.WriteLine($"Shader attrib `{name}` not found in shader `{Shader.Name}`");
             }
         }
 

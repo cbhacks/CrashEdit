@@ -18,12 +18,11 @@ namespace CrashEdit
         private bool collisionenabled = Settings.Default.DisplayFrameCollision;
         private bool normalsenabled = true;
         private bool interpenabled = true;
-        private float interp;
         private int cullmode = 0;
 
         private VAO vaoModel;
         private Vector3[] buf_vtx;
-        //private Vector3[] buf_nor;
+        private Vector3[] buf_nor;
         private Color4[] buf_col;
         private Vector2[] buf_uv;
         private int[] buf_tex;
@@ -130,7 +129,8 @@ namespace CrashEdit
             }
             if (frames != null)
             {
-                OldFrame f2 = null;
+                OldFrame frame2 = null;
+                float interp = 0;
                 if (frames.Count == 1)
                 {
                     cur_frame = 0;
@@ -145,12 +145,72 @@ namespace CrashEdit
                     cur_frame = (int)Math.Floor(prog);
                     if (interpenabled)
                     {
-                        f2 = frames[(int)Math.Ceiling(prog) % frames.Count];
+                        frame2 = frames[(int)Math.Ceiling(prog) % frames.Count];
                         interp = (float)(prog - cur_frame);
                         // Console.WriteLine(string.Format("Render frame {1}+{2}/{0} (i {3})", anim.Frames.Count, cur_frame, (int)Math.Ceiling(prog) % anim.Frames.Count, interp));
                     }
                 }
-                RenderFrame(frames[cur_frame], f2);
+                OldFrame frame1 = frames[cur_frame];
+                if (frame2 != null && (frame2.ModelEID != frame1.ModelEID || frame1.Vertices.Count != frame2.Vertices.Count)) frame2 = null;
+
+                var model = nsf.GetEntry<OldModelEntry>(frame1.ModelEID);
+                if (model == null) return;
+
+                RenderFrame(frame1);
+
+                // uniforms and static data
+                vaoModel.UserTrans = new(frame1.XOffset, frame1.YOffset, frame1.ZOffset);
+                vaoModel.UserScale = new Vector3(model.ScaleX, model.ScaleY, model.ScaleZ) / (GameScales.ModelC1 * GameScales.AnimC1);
+                vaoModel.UserCullMode = cullmode;
+
+                if (frame2 != null)
+                {
+                    // do lerp
+                    var buf_vtx1 = buf_vtx;
+                    var buf_nor1 = buf_nor;
+                    var buf_col1 = buf_col;
+                    RenderFrame(frame2);
+                    var buf_vtx2 = buf_vtx;
+                    var buf_nor2 = buf_nor;
+                    var buf_col2 = buf_col;
+
+                    vaoModel.UserTrans = MathExt.Lerp(vaoModel.UserTrans, new Vector3(frame2.XOffset, frame2.YOffset, frame2.ZOffset), interp);
+
+                    for (int i = 0; i < buf_idx; ++i)
+                    {
+                        buf_vtx[i] = MathExt.Lerp(buf_vtx1[i], buf_vtx2[i], interp);
+                        if (!colored)
+                            buf_nor[i] = MathExt.Lerp(buf_nor1[i], buf_nor2[i], interp);
+                        else
+                            buf_col[i] = MathExt.Lerp(buf_col1[i], buf_col2[i], interp);
+                    }
+                }
+
+                vaoModel.UpdatePositions(buf_vtx);
+                if (!colored)
+                    vaoModel.UpdateNormals(buf_nor);
+                vaoModel.UpdateColors(buf_col);
+                vaoModel.UpdateUVs(buf_uv);
+                vaoModel.UpdateAttrib(1, "tex", buf_tex, 4, 1);
+
+                RenderFramePass(BlendMode.Solid);
+                RenderFramePass(BlendMode.Trans);
+                RenderFramePass(BlendMode.Subtractive);
+                RenderFramePass(BlendMode.Additive);
+
+                if (collisionenabled)
+                {
+                    SetBlendMode(BlendMode.Solid);
+                    GL.DepthMask(false);
+                    var c1 = new Vector3(frame1.X1, frame1.Y1, frame1.Z1) / GameScales.CollisionC1;
+                    var c2 = new Vector3(frame1.X2, frame1.Y2, frame1.Z2) / GameScales.CollisionC1;
+                    var ct = new Vector3(frame1.XGlobal, frame1.YGlobal, frame1.ZGlobal) / GameScales.CollisionC1;
+                    var pos = (c1 + c2) / 2 + ct;
+                    var size = (c2 - c1) / 2;
+                    RenderBox(pos, size, new Color4(0, 1f, 0, 0.2f));
+                    RenderBoxLine(pos, size, new Color4(0, 1f, 0, 1f));
+                    GL.DepthMask(true);
+                }
             }
         }
 
@@ -177,10 +237,8 @@ namespace CrashEdit
             return tex_eids;
         }
 
-        private void RenderFrame(OldFrame frame, OldFrame frame2 = null)
+        private void RenderFrame(OldFrame frame)
         {
-            if (frame2 != null && (frame2.ModelEID != frame.ModelEID || frame.Vertices.Count != frame2.Vertices.Count)) frame2 = null;
-
             var model = nsf.GetEntry<OldModelEntry>(frame.ModelEID);
             if (model != null)
             {
@@ -191,7 +249,8 @@ namespace CrashEdit
                 // alloc buffers
                 int nb = model.Polygons.Count * 3;
                 buf_vtx = new Vector3[nb];
-                //buf_nor = new Vector3[nb];
+                if (!colored)
+                    buf_nor = new Vector3[nb];
                 buf_col = new Color4[nb];
                 buf_uv = new Vector2[nb];
                 buf_tex = new int[nb]; // enable: 1, colormode: 2, blendmode: 2, clutx: 4, cluty: 7, doubleface: 1, page: X (>17 total)
@@ -221,9 +280,9 @@ namespace CrashEdit
                                             | (Convert.ToInt32(tex.N) << 16)
                                             | (tex_eids[tex.EID] << 17)
                                             ;
-                        RenderVertex(frame, frame2, polygon.VertexC / 6);
-                        RenderVertex(frame, frame2, polygon.VertexB / 6);
-                        RenderVertex(frame, frame2, polygon.VertexA / 6);
+                        RenderVertex(frame.Vertices[polygon.VertexC / 6]);
+                        RenderVertex(frame.Vertices[polygon.VertexB / 6]);
+                        RenderVertex(frame.Vertices[polygon.VertexA / 6]);
                     }
                     else
                     {
@@ -235,45 +294,11 @@ namespace CrashEdit
                         buf_col[buf_idx + 1] = buf_col[buf_idx];
                         buf_col[buf_idx + 2] = buf_col[buf_idx];
                         buf_tex[buf_idx + 2] = 0 | (Convert.ToInt32(col.N) << 16);
-                        RenderVertex(frame, frame2, polygon.VertexC / 6);
-                        RenderVertex(frame, frame2, polygon.VertexB / 6);
-                        RenderVertex(frame, frame2, polygon.VertexA / 6);
+                        RenderVertex(frame.Vertices[polygon.VertexC / 6]);
+                        RenderVertex(frame.Vertices[polygon.VertexB / 6]);
+                        RenderVertex(frame.Vertices[polygon.VertexA / 6]);
                     }
                 }
-
-                // uniforms and static data
-                vaoModel.UserTrans = new(frame.XOffset, frame.YOffset, frame.ZOffset);
-                if (frame2 != null)
-                {
-                    vaoModel.UserTrans = MathExt.Lerp(vaoModel.UserTrans, new Vector3(frame2.XOffset, frame2.YOffset, frame2.ZOffset), interp);
-                }
-                vaoModel.UserScale = new Vector3(model.ScaleX, model.ScaleY, model.ScaleZ) / (GameScales.ModelC1 * GameScales.AnimC1);
-                vaoModel.UserCullMode = cullmode;
-
-                vaoModel.UpdatePositions(buf_vtx);
-                //vaoModel.UpdateNormals(buf_nor);
-                vaoModel.UpdateColors(buf_col);
-                vaoModel.UpdateUVs(buf_uv);
-                vaoModel.UpdateAttrib(1, "tex", buf_tex, 4, 1);
-
-                RenderFramePass(BlendMode.Solid);
-                RenderFramePass(BlendMode.Trans);
-                RenderFramePass(BlendMode.Subtractive);
-                RenderFramePass(BlendMode.Additive);
-            }
-
-            if (collisionenabled)
-            {
-                SetBlendMode(BlendMode.Solid);
-                GL.DepthMask(false);
-                var c1 = new Vector3(frame.X1, frame.Y1, frame.Z1) / GameScales.CollisionC1;
-                var c2 = new Vector3(frame.X2, frame.Y2, frame.Z2) / GameScales.CollisionC1;
-                var ct = new Vector3(frame.XGlobal, frame.YGlobal, frame.ZGlobal) / GameScales.CollisionC1;
-                var pos = (c1 + c2) / 2 + ct;
-                var size = (c2 - c1) / 2;
-                RenderBox(pos, size, new Color4(0, 1f, 0, 0.2f));
-                RenderBoxLine(pos, size, new Color4(0, 1f, 0, 1f));
-                GL.DepthMask(true);
             }
         }
 
@@ -284,30 +309,14 @@ namespace CrashEdit
             vaoModel.Render(render, vertcount: buf_idx);
         }
 
-        private void RenderVertex(OldFrame f1, OldFrame f2, int id)
+        private void RenderVertex(OldFrameVertex vert)
         {
-            if (f2 == null)
-            {
-                OldFrameVertex v = f1.Vertices[id];
-                buf_vtx[buf_idx] = new(v.X, v.Y, v.Z);
-                if (colored)
-                    buf_col[buf_idx] = new Color4(buf_col[buf_idx].R * v.Red, buf_col[buf_idx].G * v.Green, buf_col[buf_idx].B * v.Blue, 1);
-                //buf_nor[buf_idx] = new(v.NormalX, v.NormalY, v.NormalZ);
-                buf_idx++;
-            }
+            buf_vtx[buf_idx] = new(vert.X, vert.Y, vert.Z);
+            if (colored)
+                buf_col[buf_idx] = new Color4(buf_col[buf_idx].R * vert.Red, buf_col[buf_idx].G * vert.Green, buf_col[buf_idx].B * vert.Blue, 1);
             else
-            {
-                OldFrameVertex v1 = f1.Vertices[id];
-                OldFrameVertex v2 = f2.Vertices[id];
-                buf_vtx[buf_idx] = MathExt.Lerp(new Vector3(v1.X, v1.Y, v1.Z), new Vector3(v2.X, v2.Y, v2.Z), interp);
-                if (colored)
-                    buf_col[buf_idx] = new Color4(buf_col[buf_idx].R * MathExt.Lerp(v1.Red, v2.Red, interp),
-                                                  buf_col[buf_idx].G * MathExt.Lerp(v1.Green, v2.Green, interp),
-                                                  buf_col[buf_idx].B * MathExt.Lerp(v1.Blue, v2.Blue, interp),
-                                                  1);
-                //buf_nor[buf_idx] = MathExt.Lerp(new Vector3(v1.NormalX, v1.NormalY, v1.NormalZ), new Vector3(v2.NormalX, v2.NormalY, v2.NormalZ), interp);
-                buf_idx++;
-            }
+                buf_nor[buf_idx] = new(vert.NormalX, vert.NormalY, vert.NormalZ);
+            buf_idx++;
         }
 
         protected override void Dispose(bool disposing)
