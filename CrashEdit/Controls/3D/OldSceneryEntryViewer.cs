@@ -88,16 +88,11 @@ namespace CrashEdit
             // setup textures
             var tex_eids = CollectTPAGs();
             SetupTPAGs(tex_eids);
+            int nb = 0;
             foreach (var world in GetWorlds())
             {
-                RenderWorld(world, tex_eids);
+                nb += world.Polygons.Count * 3;
             }
-        }
-
-        protected void RenderWorld(OldSceneryEntry world, Dictionary<int, int> tex_eids)
-        {
-            // alloc buffers
-            int nb = world.Polygons.Count * 3;
             buf_vtx = new Vector3[nb];
             buf_col = new Color4[nb];
             buf_uv = new Vector2[nb];
@@ -105,7 +100,25 @@ namespace CrashEdit
 
             // render stuff
             buf_idx = 0;
+            foreach (var world in GetWorlds())
+            {
+                RenderWorld(world, tex_eids);
+            }
 
+            vaoWorld.UpdatePositions(buf_vtx);
+            vaoWorld.UpdateColors(buf_col);
+            vaoWorld.UpdateUVs(buf_uv);
+            vaoWorld.UpdateAttrib(1, "tex", buf_tex, 4, 1);
+
+            // render passes
+            RenderWorldPass(BlendMode.Solid);
+            RenderWorldPass(BlendMode.Trans);
+            RenderWorldPass(BlendMode.Subtractive);
+            RenderWorldPass(BlendMode.Additive);
+        }
+
+        protected void RenderWorld(OldSceneryEntry world, Dictionary<int, int> tex_eids)
+        {
             foreach (OldSceneryPolygon polygon in world.Polygons)
             {
                 OldModelStruct str = world.Structs[polygon.ModelStruct];
@@ -121,32 +134,18 @@ namespace CrashEdit
                                         | (tex.ClutY << 9)
                                         | (tex_eids[world.GetTPAG(polygon.Page)] << 17)
                                         ;
-                    RenderVertex(world.Vertices[polygon.VertexA]);
-                    RenderVertex(world.Vertices[polygon.VertexB]);
-                    RenderVertex(world.Vertices[polygon.VertexC]);
+                    RenderVertex(world, world.Vertices[polygon.VertexA]);
+                    RenderVertex(world, world.Vertices[polygon.VertexB]);
+                    RenderVertex(world, world.Vertices[polygon.VertexC]);
                 }
                 else
                 {
                     buf_tex[buf_idx + 2] = 0;
-                    RenderVertex(world.Vertices[polygon.VertexA]);
-                    RenderVertex(world.Vertices[polygon.VertexB]);
-                    RenderVertex(world.Vertices[polygon.VertexC]);
+                    RenderVertex(world, world.Vertices[polygon.VertexA]);
+                    RenderVertex(world, world.Vertices[polygon.VertexB]);
+                    RenderVertex(world, world.Vertices[polygon.VertexC]);
                 }
             }
-
-            // uniforms and static data
-            vaoWorld.UserTrans = new(world.XOffset, world.YOffset, world.ZOffset);
-
-            vaoWorld.UpdatePositions(buf_vtx);
-            vaoWorld.UpdateColors(buf_col);
-            vaoWorld.UpdateUVs(buf_uv);
-            vaoWorld.UpdateAttrib(1, "tex", buf_tex, 4, 1);
-
-            // render passes
-            RenderWorldPass(BlendMode.Solid);
-            RenderWorldPass(BlendMode.Trans);
-            RenderWorldPass(BlendMode.Subtractive);
-            RenderWorldPass(BlendMode.Additive);
         }
 
         private void RenderWorldPass(BlendMode pass)
@@ -156,9 +155,9 @@ namespace CrashEdit
             vaoWorld.Render(render, vertcount: buf_idx);
         }
 
-        private void RenderVertex(OldSceneryVertex vert)
+        private void RenderVertex(OldSceneryEntry world, OldSceneryVertex vert)
         {
-            buf_vtx[buf_idx] = new(vert.X, vert.Y, vert.Z);
+            buf_vtx[buf_idx] = new Vector3(vert.X, vert.Y, vert.Z) + new Vector3(world.XOffset, world.YOffset, world.ZOffset);
             buf_col[buf_idx] = new(vert.Red, vert.Green, vert.Blue, 255);
             buf_idx++;
         }
