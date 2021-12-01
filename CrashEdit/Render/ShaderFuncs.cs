@@ -20,6 +20,8 @@ namespace CrashEdit
             sh.UniformVec4("userColor1", ref ri.Projection.UserColor1);
             sh.UniformVec4("userColor2", ref ri.Projection.UserColor2);
             sh.UniformInt("colorMode", (int)ri.Projection.ColorMode);
+
+            sh.UniformBool("enableTex", ri.EnableTexture);
         }
 
         internal static void RenderTest(Shader sh, RenderInfo ri)

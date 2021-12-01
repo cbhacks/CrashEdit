@@ -5,6 +5,7 @@ layout(binding=0) uniform usampler2D vram8;
 uniform int cullmode;
 uniform int blendmask;  // if on, masks away blend-texels (additive/subtractive)
                         // if off, masks away non-blend-texels
+uniform int enableTex;
 
 in vec3 p_Color;
 in vec2 p_UV;
@@ -42,7 +43,7 @@ void main()
         if (cullmode == 1 && gl_FrontFacing) discard;
     }
     f_col = vec4(p_Color, 1.0);
-    if (enable == 1) {
+    if (enable == 1 && enableTex != 0) {
         int tpage = p_Tex >> 17;
         int cmode = (p_Tex >> 1) & 0x3;
         int bmode = (p_Tex >> 3) & 0x3;

@@ -15,6 +15,7 @@ namespace CrashEdit
         public ProjectionInfo Projection;
         public ShaderContext ShaderContext;
         public RendererMoveMode MoveMode;
+        public bool EnableTexture = true;
 
         public const float InitialDistance = 5;
         public const float MinDistance = 0.5f;

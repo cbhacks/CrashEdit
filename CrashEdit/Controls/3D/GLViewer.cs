@@ -358,6 +358,7 @@ namespace CrashEdit
                 render.Reset();
                 ResetCamera();
             }
+            if (KPress(Keys.T)) render.EnableTexture = !render.EnableTexture;
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -453,7 +454,9 @@ namespace CrashEdit
 
                 // Clear buffers
                 GL.DepthMask(true);
-                GL.ClearColor(Color.FromArgb(Properties.Settings.Default.ClearColorRGB));
+                var col = Properties.Settings.Default.ClearColorRGB;
+                if ((col & 0xffffff) == 0) col = 0;
+                GL.ClearColor(Color.FromArgb(col));
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
                 // set up view matrices (45º FOV)

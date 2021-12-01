@@ -19,7 +19,6 @@ namespace CrashEdit
         private int cur_frame = 0;
         private bool colored;
         private bool collisionenabled = Settings.Default.DisplayFrameCollision;
-        private bool texturesenabled = true;
         private bool normalsenabled = true;
         private bool interpenabled = true;
         private float interp;
@@ -156,7 +155,6 @@ namespace CrashEdit
             base.ActualRunLogic();
             if (KPress(Keys.C)) collisionenabled = !collisionenabled;
             if (KPress(Keys.N)) normalsenabled = !normalsenabled;
-            if (KPress(Keys.T)) texturesenabled = !texturesenabled;
             if (KPress(Keys.I)) interpenabled = !interpenabled;
             if (KPress(Keys.U)) cullmode = ++cullmode % 3;
         }
