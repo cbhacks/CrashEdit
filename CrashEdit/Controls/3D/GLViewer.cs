@@ -29,6 +29,7 @@ namespace CrashEdit
                 GL.TexImage2D(TextureTarget.Texture2D,0,PixelInternalFormat.Rgba,image.Width,image.Height,0,OpenTK.Graphics.OpenGL4.PixelFormat.Bgra,PixelType.UnsignedByte,data.Scan0);
                 GL.TexParameter(TextureTarget.Texture2D,TextureParameterName.TextureMinFilter,(int)TextureMinFilter.Nearest);
                 GL.TexParameter(TextureTarget.Texture2D,TextureParameterName.TextureMagFilter,(int)TextureMagFilter.Nearest);
+                lastimage = image;
             }
             catch
             {
@@ -37,7 +38,6 @@ namespace CrashEdit
             finally
             {
                 image.UnlockBits(data);
-                lastimage = image;
             }
         }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
@@ -257,10 +258,20 @@ namespace CrashEdit
         [ExternalTexture(4,4,2,1)]
         private static Bitmap fruittawna = null;
 
+        private static Bitmap alltex = null;
+
         static OldResources()
         {
-            ResourceManager manager = new ResourceManager("CrashEdit.OldResources",Assembly.GetExecutingAssembly());
-            foreach (FieldInfo field in typeof(OldResources).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+            List<FieldInfo> allfields = new();
+            foreach (var field in typeof(OldResources).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+            {
+                if (field.Name != "alltex")
+                {
+                    allfields.Add(field);
+                }
+            }
+            var manager = new ResourceManager("CrashEdit.OldResources",Assembly.GetExecutingAssembly());
+            foreach (FieldInfo field in allfields)
             {
                 foreach (ResourceAttribute attribute in field.GetCustomAttributes(typeof(ResourceAttribute),false))
                 {
@@ -274,7 +285,7 @@ namespace CrashEdit
             {
                 using (Image texturespng = Image.FromFile(texturespngfilename))
                 {
-                    foreach (FieldInfo field in typeof(OldResources).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+                    foreach (FieldInfo field in allfields)
                     {
                         foreach (ExternalTextureAttribute attribute in field.GetCustomAttributes(typeof(ExternalTextureAttribute),false))
                         {
@@ -284,7 +295,7 @@ namespace CrashEdit
                             int y = attribute.Y * 32;
                             if (texturespng.Width < x+w || texturespng.Height < y+h)
                                 continue;
-                            Bitmap texture = new Bitmap(w,h);
+                            var texture = new Bitmap(w,h);
                             using (Graphics g = Graphics.FromImage(texture))
                             {
                                 g.DrawImage(texturespng,new Rectangle(0,0,w,h),new Rectangle(x,y,w,h),GraphicsUnit.Pixel);
@@ -294,7 +305,47 @@ namespace CrashEdit
                     }
                 }
             }
+            List<Bitmap> bmps = new();
+            foreach (FieldInfo field in allfields)
+            {
+                if (field.FieldType == typeof(Bitmap))
+                {
+                    bmps.Add(field.GetValue(null) as Bitmap);
+                }
+            }
+            int aw = 0, tw = 0, th = 0, mh = int.MaxValue;
+            foreach (var bmp in bmps)
+            {
+                tw = Math.Max(tw, bmp.Width);
+                th = Math.Max(th, bmp.Height);
+                mh = Math.Min(mh, bmp.Height);
+                aw += bmp.Width;
+            }
+            bmps.Sort((Bitmap a, Bitmap b) =>
+            {
+                int d = b.Width - a.Width;
+                if (d == 0)
+                {
+                    d = b.Height - a.Height;
+                }
+                return d;
+            });
+            alltex = new(aw, th);
+            TexMap = new();
+            using (Graphics g = Graphics.FromImage(alltex))
+            {
+                int curx = 0;
+                foreach (var bmp in bmps)
+                {
+                    var destRect = new Rectangle(curx, 0, bmp.Width, bmp.Height);
+                    g.DrawImage(bmp, destRect, new Rectangle(0, 0, bmp.Width, bmp.Height), GraphicsUnit.Pixel);
+                    TexMap.Add(bmp, destRect);
+                    curx += bmp.Width;
+                }
+            }
         }
+
+        public static Dictionary<Bitmap, Rectangle> TexMap { get; }
 
         public static Icon NSDIcon => nsdicon;
         public static Icon NSFIcon => nsficon;
