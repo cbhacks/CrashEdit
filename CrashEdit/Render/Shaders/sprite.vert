@@ -1,6 +1,6 @@
 ﻿#version 430 core
 
-in vec4 position;
+in vec2 position;
 in vec2 uv;
 
 uniform mat4 projectionMatrix;

@@ -13,13 +13,13 @@ namespace CrashEdit
 {
     public abstract class GLViewer : GLControl
     {
-        static readonly Vector4[] SpriteVerts = new Vector4[4] {
-            new(-.5f, -.5f, 0, 1),
-            new(-.5f, +.5f, 0, 1),
-            new(+.5f, +.5f, 0, 1),
-            //new(+.5f, +.5f, 0, 1),
-            new(+.5f, -.5f, 0, 1)
-            //new(-.5f, -.5f, 0, 1)
+        static readonly Vector2[] SpriteVerts = new Vector2[4] {
+            new(-.5f, -.5f),
+            new(-.5f, +.5f),
+            new(+.5f, +.5f),
+            //new(+.5f, +.5f),
+            new(+.5f, -.5f)
+            //new(-.5f, -.5f)
         };
         static readonly Vector3[] AxesPos = new Vector3[6] {
             new(-.5f, 0, 0),
@@ -314,10 +314,10 @@ namespace CrashEdit
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8ui, 512, 0, 0, OpenTK.Graphics.OpenGL4.PixelFormat.RedInteger, PixelType.UnsignedByte, IntPtr.Zero);
 
+            ResetCamera();
+
             // enable logic
             run = true;
-
-            ResetCamera();
         }
 
         public void BeginRunLogic()
@@ -439,7 +439,7 @@ namespace CrashEdit
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (render.Started)
+            if (run)
             {
                 MakeCurrent();
 
@@ -524,6 +524,7 @@ namespace CrashEdit
         protected void RenderSprite(Vector3 trans, Vector2 size, Color4 col, Bitmap texture)
         {
             var texRect = OldResources.TexMap[texture];
+            //Console.WriteLine($"TEXTURE: {texRect.Left},{texRect.Top}/{texRect.Right},{texRect.Bottom}");
             var uvs = new Vector2[4];
             uvs[0] = new Vector2(texRect.Left, texRect.Bottom);
             uvs[1] = new Vector2(texRect.Left, texRect.Top);
@@ -531,6 +532,7 @@ namespace CrashEdit
             //uvs[3] = new Vector2(texRect.Right, texRect.Top);
             uvs[3] = new Vector2(texRect.Right, texRect.Bottom);
             //uvs[5] = new Vector2(texRect.Left, texRect.Bottom);
+            vaoSprites.UpdatePositions(SpriteVerts);
             vaoSprites.UpdateUVs(uvs);
             vaoSprites.UserTrans = trans;
             vaoSprites.UserScale = new Vector3(size);

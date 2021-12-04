@@ -44,24 +44,16 @@ namespace CrashEdit
                 GL.BindBuffer(BufferTarget.ArrayBuffer, buf);
                 GL.BufferData(BufferTarget.ArrayBuffer, (eltcount == -1 ? data.Length : eltcount) * eltsize, data, BufferUsageHint.DynamicDraw);
                 // setup the position attribute.
-                if (etype == 1)
+                switch (etype)
                 {
-                    GL.VertexAttribIPointer(loc, components, VertexAttribIntegerType.Int, 0, IntPtr.Zero);
-                }
-                else if (etype == 2)
-                {
-                    GL.VertexAttribIPointer(loc, components, VertexAttribIntegerType.UnsignedShort, 0, IntPtr.Zero);
-                }
-                else if (etype == 3)
-                {
-                    GL.VertexAttribIPointer(loc, components, VertexAttribIntegerType.UnsignedByte, 0, IntPtr.Zero);
-                }
-                else if (etype == 0)
-                {
-                    GL.VertexAttribPointer(loc, components, VertexAttribPointerType.Float, false, 0, 0);
+                    case 1: GL.VertexAttribIPointer(loc, components, VertexAttribIntegerType.Int, 0, IntPtr.Zero); break;
+                    case 2: GL.VertexAttribIPointer(loc, components, VertexAttribIntegerType.UnsignedShort, 0, IntPtr.Zero); break;
+                    case 3: GL.VertexAttribIPointer(loc, components, VertexAttribIntegerType.UnsignedByte, 0, IntPtr.Zero); break;
+                    default: GL.VertexAttribPointer(loc, components, VertexAttribPointerType.Float, false, 0, 0); break;
                 }
                 GL.EnableVertexAttribArray(loc);
 
+                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
                 GL.BindVertexArray(0);
             }
             else
@@ -70,12 +62,17 @@ namespace CrashEdit
             }
         }
 
-        public void UpdatePositions(Vector4[] positions, int eltc = -1) => UpdateAttrib(0, "position", positions, 16, 4, eltc);
-        public void UpdatePositions(Vector3[] positions, int eltc = -1) => UpdateAttrib(0, "position", positions, 12, 3, eltc);
-        public void UpdatePositions(Vector2[] positions, int eltc = -1) => UpdateAttrib(0, "position", positions, 8, 2, eltc);
+        public void UpdateVectors(Vector4[] vec, string name, int eltc = -1) => UpdateAttrib(0, name, vec, 16, 4, eltc);
+        public void UpdateVectors(Vector3[] vec, string name, int eltc = -1) => UpdateAttrib(0, name, vec, 12, 3, eltc);
+        public void UpdateVectors(Vector2[] vec, string name, int eltc = -1) => UpdateAttrib(0, name, vec, 8, 2, eltc);
+        public void UpdatePositions(Vector4[] positions, int eltc = -1) => UpdateVectors(positions, "position", eltc);
+        public void UpdatePositions(Vector3[] positions, int eltc = -1) => UpdateVectors(positions, "position", eltc);
+        public void UpdatePositions(Vector2[] positions, int eltc = -1) => UpdateVectors(positions, "position", eltc);
+        public void UpdateUVs(Vector4[] positions, int eltc = -1) => UpdateVectors(positions, "uv", eltc);
+        public void UpdateUVs(Vector3[] positions, int eltc = -1) => UpdateVectors(positions, "uv", eltc);
+        public void UpdateUVs(Vector2[] positions, int eltc = -1) => UpdateVectors(positions, "uv", eltc);
         public void UpdateNormals(Vector3[] positions, int eltc = -1) => UpdateAttrib(0, "normal", positions, 12, 3, eltc);
         public void UpdateColors(Color4[] colors, int eltc = -1) => UpdateAttrib(0, "color", colors, 16, 4, eltc);
-        public void UpdateUVs(Vector2[] uvs, int eltc = -1) => UpdateAttrib(0, "uv", uvs, 8, 2, eltc);
 
         public void Dispose()
         {
@@ -94,6 +91,8 @@ namespace CrashEdit
 
             // This draws the triangle.
             GL.DrawArrays(Primitive, 0, vertcount == -1 ? VertCount : vertcount);
+
+            GL.BindVertexArray(0);
         }
 
         #region USER DATA (these can be whatever you want)

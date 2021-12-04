@@ -45,7 +45,6 @@ namespace CrashEdit
         public long RealCurrentFrame => _framewatch.ElapsedFrames();
         public double FullCurrentFrame => _framewatch.ElapsedFramesFull();
         public long MissedFrames => RealCurrentFrame - _framehits;
-        public bool Started => !masterexit;
 
         public readonly object mLock = new();
 
