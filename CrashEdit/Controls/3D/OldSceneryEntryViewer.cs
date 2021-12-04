@@ -30,7 +30,7 @@ namespace CrashEdit
             this.worlds = new(worlds);
         }
 
-        private IEnumerable<OldSceneryEntry> GetWorlds()
+        protected IEnumerable<OldSceneryEntry> GetWorlds()
         {
             foreach (int eid in worlds)
             {
@@ -40,6 +40,11 @@ namespace CrashEdit
                     yield return world;
                 }
             }
+        }
+
+        protected void SetWorlds(IEnumerable<int> worlds)
+        {
+            this.worlds = new(worlds);
         }
 
         protected override IEnumerable<IPosition> CorePositions

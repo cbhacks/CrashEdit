@@ -29,7 +29,7 @@ void main(void)
             gl_Position = projectionMatrix * viewMatrix * vec4( (position+trans-128.0)*scale, 1.0 );
             break;
     }
-    p_Color = vec3(color);
+    p_Color = color.rgb;
     p_UV = uv;
     p_Tex = tex;
 }

@@ -252,7 +252,9 @@
     <Compile Include="Controls\EntityBox.Designer.cs">
       <DependentUpon>EntityBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\3D\OldZoneEntryViewer.cs" />
+    <Compile Include="Controls\3D\OldZoneEntryViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\3D\NewZoneEntryViewer.cs" />
     <Compile Include="Controls\3D\ZoneEntryViewer.cs" />
     <Compile Include="Controls\UndockableControl.cs">
@@ -459,6 +461,8 @@
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Render\Shaders\box-model.vert" />
+    <EmbeddedResource Include="Render\Shaders\sprite.vert" />
+    <EmbeddedResource Include="Render\Shaders\sprite.frag" />
     <None Include="Resources\objects_012_red.gif" />
     <Content Include="Resources\objects_012_violet.gif" />
     <None Include="Resources\objects_012_yellow.gif" />

@@ -13,34 +13,14 @@ namespace CrashEdit
 {
     public abstract class GLViewer : GLControl
     {
-        protected static readonly CullFaceMode[] cullFaceModes = { CullFaceMode.Back, CullFaceMode.Front, CullFaceMode.FrontAndBack };
-
-        private static Bitmap lastimage = null;
-        private static int defaulttexture = 0;
-
-        protected static void LoadTexture(Bitmap image)
-        {
-            if (defaulttexture == 0) defaulttexture = GL.GenTexture();
-            if (image == lastimage) return; // no reload
-            BitmapData data = image.LockBits(new Rectangle(Point.Empty,image.Size),ImageLockMode.ReadOnly,System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            try
-            {
-                GL.BindTexture(TextureTarget.Texture2D, defaulttexture);
-                GL.TexImage2D(TextureTarget.Texture2D,0,PixelInternalFormat.Rgba,image.Width,image.Height,0,OpenTK.Graphics.OpenGL4.PixelFormat.Bgra,PixelType.UnsignedByte,data.Scan0);
-                GL.TexParameter(TextureTarget.Texture2D,TextureParameterName.TextureMinFilter,(int)TextureMinFilter.Nearest);
-                GL.TexParameter(TextureTarget.Texture2D,TextureParameterName.TextureMagFilter,(int)TextureMagFilter.Nearest);
-                lastimage = image;
-            }
-            catch
-            {
-                GL.BindTexture(TextureTarget.Texture2D, 0);
-            }
-            finally
-            {
-                image.UnlockBits(data);
-            }
-        }
-
+        static readonly Vector4[] SpriteVerts = new Vector4[4] {
+            new(-.5f, -.5f, 0, 1),
+            new(-.5f, +.5f, 0, 1),
+            new(+.5f, +.5f, 0, 1),
+            //new(+.5f, +.5f, 0, 1),
+            new(+.5f, -.5f, 0, 1)
+            //new(-.5f, -.5f, 0, 1)
+        };
         static readonly Vector3[] AxesPos = new Vector3[6] {
             new(-.5f, 0, 0),
             new(1, 0, 0),
@@ -136,10 +116,10 @@ namespace CrashEdit
             new(-1, +1, -1)
         };
         private readonly Dictionary<int, Vector4[]> SpherePosCache = new();
-        private int SpherePosLastUploaded = -1;
-        protected VAO vaoSphereLine;
         private readonly Dictionary<int, Vector4[]> GridPosCache = new();
+        private int SpherePosLastUploaded = -1;
         private int GridPosLastUploaded = -1;
+        protected VAO vaoSphereLine;
         protected VAO vaoGridLine;
 
         protected readonly RenderInfo render;
@@ -148,6 +128,7 @@ namespace CrashEdit
         private VAO vaoBoxTri;
         private VAO vaoBoxLine;
         private VAO vaoAxes;
+        private VAO vaoSprites;
         // private VAO vaoText;
 
         private bool run = false;
@@ -318,9 +299,11 @@ namespace CrashEdit
             vaoGridLine = new VAO(render.ShaderContext, "line-usercolor", PrimitiveType.Lines);
             vaoBoxTri = new VAO(render.ShaderContext, "box-model", PrimitiveType.Triangles);
             vaoBoxLine = new VAO(render.ShaderContext, "box-model", PrimitiveType.Lines);
+            vaoSprites = new(render.ShaderContext, "sprite", PrimitiveType.TriangleFan);
 
             vaoBoxTri.UpdatePositions(BoxTriVerts);
             vaoBoxLine.UpdatePositions(BoxLineVerts);
+            vaoSprites.UpdatePositions(SpriteVerts);
             vaoGridLine.UserColor1 = Color4.Gray;
 
             // make texture
@@ -460,27 +443,27 @@ namespace CrashEdit
             {
                 MakeCurrent();
 
-                // set up viewport clip
-                GL.Viewport(0, 0, Width, Height);
-                render.Projection.Width = Width;
-                render.Projection.Height = Height;
-
-                // Clear buffers
-                GL.DepthMask(true);
-                var col = Properties.Settings.Default.ClearColorRGB;
-                if ((col & 0xffffff) == 0) col = 0;
-                GL.ClearColor(Color.FromArgb(col));
-                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-                // set up view matrices (45º FOV)
-                render.Projection.Perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45), render.Projection.Aspect, 0.25f, 8192);
-                var rot_mat = Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot));
-                var test_vec = (rot_mat * new Vector4(0, 0, render.Distance, 1)).Xyz;
-                render.Projection.View = Matrix4.CreateTranslation(render.Projection.Trans - test_vec) * rot_mat;
-
                 // mutex lock to prevent races with the renderinfo timer and using the renderinfo itself
                 lock (render.mLock)
                 {
+                    // set up viewport clip
+                    GL.Viewport(0, 0, Width, Height);
+                    render.Projection.Width = Width;
+                    render.Projection.Height = Height;
+
+                    // Clear buffers
+                    GL.DepthMask(true);
+                    var col = Properties.Settings.Default.ClearColorRGB;
+                    if ((col & 0xffffff) == 0) col = 0;
+                    GL.ClearColor(Color.FromArgb(col));
+                    GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+                    // set up view matrices (45º FOV)
+                    render.Projection.Perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45), render.Projection.Aspect, 0.25f, 8192);
+                    var rot_mat = Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot));
+                    var test_vec = (rot_mat * new Vector4(0, 0, render.Distance, 1)).Xyz;
+                    render.Projection.View = Matrix4.CreateTranslation(render.Projection.Trans - test_vec) * rot_mat;
+
                     // render
                     Render();
                 }
@@ -531,6 +514,28 @@ namespace CrashEdit
         {
             RenderBox(pos, size, col);
             RenderBoxLine(pos, size, col);
+        }
+
+        protected void RenderBoxAB(Vector3 a, Vector3 b, Color4 col) =>     RenderBox((a + b) / 2, (b - a) / 2, col);
+        protected void RenderBoxLineAB(Vector3 a, Vector3 b, Color4 col) => RenderBoxLine((a + b) / 2, (b - a) / 2, col);
+        protected void RenderBoxAS(Vector3 a, Vector3 b, Color4 col) =>     RenderBox(a + b / 2, b / 2, col);
+        protected void RenderBoxLineAS(Vector3 a, Vector3 b, Color4 col) => RenderBoxLine(a + b / 2, b / 2, col);
+
+        protected void RenderSprite(Vector3 trans, Vector2 size, Color4 col, Bitmap texture)
+        {
+            var texRect = OldResources.TexMap[texture];
+            var uvs = new Vector2[4];
+            uvs[0] = new Vector2(texRect.Left, texRect.Bottom);
+            uvs[1] = new Vector2(texRect.Left, texRect.Top);
+            uvs[2] = new Vector2(texRect.Right, texRect.Top);
+            //uvs[3] = new Vector2(texRect.Right, texRect.Top);
+            uvs[3] = new Vector2(texRect.Right, texRect.Bottom);
+            //uvs[5] = new Vector2(texRect.Left, texRect.Bottom);
+            vaoSprites.UpdateUVs(uvs);
+            vaoSprites.UserTrans = trans;
+            vaoSprites.UserScale = new Vector3(size);
+            vaoSprites.UserColor1 = col;
+            vaoSprites.Render(render, vertcount: uvs.Length);
         }
 
         public void ResetCamera()
@@ -590,6 +595,7 @@ namespace CrashEdit
 
         protected void SetupTPAGs(Dictionary<int, int> tex_eids)
         {
+            GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, tpage);
 
             // fill texture
@@ -616,6 +622,8 @@ namespace CrashEdit
             GL.UseProgram(0);
 
             // Delete all the resources.
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
             GL.DeleteTexture(tpage);
             render.ShaderContext.KillShaders();
 
@@ -623,6 +631,7 @@ namespace CrashEdit
             vaoSphereLine?.Dispose();
             vaoBoxTri?.Dispose();
             vaoBoxLine?.Dispose();
+            vaoSprites?.Dispose();
 
             base.Dispose(disposing);
         }

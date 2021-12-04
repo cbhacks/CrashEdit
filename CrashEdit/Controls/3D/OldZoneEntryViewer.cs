@@ -1,137 +1,171 @@
-/*
 using Crash;
-using OpenTK.Graphics.OpenGL;
+using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
+using System;
 
 namespace CrashEdit
 {
     public sealed class OldZoneEntryViewer : OldSceneryEntryViewer
     {
-        private static byte[] stipplea;
-        private static byte[] stippleb;
+        private int sprites;
+        // private VAO vaoStuff;
 
-        static OldZoneEntryViewer()
+        private List<int> zones;
+        private int this_zone;
+
+        public OldZoneEntryViewer(NSF nsf, int zone_eid) : base(nsf, new List<int>())
         {
-            stipplea = new byte[128];
-            stippleb = new byte[128];
-            for (int i = 0; i < 128; i += 8)
-            {
-                stipplea[i + 0] = 0x55;
-                stipplea[i + 1] = 0x55;
-                stipplea[i + 2] = 0x55;
-                stipplea[i + 3] = 0x55;
-                stipplea[i + 4] = 0xAA;
-                stipplea[i + 5] = 0xAA;
-                stipplea[i + 6] = 0xAA;
-                stipplea[i + 7] = 0xAA;
-                stippleb[i + 0] = 0xAA;
-                stippleb[i + 1] = 0xAA;
-                stippleb[i + 2] = 0xAA;
-                stippleb[i + 3] = 0xAA;
-                stippleb[i + 4] = 0x55;
-                stippleb[i + 5] = 0x55;
-                stippleb[i + 6] = 0x55;
-                stippleb[i + 7] = 0x55;
-            }
+            zones = new() { zone_eid };
+            this_zone = zone_eid;
         }
 
-        private OldZoneEntry entry;
-        private OldZoneEntry[] linkedentries;
-        private CommonZoneEntryViewer common;
-
-        public string EntryName => entry.EName;
-
-        public OldZoneEntryViewer(OldZoneEntry entry,OldSceneryEntry[] linkedsceneryentries,TextureChunk[][] texturechunks,OldZoneEntry[] linkedentries) 
-            : base(linkedsceneryentries,texturechunks)
+        protected override void OnLoad(EventArgs e)
         {
-            this.entry = entry;
-            this.linkedentries = linkedentries;
-            common = new CommonZoneEntryViewer(linkedentries.Length + 1);
+            base.OnLoad(e);
+
+            // vaoStuff = new(render.ShaderContext, "crash1", PrimitiveType.Triangles);
+
+            // make texture for sprites
+            sprites = GL.GenTexture();
+            GL.ActiveTexture(TextureUnit.Texture1);
+            GL.BindTexture(TextureTarget.Texture2D, sprites);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+            BitmapData data = OldResources.AllTex.LockBits(new Rectangle(Point.Empty, OldResources.AllTex.Size), ImageLockMode.ReadOnly, OldResources.AllTex.PixelFormat);
+            try
+            {
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba8ui, OldResources.AllTex.Width, OldResources.AllTex.Height, 0, OpenTK.Graphics.OpenGL4.PixelFormat.BgraInteger, PixelType.UnsignedByte, data.Scan0);
+            }
+            catch
+            {
+                GL.BindTexture(TextureTarget.Texture2D, 0);
+                Console.WriteLine("Error making texture.");
+            }
+            finally
+            {
+                OldResources.AllTex.UnlockBits(data);
+            }
         }
 
         protected override IEnumerable<IPosition> CorePositions
         {
             get
             {
-                int xoffset = BitConv.FromInt32(entry.Layout,0);
-                int yoffset = BitConv.FromInt32(entry.Layout,4);
-                int zoffset = BitConv.FromInt32(entry.Layout,8);
-                yield return new Position(xoffset,yoffset,zoffset);
-                int x2 = BitConv.FromInt32(entry.Layout,12);
-                int y2 = BitConv.FromInt32(entry.Layout,16);
-                int z2 = BitConv.FromInt32(entry.Layout,20);
-                yield return new Position(x2 + xoffset, y2 + yoffset, z2 + zoffset);
-                foreach (OldEntity entity in entry.Entities)
+                var zone = nsf.GetEntry<OldZoneEntry>(this_zone);
+                var zonetrans = new Position(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
+                yield return zonetrans;
+                yield return new Position(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1 + zonetrans;
+                foreach (OldEntity entity in zone.Entities)
                 {
                     foreach (EntityPosition position in entity.Positions)
                     {
-                        int x = (entity.Type != 34 ? position.X : position.X + 50) + xoffset;
-                        int y = (entity.Type != 34 ? position.Y : position.Y + 50) + yoffset;
-                        int z = (entity.Type != 34 ? position.Z : position.Z + 50) + zoffset;
-                        yield return new Position(x,y,z);
+                        int x = entity.Type != 34 ? position.X : position.X + 50;
+                        int y = entity.Type != 34 ? position.Y : position.Y + 50;
+                        int z = entity.Type != 34 ? position.Z : position.Z + 50;
+                        yield return new Position(x,y,z) / GameScales.ZoneEntityC1 + zonetrans;
                     }
                 }
-                foreach (OldCamera camera in entry.Cameras)
+                foreach (OldCamera camera in zone.Cameras)
                 {
                     foreach (OldCameraPosition position in camera.Positions)
                     {
-                        int x = position.X + xoffset;
-                        int y = position.Y + yoffset;
-                        int z = position.Z + zoffset;
-                        yield return new Position(x,y,z);
+                        int x = position.X;
+                        int y = position.Y;
+                        int z = position.Z;
+                        yield return new Position(x,y,z) / GameScales.ZoneCameraC1 + zonetrans;
                     }
                 }
             }
         }
 
-        protected override int CameraRangeMinimum => 800;
-
-        protected override bool IsInputKey(Keys keyData)
+        private IEnumerable<OldZoneEntry> GetZones()
         {
-            bool? settingsinput = common.IsInputKey(keyData);
-            if (settingsinput != null)
-                return settingsinput.Value;
-            switch (keyData)
+            var ret = new List<OldZoneEntry>();
+            foreach (int eid in zones)
             {
-                default:
-                    return base.IsInputKey(keyData);
+                var zone = nsf.GetEntry<OldZoneEntry>(eid);
+                if (zone != null)
+                {
+                    for (int i = 0; i < zone.ZoneCount; ++i)
+                    {
+                        var lzone = nsf.GetEntry<OldZoneEntry>(zone.GetLinkedZone(i));
+                        if (lzone != null && !ret.Contains(lzone))
+                        {
+                            ret.Add(lzone);
+                        }
+                    }
+                }
+            }
+            return ret;
+        }
+
+        protected override void Render()
+        {
+            var allzones = GetZones();
+            List<int> worlds = new();
+            foreach (var zone in allzones)
+            {
+                for (int i = 0; i < zone.WorldCount; ++i)
+                {
+                    var world = zone.GetLinkedWorld(i);
+                    if (!worlds.Contains(world))
+                        worlds.Add(world);
+                }
+            }
+            SetWorlds(worlds);
+
+            base.Render();
+
+            SetBlendMode(BlendMode.Solid);
+            foreach (var zone in allzones)
+            {
+                RenderZone(zone);
             }
         }
 
-        protected override void OnKeyDown(KeyEventArgs e)
+        private void RenderZone(OldZoneEntry zone)
         {
-            base.OnKeyDown(e);
-            common.OnKeyDown(e);
-            switch (e.KeyCode)
+            RenderBoxLineAS(new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1, new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1, Color4.White);
+            foreach (OldEntity entity in zone.Entities)
+            {
+                RenderEntity(zone, entity);
+            }
+            foreach (OldCamera camera in zone.Cameras)
+            {
+                //RenderCamera(camera);
+            }
+        }
+
+        private void RenderEntity(OldZoneEntry zone, OldEntity entity)
+        {
+            if (entity.Positions.Count == 1)
+            {
+                EntityPosition position = entity.Positions[0];
+                Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
+                switch (entity.Type)
+                {
+                    case 0x3:
+                        RenderPickup(trans + new Vector3(0, .5f, 0), entity.Subtype);
+                        break;
+                    //case 0x22:
+                        //RenderBox(trans, entity.Subtype);
+                        //break;
+                    default:
+                        RenderSprite(trans, new Vector2(1), Color4.White, OldResources.PointTexture);
+                        break;
+                }
+            }
+            else
             {
             }
         }
 
-        protected override void RenderObjects()
-        {
-            GL.Disable(EnableCap.Texture2D);
-            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 1.0f);
-            RenderEntry(entry,ref common.OctreeDisplayLists[0]);
-            GL.Enable(EnableCap.PolygonStipple);
-            for (int i = 0; i < linkedentries.Length; i++)
-            {
-                OldZoneEntry linkedentry = linkedentries[i];
-                if (linkedentry == entry)
-                    continue;
-                if (linkedentry == null)
-                    continue;
-                RenderLinkedEntry(linkedentry,ref common.OctreeDisplayLists[i + 1]);
-            }
-            GL.Disable(EnableCap.PolygonStipple);
-            if (common.DeleteLists)
-                common.DeleteLists = false;
-            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
-            GL.Enable(EnableCap.Texture2D);
-            base.RenderObjects();
-        }
-
+        /*
         private void RenderEntry(OldZoneEntry entry,ref int octreedisplaylist)
         {
             common.CurrentEntry = entry;
@@ -255,7 +289,6 @@ namespace CrashEdit
             }
             GL.PopMatrix();
         }
-
         private void RenderEntity(OldEntity entity)
         {
             GL.PolygonStipple(stipplea);
@@ -327,51 +360,13 @@ namespace CrashEdit
             }
             GL.PopMatrix();
         }
+        */
 
-        private void RenderSprite()
+        private void RenderPickup(Vector3 trans, int subtype)
         {
-            GL.Enable(EnableCap.Texture2D);
-            GL.PushMatrix();
-            GL.Rotate(-rotx,0,1,0);
-            GL.Rotate(-roty,1,0,0);
-            GL.Begin(PrimitiveType.Quads);
-            GL.TexCoord2(0,0);
-            GL.Vertex2(-50,+50);
-            GL.TexCoord2(1,0);
-            GL.Vertex2(+50,+50);
-            GL.TexCoord2(1,1);
-            GL.Vertex2(+50,-50);
-            GL.TexCoord2(0,1);
-            GL.Vertex2(-50,-50);
-            GL.End();
-            GL.PopMatrix();
-            GL.Disable(EnableCap.Texture2D);
+            RenderSprite(trans, GetPickupScale(subtype), Color4.White, GetPickupTexture(subtype));
         }
-
-        private void RenderPickup(int subtype)
-        {
-            GL.Translate(0,50,0);
-            GL.Color3(Color.White);
-            LoadPickupTexture(subtype);
-            GL.Enable(EnableCap.Texture2D);
-            GL.PushMatrix();
-            GL.Rotate(-rotx,0,1,0);
-            GL.Rotate(-roty,1,0,0);
-            ScalePickup(subtype);
-            GL.Begin(PrimitiveType.Quads);
-            GL.TexCoord2(0,0);
-            GL.Vertex2(-50,+50);
-            GL.TexCoord2(1,0);
-            GL.Vertex2(+50,+50);
-            GL.TexCoord2(1,1);
-            GL.Vertex2(+50,-50);
-            GL.TexCoord2(0,1);
-            GL.Vertex2(-50,-50);
-            GL.End();
-            GL.PopMatrix();
-            GL.Disable(EnableCap.Texture2D);
-        }
-
+        /*
         private void RenderBox(int subtype)
         {
             GL.Translate(50,50,50);
@@ -414,90 +409,6 @@ namespace CrashEdit
             GL.TexCoord2(0,1);
             GL.Vertex3(-50,-50,50);
             GL.End();
-        }
-
-        private void LoadPickupTexture(int subtype)
-        {
-            switch (subtype)
-            {
-                case 0: // Lime
-                    LoadTexture(OldResources.LimeTexture);
-                    break;
-                case 1: // Coconut
-                    LoadTexture(OldResources.CoconutTexture);
-                    break;
-                case 2: // Pineapple
-                    LoadTexture(OldResources.PineappleTexture);
-                    break;
-                case 3: // Strawberry
-                    LoadTexture(OldResources.StrawberryTexture);
-                    break;
-                case 4: // Mango
-                    LoadTexture(OldResources.MangoTexture);
-                    break;
-                case 5: // Life
-                    LoadTexture(OldResources.LifeTexture);
-                    break;
-                case 6: // Mask
-                    LoadTexture(OldResources.MaskTexture);
-                    break;
-                case 7: // Lemon
-                    LoadTexture(OldResources.LemonTexture);
-                    break;
-                case 8: // YYY
-                    LoadTexture(OldResources.YYYTexture);
-                    break;
-                case 11: // Grape
-                    LoadTexture(OldResources.GrapeTexture);
-                    break;
-                case 16: // Apple
-                    LoadTexture(OldResources.AppleTexture);
-                    break;
-                case 18: // Cortex
-                    LoadTexture(OldResources.CortexTexture);
-                    break;
-                case 19: // Brio
-                    LoadTexture(OldResources.BrioTexture);
-                    break;
-                case 20: // Tawna
-                    LoadTexture(OldResources.TawnaTexture);
-                    break;
-                default:
-                    LoadTexture(OldResources.UnknownPickupTexture);
-                    break;
-            }
-        }
-
-        private void ScalePickup(int subtype)
-        {
-            switch (subtype)
-            {
-                case 0: // Lime
-                case 1: // Coconut
-                case 4: // Mango
-                case 7: // Lemon
-                case 8: // YYY
-                    GL.Scale(0.7f,0.7f,1);
-                    break;
-                case 2: // Pineapple
-                    GL.Scale(0.7f,1.4f,1);
-                    break;
-                case 3: // Strawberry
-                    GL.Scale(0.8f,0.8f,1);
-                    break;
-                case 5: // Life
-                case 6: // Mask
-                case 18: // Cortex
-                case 20: // Tawna
-                    GL.Scale(1.8f,1.125f,1);
-                    break;
-                case 16: // Apple
-                    GL.Scale(0.675f,0.84375f,1);
-                    break;
-                case 19: // Brio
-                    GL.Scale(1.8f,1.8f,1);
-                    break;
-            }
         }
 
         private void LoadBoxTopTexture(int subtype)
@@ -585,6 +496,83 @@ namespace CrashEdit
                     break;
             }
         }
+        
+         */
+
+        private Bitmap GetPickupTexture(int subtype)
+        {
+            switch (subtype)
+            {
+                case 0: // Lime
+                    return (OldResources.LimeTexture);
+                case 1: // Coconut
+                    return (OldResources.CoconutTexture);
+                case 2: // Pineapple
+                    return (OldResources.PineappleTexture);
+                case 3: // Strawberry
+                    return (OldResources.StrawberryTexture);
+                case 4: // Mango
+                    return (OldResources.MangoTexture);
+                case 5: // Life
+                    return (OldResources.LifeTexture);
+                case 6: // Mask
+                    return (OldResources.MaskTexture);
+                case 7: // Lemon
+                    return (OldResources.LemonTexture);
+                case 8: // YYY
+                    return (OldResources.YYYTexture);
+                case 11: // Grape
+                    return (OldResources.GrapeTexture);
+                case 16: // Apple
+                    return (OldResources.AppleTexture);
+                case 18: // Cortex
+                    return (OldResources.CortexTexture);
+                case 19: // Brio
+                    return (OldResources.BrioTexture);
+                case 20: // Tawna
+                    return (OldResources.TawnaTexture);
+                default:
+                    return (OldResources.UnknownPickupTexture);
+            }
+        }
+
+        private Vector2 GetPickupScale(int subtype)
+        {
+            switch (subtype)
+            {
+                case 0: // Lime
+                case 1: // Coconut
+                case 4: // Mango
+                case 7: // Lemon
+                case 8: // YYY
+                    return new Vector2(0.7f, 0.7f);
+                case 2: // Pineapple
+                    return new Vector2(0.7f, 1.4f);
+                case 3: // Strawberry
+                    return new Vector2(0.8f, 0.8f);
+                case 5: // Life
+                case 6: // Mask
+                case 18: // Cortex
+                case 20: // Tawna
+                    return new Vector2(1.8f, 1.125f);
+                case 16: // Apple
+                    return new Vector2(0.675f, 0.84375f);
+                case 19: // Brio
+                    return new Vector2(1.8f, 1.8f);
+                default:
+                    return new Vector2(1);
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            GL.ActiveTexture(TextureUnit.Texture1);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+            GL.DeleteTexture(sprites);
+
+            //vaoStuff?.Dispose();
+
+            base.Dispose(disposing);
+        }
     }
 }
-*/

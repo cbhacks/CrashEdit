@@ -343,8 +343,10 @@ namespace CrashEdit
                     curx += bmp.Width;
                 }
             }
+            // alltex.Save("test.png", System.Drawing.Imaging.ImageFormat.Png);
         }
 
+        public static Bitmap AllTex => alltex;
         public static Dictionary<Bitmap, Rectangle> TexMap { get; }
 
         public static Icon NSDIcon => nsdicon;
