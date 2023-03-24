@@ -49,9 +49,9 @@ namespace CrashEdit
             }
         }
 
-        public VAO(ShaderContext context, string shadername, PrimitiveType prim, int vert_count = 10000)
+        public VAO(ShaderContext shaders, string shadername, PrimitiveType prim, int vert_count = 10000)
         {
-            Shader = context.GetShader(shadername);
+            Shader = shaders.GetShader(shadername);
             Primitive = prim;
             verts = new Vertex[vert_count];
 
@@ -74,7 +74,7 @@ namespace CrashEdit
         {
             if (VertCount == Verts.Length)
             {
-                Console.WriteLine("Realloc buffer");
+                Console.WriteLine($"Realloc buffer {VertCount} -> {VertCount * 2}");
                 Array.Resize(ref verts, Verts.Length * 2);
             }
             if (trans != null)

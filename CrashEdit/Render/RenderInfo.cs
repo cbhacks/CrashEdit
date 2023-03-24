@@ -12,7 +12,6 @@ namespace CrashEdit
     {
 
         public ProjectionInfo Projection;
-        public ShaderContext ShaderContext;
         public RendererMoveMode MoveMode;
         public bool EnableTexture = true;
 
@@ -50,7 +49,6 @@ namespace CrashEdit
 
         public RenderInfo(GLViewer parent = null)
         {
-            ShaderContext = new();
 
             // window update
             if (parent != null)

@@ -65,7 +65,7 @@ namespace CrashEdit
         {
             base.GLLoad();
 
-            vaoWorld = new(render.ShaderContext, "crash1", PrimitiveType.Triangles);
+            vaoWorld = new(shaderContext, "crash1", PrimitiveType.Triangles);
             vaoWorld.ArtType = VAO.ArtTypeEnum.Crash1World;
             vaoWorld.UserScaleScalar = GameScales.WorldC1;
         }

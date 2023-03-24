@@ -47,7 +47,7 @@ namespace CrashEdit
 
         // init shaders. Needs a GL context to be active.
         // TODO see if shaders can be reused across contexts
-        public void InitShaders()
+        public ShaderContext()
         {
             if (shaders.Count != 0)
             {

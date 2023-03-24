@@ -5,15 +5,13 @@ using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace CrashEdit
 {
     public abstract class GLViewer : GLControl
     {
-        static readonly Vector3[] SpriteVerts = new Vector3[4] {
+        protected static readonly Vector3[] SpriteVerts = new Vector3[4] {
             new(-.5f, -.5f, 0),
             new(-.5f, +.5f, 0),
             new(+.5f, +.5f, 0),
@@ -21,7 +19,7 @@ namespace CrashEdit
             new(+.5f, -.5f, 0)
             //new(-.5f, -.5f)
         };
-        static readonly Vector3[] AxesPos = new Vector3[6] {
+        protected static readonly Vector3[] AxesPos = new Vector3[6] {
             new(-.5f, 0, 0),
             new(1, 0, 0),
             new(0, -.5f, 0),
@@ -29,7 +27,7 @@ namespace CrashEdit
             new(0, 0, -.5f),
             new(0, 0, 1)
         };
-        static readonly Vector3[] BoxLineVerts = new Vector3[24] {
+        protected static readonly Vector3[] BoxLineVerts = new Vector3[24] {
             // sides
             new(-1, -1, -1),
             new(-1, +1, -1),
@@ -69,7 +67,7 @@ namespace CrashEdit
             new(-1, +1, +1),
             new(-1, +1, -1)
         };
-        static readonly Vector3[] BoxTriVerts = new Vector3[36] {
+        protected static readonly Vector3[] BoxTriVerts = new Vector3[36] {
             // sides
             new(-1, -1, -1),
             new(-1, +1, -1),
@@ -115,24 +113,26 @@ namespace CrashEdit
             new(-1, +1, +1),
             new(-1, +1, -1)
         };
-        private readonly Dictionary<int, Vector3[]> SpherePosCache = new();
-        private readonly Dictionary<int, Vector3[]> GridPosCache = new();
-        private int SpherePosLastUploaded = -1;
-        private int GridPosLastUploaded = -1;
-        protected VAO vaoSphereLine;
-        protected VAO vaoGridLine;
+        private static Dictionary<int, Vector3[]> SpherePosCache = new();
+        private static Dictionary<int, Vector3[]> GridPosCache = new();
+        private static int SpherePosLastUploaded = -1;
+        private static int GridPosLastUploaded = -1;
+        protected static VAO vaoSphereLine;
+        protected static VAO vaoGridLine;
+        protected static ShaderContext shaderContext;
 
         protected readonly RenderInfo render;
 
-        private int tpage;
-        private VAO vaoBoxTri;
-        private VAO vaoBoxLine;
-        private VAO vaoAxes;
-        private VAO vaoSprites;
-        // private VAO vaoText;
+        protected static int tpage;
+        protected static VAO vaoBoxTri;
+        protected static VAO vaoBoxLine;
+        protected static VAO vaoAxes;
+        protected static VAO vaoSprites;
+        // protected static VAO vaoText;
 
         private bool run = false;
         private bool loaded = false;
+        private static HashSet<Type> loaded_static_types = new();
 
         private readonly HashSet<Keys> keysdown = new();
         private readonly HashSet<Keys> keyspressed = new();
@@ -151,7 +151,7 @@ namespace CrashEdit
 
         protected abstract bool UseGrid { get; }
 
-        protected void MakeLineSphere(int resolution)
+        protected static void MakeLineSphere(int resolution)
         {
             if (resolution < 0)
                 throw new ArgumentOutOfRangeException(nameof(resolution), "Sphere resolution cannot be less than 0.");
@@ -280,78 +280,26 @@ namespace CrashEdit
 
         protected abstract IEnumerable<IPosition> CorePositions { get; }
 
+        // for all instances, runs once.
+        protected virtual void GLLoadStatic()
+        {
+            // nothing.
+            Console.WriteLine($"GLLoadStatic {GetType().Name}");
+        }
+
+        // for each instance
         protected virtual void GLLoad()
         {
-            MakeCurrent();
-
-            // version print
-            Console.WriteLine($"OpenGL version: {GL.GetString(StringName.Version)}");
-
-            int flags = GL.GetInteger(GetPName.ContextFlags);
-            // Console.WriteLine($"flags: {flags}");
-            if ((flags & (int)ContextFlagMask.ContextFlagDebugBit) != 0)
+            if (!loaded_static_types.Contains(Program.TopLevelGLViewer.GetType()))
             {
-                // Console.WriteLine("GL debug enabled.");
-                // Enable debug callbacks.
-                GL.Enable(EnableCap.DebugOutput);
-                GL.DebugMessageCallback((source, type, id, severity, length, message, userParam) =>
-                {
-                    string msg = Marshal.PtrToStringAnsi(message);
-                    switch (severity)
-                    {
-                        case DebugSeverity.DebugSeverityHigh:
-                            Console.WriteLine("OpenGL ERROR: " + msg);
-                            break;
-                        case DebugSeverity.DebugSeverityMedium:
-                            Console.WriteLine("OpenGL WARN: " + msg);
-                            break;
-                        case DebugSeverity.DebugSeverityLow:
-                            Console.WriteLine("OpenGL INFO: " + msg);
-                            break;
-                        default:
-                            Console.WriteLine("OpenGL OTHER: " + msg);
-                            break;
-                    }
-                }, IntPtr.Zero);
+                Program.TopLevelGLViewer.GLLoadStatic();
+                loaded_static_types.Add(Program.TopLevelGLViewer.GetType());
             }
-
-            GL.Enable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-
-            // init all shaders
-            render.ShaderContext.InitShaders();
-
-            // init axes vao
-            vaoAxes = new VAO(render.ShaderContext, "axes", PrimitiveType.Lines, vert_count: AxesPos.Length);
-            for (int i = 0; i < AxesPos.Length; ++i)
+            if (!loaded_static_types.Contains(GetType()))
             {
-                vaoAxes.PushAttrib(trans: AxesPos[i]);
+                GLLoadStatic();
+                loaded_static_types.Add(GetType());
             }
-
-            vaoSphereLine = new VAO(render.ShaderContext, "line-model", PrimitiveType.LineStrip);
-            vaoGridLine = new VAO(render.ShaderContext, "line-usercolor", PrimitiveType.Lines);
-            vaoBoxTri = new VAO(render.ShaderContext, "box-model", PrimitiveType.Triangles, vert_count: BoxTriVerts.Length);
-            vaoBoxLine = new VAO(render.ShaderContext, "box-model", PrimitiveType.Lines, vert_count: BoxLineVerts.Length);
-            vaoSprites = new VAO(render.ShaderContext, "sprite", PrimitiveType.TriangleFan, vert_count: SpriteVerts.Length);
-            vaoGridLine.UserColor1 = Color4.Gray;
-
-            for (int i = 0; i < BoxTriVerts.Length; ++i)
-            {
-                vaoBoxTri.PushAttrib(trans: BoxTriVerts[i]);
-            }
-            for (int i = 0; i < BoxLineVerts.Length; ++i)
-            {
-                vaoBoxLine.PushAttrib(trans: BoxLineVerts[i]);
-            }
-
-            // make texture
-            tpage = GL.GenTexture();
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, tpage);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8ui, 512, 0, 0, OpenTK.Graphics.OpenGL4.PixelFormat.RedInteger, PixelType.UnsignedByte, IntPtr.Zero);
 
             ResetCamera();
 
@@ -480,10 +428,11 @@ namespace CrashEdit
         {
             if (!loaded)
             {
+                MakeCurrent();
                 GLLoad();
                 loaded = true;
             }
-            if (run)
+            else if (run)
             {
                 MakeCurrent();
 
@@ -560,9 +509,9 @@ namespace CrashEdit
             RenderBoxLine(pos, size, col);
         }
 
-        protected void RenderBoxAB(Vector3 a, Vector3 b, Color4 col) =>     RenderBox((a + b) / 2, (b - a) / 2, col);
+        protected void RenderBoxAB(Vector3 a, Vector3 b, Color4 col) => RenderBox((a + b) / 2, (b - a) / 2, col);
         protected void RenderBoxLineAB(Vector3 a, Vector3 b, Color4 col) => RenderBoxLine((a + b) / 2, (b - a) / 2, col);
-        protected void RenderBoxAS(Vector3 a, Vector3 b, Color4 col) =>     RenderBox(a + b / 2, b / 2, col);
+        protected void RenderBoxAS(Vector3 a, Vector3 b, Color4 col) => RenderBox(a + b / 2, b / 2, col);
         protected void RenderBoxLineAS(Vector3 a, Vector3 b, Color4 col) => RenderBoxLine(a + b / 2, b / 2, col);
 
         protected void RenderSprite(Vector3 trans, Vector2 size, Color4 col, Bitmap texture)
@@ -597,17 +546,17 @@ namespace CrashEdit
             float maxz = float.MinValue;
             foreach (IPosition position in CorePositions)
             {
-                minx = (float)Math.Min(minx,position.X);
-                miny = (float)Math.Min(miny,position.Y);
-                minz = (float)Math.Min(minz,position.Z);
-                maxx = (float)Math.Max(maxx,position.X);
-                maxy = (float)Math.Max(maxy,position.Y);
-                maxz = (float)Math.Max(maxz,position.Z);
+                minx = (float)Math.Min(minx, position.X);
+                miny = (float)Math.Min(miny, position.Y);
+                minz = (float)Math.Min(minz, position.Z);
+                maxx = (float)Math.Max(maxx, position.X);
+                maxy = (float)Math.Max(maxy, position.Y);
+                maxz = (float)Math.Max(maxz, position.Z);
             }
             float midx = (maxx + minx) / 2;
             float midy = (maxy + miny) / 2;
             float midz = (maxz + minz) / 2;
-            render.Distance = Math.Min(RenderInfo.MaxDistance, Math.Max(render.Distance, (float)(Math.Sqrt(Math.Pow(maxx-minx, 2) + Math.Pow(maxy-miny, 2) + Math.Pow(maxz-minz, 2))*1.2)));
+            render.Distance = Math.Min(RenderInfo.MaxDistance, Math.Max(render.Distance, (float)(Math.Sqrt(Math.Pow(maxx - minx, 2) + Math.Pow(maxy - miny, 2) + Math.Pow(maxz - minz, 2)) * 1.2)));
             //render.Distance += 0;
             render.Projection.Trans.X = -midx;
             render.Projection.Trans.Y = -midy;
@@ -675,24 +624,17 @@ namespace CrashEdit
             // page &= 0xFFFF;
             return (enable ? 1 : 0) | (color << 1) | (blend << 3) | (clutx << 5) | (cluty << 9) | (face << 16) | (page << 17);
         }
-        
+
         protected override void Dispose(bool disposing)
         {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-            GL.BindVertexArray(0);
-            GL.UseProgram(0);
-
-            // Delete all the resources.
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, 0);
-            GL.DeleteTexture(tpage);
-            render.ShaderContext.KillShaders();
-
-            vaoAxes?.Dispose();
-            vaoSphereLine?.Dispose();
-            vaoBoxTri?.Dispose();
-            vaoBoxLine?.Dispose();
-            vaoSprites?.Dispose();
+            if (context == Context)
+            {
+                context = null;
+            }
+            if (contextWindow == this)
+            {
+                contextWindow = null;
+            }
 
             base.Dispose(disposing);
         }

@@ -12,7 +12,7 @@ namespace CrashEdit
 {
     public sealed class OldZoneEntryViewer : OldSceneryEntryViewer
     {
-        private int sprites;
+        private static int sprites;
         // private VAO vaoStuff;
 
         private List<int> zones;
@@ -24,11 +24,9 @@ namespace CrashEdit
             this_zone = zone_eid;
         }
 
-        protected override void GLLoad()
+        protected override void GLLoadStatic()
         {
-            base.GLLoad();
-
-            // vaoStuff = new(render.ShaderContext, "crash1", PrimitiveType.Triangles);
+            base.GLLoadStatic();
 
             // make texture for sprites
             sprites = GL.GenTexture();
@@ -50,6 +48,13 @@ namespace CrashEdit
             {
                 OldResources.AllTex.UnlockBits(data);
             }
+        }
+
+        protected override void GLLoad()
+        {
+            base.GLLoad();
+
+            // vaoStuff = new(render.ShaderContext, "crash1", PrimitiveType.Triangles);
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -582,10 +587,6 @@ namespace CrashEdit
 
         protected override void Dispose(bool disposing)
         {
-            GL.ActiveTexture(TextureUnit.Texture1);
-            GL.BindTexture(TextureTarget.Texture2D, 0);
-            GL.DeleteTexture(sprites);
-
             //vaoStuff?.Dispose();
 
             base.Dispose(disposing);

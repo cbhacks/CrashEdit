@@ -48,7 +48,7 @@ namespace CrashEdit
         {
             base.GLLoad();
 
-            vaoModel = new(render.ShaderContext, "crash1", PrimitiveType.Triangles);
+            vaoModel = new(shaderContext, "crash1", PrimitiveType.Triangles);
             vaoModel.ArtType = VAO.ArtTypeEnum.Crash1Anim;
             buf_vtx = new Vector3[ANIM_BUF_MAX][];
             buf_nor = new Vector3[ANIM_BUF_MAX][];
