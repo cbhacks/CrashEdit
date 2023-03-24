@@ -61,9 +61,9 @@ namespace CrashEdit
             }
         }
 
-        protected override void OnLoad(EventArgs e)
+        protected override void GLLoad()
         {
-            base.OnLoad(e);
+            base.GLLoad();
 
             vaoWorld = new(render.ShaderContext, "crash1", PrimitiveType.Triangles);
             vaoWorld.ArtType = VAO.ArtTypeEnum.Crash1World;

@@ -61,6 +61,8 @@ namespace CrashEdit
             }
         }
 
+        public static DummyTopGLViewer TopLevelGLViewer = null;
+
         [STAThread]
         internal static void Main(string[] args)
         {
@@ -85,12 +87,14 @@ namespace CrashEdit
                 Properties.Settings.Default.DefaultFormH = 480;
             Properties.Settings.Default.Save();
             LoadC3AnimLinks();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             using (OldMainForm mainform = new OldMainForm())
             using (ErrorReporter errorform = new ErrorReporter(mainform))
             {
                 FileUtil.Owner = mainform;
+                TopLevelGLViewer = new DummyTopGLViewer();
                 Application.Run(mainform);
             }
 

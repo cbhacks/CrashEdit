@@ -24,9 +24,9 @@ namespace CrashEdit
             this_zone = zone_eid;
         }
 
-        protected override void OnLoad(EventArgs e)
+        protected override void GLLoad()
         {
-            base.OnLoad(e);
+            base.GLLoad();
 
             // vaoStuff = new(render.ShaderContext, "crash1", PrimitiveType.Triangles);
 

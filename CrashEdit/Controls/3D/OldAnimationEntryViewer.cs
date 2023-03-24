@@ -44,9 +44,9 @@ namespace CrashEdit
             frame_id = -1;
         }
 
-        protected override void OnLoad(EventArgs e)
+        protected override void GLLoad()
         {
-            base.OnLoad(e);
+            base.GLLoad();
 
             vaoModel = new(render.ShaderContext, "crash1", PrimitiveType.Triangles);
             vaoModel.ArtType = VAO.ArtTypeEnum.Crash1Anim;

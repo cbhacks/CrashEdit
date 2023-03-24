@@ -132,6 +132,7 @@ namespace CrashEdit
         // private VAO vaoText;
 
         private bool run = false;
+        private bool loaded = false;
 
         private readonly HashSet<Keys> keysdown = new();
         private readonly HashSet<Keys> keyspressed = new();
@@ -243,22 +244,44 @@ namespace CrashEdit
             GridPosLastUploaded = resolution;
         }
 
+        private static IGraphicsContext context;
+        private static GLViewer contextWindow;
+
         public GLViewer() : base(GraphicsMode.Default, 4, 3, GraphicsContextFlags.Debug)
         {
+            if (context == null)
+            {
+                context = Context;
+                contextWindow = this;
+            }
             render = new RenderInfo(this);
         }
 
         public GLViewer(NSF nsf) : base(GraphicsMode.Default, 4, 3, GraphicsContextFlags.Debug)
         {
+            if (context == null)
+            {
+                context = Context;
+                contextWindow = this;
+            }
             render = new RenderInfo(this);
             this.nsf = nsf;
         }
 
+        protected new void SwapBuffers()
+        {
+            ((GLControl)contextWindow).SwapBuffers();
+        }
+
+        protected new void MakeCurrent()
+        {
+            ((GLControl)contextWindow).Context.MakeCurrent(this.WindowInfo);
+        }
+
         protected abstract IEnumerable<IPosition> CorePositions { get; }
 
-        protected override void OnLoad(EventArgs e)
+        protected virtual void GLLoad()
         {
-            base.OnLoad(e);
             MakeCurrent();
 
             // version print
@@ -455,6 +478,11 @@ namespace CrashEdit
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (!loaded)
+            {
+                GLLoad();
+                loaded = true;
+            }
             if (run)
             {
                 MakeCurrent();
