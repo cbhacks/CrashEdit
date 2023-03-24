@@ -61,7 +61,7 @@ namespace CrashEdit
             }
         }
 
-        public static DummyTopGLViewer TopLevelGLViewer = null;
+        public static GLViewerLoader TopLevelGLViewer = null;
 
         [STAThread]
         internal static void Main(string[] args)
@@ -94,7 +94,7 @@ namespace CrashEdit
             using (ErrorReporter errorform = new ErrorReporter(mainform))
             {
                 FileUtil.Owner = mainform;
-                TopLevelGLViewer = new DummyTopGLViewer();
+                TopLevelGLViewer = new GLViewerLoader();
                 Application.Run(mainform);
             }
 

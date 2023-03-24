@@ -7,12 +7,11 @@ using System.Runtime.InteropServices;
 
 namespace CrashEdit
 {
-    public sealed class DummyTopGLViewer : GLViewer, IDisposable
+    public sealed class GLViewerLoader : GLViewer, IDisposable
     {
-
         protected override bool UseGrid => true;
 
-        public DummyTopGLViewer() : base()
+        public GLViewerLoader() : base()
         {
         }
         protected override IEnumerable<IPosition> CorePositions
