@@ -21,11 +21,13 @@ namespace CrashEdit
         private int cullmode = 0;
 
         private VAO vaoModel;
-        private Vector3[] buf_vtx;
-        private Vector3[] buf_nor;
-        private Color4[] buf_col;
-        private Vector2[] buf_uv;
-        private int[] buf_tex;
+        // note: there's multiple buffers because of blending
+        private const int ANIM_BUF_MAX = 2;
+        private Vector3[][] buf_vtx;
+        private Vector3[][] buf_nor;
+        private Rgba[][] buf_col;
+        private Vector2[][] buf_uv;
+        private int[][] buf_tex;
         private int buf_idx;
 
         protected override bool UseGrid => true;
@@ -48,6 +50,11 @@ namespace CrashEdit
 
             vaoModel = new(render.ShaderContext, "crash1", PrimitiveType.Triangles);
             vaoModel.ArtType = VAO.ArtTypeEnum.Crash1Anim;
+            buf_vtx = new Vector3[ANIM_BUF_MAX][];
+            buf_nor = new Vector3[ANIM_BUF_MAX][];
+            buf_col = new Rgba[ANIM_BUF_MAX][];
+            buf_uv = new Vector2[ANIM_BUF_MAX][];
+            buf_tex = new int[ANIM_BUF_MAX][];
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -108,6 +115,7 @@ namespace CrashEdit
         protected override void Render()
         {
             base.Render();
+            vaoModel.DiscardVerts();
 
             IList<OldFrame> frames = null;
             {
@@ -156,7 +164,7 @@ namespace CrashEdit
                 var model = nsf.GetEntry<OldModelEntry>(frame1.ModelEID);
                 if (model == null) return;
 
-                RenderFrame(frame1);
+                RenderFrame(frame1, 0);
 
                 // uniforms and static data
                 vaoModel.UserTrans = new(frame1.XOffset, frame1.YOffset, frame1.ZOffset);
@@ -165,33 +173,25 @@ namespace CrashEdit
 
                 if (frame2 != null)
                 {
-                    // do lerp
-                    var buf_vtx1 = buf_vtx;
-                    var buf_nor1 = buf_nor;
-                    var buf_col1 = buf_col;
-                    RenderFrame(frame2);
-                    var buf_vtx2 = buf_vtx;
-                    var buf_nor2 = buf_nor;
-                    var buf_col2 = buf_col;
+                    // lerp results
+                    RenderFrame(frame2, 1);
 
                     vaoModel.UserTrans = MathExt.Lerp(vaoModel.UserTrans, new Vector3(frame2.XOffset, frame2.YOffset, frame2.ZOffset), interp);
 
                     for (int i = 0; i < buf_idx; ++i)
                     {
-                        buf_vtx[i] = MathExt.Lerp(buf_vtx1[i], buf_vtx2[i], interp);
+                        buf_vtx[0][i] = MathExt.Lerp(buf_vtx[0][i], buf_vtx[1][i], interp);
                         if (!colored)
-                            buf_nor[i] = MathExt.Lerp(buf_nor1[i], buf_nor2[i], interp);
+                            buf_nor[0][i] = MathExt.Lerp(buf_nor[0][i], buf_nor[1][i], interp);
                         else
-                            buf_col[i] = MathExt.Lerp(buf_col1[i], buf_col2[i], interp);
+                            buf_col[0][i] = MathExt.Lerp(buf_col[0][i], buf_col[1][i], interp);
                     }
                 }
 
-                vaoModel.UpdatePositions(buf_vtx);
-                if (!colored)
-                    vaoModel.UpdateNormals(buf_nor);
-                vaoModel.UpdateColors(buf_col);
-                vaoModel.UpdateUVs(buf_uv);
-                vaoModel.UpdateAttrib(1, "tex", buf_tex, 4, 1);
+                for (int i = 0; i < buf_idx; ++i)
+                {
+                    vaoModel.PushAttrib(trans: buf_vtx[0][i], normal: buf_nor[0][i], rgba: buf_col[0][i], st: buf_uv[0][i], tex: buf_tex[0][i]);
+                }
 
                 RenderFramePass(BlendMode.Solid);
                 RenderFramePass(BlendMode.Trans);
@@ -237,7 +237,7 @@ namespace CrashEdit
             return tex_eids;
         }
 
-        private void RenderFrame(OldFrame frame)
+        private void RenderFrame(OldFrame frame, int buf)
         {
             var model = nsf.GetEntry<OldModelEntry>(frame.ModelEID);
             if (model != null)
@@ -248,12 +248,16 @@ namespace CrashEdit
 
                 // alloc buffers
                 int nb = model.Polygons.Count * 3;
-                buf_vtx = new Vector3[nb];
-                if (!colored)
-                    buf_nor = new Vector3[nb];
-                buf_col = new Color4[nb];
-                buf_uv = new Vector2[nb];
-                buf_tex = new int[nb]; // enable: 1, colormode: 2, blendmode: 2, clutx: 4, cluty: 7, doubleface: 1, page: X (>17 total)
+                if (buf_vtx[buf] == null || buf_vtx[buf].Length < nb)
+                    buf_vtx[buf] = new Vector3[nb];
+                if (buf_nor[buf] == null || buf_nor[buf].Length < nb)
+                    buf_nor[buf] = new Vector3[nb];
+                if (buf_col[buf] == null || buf_col[buf].Length < nb)
+                    buf_col[buf] = new Rgba[nb];
+                if (buf_uv[buf] == null || buf_uv[buf].Length < nb)
+                    buf_uv[buf] = new Vector2[nb];
+                if (buf_tex[buf] == null || buf_tex[buf].Length < nb)
+                    buf_tex[buf] = new int[nb]; // enable: 1, colormode: 2, blendmode: 2, clutx: 4, cluty: 7, doubleface: 1, page: X (>17 total)
 
                 // render stuff
                 buf_idx = 0;
@@ -263,40 +267,31 @@ namespace CrashEdit
                     OldModelStruct str = model.Structs[polygon.Unknown & 0x7FFF];
                     if (str is OldModelTexture tex)
                     {
-                        if (!colored)
-                            buf_col[buf_idx] = new(tex.R, tex.G, tex.B, 255);
-                        else
-                            buf_col[buf_idx] = new(tex.R / (float)0x80, tex.G / (float)0x80, tex.B / (float)0x80, 255);
-                        buf_col[buf_idx + 1] = buf_col[buf_idx];
-                        buf_col[buf_idx + 2] = buf_col[buf_idx];
-                        buf_uv[buf_idx + 0] = new(tex.U3, tex.V3);
-                        buf_uv[buf_idx + 1] = new(tex.U2, tex.V2);
-                        buf_uv[buf_idx + 2] = new(tex.U1, tex.V1);
-                        buf_tex[buf_idx + 2] = 1
-                                            | (tex.ColorMode << 1)
-                                            | (tex.BlendMode << 3)
-                                            | (tex.ClutX << 5)
-                                            | (tex.ClutY << 9)
-                                            | (Convert.ToInt32(tex.N) << 16)
-                                            | (tex_eids[tex.EID] << 17)
-                                            ;
-                        RenderVertex(frame.Vertices[polygon.VertexC / 6]);
-                        RenderVertex(frame.Vertices[polygon.VertexB / 6]);
-                        RenderVertex(frame.Vertices[polygon.VertexA / 6]);
+                        buf_col[buf][buf_idx] = new(tex.R, tex.G, tex.B, 255);
+                        buf_col[buf][buf_idx + 1] = buf_col[buf][buf_idx];
+                        buf_col[buf][buf_idx + 2] = buf_col[buf][buf_idx];
+                        buf_uv[buf][buf_idx + 0] = new(tex.U3, tex.V3);
+                        buf_uv[buf][buf_idx + 1] = new(tex.U2, tex.V2);
+                        buf_uv[buf][buf_idx + 2] = new(tex.U1, tex.V1);
+                        buf_tex[buf][buf_idx + 2] = MakeTexInfo(true, color: tex.ColorMode, blend: tex.BlendMode,
+                                                                      clutx: tex.ClutX, cluty: tex.ClutY,
+                                                                      face: Convert.ToInt32(tex.N),
+                                                                      page: tex_eids[tex.EID]);
+                        RenderVertex(frame.Vertices[polygon.VertexC / 6], buf);
+                        RenderVertex(frame.Vertices[polygon.VertexB / 6], buf);
+                        RenderVertex(frame.Vertices[polygon.VertexA / 6], buf);
                     }
                     else
                     {
                         OldSceneryColor col = (OldSceneryColor)str;
-                        if (!colored)
-                            buf_col[buf_idx] = new(col.R, col.G, col.B, 255);
-                        else
-                            buf_col[buf_idx] = new(col.R / (float)0x80, col.G / (float)0x80, col.B / (float)0x80, 255);
-                        buf_col[buf_idx + 1] = buf_col[buf_idx];
-                        buf_col[buf_idx + 2] = buf_col[buf_idx];
-                        buf_tex[buf_idx + 2] = 0 | (Convert.ToInt32(col.N) << 16);
-                        RenderVertex(frame.Vertices[polygon.VertexC / 6]);
-                        RenderVertex(frame.Vertices[polygon.VertexB / 6]);
-                        RenderVertex(frame.Vertices[polygon.VertexA / 6]);
+                        buf_col[buf][buf_idx] = new(col.R, col.G, col.B, 255);
+                        buf_col[buf][buf_idx + 1] = buf_col[buf][buf_idx];
+                        buf_col[buf][buf_idx + 2] = buf_col[buf][buf_idx];
+                        buf_tex[buf][buf_idx + 2] = 0 | (Convert.ToInt32(col.N) << 16);
+                        buf_tex[buf][buf_idx + 2] = MakeTexInfo(false, face: Convert.ToInt32(col.N));
+                        RenderVertex(frame.Vertices[polygon.VertexC / 6], buf);
+                        RenderVertex(frame.Vertices[polygon.VertexB / 6], buf);
+                        RenderVertex(frame.Vertices[polygon.VertexA / 6], buf);
                     }
                 }
             }
@@ -306,16 +301,18 @@ namespace CrashEdit
         {
             SetBlendMode(pass);
             vaoModel.BlendMask = (int)pass;
-            vaoModel.Render(render, vertcount: buf_idx);
+            vaoModel.Render(render);
         }
 
-        private void RenderVertex(OldFrameVertex vert)
+        private void RenderVertex(OldFrameVertex vert, int buf)
         {
-            buf_vtx[buf_idx] = new(vert.X, vert.Y, vert.Z);
+            buf_vtx[buf][buf_idx] = new(vert.X, vert.Y, vert.Z);
             if (colored)
-                buf_col[buf_idx] = new Color4(buf_col[buf_idx].R * vert.Red, buf_col[buf_idx].G * vert.Green, buf_col[buf_idx].B * vert.Blue, 1);
+                buf_col[buf][buf_idx] = new Rgba((byte)(buf_col[buf][buf_idx].r * 2 * vert.Red),
+                                                 (byte)(buf_col[buf][buf_idx].g * 2 * vert.Green),
+                                                 (byte)(buf_col[buf][buf_idx].b * 2 * vert.Blue), 255);
             else
-                buf_nor[buf_idx] = new(vert.NormalX, vert.NormalY, vert.NormalZ);
+                buf_nor[buf][buf_idx] = new(vert.NormalX, vert.NormalY, vert.NormalZ);
             buf_idx++;
         }
 

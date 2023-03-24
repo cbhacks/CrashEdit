@@ -143,10 +143,11 @@ namespace CrashEdit
 
         private void RenderEntity(OldZoneEntry zone, OldEntity entity)
         {
+            var ztrans = new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
             if (entity.Positions.Count == 1)
             {
                 EntityPosition position = entity.Positions[0];
-                Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
+                Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + ztrans;
                 switch (entity.Type)
                 {
                     case 0x3:
@@ -162,6 +163,21 @@ namespace CrashEdit
             }
             else
             {
+                /*
+                GL.Color3(Color.Blue);
+                GL.PushMatrix();
+                GL.Begin(PrimitiveType.LineStrip);
+                foreach (EntityPosition position in entity.Positions)
+                {
+                    GL.Vertex3(position.X, position.Y, position.Z);
+                }
+                GL.End();
+                */
+                foreach (EntityPosition position in entity.Positions)
+                {
+                    Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + ztrans;
+                    RenderSprite(trans, new Vector2(1), Color4.Red, OldResources.PointTexture);
+                }
             }
         }
 

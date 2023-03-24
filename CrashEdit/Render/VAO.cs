@@ -1,98 +1,128 @@
-﻿using OpenTK.Graphics.OpenGL4;
+﻿using OpenTK;
 using OpenTK.Graphics;
-using OpenTK;
+using OpenTK.Graphics.OpenGL4;
 using System;
-using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace CrashEdit
 {
     public class VAO : IDisposable
     {
-        public int ID { get; }
+        private Vertex[] verts;
 
-        private Dictionary<string, int> Buffers { get; } = new Dictionary<string, int>();
+        public int ID { get; }
+        public int Buffer { get; }
 
         public Shader Shader { get; }
 
         public PrimitiveType Primitive { get; set; }
+        public Vertex[] Verts { get => verts; }
         public int VertCount { get; set; }
 
-        public VAO(ShaderContext context, string shadername, PrimitiveType prim)
+        internal void EnableAttrib(string attrib_name, int size, VertexAttribPointerType type, bool normalized, string field_name)
         {
-            Shader = context.GetShader(shadername);
-            Primitive = prim;
 
-            // Create the vertex array object (VAO) for the program.
-            ID = GL.GenVertexArray();
-        }
-
-        public void UpdateAttrib<T>(int etype, string name, T[] data, int eltsize, int components, int eltcount = -1) where T : struct
-        {
-            int loc = GL.GetAttribLocation(Shader.ID, name);
-
-            if (loc != -1)
+            int temp = GL.GetAttribLocation(Shader.ID, attrib_name);
+            if (temp == -1)
             {
-                GL.BindVertexArray(ID);
-
-                // Create the vertex buffer object (VBO) for the data.
-                if (!Buffers.ContainsKey(name))
-                {
-                    Buffers.Add(name, GL.GenBuffer());
-                }
-                int buf = Buffers[name];
-                // Bind the VBO and copy the data into it.
-                GL.BindBuffer(BufferTarget.ArrayBuffer, buf);
-                GL.BufferData(BufferTarget.ArrayBuffer, (eltcount == -1 ? data.Length : eltcount) * eltsize, data, BufferUsageHint.DynamicDraw);
-                // setup the position attribute.
-                switch (etype)
-                {
-                    case 1: GL.VertexAttribIPointer(loc, components, VertexAttribIntegerType.Int, 0, IntPtr.Zero); break;
-                    case 2: GL.VertexAttribIPointer(loc, components, VertexAttribIntegerType.UnsignedShort, 0, IntPtr.Zero); break;
-                    case 3: GL.VertexAttribIPointer(loc, components, VertexAttribIntegerType.UnsignedByte, 0, IntPtr.Zero); break;
-                    default: GL.VertexAttribPointer(loc, components, VertexAttribPointerType.Float, false, 0, 0); break;
-                }
-                GL.EnableVertexAttribArray(loc);
-
-                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-                GL.BindVertexArray(0);
+                Console.WriteLine($"in shader {Shader.Name} did not find attrib {attrib_name}");
             }
             else
             {
-                // Console.WriteLine($"Shader attrib `{name}` not found in shader `{Shader.Name}`");
+                GL.EnableVertexAttribArray(temp);
+                GL.VertexAttribPointer(temp, size, type, normalized, Marshal.SizeOf<Vertex>(), Marshal.OffsetOf<Vertex>(field_name));
             }
         }
 
-        public void UpdateVectors(Vector4[] vec, string name, int eltc = -1) => UpdateAttrib(0, name, vec, 16, 4, eltc);
-        public void UpdateVectors(Vector3[] vec, string name, int eltc = -1) => UpdateAttrib(0, name, vec, 12, 3, eltc);
-        public void UpdateVectors(Vector2[] vec, string name, int eltc = -1) => UpdateAttrib(0, name, vec, 8, 2, eltc);
-        public void UpdatePositions(Vector4[] positions, int eltc = -1) => UpdateVectors(positions, "position", eltc);
-        public void UpdatePositions(Vector3[] positions, int eltc = -1) => UpdateVectors(positions, "position", eltc);
-        public void UpdatePositions(Vector2[] positions, int eltc = -1) => UpdateVectors(positions, "position", eltc);
-        public void UpdateUVs(Vector4[] positions, int eltc = -1) => UpdateVectors(positions, "uv", eltc);
-        public void UpdateUVs(Vector3[] positions, int eltc = -1) => UpdateVectors(positions, "uv", eltc);
-        public void UpdateUVs(Vector2[] positions, int eltc = -1) => UpdateVectors(positions, "uv", eltc);
-        public void UpdateNormals(Vector3[] positions, int eltc = -1) => UpdateAttrib(0, "normal", positions, 12, 3, eltc);
-        public void UpdateColors(Color4[] colors, int eltc = -1) => UpdateAttrib(0, "color", colors, 16, 4, eltc);
+        internal void EnableAttribI(string attrib_name, int size, VertexAttribIntegerType type, string field_name)
+        {
+
+            int temp = GL.GetAttribLocation(Shader.ID, attrib_name);
+            if (temp == -1)
+            {
+                Console.WriteLine($"in shader {Shader.Name} did not find attrib {attrib_name}");
+            }
+            else
+            {
+                GL.EnableVertexAttribArray(temp);
+                GL.VertexAttribIPointer(temp, size, type, Marshal.SizeOf<Vertex>(), Marshal.OffsetOf<Vertex>(field_name));
+            }
+        }
+
+        public VAO(ShaderContext context, string shadername, PrimitiveType prim, int vert_count = 10000)
+        {
+            Shader = context.GetShader(shadername);
+            Primitive = prim;
+            verts = new Vertex[vert_count];
+
+            // Create the vertex array object (VAO) and VBO for the program.
+            ID = GL.GenVertexArray();
+            Buffer = GL.GenBuffer();
+
+            // set up the array
+            GL.BindVertexArray(ID);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, Buffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, vert_count * Marshal.SizeOf<Vertex>(), IntPtr.Zero, BufferUsageHint.DynamicDraw);
+            EnableAttrib("position", 3, VertexAttribPointerType.Float, false, "trans");
+            EnableAttrib("uv", 2, VertexAttribPointerType.Float, false, "st");
+            EnableAttrib("normal", 3, VertexAttribPointerType.Float, false, "normal");
+            EnableAttrib("color", 4, VertexAttribPointerType.UnsignedByte, true, "rgba");
+            EnableAttribI("tex", 1, VertexAttribIntegerType.Int, "tex");
+        }
+
+        public void PushAttrib(Vector3? trans = null, Vector3? normal = null, Vector2? st = null, Rgba? rgba = null, int tex = 0)
+        {
+            if (VertCount == Verts.Length)
+            {
+                Console.WriteLine("Realloc buffer");
+                Array.Resize(ref verts, Verts.Length * 2);
+            }
+            if (trans != null)
+                Verts[VertCount].trans = trans.Value;
+            if (normal != null)
+                Verts[VertCount].normal = normal.Value;
+            if (st != null)
+                Verts[VertCount].st = st.Value;
+            if (rgba != null)
+                Verts[VertCount].rgba = rgba.Value;
+            Verts[VertCount].tex = tex;
+            VertCount++;
+        }
 
         public void Dispose()
         {
-            foreach (var buf in Buffers.Values)
-                GL.DeleteBuffer(buf);
+            GL.DeleteBuffer(Buffer);
             GL.DeleteVertexArray(ID);
         }
 
-        public void Render(RenderInfo ri, int vertcount = -1)
+        public void DiscardVerts()
         {
+            VertCount = 0;
+        }
+
+        public void Render(RenderInfo ri)
+        {
+            if (ri == null)
+            {
+                throw new ArgumentException("null render context");
+            }
+
             // Bind the VAO
             GL.BindVertexArray(ID);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, Buffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, VertCount * Marshal.SizeOf<Vertex>(), Verts, BufferUsageHint.DynamicDraw);
 
-            // Use/Bind the program
             Shader.Render(ri, this);
+            GL.DrawArrays(Primitive, 0, VertCount);
 
-            // This draws the triangle.
-            GL.DrawArrays(Primitive, 0, vertcount == -1 ? VertCount : vertcount);
-
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindVertexArray(0);
+        }
+
+        public void RenderAndDiscard(RenderInfo ri)
+        {
+            Render(ri);
+            DiscardVerts();
         }
 
         #region USER DATA (these can be whatever you want)

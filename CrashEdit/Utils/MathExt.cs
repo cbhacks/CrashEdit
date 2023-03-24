@@ -30,5 +30,17 @@ namespace CrashEdit
                 col1.A + (col2.A - col1.A) * amt
                 );
         }
+
+        public static Rgba Lerp(Rgba col1, Rgba col2, float amt)
+        {
+            if (amt <= 0) return col1;
+            if (amt >= 1) return col2;
+            return new Rgba(
+                (byte)(col1.r + (col2.r - col1.r) * amt),
+                (byte)(col1.g + (col2.r - col1.g) * amt),
+                (byte)(col1.b + (col2.r - col1.b) * amt),
+                (byte)(col1.a + (col2.r - col1.a) * amt)
+                );
+        }
     }
 }

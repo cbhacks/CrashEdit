@@ -13,7 +13,7 @@ namespace CrashEdit
 
         private VAO vaoWorld;
         private Vector3[] buf_vtx;
-        private Color4[] buf_col;
+        private Rgba[] buf_col;
         private Vector2[] buf_uv;
         private int[] buf_tex;
         private int buf_idx;
@@ -84,6 +84,7 @@ namespace CrashEdit
         protected override void Render()
         {
             base.Render();
+            vaoWorld.DiscardVerts();
 
             // setup textures
             var tex_eids = CollectTPAGs();
@@ -93,10 +94,14 @@ namespace CrashEdit
             {
                 nb += world.Polygons.Count * 3;
             }
-            buf_vtx = new Vector3[nb];
-            buf_col = new Color4[nb];
-            buf_uv = new Vector2[nb];
-            buf_tex = new int[nb]; // enable: 1, colormode: 2, blendmode: 2, clutx: 4, cluty: 7, doubleface: 1, page: X (>17 total)
+            if (buf_vtx == null || buf_vtx.Length < nb)
+                buf_vtx = new Vector3[nb];
+            if (buf_col == null || buf_col.Length < nb)
+                buf_col = new Rgba[nb];
+            if (buf_uv == null || buf_uv.Length < nb)
+                buf_uv = new Vector2[nb];
+            if (buf_tex == null || buf_tex.Length < nb)
+                buf_tex = new int[nb]; // enable: 1, colormode: 2, blendmode: 2, clutx: 4, cluty: 7, doubleface: 1, page: X (>17 total)
 
             // render stuff
             buf_idx = 0;
@@ -105,10 +110,10 @@ namespace CrashEdit
                 RenderWorld(world, tex_eids);
             }
 
-            vaoWorld.UpdatePositions(buf_vtx);
-            vaoWorld.UpdateColors(buf_col);
-            vaoWorld.UpdateUVs(buf_uv);
-            vaoWorld.UpdateAttrib(1, "tex", buf_tex, 4, 1);
+            for (int i = 0; i < buf_idx; ++i)
+            {
+                vaoWorld.PushAttrib(trans: buf_vtx[i], rgba: buf_col[i], st: buf_uv[i], tex: buf_tex[i]);
+            }
 
             // render passes
             RenderWorldPass(BlendMode.Solid);
@@ -159,7 +164,7 @@ namespace CrashEdit
         {
             SetBlendMode(pass);
             vaoWorld.BlendMask = (int)pass;
-            vaoWorld.Render(render, vertcount: buf_idx);
+            vaoWorld.Render(render);
         }
 
         private void RenderVertex(ProtoSceneryEntry world, ProtoSceneryVertex vert)

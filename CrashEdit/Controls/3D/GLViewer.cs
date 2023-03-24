@@ -13,12 +13,12 @@ namespace CrashEdit
 {
     public abstract class GLViewer : GLControl
     {
-        static readonly Vector2[] SpriteVerts = new Vector2[4] {
-            new(-.5f, -.5f),
-            new(-.5f, +.5f),
-            new(+.5f, +.5f),
-            //new(+.5f, +.5f),
-            new(+.5f, -.5f)
+        static readonly Vector3[] SpriteVerts = new Vector3[4] {
+            new(-.5f, -.5f, 0),
+            new(-.5f, +.5f, 0),
+            new(+.5f, +.5f, 0),
+            //new(+.5f, +.5f, 0),
+            new(+.5f, -.5f, 0)
             //new(-.5f, -.5f)
         };
         static readonly Vector3[] AxesPos = new Vector3[6] {
@@ -115,8 +115,8 @@ namespace CrashEdit
             new(-1, +1, +1),
             new(-1, +1, -1)
         };
-        private readonly Dictionary<int, Vector4[]> SpherePosCache = new();
-        private readonly Dictionary<int, Vector4[]> GridPosCache = new();
+        private readonly Dictionary<int, Vector3[]> SpherePosCache = new();
+        private readonly Dictionary<int, Vector3[]> GridPosCache = new();
         private int SpherePosLastUploaded = -1;
         private int GridPosLastUploaded = -1;
         protected VAO vaoSphereLine;
@@ -160,18 +160,18 @@ namespace CrashEdit
                 int long_amt = resolution * 4;
                 int lat_amt = resolution;
                 int pt_nb = 1 + long_amt * (2 + 2 * lat_amt) + (1 + long_amt) * (1 + 2 * lat_amt);
-                var pos = new Vector4[pt_nb];
+                var pos = new Vector3[pt_nb];
                 int i = 1;
-                pos[0] = new Vector4(0, 0, 1, 1);
+                pos[0] = new Vector3(0, 0, 1);
                 bool even = true;
                 for (int ii = 0; ii < long_amt; ++ii)
                 {
-                    var rotmat = Matrix4.CreateRotationZ((float)ii / long_amt * MathHelper.TwoPi);
+                    var rotmat = Matrix3.CreateRotationZ((float)ii / long_amt * MathHelper.TwoPi);
                     if (ii % 2 == 0)
                     {
                         for (int iii = 0, l_m = 2 + lat_amt * 2; iii < l_m; ++iii)
                         {
-                            pos[i++] = pos[0] * Matrix4.CreateRotationX((float)(iii + 1) / l_m * MathHelper.Pi) * rotmat;
+                            pos[i++] = pos[0] * Matrix3.CreateRotationX((float)(iii + 1) / l_m * MathHelper.Pi) * rotmat;
                         }
                         even = true;
                     }
@@ -179,31 +179,36 @@ namespace CrashEdit
                     {
                         for (int iii = 0, l_m = 2 + lat_amt * 2; iii < l_m; ++iii)
                         {
-                            pos[i++] = pos[0] * Matrix4.CreateRotationX((float)(l_m - iii - 1) / l_m * MathHelper.Pi) * rotmat;
+                            pos[i++] = pos[0] * Matrix3.CreateRotationX((float)(l_m - iii - 1) / l_m * MathHelper.Pi) * rotmat;
                         }
                         even = false;
                     }
                 }
                 for (int ii = 1, l_m = lat_amt * 2 + 2; ii < l_m; ++ii)
                 {
-                    Matrix4 rotmat;
+                    Matrix3 rotmat;
                     if (!even)
                     {
-                        rotmat = Matrix4.CreateRotationX((float)ii / l_m * MathHelper.Pi);
+                        rotmat = Matrix3.CreateRotationX((float)ii / l_m * MathHelper.Pi);
                     }
                     else
                     {
-                        rotmat = Matrix4.CreateRotationX((float)(l_m - ii) / l_m * MathHelper.Pi);
+                        rotmat = Matrix3.CreateRotationX((float)(l_m - ii) / l_m * MathHelper.Pi);
                     }
                     for (int iii = 0; iii <= long_amt; ++iii)
                     {
-                        pos[i++] = pos[0] * rotmat * Matrix4.CreateRotationZ((float)iii / long_amt * MathHelper.TwoPi);
+                        pos[i++] = pos[0] * (!even ? Matrix3.CreateRotationX((float)ii / l_m * MathHelper.Pi) : Matrix3.CreateRotationX((float)(l_m - ii) / l_m * MathHelper.Pi))
+                                          * Matrix3.CreateRotationZ((float)iii / long_amt * MathHelper.TwoPi);
                     }
                 }
                 SpherePosCache.Add(resolution, pos);
             }
-            vaoSphereLine.UpdatePositions(SpherePosCache[resolution]);
-            vaoSphereLine.VertCount = SpherePosCache[resolution].Length;
+            var verts = SpherePosCache[resolution];
+            vaoGridLine.VertCount = 0;
+            for (int i = 0; i < verts.Length; ++i)
+            {
+                vaoSphereLine.PushAttrib(trans: verts[i]);
+            }
             SpherePosLastUploaded = resolution;
         }
         protected void MakeLineGrid(int resolution)
@@ -214,25 +219,28 @@ namespace CrashEdit
 
             if (!GridPosCache.ContainsKey(resolution))
             {
-                var pos = new Vector4[4 * resolution * 2];
+                var pos = new Vector3[4 * resolution * 2];
                 var border = resolution * 1f - 0.5f;
 
                 var pi = 0;
                 for (int i = 0; i < resolution * 2; ++i)
                 {
-                    pos[pi++] = new Vector4(-border + i, 0, -border, 1);
-                    pos[pi++] = new Vector4(-border + i, 0, +border, 1);
-                    pos[pi++] = new Vector4(-border, 0, -border + i, 1);
-                    pos[pi++] = new Vector4(+border, 0, -border + i, 1);
+                    pos[pi++] = new Vector3(-border + i, 0, -border);
+                    pos[pi++] = new Vector3(-border + i, 0, +border);
+                    pos[pi++] = new Vector3(-border, 0, -border + i);
+                    pos[pi++] = new Vector3(+border, 0, -border + i);
                 }
 
                 GridPosCache.Add(resolution, pos);
             }
 
-            vaoGridLine.UpdatePositions(GridPosCache[resolution]);
-            vaoGridLine.VertCount = GridPosCache[resolution].Length;
+            var verts = GridPosCache[resolution];
+            vaoGridLine.VertCount = 0;
+            for (int i = 0; i < verts.Length; ++i)
+            {
+                vaoGridLine.PushAttrib(trans: verts[i]);
+            }
             GridPosLastUploaded = resolution;
-
         }
 
         public GLViewer() : base(GraphicsMode.Default, 4, 3, GraphicsContextFlags.Debug)
@@ -292,19 +300,27 @@ namespace CrashEdit
             render.ShaderContext.InitShaders();
 
             // init axes vao
-            vaoAxes = new VAO(render.ShaderContext, "axes", PrimitiveType.Lines);
-            vaoAxes.UpdatePositions(AxesPos);
+            vaoAxes = new VAO(render.ShaderContext, "axes", PrimitiveType.Lines, vert_count: AxesPos.Length);
+            for (int i = 0; i < AxesPos.Length; ++i)
+            {
+                vaoAxes.PushAttrib(trans: AxesPos[i]);
+            }
 
             vaoSphereLine = new VAO(render.ShaderContext, "line-model", PrimitiveType.LineStrip);
             vaoGridLine = new VAO(render.ShaderContext, "line-usercolor", PrimitiveType.Lines);
-            vaoBoxTri = new VAO(render.ShaderContext, "box-model", PrimitiveType.Triangles);
-            vaoBoxLine = new VAO(render.ShaderContext, "box-model", PrimitiveType.Lines);
-            vaoSprites = new(render.ShaderContext, "sprite", PrimitiveType.TriangleFan);
-
-            vaoBoxTri.UpdatePositions(BoxTriVerts);
-            vaoBoxLine.UpdatePositions(BoxLineVerts);
-            vaoSprites.UpdatePositions(SpriteVerts);
+            vaoBoxTri = new VAO(render.ShaderContext, "box-model", PrimitiveType.Triangles, vert_count: BoxTriVerts.Length);
+            vaoBoxLine = new VAO(render.ShaderContext, "box-model", PrimitiveType.Lines, vert_count: BoxLineVerts.Length);
+            vaoSprites = new VAO(render.ShaderContext, "sprite", PrimitiveType.TriangleFan, vert_count: SpriteVerts.Length);
             vaoGridLine.UserColor1 = Color4.Gray;
+
+            for (int i = 0; i < BoxTriVerts.Length; ++i)
+            {
+                vaoBoxTri.PushAttrib(trans: BoxTriVerts[i]);
+            }
+            for (int i = 0; i < BoxLineVerts.Length; ++i)
+            {
+                vaoBoxLine.PushAttrib(trans: BoxLineVerts[i]);
+            }
 
             // make texture
             tpage = GL.GenTexture();
@@ -491,7 +507,7 @@ namespace CrashEdit
         private void RenderAxes(Vector3 pos)
         {
             vaoAxes.UserTrans = pos;
-            vaoAxes.Render(render, vertcount: 6);
+            vaoAxes.Render(render);
         }
 
         protected void RenderBox(Vector3 pos, Vector3 size, Color4 col)
@@ -499,7 +515,7 @@ namespace CrashEdit
             vaoBoxTri.UserTrans = pos;
             vaoBoxTri.UserScale = size;
             vaoBoxTri.UserColor1 = col;
-            vaoBoxTri.Render(render, vertcount: BoxTriVerts.Length);
+            vaoBoxTri.Render(render);
         }
 
         protected void RenderBoxLine(Vector3 pos, Vector3 size, Color4 col)
@@ -507,7 +523,7 @@ namespace CrashEdit
             vaoBoxLine.UserTrans = pos;
             vaoBoxLine.UserScale = size;
             vaoBoxLine.UserColor1 = col;
-            vaoBoxLine.Render(render, vertcount: BoxLineVerts.Length);
+            vaoBoxLine.Render(render);
         }
 
         protected void RenderBoxFilled(Vector3 pos, Vector3 size, Color4 col)
@@ -532,12 +548,15 @@ namespace CrashEdit
             //uvs[3] = new Vector2(texRect.Right, texRect.Top);
             uvs[3] = new Vector2(texRect.Right, texRect.Bottom);
             //uvs[5] = new Vector2(texRect.Left, texRect.Bottom);
-            vaoSprites.UpdatePositions(SpriteVerts);
-            vaoSprites.UpdateUVs(uvs);
+            vaoSprites.DiscardVerts();
+            for (int i = 0; i < SpriteVerts.Length; ++i)
+            {
+                vaoSprites.PushAttrib(trans: SpriteVerts[i], st: uvs[i]);
+            }
             vaoSprites.UserTrans = trans;
             vaoSprites.UserScale = new Vector3(size);
             vaoSprites.UserColor1 = col;
-            vaoSprites.Render(render, vertcount: uvs.Length);
+            vaoSprites.Render(render);
         }
 
         public void ResetCamera()
@@ -615,6 +634,18 @@ namespace CrashEdit
                     GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, kvp.Value * 128, 512, 128, OpenTK.Graphics.OpenGL4.PixelFormat.RedInteger, PixelType.UnsignedByte, tpag.Data);
                 }
             }
+        }
+
+        protected int MakeTexInfo(bool enable, int color = 0, int blend = 0, int clutx = 0, int cluty = 0, int face = 0, int page = 0)
+        {
+            // enable: 1, colormode: 2, blendmode: 2, clutx: 4, cluty: 7, doubleface: 1, page: X (>17 total)
+            color &= 0x3;
+            blend &= 0x3;
+            clutx &= 0xF;
+            cluty &= 0x7F;
+            face &= 0x1;
+            // page &= 0xFFFF;
+            return (enable ? 1 : 0) | (color << 1) | (blend << 3) | (clutx << 5) | (cluty << 9) | (face << 16) | (page << 17);
         }
         
         protected override void Dispose(bool disposing)
