@@ -20,7 +20,9 @@ namespace CrashEdit
         private TrackBar trkSampleRate;
         private Label lblSampleRate;
 
-        public SoundBox(SampleSet samples)
+        private Entry entry = null;
+
+        public SoundBox(SampleSet samples, float default_pitch = 4.0f)
         {
             this.samples = samples;
 
@@ -39,7 +41,7 @@ namespace CrashEdit
                 Minimum = 0,
                 Maximum = 16 * 256,
                 TickFrequency = 128,
-                Value = 1024,
+                Value = (int)(default_pitch * 256),
                 Dock = DockStyle.Fill
             };
             trkSampleRate.ValueChanged += (object sender, EventArgs e) => {
@@ -94,13 +96,15 @@ namespace CrashEdit
             ExportWave((int)(trkSampleRate.Value / 256.0 * (11025 / 4.0)));
         }
 
-        public SoundBox(SoundEntry entry)
-            : this(entry.Samples)
+        public SoundBox(SoundEntry entry, float default_pitch = 4.0f)
+            : this(entry.Samples, default_pitch)
         {
+            this.entry = entry;
         }
 
-        public SoundBox(SpeechEntry entry) : this(entry.Samples)
+        public SoundBox(SpeechEntry entry, float default_pitch = 8.0f) : this(entry.Samples, default_pitch)
         {
+            this.entry = entry;
         }
 
         void tbbExport_Click(object sender,EventArgs e)
@@ -118,8 +122,15 @@ namespace CrashEdit
 
         private void ExportWave(int samplerate)
         {
-            byte[] wave = WaveConv.ToWave(samples.ToPCM(),samplerate).Save();
-            FileUtil.SaveFile(wave,FileFilters.Wave,FileFilters.Any);
+            byte[] wave = WaveConv.ToWave(samples.ToPCM(), samplerate).Save();
+            if (entry != null)
+            {
+                FileUtil.SaveFile(entry.EName, wave, FileFilters.Wave, FileFilters.Any);
+            }
+            else
+            {
+                FileUtil.SaveFile(wave, FileFilters.Wave, FileFilters.Any);
+            }
         }
 
         protected override void Dispose(bool disposing)
