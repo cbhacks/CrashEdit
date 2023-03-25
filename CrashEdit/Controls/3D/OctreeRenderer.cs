@@ -10,7 +10,7 @@ namespace CrashEdit
 {
     public class OctreeRenderer : IDisposable
     {
-        public static Dictionary<short, Color4> nodeColors = new();
+        public static Dictionary<short, Rgba> nodeColors = new();
 
         public bool Enabled { get; set; }
         public int NodeKindSelection { get; set; }
@@ -87,7 +87,7 @@ namespace CrashEdit
                 {
                     ListViewItem lsi = new();
                     lsi.Text = string.Format("{2:X2}:{1:X2}:{0:X1}", color.Key >> 1 & 0x7, color.Key >> 4 & 0x3F, color.Key >> 10 & 0x3F);
-                    lsi.BackColor = (Color)color.Value;
+                    lsi.BackColor = (Color)(Color4)color.Value;
                     lsi.ForeColor = lsi.BackColor.GetBrightness() >= 0.5 ? Color.Black : Color.White;
                     lsi.Tag = color.Key;
                     lst.Items.Add(lsi);
@@ -119,20 +119,23 @@ namespace CrashEdit
             {
                 if (NodeKindSelection != -1 && NodeKindSelection != value)
                     return;
-                Color4 color;
+                Rgba color;
                 if (!nodeColors.TryGetValue((short)value, out color))
                 {
                     byte[] colorbuf = new byte[3];
                     Random random = new Random(value);
                     random.NextBytes(colorbuf);
-                    color = new Color4(colorbuf[0], colorbuf[1], colorbuf[2], 255);
+                    color = new Rgba(colorbuf[0], colorbuf[1], colorbuf[2], 255);
                     nodeColors.Add((short)value, color);
                 }
-                Color4[] all_colors = new Color4[8];
+                Rgba[] all_colors = new Rgba[8];
                 for (int i = 0; i < all_colors.Length; ++i)
                 {
-                    float inc = i * 0.01f;
-                    all_colors[i] = new(Math.Min(color.R + inc, 1), Math.Min(color.G + inc, 1), Math.Min(color.B + inc, 1), 1f);
+                    int inc = i * 3;
+                    all_colors[i] = new((byte)Math.Min(color.r + inc, 255),
+                                        (byte)Math.Min(color.g + inc, 255),
+                                        (byte)Math.Min(color.b + inc, 255),
+                                        255);
                 }
                 Viewer.AddBox(new Vector3(x, y, z), new Vector3(w, h, d), all_colors, NodeOutline);
             }

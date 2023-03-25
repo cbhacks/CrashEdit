@@ -480,14 +480,14 @@ namespace CrashEdit
             RenderSingleBox(pos, size, col_fill);
         }
 
-        public void AddBox(Vector3 ofs, Vector3 sz, Color4 col, bool outline)
+        public void AddBox(Vector3 ofs, Vector3 sz, Rgba col, bool outline)
         {
             if (outline)
             {
                 for (int i = 0; i < BoxLineIndices.Length; ++i)
                 {
                     int v_idx = BoxLineIndices[i];
-                    vaoLineBatch.PushAttrib(trans: (BoxVerts[v_idx] + new Vector3(1)) / 2 * sz + ofs, rgba: (Rgba)col);
+                    vaoLineBatch.PushAttrib(trans: (BoxVerts[v_idx] + new Vector3(1)) / 2 * sz + ofs, rgba: col);
                 }
             }
             else
@@ -495,20 +495,19 @@ namespace CrashEdit
                 for (int i = 0; i < BoxTriIndices.Length; ++i)
                 {
                     int v_idx = BoxTriIndices[i];
-                    vaoTriBatch.PushAttrib(trans: (BoxVerts[v_idx] + new Vector3(1)) / 2 * sz + ofs, rgba: (Rgba)col, st: new Vector2(-1));
+                    vaoTriBatch.PushAttrib(trans: (BoxVerts[v_idx] + new Vector3(1)) / 2 * sz + ofs, rgba: col, st: new Vector2(-1));
                 }
             }
         }
 
-        public void AddBox(Vector3 ofs, Vector3 sz, Color4[] colors, bool outline)
+        public void AddBox(Vector3 ofs, Vector3 sz, Rgba[] colors, bool outline)
         {
             if (outline)
             {
-                Color4[] color_array = colors.Length == BoxLineIndices.Length ? colors : new Color4[BoxLineIndices.Length];
                 for (int i = 0; i < BoxLineIndices.Length; ++i)
                 {
                     int v_idx = BoxLineIndices[i];
-                    vaoLineBatch.PushAttrib(trans: (BoxVerts[v_idx] + new Vector3(1)) / 2 * sz + ofs, rgba: (Rgba)(colors.Length == BoxLineIndices.Length ? colors[i] : colors[v_idx]));
+                    vaoLineBatch.PushAttrib(trans: (BoxVerts[v_idx] + new Vector3(1)) / 2 * sz + ofs, rgba: colors.Length == BoxLineIndices.Length ? colors[i] : colors[v_idx]);
                 }
             }
             else
@@ -516,12 +515,12 @@ namespace CrashEdit
                 for (int i = 0; i < BoxTriIndices.Length; ++i)
                 {
                     int v_idx = BoxTriIndices[i];
-                    vaoTriBatch.PushAttrib(trans: (BoxVerts[v_idx] + new Vector3(1)) / 2 * sz + ofs, rgba: (Rgba)(colors.Length == BoxTriIndices.Length ? colors[i] : colors[v_idx]), st: new Vector2(-1));
+                    vaoTriBatch.PushAttrib(trans: (BoxVerts[v_idx] + new Vector3(1)) / 2 * sz + ofs, rgba: colors.Length == BoxTriIndices.Length ? colors[i] : colors[v_idx], st: new Vector2(-1));
                 }
             }
         }
 
-        public void AddBoxAB(Vector3 a, Vector3 b, Color4 col, bool outline) => AddBox(a, b - a, col, outline);
+        public void AddBoxAB(Vector3 a, Vector3 b, Rgba col, bool outline) => AddBox(a, b - a, col, outline);
 
         protected void RenderSingleSprite(Vector3 trans, Vector2 size, Color4 col, Bitmap texture)
         {

@@ -27,6 +27,11 @@ namespace CrashEdit
                             (byte)(c.B * 255),
                             (byte)(c.A * 255));
         }
+
+        public static explicit operator Color4(Rgba c)
+        {
+            return new Color4(c.r, c.g, c.b, c.a);
+        }
     }
 
     public struct TexInfoUnpacked
