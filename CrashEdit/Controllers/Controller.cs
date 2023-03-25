@@ -127,7 +127,7 @@ namespace CrashEdit
                     }
                 }
             }
-            Node.Remove(); // <-- this line makes the TreeNodeCollection volatile, so the node references must be copies onto a separate list beforehand
+            Node.Remove(); // <-- this line makes the TreeNodeCollection volatile, so the node references must be copied onto a separate list beforehand
             ContextMenu.Dispose();
             if (editor != null)
             {

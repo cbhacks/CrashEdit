@@ -58,6 +58,9 @@ namespace CrashEdit
         public NSF NSF { get; }
         public GameVersion GameVersion { get; }
 
+        private Form ShowLevelForm { get; set; }
+        private Form ShowLevelZonesForm { get; set; }
+
         public ChunkController CreateChunkController(Chunk chunk)
         {
             if (chunk is NormalChunk)
@@ -273,44 +276,71 @@ namespace CrashEdit
 
         private void Menu_ShowLevelC1()
         {
-            Form frm = new() { Text = "Loading...", Width = 480, Height = 360 };
-            frm.Show();
+            if (ShowLevelForm != null)
+            {
+                ShowLevelForm.Focus();
+                return;
+            }
+            ShowLevelForm = new() { Text = "Loading...", Width = 480, Height = 360 };
+            ShowLevelForm.Show();
             List<int> worlds = new();
             foreach (var entry in NSF.GetEntries<OldSceneryEntry>())
             {
                 worlds.Add(entry.EID);
             }
             OldSceneryEntryViewer viewer = new(NSF, worlds) { Dock = DockStyle.Fill };
-            frm.Controls.Add(viewer);
-            frm.Text = string.Empty;
+            ShowLevelForm.Controls.Add(viewer);
+            ShowLevelForm.Text = string.Empty;
+            ShowLevelForm.FormClosing += (object sender, FormClosingEventArgs e) =>
+            {
+                ShowLevelForm = null;
+            };
         }
 
         private void Menu_ShowLevelZonesC1()
         {
-            Form frm = new() { Text = "Loading...", Width = 480, Height = 360 };
-            frm.Show();
+            if (ShowLevelZonesForm != null)
+            {
+                ShowLevelZonesForm.Focus();
+                return;
+            }
+            ShowLevelZonesForm = new() { Text = "Loading...", Width = 480, Height = 360 };
+            ShowLevelZonesForm.Show();
             List<int> zones = new();
             foreach (var entry in NSF.GetEntries<OldZoneEntry>())
             {
                 zones.Add(entry.EID);
             }
             OldZoneEntryViewer viewer = new(NSF, zones) { Dock = DockStyle.Fill };
-            frm.Controls.Add(viewer);
-            frm.Text = string.Empty;
+            ShowLevelZonesForm.Controls.Add(viewer);
+            ShowLevelZonesForm.Text = string.Empty;
+            ShowLevelZonesForm.FormClosing += (object sender, FormClosingEventArgs e) =>
+            {
+                ShowLevelZonesForm = null;
+            };
         }
 
         private void Menu_ShowLevelC1Proto()
         {
-            Form frm = new() { Text = "Loading...", Width = 480, Height = 360 };
-            frm.Show();
+            if (ShowLevelForm != null)
+            {
+                ShowLevelForm.Focus();
+                return;
+            }
+            ShowLevelForm = new() { Text = "Loading...", Width = 480, Height = 360 };
+            ShowLevelForm.Show();
             List<int> worlds = new();
             foreach (var entry in NSF.GetEntries<ProtoSceneryEntry>())
             {
                 worlds.Add(entry.EID);
             }
             ProtoSceneryEntryViewer viewer = new(NSF, worlds) { Dock = DockStyle.Fill };
-            frm.Controls.Add(viewer);
-            frm.Text = string.Empty;
+            ShowLevelForm.Controls.Add(viewer);
+            ShowLevelForm.Text = string.Empty;
+            ShowLevelForm.FormClosing += (object sender, FormClosingEventArgs e) =>
+            {
+                ShowLevelForm = null;
+            };
         }
 
         private void Menu_ShowLevelC2()
@@ -386,6 +416,14 @@ namespace CrashEdit
                 {
                 }
             }
+        }
+
+        public override void Dispose()
+        {
+            ShowLevelForm?.Close();
+            ShowLevelZonesForm?.Close();
+
+            base.Dispose();
         }
     }
 }
