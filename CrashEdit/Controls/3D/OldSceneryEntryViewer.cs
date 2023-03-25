@@ -37,6 +37,28 @@ namespace CrashEdit
             }
         }
 
+        protected IEnumerable<OldSceneryEntry> GetSkyWorlds()
+        {
+            foreach (OldSceneryEntry world in GetWorlds())
+            {
+                if (world.IsSky)
+                {
+                    yield return world;
+                }
+            }
+        }
+
+        protected IEnumerable<OldSceneryEntry> GetNonSkyWorlds()
+        {
+            foreach (OldSceneryEntry world in GetWorlds())
+            {
+                if (!world.IsSky)
+                {
+                    yield return world;
+                }
+            }
+        }
+
         protected void SetWorlds(IEnumerable<int> worlds)
         {
             this.worlds = new(worlds);
@@ -89,32 +111,51 @@ namespace CrashEdit
             var tex_eids = CollectTPAGs();
             SetupTPAGs(tex_eids);
 
-            int nb = 0;
-            foreach (var world in GetWorlds())
+            // render skies first then other things
+            for (int i = 0; i < 2; ++i)
             {
-                nb += world.Polygons.Count * 3;
-            }
-            vaoWorld.VertCount = nb;
-            vaoWorld.TestRealloc();
-            vaoWorld.DiscardVerts();
+                IEnumerable<OldSceneryEntry> worlds_to_use = i == 0 ? GetSkyWorlds() : GetNonSkyWorlds();
+                if (i == 0)
+                {
+                    GL.DepthMask(false);
+                    vaoWorld.UserScaleScalar = GameScales.WorldC1 / render.Distance;
+                } else
+                {
+                    vaoWorld.UserScaleScalar = GameScales.WorldC1;
+                }
+                int nb = 0;
+                foreach (var world in worlds_to_use)
+                {
+                    nb += world.Polygons.Count * 3;
+                }
+                vaoWorld.VertCount = nb;
+                vaoWorld.TestRealloc();
+                vaoWorld.DiscardVerts();
 
-            // render stuff
-            blendMask = BlendMode.Solid;
-            foreach (var world in GetWorlds())
-            {
-                RenderWorld(world, tex_eids);
-            }
+                // render stuff
+                blendMask = BlendMode.Solid;
+                foreach (var world in worlds_to_use)
+                {
+                    RenderWorld(world, tex_eids);
+                }
 
-            // render passes
-            RenderWorldPass(BlendMode.Solid);
-            RenderWorldPass(BlendMode.Trans);
-            RenderWorldPass(BlendMode.Subtractive);
-            RenderWorldPass(BlendMode.Additive);
+                // render passes
+                RenderWorldPass(BlendMode.Solid);
+                RenderWorldPass(BlendMode.Trans);
+                RenderWorldPass(BlendMode.Subtractive);
+                RenderWorldPass(BlendMode.Additive);
+
+                GL.DepthMask(true);
+            }
         }
 
         protected void RenderWorld(OldSceneryEntry world, Dictionary<int, int> tex_eids)
         {
             worldOffset = new Vector3(world.XOffset, world.YOffset, world.ZOffset);
+            if (world.IsSky)
+            {
+                worldOffset = -render.Projection.Trans * vaoWorld.UserScaleScalar;
+            }
             foreach (OldSceneryPolygon polygon in world.Polygons)
             {
                 OldModelStruct str = world.Structs[polygon.ModelStruct];

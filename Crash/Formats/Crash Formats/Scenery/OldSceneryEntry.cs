@@ -18,6 +18,11 @@ namespace Crash
             this.vertices = new List<OldSceneryVertex>(vertices);
             this.structs = new List<OldModelStruct>(structs);
             ExtraData = extradata;
+
+            if (IsSky && BitConv.FromInt32(Info, 0x1C) != 1)
+            {
+                throw new ArgumentOutOfRangeException("Info.IsSky");
+            }
         }
 
         public override int Type => 3;
@@ -43,6 +48,12 @@ namespace Crash
         }
 
         public int TPAGCount => BitConv.FromInt32(Info, 0x18);
+
+        public bool IsSky
+        {
+            get => BitConv.FromInt32(Info, 0x1C) != 0;
+            set => BitConv.ToInt32(Info, 0x1C, value ? 1 : 0);
+        }
         public int GetTPAG(int idx) => BitConv.FromInt32(Info, 0x20 + 4 * idx);
 
         public IList<OldSceneryPolygon> Polygons => polygons;
