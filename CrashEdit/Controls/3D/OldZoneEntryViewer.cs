@@ -219,7 +219,7 @@ namespace CrashEdit
             };
             for (int i = 0; i < 3 * 6; ++i)
             {
-                vaoBoxEntity.PushAttrib(trans: trans + BoxTriVerts[i] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6], st: uvs[i % 6]);
+                vaoBoxEntity.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6], st: uvs[i % 6]);
             }
             uvs[0] = new Vector2(topTexRect.Left, topTexRect.Bottom);
             uvs[1] = new Vector2(topTexRect.Left, topTexRect.Top);
@@ -229,7 +229,7 @@ namespace CrashEdit
             uvs[5] = new Vector2(topTexRect.Left, topTexRect.Bottom);
             for (int i = 4 * 6; i < 6 * 6; ++i)
             {
-                vaoBoxEntity.PushAttrib(trans: trans + BoxTriVerts[i] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6 - 1], st: uvs[i % 6]);
+                vaoBoxEntity.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6 - 1], st: uvs[i % 6]);
             }
         }
 

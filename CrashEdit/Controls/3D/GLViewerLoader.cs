@@ -74,19 +74,19 @@ namespace CrashEdit
 
             vaoSphereLine = new VAO(shaderContext, "line-model", PrimitiveType.LineStrip);
             vaoGridLine = new VAO(shaderContext, "line-usercolor", PrimitiveType.Lines);
-            vaoBoxTri = new VAO(shaderContext, "box-model", PrimitiveType.Triangles, vert_count: BoxTriVerts.Length);
-            vaoBoxLine = new VAO(shaderContext, "box-model", PrimitiveType.Lines, vert_count: BoxLineVerts.Length);
+            vaoBoxTri = new VAO(shaderContext, "box-model", PrimitiveType.Triangles, vert_count: BoxTriIndices.Length);
+            vaoBoxLine = new VAO(shaderContext, "box-model", PrimitiveType.Lines, vert_count: BoxLineIndices.Length);
             vaoSprite = new VAO(shaderContext, "sprite", PrimitiveType.TriangleFan, vert_count: SpriteVerts.Length);
             vaoSpriteBatch = new VAO(shaderContext, "sprite2", PrimitiveType.Quads);
             vaoGridLine.UserColor1 = Color4.Gray;
 
-            for (int i = 0; i < BoxTriVerts.Length; ++i)
+            for (int i = 0; i < BoxTriIndices.Length; ++i)
             {
-                vaoBoxTri.PushAttrib(trans: BoxTriVerts[i]);
+                vaoBoxTri.PushAttrib(trans: BoxVerts[BoxTriIndices[i]]);
             }
-            for (int i = 0; i < BoxLineVerts.Length; ++i)
+            for (int i = 0; i < BoxLineIndices.Length; ++i)
             {
-                vaoBoxLine.PushAttrib(trans: BoxLineVerts[i]);
+                vaoBoxLine.PushAttrib(trans: BoxVerts[BoxLineIndices[i]]);
             }
 
             // make texture

@@ -11,108 +11,69 @@ namespace CrashEdit
 {
     public abstract class GLViewer : GLControl
     {
+        protected static readonly Vector3[] AxesPos = new Vector3[6] {
+            new(-0.5f, 0, 0),
+            new(+1.0f, 0, 0),
+            new(0, -0.5f, 0),
+            new(0, +1.0f, 0),
+            new(0, 0, -0.5f),
+            new(0, 0, +1.0f)
+        };
+
         protected static readonly Vector3[] SpriteVerts = new Vector3[4] {
             new(-.5f, -.5f, 0),
             new(-.5f, +.5f, 0),
             new(+.5f, +.5f, 0),
-            //new(+.5f, +.5f, 0),
             new(+.5f, -.5f, 0)
-            //new(-.5f, -.5f, 0)
         };
-        protected static readonly Vector3[] AxesPos = new Vector3[6] {
-            new(-.5f, 0, 0),
-            new(1, 0, 0),
-            new(0, -.5f, 0),
-            new(0, 1, 0),
-            new(0, 0, -.5f),
-            new(0, 0, 1)
-        };
-        protected static readonly Vector3[] BoxLineVerts = new Vector3[24] {
-            // sides
+
+        protected static readonly Vector3[] BoxVerts = new Vector3[8] {
             new(-1, -1, -1),
-            new(-1, +1, -1),
-
-            new(+1, -1, -1),
-            new(+1, +1, -1),
-
-            new(+1, -1, +1),
-            new(+1, +1, +1),
-
             new(-1, -1, +1),
+            new(+1, -1, -1),
+            new(+1, -1, +1),
+            new(-1, +1, -1),
             new(-1, +1, +1),
+            new(+1, +1, -1),
+            new(+1, +1, +1),
+        };
+
+        // index into SpriteVerts for rendering sprites using triangles
+        protected static readonly int[] SpriteTriIndices = new int[6] { 0, 1, 2, 2, 3, 0 };
+        // index into BoxVerts for rendering a box using lines
+        protected static readonly int[] BoxLineIndices = new int[24] {
+            // sides
+            0, 0+4,
+            1, 1+4,
+            2, 2+4,
+            3, 3+4,
 
             // bottom
-            new(-1, -1, -1),
-            new(+1, -1, -1),
-
-            new(+1, -1, -1),
-            new(+1, -1, +1),
-
-            new(+1, -1, +1),
-            new(-1, -1, +1),
-
-            new(-1, -1, +1),
-            new(-1, -1, -1),
+            0, 2,
+            2, 3,
+            3, 1,
+            1, 0,
 
             // top
-            new(-1, +1, -1),
-            new(+1, +1, -1),
-
-            new(+1, +1, -1),
-            new(+1, +1, +1),
-
-            new(+1, +1, +1),
-            new(-1, +1, +1),
-
-            new(-1, +1, +1),
-            new(-1, +1, -1)
+            0+4, 2+4,
+            2+4, 3+4,
+            3+4, 1+4,
+            1+4, 0+4,
         };
-        protected static readonly Vector3[] BoxTriVerts = new Vector3[36] {
+        // index into BoxVerts for rendering a box using triangles
+        protected static readonly int[] BoxTriIndices = new int[36]
+        {
             // sides
-            new(-1, -1, +1),
-            new(-1, +1, +1),
-            new(+1, +1, +1),
-            new(+1, +1, +1),
-            new(+1, -1, +1),
-            new(-1, -1, +1),
-
-            new(+1, -1, +1),
-            new(+1, +1, +1),
-            new(+1, +1, -1),
-            new(+1, +1, -1),
-            new(+1, -1, -1),
-            new(+1, -1, +1),
-
-            new(-1, -1, -1),
-            new(-1, +1, -1),
-            new(-1, +1, +1),
-            new(-1, +1, +1),
-            new(-1, -1, +1),
-            new(-1, -1, -1),
-
-            new(-1, -1, -1),
-            new(-1, +1, -1),
-            new(+1, +1, -1),
-            new(+1, +1, -1),
-            new(+1, -1, -1),
-            new(-1, -1, -1),
-
+            1, 5, 7, 7, 3, 1,
+            3, 7, 6, 6, 2, 3,
+            0, 4, 5, 5, 1, 0,
+            0, 4, 6, 6, 2, 0,
             // bottom
-            new(+1, -1, -1),
-            new(+1, -1, +1),
-            new(-1, -1, +1),
-            new(-1, -1, +1),
-            new(-1, -1, -1),
-            new(+1, -1, -1),
-
+            2, 3, 1, 1, 0, 2,
             // top
-            new(-1, +1, +1),
-            new(-1, +1, -1),
-            new(+1, +1, -1),
-            new(+1, +1, -1),
-            new(+1, +1, +1),
-            new(-1, +1, +1),
+            2+4, 3+4, 1+4, 1+4, 0+4, 2+4,
         };
+
         private static Dictionary<int, Vector3[]> SpherePosCache = new();
         private static Dictionary<int, Vector3[]> GridPosCache = new();
         private static int SpherePosLastUploaded = -1;
