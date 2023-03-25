@@ -70,13 +70,19 @@ namespace CrashEdit
             EnableAttribI("tex", 1, VertexAttribIntegerType.Int, "tex");
         }
 
-        public void PushAttrib(Vector3? trans = null, Vector3? normal = null, Vector2? st = null, Rgba? rgba = null, TexInfoUnpacked? tex = null)
+        public void TestRealloc()
         {
-            if (VertCount == Verts.Length)
+            if (VertCount >= Verts.Length)
             {
                 Console.WriteLine($"Realloc buffer {VertCount} -> {VertCount * 2}");
                 Array.Resize(ref verts, Verts.Length * 2);
+                TestRealloc();
             }
+        }
+
+        public void PushAttrib(Vector3? trans = null, Vector3? normal = null, Vector2? st = null, Rgba? rgba = null, TexInfoUnpacked? tex = null)
+        {
+            TestRealloc();
             if (trans != null)
                 Verts[VertCount].trans = trans.Value;
             if (normal != null)

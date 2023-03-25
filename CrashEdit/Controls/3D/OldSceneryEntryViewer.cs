@@ -93,12 +93,20 @@ namespace CrashEdit
         protected override void Render()
         {
             base.Render();
+            long dbgTimeSetupTPAGs = 0;
+            long dbgTimeAllocBufs = 0;
+            long dbgTimeMakeVerts = 0;
+            long dbgTimePushVerts = 0;
+            long dbgTimeRender = 0;
             watch.Restart();
             vaoWorld.DiscardVerts();
 
             // setup textures
             var tex_eids = CollectTPAGs();
             SetupTPAGs(tex_eids);
+            dbgTimeSetupTPAGs = watch.StopAndElapsed();
+            watch.Restart();
+
             int nb = 0;
             foreach (var world in GetWorlds())
             {
@@ -112,6 +120,8 @@ namespace CrashEdit
                 buf_uv = new Vector2[nb];
             if (buf_tex == null || buf_tex.Length < nb)
                 buf_tex = new TexInfoUnpacked[nb];
+            dbgTimeAllocBufs = watch.StopAndElapsed();
+            watch.Restart();
 
             // render stuff
             buf_idx = 0;
@@ -119,14 +129,20 @@ namespace CrashEdit
             {
                 RenderWorld(world, tex_eids);
             }
+            dbgTimeMakeVerts = watch.StopAndElapsed();
+            watch.Restart();
 
             for (int i = 0; i < buf_idx; ++i)
             {
                 vaoWorld.PushAttrib(buf_tex[i / 3 * 3 + 2].GetBlendMode() | BlendMode.Solid, trans: buf_vtx[i], rgba: buf_col[i], st: buf_uv[i], tex: buf_tex[i]);
             }
+            dbgTimePushVerts = watch.StopAndElapsed();
+            watch.Restart();
 
             // render passes
             vaoWorld.Render(render);
+            dbgTimeRender = watch.StopAndElapsed();
+            watch.Restart();
             watch.Stop();
             if (true)
             {
@@ -134,7 +150,12 @@ namespace CrashEdit
                 {
                     Console.WriteLine($"WGEO vao blend {vao.BlendMask} has {vao.VertCount} verts");
                 });
-                Console.WriteLine($"WGEO render time {watch.ElapsedTicks / (System.Diagnostics.Stopwatch.Frequency / 1000.0)}ms");
+                double t_to_ms = 1 / (System.Diagnostics.Stopwatch.Frequency / 1000.0);
+                Console.WriteLine($"WGEO renderer dbgTimeSetupTPAGs: {dbgTimeSetupTPAGs * t_to_ms}ms");
+                Console.WriteLine($"WGEO renderer dbgTimeAllocBufs: {dbgTimeAllocBufs * t_to_ms}ms");
+                Console.WriteLine($"WGEO renderer dbgTimeMakeVerts: {dbgTimeMakeVerts * t_to_ms}ms");
+                Console.WriteLine($"WGEO renderer dbgTimePushVerts: {dbgTimePushVerts * t_to_ms}ms");
+                Console.WriteLine($"WGEO renderer dbgTimeRender: {dbgTimeRender * t_to_ms}ms");
             }
         }
 
