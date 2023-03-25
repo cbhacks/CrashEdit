@@ -1,7 +1,6 @@
 ﻿using Crash;
 using OpenTK;
 using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -9,47 +8,70 @@ using System.Windows.Forms;
 
 namespace CrashEdit
 {
-    public class OctreeRenderer
+    public class OctreeRenderer : IDisposable
     {
-        public Dictionary<short, Color> octreevalues;
+        public static Dictionary<short, Color4> nodeColors = new();
 
         public bool Enabled { get; set; }
-        public int OctreeSelection { get; set; }
-        public bool PolygonMode { get; set; }
-        public bool AllEntries { get; set; }
+        public int NodeKindSelection { get; set; }
+        public bool NodeOutline { get; set; }
+        public bool ShowAllEntries { get; set; }
         public Form OctreeForm { get; set; }
         private GLViewer Viewer { get; set; }
+
+        private bool formWantUpdate = false;
+        private bool formWantSelect = false;
 
         public OctreeRenderer(GLViewer viewer)
         {
             Enabled = false;
-            octreevalues = new Dictionary<short, Color>();
-            OctreeSelection = -1;
-            PolygonMode = false;
-            AllEntries = false;
+            NodeKindSelection = -1;
+            NodeOutline = true;
+            ShowAllEntries = false;
             Viewer = viewer;
+        }
+
+        public void UpdateForm()
+        {
+            if (OctreeForm != null)
+            {
+                if (!OctreeForm.Visible)
+                {
+                    OctreeForm.Show();
+                }
+                if (formWantUpdate)
+                {
+                    UpdateOctreeFormList();
+                }
+                if (formWantSelect)
+                {
+                    OctreeForm.Select();
+                }
+            }
+            formWantUpdate = false;
+            formWantSelect = false;
         }
 
         public void RunLogic()
         {
             if (Viewer.KPress(Keys.X)) Enabled = !Enabled;
-            if (Viewer.KPress(Keys.V)) PolygonMode = !PolygonMode;
-            if (Viewer.KPress(Keys.F)) AllEntries = !AllEntries;
-            if (Viewer.KPress(Keys.C))
+            if (Viewer.KPress(Keys.V)) NodeOutline = !NodeOutline;
+            if (Viewer.KPress(Keys.F)) ShowAllEntries = !ShowAllEntries;
+            if (Viewer.KPress(Keys.C) && Enabled)
             {
                 if (OctreeForm == null || OctreeForm.IsDisposed)
                 {
                     OctreeForm = new Form();
-                    OctreeForm.FormClosed += (sender, e) =>
+                    OctreeForm.FormClosing += (sender, e) =>
                     {
-                        OctreeSelection = -1;
+                        NodeKindSelection = -1;
+                        OctreeForm = null;
                     };
-                    UpdateOctreeFormList();
-                    OctreeForm.Show();
+                    formWantUpdate = true;
                 }
                 else
                 {
-                    OctreeForm.Select();
+                    formWantSelect = true;
                 }
             }
         }
@@ -61,24 +83,24 @@ namespace CrashEdit
                 OctreeForm.Controls.Clear();
                 ListView lst = new();
                 lst.Dock = DockStyle.Fill;
-                foreach (KeyValuePair<short, Color> color in octreevalues)
+                foreach (var color in nodeColors)
                 {
                     ListViewItem lsi = new();
                     lsi.Text = string.Format("{2:X2}:{1:X2}:{0:X1}", color.Key >> 1 & 0x7, color.Key >> 4 & 0x3F, color.Key >> 10 & 0x3F);
-                    lsi.BackColor = color.Value;
-                    lsi.ForeColor = color.Value.GetBrightness() >= 0.5 ? Color.Black : Color.White;
+                    lsi.BackColor = (Color)color.Value;
+                    lsi.ForeColor = lsi.BackColor.GetBrightness() >= 0.5 ? Color.Black : Color.White;
                     lsi.Tag = color.Key;
                     lst.Items.Add(lsi);
                 }
-                lst.SelectedIndexChanged += delegate (object sender, EventArgs ee)
+                lst.SelectedIndexChanged += (sender, e) =>
                 {
                     if (lst.SelectedItems.Count == 0)
                     {
-                        OctreeSelection = -1;
+                        NodeKindSelection = -1;
                     }
                     else
                     {
-                        OctreeSelection = (ushort)(short)lst.SelectedItems[0].Tag;
+                        NodeKindSelection = (ushort)(short)lst.SelectedItems[0].Tag;
                     }
                 };
                 OctreeForm.Controls.Add(lst);
@@ -95,23 +117,24 @@ namespace CrashEdit
             int value = (ushort)BitConv.FromInt16(data, offset);
             if ((value & 1) != 0)
             {
-                if (OctreeSelection != -1 && OctreeSelection != value)
+                if (NodeKindSelection != -1 && NodeKindSelection != value)
                     return;
-                Color color;
-                if (!octreevalues.TryGetValue((short)value, out color))
+                Color4 color;
+                if (!nodeColors.TryGetValue((short)value, out color))
                 {
                     byte[] colorbuf = new byte[3];
                     Random random = new Random(value);
                     random.NextBytes(colorbuf);
-                    color = Color.FromArgb(255, colorbuf[0], colorbuf[1], colorbuf[2]);
-                    octreevalues.Add((short)value, color);
+                    color = new Color4(colorbuf[0], colorbuf[1], colorbuf[2], 255);
+                    nodeColors.Add((short)value, color);
                 }
                 Color4[] all_colors = new Color4[8];
                 for (int i = 0; i < all_colors.Length; ++i)
                 {
-                    all_colors[i] = new(Math.Min(color.R + i * 3, 0xFF)/255f, Math.Min(color.G + i * 3, 0xFF) / 255f, Math.Min(color.B + i * 3, 0xFF) / 255f, 1f);
+                    float inc = i * 0.01f;
+                    all_colors[i] = new(Math.Min(color.R + inc, 1), Math.Min(color.G + inc, 1), Math.Min(color.B + inc, 1), 1f);
                 }
-                Viewer.AddBox(new Vector3(x, y, z), new Vector3(w, h, d), all_colors, !PolygonMode);
+                Viewer.AddBox(new Vector3(x, y, z), new Vector3(w, h, d), all_colors, NodeOutline);
             }
             else if (value != 0)
             {
@@ -160,6 +183,11 @@ namespace CrashEdit
                 RenderOctree(data, offset, x, y, z, w, h, d, xmax, ymax, zmax - 1);
                 offset += 2;
             }
+        }
+
+        public void Dispose()
+        {
+            OctreeForm?.Close();
         }
     }
 }

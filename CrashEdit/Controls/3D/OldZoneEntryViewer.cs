@@ -1,7 +1,6 @@
 using Crash;
 using OpenTK;
 using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -10,12 +9,10 @@ namespace CrashEdit
 {
     public sealed class OldZoneEntryViewer : OldSceneryEntryViewer
     {
-        private VAO vaoLines;
-        private VAO vaoBoxEntity;
-        private OctreeRenderer octreeRenderer;
+        private readonly OctreeRenderer octreeRenderer;
 
-        private List<int> zones;
-        private int this_zone;
+        private readonly List<int> zones;
+        private readonly int this_zone;
 
         internal bool masterZone;
         internal float masterZoneAlpha;
@@ -36,12 +33,10 @@ namespace CrashEdit
             octreeRenderer = new(this);
         }
 
-        protected override void GLLoad()
+        protected override void OnInvalidated(InvalidateEventArgs e)
         {
-            base.GLLoad();
-
-            vaoLines = new VAO(shaderContext, "line", PrimitiveType.Lines);
-            vaoBoxEntity = new VAO(shaderContext, "generic", PrimitiveType.Triangles);
+            base.OnInvalidated(e);
+            octreeRenderer?.UpdateForm();
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -130,9 +125,6 @@ namespace CrashEdit
                 masterZoneAlpha255 = (byte)(masterZoneAlpha * 255);
                 RenderZone(zone);
             }
-
-            vaoBoxEntity.RenderAndDiscard(render);
-            vaoLines.RenderAndDiscard(render);
         }
 
         private void RenderZone(OldZoneEntry zone)
@@ -152,7 +144,7 @@ namespace CrashEdit
                 RenderCamera(camera);
             }
 
-            if (octreeRenderer.Enabled)
+            if (octreeRenderer.Enabled && (masterZone || octreeRenderer.ShowAllEntries))
             {
                 octreeRenderer.RenderOctree(zone.Layout, 0x1C, zoneTrans.X, zoneTrans.Y, zoneTrans.Z, zoneSize.X, zoneSize.Y, zoneSize.Z, zone.CollisionDepthX, zone.CollisionDepthY, zone.CollisionDepthZ);
             }
@@ -181,10 +173,10 @@ namespace CrashEdit
             {
                 for (int i = 1; i < entity.Positions.Count; ++i)
                 {
-                    vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i - 1].X, entity.Positions[i - 1].Y, entity.Positions[i - 1].Z) / GameScales.ZoneEntityC1 + zoneTrans,
-                                        rgba: new Rgba(0, 0, 255, 255));
-                    vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i].X, entity.Positions[i].Y, entity.Positions[i].Z) / GameScales.ZoneEntityC1 + zoneTrans,
-                                        rgba: new Rgba(0, 0, 255, 255));
+                    vaoLineBatch.PushAttrib(trans: new Vector3(entity.Positions[i - 1].X, entity.Positions[i - 1].Y, entity.Positions[i - 1].Z) / GameScales.ZoneEntityC1 + zoneTrans,
+                                            rgba: new Rgba(0, 0, 255, 255));
+                    vaoLineBatch.PushAttrib(trans: new Vector3(entity.Positions[i].X, entity.Positions[i].Y, entity.Positions[i].Z) / GameScales.ZoneEntityC1 + zoneTrans,
+                                            rgba: new Rgba(0, 0, 255, 255));
                 }
                 foreach (EntityPosition position in entity.Positions)
                 {
@@ -198,10 +190,10 @@ namespace CrashEdit
         {
             for (int i = 1; i < camera.Positions.Count; ++i)
             {
-                vaoLines.PushAttrib(trans: new Vector3(camera.Positions[i - 1].X, camera.Positions[i - 1].Y, camera.Positions[i - 1].Z) / GameScales.ZoneCameraC1 + zoneTrans,
-                                    rgba: new Rgba(0, 128, 0, masterZoneAlpha255));
-                vaoLines.PushAttrib(trans: new Vector3(camera.Positions[i].X, camera.Positions[i].Y, camera.Positions[i].Z) / GameScales.ZoneCameraC1 + zoneTrans,
-                                    rgba: new Rgba(0, 128, 0, masterZoneAlpha255));
+                vaoLineBatch.PushAttrib(trans: new Vector3(camera.Positions[i - 1].X, camera.Positions[i - 1].Y, camera.Positions[i - 1].Z) / GameScales.ZoneCameraC1 + zoneTrans,
+                                        rgba: new Rgba(0, 128, 0, masterZoneAlpha255));
+                vaoLineBatch.PushAttrib(trans: new Vector3(camera.Positions[i].X, camera.Positions[i].Y, camera.Positions[i].Z) / GameScales.ZoneCameraC1 + zoneTrans,
+                                        rgba: new Rgba(0, 128, 0, masterZoneAlpha255));
             }
             foreach (OldCameraPosition position in camera.Positions)
             {
@@ -236,7 +228,7 @@ namespace CrashEdit
             };
             for (int i = 0; i < 3 * 6; ++i)
             {
-                vaoBoxEntity.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6], st: uvs[i % 6]);
+                vaoTriBatch.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6], st: uvs[i % 6]);
             }
             uvs[0] = new Vector2(topTexRect.Left, topTexRect.Bottom);
             uvs[1] = new Vector2(topTexRect.Left, topTexRect.Top);
@@ -246,7 +238,7 @@ namespace CrashEdit
             uvs[5] = new Vector2(topTexRect.Left, topTexRect.Bottom);
             for (int i = 4 * 6; i < 6 * 6; ++i)
             {
-                vaoBoxEntity.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6 - 1], st: uvs[i % 6]);
+                vaoTriBatch.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6 - 1], st: uvs[i % 6]);
             }
         }
 
@@ -384,7 +376,7 @@ namespace CrashEdit
 
         protected override void Dispose(bool disposing)
         {
-            vaoLines?.Dispose();
+            octreeRenderer?.Dispose();
 
             base.Dispose(disposing);
         }
