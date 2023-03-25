@@ -50,11 +50,17 @@ namespace CrashEdit
             return new TexInfoUnpacked((v & 1) != 0, (v >> 1) & 0x3, (v >> 3) & 0x3, (v >> 5) & 0xf, (v >> 9) & 0x7f, (v >> 16) & 0x1, v >> 17);
         }
 
+        public static int Pack(bool enable, int color = 0, int blend = 0, int clutx = 0, int cluty = 0, int face = 0, int page = 0)
+        {
+            return (enable ? 1 : 0) | (color << 1) | (blend << 3) | (clutx << 5) | (cluty << 9) | (face << 16) | (page << 17);
+        }
+
         public static explicit operator int(TexInfoUnpacked p)
         {
-            return (p.enable ? 1 : 0) | (p.color << 1) | (p.blend << 3) | (p.clutx << 5) | (p.cluty << 9) | (p.face << 16) | (p.page << 17);
+            return Pack(p.enable, p.color, p.blend, p.clutx, p.cluty, p.face, p.page);
         }
-        public GLViewer.BlendMode GetBlendMode()
+
+        public static GLViewer.BlendMode GetBlendMode(int blend)
         {
             switch (blend)
             {
@@ -64,6 +70,11 @@ namespace CrashEdit
                 default:
                 case 3: return GLViewer.BlendMode.Solid;
             }
+        }
+
+        public GLViewer.BlendMode GetBlendMode()
+        {
+            return GetBlendMode(blend);
         }
     }
 
