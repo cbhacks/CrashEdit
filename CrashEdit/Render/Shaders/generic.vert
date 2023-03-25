@@ -4,8 +4,7 @@ in vec3 position;
 in vec4 color;
 in vec2 uv;
 
-uniform mat4 projectionMatrix;
-uniform mat4 viewMatrix;
+uniform mat4 PVM;
 
 uniform vec3 trans;
 uniform vec3 scale;
@@ -16,7 +15,7 @@ out vec2 p_ST;
 
 void main()
 {
-    gl_Position = projectionMatrix * viewMatrix * vec4(position, 1.0);
+    gl_Position = PVM * vec4(position, 1.0);
     p_Color = color;
     p_ST = uv;
 }

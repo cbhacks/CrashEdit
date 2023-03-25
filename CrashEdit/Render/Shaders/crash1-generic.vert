@@ -6,8 +6,7 @@ in vec4 color;
 in vec2 uv;
 in int tex;
 
-uniform mat4 projectionMatrix;
-uniform mat4 viewMatrix;
+uniform mat4 PVM;
 
 uniform int art;
 
@@ -23,10 +22,10 @@ void main(void)
 {
     switch (art) {
         case 0: // crash 1 worlds
-            gl_Position = projectionMatrix * viewMatrix * vec4( (position+trans)/scaleScalar, 1.0 );
+            gl_Position = PVM * vec4( (position+trans)/scaleScalar, 1.0 );
             break;
         case 1: // crash 1 anims
-            gl_Position = projectionMatrix * viewMatrix * vec4( (position+trans-128.0)*scale, 1.0 );
+            gl_Position = PVM * vec4( (position+trans-128.0)*scale, 1.0 );
             break;
     }
     p_Color = color.rgb;

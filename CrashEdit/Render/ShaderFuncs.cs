@@ -15,6 +15,8 @@ namespace CrashEdit
         {
             sh.UniformMat4("projectionMatrix", ref ri.Projection.Perspective);
             sh.UniformMat4("viewMatrix", ref ri.Projection.View);
+            Matrix4 pvm = ri.Projection.View * ri.Projection.Perspective;
+            sh.UniformMat4("PVM", ref pvm);
             sh.UniformVec3("viewTrans", ref ri.Projection.Trans);
 
             sh.UniformVec3("trans", ref vao.UserTrans);
@@ -42,6 +44,14 @@ namespace CrashEdit
             Matrix4 model = Matrix4.CreateFromAxisAngle(vao.UserAxis.Xyz, vao.UserAxis.W);
 
             sh.UniformMat4("modelMatrix", ref model);
+        }
+
+        internal static void RenderSprite(Shader sh, RenderInfo ri, VAO vao)
+        {
+            Vector3 viewColumn0 = ri.Projection.View.Column0.Xyz;
+            Vector3 viewColumn1 = ri.Projection.View.Column1.Xyz;
+            sh.UniformVec3("viewColumn0", ref viewColumn0);
+            sh.UniformVec3("viewColumn1", ref viewColumn1);
         }
     }
 }

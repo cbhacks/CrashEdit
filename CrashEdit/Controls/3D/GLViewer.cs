@@ -17,7 +17,7 @@ namespace CrashEdit
             new(+.5f, +.5f, 0),
             //new(+.5f, +.5f, 0),
             new(+.5f, -.5f, 0)
-            //new(-.5f, -.5f)
+            //new(-.5f, -.5f, 0)
         };
         protected static readonly Vector3[] AxesPos = new Vector3[6] {
             new(-.5f, 0, 0),
@@ -128,7 +128,8 @@ namespace CrashEdit
         protected static VAO vaoBoxTri;
         protected static VAO vaoBoxLine;
         protected static VAO vaoAxes;
-        protected static VAO vaoSprites;
+        protected static VAO vaoSprite;
+        protected static VAO vaoSpriteBatch;
         // protected static VAO vaoText;
 
         private bool run = false;
@@ -453,13 +454,15 @@ namespace CrashEdit
                     GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
                     // set up view matrices (45º FOV)
-                    render.Projection.Perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45), render.Projection.Aspect, 0.25f, 8192);
+                    render.Projection.Perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45), render.Projection.Aspect, 0.25f, 5000);
                     var rot_mat = Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot));
                     var test_vec = (rot_mat * new Vector4(0, 0, render.Distance, 1)).Xyz;
                     render.Projection.View = Matrix4.CreateTranslation(render.Projection.Trans - test_vec) * rot_mat;
 
                     // render
                     Render();
+
+                    vaoSpriteBatch.RenderAndDiscard(render);
                 }
 
                 // swap the front/back buffers so what we just rendered to the back buffer is displayed in the window.
@@ -515,7 +518,7 @@ namespace CrashEdit
         protected void RenderBoxAS(Vector3 a, Vector3 b, Color4 col) => RenderBox(a + b / 2, b / 2, col);
         protected void RenderBoxLineAS(Vector3 a, Vector3 b, Color4 col) => RenderBoxLine(a + b / 2, b / 2, col);
 
-        protected void RenderSprite(Vector3 trans, Vector2 size, Color4 col, Bitmap texture)
+        protected void RenderSingleSprite(Vector3 trans, Vector2 size, Color4 col, Bitmap texture)
         {
             var texRect = OldResources.TexMap[texture];
             //Console.WriteLine($"TEXTURE: {texRect.Left},{texRect.Top}/{texRect.Right},{texRect.Bottom}");
@@ -526,15 +529,32 @@ namespace CrashEdit
             //uvs[3] = new Vector2(texRect.Right, texRect.Top);
             uvs[3] = new Vector2(texRect.Right, texRect.Bottom);
             //uvs[5] = new Vector2(texRect.Left, texRect.Bottom);
-            vaoSprites.DiscardVerts();
+            vaoSprite.DiscardVerts();
             for (int i = 0; i < SpriteVerts.Length; ++i)
             {
-                vaoSprites.PushAttrib(trans: SpriteVerts[i], st: uvs[i]);
+                vaoSprite.PushAttrib(trans: SpriteVerts[i], st: uvs[i]);
             }
-            vaoSprites.UserTrans = trans;
-            vaoSprites.UserScale = new Vector3(size);
-            vaoSprites.UserColor1 = col;
-            vaoSprites.Render(render);
+            vaoSprite.UserTrans = trans;
+            vaoSprite.UserScale = new Vector3(size);
+            vaoSprite.UserColor1 = col;
+            vaoSprite.Render(render);
+        }
+
+        protected void AddSprite(Vector3 trans, Vector2 size, Rgba col, Bitmap texture)
+        {
+            var texRect = OldResources.TexMap[texture];
+            //Console.WriteLine($"TEXTURE: {texRect.Left},{texRect.Top}/{texRect.Right},{texRect.Bottom}");
+            var uvs = new Vector2[4];
+            uvs[0] = new Vector2(texRect.Left, texRect.Bottom);
+            uvs[1] = new Vector2(texRect.Left, texRect.Top);
+            uvs[2] = new Vector2(texRect.Right, texRect.Top);
+            //uvs[3] = new Vector2(texRect.Right, texRect.Top);
+            uvs[3] = new Vector2(texRect.Right, texRect.Bottom);
+            //uvs[5] = new Vector2(texRect.Left, texRect.Bottom);
+            for (int i = 0; i < SpriteVerts.Length; ++i)
+            {
+                vaoSpriteBatch.PushAttrib(trans: trans, rgba: col, st: uvs[i], normal: SpriteVerts[i] * new Vector3(size));
+            }
         }
 
         protected void AddLineToVAO(VAO vao, Vector3 p1, Vector3 p2, Rgba col1, Rgba col2)

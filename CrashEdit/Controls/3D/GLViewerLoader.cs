@@ -76,7 +76,8 @@ namespace CrashEdit
             vaoGridLine = new VAO(shaderContext, "line-usercolor", PrimitiveType.Lines);
             vaoBoxTri = new VAO(shaderContext, "box-model", PrimitiveType.Triangles, vert_count: BoxTriVerts.Length);
             vaoBoxLine = new VAO(shaderContext, "box-model", PrimitiveType.Lines, vert_count: BoxLineVerts.Length);
-            vaoSprites = new VAO(shaderContext, "sprite", PrimitiveType.TriangleFan, vert_count: SpriteVerts.Length);
+            vaoSprite = new VAO(shaderContext, "sprite", PrimitiveType.TriangleFan, vert_count: SpriteVerts.Length);
+            vaoSpriteBatch = new VAO(shaderContext, "sprite2", PrimitiveType.Quads);
             vaoGridLine.UserColor1 = Color4.Gray;
 
             for (int i = 0; i < BoxTriVerts.Length; ++i)

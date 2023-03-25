@@ -17,6 +17,7 @@ namespace CrashEdit
 
         internal bool masterZone;
         internal float masterZoneAlpha;
+        internal byte masterZoneAlpha255;
         internal Vector3 zoneTrans;
 
         public OldZoneEntryViewer(NSF nsf, int zone_eid) : base(nsf, new List<int>())
@@ -116,6 +117,7 @@ namespace CrashEdit
             {
                 masterZone = zones.Count != 1 || zone.EID == this_zone;
                 masterZoneAlpha = masterZone ? 1f : 0.5f;
+                masterZoneAlpha255 = (byte)(masterZoneAlpha * 255);
                 RenderZone(zone);
             }
 
@@ -154,7 +156,7 @@ namespace CrashEdit
                         RenderBoxEntity(trans, entity.Subtype);
                         break;
                     default:
-                        RenderSprite(trans, new Vector2(1), new(1, 1, 1, masterZoneAlpha), OldResources.PointTexture);
+                        AddSprite(trans, new Vector2(1), new(255, 255, 255, masterZoneAlpha255), OldResources.PointTexture);
                         break;
                 }
             }
@@ -170,7 +172,7 @@ namespace CrashEdit
                 foreach (EntityPosition position in entity.Positions)
                 {
                     Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + zoneTrans;
-                    RenderSprite(trans, new Vector2(1), Color4.Red, OldResources.PointTexture);
+                    AddSprite(trans, new Vector2(1), new(255, 0, 0, masterZoneAlpha255), OldResources.PointTexture);
                 }
             }
         }
@@ -180,20 +182,20 @@ namespace CrashEdit
             for (int i = 1; i < camera.Positions.Count; ++i)
             {
                 vaoLines.PushAttrib(trans: new Vector3(camera.Positions[i - 1].X, camera.Positions[i - 1].Y, camera.Positions[i - 1].Z) / GameScales.ZoneCameraC1 + zoneTrans,
-                                    rgba: new Rgba(0, 128, 0, (byte)(masterZoneAlpha * 255)));
+                                    rgba: new Rgba(0, 128, 0, masterZoneAlpha255));
                 vaoLines.PushAttrib(trans: new Vector3(camera.Positions[i].X, camera.Positions[i].Y, camera.Positions[i].Z) / GameScales.ZoneCameraC1 + zoneTrans,
-                                    rgba: new Rgba(0, 128, 0, (byte)(masterZoneAlpha * 255)));
+                                    rgba: new Rgba(0, 128, 0, masterZoneAlpha255));
             }
             foreach (OldCameraPosition position in camera.Positions)
             {
                 Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneCameraC1 + zoneTrans;
-                RenderSprite(trans, new Vector2(1), new(1, 1, 0, masterZoneAlpha), OldResources.PointTexture);
+                AddSprite(trans, new Vector2(1), new(255, 255, 0, masterZoneAlpha255), OldResources.PointTexture);
             }
         }
 
         private void RenderPickupEntity(Vector3 trans, int subtype)
         {
-            RenderSprite(trans, GetPickupScale(subtype), new(1, 1, 1, masterZoneAlpha), GetPickupTexture(subtype));
+            AddSprite(trans, GetPickupScale(subtype), new(255, 255, 255, masterZoneAlpha255), GetPickupTexture(subtype));
         }
 
         private void RenderBoxEntity(Vector3 trans, int subtype)

@@ -3,8 +3,7 @@
 layout(location = 0) in vec4 position;
 layout(location = 1) in vec4 color;
 
-uniform mat4 projectionMatrix;
-uniform mat4 viewMatrix;
+uniform mat4 PVM;
 uniform mat4 modelMatrix;
 uniform vec3 trans;
 uniform vec3 scale;
@@ -17,7 +16,7 @@ out vec4 p_Color;
 
 void main()
 {
-    gl_Position = (projectionMatrix * viewMatrix * ((modelMatrix * ((vec4(scale, 1.0) * position)) + vec4(trans*2, 1.0))));
+    gl_Position = (PVM * ((modelMatrix * ((vec4(scale, 1.0) * position)) + vec4(trans*2, 1.0))));
     if (modeColor == 0) {
         p_Color = color;
     } else if (modeColor == 1) {
