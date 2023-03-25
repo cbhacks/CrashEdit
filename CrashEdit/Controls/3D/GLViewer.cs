@@ -613,6 +613,7 @@ namespace CrashEdit
             }
         }
 
+        // pack polygon texture mapping information into a 32-bit value.
         protected int MakeTexInfo(bool enable, int color = 0, int blend = 0, int clutx = 0, int cluty = 0, int face = 0, int page = 0)
         {
             // enable: 1, colormode: 2, blendmode: 2, clutx: 4, cluty: 7, doubleface: 1, page: X (>17 total)

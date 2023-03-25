@@ -81,7 +81,7 @@
     <Compile Include="Controllers\GOOL\GOOLEntryController.cs" />
     <Compile Include="Controllers\Image\ImageEntryController.cs" />
     <Compile Include="Controllers\Map\MapEntryController.cs" />
-    <Compile Include="Controls\3D\DummyTopGLViewer.cs">
+    <Compile Include="Controls\3D\GLViewerLoader.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\BufferedTreeView.cs">

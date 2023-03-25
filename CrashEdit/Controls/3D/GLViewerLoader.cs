@@ -32,7 +32,7 @@ namespace CrashEdit
             // Console.WriteLine($"flags: {flags}");
             if ((flags & (int)ContextFlagMask.ContextFlagDebugBit) != 0)
             {
-                // Console.WriteLine("GL debug enabled.");
+                Console.WriteLine("GL debug enabled.");
                 // Enable debug callbacks.
                 GL.Enable(EnableCap.DebugOutput);
                 GL.DebugMessageCallback((source, type, id, severity, length, message, userParam) =>
