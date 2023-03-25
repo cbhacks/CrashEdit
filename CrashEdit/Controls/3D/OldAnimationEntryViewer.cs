@@ -20,15 +20,10 @@ namespace CrashEdit
         private bool interpenabled = true;
         private int cullmode = 0;
 
-        private VAO vaoModel;
         // note: there's multiple buffers because of blending
         private const int ANIM_BUF_MAX = 2;
-        private Vector3[][] buf_vtx;
-        private Vector3[][] buf_nor;
-        private Rgba[][] buf_col;
-        private Vector2[][] buf_uv;
-        private TexInfoUnpacked[][] buf_tex;
-        private int buf_idx;
+        private VAO[] vaoModel = new VAO[ANIM_BUF_MAX];
+        private BlendMode blendMask;
 
         protected override bool UseGrid => true;
 
@@ -48,13 +43,11 @@ namespace CrashEdit
         {
             base.GLLoad();
 
-            vaoModel = new(shaderContext, "crash1", PrimitiveType.Triangles);
-            vaoModel.ArtType = VAO.ArtTypeEnum.Crash1Anim;
-            buf_vtx = new Vector3[ANIM_BUF_MAX][];
-            buf_nor = new Vector3[ANIM_BUF_MAX][];
-            buf_col = new Rgba[ANIM_BUF_MAX][];
-            buf_uv = new Vector2[ANIM_BUF_MAX][];
-            buf_tex = new TexInfoUnpacked[ANIM_BUF_MAX][];
+            for (int i = 0; i < ANIM_BUF_MAX; ++i)
+            {
+                vaoModel[i] = new(shaderContext, "crash1", PrimitiveType.Triangles);
+                vaoModel[i].ArtType = VAO.ArtTypeEnum.Crash1Anim;
+            }
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -115,7 +108,6 @@ namespace CrashEdit
         protected override void Render()
         {
             base.Render();
-            vaoModel.DiscardVerts();
 
             IList<OldFrame> frames = null;
             {
@@ -149,12 +141,12 @@ namespace CrashEdit
                 }
                 else
                 {
-                    double prog = render.FullCurrentFrame / 2 % frames.Count;
-                    cur_frame = (int)Math.Floor(prog);
+                    double prog = render.FullCurrentFrame / 2;
+                    cur_frame = (int)Math.Floor(prog) % frames.Count;
                     if (interpenabled)
                     {
                         frame2 = frames[(int)Math.Ceiling(prog) % frames.Count];
-                        interp = (float)(prog - cur_frame);
+                        interp = (float)(prog - Math.Floor(prog));
                         // Console.WriteLine(string.Format("Render frame {1}+{2}/{0} (i {3})", anim.Frames.Count, cur_frame, (int)Math.Ceiling(prog) % anim.Frames.Count, interp));
                     }
                 }
@@ -164,35 +156,33 @@ namespace CrashEdit
                 var model = nsf.GetEntry<OldModelEntry>(frame1.ModelEID);
                 if (model == null) return;
 
+                blendMask = BlendMode.Solid;
+
                 RenderFrame(frame1, 0);
 
                 // uniforms and static data
-                vaoModel.UserTrans = new(frame1.XOffset, frame1.YOffset, frame1.ZOffset);
-                vaoModel.UserScale = new Vector3(model.ScaleX, model.ScaleY, model.ScaleZ) / (GameScales.ModelC1 * GameScales.AnimC1);
-                vaoModel.UserCullMode = cullmode;
+                vaoModel[0].UserTrans = new(frame1.XOffset, frame1.YOffset, frame1.ZOffset);
+                vaoModel[0].UserScale = new Vector3(model.ScaleX, model.ScaleY, model.ScaleZ) / (GameScales.ModelC1 * GameScales.AnimC1);
+                vaoModel[0].UserCullMode = cullmode;
 
                 if (frame2 != null)
                 {
                     // lerp results
                     RenderFrame(frame2, 1);
 
-                    vaoModel.UserTrans = MathExt.Lerp(vaoModel.UserTrans, new Vector3(frame2.XOffset, frame2.YOffset, frame2.ZOffset), interp);
+                    vaoModel[0].UserTrans = MathExt.Lerp(vaoModel[0].UserTrans, new Vector3(frame2.XOffset, frame2.YOffset, frame2.ZOffset), interp);
 
-                    for (int i = 0; i < buf_idx; ++i)
+                    for (int i = 0; i < vaoModel[0].VertCount; ++i)
                     {
-                        buf_vtx[0][i] = MathExt.Lerp(buf_vtx[0][i], buf_vtx[1][i], interp);
+                        vaoModel[0].Verts[i].trans = MathExt.Lerp(vaoModel[0].Verts[i].trans, vaoModel[1].Verts[i].trans, interp);
                         if (!colored)
-                            buf_nor[0][i] = MathExt.Lerp(buf_nor[0][i], buf_nor[1][i], interp);
+                            vaoModel[0].Verts[i].normal = MathExt.Lerp(vaoModel[0].Verts[i].normal, vaoModel[1].Verts[i].normal, interp);
                         else
-                            buf_col[0][i] = MathExt.Lerp(buf_col[0][i], buf_col[1][i], interp);
+                            vaoModel[0].Verts[i].rgba = MathExt.Lerp(vaoModel[0].Verts[i].rgba, vaoModel[1].Verts[i].rgba, interp);
                     }
                 }
 
-                for (int i = 0; i < buf_idx; ++i)
-                {
-                    vaoModel.PushAttrib(trans: buf_vtx[0][i], normal: buf_nor[0][i], rgba: buf_col[0][i], st: buf_uv[0][i], tex: buf_tex[0][i]);
-                }
-
+                // note: only buffer 0 is rendered
                 RenderFramePass(BlendMode.Solid);
                 RenderFramePass(BlendMode.Trans);
                 RenderFramePass(BlendMode.Subtractive);
@@ -248,49 +238,43 @@ namespace CrashEdit
 
                 // alloc buffers
                 int nb = model.Polygons.Count * 3;
-                if (buf_vtx[buf] == null || buf_vtx[buf].Length < nb)
-                    buf_vtx[buf] = new Vector3[nb];
-                if (buf_nor[buf] == null || buf_nor[buf].Length < nb)
-                    buf_nor[buf] = new Vector3[nb];
-                if (buf_col[buf] == null || buf_col[buf].Length < nb)
-                    buf_col[buf] = new Rgba[nb];
-                if (buf_uv[buf] == null || buf_uv[buf].Length < nb)
-                    buf_uv[buf] = new Vector2[nb];
-                if (buf_tex[buf] == null || buf_tex[buf].Length < nb)
-                    buf_tex[buf] = new TexInfoUnpacked[nb];
+                vaoModel[buf].VertCount = nb;
+                vaoModel[buf].TestRealloc();
+                vaoModel[buf].DiscardVerts();
 
                 // render stuff
-                buf_idx = 0;
-
                 foreach (OldModelPolygon polygon in model.Polygons)
                 {
+                    int cur_idx = vaoModel[buf].VertCount;
                     OldModelStruct str = model.Structs[polygon.Unknown & 0x7FFF];
                     if (str is OldModelTexture tex)
                     {
-                        buf_col[buf][buf_idx] = new(tex.R, tex.G, tex.B, 255);
-                        buf_col[buf][buf_idx + 1] = buf_col[buf][buf_idx];
-                        buf_col[buf][buf_idx + 2] = buf_col[buf][buf_idx];
-                        buf_uv[buf][buf_idx + 0] = new(tex.U3, tex.V3);
-                        buf_uv[buf][buf_idx + 1] = new(tex.U2, tex.V2);
-                        buf_uv[buf][buf_idx + 2] = new(tex.U1, tex.V1);
-                        buf_tex[buf][buf_idx + 2] = new(true, color: tex.ColorMode, blend: tex.BlendMode,
-                                                              clutx: tex.ClutX, cluty: tex.ClutY,
-                                                              face: Convert.ToInt32(tex.N),
-                                                              page: tex_eids[tex.EID]);
-                        RenderVertex(frame.Vertices[polygon.VertexC / 6], buf);
-                        RenderVertex(frame.Vertices[polygon.VertexB / 6], buf);
-                        RenderVertex(frame.Vertices[polygon.VertexA / 6], buf);
+                        vaoModel[buf].Verts[cur_idx].rgba = new(tex.R, tex.G, tex.B, 255);
+                        vaoModel[buf].Verts[cur_idx + 1].rgba = vaoModel[buf].Verts[cur_idx].rgba;
+                        vaoModel[buf].Verts[cur_idx + 2].rgba = vaoModel[buf].Verts[cur_idx].rgba;
+                        vaoModel[buf].Verts[cur_idx + 0].st = new(tex.U3, tex.V3);
+                        vaoModel[buf].Verts[cur_idx + 1].st = new(tex.U2, tex.V2);
+                        vaoModel[buf].Verts[cur_idx + 2].st = new(tex.U1, tex.V1);
+                        vaoModel[buf].Verts[cur_idx + 2].tex = TexInfoUnpacked.Pack(true, color: tex.ColorMode, blend: tex.BlendMode,
+                                                                                          clutx: tex.ClutX, cluty: tex.ClutY,
+                                                                                          face: Convert.ToInt32(tex.N),
+                                                                                          page: tex_eids[tex.EID]);
+                        RenderVertex(frame, polygon.VertexC / 6, buf);
+                        RenderVertex(frame, polygon.VertexB / 6, buf);
+                        RenderVertex(frame, polygon.VertexA / 6, buf);
+
+                        blendMask |= TexInfoUnpacked.GetBlendMode(tex.BlendMode);
                     }
                     else
                     {
                         OldSceneryColor col = (OldSceneryColor)str;
-                        buf_col[buf][buf_idx] = new(col.R, col.G, col.B, 255);
-                        buf_col[buf][buf_idx + 1] = buf_col[buf][buf_idx];
-                        buf_col[buf][buf_idx + 2] = buf_col[buf][buf_idx];
-                        buf_tex[buf][buf_idx + 2] = new(false, face: Convert.ToInt32(col.N));
-                        RenderVertex(frame.Vertices[polygon.VertexC / 6], buf);
-                        RenderVertex(frame.Vertices[polygon.VertexB / 6], buf);
-                        RenderVertex(frame.Vertices[polygon.VertexA / 6], buf);
+                        vaoModel[buf].Verts[cur_idx].rgba = new(col.R, col.G, col.B, 255);
+                        vaoModel[buf].Verts[cur_idx + 1].rgba = vaoModel[buf].Verts[cur_idx].rgba;
+                        vaoModel[buf].Verts[cur_idx + 2].rgba = vaoModel[buf].Verts[cur_idx].rgba;
+                        vaoModel[buf].Verts[cur_idx + 2].tex = TexInfoUnpacked.Pack(false, face: Convert.ToInt32(col.N));
+                        RenderVertex(frame, polygon.VertexC / 6, buf);
+                        RenderVertex(frame, polygon.VertexB / 6, buf);
+                        RenderVertex(frame, polygon.VertexA / 6, buf);
                     }
                 }
             }
@@ -298,26 +282,39 @@ namespace CrashEdit
 
         private void RenderFramePass(BlendMode pass)
         {
-            SetBlendMode(pass);
-            vaoModel.BlendMask = (int)pass;
-            vaoModel.Render(render);
+            if ((pass & blendMask) != BlendMode.None)
+            {
+                SetBlendMode(pass);
+                vaoModel[0].BlendMask = BlendModeIndex(pass);
+                vaoModel[0].Render(render);
+            }
         }
 
-        private void RenderVertex(OldFrameVertex vert, int buf)
+        private void RenderVertex(OldFrame frame, int vert_idx, int buf)
         {
-            buf_vtx[buf][buf_idx] = new(vert.X, vert.Y, vert.Z);
+            OldFrameVertex vert = frame.Vertices[vert_idx];
+            int cur_vert_idx = vaoModel[buf].VertCount;
+            vaoModel[buf].Verts[cur_vert_idx].trans = new(vert.X, vert.Y, vert.Z);
             if (colored)
-                buf_col[buf][buf_idx] = new Rgba((byte)(buf_col[buf][buf_idx].r * 2 * vert.Red),
-                                                 (byte)(buf_col[buf][buf_idx].g * 2 * vert.Green),
-                                                 (byte)(buf_col[buf][buf_idx].b * 2 * vert.Blue), 255);
+            {
+                Rgba old_rgba = vaoModel[buf].Verts[cur_vert_idx].rgba;
+                vaoModel[buf].Verts[cur_vert_idx].rgba = new Rgba((byte)(old_rgba.r * 2 * vert.Red),
+                                                                  (byte)(old_rgba.g * 2 * vert.Green),
+                                                                  (byte)(old_rgba.b * 2 * vert.Blue), 255);
+            }
             else
-                buf_nor[buf][buf_idx] = new(vert.NormalX, vert.NormalY, vert.NormalZ);
-            buf_idx++;
+            {
+                vaoModel[buf].Verts[cur_vert_idx].normal = new(vert.NormalX, vert.NormalY, vert.NormalZ);
+            }
+            vaoModel[buf].VertCount++;
         }
 
         protected override void Dispose(bool disposing)
         {
-            vaoModel?.Dispose();
+            for (int i = 0; i < ANIM_BUF_MAX; ++i)
+            {
+                vaoModel[i]?.Dispose();
+            }
 
             base.Dispose(disposing);
         }
