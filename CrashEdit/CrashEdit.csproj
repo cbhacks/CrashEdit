@@ -101,7 +101,7 @@
     <Compile Include="Controls\PaletteEntryBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\3D\CommonZoneEntryViewer.cs" />
+    <Compile Include="Controls\3D\OctreeRenderer.cs" />
     <Compile Include="ExternalTool.cs" />
     <Compile Include="Forms\ErrorReporter.cs">
       <SubType>Form</SubType>

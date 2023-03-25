@@ -15,7 +15,7 @@ void main()
     ivec2 sz = textureSize(sprites, 0);
 
     if (st.s < 0 || st.s >= sz.x || st.t < 0 || st.t >= sz.y) {
-        f_Color *= vec4(1, 0, 1, 1);
+        // f_Color *= vec4(1, 0, 1, 1);
     } else {
         uvec4 texel = texelFetch(sprites, st, 0);
         if (texel.a == 0) discard;

@@ -74,6 +74,24 @@ namespace Crash
             set => BitConv.ToInt32(Layout, 20, value);
         }
 
+        public ushort CollisionDepthX
+        {
+            get => (ushort)BitConv.FromInt16(Layout, 0x1E);
+            set => BitConv.ToInt16(Layout, 0x1E, (short)value);
+        }
+
+        public ushort CollisionDepthY
+        {
+            get => (ushort)BitConv.FromInt16(Layout, 0x20);
+            set => BitConv.ToInt16(Layout, 0x20, (short)value);
+        }
+
+        public ushort CollisionDepthZ
+        {
+            get => (ushort)BitConv.FromInt16(Layout, 0x22);
+            set => BitConv.ToInt16(Layout, 0x22, (short)value);
+        }
+
         public override UnprocessedEntry Unprocess()
         {
             BitConv.ToInt32(Header,0x208,cameras.Count);

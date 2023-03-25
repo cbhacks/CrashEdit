@@ -4,6 +4,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace CrashEdit
 {
@@ -11,6 +12,7 @@ namespace CrashEdit
     {
         private VAO vaoLines;
         private VAO vaoBoxEntity;
+        private OctreeRenderer octreeRenderer;
 
         private List<int> zones;
         private int this_zone;
@@ -24,12 +26,14 @@ namespace CrashEdit
         {
             zones = new() { zone_eid };
             this_zone = zone_eid;
+            octreeRenderer = new(this);
         }
 
         public OldZoneEntryViewer(NSF nsf, List<int> zone_eids) : base(nsf, new List<int>())
         {
             zones = zone_eids;
             this_zone = Entry.NullEID;
+            octreeRenderer = new(this);
         }
 
         protected override void GLLoad()
@@ -72,6 +76,12 @@ namespace CrashEdit
                     }
                 }
             }
+        }
+
+        protected override void RunLogic()
+        {
+            base.RunLogic();
+            octreeRenderer.RunLogic();
         }
 
         private IEnumerable<OldZoneEntry> GetZones()
@@ -128,9 +138,11 @@ namespace CrashEdit
         private void RenderZone(OldZoneEntry zone)
         {
             zoneTrans = new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
-            RenderBoxLineAS(zoneTrans,
-                            new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1,
-                            new(1, 1, 1, masterZoneAlpha));
+            Vector3 zoneSize = new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1;
+            AddBox(zoneTrans,
+                   new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1,
+                   new Color4(1, 1, 1, masterZoneAlpha),
+                   true);
             foreach (OldEntity entity in zone.Entities)
             {
                 RenderEntity(entity);
@@ -138,6 +150,11 @@ namespace CrashEdit
             foreach (OldCamera camera in zone.Cameras)
             {
                 RenderCamera(camera);
+            }
+
+            if (octreeRenderer.Enabled)
+            {
+                octreeRenderer.RenderOctree(zone.Layout, 0x1C, zoneTrans.X, zoneTrans.Y, zoneTrans.Z, zoneSize.X, zoneSize.Y, zoneSize.Z, zone.CollisionDepthX, zone.CollisionDepthY, zone.CollisionDepthZ);
             }
         }
 

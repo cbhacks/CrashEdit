@@ -195,10 +195,10 @@ namespace CrashEdit
                     var c1 = new Vector3(frame1.X1, frame1.Y1, frame1.Z1) / GameScales.CollisionC1;
                     var c2 = new Vector3(frame1.X2, frame1.Y2, frame1.Z2) / GameScales.CollisionC1;
                     var ct = new Vector3(frame1.XGlobal, frame1.YGlobal, frame1.ZGlobal) / GameScales.CollisionC1;
-                    var pos = (c1 + c2) / 2 + ct;
-                    var size = (c2 - c1) / 2;
-                    RenderBox(pos, size, new Color4(0, 1f, 0, 0.2f));
-                    RenderBoxLine(pos, size, new Color4(0, 1f, 0, 1f));
+                    var pos = c1 + ct;
+                    var size = c2 - c1;
+                    AddBox(pos, size, new Color4(0, 1f, 0, 0.2f), false);
+                    AddBox(pos, size, new Color4(0, 1f, 0, 1f), true);
                     GL.DepthMask(true);
                 }
             }

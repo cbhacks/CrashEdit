@@ -1,5 +1,6 @@
 ﻿using OpenTK;
 using System.Runtime.InteropServices;
+using OpenTK.Graphics;
 
 namespace CrashEdit
 {
@@ -17,6 +18,14 @@ namespace CrashEdit
             g = green;
             b = blue;
             a = alpha;
+        }
+
+        public static explicit operator Rgba(Color4 c)
+        {
+            return new Rgba((byte)(c.R * 255),
+                            (byte)(c.G * 255),
+                            (byte)(c.B * 255),
+                            (byte)(c.A * 255));
         }
     }
 
