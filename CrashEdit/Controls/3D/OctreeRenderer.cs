@@ -10,11 +10,12 @@ namespace CrashEdit
 {
     public class OctreeRenderer : IDisposable
     {
-        public static Dictionary<short, Rgba> nodeColors = new();
+        public static Dictionary<short, Rgba[]> nodeColors = new();
 
         public bool Enabled { get; set; }
         public int NodeKindSelection { get; set; }
         public bool NodeOutline { get; set; }
+        public byte NodeAlpha { get; set; }
         public bool ShowAllEntries { get; set; }
         public Form OctreeForm { get; set; }
         private GLViewer Viewer { get; set; }
@@ -87,7 +88,7 @@ namespace CrashEdit
                 {
                     ListViewItem lsi = new();
                     lsi.Text = string.Format("{2:X2}:{1:X2}:{0:X1}", color.Key >> 1 & 0x7, color.Key >> 4 & 0x3F, color.Key >> 10 & 0x3F);
-                    lsi.BackColor = (Color)(Color4)color.Value;
+                    lsi.BackColor = (Color)(Color4)color.Value[0];
                     lsi.ForeColor = lsi.BackColor.GetBrightness() >= 0.5 ? Color.Black : Color.White;
                     lsi.Tag = color.Key;
                     lst.Items.Add(lsi);
@@ -119,25 +120,28 @@ namespace CrashEdit
             {
                 if (NodeKindSelection != -1 && NodeKindSelection != value)
                     return;
-                Rgba color;
-                if (!nodeColors.TryGetValue((short)value, out color))
+                Rgba[] colors;
+                if (!nodeColors.TryGetValue((short)value, out colors))
                 {
                     byte[] colorbuf = new byte[3];
                     Random random = new Random(value);
                     random.NextBytes(colorbuf);
-                    color = new Rgba(colorbuf[0], colorbuf[1], colorbuf[2], 255);
-                    nodeColors.Add((short)value, color);
-                }
-                Rgba[] all_colors = new Rgba[8];
-                for (int i = 0; i < all_colors.Length; ++i)
-                {
-                    int inc = i * 3;
-                    all_colors[i] = new((byte)Math.Min(color.r + inc, 255),
-                                        (byte)Math.Min(color.g + inc, 255),
-                                        (byte)Math.Min(color.b + inc, 255),
+                    colors = new Rgba[8];
+                    for (int i = 0; i < colors.Length; ++i)
+                    {
+                        int inc = i * 3;
+                        colors[i] = new((byte)Math.Min(colorbuf[0] + inc, 255),
+                                        (byte)Math.Min(colorbuf[1] + inc, 255),
+                                        (byte)Math.Min(colorbuf[2] + inc, 255),
                                         255);
+                    }
+                    nodeColors.Add((short)value, colors);
                 }
-                Viewer.AddBox(new Vector3(x, y, z), new Vector3(w, h, d), all_colors, NodeOutline);
+                for (int i = 0; i < colors.Length; ++i)
+                {
+                    colors[i].a = NodeAlpha;
+                }
+                Viewer.AddBox(new Vector3(x, y, z), new Vector3(w, h, d), colors, NodeOutline);
             }
             else if (value != 0)
             {

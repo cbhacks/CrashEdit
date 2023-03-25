@@ -144,6 +144,7 @@ namespace CrashEdit
 
             if (octreeRenderer.Enabled && (masterZone || octreeRenderer.ShowAllEntries))
             {
+                octreeRenderer.NodeAlpha = masterZoneAlpha;
                 octreeRenderer.RenderOctree(zone.Layout, 0x1C, zoneTrans.X, zoneTrans.Y, zoneTrans.Z, zoneSize.X, zoneSize.Y, zoneSize.Z, zone.CollisionDepthX, zone.CollisionDepthY, zone.CollisionDepthZ);
             }
         }

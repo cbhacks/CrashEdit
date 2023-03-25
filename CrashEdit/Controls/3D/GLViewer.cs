@@ -427,9 +427,20 @@ namespace CrashEdit
                     // render
                     Render();
 
+                    // post render
+                    SetBlendMode(BlendMode.Solid);
+
                     vaoLineBatch.RenderAndDiscard(render);
                     vaoTriBatch.RenderAndDiscard(render);
                     vaoSpriteBatch.RenderAndDiscard(render);
+
+                    if (UseGrid && Properties.Settings.Default.DisplayAnimGrid)
+                    {
+                        RenderAxes(new Vector3(0));
+
+                        MakeLineGrid(Properties.Settings.Default.AnimGridLen);
+                        vaoGridLine.Render(render);
+                    }
                 }
 
                 // swap the front/back buffers so what we just rendered to the back buffer is displayed in the window.
@@ -441,15 +452,6 @@ namespace CrashEdit
         protected virtual void Render()
         {
             SetBlendMode(BlendMode.Solid);
-
-            // vaoTest.Render(render);
-            if (UseGrid && Properties.Settings.Default.DisplayAnimGrid)
-            {
-                RenderAxes(new Vector3(0));
-
-                MakeLineGrid(Properties.Settings.Default.AnimGridLen);
-                vaoGridLine.Render(render);
-            }
         }
 
         private void RenderAxes(Vector3 pos)
