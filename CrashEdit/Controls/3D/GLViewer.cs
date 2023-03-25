@@ -69,13 +69,6 @@ namespace CrashEdit
         };
         protected static readonly Vector3[] BoxTriVerts = new Vector3[36] {
             // sides
-            new(-1, -1, -1),
-            new(-1, +1, -1),
-            new(+1, +1, -1),
-            new(+1, +1, -1),
-            new(+1, -1, -1),
-            new(-1, -1, -1),
-
             new(-1, -1, +1),
             new(-1, +1, +1),
             new(+1, +1, +1),
@@ -83,6 +76,13 @@ namespace CrashEdit
             new(+1, -1, +1),
             new(-1, -1, +1),
 
+            new(+1, -1, +1),
+            new(+1, +1, +1),
+            new(+1, +1, -1),
+            new(+1, +1, -1),
+            new(+1, -1, -1),
+            new(+1, -1, +1),
+
             new(-1, -1, -1),
             new(-1, +1, -1),
             new(-1, +1, +1),
@@ -90,28 +90,28 @@ namespace CrashEdit
             new(-1, -1, +1),
             new(-1, -1, -1),
 
-            new(+1, -1, -1),
+            new(-1, -1, -1),
+            new(-1, +1, -1),
             new(+1, +1, -1),
-            new(+1, +1, +1),
-            new(+1, +1, +1),
-            new(+1, -1, +1),
+            new(+1, +1, -1),
             new(+1, -1, -1),
+            new(-1, -1, -1),
 
             // bottom
-            new(-1, -1, -1),
             new(+1, -1, -1),
             new(+1, -1, +1),
-            new(+1, -1, +1),
+            new(-1, -1, +1),
             new(-1, -1, +1),
             new(-1, -1, -1),
+            new(+1, -1, -1),
 
             // top
+            new(-1, +1, +1),
             new(-1, +1, -1),
             new(+1, +1, -1),
-            new(+1, +1, +1),
+            new(+1, +1, -1),
             new(+1, +1, +1),
             new(-1, +1, +1),
-            new(-1, +1, -1)
         };
         private static Dictionary<int, Vector3[]> SpherePosCache = new();
         private static Dictionary<int, Vector3[]> GridPosCache = new();
@@ -123,7 +123,8 @@ namespace CrashEdit
 
         protected readonly RenderInfo render;
 
-        protected static int tpage;
+        protected static int texTpages;
+        protected static int texSprites;
         protected static VAO vaoBoxTri;
         protected static VAO vaoBoxLine;
         protected static VAO vaoAxes;
@@ -536,6 +537,16 @@ namespace CrashEdit
             vaoSprites.Render(render);
         }
 
+        protected void AddLineToVAO(VAO vao, Vector3 p1, Vector3 p2, Rgba col1, Rgba col2)
+        {
+            vao.PushAttrib(trans: p1, rgba: col1);
+            vao.PushAttrib(trans: p2, rgba: col2);
+        }
+        protected void AddLineToVAO(VAO vao, Vector3 p1, Vector3 p2, Rgba col)
+        {
+            AddLineToVAO(vao, p1, p2, col, col);
+        }
+
         public void ResetCamera()
         {
             float minx = float.MaxValue;
@@ -596,10 +607,10 @@ namespace CrashEdit
         protected void SetupTPAGs(Dictionary<int, int> tex_eids)
         {
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, tpage);
+            GL.BindTexture(TextureTarget.Texture2D, texTpages);
 
             // fill texture
-            GL.GetTextureLevelParameter(tpage, 0, GetTextureParameter.TextureHeight, out int tpage_h);
+            GL.GetTextureLevelParameter(texTpages, 0, GetTextureParameter.TextureHeight, out int tpage_h);
             if (tpage_h < tex_eids.Count * 128)
             {
                 // realloc if not enough texture mem

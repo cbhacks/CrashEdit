@@ -49,7 +49,7 @@ namespace CrashEdit
             }
         }
 
-        public VAO(ShaderContext shaders, string shadername, PrimitiveType prim, int vert_count = 10000)
+        public VAO(ShaderContext shaders, string shadername, PrimitiveType prim, int vert_count = 1024)
         {
             Shader = shaders.GetShader(shadername);
             Primitive = prim;
@@ -113,6 +113,9 @@ namespace CrashEdit
             {
                 throw new ArgumentException("null render context");
             }
+
+            if (VertCount <= 0)
+                return;
 
             // Bind the VAO
             GL.BindVertexArray(ID);

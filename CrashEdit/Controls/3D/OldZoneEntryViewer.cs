@@ -4,19 +4,20 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Windows.Forms;
-using System;
 
 namespace CrashEdit
 {
     public sealed class OldZoneEntryViewer : OldSceneryEntryViewer
     {
-        private static int sprites;
-        // private VAO vaoStuff;
+        private VAO vaoLines;
+        private VAO vaoBoxEntity;
 
         private List<int> zones;
         private int this_zone;
+
+        internal bool masterZone;
+        internal float masterZoneAlpha;
+        internal Vector3 zoneTrans;
 
         public OldZoneEntryViewer(NSF nsf, int zone_eid) : base(nsf, new List<int>())
         {
@@ -24,65 +25,49 @@ namespace CrashEdit
             this_zone = zone_eid;
         }
 
-        protected override void GLLoadStatic()
+        public OldZoneEntryViewer(NSF nsf, List<int> zone_eids) : base(nsf, new List<int>())
         {
-            base.GLLoadStatic();
-
-            // make texture for sprites
-            sprites = GL.GenTexture();
-            GL.ActiveTexture(TextureUnit.Texture1);
-            GL.BindTexture(TextureTarget.Texture2D, sprites);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-            BitmapData data = OldResources.AllTex.LockBits(new Rectangle(Point.Empty, OldResources.AllTex.Size), ImageLockMode.ReadOnly, OldResources.AllTex.PixelFormat);
-            try
-            {
-                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba8ui, OldResources.AllTex.Width, OldResources.AllTex.Height, 0, OpenTK.Graphics.OpenGL4.PixelFormat.BgraInteger, PixelType.UnsignedByte, data.Scan0);
-            }
-            catch
-            {
-                GL.BindTexture(TextureTarget.Texture2D, 0);
-                Console.WriteLine("Error making texture.");
-            }
-            finally
-            {
-                OldResources.AllTex.UnlockBits(data);
-            }
+            zones = zone_eids;
+            this_zone = Entry.NullEID;
         }
 
         protected override void GLLoad()
         {
             base.GLLoad();
 
-            // vaoStuff = new(render.ShaderContext, "crash1", PrimitiveType.Triangles);
+            vaoLines = new VAO(shaderContext, "line", PrimitiveType.Lines);
+            vaoBoxEntity = new VAO(shaderContext, "generic", PrimitiveType.Triangles);
         }
 
         protected override IEnumerable<IPosition> CorePositions
         {
             get
             {
-                var zone = nsf.GetEntry<OldZoneEntry>(this_zone);
-                var zonetrans = new Position(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
-                yield return zonetrans;
-                yield return new Position(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1 + zonetrans;
-                foreach (OldEntity entity in zone.Entities)
+                foreach (int eid in zones)
                 {
-                    foreach (EntityPosition position in entity.Positions)
+                    var zone = nsf.GetEntry<OldZoneEntry>(eid);
+                    var zonetrans = new Position(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
+                    yield return zonetrans;
+                    yield return new Position(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1 + zonetrans;
+                    foreach (OldEntity entity in zone.Entities)
                     {
-                        int x = entity.Type != 34 ? position.X : position.X + 50;
-                        int y = entity.Type != 34 ? position.Y : position.Y + 50;
-                        int z = entity.Type != 34 ? position.Z : position.Z + 50;
-                        yield return new Position(x,y,z) / GameScales.ZoneEntityC1 + zonetrans;
+                        foreach (EntityPosition position in entity.Positions)
+                        {
+                            int x = entity.Type != 34 ? position.X : position.X + 50;
+                            int y = entity.Type != 34 ? position.Y : position.Y + 50;
+                            int z = entity.Type != 34 ? position.Z : position.Z + 50;
+                            yield return new Position(x, y, z) / GameScales.ZoneEntityC1 + zonetrans;
+                        }
                     }
-                }
-                foreach (OldCamera camera in zone.Cameras)
-                {
-                    foreach (OldCameraPosition position in camera.Positions)
+                    foreach (OldCamera camera in zone.Cameras)
                     {
-                        int x = position.X;
-                        int y = position.Y;
-                        int z = position.Z;
-                        yield return new Position(x,y,z) / GameScales.ZoneCameraC1 + zonetrans;
+                        foreach (OldCameraPosition position in camera.Positions)
+                        {
+                            int x = position.X;
+                            int y = position.Y;
+                            int z = position.Z;
+                            yield return new Position(x, y, z) / GameScales.ZoneCameraC1 + zonetrans;
+                        }
                     }
                 }
             }
@@ -129,58 +114,62 @@ namespace CrashEdit
             SetBlendMode(BlendMode.Solid);
             foreach (var zone in allzones)
             {
+                masterZone = zones.Count != 1 || zone.EID == this_zone;
+                masterZoneAlpha = masterZone ? 1f : 0.5f;
                 RenderZone(zone);
             }
+
+            vaoBoxEntity.RenderAndDiscard(render);
+            vaoLines.RenderAndDiscard(render);
         }
 
         private void RenderZone(OldZoneEntry zone)
         {
-            RenderBoxLineAS(new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1, new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1, Color4.White);
+            zoneTrans = new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
+            RenderBoxLineAS(zoneTrans,
+                            new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1,
+                            new(1, 1, 1, masterZoneAlpha));
             foreach (OldEntity entity in zone.Entities)
             {
                 RenderEntity(zone, entity);
             }
             foreach (OldCamera camera in zone.Cameras)
             {
-                //RenderCamera(camera);
+                RenderCamera(camera);
             }
         }
 
         private void RenderEntity(OldZoneEntry zone, OldEntity entity)
         {
-            var ztrans = new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
             if (entity.Positions.Count == 1)
             {
                 EntityPosition position = entity.Positions[0];
-                Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + ztrans;
+                Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + zoneTrans;
                 switch (entity.Type)
                 {
-                    case 0x3:
-                        RenderPickup(trans + new Vector3(0, .5f, 0), entity.Subtype);
+                    case 3:
+                        RenderPickupEntity(trans + new Vector3(0, .5f, 0), entity.Subtype);
                         break;
-                    //case 0x22:
-                        //RenderBox(trans, entity.Subtype);
-                        //break;
+                    case 34:
+                        RenderBoxEntity(trans, entity.Subtype);
+                        break;
                     default:
-                        RenderSprite(trans, new Vector2(1), Color4.White, OldResources.PointTexture);
+                        RenderSprite(trans, new Vector2(1), new(1, 1, 1, masterZoneAlpha), OldResources.PointTexture);
                         break;
                 }
             }
             else
             {
-                /*
-                GL.Color3(Color.Blue);
-                GL.PushMatrix();
-                GL.Begin(PrimitiveType.LineStrip);
-                foreach (EntityPosition position in entity.Positions)
+                for (int i = 1; i < entity.Positions.Count; ++i)
                 {
-                    GL.Vertex3(position.X, position.Y, position.Z);
+                    vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i - 1].X, entity.Positions[i - 1].Y, entity.Positions[i - 1].Z) / GameScales.ZoneEntityC1 + zoneTrans,
+                                        rgba: new Rgba(0, 0, 255, 255));
+                    vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i].X, entity.Positions[i].Y, entity.Positions[i].Z) / GameScales.ZoneEntityC1 + zoneTrans,
+                                        rgba: new Rgba(0, 0, 255, 255));
                 }
-                GL.End();
-                */
                 foreach (EntityPosition position in entity.Positions)
                 {
-                    Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + ztrans;
+                    Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + zoneTrans;
                     RenderSprite(trans, new Vector2(1), Color4.Red, OldResources.PointTexture);
                 }
             }
@@ -310,136 +299,71 @@ namespace CrashEdit
             }
             GL.PopMatrix();
         }
-        private void RenderEntity(OldEntity entity)
-        {
-            GL.PolygonStipple(stipplea);
-            if (entity.Positions.Count == 1)
-            {
-                EntityPosition position = entity.Positions[0];
-                GL.PushMatrix();
-                GL.Translate(position.X,position.Y,position.Z);
-                switch (entity.Type)
-                {
-                    case 0x3:
-                        RenderPickup(entity.Subtype);
-                        break;
-                    case 0x22:
-                        RenderBox(entity.Subtype);
-                        break;
-                    default:
-                        GL.Color3(Color.White);
-                        LoadTexture(OldResources.PointTexture);
-                        RenderSprite();
-                        break;
-                }
-                GL.PopMatrix();
-            }
-            else
-            {
-                GL.Color3(Color.Blue);
-                GL.PushMatrix();
-                GL.Begin(PrimitiveType.LineStrip);
-                foreach (EntityPosition position in entity.Positions)
-                {
-                    GL.Vertex3(position.X,position.Y,position.Z);
-                }
-                GL.End();
-                GL.Color3(Color.Red);
-                LoadTexture(OldResources.PointTexture);
-                foreach (EntityPosition position in entity.Positions)
-                {
-                    GL.PushMatrix();
-                    GL.Translate(position.X,position.Y,position.Z);
-                    RenderSprite();
-                    GL.PopMatrix();
-                }
-                GL.PopMatrix();
-            }
-        }
+        */
 
         private void RenderCamera(OldCamera camera)
         {
-            GL.PolygonStipple(stippleb);
-            GL.Color3(Color.Green);
-            GL.PushMatrix();
-            GL.Scale(0.25F,0.25F,0.25F);
-            GL.Begin(PrimitiveType.LineStrip);
+            for (int i = 1; i < camera.Positions.Count; ++i)
+            {
+                vaoLines.PushAttrib(trans: new Vector3(camera.Positions[i - 1].X, camera.Positions[i - 1].Y, camera.Positions[i - 1].Z) / GameScales.ZoneCameraC1 + zoneTrans,
+                                    rgba: new Rgba(0, 128, 0, (byte)(masterZoneAlpha * 255)));
+                vaoLines.PushAttrib(trans: new Vector3(camera.Positions[i].X, camera.Positions[i].Y, camera.Positions[i].Z) / GameScales.ZoneCameraC1 + zoneTrans,
+                                    rgba: new Rgba(0, 128, 0, (byte)(masterZoneAlpha * 255)));
+            }
             foreach (OldCameraPosition position in camera.Positions)
             {
-                GL.Vertex3(position.X,position.Y,position.Z);
+                Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneCameraC1 + zoneTrans;
+                RenderSprite(trans, new Vector2(1), new(1, 1, 0, masterZoneAlpha), OldResources.PointTexture);
             }
-            GL.End();
-            GL.Color3(Color.Yellow);
-            LoadTexture(OldResources.PointTexture);
-            foreach (OldCameraPosition position in camera.Positions)
+        }
+
+        private void RenderPickupEntity(Vector3 trans, int subtype)
+        {
+            RenderSprite(trans, GetPickupScale(subtype), new(1, 1, 1, masterZoneAlpha), GetPickupTexture(subtype));
+        }
+
+        private void RenderBoxEntity(Vector3 trans, int subtype)
+        {
+            Rectangle sideTexRect = OldResources.TexMap[GetBoxSideTexture(subtype)];
+            Rectangle topTexRect = OldResources.TexMap[GetBoxTopTexture(subtype)];
+            Vector2[] uvs = new Vector2[6];
+            uvs[0] = new Vector2(sideTexRect.Left, sideTexRect.Bottom);
+            uvs[1] = new Vector2(sideTexRect.Left, sideTexRect.Top);
+            uvs[2] = new Vector2(sideTexRect.Right, sideTexRect.Top);
+            uvs[3] = new Vector2(sideTexRect.Right, sideTexRect.Top);
+            uvs[4] = new Vector2(sideTexRect.Right, sideTexRect.Bottom);
+            uvs[5] = new Vector2(sideTexRect.Left, sideTexRect.Bottom);
+            Rgba[] cols = new Rgba[5]
             {
-                GL.PushMatrix();
-                GL.Translate(position.X,position.Y,position.Z);
-                GL.Scale(4,4,4);
-                RenderSprite();
-                GL.PopMatrix();
+                new Rgba(93*2, 93*2, 93*2, 255),
+                new Rgba(51*2, 51*2, 76*2, 255),
+                new Rgba(115*2, 115*2, 92*2, 255),
+                new Rgba(33*2, 33*2, 59*2, 255),
+                new Rgba(115*2, 115*2, 92*2, 255)
+            };
+            for (int i = 0; i < 3 * 6; ++i)
+            {
+                vaoBoxEntity.PushAttrib(trans: trans + BoxTriVerts[i] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6], st: uvs[i % 6]);
             }
-            GL.PopMatrix();
-        }
-        */
-
-        private void RenderPickup(Vector3 trans, int subtype)
-        {
-            RenderSprite(trans, GetPickupScale(subtype), Color4.White, GetPickupTexture(subtype));
-        }
-        /*
-        private void RenderBox(int subtype)
-        {
-            GL.Translate(50,50,50);
-            GL.Enable(EnableCap.Texture2D);
-            GL.Color3(Color.White);
-            LoadBoxSideTexture(subtype);
-            GL.PushMatrix();
-            GL.Color3(93/128F,93/128F,93/128F);
-            RenderBoxFace();
-            GL.Rotate(90,0,1,0);
-            GL.Color3(51/128F,51/128F,76/128F);
-            RenderBoxFace();
-            GL.Rotate(90,0,1,0);
-            //RenderBoxFace();
-            GL.Rotate(90,0,1,0);
-            GL.Color3(115/128F,115/128F,92/128F);
-            RenderBoxFace();
-            GL.PopMatrix();
-            LoadBoxTopTexture(subtype);
-            GL.PushMatrix();
-            GL.Rotate(90,1,0,0);
-            GL.Color3(33/128F,33/128F,59/128F);
-            RenderBoxFace();
-            GL.Rotate(180,1,0,0);
-            GL.Color3(115/128F,115/128F,92/128F);
-            RenderBoxFace();
-            GL.PopMatrix();
-            GL.Disable(EnableCap.Texture2D);
+            uvs[0] = new Vector2(topTexRect.Left, topTexRect.Bottom);
+            uvs[1] = new Vector2(topTexRect.Left, topTexRect.Top);
+            uvs[2] = new Vector2(topTexRect.Right, topTexRect.Top);
+            uvs[3] = new Vector2(topTexRect.Right, topTexRect.Top);
+            uvs[4] = new Vector2(topTexRect.Right, topTexRect.Bottom);
+            uvs[5] = new Vector2(topTexRect.Left, topTexRect.Bottom);
+            for (int i = 4 * 6; i < 6 * 6; ++i)
+            {
+                vaoBoxEntity.PushAttrib(trans: trans + BoxTriVerts[i] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6 - 1], st: uvs[i % 6]);
+            }
         }
 
-        private void RenderBoxFace()
-        {
-            GL.Begin(PrimitiveType.Quads);
-            GL.TexCoord2(0,0);
-            GL.Vertex3(-50,+50,50);
-            GL.TexCoord2(1,0);
-            GL.Vertex3(+50,+50,50);
-            GL.TexCoord2(1,1);
-            GL.Vertex3(+50,-50,50);
-            GL.TexCoord2(0,1);
-            GL.Vertex3(-50,-50,50);
-            GL.End();
-        }
-
-        private void LoadBoxTopTexture(int subtype)
+        private Bitmap GetBoxTopTexture(int subtype)
         {
             switch (subtype)
             {
                 case 0: // TNT
                 case 16: // TNT AutoGrav
-                    LoadTexture(OldResources.TNTBoxTopTexture);
-                    break;
+                    return (OldResources.TNTBoxTopTexture);
                 case 2: // Empty
                 case 3: // Spring
                 case 6: // Fruit
@@ -449,76 +373,56 @@ namespace CrashEdit
                 case 11: // POW
                 case 17: // Pickup AutoGrav
                 case 20: // Empty AutoGrav
-                    LoadTexture(OldResources.EmptyBoxTexture);
-                    break;
+                    return (OldResources.EmptyBoxTexture);
                 case 4: // Continue
-                    LoadTexture(OldResources.ContinueBoxTexture);
-                    break;
+                    return (OldResources.ContinueBoxTexture);
                 case 5: // Iron
                 case 7: // Action
                 case 15: // Iron Spring
-                    LoadTexture(OldResources.IronBoxTexture);
-                    break;
+                    return (OldResources.IronBoxTexture);
                 default:
-                    LoadTexture(OldResources.UnknownBoxTopTexture);
-                    break;
+                    return (OldResources.UnknownBoxTopTexture);
             }
         }
 
-        private void LoadBoxSideTexture(int subtype)
+        private Bitmap GetBoxSideTexture(int subtype)
         {
             switch (subtype)
             {
                 case 0: // TNT
                 case 16: // TNT AutoGrav
-                    LoadTexture(OldResources.TNTBoxTexture);
-                    break;
+                    return (OldResources.TNTBoxTexture);
                 case 2: // Empty
                 case 20: // Empty AutoGrav
-                    LoadTexture(OldResources.EmptyBoxTexture);
-                    break;
+                    return (OldResources.EmptyBoxTexture);
                 case 3: // Spring
-                    LoadTexture(OldResources.SpringBoxTexture);
-                    break;
+                    return (OldResources.SpringBoxTexture);
                 case 4: // Continue
-                    LoadTexture(OldResources.ContinueBoxTexture);
-                    break;
+                    return (OldResources.ContinueBoxTexture);
                 case 5: // Iron
-                    LoadTexture(OldResources.IronBoxTexture);
-                    break;
+                    return (OldResources.IronBoxTexture);
                 case 6: // Fruit
-                    LoadTexture(OldResources.FruitBoxTexture);
-                    break;
+                    return (OldResources.FruitBoxTexture);
                 case 7: // Action
-                    LoadTexture(OldResources.ActionBoxTexture);
-                    break;
+                    return (OldResources.ActionBoxTexture);
                 case 8: // Life
-                    LoadTexture(OldResources.LifeBoxTexture);
-                    break;
+                    return (OldResources.LifeBoxTexture);
                 case 9: // Doctor
-                    LoadTexture(OldResources.DoctorBoxTexture);
-                    break;
+                    return (OldResources.DoctorBoxTexture);
                 case 10: // Pickup
                 case 17: // Pickup AutoGrav
-                    LoadTexture(OldResources.PickupBoxTexture);
-                    break;
+                    return (OldResources.PickupBoxTexture);
                 case 11: // POW
-                    LoadTexture(OldResources.POWBoxTexture);
-                    break;
+                    return (OldResources.POWBoxTexture);
                 case 13: // Ghost
                 case 19: // Ghost Iron
-                    LoadTexture(OldResources.UnknownBoxTopTexture);
-                    break;
+                    return (OldResources.UnknownBoxTopTexture);
                 case 15: // Iron Spring
-                    LoadTexture(OldResources.IronSpringBoxTexture);
-                    break;
+                    return (OldResources.IronSpringBoxTexture);
                 default:
-                    LoadTexture(OldResources.UnknownBoxTexture);
-                    break;
+                    return (OldResources.UnknownBoxTexture);
             }
         }
-        
-         */
 
         private Bitmap GetPickupTexture(int subtype)
         {
@@ -587,7 +491,7 @@ namespace CrashEdit
 
         protected override void Dispose(bool disposing)
         {
-            //vaoStuff?.Dispose();
+            vaoLines?.Dispose();
 
             base.Dispose(disposing);
         }

@@ -30,13 +30,16 @@ namespace CrashEdit
                 AddMenuSeparator();
             }
             if (GameVersion == GameVersion.Crash1 || GameVersion == GameVersion.Crash1BetaMAR08 || GameVersion == GameVersion.Crash1BetaMAY11)
-                AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC1);
+            {
+                AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC1);
+                AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevelZones, Menu_ShowLevelZonesC1);
+            }
             else if (GameVersion == GameVersion.Crash1Beta1995)
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC1Proto);
             else if (GameVersion == GameVersion.Crash2)
-                AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC2);
+                AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC2);
             else if (GameVersion == GameVersion.Crash3)
-                AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC3);
+                AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC3);
             InvalidateNode();
             InvalidateNodeImage();
         }
@@ -278,6 +281,20 @@ namespace CrashEdit
                 worlds.Add(entry.EID);
             }
             OldSceneryEntryViewer viewer = new(NSF, worlds) { Dock = DockStyle.Fill };
+            frm.Controls.Add(viewer);
+            frm.Text = string.Empty;
+        }
+
+        private void Menu_ShowLevelZonesC1()
+        {
+            Form frm = new() { Text = "Loading...", Width = 480, Height = 360 };
+            frm.Show();
+            List<int> zones = new();
+            foreach (var entry in NSF.GetEntries<OldZoneEntry>())
+            {
+                zones.Add(entry.EID);
+            }
+            OldZoneEntryViewer viewer = new(NSF, zones) { Dock = DockStyle.Fill };
             frm.Controls.Add(viewer);
             frm.Text = string.Empty;
         }
