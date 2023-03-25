@@ -131,7 +131,7 @@ namespace CrashEdit
                             new(1, 1, 1, masterZoneAlpha));
             foreach (OldEntity entity in zone.Entities)
             {
-                RenderEntity(zone, entity);
+                RenderEntity(entity);
             }
             foreach (OldCamera camera in zone.Cameras)
             {
@@ -139,7 +139,7 @@ namespace CrashEdit
             }
         }
 
-        private void RenderEntity(OldZoneEntry zone, OldEntity entity)
+        private void RenderEntity(OldEntity entity)
         {
             if (entity.Positions.Count == 1)
             {
@@ -174,132 +174,6 @@ namespace CrashEdit
                 }
             }
         }
-
-        /*
-        private void RenderEntry(OldZoneEntry entry,ref int octreedisplaylist)
-        {
-            common.CurrentEntry = entry;
-            int xoffset = BitConv.FromInt32(entry.Layout,0);
-            int yoffset = BitConv.FromInt32(entry.Layout,4);
-            int zoffset = BitConv.FromInt32(entry.Layout,8);
-            int x2 = BitConv.FromInt32(entry.Layout,12);
-            int y2 = BitConv.FromInt32(entry.Layout,16);
-            int z2 = BitConv.FromInt32(entry.Layout,20);
-            GL.PushMatrix();
-            GL.Translate(xoffset,yoffset,zoffset);
-            if (common.DeleteLists)
-            {
-                GL.DeleteLists(octreedisplaylist,1);
-                octreedisplaylist = -1;
-            }
-            if (common.EnableOctree)
-            {
-                if (!common.PolygonMode)
-                    GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Line);
-                if (octreedisplaylist == -1)
-                {
-                    octreedisplaylist = GL.GenLists(1);
-                    GL.NewList(octreedisplaylist,ListMode.CompileAndExecute);
-                    GL.PushMatrix();
-                    int xmax = (ushort)BitConv.FromInt16(entry.Layout,0x1E);
-                    int ymax = (ushort)BitConv.FromInt16(entry.Layout,0x20);
-                    int zmax = (ushort)BitConv.FromInt16(entry.Layout,0x22);
-                    common.RenderOctree(entry.Layout,0x1C,0,0,0,x2,y2,z2,xmax,ymax,zmax);
-                    GL.PopMatrix();
-                    GL.EndList();
-                }
-                else
-                {
-                    GL.CallList(octreedisplaylist);
-                }
-                GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
-            }
-            GL.Color3(Color.White);
-            GL.Begin(PrimitiveType.LineStrip);
-            GL.Vertex3(0,0,0);
-            GL.Vertex3(x2,0,0);
-            GL.Vertex3(x2,y2,0);
-            GL.Vertex3(0,y2,0);
-            GL.Vertex3(0,0,0);
-            GL.Vertex3(0,0,z2);
-            GL.Vertex3(x2,0,z2);
-            GL.Vertex3(x2,y2,z2);
-            GL.Vertex3(0,y2,z2);
-            GL.Vertex3(0,0,z2);
-            GL.Vertex3(x2,0,z2);
-            GL.Vertex3(x2,0,0);
-            GL.Vertex3(x2,y2,0);
-            GL.Vertex3(x2,y2,z2);
-            GL.Vertex3(0,y2,z2);
-            GL.Vertex3(0,y2,0);
-            GL.End();
-            GL.Scale(4,4,4);
-            foreach (OldEntity entity in entry.Entities)
-            {
-                RenderEntity(entity);
-            }
-            foreach (OldCamera camera in entry.Cameras)
-            {
-                RenderCamera(camera);
-            }
-            GL.PopMatrix();
-        }
-
-        private void RenderLinkedEntry(OldZoneEntry entry, ref int octreedisplaylist)
-        {
-            common.CurrentEntry = entry;
-            int xoffset = BitConv.FromInt32(entry.Layout,0);
-            int yoffset = BitConv.FromInt32(entry.Layout,4);
-            int zoffset = BitConv.FromInt32(entry.Layout,8);
-            int x2 = BitConv.FromInt32(entry.Layout,12);
-            int y2 = BitConv.FromInt32(entry.Layout,16);
-            int z2 = BitConv.FromInt32(entry.Layout,20);
-            GL.PushMatrix();
-            GL.Translate(xoffset,yoffset,zoffset);
-            if (common.AllEntries)
-            {
-                if (common.DeleteLists)
-                {
-                    GL.DeleteLists(octreedisplaylist,1);
-                    octreedisplaylist = -1;
-                }
-                if (common.EnableOctree)
-                {
-                    GL.Disable(EnableCap.PolygonStipple);
-                    if (!common.PolygonMode)
-                        GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Line);
-                    if (octreedisplaylist == -1)
-                    {
-                        octreedisplaylist = GL.GenLists(1);
-                        GL.NewList(octreedisplaylist,ListMode.CompileAndExecute);
-                        GL.PushMatrix();
-                        int xmax = (ushort)BitConv.FromInt16(entry.Layout,0x1E);
-                        int ymax = (ushort)BitConv.FromInt16(entry.Layout,0x20);
-                        int zmax = (ushort)BitConv.FromInt16(entry.Layout,0x22);
-                        common.RenderOctree(entry.Layout,0x1C,0,0,0,x2,y2,z2,xmax,ymax,zmax);
-                        GL.PopMatrix();
-                        GL.EndList();
-                    }
-                    else
-                    {
-                        GL.CallList(octreedisplaylist);
-                    }
-                    GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
-                    GL.Enable(EnableCap.PolygonStipple);
-                }
-            }
-            GL.Scale(4,4,4);
-            foreach (OldEntity entity in entry.Entities)
-            {
-                RenderEntity(entity);
-            }
-            foreach (OldCamera camera in entry.Cameras)
-            {
-                RenderCamera(camera);
-            }
-            GL.PopMatrix();
-        }
-        */
 
         private void RenderCamera(OldCamera camera)
         {
