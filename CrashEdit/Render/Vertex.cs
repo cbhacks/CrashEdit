@@ -24,6 +24,49 @@ namespace CrashEdit
         }
     }
 
+    public struct TexInfoUnpacked
+    {
+        public bool enable;
+        public int color;
+        public int blend;
+        public int clutx;
+        public int cluty;
+        public int face;
+        public int page;
+
+        public TexInfoUnpacked(bool enable, int color = 0, int blend = 0, int clutx = 0, int cluty = 0, int face = 0, int page = 0)
+        {
+            this.enable = enable;
+            this.color = color;
+            this.blend = blend;
+            this.clutx = clutx;
+            this.cluty = cluty;
+            this.face = face;
+            this.page = page;
+        }
+
+        public static explicit operator TexInfoUnpacked(int v)
+        {
+            return new TexInfoUnpacked((v & 1) != 0, (v >> 1) & 0x3, (v >> 3) & 0x3, (v >> 5) & 0xf, (v >> 9) & 0x7f, (v >> 16) & 0x1, v >> 17);
+        }
+
+        public static explicit operator int(TexInfoUnpacked p)
+        {
+            return (p.enable ? 1 : 0) | (p.color << 1) | (p.blend << 3) | (p.clutx << 5) | (p.cluty << 9) | (p.face << 16) | (p.page << 17);
+        }
+        public GLViewer.BlendMode GetBlendMode()
+        {
+            switch (blend)
+            {
+                case 0: return GLViewer.BlendMode.Trans;
+                case 1: return GLViewer.BlendMode.Additive;
+                case 2: return GLViewer.BlendMode.Subtractive;
+                default:
+                case 3: return GLViewer.BlendMode.Solid;
+            }
+        }
+    }
+
     [StructLayout(LayoutKind.Explicit, Size = 64)]
     public struct Vertex
     {

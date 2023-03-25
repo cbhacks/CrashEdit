@@ -11,11 +11,11 @@ namespace CrashEdit
     {
         private List<int> worlds;
 
-        private VAO vaoWorld;
+        private MultiPassVAO vaoWorld;
         private Vector3[] buf_vtx;
         private Rgba[] buf_col;
         private Vector2[] buf_uv;
-        private int[] buf_tex;
+        private TexInfoUnpacked[] buf_tex;
         private int buf_idx;
 
         protected override bool UseGrid => true;
@@ -65,9 +65,12 @@ namespace CrashEdit
         {
             base.GLLoad();
 
-            vaoWorld = new(shaderContext, "crash1", PrimitiveType.Triangles);
-            vaoWorld.ArtType = VAO.ArtTypeEnum.Crash1World;
-            vaoWorld.UserScaleScalar = GameScales.WorldC1;
+            vaoWorld = new(BlendMode.All, shaderContext, "crash1", PrimitiveType.Triangles);
+            vaoWorld.ForEachVAO((VAO vao) =>
+            {
+                vao.ArtType = VAO.ArtTypeEnum.Crash1World;
+                vao.UserScaleScalar = GameScales.WorldC1;
+            });
         }
 
         private Dictionary<int, int> CollectTPAGs()
@@ -86,9 +89,11 @@ namespace CrashEdit
             return tex_eids;
         }
 
+        System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
         protected override void Render()
         {
             base.Render();
+            watch.Restart();
             vaoWorld.DiscardVerts();
 
             // setup textures
@@ -106,7 +111,7 @@ namespace CrashEdit
             if (buf_uv == null || buf_uv.Length < nb)
                 buf_uv = new Vector2[nb];
             if (buf_tex == null || buf_tex.Length < nb)
-                buf_tex = new int[nb]; // enable: 1, colormode: 2, blendmode: 2, clutx: 4, cluty: 7, doubleface: 1, page: X (>17 total)
+                buf_tex = new TexInfoUnpacked[nb];
 
             // render stuff
             buf_idx = 0;
@@ -117,14 +122,20 @@ namespace CrashEdit
 
             for (int i = 0; i < buf_idx; ++i)
             {
-                vaoWorld.PushAttrib(trans: buf_vtx[i], rgba: buf_col[i], st: buf_uv[i], tex: buf_tex[i]);
+                vaoWorld.PushAttrib(buf_tex[i / 3 * 3 + 2].GetBlendMode() | BlendMode.Solid, trans: buf_vtx[i], rgba: buf_col[i], st: buf_uv[i], tex: buf_tex[i]);
             }
 
             // render passes
-            RenderWorldPass(BlendMode.Solid);
-            RenderWorldPass(BlendMode.Trans);
-            RenderWorldPass(BlendMode.Subtractive);
-            RenderWorldPass(BlendMode.Additive);
+            vaoWorld.Render(render);
+            watch.Stop();
+            if (true)
+            {
+                vaoWorld.ForEachVAO((VAO vao) =>
+                {
+                    Console.WriteLine($"WGEO vao blend {vao.BlendMask} has {vao.VertCount} verts");
+                });
+                Console.WriteLine($"WGEO render time {watch.ElapsedTicks / (System.Diagnostics.Stopwatch.Frequency / 1000.0)}ms");
+            }
         }
 
         protected void RenderWorld(OldSceneryEntry world, Dictionary<int, int> tex_eids)
@@ -138,28 +149,21 @@ namespace CrashEdit
                     buf_uv[buf_idx + 1] = new(tex.U2, tex.V2);
                     buf_uv[buf_idx + 2] = new(tex.U1, tex.V1);
 
-                    buf_tex[buf_idx + 2] = MakeTexInfo(true, color: tex.ColorMode, blend: tex.BlendMode,
-                                                             clutx: tex.ClutX, cluty: tex.ClutY,
-                                                             page: tex_eids[world.GetTPAG(polygon.Page)]);
+                    buf_tex[buf_idx + 2] = new(true, color: tex.ColorMode, blend: tex.BlendMode,
+                                                     clutx: tex.ClutX, cluty: tex.ClutY,
+                                                     page: tex_eids[world.GetTPAG(polygon.Page)]);
                     RenderVertex(world, world.Vertices[polygon.VertexA]);
                     RenderVertex(world, world.Vertices[polygon.VertexB]);
                     RenderVertex(world, world.Vertices[polygon.VertexC]);
                 }
                 else
                 {
-                    buf_tex[buf_idx + 2] = MakeTexInfo(false);
+                    buf_tex[buf_idx + 2] = new(false);
                     RenderVertex(world, world.Vertices[polygon.VertexA]);
                     RenderVertex(world, world.Vertices[polygon.VertexB]);
                     RenderVertex(world, world.Vertices[polygon.VertexC]);
                 }
             }
-        }
-
-        private void RenderWorldPass(BlendMode pass)
-        {
-            SetBlendMode(pass);
-            vaoWorld.BlendMask = (int)pass;
-            vaoWorld.Render(render);
         }
 
         private void RenderVertex(OldSceneryEntry world, OldSceneryVertex vert)

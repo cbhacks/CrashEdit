@@ -27,7 +27,7 @@ namespace CrashEdit
         private Vector3[][] buf_nor;
         private Rgba[][] buf_col;
         private Vector2[][] buf_uv;
-        private int[][] buf_tex;
+        private TexInfoUnpacked[][] buf_tex;
         private int buf_idx;
 
         protected override bool UseGrid => true;
@@ -54,7 +54,7 @@ namespace CrashEdit
             buf_nor = new Vector3[ANIM_BUF_MAX][];
             buf_col = new Rgba[ANIM_BUF_MAX][];
             buf_uv = new Vector2[ANIM_BUF_MAX][];
-            buf_tex = new int[ANIM_BUF_MAX][];
+            buf_tex = new TexInfoUnpacked[ANIM_BUF_MAX][];
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -257,7 +257,7 @@ namespace CrashEdit
                 if (buf_uv[buf] == null || buf_uv[buf].Length < nb)
                     buf_uv[buf] = new Vector2[nb];
                 if (buf_tex[buf] == null || buf_tex[buf].Length < nb)
-                    buf_tex[buf] = new int[nb]; // enable: 1, colormode: 2, blendmode: 2, clutx: 4, cluty: 7, doubleface: 1, page: X (>17 total)
+                    buf_tex[buf] = new TexInfoUnpacked[nb];
 
                 // render stuff
                 buf_idx = 0;
@@ -273,10 +273,10 @@ namespace CrashEdit
                         buf_uv[buf][buf_idx + 0] = new(tex.U3, tex.V3);
                         buf_uv[buf][buf_idx + 1] = new(tex.U2, tex.V2);
                         buf_uv[buf][buf_idx + 2] = new(tex.U1, tex.V1);
-                        buf_tex[buf][buf_idx + 2] = MakeTexInfo(true, color: tex.ColorMode, blend: tex.BlendMode,
-                                                                      clutx: tex.ClutX, cluty: tex.ClutY,
-                                                                      face: Convert.ToInt32(tex.N),
-                                                                      page: tex_eids[tex.EID]);
+                        buf_tex[buf][buf_idx + 2] = new(true, color: tex.ColorMode, blend: tex.BlendMode,
+                                                              clutx: tex.ClutX, cluty: tex.ClutY,
+                                                              face: Convert.ToInt32(tex.N),
+                                                              page: tex_eids[tex.EID]);
                         RenderVertex(frame.Vertices[polygon.VertexC / 6], buf);
                         RenderVertex(frame.Vertices[polygon.VertexB / 6], buf);
                         RenderVertex(frame.Vertices[polygon.VertexA / 6], buf);
@@ -287,8 +287,7 @@ namespace CrashEdit
                         buf_col[buf][buf_idx] = new(col.R, col.G, col.B, 255);
                         buf_col[buf][buf_idx + 1] = buf_col[buf][buf_idx];
                         buf_col[buf][buf_idx + 2] = buf_col[buf][buf_idx];
-                        buf_tex[buf][buf_idx + 2] = 0 | (Convert.ToInt32(col.N) << 16);
-                        buf_tex[buf][buf_idx + 2] = MakeTexInfo(false, face: Convert.ToInt32(col.N));
+                        buf_tex[buf][buf_idx + 2] = new(false, face: Convert.ToInt32(col.N));
                         RenderVertex(frame.Vertices[polygon.VertexC / 6], buf);
                         RenderVertex(frame.Vertices[polygon.VertexB / 6], buf);
                         RenderVertex(frame.Vertices[polygon.VertexA / 6], buf);

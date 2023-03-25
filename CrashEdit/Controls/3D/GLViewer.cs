@@ -566,9 +566,11 @@ namespace CrashEdit
             Invalidate();
         }
 
-        protected enum BlendMode { Trans = 0, Additive, Subtractive, Solid }
+        [Flags]
+        public enum BlendMode { None = 0, Trans = 1, Additive = 2, Subtractive = 4, Solid = 8, All = Trans | Additive | Subtractive | Solid }
+        public static int BlendModeIndex(BlendMode blend) => MathExt.Log2((int)blend);
 
-        protected void SetBlendMode(BlendMode bmode)
+        public static void SetBlendMode(BlendMode bmode)
         {
             switch (bmode)
             {

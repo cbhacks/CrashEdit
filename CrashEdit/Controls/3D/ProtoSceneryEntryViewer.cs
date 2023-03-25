@@ -15,7 +15,7 @@ namespace CrashEdit
         private Vector3[] buf_vtx;
         private Rgba[] buf_col;
         private Vector2[] buf_uv;
-        private int[] buf_tex;
+        private TexInfoUnpacked[] buf_tex;
         private int buf_idx;
 
         protected override bool UseGrid => true;
@@ -101,7 +101,7 @@ namespace CrashEdit
             if (buf_uv == null || buf_uv.Length < nb)
                 buf_uv = new Vector2[nb];
             if (buf_tex == null || buf_tex.Length < nb)
-                buf_tex = new int[nb]; // enable: 1, colormode: 2, blendmode: 2, clutx: 4, cluty: 7, doubleface: 1, page: X (>17 total)
+                buf_tex = new TexInfoUnpacked[nb]; // enable: 1, colormode: 2, blendmode: 2, clutx: 4, cluty: 7, doubleface: 1, page: X (>17 total)
 
             // render stuff
             buf_idx = 0;
@@ -135,13 +135,9 @@ namespace CrashEdit
                     buf_uv[buf_idx + 0] = new(tex.U3, tex.V3);
                     buf_uv[buf_idx + 1] = new(tex.U2, tex.V2);
                     buf_uv[buf_idx + 2] = new(tex.U1, tex.V1);
-                    buf_tex[buf_idx + 2] = 1
-                                        | (tex.ColorMode << 1)
-                                        | (tex.BlendMode << 3)
-                                        | (tex.ClutX << 5)
-                                        | (tex.ClutY << 9)
-                                        | (tex_eids[world.GetTPAG(polygon.Page)] << 17)
-                                        ;
+                    buf_tex[buf_idx + 2] = new(true, color: tex.ColorMode, blend: tex.BlendMode,
+                                                     clutx: tex.ClutX, cluty: tex.ClutY,
+                                                     page: tex_eids[world.GetTPAG(polygon.Page)]);
                     RenderVertex(world, world.Vertices[polygon.VertexA]);
                     RenderVertex(world, world.Vertices[polygon.VertexB]);
                     RenderVertex(world, world.Vertices[polygon.VertexC]);
@@ -152,7 +148,7 @@ namespace CrashEdit
                     buf_col[buf_idx] = new(col.R, col.G, col.B, 255);
                     buf_col[buf_idx + 1] = buf_col[buf_idx];
                     buf_col[buf_idx + 2] = buf_col[buf_idx];
-                    buf_tex[buf_idx + 2] = 0;
+                    buf_tex[buf_idx + 2] = new(false);
                     RenderVertex(world, world.Vertices[polygon.VertexA]);
                     RenderVertex(world, world.Vertices[polygon.VertexB]);
                     RenderVertex(world, world.Vertices[polygon.VertexC]);

@@ -70,7 +70,7 @@ namespace CrashEdit
             EnableAttribI("tex", 1, VertexAttribIntegerType.Int, "tex");
         }
 
-        public void PushAttrib(Vector3? trans = null, Vector3? normal = null, Vector2? st = null, Rgba? rgba = null, int tex = 0)
+        public void PushAttrib(Vector3? trans = null, Vector3? normal = null, Vector2? st = null, Rgba? rgba = null, TexInfoUnpacked? tex = null)
         {
             if (VertCount == Verts.Length)
             {
@@ -85,7 +85,8 @@ namespace CrashEdit
                 Verts[VertCount].st = st.Value;
             if (rgba != null)
                 Verts[VertCount].rgba = rgba.Value;
-            Verts[VertCount].tex = tex;
+            if (tex != null)
+                Verts[VertCount].tex = (int)tex.Value;
             VertCount++;
         }
 

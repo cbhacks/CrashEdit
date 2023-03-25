@@ -42,5 +42,23 @@ namespace CrashEdit
                 (byte)(col1.a + (col2.r - col1.a) * amt)
                 );
         }
+
+        public static int Log2(int v)
+        {
+            for (int i = 31; i-- > 0;)
+            {
+                if (v >= (1 << i)) return i;
+            }
+            return -1;
+        }
+
+        public static uint Log2(uint v)
+        {
+            for (int i = 32; i-- > 0;)
+            {
+                if (v >= (1 << i)) return (uint)i;
+            }
+            return uint.MaxValue;
+        }
     }
 }
