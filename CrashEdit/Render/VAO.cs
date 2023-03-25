@@ -74,7 +74,7 @@ namespace CrashEdit
         {
             if (VertCount >= Verts.Length)
             {
-                Console.WriteLine($"Realloc buffer {VertCount} -> {VertCount * 2}");
+                Console.WriteLine($"Realloc buffer {Verts.Length} -> {Verts.Length * 2}");
                 Array.Resize(ref verts, Verts.Length * 2);
                 TestRealloc();
             }

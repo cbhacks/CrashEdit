@@ -11,7 +11,7 @@ namespace CrashEdit
     {
         private List<int> worlds;
 
-        private MultiPassVAO vaoWorld;
+        private VAO vaoWorld;
         private Vector3[] buf_vtx;
         private Rgba[] buf_col;
         private Vector2[] buf_uv;
@@ -65,12 +65,9 @@ namespace CrashEdit
         {
             base.GLLoad();
 
-            vaoWorld = new(BlendMode.All, shaderContext, "crash1", PrimitiveType.Triangles);
-            vaoWorld.ForEachVAO((VAO vao) =>
-            {
-                vao.ArtType = VAO.ArtTypeEnum.Crash1World;
-                vao.UserScaleScalar = GameScales.WorldC1;
-            });
+            vaoWorld = new(shaderContext, "crash1", PrimitiveType.Triangles);
+            vaoWorld.ArtType = VAO.ArtTypeEnum.Crash1World;
+            vaoWorld.UserScaleScalar = GameScales.WorldC1;
         }
 
         private Dictionary<int, int> CollectTPAGs()
@@ -134,22 +131,22 @@ namespace CrashEdit
 
             for (int i = 0; i < buf_idx; ++i)
             {
-                vaoWorld.PushAttrib(buf_tex[i / 3 * 3 + 2].GetBlendMode() | BlendMode.Solid, trans: buf_vtx[i], rgba: buf_col[i], st: buf_uv[i], tex: buf_tex[i]);
+                vaoWorld.PushAttrib(trans: buf_vtx[i], rgba: buf_col[i], st: buf_uv[i], tex: buf_tex[i]);
             }
             dbgTimePushVerts = watch.StopAndElapsed();
             watch.Restart();
 
             // render passes
-            vaoWorld.Render(render);
+            RenderWorldPass(BlendMode.Solid);
+            RenderWorldPass(BlendMode.Trans);
+            RenderWorldPass(BlendMode.Subtractive);
+            RenderWorldPass(BlendMode.Additive);
+            // vaoWorld.Render(render);
             dbgTimeRender = watch.StopAndElapsed();
             watch.Restart();
             watch.Stop();
             if (true)
             {
-                vaoWorld.ForEachVAO((VAO vao) =>
-                {
-                    Console.WriteLine($"WGEO vao blend {vao.BlendMask} has {vao.VertCount} verts");
-                });
                 double t_to_ms = 1 / (System.Diagnostics.Stopwatch.Frequency / 1000.0);
                 Console.WriteLine($"WGEO renderer dbgTimeSetupTPAGs: {dbgTimeSetupTPAGs * t_to_ms}ms");
                 Console.WriteLine($"WGEO renderer dbgTimeAllocBufs: {dbgTimeAllocBufs * t_to_ms}ms");
@@ -185,6 +182,13 @@ namespace CrashEdit
                     RenderVertex(world, world.Vertices[polygon.VertexC]);
                 }
             }
+        }
+
+        private void RenderWorldPass(BlendMode pass)
+        {
+            SetBlendMode(pass);
+            vaoWorld.BlendMask = BlendModeIndex(pass);
+            vaoWorld.Render(render);
         }
 
         private void RenderVertex(OldSceneryEntry world, OldSceneryVertex vert)
