@@ -74,21 +74,21 @@ namespace CrashEdit
 
             vaoSphereLine = new VAO(shaderContext, "line-model", PrimitiveType.LineStrip);
             vaoGridLine = new VAO(shaderContext, "line-usercolor", PrimitiveType.Lines);
-            vaoBoxTri = new VAO(shaderContext, "box-model", PrimitiveType.Triangles, vert_count: BoxTriIndices.Length);
-            vaoBoxLine = new VAO(shaderContext, "box-model", PrimitiveType.Lines, vert_count: BoxLineIndices.Length);
-            vaoSprite = new VAO(shaderContext, "sprite", PrimitiveType.TriangleFan, vert_count: SpriteVerts.Length);
-            vaoSpriteBatch = new VAO(shaderContext, "sprite2", PrimitiveType.Quads);
-            vaoLineBatch = new VAO(shaderContext, "line", PrimitiveType.Lines);
-            vaoTriBatch = new VAO(shaderContext, "generic", PrimitiveType.Triangles);
+            vaoDebugBoxTri = new VAO(shaderContext, "box-model", PrimitiveType.Triangles, vert_count: BoxTriIndices.Length);
+            vaoDebugBoxLine = new VAO(shaderContext, "box-model", PrimitiveType.Lines, vert_count: BoxLineIndices.Length);
+            vaoDebugSprite = new VAO(shaderContext, "sprite-debug", PrimitiveType.TriangleFan, vert_count: SpriteVerts.Length);
+            vaoSprites = new VAO(shaderContext, "sprite", PrimitiveType.Quads);
+            vaoLines = new VAO(shaderContext, "line", PrimitiveType.Lines);
+            vaoTris = new VAO(shaderContext, "generic", PrimitiveType.Triangles);
             vaoGridLine.UserColor1 = Color4.Gray;
 
             for (int i = 0; i < BoxTriIndices.Length; ++i)
             {
-                vaoBoxTri.PushAttrib(trans: BoxVerts[BoxTriIndices[i]]);
+                vaoDebugBoxTri.PushAttrib(trans: BoxVerts[BoxTriIndices[i]]);
             }
             for (int i = 0; i < BoxLineIndices.Length; ++i)
             {
-                vaoBoxLine.PushAttrib(trans: BoxVerts[BoxLineIndices[i]]);
+                vaoDebugBoxLine.PushAttrib(trans: BoxVerts[BoxLineIndices[i]]);
             }
 
             // make texture

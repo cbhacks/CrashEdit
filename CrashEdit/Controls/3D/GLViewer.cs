@@ -87,15 +87,15 @@ namespace CrashEdit
         protected static int texTpages;
         protected static int texSprites;
         protected static VAO vaoAxes;
-        protected static VAO vaoTriBatch;
-        protected static VAO vaoLineBatch;
-        protected static VAO vaoSpriteBatch;
+        protected static VAO vaoTris;
+        protected static VAO vaoLines;
+        protected static VAO vaoSprites;
         // protected static VAO vaoText;
 
         // these shouldn't be used
-        protected static VAO vaoBoxTri;
-        protected static VAO vaoBoxLine;
-        protected static VAO vaoSprite;
+        protected static VAO vaoDebugBoxTri;
+        protected static VAO vaoDebugBoxLine;
+        protected static VAO vaoDebugSprite;
 
         private bool run = false;
         private bool loaded = false;
@@ -430,9 +430,9 @@ namespace CrashEdit
                     // post render
                     SetBlendMode(BlendMode.Solid);
 
-                    vaoLineBatch.RenderAndDiscard(render);
-                    vaoTriBatch.RenderAndDiscard(render);
-                    vaoSpriteBatch.RenderAndDiscard(render);
+                    vaoLines.RenderAndDiscard(render);
+                    vaoTris.RenderAndDiscard(render);
+                    vaoSprites.RenderAndDiscard(render);
 
                     if (UseGrid && Properties.Settings.Default.DisplayAnimGrid)
                     {
@@ -460,26 +460,26 @@ namespace CrashEdit
             vaoAxes.Render(render);
         }
 
-        protected void RenderSingleBox(Vector3 pos, Vector3 size, Color4 col)
+        protected void DebugRenderBox(Vector3 pos, Vector3 size, Color4 col)
         {
-            vaoBoxTri.UserTrans = pos;
-            vaoBoxTri.UserScale = size;
-            vaoBoxTri.UserColor1 = col;
-            vaoBoxTri.Render(render);
+            vaoDebugBoxTri.UserTrans = pos;
+            vaoDebugBoxTri.UserScale = size;
+            vaoDebugBoxTri.UserColor1 = col;
+            vaoDebugBoxTri.Render(render);
         }
 
-        protected void RenderSingleBoxLine(Vector3 pos, Vector3 size, Color4 col)
+        protected void DebugRenderBoxLine(Vector3 pos, Vector3 size, Color4 col)
         {
-            vaoBoxLine.UserTrans = pos;
-            vaoBoxLine.UserScale = size;
-            vaoBoxLine.UserColor1 = col;
-            vaoBoxLine.Render(render);
+            vaoDebugBoxLine.UserTrans = pos;
+            vaoDebugBoxLine.UserScale = size;
+            vaoDebugBoxLine.UserColor1 = col;
+            vaoDebugBoxLine.Render(render);
         }
 
-        protected void RenderSingleBoxFilled(Vector3 pos, Vector3 size, Color4 col_line, Color4 col_fill)
+        protected void DEbugRenderOutlinedBox(Vector3 pos, Vector3 size, Color4 col_line, Color4 col_fill)
         {
-            RenderSingleBoxLine(pos, size, col_line);
-            RenderSingleBox(pos, size, col_fill);
+            DebugRenderBoxLine(pos, size, col_line);
+            DebugRenderBox(pos, size, col_fill);
         }
 
         public void AddBox(Vector3 ofs, Vector3 sz, Rgba col, bool outline)
@@ -489,7 +489,7 @@ namespace CrashEdit
                 for (int i = 0; i < BoxLineIndices.Length; ++i)
                 {
                     int v_idx = BoxLineIndices[i];
-                    vaoLineBatch.PushAttrib(trans: (BoxVerts[v_idx] + new Vector3(1)) / 2 * sz + ofs, rgba: col);
+                    vaoLines.PushAttrib(trans: (BoxVerts[v_idx] + new Vector3(1)) / 2 * sz + ofs, rgba: col);
                 }
             }
             else
@@ -497,7 +497,7 @@ namespace CrashEdit
                 for (int i = 0; i < BoxTriIndices.Length; ++i)
                 {
                     int v_idx = BoxTriIndices[i];
-                    vaoTriBatch.PushAttrib(trans: (BoxVerts[v_idx] + new Vector3(1)) / 2 * sz + ofs, rgba: col, st: new Vector2(-1));
+                    vaoTris.PushAttrib(trans: (BoxVerts[v_idx] + new Vector3(1)) / 2 * sz + ofs, rgba: col, st: new Vector2(-1));
                 }
             }
         }
@@ -509,7 +509,7 @@ namespace CrashEdit
                 for (int i = 0; i < BoxLineIndices.Length; ++i)
                 {
                     int v_idx = BoxLineIndices[i];
-                    vaoLineBatch.PushAttrib(trans: (BoxVerts[v_idx] + new Vector3(1)) / 2 * sz + ofs, rgba: colors.Length == BoxLineIndices.Length ? colors[i] : colors[v_idx]);
+                    vaoLines.PushAttrib(trans: (BoxVerts[v_idx] + new Vector3(1)) / 2 * sz + ofs, rgba: colors.Length == BoxLineIndices.Length ? colors[i] : colors[v_idx]);
                 }
             }
             else
@@ -517,14 +517,15 @@ namespace CrashEdit
                 for (int i = 0; i < BoxTriIndices.Length; ++i)
                 {
                     int v_idx = BoxTriIndices[i];
-                    vaoTriBatch.PushAttrib(trans: (BoxVerts[v_idx] + new Vector3(1)) / 2 * sz + ofs, rgba: colors.Length == BoxTriIndices.Length ? colors[i] : colors[v_idx], st: new Vector2(-1));
+                    vaoTris.PushAttrib(trans: (BoxVerts[v_idx] + new Vector3(1)) / 2 * sz + ofs, rgba: colors.Length == BoxTriIndices.Length ? colors[i] : colors[v_idx], st: new Vector2(-1));
                 }
             }
         }
 
         public void AddBoxAB(Vector3 a, Vector3 b, Rgba col, bool outline) => AddBox(a, b - a, col, outline);
+        public void AddBoxAB(Vector3 a, Vector3 b, Rgba[] col, bool outline) => AddBox(a, b - a, col, outline);
 
-        protected void RenderSingleSprite(Vector3 trans, Vector2 size, Color4 col, Bitmap texture)
+        protected void DebugRenderSprite(Vector3 trans, Vector2 size, Color4 col, Bitmap texture)
         {
             var texRect = OldResources.TexMap[texture];
             //Console.WriteLine($"TEXTURE: {texRect.Left},{texRect.Top}/{texRect.Right},{texRect.Bottom}");
@@ -535,15 +536,15 @@ namespace CrashEdit
             //uvs[3] = new Vector2(texRect.Right, texRect.Top);
             uvs[3] = new Vector2(texRect.Right, texRect.Bottom);
             //uvs[5] = new Vector2(texRect.Left, texRect.Bottom);
-            vaoSprite.DiscardVerts();
+            vaoDebugSprite.DiscardVerts();
             for (int i = 0; i < SpriteVerts.Length; ++i)
             {
-                vaoSprite.PushAttrib(trans: SpriteVerts[i], st: uvs[i]);
+                vaoDebugSprite.PushAttrib(trans: SpriteVerts[i], st: uvs[i]);
             }
-            vaoSprite.UserTrans = trans;
-            vaoSprite.UserScale = new Vector3(size);
-            vaoSprite.UserColor1 = col;
-            vaoSprite.Render(render);
+            vaoDebugSprite.UserTrans = trans;
+            vaoDebugSprite.UserScale = new Vector3(size);
+            vaoDebugSprite.UserColor1 = col;
+            vaoDebugSprite.Render(render);
         }
 
         protected void AddSprite(Vector3 trans, Vector2 size, Rgba col, Bitmap texture)
@@ -559,18 +560,8 @@ namespace CrashEdit
             //uvs[5] = new Vector2(texRect.Left, texRect.Bottom);
             for (int i = 0; i < SpriteVerts.Length; ++i)
             {
-                vaoSpriteBatch.PushAttrib(trans: trans, rgba: col, st: uvs[i], normal: SpriteVerts[i] * new Vector3(size));
+                vaoSprites.PushAttrib(trans: trans, rgba: col, st: uvs[i], normal: SpriteVerts[i] * new Vector3(size));
             }
-        }
-
-        protected void AddLineToVAO(VAO vao, Vector3 p1, Vector3 p2, Rgba col1, Rgba col2)
-        {
-            vao.PushAttrib(trans: p1, rgba: col1);
-            vao.PushAttrib(trans: p2, rgba: col2);
-        }
-        protected void AddLineToVAO(VAO vao, Vector3 p1, Vector3 p2, Rgba col)
-        {
-            AddLineToVAO(vao, p1, p2, col, col);
         }
 
         public void ResetCamera()
@@ -650,19 +641,6 @@ namespace CrashEdit
                     GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, kvp.Value * 128, 512, 128, OpenTK.Graphics.OpenGL4.PixelFormat.RedInteger, PixelType.UnsignedByte, tpag.Data);
                 }
             }
-        }
-
-        // pack polygon texture mapping information into a 32-bit value.
-        protected int MakeTexInfo(bool enable, int color = 0, int blend = 0, int clutx = 0, int cluty = 0, int face = 0, int page = 0)
-        {
-            // enable: 1, colormode: 2, blendmode: 2, clutx: 4, cluty: 7, doubleface: 1, page: X (>17 total)
-            color &= 0x3;
-            blend &= 0x3;
-            clutx &= 0xF;
-            cluty &= 0x7F;
-            face &= 0x1;
-            // page &= 0xFFFF;
-            return (enable ? 1 : 0) | (color << 1) | (blend << 3) | (clutx << 5) | (cluty << 9) | (face << 16) | (page << 17);
         }
 
         protected override void Dispose(bool disposing)

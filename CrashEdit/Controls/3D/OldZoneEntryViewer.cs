@@ -172,10 +172,10 @@ namespace CrashEdit
             {
                 for (int i = 1; i < entity.Positions.Count; ++i)
                 {
-                    vaoLineBatch.PushAttrib(trans: new Vector3(entity.Positions[i - 1].X, entity.Positions[i - 1].Y, entity.Positions[i - 1].Z) / GameScales.ZoneEntityC1 + zoneTrans,
-                                            rgba: new Rgba(0, 0, 255, 255));
-                    vaoLineBatch.PushAttrib(trans: new Vector3(entity.Positions[i].X, entity.Positions[i].Y, entity.Positions[i].Z) / GameScales.ZoneEntityC1 + zoneTrans,
-                                            rgba: new Rgba(0, 0, 255, 255));
+                    vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i - 1].X, entity.Positions[i - 1].Y, entity.Positions[i - 1].Z) / GameScales.ZoneEntityC1 + zoneTrans,
+                                        rgba: new Rgba(0, 0, 255, 255));
+                    vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i].X, entity.Positions[i].Y, entity.Positions[i].Z) / GameScales.ZoneEntityC1 + zoneTrans,
+                                        rgba: new Rgba(0, 0, 255, 255));
                 }
                 foreach (EntityPosition position in entity.Positions)
                 {
@@ -189,10 +189,10 @@ namespace CrashEdit
         {
             for (int i = 1; i < camera.Positions.Count; ++i)
             {
-                vaoLineBatch.PushAttrib(trans: new Vector3(camera.Positions[i - 1].X, camera.Positions[i - 1].Y, camera.Positions[i - 1].Z) / GameScales.ZoneCameraC1 + zoneTrans,
-                                        rgba: new Rgba(0, 128, 0, masterZoneAlpha));
-                vaoLineBatch.PushAttrib(trans: new Vector3(camera.Positions[i].X, camera.Positions[i].Y, camera.Positions[i].Z) / GameScales.ZoneCameraC1 + zoneTrans,
-                                        rgba: new Rgba(0, 128, 0, masterZoneAlpha));
+                vaoLines.PushAttrib(trans: new Vector3(camera.Positions[i - 1].X, camera.Positions[i - 1].Y, camera.Positions[i - 1].Z) / GameScales.ZoneCameraC1 + zoneTrans,
+                                    rgba: new Rgba(0, 128, 0, masterZoneAlpha));
+                vaoLines.PushAttrib(trans: new Vector3(camera.Positions[i].X, camera.Positions[i].Y, camera.Positions[i].Z) / GameScales.ZoneCameraC1 + zoneTrans,
+                                    rgba: new Rgba(0, 128, 0, masterZoneAlpha));
             }
             foreach (OldCameraPosition position in camera.Positions)
             {
@@ -227,7 +227,7 @@ namespace CrashEdit
             };
             for (int i = 0; i < 3 * 6; ++i)
             {
-                vaoTriBatch.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6], st: uvs[i % 6]);
+                vaoTris.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6], st: uvs[i % 6]);
             }
             uvs[0] = new Vector2(topTexRect.Left, topTexRect.Bottom);
             uvs[1] = new Vector2(topTexRect.Left, topTexRect.Top);
@@ -237,7 +237,7 @@ namespace CrashEdit
             uvs[5] = new Vector2(topTexRect.Left, topTexRect.Bottom);
             for (int i = 4 * 6; i < 6 * 6; ++i)
             {
-                vaoTriBatch.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6 - 1], st: uvs[i % 6]);
+                vaoTris.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6 - 1], st: uvs[i % 6]);
             }
         }
 

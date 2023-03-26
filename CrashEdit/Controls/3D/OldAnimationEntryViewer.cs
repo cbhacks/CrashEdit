@@ -195,8 +195,8 @@ namespace CrashEdit
                     for (int i = 0; i < vaoModel[0].VertCount; ++i)
                     {
                         var p = (vaoModel[0].Verts[i].trans + ofs) * vaoModel[0].UserScale;
-                        vaoLineBatch.PushAttrib(trans: p, rgba: (Rgba)Color4.White);
-                        vaoLineBatch.PushAttrib(trans: p + vaoModel[0].Verts[i].normal * 0.1f, rgba: (Rgba)Color4.Cyan);
+                        vaoLines.PushAttrib(trans: p, rgba: (Rgba)Color4.White);
+                        vaoLines.PushAttrib(trans: p + vaoModel[0].Verts[i].normal * 0.1f, rgba: (Rgba)Color4.Cyan);
                     }
                 }
                 if (collisionenabled)
