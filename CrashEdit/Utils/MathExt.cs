@@ -18,6 +18,13 @@ namespace CrashEdit
             if (amt >= 1) return b;
             return a + (b - a) * amt;
         }
+        public static Vector3 Div(Vector3 a, Vector3 b)
+        {
+            a.X /= b.X;
+            a.Y /= b.Y;
+            a.Z /= b.Z;
+            return a;
+        }
 
         public static Color4 Lerp(Color4 col1, Color4 col2, float amt)
         {
