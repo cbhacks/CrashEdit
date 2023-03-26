@@ -188,6 +188,16 @@ namespace CrashEdit
                 RenderFramePass(BlendMode.Subtractive);
                 RenderFramePass(BlendMode.Additive);
 
+                if (normalsenabled && !colored)
+                {
+                    var ofs = vaoModel[0].UserTrans - new Vector3(128);
+                    for (int i = 0; i < vaoModel[0].VertCount; ++i)
+                    {
+                        var p = (vaoModel[0].Verts[i].trans + ofs) * vaoModel[0].UserScale;
+                        vaoLineBatch.PushAttrib(trans: p, rgba: (Rgba)Color4.White);
+                        vaoLineBatch.PushAttrib(trans: p + vaoModel[0].Verts[i].normal * 0.1f, rgba: (Rgba)Color4.Cyan);
+                    }
+                }
                 if (collisionenabled)
                 {
                     SetBlendMode(BlendMode.Solid);
@@ -304,7 +314,7 @@ namespace CrashEdit
             }
             else
             {
-                vaoModel[buf].Verts[cur_vert_idx].normal = new(vert.NormalX, vert.NormalY, vert.NormalZ);
+                vaoModel[buf].Verts[cur_vert_idx].normal = new Vector3(vert.NormalX, vert.NormalY, vert.NormalZ) / 127;
             }
             vaoModel[buf].VertCount++;
         }
