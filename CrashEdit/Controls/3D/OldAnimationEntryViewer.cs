@@ -18,7 +18,7 @@ namespace CrashEdit
         private bool collisionenabled = Settings.Default.DisplayFrameCollision;
         private bool normalsenabled = true;
         private bool interpenabled = true;
-        private int cullmode = 0;
+        private int cullmode = 1;
 
         // note: there's multiple buffers because of blending
         private const int ANIM_BUF_MAX = 2;
@@ -46,7 +46,6 @@ namespace CrashEdit
             for (int i = 0; i < ANIM_BUF_MAX; ++i)
             {
                 vaoModel[i] = new(shaderContext, "crash1", PrimitiveType.Triangles);
-                vaoModel[i].ArtType = VAO.ArtTypeEnum.Crash1Anim;
             }
         }
 
@@ -182,6 +181,8 @@ namespace CrashEdit
                     }
                 }
 
+                vaoModel[0].UserTrans -= new Vector3(128);
+
                 // note: only buffer 0 is rendered
                 RenderFramePass(BlendMode.Solid);
                 RenderFramePass(BlendMode.Trans);
@@ -190,7 +191,7 @@ namespace CrashEdit
 
                 if (normalsenabled && !colored)
                 {
-                    var ofs = vaoModel[0].UserTrans - new Vector3(128);
+                    var ofs = vaoModel[0].UserTrans;
                     for (int i = 0; i < vaoModel[0].VertCount; ++i)
                     {
                         var p = (vaoModel[0].Verts[i].trans + ofs) * vaoModel[0].UserScale;

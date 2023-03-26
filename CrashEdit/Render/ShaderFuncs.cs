@@ -25,8 +25,6 @@ namespace CrashEdit
             sh.UniformVec4("userColor2", ref vao.UserColor2);
             sh.UniformInt("modeColor", (int)vao.ColorMode);
             sh.UniformInt("modeCull", vao.UserCullMode);
-            sh.UniformFloat("scaleScalar", vao.UserScaleScalar);
-            sh.UniformInt("art", (int)vao.ArtType);
             sh.UniformInt("blendmask", vao.BlendMask);
 
             sh.UniformBool("enableTex", ri.EnableTexture);

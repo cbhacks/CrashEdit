@@ -5,7 +5,6 @@ layout(binding=0) uniform usampler2D vram8;
 uniform int modeCull;
 uniform int blendmask;
 uniform int enableTex;
-uniform int art;
 
 in vec3 p_Color;
 in vec2 p_UV;
@@ -37,12 +36,12 @@ uvec4 get_texel_bpp16(int u, int v) {
 void main()
 {
     int enable = p_Tex & 0x1;
-    if (art == 1 && modeCull != 2) {
+    if (modeCull != 0) {
         // crash 1 anim culling
         int nocull = (p_Tex >> 16) & 0x1;
         if (nocull == 0) {
-            if (modeCull == 0 && !gl_FrontFacing) discard;
-            if (modeCull == 1 && gl_FrontFacing) discard;
+            if (modeCull == 1 && !gl_FrontFacing) discard;
+            if (modeCull == 2 && gl_FrontFacing) discard;
         }
     }
     f_col = vec4(p_Color, 1.0);

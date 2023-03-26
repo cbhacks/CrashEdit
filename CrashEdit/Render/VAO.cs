@@ -146,14 +146,10 @@ namespace CrashEdit
         public Matrix3 UserMat3;
         public Vector3 UserColorAmb;
         public Vector3 UserColorDiff;
-        public float UserScaleScalar;
-        public int UserCullMode; // 0 - default, 1 - backface, 2 - no cull
+        public int UserCullMode; // 0 - no cull, 1 - backface (default), 2 - frontface
 
         public enum ColorModeEnum { Default = 0, GradientY = 1, Solid = 2 };
         public ColorModeEnum ColorMode;
-
-        public enum ArtTypeEnum { Crash1World = 0, Crash1Anim = 1 };
-        public ArtTypeEnum ArtType;
 
         public int BlendMask;
         #endregion

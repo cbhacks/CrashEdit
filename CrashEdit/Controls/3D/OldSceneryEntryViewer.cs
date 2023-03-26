@@ -83,8 +83,7 @@ namespace CrashEdit
             base.GLLoad();
 
             vaoWorld = new(shaderContext, "crash1", PrimitiveType.Triangles);
-            vaoWorld.ArtType = VAO.ArtTypeEnum.Crash1World;
-            vaoWorld.UserScaleScalar = GameScales.WorldC1;
+            vaoWorld.UserScale = new Vector3(1 / GameScales.WorldC1);
         }
 
         private Dictionary<int, int> CollectTPAGs()
@@ -118,10 +117,10 @@ namespace CrashEdit
                 if (i == 0)
                 {
                     GL.DepthMask(false);
-                    vaoWorld.UserScaleScalar = GameScales.WorldC1 / render.Distance;
+                    vaoWorld.UserScale = new Vector3(1 / (GameScales.WorldC1 / render.Distance));
                 } else
                 {
-                    vaoWorld.UserScaleScalar = GameScales.WorldC1;
+                    vaoWorld.UserScale = new Vector3(1 / GameScales.WorldC1);
                 }
                 int nb = 0;
                 foreach (var world in worlds_to_use)
@@ -154,7 +153,7 @@ namespace CrashEdit
             worldOffset = new Vector3(world.XOffset, world.YOffset, world.ZOffset);
             if (world.IsSky)
             {
-                worldOffset = -render.Projection.Trans * vaoWorld.UserScaleScalar;
+                worldOffset = -render.Projection.Trans * vaoWorld.UserScale;
             }
             foreach (OldSceneryPolygon polygon in world.Polygons)
             {
