@@ -117,7 +117,7 @@ namespace CrashEdit
                 if (i == 0)
                 {
                     GL.DepthMask(false);
-                    vaoWorld.UserScale = new Vector3(1 / (GameScales.WorldC1 / render.Distance));
+                    vaoWorld.UserScale = new Vector3(1 / GameScales.WorldC1 * render.Distance);
                 } else
                 {
                     vaoWorld.UserScale = new Vector3(1 / GameScales.WorldC1);
@@ -153,7 +153,7 @@ namespace CrashEdit
             worldOffset = new Vector3(world.XOffset, world.YOffset, world.ZOffset);
             if (world.IsSky)
             {
-                worldOffset = -render.Projection.Trans * vaoWorld.UserScale;
+                worldOffset = MathExt.Div(-render.Projection.Trans, vaoWorld.UserScale);
             }
             foreach (OldSceneryPolygon polygon in world.Polygons)
             {
