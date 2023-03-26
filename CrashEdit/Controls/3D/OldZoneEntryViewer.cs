@@ -116,7 +116,6 @@ namespace CrashEdit
 
             base.Render();
 
-            SetBlendMode(BlendMode.Solid);
             foreach (var zone in allzones)
             {
                 masterZone = Entry.NullEID == this_zone || zone.EID == this_zone;
@@ -229,11 +228,11 @@ namespace CrashEdit
             uvs[5] = new Vector2(sideTexRect.Left, sideTexRect.Bottom);
             Rgba[] cols = new Rgba[5]
             {
-                new Rgba(93*2, 93*2, 93*2, 255),
-                new Rgba(51*2, 51*2, 76*2, 255),
-                new Rgba(115*2, 115*2, 92*2, 255),
-                new Rgba(33*2, 33*2, 59*2, 255),
-                new Rgba(115*2, 115*2, 92*2, 255)
+                new Rgba(93*2, 93*2, 93*2, masterZoneAlpha),
+                new Rgba(51*2, 51*2, 76*2, masterZoneAlpha),
+                new Rgba(115*2, 115*2, 92*2, masterZoneAlpha),
+                new Rgba(33*2, 33*2, 59*2, masterZoneAlpha),
+                new Rgba(115*2, 115*2, 92*2, masterZoneAlpha)
             };
             for (int i = 0; i < 3 * 6; ++i)
             {

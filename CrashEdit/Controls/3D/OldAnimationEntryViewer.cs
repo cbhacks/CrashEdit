@@ -201,7 +201,6 @@ namespace CrashEdit
                 }
                 if (collisionenabled)
                 {
-                    SetBlendMode(BlendMode.Solid);
                     var c1 = new Vector3(frame1.X1, frame1.Y1, frame1.Z1) / GameScales.CollisionC1;
                     var c2 = new Vector3(frame1.X2, frame1.Y2, frame1.Z2) / GameScales.CollisionC1;
                     var ct = new Vector3(frame1.XGlobal, frame1.YGlobal, frame1.ZGlobal) / GameScales.CollisionC1;
