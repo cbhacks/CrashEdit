@@ -198,6 +198,16 @@ namespace CrashEdit
             {
                 Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneCameraC1 + zoneTrans;
                 AddSprite(trans, new Vector2(1), new(255, 255, 0, masterZoneAlpha), OldResources.PointTexture);
+
+                float ang2rad = MathHelper.Pi / 2048;
+                var quatAng = Quaternion.FromEulerAngles(-position.XRot * ang2rad, -position.YRot * ang2rad, -position.ZRot * ang2rad);
+                var rot_mat = Matrix4.CreateFromQuaternion(quatAng);
+                var test_vec = (rot_mat * new Vector4(0, 0, -1, 1)).Xyz;
+
+                Rgba angColor = (Rgba)Color4.Olive;
+                vaoLines.PushAttrib(trans: trans, rgba: angColor);
+                vaoLines.PushAttrib(trans: trans + test_vec, rgba: angColor);
+                AddSprite(trans + test_vec, new Vector2(0.5f), angColor, OldResources.PointTexture);
             }
         }
 
