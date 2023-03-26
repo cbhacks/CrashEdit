@@ -117,6 +117,12 @@ namespace CrashEdit
             if (VertCount <= 0)
                 return;
 
+            GL.GetBoolean(GetPName.DepthWritemask, out bool glZBufWrite);
+            if (glZBufWrite && ZBufDisableWrite)
+            {
+                GL.DepthMask(false);
+            }
+
             // Bind the VAO
             GL.BindVertexArray(ID);
             GL.BindBuffer(BufferTarget.ArrayBuffer, Buffer);
@@ -127,6 +133,11 @@ namespace CrashEdit
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindVertexArray(0);
+
+            if (glZBufWrite && ZBufDisableWrite)
+            {
+                GL.DepthMask(true);
+            }
         }
 
         public void RenderAndDiscard(RenderInfo ri)
@@ -152,6 +163,8 @@ namespace CrashEdit
         public ColorModeEnum ColorMode;
 
         public int BlendMask;
+
+        public bool ZBufDisableWrite;
         #endregion
     }
 }

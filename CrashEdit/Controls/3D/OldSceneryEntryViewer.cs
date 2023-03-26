@@ -116,10 +116,11 @@ namespace CrashEdit
                 IEnumerable<OldSceneryEntry> worlds_to_use = i == 0 ? GetSkyWorlds() : GetNonSkyWorlds();
                 if (i == 0)
                 {
-                    GL.DepthMask(false);
+                    vaoWorld.ZBufDisableWrite = true;
                     vaoWorld.UserScale = new Vector3(1 / GameScales.WorldC1 * render.Distance);
                 } else
                 {
+                    vaoWorld.ZBufDisableWrite = false;
                     vaoWorld.UserScale = new Vector3(1 / GameScales.WorldC1);
                 }
                 int nb = 0;
@@ -143,8 +144,6 @@ namespace CrashEdit
                 RenderWorldPass(BlendMode.Trans);
                 RenderWorldPass(BlendMode.Subtractive);
                 RenderWorldPass(BlendMode.Additive);
-
-                GL.DepthMask(true);
             }
         }
 
