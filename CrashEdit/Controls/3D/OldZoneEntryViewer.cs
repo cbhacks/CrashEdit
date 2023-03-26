@@ -119,7 +119,7 @@ namespace CrashEdit
             SetBlendMode(BlendMode.Solid);
             foreach (var zone in allzones)
             {
-                masterZone = zones.Count != 1 || zone.EID == this_zone;
+                masterZone = Entry.NullEID == this_zone || zone.EID == this_zone;
                 masterZoneAlpha = (byte)(masterZone ? 255 : 128);
                 RenderZone(zone);
             }
