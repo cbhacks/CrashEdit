@@ -48,7 +48,6 @@ namespace CrashEdit
         private void Menu_DeleteProto()
         {
             ProtoZoneEntry.Cameras.Remove(Camera);
-            ProtoZoneEntry.CameraCount = ProtoZoneEntry.Cameras.Count;
             Dispose();
         }
         

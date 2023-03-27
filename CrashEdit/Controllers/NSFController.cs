@@ -35,7 +35,10 @@ namespace CrashEdit
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevelZones, Menu_ShowLevelZonesC1);
             }
             else if (GameVersion == GameVersion.Crash1Beta1995)
+            {
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC1Proto);
+                AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevelZones, Menu_ShowLevelZonesC1Proto);
+            }
             else if (GameVersion == GameVersion.Crash2)
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC2);
             else if (GameVersion == GameVersion.Crash3)
@@ -340,6 +343,29 @@ namespace CrashEdit
             ShowLevelForm.FormClosing += (object sender, FormClosingEventArgs e) =>
             {
                 ShowLevelForm = null;
+            };
+        }
+
+        private void Menu_ShowLevelZonesC1Proto()
+        {
+            if (ShowLevelZonesForm != null)
+            {
+                ShowLevelZonesForm.Focus();
+                return;
+            }
+            ShowLevelZonesForm = new() { Text = "Loading...", Width = 480, Height = 360 };
+            ShowLevelZonesForm.Show();
+            List<int> zones = new();
+            foreach (var entry in NSF.GetEntries<ProtoZoneEntry>())
+            {
+                zones.Add(entry.EID);
+            }
+            ProtoZoneEntryViewer viewer = new(NSF, zones) { Dock = DockStyle.Fill };
+            ShowLevelZonesForm.Controls.Add(viewer);
+            ShowLevelZonesForm.Text = string.Empty;
+            ShowLevelZonesForm.FormClosing += (object sender, FormClosingEventArgs e) =>
+            {
+                ShowLevelZonesForm = null;
             };
         }
 

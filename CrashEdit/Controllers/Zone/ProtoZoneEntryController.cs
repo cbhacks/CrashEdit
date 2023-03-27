@@ -37,35 +37,11 @@ namespace CrashEdit
             Node.SelectedImageKey = "violetb";
         }
 
-        /*
         protected override Control CreateEditor()
         {
-            int linkedsceneryentrycount = BitConv.FromInt32(ProtoZoneEntry.Header,0);
-            ProtoSceneryEntry[] linkedsceneryentries = new ProtoSceneryEntry[linkedsceneryentrycount];
-            TextureChunk[][] totaltexturechunks = new TextureChunk[linkedsceneryentrycount][];
-            for (int i = 0; i < linkedsceneryentrycount; i++)
-            {
-                linkedsceneryentries[i] = FindEID<ProtoSceneryEntry>(BitConv.FromInt32(ProtoZoneEntry.Header,4 + i * 64));
-                TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(linkedsceneryentries[i].Info, 0x18)];
-                for (int j = 0; j < texturechunks.Length; ++j)
-                {
-                    texturechunks[j] = FindEID<TextureChunk>(BitConv.FromInt32(linkedsceneryentries[i].Info, 0x20 + j * 4));
-                }
-                totaltexturechunks[i] = texturechunks;
-            }
-            for (int i = 0; i < linkedsceneryentrycount; i++)
-            {
-                linkedsceneryentries[i] = FindEID<ProtoSceneryEntry>(BitConv.FromInt32(ProtoZoneEntry.Header,4 + i * 64));
-            }
-            int linkedzoneentrycount = BitConv.FromInt32(ProtoZoneEntry.Header,528);
-            ProtoZoneEntry[] linkedzoneentries = new ProtoZoneEntry[linkedzoneentrycount];
-            for (int i = 0; i < linkedzoneentrycount; i++)
-            {
-                linkedzoneentries[i] = FindEID<ProtoZoneEntry>(BitConv.FromInt32(ProtoZoneEntry.Header,532 + i * 4));
-            }
-            return new UndockableControl(new ProtoZoneEntryViewer(ProtoZoneEntry,linkedsceneryentries,totaltexturechunks,linkedzoneentries));
+            return new UndockableControl(new ProtoZoneEntryViewer(NSF, ProtoZoneEntry.EID));
         }
-        */
+
         public ProtoZoneEntry ProtoZoneEntry { get; }
 
         private void Menu_ExportAsC1()

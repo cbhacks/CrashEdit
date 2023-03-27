@@ -172,9 +172,9 @@ namespace CrashEdit
                 for (int i = 1; i < entity.Positions.Count; ++i)
                 {
                     vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i - 1].X, entity.Positions[i - 1].Y, entity.Positions[i - 1].Z) / GameScales.ZoneEntityC1 + zoneTrans,
-                                        rgba: new Rgba(0, 0, 255, 255));
+                                        rgba: new Rgba(0, 0, 255, masterZoneAlpha));
                     vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i].X, entity.Positions[i].Y, entity.Positions[i].Z) / GameScales.ZoneEntityC1 + zoneTrans,
-                                        rgba: new Rgba(0, 0, 255, 255));
+                                        rgba: new Rgba(0, 0, 255, masterZoneAlpha));
                 }
                 foreach (EntityPosition position in entity.Positions)
                 {

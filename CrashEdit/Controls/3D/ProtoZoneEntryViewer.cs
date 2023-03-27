@@ -1,6 +1,6 @@
-/*
 using Crash;
-using OpenTK.Graphics.OpenGL;
+using OpenTK;
+using OpenTK.Graphics;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -9,398 +9,286 @@ namespace CrashEdit
 {
     public sealed class ProtoZoneEntryViewer : ProtoSceneryEntryViewer
     {
-        private static byte[] stipplea;
-        private static byte[] stippleb;
+        private readonly OctreeRenderer octreeRenderer;
 
-        static ProtoZoneEntryViewer()
+        private readonly List<int> zones;
+        private readonly int this_zone;
+
+        private bool octreeFlip;
+
+        internal bool masterZone;
+        internal byte masterZoneAlpha;
+        internal Vector3 zoneTrans;
+
+        public ProtoZoneEntryViewer(NSF nsf, int zone_eid) : base(nsf, new List<int>())
         {
-            stipplea = new byte[128];
-            stippleb = new byte[128];
-            for (int i = 0; i < 128; i += 8)
-            {
-                stipplea[i + 0] = 0x55;
-                stipplea[i + 1] = 0x55;
-                stipplea[i + 2] = 0x55;
-                stipplea[i + 3] = 0x55;
-                stipplea[i + 4] = 0xAA;
-                stipplea[i + 5] = 0xAA;
-                stipplea[i + 6] = 0xAA;
-                stipplea[i + 7] = 0xAA;
-                stippleb[i + 0] = 0xAA;
-                stippleb[i + 1] = 0xAA;
-                stippleb[i + 2] = 0xAA;
-                stippleb[i + 3] = 0xAA;
-                stippleb[i + 4] = 0x55;
-                stippleb[i + 5] = 0x55;
-                stippleb[i + 6] = 0x55;
-                stippleb[i + 7] = 0x55;
-            }
+            zones = new() { zone_eid };
+            this_zone = zone_eid;
+            octreeRenderer = new(this);
         }
 
-        private ProtoZoneEntry entry;
-        private ProtoZoneEntry[] linkedentries;
-        private CommonZoneEntryViewer common;
-        private bool flipoctree;
-
-        public string EntryName => entry.EName;
-
-        public ProtoZoneEntryViewer(ProtoZoneEntry entry,ProtoSceneryEntry[] linkedsceneryentries,TextureChunk[][] texturechunks,ProtoZoneEntry[] linkedentries) : base(linkedsceneryentries,texturechunks)
+        public ProtoZoneEntryViewer(NSF nsf, List<int> zone_eids) : base(nsf, new List<int>())
         {
-            this.entry = entry;
-            this.linkedentries = linkedentries;
-            common = new CommonZoneEntryViewer(linkedentries.Length + 1);
-            flipoctree = false;
+            zones = zone_eids;
+            this_zone = Entry.NullEID;
+            octreeRenderer = new(this);
+        }
+
+        protected override void OnInvalidated(InvalidateEventArgs e)
+        {
+            base.OnInvalidated(e);
+            octreeRenderer?.UpdateForm();
         }
 
         protected override IEnumerable<IPosition> CorePositions
         {
             get
             {
-                int xoffset = BitConv.FromInt32(entry.Layout,0);
-                int yoffset = BitConv.FromInt32(entry.Layout,4);
-                int zoffset = BitConv.FromInt32(entry.Layout,8);
-                yield return new Position(xoffset,yoffset,zoffset);
-                int x2 = BitConv.FromInt32(entry.Layout,12);
-                int y2 = BitConv.FromInt32(entry.Layout,16);
-                int z2 = BitConv.FromInt32(entry.Layout,20);
-                yield return new Position(x2 + xoffset,y2 + yoffset,z2 + zoffset);
-                foreach (ProtoEntity entity in entry.Entities)
+                foreach (int eid in zones)
                 {
-                    int x = entity.StartX/4 + xoffset;
-                    int y = entity.StartY/4 + yoffset;
-                    int z = entity.StartZ/4 + zoffset;
-                    yield return new Position(x,y,z);
-                    foreach (ProtoEntityPosition delta in entity.Deltas)
+                    var zone = nsf.GetEntry<ProtoZoneEntry>(eid);
+                    var zonetrans = new Position(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
+                    yield return zonetrans;
+                    yield return new Position(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1 + zonetrans;
+                    foreach (ProtoEntity entity in zone.Entities)
                     {
-                        x += delta.X*2;
-                        y += delta.Y*2;
-                        z += delta.Z*2;
-                        yield return new Position(x,y,z);
+                        float x = entity.StartX / GameScales.ZoneC1;
+                        float y = entity.StartY / GameScales.ZoneC1;
+                        float z = entity.StartZ / GameScales.ZoneC1;
+                        yield return new Position(x, y, z) + zonetrans;
+                        foreach (ProtoEntityPosition delta in entity.Deltas)
+                        {
+                            x += delta.X * 8 / GameScales.ZoneC1;
+                            y += delta.Y * 8 / GameScales.ZoneC1;
+                            z += delta.Z * 8 / GameScales.ZoneC1;
+                            yield return new Position(x, y, z) + zonetrans;
+                        }
+                    }
+                    foreach (OldCamera camera in zone.Cameras)
+                    {
+                        foreach (OldCameraPosition position in camera.Positions)
+                        {
+                            int x = position.X;
+                            int y = position.Y;
+                            int z = position.Z;
+                            yield return new Position(x, y, z) / GameScales.ZoneCameraC1 + zonetrans;
+                        }
                     }
                 }
-                foreach (OldCamera camera in entry.Cameras)
+            }
+        }
+
+        protected override void RunLogic()
+        {
+            base.RunLogic();
+            octreeRenderer.RunLogic();
+
+            if (KPress(Keys.O)) octreeFlip = !octreeFlip;
+        }
+
+        private IEnumerable<ProtoZoneEntry> GetZones()
+        {
+            var ret = new List<ProtoZoneEntry>();
+            foreach (int eid in zones)
+            {
+                var zone = nsf.GetEntry<ProtoZoneEntry>(eid);
+                if (zone != null)
                 {
-                    foreach (OldCameraPosition position in camera.Positions)
+                    for (int i = 0; i < zone.ZoneCount; ++i)
                     {
-                        int x = position.X + xoffset;
-                        int y = position.Y + yoffset;
-                        int z = position.Z + zoffset;
-                        yield return new Position(x,y,z);
+                        var lzone = nsf.GetEntry<ProtoZoneEntry>(zone.GetLinkedZone(i));
+                        if (lzone != null && !ret.Contains(lzone))
+                        {
+                            ret.Add(lzone);
+                        }
                     }
                 }
             }
+            return ret;
         }
 
-        protected override int CameraRangeMinimum => 800;
-
-        protected override bool IsInputKey(Keys keyData)
+        protected override void Render()
         {
-            bool? settingsinput = common.IsInputKey(keyData);
-            if (settingsinput != null)
-                return settingsinput.Value;
-            switch (keyData)
+            var allzones = GetZones();
+            List<int> worlds = new();
+            foreach (var zone in allzones)
             {
-                case Keys.O:
-                    return true;
-                default:
-                    return base.IsInputKey(keyData);
-            }
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            base.OnKeyDown(e);
-            common.OnKeyDown(e);
-            switch (e.KeyCode)
-            {
-                case Keys.O:
-                    flipoctree = !flipoctree;
-                    common.DeleteLists = true;
-                    break;
-            }
-        }
-
-        protected override void RenderObjects()
-        {
-            GL.Disable(EnableCap.Texture2D);
-            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 1.0f);
-            RenderEntry(entry,ref common.OctreeDisplayLists[0]);
-            GL.Enable(EnableCap.PolygonStipple);
-            for (int i = 0; i < linkedentries.Length; i++)
-            {
-                ProtoZoneEntry linkedentry = linkedentries[i];
-                if (linkedentry == entry)
-                    continue;
-                if (linkedentry == null)
-                    continue;
-                RenderLinkedEntry(linkedentry,ref common.OctreeDisplayLists[i + 1]);
-            }
-            GL.Disable(EnableCap.PolygonStipple);
-            if (common.DeleteLists)
-                common.DeleteLists = false;
-            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.RgbScale, 2.0f);
-            GL.Enable(EnableCap.Texture2D);
-            base.RenderObjects();
-        }
-
-        private void RenderEntry(ProtoZoneEntry entry,ref int octreedisplaylist)
-        {
-            common.CurrentEntry = entry;
-            int xoffset = BitConv.FromInt32(entry.Layout,0);
-            int yoffset = BitConv.FromInt32(entry.Layout,4);
-            int zoffset = BitConv.FromInt32(entry.Layout,8);
-            int x2 = BitConv.FromInt32(entry.Layout,12);
-            int y2 = BitConv.FromInt32(entry.Layout,16);
-            int z2 = BitConv.FromInt32(entry.Layout,20);
-            GL.PushMatrix();
-            GL.Translate(xoffset,yoffset,zoffset);
-            if (common.DeleteLists)
-            {
-                GL.DeleteLists(octreedisplaylist,1);
-                octreedisplaylist = -1;
-            }
-            if (common.EnableOctree)
-            {
-                if (!common.PolygonMode)
-                    GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Line);
-                if (octreedisplaylist == -1)
+                for (int i = 0; i < zone.WorldCount; ++i)
                 {
-                    octreedisplaylist = GL.GenLists(1);
-                    GL.NewList(octreedisplaylist,ListMode.CompileAndExecute);
-                    GL.PushMatrix();
-                    int xmax = (ushort)BitConv.FromInt16(entry.Layout,0x1E);
-                    int ymax = (ushort)BitConv.FromInt16(entry.Layout,0x20);
-                    if (ymax == 0) ymax = xmax;
-                    int zmax = (ushort)BitConv.FromInt16(entry.Layout,0x22);
-                    if (zmax == 0) zmax = ymax;
-                    common.RenderOctree(entry.Layout,0x1C,0,flipoctree ? -y2 : 0,flipoctree ? -z2 : 0,x2,y2,z2,xmax,ymax,zmax);
-                    GL.PopMatrix();
-                    GL.EndList();
+                    var world = zone.GetLinkedWorld(i);
+                    if (!worlds.Contains(world))
+                        worlds.Add(world);
+                }
+            }
+            SetWorlds(worlds);
+
+            base.Render();
+
+            foreach (var zone in allzones)
+            {
+                masterZone = Entry.NullEID == this_zone || zone.EID == this_zone;
+                masterZoneAlpha = (byte)(masterZone ? 255 : 128);
+                RenderZone(zone);
+            }
+        }
+
+        private void RenderZone(ProtoZoneEntry zone)
+        {
+            zoneTrans = new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
+            Vector3 zoneSize = new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1;
+            AddBox(zoneTrans,
+                   new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1,
+                   new Rgba(255, 255, 255, masterZoneAlpha),
+                   true);
+            foreach (ProtoEntity entity in zone.Entities)
+            {
+                RenderEntity(entity);
+            }
+            foreach (OldCamera camera in zone.Cameras)
+            {
+                RenderCamera(camera);
+            }
+
+            if (octreeRenderer.Enabled && (masterZone || octreeRenderer.ShowAllEntries))
+            {
+                octreeRenderer.NodeAlpha = masterZoneAlpha;
+                int maxx = zone.CollisionDepthX;
+                int maxy = zone.CollisionDepthY;
+                int maxz = zone.CollisionDepthZ;
+                if (maxy == 0)
+                    maxy = maxx;
+                if (maxz == 0)
+                    maxz = maxy;
+                if (octreeFlip)
+                {
+                    octreeRenderer.RenderOctree(zone.Layout, 0x1C, zoneTrans.X, zoneTrans.Y + zoneSize.Y, zoneTrans.Z + zoneSize.Z, zoneSize.X, -zoneSize.Y, -zoneSize.Z, maxx, maxy, maxz);
                 }
                 else
                 {
-                    GL.CallList(octreedisplaylist);
+                    octreeRenderer.RenderOctree(zone.Layout, 0x1C, zoneTrans.X, zoneTrans.Y, zoneTrans.Z, zoneSize.X, zoneSize.Y, zoneSize.Z, maxx, maxy, maxz);
                 }
-                GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
             }
-            GL.Color3(Color.White);
-            GL.Begin(PrimitiveType.LineStrip);
-            GL.Vertex3(0,0,0);
-            GL.Vertex3(x2,0,0);
-            GL.Vertex3(x2,y2,0);
-            GL.Vertex3(0,y2,0);
-            GL.Vertex3(0,0,0);
-            GL.Vertex3(0,0,z2);
-            GL.Vertex3(x2,0,z2);
-            GL.Vertex3(x2,y2,z2);
-            GL.Vertex3(0,y2,z2);
-            GL.Vertex3(0,0,z2);
-            GL.Vertex3(x2,0,z2);
-            GL.Vertex3(x2,0,0);
-            GL.Vertex3(x2,y2,0);
-            GL.Vertex3(x2,y2,z2);
-            GL.Vertex3(0,y2,z2);
-            GL.Vertex3(0,y2,0);
-            GL.End();
-            GL.Scale(4,4,4);
-            foreach (ProtoEntity entity in entry.Entities)
-            {
-                RenderEntity(entity);
-            }
-            foreach (OldCamera camera in entry.Cameras)
-            {
-                RenderCamera(camera);
-            }
-            GL.PopMatrix();
-        }
-
-        private void RenderLinkedEntry(ProtoZoneEntry entry,ref int octreedisplaylist)
-        {
-            common.CurrentEntry = entry;
-            int xoffset = BitConv.FromInt32(entry.Layout,0);
-            int yoffset = BitConv.FromInt32(entry.Layout,4);
-            int zoffset = BitConv.FromInt32(entry.Layout,8);
-            int x2 = BitConv.FromInt32(entry.Layout,12);
-            int y2 = BitConv.FromInt32(entry.Layout,16);
-            int z2 = BitConv.FromInt32(entry.Layout,20);
-            GL.PushMatrix();
-            GL.Translate(xoffset,yoffset,zoffset);
-            if (common.AllEntries)
-            {
-                GL.Disable(EnableCap.PolygonStipple);
-                if (common.DeleteLists)
-                {
-                    GL.DeleteLists(octreedisplaylist,1);
-                    octreedisplaylist = -1;
-                }
-                if (common.EnableOctree)
-                {
-                    if (!common.PolygonMode)
-                        GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Line);
-                    if (octreedisplaylist == -1)
-                    {
-                        octreedisplaylist = GL.GenLists(1);
-                        GL.NewList(octreedisplaylist,ListMode.CompileAndExecute);
-                        GL.PushMatrix();
-                        int xmax = (ushort)BitConv.FromInt16(entry.Layout,0x1E);
-                        int ymax = (ushort)BitConv.FromInt16(entry.Layout,0x20);
-                        if (ymax == 0) ymax = xmax;
-                        int zmax = (ushort)BitConv.FromInt16(entry.Layout,0x22);
-                        if (zmax == 0) zmax = ymax;
-                        common.RenderOctree(entry.Layout,0x1C,0,flipoctree ? -y2 : 0,flipoctree ? -z2 : 0,x2,y2,z2,xmax,ymax,zmax);
-                        GL.PopMatrix();
-                        GL.EndList();
-                    }
-                    else
-                    {
-                        GL.CallList(octreedisplaylist);
-                    }
-                    GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
-                }
-                GL.Enable(EnableCap.PolygonStipple);
-            }
-            GL.Scale(4,4,4);
-            foreach (ProtoEntity entity in entry.Entities)
-            {
-                RenderEntity(entity);
-            }
-            foreach (OldCamera camera in entry.Cameras)
-            {
-                RenderCamera(camera);
-            }
-            GL.PopMatrix();
         }
 
         private void RenderEntity(ProtoEntity entity)
         {
-            GL.PolygonStipple(stipplea);
+            Vector3 trans = new Vector3(entity.StartX, entity.StartY, entity.StartZ) / GameScales.ZoneC1 + zoneTrans;
             if (entity.Deltas.Count == 0)
             {
-                GL.PushMatrix();
-                GL.Translate(entity.StartX/4,entity.StartY/4,entity.StartZ/4);
                 switch (entity.Type)
                 {
-                    case 0x3:
-                        RenderPickup(entity.Subtype);
+                    case 3:
+                        RenderPickupEntity(trans + new Vector3(0, .5f, 0), entity.Subtype);
                         break;
                     default:
-                        GL.Color3(Color.White);
-                        LoadTexture(OldResources.PointTexture);
-                        RenderSprite();
+                        AddSprite(trans, new Vector2(1), new(255, 255, 255, masterZoneAlpha), OldResources.PointTexture);
                         break;
                 }
-                GL.PopMatrix();
             }
             else
             {
-                GL.Color3(Color.Blue);
-                GL.PushMatrix();
-                GL.Begin(PrimitiveType.LineStrip);
-                int curx = entity.StartX / 4;
-                int cury = entity.StartY / 4;
-                int curz = entity.StartZ / 4;
-                GL.Vertex3(curx,cury,curz);
+                AddSprite(trans, new Vector2(1), new(255, 0, 0, masterZoneAlpha), OldResources.PointTexture);
                 foreach (ProtoEntityPosition delta in entity.Deltas)
                 {
-                    curx += delta.X*2;
-                    cury += delta.Y*2;
-                    curz += delta.Z*2;
-                    GL.Vertex3(curx,cury,curz);
+                    vaoLines.PushAttrib(trans: trans, rgba: new Rgba(0, 0, 255, masterZoneAlpha));
+                    trans += new Vector3(delta.X, delta.Y, delta.Z) * 8 / GameScales.ZoneC1;
+                    vaoLines.PushAttrib(trans: trans, rgba: new Rgba(0, 0, 255, masterZoneAlpha));
+                    AddSprite(trans, new Vector2(1), new(255, 0, 0, masterZoneAlpha), OldResources.PointTexture);
                 }
-                GL.End();
-                curx = entity.StartX / 4;
-                cury = entity.StartY / 4;
-                curz = entity.StartZ / 4;
-                GL.Color3(Color.Red);
-                LoadTexture(OldResources.PointTexture);
-                GL.PushMatrix();
-                GL.Translate(curx,cury,curz);
-                RenderSprite();
-                GL.PopMatrix();
-                GL.Vertex3(curx,cury,curz);
-                foreach (ProtoEntityPosition delta in entity.Deltas)
-                {
-                    GL.PushMatrix();
-                    curx += delta.X*2;
-                    cury += delta.Y*2;
-                    curz += delta.Z*2;
-                    GL.Translate(curx,cury,curz);
-                    RenderSprite();
-                    GL.PopMatrix();
-                }
-                GL.PopMatrix();
             }
         }
 
         private void RenderCamera(OldCamera camera)
         {
-            GL.PolygonStipple(stippleb);
-            GL.Color3(Color.Green);
-            GL.PushMatrix();
-            GL.Begin(PrimitiveType.LineStrip);
+            for (int i = 1; i < camera.Positions.Count; ++i)
+            {
+                vaoLines.PushAttrib(trans: new Vector3(camera.Positions[i - 1].X, camera.Positions[i - 1].Y, camera.Positions[i - 1].Z) / GameScales.ZoneCameraC1 + zoneTrans,
+                                    rgba: new Rgba(0, 128, 0, masterZoneAlpha));
+                vaoLines.PushAttrib(trans: new Vector3(camera.Positions[i].X, camera.Positions[i].Y, camera.Positions[i].Z) / GameScales.ZoneCameraC1 + zoneTrans,
+                                    rgba: new Rgba(0, 128, 0, masterZoneAlpha));
+            }
             foreach (OldCameraPosition position in camera.Positions)
             {
-                GL.Vertex3(position.X / 4,position.Y / 4,position.Z / 4);
+                Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneCameraC1 + zoneTrans;
+                AddSprite(trans, new Vector2(1), new(255, 255, 0, masterZoneAlpha), OldResources.PointTexture);
+
+                float ang2rad = MathHelper.Pi / 2048;
+                var quatAng = Quaternion.FromEulerAngles(-position.XRot * ang2rad, -position.YRot * ang2rad, -position.ZRot * ang2rad);
+                var rot_mat = Matrix4.CreateFromQuaternion(quatAng);
+                var test_vec = (rot_mat * new Vector4(0, 0, -1, 1)).Xyz;
+
+                Rgba angColor = (Rgba)Color4.Olive;
+                vaoLines.PushAttrib(trans: trans, rgba: angColor);
+                vaoLines.PushAttrib(trans: trans + test_vec, rgba: angColor);
+                AddSprite(trans + test_vec, new Vector2(0.5f), angColor, OldResources.PointTexture);
             }
-            GL.End();
-            GL.Color3(Color.Yellow);
-            LoadTexture(OldResources.PointTexture);
-            foreach (OldCameraPosition position in camera.Positions)
-            {
-                GL.PushMatrix();
-                GL.Translate(position.X / 4,position.Y / 4,position.Z / 4);
-                RenderSprite();
-                GL.PopMatrix();
-            }
-            GL.PopMatrix();
         }
 
-        private void RenderSprite()
+        private void RenderPickupEntity(Vector3 trans, int subtype)
         {
-            GL.Enable(EnableCap.Texture2D);
-            GL.PushMatrix();
-            GL.Rotate(-rotx,0,1,0);
-            GL.Rotate(-roty,1,0,0);
-            GL.Begin(PrimitiveType.Quads);
-            GL.TexCoord2(0,0);
-            GL.Vertex2(-50,+50);
-            GL.TexCoord2(1,0);
-            GL.Vertex2(+50,+50);
-            GL.TexCoord2(1,1);
-            GL.Vertex2(+50,-50);
-            GL.TexCoord2(0,1);
-            GL.Vertex2(-50,-50);
-            GL.End();
-            GL.PopMatrix();
-            GL.Disable(EnableCap.Texture2D);
+            AddSprite(trans, GetPickupScale(subtype), new(255, 255, 255, masterZoneAlpha), GetPickupTexture(subtype));
         }
 
-        private void RenderPickup(int subtype)
-        {
-            GL.Translate(0,50,0);
-            GL.Color3(Color.White);
-            LoadPickupTexture(subtype);
-            RenderSprite();
-        }
-
-        private void LoadPickupTexture(int subtype)
+        private Bitmap GetPickupTexture(int subtype)
         {
             switch (subtype)
             {
+                case 0: // Lime
+                    return (OldResources.LimeTexture);
+                case 1: // Coconut
+                    return (OldResources.CoconutTexture);
+                case 2: // Pineapple
+                    return (OldResources.PineappleTexture);
+                case 3: // Strawberry
+                    return (OldResources.StrawberryTexture);
+                case 4: // Mango
+                    return (OldResources.MangoTexture);
                 case 5: // Life
-                    LoadTexture(OldResources.LifeTexture);
-                    break;
+                    return (OldResources.LifeTexture);
                 case 6: // Mask
-                    LoadTexture(OldResources.MaskTexture);
-                    break;
+                    return (OldResources.MaskTexture);
+                case 7: // Lemon
+                    return (OldResources.LemonTexture);
+                case 8: // YYY
+                    return (OldResources.YYYTexture);
+                case 11: // Grape
+                    return (OldResources.GrapeTexture);
                 case 16: // Apple
-                    LoadTexture(OldResources.AppleTexture);
-                    break;
+                    return (OldResources.AppleTexture);
                 default:
-                    LoadTexture(OldResources.UnknownPickupTexture);
-                    break;
+                    return (OldResources.UnknownPickupTexture);
             }
+        }
+
+        private Vector2 GetPickupScale(int subtype)
+        {
+            switch (subtype)
+            {
+                case 0: // Lime
+                case 1: // Coconut
+                case 4: // Mango
+                case 7: // Lemon
+                case 8: // YYY
+                    return new Vector2(0.7f, 0.7f);
+                case 2: // Pineapple
+                    return new Vector2(0.7f, 1.4f);
+                case 3: // Strawberry
+                    return new Vector2(0.8f, 0.8f);
+                case 5: // Life
+                case 6: // Mask
+                    return new Vector2(1.8f, 1.125f);
+                case 16: // Apple
+                    return new Vector2(0.675f, 0.84375f);
+                default:
+                    return new Vector2(1);
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            octreeRenderer?.Dispose();
+
+            base.Dispose(disposing);
         }
     }
 }
-*/

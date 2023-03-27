@@ -16,7 +16,7 @@ namespace CrashEdit
         private int cur_frame = 0;
         private bool colored;
         private bool collisionenabled = Settings.Default.DisplayFrameCollision;
-        private bool normalsenabled = true;
+        private bool normalsenabled = Settings.Default.DisplayNormals;
         private bool interpenabled = true;
         private int cullmode = 1;
 
@@ -110,20 +110,24 @@ namespace CrashEdit
 
             IList<OldFrame> frames = null;
             {
-                var svtx = nsf.GetEntry<OldAnimationEntry>(eid_anim);
+                var entry = nsf.GetEntry<Entry>(eid_anim);
+                var svtx = entry as OldAnimationEntry;
+                var svtx_proto = entry as ProtoAnimationEntry;
+                var cvtx = entry as ColoredAnimationEntry;
                 if (svtx != null)
                 {
                     frames = svtx.Frames;
                     colored = false;
                 }
-                else
+                else if (svtx_proto != null)
                 {
-                    var cvtx = nsf.GetEntry<ColoredAnimationEntry>(eid_anim);
-                    if (cvtx != null)
-                    {
-                        frames = cvtx.Frames;
-                        colored = true;
-                    }
+                    frames = svtx_proto.Frames;
+                    colored = false;
+                }
+                else if (cvtx != null)
+                {
+                    frames = cvtx.Frames;
+                    colored = true;
                 }
             }
             if (frames != null)

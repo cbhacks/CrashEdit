@@ -21,7 +21,8 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(ProtoAnimationEntry.NotProto ? Crash.UI.Properties.Resources.OldAnimationEntryController_Text : Crash.UI.Properties.Resources.ProtoAnimationEntryController_Text, ProtoAnimationEntry.EName); // fucking hell
+            Node.Text = string.Format(ProtoAnimationEntry.NotProto ? Crash.UI.Properties.Resources.OldAnimationEntryController_Text
+                                                                   : Crash.UI.Properties.Resources.ProtoAnimationEntryController_Text, ProtoAnimationEntry.EName);
         }
 
         public override void InvalidateNodeImage()
@@ -30,17 +31,10 @@ namespace CrashEdit
             Node.SelectedImageKey = "limeb";
         }
 
-        /*
         protected override Control CreateEditor()
         {
-            OldModelEntry modelentry = EntryChunkController.NSFController.NSF.GetEntry<OldModelEntry>(ProtoAnimationEntry.Frames[0].ModelEID);
-            Dictionary<int,TextureChunk> textures = new Dictionary<int,TextureChunk>();
-            foreach (OldModelStruct str in modelentry.Structs)
-                if (str is OldModelTexture tex && !textures.ContainsKey(tex.EID))
-                    textures.Add(tex.EID,EntryChunkController.NSFController.NSF.GetEntry<TextureChunk>(tex.EID));
-            return new UndockableControl(new OldAnimationEntryViewer(ProtoAnimationEntry.Frames,false,modelentry,textures));
+            return new UndockableControl(new OldAnimationEntryViewer(NSF, Entry.EID));
         }
-        */
 
         public ProtoAnimationEntry ProtoAnimationEntry { get; }
 

@@ -262,12 +262,11 @@ namespace Crash
             {
                 foreach (Chunk chunk in Chunks)
                 {
-                    if (chunk is IEntry)
+                    if (chunk is IEntry ientrychunk)
                     {
-                        IEntry entry = (IEntry)chunk;
-                        if (entry.EID == eid && entry is T)
+                        if (ientrychunk.EID == eid && ientrychunk is T)
                         {
-                            return (T)entry;
+                            return (T)ientrychunk;
                         }
                     }
                     if (chunk is EntryChunk entrychunk)

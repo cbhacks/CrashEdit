@@ -32,6 +32,16 @@ namespace CrashEdit
         {
             return new Color4(c.r, c.g, c.b, c.a);
         }
+
+        public static Rgba FromOther(Rgba other, byte a)
+        {
+            return new Rgba(other.r, other.g, other.b, a);
+        }
+
+        public static Rgba FromOther(Color4 other, byte a)
+        {
+            return FromOther((Rgba)other, a);
+        }
     }
 
     public struct TexInfoUnpacked
