@@ -212,7 +212,7 @@ namespace CrashEdit
         }
 
         private static IGraphicsContext context;
-        private static GLViewer contextWindow;
+        private static GLControl contextWindow;
 
         public GLViewer() : base(GraphicsMode.Default, 4, 3, GraphicsContextFlags.Debug)
         {
@@ -237,12 +237,12 @@ namespace CrashEdit
 
         protected new void SwapBuffers()
         {
-            ((GLControl)contextWindow).SwapBuffers();
+            contextWindow.SwapBuffers();
         }
 
         protected new void MakeCurrent()
         {
-            ((GLControl)contextWindow).Context.MakeCurrent(this.WindowInfo);
+            context.MakeCurrent(WindowInfo);
         }
 
         protected abstract IEnumerable<IPosition> CorePositions { get; }
@@ -645,15 +645,11 @@ namespace CrashEdit
 
         protected override void Dispose(bool disposing)
         {
-            if (context == Context)
-            {
-                context = null;
-            }
             if (contextWindow == this)
             {
                 contextWindow = null;
+                context = null;
             }
-
             base.Dispose(disposing);
         }
     }
