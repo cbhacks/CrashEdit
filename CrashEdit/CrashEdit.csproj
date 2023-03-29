@@ -263,7 +263,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\3D\NewZoneEntryViewer.cs" />
-    <Compile Include="Controls\3D\ZoneEntryViewer.cs" />
+    <Compile Include="Controls\3D\ZoneEntryViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\UndockableControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

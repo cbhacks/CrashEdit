@@ -29,6 +29,7 @@ namespace CrashEdit
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcFixBoxCount,Menu_Fix_BoxCount);
                 AddMenuSeparator();
             }
+
             if (GameVersion == GameVersion.Crash1 || GameVersion == GameVersion.Crash1BetaMAR08 || GameVersion == GameVersion.Crash1BetaMAY11)
             {
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC1);
@@ -42,7 +43,7 @@ namespace CrashEdit
             else if (GameVersion == GameVersion.Crash2)
             {
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC2);
-                // AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevelZones, Menu_ShowLevelZonesC2);
+                AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevelZones, Menu_ShowLevelZonesC2);
             }
             else if (GameVersion == GameVersion.Crash3)
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC3);
@@ -392,6 +393,29 @@ namespace CrashEdit
             ShowLevelForm.FormClosing += (object sender, FormClosingEventArgs e) =>
             {
                 ShowLevelForm = null;
+            };
+        }
+
+        private void Menu_ShowLevelZonesC2()
+        {
+            if (ShowLevelZonesForm != null)
+            {
+                ShowLevelZonesForm.Focus();
+                return;
+            }
+            ShowLevelZonesForm = new() { Text = "Loading...", Width = 480, Height = 360 };
+            ShowLevelZonesForm.Show();
+            List<int> zones = new();
+            foreach (var entry in NSF.GetEntries<ZoneEntry>())
+            {
+                zones.Add(entry.EID);
+            }
+            ZoneEntryViewer viewer = new(NSF, zones) { Dock = DockStyle.Fill };
+            ShowLevelZonesForm.Controls.Add(viewer);
+            ShowLevelZonesForm.Text = string.Empty;
+            ShowLevelZonesForm.FormClosing += (object sender, FormClosingEventArgs e) =>
+            {
+                ShowLevelZonesForm = null;
             };
         }
 
