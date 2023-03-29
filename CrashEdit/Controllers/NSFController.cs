@@ -40,7 +40,10 @@ namespace CrashEdit
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevelZones, Menu_ShowLevelZonesC1Proto);
             }
             else if (GameVersion == GameVersion.Crash2)
+            {
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC2);
+                // AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevelZones, Menu_ShowLevelZonesC2);
+            }
             else if (GameVersion == GameVersion.Crash3)
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC3);
             InvalidateNode();
@@ -371,25 +374,25 @@ namespace CrashEdit
 
         private void Menu_ShowLevelC2()
         {
-            /*
-            List<TextureChunk[]> sortedtexturechunks = new List<TextureChunk[]>();
-            var sceneryentries = new List<int>();
-            foreach (SceneryEntry entry in NSF.GetEntries<SceneryEntry>())
+            if (ShowLevelForm != null)
             {
-                sceneryentries.Add(entry.EID);
-                TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info,0x28)];
-                for (int i = 0; i < texturechunks.Length; ++i)
-                {
-                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info,0x2C+i*4));
-                }
-                sortedtexturechunks.Add(texturechunks);
+                ShowLevelForm.Focus();
+                return;
             }
-            Form frm = new Form() { Text = "Loading...", Width = 480, Height = 360 };
-            frm.Show();
-            SceneryEntryViewer viewer = new SceneryEntryViewer(NSF, sceneryentries,sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
-            frm.Controls.Add(viewer);
-            frm.Text = string.Empty;
-            */
+            ShowLevelForm = new() { Text = "Loading...", Width = 480, Height = 360 };
+            ShowLevelForm.Show();
+            List<int> worlds = new();
+            foreach (var entry in NSF.GetEntries<SceneryEntry>())
+            {
+                worlds.Add(entry.EID);
+            }
+            SceneryEntryViewer viewer = new(NSF, worlds) { Dock = DockStyle.Fill };
+            ShowLevelForm.Controls.Add(viewer);
+            ShowLevelForm.Text = string.Empty;
+            ShowLevelForm.FormClosing += (object sender, FormClosingEventArgs e) =>
+            {
+                ShowLevelForm = null;
+            };
         }
 
         private void Menu_ShowLevelC3()

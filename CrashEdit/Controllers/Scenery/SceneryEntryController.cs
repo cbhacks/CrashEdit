@@ -28,17 +28,11 @@ namespace CrashEdit
             Node.SelectedImageKey = "blueb";
         }
 
-        /*
         protected override Control CreateEditor()
         {
-            TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(SceneryEntry.Info,0x28)];
-            for (int i = 0; i < texturechunks.Length; ++i)
-            {
-                texturechunks[i] = FindEID<TextureChunk>(BitConv.FromInt32(SceneryEntry.Info,0x2C+i*4));
-            }
-            return new UndockableControl(new SceneryEntryViewer(NSF, SceneryEntry.EID, texturechunks));
+            return new UndockableControl(new SceneryEntryViewer(NSF, SceneryEntry.EID));
         }
-        */
+
         public SceneryEntry SceneryEntry { get; }
 
         private void Menu_Export_OBJ()

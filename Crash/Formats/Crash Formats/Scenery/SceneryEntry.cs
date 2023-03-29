@@ -51,6 +51,16 @@ namespace Crash
             set => BitConv.ToInt32(Info,8,value);
         }
 
+        public bool IsSky
+        {
+            get => BitConv.FromInt32(Info, 12) != 0;
+            set => BitConv.ToInt32(Info, 12, value ? 1 : 0);
+        }
+
+        public int TPAGCount => BitConv.FromInt32(Info, 0x28);
+
+        public int GetTPAG(int idx) => BitConv.FromInt32(Info, 0x2C + 4 * idx);
+
         public override UnprocessedEntry Unprocess()
         {
             byte[][] items = new byte [7][];

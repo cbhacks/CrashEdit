@@ -223,7 +223,9 @@
       <DependentUpon>OldEntityBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\3D\NewSceneryEntryViewer.cs" />
-    <Compile Include="Controls\3D\SceneryEntryViewer.cs" />
+    <Compile Include="Controls\3D\SceneryEntryViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\3D\OldAnimationEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>

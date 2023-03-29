@@ -54,6 +54,7 @@ namespace Crash
             get => BitConv.FromInt32(Info, 0x1C) != 0;
             set => BitConv.ToInt32(Info, 0x1C, value ? 1 : 0);
         }
+
         public int GetTPAG(int idx) => BitConv.FromInt32(Info, 0x20 + 4 * idx);
 
         public IList<OldSceneryPolygon> Polygons => polygons;
