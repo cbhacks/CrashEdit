@@ -197,27 +197,31 @@ namespace CrashEdit
                 vaoLines.PushAttrib(trans: new Vector3(entity1.Positions[i].X, entity1.Positions[i].Y, entity1.Positions[i].Z) / GameScales.ZoneCameraC1 + zoneTrans,
                                     rgba: new Rgba(0, 128, 0, masterZoneAlpha));
             }
+            bool render_angles = entity2.Positions.Count == entity1.Positions.Count * 2;
             for (int i = 0; i < entity1.Positions.Count; ++i)
             {
                 Vector3 trans = new Vector3(entity1.Positions[i].X, entity1.Positions[i].Y, entity1.Positions[i].Z) / GameScales.ZoneCameraC1 + zoneTrans;
                 AddSprite(trans, new Vector2(1), new(255, 255, 0, masterZoneAlpha), OldResources.PointTexture);
 
-                const float ang2rad = MathHelper.Pi / 2048;
-                var quatAng1 = Quaternion.FromEulerAngles(-entity2.Positions[i * 2 + 0].X * ang2rad, -entity2.Positions[i * 2 + 0].Y * ang2rad, -entity2.Positions[i * 2 + 0].Z * ang2rad);
-                var rot_mat1 = Matrix4.CreateFromQuaternion(quatAng1);
-                var dir_vec1 = (rot_mat1 * new Vector4(0, 0, -1, 1)).Xyz;
-                var quatAng2 = Quaternion.FromEulerAngles(-entity2.Positions[i * 2 + 1].X * ang2rad, -entity2.Positions[i * 2 + 1].Y * ang2rad, -entity2.Positions[i * 2 + 1].Z * ang2rad);
-                var rot_mat2 = Matrix4.CreateFromQuaternion(quatAng2);
-                var dir_vec2 = (rot_mat2 * new Vector4(0, 0, -1, 1)).Xyz;
+                if (render_angles)
+                {
+                    const float ang2rad = MathHelper.Pi / 2048;
+                    var quatAng1 = Quaternion.FromEulerAngles(-entity2.Positions[i * 2 + 0].X * ang2rad, -entity2.Positions[i * 2 + 0].Y * ang2rad, -entity2.Positions[i * 2 + 0].Z * ang2rad);
+                    var rot_mat1 = Matrix4.CreateFromQuaternion(quatAng1);
+                    var dir_vec1 = (rot_mat1 * new Vector4(0, 0, -1, 1)).Xyz;
+                    var quatAng2 = Quaternion.FromEulerAngles(-entity2.Positions[i * 2 + 1].X * ang2rad, -entity2.Positions[i * 2 + 1].Y * ang2rad, -entity2.Positions[i * 2 + 1].Z * ang2rad);
+                    var rot_mat2 = Matrix4.CreateFromQuaternion(quatAng2);
+                    var dir_vec2 = (rot_mat2 * new Vector4(0, 0, -1, 1)).Xyz;
 
-                Rgba angColor1 = Rgba.FromOther(Color4.Olive, masterZoneAlpha);
-                Rgba angColor2 = new Rgba(128, 0, 0, masterZoneAlpha);
-                vaoLines.PushAttrib(trans: trans, rgba: angColor1);
-                vaoLines.PushAttrib(trans: trans + dir_vec1, rgba: angColor1);
-                AddSprite(trans + dir_vec1, new Vector2(0.5f), angColor1, OldResources.PointTexture);
-                vaoLines.PushAttrib(trans: trans, rgba: angColor2);
-                vaoLines.PushAttrib(trans: trans + dir_vec2, rgba: angColor2);
-                AddSprite(trans + dir_vec2, new Vector2(0.5f), angColor2, OldResources.PointTexture);
+                    Rgba angColor1 = Rgba.FromOther(Color4.Olive, masterZoneAlpha);
+                    Rgba angColor2 = new Rgba(128, 0, 0, masterZoneAlpha);
+                    vaoLines.PushAttrib(trans: trans, rgba: angColor1);
+                    vaoLines.PushAttrib(trans: trans + dir_vec1, rgba: angColor1);
+                    AddSprite(trans + dir_vec1, new Vector2(0.5f), angColor1, OldResources.PointTexture);
+                    vaoLines.PushAttrib(trans: trans, rgba: angColor2);
+                    vaoLines.PushAttrib(trans: trans + dir_vec2, rgba: angColor2);
+                    AddSprite(trans + dir_vec2, new Vector2(0.5f), angColor2, OldResources.PointTexture);
+                }
             }
         }
 
