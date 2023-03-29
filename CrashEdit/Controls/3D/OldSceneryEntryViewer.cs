@@ -9,7 +9,7 @@ namespace CrashEdit
     {
         private List<int> worlds;
 
-        private VAO vaoWorld;
+        private VAO vaoWorld = vaoCrash1;
         Vector3 worldOffset;
         private BlendMode blendMask;
 
@@ -76,14 +76,6 @@ namespace CrashEdit
                     }
                 }
             }
-        }
-
-        protected override void GLLoad()
-        {
-            base.GLLoad();
-
-            vaoWorld = new(shaderContext, "crash1", PrimitiveType.Triangles);
-            vaoWorld.UserScale = new Vector3(1 / GameScales.WorldC1);
         }
 
         private Dictionary<int, int> CollectTPAGs()
@@ -198,13 +190,6 @@ namespace CrashEdit
             vaoWorld.Verts[vaoWorld.VertCount].trans = new Vector3(vert.X, vert.Y, vert.Z) + worldOffset;
             vaoWorld.Verts[vaoWorld.VertCount].rgba = new(vert.Red, vert.Green, vert.Blue, 255);
             vaoWorld.VertCount++;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            vaoWorld?.Dispose();
-
-            base.Dispose(disposing);
         }
     }
 }

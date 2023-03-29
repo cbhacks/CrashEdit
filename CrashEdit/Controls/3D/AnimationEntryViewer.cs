@@ -17,9 +17,7 @@ namespace CrashEdit
         private bool interpenabled = true;
         private int cullmode = 1;
 
-        // note: there's multiple buffers because of blending
-        private const int ANIM_BUF_MAX = 2;
-        private VAO[] vaoModel = new VAO[ANIM_BUF_MAX];
+        private VAO[] vaoModel = vaoListCrash1;
         private BlendMode blendMask;
 
         protected override bool UseGrid => true;
@@ -34,16 +32,6 @@ namespace CrashEdit
         {
             eid_anim = anim_eid;
             frame_id = -1;
-        }
-
-        protected override void GLLoad()
-        {
-            base.GLLoad();
-
-            for (int i = 0; i < ANIM_BUF_MAX; ++i)
-            {
-                vaoModel[i] = new(shaderContext, "crash1", PrimitiveType.Triangles);
-            }
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -291,16 +279,6 @@ namespace CrashEdit
                 vaoModel[0].BlendMask = BlendModeIndex(pass);
                 vaoModel[0].Render(render);
             }
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            for (int i = 0; i < ANIM_BUF_MAX; ++i)
-            {
-                vaoModel[i]?.Dispose();
-            }
-
-            base.Dispose(disposing);
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace CrashEdit
 {
-    public sealed class OldAnimationEntryViewer : GLViewer, IDisposable
+    public sealed class OldAnimationEntryViewer : GLViewer
     {
         private readonly int eid_anim;
         private readonly int frame_id;
@@ -20,9 +20,7 @@ namespace CrashEdit
         private bool interpenabled = true;
         private int cullmode = 1;
 
-        // note: there's multiple buffers because of blending
-        private const int ANIM_BUF_MAX = 2;
-        private VAO[] vaoModel = new VAO[ANIM_BUF_MAX];
+        private readonly VAO[] vaoModel = vaoListCrash1;
         private BlendMode blendMask;
 
         protected override bool UseGrid => true;
@@ -39,35 +37,22 @@ namespace CrashEdit
             frame_id = -1;
         }
 
-        protected override void GLLoad()
-        {
-            base.GLLoad();
-
-            for (int i = 0; i < ANIM_BUF_MAX; ++i)
-            {
-                vaoModel[i] = new(shaderContext, "crash1", PrimitiveType.Triangles);
-            }
-        }
-
         private IList<OldFrame> GetFrames()
         {
             IList<OldFrame> frames = null;
             {
                 var entry = nsf.GetEntry<Entry>(eid_anim);
-                var svtx = entry as OldAnimationEntry;
-                var svtx_proto = entry as ProtoAnimationEntry;
-                var cvtx = entry as ColoredAnimationEntry;
-                if (svtx != null)
+                if (entry is OldAnimationEntry svtx)
                 {
                     frames = svtx.Frames;
                     colored = false;
                 }
-                else if (svtx_proto != null)
+                else if (entry is ProtoAnimationEntry svtx_proto)
                 {
                     frames = svtx_proto.Frames;
                     colored = false;
                 }
-                else if (cvtx != null)
+                else if (entry is ColoredAnimationEntry cvtx)
                 {
                     frames = cvtx.Frames;
                     colored = true;
@@ -308,16 +293,6 @@ namespace CrashEdit
                 vaoModel[buf].Verts[cur_vert_idx].normal = new Vector3(vert.NormalX, vert.NormalY, vert.NormalZ) / 127;
             }
             vaoModel[buf].VertCount++;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            for (int i = 0; i < ANIM_BUF_MAX; ++i)
-            {
-                vaoModel[i]?.Dispose();
-            }
-
-            base.Dispose(disposing);
         }
     }
 }

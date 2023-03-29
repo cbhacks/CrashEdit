@@ -91,6 +91,10 @@ namespace CrashEdit
         protected static VAO vaoLines;
         protected static VAO vaoSprites;
         // protected static VAO vaoText;
+        // note: there's multiple buffers because of blending
+        protected const int ANIM_BUF_MAX = 2;
+        protected static VAO[] vaoListCrash1 = new VAO[ANIM_BUF_MAX];
+        protected static VAO vaoCrash1 = vaoListCrash1[0];
 
         // these shouldn't be used
         protected static VAO vaoDebugBoxTri;
@@ -436,14 +440,6 @@ namespace CrashEdit
                     vaoLines.RenderAndDiscard(render);
                     vaoTris.RenderAndDiscard(render);
                     vaoSprites.RenderAndDiscard(render);
-
-                    if (UseGrid && Properties.Settings.Default.DisplayAnimGrid)
-                    {
-                        RenderAxes(new Vector3(0));
-
-                        MakeLineGrid(Properties.Settings.Default.AnimGridLen);
-                        vaoGridLine.Render(render);
-                    }
                 }
 
                 // swap the front/back buffers so what we just rendered to the back buffer is displayed in the window.
@@ -455,6 +451,14 @@ namespace CrashEdit
         protected virtual void Render()
         {
             SetBlendMode(BlendMode.Solid);
+
+            if (UseGrid && Properties.Settings.Default.DisplayAnimGrid)
+            {
+                RenderAxes(new Vector3(0));
+
+                MakeLineGrid(Properties.Settings.Default.AnimGridLen);
+                vaoGridLine.Render(render);
+            }
         }
 
         private void RenderAxes(Vector3 pos)

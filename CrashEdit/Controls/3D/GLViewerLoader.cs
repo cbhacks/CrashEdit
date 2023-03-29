@@ -67,10 +67,6 @@ namespace CrashEdit
 
             // init axes vao
             vaoAxes = new VAO(shaderContext, "axes", PrimitiveType.Lines, vert_count: AxesPos.Length);
-            for (int i = 0; i < AxesPos.Length; ++i)
-            {
-                vaoAxes.PushAttrib(trans: AxesPos[i]);
-            }
 
             vaoSphereLine = new VAO(shaderContext, "line-model", PrimitiveType.LineStrip);
             vaoGridLine = new VAO(shaderContext, "line-usercolor", PrimitiveType.Lines);
@@ -80,8 +76,19 @@ namespace CrashEdit
             vaoSprites = new VAO(shaderContext, "sprite", PrimitiveType.Quads);
             vaoLines = new VAO(shaderContext, "line", PrimitiveType.Lines);
             vaoTris = new VAO(shaderContext, "generic", PrimitiveType.Triangles);
-            vaoGridLine.UserColor1 = Color4.Gray;
+            for (int i = 0; i < ANIM_BUF_MAX; ++i)
+            {
+                vaoListCrash1[i] = new(shaderContext, "crash1", PrimitiveType.Triangles);
+            }
 
+            vaoGridLine.UserColor1 = Color4.Gray;
+            vaoGridLine.ZBufDisableWrite = true;
+            vaoAxes.ZBufDisableWrite = true;
+
+            for (int i = 0; i < AxesPos.Length; ++i)
+            {
+                vaoAxes.PushAttrib(trans: AxesPos[i]);
+            }
             for (int i = 0; i < BoxTriIndices.Length; ++i)
             {
                 vaoDebugBoxTri.PushAttrib(trans: BoxVerts[BoxTriIndices[i]]);
