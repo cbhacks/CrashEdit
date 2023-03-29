@@ -203,29 +203,21 @@ namespace CrashEdit
                 AddSprite(trans, new Vector2(1), new(255, 255, 0, masterZoneAlpha), OldResources.PointTexture);
 
                 const float ang2rad = MathHelper.Pi / 2048;
-
                 var quatAng1 = Quaternion.FromEulerAngles(-entity2.Positions[i * 2 + 0].X * ang2rad, -entity2.Positions[i * 2 + 0].Y * ang2rad, -entity2.Positions[i * 2 + 0].Z * ang2rad);
                 var rot_mat1 = Matrix4.CreateFromQuaternion(quatAng1);
                 var dir_vec1 = (rot_mat1 * new Vector4(0, 0, -1, 1)).Xyz;
+                var quatAng2 = Quaternion.FromEulerAngles(-entity2.Positions[i * 2 + 1].X * ang2rad, -entity2.Positions[i * 2 + 1].Y * ang2rad, -entity2.Positions[i * 2 + 1].Z * ang2rad);
+                var rot_mat2 = Matrix4.CreateFromQuaternion(quatAng2);
+                var dir_vec2 = (rot_mat2 * new Vector4(0, 0, -1, 1)).Xyz;
 
                 Rgba angColor1 = Rgba.FromOther(Color4.Olive, masterZoneAlpha);
+                Rgba angColor2 = new Rgba(128, 0, 0, masterZoneAlpha);
                 vaoLines.PushAttrib(trans: trans, rgba: angColor1);
                 vaoLines.PushAttrib(trans: trans + dir_vec1, rgba: angColor1);
                 AddSprite(trans + dir_vec1, new Vector2(0.5f), angColor1, OldResources.PointTexture);
-
-                if (entity2.Positions[i * 2 + 0].X != entity2.Positions[i * 2 + 1].X ||
-                    entity2.Positions[i * 2 + 0].Y != entity2.Positions[i * 2 + 1].Y ||
-                    entity2.Positions[i * 2 + 0].Z != entity2.Positions[i * 2 + 1].Z)
-                {
-                    var quatAng2 = Quaternion.FromEulerAngles(-entity2.Positions[i * 2 + 1].X * ang2rad, -entity2.Positions[i * 2 + 1].Y * ang2rad, -entity2.Positions[i * 2 + 1].Z * ang2rad);
-                    var rot_mat2 = Matrix4.CreateFromQuaternion(quatAng2);
-                    var dir_vec2 = (rot_mat2 * new Vector4(0, 0, -1, 1)).Xyz;
-
-                    Rgba angColor2 = new Rgba(128, 0, 0, masterZoneAlpha);
-                    vaoLines.PushAttrib(trans: trans, rgba: angColor2);
-                    vaoLines.PushAttrib(trans: trans + dir_vec2, rgba: angColor2);
-                    AddSprite(trans + dir_vec2, new Vector2(0.5f), angColor2, OldResources.PointTexture);
-                }
+                vaoLines.PushAttrib(trans: trans, rgba: angColor2);
+                vaoLines.PushAttrib(trans: trans + dir_vec2, rgba: angColor2);
+                AddSprite(trans + dir_vec2, new Vector2(0.5f), angColor2, OldResources.PointTexture);
             }
         }
 
@@ -256,7 +248,7 @@ namespace CrashEdit
             };
             for (int i = 0; i < 4 * 6; ++i)
             {
-                vaoTris.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6], st: uvs[i % 6]);
+                vaoTris.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0, 0.5f, 0), rgba: cols[i / 6], st: uvs[i % 6]);
             }
             uvs[0] = new Vector2(topTexRect.Left, topTexRect.Bottom);
             uvs[1] = new Vector2(topTexRect.Left, topTexRect.Top);
@@ -266,7 +258,7 @@ namespace CrashEdit
             uvs[5] = new Vector2(topTexRect.Left, topTexRect.Bottom);
             for (int i = 4 * 6; i < 6 * 6; ++i)
             {
-                vaoTris.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6], st: uvs[i % 6]);
+                vaoTris.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0, 0.5f, 0), rgba: cols[i / 6], st: uvs[i % 6]);
             }
         }
 
