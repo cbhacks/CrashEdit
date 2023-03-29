@@ -213,8 +213,11 @@ namespace CrashEdit
 
         private static IGraphicsContext context;
         private static GLControl contextWindow;
+        private static readonly GraphicsMode DefaultGraphicsSettings = new(new ColorFormat(8, 8, 8, 8), 24);
+        private static readonly float DefaultZNear = 0.25f;
+        private static readonly float DefaultZFar = DefaultZNear * 0x4000;
 
-        public GLViewer() : base(GraphicsMode.Default, 4, 3, GraphicsContextFlags.Debug)
+        public GLViewer() : base(DefaultGraphicsSettings, 4, 3, GraphicsContextFlags.Debug)
         {
             if (context == null)
             {
@@ -224,7 +227,7 @@ namespace CrashEdit
             render = new RenderInfo(this);
         }
 
-        public GLViewer(NSF nsf) : base(GraphicsMode.Default, 4, 3, GraphicsContextFlags.Debug)
+        public GLViewer(NSF nsf) : base(DefaultGraphicsSettings, 4, 3, GraphicsContextFlags.Debug)
         {
             if (context == null)
             {
@@ -419,7 +422,7 @@ namespace CrashEdit
                     GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
                     // set up view matrices (45º FOV)
-                    render.Projection.Perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45), render.Projection.Aspect, 0.5f, 0.5f * 4096);
+                    render.Projection.Perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45), render.Projection.Aspect, DefaultZNear, DefaultZFar);
                     var rot_mat = Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot));
                     var test_vec = (rot_mat * new Vector4(0, 0, render.Distance, 1)).Xyz;
                     render.Projection.View = Matrix4.CreateTranslation(render.Projection.Trans - test_vec) * rot_mat;
