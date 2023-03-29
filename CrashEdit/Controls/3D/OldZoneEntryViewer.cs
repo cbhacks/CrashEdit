@@ -203,7 +203,7 @@ namespace CrashEdit
                 var rot_mat = Matrix4.CreateFromQuaternion(quatAng);
                 var test_vec = (rot_mat * new Vector4(0, 0, -1, 1)).Xyz;
 
-                Rgba angColor = (Rgba)Color4.Olive;
+                Rgba angColor = Rgba.FromOther(Color4.Olive, masterZoneAlpha);
                 vaoLines.PushAttrib(trans: trans, rgba: angColor);
                 vaoLines.PushAttrib(trans: trans + test_vec, rgba: angColor);
                 AddSprite(trans + test_vec, new Vector2(0.5f), angColor, OldResources.PointTexture);

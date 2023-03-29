@@ -48,6 +48,14 @@ namespace CrashEdit
                     var zonetrans = new Position(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
                     yield return zonetrans;
                     yield return new Position(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1 + zonetrans;
+                    for (int i = 0; i < zone.CameraCount; i += 3)
+                    {
+                        Entity entity1 = zone.Entities[i];
+                        foreach (EntityPosition position in entity1.Positions)
+                        {
+                            yield return new Position(position.X, position.Y, position.Z) / GameScales.ZoneCameraC1 + zonetrans;
+                        }
+                    }
                     for (int i = zone.CameraCount; i < zone.Entities.Count; ++i)
                     {
                         Entity entity = zone.Entities[i];
@@ -128,6 +136,13 @@ namespace CrashEdit
                 Entity entity = zone.Entities[i];
                 RenderEntity(entity);
             }
+            for (int i = 0; i < zone.CameraCount; i += 3)
+            {
+                Entity entity1 = zone.Entities[i];
+                Entity entity2 = zone.Entities[i + 1];
+                Entity entity3 = zone.Entities[i + 2];
+                RenderCamera(entity1, entity2, entity3);
+            }
 
             if (octreeRenderer.Enabled && (masterZone || octreeRenderer.ShowAllEntries))
             {
@@ -169,6 +184,47 @@ namespace CrashEdit
                 {
                     Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + zoneTrans;
                     AddSprite(trans, new Vector2(1), new(255, 0, 0, masterZoneAlpha), OldResources.PointTexture);
+                }
+            }
+        }
+
+        private void RenderCamera(Entity entity1, Entity entity2, Entity entity3)
+        {
+            for (int i = 1; i < entity1.Positions.Count; ++i)
+            {
+                vaoLines.PushAttrib(trans: new Vector3(entity1.Positions[i - 1].X, entity1.Positions[i - 1].Y, entity1.Positions[i - 1].Z) / GameScales.ZoneCameraC1 + zoneTrans,
+                                    rgba: new Rgba(0, 128, 0, masterZoneAlpha));
+                vaoLines.PushAttrib(trans: new Vector3(entity1.Positions[i].X, entity1.Positions[i].Y, entity1.Positions[i].Z) / GameScales.ZoneCameraC1 + zoneTrans,
+                                    rgba: new Rgba(0, 128, 0, masterZoneAlpha));
+            }
+            for (int i = 0; i < entity1.Positions.Count; ++i)
+            {
+                Vector3 trans = new Vector3(entity1.Positions[i].X, entity1.Positions[i].Y, entity1.Positions[i].Z) / GameScales.ZoneCameraC1 + zoneTrans;
+                AddSprite(trans, new Vector2(1), new(255, 255, 0, masterZoneAlpha), OldResources.PointTexture);
+
+                const float ang2rad = MathHelper.Pi / 2048;
+
+                var quatAng1 = Quaternion.FromEulerAngles(-entity2.Positions[i * 2 + 0].X * ang2rad, -entity2.Positions[i * 2 + 0].Y * ang2rad, -entity2.Positions[i * 2 + 0].Z * ang2rad);
+                var rot_mat1 = Matrix4.CreateFromQuaternion(quatAng1);
+                var dir_vec1 = (rot_mat1 * new Vector4(0, 0, -1, 1)).Xyz;
+
+                Rgba angColor1 = Rgba.FromOther(Color4.Olive, masterZoneAlpha);
+                vaoLines.PushAttrib(trans: trans, rgba: angColor1);
+                vaoLines.PushAttrib(trans: trans + dir_vec1, rgba: angColor1);
+                AddSprite(trans + dir_vec1, new Vector2(0.5f), angColor1, OldResources.PointTexture);
+
+                if (entity2.Positions[i * 2 + 0].X != entity2.Positions[i * 2 + 1].X ||
+                    entity2.Positions[i * 2 + 0].Y != entity2.Positions[i * 2 + 1].Y ||
+                    entity2.Positions[i * 2 + 0].Z != entity2.Positions[i * 2 + 1].Z)
+                {
+                    var quatAng2 = Quaternion.FromEulerAngles(-entity2.Positions[i * 2 + 1].X * ang2rad, -entity2.Positions[i * 2 + 1].Y * ang2rad, -entity2.Positions[i * 2 + 1].Z * ang2rad);
+                    var rot_mat2 = Matrix4.CreateFromQuaternion(quatAng2);
+                    var dir_vec2 = (rot_mat2 * new Vector4(0, 0, -1, 1)).Xyz;
+
+                    Rgba angColor2 = new Rgba(128, 0, 0, masterZoneAlpha);
+                    vaoLines.PushAttrib(trans: trans, rgba: angColor2);
+                    vaoLines.PushAttrib(trans: trans + dir_vec2, rgba: angColor2);
+                    AddSprite(trans + dir_vec2, new Vector2(0.5f), angColor2, OldResources.PointTexture);
                 }
             }
         }
