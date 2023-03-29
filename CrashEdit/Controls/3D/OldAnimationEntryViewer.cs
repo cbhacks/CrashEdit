@@ -49,28 +49,38 @@ namespace CrashEdit
             }
         }
 
+        private IList<OldFrame> GetFrames()
+        {
+            IList<OldFrame> frames = null;
+            {
+                var entry = nsf.GetEntry<Entry>(eid_anim);
+                var svtx = entry as OldAnimationEntry;
+                var svtx_proto = entry as ProtoAnimationEntry;
+                var cvtx = entry as ColoredAnimationEntry;
+                if (svtx != null)
+                {
+                    frames = svtx.Frames;
+                    colored = false;
+                }
+                else if (svtx_proto != null)
+                {
+                    frames = svtx_proto.Frames;
+                    colored = false;
+                }
+                else if (cvtx != null)
+                {
+                    frames = cvtx.Frames;
+                    colored = true;
+                }
+            }
+            return frames;
+        }
+
         protected override IEnumerable<IPosition> CorePositions
         {
             get
             {
-                IList<OldFrame> frames = null;
-                {
-                    var svtx = nsf.GetEntry<OldAnimationEntry>(eid_anim);
-                    if (svtx != null)
-                    {
-                        frames = svtx.Frames;
-                        colored = false;
-                    }
-                    else
-                    {
-                        var cvtx = nsf.GetEntry<ColoredAnimationEntry>(eid_anim);
-                        if (cvtx != null)
-                        {
-                            frames = cvtx.Frames;
-                            colored = true;
-                        }
-                    }
-                }
+                IList<OldFrame> frames = GetFrames();
                 if (frames != null)
                 {
                     var usedframes = new List<OldFrame>();
@@ -99,7 +109,7 @@ namespace CrashEdit
                         }
                     }
                 }
-                
+
                 yield return new Position(0, 0, 0);
             }
         }
@@ -108,28 +118,7 @@ namespace CrashEdit
         {
             base.Render();
 
-            IList<OldFrame> frames = null;
-            {
-                var entry = nsf.GetEntry<Entry>(eid_anim);
-                var svtx = entry as OldAnimationEntry;
-                var svtx_proto = entry as ProtoAnimationEntry;
-                var cvtx = entry as ColoredAnimationEntry;
-                if (svtx != null)
-                {
-                    frames = svtx.Frames;
-                    colored = false;
-                }
-                else if (svtx_proto != null)
-                {
-                    frames = svtx_proto.Frames;
-                    colored = false;
-                }
-                else if (cvtx != null)
-                {
-                    frames = cvtx.Frames;
-                    colored = true;
-                }
-            }
+            IList<OldFrame> frames = GetFrames();
             if (frames != null)
             {
                 OldFrame frame2 = null;

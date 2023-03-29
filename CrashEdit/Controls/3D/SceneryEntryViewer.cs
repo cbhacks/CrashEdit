@@ -1,10 +1,7 @@
 using Crash;
-using Crash.GOOLIns;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Security.Cryptography;
 
 namespace CrashEdit
 {
@@ -163,56 +160,19 @@ namespace CrashEdit
             {
                 if ((tri.VertexA >= world.Vertices.Count || tri.VertexB >= world.Vertices.Count || tri.VertexC >= world.Vertices.Count) ||
                     (tri.VertexA == tri.VertexB || tri.VertexB == tri.VertexC || tri.VertexC == tri.VertexA)) continue;
+                var polygon_texture_info = ProcessTextureInfoC2(tri.Texture, tri.Animated, world.Textures, world.AnimatedTextures);
+                if (!polygon_texture_info.Item1)
+                    continue;
                 int tex = 0; // completely untextured
-                if (tri.Texture != 0 || tri.Animated)
+                if (polygon_texture_info.Item2.HasValue)
                 {
-                    ModelTexture? info_temp = null;
-                    int tex_id = tri.Texture - 1;
-                    if (tri.Animated)
-                    {
-                        var anim = world.AnimatedTextures[++tex_id];
-                        // check if it's an untextured polygon
-                        if (anim.Offset != 0)
-                        {
-                            tex_id = anim.Offset - 1;
-                            if (anim.IsLOD)
-                            {
-                                tex_id += anim.LOD0; // we only render closest LOD for now
-                            }
-                            else
-                            {
-                                tex_id += (int)((render.RealCurrentFrame / 2 / (1 + anim.Latency) + anim.Delay) & anim.Mask);
-                                if (anim.Leap)
-                                {
-                                    anim = world.AnimatedTextures[++tex_id];
-                                    tex_id = anim.Offset - 1 + anim.LOD0;
-                                }
-                            }
-                            if (tex_id >= world.Textures.Count)
-                            {
-                                continue;
-                            }
-                            info_temp = world.Textures[tex_id];
-                        }
-                    }
-                    else
-                    {
-                        if (tex_id >= world.Textures.Count)
-                        {
-                            continue;
-                        }
-                        info_temp = world.Textures[tex_id];
-                    }
-                    if (info_temp.HasValue)
-                    {
-                        var info = info_temp.Value;
-                        tex = TexInfoUnpacked.Pack(true, color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY, page: tex_eids[world.GetTPAG(info.Page)]);
-                        vaoWorld.Verts[vaoWorld.VertCount + 0].st = new(info.X2, info.Y2);
-                        vaoWorld.Verts[vaoWorld.VertCount + 1].st = new(info.X1, info.Y1);
-                        vaoWorld.Verts[vaoWorld.VertCount + 2].st = new(info.X3, info.Y3);
+                    var info = polygon_texture_info.Item2.Value;
+                    tex = TexInfoUnpacked.Pack(true, color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY, page: tex_eids[world.GetTPAG(info.Page)]);
+                    vaoWorld.Verts[vaoWorld.VertCount + 0].st = new(info.X2, info.Y2);
+                    vaoWorld.Verts[vaoWorld.VertCount + 1].st = new(info.X1, info.Y1);
+                    vaoWorld.Verts[vaoWorld.VertCount + 2].st = new(info.X3, info.Y3);
 
-                        blendMask |= TexInfoUnpacked.GetBlendMode(info.BlendMode);
-                    }
+                    blendMask |= TexInfoUnpacked.GetBlendMode(info.BlendMode);
                 }
                 vaoWorld.Verts[vaoWorld.VertCount + 2].tex = tex;
 
@@ -224,57 +184,20 @@ namespace CrashEdit
             {
                 if ((quad.VertexA >= world.Vertices.Count || quad.VertexB >= world.Vertices.Count || quad.VertexC >= world.Vertices.Count || quad.VertexD >= world.Vertices.Count) ||
                     (quad.VertexA == quad.VertexB || quad.VertexB == quad.VertexC || quad.VertexC == quad.VertexD || quad.VertexD == quad.VertexA)) continue;
+                var polygon_texture_info = ProcessTextureInfoC2(quad.Texture, quad.Animated, world.Textures, world.AnimatedTextures);
+                if (!polygon_texture_info.Item1)
+                    continue;
                 int tex = 0; // completely untextured
-                if (quad.Texture != 0 || quad.Animated)
+                if (polygon_texture_info.Item2.HasValue)
                 {
-                    ModelTexture? info_temp = null;
-                    int tex_id = quad.Texture - 1;
-                    if (quad.Animated)
-                    {
-                        var anim = world.AnimatedTextures[++tex_id];
-                        // check if it's an untextured polygon
-                        if (anim.Offset != 0)
-                        {
-                            tex_id = anim.Offset - 1;
-                            if (anim.IsLOD)
-                            {
-                                tex_id += anim.LOD0; // we only render closest LOD for now
-                            }
-                            else
-                            {
-                                tex_id += (int)((render.RealCurrentFrame / 2 / (1 + anim.Latency) + anim.Delay) & anim.Mask);
-                                if (anim.Leap)
-                                {
-                                    anim = world.AnimatedTextures[++tex_id];
-                                    tex_id = anim.Offset - 1 + anim.LOD0;
-                                }
-                            }
-                            if (tex_id >= world.Textures.Count)
-                            {
-                                continue;
-                            }
-                            info_temp = world.Textures[tex_id];
-                        }
-                    }
-                    else
-                    {
-                        if (tex_id >= world.Textures.Count)
-                        {
-                            continue;
-                        }
-                        info_temp = world.Textures[tex_id];
-                    }
-                    if (info_temp.HasValue)
-                    {
-                        var info = info_temp.Value;
-                        tex = TexInfoUnpacked.Pack(true, color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY, page: tex_eids[world.GetTPAG(info.Page)]);
-                        vaoWorld.Verts[vaoWorld.VertCount + 0].st = new(info.X2, info.Y2);
-                        vaoWorld.Verts[vaoWorld.VertCount + 1].st = new(info.X1, info.Y1);
-                        vaoWorld.Verts[vaoWorld.VertCount + 2].st = new(info.X3, info.Y3);
-                        vaoWorld.Verts[vaoWorld.VertCount + 4].st = new(info.X4, info.Y4);
+                    var info = polygon_texture_info.Item2.Value;
+                    tex = TexInfoUnpacked.Pack(true, color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY, page: tex_eids[world.GetTPAG(info.Page)]);
+                    vaoWorld.Verts[vaoWorld.VertCount + 0].st = new(info.X2, info.Y2);
+                    vaoWorld.Verts[vaoWorld.VertCount + 1].st = new(info.X1, info.Y1);
+                    vaoWorld.Verts[vaoWorld.VertCount + 2].st = new(info.X3, info.Y3);
+                    vaoWorld.Verts[vaoWorld.VertCount + 4].st = new(info.X4, info.Y4);
 
-                        blendMask |= TexInfoUnpacked.GetBlendMode(info.BlendMode);
-                    }
+                    blendMask |= TexInfoUnpacked.GetBlendMode(info.BlendMode);
                 }
                 vaoWorld.Verts[vaoWorld.VertCount + 2].tex = tex;
 

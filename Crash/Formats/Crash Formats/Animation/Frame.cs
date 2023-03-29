@@ -122,6 +122,100 @@ namespace Crash
         private List<FrameCollision> collision;
         private List<FrameVertex> vertices;
 
+        private static readonly int[] SignTable = { -1, -2, -4, -8, -16, -32, -64, -128 }; // used for decompression
+        public IList<FrameVertex> MakeVertices(NSF nsf)
+        {
+            IList<FrameVertex> verts = new FrameVertex[Vertices.Count];
+            var model = nsf.GetEntry<ModelEntry>(ModelEID);
+            if (model != null && model.Positions != null)
+            {
+                // compressed frame
+                int x_acc = 0, y_acc = 0, z_acc = 0;
+                int bit_n = SpecialVertexCount * 8 * 3;
+                for (int i = 0; i < model.Positions.Count; ++i)
+                {
+                    int x_pos = model.Positions[i].X << 1;
+                    int y_pos = model.Positions[i].Y;
+                    int z_pos = model.Positions[i].Z;
+                    int x_bits = model.Positions[i].XBits;
+                    int y_bits = model.Positions[i].YBits;
+                    int z_bits = model.Positions[i].ZBits;
+                    if (x_bits == 7) x_acc = 0;
+                    if (y_bits == 7) y_acc = 0;
+                    if (z_bits == 7) z_acc = 0;
+
+                    // XZY frame data
+
+                    // sign extending
+                    int x_vert = Temporals[bit_n++] ? SignTable[x_bits] : 0;
+                    for (int b = 0; b < x_bits; ++b)
+                    {
+                        x_vert |= Convert.ToByte(Temporals[bit_n++]) << (x_bits - 1 - b);
+                    }
+                    // sign extending
+                    int z_vert = Temporals[bit_n++] ? SignTable[z_bits] : 0;
+                    for (int b = 0; b < z_bits; ++b)
+                    {
+                        z_vert |= Convert.ToByte(Temporals[bit_n++]) << (z_bits - 1 - b);
+                    }
+                    // sign extending
+                    int y_vert = Temporals[bit_n++] ? SignTable[y_bits] : 0;
+                    for (int b = 0; b < y_bits; ++b)
+                    {
+                        y_vert |= Convert.ToByte(Temporals[bit_n++]) << (y_bits - 1 - b);
+                    }
+
+                    x_acc += x_vert + x_pos;
+                    y_acc += y_vert + y_pos;
+                    z_acc += z_vert + z_pos;
+                    x_acc &= 0xff;
+                    y_acc &= 0xff;
+                    z_acc &= 0xff;
+
+                    verts[i] = new FrameVertex((byte)x_acc, (byte)y_acc, (byte)z_acc);
+                }
+            }
+            else
+            {
+                // uncompressed frame
+                bool[] uncompressedbitstream = new bool[Temporals.Length];
+                for (int i = 0; i < uncompressedbitstream.Length / 32; ++i)
+                {
+                    for (int j = 0; j < 4; ++j)
+                    {
+                        for (int k = 0; k < 8; ++k)
+                        {
+                            uncompressedbitstream[32 * i + 24 - j * 8 + k] = Temporals[32 * i + j * 8 + k]; // replace this with a cool formula one day
+                        }
+                    }
+                }
+                int bi = SpecialVertexCount * 8 * 3;
+                for (int i = SpecialVertexCount; i < Vertices.Count; ++i)
+                {
+                    byte x = 0;
+                    for (int j = 0; j < 8; ++j)
+                    {
+                        x |= (byte)(Convert.ToByte(uncompressedbitstream[bi++]) << (7 - j));
+                    }
+
+                    byte y = 0;
+                    for (int j = 0; j < 8; ++j)
+                    {
+                        y |= (byte)(Convert.ToByte(uncompressedbitstream[bi++]) << (7 - j));
+                    }
+
+                    byte z = 0;
+                    for (int j = 0; j < 8; ++j)
+                    {
+                        z |= (byte)(Convert.ToByte(uncompressedbitstream[bi++]) << (7 - j));
+                    }
+
+                    verts[i] = new FrameVertex(x, y, z);
+                }
+            }
+            return verts;
+        }
+
         public Frame(short xoffset,short yoffset,short zoffset,short unknown,int modeleid,int headersize,IEnumerable<FrameCollision> collision,IEnumerable<FrameVertex> vertices,int specialvertexcount, bool[] temporals,bool isnew)
         {
             IsNew = isnew;

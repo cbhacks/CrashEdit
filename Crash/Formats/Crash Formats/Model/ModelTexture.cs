@@ -46,7 +46,6 @@ namespace Crash
             ColorMode = colormode;
             Page = textureoffset;
 
-            float pw = 256 << (2-ColorMode);
             int xoff = (1 << (2-ColorMode)) * 64 * Segment;
             Left = Math.Min(U1, Math.Min(U2, U3)) + xoff;
             Top = Math.Min(V1, Math.Min(V2, V3));

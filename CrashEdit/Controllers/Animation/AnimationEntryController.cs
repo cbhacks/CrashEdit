@@ -26,32 +26,11 @@ namespace CrashEdit
             Node.ImageKey = "limeb";
             Node.SelectedImageKey = "limeb";
         }
-        /*
+
         protected override Control CreateEditor()
         {
-            if (!AnimationEntry.IsNew)
-            {
-                ModelEntry modelentry = FindEID<ModelEntry>(AnimationEntry.Frames[0].ModelEID);
-                if (modelentry != null)
-                {
-                    TextureChunk[] texturechunks = new TextureChunk[modelentry.TPAGCount];
-                    for (int i = 0; i < texturechunks.Length; ++i)
-                    {
-                        texturechunks[i] = FindEID<TextureChunk>(BitConv.FromInt32(modelentry.Info,0xC+i*4));
-                    }
-                    return new UndockableControl(new AnimationEntryViewer(AnimationEntry.Frames,modelentry,texturechunks));
-                }
-                else
-                {
-                    return new UndockableControl(new AnimationEntryViewer(AnimationEntry.Frames,null,null));
-                }
-            }
-            else
-            {
-                return new Crash3AnimationSelector(AnimationEntry, EntryChunkController.NSFController.NSF);
-            }
+            return new UndockableControl(new AnimationEntryViewer(NSF, Entry.EID));
         }
-        */
 
         public AnimationEntry AnimationEntry { get; }
     }

@@ -171,6 +171,7 @@ namespace Crash
         public int ScaleX => BitConv.FromInt32(Info, 0);
         public int ScaleY => BitConv.FromInt32(Info, 4);
         public int ScaleZ => BitConv.FromInt32(Info, 8);
+        public int GetTPAG(int idx) => BitConv.FromInt32(Info, 0xC + 4 * idx);
         public int VertexCount => BitConv.FromInt32(Info, 0x38);
         public int TPAGCount => BitConv.FromInt32(Info, 0x40);
         public int PolyCount => BitConv.FromInt32(Info, 0x44);

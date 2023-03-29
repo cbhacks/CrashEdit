@@ -44,9 +44,9 @@ namespace CrashEdit
             if (amt >= 1) return col2;
             return new Rgba(
                 (byte)(col1.r + (col2.r - col1.r) * amt),
-                (byte)(col1.g + (col2.r - col1.g) * amt),
-                (byte)(col1.b + (col2.r - col1.b) * amt),
-                (byte)(col1.a + (col2.r - col1.a) * amt)
+                (byte)(col1.g + (col2.g - col1.g) * amt),
+                (byte)(col1.b + (col2.b - col1.b) * amt),
+                (byte)(col1.a + (col2.a - col1.a) * amt)
                 );
         }
 
