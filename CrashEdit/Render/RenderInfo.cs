@@ -15,9 +15,9 @@ namespace CrashEdit
         public RendererMoveMode MoveMode;
         public bool EnableTexture = true;
 
-        public const float InitialDistance = 5;
-        public const float MinDistance = 0.5f;
-        public const float MaxDistance = 50;
+        public const float MinDistance = GLViewer.DefaultZNear;
+        public const float MaxDistance = 100;
+        public const float InitialDistance = MaxDistance * 0.075f;
 
         public const float BaseRot = 0;
         public const float MinRot = BaseRot - MathHelper.PiOver2;

@@ -217,8 +217,8 @@ namespace CrashEdit
         private static IGraphicsContext context;
         private static GLControl contextWindow;
         private static readonly GraphicsMode DefaultGraphicsSettings = new(new ColorFormat(8, 8, 8, 8), 24);
-        private static readonly float DefaultZNear = 0.25f;
-        private static readonly float DefaultZFar = DefaultZNear * 0x4000;
+        public const float DefaultZNear = 0.25f;
+        public const float DefaultZFar = DefaultZNear * 0x4000;
 
         public GLViewer(NSF nsf = null) : base(DefaultGraphicsSettings, 4, 3, GraphicsContextFlags.Debug)
         {
