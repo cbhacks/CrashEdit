@@ -1,8 +1,6 @@
 ﻿using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System;
-using System.Runtime.InteropServices;
 
 namespace CrashEdit
 {

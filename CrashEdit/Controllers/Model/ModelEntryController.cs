@@ -6,7 +6,7 @@ namespace CrashEdit
 {
     public sealed class ModelEntryController : EntryController
     {
-        public ModelEntryController(EntryChunkController entrychunkcontroller,ModelEntry modelentry) : base(entrychunkcontroller,modelentry)
+        public ModelEntryController(EntryChunkController entrychunkcontroller, ModelEntry modelentry) : base(entrychunkcontroller, modelentry)
         {
             ModelEntry = modelentry;
             InvalidateNode();
@@ -17,11 +17,11 @@ namespace CrashEdit
         {
             if (ModelEntry.Positions == null)
             {
-                Node.Text = string.Format(Crash.UI.Properties.Resources.ModelEntryController_Text,ModelEntry.EName);
+                Node.Text = string.Format(Crash.UI.Properties.Resources.ModelEntryController_Text, ModelEntry.EName);
             }
             else
             {
-                Node.Text = string.Format(Crash.UI.Properties.Resources.ModelEntryController_Compressed_Text,ModelEntry.EName);
+                Node.Text = string.Format(Crash.UI.Properties.Resources.ModelEntryController_Compressed_Text, ModelEntry.EName);
             }
         }
 
@@ -42,18 +42,18 @@ namespace CrashEdit
         protected override Control CreateEditor()
         {
             if (ModelEntry.Positions == null)
-                return new Label { Text = string.Format("Polygon count: {0}\nVertex count: {1}",ModelEntry.PolyCount,ModelEntry.VertexCount), TextAlign = ContentAlignment.MiddleCenter };
+                return new Label { Text = string.Format("Polygon count: {0}\nVertex count: {1}", ModelEntry.PolyCount, ModelEntry.VertexCount), TextAlign = ContentAlignment.MiddleCenter };
             else
             {
                 int totalbits = ModelEntry.Positions.Count * 8 * 3;
                 int bits = 0;
                 foreach (ModelPosition pos in ModelEntry.Positions)
                 {
-                    bits += 1+pos.XBits;
-                    bits += 1+pos.YBits;
-                    bits += 1+pos.ZBits;
+                    bits += 1 + pos.XBits;
+                    bits += 1 + pos.YBits;
+                    bits += 1 + pos.ZBits;
                 }
-                return new Label { Text = string.Format("Polygon count: {0}\nVertex count: {1}\nCompression ratio: {2:P1} ({3}/{4})",ModelEntry.PolyCount,ModelEntry.VertexCount,(float)bits/totalbits,bits,totalbits), TextAlign = ContentAlignment.MiddleCenter };
+                return new Label { Text = string.Format("Polygon count: {0}\nVertex count: {1}\nCompression ratio: {2:P1} ({3}/{4})", ModelEntry.PolyCount, ModelEntry.VertexCount, (float)bits / totalbits, bits, totalbits), TextAlign = ContentAlignment.MiddleCenter };
             }
         }
 

@@ -4,14 +4,14 @@ namespace CrashEdit
 {
     public abstract class ChunkController : Controller
     {
-        public ChunkController(NSFController nsfcontroller,Chunk chunk)
+        public ChunkController(NSFController nsfcontroller, Chunk chunk)
         {
             NSFController = nsfcontroller;
             Chunk = chunk;
-            AddMenu(Crash.UI.Properties.Resources.ChunkController_AcDelete,Menu_Delete_Chunk);
+            AddMenu(Crash.UI.Properties.Resources.ChunkController_AcDelete, Menu_Delete_Chunk);
             if (!(this is UnprocessedChunkController))
             {
-                AddMenu(Crash.UI.Properties.Resources.ChunkController_AcDeprocess,Menu_Unprocess_Chunk);
+                AddMenu(Crash.UI.Properties.Resources.ChunkController_AcDeprocess, Menu_Unprocess_Chunk);
             }
         }
 

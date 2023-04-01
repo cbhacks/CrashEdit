@@ -5,7 +5,7 @@ namespace CrashEdit
 {
     public abstract class MysteryUniItemEntryController : EntryController
     {
-        public MysteryUniItemEntryController(EntryChunkController entrychunkcontroller,MysteryUniItemEntry mysteryentry) : base(entrychunkcontroller,mysteryentry)
+        public MysteryUniItemEntryController(EntryChunkController entrychunkcontroller, MysteryUniItemEntry mysteryentry) : base(entrychunkcontroller, mysteryentry)
         {
             MysteryEntry = mysteryentry;
         }

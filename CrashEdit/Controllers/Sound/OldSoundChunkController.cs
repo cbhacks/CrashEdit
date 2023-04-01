@@ -4,7 +4,7 @@ namespace CrashEdit
 {
     public sealed class OldSoundChunkController : EntryChunkController
     {
-        public OldSoundChunkController(NSFController nsfcontroller,OldSoundChunk oldsoundchunk) : base(nsfcontroller,oldsoundchunk)
+        public OldSoundChunkController(NSFController nsfcontroller, OldSoundChunk oldsoundchunk) : base(nsfcontroller, oldsoundchunk)
         {
             OldSoundChunk = oldsoundchunk;
             InvalidateNode();
@@ -13,7 +13,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.OldSoundChunkController_Text,NSFController.NSF.Chunks.IndexOf(OldSoundChunk) * 2 + 1);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.OldSoundChunkController_Text, NSFController.NSF.Chunks.IndexOf(OldSoundChunk) * 2 + 1);
         }
 
         public override void InvalidateNodeImage()

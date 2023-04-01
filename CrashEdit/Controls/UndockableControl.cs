@@ -45,7 +45,7 @@ namespace CrashEdit
                         };
                         Controls.Remove(control);
                         form.Controls.Add(control);
-                        form.FormClosed += delegate (object sender,FormClosedEventArgs ee)
+                        form.FormClosed += delegate (object sender, FormClosedEventArgs ee)
                         {
                             form.Controls.Remove(control);
                             Controls.Add(control);
@@ -61,7 +61,7 @@ namespace CrashEdit
             }
         }
 
-        protected override bool ProcessCmdKey(ref Message msg,Keys keyData)
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (IsInputKey((Keys)msg.WParam))
             {
@@ -70,7 +70,7 @@ namespace CrashEdit
             }
             else
             {
-                return base.ProcessCmdKey(ref msg,keyData);
+                return base.ProcessCmdKey(ref msg, keyData);
             }
         }
 

@@ -5,20 +5,20 @@ namespace CrashEdit
 {
     public sealed class OldCameraController : Controller
     {
-        public OldCameraController(ProtoZoneEntryController protozoneentrycontroller,OldCamera camera)
+        public OldCameraController(ProtoZoneEntryController protozoneentrycontroller, OldCamera camera)
         {
             ProtoZoneEntryController = protozoneentrycontroller;
             Camera = camera;
-            AddMenu("Delete Camera",Menu_DeleteProto);
+            AddMenu("Delete Camera", Menu_DeleteProto);
             InvalidateNodeImage();
             InvalidateNode();
         }
 
-        public OldCameraController(OldZoneEntryController oldzoneentrycontroller,OldCamera camera)
+        public OldCameraController(OldZoneEntryController oldzoneentrycontroller, OldCamera camera)
         {
             OldZoneEntryController = oldzoneentrycontroller;
             Camera = camera;
-            AddMenu("Delete Camera",Menu_DeleteOld);
+            AddMenu("Delete Camera", Menu_DeleteOld);
             InvalidateNode();
             InvalidateNodeImage();
         }
@@ -44,13 +44,13 @@ namespace CrashEdit
         public OldZoneEntryController OldZoneEntryController { get; }
         public OldZoneEntry OldZoneEntry => OldZoneEntryController.OldZoneEntry;
         public OldCamera Camera { get; }
-        
+
         private void Menu_DeleteProto()
         {
             ProtoZoneEntry.Cameras.Remove(Camera);
             Dispose();
         }
-        
+
         private void Menu_DeleteOld()
         {
             OldZoneEntry.Cameras.Remove(Camera);

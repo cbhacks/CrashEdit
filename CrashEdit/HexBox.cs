@@ -18,11 +18,11 @@ namespace CrashEdit
             offset = 0;
             position = 0;
             input = null;
-            Data = new byte [0];
+            Data = new byte[0];
             viewbit = 8;
             eidview = false;
             TabStop = true;
-            SetStyle(ControlStyles.Selectable,true);
+            SetStyle(ControlStyles.Selectable, true);
             DoubleBuffered = true;
         }
 
@@ -318,9 +318,9 @@ namespace CrashEdit
                 case Keys.Space:
                     if (e.Control)
                     {
-                        if (MessageBox.Show("Are you sure?","Nullify",MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        if (MessageBox.Show("Are you sure?", "Nullify", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
-                            for (int i = 0;i < Data.Length;i++)
+                            for (int i = 0; i < Data.Length; i++)
                             {
                                 Data[i] = 0;
                             }
@@ -349,8 +349,8 @@ namespace CrashEdit
             Brush inputselbackbrush = Brushes.Red;
             Brush eidbackbrush = Brushes.Chocolate;
             Brush voidbrush = Brushes.DarkMagenta;
-            Font font = new Font(FontFamily.GenericMonospace,8);
-            Font selfont = new Font(FontFamily.GenericMonospace,10);
+            Font font = new Font(FontFamily.GenericMonospace, 8);
+            Font selfont = new Font(FontFamily.GenericMonospace, 10);
             StringFormat format = new StringFormat();
             StringFormat selformat = new StringFormat();
             format.Alignment = StringAlignment.Center;
@@ -363,10 +363,10 @@ namespace CrashEdit
             int height = vstep * 16;
             int xsel = position % 16;
             int ysel = position / 16;
-            e.Graphics.FillRectangle(borderbrush,0,0,width + 1,height + 1);
-            for (int y = 0;y < 16;y++)
+            e.Graphics.FillRectangle(borderbrush, 0, 0, width + 1, height + 1);
+            for (int y = 0; y < 16; y++)
             {
-                for (int x = 0;x < 16;x++)
+                for (int x = 0; x < 16; x++)
                 {
                     int i = x + (offset + y) * 16;
                     Font curfont;
@@ -388,9 +388,9 @@ namespace CrashEdit
                         curbackbrush = eidbackbrush;
                         curformat = format;
                         rect.Width = hstep * 4 - 1;
-                        int eid = BitConv.FromInt32(Data,i);
-                        e.Graphics.FillRectangle(curbackbrush,rect);
-                        e.Graphics.DrawString(Entry.EIDToEName(eid),curfont,curbrush,rect,curformat);
+                        int eid = BitConv.FromInt32(Data, i);
+                        e.Graphics.FillRectangle(curbackbrush, rect);
+                        e.Graphics.DrawString(Entry.EIDToEName(eid), curfont, curbrush, rect, curformat);
                         x += 3;
                         continue;
                     }
@@ -433,10 +433,10 @@ namespace CrashEdit
                         curformat = null;
                         text = "";
                     }
-                    e.Graphics.FillRectangle(curbackbrush,rect);
+                    e.Graphics.FillRectangle(curbackbrush, rect);
                     if (x + (offset + y) * 16 < Data.Length)
                     {
-                        e.Graphics.DrawString(text,curfont,curbrush,rect,curformat);
+                        e.Graphics.DrawString(text, curfont, curbrush, rect, curformat);
                     }
                 }
             }

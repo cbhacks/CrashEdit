@@ -4,7 +4,7 @@ namespace CrashEdit
 {
     public sealed class WavebankChunkController : EntryChunkController
     {
-        public WavebankChunkController(NSFController nsfcontroller,WavebankChunk wavebankchunk) : base(nsfcontroller,wavebankchunk)
+        public WavebankChunkController(NSFController nsfcontroller, WavebankChunk wavebankchunk) : base(nsfcontroller, wavebankchunk)
         {
             WavebankChunk = wavebankchunk;
             InvalidateNode();
@@ -13,7 +13,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.WavebankChunkController_Text,NSFController.NSF.Chunks.IndexOf(WavebankChunk) * 2 + 1);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.WavebankChunkController_Text, NSFController.NSF.Chunks.IndexOf(WavebankChunk) * 2 + 1);
         }
 
         public override void InvalidateNodeImage()

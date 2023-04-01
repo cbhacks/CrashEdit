@@ -1,7 +1,7 @@
 using Crash;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Collections.Generic;
 
 namespace CrashEdit
 {
@@ -14,26 +14,26 @@ namespace CrashEdit
             imglist = new ImageList { ColorDepth = ColorDepth.Depth32Bit };
             try
             {
-                imglist.Images.Add("default",OldResources.FileImage);
-                imglist.Images.Add("nsf",new Icon(OldResources.NSFIcon,16,16));
-                imglist.Images.Add("yellowj",OldResources.YellowJournalImage);
-                imglist.Images.Add("image",OldResources.ImageImage);
-                imglist.Images.Add("bluej",OldResources.BlueJournalImage);
-                imglist.Images.Add("music",OldResources.MusicImage);
-                imglist.Images.Add("musicred",OldResources.MusicRedImage);
-                imglist.Images.Add("musicyellow",OldResources.MusicYellowImage);
-                imglist.Images.Add("whitej",OldResources.WhiteJournalImage);
-                imglist.Images.Add("thing",OldResources.ThingImage);
-                imglist.Images.Add("speaker",OldResources.SpeakerImage);
-                imglist.Images.Add("arrow",OldResources.ArrowImage);
-                imglist.Images.Add("greyb",OldResources.GreyBuckle);
-                imglist.Images.Add("codeb",OldResources.CodeBuckle);
-                imglist.Images.Add("crimsonb",OldResources.CrimsonBuckle);
-                imglist.Images.Add("limeb",OldResources.LimeBuckle);
-                imglist.Images.Add("blueb",OldResources.BlueBuckle);
-                imglist.Images.Add("violetb",OldResources.VioletBuckle);
-                imglist.Images.Add("redb",OldResources.RedBuckle);
-                imglist.Images.Add("yellowb",OldResources.YellowBuckle);
+                imglist.Images.Add("default", OldResources.FileImage);
+                imglist.Images.Add("nsf", new Icon(OldResources.NSFIcon, 16, 16));
+                imglist.Images.Add("yellowj", OldResources.YellowJournalImage);
+                imglist.Images.Add("image", OldResources.ImageImage);
+                imglist.Images.Add("bluej", OldResources.BlueJournalImage);
+                imglist.Images.Add("music", OldResources.MusicImage);
+                imglist.Images.Add("musicred", OldResources.MusicRedImage);
+                imglist.Images.Add("musicyellow", OldResources.MusicYellowImage);
+                imglist.Images.Add("whitej", OldResources.WhiteJournalImage);
+                imglist.Images.Add("thing", OldResources.ThingImage);
+                imglist.Images.Add("speaker", OldResources.SpeakerImage);
+                imglist.Images.Add("arrow", OldResources.ArrowImage);
+                imglist.Images.Add("greyb", OldResources.GreyBuckle);
+                imglist.Images.Add("codeb", OldResources.CodeBuckle);
+                imglist.Images.Add("crimsonb", OldResources.CrimsonBuckle);
+                imglist.Images.Add("limeb", OldResources.LimeBuckle);
+                imglist.Images.Add("blueb", OldResources.BlueBuckle);
+                imglist.Images.Add("violetb", OldResources.VioletBuckle);
+                imglist.Images.Add("redb", OldResources.RedBuckle);
+                imglist.Images.Add("yellowb", OldResources.YellowBuckle);
             }
             catch
             {
@@ -78,7 +78,7 @@ namespace CrashEdit
         public NSF NSF { get; }
         public NSFController NSFController { get; }
 
-        private void trvMain_AfterSelect(object sender,TreeViewEventArgs e)
+        private void trvMain_AfterSelect(object sender, TreeViewEventArgs e)
         {
             if (e.Node != null)
             {
@@ -91,12 +91,12 @@ namespace CrashEdit
             }
         }
 
-        private void trvMain_ItemDrag(object sender,ItemDragEventArgs e)
+        private void trvMain_ItemDrag(object sender, ItemDragEventArgs e)
         {
-            DoDragDrop(e.Item,DragDropEffects.All);
+            DoDragDrop(e.Item, DragDropEffects.All);
         }
 
-        private void trvMain_DragOver(object sender,DragEventArgs e)
+        private void trvMain_DragOver(object sender, DragEventArgs e)
         {
             if (!e.Data.GetDataPresent(typeof(TreeNode)))
             {
@@ -105,7 +105,7 @@ namespace CrashEdit
             }
             TreeNode node = (TreeNode)e.Data.GetData(typeof(TreeNode));
             Controller item = (Controller)node.Tag;
-            Point droppoint = trvMain.PointToClient(new Point(e.X,e.Y));
+            Point droppoint = trvMain.PointToClient(new Point(e.X, e.Y));
             TreeNode dropnode = trvMain.GetNodeAt(droppoint);
             if (dropnode == null)
             {
@@ -123,7 +123,7 @@ namespace CrashEdit
                 e.Effect = DragDropEffects.None;
                 return;
             }
-            if (item.Move(destination,false))
+            if (item.Move(destination, false))
             {
                 e.Effect = DragDropEffects.Move;
             }
@@ -133,7 +133,7 @@ namespace CrashEdit
             }
         }
 
-        private void trvMain_DragDrop(object sender,DragEventArgs e)
+        private void trvMain_DragDrop(object sender, DragEventArgs e)
         {
             if (!e.Data.GetDataPresent(typeof(TreeNode)))
             {
@@ -141,7 +141,7 @@ namespace CrashEdit
             }
             TreeNode node = (TreeNode)e.Data.GetData(typeof(TreeNode));
             Controller item = (Controller)node.Tag;
-            Point droppoint = trvMain.PointToClient(new Point(e.X,e.Y));
+            Point droppoint = trvMain.PointToClient(new Point(e.X, e.Y));
             TreeNode dropnode = trvMain.GetNodeAt(droppoint);
             if (dropnode == null)
             {
@@ -156,7 +156,7 @@ namespace CrashEdit
             {
                 return;
             }
-            item.Move(destination,true);
+            item.Move(destination, true);
             item.Node.EnsureVisible();
             trvMain.SelectedNode = item.Node;
         }
@@ -167,7 +167,7 @@ namespace CrashEdit
             searchresults.Clear();
             foreach (TreeNode node in trvMain.Nodes)
             {
-                FindNode(term,node);
+                FindNode(term, node);
             }
             FindNext();
         }
@@ -185,7 +185,7 @@ namespace CrashEdit
             }
         }
 
-        private void FindNode(string term,TreeNode node)
+        private void FindNode(string term, TreeNode node)
         {
             if (node.Text.ToUpper().Contains(term))
             {
@@ -193,13 +193,13 @@ namespace CrashEdit
             }
             foreach (TreeNode childnode in node.Nodes)
             {
-                FindNode(term,childnode);
+                FindNode(term, childnode);
             }
         }
 
         public void GotoEID(int eid)
         {
-            TreeNode node = FindEID(eid,NSFController.Node);
+            TreeNode node = FindEID(eid, NSFController.Node);
             if (node != null)
             {
                 node.EnsureVisible();
@@ -211,7 +211,7 @@ namespace CrashEdit
             }
         }
 
-        private TreeNode FindEID(int eid,TreeNode node)
+        private TreeNode FindEID(int eid, TreeNode node)
         {
             if (node.Tag is EntryController)
             {
@@ -222,7 +222,7 @@ namespace CrashEdit
             }
             foreach (TreeNode childnode in node.Nodes)
             {
-                TreeNode result = FindEID(eid,childnode);
+                TreeNode result = FindEID(eid, childnode);
                 if (result != null)
                 {
                     return result;

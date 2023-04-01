@@ -4,7 +4,7 @@ namespace CrashEdit
 {
     public sealed class ImageEntryController : MysteryMultiItemEntryController
     {
-        public ImageEntryController(EntryChunkController entrychunkcontroller,ImageEntry imageentry) : base(entrychunkcontroller,imageentry)
+        public ImageEntryController(EntryChunkController entrychunkcontroller, ImageEntry imageentry) : base(entrychunkcontroller, imageentry)
         {
             ImageEntry = imageentry;
             InvalidateNode();
@@ -13,7 +13,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.ImageEntryController_Text,ImageEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.ImageEntryController_Text, ImageEntry.EName);
         }
 
         public override void InvalidateNodeImage()

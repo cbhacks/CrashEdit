@@ -10,11 +10,11 @@ namespace CrashEdit
         {
         }
 
-        public GUIException(string message,Exception inner) : base(message,inner)
+        public GUIException(string message, Exception inner) : base(message, inner)
         {
         }
 
-        protected GUIException(SerializationInfo info,StreamingContext context) : base(info,context)
+        protected GUIException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }

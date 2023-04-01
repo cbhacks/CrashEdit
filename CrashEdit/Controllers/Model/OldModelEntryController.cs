@@ -6,7 +6,7 @@ namespace CrashEdit
 {
     public sealed class OldModelEntryController : EntryController
     {
-        public OldModelEntryController(EntryChunkController entrychunkcontroller,OldModelEntry oldmodelentry) : base(entrychunkcontroller,oldmodelentry)
+        public OldModelEntryController(EntryChunkController entrychunkcontroller, OldModelEntry oldmodelentry) : base(entrychunkcontroller, oldmodelentry)
         {
             OldModelEntry = oldmodelentry;
             InvalidateNode();
@@ -15,7 +15,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.OldModelEntryController_Text,OldModelEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.OldModelEntryController_Text, OldModelEntry.EName);
         }
 
         public override void InvalidateNodeImage()

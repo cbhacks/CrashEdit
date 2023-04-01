@@ -44,7 +44,8 @@ namespace CrashEdit
                 Value = (int)(default_pitch * 256),
                 Dock = DockStyle.Fill
             };
-            trkSampleRate.ValueChanged += (object sender, EventArgs e) => {
+            trkSampleRate.ValueChanged += (object sender, EventArgs e) =>
+            {
                 int smpe = (int)(trkSampleRate.Value / 256.0 * (11025 / 4.0));
                 cmdPlay.Text = string.Format("Play ({0}Hz)", smpe);
                 cmdExport.Text = string.Format("Export ({0}Hz)", smpe);
@@ -73,14 +74,14 @@ namespace CrashEdit
             pnOptions.Dock = DockStyle.Fill;
             pnOptions.ColumnCount = 2;
             pnOptions.RowCount = 1;
-            pnOptions.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,50));
-            pnOptions.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,50));
-            pnOptions.RowStyles.Add(new RowStyle(SizeType.Percent,50));
-            pnOptions.RowStyles.Add(new RowStyle(SizeType.Percent,50));
-            pnOptions.Controls.Add(cmdPlay,0,0);
-            pnOptions.Controls.Add(cmdExport,1,0);
-            pnOptions.Controls.Add(trkSampleRate,1,1);
-            pnOptions.Controls.Add(lblSampleRate,0,1);
+            pnOptions.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            pnOptions.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            pnOptions.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+            pnOptions.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+            pnOptions.Controls.Add(cmdPlay, 0, 0);
+            pnOptions.Controls.Add(cmdExport, 1, 0);
+            pnOptions.Controls.Add(trkSampleRate, 1, 1);
+            pnOptions.Controls.Add(lblSampleRate, 0, 1);
 
             Controls.Add(pnOptions);
             Controls.Add(tsToolbar);
@@ -107,14 +108,14 @@ namespace CrashEdit
             this.entry = entry;
         }
 
-        void tbbExport_Click(object sender,EventArgs e)
+        void tbbExport_Click(object sender, EventArgs e)
         {
-            FileUtil.SaveFile(samples.Save(),FileFilters.Any);
+            FileUtil.SaveFile(samples.Save(), FileFilters.Any);
         }
 
         private void Play(int samplerate)
         {
-            byte[] wave = WaveConv.ToWave(samples.ToPCM(),samplerate).Save();
+            byte[] wave = WaveConv.ToWave(samples.ToPCM(), samplerate).Save();
             spPlayer.Stop();
             spPlayer.Stream = new MemoryStream(wave);
             spPlayer.Play();

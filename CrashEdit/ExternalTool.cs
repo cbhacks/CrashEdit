@@ -1,5 +1,5 @@
-using System.IO;
 using System.Diagnostics;
+using System.IO;
 
 namespace CrashEdit
 {
@@ -10,19 +10,23 @@ namespace CrashEdit
             name = name.ToLower();
 
             // Search for "foo.exe", "foo.cmd", "foo", etc.
-            foreach (var file in dir.GetFiles()) {
-                if (Path.GetFileNameWithoutExtension(file.Name).ToLower() == name) {
+            foreach (var file in dir.GetFiles())
+            {
+                if (Path.GetFileNameWithoutExtension(file.Name).ToLower() == name)
+                {
                     return file.FullName;
                 }
             }
 
             // Otherwise, recursively check each subdirectory named "foo".
-            foreach (var subdir in dir.GetDirectories()) {
+            foreach (var subdir in dir.GetDirectories())
+            {
                 if (subdir.Name.ToLower() != name)
                     continue;
 
                 var result = FindEXEInDir(name, subdir);
-                if (result != null) {
+                if (result != null)
+                {
                     return result;
                 }
             }
@@ -57,7 +61,8 @@ namespace CrashEdit
                 WorkingDirectory = Path.GetDirectoryName(exe),
                 UseShellExecute = false
             };
-            using (var proc = Process.Start(psi)) {
+            using (var proc = Process.Start(psi))
+            {
                 proc.WaitForExit();
                 return proc.ExitCode;
             }

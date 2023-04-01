@@ -1,17 +1,17 @@
 using Crash;
-using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace CrashEdit
 {
     public sealed class NewEntityController : Controller
     {
-        public NewEntityController(NewZoneEntryController zoneentrycontroller,Entity entity)
+        public NewEntityController(NewZoneEntryController zoneentrycontroller, Entity entity)
         {
             NewZoneEntryController = zoneentrycontroller;
             Entity = entity;
-            AddMenu("Duplicate Entity",Menu_Duplicate);
-            AddMenu("Delete Entity",Menu_Delete);
+            AddMenu("Duplicate Entity", Menu_Duplicate);
+            AddMenu("Delete Entity", Menu_Delete);
             InvalidateNode();
             InvalidateNodeImage();
         }
@@ -20,11 +20,11 @@ namespace CrashEdit
         {
             if (Entity.Name != null && Entity.ID != null)
             {
-                Node.Text = string.Format("{0} - ID {1}",Entity.Name,Entity.ID);
+                Node.Text = string.Format("{0} - ID {1}", Entity.Name, Entity.ID);
             }
             else if (Entity.ID != null)
             {
-                Node.Text = string.Format("{1} ID {0}",Entity.ID,Crash.UI.Properties.Resources.EntityController_Text);
+                Node.Text = string.Format("{1} ID {0}", Entity.ID, Crash.UI.Properties.Resources.EntityController_Text);
             }
             else
             {

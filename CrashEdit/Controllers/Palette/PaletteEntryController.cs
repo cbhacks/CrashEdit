@@ -6,7 +6,7 @@ namespace CrashEdit
 {
     public sealed class PaletteEntryController : EntryController
     {
-        public PaletteEntryController(EntryChunkController entrychunkcontroller,PaletteEntry paletteentry) : base(entrychunkcontroller,paletteentry)
+        public PaletteEntryController(EntryChunkController entrychunkcontroller, PaletteEntry paletteentry) : base(entrychunkcontroller, paletteentry)
         {
             PaletteEntry = paletteentry;
             InvalidateNode();
@@ -15,7 +15,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.PaletteEntryController_Text,PaletteEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.PaletteEntryController_Text, PaletteEntry.EName);
         }
 
         public override void InvalidateNodeImage()

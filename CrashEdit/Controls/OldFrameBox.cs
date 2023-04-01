@@ -68,7 +68,7 @@ namespace CrashEdit
             }
             else
             {
-                lblVerticeIndex.Text = string.Format("{0} / {1}",vertexindex + 1,frame.Vertices.Count);
+                lblVerticeIndex.Text = string.Format("{0} / {1}", vertexindex + 1, frame.Vertices.Count);
                 cmdPreviousVertice.Enabled = (vertexindex > 0);
                 cmdNextVertice.Enabled = (vertexindex < frame.Vertices.Count - 1);
                 cmdInsertVertice.Enabled = true;
@@ -95,19 +95,19 @@ namespace CrashEdit
             vertexdirty = false;
         }
 
-        private void cmdPreviousVertice_Click(object sender,EventArgs e)
+        private void cmdPreviousVertice_Click(object sender, EventArgs e)
         {
             vertexindex--;
             UpdateVertice();
         }
 
-        private void cmdNextVertice_Click(object sender,EventArgs e)
+        private void cmdNextVertice_Click(object sender, EventArgs e)
         {
             vertexindex++;
             UpdateVertice();
         }
 
-        private void cmdNextAndRemoveVertice_Click(object sender,EventArgs e)
+        private void cmdNextAndRemoveVertice_Click(object sender, EventArgs e)
         {
             vertexindex++;
             frame.Vertices.RemoveAt(vertexindex);
@@ -115,21 +115,21 @@ namespace CrashEdit
             UpdateVertice();
         }
 
-        private void cmdInsertVertice_Click(object sender,EventArgs e)
+        private void cmdInsertVertice_Click(object sender, EventArgs e)
         {
             frame.Vertices.Insert(vertexindex, frame.Vertices[vertexindex]);
             InvalidateNodes();
             UpdateVertice();
         }
 
-        private void cmdRemoveVertice_Click(object sender,EventArgs e)
+        private void cmdRemoveVertice_Click(object sender, EventArgs e)
         {
             frame.Vertices.RemoveAt(vertexindex);
             InvalidateNodes();
             UpdateVertice();
         }
 
-        private void cmdAppendVertice_Click(object sender,EventArgs e)
+        private void cmdAppendVertice_Click(object sender, EventArgs e)
         {
             vertexindex = frame.Vertices.Count;
             if (frame.Vertices.Count > 0)
@@ -138,22 +138,22 @@ namespace CrashEdit
             }
             else
             {
-                frame.Vertices.Add(new OldFrameVertex(0,0,0,0,0,0));
+                frame.Vertices.Add(new OldFrameVertex(0, 0, 0, 0, 0, 0));
             }
             InvalidateNodes();
             UpdateVertice();
         }
 
-        private void numX_ValueChanged(object sender,EventArgs e)
+        private void numX_ValueChanged(object sender, EventArgs e)
         {
             if (!vertexdirty)
             {
                 OldFrameVertex pos = frame.Vertices[vertexindex];
-                frame.Vertices[vertexindex] = new OldFrameVertex((byte)numX.Value,pos.Y,pos.Z,pos.NormalX,pos.NormalY,pos.NormalZ);
+                frame.Vertices[vertexindex] = new OldFrameVertex((byte)numX.Value, pos.Y, pos.Z, pos.NormalX, pos.NormalY, pos.NormalZ);
             }
         }
 
-        private void numY_ValueChanged(object sender,EventArgs e)
+        private void numY_ValueChanged(object sender, EventArgs e)
         {
             if (!vertexdirty)
             {
@@ -162,7 +162,7 @@ namespace CrashEdit
             }
         }
 
-        private void numZ_ValueChanged(object sender,EventArgs e)
+        private void numZ_ValueChanged(object sender, EventArgs e)
         {
             if (!vertexdirty)
             {
@@ -203,7 +203,7 @@ namespace CrashEdit
             numUnknown.Value = frame.Unknown;
         }
 
-        private void numUnknown_ValueChanged(object sender,EventArgs e)
+        private void numUnknown_ValueChanged(object sender, EventArgs e)
         {
             frame.Unknown = (short)numUnknown.Value;
         }

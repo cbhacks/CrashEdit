@@ -5,7 +5,7 @@ namespace CrashEdit
 {
     public sealed class ProtoEntityController : Controller
     {
-        public ProtoEntityController(ProtoZoneEntryController oldzoneentrycontroller,ProtoEntity entity)
+        public ProtoEntityController(ProtoZoneEntryController oldzoneentrycontroller, ProtoEntity entity)
         {
             ProtoZoneEntryController = oldzoneentrycontroller;
             Entity = entity;
@@ -17,7 +17,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.OldEntityController_Text,Entity.ID,Entity.Type,Entity.Subtype);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.OldEntityController_Text, Entity.ID, Entity.Type, Entity.Subtype);
         }
 
         public override void InvalidateNodeImage()

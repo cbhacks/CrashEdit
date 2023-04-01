@@ -25,7 +25,7 @@ namespace CrashEdit
             optBreak.Text = Properties.Resources.ErrorReporter_Break;
         }
 
-        private void ErrorManager_Signal(object sender,ErrorSignalEventArgs e)
+        private void ErrorManager_Signal(object sender, ErrorSignalEventArgs e)
         {
             lblMessage.Text = e.Message;
             optSkip.Enabled = e.CanSkip;
@@ -75,7 +75,7 @@ namespace CrashEdit
             }
         }
 
-        private void cmdOK_Click(object sender,EventArgs e)
+        private void cmdOK_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
         }

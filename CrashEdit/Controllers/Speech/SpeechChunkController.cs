@@ -4,7 +4,7 @@ namespace CrashEdit
 {
     public sealed class SpeechChunkController : EntryChunkController
     {
-        public SpeechChunkController(NSFController nsfcontroller,SpeechChunk speechchunk) : base(nsfcontroller,speechchunk)
+        public SpeechChunkController(NSFController nsfcontroller, SpeechChunk speechchunk) : base(nsfcontroller, speechchunk)
         {
             SpeechChunk = speechchunk;
             InvalidateNode();
@@ -13,7 +13,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.SpeechChunkController_Text,NSFController.NSF.Chunks.IndexOf(SpeechChunk) * 2 + 1);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.SpeechChunkController_Text, NSFController.NSF.Chunks.IndexOf(SpeechChunk) * 2 + 1);
         }
 
         public override void InvalidateNodeImage()

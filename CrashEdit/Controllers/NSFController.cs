@@ -7,7 +7,7 @@ namespace CrashEdit
 {
     public sealed class NSFController : Controller
     {
-        public NSFController(NSF nsf,GameVersion gameversion)
+        public NSFController(NSF nsf, GameVersion gameversion)
         {
             NSF = nsf;
             GameVersion = gameversion;
@@ -15,18 +15,18 @@ namespace CrashEdit
             {
                 AddNode(CreateChunkController(chunk));
             }
-            AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddNormalChunk,Menu_Add_NormalChunk);
+            AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddNormalChunk, Menu_Add_NormalChunk);
             if (GameVersion != GameVersion.Crash2 && GameVersion != GameVersion.Crash3 && GameVersion != GameVersion.Crash1)
-                AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddOldSoundChunk,Menu_Add_OldSoundChunk);
-            AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddSoundChunk,Menu_Add_SoundChunk);
-            AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddWavebankChunk,Menu_Add_WavebankChunk);
-            AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddSpeechChunk,Menu_Add_SpeechChunk);
-            AddMenu(Crash.UI.Properties.Resources.NSFController_AcImportChunk,Menu_Import_Chunk);
+                AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddOldSoundChunk, Menu_Add_OldSoundChunk);
+            AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddSoundChunk, Menu_Add_SoundChunk);
+            AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddWavebankChunk, Menu_Add_WavebankChunk);
+            AddMenu(Crash.UI.Properties.Resources.NSFController_AcAddSpeechChunk, Menu_Add_SpeechChunk);
+            AddMenu(Crash.UI.Properties.Resources.NSFController_AcImportChunk, Menu_Import_Chunk);
             if (GameVersion == GameVersion.Crash2 || GameVersion == GameVersion.Crash3)
             {
                 AddMenuSeparator();
-                AddMenu(Crash.UI.Properties.Resources.NSFController_AcFixDetonator,Menu_Fix_Detonator);
-                AddMenu(Crash.UI.Properties.Resources.NSFController_AcFixBoxCount,Menu_Fix_BoxCount);
+                AddMenu(Crash.UI.Properties.Resources.NSFController_AcFixDetonator, Menu_Fix_Detonator);
+                AddMenu(Crash.UI.Properties.Resources.NSFController_AcFixBoxCount, Menu_Fix_BoxCount);
                 AddMenuSeparator();
             }
 
@@ -108,7 +108,7 @@ namespace CrashEdit
         {
             NormalChunk chunk = new NormalChunk(NSF);
             NSF.Chunks.Add(chunk);
-            NormalChunkController controller = new NormalChunkController(this,chunk);
+            NormalChunkController controller = new NormalChunkController(this, chunk);
             AddNode(controller);
         }
 
@@ -116,7 +116,7 @@ namespace CrashEdit
         {
             OldSoundChunk chunk = new OldSoundChunk(NSF);
             NSF.Chunks.Add(chunk);
-            OldSoundChunkController controller = new OldSoundChunkController(this,chunk);
+            OldSoundChunkController controller = new OldSoundChunkController(this, chunk);
             AddNode(controller);
         }
 
@@ -124,7 +124,7 @@ namespace CrashEdit
         {
             SoundChunk chunk = new SoundChunk(NSF);
             NSF.Chunks.Add(chunk);
-            SoundChunkController controller = new SoundChunkController(this,chunk);
+            SoundChunkController controller = new SoundChunkController(this, chunk);
             AddNode(controller);
         }
 
@@ -132,7 +132,7 @@ namespace CrashEdit
         {
             WavebankChunk chunk = new WavebankChunk(NSF);
             NSF.Chunks.Add(chunk);
-            WavebankChunkController controller = new WavebankChunkController(this,chunk);
+            WavebankChunkController controller = new WavebankChunkController(this, chunk);
             AddNode(controller);
         }
 
@@ -140,7 +140,7 @@ namespace CrashEdit
         {
             SpeechChunk chunk = new SpeechChunk(NSF);
             NSF.Chunks.Add(chunk);
-            SpeechChunkController controller = new SpeechChunkController(this,chunk);
+            SpeechChunkController controller = new SpeechChunkController(this, chunk);
             AddNode(controller);
         }
 
@@ -276,7 +276,7 @@ namespace CrashEdit
             {
                 if (willy.BoxCount.HasValue)
                 {
-                    willy.BoxCount = new EntitySetting(0,boxcount);
+                    willy.BoxCount = new EntitySetting(0, boxcount);
                 }
             }
         }
@@ -455,14 +455,14 @@ namespace CrashEdit
                     UnprocessedChunk chunk = Chunk.Load(data, NSF);
                     if (process)
                     {
-                        Chunk processedchunk = chunk.Process(NSF.Chunks.Count*2 + 1);
+                        Chunk processedchunk = chunk.Process(NSF.Chunks.Count * 2 + 1);
                         NSF.Chunks.Add(processedchunk);
                         AddNode(CreateChunkController(processedchunk));
                     }
                     else
                     {
                         NSF.Chunks.Add(chunk);
-                        AddNode(new UnprocessedChunkController(this,chunk));
+                        AddNode(new UnprocessedChunkController(this, chunk));
                     }
                 }
                 catch (LoadAbortedException)

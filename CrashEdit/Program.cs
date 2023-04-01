@@ -1,9 +1,9 @@
 using Crash;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Xml;
-using System.Runtime.InteropServices;
 
 namespace CrashEdit
 {
@@ -14,7 +14,7 @@ namespace CrashEdit
         [DllImport("kernel32.dll")]
         static extern bool FreeConsole();
 
-        public static SortedDictionary<string,string> C3AnimLinks = new SortedDictionary<string,string>(new ENameComparer());
+        public static SortedDictionary<string, string> C3AnimLinks = new SortedDictionary<string, string>(new ENameComparer());
         public static void SaveC3AnimLinks()
         {
             using (XmlWriter writer = XmlWriter.Create("CrashEdit.exe.animmodel.config", new XmlWriterSettings() { Indent = true, IndentChars = "\t" }))
@@ -78,7 +78,8 @@ namespace CrashEdit
             {
                 Properties.Resources.Culture = Crash.UI.Properties.Resources.Culture = new System.Globalization.CultureInfo(Properties.Settings.Default.Language);
             }
-            catch {
+            catch
+            {
                 Properties.Settings.Default.Language = "en";
             }
             if (Properties.Settings.Default.DefaultFormW < 640)

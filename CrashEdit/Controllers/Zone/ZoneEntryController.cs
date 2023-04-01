@@ -6,23 +6,23 @@ namespace CrashEdit
 {
     public sealed class ZoneEntryController : EntryController
     {
-        public ZoneEntryController(EntryChunkController entrychunkcontroller,ZoneEntry zoneentry) : base(entrychunkcontroller,zoneentry)
+        public ZoneEntryController(EntryChunkController entrychunkcontroller, ZoneEntry zoneentry) : base(entrychunkcontroller, zoneentry)
         {
             ZoneEntry = zoneentry;
-            AddNode(new ItemController(null,zoneentry.Header));
-            AddNode(new ItemController(null,zoneentry.Layout));
+            AddNode(new ItemController(null, zoneentry.Header));
+            AddNode(new ItemController(null, zoneentry.Layout));
             foreach (Entity entity in zoneentry.Entities)
             {
-                AddNode(new EntityController(this,entity));
+                AddNode(new EntityController(this, entity));
             }
-            AddMenu(Crash.UI.Properties.Resources.ZoneEntryController_AcAddEntity,Menu_AddEntity);
+            AddMenu(Crash.UI.Properties.Resources.ZoneEntryController_AcAddEntity, Menu_AddEntity);
             InvalidateNode();
             InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.ZoneEntryController_Text,ZoneEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.ZoneEntryController_Text, ZoneEntry.EName);
         }
 
         public override void InvalidateNodeImage()
@@ -58,10 +58,10 @@ namespace CrashEdit
                 ++id;
                 continue;
             }
-            Entity newentity = Entity.Load(new Entity(new Dictionary<short,EntityProperty>()).Save());
+            Entity newentity = Entity.Load(new Entity(new Dictionary<short, EntityProperty>()).Save());
             newentity.ID = id;
             ZoneEntry.Entities.Add(newentity);
-            AddNode(new EntityController(this,newentity));
+            AddNode(new EntityController(this, newentity));
             ++ZoneEntry.EntityCount;
         }
     }

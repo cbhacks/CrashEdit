@@ -2,7 +2,6 @@ using Crash;
 using CrashEdit.Properties;
 using OpenTK;
 using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -184,7 +183,7 @@ namespace CrashEdit
                     var ct = new Vector3(frame1.XGlobal, frame1.YGlobal, frame1.ZGlobal) / GameScales.CollisionC1;
                     var pos = c1 + ct;
                     var size = c2 - c1;
-                    AddBox(pos, size, new Rgba(0, 255, 0, 255/5), false);
+                    AddBox(pos, size, new Rgba(0, 255, 0, 255 / 5), false);
                     AddBox(pos, size, new Rgba(0, 255, 0, 255), true);
                 }
             }

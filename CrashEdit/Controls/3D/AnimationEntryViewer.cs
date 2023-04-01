@@ -1,7 +1,6 @@
 using Crash;
 using CrashEdit.Properties;
 using OpenTK;
-using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;

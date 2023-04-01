@@ -6,12 +6,12 @@ namespace CrashEdit
 {
     public sealed class ProtoAnimationEntryController : EntryController
     {
-        public ProtoAnimationEntryController(EntryChunkController entrychunkcontroller,ProtoAnimationEntry protoanimationentry) : base(entrychunkcontroller,protoanimationentry)
+        public ProtoAnimationEntryController(EntryChunkController entrychunkcontroller, ProtoAnimationEntry protoanimationentry) : base(entrychunkcontroller, protoanimationentry)
         {
             ProtoAnimationEntry = protoanimationentry;
             foreach (OldFrame frame in protoanimationentry.Frames)
             {
-                AddNode(new OldFrameController(this,frame));
+                AddNode(new OldFrameController(this, frame));
             }
             if (!ProtoAnimationEntry.NotProto)
                 AddMenu("Export as Crash 1 SVTX", Menu_ExportAsC1);
@@ -43,9 +43,9 @@ namespace CrashEdit
             List<OldFrame> frames = new List<OldFrame>();
             foreach (var frame in ProtoAnimationEntry.Frames)
             {
-                frames.Add(new OldFrame(frame.ModelEID,frame.XOffset,frame.YOffset,frame.ZOffset,frame.X1,frame.Y1,frame.Z1,frame.X2,frame.Y2,frame.Z2,0,0,0,frame.Vertices,frame.Unknown,null,false));
+                frames.Add(new OldFrame(frame.ModelEID, frame.XOffset, frame.YOffset, frame.ZOffset, frame.X1, frame.Y1, frame.Z1, frame.X2, frame.Y2, frame.Z2, 0, 0, 0, frame.Vertices, frame.Unknown, null, false));
             }
-            OldAnimationEntry newanim = new OldAnimationEntry(frames,ProtoAnimationEntry.EID);
+            OldAnimationEntry newanim = new OldAnimationEntry(frames, ProtoAnimationEntry.EID);
             FileUtil.SaveFile(newanim.Save(), FileFilters.NSEntry, FileFilters.Any);
         }
     }

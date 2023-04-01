@@ -5,7 +5,7 @@ namespace CrashEdit
 {
     public sealed class ColoredFrameController : Controller
     {
-        public ColoredFrameController(ColoredAnimationEntryController coloranimationentrycontroller,OldFrame oldframe)
+        public ColoredFrameController(ColoredAnimationEntryController coloranimationentrycontroller, OldFrame oldframe)
         {
             ColorAnimationEntryController = coloranimationentrycontroller;
             OldFrame = oldframe;
@@ -40,11 +40,11 @@ namespace CrashEdit
             {
                 throw new GUIException("The linked model entry could not be found.");
             }
-            if (MessageBox.Show("Texture and color information will not be exported.\n\nContinue anyway?","Export as OBJ",MessageBoxButtons.YesNo) != DialogResult.Yes)
+            if (MessageBox.Show("Texture and color information will not be exported.\n\nContinue anyway?", "Export as OBJ", MessageBoxButtons.YesNo) != DialogResult.Yes)
             {
                 return;
             }
-            FileUtil.SaveFile(OldFrame.ToOBJ(modelentry),FileFilters.OBJ,FileFilters.Any);
+            FileUtil.SaveFile(OldFrame.ToOBJ(modelentry), FileFilters.OBJ, FileFilters.Any);
         }
     }
 }

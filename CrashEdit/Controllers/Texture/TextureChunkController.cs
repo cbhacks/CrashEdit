@@ -6,19 +6,19 @@ namespace CrashEdit
 {
     public sealed class TextureChunkController : ChunkController
     {
-        public TextureChunkController(NSFController nsfcontroller,TextureChunk texturechunk) : base(nsfcontroller,texturechunk)
+        public TextureChunkController(NSFController nsfcontroller, TextureChunk texturechunk) : base(nsfcontroller, texturechunk)
         {
             TextureChunk = texturechunk;
-            AddMenu(Crash.UI.Properties.Resources.TextureChunkController_AcRecalcChecksum,Menu_Recalculate_Checksum);
-            AddMenu(Crash.UI.Properties.Resources.TextureChunkController_AcRename,Menu_Rename_Entry);
-            AddMenu(Crash.UI.Properties.Resources.TextureChunkController_AcOpenViewer,Menu_Open_Viewer);
+            AddMenu(Crash.UI.Properties.Resources.TextureChunkController_AcRecalcChecksum, Menu_Recalculate_Checksum);
+            AddMenu(Crash.UI.Properties.Resources.TextureChunkController_AcRename, Menu_Rename_Entry);
+            AddMenu(Crash.UI.Properties.Resources.TextureChunkController_AcOpenViewer, Menu_Open_Viewer);
             InvalidateNode();
             InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.TextureChunkController_Text,Entry.EIDToEName(TextureChunk.EID),NSFController.NSF.Chunks.IndexOf(TextureChunk) * 2 + 1);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.TextureChunkController_Text, Entry.EIDToEName(TextureChunk.EID), NSFController.NSF.Chunks.IndexOf(TextureChunk) * 2 + 1);
         }
 
         public override void InvalidateNodeImage()

@@ -62,7 +62,7 @@ namespace CrashEdit
             }
             else
             {
-                lblPositionIndex.Text = string.Format("{0} / {1}",positionindex + 1,entity.Positions.Count);
+                lblPositionIndex.Text = string.Format("{0} / {1}", positionindex + 1, entity.Positions.Count);
                 cmdPreviousPosition.Enabled = (positionindex > 0);
                 cmdNextPosition.Enabled = (positionindex < entity.Positions.Count - 1);
                 cmdInsertPosition.Enabled = true;
@@ -81,19 +81,19 @@ namespace CrashEdit
             positiondirty = false;
         }
 
-        private void cmdPreviousPosition_Click(object sender,EventArgs e)
+        private void cmdPreviousPosition_Click(object sender, EventArgs e)
         {
             positionindex--;
             UpdatePosition();
         }
 
-        private void cmdNextPosition_Click(object sender,EventArgs e)
+        private void cmdNextPosition_Click(object sender, EventArgs e)
         {
             positionindex++;
             UpdatePosition();
         }
 
-        private void cmdNextAndRemovePosition_Click(object sender,EventArgs e)
+        private void cmdNextAndRemovePosition_Click(object sender, EventArgs e)
         {
             positionindex++;
             entity.Positions.RemoveAt(positionindex);
@@ -101,21 +101,21 @@ namespace CrashEdit
             UpdatePosition();
         }
 
-        private void cmdInsertPosition_Click(object sender,EventArgs e)
+        private void cmdInsertPosition_Click(object sender, EventArgs e)
         {
             entity.Positions.Insert(positionindex, entity.Positions[positionindex]);
             InvalidateNodes();
             UpdatePosition();
         }
 
-        private void cmdRemovePosition_Click(object sender,EventArgs e)
+        private void cmdRemovePosition_Click(object sender, EventArgs e)
         {
             entity.Positions.RemoveAt(positionindex);
             InvalidateNodes();
             UpdatePosition();
         }
 
-        private void cmdAppendPosition_Click(object sender,EventArgs e)
+        private void cmdAppendPosition_Click(object sender, EventArgs e)
         {
             positionindex = entity.Positions.Count;
             if (entity.Positions.Count > 0)
@@ -124,36 +124,36 @@ namespace CrashEdit
             }
             else
             {
-                entity.Positions.Add(new EntityPosition(0,0,0));
+                entity.Positions.Add(new EntityPosition(0, 0, 0));
             }
             InvalidateNodes();
             UpdatePosition();
         }
 
-        private void numX_ValueChanged(object sender,EventArgs e)
+        private void numX_ValueChanged(object sender, EventArgs e)
         {
             if (!positiondirty)
             {
                 EntityPosition pos = entity.Positions[positionindex];
-                entity.Positions[positionindex] = new EntityPosition((short)numX.Value,pos.Y,pos.Z);
+                entity.Positions[positionindex] = new EntityPosition((short)numX.Value, pos.Y, pos.Z);
             }
         }
 
-        private void numY_ValueChanged(object sender,EventArgs e)
+        private void numY_ValueChanged(object sender, EventArgs e)
         {
             if (!positiondirty)
             {
                 EntityPosition pos = entity.Positions[positionindex];
-                entity.Positions[positionindex] = new EntityPosition(pos.X,(short)numY.Value,pos.Z);
+                entity.Positions[positionindex] = new EntityPosition(pos.X, (short)numY.Value, pos.Z);
             }
         }
 
-        private void numZ_ValueChanged(object sender,EventArgs e)
+        private void numZ_ValueChanged(object sender, EventArgs e)
         {
             if (!positiondirty)
             {
                 EntityPosition pos = entity.Positions[positionindex];
-                entity.Positions[positionindex] = new EntityPosition(pos.X,pos.Y,(short)numZ.Value);
+                entity.Positions[positionindex] = new EntityPosition(pos.X, pos.Y, (short)numZ.Value);
             }
         }
 
@@ -162,7 +162,7 @@ namespace CrashEdit
             numID.Value = entity.ID;
         }
 
-        private void numID_ValueChanged(object sender,EventArgs e)
+        private void numID_ValueChanged(object sender, EventArgs e)
         {
             entity.ID = (short)numID.Value;
         }
@@ -172,7 +172,7 @@ namespace CrashEdit
             numType.Value = entity.Type;
         }
 
-        private void numType_ValueChanged(object sender,EventArgs e)
+        private void numType_ValueChanged(object sender, EventArgs e)
         {
             entity.Type = (byte)numType.Value;
             UpdateCodeString();
@@ -183,7 +183,7 @@ namespace CrashEdit
             numSubtype.Value = entity.Subtype;
         }
 
-        private void numSubtype_ValueChanged(object sender,EventArgs e)
+        private void numSubtype_ValueChanged(object sender, EventArgs e)
         {
             entity.Subtype = (byte)numSubtype.Value;
         }
@@ -197,22 +197,22 @@ namespace CrashEdit
             numSpawn.Value = entity.Spawn;
         }
 
-        private void numUnknown_ValueChanged(object sender,EventArgs e)
+        private void numUnknown_ValueChanged(object sender, EventArgs e)
         {
             entity.Flags = (short)numFlags.Value;
         }
 
-        private void numA_ValueChanged(object sender,EventArgs e)
+        private void numA_ValueChanged(object sender, EventArgs e)
         {
             entity.VecX = (short)numA.Value;
         }
 
-        private void numB_ValueChanged(object sender,EventArgs e)
+        private void numB_ValueChanged(object sender, EventArgs e)
         {
             entity.VecY = (short)numB.Value;
         }
 
-        private void numC_ValueChanged(object sender,EventArgs e)
+        private void numC_ValueChanged(object sender, EventArgs e)
         {
             entity.VecZ = (short)numC.Value;
         }
@@ -325,13 +325,13 @@ namespace CrashEdit
             {
                 if (interpolator.ShowDialog() == DialogResult.OK)
                 {
-                    for (int m = interpolator.Start-1, i = interpolator.End-2; i > m; --i)
+                    for (int m = interpolator.Start - 1, i = interpolator.End - 2; i > m; --i)
                     {
                         entity.Positions.RemoveAt(i);
                     }
                     for (int i = 0; i < interpolator.Amount; ++i)
                     {
-                        entity.Positions.Insert(i+interpolator.Start,new EntityPosition(interpolator.NewPositions[i+1]));
+                        entity.Positions.Insert(i + interpolator.Start, new EntityPosition(interpolator.NewPositions[i + 1]));
                     }
                     UpdatePosition();
                     InvalidateNodes();

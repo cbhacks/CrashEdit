@@ -5,12 +5,12 @@ namespace CrashEdit
 {
     public sealed class NewSceneryEntryController : EntryController
     {
-        public NewSceneryEntryController(EntryChunkController entrychunkcontroller,NewSceneryEntry sceneryentry) : base(entrychunkcontroller,sceneryentry)
+        public NewSceneryEntryController(EntryChunkController entrychunkcontroller, NewSceneryEntry sceneryentry) : base(entrychunkcontroller, sceneryentry)
         {
             SceneryEntry = sceneryentry;
             AddMenuSeparator();
-            AddMenu("Export as Wavefront OBJ",Menu_Export_OBJ);
-            AddMenu("Export as Stanford PLY",Menu_Export_PLY);
+            AddMenu("Export as Wavefront OBJ", Menu_Export_OBJ);
+            AddMenu("Export as Stanford PLY", Menu_Export_PLY);
             //AddMenu("Export as COLLADA",Menu_Export_COLLADA);
             AddMenu("Fix coords imported from Crash 2", Menu_Fix_WGEOv2);
             InvalidateNode();
@@ -19,7 +19,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.SceneryEntryController_Text,SceneryEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.SceneryEntryController_Text, SceneryEntry.EName);
         }
 
         public override void InvalidateNodeImage()
@@ -71,7 +71,7 @@ namespace CrashEdit
 
         private void Menu_Fix_WGEOv2()
         {
-            for (int i = 0;i < SceneryEntry.Vertices.Count;i++)
+            for (int i = 0; i < SceneryEntry.Vertices.Count; i++)
             {
                 NewSceneryVertex vtx = SceneryEntry.Vertices[i];
                 SceneryEntry.Vertices[i] = new NewSceneryVertex(

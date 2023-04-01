@@ -1,17 +1,17 @@
 using Crash;
-using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace CrashEdit
 {
     public sealed class EntityController : Controller
     {
-        public EntityController(ZoneEntryController zoneentrycontroller,Entity entity)
+        public EntityController(ZoneEntryController zoneentrycontroller, Entity entity)
         {
             ZoneEntryController = zoneentrycontroller;
             Entity = entity;
-            AddMenu("Duplicate Entity",Menu_Duplicate);
-            AddMenu("Delete Entity",Menu_Delete);
+            AddMenu("Duplicate Entity", Menu_Duplicate);
+            AddMenu("Delete Entity", Menu_Delete);
             InvalidateNode();
             InvalidateNodeImage();
         }
@@ -84,7 +84,7 @@ namespace CrashEdit
             newentity.ID = maxid;
             newentity.AlternateID = null;
             ZoneEntry.Entities.Add(newentity);
-            ZoneEntryController.AddNode(new EntityController(ZoneEntryController,newentity));
+            ZoneEntryController.AddNode(new EntityController(ZoneEntryController, newentity));
             foreach (EntityPropertyRow<int> drawlist in drawlists)
             {
                 foreach (int value in drawlist.Values)
@@ -122,9 +122,9 @@ namespace CrashEdit
                 foreach (ZoneEntry zone in ZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<ZoneEntry>())
                 {
                     int zoneindex = -1;
-                    for (int z = 0, s = BitConv.FromInt32(zone.Header,0x190); z < s; ++z)
+                    for (int z = 0, s = BitConv.FromInt32(zone.Header, 0x190); z < s; ++z)
                     {
-                        if (BitConv.FromInt32(zone.Header,0x194+z*4) == ZoneEntry.EID)
+                        if (BitConv.FromInt32(zone.Header, 0x194 + z * 4) == ZoneEntry.EID)
                         {
                             zoneindex = z;
                             break;

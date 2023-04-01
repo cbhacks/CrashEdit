@@ -1,17 +1,16 @@
 using Crash;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CrashEdit
 {
     public sealed class OldAnimationEntryController : EntryController
     {
-        public OldAnimationEntryController(EntryChunkController entrychunkcontroller,OldAnimationEntry oldanimationentry) : base(entrychunkcontroller,oldanimationentry)
+        public OldAnimationEntryController(EntryChunkController entrychunkcontroller, OldAnimationEntry oldanimationentry) : base(entrychunkcontroller, oldanimationentry)
         {
             OldAnimationEntry = oldanimationentry;
             foreach (OldFrame frame in oldanimationentry.Frames)
             {
-                AddNode(new OldFrameController(this,frame));
+                AddNode(new OldFrameController(this, frame));
             }
             InvalidateNode();
             InvalidateNodeImage();
@@ -19,7 +18,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.OldAnimationEntryController_Text,OldAnimationEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.OldAnimationEntryController_Text, OldAnimationEntry.EName);
         }
 
         public override void InvalidateNodeImage()

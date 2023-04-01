@@ -5,12 +5,12 @@ namespace CrashEdit
 {
     public sealed class AnimationEntryController : EntryController
     {
-        public AnimationEntryController(EntryChunkController entrychunkcontroller,AnimationEntry animationentry) : base(entrychunkcontroller,animationentry)
+        public AnimationEntryController(EntryChunkController entrychunkcontroller, AnimationEntry animationentry) : base(entrychunkcontroller, animationentry)
         {
             AnimationEntry = animationentry;
             foreach (Frame frame in animationentry.Frames)
             {
-                AddNode(new FrameController(this,frame));
+                AddNode(new FrameController(this, frame));
             }
             InvalidateNode();
             InvalidateNodeImage();
@@ -18,7 +18,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.AnimationEntryController_Text,AnimationEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.AnimationEntryController_Text, AnimationEntry.EName);
         }
 
         public override void InvalidateNodeImage()

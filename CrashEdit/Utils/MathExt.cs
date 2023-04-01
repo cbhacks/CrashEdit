@@ -1,11 +1,11 @@
-﻿using OpenTK.Graphics;
-using OpenTK;
+﻿using OpenTK;
+using OpenTK.Graphics;
 
 namespace CrashEdit
 {
     public static class MathExt
     {
-        public static float Lerp (float a, float b, float amt)
+        public static float Lerp(float a, float b, float amt)
         {
             if (amt <= 0) return a;
             if (amt >= 1) return b;

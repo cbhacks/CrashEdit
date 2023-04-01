@@ -33,7 +33,7 @@ namespace CrashEdit
             Controls.Add(tsToolbar);
         }
 
-        void tbbExport_Click(object sender,EventArgs e)
+        void tbbExport_Click(object sender, EventArgs e)
         {
             if (!saving)
             {

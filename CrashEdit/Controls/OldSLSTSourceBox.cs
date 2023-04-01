@@ -13,11 +13,11 @@ namespace CrashEdit
             {
                 Dock = DockStyle.Fill
             };
-            lstValues.Items.Add(string.Format("Count: {0}",slstitem.Polygons.Count));
-            lstValues.Items.Add(string.Format("Type: {0}",0));
+            lstValues.Items.Add(string.Format("Count: {0}", slstitem.Polygons.Count));
+            lstValues.Items.Add(string.Format("Type: {0}", 0));
             foreach (OldSLSTPolygonID value in slstitem.Polygons)
             {
-                lstValues.Items.Add(string.Format("Polygon {0} (World {1})",value.ID,value.World));
+                lstValues.Items.Add(string.Format("Polygon {0} (World {1})", value.ID, value.World));
             }
             Controls.Add(lstValues);
         }

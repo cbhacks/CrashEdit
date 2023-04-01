@@ -18,7 +18,7 @@ namespace CrashEdit
             lstEntryList = new ListBox { Dock = DockStyle.Fill };
 
             Controls.Add(lstEntryList);
-            
+
             Invalidated += EntryChunkBox_Invalidated;
         }
 
