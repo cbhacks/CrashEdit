@@ -5,7 +5,7 @@ namespace CrashEdit
 {
     public sealed class OldSLSTSourceBox : UserControl
     {
-        private ListBox lstValues;
+        private readonly ListBox lstValues;
 
         public OldSLSTSourceBox(OldSLSTSource slstitem)
         {

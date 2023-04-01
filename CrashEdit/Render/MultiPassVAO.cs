@@ -8,8 +8,8 @@ namespace CrashEdit
 
     public class MultiPassVAO : IDisposable
     {
-        private VAO[] vaoPasses = new VAO[4];
-        private GLViewer.BlendMode blendMask;
+        private readonly VAO[] vaoPasses = new VAO[4];
+        private readonly GLViewer.BlendMode blendMask;
 
         private VAO GetVAO(int i)
         {

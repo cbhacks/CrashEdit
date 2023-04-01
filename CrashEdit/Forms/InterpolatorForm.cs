@@ -15,7 +15,7 @@ namespace CrashEdit
             { "Inverse Quadratic", MathFunctionInverseDouble }
         };
 
-        private List<Position> positions;
+        private readonly List<Position> positions;
         private int positionindex;
 
         public InterpolatorForm(ICollection<Position> positions)
@@ -186,7 +186,7 @@ namespace CrashEdit
             return positions[positions.Length - 1];
         }
 
-        private static List<long[]> Binomials = new List<long[]>();
+        private static readonly List<long[]> Binomials = new List<long[]>();
         private static long GetBinomial(int n, int o)
         {
             while (n >= Binomials.Count)

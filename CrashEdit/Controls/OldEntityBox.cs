@@ -6,8 +6,8 @@ namespace CrashEdit
 {
     public partial class OldEntityBox : UserControl
     {
-        private OldEntityController controller;
-        private OldEntity entity;
+        private readonly OldEntityController controller;
+        private readonly OldEntity entity;
 
         private bool positiondirty;
         private int positionindex;

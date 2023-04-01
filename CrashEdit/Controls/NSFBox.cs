@@ -7,7 +7,7 @@ namespace CrashEdit
 {
     public sealed class NSFBox : UserControl
     {
-        private static ImageList imglist;
+        private static readonly ImageList imglist;
 
         static NSFBox()
         {
@@ -41,10 +41,10 @@ namespace CrashEdit
             }
         }
 
-        private List<TreeNode> searchresults;
+        private readonly List<TreeNode> searchresults;
 
-        private SplitContainer pnSplit;
-        private TreeView trvMain;
+        private readonly SplitContainer pnSplit;
+        private readonly TreeView trvMain;
 
         public NSFBox(NSF nsf, GameVersion gameversion)
         {

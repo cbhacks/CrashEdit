@@ -6,7 +6,7 @@ namespace CrashEdit
 {
     public partial class ErrorReporter : Form
     {
-        private IWin32Window owner = null;
+        private readonly IWin32Window owner = null;
 
         private bool lastcheckedwasskip = false;
 

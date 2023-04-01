@@ -9,8 +9,8 @@ namespace CrashEdit
 {
     public partial class EntityBox : UserControl
     {
-        private Controller controller;
-        private Entity entity;
+        private readonly Controller controller;
+        private readonly Entity entity;
 
         private int positionindex;
         private int settingindex;

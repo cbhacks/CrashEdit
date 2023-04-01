@@ -6,8 +6,8 @@ namespace CrashEdit
 {
     public partial class OldCameraBox : UserControl
     {
-        private OldCameraController controller;
-        private OldCamera camera;
+        private readonly OldCameraController controller;
+        private readonly OldCamera camera;
 
         private bool positiondirty;
         private int positionindex;

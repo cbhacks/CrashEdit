@@ -8,9 +8,9 @@ namespace CrashEdit
 {
     public partial class MainControl : UserControl
     {
-        private GameVersion gameversion;
-        private Dictionary<Crash.UI.Controller, ControllerData> controllers;
-        private ControllerData nsfcd;
+        private readonly GameVersion gameversion;
+        private readonly Dictionary<Crash.UI.Controller, ControllerData> controllers;
+        private readonly ControllerData nsfcd;
         private ControllerData activecd;
 
         public event EventHandler SyncMasterUI;
@@ -91,7 +91,7 @@ namespace CrashEdit
 
         private class ControllerData : IDisposable
         {
-            private MainControl maincontrol;
+            private readonly MainControl maincontrol;
             private Control control;
 
             public ControllerData(MainControl maincontrol, Crash.UI.Controller controller)

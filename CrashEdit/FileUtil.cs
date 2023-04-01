@@ -6,8 +6,8 @@ namespace CrashEdit
 {
     public static class FileUtil
     {
-        private static OpenFileDialog openfiledlg;
-        private static SaveFileDialog savefiledlg;
+        private static readonly OpenFileDialog openfiledlg;
+        private static readonly SaveFileDialog savefiledlg;
 
         static FileUtil()
         {

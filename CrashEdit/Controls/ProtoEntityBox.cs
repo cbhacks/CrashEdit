@@ -6,8 +6,8 @@ namespace CrashEdit
 {
     public partial class ProtoEntityBox : UserControl
     {
-        private ProtoEntityController controller;
-        private ProtoEntity entity;
+        private readonly ProtoEntityController controller;
+        private readonly ProtoEntity entity;
 
         public ProtoEntityBox(ProtoEntityController controller)
         {

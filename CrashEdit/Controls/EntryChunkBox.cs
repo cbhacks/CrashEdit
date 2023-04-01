@@ -5,11 +5,11 @@ namespace CrashEdit
 {
     public sealed class EntryChunkBox : UserControl
     {
-        private EntryChunkController controller;
+        private readonly EntryChunkController controller;
 
         private int totalsize;
 
-        private ListBox lstEntryList;
+        private readonly ListBox lstEntryList;
 
         public EntryChunkBox(EntryChunkController controller)
         {

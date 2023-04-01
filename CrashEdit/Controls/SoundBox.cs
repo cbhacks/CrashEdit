@@ -8,19 +8,19 @@ namespace CrashEdit
 {
     public sealed class SoundBox : UserControl
     {
-        private SampleSet samples;
+        private readonly SampleSet samples;
 
-        private SoundPlayer spPlayer;
+        private readonly SoundPlayer spPlayer;
 
-        private ToolStrip tsToolbar;
-        private ToolStripButton tbbExport;
-        private TableLayoutPanel pnOptions;
-        private Button cmdPlay;
-        private Button cmdExport;
-        private TrackBar trkSampleRate;
-        private Label lblSampleRate;
+        private readonly ToolStrip tsToolbar;
+        private readonly ToolStripButton tbbExport;
+        private readonly TableLayoutPanel pnOptions;
+        private readonly Button cmdPlay;
+        private readonly Button cmdExport;
+        private readonly TrackBar trkSampleRate;
+        private readonly Label lblSampleRate;
 
-        private Entry entry = null;
+        private readonly Entry entry = null;
 
         public SoundBox(SampleSet samples, float default_pitch = 4.0f)
         {

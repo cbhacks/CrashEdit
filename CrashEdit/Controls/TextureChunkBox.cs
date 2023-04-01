@@ -8,11 +8,11 @@ namespace CrashEdit
 {
     public sealed class TextureChunkBox : UserControl
     {
-        private TabControl tbcTabs;
+        private readonly TabControl tbcTabs;
 
         private TextureViewer frmViewer = null;
 
-        private TextureChunk texturechunk;
+        private readonly TextureChunk texturechunk;
 
         public TextureChunkBox(TextureChunk chunk)
         {

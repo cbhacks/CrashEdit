@@ -9,7 +9,7 @@ namespace CrashEdit
 {
     public partial class MainForm : Form
     {
-        private List<ToolStripItem> syncstripitems;
+        private readonly List<ToolStripItem> syncstripitems;
 
         public MainForm()
         {

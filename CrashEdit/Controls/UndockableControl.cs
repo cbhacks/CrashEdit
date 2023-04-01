@@ -5,7 +5,7 @@ namespace CrashEdit
 {
     public sealed class UndockableControl : UserControl
     {
-        private Control control;
+        private readonly Control control;
         private Form form;
 
         public UndockableControl(Control control)

@@ -5,7 +5,7 @@ namespace CrashEdit
 {
     public sealed class GOOLBox : UserControl
     {
-        private ListBox lstCode;
+        private readonly ListBox lstCode;
 
         public GOOLBox(GOOLEntry goolentry)
         {

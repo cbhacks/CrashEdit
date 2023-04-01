@@ -67,7 +67,7 @@ namespace CrashEdit
 
         private void Menu_Export_OBJ()
         {
-            EntryController entry = OldAnimationEntryController != null ? (EntryController)OldAnimationEntryController : (EntryController)ProtoAnimationEntryController;
+            EntryController entry = OldAnimationEntryController != null ? OldAnimationEntryController : ProtoAnimationEntryController;
             OldModelEntry modelentry = entry.EntryChunkController.NSFController.NSF.GetEntry<OldModelEntry>(OldFrame.ModelEID);
             if (modelentry == null)
             {

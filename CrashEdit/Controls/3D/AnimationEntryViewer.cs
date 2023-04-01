@@ -217,51 +217,11 @@ namespace CrashEdit
                     }
                     vaoModel[buf].Verts[vaoModel[buf].VertCount + 2].tex = tex;
 
-                    Rgba[] test = {
-                        // AA
-                        new Rgba(255, 0, 0, 255),
-                        new Rgba(255, 128, 0, 255), // correct
-                        new Rgba(255, 255, 0, 255),
-                        new Rgba(128, 255, 0, 255), // correct
-                        // BB
-                        new Rgba(0, 255, 0, 255),
-                        new Rgba(0, 255, 128, 255), // correct
-                        new Rgba(0, 255, 255, 255),
-                        new Rgba(0, 128, 255, 255), // correct
-                        // CC
-                        new Rgba(0, 0, 255, 255),
-                        new Rgba(128, 0, 255, 255), // correct
-                        new Rgba(255, 0, 255, 255),
-                        new Rgba(255, 0, 128, 255), // correct
-                    };
-
-                    int[][] testi = {
-                        // AA
-                        new int[] { 0, 1, 2,},
-                        new int[] { 0, 1, 2,},
-                        new int[] { 0, 1, 2,},
-                        new int[] { 2, 1, 0,},
-                        // BB
-                        new int[] { 0, 1, 2,},
-                        new int[] { 0, 1, 2,},
-                        new int[] { 0, 1, 2,},
-                        new int[] { 2, 1, 0,},
-                        // CC
-                        new int[] { 0, 1, 2,},
-                        new int[] { 2, 1, 0,},
-                        new int[] { 0, 1, 2,},
-                        new int[] { 0, 1, 2,},
-                    };
-
                     for (int i = 0; i < 3; ++i)
                     {
                         var v_n = !flip ? i : 2 - i;
                         var c = model.Colors[tri.Color[v_n]];
                         var v = verts[tri.Vertex[v_n] + frame.SpecialVertexCount];
-                        vaoModel[buf].Verts[vaoModel[buf].VertCount].rgba = new((byte)(test[tri.Type * 4 + tri.Subtype].r),
-                                                                                (byte)(test[tri.Type * 4 + tri.Subtype].g),
-                                                                                (byte)(test[tri.Type * 4 + tri.Subtype].b),
-                                                                                255);
                         vaoModel[buf].Verts[vaoModel[buf].VertCount].rgba = new(c.Red, c.Green, c.Blue, 255);
                         vaoModel[buf].Verts[vaoModel[buf].VertCount].trans = new(v.X, v.Z, v.Y);
                         vaoModel[buf].VertCount++;

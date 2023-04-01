@@ -19,7 +19,7 @@ namespace CrashEdit
 {
     public sealed class OldMainForm : Form
     {
-        private static ImageList imglist;
+        private static readonly ImageList imglist;
 
         static OldMainForm()
         {
@@ -40,29 +40,29 @@ namespace CrashEdit
             }
         }
 
-        private ToolStrip tsToolbar;
-        private ToolStripButton tbbOpen;
-        private ToolStripButton tbbSave;
-        private ToolStripButton tbbPatchNSD;
-        private ToolStripButton tbbClose;
-        private ToolStripButton tbbFind;
-        private ToolStripButton tbbFindNext;
-        private ToolStripMenuItem tbxMakeBIN;
-        private ToolStripMenuItem tbxMakeBINUSA;
-        private ToolStripMenuItem tbxMakeBINEUR;
-        private ToolStripMenuItem tbxMakeBINJAP;
-        private ToolStripMenuItem tbxConvertVHVB;
-        private ToolStripMenuItem tbxConvertVAB;
-        private ToolStripDropDownButton tbbExtra;
-        private ToolStripButton tbbPlay;
-        private TabControl tbcTabs;
-        private GameVersionForm dlgGameVersion;
-        private ToolStripButton tbbPAL;
+        private readonly ToolStrip tsToolbar;
+        private readonly ToolStripButton tbbOpen;
+        private readonly ToolStripButton tbbSave;
+        private readonly ToolStripButton tbbPatchNSD;
+        private readonly ToolStripButton tbbClose;
+        private readonly ToolStripButton tbbFind;
+        private readonly ToolStripButton tbbFindNext;
+        private readonly ToolStripMenuItem tbxMakeBIN;
+        private readonly ToolStripMenuItem tbxMakeBINUSA;
+        private readonly ToolStripMenuItem tbxMakeBINEUR;
+        private readonly ToolStripMenuItem tbxMakeBINJAP;
+        private readonly ToolStripMenuItem tbxConvertVHVB;
+        private readonly ToolStripMenuItem tbxConvertVAB;
+        private readonly ToolStripDropDownButton tbbExtra;
+        private readonly ToolStripButton tbbPlay;
+        private readonly TabControl tbcTabs;
+        private readonly GameVersionForm dlgGameVersion;
+        private readonly ToolStripButton tbbPAL;
 
-        private FolderBrowserDialog dlgMakeBINDir = new FolderBrowserDialog();
-        private SaveFileDialog dlgMakeBINFile = new SaveFileDialog();
+        private readonly FolderBrowserDialog dlgMakeBINDir = new FolderBrowserDialog();
+        private readonly SaveFileDialog dlgMakeBINFile = new SaveFileDialog();
 
-        private BackgroundWorker bgwMakeBIN;
+        private readonly BackgroundWorker bgwMakeBIN;
         private ProgressBarForm dlgProgress;
 
         public static bool PAL { get; private set; } = false;

@@ -74,8 +74,8 @@ namespace CrashEdit
             2+4, 3+4, 1+4, 1+4, 0+4, 2+4,
         };
 
-        private static Dictionary<int, Vector3[]> SpherePosCache = new();
-        private static Dictionary<int, Vector3[]> GridPosCache = new();
+        private static readonly Dictionary<int, Vector3[]> SpherePosCache = new();
+        private static readonly Dictionary<int, Vector3[]> GridPosCache = new();
         private static int SpherePosLastUploaded = -1;
         private static int GridPosLastUploaded = -1;
         protected static VAO vaoSphereLine;
@@ -102,7 +102,7 @@ namespace CrashEdit
 
         private bool run = false;
         private bool loaded = false;
-        private static HashSet<Type> loaded_static_types = new();
+        private static readonly HashSet<Type> loaded_static_types = new();
 
         private readonly HashSet<Keys> keysdown = new();
         private readonly HashSet<Keys> keyspressed = new();
@@ -112,9 +112,9 @@ namespace CrashEdit
         private bool mouseleft = false;
         private int mousex = 0;
         private int mousey = 0;
-        private float movespeed = 7.5f;
-        private float rotspeed = 0.5f;
-        private float zoomspeed = 0.75f;
+        private readonly float movespeed = 7.5f;
+        private readonly float rotspeed = 0.5f;
+        private readonly float zoomspeed = 0.75f;
         private const float PerFrame = 1 / 60f;
 
         protected readonly NSF nsf;

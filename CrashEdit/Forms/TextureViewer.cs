@@ -15,7 +15,7 @@ namespace CrashEdit
             Crash2
         }
 
-        private TextureChunk chunk;
+        private readonly TextureChunk chunk;
         private TextureType textype;
         private Rectangle selectedregion;
 

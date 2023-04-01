@@ -5,7 +5,7 @@ namespace CrashEdit
 {
     public sealed class SLSTDeltaBox : UserControl
     {
-        private ListBox lstValues;
+        private readonly ListBox lstValues;
 
         public SLSTDeltaBox(SLSTDelta slstitem)
         {

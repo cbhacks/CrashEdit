@@ -6,8 +6,8 @@ namespace CrashEdit
 {
     public partial class OldFrameBox : UserControl
     {
-        private OldFrameController controller;
-        private OldFrame frame;
+        private readonly OldFrameController controller;
+        private readonly OldFrame frame;
 
         private bool vertexdirty;
         private int vertexindex;
