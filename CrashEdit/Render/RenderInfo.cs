@@ -114,6 +114,8 @@ namespace CrashEdit
         public void Dispose()
         {
             masterexit = true;
+
+            _frametask.Wait();
             _frametask.Dispose();
             _frametimer?.Dispose();
         }

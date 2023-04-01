@@ -687,12 +687,15 @@ namespace CrashEdit
 
         protected override void Dispose(bool disposing)
         {
+            render.Dispose();
+
             if (contextWindow == this)
             {
                 contextWindow = null;
                 context = null;
             }
             Context?.Dispose();
+
             base.Dispose(disposing);
         }
     }
