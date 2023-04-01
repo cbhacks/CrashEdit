@@ -17,7 +17,7 @@ namespace CrashEdit
         private bool interpenabled = true;
         private int cullmode = 1;
 
-        private VAO[] vaoModel = vaoListCrash1;
+        private VAO[] vaoModel => vaoListCrash1;
         private BlendMode blendMask;
 
         protected override bool UseGrid => true;

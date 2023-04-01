@@ -1,6 +1,5 @@
 using Crash;
 using OpenTK;
-using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
 
 namespace CrashEdit
@@ -9,7 +8,7 @@ namespace CrashEdit
     {
         private List<int> worlds;
 
-        private VAO vaoWorld = vaoCrash1;
+        private VAO vaoWorld => vaoListCrash1[0];
         Vector3 worldOffset;
         private BlendMode blendMask;
 

@@ -83,8 +83,7 @@ namespace CrashEdit
 
             vaoGridLine.UserColor1 = Color4.Gray;
             vaoGridLine.ZBufDisableWrite = true;
-            vaoAxes.ZBufDisableWrite = true;
-
+            
             for (int i = 0; i < AxesPos.Length; ++i)
             {
                 vaoAxes.PushAttrib(trans: AxesPos[i]);

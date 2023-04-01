@@ -94,7 +94,6 @@ namespace CrashEdit
         // note: there's multiple buffers because of blending
         protected const int ANIM_BUF_MAX = 2;
         protected static VAO[] vaoListCrash1 = new VAO[ANIM_BUF_MAX];
-        protected static VAO vaoCrash1 = vaoListCrash1[0];
 
         // these shouldn't be used
         protected static VAO vaoDebugBoxTri;
@@ -221,17 +220,7 @@ namespace CrashEdit
         private static readonly float DefaultZNear = 0.25f;
         private static readonly float DefaultZFar = DefaultZNear * 0x4000;
 
-        public GLViewer() : base(DefaultGraphicsSettings, 4, 3, GraphicsContextFlags.Debug)
-        {
-            if (context == null)
-            {
-                context = Context;
-                contextWindow = this;
-            }
-            render = new RenderInfo(this);
-        }
-
-        public GLViewer(NSF nsf) : base(DefaultGraphicsSettings, 4, 3, GraphicsContextFlags.Debug)
+        public GLViewer(NSF nsf = null) : base(DefaultGraphicsSettings, 4, 3, GraphicsContextFlags.Debug)
         {
             if (context == null)
             {
@@ -443,7 +432,7 @@ namespace CrashEdit
                 }
 
                 // swap the front/back buffers so what we just rendered to the back buffer is displayed in the window.
-                Context.SwapBuffers();
+                SwapBuffers();
             }
             base.OnPaint(e);
         }
@@ -703,6 +692,7 @@ namespace CrashEdit
                 contextWindow = null;
                 context = null;
             }
+            Context?.Dispose();
             base.Dispose(disposing);
         }
     }
