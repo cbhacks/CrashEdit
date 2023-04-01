@@ -17,7 +17,7 @@ namespace CrashEdit
 
         public const float MinDistance = GLViewer.DefaultZNear;
         public const float MaxDistance = 100;
-        public const float InitialDistance = MaxDistance * 0.075f;
+        public const float InitialDistance = MaxDistance * 0.05f;
 
         public const float BaseRot = 0;
         public const float MinRot = BaseRot - MathHelper.PiOver2;

@@ -1,6 +1,7 @@
 using Crash;
 using CrashEdit.Properties;
 using OpenTK;
+using OpenTK.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -19,18 +20,19 @@ namespace CrashEdit
         private VAO[] vaoModel => vaoListCrash1;
         private BlendMode blendMask;
 
+        private readonly Vector3[][] transUncompressedVerts = new Vector3[ANIM_BUF_MAX][];
+
         protected override bool UseGrid => true;
 
-        public AnimationEntryViewer(NSF nsf, int anim_eid, int frame) : base(nsf)
+        public AnimationEntryViewer(NSF nsf, int anim_eid, int frame = -1) : base(nsf)
         {
             eid_anim = anim_eid;
             frame_id = frame;
-        }
 
-        public AnimationEntryViewer(NSF nsf, int anim_eid) : base(nsf)
-        {
-            eid_anim = anim_eid;
-            frame_id = -1;
+            for (int i = 0; i < ANIM_BUF_MAX; ++i)
+            {
+                transUncompressedVerts[i] = new Vector3[0];
+            }
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -104,25 +106,34 @@ namespace CrashEdit
 
                 blendMask = BlendMode.Solid;
 
-                RenderFrame(frame1, 0);
-
                 // uniforms and static data
                 vaoModel[0].UserTrans = new Vector3(frame1.XOffset, frame1.YOffset, frame1.ZOffset) / 4;
                 vaoModel[0].UserScale = new Vector3(model.ScaleX, model.ScaleY, model.ScaleZ) / (GameScales.ModelC1 * GameScales.AnimC1);
                 vaoModel[0].UserCullMode = cullmode;
 
+                RenderFrame(frame1, 0);
+
                 if (frame2 != null)
                 {
+                    MathExt.Lerp(ref vaoModel[0].UserTrans, new Vector3(frame2.XOffset, frame2.YOffset, frame2.ZOffset) / 4, interp);
+
                     // lerp results
                     RenderFrame(frame2, 1);
 
-                    vaoModel[0].UserTrans = MathExt.Lerp(vaoModel[0].UserTrans, new Vector3(frame2.XOffset, frame2.YOffset, frame2.ZOffset) / 4, interp);
-
+                    for (int i = 0; i < frame1.SpecialVertexCount; ++i)
+                    {
+                        MathExt.Lerp(ref transUncompressedVerts[0][i], transUncompressedVerts[1][i], interp);
+                    }
                     for (int i = 0; i < vaoModel[0].VertCount; ++i)
                     {
-                        vaoModel[0].Verts[i].trans = MathExt.Lerp(vaoModel[0].Verts[i].trans, vaoModel[1].Verts[i].trans, interp);
+                        MathExt.Lerp(ref vaoModel[0].Verts[i].trans, vaoModel[1].Verts[i].trans, interp);
                         vaoModel[0].Verts[i].rgba = MathExt.Lerp(vaoModel[0].Verts[i].rgba, vaoModel[1].Verts[i].rgba, interp);
                     }
+                }
+
+                for (int i = 0; i < frame1.SpecialVertexCount; ++i)
+                {
+                    AddSprite((transUncompressedVerts[0][i] + vaoModel[0].UserTrans) * vaoModel[0].UserScale, new Vector2(0.35f), (Rgba)Color4.Magenta, OldResources.PointTexture);
                 }
 
                 // note: only buffer 0 is rendered
@@ -130,6 +141,11 @@ namespace CrashEdit
                 RenderFramePass(BlendMode.Trans);
                 RenderFramePass(BlendMode.Subtractive);
                 RenderFramePass(BlendMode.Additive);
+
+                // restore things
+                vaoModel[0].UserTrans = new Vector3(0);
+                vaoModel[0].UserScale = new Vector3(1);
+                vaoModel[0].UserCullMode = 0;
 
                 if (collisionenabled)
                 {
@@ -182,11 +198,19 @@ namespace CrashEdit
                 vaoModel[buf].VertCount = nb;
                 vaoModel[buf].TestRealloc();
                 vaoModel[buf].DiscardVerts();
+                if (transUncompressedVerts[buf].Length < frame.SpecialVertexCount)
+                {
+                    Array.Resize(ref transUncompressedVerts[buf], frame.SpecialVertexCount);
+                }
 
                 // decompress vertices, on the fly right now
                 IList<FrameVertex> verts = frame.MakeVertices(nsf);
 
                 // render stuff
+                for (int i = 0; i < frame.SpecialVertexCount; ++i)
+                {
+                    transUncompressedVerts[buf][i] = new Vector3(verts[i].X, verts[i].Z, verts[i].Y);
+                }
                 foreach (var tri in model.Triangles)
                 {
                     var polygon_texture_info = ProcessTextureInfoC2(tri.Texture, tri.Animated, model.Textures, model.AnimatedTextures);

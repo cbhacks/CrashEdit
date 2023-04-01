@@ -112,10 +112,12 @@ namespace CrashEdit
         private bool mouseleft = false;
         private int mousex = 0;
         private int mousey = 0;
-        private readonly float movespeed = 7.5f;
+        private readonly float movespeed = 10f;
         private readonly float rotspeed = 0.5f;
         private readonly float zoomspeed = 0.75f;
         private const float PerFrame = 1 / 60f;
+        public const float DefaultZNear = 0.2f;
+        public const float DefaultZFar = DefaultZNear * 0x4000;
 
         protected readonly NSF nsf;
 
@@ -217,8 +219,6 @@ namespace CrashEdit
         private static IGraphicsContext context;
         private static GLControl contextWindow;
         private static readonly GraphicsMode DefaultGraphicsSettings = new(new ColorFormat(8, 8, 8, 8), 24);
-        public const float DefaultZNear = 0.25f;
-        public const float DefaultZFar = DefaultZNear * 0x4000;
 
         public GLViewer(NSF nsf = null) : base(DefaultGraphicsSettings, 4, 3, GraphicsContextFlags.Debug)
         {

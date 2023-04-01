@@ -12,11 +12,27 @@ namespace CrashEdit
             return (b - a) * amt + a;
         }
 
+        public static void Lerp(ref Vector3 a, Vector3 b, float amt)
+        {
+            if (amt <= 0) return;
+            if (amt >= 1)
+            {
+                a.X = b.X;
+                a.Y = b.Y;
+                a.Z = b.Z;
+            }
+            else
+            {
+                a.X += (b.X - a.X) * amt;
+                a.Y += (b.Y - a.Y) * amt;
+                a.Z += (b.Z - a.Z) * amt;
+            }
+        }
+
         public static Vector3 Lerp(Vector3 a, Vector3 b, float amt)
         {
-            if (amt <= 0) return a;
-            if (amt >= 1) return b;
-            return a + (b - a) * amt;
+            Lerp(ref a, b, amt);
+            return a;
         }
         public static Vector3 Div(Vector3 a, Vector3 b)
         {
