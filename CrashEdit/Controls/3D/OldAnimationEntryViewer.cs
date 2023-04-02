@@ -166,6 +166,11 @@ namespace CrashEdit
                 RenderFramePass(BlendMode.Subtractive);
                 RenderFramePass(BlendMode.Additive);
 
+                // restore things
+                vaoModel[0].UserTrans = new Vector3(0);
+                vaoModel[0].UserScale = new Vector3(1);
+                vaoModel[0].UserCullMode = 0;
+
                 if (normalsenabled && !colored)
                 {
                     var ofs = vaoModel[0].UserTrans;
@@ -238,16 +243,16 @@ namespace CrashEdit
                         vao.Verts[cur_idx].rgba = new(tex.R, tex.G, tex.B, 255);
                         vao.Verts[cur_idx + 1].rgba = vao.Verts[cur_idx].rgba;
                         vao.Verts[cur_idx + 2].rgba = vao.Verts[cur_idx].rgba;
-                        vao.Verts[cur_idx + 0].st = new(tex.U1, tex.V1);
+                        vao.Verts[cur_idx + 0].st = new(tex.U3, tex.V3);
                         vao.Verts[cur_idx + 1].st = new(tex.U2, tex.V2);
-                        vao.Verts[cur_idx + 2].st = new(tex.U3, tex.V3);
+                        vao.Verts[cur_idx + 2].st = new(tex.U1, tex.V1);
                         vao.Verts[cur_idx + 2].tex = TexInfoUnpacked.Pack(true, color: tex.ColorMode, blend: tex.BlendMode,
                                                                                 clutx: tex.ClutX, cluty: tex.ClutY,
                                                                                 face: Convert.ToInt32(tex.N),
                                                                                 page: tex_eids[tex.EID]);
-                        RenderVertex(vao, frame, polygon.VertexA / 6);
-                        RenderVertex(vao, frame, polygon.VertexB / 6);
                         RenderVertex(vao, frame, polygon.VertexC / 6);
+                        RenderVertex(vao, frame, polygon.VertexB / 6);
+                        RenderVertex(vao, frame, polygon.VertexA / 6);
 
                         blendMask |= TexInfoUnpacked.GetBlendMode(tex.BlendMode);
                     }
@@ -258,9 +263,9 @@ namespace CrashEdit
                         vao.Verts[cur_idx + 1].rgba = vao.Verts[cur_idx].rgba;
                         vao.Verts[cur_idx + 2].rgba = vao.Verts[cur_idx].rgba;
                         vao.Verts[cur_idx + 2].tex = TexInfoUnpacked.Pack(false, face: Convert.ToInt32(col.N));
-                        RenderVertex(vao, frame, polygon.VertexA / 6);
-                        RenderVertex(vao, frame, polygon.VertexB / 6);
                         RenderVertex(vao, frame, polygon.VertexC / 6);
+                        RenderVertex(vao, frame, polygon.VertexB / 6);
+                        RenderVertex(vao, frame, polygon.VertexA / 6);
                     }
                 }
             }
