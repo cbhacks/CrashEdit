@@ -127,7 +127,7 @@ namespace CrashEdit
                     for (int i = 0; i < vaoModel[0].VertCount; ++i)
                     {
                         MathExt.Lerp(ref vaoModel[0].Verts[i].trans, vaoModel[1].Verts[i].trans, interp);
-                        vaoModel[0].Verts[i].rgba = MathExt.Lerp(vaoModel[0].Verts[i].rgba, vaoModel[1].Verts[i].rgba, interp);
+                        MathExt.Lerp(ref vaoModel[0].Verts[i].rgba, vaoModel[1].Verts[i].rgba, interp);
                     }
                 }
 
@@ -194,10 +194,11 @@ namespace CrashEdit
                 SetupTPAGs(tex_eids);
 
                 // alloc buffers
+                var vao = vaoModel[buf];
                 int nb = model.Triangles.Count * 3;
-                vaoModel[buf].VertCount = nb;
-                vaoModel[buf].TestRealloc();
-                vaoModel[buf].DiscardVerts();
+                vao.VertCount = nb;
+                vao.TestRealloc();
+                vao.DiscardVerts();
                 if (transUncompressedVerts[buf].Length < frame.SpecialVertexCount)
                 {
                     Array.Resize(ref transUncompressedVerts[buf], frame.SpecialVertexCount);
@@ -223,32 +224,32 @@ namespace CrashEdit
                     {
                         var info = polygon_texture_info.Item2.Value;
                         tex |= TexInfoUnpacked.Pack(true, color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY, page: tex_eids[model.GetTPAG(info.Page)]);
-                        vaoModel[buf].Verts[vaoModel[buf].VertCount + 1].st = new(info.X2, info.Y2);
+                        vao.Verts[vao.VertCount + 1].st = new(info.X2, info.Y2);
                         if ((tri.Type != 2 && !flip) || (tri.Type == 2 && tri.Subtype == 1))
                         {
-                            vaoModel[buf].Verts[vaoModel[buf].VertCount + 0].st = new(info.X3, info.Y3);
-                            vaoModel[buf].Verts[vaoModel[buf].VertCount + 1].st = new(info.X2, info.Y2);
-                            vaoModel[buf].Verts[vaoModel[buf].VertCount + 2].st = new(info.X1, info.Y1);
+                            vao.Verts[vao.VertCount + 0].st = new(info.X3, info.Y3);
+                            vao.Verts[vao.VertCount + 1].st = new(info.X2, info.Y2);
+                            vao.Verts[vao.VertCount + 2].st = new(info.X1, info.Y1);
                         }
                         else
                         {
-                            vaoModel[buf].Verts[vaoModel[buf].VertCount + 0].st = new(info.X1, info.Y1);
-                            vaoModel[buf].Verts[vaoModel[buf].VertCount + 1].st = new(info.X2, info.Y2);
-                            vaoModel[buf].Verts[vaoModel[buf].VertCount + 2].st = new(info.X3, info.Y3);
+                            vao.Verts[vao.VertCount + 0].st = new(info.X1, info.Y1);
+                            vao.Verts[vao.VertCount + 1].st = new(info.X2, info.Y2);
+                            vao.Verts[vao.VertCount + 2].st = new(info.X3, info.Y3);
                         }
 
                         blendMask |= TexInfoUnpacked.GetBlendMode(info.BlendMode);
                     }
-                    vaoModel[buf].Verts[vaoModel[buf].VertCount + 2].tex = tex;
+                    vao.Verts[vao.VertCount + 2].tex = tex;
 
                     for (int i = 0; i < 3; ++i)
                     {
                         var v_n = !flip ? i : 2 - i;
                         var c = model.Colors[tri.Color[v_n]];
                         var v = verts[tri.Vertex[v_n] + frame.SpecialVertexCount];
-                        vaoModel[buf].Verts[vaoModel[buf].VertCount].rgba = new(c.Red, c.Green, c.Blue, 255);
-                        vaoModel[buf].Verts[vaoModel[buf].VertCount].trans = new(v.X, v.Z, v.Y);
-                        vaoModel[buf].VertCount++;
+                        vao.Verts[vao.VertCount].rgba = new(c.Red, c.Green, c.Blue, 255);
+                        vao.Verts[vao.VertCount].trans = new(v.X, v.Z, v.Y);
+                        vao.VertCount++;
                     }
                 }
             }

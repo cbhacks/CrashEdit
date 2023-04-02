@@ -34,6 +34,7 @@ namespace CrashEdit
             Lerp(ref a, b, amt);
             return a;
         }
+
         public static Vector3 Div(Vector3 a, Vector3 b)
         {
             a.X /= b.X;
@@ -54,16 +55,27 @@ namespace CrashEdit
                 );
         }
 
-        public static Rgba Lerp(Rgba col1, Rgba col2, float amt)
+        public static void Lerp(ref Rgba a, Rgba b, float amt)
         {
-            if (amt <= 0) return col1;
-            if (amt >= 1) return col2;
-            return new Rgba(
-                (byte)(col1.r + (col2.r - col1.r) * amt),
-                (byte)(col1.g + (col2.g - col1.g) * amt),
-                (byte)(col1.b + (col2.b - col1.b) * amt),
-                (byte)(col1.a + (col2.a - col1.a) * amt)
-                );
+            if (amt <= 0) return;
+            if (amt >= 1)
+            {
+                a.r = b.r;
+                a.g = b.g;
+                a.b = b.b;
+            }
+            else
+            {
+                a.r += (byte)((b.r - a.r) * amt);
+                a.g += (byte)((b.g - a.g) * amt);
+                a.b += (byte)((b.b - a.b) * amt);
+            }
+        }
+
+        public static Rgba Lerp(Rgba a, Rgba b, float amt)
+        {
+            Lerp(ref a, b, amt);
+            return a;
         }
 
         public static int Log2(int v)

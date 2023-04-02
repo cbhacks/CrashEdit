@@ -244,8 +244,6 @@ namespace Crash
 
         public bool IsNew { get; }
 
-        public bool Decompressed { get; set; } = false;
-
         public byte[] Save()
         {
             if (IsNew)
