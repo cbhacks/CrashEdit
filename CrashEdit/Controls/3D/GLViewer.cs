@@ -216,16 +216,16 @@ namespace CrashEdit
             GridPosLastUploaded = resolution;
         }
 
-        private static IGraphicsContext context;
-        private static GLControl contextWindow;
+        private static IGraphicsContext globalContext;
+        private static GLControl globalContextWindow;
         private static readonly GraphicsMode DefaultGraphicsSettings = new(new ColorFormat(8, 8, 8, 8), 24);
 
         public GLViewer(NSF nsf = null) : base(DefaultGraphicsSettings, 4, 3, GraphicsContextFlags.Debug)
         {
-            if (context == null)
+            if (globalContext == null)
             {
-                context = Context;
-                contextWindow = this;
+                globalContext = Context;
+                globalContextWindow = this;
             }
             render = new RenderInfo(this);
             this.nsf = nsf;
@@ -233,12 +233,12 @@ namespace CrashEdit
 
         protected new void SwapBuffers()
         {
-            contextWindow.SwapBuffers();
+            globalContextWindow.SwapBuffers();
         }
 
         protected new void MakeCurrent()
         {
-            context.MakeCurrent(WindowInfo);
+            globalContext.MakeCurrent(WindowInfo);
         }
 
         protected abstract IEnumerable<IPosition> CorePositions { get; }
@@ -689,10 +689,10 @@ namespace CrashEdit
         {
             render.Dispose();
 
-            if (contextWindow == this)
+            if (globalContextWindow == this)
             {
-                contextWindow = null;
-                context = null;
+                globalContextWindow = null;
+                globalContext = null;
             }
             Context?.Dispose();
 
