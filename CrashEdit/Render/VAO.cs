@@ -80,6 +80,13 @@ namespace CrashEdit
             }
         }
 
+        public void CopyAttrib(int idx)
+        {
+            TestRealloc();
+            Verts[VertCount] = Verts[idx];
+            VertCount++;
+        }
+
         public void PushAttrib(Vector3? trans = null, Vector3? normal = null, Vector2? st = null, Rgba? rgba = null, TexInfoUnpacked? tex = null)
         {
             TestRealloc();
@@ -117,10 +124,23 @@ namespace CrashEdit
             if (VertCount <= 0)
                 return;
 
+            var backup_state = GLViewer.glDebugContextString;
+            GLViewer.glDebugContextString = "vao " + Shader.Name;
+
             GL.GetBoolean(GetPName.DepthWritemask, out bool glZBufWrite);
-            if (glZBufWrite && ZBufDisableWrite)
+            GL.GetBoolean(GetPName.DepthTest, out bool glZBufRead);
+            bool updateZBufWrite = !glZBufWrite != ZBufDisableWrite;
+            bool updateZBufRead = !glZBufRead != ZBufDisableRead;
+            if (updateZBufWrite)
             {
-                GL.DepthMask(false);
+                GL.DepthMask(!ZBufDisableWrite);
+            }
+            if (updateZBufRead)
+            {
+                if (ZBufDisableRead)
+                    GL.Disable(EnableCap.DepthTest);
+                else
+                    GL.Enable(EnableCap.DepthTest);
             }
 
             // Bind the VAO
@@ -134,10 +154,19 @@ namespace CrashEdit
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindVertexArray(0);
 
-            if (glZBufWrite && ZBufDisableWrite)
+            if (updateZBufWrite)
             {
-                GL.DepthMask(true);
+                GL.DepthMask(glZBufWrite);
             }
+            if (updateZBufRead)
+            {
+                if (glZBufRead)
+                    GL.Enable(EnableCap.DepthTest);
+                else
+                    GL.Disable(EnableCap.DepthTest);
+            }
+
+            GLViewer.glDebugContextString = backup_state;
         }
 
         public void RenderAndDiscard(RenderInfo ri)
@@ -165,6 +194,7 @@ namespace CrashEdit
         public int BlendMask;
 
         public bool ZBufDisableWrite;
+        public bool ZBufDisableRead;
         #endregion
     }
 }

@@ -2,6 +2,7 @@ using Crash;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
+using SharpFont;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -84,13 +85,17 @@ namespace CrashEdit
 
         protected readonly RenderInfo render;
 
+        protected static FontTable fontTable;
+        protected static Library fontLib = new();
+
         protected static int texTpages;
         protected static int texSprites;
+        protected static int texFont;
         protected static VAO vaoAxes;
         protected static VAO vaoTris;
         protected static VAO vaoLines;
         protected static VAO vaoSprites;
-        // protected static VAO vaoText;
+        protected static VAO vaoText;
         // note: there's multiple buffers because of blending
         protected const int ANIM_BUF_MAX = 2;
         protected static VAO[] vaoListCrash1 = new VAO[ANIM_BUF_MAX];
@@ -99,6 +104,7 @@ namespace CrashEdit
         protected static VAO vaoDebugBoxTri;
         protected static VAO vaoDebugBoxLine;
         protected static VAO vaoDebugSprite;
+        public static string glDebugContextString = "*unknown*";
 
         private bool run = false;
         private bool loaded = false;
@@ -218,9 +224,9 @@ namespace CrashEdit
 
         private static IGraphicsContext globalContext;
         private static GLControl globalContextWindow;
-        private static readonly GraphicsMode DefaultGraphicsSettings = new(new ColorFormat(8, 8, 8, 8), 24);
+        private static readonly GraphicsMode DefaultGraphicsSettings = new(new ColorFormat(8, 8, 8, 8), 24, 8);
 
-        public GLViewer(NSF nsf = null) : base(DefaultGraphicsSettings, 4, 3, GraphicsContextFlags.Debug)
+        public GLViewer(NSF nsf = null) : base(DefaultGraphicsSettings, 4, 3, GraphicsContextFlags.Debug | GraphicsContextFlags.ForwardCompatible)
         {
             if (globalContext == null)
             {
@@ -389,6 +395,7 @@ namespace CrashEdit
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            glDebugContextString = "pre-run";
             if (!loaded)
             {
                 MakeCurrent();
@@ -397,11 +404,15 @@ namespace CrashEdit
             }
             else if (run)
             {
+                glDebugContextString = "run";
+
                 MakeCurrent();
 
                 // mutex lock to prevent races with the renderinfo timer and using the renderinfo itself
                 lock (render.mLock)
                 {
+                    glDebugContextString = "setup";
+
                     // set up viewport clip
                     GL.Viewport(0, 0, Width, Height);
                     render.Projection.Width = Width;
@@ -421,17 +432,24 @@ namespace CrashEdit
                     render.Projection.View = Matrix4.CreateTranslation(render.Projection.Trans - test_vec) * rot_mat;
 
                     // render
+                    glDebugContextString = "render " + GetType().ToString();
                     Render();
 
                     // post render
+                    glDebugContextString = "post-render";
                     SetBlendMode(BlendMode.Solid);
 
                     vaoLines.RenderAndDiscard(render);
                     vaoTris.RenderAndDiscard(render);
                     vaoSprites.RenderAndDiscard(render);
+
+                    AddText("test 1!\ntest 2!", new Vector2(0), (Rgba)Color4.White, new Vector2(30));
+                    vaoText.UserScale = new Vector3(Width, Height, 1);
+                    vaoText.RenderAndDiscard(render);
                 }
 
                 // swap the front/back buffers so what we just rendered to the back buffer is displayed in the window.
+                glDebugContextString = "swap-buffers";
                 SwapBuffers();
             }
             base.OnPaint(e);
@@ -472,10 +490,67 @@ namespace CrashEdit
             vaoDebugBoxLine.Render(render);
         }
 
-        protected void DEbugRenderOutlinedBox(Vector3 pos, Vector3 size, Color4 col_line, Color4 col_fill)
+        protected void DebugRenderOutlinedBox(Vector3 pos, Vector3 size, Color4 col_line, Color4 col_fill)
         {
             DebugRenderBoxLine(pos, size, col_line);
             DebugRenderBox(pos, size, col_fill);
+        }
+
+        public void AddText(string text, Vector2 ofs, Rgba col, Vector2 size)
+        {
+            if (fontTable == null)
+                return;
+
+            var face = fontTable.Face;
+            size.X /= fontTable.Width;
+            size.Y /= fontTable.Height;
+            float string_w = 0, string_h = text.Length == 0 ? 0 : fontTable.LineHeight * size.Y;
+            var start_ofs = ofs;
+            var cur_ofs = ofs;
+            cur_ofs.Y += fontTable.Adjust * size.Y;
+            for (int i = 0; i < text.Length; ++i)
+            {
+                var c = text[i];
+                if (c == '\n')
+                {
+                    cur_ofs.X = start_ofs.X;
+                    cur_ofs.Y += fontTable.LineHeight * size.Y;
+                    continue;
+                }
+                if (!fontTable.ContainsKey(c))
+                {
+                    cur_ofs.X += fontTable.Width * size.X;
+                    continue;
+                }
+
+                var glyph = fontTable[c];
+
+                float kBearingX = (float)glyph.BearingX * size.X;
+                float kBearingY = (float)glyph.BearingY * size.Y;
+                float kAdvanceX = (float)glyph.AdvanceX * size.X;
+                var kSize = new Vector2(glyph.Width, glyph.Height) * size;
+
+                int idx = vaoText.VertCount;
+                var char_ofs = cur_ofs + new Vector2(kBearingX, -kBearingY);
+                vaoText.PushAttrib(trans: new Vector3(char_ofs + kSize * new Vector2(0, 0)), st: new Vector2(glyph.Left, glyph.Top), rgba: col);
+                vaoText.PushAttrib(trans: new Vector3(char_ofs + kSize * new Vector2(1, 0)), st: new Vector2(glyph.Right, glyph.Top), rgba: col);
+                vaoText.PushAttrib(trans: new Vector3(char_ofs + kSize * new Vector2(1, 1)), st: new Vector2(glyph.Right, glyph.Bottom), rgba: col);
+                vaoText.CopyAttrib(idx + 2);
+                vaoText.PushAttrib(trans: new Vector3(char_ofs + kSize * new Vector2(0, 1)), st: new Vector2(glyph.Left, glyph.Bottom), rgba: col);
+                vaoText.CopyAttrib(idx + 0);
+
+                if (face.HasKerning && i < text.Length - 1)
+                {
+                    char cNext = text[i + 1];
+                    float kern = (float)face.GetKerning(glyph.GlyphID, face.GetCharIndex(cNext), KerningMode.Default).X * size.X;
+                    if (kern > kAdvanceX * 5 || kern < -(kAdvanceX * 5))
+                        kern = 0;
+                    cur_ofs.X += kern;
+                }
+
+                cur_ofs.X += kAdvanceX;
+                string_w += kAdvanceX;
+            }
         }
 
         public void AddBox(Vector3 ofs, Vector3 sz, Rgba col, bool outline)
@@ -547,18 +622,21 @@ namespace CrashEdit
         {
             var texRect = OldResources.TexMap[texture];
             //Console.WriteLine($"TEXTURE: {texRect.Left},{texRect.Top}/{texRect.Right},{texRect.Bottom}");
-            var uvs = new Vector2[4];
+            var uvs = new Vector2[6];
             uvs[0] = new Vector2(texRect.Left, texRect.Bottom);
             uvs[1] = new Vector2(texRect.Left, texRect.Top);
             uvs[2] = new Vector2(texRect.Right, texRect.Top);
-            //uvs[3] = new Vector2(texRect.Right, texRect.Top);
-            uvs[3] = new Vector2(texRect.Right, texRect.Bottom);
-            //uvs[5] = new Vector2(texRect.Left, texRect.Bottom);
-            for (int i = 0; i < SpriteVerts.Length; ++i)
+            uvs[3] = new Vector2(texRect.Right, texRect.Top);
+            uvs[4] = new Vector2(texRect.Right, texRect.Bottom);
+            uvs[5] = new Vector2(texRect.Left, texRect.Bottom);
+            for (int i = 0; i < SpriteTriIndices.Length; ++i)
             {
-                vaoSprites.PushAttrib(trans: trans, rgba: col, st: uvs[i], normal: SpriteVerts[i] * new Vector3(size));
+                vaoSprites.PushAttrib(trans: trans, rgba: col, st: uvs[i], normal: SpriteVerts[SpriteTriIndices[i]] * new Vector3(size));
             }
         }
+
+        protected float RelativeX(float pos) => Width * pos;
+        protected float RelativeY(float pos) => Height * pos;
 
         public void ResetCamera()
         {

@@ -1,6 +1,8 @@
 using Crash;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Xml;
@@ -13,8 +15,10 @@ namespace CrashEdit
         static extern bool AllocConsole();
         [DllImport("kernel32.dll")]
         static extern bool FreeConsole();
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        static extern bool SetDllDirectory(string path);
 
-        public static SortedDictionary<string, string> C3AnimLinks = new SortedDictionary<string, string>(new ENameComparer());
+        public static SortedDictionary<string, string> C3AnimLinks = new(new ENameComparer());
         public static void SaveC3AnimLinks()
         {
             using (XmlWriter writer = XmlWriter.Create("CrashEdit.exe.animmodel.config", new XmlWriterSettings() { Indent = true, IndentChars = "\t" }))
@@ -66,6 +70,21 @@ namespace CrashEdit
         [STAThread]
         internal static void Main(string[] args)
         {
+
+            PlatformID pid = Environment.OSVersion.Platform;
+#if __MonoCS__
+            if (pid != PlatformID.Unix && pid != PlatformID.MacOSX)
+#else
+            if (pid != PlatformID.Unix)
+#endif
+            {
+                string path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+                path = Path.Combine(path, IntPtr.Size == 8 ? "Win64" : "Win32");
+
+                if (!SetDllDirectory(path))
+                    throw new System.ComponentModel.Win32Exception();
+            }
+
             AllocConsole();
 
             if (Properties.Settings.Default.UpgradeSettings)
@@ -91,6 +110,7 @@ namespace CrashEdit
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
             using (OldMainForm mainform = new OldMainForm())
             using (ErrorReporter errorform = new ErrorReporter(mainform))
             {

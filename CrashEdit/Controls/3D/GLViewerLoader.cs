@@ -5,17 +5,19 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace CrashEdit
 {
     public sealed class GLViewerLoader : GLViewer, IDisposable
     {
-        protected override bool UseGrid => true;
+        protected override bool UseGrid => false;
 
         public GLViewerLoader() : base()
         {
         }
+
         protected override IEnumerable<IPosition> CorePositions
         {
             get
@@ -23,6 +25,7 @@ namespace CrashEdit
                 yield return new Position(0, 0, 0);
             }
         }
+
         protected override void GLLoadStatic()
         {
             base.GLLoadStatic();
@@ -40,21 +43,20 @@ namespace CrashEdit
                 GL.DebugMessageCallback((source, type, id, severity, length, message, userParam) =>
                 {
                     string msg = Marshal.PtrToStringAnsi(message);
+                    string level = "OTHER";
                     switch (severity)
                     {
                         case DebugSeverity.DebugSeverityHigh:
-                            Console.WriteLine("OpenGL ERROR: " + msg);
+                            level = "ERROR";
                             break;
                         case DebugSeverity.DebugSeverityMedium:
-                            Console.WriteLine("OpenGL WARN: " + msg);
+                            level = "WARN";
                             break;
                         case DebugSeverity.DebugSeverityLow:
-                            Console.WriteLine("OpenGL INFO: " + msg);
-                            break;
-                        default:
-                            Console.WriteLine("OpenGL OTHER: " + msg);
+                            level = "INFO";
                             break;
                     }
+                    Console.WriteLine($"[{glDebugContextString}] OpenGL {level}: {msg}");
                 }, IntPtr.Zero);
             }
 
@@ -73,9 +75,10 @@ namespace CrashEdit
             vaoDebugBoxTri = new VAO(shaderContext, "box-model", PrimitiveType.Triangles, vert_count: BoxTriIndices.Length);
             vaoDebugBoxLine = new VAO(shaderContext, "box-model", PrimitiveType.Lines, vert_count: BoxLineIndices.Length);
             vaoDebugSprite = new VAO(shaderContext, "sprite-debug", PrimitiveType.TriangleFan, vert_count: SpriteVerts.Length);
-            vaoSprites = new VAO(shaderContext, "sprite", PrimitiveType.Quads);
+            vaoSprites = new VAO(shaderContext, "sprite", PrimitiveType.Triangles);
             vaoLines = new VAO(shaderContext, "line", PrimitiveType.Lines);
             vaoTris = new VAO(shaderContext, "generic", PrimitiveType.Triangles);
+            vaoText = new VAO(shaderContext, "screen", PrimitiveType.Triangles);
             for (int i = 0; i < ANIM_BUF_MAX; ++i)
             {
                 vaoListCrash1[i] = new(shaderContext, "crash1", PrimitiveType.Triangles);
@@ -83,6 +86,8 @@ namespace CrashEdit
 
             vaoGridLine.UserColor1 = Color4.Gray;
             vaoGridLine.ZBufDisableWrite = true;
+            vaoText.ZBufDisableWrite = true;
+            vaoText.ZBufDisableRead = true;
 
             for (int i = 0; i < AxesPos.Length; ++i)
             {
@@ -125,6 +130,24 @@ namespace CrashEdit
             {
                 OldResources.AllTex.UnlockBits(data);
             }
+
+            // make texture for font
+            fontTable = new();
+            var full_bmp = fontTable.LoadFont(fontLib, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf"), 20);
+            texFont = GL.GenTexture();
+            GL.ActiveTexture(TextureUnit.Texture2);
+            GL.BindTexture(TextureTarget.Texture2D, texFont);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            var buf = new byte[full_bmp.Width * full_bmp.Height];
+            for (int y = 0; y < full_bmp.Height; ++y)
+            {
+                for (int x = 0; x < full_bmp.Width; ++x)
+                {
+                    buf[y * full_bmp.Width + x] = full_bmp.GetPixel(x, y).A;
+                }
+            }
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8, full_bmp.Width, full_bmp.Height, 0, OpenTK.Graphics.OpenGL4.PixelFormat.Red, PixelType.UnsignedByte, buf);
         }
     }
 }
