@@ -70,13 +70,16 @@ namespace CrashEdit
             numFontSize.Value = (decimal)Settings.Default.FontSize;
             numW.Value = Settings.Default.DefaultFormW;
             numH.Value = Settings.Default.DefaultFormH;
+            numAnimGrid.Value = Settings.Default.AnimGridLen;
             chkNormalDisplay.Checked = Settings.Default.DisplayNormals;
             chkCollisionDisplay.Checked = Settings.Default.DisplayFrameCollision;
             chkUseAnimLinks.Checked = Settings.Default.UseAnimLinks;
-            cdlClearCol.Color = picClearCol.BackColor = Color.FromArgb(Settings.Default.ClearColorRGB);
             chkDeleteInvalidEntries.Checked = Settings.Default.DeleteInvalidEntries;
             chkAnimGrid.Checked = Settings.Default.DisplayAnimGrid;
-            numAnimGrid.Value = Settings.Default.AnimGridLen;
+            chkFont3DEnable.Checked = Settings.Default.Font3DEnable;
+            chkFont3DAutoscale.Checked = Settings.Default.Font3DAutoscale;
+            chkFont2DEnable.Checked = Settings.Default.Font2DEnable;
+            cdlClearCol.Color = picClearCol.BackColor = Color.FromArgb(Settings.Default.ClearColorRGB);
 
             dpdLang.MaximumSize = new Size(lblLang.Width, 0);
 
