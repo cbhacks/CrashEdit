@@ -81,11 +81,11 @@ namespace CrashEdit
             1, 5, 7, 7, 3, 1,
             3, 7, 6, 6, 2, 3,
             0, 4, 5, 5, 1, 0,
-            0, 4, 6, 6, 2, 0,
+            2, 6, 4, 4, 0, 2,
             // bottom
-            2, 3, 1, 1, 0, 2,
+            0, 1, 3, 3, 2, 0,
             // top
-            2+4, 3+4, 1+4, 1+4, 0+4, 2+4,
+            1+4, 0+4, 2+4, 2+4, 3+4, 1+4,
         };
 
         private static readonly Dictionary<int, Vector3[]> SpherePosCache = new();
