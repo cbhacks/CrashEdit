@@ -136,10 +136,11 @@ namespace CrashEdit
         private int mousey = 0;
         private readonly float movespeed = 10f;
         private readonly float rotspeed = 0.5f;
-        private readonly float zoomspeed = 0.75f;
+        private readonly float zoomspeed = 1f;
         private const float PerFrame = 1 / 60f;
         public const float DefaultZNear = 0.2f;
         public const float DefaultZFar = DefaultZNear * 0x4000;
+        private float GetMoveSpeed() => movespeed * 0.2f + movespeed * 0.8f * (render.Projection.Distance / (ProjectionInfo.MaxInitialDistance * 0.2f));
 
         protected readonly NSF nsf;
 
@@ -296,7 +297,7 @@ namespace CrashEdit
 
         protected virtual void RunLogic()
         {
-            var d = movespeed * PerFrame * (render.Projection.Distance / ProjectionInfo.InitialDistance);
+            var d = GetMoveSpeed() * PerFrame;
             if (KDown(Keys.ControlKey))
             {
                 if (KDown(Keys.W)) render.Projection.Trans.Z += d;
@@ -353,6 +354,7 @@ namespace CrashEdit
             {
                 var olddist = render.Projection.Distance;
                 float delta = (float)e.Delta / SystemInformation.MouseWheelScrollDelta * zoomspeed;
+                delta *= 0.3f + 1.7f * (render.Projection.Distance / ProjectionInfo.MaxDistance);
                 render.Projection.Distance = Math.Max(ProjectionInfo.MinDistance, Math.Min(render.Projection.Distance - delta, ProjectionInfo.MaxDistance));
                 // render.Projection.Trans -= (Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot)) * new Vector4(0, 0, render.Distance - olddist, 1)).Xyz;
             }
@@ -419,7 +421,6 @@ namespace CrashEdit
 
                 glDebugContextString = "run";
 
-                console = string.Empty;
                 render.DebugRenderMs = 0;
 
                 MakeCurrent();
@@ -454,6 +455,7 @@ namespace CrashEdit
                     render.Projection.Forward = -(rot_mat * new Vector4(0, 0, 1, 1)).Xyz;
                     render.Projection.View = Matrix4.CreateTranslation(render.Projection.RealTrans) * rot_mat;
                     // console += $"trans: {-render.Projection.Trans} -> real_trans: {-render.Projection.RealTrans}\n";
+                    console += $"Zoom: {render.Projection.Distance}\nMove Speed: {GetMoveSpeed()}\n";
 
                     // render
                     glDebugContextString = "render " + GetType().ToString();
@@ -470,6 +472,7 @@ namespace CrashEdit
                     console += string.Format("Render time: {0:F2}ms\nTotal time: {1:F2}", render.DebugRenderMs, dbgRunMs);
                     if (Settings.Default.Font2DEnable)
                         AddText(console, 0, 0, (Rgba)Color4.White);
+                    console = string.Empty;
                     vaoText.UserScale = new Vector3(Width, Height, 1);
                     vaoText.RenderAndDiscard(render);
                 }
@@ -725,7 +728,7 @@ namespace CrashEdit
             float midx = (maxx + minx) / 2;
             float midy = (maxy + miny) / 2;
             float midz = (maxz + minz) / 2;
-            render.Projection.Distance = Math.Min(ProjectionInfo.MaxDistance, Math.Max(render.Projection.Distance, (float)(Math.Sqrt(Math.Pow(maxx - minx, 2) + Math.Pow(maxy - miny, 2) + Math.Pow(maxz - minz, 2)) * 1.2)));
+            render.Projection.Distance = Math.Min(ProjectionInfo.MaxInitialDistance, Math.Max(render.Projection.Distance, (float)(Math.Sqrt(Math.Pow(maxx - minx, 2) + Math.Pow(maxy - miny, 2) + Math.Pow(maxz - minz, 2)) * 1.2)));
             //render.Projection.Distance += 0;
             render.Projection.Trans.X = -midx;
             render.Projection.Trans.Y = -midy;

@@ -13,8 +13,9 @@ namespace CrashEdit
         public Matrix4 View;
 
         public const float MinDistance = GLViewer.DefaultZNear;
-        public const float MaxDistance = 100;
-        public const float InitialDistance = MaxDistance * 0.05f;
+        public const float MaxInitialDistance = 100;
+        public const float MaxDistance = MaxInitialDistance * 2;
+        public const float InitialDistance = 5;
         public float Distance { get; set; }
 
         public float Width;
