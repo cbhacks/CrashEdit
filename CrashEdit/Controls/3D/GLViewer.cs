@@ -251,26 +251,21 @@ namespace CrashEdit
 
         protected abstract IEnumerable<IPosition> CorePositions { get; }
 
-        // for all instances, runs once.
-        protected virtual void GLLoadStatic()
-        {
-            // nothing.
-            Console.WriteLine($"GLLoadStatic {GetType().Name}");
-        }
-
         // for each instance
         protected virtual void GLLoad()
         {
-            if (!loaded_static_types.Contains(Program.TopLevelGLViewer.GetType()))
+            var run_load_static = (Type t) =>
             {
-                Program.TopLevelGLViewer.GLLoadStatic();
-                loaded_static_types.Add(Program.TopLevelGLViewer.GetType());
-            }
-            if (!loaded_static_types.Contains(GetType()))
-            {
-                GLLoadStatic();
-                loaded_static_types.Add(GetType());
-            }
+                if (!loaded_static_types.Contains(t))
+                {
+                    Console.WriteLine($"GLLoadStatic {t.Name}");
+                    var func = t.GetMethod("GLLoadStatic", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+                    func?.Invoke(this, new object[] { });
+                    loaded_static_types.Add(t);
+                }
+            };
+            run_load_static(Program.TopLevelGLViewer.GetType());
+            run_load_static(GetType());
 
             ResetCamera();
 
@@ -429,7 +424,7 @@ namespace CrashEdit
 
                     // Clear buffers
                     GL.DepthMask(true);
-                    var col = Properties.Settings.Default.ClearColorRGB;
+                    var col = Settings.Default.ClearColorRGB;
                     if ((col & 0xffffff) == 0) col = 0;
                     GL.ClearColor(Color.FromArgb(col));
                     GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -452,7 +447,6 @@ namespace CrashEdit
                     vaoTris.RenderAndDiscard(render);
                     vaoSprites.RenderAndDiscard(render);
 
-                    AddText("Press foo bar: 100294v", 0, 0, (Rgba)Color4.White, 15);
                     vaoText.UserScale = new Vector3(Width, Height, 1);
                     vaoText.RenderAndDiscard(render);
                 }
@@ -468,11 +462,11 @@ namespace CrashEdit
         {
             SetBlendMode(BlendMode.Solid);
 
-            if (UseGrid && Properties.Settings.Default.DisplayAnimGrid)
+            if (UseGrid && Settings.Default.DisplayAnimGrid)
             {
                 RenderAxes(new Vector3(0));
 
-                MakeLineGrid(Properties.Settings.Default.AnimGridLen);
+                MakeLineGrid(Settings.Default.AnimGridLen);
                 vaoGridLine.Render(render);
             }
         }

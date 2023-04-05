@@ -27,10 +27,8 @@ namespace CrashEdit
             }
         }
 
-        protected override void GLLoadStatic()
+        private static void GLLoadStatic()
         {
-            base.GLLoadStatic();
-
             // version print
             Console.WriteLine($"OpenGL version: {GL.GetString(StringName.Version)}");
 
