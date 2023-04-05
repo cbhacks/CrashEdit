@@ -17,7 +17,8 @@ namespace CrashEdit
             sh.UniformMat4("viewMatrix", ref ri.Projection.View);
             Matrix4 pvm = ri.Projection.View * ri.Projection.Perspective;
             sh.UniformMat4("PVM", ref pvm);
-            sh.UniformVec3("viewTrans", ref ri.Projection.Trans);
+            var trans = ri.Projection.RealTrans;
+            sh.UniformVec3("viewTrans", ref trans);
 
             sh.UniformVec3("trans", ref vao.UserTrans);
             sh.UniformVec3("scale", ref vao.UserScale);

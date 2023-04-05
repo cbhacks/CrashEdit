@@ -105,16 +105,9 @@ namespace CrashEdit
             for (int i = 0; i < 2; ++i)
             {
                 IEnumerable<OldSceneryEntry> worlds_to_use = i == 0 ? GetSkyWorlds() : GetNonSkyWorlds();
-                if (i == 0)
-                {
-                    vaoWorld.ZBufDisableWrite = true;
-                    vaoWorld.UserScale = new Vector3(1 / GameScales.WorldC1 * render.Distance);
-                }
-                else
-                {
-                    vaoWorld.ZBufDisableWrite = false;
-                    vaoWorld.UserScale = new Vector3(1 / GameScales.WorldC1);
-                }
+                vaoWorld.ZBufDisableWrite = i == 0;
+                vaoWorld.UserScale = new Vector3(1 / GameScales.WorldC1);
+
                 int nb = 0;
                 foreach (var world in worlds_to_use)
                 {
@@ -144,7 +137,7 @@ namespace CrashEdit
             worldOffset = new Vector3(world.XOffset, world.YOffset, world.ZOffset);
             if (world.IsSky)
             {
-                worldOffset = MathExt.Div(-render.Projection.Trans, vaoWorld.UserScale);
+                worldOffset = MathExt.Div(-render.Projection.RealTrans, vaoWorld.UserScale);
             }
             foreach (OldSceneryPolygon polygon in world.Polygons)
             {

@@ -13,6 +13,13 @@ using System.Windows.Forms;
 
 namespace CrashEdit
 {
+    [Flags]
+    public enum TextRenderFlags
+    {
+        Shadow = 1 << 0,
+        Unscaled = 1 << 1
+    }
+
     public abstract class GLViewer : GLControl
     {
         protected static readonly Vector3[] AxesPos = new Vector3[6] {
@@ -286,7 +293,7 @@ namespace CrashEdit
 
         protected virtual void RunLogic()
         {
-            var d = movespeed * PerFrame * (render.Distance / RenderInfo.InitialDistance);
+            var d = movespeed * PerFrame * (render.Projection.Distance / ProjectionInfo.InitialDistance);
             if (KDown(Keys.ControlKey))
             {
                 if (KDown(Keys.W)) render.Projection.Trans.Z += d;
@@ -341,9 +348,9 @@ namespace CrashEdit
             base.OnMouseWheel(e);
             lock (render.mLock)
             {
-                var olddist = render.Distance;
+                var olddist = render.Projection.Distance;
                 float delta = (float)e.Delta / SystemInformation.MouseWheelScrollDelta * zoomspeed;
-                render.Distance = Math.Max(RenderInfo.MinDistance, Math.Min(render.Distance - delta, RenderInfo.MaxDistance));
+                render.Projection.Distance = Math.Max(ProjectionInfo.MinDistance, Math.Min(render.Projection.Distance - delta, ProjectionInfo.MaxDistance));
                 // render.Projection.Trans -= (Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot)) * new Vector4(0, 0, render.Distance - olddist, 1)).Xyz;
             }
         }
@@ -436,11 +443,12 @@ namespace CrashEdit
                     GL.ClearColor(Color.FromArgb(col));
                     GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-                    // set up view matrices (45º FOV)
+                    // set up view matrices (45deg FOV)
                     render.Projection.Perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45), render.Projection.Aspect, DefaultZNear, DefaultZFar);
                     var rot_mat = Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot));
-                    var test_vec = (rot_mat * new Vector4(0, 0, render.Distance, 1)).Xyz;
-                    render.Projection.View = Matrix4.CreateTranslation(render.Projection.Trans - test_vec) * rot_mat;
+                    render.Projection.Forward = -(rot_mat * new Vector4(0, 0, 1, 1)).Xyz;
+                    render.Projection.View = Matrix4.CreateTranslation(render.Projection.RealTrans) * rot_mat;
+                    // console += $"trans: {-render.Projection.Trans} -> real_trans: {-render.Projection.RealTrans}\n";
 
                     // render
                     glDebugContextString = "render " + GetType().ToString();
@@ -510,21 +518,26 @@ namespace CrashEdit
             DebugRenderBox(pos, size, col_fill);
         }
 
-        public void AddText3D(string text, Vector3 pos, Rgba col, float size)
+        public void AddText3D(string text, Vector3 pos, Rgba col, float size, TextRenderFlags flags = TextRenderFlags.Shadow)
         {
             var screen_pos = new Vector4(pos, 1) * render.Projection.PVM;
-            screen_pos.X /= screen_pos.W;
-            screen_pos.Y /= -screen_pos.W;
-            screen_pos.Z /= screen_pos.W;
-            screen_pos.W /= screen_pos.W;
+            screen_pos /= screen_pos.W;
             if (screen_pos.Z >= 1 || screen_pos.Z <= -1)
                 return;
-            AddText(text, (screen_pos.Xy + new Vector2(1)) * new Vector2(Width, Height) / 2, col, size);
+            screen_pos.Y = -screen_pos.Y;
+            if ((flags & TextRenderFlags.Unscaled) == 0)
+            {
+                var text_dist_vec = render.Projection.RealTrans + pos;
+                var cam_to_text_factor = 1 / Vector3.Dot(text_dist_vec, render.Projection.Forward);
+                // console += $"text_dist: {text_dist_vec.Length} dot: {cam_to_text_factor}\n";
+                size *= cam_to_text_factor * render.Projection.Height / 50;
+            }
+            AddText(text, (screen_pos.Xy + new Vector2(1)) * new Vector2(Width, Height) / 2, col, size, flags);
         }
 
-        public void AddText(string text, float x, float y, Rgba col, float size) => AddText(text, new Vector2(x, y), col, new Vector2(size));
-        public void AddText(string text, Vector2 ofs, Rgba col, float size) => AddText(text, ofs, col, new Vector2(size));
-        public void AddText(string text, Vector2 ofs, Rgba col, Vector2 size)
+        public void AddText(string text, float x, float y, Rgba col, float size, TextRenderFlags flags = TextRenderFlags.Shadow) => AddText(text, new Vector2(x, y), col, new Vector2(size), flags);
+        public void AddText(string text, Vector2 ofs, Rgba col, float size, TextRenderFlags flags = TextRenderFlags.Shadow) => AddText(text, ofs, col, new Vector2(size), flags);
+        public void AddText(string text, Vector2 ofs, Rgba col, Vector2 size, TextRenderFlags flags = TextRenderFlags.Shadow)
         {
             if (fontTable == null)
                 return;
@@ -536,6 +549,7 @@ namespace CrashEdit
             var start_ofs = ofs;
             var cur_ofs = ofs;
             cur_ofs.Y += string_h;
+            int start_idx = vaoText.VertCount;
             for (int i = 0; i < text.Length; ++i)
             {
                 var c = text[i];
@@ -578,6 +592,16 @@ namespace CrashEdit
 
                 cur_ofs.X += kAdvanceX;
                 string_w += kAdvanceX;
+            }
+            int end_idx = vaoText.VertCount;
+            if ((flags & TextRenderFlags.Shadow) != 0)
+            {
+                for (int i = 0; i < end_idx - start_idx; ++i)
+                {
+                    vaoText.CopyAttrib(start_idx + i);
+                    vaoText.Verts[start_idx + i].trans += new Vector3(new Vector2(2, 2) * size);
+                    vaoText.Verts[start_idx + i].rgba = (Rgba)Color4.Black;
+                }
             }
         }
 
@@ -686,8 +710,8 @@ namespace CrashEdit
             float midx = (maxx + minx) / 2;
             float midy = (maxy + miny) / 2;
             float midz = (maxz + minz) / 2;
-            render.Distance = Math.Min(RenderInfo.MaxDistance, Math.Max(render.Distance, (float)(Math.Sqrt(Math.Pow(maxx - minx, 2) + Math.Pow(maxy - miny, 2) + Math.Pow(maxz - minz, 2)) * 1.2)));
-            //render.Distance += 0;
+            render.Projection.Distance = Math.Min(ProjectionInfo.MaxDistance, Math.Max(render.Projection.Distance, (float)(Math.Sqrt(Math.Pow(maxx - minx, 2) + Math.Pow(maxy - miny, 2) + Math.Pow(maxz - minz, 2)) * 1.2)));
+            //render.Projection.Distance += 0;
             render.Projection.Trans.X = -midx;
             render.Projection.Trans.Y = -midy;
             render.Projection.Trans.Z = -midz;
