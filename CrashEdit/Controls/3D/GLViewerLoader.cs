@@ -85,7 +85,6 @@ namespace CrashEdit
             }
 
             vaoGridLine.UserColor1 = Color4.Gray;
-            vaoGridLine.ZBufDisableWrite = true;
             vaoText.ZBufDisableWrite = true;
             vaoText.ZBufDisableRead = true;
 

@@ -45,7 +45,7 @@ namespace CrashEdit
             Face.SetCharSize(size, size, 0, 0);
 
             Size = size;
-            FileName = Path.GetFileName(fname);
+            FileName = fname;
 
             Width = Face.Size.Metrics.NominalWidth;
             Height = Face.Size.Metrics.NominalHeight;

@@ -10,6 +10,47 @@ namespace CrashEdit
     {
         public static readonly List<string> Languages = new() { "en", "ja" };
 
+        public static readonly List<string> FontFileNames = new();
+
+        private void MakeFontsList()
+        {
+            var add_font = (string f) =>
+            {
+                var shortname = Path.GetFileName(f);
+                if (!dpdFont.Items.Contains(shortname))
+                {
+                    dpdFont.Items.Add(shortname);
+                    FontFileNames.Add(f);
+                }
+            };
+
+            dpdFont.Items.Clear();
+            FontFileNames.Clear();
+
+            foreach (var f in Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.Fonts)))
+            {
+                if (Path.GetExtension(f) == ".ttf")
+                {
+                    add_font(f);
+                }
+            }
+            try
+            {
+                foreach (var f in Directory.GetFiles(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Microsoft", "Windows", "Fonts")))
+                {
+                    if (Path.GetExtension(f) == ".ttf")
+                    {
+                        add_font(f);
+                    }
+                }
+            }
+            catch (Exception ex) when (
+                ex is DirectoryNotFoundException
+                )
+            {
+            }
+        }
+
         public ConfigEditor()
         {
             InitializeComponent();
@@ -17,12 +58,12 @@ namespace CrashEdit
                 dpdLang.Items.Add(Resources.ResourceManager.GetString("Language", new System.Globalization.CultureInfo(lang)));
             dpdLang.SelectedItem = Resources.ResourceManager.GetString("Language", new System.Globalization.CultureInfo(Settings.Default.Language));
             dpdLang.SelectedIndexChanged += new EventHandler(dpdLang_SelectedIndexChanged);
-            foreach (var f in Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.Fonts)))
-                if (Path.GetExtension(f) == ".ttf")
-                    dpdFont.Items.Add(Path.GetFileName(f));
+            MakeFontsList();
             dpdFont.SelectedIndexChanged += new EventHandler(dpdFont_SelectedIndexChanged);
             if (!dpdFont.Items.Contains(Settings.Default.FontName))
                 dpdFont.SelectedIndex = 0;
+            else if (FontFileNames.Contains(Settings.Default.FontName))
+                dpdFont.SelectedIndex = FontFileNames.IndexOf(Settings.Default.FontName);
             else
                 dpdFont.SelectedItem = Settings.Default.FontName;
             numFontSize.Value = (decimal)Settings.Default.FontSize;
@@ -63,7 +104,7 @@ namespace CrashEdit
 
         private void dpdFont_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Settings.Default.FontName = (string)dpdFont.SelectedItem;
+            Settings.Default.FontName = FontFileNames[dpdFont.SelectedIndex];
             Settings.Default.Save();
         }
 
