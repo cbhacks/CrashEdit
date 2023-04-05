@@ -13,6 +13,11 @@ namespace CrashEdit
             watch.Stop();
             return watch.ElapsedTicks;
         }
+        public static double StopAndElapsedMillisecondsFull(this Stopwatch watch)
+        {
+            watch.Stop();
+            return watch.ElapsedMillisecondsFull();
+        }
 
         public static long TicksPerFrame => Stopwatch.Frequency / 60;
     }

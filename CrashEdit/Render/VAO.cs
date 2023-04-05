@@ -2,6 +2,7 @@
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace CrashEdit
@@ -9,6 +10,7 @@ namespace CrashEdit
     public class VAO : IDisposable
     {
         private Vertex[] verts;
+        private Stopwatch watch = new();
 
         public int ID { get; }
         public int Buffer { get; }
@@ -124,6 +126,8 @@ namespace CrashEdit
             if (VertCount <= 0)
                 return;
 
+            watch.Restart();
+
             var backup_state = GLViewer.glDebugContextString;
             GLViewer.glDebugContextString = "vao " + Shader.Name;
 
@@ -161,6 +165,8 @@ namespace CrashEdit
             }
 
             GLViewer.glDebugContextString = backup_state;
+
+            ri.DebugRenderMs += watch.StopAndElapsedMillisecondsFull();
         }
 
         public void RenderAndDiscard(RenderInfo ri)

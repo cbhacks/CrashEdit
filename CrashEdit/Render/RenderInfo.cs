@@ -34,6 +34,8 @@ namespace CrashEdit
         private readonly Timer _frametimer;
         private readonly Stopwatch _framewatch;
 
+        public double DebugRenderMs { get; set; }
+
         public long CurrentFrame => _framehits;
         public long RealCurrentFrame => _framewatch.ElapsedFrames();
         public double FullCurrentFrame => _framewatch.ElapsedFramesFull();

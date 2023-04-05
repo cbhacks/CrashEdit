@@ -417,8 +417,10 @@ namespace CrashEdit
             {
                 Stopwatch watchRun = Stopwatch.StartNew();
 
-                console = string.Empty;
                 glDebugContextString = "run";
+
+                console = string.Empty;
+                render.DebugRenderMs = 0;
 
                 MakeCurrent();
 
@@ -465,7 +467,7 @@ namespace CrashEdit
                     vaoTris.RenderAndDiscard(render);
                     vaoSprites.RenderAndDiscard(render);
 
-                    console += string.Format("Render time: {0:F2}ms\n", dbgRunMs);
+                    console += string.Format("Render time: {0:F2}ms\nTotal time: {1:F2}", render.DebugRenderMs, dbgRunMs);
                     if (Settings.Default.Font2DEnable)
                         AddText(console, 0, 0, (Rgba)Color4.White);
                     vaoText.UserScale = new Vector3(Width, Height, 1);
