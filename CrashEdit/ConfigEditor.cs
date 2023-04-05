@@ -10,7 +10,7 @@ namespace CrashEdit
     {
         public static readonly List<string> Languages = new() { "en", "ja" };
 
-        public static readonly List<string> FontFileNames = new();
+        private static readonly List<string> FontFileNames = new();
 
         private void MakeFontsList()
         {
@@ -60,12 +60,12 @@ namespace CrashEdit
             dpdLang.SelectedIndexChanged += new EventHandler(dpdLang_SelectedIndexChanged);
             MakeFontsList();
             dpdFont.SelectedIndexChanged += new EventHandler(dpdFont_SelectedIndexChanged);
-            if (!dpdFont.Items.Contains(Settings.Default.FontName))
-                dpdFont.SelectedIndex = 0;
+            if (dpdFont.Items.Contains(Settings.Default.FontName))
+                dpdFont.SelectedItem = Settings.Default.FontName;
             else if (FontFileNames.Contains(Settings.Default.FontName))
                 dpdFont.SelectedIndex = FontFileNames.IndexOf(Settings.Default.FontName);
             else
-                dpdFont.SelectedItem = Settings.Default.FontName;
+                dpdFont.SelectedIndex = 0;
             numFontSize.Value = (decimal)Settings.Default.FontSize;
             numW.Value = Settings.Default.DefaultFormW;
             numH.Value = Settings.Default.DefaultFormH;
