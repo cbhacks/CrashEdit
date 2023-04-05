@@ -1,4 +1,5 @@
 using Crash;
+using CrashEdit.Properties;
 using OpenTK;
 using OpenTK.Graphics;
 using System.Collections.Generic;
@@ -157,9 +158,9 @@ namespace CrashEdit
             {
                 EntityPosition position = entity.Positions[0];
                 Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + zoneTrans;
-                if (!string.IsNullOrEmpty(entity.Name))
+                if (!string.IsNullOrEmpty(entity.Name) && Settings.Default.Font3DEnable)
                 {
-                    AddText3D(entity.Name, trans, (Rgba)Color4.Yellow, 16);
+                    AddText3D(entity.Name, trans, (Rgba)Color4.Yellow);
                 }
                 int subtype = entity.Subtype ?? -1;
                 switch (entity.Type)

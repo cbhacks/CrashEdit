@@ -146,6 +146,33 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Display debug text.
+        /// </summary>
+        internal static string Config_chkFont2DEnable {
+            get {
+                return ResourceManager.GetString("Config_chkFont2DEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scale entity text.
+        /// </summary>
+        internal static string Config_chkFont3DAutoscale {
+            get {
+                return ResourceManager.GetString("Config_chkFont3DAutoscale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display entity text.
+        /// </summary>
+        internal static string Config_chkFont3DEnable {
+            get {
+                return ResourceManager.GetString("Config_chkFont3DEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Display normals.
         /// </summary>
         internal static string Config_chkNormalDisplay {
@@ -209,11 +236,11 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language (requires restart).
+        ///   Looks up a localized string similar to Other Settings.
         /// </summary>
-        internal static string Config_FraLang {
+        internal static string Config_fraMisc {
             get {
-                return ResourceManager.GetString("Config_FraLang", resourceCulture);
+                return ResourceManager.GetString("Config_fraMisc", resourceCulture);
             }
         }
         
@@ -245,7 +272,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size.
+        ///   Looks up a localized string similar to Font Size.
         /// </summary>
         internal static string Config_lblFontSize {
             get {
@@ -254,7 +281,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Width.
+        ///   Looks up a localized string similar to Height.
         /// </summary>
         internal static string Config_lblH {
             get {
@@ -263,7 +290,16 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Height.
+        ///   Looks up a localized string similar to Language (requires restart).
+        /// </summary>
+        internal static string Config_lblLang {
+            get {
+                return ResourceManager.GetString("Config_lblLang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Width.
         /// </summary>
         internal static string Config_lblW {
             get {
@@ -1333,6 +1369,15 @@ namespace CrashEdit.Properties {
         internal static string Menu_Undo_UndoNone {
             get {
                 return ResourceManager.GetString("Menu_Undo_UndoNone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Miscellaneous.
+        /// </summary>
+        internal static string Misc {
+            get {
+                return ResourceManager.GetString("Misc", resourceCulture);
             }
         }
         

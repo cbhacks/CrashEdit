@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace CrashEdit
 {
@@ -72,27 +73,33 @@ namespace CrashEdit
             chkNormalDisplay.Checked = Settings.Default.DisplayNormals;
             chkCollisionDisplay.Checked = Settings.Default.DisplayFrameCollision;
             chkUseAnimLinks.Checked = Settings.Default.UseAnimLinks;
-            cdlClearCol.Color = picClearCol.BackColor = System.Drawing.Color.FromArgb(Settings.Default.ClearColorRGB);
+            cdlClearCol.Color = picClearCol.BackColor = Color.FromArgb(Settings.Default.ClearColorRGB);
             chkDeleteInvalidEntries.Checked = Settings.Default.DeleteInvalidEntries;
             chkAnimGrid.Checked = Settings.Default.DisplayAnimGrid;
             numAnimGrid.Value = Settings.Default.AnimGridLen;
 
-            fraLang.Text = Resources.Config_FraLang;
+            dpdLang.MaximumSize = new Size(lblLang.Width, 0);
+
+            fraMisc.Text = Resources.Config_fraMisc;
             fraSize.Text = Resources.Config_fraSize;
-            lblW.Text = Resources.Config_lblW;
-            lblH.Text = Resources.Config_lblH;
             fraClearCol.Text = Resources.Config_fraClearCol;
             fraAnimGrid.Text = Resources.Config_fraAnimGrid;
-            chkAnimGrid.Text = Resources.Config_chkAnimGrid;
-            lblAnimGrid.Text = Resources.Config_lblAnimGrid;
             fraFont.Text = Resources.Config_fraFont;
+            lblLang.Text = Resources.Config_lblLang;
+            lblW.Text = Resources.Config_lblW;
+            lblH.Text = Resources.Config_lblH;
+            lblAnimGrid.Text = Resources.Config_lblAnimGrid;
             lblFontName.Text = Resources.Config_lblFontName;
             lblFontSize.Text = Resources.Config_lblFontSize;
+            chkAnimGrid.Text = Resources.Config_chkAnimGrid;
             chkNormalDisplay.Text = Resources.Config_chkNormalDisplay;
             chkCollisionDisplay.Text = Resources.Config_chkCollisionDisplay;
             chkDeleteInvalidEntries.Text = Resources.Config_chkDeleteInvalidEntries;
             chkUseAnimLinks.Text = Resources.Config_chkUseAnimLinks;
             chkPatchNSDSavesNSF.Text = Resources.Config_chkPatchNSDSavesNSF;
+            chkFont3DAutoscale.Text = Resources.Config_chkFont3DAutoscale;
+            chkFont3DEnable.Text = Resources.Config_chkFont3DEnable;
+            chkFont2DEnable.Text = Resources.Config_chkFont2DEnable;
             cmdReset.Text = Resources.Config_cmdReset;
         }
 
@@ -181,6 +188,24 @@ namespace CrashEdit
         private void numFontSize_ValueChanged(object sender, EventArgs e)
         {
             Settings.Default.FontSize = (int)numFontSize.Value;
+            Settings.Default.Save();
+        }
+
+        private void chkFont3DEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.Font3DEnable = chkFont3DEnable.Checked;
+            Settings.Default.Save();
+        }
+
+        private void chkFont3DAutoscale_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.Font3DAutoscale = chkFont3DAutoscale.Checked;
+            Settings.Default.Save();
+        }
+
+        private void chkFont2DEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.Font2DEnable = chkFont2DEnable.Checked;
             Settings.Default.Save();
         }
     }

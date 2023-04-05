@@ -190,5 +190,41 @@ namespace CrashEdit.Properties {
                 this["FontName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Font3DEnable {
+            get {
+                return ((bool)(this["Font3DEnable"]));
+            }
+            set {
+                this["Font3DEnable"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Font2DEnable {
+            get {
+                return ((bool)(this["Font2DEnable"]));
+            }
+            set {
+                this["Font2DEnable"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Font3DAutoscale {
+            get {
+                return ((bool)(this["Font3DAutoscale"]));
+            }
+            set {
+                this["Font3DAutoscale"] = value;
+            }
+        }
     }
 }

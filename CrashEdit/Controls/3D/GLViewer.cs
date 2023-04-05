@@ -16,8 +16,11 @@ namespace CrashEdit
     [Flags]
     public enum TextRenderFlags
     {
-        Shadow = 1 << 0,
-        Unscaled = 1 << 1
+        Shadow    = 1 << 0,
+        Unscaled  = 1 << 1,
+        AutoScale = 1 << 2,
+
+        Default = Shadow | AutoScale
     }
 
     public abstract class GLViewer : GLControl
@@ -462,8 +465,9 @@ namespace CrashEdit
                     vaoTris.RenderAndDiscard(render);
                     vaoSprites.RenderAndDiscard(render);
 
-                    console += string.Format("render time: {0:F2}ms\n", dbgRunMs);
-                    AddText(console, 0, 0, (Rgba)Color4.White, 16);
+                    console += string.Format("Render time: {0:F2}ms\n", dbgRunMs);
+                    if (Settings.Default.Font2DEnable)
+                        AddText(console, 0, 0, (Rgba)Color4.White);
                     vaoText.UserScale = new Vector3(Width, Height, 1);
                     vaoText.RenderAndDiscard(render);
                 }
@@ -518,13 +522,21 @@ namespace CrashEdit
             DebugRenderBox(pos, size, col_fill);
         }
 
-        public void AddText3D(string text, Vector3 pos, Rgba col, float size, TextRenderFlags flags = TextRenderFlags.Shadow)
+        public void AddText3D(string text, Vector3 pos, Rgba col, float size = 1, TextRenderFlags flags = TextRenderFlags.Default)
         {
             var screen_pos = new Vector4(pos, 1) * render.Projection.PVM;
             screen_pos /= screen_pos.W;
             if (screen_pos.Z >= 1 || screen_pos.Z <= -1)
                 return;
             screen_pos.Y = -screen_pos.Y;
+            if ((flags & TextRenderFlags.AutoScale) != 0)
+            {
+                flags &= ~TextRenderFlags.Unscaled;
+                if (!Settings.Default.Font3DAutoscale)
+                {
+                    flags |= TextRenderFlags.Unscaled;
+                }
+            }
             if ((flags & TextRenderFlags.Unscaled) == 0)
             {
                 var text_dist_vec = render.Projection.RealTrans + pos;
@@ -535,14 +547,15 @@ namespace CrashEdit
             AddText(text, (screen_pos.Xy + new Vector2(1)) * new Vector2(Width, Height) / 2, col, size, flags);
         }
 
-        public void AddText(string text, float x, float y, Rgba col, float size, TextRenderFlags flags = TextRenderFlags.Shadow) => AddText(text, new Vector2(x, y), col, new Vector2(size), flags);
-        public void AddText(string text, Vector2 ofs, Rgba col, float size, TextRenderFlags flags = TextRenderFlags.Shadow) => AddText(text, ofs, col, new Vector2(size), flags);
-        public void AddText(string text, Vector2 ofs, Rgba col, Vector2 size, TextRenderFlags flags = TextRenderFlags.Shadow)
+        public void AddText(string text, float x, float y, Rgba col, float size = 1, TextRenderFlags flags = TextRenderFlags.Default) => AddText(text, new Vector2(x, y), col, new Vector2(size), flags);
+        public void AddText(string text, Vector2 ofs, Rgba col, float size = 1, TextRenderFlags flags = TextRenderFlags.Default) => AddText(text, ofs, col, new Vector2(size), flags);
+        public void AddText(string text, Vector2 ofs, Rgba col, Vector2 size, TextRenderFlags flags = TextRenderFlags.Default)
         {
             if (fontTable == null)
                 return;
 
             var face = fontTable.Face;
+            size *= 16;
             size.X /= fontTable.Width;
             size.Y /= fontTable.Height;
             float string_w = 0, string_h = text.Length == 0 ? 0 : fontTable.LineHeight * size.Y;

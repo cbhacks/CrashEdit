@@ -301,7 +301,7 @@
   <data name="Text_CloseDirtyFilePrompt" xml:space="preserve">
     <value>The file "{0}" has not been saved since it was last modified. Continue anyway?</value>
   </data>
-  <data name="Config_FraLang" xml:space="preserve">
+  <data name="Config_lblLang" xml:space="preserve">
     <value>Language (requires restart)</value>
   </data>
   <data name="EntityBox_ChkBonusBoxCount" xml:space="preserve">
@@ -445,10 +445,10 @@
     <value>Amount</value>
   </data>
   <data name="Config_lblH" xml:space="preserve">
-    <value>Width</value>
+    <value>Height</value>
   </data>
   <data name="Config_lblW" xml:space="preserve">
-    <value>Height</value>
+    <value>Width</value>
   </data>
   <data name="Crash3AnimationSelector_Desc" xml:space="preserve">
     <value>Type in a Model (or Compressed Model) name and press Enter.</value>
@@ -751,6 +751,21 @@ as Meters: {3:F3}m</value>
     <value>Font</value>
   </data>
   <data name="Config_lblFontSize" xml:space="preserve">
-    <value>Size</value>
+    <value>Font Size</value>
+  </data>
+  <data name="Config_chkFont2DEnable" xml:space="preserve">
+    <value>Display debug text</value>
+  </data>
+  <data name="Config_chkFont3DAutoscale" xml:space="preserve">
+    <value>Scale entity text</value>
+  </data>
+  <data name="Config_chkFont3DEnable" xml:space="preserve">
+    <value>Display entity text</value>
+  </data>
+  <data name="Config_fraMisc" xml:space="preserve">
+    <value>Other Settings</value>
+  </data>
+  <data name="Misc" xml:space="preserve">
+    <value>Miscellaneous</value>
   </data>
 </root>
