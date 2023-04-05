@@ -19,7 +19,7 @@ namespace CrashEdit.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -182,7 +182,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Animation Viewer World Grid.
+        ///   Looks up a localized string similar to 3D Viewer Grid.
         /// </summary>
         internal static string Config_fraAnimGrid {
             get {
@@ -196,6 +196,15 @@ namespace CrashEdit.Properties {
         internal static string Config_fraClearCol {
             get {
                 return ResourceManager.GetString("Config_fraClearCol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Font Renderer.
+        /// </summary>
+        internal static string Config_fraFont {
+            get {
+                return ResourceManager.GetString("Config_fraFont", resourceCulture);
             }
         }
         
@@ -223,6 +232,24 @@ namespace CrashEdit.Properties {
         internal static string Config_lblAnimGrid {
             get {
                 return ResourceManager.GetString("Config_lblAnimGrid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Font.
+        /// </summary>
+        internal static string Config_lblFontName {
+            get {
+                return ResourceManager.GetString("Config_lblFontName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size.
+        /// </summary>
+        internal static string Config_lblFontSize {
+            get {
+                return ResourceManager.GetString("Config_lblFontSize", resourceCulture);
             }
         }
         

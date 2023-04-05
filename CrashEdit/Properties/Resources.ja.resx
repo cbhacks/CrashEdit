@@ -431,10 +431,10 @@
     <value>設定のリセット</value>
   </data>
   <data name="Config_fraAnimGrid" xml:space="preserve">
-    <value>アニメーションビューワーのグリッド線</value>
+    <value>3Dビューワーのグリッド線</value>
   </data>
   <data name="Config_fraClearCol" xml:space="preserve">
-    <value>クリア</value>
+    <value>クリアカラー</value>
   </data>
   <data name="Config_fraSize" xml:space="preserve">
     <value>ウィンドウのサイズ</value>
@@ -732,5 +732,14 @@
   </data>
   <data name="MakeBIN_Making" xml:space="preserve">
     <value>BIN の作成</value>
+  </data>
+  <data name="Config_fraFont" xml:space="preserve">
+    <value>フォントレンダラ</value>
+  </data>
+  <data name="Config_lblFontName" xml:space="preserve">
+    <value>フォント</value>
+  </data>
+  <data name="Config_lblFontSize" xml:space="preserve">
+    <value>サイズ</value>
   </data>
 </root>

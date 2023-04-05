@@ -1,4 +1,5 @@
 using Crash;
+using CrashEdit.Properties;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
@@ -6,6 +7,7 @@ using SharpFont;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -413,6 +415,13 @@ namespace CrashEdit
                 {
                     glDebugContextString = "setup";
 
+                    // update font
+                    if (fontTable.Size != Settings.Default.FontSize || fontTable.FileName != Settings.Default.FontName)
+                    {
+                        fontTable.LoadFont(fontLib, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), Settings.Default.FontName), Settings.Default.FontSize);
+                        fontTable.LoadFontTextureGL(texFont);
+                    }
+
                     // set up viewport clip
                     GL.Viewport(0, 0, Width, Height);
                     render.Projection.Width = Width;
@@ -443,7 +452,7 @@ namespace CrashEdit
                     vaoTris.RenderAndDiscard(render);
                     vaoSprites.RenderAndDiscard(render);
 
-                    AddText("test 1!\ntest 2!", new Vector2(0), (Rgba)Color4.White, new Vector2(30));
+                    AddText("Press foo bar: 100294v", 0, 0, (Rgba)Color4.White, 15);
                     vaoText.UserScale = new Vector3(Width, Height, 1);
                     vaoText.RenderAndDiscard(render);
                 }
@@ -490,12 +499,14 @@ namespace CrashEdit
             vaoDebugBoxLine.Render(render);
         }
 
-        protected void DebugRenderOutlinedBox(Vector3 pos, Vector3 size, Color4 col_line, Color4 col_fill)
+        protected void DebugRenderBoxLineFilled(Vector3 pos, Vector3 size, Color4 col_line, Color4 col_fill)
         {
             DebugRenderBoxLine(pos, size, col_line);
             DebugRenderBox(pos, size, col_fill);
         }
 
+        public void AddText(string text, float x, float y, Rgba col, float size) => AddText(text, new Vector2(x, y), col, new Vector2(size));
+        public void AddText(string text, Vector2 ofs, Rgba col, float size) => AddText(text, ofs, col, new Vector2(size));
         public void AddText(string text, Vector2 ofs, Rgba col, Vector2 size)
         {
             if (fontTable == null)
@@ -507,7 +518,7 @@ namespace CrashEdit
             float string_w = 0, string_h = text.Length == 0 ? 0 : fontTable.LineHeight * size.Y;
             var start_ofs = ofs;
             var cur_ofs = ofs;
-            cur_ofs.Y += fontTable.Adjust * size.Y;
+            cur_ofs.Y += string_h;
             for (int i = 0; i < text.Length; ++i)
             {
                 var c = text[i];

@@ -1,13 +1,14 @@
 ﻿using CrashEdit.Properties;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 namespace CrashEdit
 {
     public partial class ConfigEditor : UserControl
     {
-        public static readonly List<string> Languages = new List<string> { "en", "ja" };
+        public static readonly List<string> Languages = new() { "en", "ja" };
 
         public ConfigEditor()
         {
@@ -16,6 +17,15 @@ namespace CrashEdit
                 dpdLang.Items.Add(Resources.ResourceManager.GetString("Language", new System.Globalization.CultureInfo(lang)));
             dpdLang.SelectedItem = Resources.ResourceManager.GetString("Language", new System.Globalization.CultureInfo(Settings.Default.Language));
             dpdLang.SelectedIndexChanged += new EventHandler(dpdLang_SelectedIndexChanged);
+            foreach (var f in Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.Fonts)))
+                if (Path.GetExtension(f) == ".ttf")
+                    dpdFont.Items.Add(Path.GetFileName(f));
+            dpdFont.SelectedIndexChanged += new EventHandler(dpdFont_SelectedIndexChanged);
+            if (!dpdFont.Items.Contains(Settings.Default.FontName))
+                dpdFont.SelectedIndex = 0;
+            else
+                dpdFont.SelectedItem = Settings.Default.FontName;
+            numFontSize.Value = (decimal)Settings.Default.FontSize;
             numW.Value = Settings.Default.DefaultFormW;
             numH.Value = Settings.Default.DefaultFormH;
             chkNormalDisplay.Checked = Settings.Default.DisplayNormals;
@@ -25,6 +35,7 @@ namespace CrashEdit
             chkDeleteInvalidEntries.Checked = Settings.Default.DeleteInvalidEntries;
             chkAnimGrid.Checked = Settings.Default.DisplayAnimGrid;
             numAnimGrid.Value = Settings.Default.AnimGridLen;
+
             fraLang.Text = Resources.Config_FraLang;
             fraSize.Text = Resources.Config_fraSize;
             lblW.Text = Resources.Config_lblW;
@@ -33,6 +44,9 @@ namespace CrashEdit
             fraAnimGrid.Text = Resources.Config_fraAnimGrid;
             chkAnimGrid.Text = Resources.Config_chkAnimGrid;
             lblAnimGrid.Text = Resources.Config_lblAnimGrid;
+            fraFont.Text = Resources.Config_fraFont;
+            lblFontName.Text = Resources.Config_lblFontName;
+            lblFontSize.Text = Resources.Config_lblFontSize;
             chkNormalDisplay.Text = Resources.Config_chkNormalDisplay;
             chkCollisionDisplay.Text = Resources.Config_chkCollisionDisplay;
             chkDeleteInvalidEntries.Text = Resources.Config_chkDeleteInvalidEntries;
@@ -44,6 +58,12 @@ namespace CrashEdit
         private void dpdLang_SelectedIndexChanged(object sender, EventArgs e)
         {
             Settings.Default.Language = Languages[dpdLang.SelectedIndex];
+            Settings.Default.Save();
+        }
+
+        private void dpdFont_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Settings.Default.FontName = (string)dpdFont.SelectedItem;
             Settings.Default.Save();
         }
 
@@ -114,6 +134,12 @@ namespace CrashEdit
         private void chkPatchNSDSavesNSF_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Default.PatchNSDSavesNSF = chkPatchNSDSavesNSF.Checked;
+            Settings.Default.Save();
+        }
+
+        private void numFontSize_ValueChanged(object sender, EventArgs e)
+        {
+            Settings.Default.FontSize = (int)numFontSize.Value;
             Settings.Default.Save();
         }
     }

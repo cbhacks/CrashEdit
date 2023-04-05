@@ -54,11 +54,11 @@ namespace CrashEdit
             if (parent != null)
             {
                 _frametimer = new();
-                _frametimer.Interval = 10;
                 _frametimer.Tick += (sender, e) =>
                 {
                     parent.Invalidate();
                 };
+                _frametimer.Interval = 10;
                 _frametimer.Enabled = true;
             }
 
@@ -111,11 +111,24 @@ namespace CrashEdit
             _frametask.Start();
         }
 
-        public void Dispose()
+        public void StopDisplay()
+        {
+            if (_frametimer != null)
+                _frametimer.Enabled = false;
+        }
+
+        public void StopLogic(bool wait = false)
         {
             masterexit = true;
+            if (wait)
+                _frametask.Wait();
+        }
 
-            _frametask.Wait();
+        public void Dispose()
+        {
+            StopDisplay();
+            StopLogic(true);
+
             _frametask.Dispose();
             _frametimer?.Dispose();
         }

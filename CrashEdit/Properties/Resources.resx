@@ -433,7 +433,7 @@
     <value>Reset Settings</value>
   </data>
   <data name="Config_fraAnimGrid" xml:space="preserve">
-    <value>Animation Viewer World Grid</value>
+    <value>3D Viewer Grid</value>
   </data>
   <data name="Config_fraClearCol" xml:space="preserve">
     <value>Clear Color</value>
@@ -743,5 +743,14 @@
 as Angle: {1:F}deg
 as Time: {2:F}s
 as Meters: {3:F3}m</value>
+  </data>
+  <data name="Config_fraFont" xml:space="preserve">
+    <value>Font Renderer</value>
+  </data>
+  <data name="Config_lblFontName" xml:space="preserve">
+    <value>Font</value>
+  </data>
+  <data name="Config_lblFontSize" xml:space="preserve">
+    <value>Size</value>
   </data>
 </root>

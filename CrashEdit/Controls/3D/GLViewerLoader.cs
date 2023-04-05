@@ -1,4 +1,5 @@
 using Crash;
+using CrashEdit.Properties;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System;
@@ -10,7 +11,7 @@ using System.Runtime.InteropServices;
 
 namespace CrashEdit
 {
-    public sealed class GLViewerLoader : GLViewer, IDisposable
+    public sealed class GLViewerLoader : GLViewer
     {
         protected override bool UseGrid => false;
 
@@ -67,9 +68,8 @@ namespace CrashEdit
             // init all shaders
             shaderContext = new();
 
-            // init axes vao
+            // init vertex array objects
             vaoAxes = new VAO(shaderContext, "axes", PrimitiveType.Lines, vert_count: AxesPos.Length);
-
             vaoSphereLine = new VAO(shaderContext, "line-model", PrimitiveType.LineStrip);
             vaoGridLine = new VAO(shaderContext, "line-usercolor", PrimitiveType.Lines);
             vaoDebugBoxTri = new VAO(shaderContext, "box-model", PrimitiveType.Triangles, vert_count: BoxTriIndices.Length);
@@ -133,21 +133,16 @@ namespace CrashEdit
 
             // make texture for font
             fontTable = new();
-            var full_bmp = fontTable.LoadFont(fontLib, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf"), 20);
-            texFont = GL.GenTexture();
-            GL.ActiveTexture(TextureUnit.Texture2);
-            GL.BindTexture(TextureTarget.Texture2D, texFont);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            var buf = new byte[full_bmp.Width * full_bmp.Height];
-            for (int y = 0; y < full_bmp.Height; ++y)
-            {
-                for (int x = 0; x < full_bmp.Width; ++x)
-                {
-                    buf[y * full_bmp.Width + x] = full_bmp.GetPixel(x, y).A;
-                }
-            }
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8, full_bmp.Width, full_bmp.Height, 0, OpenTK.Graphics.OpenGL4.PixelFormat.Red, PixelType.UnsignedByte, buf);
+            fontTable.LoadFont(fontLib, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), Settings.Default.FontName), Settings.Default.FontSize);
+            texFont = fontTable.LoadFontTextureGL(GL.GenTexture());
+        }
+
+        protected override void GLLoad()
+        {
+            base.GLLoad();
+
+            render.StopDisplay();
+            render.StopLogic();
         }
     }
 }

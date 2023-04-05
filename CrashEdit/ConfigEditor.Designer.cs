@@ -48,6 +48,11 @@
             this.lblAnimGrid = new System.Windows.Forms.Label();
             this.chkAnimGrid = new System.Windows.Forms.CheckBox();
             this.chkPatchNSDSavesNSF = new System.Windows.Forms.CheckBox();
+            this.dpdFont = new System.Windows.Forms.ComboBox();
+            this.fraFont = new System.Windows.Forms.GroupBox();
+            this.lblFontName = new System.Windows.Forms.Label();
+            this.lblFontSize = new System.Windows.Forms.Label();
+            this.numFontSize = new System.Windows.Forms.NumericUpDown();
             this.fraLang.SuspendLayout();
             this.fraSize.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numH)).BeginInit();
@@ -56,6 +61,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.picClearCol)).BeginInit();
             this.fraAnimGrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numAnimGrid)).BeginInit();
+            this.fraFont.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numFontSize)).BeginInit();
             this.SuspendLayout();
             // 
             // dpdLang
@@ -79,7 +86,7 @@
             // 
             // cmdReset
             // 
-            this.cmdReset.Location = new System.Drawing.Point(3, 252);
+            this.cmdReset.Location = new System.Drawing.Point(3, 262);
             this.cmdReset.Name = "cmdReset";
             this.cmdReset.Size = new System.Drawing.Size(100, 23);
             this.cmdReset.TabIndex = 1;
@@ -89,13 +96,15 @@
             // 
             // fraSize
             // 
+            this.fraSize.AutoSize = true;
+            this.fraSize.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.fraSize.Controls.Add(this.lblH);
             this.fraSize.Controls.Add(this.lblW);
             this.fraSize.Controls.Add(this.numH);
             this.fraSize.Controls.Add(this.numW);
             this.fraSize.Location = new System.Drawing.Point(3, 58);
             this.fraSize.Name = "fraSize";
-            this.fraSize.Size = new System.Drawing.Size(131, 74);
+            this.fraSize.Size = new System.Drawing.Size(131, 84);
             this.fraSize.TabIndex = 1;
             this.fraSize.TabStop = false;
             this.fraSize.Text = "Default Window Size";
@@ -169,7 +178,7 @@
             this.chkNormalDisplay.AutoSize = true;
             this.chkNormalDisplay.Checked = true;
             this.chkNormalDisplay.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkNormalDisplay.Location = new System.Drawing.Point(3, 138);
+            this.chkNormalDisplay.Location = new System.Drawing.Point(3, 148);
             this.chkNormalDisplay.Name = "chkNormalDisplay";
             this.chkNormalDisplay.Size = new System.Drawing.Size(99, 17);
             this.chkNormalDisplay.TabIndex = 0;
@@ -182,7 +191,7 @@
             this.chkCollisionDisplay.AutoSize = true;
             this.chkCollisionDisplay.Checked = true;
             this.chkCollisionDisplay.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkCollisionDisplay.Location = new System.Drawing.Point(3, 161);
+            this.chkCollisionDisplay.Location = new System.Drawing.Point(3, 171);
             this.chkCollisionDisplay.Name = "chkCollisionDisplay";
             this.chkCollisionDisplay.Size = new System.Drawing.Size(178, 17);
             this.chkCollisionDisplay.TabIndex = 2;
@@ -195,7 +204,7 @@
             this.chkUseAnimLinks.AutoSize = true;
             this.chkUseAnimLinks.Checked = true;
             this.chkUseAnimLinks.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkUseAnimLinks.Location = new System.Drawing.Point(3, 230);
+            this.chkUseAnimLinks.Location = new System.Drawing.Point(3, 240);
             this.chkUseAnimLinks.Name = "chkUseAnimLinks";
             this.chkUseAnimLinks.Size = new System.Drawing.Size(231, 17);
             this.chkUseAnimLinks.TabIndex = 3;
@@ -211,10 +220,12 @@
             // 
             // fraClearCol
             // 
+            this.fraClearCol.AutoSize = true;
+            this.fraClearCol.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.fraClearCol.Controls.Add(this.picClearCol);
             this.fraClearCol.Location = new System.Drawing.Point(140, 58);
             this.fraClearCol.Name = "fraClearCol";
-            this.fraClearCol.Size = new System.Drawing.Size(72, 74);
+            this.fraClearCol.Size = new System.Drawing.Size(72, 84);
             this.fraClearCol.TabIndex = 4;
             this.fraClearCol.TabStop = false;
             this.fraClearCol.Text = "Clear Color";
@@ -224,7 +235,7 @@
             this.picClearCol.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.picClearCol.Location = new System.Drawing.Point(6, 19);
             this.picClearCol.Name = "picClearCol";
-            this.picClearCol.Size = new System.Drawing.Size(60, 49);
+            this.picClearCol.Size = new System.Drawing.Size(60, 46);
             this.picClearCol.TabIndex = 0;
             this.picClearCol.TabStop = false;
             this.picClearCol.Click += new System.EventHandler(this.pictureBox1_Click);
@@ -234,7 +245,7 @@
             this.chkDeleteInvalidEntries.AutoSize = true;
             this.chkDeleteInvalidEntries.Checked = true;
             this.chkDeleteInvalidEntries.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDeleteInvalidEntries.Location = new System.Drawing.Point(3, 184);
+            this.chkDeleteInvalidEntries.Location = new System.Drawing.Point(3, 194);
             this.chkDeleteInvalidEntries.Name = "chkDeleteInvalidEntries";
             this.chkDeleteInvalidEntries.Size = new System.Drawing.Size(280, 17);
             this.chkDeleteInvalidEntries.TabIndex = 5;
@@ -244,26 +255,28 @@
             // 
             // fraAnimGrid
             // 
+            this.fraAnimGrid.AutoSize = true;
+            this.fraAnimGrid.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.fraAnimGrid.Controls.Add(this.numAnimGrid);
             this.fraAnimGrid.Controls.Add(this.lblAnimGrid);
             this.fraAnimGrid.Controls.Add(this.chkAnimGrid);
             this.fraAnimGrid.Location = new System.Drawing.Point(219, 58);
             this.fraAnimGrid.Name = "fraAnimGrid";
-            this.fraAnimGrid.Size = new System.Drawing.Size(184, 74);
+            this.fraAnimGrid.Size = new System.Drawing.Size(136, 84);
             this.fraAnimGrid.TabIndex = 6;
             this.fraAnimGrid.TabStop = false;
-            this.fraAnimGrid.Text = "Animation Viewer World Grid";
+            this.fraAnimGrid.Text = "3D Viewer World Grid";
             // 
             // numAnimGrid
             // 
-            this.numAnimGrid.Location = new System.Drawing.Point(56, 42);
+            this.numAnimGrid.Location = new System.Drawing.Point(56, 45);
             this.numAnimGrid.Maximum = new decimal(new int[] {
             32767,
             0,
             0,
             0});
             this.numAnimGrid.Name = "numAnimGrid";
-            this.numAnimGrid.Size = new System.Drawing.Size(80, 20);
+            this.numAnimGrid.Size = new System.Drawing.Size(74, 20);
             this.numAnimGrid.TabIndex = 2;
             this.numAnimGrid.Value = new decimal(new int[] {
             4,
@@ -275,7 +288,7 @@
             // lblAnimGrid
             // 
             this.lblAnimGrid.AutoSize = true;
-            this.lblAnimGrid.Location = new System.Drawing.Point(7, 46);
+            this.lblAnimGrid.Location = new System.Drawing.Point(6, 47);
             this.lblAnimGrid.Name = "lblAnimGrid";
             this.lblAnimGrid.Size = new System.Drawing.Size(43, 13);
             this.lblAnimGrid.TabIndex = 1;
@@ -284,7 +297,7 @@
             // chkAnimGrid
             // 
             this.chkAnimGrid.AutoSize = true;
-            this.chkAnimGrid.Location = new System.Drawing.Point(6, 19);
+            this.chkAnimGrid.Location = new System.Drawing.Point(9, 19);
             this.chkAnimGrid.Name = "chkAnimGrid";
             this.chkAnimGrid.Size = new System.Drawing.Size(65, 17);
             this.chkAnimGrid.TabIndex = 0;
@@ -297,7 +310,7 @@
             this.chkPatchNSDSavesNSF.AutoSize = true;
             this.chkPatchNSDSavesNSF.Checked = true;
             this.chkPatchNSDSavesNSF.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkPatchNSDSavesNSF.Location = new System.Drawing.Point(3, 207);
+            this.chkPatchNSDSavesNSF.Location = new System.Drawing.Point(3, 217);
             this.chkPatchNSDSavesNSF.Name = "chkPatchNSDSavesNSF";
             this.chkPatchNSDSavesNSF.Size = new System.Drawing.Size(266, 17);
             this.chkPatchNSDSavesNSF.TabIndex = 7;
@@ -305,11 +318,79 @@
             this.chkPatchNSDSavesNSF.UseVisualStyleBackColor = true;
             this.chkPatchNSDSavesNSF.CheckedChanged += new System.EventHandler(this.chkPatchNSDSavesNSF_CheckedChanged);
             // 
+            // dpdFont
+            // 
+            this.dpdFont.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.dpdFont.FormattingEnabled = true;
+            this.dpdFont.Location = new System.Drawing.Point(58, 19);
+            this.dpdFont.Name = "dpdFont";
+            this.dpdFont.Size = new System.Drawing.Size(149, 21);
+            this.dpdFont.TabIndex = 1;
+            // 
+            // fraFont
+            // 
+            this.fraFont.AutoSize = true;
+            this.fraFont.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.fraFont.Controls.Add(this.numFontSize);
+            this.fraFont.Controls.Add(this.lblFontSize);
+            this.fraFont.Controls.Add(this.lblFontName);
+            this.fraFont.Controls.Add(this.dpdFont);
+            this.fraFont.Location = new System.Drawing.Point(361, 58);
+            this.fraFont.Name = "fraFont";
+            this.fraFont.Size = new System.Drawing.Size(213, 84);
+            this.fraFont.TabIndex = 8;
+            this.fraFont.TabStop = false;
+            this.fraFont.Text = "Font Renderer";
+            // 
+            // lblFontName
+            // 
+            this.lblFontName.AutoSize = true;
+            this.lblFontName.Location = new System.Drawing.Point(6, 21);
+            this.lblFontName.Name = "lblFontName";
+            this.lblFontName.Size = new System.Drawing.Size(28, 13);
+            this.lblFontName.TabIndex = 3;
+            this.lblFontName.Text = "Font";
+            // 
+            // lblFontSize
+            // 
+            this.lblFontSize.AutoSize = true;
+            this.lblFontSize.Location = new System.Drawing.Point(6, 47);
+            this.lblFontSize.Name = "lblFontSize";
+            this.lblFontSize.Size = new System.Drawing.Size(27, 13);
+            this.lblFontSize.TabIndex = 4;
+            this.lblFontSize.Text = "Size";
+            // 
+            // numFontSize
+            // 
+            this.numFontSize.DecimalPlaces = 2;
+            this.numFontSize.Location = new System.Drawing.Point(58, 45);
+            this.numFontSize.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+            this.numFontSize.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numFontSize.Name = "numFontSize";
+            this.numFontSize.Size = new System.Drawing.Size(60, 20);
+            this.numFontSize.TabIndex = 3;
+            this.numFontSize.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numFontSize.ValueChanged += new System.EventHandler(this.numFontSize_ValueChanged);
+            // 
             // ConfigEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.Controls.Add(this.fraFont);
             this.Controls.Add(this.chkPatchNSDSavesNSF);
             this.Controls.Add(this.fraAnimGrid);
             this.Controls.Add(this.chkDeleteInvalidEntries);
@@ -321,7 +402,7 @@
             this.Controls.Add(this.cmdReset);
             this.Controls.Add(this.fraLang);
             this.Name = "ConfigEditor";
-            this.Size = new System.Drawing.Size(433, 288);
+            this.Size = new System.Drawing.Size(681, 298);
             this.fraLang.ResumeLayout(false);
             this.fraSize.ResumeLayout(false);
             this.fraSize.PerformLayout();
@@ -332,6 +413,9 @@
             this.fraAnimGrid.ResumeLayout(false);
             this.fraAnimGrid.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numAnimGrid)).EndInit();
+            this.fraFont.ResumeLayout(false);
+            this.fraFont.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numFontSize)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -359,5 +443,10 @@
         private System.Windows.Forms.Label lblAnimGrid;
         private System.Windows.Forms.CheckBox chkAnimGrid;
         private System.Windows.Forms.CheckBox chkPatchNSDSavesNSF;
+        private System.Windows.Forms.ComboBox dpdFont;
+        private System.Windows.Forms.GroupBox fraFont;
+        private System.Windows.Forms.NumericUpDown numFontSize;
+        private System.Windows.Forms.Label lblFontSize;
+        private System.Windows.Forms.Label lblFontName;
     }
 }
