@@ -131,16 +131,13 @@ namespace CrashEdit
             GL.GetBoolean(GetPName.DepthTest, out bool glZBufRead);
             bool updateZBufWrite = !glZBufWrite != ZBufDisableWrite;
             bool updateZBufRead = !glZBufRead != ZBufDisableRead;
-            if (updateZBufWrite)
+            if (glZBufWrite && ZBufDisableWrite)
             {
-                GL.DepthMask(!ZBufDisableWrite);
+                GL.DepthMask(false);
             }
-            if (updateZBufRead)
+            if (glZBufRead && ZBufDisableRead)
             {
-                if (ZBufDisableRead)
-                    GL.Disable(EnableCap.DepthTest);
-                else
-                    GL.Enable(EnableCap.DepthTest);
+                GL.Disable(EnableCap.DepthTest);
             }
 
             // Bind the VAO
@@ -154,16 +151,13 @@ namespace CrashEdit
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindVertexArray(0);
 
-            if (updateZBufWrite)
+            if (glZBufWrite && ZBufDisableWrite)
             {
-                GL.DepthMask(glZBufWrite);
+                GL.DepthMask(true);
             }
-            if (updateZBufRead)
+            if (glZBufRead && ZBufDisableRead)
             {
-                if (glZBufRead)
-                    GL.Enable(EnableCap.DepthTest);
-                else
-                    GL.Disable(EnableCap.DepthTest);
+                GL.Enable(EnableCap.DepthTest);
             }
 
             GLViewer.glDebugContextString = backup_state;
