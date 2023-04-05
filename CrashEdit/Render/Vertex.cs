@@ -104,7 +104,8 @@ namespace CrashEdit
         [FieldOffset(00)] public Vector3 trans;
         [FieldOffset(12)] public Rgba rgba;
         [FieldOffset(16)] public Vector3 normal;
+        [FieldOffset(28)] public int tex;
         [FieldOffset(32)] public Vector2 st;
-        [FieldOffset(40)] public int tex;
+        // 40
     }
 }

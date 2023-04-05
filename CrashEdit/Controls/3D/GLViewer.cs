@@ -6,6 +6,7 @@ using OpenTK.Graphics.OpenGL4;
 using SharpFont;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -107,6 +108,9 @@ namespace CrashEdit
         protected static VAO vaoDebugBoxLine;
         protected static VAO vaoDebugSprite;
         public static string glDebugContextString = "*unknown*";
+        protected string console;
+        // debug timers
+        private double dbgRunMs;
 
         private bool run = false;
         private bool loaded = false;
@@ -401,6 +405,9 @@ namespace CrashEdit
             }
             else if (run)
             {
+                Stopwatch watchRun = Stopwatch.StartNew();
+
+                console = string.Empty;
                 glDebugContextString = "run";
 
                 MakeCurrent();
@@ -447,9 +454,13 @@ namespace CrashEdit
                     vaoTris.RenderAndDiscard(render);
                     vaoSprites.RenderAndDiscard(render);
 
+                    console += string.Format("render time: {0:F2}ms\n", dbgRunMs);
+                    AddText(console, 0, 0, (Rgba)Color4.White, 16);
                     vaoText.UserScale = new Vector3(Width, Height, 1);
                     vaoText.RenderAndDiscard(render);
                 }
+
+                dbgRunMs = watchRun.ElapsedMillisecondsFull();
 
                 // swap the front/back buffers so what we just rendered to the back buffer is displayed in the window.
                 glDebugContextString = "swap-buffers";
@@ -497,6 +508,18 @@ namespace CrashEdit
         {
             DebugRenderBoxLine(pos, size, col_line);
             DebugRenderBox(pos, size, col_fill);
+        }
+
+        public void AddText3D(string text, Vector3 pos, Rgba col, float size)
+        {
+            var screen_pos = new Vector4(pos, 1) * render.Projection.PVM;
+            screen_pos.X /= screen_pos.W;
+            screen_pos.Y /= -screen_pos.W;
+            screen_pos.Z /= screen_pos.W;
+            screen_pos.W /= screen_pos.W;
+            if (screen_pos.Z >= 1 || screen_pos.Z <= -1)
+                return;
+            AddText(text, (screen_pos.Xy + new Vector2(1)) * new Vector2(Width, Height) / 2, col, size);
         }
 
         public void AddText(string text, float x, float y, Rgba col, float size) => AddText(text, new Vector2(x, y), col, new Vector2(size));
