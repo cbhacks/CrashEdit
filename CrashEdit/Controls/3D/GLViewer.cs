@@ -451,8 +451,7 @@ namespace CrashEdit
                     // update font
                     if (fontTable.Size != Settings.Default.FontSize || fontTable.FileName != Settings.Default.FontName)
                     {
-                        fontTable.LoadFont(fontLib, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), Settings.Default.FontName), Settings.Default.FontSize);
-                        fontTable.LoadFontTextureGL(texFont);
+                        fontTable.LoadFontAndLoadToGL(texFont, fontLib, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), Settings.Default.FontName), Settings.Default.FontSize);
                     }
 
                     // set up viewport clip

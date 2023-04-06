@@ -131,8 +131,7 @@ namespace CrashEdit
 
             // make texture for font
             fontTable = new();
-            fontTable.LoadFont(fontLib, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), Settings.Default.FontName), Settings.Default.FontSize);
-            texFont = fontTable.LoadFontTextureGL(GL.GenTexture());
+            texFont = fontTable.LoadFontAndLoadToGL(GL.GenTexture(), fontLib, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), Settings.Default.FontName), Settings.Default.FontSize);
         }
 
         protected override void GLLoad()

@@ -2,8 +2,8 @@
 using SharpFont;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 
 namespace CrashEdit
 {
@@ -27,8 +27,10 @@ namespace CrashEdit
             Clear();
         }
 
-        public Bitmap LoadFont(Library lib, string fname, float size)
+        public Bitmap LoadFontBitmap(Library lib, string fname, float size)
         {
+            Stopwatch watch = Stopwatch.StartNew();
+
             Face face;
             try
             {
@@ -119,7 +121,7 @@ namespace CrashEdit
                 }
             }
             // full_bmp.Save("test-full.png");
-            Console.WriteLine($"Succesfully created bitmap for {Face.FamilyName} {Face.StyleName} {size}pt ({full_bmp.Width}x{full_bmp.Height})");
+            Console.WriteLine($"Succesfully created bitmap for {Face.FamilyName} {Face.StyleName} {size}pt ({full_bmp.Width}x{full_bmp.Height}) in {watch.ElapsedMillisecondsFull()}ms");
 
             Bitmap = full_bmp;
             return Bitmap;
@@ -140,6 +142,15 @@ namespace CrashEdit
                 }
             }
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8, Bitmap.Width, Bitmap.Height, 0, PixelFormat.Red, PixelType.UnsignedByte, buf);
+            return tex_id;
+        }
+
+        public int LoadFontAndLoadToGL(int tex_id, Library lib, string fname, float size)
+        {
+            Stopwatch watch = Stopwatch.StartNew();
+            LoadFontBitmap(lib, fname, size);
+            LoadFontTextureGL(tex_id);
+            Console.WriteLine(string.Format("Successfully loaded font {1} {2} in {0:F3} seconds", watch.ElapsedMillisecondsFull() / 1000, Face.FamilyName, Face.StyleName));
             return tex_id;
         }
     }

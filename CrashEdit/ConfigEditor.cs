@@ -188,7 +188,7 @@ namespace CrashEdit
 
         private void numFontSize_ValueChanged(object sender, EventArgs e)
         {
-            Settings.Default.FontSize = (int)numFontSize.Value;
+            Settings.Default.FontSize = (float)numFontSize.Value;
             Settings.Default.Save();
         }
 
