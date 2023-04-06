@@ -566,12 +566,14 @@ namespace CrashEdit
                 return;
 
             var face = fontTable.Face;
+            var string_size = GetTextSize(text, new Vector2(1), flags) * size;
+            
+            // correct size
             size *= 16;
             size.X /= fontTable.Width;
             size.Y /= fontTable.Height;
 
             var start_ofs = ofs;
-            var string_size = GetTextSize(text, size, flags);
             if ((flags & TextRenderFlags.Middle) != 0)
             {
                 start_ofs.Y -= string_size.Y / 2;

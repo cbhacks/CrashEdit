@@ -128,7 +128,7 @@ namespace CrashEdit
         {
             zoneTrans = new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
             Vector3 zoneSize = new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1;
-            AddText3D(zone.EName, zoneTrans + new Vector3(zoneSize.X, 0, zoneSize.Z), (Rgba)Color4.White);
+            AddText3D(zone.EName, zoneTrans + new Vector3(zoneSize.X, 0, zoneSize.Z) / 2, Rgba.FromOther(Color4.White, masterZoneAlpha), size: 2, flags: TextRenderFlags.Shadow | TextRenderFlags.Top | TextRenderFlags.Center);
             AddBox(zoneTrans,
                    new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1,
                    new Rgba(255, 255, 255, masterZoneAlpha),
@@ -160,7 +160,7 @@ namespace CrashEdit
                 Vector3 trans = new Vector3(entity.Positions[0].X, entity.Positions[0].Y, entity.Positions[0].Z) / GameScales.ZoneEntityC1 + zoneTrans;
                 if (!string.IsNullOrEmpty(entity.Name) && Settings.Default.Font3DEnable)
                 {
-                    AddText3D(entity.Name, trans, (Rgba)Color4.Yellow);
+                    AddText3D(entity.Name, trans, Rgba.FromOther(Color4.Yellow, masterZoneAlpha), flags: TextRenderFlags.Default | TextRenderFlags.Bottom);
                 }
                 if (entity.Positions.Count == 1)
                 {

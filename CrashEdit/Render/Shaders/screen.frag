@@ -9,5 +9,6 @@ out vec4 f_Color;
 
 void main()
 {
-    f_Color = vec4(p_Color.rgb, texture(font, p_ST).r);
+    f_Color = p_Color;
+    f_Color.a *= texture(font, p_ST).r;
 }
