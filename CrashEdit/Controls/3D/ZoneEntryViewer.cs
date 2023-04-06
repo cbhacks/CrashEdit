@@ -15,6 +15,7 @@ namespace CrashEdit
         private readonly List<int> zones;
         private readonly int this_zone;
 
+        internal Dictionary<int, GOOLEntry> gools = new();
         internal bool masterZone;
         internal byte masterZoneAlpha;
         internal Vector3 zoneTrans;
@@ -114,6 +115,14 @@ namespace CrashEdit
             }
             SetWorlds(worlds);
 
+            gools.Clear();
+            foreach (var e in nsf.GetEntries<GOOLEntry>())
+            {
+                if (e.ParentGOOL == null)
+                {
+                    gools.Add(e.ID, e);
+                }
+            }
 
             foreach (var zone in allzones)
             {
@@ -159,6 +168,8 @@ namespace CrashEdit
 
         private void RenderEntity(Entity entity)
         {
+            float text_y = Settings.Default.Font3DEnable ? 0 : float.MaxValue;
+            bool draw_type = entity.Type.HasValue && entity.Subtype.HasValue;
             if (entity.Positions.Count > 0)
             {
                 Vector3 trans = new Vector3(entity.Positions[0].X, entity.Positions[0].Y, entity.Positions[0].Z) / GameScales.ZoneEntityC1 + zoneTrans;
@@ -166,28 +177,70 @@ namespace CrashEdit
                 {
                     AddText3D(entity.Name, trans, Rgba.FromOther(Color4.Yellow, masterZoneAlpha), flags: TextRenderFlags.Default | TextRenderFlags.Bottom);
                 }
+
                 if (entity.Positions.Count == 1)
                 {
-                    int subtype = entity.Subtype ?? -1;
-                    switch (entity.Type)
+                    if (entity.Subtype.HasValue && entity.Type == 3)
                     {
-                        case 3:
-                            RenderPickupEntity(trans + new Vector3(0, .5f, 0), subtype);
-                            if (Settings.Default.Font3DEnable)
+                        draw_type = !RenderPickupEntity(trans + new Vector3(0, .5f, 0), entity.Subtype.Value);
+                        if (entity.Subtype.Value == 25 && entity.Settings.Count > 0)
+                        {
+                            draw_type = false;
+                            int gem_id = entity.Settings[0].ValueB;
+                            text_y += AddText3D(gem_id.ToString(), trans, Rgba.FromOther(GetColorForGemId(gem_id), masterZoneAlpha), ofs_y: text_y).Y;
+                        }
+                    }
+                    else if (entity.Subtype.HasValue && entity.Type == 34)
+                    {
+                        RenderBoxEntity(trans, entity.Subtype.Value);
+                        draw_type = false;
+                        if (entity.Settings.Count > 0)
+                        {
+                            int pickup = entity.Settings[0].ValueB;
+                            string pickup_name = $"unknown {pickup}";
+                            if (pickup == 0) pickup_name = "";
+                            else if (pickup == 100) pickup_name = "random";
+                            else if (pickup == 101) pickup_name = "random-fruit";
+                            else if (pickup >= 30 && pickup < 97) pickup_name = $"fruit {pickup}";
+                            else if (pickup == 97) pickup_name = "1up";
+                            else if (pickup == 102) pickup_name = "doctor";
+                            else if (pickup >= 200 && pickup < 264) pickup_name = "crystal-" + (pickup - 200);
+                            else if (pickup >= 300 && pickup < 364) pickup_name = "gem-" + (pickup - 300);
+                            text_y += AddText3D(pickup_name, trans, Rgba.FromOther(Color4.White, masterZoneAlpha), ofs_y: text_y).Y;
+                        }
+                        if (entity.Settings.Count > 2)
+                        {
+                            int link_a = entity.Settings[2].ValueB;
+                            int link_b = 0;
+                            if (entity.Settings.Count > 3 && (entity.Subtype == 7 || entity.Subtype == 24))
                             {
-                                if (subtype == 25 && entity.Settings.Count > 0)
+                                link_b = entity.Settings[3].ValueB;
+                            }
+                            for (int i = link_a; i <= (link_b == 0 ? link_a : link_b); ++i)
+                            {
+                                var link_info = i == 0 ? null : nsf.GetEntityC2(i);
+                                if (link_info != null)
                                 {
-                                    int gem_id = entity.Settings[0].ValueB;
-                                    AddText3D(gem_id.ToString(), trans, Rgba.FromOther(GetColorForGemId(gem_id), masterZoneAlpha));
+                                    var link = link_info.Item1;
+                                    var lzone = link_info.Item2;
+                                    if (link.Positions.Count > 0)
+                                    {
+                                        var lzone_trans = new Vector3(lzone.X, lzone.Y, lzone.Z) / GameScales.ZoneC1;
+                                        Vector3 link_trans = new Vector3(link.Positions[0].X, link.Positions[0].Y, link.Positions[0].Z) / GameScales.ZoneEntityC1 + lzone_trans;
+                                        vaoLines.PushAttrib(trans: trans, rgba: Rgba.FromOther(Color4.Red, masterZoneAlpha));
+                                        vaoLines.PushAttrib(trans: link_trans, rgba: Rgba.FromOther(Color4.DarkRed, masterZoneAlpha));
+                                    }
                                 }
                             }
-                            break;
-                        case 34:
-                            RenderBoxEntity(trans, subtype);
-                            break;
-                        default:
-                            AddSprite(trans, new Vector2(1), new(255, 255, 255, masterZoneAlpha), OldResources.PointTexture);
-                            break;
+                        }
+                        if (entity.DDASettings.HasValue)
+                            text_y += AddText3D($"dda {entity.DDASettings.Value >> 8}", trans, Rgba.FromOther(Color4.White, masterZoneAlpha), ofs_y: text_y).Y;
+                        if (entity.DDASection.HasValue)
+                            text_y += AddText3D($"dda-section {entity.DDASection.Value}", trans, Rgba.FromOther(Color4.White, masterZoneAlpha), ofs_y: text_y).Y;
+                    }
+                    else
+                    {
+                        AddSprite(trans, new Vector2(1), new(255, 255, 255, masterZoneAlpha), OldResources.PointTexture);
                     }
                 }
                 else
@@ -201,9 +254,17 @@ namespace CrashEdit
                     }
                     foreach (EntityPosition position in entity.Positions)
                     {
-                        trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + zoneTrans;
-                        AddSprite(trans, new Vector2(1), new(255, 0, 0, masterZoneAlpha), OldResources.PointTexture);
+                        var cur_trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + zoneTrans;
+                        AddSprite(cur_trans, new Vector2(1), new(255, 0, 0, masterZoneAlpha), OldResources.PointTexture);
                     }
+                }
+
+                if (draw_type)
+                {
+                    if (gools.ContainsKey(entity.Type.Value))
+                        text_y += AddText3D($"{gools[entity.Type.Value].EName}-{entity.Subtype.Value}", trans, Rgba.FromOther(Color4.White, masterZoneAlpha), ofs_y: text_y).Y;
+                    else
+                        text_y += AddText3D($"{entity.Type.Value}-{entity.Subtype.Value} (invalid type)", trans, Rgba.FromOther(Color4.White, masterZoneAlpha), ofs_y: text_y).Y;
                 }
             }
         }
@@ -258,9 +319,11 @@ namespace CrashEdit
             };
         }
 
-        private void RenderPickupEntity(Vector3 trans, int subtype)
+        private bool RenderPickupEntity(Vector3 trans, int subtype)
         {
-            AddSprite(trans, GetPickupScale(subtype), new(255, 255, 255, masterZoneAlpha), GetPickupTexture(subtype));
+            var texture = GetPickupTexture(subtype);
+            AddSprite(trans, GetPickupScale(subtype), new(255, 255, 255, masterZoneAlpha), texture);
+            return texture != OldResources.UnknownPickupTexture;
         }
 
         private void RenderBoxEntity(Vector3 trans, int subtype)

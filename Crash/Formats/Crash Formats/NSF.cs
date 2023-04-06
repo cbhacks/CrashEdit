@@ -318,6 +318,38 @@ namespace Crash
             return entries;
         }
 
+        public Tuple<OldEntity, OldZoneEntry> GetEntityC1(int id)
+        {
+            foreach (var zone in GetEntries<OldZoneEntry>())
+            {
+                for (int i = 0; i < zone.Entities.Count; ++i)
+                {
+                    var entity = zone.Entities[i];
+                    if (entity.ID == id)
+                    {
+                        return new Tuple<OldEntity, OldZoneEntry>(entity, zone);
+                    }
+                }
+            }
+            return null;
+        }
+
+        public Tuple<Entity, ZoneEntry> GetEntityC2(int id)
+        {
+            foreach (var zone in GetEntries<ZoneEntry>())
+            {
+                for (int i = zone.CameraCount; i < zone.Entities.Count; ++i)
+                {
+                    var entity = zone.Entities[i];
+                    if (entity.ID == id)
+                    {
+                        return new Tuple<Entity, ZoneEntry>(entity, zone);
+                    }
+                }
+            }
+            return null;
+        }
+
         public byte[] Save()
         {
             byte[] data = new byte [Chunks.Count * Chunk.Length];
