@@ -62,7 +62,7 @@ namespace CrashEdit
                         }
                         foreach (var vert in frame.MakeVertices(nsf))
                         {
-                            yield return (new Position(vert.X, vert.Y, vert.Z)
+                            yield return (new Position(vert.X, vert.Z, vert.Y)
                                         + new Position(frame.XOffset / 4f, frame.YOffset / 4f, frame.ZOffset / 4f)) * new Position(mx, my, mz);
                         }
                     }
