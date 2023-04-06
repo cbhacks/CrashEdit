@@ -643,7 +643,7 @@ namespace CrashEdit
                 {
                     vaoText.CopyAttrib(start_idx + i);
                     vaoText.Verts[start_idx + i].trans += new Vector3(new Vector2(2, 2) * size);
-                    vaoText.Verts[start_idx + i].rgba = (Rgba)Color4.Black;
+                    vaoText.Verts[start_idx + i].rgba = new Rgba(0, 0, 0, col.a);
                 }
             }
         }
