@@ -475,7 +475,7 @@ namespace CrashEdit
                     vaoTris.RenderAndDiscard(render);
                     vaoSprites.RenderAndDiscard(render);
 
-                    console += string.Format("Render time: {0:F2}ms\nTotal time: {1:F2}", render.DebugRenderMs, dbgRunMs);
+                    console += string.Format("Render time: {0:F2}ms\nTotal time: {1:F2}ms", render.DebugRenderMs, dbgRunMs);
                     if (Settings.Default.Font2DEnable)
                         AddText(console, 0, 0, (Rgba)Color4.White);
                     console = string.Empty;
