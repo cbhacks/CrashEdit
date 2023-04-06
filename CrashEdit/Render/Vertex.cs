@@ -20,6 +20,18 @@ namespace CrashEdit
             a = alpha;
         }
 
+        public Rgba(Rgba other, byte alpha)
+        {
+            r = other.r;
+            g = other.g;
+            b = other.b;
+            a = alpha;
+        }
+
+        public Rgba(Color4 other, byte alpha) : this((Rgba)other, alpha)
+        {
+        }
+
         public static explicit operator Rgba(Color4 c)
         {
             return new Rgba((byte)(c.R * 255),
@@ -31,16 +43,6 @@ namespace CrashEdit
         public static explicit operator Color4(Rgba c)
         {
             return new Color4(c.r, c.g, c.b, c.a);
-        }
-
-        public static Rgba FromOther(Rgba other, byte a)
-        {
-            return new Rgba(other.r, other.g, other.b, a);
-        }
-
-        public static Rgba FromOther(Color4 other, byte a)
-        {
-            return FromOther((Rgba)other, a);
         }
     }
 
