@@ -142,6 +142,8 @@ namespace CrashEdit
         private bool mouseleft = false;
         private int mousex = 0;
         private int mousey = 0;
+        private static readonly float minDepth;
+        private static readonly float maxDepth;
         private readonly float movespeed = 10f;
         private readonly float rotspeed = 0.5f;
         private readonly float zoomspeed = 1f;
@@ -247,6 +249,14 @@ namespace CrashEdit
             GridPosLastUploaded = resolution;
         }
 
+        static GLViewer()
+        {
+            float min = -1;
+            float max = +1;
+            minDepth = BitConverter.ToSingle(BitConverter.GetBytes(BitConverter.ToInt32(BitConverter.GetBytes(min), 0) + 1), 0);
+            maxDepth = BitConverter.ToSingle(BitConverter.GetBytes(BitConverter.ToInt32(BitConverter.GetBytes(max), 0) + 1), 0);
+        }
+        
         private static IGraphicsContext globalContext;
         private static GLControl globalContextWindow;
         private static readonly GraphicsMode DefaultGraphicsSettings = new(new ColorFormat(8, 8, 8, 8), 24, 8);

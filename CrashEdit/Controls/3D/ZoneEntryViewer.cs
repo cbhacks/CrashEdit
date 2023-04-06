@@ -15,10 +15,10 @@ namespace CrashEdit
         private readonly List<int> zones;
         private readonly int this_zone;
 
-        internal Dictionary<int, GOOLEntry> gools = new();
-        internal bool masterZone;
-        internal byte masterZoneAlpha;
-        internal Vector3 zoneTrans;
+        private readonly Dictionary<int, GOOLEntry> gools = new();
+        private bool masterZone;
+        private byte masterZoneAlpha;
+        private Vector3 zoneTrans;
 
         private Rgba GetZoneColor(Color4 color)
         {
@@ -183,9 +183,9 @@ namespace CrashEdit
             if (entity.Positions.Count > 0)
             {
                 Vector3 trans = new Vector3(entity.Positions[0].X, entity.Positions[0].Y, entity.Positions[0].Z) / GameScales.ZoneEntityC1 + zoneTrans;
-                if (!string.IsNullOrEmpty(entity.Name) && Settings.Default.Font3DEnable)
+                if (!string.IsNullOrEmpty(entity.Name))
                 {
-                    AddText3D(entity.Name, trans, GetZoneColor(Color4.Yellow), flags: TextRenderFlags.Default | TextRenderFlags.Bottom);
+                    AddText3D(entity.Name, trans, GetZoneColor(Color4.Yellow), ofs_y: text_y, flags: TextRenderFlags.Default | TextRenderFlags.Bottom);
                 }
 
                 if (entity.Positions.Count == 1)

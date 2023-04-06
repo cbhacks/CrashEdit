@@ -229,8 +229,7 @@ namespace CrashEdit
                 // alloc buffers
                 var vao = vaoModel[buf];
                 int nb = model.Polygons.Count * 3;
-                vao.VertCount = nb;
-                vao.TestRealloc();
+                vao.TestRealloc(nb);
                 vao.DiscardVerts();
 
                 // render stuff

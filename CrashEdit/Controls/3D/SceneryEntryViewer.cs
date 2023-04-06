@@ -115,8 +115,7 @@ namespace CrashEdit
                 {
                     nb += world.Triangles.Count * 3 + world.Quads.Count * 6;
                 }
-                vaoWorld.VertCount = nb;
-                vaoWorld.TestRealloc();
+                vaoWorld.TestRealloc(nb);
                 vaoWorld.DiscardVerts();
 
                 // render stuff

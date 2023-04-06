@@ -79,13 +79,14 @@ namespace CrashEdit
             var tex_eids = CollectTPAGs();
             SetupTPAGs(tex_eids);
 
+            vaoWorld.UserScale = new Vector3(1 / GameScales.WorldC1);
+
             int nb = 0;
             foreach (var world in GetWorlds())
             {
                 nb += world.Polygons.Count * 3;
             }
-            vaoWorld.VertCount = nb;
-            vaoWorld.TestRealloc();
+            vaoWorld.TestRealloc(nb);
             vaoWorld.DiscardVerts();
 
             // render stuff

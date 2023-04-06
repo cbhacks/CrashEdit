@@ -1,4 +1,5 @@
 using Crash;
+using CrashEdit.Properties;
 using OpenTK;
 using OpenTK.Graphics;
 using System.Collections.Generic;
@@ -14,11 +15,22 @@ namespace CrashEdit
         private readonly List<int> zones;
         private readonly int this_zone;
 
-        private bool octreeFlip;
+        private readonly Dictionary<int, GOOLEntry> gools = new();
+        private bool masterZone;
+        private byte masterZoneAlpha;
+        private Vector3 zoneTrans;
 
-        internal bool masterZone;
-        internal byte masterZoneAlpha;
-        internal Vector3 zoneTrans;
+        private Rgba GetZoneColor(Color4 color)
+        {
+            return new Rgba(color, masterZoneAlpha);
+        }
+
+        private Rgba GetZoneColor(byte r, byte g, byte b)
+        {
+            return new Rgba(r, g, b, masterZoneAlpha);
+        }
+
+        private bool octreeFlip;
 
         public ProtoZoneEntryViewer(NSF nsf, int zone_eid) : base(nsf, new List<int>())
         {
@@ -122,6 +134,15 @@ namespace CrashEdit
             }
             SetWorlds(worlds);
 
+            gools.Clear();
+            foreach (var e in nsf.GetEntries<GOOLEntry>())
+            {
+                if (e.ParentGOOL == null)
+                {
+                    gools.Add(e.ID, e);
+                }
+            }
+
             foreach (var zone in allzones)
             {
                 masterZone = Entry.NullEID == this_zone || zone.EID == this_zone;
@@ -139,9 +160,10 @@ namespace CrashEdit
         {
             zoneTrans = new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
             Vector3 zoneSize = new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1;
+            AddText3D(zone.EName, zoneTrans + new Vector3(zoneSize.X, 0, zoneSize.Z) / 2, GetZoneColor(Color4.White), size: 2, flags: TextRenderFlags.Shadow | TextRenderFlags.Top | TextRenderFlags.Center);
             AddBox(zoneTrans,
                    new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1,
-                   new Rgba(255, 255, 255, masterZoneAlpha),
+                   GetZoneColor(Color4.White),
                    true);
             foreach (ProtoEntity entity in zone.Entities)
             {
@@ -175,29 +197,41 @@ namespace CrashEdit
 
         private void RenderEntity(ProtoEntity entity)
         {
+            float text_y = Settings.Default.Font3DEnable ? 0 : float.MaxValue;
+            bool draw_type = true;
+
             Vector3 trans = new Vector3(entity.StartX, entity.StartY, entity.StartZ) / GameScales.ZoneC1 + zoneTrans;
+            AddText3D("entity-" + entity.ID, trans, GetZoneColor(Color4.Yellow), ofs_y: text_y, flags: TextRenderFlags.Default | TextRenderFlags.Bottom);
             if (entity.Deltas.Count == 0)
             {
-                switch (entity.Type)
+                if (entity.Type == 3)
                 {
-                    case 3:
-                        RenderPickupEntity(trans + new Vector3(0, .5f, 0), entity.Subtype);
-                        break;
-                    default:
-                        AddSprite(trans, new Vector2(1), new(255, 255, 255, masterZoneAlpha), OldResources.PointTexture);
-                        break;
+                    draw_type = !RenderPickupEntity(trans + new Vector3(0, .5f, 0), entity.Subtype);
+                }
+                else
+                {
+                    AddSprite(trans, new Vector2(1), GetZoneColor(Color4.White), OldResources.PointTexture);
                 }
             }
             else
             {
-                AddSprite(trans, new Vector2(1), new(255, 0, 0, masterZoneAlpha), OldResources.PointTexture);
+                var cur_trans = trans;
+                AddSprite(cur_trans, new Vector2(1), GetZoneColor(Color4.Red), OldResources.PointTexture);
                 foreach (ProtoEntityPosition delta in entity.Deltas)
                 {
-                    vaoLines.PushAttrib(trans: trans, rgba: new Rgba(0, 0, 255, masterZoneAlpha));
-                    trans += new Vector3(delta.X, delta.Y, delta.Z) * 8 / GameScales.ZoneC1;
-                    vaoLines.PushAttrib(trans: trans, rgba: new Rgba(0, 0, 255, masterZoneAlpha));
-                    AddSprite(trans, new Vector2(1), new(255, 0, 0, masterZoneAlpha), OldResources.PointTexture);
+                    vaoLines.PushAttrib(trans: cur_trans, rgba: GetZoneColor(Color4.Blue));
+                    cur_trans += new Vector3(delta.X, delta.Y, delta.Z) * 8 / GameScales.ZoneC1;
+                    vaoLines.PushAttrib(trans: cur_trans, rgba: GetZoneColor(Color4.Blue));
+                    AddSprite(cur_trans, new Vector2(1), GetZoneColor(Color4.Red), OldResources.PointTexture);
                 }
+            }
+
+            if (draw_type)
+            {
+                if (gools.ContainsKey(entity.Type))
+                    text_y += AddText3D($"{gools[entity.Type].EName}-{entity.Subtype}", trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
+                else
+                    text_y += AddText3D($"{entity.Type}-{entity.Subtype} (invalid type)", trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
             }
         }
 
@@ -206,30 +240,32 @@ namespace CrashEdit
             for (int i = 1; i < camera.Positions.Count; ++i)
             {
                 vaoLines.PushAttrib(trans: new Vector3(camera.Positions[i - 1].X, camera.Positions[i - 1].Y, camera.Positions[i - 1].Z) / GameScales.ZoneCameraC1 + zoneTrans,
-                                    rgba: new Rgba(0, 128, 0, masterZoneAlpha));
+                                    rgba: GetZoneColor(Color4.Green));
                 vaoLines.PushAttrib(trans: new Vector3(camera.Positions[i].X, camera.Positions[i].Y, camera.Positions[i].Z) / GameScales.ZoneCameraC1 + zoneTrans,
-                                    rgba: new Rgba(0, 128, 0, masterZoneAlpha));
+                                    rgba: GetZoneColor(Color4.Green));
             }
             foreach (OldCameraPosition position in camera.Positions)
             {
                 Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneCameraC1 + zoneTrans;
-                AddSprite(trans, new Vector2(1), new(255, 255, 0, masterZoneAlpha), OldResources.PointTexture);
+                AddSprite(trans, new Vector2(1), GetZoneColor(Color4.Yellow), OldResources.PointTexture);
 
                 float ang2rad = MathHelper.Pi / 2048;
                 var quatAng = Quaternion.FromEulerAngles(-position.XRot * ang2rad, -position.YRot * ang2rad, -position.ZRot * ang2rad);
                 var rot_mat = Matrix4.CreateFromQuaternion(quatAng);
                 var test_vec = (rot_mat * new Vector4(0, 0, -1, 1)).Xyz;
 
-                Rgba angColor = (Rgba)Color4.Olive;
+                Rgba angColor = GetZoneColor(Color4.Olive);
                 vaoLines.PushAttrib(trans: trans, rgba: angColor);
                 vaoLines.PushAttrib(trans: trans + test_vec, rgba: angColor);
                 AddSprite(trans + test_vec, new Vector2(0.5f), angColor, OldResources.PointTexture);
             }
         }
 
-        private void RenderPickupEntity(Vector3 trans, int subtype)
+        private bool RenderPickupEntity(Vector3 trans, int subtype)
         {
-            AddSprite(trans, GetPickupScale(subtype), new(255, 255, 255, masterZoneAlpha), GetPickupTexture(subtype));
+            var texture = GetPickupTexture(subtype);
+            AddSprite(trans, GetPickupScale(subtype), GetZoneColor(Color4.White), texture);
+            return texture != OldResources.UnknownPickupTexture;
         }
 
         private Bitmap GetPickupTexture(int subtype)

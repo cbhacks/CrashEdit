@@ -113,8 +113,7 @@ namespace CrashEdit
                 {
                     nb += world.Polygons.Count * 3;
                 }
-                vaoWorld.VertCount = nb;
-                vaoWorld.TestRealloc();
+                vaoWorld.TestRealloc(nb);
                 vaoWorld.DiscardVerts();
 
                 // render stuff

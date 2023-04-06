@@ -72,13 +72,14 @@ namespace CrashEdit
             EnableAttribI("tex", 1, VertexAttribIntegerType.Int, "tex");
         }
 
-        public void TestRealloc()
+        public void TestRealloc() => TestRealloc(VertCount);
+        public void TestRealloc(int vert_count)
         {
-            if (VertCount >= Verts.Length)
+            if (vert_count >= Verts.Length)
             {
                 Console.WriteLine($"Realloc buffer {Verts.Length} -> {Verts.Length * 2}");
                 Array.Resize(ref verts, Verts.Length * 2);
-                TestRealloc();
+                TestRealloc(vert_count);
             }
         }
 

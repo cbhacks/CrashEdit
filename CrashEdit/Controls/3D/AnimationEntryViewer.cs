@@ -196,8 +196,7 @@ namespace CrashEdit
                 // alloc buffers
                 var vao = vaoModel[buf];
                 int nb = model.Triangles.Count * 3;
-                vao.VertCount = nb;
-                vao.TestRealloc();
+                vao.TestRealloc(nb);
                 vao.DiscardVerts();
                 if (transUncompressedVerts[buf].Length < frame.SpecialVertexCount)
                 {

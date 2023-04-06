@@ -1,4 +1,5 @@
 using Crash;
+using CrashEdit.Properties;
 using OpenTK;
 using OpenTK.Graphics;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace CrashEdit
         private readonly List<int> zones;
         private readonly int this_zone;
 
+        private readonly Dictionary<int, GOOLEntry> gools = new();
         private bool masterZone;
         private byte masterZoneAlpha;
         private Vector3 zoneTrans;
@@ -124,6 +126,15 @@ namespace CrashEdit
             }
             SetWorlds(worlds);
 
+            gools.Clear();
+            foreach (var e in nsf.GetEntries<GOOLEntry>())
+            {
+                if (e.ParentGOOL == null)
+                {
+                    gools.Add(e.ID, e);
+                }
+            }
+
             foreach (var zone in allzones)
             {
                 masterZone = Entry.NullEID == this_zone || zone.EID == this_zone;
@@ -141,6 +152,7 @@ namespace CrashEdit
         {
             zoneTrans = new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
             Vector3 zoneSize = new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1;
+            AddText3D(zone.EName, zoneTrans + new Vector3(zoneSize.X, 0, zoneSize.Z) / 2, GetZoneColor(Color4.White), size: 2, flags: TextRenderFlags.Shadow | TextRenderFlags.Top | TextRenderFlags.Center);
             AddBox(zoneTrans,
                    new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1,
                    GetZoneColor(Color4.White),
@@ -163,36 +175,78 @@ namespace CrashEdit
 
         private void RenderEntity(OldEntity entity)
         {
-            if (entity.Positions.Count == 1)
+            float text_y = Settings.Default.Font3DEnable ? 0 : float.MaxValue;
+            bool draw_type = true;
+            Vector3 trans = new Vector3(entity.Positions[0].X, entity.Positions[0].Y, entity.Positions[0].Z) / GameScales.ZoneEntityC1 + zoneTrans;
+            if (entity.Positions.Count > 0)
             {
-                EntityPosition position = entity.Positions[0];
-                Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + zoneTrans;
-                switch (entity.Type)
+                AddText3D("entity-" + entity.ID, trans, GetZoneColor(Color4.Yellow), ofs_y: text_y, flags: TextRenderFlags.Default | TextRenderFlags.Bottom);
+                if (entity.Positions.Count == 1)
                 {
-                    case 3:
-                        RenderPickupEntity(trans + new Vector3(0, .5f, 0), entity.Subtype);
-                        break;
-                    case 34:
+                    if (entity.Type == 3)
+                    {
+                        draw_type = !RenderPickupEntity(trans + new Vector3(0, .5f, 0), entity.Subtype);
+                    }
+                    else if (entity.Type == 34)
+                    {
                         RenderBoxEntity(trans, entity.Subtype);
-                        break;
-                    default:
+                        draw_type = false;
+                        int pickup = entity.VecX;
+                        string pickup_name = $"unknown {pickup}";
+                        if (pickup == 0) pickup_name = "";
+                        else if (pickup == 100) pickup_name = "random";
+                        else if (pickup == 101) pickup_name = "random-fruit";
+                        else if (pickup >= 30 && pickup < 97) pickup_name = $"fruit {pickup}";
+                        else if (pickup == 97) pickup_name = "1up";
+                        else if (pickup == 102) pickup_name = "doctor";
+                        else if (pickup == 103) pickup_name = "cortex";
+                        else if (pickup == 104) pickup_name = "brio";
+                        else if (pickup == 105) pickup_name = "tawna";
+                        else if (pickup >= 200 && pickup < 264) pickup_name = "crystal-" + (pickup - 200);
+                        else if (pickup >= 300 && pickup < 364) pickup_name = "gem-" + (pickup - 300);
+                        text_y += AddText3D(pickup_name, trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
+                        int link_a = entity.VecZ;
+                        var link_info = link_a == 0 ? null : nsf.GetEntityC1(link_a);
+                        if (link_info != null)
+                        {
+                            var link = link_info.Item1;
+                            var lzone = link_info.Item2;
+                            if (link.Positions.Count > 0)
+                            {
+                                var lzone_trans = new Vector3(lzone.X, lzone.Y, lzone.Z) / GameScales.ZoneC1;
+                                Vector3 link_trans = new Vector3(link.Positions[0].X, link.Positions[0].Y, link.Positions[0].Z) / GameScales.ZoneEntityC1 + lzone_trans;
+                                vaoLinesThick.PushAttrib(trans: trans, rgba: GetZoneColor(Color4.Red));
+                                vaoLinesThick.PushAttrib(trans: link_trans, rgba: GetZoneColor(Color4.DarkRed));
+                            }
+                        }
+                    }
+                    else
+                    {
                         AddSprite(trans, new Vector2(1), GetZoneColor(Color4.White), OldResources.PointTexture);
-                        break;
+                    }
                 }
-            }
-            else
-            {
-                for (int i = 1; i < entity.Positions.Count; ++i)
+                else
                 {
-                    vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i - 1].X, entity.Positions[i - 1].Y, entity.Positions[i - 1].Z) / GameScales.ZoneEntityC1 + zoneTrans,
-                                        rgba: GetZoneColor(Color4.Blue));
-                    vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i].X, entity.Positions[i].Y, entity.Positions[i].Z) / GameScales.ZoneEntityC1 + zoneTrans,
-                                        rgba: GetZoneColor(Color4.Blue));
+                    for (int i = 1; i < entity.Positions.Count; ++i)
+                    {
+                        vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i - 1].X, entity.Positions[i - 1].Y, entity.Positions[i - 1].Z) / GameScales.ZoneEntityC1 + zoneTrans,
+                                            rgba: GetZoneColor(Color4.Blue));
+                        vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i].X, entity.Positions[i].Y, entity.Positions[i].Z) / GameScales.ZoneEntityC1 + zoneTrans,
+                                            rgba: GetZoneColor(Color4.Blue));
+                    }
+                    foreach (EntityPosition position in entity.Positions)
+                    {
+                        var cur_trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + zoneTrans;
+                        AddSprite(cur_trans, new Vector2(1), GetZoneColor(Color4.Red), OldResources.PointTexture);
+                    }
                 }
-                foreach (EntityPosition position in entity.Positions)
+
+                if (draw_type)
                 {
-                    Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + zoneTrans;
-                    AddSprite(trans, new Vector2(1), GetZoneColor(Color4.Red), OldResources.PointTexture);
+                    if (gools.ContainsKey(entity.Type))
+                        text_y += AddText3D($"{gools[entity.Type].EName}-{entity.Subtype}", trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
+                    else
+                        text_y += AddText3D($"{entity.Type}-{entity.Subtype} (invalid type)", trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
                 }
             }
         }
@@ -223,9 +277,11 @@ namespace CrashEdit
             }
         }
 
-        private void RenderPickupEntity(Vector3 trans, int subtype)
+        private bool RenderPickupEntity(Vector3 trans, int subtype)
         {
-            AddSprite(trans, GetPickupScale(subtype), GetZoneColor(Color4.White), GetPickupTexture(subtype));
+            var texture = GetPickupTexture(subtype);
+            AddSprite(trans, GetPickupScale(subtype), GetZoneColor(Color4.White), texture);
+            return texture != OldResources.UnknownPickupTexture;
         }
 
         private void RenderBoxEntity(Vector3 trans, int subtype)
