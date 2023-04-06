@@ -169,6 +169,14 @@ namespace CrashEdit
                     {
                         case 3:
                             RenderPickupEntity(trans + new Vector3(0, .5f, 0), subtype);
+                            if (Settings.Default.Font3DEnable)
+                            {
+                                if (subtype == 25 && entity.Settings.Count > 0)
+                                {
+                                    int gem_id = entity.Settings[0].ValueB;
+                                    AddText3D(gem_id.ToString(), trans, Rgba.FromOther(GetColorForGemId(gem_id), masterZoneAlpha));
+                                }
+                            }
                             break;
                         case 34:
                             RenderBoxEntity(trans, subtype);
@@ -231,6 +239,19 @@ namespace CrashEdit
                     AddSprite(trans + dir_vec2, new Vector2(0.5f), angColor2, OldResources.PointTexture);
                 }
             }
+        }
+
+        private Color4 GetColorForGemId(int id)
+        {
+            return id switch
+            {
+                0x3a => Color4.DarkRed,
+                0x3b => Color4.Green,
+                0x3c => Color4.Purple,
+                0x3d => Color4.DarkBlue,
+                0x3e => Color4.PaleGoldenrod,
+                _ => Color4.LightGray,
+            };
         }
 
         private void RenderPickupEntity(Vector3 trans, int subtype)
