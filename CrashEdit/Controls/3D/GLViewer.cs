@@ -362,7 +362,7 @@ namespace CrashEdit
             {
                 var olddist = render.Projection.Distance;
                 float delta = (float)e.Delta / SystemInformation.MouseWheelScrollDelta * zoomspeed;
-                delta *= 0.3f + 1.7f * (render.Projection.Distance / ProjectionInfo.MaxDistance);
+                delta *= 0.3f + 1.7f * (render.Projection.Distance / ProjectionInfo.MaxInitialDistance);
                 render.Projection.Distance = Math.Max(ProjectionInfo.MinDistance, Math.Min(render.Projection.Distance - delta, ProjectionInfo.MaxDistance));
                 // render.Projection.Trans -= (Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot)) * new Vector4(0, 0, render.Distance - olddist, 1)).Xyz;
             }
