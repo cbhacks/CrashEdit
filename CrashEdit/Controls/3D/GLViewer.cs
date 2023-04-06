@@ -895,7 +895,11 @@ namespace CrashEdit
                 int tex_id = in_tex_id - 1;
                 if (animated)
                 {
-                    var anim = animated_textures[++tex_id];
+                    if (++tex_id >= animated_textures.Count)
+                    {
+                        return new(false, null);
+                    }
+                    var anim = animated_textures[tex_id];
                     // check if it's an untextured polygon
                     if (anim.Offset != 0)
                     {
