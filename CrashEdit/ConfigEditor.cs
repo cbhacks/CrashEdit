@@ -12,16 +12,20 @@ namespace CrashEdit
         public static readonly List<string> Languages = new() { "en", "ja" };
 
         private static readonly List<string> FontFileNames = new();
+        private static readonly List<string> FontExtensions = new() { ".ttf", ".otf" };
 
         private void MakeFontsList()
         {
             var add_font = (string f) =>
             {
-                var shortname = Path.GetFileName(f);
-                if (!dpdFont.Items.Contains(shortname))
+                if (FontExtensions.Contains(Path.GetExtension(f).ToLower()))
                 {
-                    dpdFont.Items.Add(shortname);
-                    FontFileNames.Add(f);
+                    var shortname = Path.GetFileName(f);
+                    if (!dpdFont.Items.Contains(shortname))
+                    {
+                        dpdFont.Items.Add(shortname);
+                        FontFileNames.Add(f);
+                    }
                 }
             };
 
@@ -30,19 +34,13 @@ namespace CrashEdit
 
             foreach (var f in Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.Fonts)))
             {
-                if (Path.GetExtension(f) == ".ttf")
-                {
-                    add_font(f);
-                }
+                add_font(f);
             }
             try
             {
                 foreach (var f in Directory.GetFiles(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Microsoft", "Windows", "Fonts")))
                 {
-                    if (Path.GetExtension(f) == ".ttf")
-                    {
-                        add_font(f);
-                    }
+                    add_font(f);
                 }
             }
             catch (Exception ex) when (
