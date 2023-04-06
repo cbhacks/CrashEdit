@@ -128,6 +128,7 @@ namespace CrashEdit
         {
             zoneTrans = new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
             Vector3 zoneSize = new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1;
+            AddText3D(zone.EName, zoneTrans + new Vector3(zoneSize.X, 0, zoneSize.Z), (Rgba)Color4.White);
             AddBox(zoneTrans,
                    new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1,
                    new Rgba(255, 255, 255, masterZoneAlpha),
