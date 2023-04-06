@@ -114,6 +114,7 @@ namespace CrashEdit
         protected static VAO vaoAxes;
         protected static VAO vaoTris;
         protected static VAO vaoLines;
+        protected static VAO vaoLinesThick;
         protected static VAO vaoSprites;
         protected static VAO vaoText;
         // note: there's multiple buffers because of blending
@@ -507,6 +508,7 @@ namespace CrashEdit
             SetBlendMode(BlendMode.Solid);
 
             vaoLines.RenderAndDiscard(render);
+            vaoLinesThick.RenderAndDiscard(render);
             vaoTris.RenderAndDiscard(render);
             vaoSprites.RenderAndDiscard(render);
         }

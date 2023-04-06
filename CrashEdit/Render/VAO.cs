@@ -133,6 +133,7 @@ namespace CrashEdit
 
             GL.GetBoolean(GetPName.DepthWritemask, out bool glZBufWrite);
             GL.GetBoolean(GetPName.DepthTest, out bool glZBufRead);
+            GL.GetFloat(GetPName.LineWidth, out float glLineWidth);
             if (glZBufWrite && ZBufDisable)
             {
                 GL.DepthMask(false);
@@ -140,6 +141,10 @@ namespace CrashEdit
             if (glZBufRead && ZBufDisableRead)
             {
                 GL.Disable(EnableCap.DepthTest);
+            }
+            if (LineWidth > 0)
+            {
+                GL.LineWidth(LineWidth);
             }
 
             // Bind the VAO
@@ -160,6 +165,10 @@ namespace CrashEdit
             if (glZBufRead && ZBufDisableRead)
             {
                 GL.Enable(EnableCap.DepthTest);
+            }
+            if (LineWidth > 0)
+            {
+                GL.LineWidth(glLineWidth);
             }
 
             GLViewer.glDebugContextString = backup_state;
@@ -194,6 +203,7 @@ namespace CrashEdit
         public bool ZBufDisable;
         public bool ZBufDisableRead;
         public bool ZBufDisableWrite;
+        public float LineWidth;
         #endregion
     }
 }

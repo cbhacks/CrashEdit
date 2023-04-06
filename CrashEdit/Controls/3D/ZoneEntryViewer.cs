@@ -227,8 +227,8 @@ namespace CrashEdit
                                     {
                                         var lzone_trans = new Vector3(lzone.X, lzone.Y, lzone.Z) / GameScales.ZoneC1;
                                         Vector3 link_trans = new Vector3(link.Positions[0].X, link.Positions[0].Y, link.Positions[0].Z) / GameScales.ZoneEntityC1 + lzone_trans;
-                                        vaoLines.PushAttrib(trans: trans, rgba: Rgba.FromOther(Color4.Red, masterZoneAlpha));
-                                        vaoLines.PushAttrib(trans: link_trans, rgba: Rgba.FromOther(Color4.DarkRed, masterZoneAlpha));
+                                        vaoLinesThick.PushAttrib(trans: trans, rgba: Rgba.FromOther(Color4.Red, masterZoneAlpha));
+                                        vaoLinesThick.PushAttrib(trans: link_trans, rgba: Rgba.FromOther(Color4.DarkRed, masterZoneAlpha));
                                     }
                                 }
                             }

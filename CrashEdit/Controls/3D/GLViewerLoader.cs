@@ -75,6 +75,7 @@ namespace CrashEdit
             vaoDebugSprite = new VAO(shaderContext, "sprite-debug", PrimitiveType.TriangleFan, vert_count: SpriteVerts.Length);
             vaoSprites = new VAO(shaderContext, "sprite", PrimitiveType.Triangles);
             vaoLines = new VAO(shaderContext, "line", PrimitiveType.Lines);
+            vaoLinesThick = new VAO(shaderContext, "line", PrimitiveType.Lines);
             vaoTris = new VAO(shaderContext, "generic", PrimitiveType.Triangles);
             vaoText = new VAO(shaderContext, "screen", PrimitiveType.Triangles);
             for (int i = 0; i < ANIM_BUF_MAX; ++i)
@@ -84,6 +85,7 @@ namespace CrashEdit
 
             vaoGridLine.UserColor1 = Color4.Gray;
             vaoText.ZBufDisable = true;
+            vaoLinesThick.LineWidth = 3;
 
             for (int i = 0; i < AxesPos.Length; ++i)
             {
