@@ -133,9 +133,7 @@ namespace CrashEdit
 
             GL.GetBoolean(GetPName.DepthWritemask, out bool glZBufWrite);
             GL.GetBoolean(GetPName.DepthTest, out bool glZBufRead);
-            bool updateZBufWrite = !glZBufWrite != ZBufDisableWrite;
-            bool updateZBufRead = !glZBufRead != ZBufDisableRead;
-            if (glZBufWrite && ZBufDisableWrite)
+            if (glZBufWrite && ZBufDisable)
             {
                 GL.DepthMask(false);
             }
@@ -155,7 +153,7 @@ namespace CrashEdit
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindVertexArray(0);
 
-            if (glZBufWrite && ZBufDisableWrite)
+            if (glZBufWrite && ZBufDisable)
             {
                 GL.DepthMask(true);
             }
@@ -193,8 +191,9 @@ namespace CrashEdit
 
         public int BlendMask;
 
-        public bool ZBufDisableWrite;
+        public bool ZBufDisable;
         public bool ZBufDisableRead;
+        public bool ZBufDisableWrite;
         #endregion
     }
 }

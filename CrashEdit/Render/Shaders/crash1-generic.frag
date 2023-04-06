@@ -5,6 +5,7 @@ layout(binding=0) uniform usampler2D vram8;
 uniform int modeCull;
 uniform int blendmask;
 uniform int enableTex;
+uniform int disableDepth;
 
 in vec3 p_Color;
 in vec2 p_UV;
@@ -35,6 +36,10 @@ uvec4 get_texel_bpp16(int u, int v) {
 
 void main()
 {
+    gl_FragDepth = gl_FragCoord.z;
+    if (disableDepth == 1) {
+        gl_FragDepth = intBitsToFloat(floatBitsToInt(1.0)-1);
+    }
     int enable = p_Tex & 0x1;
     if (modeCull != 0) {
         // crash 1 anim culling

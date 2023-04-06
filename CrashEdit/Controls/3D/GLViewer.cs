@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -469,11 +470,7 @@ namespace CrashEdit
 
                     // post render
                     glDebugContextString = "post-render";
-                    SetBlendMode(BlendMode.Solid);
-
-                    vaoLines.RenderAndDiscard(render);
-                    vaoTris.RenderAndDiscard(render);
-                    vaoSprites.RenderAndDiscard(render);
+                    PostRender();
 
                     console += string.Format("Render time: {0:F2}ms\nTotal time: {1:F2}ms", render.DebugRenderMs, dbgRunMs);
                     if (Settings.Default.Font2DEnable)
@@ -505,6 +502,15 @@ namespace CrashEdit
             }
         }
 
+        protected void PostRender()
+        {
+            SetBlendMode(BlendMode.Solid);
+
+            vaoLines.RenderAndDiscard(render);
+            vaoTris.RenderAndDiscard(render);
+            vaoSprites.RenderAndDiscard(render);
+        }
+
         private void RenderAxes(Vector3 pos)
         {
             vaoAxes.UserTrans = pos;
@@ -533,12 +539,12 @@ namespace CrashEdit
             DebugRenderBox(pos, size, col_fill);
         }
 
-        public void AddText3D(string text, Vector3 pos, Rgba col, float size = 1, TextRenderFlags flags = TextRenderFlags.Default)
+        public Vector2 AddText3D(string text, Vector3 pos, Rgba col, float size = 1, TextRenderFlags flags = TextRenderFlags.Default, float ofs_x = 0, float ofs_y = 0)
         {
             var screen_pos = new Vector4(pos, 1) * render.Projection.PVM;
             screen_pos /= screen_pos.W;
             if (screen_pos.Z >= 1 || screen_pos.Z <= -1)
-                return;
+                return new Vector2(0);
             screen_pos.Y = -screen_pos.Y;
             if ((flags & TextRenderFlags.AutoScale) != 0)
             {
@@ -555,41 +561,50 @@ namespace CrashEdit
                 // console += $"text_dist: {text_dist_vec.Length} dot: {cam_to_text_factor}\n";
                 size *= cam_to_text_factor * render.Projection.Height / 50;
             }
-            AddText(text, (screen_pos.Xy + new Vector2(1)) * new Vector2(Width, Height) / 2, col, size, flags);
+            return AddText(text, (screen_pos.Xy + new Vector2(1)) * new Vector2(Width, Height) / 2 + new Vector2(ofs_x, ofs_y), col, size, flags);
         }
 
-        public void AddText(string text, float x, float y, Rgba col, float size = 1, TextRenderFlags flags = TextRenderFlags.Default) => AddText(text, new Vector2(x, y), col, new Vector2(size), flags);
-        public void AddText(string text, Vector2 ofs, Rgba col, float size = 1, TextRenderFlags flags = TextRenderFlags.Default) => AddText(text, ofs, col, new Vector2(size), flags);
-        public void AddText(string text, Vector2 ofs, Rgba col, Vector2 size, TextRenderFlags flags = TextRenderFlags.Default)
+        public Vector2 AddText(string text, float x, float y, Rgba col, float size = 1, TextRenderFlags flags = TextRenderFlags.Default) => AddText(text, new Vector2(x, y), col, new Vector2(size), flags);
+        public Vector2 AddText(string text, Vector2 ofs, Rgba col, float size = 1, TextRenderFlags flags = TextRenderFlags.Default) => AddText(text, ofs, col, new Vector2(size), flags);
+        public Vector2 AddText(string text, Vector2 ofs, Rgba col, Vector2 size, TextRenderFlags flags = TextRenderFlags.Default)
         {
             if (fontTable == null || text.Length == 0)
-                return;
+                return new Vector2(0);
 
             var face = fontTable.Face;
-            var string_size = GetTextSize(text, new Vector2(1), flags) * size;
-            
-            // correct size
-            size *= 16;
-            size.X /= fontTable.Width;
-            size.Y /= fontTable.Height;
+            var text_size = GetTextSize(text, new Vector2(1), flags) * size;
+            string[] text_lines = null;
+            float[] text_line_sizes = null;
+            int line = 0;
 
             var start_ofs = ofs;
             if ((flags & TextRenderFlags.Middle) != 0)
             {
-                start_ofs.Y -= string_size.Y / 2;
+                start_ofs.Y -= text_size.Y / 2;
             }
             else if ((flags & TextRenderFlags.Bottom) != 0)
             {
-                start_ofs.Y -= string_size.Y;
+                start_ofs.Y -= text_size.Y;
             }
             if ((flags & TextRenderFlags.Center) != 0)
             {
-                start_ofs.X -= string_size.X / 2;
+                text_lines = text.Split('\n');
+                text_line_sizes = new float[text_lines.Length];
+                for (int i = 0; i < text_lines.Length; ++i)
+                {
+                    text_line_sizes[i] = GetTextSize(text_lines[i], new Vector2(1), flags).X * size.X;
+                }
+                start_ofs.X -= text_line_sizes[line++] / 2;
             }
             else if ((flags & TextRenderFlags.Right) != 0)
             {
-                start_ofs.X -= string_size.X;
+                start_ofs.X -= text_size.X;
             }
+
+            // correct size
+            size *= 16;
+            size.X /= fontTable.Width;
+            size.Y /= fontTable.Height;
 
             var cur_ofs = start_ofs;
             cur_ofs.Y += fontTable.LineHeight * size.Y;
@@ -599,7 +614,14 @@ namespace CrashEdit
                 var c = text[i];
                 if (c == '\n')
                 {
-                    cur_ofs.X = start_ofs.X;
+                    if ((flags & TextRenderFlags.Center) != 0)
+                    {
+                        cur_ofs.X = ofs.X - text_line_sizes[line++] / 2;
+                    }
+                    else
+                    {
+                        cur_ofs.X = start_ofs.X;
+                    }
                     cur_ofs.Y += fontTable.LineHeight * size.Y;
                     continue;
                 }
@@ -646,6 +668,8 @@ namespace CrashEdit
                     vaoText.Verts[start_idx + i].rgba = new Rgba(0, 0, 0, col.a);
                 }
             }
+
+            return text_size;
         }
 
         public Vector2 GetTextSize(string text, Vector2 size, TextRenderFlags flags = TextRenderFlags.Default)
@@ -658,7 +682,7 @@ namespace CrashEdit
             size.X /= fontTable.Width;
             size.Y /= fontTable.Height;
 
-            float string_w = 0;
+            float text_w = 0;
             var start_ofs = new Vector2(0);
             var cur_ofs = new Vector2(0, fontTable.LineHeight * size.Y);
             for (int i = 0; i < text.Length; ++i)
@@ -666,7 +690,7 @@ namespace CrashEdit
                 var c = text[i];
                 if (c == '\n')
                 {
-                    string_w = Math.Max(string_w, cur_ofs.X - start_ofs.X);
+                    text_w = Math.Max(text_w, cur_ofs.X - start_ofs.X);
 
                     cur_ofs.X = start_ofs.X;
                     cur_ofs.Y += fontTable.LineHeight * size.Y;
@@ -694,8 +718,7 @@ namespace CrashEdit
                 cur_ofs.X += kAdvanceX;
             }
 
-            string_w = Math.Max(string_w, cur_ofs.X - start_ofs.X);
-            return new Vector2(string_w, cur_ofs.Y - start_ofs.Y);
+            return new Vector2(Math.Max(text_w, cur_ofs.X - start_ofs.X), cur_ofs.Y - start_ofs.Y);
         }
 
         public void AddBox(Vector3 ofs, Vector3 sz, Rgba col, bool outline)

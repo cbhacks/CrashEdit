@@ -28,6 +28,7 @@ namespace CrashEdit
             sh.UniformInt("modeCull", vao.UserCullMode);
             sh.UniformInt("blendmask", vao.BlendMask);
 
+            sh.UniformBool("disableDepth", vao.ZBufDisableWrite);
             sh.UniformBool("enableTex", ri.EnableTexture);
         }
 

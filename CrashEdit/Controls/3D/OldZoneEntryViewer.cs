@@ -114,14 +114,17 @@ namespace CrashEdit
             }
             SetWorlds(worlds);
 
-            base.Render();
-
             foreach (var zone in allzones)
             {
                 masterZone = Entry.NullEID == this_zone || zone.EID == this_zone;
                 masterZoneAlpha = (byte)(masterZone ? 255 : 128);
                 RenderZone(zone);
             }
+
+            // render early
+            PostRender();
+
+            base.Render();
         }
 
         private void RenderZone(OldZoneEntry zone)

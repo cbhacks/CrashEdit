@@ -114,7 +114,6 @@ namespace CrashEdit
             }
             SetWorlds(worlds);
 
-            base.Render();
 
             foreach (var zone in allzones)
             {
@@ -122,6 +121,11 @@ namespace CrashEdit
                 masterZoneAlpha = (byte)(masterZone ? 255 : 128);
                 RenderZone(zone);
             }
+
+            // render early
+            PostRender();
+
+            base.Render();
         }
 
         private void RenderZone(ZoneEntry zone)
