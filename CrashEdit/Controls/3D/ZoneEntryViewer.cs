@@ -154,41 +154,43 @@ namespace CrashEdit
 
         private void RenderEntity(Entity entity)
         {
-            if (entity.Positions.Count == 1)
+            if (entity.Positions.Count > 0)
             {
-                EntityPosition position = entity.Positions[0];
-                Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + zoneTrans;
+                Vector3 trans = new Vector3(entity.Positions[0].X, entity.Positions[0].Y, entity.Positions[0].Z) / GameScales.ZoneEntityC1 + zoneTrans;
                 if (!string.IsNullOrEmpty(entity.Name) && Settings.Default.Font3DEnable)
                 {
                     AddText3D(entity.Name, trans, (Rgba)Color4.Yellow);
                 }
-                int subtype = entity.Subtype ?? -1;
-                switch (entity.Type)
+                if (entity.Positions.Count == 1)
                 {
-                    case 3:
-                        RenderPickupEntity(trans + new Vector3(0, .5f, 0), subtype);
-                        break;
-                    case 34:
-                        RenderBoxEntity(trans, subtype);
-                        break;
-                    default:
-                        AddSprite(trans, new Vector2(1), new(255, 255, 255, masterZoneAlpha), OldResources.PointTexture);
-                        break;
+                    int subtype = entity.Subtype ?? -1;
+                    switch (entity.Type)
+                    {
+                        case 3:
+                            RenderPickupEntity(trans + new Vector3(0, .5f, 0), subtype);
+                            break;
+                        case 34:
+                            RenderBoxEntity(trans, subtype);
+                            break;
+                        default:
+                            AddSprite(trans, new Vector2(1), new(255, 255, 255, masterZoneAlpha), OldResources.PointTexture);
+                            break;
+                    }
                 }
-            }
-            else
-            {
-                for (int i = 1; i < entity.Positions.Count; ++i)
+                else
                 {
-                    vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i - 1].X, entity.Positions[i - 1].Y, entity.Positions[i - 1].Z) / GameScales.ZoneEntityC1 + zoneTrans,
-                                        rgba: new Rgba(0, 0, 255, masterZoneAlpha));
-                    vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i].X, entity.Positions[i].Y, entity.Positions[i].Z) / GameScales.ZoneEntityC1 + zoneTrans,
-                                        rgba: new Rgba(0, 0, 255, masterZoneAlpha));
-                }
-                foreach (EntityPosition position in entity.Positions)
-                {
-                    Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + zoneTrans;
-                    AddSprite(trans, new Vector2(1), new(255, 0, 0, masterZoneAlpha), OldResources.PointTexture);
+                    for (int i = 1; i < entity.Positions.Count; ++i)
+                    {
+                        vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i - 1].X, entity.Positions[i - 1].Y, entity.Positions[i - 1].Z) / GameScales.ZoneEntityC1 + zoneTrans,
+                                            rgba: new Rgba(0, 0, 255, masterZoneAlpha));
+                        vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i].X, entity.Positions[i].Y, entity.Positions[i].Z) / GameScales.ZoneEntityC1 + zoneTrans,
+                                            rgba: new Rgba(0, 0, 255, masterZoneAlpha));
+                    }
+                    foreach (EntityPosition position in entity.Positions)
+                    {
+                        trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + zoneTrans;
+                        AddSprite(trans, new Vector2(1), new(255, 0, 0, masterZoneAlpha), OldResources.PointTexture);
+                    }
                 }
             }
         }
