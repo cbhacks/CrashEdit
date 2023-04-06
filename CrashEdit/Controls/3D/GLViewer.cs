@@ -19,8 +19,14 @@ namespace CrashEdit
         Shadow    = 1 << 0,
         Unscaled  = 1 << 1,
         AutoScale = 1 << 2,
+        Left      = 1 << 3,
+        Center    = 1 << 4,
+        Right     = 1 << 5,
+        Top       = 1 << 6,
+        Middle    = 1 << 7,
+        Bottom    = 1 << 8,
 
-        Default = Shadow | AutoScale
+        Default = Shadow | AutoScale | Left | Top
     }
 
     public abstract class GLViewer : GLControl
@@ -556,17 +562,35 @@ namespace CrashEdit
         public void AddText(string text, Vector2 ofs, Rgba col, float size = 1, TextRenderFlags flags = TextRenderFlags.Default) => AddText(text, ofs, col, new Vector2(size), flags);
         public void AddText(string text, Vector2 ofs, Rgba col, Vector2 size, TextRenderFlags flags = TextRenderFlags.Default)
         {
-            if (fontTable == null)
+            if (fontTable == null || text.Length == 0)
                 return;
 
             var face = fontTable.Face;
             size *= 16;
             size.X /= fontTable.Width;
             size.Y /= fontTable.Height;
-            float string_w = 0, string_h = text.Length == 0 ? 0 : fontTable.LineHeight * size.Y;
+
             var start_ofs = ofs;
-            var cur_ofs = ofs;
-            cur_ofs.Y += string_h;
+            var string_size = GetTextSize(text, size, flags);
+            if ((flags & TextRenderFlags.Middle) != 0)
+            {
+                start_ofs.Y -= string_size.Y / 2;
+            }
+            else if ((flags & TextRenderFlags.Bottom) != 0)
+            {
+                start_ofs.Y -= string_size.Y;
+            }
+            if ((flags & TextRenderFlags.Center) != 0)
+            {
+                start_ofs.X -= string_size.X / 2;
+            }
+            else if ((flags & TextRenderFlags.Right) != 0)
+            {
+                start_ofs.X -= string_size.X;
+            }
+
+            var cur_ofs = start_ofs;
+            cur_ofs.Y += fontTable.LineHeight * size.Y;
             int start_idx = vaoText.VertCount;
             for (int i = 0; i < text.Length; ++i)
             {
@@ -609,7 +633,6 @@ namespace CrashEdit
                 }
 
                 cur_ofs.X += kAdvanceX;
-                string_w += kAdvanceX;
             }
             int end_idx = vaoText.VertCount;
             if ((flags & TextRenderFlags.Shadow) != 0)
@@ -621,6 +644,56 @@ namespace CrashEdit
                     vaoText.Verts[start_idx + i].rgba = (Rgba)Color4.Black;
                 }
             }
+        }
+
+        public Vector2 GetTextSize(string text, Vector2 size, TextRenderFlags flags = TextRenderFlags.Default)
+        {
+            if (fontTable == null || text.Length == 0)
+                return new Vector2(0);
+
+            var face = fontTable.Face;
+            size *= 16;
+            size.X /= fontTable.Width;
+            size.Y /= fontTable.Height;
+
+            float string_w = 0;
+            var start_ofs = new Vector2(0);
+            var cur_ofs = new Vector2(0, fontTable.LineHeight * size.Y);
+            for (int i = 0; i < text.Length; ++i)
+            {
+                var c = text[i];
+                if (c == '\n')
+                {
+                    string_w = Math.Max(string_w, cur_ofs.X - start_ofs.X);
+
+                    cur_ofs.X = start_ofs.X;
+                    cur_ofs.Y += fontTable.LineHeight * size.Y;
+                    continue;
+                }
+                if (!fontTable.ContainsKey(c))
+                {
+                    cur_ofs.X += fontTable.Width * size.X;
+                    continue;
+                }
+
+                var glyph = fontTable[c];
+
+                float kAdvanceX = (float)glyph.AdvanceX * size.X;
+
+                if (face.HasKerning && i < text.Length - 1)
+                {
+                    char cNext = text[i + 1];
+                    float kern = (float)face.GetKerning(glyph.GlyphID, face.GetCharIndex(cNext), KerningMode.Default).X * size.X;
+                    if (kern > kAdvanceX * 5 || kern < -(kAdvanceX * 5))
+                        kern = 0;
+                    cur_ofs.X += kern;
+                }
+
+                cur_ofs.X += kAdvanceX;
+            }
+
+            string_w = Math.Max(string_w, cur_ofs.X - start_ofs.X);
+            return new Vector2(string_w, cur_ofs.Y - start_ofs.Y);
         }
 
         public void AddBox(Vector3 ofs, Vector3 sz, Rgba col, bool outline)
