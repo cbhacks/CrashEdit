@@ -9,6 +9,7 @@ namespace Crash
         {
             if (data.Length < 22)
                 ErrorManager.SignalError("OldEntity: Data is too short");
+            int header = BitConv.FromInt32(data,0);
             short flags = BitConv.FromInt16(data,4);
             byte spawn = data[6];
             byte unk = data[7];
@@ -36,15 +37,16 @@ namespace Crash
                 positions[i] = new EntityPosition(x,y,z);
             }
             short nullfield1 = BitConv.FromInt16(data,20 + positioncount * 6);
-            return new OldEntity(flags,spawn,unk,id,vecx,vecy,vecz,type,subtype,positions,nullfield1);
+            return new OldEntity(header,flags,spawn,unk,id,vecx,vecy,vecz,type,subtype,positions,nullfield1);
         }
 
         private List<EntityPosition> positions = null;
 
-        public OldEntity(short flags,byte spawn,byte unk,short id,short vecx,short vecy,short vecz,byte type,byte subtype,IEnumerable<EntityPosition> positions,short nullfield1)
+        public OldEntity(int header,short flags,byte spawn,byte unk,short id,short vecx,short vecy,short vecz,byte type,byte subtype,IEnumerable<EntityPosition> positions,short nullfield1)
         {
             if (positions == null)
                 throw new ArgumentNullException("index");
+            Header = header;
             Flags = flags;
             Spawn = spawn;
             Unk = unk;
@@ -58,6 +60,7 @@ namespace Crash
             Nullfield1 = nullfield1;
         }
 
+        public int Header { get; set; }
         public short Flags { get; set; }
         public byte Spawn { get; set; }
         public byte Unk { get; set; }
@@ -73,7 +76,7 @@ namespace Crash
         public byte[] Save()
         {
             byte[] result = new byte [22 + (6 * positions.Count)];
-            BitConv.ToInt32(result,0,0);
+            BitConv.ToInt32(result,0,Header);
             BitConv.ToInt16(result,4,Flags);
             result[6] = Spawn;
             result[7] = Unk;

@@ -47,7 +47,7 @@ namespace Crash
                         if (shorterData[j] == longerData[j])
                             continue;
 
-                        ErrorManager.SignalIgnorableError("Entry: Processed entry deprocesses to different item data");
+                        ErrorManager.SignalIgnorableError($"Entry: Processed entry deprocesses to different data on item {i}");
                         return result;
                     }
 
@@ -60,7 +60,7 @@ namespace Crash
                         if (longerData[j] == 0)
                             continue;
 
-                        ErrorManager.SignalIgnorableError("Entry: Processed entry deprocesses to different item data");
+                        ErrorManager.SignalIgnorableError($"Entry: Processed entry deprocesses to different data on item {i}");
                         return result;
                     }
                 }

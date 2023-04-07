@@ -79,7 +79,7 @@ namespace CrashEdit
                     z += (short)(delta.Z * 2);
                     pos.Add(new EntityPosition(x, y, z));
                 }
-                entities.Add(new OldEntity(protoentity.Flags, protoentity.Spawn, protoentity.Unk, (short)(protoentity.ID + 5), protoentity.VecX, protoentity.VecY, protoentity.VecZ, protoentity.Type, protoentity.Subtype, pos, protoentity.Nullfield1));
+                entities.Add(new OldEntity(0, protoentity.Flags, protoentity.Spawn, protoentity.Unk, (short)(protoentity.ID + 5), protoentity.VecX, protoentity.VecY, protoentity.VecZ, protoentity.Type, protoentity.Subtype, pos, protoentity.Nullfield1));
             }
             OldZoneEntry newzone = new OldZoneEntry(header, layout, ProtoZoneEntry.Cameras, entities, ProtoZoneEntry.EID);
             FileUtil.SaveFile(newzone.Save(), FileFilters.NSEntry, FileFilters.Any);
