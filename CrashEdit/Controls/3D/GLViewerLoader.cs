@@ -85,7 +85,7 @@ namespace CrashEdit
 
             vaoGridLine.UserColor1 = Color4.Gray;
             vaoText.ZBufDisable = true;
-            vaoLinesThick.LineWidth = 3;
+            vaoLinesThick.LineWidth = 5;
 
             for (int i = 0; i < AxesPos.Length; ++i)
             {
