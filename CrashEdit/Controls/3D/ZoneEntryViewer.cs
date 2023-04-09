@@ -71,12 +71,18 @@ namespace CrashEdit
                     for (int i = zone.CameraCount; i < zone.Entities.Count; ++i)
                     {
                         Entity entity = zone.Entities[i];
+                        float scale = GameScales.ZoneEntityC1;
+                        if (entity.Scaling.HasValue)
+                        {
+                            scale *= 4;
+                            scale /= 1 << entity.Scaling.Value;
+                        }
                         foreach (EntityPosition position in entity.Positions)
                         {
                             int x = entity.Type != 34 ? position.X : position.X + 50;
                             int y = entity.Type != 34 ? position.Y : position.Y + 50;
                             int z = entity.Type != 34 ? position.Z : position.Z + 50;
-                            yield return new Position(x, y, z) / GameScales.ZoneEntityC1 + zonetrans;
+                            yield return new Position(x, y, z) / scale + zonetrans;
                         }
                     }
                 }
@@ -180,9 +186,15 @@ namespace CrashEdit
         {
             float text_y = Settings.Default.Font3DEnable ? 0 : float.MaxValue;
             bool draw_type = entity.Type.HasValue && entity.Subtype.HasValue;
+            float scale = GameScales.ZoneEntityC1;
+            if (entity.Scaling.HasValue)
+            {
+                scale *= 4;
+                scale /= 1 << entity.Scaling.Value;
+            }
             if (entity.Positions.Count > 0)
             {
-                Vector3 trans = new Vector3(entity.Positions[0].X, entity.Positions[0].Y, entity.Positions[0].Z) / GameScales.ZoneEntityC1 + zoneTrans;
+                Vector3 trans = new Vector3(entity.Positions[0].X, entity.Positions[0].Y, entity.Positions[0].Z) / scale + zoneTrans;
                 if (!string.IsNullOrEmpty(entity.Name))
                 {
                     AddText3D(entity.Name, trans, GetZoneColor(Color4.Yellow), ofs_y: text_y, flags: TextRenderFlags.Default | TextRenderFlags.Bottom);
@@ -236,7 +248,7 @@ namespace CrashEdit
                                     if (link.Positions.Count > 0)
                                     {
                                         var lzone_trans = new Vector3(lzone.X, lzone.Y, lzone.Z) / GameScales.ZoneC1;
-                                        Vector3 link_trans = new Vector3(link.Positions[0].X, link.Positions[0].Y, link.Positions[0].Z) / GameScales.ZoneEntityC1 + lzone_trans;
+                                        Vector3 link_trans = new Vector3(link.Positions[0].X, link.Positions[0].Y, link.Positions[0].Z) / scale + lzone_trans;
                                         vaoLinesThick.PushAttrib(trans: trans, rgba: GetZoneColor(Color4.Red));
                                         vaoLinesThick.PushAttrib(trans: link_trans, rgba: GetZoneColor(Color4.DarkRed));
                                     }
@@ -257,14 +269,14 @@ namespace CrashEdit
                 {
                     for (int i = 1; i < entity.Positions.Count; ++i)
                     {
-                        vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i - 1].X, entity.Positions[i - 1].Y, entity.Positions[i - 1].Z) / GameScales.ZoneEntityC1 + zoneTrans,
+                        vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i - 1].X, entity.Positions[i - 1].Y, entity.Positions[i - 1].Z) / scale + zoneTrans,
                                             rgba: GetZoneColor(Color4.Blue));
-                        vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i].X, entity.Positions[i].Y, entity.Positions[i].Z) / GameScales.ZoneEntityC1 + zoneTrans,
+                        vaoLines.PushAttrib(trans: new Vector3(entity.Positions[i].X, entity.Positions[i].Y, entity.Positions[i].Z) / scale + zoneTrans,
                                             rgba: GetZoneColor(Color4.Blue));
                     }
                     foreach (EntityPosition position in entity.Positions)
                     {
-                        var cur_trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneEntityC1 + zoneTrans;
+                        var cur_trans = new Vector3(position.X, position.Y, position.Z) / scale + zoneTrans;
                         AddSprite(cur_trans, new Vector2(1), GetZoneColor(Color4.Red), OldResources.PointTexture);
                     }
                 }
