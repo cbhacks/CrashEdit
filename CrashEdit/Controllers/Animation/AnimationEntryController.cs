@@ -1,4 +1,5 @@
 using Crash;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -29,7 +30,10 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            return new UndockableControl(new AnimationEntryViewer(NSF, Entry.EID));
+            if (AnimationEntry.IsNew)
+                return new Crash3AnimationSelector(NSF, AnimationEntry);
+            else
+                return new UndockableControl(new AnimationEntryViewer(NSF, Entry.EID));
         }
 
         public AnimationEntry AnimationEntry { get; }

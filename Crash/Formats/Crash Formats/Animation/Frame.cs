@@ -123,10 +123,9 @@ namespace Crash
         private List<FrameVertex> vertices;
 
         private static readonly int[] SignTable = { -1, -2, -4, -8, -16, -32, -64, -128 }; // used for decompression
-        public IList<FrameVertex> MakeVertices(NSF nsf)
+        public IList<Position> MakeVertices(ModelEntry model)
         {
-            IList<FrameVertex> verts = new FrameVertex[Vertices.Count];
-            var model = nsf.GetEntry<ModelEntry>(ModelEID);
+            IList<Position> verts = new Position[Vertices.Count];
             if (model != null && model.Positions != null)
             {
                 // compressed frame
@@ -172,7 +171,7 @@ namespace Crash
                     y_acc &= 0xff;
                     z_acc &= 0xff;
 
-                    verts[i] = new FrameVertex((byte)x_acc, (byte)y_acc, (byte)z_acc);
+                    verts[i] = new Position((byte)x_acc, (byte)y_acc, (byte)z_acc);
                 }
             }
             else
@@ -210,7 +209,14 @@ namespace Crash
                         z |= (byte)(Convert.ToByte(uncompressedbitstream[bi++]) << (7 - j));
                     }
 
-                    verts[i] = new FrameVertex(x, y, z);
+                    verts[i] = new Position(x, y, z);
+                }
+            }
+            if (IsNew)
+            {
+                for (int i = 0; i < verts.Count; ++i)
+                {
+                    verts[i] *= 8;
                 }
             }
             return verts;

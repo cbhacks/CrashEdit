@@ -106,7 +106,9 @@
     <Compile Include="Controls\BufferedTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\Crash3AnimationSelector.cs" />
+    <Compile Include="Controls\Crash3AnimationSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\Crash3AnimationSelector.Designer.cs">
       <DependentUpon>Crash3AnimationSelector.cs</DependentUpon>
     </Compile>

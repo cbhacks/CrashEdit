@@ -159,6 +159,21 @@ namespace Crash
             }
         }
 
+        public int GetFrameBitCount()
+        {
+            int result = 0;
+            if (Positions != null)
+            {
+                foreach (var p in Positions)
+                {
+                    result += p.XBits + 1;
+                    result += p.YBits + 1;
+                    result += p.ZBits + 1;
+                }
+            }
+            return result;
+        }
+
         public override int Type => 2;
         public byte[] Info { get; }
         public uint[] PolyData { get; }

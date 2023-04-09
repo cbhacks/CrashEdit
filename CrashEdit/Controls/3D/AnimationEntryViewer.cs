@@ -12,6 +12,7 @@ namespace CrashEdit
     {
         private readonly int eid_anim;
         private readonly int frame_id;
+        private readonly int model_eid;
         private int cur_frame = 0;
         private bool collisionenabled = Settings.Default.DisplayFrameCollision;
         private bool interpenabled = true;
@@ -24,10 +25,11 @@ namespace CrashEdit
 
         protected override bool UseGrid => true;
 
-        public AnimationEntryViewer(NSF nsf, int anim_eid, int frame = -1) : base(nsf)
+        public AnimationEntryViewer(NSF nsf, int anim_eid, int frame = -1, int model_eid = Entry.NullEID) : base(nsf)
         {
             eid_anim = anim_eid;
             frame_id = frame;
+            this.model_eid = model_eid;
 
             for (int i = 0; i < ANIM_BUF_MAX; ++i)
             {
@@ -50,7 +52,7 @@ namespace CrashEdit
 
                     foreach (Frame frame in usedframes)
                     {
-                        var model = nsf.GetEntry<ModelEntry>(frame.ModelEID);
+                        var model = nsf.GetEntry<ModelEntry>(GetModelEID(frame));
                         float mx = 1 / 128f;
                         float my = 1 / 128f;
                         float mz = 1 / 128f;
@@ -60,7 +62,7 @@ namespace CrashEdit
                             my = model.ScaleY / GameScales.ModelC1 / GameScales.AnimC1;
                             mz = model.ScaleZ / GameScales.ModelC1 / GameScales.AnimC1;
                         }
-                        foreach (var vert in frame.MakeVertices(nsf))
+                        foreach (var vert in frame.MakeVertices(model))
                         {
                             yield return (new Position(vert.X, vert.Z, vert.Y)
                                         + new Position(frame.XOffset / 4f, frame.YOffset / 4f, frame.ZOffset / 4f)) * new Position(mx, my, mz);
@@ -68,6 +70,11 @@ namespace CrashEdit
                     }
                 }
             }
+        }
+
+        private int GetModelEID(Frame frame)
+        {
+            return model_eid != Entry.NullEID ? model_eid : frame.ModelEID;
         }
 
         protected override void Render()
@@ -99,9 +106,9 @@ namespace CrashEdit
                     }
                 }
                 Frame frame1 = frames[cur_frame];
-                if (frame2 != null && (frame2.ModelEID != frame1.ModelEID || frame1.Vertices.Count != frame2.Vertices.Count)) frame2 = null;
+                if (frame2 != null && (GetModelEID(frame2) != GetModelEID(frame1) || frame1.Vertices.Count != frame2.Vertices.Count)) frame2 = null;
 
-                var model = nsf.GetEntry<ModelEntry>(frame1.ModelEID);
+                var model = nsf.GetEntry<ModelEntry>(GetModelEID(frame1));
                 if (model == null) return;
 
                 blendMask = BlendMode.Solid;
@@ -186,7 +193,7 @@ namespace CrashEdit
 
         private void RenderFrame(Frame frame, int buf)
         {
-            var model = nsf.GetEntry<ModelEntry>(frame.ModelEID);
+            var model = nsf.GetEntry<ModelEntry>(GetModelEID(frame));
             if (model != null)
             {
                 // setup textures
@@ -195,8 +202,7 @@ namespace CrashEdit
 
                 // alloc buffers
                 var vao = vaoModel[buf];
-                int nb = model.Triangles.Count * 3;
-                vao.TestRealloc(nb);
+                vao.TestRealloc(model.Triangles.Count * 3);
                 vao.DiscardVerts();
                 if (transUncompressedVerts[buf].Length < frame.SpecialVertexCount)
                 {
@@ -204,7 +210,7 @@ namespace CrashEdit
                 }
 
                 // decompress vertices, on the fly right now
-                IList<FrameVertex> verts = frame.MakeVertices(nsf);
+                var verts = frame.MakeVertices(model);
 
                 // render stuff
                 for (int i = 0; i < frame.SpecialVertexCount; ++i)
