@@ -124,7 +124,7 @@ namespace CrashEdit
         /// TODO: MAYBE IMPLEMENT AN FBX EXPORT OR SOMETHING ELSE THAT IS A BIT MORE FLEXIBLE?
         ///
         /// This function resides here because access to GameScales is required, and the Frame object does not have access to it
-        /// a good improvement would be to move this there
+        /// a good improvement might be to move this there
         /// </summary>
         /// <returns></returns>
         public byte[] ToGameOBJ()
