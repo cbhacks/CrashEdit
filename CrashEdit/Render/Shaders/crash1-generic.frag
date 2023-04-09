@@ -38,7 +38,7 @@ void main()
 {
     gl_FragDepth = gl_FragCoord.z;
     if (disableDepth == 1) {
-        gl_FragDepth = intBitsToFloat(floatBitsToInt(1.0)-1);
+        gl_FragDepth = mix(0.995, intBitsToFloat(floatBitsToInt(1.0)-1), gl_FragDepth);
     }
     int enable = p_Tex & 0x1;
     if (modeCull != 0) {
