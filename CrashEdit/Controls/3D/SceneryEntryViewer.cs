@@ -139,7 +139,7 @@ namespace CrashEdit
             {
                 worldOffset = MathExt.Div(-render.Projection.RealTrans, vaoWorld.UserScale);
                 if (world.IsC3)
-                    worldOffset -= new Vector3(0x1800);
+                    worldOffset -= new Vector3(0x2000);
             }
             else
                 worldOffset = new Vector3(world.XOffset, world.YOffset, world.ZOffset);
