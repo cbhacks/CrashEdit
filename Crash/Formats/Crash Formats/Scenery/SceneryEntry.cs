@@ -12,7 +12,7 @@ namespace Crash
         private List<SceneryColor> colors;
         private List<ModelExtendedTexture> animatedtextures;
 
-        public SceneryEntry(byte[] info,IEnumerable<SceneryVertex> vertices,IEnumerable<SceneryTriangle> triangles,IEnumerable<SceneryQuad> quads,IEnumerable<ModelTexture> textures,IEnumerable<SceneryColor> colors,IEnumerable<ModelExtendedTexture> animatedtextures,int eid)
+        public SceneryEntry(byte[] info,IEnumerable<SceneryVertex> vertices,IEnumerable<SceneryTriangle> triangles,IEnumerable<SceneryQuad> quads,IEnumerable<ModelTexture> textures,IEnumerable<SceneryColor> colors,IEnumerable<ModelExtendedTexture> animatedtextures,bool is_c3,int eid)
             : base(eid)
         {
             Info = info;
@@ -22,6 +22,7 @@ namespace Crash
             this.textures = new List<ModelTexture>(textures);
             this.colors = new List<SceneryColor>(colors);
             this.animatedtextures = new List<ModelExtendedTexture>(animatedtextures);
+            IsC3 = is_c3;
         }
 
         public override int Type => 3;
@@ -32,6 +33,7 @@ namespace Crash
         public IList<ModelTexture> Textures => textures;
         public IList<SceneryColor> Colors => colors;
         public IList<ModelExtendedTexture> AnimatedTextures => animatedtextures;
+        public bool IsC3 { get; }
 
         public int XOffset
         {

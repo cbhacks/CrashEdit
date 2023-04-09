@@ -135,11 +135,14 @@ namespace CrashEdit
 
         protected void RenderWorld(SceneryEntry world, Dictionary<int, int> tex_eids)
         {
-            worldOffset = new Vector3(world.XOffset, world.YOffset, world.ZOffset);
             if (world.IsSky)
             {
                 worldOffset = MathExt.Div(-render.Projection.RealTrans, vaoWorld.UserScale);
+                if (world.IsC3)
+                    worldOffset -= new Vector3(0x1800);
             }
+            else
+                worldOffset = new Vector3(world.XOffset, world.YOffset, world.ZOffset);
             foreach (SceneryTriangle tri in world.Triangles)
             {
                 if ((tri.VertexA >= world.Vertices.Count || tri.VertexB >= world.Vertices.Count || tri.VertexC >= world.Vertices.Count) ||

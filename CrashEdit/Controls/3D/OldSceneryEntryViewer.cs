@@ -133,11 +133,10 @@ namespace CrashEdit
 
         protected void RenderWorld(OldSceneryEntry world, Dictionary<int, int> tex_eids)
         {
-            worldOffset = new Vector3(world.XOffset, world.YOffset, world.ZOffset);
             if (world.IsSky)
-            {
                 worldOffset = MathExt.Div(-render.Projection.RealTrans, vaoWorld.UserScale);
-            }
+            else
+                worldOffset = new Vector3(world.XOffset, world.YOffset, world.ZOffset);
             foreach (OldSceneryPolygon polygon in world.Polygons)
             {
                 OldModelStruct str = world.Structs[polygon.ModelStruct];
