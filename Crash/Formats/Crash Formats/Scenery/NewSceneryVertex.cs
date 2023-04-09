@@ -2,7 +2,7 @@ using System;
 
 namespace Crash
 {
-    public struct NewSceneryVertex : IPosition
+    public readonly struct NewSceneryVertex
     {
         public static NewSceneryVertex Load(byte[] xydata,byte[] zdata)
         {
@@ -56,9 +56,6 @@ namespace Crash
         public int UnknownY { get; }
         public int UnknownZ { get; }
         public int Color => (UnknownY & 0x3) << 8 | UnknownX << 4 | UnknownZ;
-        double IPosition.X => X;
-        double IPosition.Y => Y;
-        double IPosition.Z => Z;
 
         public byte[] SaveXY()
         {

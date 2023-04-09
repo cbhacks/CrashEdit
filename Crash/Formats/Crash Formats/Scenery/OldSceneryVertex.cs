@@ -2,7 +2,7 @@ using System;
 
 namespace Crash
 {
-    public struct OldSceneryVertex : IPosition
+    public readonly struct OldSceneryVertex
     {
         public static OldSceneryVertex Load(byte[] data)
         {
@@ -47,9 +47,6 @@ namespace Crash
         public byte Green { get; }
         public byte Blue { get; }
         public bool FX { get; }
-        double IPosition.X => X;
-        double IPosition.Y => Y;
-        double IPosition.Z => Z;
 
         public byte[] Save()
         {
