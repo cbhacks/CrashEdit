@@ -127,6 +127,7 @@ namespace CrashEdit
         protected static VAO vaoDebugSprite;
         public static string glDebugContextString = "*unknown*";
         protected string console;
+        protected string consoleHelp;
         // debug timers
         private double dbgRunMs;
 
@@ -284,65 +285,6 @@ namespace CrashEdit
 
         protected abstract IEnumerable<IPosition> CorePositions { get; }
 
-        // for each instance
-        protected virtual void GLLoad()
-        {
-            var run_load_static = (Type t) =>
-            {
-                if (!loaded_static_types.Contains(t))
-                {
-                    Console.WriteLine($"GLLoadStatic {t.Name}");
-                    var func = t.GetMethod("GLLoadStatic", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
-                    func?.Invoke(this, new object[] { });
-                    loaded_static_types.Add(t);
-                }
-            };
-            run_load_static(Program.TopLevelGLViewer.GetType());
-            run_load_static(GetType());
-
-            ResetCamera();
-
-            // enable logic
-            run = true;
-        }
-
-        public void BeginRunLogic()
-        {
-            if (!run) return;
-            RunLogic();
-            keyspressed.Clear();
-        }
-
-        protected virtual void RunLogic()
-        {
-            var d = GetMoveSpeed() * PerFrame;
-            if (KDown(Keys.ControlKey))
-            {
-                if (KDown(Keys.W)) render.Projection.Trans.Z += d;
-                if (KDown(Keys.S)) render.Projection.Trans.Z -= d;
-                if (KDown(Keys.A)) render.Projection.Trans.X += d;
-                if (KDown(Keys.D)) render.Projection.Trans.X -= d;
-                if (KDown(Keys.E)) render.Projection.Trans.Y += d;
-                if (KDown(Keys.Q)) render.Projection.Trans.Y -= d;
-            }
-            else
-            {
-                var r = Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot));
-                if (KDown(Keys.W)) render.Projection.Trans += (r * new Vector4(0, 0, d, 1)).Xyz;
-                if (KDown(Keys.S)) render.Projection.Trans -= (r * new Vector4(0, 0, d, 1)).Xyz;
-                if (KDown(Keys.A)) render.Projection.Trans += (r * new Vector4(d, 0, 0, 1)).Xyz;
-                if (KDown(Keys.D)) render.Projection.Trans -= (r * new Vector4(d, 0, 0, 1)).Xyz;
-                if (KDown(Keys.E)) render.Projection.Trans += (r * new Vector4(0, d, 0, 1)).Xyz;
-                if (KDown(Keys.Q)) render.Projection.Trans -= (r * new Vector4(0, d, 0, 1)).Xyz;
-            }
-            if (KPress(Keys.R))
-            {
-                render.Reset();
-                ResetCamera();
-            }
-            if (KPress(Keys.T)) render.EnableTexture = !render.EnableTexture;
-        }
-
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -424,6 +366,79 @@ namespace CrashEdit
             }
         }
 
+        // for each instance
+        protected virtual void GLLoad()
+        {
+            var run_load_static = (Type t) =>
+            {
+                if (!loaded_static_types.Contains(t))
+                {
+                    Console.WriteLine($"GLLoadStatic {t.Name}");
+                    var func = t.GetMethod("GLLoadStatic", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+                    func?.Invoke(this, new object[] { });
+                    loaded_static_types.Add(t);
+                }
+            };
+            run_load_static(Program.TopLevelGLViewer.GetType());
+            run_load_static(GetType());
+
+            ResetCamera();
+
+            // enable logic
+            run = true;
+        }
+
+        public void BeginRunLogic()
+        {
+            if (!run) return;
+            RunLogic();
+            keyspressed.Clear();
+        }
+
+        protected virtual void PrintDebug()
+        {
+            console += $"Zoom: {render.Projection.Distance}\nMove Speed: {GetMoveSpeed()}\n";
+            console += string.Format("Render time: {0:F2}ms\nTotal time: {1:F2}ms\n", render.DebugRenderMs, dbgRunMs);
+        }
+
+        protected virtual void PrintHelp()
+        {
+            consoleHelp += "WASD to move, Q/E to pan up/down\nHold Ctrl for aligned movement.\n";
+            consoleHelp += "Left mouse to aim, scroll wheel to zoom.\n";
+            consoleHelp += "R to reset camera.\n";
+            consoleHelp += "T to toggle textures.\n";
+        }
+
+        protected virtual void RunLogic()
+        {
+            var d = GetMoveSpeed() * PerFrame;
+            if (KDown(Keys.ControlKey))
+            {
+                if (KDown(Keys.W)) render.Projection.Trans.Z += d;
+                if (KDown(Keys.S)) render.Projection.Trans.Z -= d;
+                if (KDown(Keys.A)) render.Projection.Trans.X += d;
+                if (KDown(Keys.D)) render.Projection.Trans.X -= d;
+                if (KDown(Keys.E)) render.Projection.Trans.Y += d;
+                if (KDown(Keys.Q)) render.Projection.Trans.Y -= d;
+            }
+            else
+            {
+                var r = Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot));
+                if (KDown(Keys.W)) render.Projection.Trans += (r * new Vector4(0, 0, d, 1)).Xyz;
+                if (KDown(Keys.S)) render.Projection.Trans -= (r * new Vector4(0, 0, d, 1)).Xyz;
+                if (KDown(Keys.A)) render.Projection.Trans += (r * new Vector4(d, 0, 0, 1)).Xyz;
+                if (KDown(Keys.D)) render.Projection.Trans -= (r * new Vector4(d, 0, 0, 1)).Xyz;
+                if (KDown(Keys.E)) render.Projection.Trans += (r * new Vector4(0, d, 0, 1)).Xyz;
+                if (KDown(Keys.Q)) render.Projection.Trans -= (r * new Vector4(0, d, 0, 1)).Xyz;
+            }
+            if (KPress(Keys.R))
+            {
+                render.Reset();
+                ResetCamera();
+            }
+            if (KPress(Keys.T)) render.EnableTexture = !render.EnableTexture;
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             glDebugContextString = "pre-run";
@@ -472,7 +487,6 @@ namespace CrashEdit
                     render.Projection.Forward = -(rot_mat * new Vector4(0, 0, 1, 1)).Xyz;
                     render.Projection.View = Matrix4.CreateTranslation(render.Projection.RealTrans) * rot_mat;
                     // console += $"trans: {-render.Projection.Trans} -> real_trans: {-render.Projection.RealTrans}\n";
-                    console += $"Zoom: {render.Projection.Distance}\nMove Speed: {GetMoveSpeed()}\n";
 
                     // render
                     glDebugContextString = "render " + GetType().ToString();
@@ -482,12 +496,16 @@ namespace CrashEdit
                     glDebugContextString = "post-render";
                     PostRender();
 
-                    console += string.Format("Render time: {0:F2}ms\nTotal time: {1:F2}ms", render.DebugRenderMs, dbgRunMs);
+                    PrintHelp();
+                    PrintDebug();
                     if (Settings.Default.Font2DEnable)
-                        AddText(console, 0, 0, (Rgba)Color4.White);
-                    console = string.Empty;
+                        AddText(consoleHelp, Width, Height, (Rgba)Color4.White, flags: TextRenderFlags.Right | TextRenderFlags.Bottom | TextRenderFlags.Default);
+                    if (Settings.Default.Font2DEnable)
+                        AddText(console, 0, 0, (Rgba)Color4.White, size: 0.9f);
                     vaoText.UserScale = new Vector3(Width, Height, 1);
                     vaoText.RenderAndDiscard(render);
+                    console = string.Empty;
+                    consoleHelp = string.Empty;
                 }
 
                 dbgRunMs = watchRun.ElapsedMillisecondsFull();
@@ -583,7 +601,7 @@ namespace CrashEdit
                 return new Vector2(0);
 
             var face = fontTable.Face;
-            var text_size = GetTextSize(text, new Vector2(1), flags) * size;
+            var text_size = GetTextSize(text, size, flags);
             string[] text_lines = null;
             float[] text_line_sizes = null;
             int line = 0;
@@ -597,7 +615,7 @@ namespace CrashEdit
             {
                 start_ofs.Y -= text_size.Y;
             }
-            if ((flags & TextRenderFlags.Center) != 0)
+            if ((flags & (TextRenderFlags.Center | TextRenderFlags.Right)) != 0)
             {
                 text_lines = text.Split('\n');
                 text_line_sizes = new float[text_lines.Length];
@@ -605,11 +623,7 @@ namespace CrashEdit
                 {
                     text_line_sizes[i] = GetTextSize(text_lines[i], new Vector2(1), flags).X * size.X;
                 }
-                start_ofs.X -= text_line_sizes[line++] / 2;
-            }
-            else if ((flags & TextRenderFlags.Right) != 0)
-            {
-                start_ofs.X -= text_size.X;
+                start_ofs.X -= text_line_sizes[line++] / (((flags & TextRenderFlags.Center) != 0) ? 2 : 1);
             }
 
             // correct size
@@ -628,6 +642,10 @@ namespace CrashEdit
                     if ((flags & TextRenderFlags.Center) != 0)
                     {
                         cur_ofs.X = ofs.X - text_line_sizes[line++] / 2;
+                    }
+                    else if ((flags & TextRenderFlags.Right) != 0)
+                    {
+                        cur_ofs.X = ofs.X - text_line_sizes[line++];
                     }
                     else
                     {
@@ -704,7 +722,8 @@ namespace CrashEdit
                     text_w = Math.Max(text_w, cur_ofs.X - start_ofs.X);
 
                     cur_ofs.X = start_ofs.X;
-                    cur_ofs.Y += fontTable.LineHeight * size.Y;
+                    if (i < text.Length - 1)
+                        cur_ofs.Y += fontTable.LineHeight * size.Y;
                     continue;
                 }
                 if (!fontTable.ContainsKey(c))
