@@ -27,21 +27,23 @@ namespace CrashEdit
                 AddMenuSeparator();
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcFixDetonator, Menu_Fix_Detonator);
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcFixBoxCount, Menu_Fix_BoxCount);
-                AddMenuSeparator();
             }
 
             if (GameVersion == GameVersion.Crash1 || GameVersion == GameVersion.Crash1BetaMAR08 || GameVersion == GameVersion.Crash1BetaMAY11)
             {
+                AddMenuSeparator();
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC1);
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevelZones, Menu_ShowLevelZonesC1);
             }
             else if (GameVersion == GameVersion.Crash1Beta1995)
             {
+                AddMenuSeparator();
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC1Proto);
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevelZones, Menu_ShowLevelZonesC1Proto);
             }
             else if (GameVersion == GameVersion.Crash2 || GameVersion == GameVersion.Crash3)
             {
+                AddMenuSeparator();
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC2);
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevelZones, Menu_ShowLevelZonesC2);
             }

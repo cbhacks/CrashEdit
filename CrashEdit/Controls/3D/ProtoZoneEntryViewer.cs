@@ -16,18 +16,18 @@ namespace CrashEdit
         private readonly int this_zone;
 
         private readonly Dictionary<int, GOOLEntry> gools = new();
-        private bool masterZone;
-        private byte masterZoneAlpha;
-        private Vector3 zoneTrans;
+        private bool is_master_zone;
+        private byte zone_alpha;
+        private Vector3 zone_trans;
 
         private Rgba GetZoneColor(Color4 color)
         {
-            return new Rgba(color, masterZoneAlpha);
+            return new Rgba(color, zone_alpha);
         }
 
         private Rgba GetZoneColor(byte r, byte g, byte b)
         {
-            return new Rgba(r, g, b, masterZoneAlpha);
+            return new Rgba(r, g, b, zone_alpha);
         }
 
         private bool octreeFlip;
@@ -98,7 +98,7 @@ namespace CrashEdit
             if (KPress(Keys.O)) octreeFlip = !octreeFlip;
         }
 
-        private IEnumerable<ProtoZoneEntry> GetZones()
+        private IList<ProtoZoneEntry> GetZones()
         {
             var ret = new List<ProtoZoneEntry>();
             foreach (int eid in zones)
@@ -122,6 +122,16 @@ namespace CrashEdit
         protected override void Render()
         {
             var allzones = GetZones();
+            ProtoZoneEntry master_zone = null;
+            foreach (var zone in allzones)
+            {
+                if (zone.EID == this_zone)
+                {
+                    master_zone = zone;
+                    break;
+                }
+            }
+
             List<int> worlds = new();
             foreach (var zone in allzones)
             {
@@ -143,25 +153,42 @@ namespace CrashEdit
                 }
             }
 
-            foreach (var zone in allzones)
+            is_master_zone = true;
+            zone_alpha = 255;
+            if (master_zone != null)
             {
-                masterZone = Entry.NullEID == this_zone || zone.EID == this_zone;
-                masterZoneAlpha = (byte)(masterZone ? 255 : 128);
-                RenderZone(zone);
+                allzones.Remove(master_zone);
+                RenderZone(master_zone);
+
+                is_master_zone = false;
+                zone_alpha = 128;
+            }
+            else
+            {
+                foreach (var zone in allzones)
+                {
+                    RenderZone(zone);
+                }
+                allzones.Clear();
             }
 
             // render early
             PostRender();
 
             base.Render();
+
+            foreach (var zone in allzones)
+            {
+                RenderZone(zone);
+            }
         }
 
         private void RenderZone(ProtoZoneEntry zone)
         {
-            zoneTrans = new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
+            zone_trans = new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
             Vector3 zoneSize = new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1;
-            AddText3D(zone.EName, zoneTrans + new Vector3(zoneSize.X, 0, zoneSize.Z) / 2, GetZoneColor(Color4.White), size: 2, flags: TextRenderFlags.Shadow | TextRenderFlags.Top | TextRenderFlags.Center);
-            AddBox(zoneTrans,
+            AddText3D(zone.EName, zone_trans + new Vector3(zoneSize.X, 0, zoneSize.Z) / 2, GetZoneColor(Color4.White), size: 2, flags: TextRenderFlags.Shadow | TextRenderFlags.Top | TextRenderFlags.Center);
+            AddBox(zone_trans,
                    new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1,
                    GetZoneColor(Color4.White),
                    true);
@@ -174,9 +201,9 @@ namespace CrashEdit
                 RenderCamera(camera);
             }
 
-            if (octreeRenderer.Enabled && (masterZone || octreeRenderer.ShowAllEntries))
+            if (octreeRenderer.Enabled && (is_master_zone || octreeRenderer.ShowAllEntries))
             {
-                octreeRenderer.NodeAlpha = masterZoneAlpha;
+                octreeRenderer.NodeAlpha = zone_alpha;
                 int maxx = zone.CollisionDepthX;
                 int maxy = zone.CollisionDepthY;
                 int maxz = zone.CollisionDepthZ;
@@ -186,11 +213,11 @@ namespace CrashEdit
                     maxz = maxy;
                 if (octreeFlip)
                 {
-                    octreeRenderer.RenderOctree(zone.Layout, 0x1C, zoneTrans.X, zoneTrans.Y + zoneSize.Y, zoneTrans.Z + zoneSize.Z, zoneSize.X, -zoneSize.Y, -zoneSize.Z, maxx, maxy, maxz);
+                    octreeRenderer.RenderOctree(zone.Layout, 0x1C, zone_trans.X, zone_trans.Y + zoneSize.Y, zone_trans.Z + zoneSize.Z, zoneSize.X, -zoneSize.Y, -zoneSize.Z, maxx, maxy, maxz);
                 }
                 else
                 {
-                    octreeRenderer.RenderOctree(zone.Layout, 0x1C, zoneTrans.X, zoneTrans.Y, zoneTrans.Z, zoneSize.X, zoneSize.Y, zoneSize.Z, maxx, maxy, maxz);
+                    octreeRenderer.RenderOctree(zone.Layout, 0x1C, zone_trans.X, zone_trans.Y, zone_trans.Z, zoneSize.X, zoneSize.Y, zoneSize.Z, maxx, maxy, maxz);
                 }
             }
         }
@@ -200,7 +227,7 @@ namespace CrashEdit
             float text_y = Settings.Default.Font3DEnable ? 0 : float.MaxValue;
             bool draw_type = true;
 
-            Vector3 trans = new Vector3(entity.StartX, entity.StartY, entity.StartZ) / GameScales.ZoneC1 + zoneTrans;
+            Vector3 trans = new Vector3(entity.StartX, entity.StartY, entity.StartZ) / GameScales.ZoneC1 + zone_trans;
             AddText3D("entity-" + entity.ID, trans, GetZoneColor(Color4.Yellow), ofs_y: text_y, flags: TextRenderFlags.Default | TextRenderFlags.Bottom);
             if (entity.Deltas.Count == 0)
             {
@@ -239,14 +266,14 @@ namespace CrashEdit
         {
             for (int i = 1; i < camera.Positions.Count; ++i)
             {
-                vaoLines.PushAttrib(trans: new Vector3(camera.Positions[i - 1].X, camera.Positions[i - 1].Y, camera.Positions[i - 1].Z) / GameScales.ZoneCameraC1 + zoneTrans,
+                vaoLines.PushAttrib(trans: new Vector3(camera.Positions[i - 1].X, camera.Positions[i - 1].Y, camera.Positions[i - 1].Z) / GameScales.ZoneCameraC1 + zone_trans,
                                     rgba: GetZoneColor(Color4.Green));
-                vaoLines.PushAttrib(trans: new Vector3(camera.Positions[i].X, camera.Positions[i].Y, camera.Positions[i].Z) / GameScales.ZoneCameraC1 + zoneTrans,
+                vaoLines.PushAttrib(trans: new Vector3(camera.Positions[i].X, camera.Positions[i].Y, camera.Positions[i].Z) / GameScales.ZoneCameraC1 + zone_trans,
                                     rgba: GetZoneColor(Color4.Green));
             }
             foreach (OldCameraPosition position in camera.Positions)
             {
-                Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneCameraC1 + zoneTrans;
+                Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneCameraC1 + zone_trans;
                 AddSprite(trans, new Vector2(1), GetZoneColor(Color4.Yellow), OldResources.PointTexture);
 
                 float ang2rad = MathHelper.Pi / 2048;
