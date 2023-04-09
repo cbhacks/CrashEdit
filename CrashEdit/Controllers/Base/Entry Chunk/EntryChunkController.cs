@@ -62,10 +62,6 @@ namespace CrashEdit
             {
                 return new SceneryEntryController(this, (SceneryEntry)entry);
             }
-            else if (entry is NewSceneryEntry)
-            {
-                return new NewSceneryEntryController(this, (NewSceneryEntry)entry);
-            }
             else if (entry is SLSTEntry)
             {
                 return new SLSTEntryController(this, (SLSTEntry)entry);
@@ -89,10 +85,6 @@ namespace CrashEdit
             else if (entry is ZoneEntry)
             {
                 return new ZoneEntryController(this, (ZoneEntry)entry);
-            }
-            else if (entry is NewZoneEntry)
-            {
-                return new NewZoneEntryController(this, (NewZoneEntry)entry);
             }
             else if (entry is GOOLEntry)
             {

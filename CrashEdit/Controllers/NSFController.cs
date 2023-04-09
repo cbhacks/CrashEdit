@@ -40,13 +40,11 @@ namespace CrashEdit
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC1Proto);
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevelZones, Menu_ShowLevelZonesC1Proto);
             }
-            else if (GameVersion == GameVersion.Crash2)
+            else if (GameVersion == GameVersion.Crash2 || GameVersion == GameVersion.Crash3)
             {
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC2);
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevelZones, Menu_ShowLevelZonesC2);
             }
-            else if (GameVersion == GameVersion.Crash3)
-                AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC3);
             InvalidateNode();
             InvalidateNodeImage();
         }
@@ -148,23 +146,6 @@ namespace CrashEdit
         {
             List<Entity> nitros = new List<Entity>();
             List<Entity> detonators = new List<Entity>();
-            foreach (NewZoneEntry entry in NSF.GetEntries<NewZoneEntry>())
-            {
-                foreach (Entity entity in entry.Entities)
-                {
-                    if (entity.Type == 34)
-                    {
-                        if (entity.Subtype == 18 && entity.ID.HasValue)
-                        {
-                            nitros.Add(entity);
-                        }
-                        else if (entity.Subtype == 24)
-                        {
-                            detonators.Add(entity);
-                        }
-                    }
-                }
-            }
             foreach (ZoneEntry entry in NSF.GetEntries<ZoneEntry>())
             {
                 foreach (Entity entity in entry.Entities)
@@ -222,52 +203,11 @@ namespace CrashEdit
                             case 18: // nitro
                             case 20: // auto empty
                             case 21: // empty 2
-                                boxcount++;
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                }
-            }
-            foreach (NewZoneEntry zone in NSF.GetEntries<NewZoneEntry>())
-            {
-                foreach (Entity entity in zone.Entities)
-                {
-                    if (entity.Type == 0 && entity.Subtype == 0)
-                    {
-                        willys.Add(entity);
-                    }
-                    else if (entity.Type == 34)
-                    {
-                        switch (entity.Subtype)
-                        {
-                            case 0: // tnt
-                            case 2: // empty
-                            case 3: // spring
-                            case 4: // continue
-                            case 6: // fruit
-                            case 8: // life
-                            case 9: // doctor
-                            case 10: // pickup
-                            case 11: // pow
-                            case 13: // ghost
-                            case 17: // auto pickup
-                            case 18: // nitro
-                            case 20: // auto empty
-                            case 21: // empty 2
                             case 25: // slot
                                 boxcount++;
                                 break;
                             default:
                                 break;
-                        }
-                    }
-                    else if (entity.Type == 36)
-                    {
-                        if (entity.Subtype == 1)
-                        {
-                            boxcount++;
                         }
                     }
                 }
@@ -417,29 +357,6 @@ namespace CrashEdit
             {
                 ShowLevelZonesForm = null;
             };
-        }
-
-        private void Menu_ShowLevelC3()
-        {
-            /*
-            List<TextureChunk[]> sortedtexturechunks = new List<TextureChunk[]>();
-            List<NewSceneryEntry> sceneryentries = new List<NewSceneryEntry>();
-            foreach (NewSceneryEntry entry in NSF.GetEntries<NewSceneryEntry>())
-            {
-                sceneryentries.Add(entry);
-                TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info,0x28)];
-                for (int i = 0; i < texturechunks.Length; ++i)
-                {
-                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info,0x2C+i*4));
-                }
-                sortedtexturechunks.Add(texturechunks);
-            }
-            Form frm = new Form() { Text = "Loading...", Width = 480, Height = 360 };
-            frm.Show();
-            NewSceneryEntryViewer viewer = new NewSceneryEntryViewer(sceneryentries,sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
-            frm.Controls.Add(viewer);
-            frm.Text = string.Empty;
-            */
         }
 
         private void Menu_Import_Chunk()

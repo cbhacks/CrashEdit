@@ -161,7 +161,6 @@
     <Compile Include="Controllers\Animation\OldAnimationEntryController.cs" />
     <Compile Include="Controllers\Animation\OldFrameController.cs" />
     <Compile Include="Controllers\Model\ModelEntryController.cs" />
-    <Compile Include="Controllers\Scenery\NewSceneryEntryController.cs" />
     <Compile Include="Controllers\Scenery\ProtoSceneryEntryController.cs" />
     <Compile Include="Controllers\SLST\OldSLSTDeltaController.cs" />
     <Compile Include="Controllers\SLST\SLSTDeltaController.cs" />
@@ -174,7 +173,6 @@
     <Compile Include="Controllers\Music\OldMusicEntryController.cs" />
     <Compile Include="Controllers\Palette\PaletteEntryController.cs" />
     <Compile Include="Controllers\T6\T6EntryController.cs" />
-    <Compile Include="Controllers\Zone\NewEntityController.cs" />
     <Compile Include="Controllers\Zone\OldCameraController.cs" />
     <Compile Include="Controllers\Zone\ProtoZoneEntryController.cs" />
     <Compile Include="Controllers\Zone\ProtoEntityController.cs" />
@@ -189,7 +187,6 @@
     <Compile Include="Controllers\Unprocessed\UnprocessedChunkController.cs" />
     <Compile Include="Controllers\Base\Entry\ItemController.cs" />
     <Compile Include="Controllers\Zone\EntityController.cs" />
-    <Compile Include="Controllers\Zone\NewZoneEntryController.cs" />
     <Compile Include="Controllers\Zone\ZoneEntryController.cs" />
     <Compile Include="Controllers\Unprocessed\UnprocessedEntryController.cs" />
     <Compile Include="Controllers\SLST\SLSTEntryController.cs" />
@@ -243,7 +240,6 @@
     <Compile Include="Controls\OldEntityBox.Designer.cs">
       <DependentUpon>OldEntityBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\3D\NewSceneryEntryViewer.cs" />
     <Compile Include="Controls\3D\SceneryEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -283,7 +279,6 @@
     <Compile Include="Controls\3D\OldZoneEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\3D\NewZoneEntryViewer.cs" />
     <Compile Include="Controls\3D\ZoneEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -47,14 +47,14 @@ namespace Crash
             {
                 ErrorManager.SignalError("SceneryEntry: Animated texture count mismatch");
             }
-            NewSceneryVertex[] vertices = new NewSceneryVertex[vertexcount];
+            SceneryVertex[] vertices = new SceneryVertex[vertexcount];
             for (int i = 0; i < vertexcount; i++)
             {
                 byte[] xydata = new byte[4];
                 byte[] zdata = new byte[2];
                 Array.Copy(items[1], (vertexcount - 1 - i) * 4, xydata, 0, xydata.Length);
                 Array.Copy(items[1], vertexcount * 4 + i * 2, zdata, 0, zdata.Length);
-                vertices[i] = NewSceneryVertex.Load(xydata, zdata);
+                vertices[i] = SceneryVertex.Load(xydata, zdata, true);
             }
             SceneryTriangle[] triangles = new SceneryTriangle[trianglecount];
             for (int i = 0; i < trianglecount; i++)
@@ -95,7 +95,7 @@ namespace Crash
                 Array.Copy(items[6], i * 4, animatedtexturedata, 0, animatedtexturedata.Length);
                 animatedtextures[i] = ModelExtendedTexture.Load(animatedtexturedata);
             }
-            return new NewSceneryEntry(items[0],vertices,triangles,quads,textures,colors,animatedtextures,eid);
+            return new SceneryEntry(items[0],vertices,triangles,quads,textures,colors,animatedtextures,eid);
         }
     }
 }

@@ -597,7 +597,7 @@ namespace CrashEdit
                         break;
                     case GameVersion.Crash3:
                         {
-                            NewNSD nsd = data != null ? NewNSD.Load(data) : new NewNSD(new int[256], 0, new int[4], 0, 0, new int[64], new NSDLink[0], 0, 0x3F, 0, new int[128], new byte[0xFC], new NSDSpawnPoint[1] { new NSDSpawnPoint(Entry.NullEID, 0, 0, 0, 0, 0) }, new byte[0]);
+                            NSD nsd = data != null ? NSD.LoadC3(data) : new NSD(new int[256], 0, new int[4], 0, 0, new int[64], new NSDLink[0], 0, 0x3F, 0, new int[128], new byte[0xFC], new NSDSpawnPoint[1] { new NSDSpawnPoint(Entry.NullEID, 0, 0, 0, 0, 0) }, new byte[0]);
                             PatchNSD(nsd, nsf, filename, ignore_warnings);
                         }
                         break;
@@ -654,63 +654,6 @@ namespace CrashEdit
             }
             catch (LoadAbortedException)
             {
-            }
-        }
-
-        public void PatchNSD(NewNSD nsd, NSF nsf, string path, bool ignore_warnings)
-        {
-            nsd.ChunkCount = nsf.Chunks.Count;
-            var indexdata = nsf.MakeNSDIndex();
-            nsd.HashKeyMap = indexdata.Item1;
-            nsd.Index = indexdata.Item2;
-            PatchNSDGoolMap(nsd.GOOLMap, nsf, ignore_warnings);
-
-            // patch object entity count
-            nsd.EntityCount = 0;
-            foreach (NewZoneEntry zone in nsf.GetEntries<NewZoneEntry>())
-                foreach (Entity ent in zone.Entities)
-                    if (ent.ID != null)
-                        ++nsd.EntityCount;
-
-            if (ignore_warnings ? true : MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                File.WriteAllBytes(path, nsd.Save());
-            }
-            if (!ignore_warnings && MessageBox.Show(Resources.PatchNSD2, Resources.PatchNSD_Title2, MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                int[] eids = new int[nsd.Index.Count];
-                for (int i = 0; i < eids.Length; ++i)
-                    eids[i] = nsd.Index[i].EntryID;
-                foreach (NewZoneEntry zone in nsf.GetEntries<NewZoneEntry>())
-                {
-                    foreach (Entity ent in zone.Entities)
-                    {
-                        if (ent.LoadListA != null)
-                        {
-                            foreach (EntityPropertyRow<int> row in ent.LoadListA.Rows)
-                            {
-                                List<int> values = (List<int>)row.Values;
-                                values.Sort(delegate (int a, int b)
-                                {
-                                    return Array.IndexOf(eids, a) - Array.IndexOf(eids, b);
-                                });
-                                if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.GetEntry<IEntry>(eid) == null);
-                            }
-                        }
-                        if (ent.LoadListB != null)
-                        {
-                            foreach (EntityPropertyRow<int> row in ent.LoadListB.Rows)
-                            {
-                                List<int> values = (List<int>)row.Values;
-                                values.Sort(delegate (int a, int b)
-                                {
-                                    return Array.IndexOf(eids, a) - Array.IndexOf(eids, b);
-                                });
-                                if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.GetEntry<IEntry>(eid) == null);
-                            }
-                        }
-                    }
-                }
             }
         }
 
