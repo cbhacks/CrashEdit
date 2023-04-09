@@ -336,7 +336,7 @@ namespace CrashEdit
                 0x3b => Color4.Green,
                 0x3c => Color4.Purple,
                 0x3d => Color4.DarkBlue,
-                0x3e => Color4.PaleGoldenrod,
+                0x3e => Color4.Gold,
                 _ => Color4.LightGray,
             };
         }
