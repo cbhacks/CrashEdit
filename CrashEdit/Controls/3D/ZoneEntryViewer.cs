@@ -275,6 +275,10 @@ namespace CrashEdit
                                 else if (pickup == 102) pickup_name = "doctor";
                                 else if (pickup >= 200 && pickup < 264) pickup_name = "crystal-" + (pickup - 200);
                                 else if (pickup >= 300 && pickup < 364) pickup_name = "gem-" + (pickup - 300);
+                                else if (pickup >= 400 && pickup < 464) pickup_name = "relic-1-" + (pickup - 400);
+                                else if (pickup >= 500 && pickup < 564) pickup_name = "relic-2-" + (pickup - 500);
+                                else if (pickup >= 600 && pickup < 664) pickup_name = "relic-3-" + (pickup - 600);
+                                else if (pickup >= 700 && pickup < 764) pickup_name = "power-" + (pickup - 700);
                                 text_y += AddText3D(pickup_name, trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
                             }
                             if (entity.Settings.Count > 2)
@@ -297,7 +301,7 @@ namespace CrashEdit
                                             var lzone_trans = new Vector3(lzone.X, lzone.Y, lzone.Z) / GameScales.ZoneC1;
                                             Vector3 link_trans = new Vector3(link.Positions[0].X, link.Positions[0].Y, link.Positions[0].Z) / scale + lzone_trans;
                                             vaoLinesThick.PushAttrib(trans: trans, rgba: GetZoneColor(Color4.Red));
-                                            vaoLinesThick.PushAttrib(trans: link_trans, rgba: GetZoneColor(Color4.DarkRed));
+                                            vaoLinesThick.PushAttrib(trans: link_trans, rgba: GetZoneColor(Color4.Lime));
                                         }
                                     }
                                 }
