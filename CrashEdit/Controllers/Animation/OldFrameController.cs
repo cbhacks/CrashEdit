@@ -55,11 +55,9 @@ namespace CrashEdit.CE
             {
                 throw new GUIException("The linked model entry could not be found.");
             }
-            if (MessageBox.Show("Texture and color information will not be exported.\n\nContinue anyway?", "Export as OBJ", MessageBoxButtons.YesNo) != DialogResult.Yes)
-            {
+            if (!FileUtil.SelectSaveFile (out string filename, FileFilters.OBJ, FileFilters.Any))
                 return;
-            }
-            FileUtil.SelectSaveFile (out string filename, FileFilters.OBJ, FileFilters.Any);
+            
             ToOBJ (Path.GetDirectoryName (filename), Path.GetFileNameWithoutExtension (filename));
         }
 

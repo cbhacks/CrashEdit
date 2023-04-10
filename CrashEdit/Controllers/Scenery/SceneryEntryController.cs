@@ -25,7 +25,9 @@ namespace CrashEdit.CE
 
         private void Menu_Export_OBJ ()
         {
-            FileUtil.SelectSaveFile (out string filename, FileFilters.OBJ, FileFilters.Any);
+            if (!FileUtil.SelectSaveFile (out string filename, FileFilters.OBJ, FileFilters.Any))
+                return;
+            
             ToOBJ (Path.GetDirectoryName (filename), Path.GetFileNameWithoutExtension (filename));
         }
 
@@ -52,7 +54,7 @@ namespace CrashEdit.CE
 
             foreach (var tri in SceneryEntry.Triangles)
             {
-                var info = ProcessTextureInfoC2(tri.Texture, tri.Animated, SceneryEntry.Textures, SceneryEntry.AnimatedTextures);
+                var info = TextureUtils.ProcessTextureInfoC2(0, tri.Texture, tri.Animated, SceneryEntry.Textures, SceneryEntry.AnimatedTextures);
                 string material = null;
                 Vector2? uv1 = null, uv2 = null, uv3 = null;
 
@@ -125,7 +127,7 @@ namespace CrashEdit.CE
             
             foreach (var quad in SceneryEntry.Quads)
             {
-                var info = ProcessTextureInfoC2(quad.Texture, quad.Animated, SceneryEntry.Textures, SceneryEntry.AnimatedTextures);
+                var info = TextureUtils.ProcessTextureInfoC2(0, quad.Texture, quad.Animated, SceneryEntry.Textures, SceneryEntry.AnimatedTextures);
                 string material = null;
                 Vector2? uv1 = null, uv2 = null, uv3 = null, uv4 = null;
 
@@ -203,64 +205,6 @@ namespace CrashEdit.CE
             }
             
             exporter.Export (path, modelname);
-        }
-        
-        /// <summary>
-        /// TODO: THIS IS A DUPLICATED OF GLViewer:899, MOVE IT SOMEWHERE ELSE WHERE BOTH HAVE ACCESS TO IT
-        /// </summary>
-        /// <param name="in_tex_id"></param>
-        /// <param name="animated"></param>
-        /// <param name="textures"></param>
-        /// <param name="animated_textures"></param>
-        /// <returns></returns>
-        protected Tuple<bool, ModelTexture?> ProcessTextureInfoC2(int in_tex_id, bool animated, IList<ModelTexture> textures, IList<ModelExtendedTexture> animated_textures)
-        {
-            if (in_tex_id != 0 || animated)
-            {
-                ModelTexture? info_temp = null;
-                int tex_id = in_tex_id - 1;
-                if (animated)
-                {
-                    if (++tex_id >= animated_textures.Count)
-                    {
-                        return new(false, null);
-                    }
-                    var anim = animated_textures[tex_id];
-                    // check if it's an untextured polygon
-                    if (anim.Offset != 0)
-                    {
-                        tex_id = anim.Offset - 1;
-                        if (anim.IsLOD)
-                        {
-                            tex_id += anim.LOD0; // we only render closest LOD for now
-                        }
-                        else
-                        {
-                            tex_id += (int)((0 / 2 / (1 + anim.Latency) + anim.Delay) & anim.Mask);
-                            if (anim.Leap)
-                            {
-                                anim = animated_textures[++tex_id];
-                                tex_id = anim.Offset - 1 + anim.LOD0;
-                            }
-                        }
-                        if (tex_id >= textures.Count)
-                        {
-                            return new(false, null);
-                        }
-                        info_temp = textures[tex_id];
-                    }
-                }
-                else
-                {
-                    if (tex_id >= textures.Count)
-                    {
-                        return new(false, null);
-                    }
-                    info_temp = textures[tex_id];
-                }
-                return new(true, info_temp);
-            }
-            return new(true, null);
         }
         
         private void Menu_Fix_WGEOv3()
