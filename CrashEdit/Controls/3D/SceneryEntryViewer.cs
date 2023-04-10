@@ -133,7 +133,7 @@ namespace CrashEdit
             foreach (SceneryTriangle tri in world.Triangles)
             {
                 if (tri.VertexA >= world.Vertices.Count || tri.VertexB >= world.Vertices.Count || tri.VertexC >= world.Vertices.Count) continue;
-                var polygon_texture_info = ProcessTextureInfoC2(tri.Texture, tri.Animated, world.Textures, world.AnimatedTextures);
+                var polygon_texture_info = TextureUtils.ProcessTextureInfoC2(render.RealCurrentFrame, tri.Texture, tri.Animated, world.Textures, world.AnimatedTextures);
                 if (!polygon_texture_info.Item1)
                     continue;
                 int tex = 0; // completely untextured
@@ -156,7 +156,7 @@ namespace CrashEdit
             foreach (SceneryQuad quad in world.Quads)
             {
                 if (quad.VertexA >= world.Vertices.Count || quad.VertexB >= world.Vertices.Count || quad.VertexC >= world.Vertices.Count || quad.VertexD >= world.Vertices.Count) continue;
-                var polygon_texture_info = ProcessTextureInfoC2(quad.Texture, quad.Animated, world.Textures, world.AnimatedTextures);
+                var polygon_texture_info = TextureUtils.ProcessTextureInfoC2(render.RealCurrentFrame, quad.Texture, quad.Animated, world.Textures, world.AnimatedTextures);
                 if (!polygon_texture_info.Item1)
                     continue;
                 int tex = 0; // completely untextured

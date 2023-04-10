@@ -65,7 +65,9 @@ namespace CrashEdit
 
         private void Menu_Export_OBJ()
         {
-            FileUtil.SelectSaveFile (out string filename, FileFilters.OBJ, FileFilters.Any);
+            if (!FileUtil.SelectSaveFile (out string filename, FileFilters.OBJ, FileFilters.Any))
+                return;
+            
             ToOBJ (Path.GetDirectoryName (filename), Path.GetFileNameWithoutExtension (filename));
         }
 

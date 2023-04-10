@@ -20,7 +20,8 @@ namespace CrashEdit
 
         private void Menu_Export_OBJ_Game ()
         {
-            FileUtil.SelectSaveFile (out string output, FileFilters.OBJ, FileFilters.Any);
+            if (!FileUtil.SelectSaveFile (out string output, FileFilters.OBJ, FileFilters.Any))
+                return;
             
             // modify the path to add a number before the extension
             string ext = Path.GetExtension (output);

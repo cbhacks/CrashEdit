@@ -355,6 +355,7 @@
     <Compile Include="Utils\MathExt.cs" />
     <Compile Include="Utils\ResourceLoad.cs" />
     <Compile Include="Utils\StopwatchExt.cs" />
+    <Compile Include="Utils\TextureUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="DiscUtils.Core, Version=0.16.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
