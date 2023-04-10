@@ -42,7 +42,7 @@ namespace CrashEdit
         {
             var exporter = new OBJExporter ();
             var model = this.AnimationEntryController.NSF.GetEntry<ModelEntry>(Frame.ModelEID);
-            var vertices = Frame.MakeVertices (this.AnimationEntryController.NSF);
+            var vertices = Frame.MakeVertices (model);
             var offset = new Vector3 (Frame.XOffset, Frame.YOffset, Frame.ZOffset) / 4F;
             var scale = new Vector3 (model.ScaleX, model.ScaleY, model.ScaleZ) / (GameScales.ModelC1 * GameScales.AnimC1);
             
@@ -136,9 +136,9 @@ namespace CrashEdit
                 SceneryColor fc1 = model.Colors [tri.Color [!flip ? 0 : 2]];
                 SceneryColor fc2 = model.Colors [tri.Color [!flip ? 1 : 1]];
                 SceneryColor fc3 = model.Colors [tri.Color [!flip ? 2 : 0]];
-                FrameVertex fv1 = vertices [tri.Vertex [!flip ? 0 : 2] + Frame.SpecialVertexCount];
-                FrameVertex fv2 = vertices [tri.Vertex [!flip ? 1 : 1] + Frame.SpecialVertexCount];
-                FrameVertex fv3 = vertices [tri.Vertex [!flip ? 2 : 0] + Frame.SpecialVertexCount];
+                Position fv1 = vertices [tri.Vertex [!flip ? 0 : 2] + Frame.SpecialVertexCount];
+                Position fv2 = vertices [tri.Vertex [!flip ? 1 : 1] + Frame.SpecialVertexCount];
+                Position fv3 = vertices [tri.Vertex [!flip ? 2 : 0] + Frame.SpecialVertexCount];
                 Vector3 v1 = new Vector3 (fv1.X, fv1.Z, fv1.Y);
                 Vector3 v2 = new Vector3 (fv2.X, fv2.Z, fv2.Y);
                 Vector3 v3 = new Vector3 (fv3.X, fv3.Z, fv3.Y);

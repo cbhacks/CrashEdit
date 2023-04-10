@@ -100,7 +100,6 @@ namespace CrashEdit
                 OldFrameVertex ov1 = OldFrame.Vertices [polygon.VertexA / 6];
                 OldFrameVertex ov2 = OldFrame.Vertices [polygon.VertexB / 6];
                 OldFrameVertex ov3 = OldFrame.Vertices [polygon.VertexC / 6];
-
                 Vector3 v1 = new Vector3 (ov1.X, ov1.Y, ov1.Z);
                 Vector3 v2 = new Vector3 (ov2.X, ov2.Y, ov2.Z);
                 Vector3 v3 = new Vector3 (ov3.X, ov3.Y, ov3.Z);
