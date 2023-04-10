@@ -768,4 +768,55 @@ as Meters: {3:F3}m</value>
   <data name="Misc" xml:space="preserve">
     <value>Miscellaneous</value>
   </data>
+  <data name="Config_chkViewerShowHelp" xml:space="preserve">
+    <value>Display help text by default</value>
+  </data>
+  <data name="ViewerControls_AimAndZoom" xml:space="preserve">
+    <value>Left mouse to aim, scroll wheel to zoom</value>
+  </data>
+  <data name="ViewerControls_ChangeCullMode" xml:space="preserve">
+    <value>Scroll through culling modes (current: {0})</value>
+  </data>
+  <data name="ViewerControls_Move" xml:space="preserve">
+    <value>W/A/S/D to move, Q/E to pan up/down</value>
+  </data>
+  <data name="ViewerControls_MoveAligned" xml:space="preserve">
+    <value>Hold Ctrl for aligned movement</value>
+  </data>
+  <data name="ViewerControls_OpenOctreeWindow" xml:space="preserve">
+    <value>Open octree node window</value>
+  </data>
+  <data name="ViewerControls_ResetCamera" xml:space="preserve">
+    <value>Reset camera</value>
+  </data>
+  <data name="ViewerControls_ToggleCollisionAnim" xml:space="preserve">
+    <value>Show collision boxes ({0})</value>
+  </data>
+  <data name="ViewerControls_ToggleHelp" xml:space="preserve">
+    <value>Toggle help text ({0})</value>
+  </data>
+  <data name="ViewerControls_ToggleLerp" xml:space="preserve">
+    <value>Enable animation interpolation ({0})</value>
+  </data>
+  <data name="ViewerControls_ToggleNormals" xml:space="preserve">
+    <value>Show normals ({0})</value>
+  </data>
+  <data name="ViewerControls_ToggleTextures" xml:space="preserve">
+    <value>Enable textures ({0})</value>
+  </data>
+  <data name="ViewerControls_ToggleTimeTrial" xml:space="preserve">
+    <value>Toggle time trial mode ({0})</value>
+  </data>
+  <data name="ViewerControls_ToggleZoneOctree" xml:space="preserve">
+    <value>Show zone collision octree ({0})</value>
+  </data>
+  <data name="ViewerControls_ToggleZoneOctreeFlip" xml:space="preserve">
+    <value>Flip octree ({0})</value>
+  </data>
+  <data name="ViewerControls_ToggleZoneOctreeNeighbors" xml:space="preserve">
+    <value>Show octree for neighbor zones ({0})</value>
+  </data>
+  <data name="ViewerControls_ToggleZoneOctreeOutline" xml:space="preserve">
+    <value>Toggle octree wireframe ({0})</value>
+  </data>
 </root>

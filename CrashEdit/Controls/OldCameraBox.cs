@@ -430,28 +430,26 @@ namespace CrashEdit
             {
                 pos[i] = new Position(camera.Positions[i].X, camera.Positions[i].Y, camera.Positions[i].Z);
             }
-            using (InterpolatorForm interpolator = new InterpolatorForm(pos))
+            using InterpolatorForm interpolator = new InterpolatorForm(pos);
+            if (interpolator.ShowDialog() == DialogResult.OK)
             {
-                if (interpolator.ShowDialog() == DialogResult.OK)
+                Position startrot = new Position(camera.Positions[interpolator.Start - 1].XRot, camera.Positions[interpolator.Start - 1].YRot, camera.Positions[interpolator.Start - 1].ZRot);
+                Position deltarot = new Position(camera.Positions[interpolator.End - 1].XRot, camera.Positions[interpolator.End - 1].YRot, camera.Positions[interpolator.End - 1].ZRot) - startrot;
+                for (int m = interpolator.Start - 1, i = interpolator.End - 2; i > m; --i)
                 {
-                    Position startrot = new Position(camera.Positions[interpolator.Start - 1].XRot, camera.Positions[interpolator.Start - 1].YRot, camera.Positions[interpolator.Start - 1].ZRot);
-                    Position deltarot = new Position(camera.Positions[interpolator.End - 1].XRot, camera.Positions[interpolator.End - 1].YRot, camera.Positions[interpolator.End - 1].ZRot) - startrot;
-                    for (int m = interpolator.Start - 1, i = interpolator.End - 2; i > m; --i)
-                    {
-                        camera.Positions.RemoveAt(i);
-                    }
-                    for (int i = 0; i < interpolator.Amount; ++i)
-                    {
-                        double delta = InterpolatorForm.MathFuncs[interpolator.Func].Invoke((double)(i + 1) / (interpolator.Amount + 1), interpolator.Order);
-                        camera.Positions.Insert(i + interpolator.Start, new OldCameraPosition((short)interpolator.NewPositions[i + 1].X, (short)interpolator.NewPositions[i + 1].Y, (short)interpolator.NewPositions[i + 1].Z,
-                            (short)(deltarot.X * delta + startrot.X),
-                            (short)(deltarot.Y * delta + startrot.Y),
-                            (short)(deltarot.Z * delta + startrot.Z)
-                            ));
-                    }
-                    UpdatePosition();
-                    InvalidateNodes();
+                    camera.Positions.RemoveAt(i);
                 }
+                for (int i = 0; i < interpolator.Amount; ++i)
+                {
+                    double delta = InterpolatorForm.MathFuncs[interpolator.Func].Invoke((double)(i + 1) / (interpolator.Amount + 1), interpolator.Order);
+                    camera.Positions.Insert(i + interpolator.Start, new OldCameraPosition((short)interpolator.NewPositions[i + 1].X, (short)interpolator.NewPositions[i + 1].Y, (short)interpolator.NewPositions[i + 1].Z,
+                        (short)(deltarot.X * delta + startrot.X),
+                        (short)(deltarot.Y * delta + startrot.Y),
+                        (short)(deltarot.Z * delta + startrot.Z)
+                        ));
+                }
+                UpdatePosition();
+                InvalidateNodes();
             }
         }
     }

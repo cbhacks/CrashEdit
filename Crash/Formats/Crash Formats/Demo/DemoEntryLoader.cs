@@ -6,7 +6,7 @@ namespace Crash
     [EntryType(19,GameVersion.Crash3)]
     public sealed class DemoEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,GameVersion version)
         {
             if (items.Length != 1)
             {

@@ -42,6 +42,8 @@ namespace CrashEdit
         public override void InvalidateNode()
         {
             Node.Text = string.Format(Crash.UI.Properties.Resources.OldAnimationEntryController_Text, OldAnimationEntry.EName);
+            Node.Text = string.Format(OldAnimationEntry.Proto ? Crash.UI.Properties.Resources.ProtoAnimationEntryController_Text
+                                                              : Crash.UI.Properties.Resources.OldAnimationEntryController_Text, OldAnimationEntry.EName);
         }
 
         public override void InvalidateNodeImage()

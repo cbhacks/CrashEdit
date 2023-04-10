@@ -1,9 +1,9 @@
 ﻿using CrashEdit.Properties;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using System.Drawing;
 
 namespace CrashEdit
 {
@@ -77,6 +77,7 @@ namespace CrashEdit
             chkFont3DEnable.Checked = Settings.Default.Font3DEnable;
             chkFont3DAutoscale.Checked = Settings.Default.Font3DAutoscale;
             chkFont2DEnable.Checked = Settings.Default.Font2DEnable;
+            chkViewerShowHelp.Checked = Settings.Default.ViewerShowHelp;
             cdlClearCol.Color = picClearCol.BackColor = Color.FromArgb(Settings.Default.ClearColorRGB);
 
             dpdLang.MaximumSize = new Size(lblLang.Width, 0);
@@ -101,6 +102,7 @@ namespace CrashEdit
             chkFont3DAutoscale.Text = Resources.Config_chkFont3DAutoscale;
             chkFont3DEnable.Text = Resources.Config_chkFont3DEnable;
             chkFont2DEnable.Text = Resources.Config_chkFont2DEnable;
+            chkViewerShowHelp.Text = Resources.Config_chkViewerShowHelp;
             cmdReset.Text = Resources.Config_cmdReset;
         }
 
@@ -207,6 +209,12 @@ namespace CrashEdit
         private void chkFont2DEnable_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Default.Font2DEnable = chkFont2DEnable.Checked;
+            Settings.Default.Save();
+        }
+
+        private void chkViewerShowHelp_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.ViewerShowHelp = chkViewerShowHelp.Checked;
             Settings.Default.Save();
         }
     }

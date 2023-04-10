@@ -10,7 +10,7 @@ namespace CrashEdit
     public class VAO : IDisposable
     {
         private Vertex[] verts;
-        private Stopwatch watch = new();
+        private readonly Stopwatch watch = new();
 
         public int ID { get; }
         public int Buffer { get; }
@@ -19,7 +19,8 @@ namespace CrashEdit
 
         public PrimitiveType Primitive { get; set; }
         public Vertex[] Verts { get => verts; }
-        public int VertCount { get; set; }
+
+        public int vert_count;
 
         internal void EnableAttrib(string attrib_name, int size, VertexAttribPointerType type, bool normalized, string field_name)
         {
@@ -72,7 +73,7 @@ namespace CrashEdit
             EnableAttribI("tex", 1, VertexAttribIntegerType.Int, "tex");
         }
 
-        public void TestRealloc() => TestRealloc(VertCount);
+        public void TestRealloc() => TestRealloc(vert_count);
         public void TestRealloc(int vert_count)
         {
             if (vert_count >= Verts.Length)
@@ -86,24 +87,24 @@ namespace CrashEdit
         public void CopyAttrib(int idx)
         {
             TestRealloc();
-            Verts[VertCount] = Verts[idx];
-            VertCount++;
+            Verts[vert_count] = Verts[idx];
+            vert_count++;
         }
 
         public void PushAttrib(Vector3? trans = null, Vector3? normal = null, Vector2? st = null, Rgba? rgba = null, TexInfoUnpacked? tex = null)
         {
             TestRealloc();
             if (trans != null)
-                Verts[VertCount].trans = trans.Value;
+                Verts[vert_count].trans = trans.Value;
             if (normal != null)
-                Verts[VertCount].normal = normal.Value;
+                Verts[vert_count].normal = normal.Value;
             if (st != null)
-                Verts[VertCount].st = st.Value;
+                Verts[vert_count].st = st.Value;
             if (rgba != null)
-                Verts[VertCount].rgba = rgba.Value;
+                Verts[vert_count].rgba = rgba.Value;
             if (tex != null)
-                Verts[VertCount].tex = (int)tex.Value;
-            VertCount++;
+                Verts[vert_count].tex = (int)tex.Value;
+            vert_count++;
         }
 
         public void Dispose()
@@ -114,7 +115,7 @@ namespace CrashEdit
 
         public void DiscardVerts()
         {
-            VertCount = 0;
+            vert_count = 0;
         }
 
         public void Render(RenderInfo ri)
@@ -124,13 +125,13 @@ namespace CrashEdit
                 throw new ArgumentException("null render context");
             }
 
-            if (VertCount <= 0)
+            if (vert_count <= 0)
                 return;
 
             watch.Restart();
 
-            var backup_state = GLViewer.glDebugContextString;
-            GLViewer.glDebugContextString = "vao " + Shader.Name;
+            var backup_state = GLViewer.dbgContextString;
+            GLViewer.dbgContextString = "vao " + Shader.Name;
 
             GL.GetBoolean(GetPName.DepthWritemask, out bool glZBufWrite);
             GL.GetBoolean(GetPName.DepthTest, out bool glZBufRead);
@@ -151,10 +152,10 @@ namespace CrashEdit
             // Bind the VAO
             GL.BindVertexArray(ID);
             GL.BindBuffer(BufferTarget.ArrayBuffer, Buffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, VertCount * Marshal.SizeOf<Vertex>(), Verts, BufferUsageHint.DynamicDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, vert_count * Marshal.SizeOf<Vertex>(), Verts, BufferUsageHint.StreamDraw);
 
             Shader.Render(ri, this);
-            GL.DrawArrays(Primitive, 0, VertCount);
+            GL.DrawArrays(Primitive, 0, vert_count);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindVertexArray(0);
@@ -172,7 +173,7 @@ namespace CrashEdit
                 GL.LineWidth(glLineWidth);
             }
 
-            GLViewer.glDebugContextString = backup_state;
+            GLViewer.dbgContextString = backup_state;
 
             ri.DebugRenderMs += watch.StopAndElapsedMillisecondsFull();
         }

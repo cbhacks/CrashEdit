@@ -56,8 +56,6 @@
     <Compile Include="Formats\Crash Formats\Animation\FrameCollision.cs" />
     <Compile Include="Formats\Crash Formats\Animation\Frame.cs" />
     <Compile Include="Formats\Crash Formats\Animation\FrameVertex.cs" />
-    <Compile Include="Formats\Crash Formats\Animation\ProtoAnimationEntry.cs" />
-    <Compile Include="Formats\Crash Formats\Animation\ProtoAnimationEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Base\Entry\ENameComparer.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Atan.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Cos.cs" />
@@ -84,13 +82,9 @@
     <Compile Include="Formats\Crash Formats\Model\OldModelStruct.cs" />
     <Compile Include="Formats\Crash Formats\Model\OldModelTexture.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\OldSceneryTexture.cs" />
-    <Compile Include="Formats\Crash Formats\NSD\NewNSD.cs" />
     <Compile Include="Formats\Crash Formats\NSD\ProtoNSD.cs" />
     <Compile Include="Formats\Crash Formats\NSD\OldNSD.cs" />
     <Compile Include="Formats\Crash Formats\NSD\NSDSpawnPoint.cs" />
-    <Compile Include="Formats\Crash Formats\Scenery\NewSceneryEntry.cs" />
-    <Compile Include="Formats\Crash Formats\Scenery\NewSceneryVertex.cs" />
-    <Compile Include="Formats\Crash Formats\Scenery\NewSceneryEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\OldSceneryColor.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryEntry.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryEntryLoader.cs" />
@@ -231,8 +225,6 @@
     <Compile Include="Formats\Crash Formats\Palette\PaletteEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\T6\T6Entry.cs" />
     <Compile Include="Formats\Crash Formats\T6\T6EntryLoader.cs" />
-    <Compile Include="Formats\Crash Formats\Zone\NewZoneEntry.cs" />
-    <Compile Include="Formats\Crash Formats\Zone\NewZoneEntryLoader.cs" />
     <Compile Include="..\Version.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\Aligner.cs" />

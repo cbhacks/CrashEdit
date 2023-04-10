@@ -5,7 +5,7 @@ namespace Crash
     [EntryType(3,GameVersion.Crash1Beta1995)]
     public sealed class ProtoSceneryEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,GameVersion version)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -16,6 +16,10 @@ namespace Crash
             int polygoncount = BitConv.FromInt32(items[0],0xC);
             int vertexcount = BitConv.FromInt32(items[0],0x10);
             int structcount = BitConv.FromInt32(items[0],0x14);
+            if (items[1].Length != polygoncount * 12)
+            {
+                ErrorManager.SignalError("ProtoSceneryEntry: Polygon count mismatch");
+            }
             ProtoSceneryPolygon[] polygons = new ProtoSceneryPolygon[polygoncount];
             for (int i = 0;i < polygons.Length;i++)
             {

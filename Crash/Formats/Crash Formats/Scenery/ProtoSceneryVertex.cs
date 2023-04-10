@@ -2,7 +2,7 @@ using System;
 
 namespace Crash
 {
-    public struct ProtoSceneryVertex : IPosition
+    public readonly struct ProtoSceneryVertex
     {
         public static ProtoSceneryVertex Load(byte[] data)
         {
@@ -26,9 +26,6 @@ namespace Crash
         public short X { get; }
         public short Y { get; }
         public short Z { get; }
-        double IPosition.X => X;
-        double IPosition.Y => Y;
-        double IPosition.Z => Z;
 
         public byte[] Save()
         {

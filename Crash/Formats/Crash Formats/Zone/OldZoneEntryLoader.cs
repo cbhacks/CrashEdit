@@ -7,7 +7,7 @@ namespace Crash
     [EntryType(7,GameVersion.Crash1)]
     public sealed class OldZoneEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,GameVersion version)
         {
             if (items == null)
                 throw new ArgumentNullException("items");

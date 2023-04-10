@@ -2,7 +2,7 @@ using System;
 
 namespace Crash
 {
-    public struct OldFrameVertex : IPosition
+    public readonly struct OldFrameVertex
     {
         public static OldFrameVertex Load(byte[] data)
         {
@@ -41,10 +41,6 @@ namespace Crash
         public float Red => R / 255f;
         public float Green => G / 255f;
         public float Blue => B / 255f;
-
-        double IPosition.X => X;
-        double IPosition.Y => Y;
-        double IPosition.Z => Z;
 
         public byte[] Save()
         {

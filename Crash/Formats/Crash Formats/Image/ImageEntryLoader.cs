@@ -8,7 +8,7 @@ namespace Crash
     [EntryType(15,GameVersion.Crash1)]
     public sealed class ImageEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,GameVersion version)
         {
             if (items == null)
                 throw new ArgumentNullException("items");

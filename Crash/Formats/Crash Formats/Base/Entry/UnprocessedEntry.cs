@@ -4,7 +4,7 @@ namespace Crash
 {
     public sealed class UnprocessedEntry : MysteryMultiItemEntry
     {
-        private int type;
+        private readonly int type;
 
         public UnprocessedEntry(IEnumerable<byte[]> items,int eid,int type) : base(items,eid)
         {
@@ -19,14 +19,14 @@ namespace Crash
             Dictionary<int,EntryLoader> loaders = GetLoaders(gameversion);
             if (loaders.ContainsKey(type))
             {
-                var result = loaders[type].Load(((List<byte[]>)Items).ToArray(),EID);
+                var result = loaders[type].Load(((List<byte[]>)Items).ToArray(),EID,gameversion);
 
                 if (result.IgnoreResaveErrors)
                     return result;
 
                 var resultOut = result.Unprocess();
                 if (Items.Count != resultOut.Items.Count) {
-                    ErrorManager.SignalIgnorableError("Entry: Processed entry deprocesses to different item count");
+                    ErrorManager.SignalIgnorableError($"Entry: Processed entry {EName} deprocesses to different item count");
                     return result;
                 }
 
@@ -47,7 +47,7 @@ namespace Crash
                         if (shorterData[j] == longerData[j])
                             continue;
 
-                        ErrorManager.SignalIgnorableError($"Entry: Processed entry deprocesses to different data on item {i}");
+                        ErrorManager.SignalIgnorableError($"Entry: Processed entry {EName} deprocesses to different data on item {i}");
                         return result;
                     }
 
@@ -60,7 +60,7 @@ namespace Crash
                         if (longerData[j] == 0)
                             continue;
 
-                        ErrorManager.SignalIgnorableError($"Entry: Processed entry deprocesses to different data on item {i}");
+                        ErrorManager.SignalIgnorableError($"Entry: Processed entry {EName} deprocesses to different data on item {i}");
                         return result;
                     }
                 }
@@ -69,7 +69,7 @@ namespace Crash
             }
             else
             {
-                ErrorManager.SignalError("UnprocessedEntry: Unknown entry type");
+                ErrorManager.SignalError($"UnprocessedEntry: Unknown entry type ({EName})");
                 return null;
             }
         }

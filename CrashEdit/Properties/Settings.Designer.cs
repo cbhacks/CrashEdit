@@ -226,5 +226,17 @@ namespace CrashEdit.Properties {
                 this["Font3DAutoscale"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ViewerShowHelp {
+            get {
+                return ((bool)(this["ViewerShowHelp"]));
+            }
+            set {
+                this["ViewerShowHelp"] = value;
+            }
+        }
     }
 }

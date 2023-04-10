@@ -200,6 +200,15 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Display help text by default.
+        /// </summary>
+        internal static string Config_chkViewerShowHelp {
+            get {
+                return ResourceManager.GetString("Config_chkViewerShowHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset Settings.
         /// </summary>
         internal static string Config_cmdReset {
@@ -2024,6 +2033,150 @@ namespace CrashEdit.Properties {
         internal static string Toolbar_UndoNone {
             get {
                 return ResourceManager.GetString("Toolbar_UndoNone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Left mouse to aim, scroll wheel to zoom.
+        /// </summary>
+        internal static string ViewerControls_AimAndZoom {
+            get {
+                return ResourceManager.GetString("ViewerControls_AimAndZoom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scroll through culling modes (current: {0}).
+        /// </summary>
+        internal static string ViewerControls_ChangeCullMode {
+            get {
+                return ResourceManager.GetString("ViewerControls_ChangeCullMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to W/A/S/D to move, Q/E to pan up/down.
+        /// </summary>
+        internal static string ViewerControls_Move {
+            get {
+                return ResourceManager.GetString("ViewerControls_Move", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hold Ctrl for aligned movement.
+        /// </summary>
+        internal static string ViewerControls_MoveAligned {
+            get {
+                return ResourceManager.GetString("ViewerControls_MoveAligned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open octree node window.
+        /// </summary>
+        internal static string ViewerControls_OpenOctreeWindow {
+            get {
+                return ResourceManager.GetString("ViewerControls_OpenOctreeWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset camera.
+        /// </summary>
+        internal static string ViewerControls_ResetCamera {
+            get {
+                return ResourceManager.GetString("ViewerControls_ResetCamera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show collision boxes ({0}).
+        /// </summary>
+        internal static string ViewerControls_ToggleCollisionAnim {
+            get {
+                return ResourceManager.GetString("ViewerControls_ToggleCollisionAnim", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle help text ({0}).
+        /// </summary>
+        internal static string ViewerControls_ToggleHelp {
+            get {
+                return ResourceManager.GetString("ViewerControls_ToggleHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable animation interpolation ({0}).
+        /// </summary>
+        internal static string ViewerControls_ToggleLerp {
+            get {
+                return ResourceManager.GetString("ViewerControls_ToggleLerp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show normals ({0}).
+        /// </summary>
+        internal static string ViewerControls_ToggleNormals {
+            get {
+                return ResourceManager.GetString("ViewerControls_ToggleNormals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable textures ({0}).
+        /// </summary>
+        internal static string ViewerControls_ToggleTextures {
+            get {
+                return ResourceManager.GetString("ViewerControls_ToggleTextures", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle time trial mode ({0}).
+        /// </summary>
+        internal static string ViewerControls_ToggleTimeTrial {
+            get {
+                return ResourceManager.GetString("ViewerControls_ToggleTimeTrial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show zone collision octree ({0}).
+        /// </summary>
+        internal static string ViewerControls_ToggleZoneOctree {
+            get {
+                return ResourceManager.GetString("ViewerControls_ToggleZoneOctree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flip octree ({0}).
+        /// </summary>
+        internal static string ViewerControls_ToggleZoneOctreeFlip {
+            get {
+                return ResourceManager.GetString("ViewerControls_ToggleZoneOctreeFlip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show octree for neighbor zones ({0}).
+        /// </summary>
+        internal static string ViewerControls_ToggleZoneOctreeNeighbors {
+            get {
+                return ResourceManager.GetString("ViewerControls_ToggleZoneOctreeNeighbors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle octree wireframe ({0}).
+        /// </summary>
+        internal static string ViewerControls_ToggleZoneOctreeOutline {
+            get {
+                return ResourceManager.GetString("ViewerControls_ToggleZoneOctreeOutline", resourceCulture);
             }
         }
     }

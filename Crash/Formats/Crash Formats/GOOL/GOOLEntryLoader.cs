@@ -63,7 +63,7 @@ namespace Crash
     [EntryType(11,GameVersion.Crash1BetaMAR08)]
     public sealed class GOOLv0EntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,GameVersion version)
         {
             return GOOLEntryLoader.LoadGOOL(GOOLVersion.Version0,items,eid);
         }
@@ -73,7 +73,7 @@ namespace Crash
     [EntryType(11,GameVersion.Crash1)]
     public sealed class GOOLv1EntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,GameVersion version)
         {
             return GOOLEntryLoader.LoadGOOL(GOOLVersion.Version1,items,eid);
         }
@@ -82,7 +82,7 @@ namespace Crash
     [EntryType(11,GameVersion.Crash2)]
     public sealed class GOOLv2EntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,GameVersion version)
         {
             return GOOLEntryLoader.LoadGOOL(GOOLVersion.Version2,items,eid);
         }
@@ -91,7 +91,7 @@ namespace Crash
     [EntryType(11,GameVersion.Crash3)]
     public sealed class GOOLv3EntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,GameVersion version)
         {
             return GOOLEntryLoader.LoadGOOL(GOOLVersion.Version3,items,eid);
         }

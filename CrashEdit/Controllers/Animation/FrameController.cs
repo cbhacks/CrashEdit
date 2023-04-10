@@ -230,7 +230,10 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            return new AnimationEntryViewer(AnimationEntryController.NSF, AnimationEntryController.AnimationEntry.EID, AnimationEntryController.AnimationEntry.Frames.IndexOf(Frame));
+            if (AnimationEntryController.AnimationEntry.IsNew)
+                return new Crash3AnimationSelector(AnimationEntryController.NSF, AnimationEntryController.AnimationEntry, Frame);
+            else
+                return new UndockableControl(new AnimationEntryViewer(AnimationEntryController.NSF, AnimationEntryController.AnimationEntry.EID, AnimationEntryController.AnimationEntry.Frames.IndexOf(Frame)));
         }
 
         public AnimationEntryController AnimationEntryController { get; }

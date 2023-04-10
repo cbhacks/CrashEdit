@@ -8,7 +8,7 @@ namespace Crash
     [EntryType(17,GameVersion.Crash2)]
     public sealed class MapEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,GameVersion version)
         {
             if (items == null)
                 throw new ArgumentNullException("items");

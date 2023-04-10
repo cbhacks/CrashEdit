@@ -132,7 +132,7 @@ namespace CrashEdit
                 NewPositions[NewPositions.Length - 1] = end;
                 for (int i = 1, s = NewPositions.Length - 1; i < s + 1; ++i)
                 {
-                    NewPositions[i] = delta * MathFuncs[Func].Invoke((double)i / s, Order) + start;
+                    NewPositions[i] = delta * (float)MathFuncs[Func].Invoke((double)i / s, Order) + start;
                 }
                 delta /= Amount + 1;
                 lblAverage.Text = $"Average Point Distance: {(int)Math.Sqrt(delta.X * delta.X + delta.Y * delta.Y + delta.Z * delta.Z)}";
@@ -181,7 +181,7 @@ namespace CrashEdit
                 if (targetlen == arclen[i])
                     return positions[i];
                 else if (targetlen < arclen[i])
-                    return positions[i - 1] + (positions[i] - positions[i - 1]) * ((targetlen - arclen[i - 1]) / (arclen[i] - arclen[i - 1]));
+                    return positions[i - 1] + (positions[i] - positions[i - 1]) * (float)((targetlen - arclen[i - 1]) / (arclen[i] - arclen[i - 1]));
             }
             return positions[positions.Length - 1];
         }
@@ -210,7 +210,7 @@ namespace CrashEdit
             int n = controlcount - 1;
             for (int i = 0; i < controlcount; ++i)
             {
-                newpos += GetBinomial(n, i) * Math.Pow(1.0 - t, n - i) * Math.Pow(t, i) * weights[i] * Position.Unit;
+                newpos += (float)(GetBinomial(n, i) * Math.Pow(1.0 - t, n - i) * Math.Pow(t, i) * weights[i]) * Position.Unit;
             }
             return newpos;
         }
@@ -221,7 +221,7 @@ namespace CrashEdit
             int n = control.Count - 1;
             for (int i = 0; i < control.Count; ++i)
             {
-                newpos += GetBinomial(n, i) * Math.Pow(1.0 - t, n - i) * Math.Pow(t, i) * weights[i] * control[i] / GetBezierBasisPoint(control.Count, weights, t);
+                newpos += (float)(GetBinomial(n, i) * Math.Pow(1.0 - t, n - i) * Math.Pow(t, i) * weights[i]) * control[i] / GetBezierBasisPoint(control.Count, weights, t);
             }
             return newpos;
         }

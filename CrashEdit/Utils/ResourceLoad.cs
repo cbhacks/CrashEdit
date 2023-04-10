@@ -12,8 +12,8 @@ namespace CrashEdit
             var names = GetAllFileNames();
             var exe = Assembly.GetExecutingAssembly();
             var fullname = string.Format("{0}.{1}", exe.GetName().Name, name.Replace("/", "."));
-            using (var r = new StreamReader(exe.GetManifestResourceStream(fullname)))
-                return r.ReadToEnd();
+            using var r = new StreamReader(exe.GetManifestResourceStream(fullname));
+            return r.ReadToEnd();
         }
     }
 }

@@ -10,13 +10,12 @@ namespace CrashEdit
     {
         internal static readonly Dictionary<string, ShaderInfo> Infos = new()
         {
-            { "test", new ShaderInfo("test.vert", "default4.frag", func: RenderTest) },
             { "axes", new ShaderInfo("axes.vert", "default4.frag") },
             { "line", new ShaderInfo("line-static.vert", "default4.frag") },
-            { "line-model", new ShaderInfo("line-model.vert", "default4.frag", func: RenderLineModel) },
+            { "line-debug", new ShaderInfo("line-debug.vert", "default4.frag", func: RenderLineDebug) },
             { "crash1", new ShaderInfo("crash1-generic.vert", "crash1-generic.frag") },
-            { "line-usercolor", new ShaderInfo("line-usercolor.vert", "default4.frag") },
-            { "box-model", new ShaderInfo("box-model.vert", "default4.frag") },
+            { "line-debug-usercolor", new ShaderInfo("line-usercolor.vert", "default4.frag") },
+            { "box-debug", new ShaderInfo("box-debug.vert", "default4.frag") },
             { "sprite-debug", new ShaderInfo("sprite.vert", "sprite.frag") },
             { "sprite", new ShaderInfo("sprite-generic.vert", "sprite.frag", func: RenderSprite) },
             { "generic", new ShaderInfo("generic.vert", "sprite.frag") },

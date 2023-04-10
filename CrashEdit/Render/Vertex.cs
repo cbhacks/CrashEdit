@@ -100,7 +100,7 @@ namespace CrashEdit
         }
     }
 
-    [StructLayout(LayoutKind.Explicit, Size = 64)]
+    [StructLayout(LayoutKind.Explicit, Size = 48)]
     public struct Vertex
     {
         [FieldOffset(00)] public Vector3 trans;

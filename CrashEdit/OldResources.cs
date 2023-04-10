@@ -283,25 +283,23 @@ namespace CrashEdit
             string texturespngfilename = Path.Combine(exedirname, "Textures.png");
             if (File.Exists(texturespngfilename))
             {
-                using (Image texturespng = Image.FromFile(texturespngfilename))
+                using Image texturespng = Image.FromFile(texturespngfilename);
+                foreach (FieldInfo field in allfields)
                 {
-                    foreach (FieldInfo field in allfields)
+                    foreach (ExternalTextureAttribute attribute in field.GetCustomAttributes(typeof(ExternalTextureAttribute), false))
                     {
-                        foreach (ExternalTextureAttribute attribute in field.GetCustomAttributes(typeof(ExternalTextureAttribute), false))
+                        int w = attribute.W * 32;
+                        int h = attribute.H * 32;
+                        int x = attribute.X * 32;
+                        int y = attribute.Y * 32;
+                        if (texturespng.Width < x + w || texturespng.Height < y + h)
+                            continue;
+                        var texture = new Bitmap(w, h);
+                        using (Graphics g = Graphics.FromImage(texture))
                         {
-                            int w = attribute.W * 32;
-                            int h = attribute.H * 32;
-                            int x = attribute.X * 32;
-                            int y = attribute.Y * 32;
-                            if (texturespng.Width < x + w || texturespng.Height < y + h)
-                                continue;
-                            var texture = new Bitmap(w, h);
-                            using (Graphics g = Graphics.FromImage(texture))
-                            {
-                                g.DrawImage(texturespng, new Rectangle(0, 0, w, h), new Rectangle(x, y, w, h), GraphicsUnit.Pixel);
-                            }
-                            field.SetValue(null, texture);
+                            g.DrawImage(texturespng, new Rectangle(0, 0, w, h), new Rectangle(x, y, w, h), GraphicsUnit.Pixel);
                         }
+                        field.SetValue(null, texture);
                     }
                 }
             }
