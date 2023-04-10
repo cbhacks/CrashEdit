@@ -17,7 +17,6 @@ namespace CrashEdit
             SceneryEntry = sceneryentry;
             AddMenuSeparator();
             AddMenu("Export as Wavefront OBJ", Menu_Export_OBJ);
-            AddMenu("Export as Stanford PLY", Menu_Export_PLY);
             //AddMenu("Export as COLLADA",Menu_Export_COLLADA);
             AddMenu("Fix coords imported from Crash 3", Menu_Fix_WGEOv3);
             InvalidateNode();
@@ -281,24 +280,6 @@ namespace CrashEdit
             }
             return new(true, null);
         }
-        
-        private void Menu_Export_PLY()
-        {
-            if (MessageBox.Show("Exporting to Stanford PLY (.ply) is experimental.\nTexture information will not be exported.\n\nContinue anyway?", "Export as PLY", MessageBoxButtons.YesNo) != DialogResult.Yes)
-            {
-                return;
-            }
-            FileUtil.SaveFile(SceneryEntry.ToPLY(), FileFilters.PLY, FileFilters.Any);
-        }
-
-        /*private void Menu_Export_COLLADA()
-        {
-            if (MessageBox.Show("Exporting to COLLADA (.dae) is experimental.\nTexture and quad information will not be exported.\n\nContinue anyway?", "Export as OBJ", MessageBoxButtons.YesNo) != DialogResult.Yes)
-            {
-                return;
-            }
-            FileUtil.SaveFile(sceneryentry.ToCOLLADA(), FileFilters.COLLADA, FileFilters.Any);
-        }*/
         
         private void Menu_Fix_WGEOv3()
         {
