@@ -357,4 +357,7 @@
   <data name="NSFController_AcShowLevelZones" xml:space="preserve">
     <value>Show All Level Zones</value>
   </data>
+  <data name="NSFController_AcExportScenery" xml:space="preserve">
+    <value>Export all scenery to OBJ</value>
+  </data>
 </root>
