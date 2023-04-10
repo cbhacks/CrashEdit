@@ -84,6 +84,12 @@ namespace CrashEdit
             }
         }
 
+        protected override void PrintHelp()
+        {
+            base.PrintHelp();
+            consoleHelp += octreeRenderer.PrintHelp();
+        }
+
         protected override void RunLogic()
         {
             base.RunLogic();

@@ -32,6 +32,7 @@ namespace CrashEdit
 
     public abstract class GLViewer : GLControl
     {
+        #region Static data.
         protected static readonly Vector3[] AxesPos = new Vector3[6] {
             new(-0.5f, 0, 0),
             new(+1.0f, 0, 0),
@@ -94,7 +95,9 @@ namespace CrashEdit
             // top
             1+4, 0+4, 2+4, 2+4, 3+4, 1+4,
         };
+        #endregion
 
+        #region Static fields for OpenGL renderer.
         private static readonly Dictionary<int, Vector3[]> SpherePosCache = new();
         private static readonly Dictionary<int, Vector3[]> GridPosCache = new();
         private static int SpherePosLastUploaded = -1;
@@ -102,9 +105,6 @@ namespace CrashEdit
         protected static VAO vaoSphereLine;
         protected static VAO vaoGridLine;
         protected static ShaderContext shaderContext;
-
-        protected readonly RenderInfo render;
-
         protected static FontTable fontTable;
         protected static Library fontLib = new();
 
@@ -120,25 +120,31 @@ namespace CrashEdit
         // note: there's multiple buffers because of blending
         protected const int ANIM_BUF_MAX = 2;
         protected static VAO[] vaoListCrash1 = new VAO[ANIM_BUF_MAX];
-
         // these shouldn't be used
         protected static VAO vaoDebugBoxTri;
         protected static VAO vaoDebugBoxLine;
         protected static VAO vaoDebugSprite;
         public static string glDebugContextString = "*unknown*";
+
+        private static IGraphicsContext globalContext;
+        private static GLControl globalContextWindow;
+        private static readonly GraphicsMode DefaultGraphicsSettings = new(new ColorFormat(8, 8, 8, 8), 24, 8);
+        #endregion
+
+        protected readonly RenderInfo render;
+
         protected string console;
         protected string consoleHelp;
         // debug timers
         private double dbgRunMs;
 
+        #region Internal fields for input status and handling.
         private bool run = false;
         private bool loaded = false;
         private static readonly HashSet<Type> loaded_static_types = new();
 
         private readonly HashSet<Keys> keysdown = new();
         private readonly HashSet<Keys> keyspressed = new();
-        public bool KDown(Keys key) => keysdown.Contains(key);
-        public bool KPress(Keys key) => keyspressed.Contains(key);
         private bool mouseright = false;
         private bool mouseleft = false;
         private int mousex = 0;
@@ -151,12 +157,39 @@ namespace CrashEdit
         private const float PerFrame = 1 / 60f;
         public const float DefaultZNear = 0.2f;
         public const float DefaultZFar = DefaultZNear * 0x4000;
+        #endregion
+
+        public bool KDown(Keys key) => keysdown.Contains(key);
+        public bool KPress(Keys key) => keyspressed.Contains(key);
+        public bool KDown(ControlsKeyboardInfo control) => KDown(control.Key);
+        public bool KPress(ControlsKeyboardInfo control) => KPress(control.Key);
         private float GetMoveSpeed() => movespeed * 0.2f + movespeed * 0.8f * (render.Projection.Distance / (ProjectionInfo.MaxInitialDistance * 0.2f));
+
+        #region Default controls.
+        public static class KeyboardControls
+        {
+            public static readonly ControlsKeyboardInfo ResetCamera = new(Keys.R, "Reset camera");
+            public static readonly ControlsKeyboardInfo ToggleTextures = new(Keys.T, "Enable textures ({0})");
+            public static readonly ControlsKeyboardInfo ToggleZoneOctree = new(Keys.C, "Show zone collision octree ({0})");
+            public static readonly ControlsKeyboardInfo ToggleZoneOctreeOutline = new(Keys.V, "Toggle octree wireframe ({0})");
+            public static readonly ControlsKeyboardInfo ToggleZoneOctreeNeighbors = new(Keys.Z, "Show octree for neighbor zones ({0})");
+            public static readonly ControlsKeyboardInfo OpenOctreeWindow = new(Keys.B, "Open octree node window");
+            public static readonly ControlsKeyboardInfo ToggleZoneOctreeFlip = new(Keys.O, "Flip octree ({0})");
+            public static readonly ControlsKeyboardInfo ToggleTimeTrial = new(Keys.Y, "Toggle time trial mode ({0})");
+            public static readonly ControlsKeyboardInfo ToggleCollisionAnim = new(Keys.C, "Show collision boxes ({0})");
+            public static readonly ControlsKeyboardInfo ToggleLerp = new(Keys.I, "Enable animation interpolation ({0})");
+            public static readonly ControlsKeyboardInfo ToggleNormals = new(Keys.N, "Show normals ({0})");
+            public static readonly ControlsKeyboardInfo ChangeCullMode = new(Keys.U, "Scroll through culling modes (current: {0})");
+            public static readonly ControlsKeyboardInfo ToggleHelp = new(Keys.H, "Show help text ({0})");
+        }
+        #endregion
 
         protected readonly NSF nsf;
 
+        // Whether to render a grid at origin point or not.
         protected abstract bool UseGrid { get; }
 
+        #region Functions for generating static data for some helper renderers.
         protected static void MakeLineSphere(int resolution)
         {
             if (resolution < 0)
@@ -218,7 +251,7 @@ namespace CrashEdit
             }
             SpherePosLastUploaded = resolution;
         }
-        protected void MakeLineGrid(int resolution)
+        protected static void MakeLineGrid(int resolution)
         {
             if (resolution < 0)
                 throw new ArgumentOutOfRangeException(nameof(resolution), "Grid resolution cannot be less than 0.");
@@ -249,6 +282,7 @@ namespace CrashEdit
             }
             GridPosLastUploaded = resolution;
         }
+        #endregion
 
         static GLViewer()
         {
@@ -257,10 +291,6 @@ namespace CrashEdit
             minDepth = BitConverter.ToSingle(BitConverter.GetBytes(BitConverter.ToInt32(BitConverter.GetBytes(min), 0) + 1), 0);
             maxDepth = BitConverter.ToSingle(BitConverter.GetBytes(BitConverter.ToInt32(BitConverter.GetBytes(max), 0) + 1), 0);
         }
-        
-        private static IGraphicsContext globalContext;
-        private static GLControl globalContextWindow;
-        private static readonly GraphicsMode DefaultGraphicsSettings = new(new ColorFormat(8, 8, 8, 8), 24, 8);
 
         public GLViewer(NSF nsf = null) : base(DefaultGraphicsSettings, 4, 3, GraphicsContextFlags.Debug | GraphicsContextFlags.ForwardCompatible)
         {
@@ -285,28 +315,6 @@ namespace CrashEdit
 
         protected abstract IEnumerable<IPosition> CorePositions { get; }
 
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            base.OnKeyDown(e);
-            if (KDown(e.KeyCode)) return;
-            keysdown.Add(e.KeyCode);
-            keyspressed.Add(e.KeyCode);
-        }
-
-        protected override void OnKeyUp(KeyEventArgs e)
-        {
-            base.OnKeyUp(e);
-            keysdown.Remove(e.KeyCode);
-        }
-
-        protected override void OnLostFocus(EventArgs e)
-        {
-            base.OnLostFocus(e);
-            keysdown.Clear(); // release all keys on unfocus
-            mouseleft = false;
-            mouseright = false;
-        }
-
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             base.OnMouseWheel(e);
@@ -317,16 +325,6 @@ namespace CrashEdit
                 delta *= 0.3f + 1.7f * (render.Projection.Distance / ProjectionInfo.MaxInitialDistance);
                 render.Projection.Distance = Math.Max(ProjectionInfo.MinDistance, Math.Min(render.Projection.Distance - delta, ProjectionInfo.MaxDistance));
                 // render.Projection.Trans -= (Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot)) * new Vector4(0, 0, render.Distance - olddist, 1)).Xyz;
-            }
-        }
-
-        protected override void OnMouseDown(MouseEventArgs e)
-        {
-            base.OnMouseDown(e);
-            switch (e.Button)
-            {
-                case MouseButtons.Left: mouseleft = true; /*mousex = e.X; mousey = e.Y;*/ break;
-                case MouseButtons.Right: mouseright = true; break;
             }
         }
 
@@ -395,6 +393,11 @@ namespace CrashEdit
             keyspressed.Clear();
         }
 
+        public static string BoolToEnable(bool enable)
+        {
+            return enable ? "enabled" : "disabled";
+        }
+
         protected virtual void PrintDebug()
         {
             console += $"Zoom: {render.Projection.Distance}\nMove Speed: {GetMoveSpeed()}\n";
@@ -403,10 +406,10 @@ namespace CrashEdit
 
         protected virtual void PrintHelp()
         {
-            consoleHelp += "WASD to move, Q/E to pan up/down\nHold Ctrl for aligned movement.\n";
+            consoleHelp += "W/A/S/D to move, Q/E to pan up/down\nHold Ctrl for aligned movement.\n";
             consoleHelp += "Left mouse to aim, scroll wheel to zoom.\n";
-            consoleHelp += "R to reset camera.\n";
-            consoleHelp += "T to toggle textures.\n";
+            consoleHelp += KeyboardControls.ResetCamera.Print();
+            consoleHelp += KeyboardControls.ToggleTextures.Print(BoolToEnable(render.EnableTexture));
         }
 
         protected virtual void RunLogic()
@@ -431,12 +434,12 @@ namespace CrashEdit
                 if (KDown(Keys.E)) render.Projection.Trans += (r * new Vector4(0, d, 0, 1)).Xyz;
                 if (KDown(Keys.Q)) render.Projection.Trans -= (r * new Vector4(0, d, 0, 1)).Xyz;
             }
-            if (KPress(Keys.R))
+            if (KPress(KeyboardControls.ResetCamera))
             {
                 render.Reset();
                 ResetCamera();
             }
-            if (KPress(Keys.T)) render.EnableTexture = !render.EnableTexture;
+            if (KPress(KeyboardControls.ToggleTextures)) render.EnableTexture = !render.EnableTexture;
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -499,7 +502,7 @@ namespace CrashEdit
                     PrintHelp();
                     PrintDebug();
                     if (Settings.Default.Font2DEnable)
-                        AddText(consoleHelp, Width, Height, (Rgba)Color4.White, flags: TextRenderFlags.Right | TextRenderFlags.Bottom | TextRenderFlags.Default);
+                        AddText(consoleHelp, Width, Height - 8, (Rgba)Color4.White, size: 0.9f, flags: TextRenderFlags.Right | TextRenderFlags.Bottom | TextRenderFlags.Default);
                     if (Settings.Default.Font2DEnable)
                         AddText(console, 0, 0, (Rgba)Color4.White, size: 0.9f);
                     vaoText.UserScale = new Vector3(Width, Height, 1);
@@ -963,6 +966,38 @@ namespace CrashEdit
                 return new(true, info_temp);
             }
             return new(true, null);
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            if (KDown(e.KeyCode)) return;
+            keysdown.Add(e.KeyCode);
+            keyspressed.Add(e.KeyCode);
+        }
+
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
+            base.OnKeyUp(e);
+            keysdown.Remove(e.KeyCode);
+        }
+
+        protected override void OnLostFocus(EventArgs e)
+        {
+            base.OnLostFocus(e);
+            keysdown.Clear(); // release all keys on unfocus
+            mouseleft = false;
+            mouseright = false;
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+            switch (e.Button)
+            {
+                case MouseButtons.Left: mouseleft = true; /*mousex = e.X; mousey = e.Y;*/ break;
+                case MouseButtons.Right: mouseright = true; break;
+            }
         }
 
         protected override void Dispose(bool disposing)

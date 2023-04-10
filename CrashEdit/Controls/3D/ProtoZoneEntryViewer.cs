@@ -90,12 +90,19 @@ namespace CrashEdit
             }
         }
 
+        protected override void PrintHelp()
+        {
+            base.PrintHelp();
+            consoleHelp += octreeRenderer.PrintHelp();
+            if (octreeRenderer.Enabled)
+                consoleHelp += KeyboardControls.ToggleZoneOctreeFlip.Print(BoolToEnable(octreeFlip));
+        }
+
         protected override void RunLogic()
         {
             base.RunLogic();
             octreeRenderer.RunLogic();
-
-            if (KPress(Keys.O)) octreeFlip = !octreeFlip;
+            if (KPress(KeyboardControls.ToggleZoneOctreeFlip)) octreeFlip = !octreeFlip;
         }
 
         private IList<ProtoZoneEntry> GetZones()

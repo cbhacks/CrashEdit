@@ -41,7 +41,10 @@ namespace CrashEdit
                             Text = "Undocked Control",
                             Width = Width,
                             Height = Height,
-                            FormBorderStyle = FormBorderStyle.SizableToolWindow
+                            FormBorderStyle = FormBorderStyle.Sizable,
+                            MaximizeBox = true,
+                            MinimizeBox = true,
+                            ControlBox = true
                         };
                         Controls.Remove(control);
                         form.Controls.Add(control);
@@ -77,10 +80,7 @@ namespace CrashEdit
         protected override void Dispose(bool disposing)
         {
             control.Dispose();
-            if (form != null)
-            {
-                form.Dispose();
-            }
+            form?.Dispose();
             base.Dispose(disposing);
         }
     }

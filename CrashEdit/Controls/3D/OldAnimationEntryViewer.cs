@@ -194,13 +194,22 @@ namespace CrashEdit
             }
         }
 
+        protected override void PrintHelp()
+        {
+            base.PrintHelp();
+            consoleHelp += KeyboardControls.ToggleCollisionAnim.Print(BoolToEnable(collisionenabled));
+            consoleHelp += KeyboardControls.ToggleLerp.Print(BoolToEnable(interpenabled));
+            consoleHelp += KeyboardControls.ChangeCullMode.Print(cullmode);
+            consoleHelp += KeyboardControls.ToggleNormals.Print(BoolToEnable(normalsenabled));
+        }
+
         protected override void RunLogic()
         {
             base.RunLogic();
-            if (KPress(Keys.C)) collisionenabled = !collisionenabled;
-            if (KPress(Keys.N)) normalsenabled = !normalsenabled;
-            if (KPress(Keys.I)) interpenabled = !interpenabled;
-            if (KPress(Keys.U)) cullmode = ++cullmode % 3;
+            if (KPress(KeyboardControls.ToggleCollisionAnim)) collisionenabled = !collisionenabled;
+            if (KPress(KeyboardControls.ToggleLerp)) interpenabled = !interpenabled;
+            if (KPress(KeyboardControls.ChangeCullMode)) cullmode = ++cullmode % 3;
+            if (KPress(KeyboardControls.ToggleNormals)) normalsenabled = !normalsenabled;
         }
 
         private Dictionary<int, int> CollectTPAGs(OldModelEntry model)

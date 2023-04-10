@@ -53,12 +53,22 @@ namespace CrashEdit
             formWantSelect = false;
         }
 
+        public string PrintHelp()
+        {
+            return GLViewer.KeyboardControls.ToggleZoneOctree.Print(GLViewer.BoolToEnable(Enabled))
+                + (!Enabled ? "" :
+                   GLViewer.KeyboardControls.ToggleZoneOctreeOutline.Print(GLViewer.BoolToEnable(NodeOutline))
+                 + GLViewer.KeyboardControls.ToggleZoneOctreeNeighbors.Print(GLViewer.BoolToEnable(ShowAllEntries))
+                 + GLViewer.KeyboardControls.OpenOctreeWindow.Print()
+                    );
+        }
+
         public void RunLogic()
         {
-            if (Viewer.KPress(Keys.X)) Enabled = !Enabled;
-            if (Viewer.KPress(Keys.V)) NodeOutline = !NodeOutline;
-            if (Viewer.KPress(Keys.F)) ShowAllEntries = !ShowAllEntries;
-            if (Viewer.KPress(Keys.C) && Enabled)
+            if (Viewer.KPress(GLViewer.KeyboardControls.ToggleZoneOctree)) Enabled = !Enabled;
+            if (Viewer.KPress(GLViewer.KeyboardControls.ToggleZoneOctreeOutline)) NodeOutline = !NodeOutline;
+            if (Viewer.KPress(GLViewer.KeyboardControls.ToggleZoneOctreeNeighbors)) ShowAllEntries = !ShowAllEntries;
+            if (Viewer.KPress(GLViewer.KeyboardControls.OpenOctreeWindow) && Enabled)
             {
                 if (OctreeForm == null || OctreeForm.IsDisposed)
                 {
