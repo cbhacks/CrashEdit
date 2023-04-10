@@ -5,19 +5,8 @@ namespace CrashEdit
 {
     public sealed class OldFrameController : Controller
     {
-        public OldFrameController(ProtoAnimationEntryController protoanimationentrycontroller, OldFrame oldframe)
-        {
-            ProtoAnimationEntryController = protoanimationentrycontroller;
-            OldAnimationEntryController = null;
-            OldFrame = oldframe;
-            AddMenu("Export as OBJ", Menu_Export_OBJ);
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
         public OldFrameController(OldAnimationEntryController oldanimationentrycontroller, OldFrame oldframe)
         {
-            ProtoAnimationEntryController = null;
             OldAnimationEntryController = oldanimationentrycontroller;
             OldFrame = oldframe;
             AddMenu("Export as OBJ", Menu_Export_OBJ);
@@ -38,20 +27,21 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            TabControl tbcTabs = new TabControl() { Dock = DockStyle.Fill };
+            var tbcTabs = new TabControl() { Dock = DockStyle.Fill };
 
-            OldFrameBox framebox = new OldFrameBox(this);
-            framebox.Dock = DockStyle.Fill;
-            EntryController controller = OldAnimationEntryController != null ? OldAnimationEntryController : ProtoAnimationEntryController;
-            Entry entry = controller.Entry;
-            OldAnimationEntryViewer viewerbox = new OldAnimationEntryViewer(controller.NSF, entry.EID,
-                                                                            entry is ProtoAnimationEntry pentry ? pentry.Frames.IndexOf(OldFrame)
-                                                                                                                : (entry as OldAnimationEntry).Frames.IndexOf(OldFrame))
-            { Dock = DockStyle.Fill };
+            var framebox = new OldFrameBox(this)
+            {
+                Dock = DockStyle.Fill
+            };
+            var entry = OldAnimationEntryController.OldAnimationEntry;
+            var viewerbox = new OldAnimationEntryViewer(OldAnimationEntryController.NSF, entry.EID, entry.Frames.IndexOf(OldFrame))
+            {
+                Dock = DockStyle.Fill
+            };
 
-            TabPage edittab = new TabPage("Editor");
+            var edittab = new TabPage("Editor");
             edittab.Controls.Add(framebox);
-            TabPage viewertab = new TabPage("Viewer");
+            var viewertab = new TabPage("Viewer");
             viewertab.Controls.Add(new UndockableControl(viewerbox));
 
             tbcTabs.TabPages.Add(viewertab);
@@ -61,14 +51,12 @@ namespace CrashEdit
             return tbcTabs;
         }
 
-        public ProtoAnimationEntryController ProtoAnimationEntryController { get; }
         public OldAnimationEntryController OldAnimationEntryController { get; }
         public OldFrame OldFrame { get; }
 
         private void Menu_Export_OBJ()
         {
-            EntryController entry = OldAnimationEntryController != null ? OldAnimationEntryController : ProtoAnimationEntryController;
-            OldModelEntry modelentry = entry.EntryChunkController.NSFController.NSF.GetEntry<OldModelEntry>(OldFrame.ModelEID);
+            OldModelEntry modelentry = OldAnimationEntryController.EntryChunkController.NSFController.NSF.GetEntry<OldModelEntry>(OldFrame.ModelEID);
             if (modelentry == null)
             {
                 throw new GUIException("The linked model entry could not be found.");

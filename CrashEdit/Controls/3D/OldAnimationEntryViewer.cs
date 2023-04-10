@@ -43,11 +43,6 @@ namespace CrashEdit
                     frames = svtx.Frames;
                     colored = false;
                 }
-                else if (entry is ProtoAnimationEntry svtx_proto)
-                {
-                    frames = svtx_proto.Frames;
-                    colored = false;
-                }
                 else if (entry is ColoredAnimationEntry cvtx)
                 {
                     frames = cvtx.Frames;

@@ -9,7 +9,7 @@ namespace Crash
     [EntryType(14,GameVersion.Crash3)]
     public sealed class WavebankEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,GameVersion version)
         {
             if (items == null)
                 throw new ArgumentNullException("items");

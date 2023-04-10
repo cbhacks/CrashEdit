@@ -224,7 +224,7 @@ namespace Crash
                     xmlwriter.WriteStartElement("float_array");
                     xmlwriter.WriteAttributeString("id", "positions-array");
                     xmlwriter.WriteAttributeString("count", (vertices.Count * 3).ToString());
-                    foreach (NewSceneryVertex vertex in vertices)
+                    foreach (SceneryVertex vertex in vertices)
                     {
                         xmlwriter.WriteValue(vertex.X + XOffset / 4);
                         xmlwriter.WriteWhitespace(" ");
@@ -259,7 +259,7 @@ namespace Crash
                     xmlwriter.WriteStartElement("float_array");
                     xmlwriter.WriteAttributeString("id", "colors-array");
                     xmlwriter.WriteAttributeString("count", (vertices.Count * 3).ToString());
-                    foreach (NewSceneryVertex vertex in vertices)
+                    foreach (SceneryVertex vertex in vertices)
                     {
                         if (vertex.Color < Colors.Count)
                         {

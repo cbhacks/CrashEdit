@@ -30,11 +30,7 @@ namespace CrashEdit
         internal EntryController CreateEntryController(Entry entry)
         {
             // TODO something more elegant
-            if (entry is ProtoAnimationEntry)
-            {
-                return new ProtoAnimationEntryController(this, (ProtoAnimationEntry)entry);
-            }
-            else if (entry is OldAnimationEntry)
+            if (entry is OldAnimationEntry)
             {
                 return new OldAnimationEntryController(this, (OldAnimationEntry)entry);
             }

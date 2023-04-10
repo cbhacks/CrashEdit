@@ -3,9 +3,10 @@ using System;
 namespace Crash
 {
     [EntryType(3,GameVersion.Crash2)]
+    [EntryType(3,GameVersion.Crash3)]
     public sealed class SceneryEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,GameVersion version)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -54,7 +55,7 @@ namespace Crash
                 byte[] zdata = new byte[2];
                 Array.Copy(items[1], (vertexcount - 1 - i) * 4, xydata, 0, xydata.Length);
                 Array.Copy(items[1], vertexcount * 4 + i * 2, zdata, 0, zdata.Length);
-                vertices[i] = SceneryVertex.Load(xydata, zdata);
+                vertices[i] = SceneryVertex.Load(xydata, zdata, version == GameVersion.Crash3);
             }
             SceneryTriangle[] triangles = new SceneryTriangle[trianglecount];
             for (int i = 0; i < trianglecount; i++)
@@ -95,7 +96,7 @@ namespace Crash
                 Array.Copy(items[6], i * 4, animatedtexturedata, 0, animatedtexturedata.Length);
                 animatedtextures[i] = ModelExtendedTexture.Load(animatedtexturedata);
             }
-            return new SceneryEntry(items[0],vertices,triangles,quads,textures,colors,animatedtextures,false,eid);
+            return new SceneryEntry(items[0], vertices, triangles, quads, textures, colors, animatedtextures, version == GameVersion.Crash3, eid);
         }
     }
 }

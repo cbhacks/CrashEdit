@@ -27,11 +27,11 @@ namespace Crash
                 proto = true;
                 if (data.Length < 44 + vertexcount * 6 + 2)
                 {
-                    ErrorManager.SignalError("OldFrame: Data is too short");
+                    ErrorManager.SignalError("ProtoFrame: Data is too short");
                 }
                 if (data.Length > 44 + vertexcount * 6 + 2)
                 {
-                    ErrorManager.SignalError("OldFrame: Data is too large");
+                    ErrorManager.SignalError("ProtoFrame: Data is too large");
                 }
             }
             if (data.Length > targetsize)

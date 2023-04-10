@@ -56,8 +56,6 @@
     <Compile Include="Formats\Crash Formats\Animation\FrameCollision.cs" />
     <Compile Include="Formats\Crash Formats\Animation\Frame.cs" />
     <Compile Include="Formats\Crash Formats\Animation\FrameVertex.cs" />
-    <Compile Include="Formats\Crash Formats\Animation\ProtoAnimationEntry.cs" />
-    <Compile Include="Formats\Crash Formats\Animation\ProtoAnimationEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Base\Entry\ENameComparer.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Atan.cs" />
     <Compile Include="Formats\Crash Formats\GOOL\GOOL Instructions\Cos.cs" />
@@ -87,7 +85,6 @@
     <Compile Include="Formats\Crash Formats\NSD\ProtoNSD.cs" />
     <Compile Include="Formats\Crash Formats\NSD\OldNSD.cs" />
     <Compile Include="Formats\Crash Formats\NSD\NSDSpawnPoint.cs" />
-    <Compile Include="Formats\Crash Formats\Scenery\NewSceneryEntryLoader.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\OldSceneryColor.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryEntry.cs" />
     <Compile Include="Formats\Crash Formats\Scenery\ProtoSceneryEntryLoader.cs" />

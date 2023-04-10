@@ -13,6 +13,7 @@ namespace Crash
 
         public override int Type => 1;
         public IList<OldFrame> Frames => frames;
+        public bool Proto => frames.Count > 0 && frames[0].Proto;
 
         public override UnprocessedEntry Unprocess()
         {

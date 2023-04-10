@@ -4,7 +4,7 @@ namespace Crash
     [EntryType(7,GameVersion.Crash3)]
     public sealed class ZoneEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items,int eid,GameVersion version)
         {
             if (items.Length < 2)
             {

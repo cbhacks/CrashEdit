@@ -7,13 +7,13 @@ namespace Crash
         public static SceneryVertex Load(byte[] xydata,byte[] zdata,bool is_c3 = false)
         {
             if (xydata == null)
-                throw new ArgumentNullException("xydata");
+                throw new ArgumentNullException(nameof(xydata));
             if (zdata == null)
-                throw new ArgumentNullException("zdata");
+                throw new ArgumentNullException(nameof(zdata));
             if (xydata.Length != 4)
-                throw new ArgumentException("Value must be 4 bytes long.","xydata");
+                throw new ArgumentException("Value must be 4 bytes long.", nameof(xydata));
             if (zdata.Length != 2)
-                throw new ArgumentException("Value must be 2 bytes long.","zdata");
+                throw new ArgumentException("Value must be 2 bytes long.", nameof(zdata));
             int xy = BitConv.FromInt32(xydata,0);
             ushort z = (ushort)BitConv.FromInt16(zdata,0);
             ushort y = (ushort)(xy >> 16);
