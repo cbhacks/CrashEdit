@@ -40,6 +40,7 @@ namespace CrashEdit
                 AddMenuSeparator();
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC1);
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevelZones, Menu_ShowLevelZonesC1);
+                AddMenu (Crash.UI.Properties.Resources.NSFController_AcExportScenery, Menu_ExportSceneryC1OBJ);
             }
             else if (GameVersion == GameVersion.Crash1Beta1995)
             {
@@ -53,7 +54,7 @@ namespace CrashEdit
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC2);
                 AddMenu(Crash.UI.Properties.Resources.NSFController_AcShowLevelZones, Menu_ShowLevelZonesC2);
                 AddMenuSeparator ();
-                AddMenu (Crash.UI.Properties.Resources.NSFController_AcExportScenery, Menu_ExportSceneryOBJ);
+                AddMenu (Crash.UI.Properties.Resources.NSFController_AcExportScenery, Menu_ExportSceneryC2OBJ);
             }
             InvalidateNode();
             InvalidateNodeImage();
@@ -369,15 +370,23 @@ namespace CrashEdit
             };
         }
 
-        private void Menu_ExportSceneryOBJ ()
+        private void Menu_ExportSceneryC1OBJ ()
         {
             if (!FileUtil.SelectSaveFile (out string filename, FileFilters.OBJ, FileFilters.Any))
                 return;
             
-            ExportSceneryOBJ (Path.GetDirectoryName (filename), Path.GetFileNameWithoutExtension (filename));
+            ExportSceneryC1OBJ (Path.GetDirectoryName (filename), Path.GetFileNameWithoutExtension (filename));
         }
         
-        private void ExportSceneryOBJ (string path, string modelname)
+        private void Menu_ExportSceneryC2OBJ ()
+        {
+            if (!FileUtil.SelectSaveFile (out string filename, FileFilters.OBJ, FileFilters.Any))
+                return;
+            
+            ExportSceneryC2OBJ (Path.GetDirectoryName (filename), Path.GetFileNameWithoutExtension (filename));
+        }
+        
+        private void ExportSceneryC2OBJ (string path, string modelname)
         {
             var exporter = new OBJExporter ();
             
@@ -571,7 +580,105 @@ namespace CrashEdit
             
             exporter.Export (path, modelname);
         }
+        
+        private void ExportSceneryC1OBJ (string path, string modelname)
+        {
+            var exporter = new OBJExporter ();
+            
+            // detect how many textures are used and their eids to prepare the image
+            Dictionary <int, int> textureEIDs = new ();
+            Dictionary <string, TexInfoUnpacked> objTranslate = new Dictionary <string, TexInfoUnpacked> ();
+            
+            // find all the scenery insde chunks
+            foreach (OldSceneryEntry scenery in NSF.GetEntries<OldSceneryEntry> ())
+            {
+                var offset = new Vector3 (scenery.XOffset, scenery.YOffset, scenery.ZOffset);
+                var scale = new Vector3 (1 / GameScales.WorldC1);
+                
+                for (int i = 0; i < scenery.TPAGCount; i++)
+                {
+                    int tpag_eid = scenery.GetTPAG (i);
 
+                    if (textureEIDs.ContainsKey (tpag_eid))
+                        continue;
+
+                    textureEIDs.Add (tpag_eid, textureEIDs.Count);
+                }
+                
+                foreach (var polygon in scenery.Polygons)
+                {
+                    string material = null;
+                    Vector2? uv1 = null, uv2 = null, uv3 = null;
+                    OldModelStruct str = scenery.Structs[polygon.ModelStruct];
+                    OldSceneryVertex ov1 = scenery.Vertices [polygon.VertexA];
+                    OldSceneryVertex ov2 = scenery.Vertices [polygon.VertexB];
+                    OldSceneryVertex ov3 = scenery.Vertices [polygon.VertexC];
+                    Vector3 v1 = new Vector3 (ov1.X, ov1.Y, ov1.Z);
+                    Vector3 v2 = new Vector3 (ov2.X, ov2.Y, ov2.Z);
+                    Vector3 v3 = new Vector3 (ov3.X, ov3.Y, ov3.Z);
+                    Vector3 color = Vector3.Zero;
+
+                    if (str is OldSceneryTexture t)
+                    {
+                        color = new Vector3 (t.R, t.G, t.B) / 255F;
+                        
+                        // add the texture to the list too
+                        material = objTranslate.FirstOrDefault (x => 
+                            x.Value.color == t.ColorMode &&
+                            x.Value.blend == t.BlendMode &&
+                            x.Value.clutx == t.ClutX &&
+                            x.Value.cluty == t.ClutY &&
+                            x.Value.page == textureEIDs [scenery.GetTPAG (polygon.Page)]
+                        ).Key;
+                        
+                        if (material is null)
+                        {
+                            var texinfo = new TexInfoUnpacked(
+                                true, color: t.ColorMode, blend: t.BlendMode,
+                                clutx: t.ClutX, cluty: t.ClutY,
+                                page: textureEIDs[scenery.GetTPAG (polygon.Page)]
+                            );
+
+                            var tpag = this.NSF.GetEntry <TextureChunk> (scenery.GetTPAG (polygon.Page));
+                            Bitmap texture = TextureExporter.CreateTexture (tpag.Data, texinfo);
+                            
+                            // the material name changes
+                            material = exporter.AddTexture (((int) texinfo).ToString ("X8"), texture);
+                            
+                            // add it to the lookup table too
+                            objTranslate [material] = texinfo;
+                        }
+
+                        Vector2 texsize = t.ColorMode switch
+                        {
+                            0 => new Vector2 (1024, 128),
+                            1 => new Vector2 (512, 128),
+                            _ => new Vector2 (256, 128)
+                        };
+                        
+                        uv3 = new Vector2 (t.U1 / texsize.X, (128 - t.V1) / texsize.Y);
+                        uv2 = new Vector2 (t.U2 / texsize.X, (128 - t.V2) / texsize.Y);
+                        uv1 = new Vector2 (t.U3 / texsize.X, (128 - t.V3) / texsize.Y);
+                    }
+                    else if(str is OldSceneryColor c)
+                    {
+                        color = new Vector3 (c.R, c.G, c.B) / 255F;
+                    }
+
+                    exporter.AddFace (
+                        (v1 + offset) * scale,
+                        (v2 + offset) * scale,
+                        (v3 + offset) * scale,
+                        color, color, color,
+                        material,
+                        uv1, uv2, uv3
+                    );
+                }
+            }
+            
+            exporter.Export (path, modelname);
+        }
+        
         private void Menu_Import_Chunk()
         {
             byte[][] datas = FileUtil.OpenFiles(FileFilters.Any);
