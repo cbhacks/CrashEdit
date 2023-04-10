@@ -10,7 +10,7 @@ namespace CrashEdit
 {
     public sealed class ProtoZoneEntryViewer : ProtoSceneryEntryViewer
     {
-        private readonly OctreeRenderer octreeRenderer;
+        private readonly OctreeRenderer octree_renderer;
 
         private readonly List<int> zones;
         private readonly int this_zone;
@@ -36,20 +36,20 @@ namespace CrashEdit
         {
             zones = new() { zone_eid };
             this_zone = zone_eid;
-            octreeRenderer = new(this);
+            octree_renderer = new(this);
         }
 
         public ProtoZoneEntryViewer(NSF nsf, List<int> zone_eids) : base(nsf, new List<int>())
         {
             zones = zone_eids;
             this_zone = Entry.NullEID;
-            octreeRenderer = new(this);
+            octree_renderer = new(this);
         }
 
         protected override void OnInvalidated(InvalidateEventArgs e)
         {
             base.OnInvalidated(e);
-            octreeRenderer?.UpdateForm();
+            octree_renderer?.UpdateForm();
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -93,16 +93,16 @@ namespace CrashEdit
         protected override void PrintHelp()
         {
             base.PrintHelp();
-            consoleHelp += octreeRenderer.PrintHelp();
-            if (octreeRenderer.Enabled)
-                consoleHelp += KeyboardControls.ToggleZoneOctreeFlip.Print(BoolToEnable(octreeFlip));
+            con_help += octree_renderer.PrintHelp();
+            if (octree_renderer.enable)
+                con_help += KeyboardControls.ToggleZoneOctreeFlip.Print(BoolToEnable(octreeFlip));
         }
 
         protected override void RunLogic()
         {
             base.RunLogic();
-            octreeRenderer.RunLogic();
-            if (KPress(KeyboardControls.ToggleZoneOctreeFlip)) octreeFlip = !octreeFlip;
+            octree_renderer.RunLogic();
+            if (octree_renderer.enable && KPress(KeyboardControls.ToggleZoneOctreeFlip)) octreeFlip = !octreeFlip;
         }
 
         private IList<ProtoZoneEntry> GetZones()
@@ -208,9 +208,9 @@ namespace CrashEdit
                 RenderCamera(camera);
             }
 
-            if (octreeRenderer.Enabled && (is_master_zone || octreeRenderer.ShowAllEntries))
+            if (octree_renderer.enable && (is_master_zone || octree_renderer.show_neighbor_zones))
             {
-                octreeRenderer.NodeAlpha = zone_alpha;
+                octree_renderer.alpha = zone_alpha;
                 int maxx = zone.CollisionDepthX;
                 int maxy = zone.CollisionDepthY;
                 int maxz = zone.CollisionDepthZ;
@@ -220,11 +220,11 @@ namespace CrashEdit
                     maxz = maxy;
                 if (octreeFlip)
                 {
-                    octreeRenderer.RenderOctree(zone.Layout, 0x1C, zone_trans.X, zone_trans.Y + zoneSize.Y, zone_trans.Z + zoneSize.Z, zoneSize.X, -zoneSize.Y, -zoneSize.Z, maxx, maxy, maxz);
+                    octree_renderer.RenderOctree(zone.Layout, 0x1C, zone_trans.X, zone_trans.Y + zoneSize.Y, zone_trans.Z + zoneSize.Z, zoneSize.X, -zoneSize.Y, -zoneSize.Z, maxx, maxy, maxz);
                 }
                 else
                 {
-                    octreeRenderer.RenderOctree(zone.Layout, 0x1C, zone_trans.X, zone_trans.Y, zone_trans.Z, zoneSize.X, zoneSize.Y, zoneSize.Z, maxx, maxy, maxz);
+                    octree_renderer.RenderOctree(zone.Layout, 0x1C, zone_trans.X, zone_trans.Y, zone_trans.Z, zoneSize.X, zoneSize.Y, zoneSize.Z, maxx, maxy, maxz);
                 }
             }
         }
@@ -359,7 +359,7 @@ namespace CrashEdit
 
         protected override void Dispose(bool disposing)
         {
-            octreeRenderer?.Dispose();
+            octree_renderer?.Dispose();
 
             base.Dispose(disposing);
         }

@@ -12,88 +12,94 @@ namespace CrashEdit
     {
         public static Dictionary<short, Rgba[]> nodeColors = new();
 
-        public bool Enabled { get; set; }
-        public int NodeKindSelection { get; set; }
-        public bool NodeOutline { get; set; }
-        public byte NodeAlpha { get; set; }
-        public bool ShowAllEntries { get; set; }
-        public Form OctreeForm { get; set; }
-        private GLViewer Viewer { get; set; }
+        public bool enable;
+        public int node_filter;
+        public bool outline;
+        public byte alpha;
+        public bool show_neighbor_zones;
 
-        private bool formWantUpdate = false;
-        private bool formWantSelect = false;
+        private readonly GLViewer viewer;
+
+        private Form octree_form;
+        private bool form_want_update = false;
+        private bool form_want_select = false;
 
         public OctreeRenderer(GLViewer viewer)
         {
-            Enabled = false;
-            NodeKindSelection = -1;
-            NodeOutline = true;
-            ShowAllEntries = false;
-            Viewer = viewer;
+            enable = false;
+            node_filter = -1;
+            outline = true;
+            show_neighbor_zones = false;
+            this.viewer = viewer;
         }
 
         public void UpdateForm()
         {
-            if (OctreeForm != null)
+            if (octree_form != null)
             {
-                if (!OctreeForm.Visible)
+                if (!octree_form.Visible)
                 {
-                    OctreeForm.Show();
+                    octree_form.Show();
                 }
-                if (formWantUpdate)
+                if (form_want_update)
                 {
                     UpdateOctreeFormList();
                 }
-                if (formWantSelect)
+                if (form_want_select)
                 {
-                    OctreeForm.Select();
+                    octree_form.Select();
                 }
             }
-            formWantUpdate = false;
-            formWantSelect = false;
+            form_want_update = false;
+            form_want_select = false;
         }
 
         public string PrintHelp()
         {
-            return GLViewer.KeyboardControls.ToggleZoneOctree.Print(GLViewer.BoolToEnable(Enabled))
-                + (!Enabled ? "" :
-                   GLViewer.KeyboardControls.ToggleZoneOctreeOutline.Print(GLViewer.BoolToEnable(NodeOutline))
-                 + GLViewer.KeyboardControls.ToggleZoneOctreeNeighbors.Print(GLViewer.BoolToEnable(ShowAllEntries))
+            return GLViewer.KeyboardControls.ToggleZoneOctree.Print(GLViewer.BoolToEnable(enable))
+                + (!enable ? "" :
+                   GLViewer.KeyboardControls.ToggleZoneOctreeOutline.Print(GLViewer.BoolToEnable(outline))
+                 + GLViewer.KeyboardControls.ToggleZoneOctreeNeighbors.Print(GLViewer.BoolToEnable(show_neighbor_zones))
                  + GLViewer.KeyboardControls.OpenOctreeWindow.Print()
                     );
         }
 
         public void RunLogic()
         {
-            if (Viewer.KPress(GLViewer.KeyboardControls.ToggleZoneOctree)) Enabled = !Enabled;
-            if (Viewer.KPress(GLViewer.KeyboardControls.ToggleZoneOctreeOutline)) NodeOutline = !NodeOutline;
-            if (Viewer.KPress(GLViewer.KeyboardControls.ToggleZoneOctreeNeighbors)) ShowAllEntries = !ShowAllEntries;
-            if (Viewer.KPress(GLViewer.KeyboardControls.OpenOctreeWindow) && Enabled)
+            if (viewer.KPress(GLViewer.KeyboardControls.ToggleZoneOctree)) enable = !enable;
+            if (enable)
             {
-                if (OctreeForm == null || OctreeForm.IsDisposed)
+                if (viewer.KPress(GLViewer.KeyboardControls.ToggleZoneOctreeOutline)) outline = !outline;
+                if (viewer.KPress(GLViewer.KeyboardControls.ToggleZoneOctreeNeighbors)) show_neighbor_zones = !show_neighbor_zones;
+                if (viewer.KPress(GLViewer.KeyboardControls.OpenOctreeWindow))
                 {
-                    OctreeForm = new Form();
-                    OctreeForm.FormClosing += (sender, e) =>
+                    if (octree_form == null || octree_form.IsDisposed)
                     {
-                        NodeKindSelection = -1;
-                        OctreeForm = null;
-                    };
-                    formWantUpdate = true;
-                }
-                else
-                {
-                    formWantSelect = true;
+                        octree_form = new Form();
+                        octree_form.FormClosing += (sender, e) =>
+                        {
+                            node_filter = -1;
+                            octree_form = null;
+                        };
+                        form_want_update = true;
+                    }
+                    else
+                    {
+                        form_want_select = true;
+                    }
                 }
             }
         }
 
         internal void UpdateOctreeFormList()
         {
-            if (OctreeForm != null && !OctreeForm.IsDisposed)
+            if (octree_form != null && !octree_form.IsDisposed)
             {
-                OctreeForm.Controls.Clear();
-                ListView lst = new();
-                lst.Dock = DockStyle.Fill;
+                octree_form.Controls.Clear();
+                ListView lst = new()
+                {
+                    Dock = DockStyle.Fill
+                };
                 foreach (var color in nodeColors)
                 {
                     ListViewItem lsi = new();
@@ -107,14 +113,14 @@ namespace CrashEdit
                 {
                     if (lst.SelectedItems.Count == 0)
                     {
-                        NodeKindSelection = -1;
+                        node_filter = -1;
                     }
                     else
                     {
-                        NodeKindSelection = (ushort)(short)lst.SelectedItems[0].Tag;
+                        node_filter = (ushort)(short)lst.SelectedItems[0].Tag;
                     }
                 };
-                OctreeForm.Controls.Add(lst);
+                octree_form.Controls.Add(lst);
             }
         }
 
@@ -128,7 +134,7 @@ namespace CrashEdit
             int value = (ushort)BitConv.FromInt16(data, offset);
             if ((value & 1) != 0)
             {
-                if (NodeKindSelection != -1 && NodeKindSelection != value)
+                if (node_filter != -1 && node_filter != value)
                     return;
                 Rgba[] colors;
                 if (!nodeColors.TryGetValue((short)value, out colors))
@@ -149,9 +155,9 @@ namespace CrashEdit
                 }
                 for (int i = 0; i < colors.Length; ++i)
                 {
-                    colors[i].a = NodeAlpha;
+                    colors[i].a = alpha;
                 }
-                Viewer.AddBox(new Vector3(x, y, z), new Vector3(w, h, d), colors, NodeOutline);
+                viewer.AddBox(new Vector3(x, y, z), new Vector3(w, h, d), colors, outline);
             }
             else if (value != 0)
             {
@@ -204,7 +210,7 @@ namespace CrashEdit
 
         public void Dispose()
         {
-            OctreeForm?.Close();
+            octree_form?.Close();
         }
     }
 }

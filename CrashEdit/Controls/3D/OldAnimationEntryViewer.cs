@@ -4,7 +4,6 @@ using OpenTK;
 using OpenTK.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace CrashEdit
 {
@@ -14,15 +13,13 @@ namespace CrashEdit
         private readonly int frame_id;
         private int cur_frame = 0;
         private bool colored;
-        private bool collisionenabled = Settings.Default.DisplayFrameCollision;
-        private bool normalsenabled = Settings.Default.DisplayNormals;
-        private bool interpenabled = true;
-        private int cullmode = 1;
+        private bool enable_collision = Settings.Default.DisplayFrameCollision;
+        private bool enable_normals = Settings.Default.DisplayNormals;
+        private bool enable_interp = true;
+        private int cull_mode = 1;
 
         private VAO[] vaoModel => vaoListCrash1;
-        private BlendMode blendMask;
-
-        protected override bool UseGrid => true;
+        private BlendMode blend_mask;
 
         public OldAnimationEntryViewer(NSF nsf, int anim_eid, int frame) : base(nsf)
         {
@@ -119,7 +116,7 @@ namespace CrashEdit
                 {
                     double prog = render.FullCurrentFrame / 2;
                     cur_frame = (int)Math.Floor(prog) % frames.Count;
-                    if (interpenabled)
+                    if (enable_interp)
                     {
                         frame2 = frames[(int)Math.Ceiling(prog) % frames.Count];
                         interp = (float)(prog - Math.Floor(prog));
@@ -127,28 +124,29 @@ namespace CrashEdit
                     }
                 }
                 OldFrame frame1 = frames[cur_frame];
-                if (frame2 != null && (frame2.ModelEID != frame1.ModelEID || frame1.Vertices.Count != frame2.Vertices.Count)) frame2 = null;
+                if (frame2 != null && (frame2.ModelEID != frame1.ModelEID || frame1.Vertices.Count != frame2.Vertices.Count))
+                    frame2 = null;
 
                 var model = nsf.GetEntry<OldModelEntry>(frame1.ModelEID);
                 if (model == null) return;
 
-                blendMask = BlendMode.Solid;
+                blend_mask = BlendMode.Solid;
 
                 RenderFrame(frame1, 0);
 
                 // uniforms and static data
                 vaoModel[0].UserTrans = new(frame1.XOffset, frame1.YOffset, frame1.ZOffset);
                 vaoModel[0].UserScale = new Vector3(model.ScaleX, model.ScaleY, model.ScaleZ) / (GameScales.ModelC1 * GameScales.AnimC1);
-                vaoModel[0].UserCullMode = cullmode;
+                vaoModel[0].UserCullMode = cull_mode;
 
-                if (frame2 != null)
+                if (frame2 != null && frame2 != frame1)
                 {
                     // lerp results
                     RenderFrame(frame2, 1);
 
                     MathExt.Lerp(ref vaoModel[0].UserTrans, new Vector3(frame2.XOffset, frame2.YOffset, frame2.ZOffset), interp);
 
-                    for (int i = 0; i < vaoModel[0].VertCount; ++i)
+                    for (int i = 0; i < vaoModel[0].vert_count; ++i)
                     {
                         MathExt.Lerp(ref vaoModel[0].Verts[i].trans, vaoModel[1].Verts[i].trans, interp);
                         if (!colored)
@@ -171,17 +169,17 @@ namespace CrashEdit
                 vaoModel[0].UserScale = new Vector3(1);
                 vaoModel[0].UserCullMode = 0;
 
-                if (normalsenabled && !colored)
+                if (enable_normals && !colored)
                 {
                     var ofs = vaoModel[0].UserTrans;
-                    for (int i = 0; i < vaoModel[0].VertCount; ++i)
+                    for (int i = 0; i < vaoModel[0].vert_count; ++i)
                     {
                         var p = (vaoModel[0].Verts[i].trans + ofs) * vaoModel[0].UserScale;
                         vaoLines.PushAttrib(trans: p, rgba: (Rgba)Color4.White);
                         vaoLines.PushAttrib(trans: p + vaoModel[0].Verts[i].normal * 0.1f, rgba: (Rgba)Color4.Cyan);
                     }
                 }
-                if (collisionenabled)
+                if (enable_collision)
                 {
                     var c1 = new Vector3(frame1.X1, frame1.Y1, frame1.Z1) / GameScales.CollisionC1;
                     var c2 = new Vector3(frame1.X2, frame1.Y2, frame1.Z2) / GameScales.CollisionC1;
@@ -197,19 +195,19 @@ namespace CrashEdit
         protected override void PrintHelp()
         {
             base.PrintHelp();
-            consoleHelp += KeyboardControls.ToggleCollisionAnim.Print(BoolToEnable(collisionenabled));
-            consoleHelp += KeyboardControls.ToggleLerp.Print(BoolToEnable(interpenabled));
-            consoleHelp += KeyboardControls.ChangeCullMode.Print(cullmode);
-            consoleHelp += KeyboardControls.ToggleNormals.Print(BoolToEnable(normalsenabled));
+            con_help += KeyboardControls.ToggleCollisionAnim.Print(BoolToEnable(enable_collision));
+            con_help += KeyboardControls.ToggleLerp.Print(BoolToEnable(enable_interp));
+            con_help += KeyboardControls.ChangeCullMode.Print(cull_mode);
+            con_help += KeyboardControls.ToggleNormals.Print(BoolToEnable(enable_normals));
         }
 
         protected override void RunLogic()
         {
             base.RunLogic();
-            if (KPress(KeyboardControls.ToggleCollisionAnim)) collisionenabled = !collisionenabled;
-            if (KPress(KeyboardControls.ToggleLerp)) interpenabled = !interpenabled;
-            if (KPress(KeyboardControls.ChangeCullMode)) cullmode = ++cullmode % 3;
-            if (KPress(KeyboardControls.ToggleNormals)) normalsenabled = !normalsenabled;
+            if (KPress(KeyboardControls.ToggleCollisionAnim)) enable_collision = !enable_collision;
+            if (KPress(KeyboardControls.ToggleLerp)) enable_interp = !enable_interp;
+            if (KPress(KeyboardControls.ChangeCullMode)) cull_mode = ++cull_mode % 3;
+            if (KPress(KeyboardControls.ToggleNormals)) enable_normals = !enable_normals;
         }
 
         private Dictionary<int, int> CollectTPAGs(OldModelEntry model)
@@ -244,7 +242,7 @@ namespace CrashEdit
                 // render stuff
                 foreach (OldModelPolygon polygon in model.Polygons)
                 {
-                    int cur_idx = vao.VertCount;
+                    int cur_idx = vao.vert_count;
                     OldModelStruct str = model.Structs[polygon.Unknown & 0x7FFF];
                     if (str is OldModelTexture tex)
                     {
@@ -262,7 +260,7 @@ namespace CrashEdit
                         RenderVertex(vao, frame, polygon.VertexB / 6);
                         RenderVertex(vao, frame, polygon.VertexA / 6);
 
-                        blendMask |= TexInfoUnpacked.GetBlendMode(tex.BlendMode);
+                        blend_mask |= TexInfoUnpacked.GetBlendMode(tex.BlendMode);
                     }
                     else
                     {
@@ -281,7 +279,7 @@ namespace CrashEdit
 
         private void RenderFramePass(BlendMode pass)
         {
-            if ((pass & blendMask) != BlendMode.None)
+            if ((pass & blend_mask) != BlendMode.None)
             {
                 SetBlendMode(pass);
                 vaoModel[0].BlendMask = BlendModeIndex(pass);
@@ -292,7 +290,7 @@ namespace CrashEdit
         private void RenderVertex(VAO vao, OldFrame frame, int vert_idx)
         {
             OldFrameVertex vert = frame.Vertices[vert_idx];
-            int cur_vert_idx = vao.VertCount;
+            int cur_vert_idx = vao.vert_count;
             vao.Verts[cur_vert_idx].trans = new(vert.X, vert.Y, vert.Z);
             if (colored)
             {
@@ -305,7 +303,7 @@ namespace CrashEdit
             {
                 vao.Verts[cur_vert_idx].normal = new Vector3(vert.NormalX, vert.NormalY, vert.NormalZ) / 127;
             }
-            vao.VertCount++;
+            vao.vert_count++;
         }
     }
 }

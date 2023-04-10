@@ -400,16 +400,14 @@ namespace CrashEdit
 
         public void OpenNSF()
         {
-            using (OpenFileDialog dialog = new OpenFileDialog())
+            using OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = FileFilters.NSF + "|" + FileFilters.Any;
+            dialog.Multiselect = true;
+            if (dialog.ShowDialog(this) == DialogResult.OK)
             {
-                dialog.Filter = FileFilters.NSF + "|" + FileFilters.Any;
-                dialog.Multiselect = true;
-                if (dialog.ShowDialog(this) == DialogResult.OK)
+                foreach (string filename in dialog.FileNames)
                 {
-                    foreach (string filename in dialog.FileNames)
-                    {
-                        OpenNSF(filename);
-                    }
+                    OpenNSF(filename);
                 }
             }
         }
@@ -512,7 +510,7 @@ namespace CrashEdit
             try
             {
                 byte[] nsfdata = nsf.Save();
-                if (ignore_warnings ? true : MessageBox.Show(Resources.SaveNSF, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (ignore_warnings || MessageBox.Show(Resources.SaveNSF, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     File.WriteAllBytes(filename, nsfdata);
                 }
@@ -646,7 +644,7 @@ namespace CrashEdit
                 nsfc.Node.TreeView.EndUpdate();
                 if (!no_nsf_overwrite)
                 {
-                    if (ignore_warnings || Settings.Default.PatchNSDSavesNSF ? true : (order_updated && MessageBox.Show(Resources.PatchNSD3, Resources.PatchNSD_Title1, MessageBoxButtons.YesNo) == DialogResult.Yes))
+                    if (ignore_warnings || Settings.Default.PatchNSDSavesNSF || (order_updated && MessageBox.Show(Resources.PatchNSD3, Resources.PatchNSD_Title1, MessageBoxButtons.YesNo) == DialogResult.Yes))
                     {
                         SaveNSF(ignore_warnings);
                     }
@@ -672,7 +670,7 @@ namespace CrashEdit
                     if (ent.ID != null)
                         ++nsd.EntityCount;
 
-            if (ignore_warnings ? true : MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ignore_warnings || MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
             }
@@ -721,7 +719,7 @@ namespace CrashEdit
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
             PatchNSDGoolMap(nsd.GOOLMap, nsf, ignore_warnings);
-            if (ignore_warnings ? true : MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ignore_warnings || MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
             }
@@ -733,7 +731,7 @@ namespace CrashEdit
             var indexdata = nsf.MakeNSDIndex();
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
-            if (ignore_warnings ? true : MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ignore_warnings || MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
             }
@@ -796,12 +794,10 @@ namespace CrashEdit
             if (tbcTabs.SelectedTab != null)
             {
                 NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
-                using (InputWindow inputwindow = new InputWindow())
+                using InputWindow inputwindow = new InputWindow();
+                if (inputwindow.ShowDialog(this) == DialogResult.OK)
                 {
-                    if (inputwindow.ShowDialog(this) == DialogResult.OK)
-                    {
-                        nsfbox.Find(inputwindow.Input);
-                    }
+                    nsfbox.Find(inputwindow.Input);
                 }
             }
         }
@@ -833,11 +829,9 @@ namespace CrashEdit
             CDBuilder fs = (CDBuilder)args[0];
             string filename = (string)args[1];
             while (!dlgProgress.IsShown) ;
-            using (FileStream output = new FileStream(filename, FileMode.Create, FileAccess.Write))
-            using (Stream input = fs.Build())
-            {
-                ISO2PSX.Run(input, output, bgwMakeBIN);
-            }
+            using FileStream output = new FileStream(filename, FileMode.Create, FileAccess.Write);
+            using Stream input = fs.Build();
+            ISO2PSX.Run(input, output, bgwMakeBIN);
         }
 
         private void bgwMakeBIN_ProgressChanged(object sender, ProgressChangedEventArgs e)

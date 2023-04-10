@@ -9,10 +9,8 @@ namespace CrashEdit
         private List<int> worlds;
 
         private VAO vaoWorld => vaoListCrash1[0];
-        Vector3 worldOffset;
-        private BlendMode blendMask;
-
-        protected override bool UseGrid => true;
+        Vector3 world_offset;
+        private BlendMode blend_mask;
 
         public OldSceneryEntryViewer(NSF nsf, int world) : base(nsf)
         {
@@ -36,22 +34,11 @@ namespace CrashEdit
             }
         }
 
-        protected IEnumerable<OldSceneryEntry> GetSkyWorlds()
+        protected IEnumerable<OldSceneryEntry> GetWorlds(bool want_sky)
         {
             foreach (OldSceneryEntry world in GetWorlds())
             {
-                if (world.IsSky)
-                {
-                    yield return world;
-                }
-            }
-        }
-
-        protected IEnumerable<OldSceneryEntry> GetNonSkyWorlds()
-        {
-            foreach (OldSceneryEntry world in GetWorlds())
-            {
-                if (!world.IsSky)
+                if (world.IsSky == want_sky)
                 {
                     yield return world;
                 }
@@ -104,7 +91,7 @@ namespace CrashEdit
             // render skies first then other things
             for (int i = 0; i < 2; ++i)
             {
-                IEnumerable<OldSceneryEntry> worlds_to_use = i == 0 ? GetSkyWorlds() : GetNonSkyWorlds();
+                IEnumerable<OldSceneryEntry> worlds_to_use = GetWorlds(i == 0);
                 vaoWorld.ZBufDisableWrite = i == 0;
                 vaoWorld.UserScale = new Vector3(1 / GameScales.WorldC1);
 
@@ -117,7 +104,7 @@ namespace CrashEdit
                 vaoWorld.DiscardVerts();
 
                 // render stuff
-                blendMask = BlendMode.Solid;
+                blend_mask = BlendMode.Solid;
                 foreach (var world in worlds_to_use)
                 {
                     RenderWorld(world, tex_eids);
@@ -134,30 +121,30 @@ namespace CrashEdit
         protected void RenderWorld(OldSceneryEntry world, Dictionary<int, int> tex_eids)
         {
             if (world.IsSky)
-                worldOffset = MathExt.Div(-render.Projection.RealTrans, vaoWorld.UserScale);
+                world_offset = MathExt.Div(-render.Projection.RealTrans, vaoWorld.UserScale);
             else
-                worldOffset = new Vector3(world.XOffset, world.YOffset, world.ZOffset);
+                world_offset = new Vector3(world.XOffset, world.YOffset, world.ZOffset);
             foreach (OldSceneryPolygon polygon in world.Polygons)
             {
                 OldModelStruct str = world.Structs[polygon.ModelStruct];
                 if (str is OldSceneryTexture tex)
                 {
-                    vaoWorld.Verts[vaoWorld.VertCount + 0].st = new(tex.U3, tex.V3);
-                    vaoWorld.Verts[vaoWorld.VertCount + 1].st = new(tex.U2, tex.V2);
-                    vaoWorld.Verts[vaoWorld.VertCount + 2].st = new(tex.U1, tex.V1);
+                    vaoWorld.Verts[vaoWorld.vert_count + 0].st = new(tex.U3, tex.V3);
+                    vaoWorld.Verts[vaoWorld.vert_count + 1].st = new(tex.U2, tex.V2);
+                    vaoWorld.Verts[vaoWorld.vert_count + 2].st = new(tex.U1, tex.V1);
 
-                    vaoWorld.Verts[vaoWorld.VertCount + 2].tex = TexInfoUnpacked.Pack(true, color: tex.ColorMode, blend: tex.BlendMode,
+                    vaoWorld.Verts[vaoWorld.vert_count + 2].tex = TexInfoUnpacked.Pack(true, color: tex.ColorMode, blend: tex.BlendMode,
                                                                                             clutx: tex.ClutX, cluty: tex.ClutY,
                                                                                             page: tex_eids[world.GetTPAG(polygon.Page)]);
                     RenderVertex(world, polygon.VertexA);
                     RenderVertex(world, polygon.VertexB);
                     RenderVertex(world, polygon.VertexC);
 
-                    blendMask |= TexInfoUnpacked.GetBlendMode(tex.BlendMode);
+                    blend_mask |= TexInfoUnpacked.GetBlendMode(tex.BlendMode);
                 }
                 else
                 {
-                    vaoWorld.Verts[vaoWorld.VertCount + 2].tex = 0;
+                    vaoWorld.Verts[vaoWorld.vert_count + 2].tex = 0;
                     RenderVertex(world, polygon.VertexA);
                     RenderVertex(world, polygon.VertexB);
                     RenderVertex(world, polygon.VertexC);
@@ -167,7 +154,7 @@ namespace CrashEdit
 
         private void RenderWorldPass(BlendMode pass)
         {
-            if ((pass & blendMask) != BlendMode.None)
+            if ((pass & blend_mask) != BlendMode.None)
             {
                 SetBlendMode(pass);
                 vaoWorld.BlendMask = BlendModeIndex(pass);
@@ -178,9 +165,9 @@ namespace CrashEdit
         private void RenderVertex(OldSceneryEntry world, int vert_idx)
         {
             OldSceneryVertex vert = world.Vertices[vert_idx];
-            vaoWorld.Verts[vaoWorld.VertCount].trans = new Vector3(vert.X, vert.Y, vert.Z) + worldOffset;
-            vaoWorld.Verts[vaoWorld.VertCount].rgba = new(vert.Red, vert.Green, vert.Blue, 255);
-            vaoWorld.VertCount++;
+            vaoWorld.Verts[vaoWorld.vert_count].trans = new Vector3(vert.X, vert.Y, vert.Z) + world_offset;
+            vaoWorld.Verts[vaoWorld.vert_count].rgba = new(vert.Red, vert.Green, vert.Blue, 255);
+            vaoWorld.vert_count++;
         }
     }
 }

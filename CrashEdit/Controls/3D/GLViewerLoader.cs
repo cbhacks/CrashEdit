@@ -13,8 +13,6 @@ namespace CrashEdit
 {
     public sealed class GLViewerLoader : GLViewer
     {
-        protected override bool UseGrid => false;
-
         public GLViewerLoader() : base()
         {
         }
@@ -55,7 +53,7 @@ namespace CrashEdit
                             level = "INFO";
                             break;
                     }
-                    Console.WriteLine($"[{glDebugContextString}] OpenGL {level}: {msg}");
+                    Console.WriteLine($"[{dbgContextString}] OpenGL {level}: {msg}");
                 }, IntPtr.Zero);
             }
 

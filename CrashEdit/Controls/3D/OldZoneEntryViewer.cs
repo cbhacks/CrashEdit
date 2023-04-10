@@ -10,7 +10,7 @@ namespace CrashEdit
 {
     public sealed class OldZoneEntryViewer : OldSceneryEntryViewer
     {
-        private readonly OctreeRenderer octreeRenderer;
+        private readonly OctreeRenderer octree_renderer;
 
         private readonly List<int> zones;
         private readonly int this_zone;
@@ -34,20 +34,20 @@ namespace CrashEdit
         {
             zones = new() { zone_eid };
             this_zone = zone_eid;
-            octreeRenderer = new(this);
+            octree_renderer = new(this);
         }
 
         public OldZoneEntryViewer(NSF nsf, List<int> zone_eids) : base(nsf, new List<int>())
         {
             zones = zone_eids;
             this_zone = Entry.NullEID;
-            octreeRenderer = new(this);
+            octree_renderer = new(this);
         }
 
         protected override void OnInvalidated(InvalidateEventArgs e)
         {
             base.OnInvalidated(e);
-            octreeRenderer?.UpdateForm();
+            octree_renderer?.UpdateForm();
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -87,13 +87,13 @@ namespace CrashEdit
         protected override void PrintHelp()
         {
             base.PrintHelp();
-            consoleHelp += octreeRenderer.PrintHelp();
+            con_help += octree_renderer.PrintHelp();
         }
 
         protected override void RunLogic()
         {
             base.RunLogic();
-            octreeRenderer.RunLogic();
+            octree_renderer.RunLogic();
         }
 
         private IList<OldZoneEntry> GetZones()
@@ -199,10 +199,10 @@ namespace CrashEdit
                 RenderCamera(camera);
             }
 
-            if (octreeRenderer.Enabled && (is_master_zone || octreeRenderer.ShowAllEntries))
+            if (octree_renderer.enable && (is_master_zone || octree_renderer.show_neighbor_zones))
             {
-                octreeRenderer.NodeAlpha = zone_alpha;
-                octreeRenderer.RenderOctree(zone.Layout, 0x1C, zone_trans.X, zone_trans.Y, zone_trans.Z, zoneSize.X, zoneSize.Y, zoneSize.Z, zone.CollisionDepthX, zone.CollisionDepthY, zone.CollisionDepthZ);
+                octree_renderer.alpha = zone_alpha;
+                octree_renderer.RenderOctree(zone.Layout, 0x1C, zone_trans.X, zone_trans.Y, zone_trans.Z, zoneSize.X, zoneSize.Y, zoneSize.Z, zone.CollisionDepthX, zone.CollisionDepthY, zone.CollisionDepthZ);
             }
         }
 
@@ -486,7 +486,7 @@ namespace CrashEdit
 
         protected override void Dispose(bool disposing)
         {
-            octreeRenderer?.Dispose();
+            octree_renderer?.Dispose();
 
             base.Dispose(disposing);
         }

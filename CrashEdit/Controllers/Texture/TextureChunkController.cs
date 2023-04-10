@@ -52,15 +52,13 @@ namespace CrashEdit
 
         private void Menu_Rename_Entry()
         {
-            using (NewEntryForm newentrywindow = new NewEntryForm(NSFController))
+            using NewEntryForm newentrywindow = new NewEntryForm(NSFController);
+            newentrywindow.Text = "Rename Entry";
+            newentrywindow.SetRenameMode(TextureChunk.EName);
+            if (newentrywindow.ShowDialog(Node.TreeView.TopLevelControl) == DialogResult.OK)
             {
-                newentrywindow.Text = "Rename Entry";
-                newentrywindow.SetRenameMode(TextureChunk.EName);
-                if (newentrywindow.ShowDialog(Node.TreeView.TopLevelControl) == DialogResult.OK)
-                {
-                    TextureChunk.EID = newentrywindow.EID;
-                    InvalidateNode();
-                }
+                TextureChunk.EID = newentrywindow.EID;
+                InvalidateNode();
             }
         }
 

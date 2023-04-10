@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace CrashEdit
@@ -17,15 +16,15 @@ namespace CrashEdit
     [Flags]
     public enum TextRenderFlags
     {
-        Shadow    = 1 << 0,
-        Unscaled  = 1 << 1,
+        Shadow = 1 << 0,
+        Unscaled = 1 << 1,
         AutoScale = 1 << 2,
-        Left      = 1 << 3,
-        Center    = 1 << 4,
-        Right     = 1 << 5,
-        Top       = 1 << 6,
-        Middle    = 1 << 7,
-        Bottom    = 1 << 8,
+        Left = 1 << 3,
+        Center = 1 << 4,
+        Right = 1 << 5,
+        Top = 1 << 6,
+        Middle = 1 << 7,
+        Bottom = 1 << 8,
 
         Default = Shadow | AutoScale | Left | Top
     }
@@ -124,19 +123,19 @@ namespace CrashEdit
         protected static VAO vaoDebugBoxTri;
         protected static VAO vaoDebugBoxLine;
         protected static VAO vaoDebugSprite;
-        public static string glDebugContextString = "*unknown*";
+        public static string dbgContextString = "*unknown*";
 
-        private static IGraphicsContext globalContext;
-        private static GLControl globalContextWindow;
-        private static readonly GraphicsMode DefaultGraphicsSettings = new(new ColorFormat(8, 8, 8, 8), 24, 8);
+        private static IGraphicsContext global_context;
+        private static GLControl global_context_window;
+        private static readonly GraphicsMode default_graphics_settings = new(new ColorFormat(8, 8, 8, 8), 24, 8);
         #endregion
 
         protected readonly RenderInfo render;
 
-        protected string console;
-        protected string consoleHelp;
+        protected string con_debug;
+        protected string con_help;
         // debug timers
-        private double dbgRunMs;
+        private double dbg_run_ms;
 
         #region Internal fields for input status and handling.
         private bool run = false;
@@ -149,8 +148,6 @@ namespace CrashEdit
         private bool mouseleft = false;
         private int mousex = 0;
         private int mousey = 0;
-        private static readonly float minDepth;
-        private static readonly float maxDepth;
         private readonly float movespeed = 10f;
         private readonly float rotspeed = 0.5f;
         private readonly float zoomspeed = 1f;
@@ -186,9 +183,6 @@ namespace CrashEdit
 
         protected readonly NSF nsf;
         private bool showHelp = Settings.Default.ViewerShowHelp;
-
-        // Whether to render a grid at origin point or not.
-        protected abstract bool UseGrid { get; }
 
         #region Functions for generating static data for some helper renderers.
         protected static void MakeLineSphere(int resolution)
@@ -245,7 +239,7 @@ namespace CrashEdit
                 SpherePosCache.Add(resolution, pos);
             }
             var verts = SpherePosCache[resolution];
-            vaoGridLine.VertCount = 0;
+            vaoGridLine.vert_count = 0;
             for (int i = 0; i < verts.Length; ++i)
             {
                 vaoSphereLine.PushAttrib(trans: verts[i]);
@@ -276,7 +270,7 @@ namespace CrashEdit
             }
 
             var verts = GridPosCache[resolution];
-            vaoGridLine.VertCount = 0;
+            vaoGridLine.vert_count = 0;
             for (int i = 0; i < verts.Length; ++i)
             {
                 vaoGridLine.PushAttrib(trans: verts[i]);
@@ -285,20 +279,12 @@ namespace CrashEdit
         }
         #endregion
 
-        static GLViewer()
+        public GLViewer(NSF nsf = null) : base(default_graphics_settings, 4, 3, GraphicsContextFlags.Debug | GraphicsContextFlags.ForwardCompatible)
         {
-            float min = -1;
-            float max = +1;
-            minDepth = BitConverter.ToSingle(BitConverter.GetBytes(BitConverter.ToInt32(BitConverter.GetBytes(min), 0) + 1), 0);
-            maxDepth = BitConverter.ToSingle(BitConverter.GetBytes(BitConverter.ToInt32(BitConverter.GetBytes(max), 0) + 1), 0);
-        }
-
-        public GLViewer(NSF nsf = null) : base(DefaultGraphicsSettings, 4, 3, GraphicsContextFlags.Debug | GraphicsContextFlags.ForwardCompatible)
-        {
-            if (globalContext == null)
+            if (global_context == null)
             {
-                globalContext = Context;
-                globalContextWindow = this;
+                global_context = Context;
+                global_context_window = this;
             }
             render = new RenderInfo(this);
             this.nsf = nsf;
@@ -306,12 +292,12 @@ namespace CrashEdit
 
         protected new void SwapBuffers()
         {
-            globalContextWindow.SwapBuffers();
+            global_context_window.SwapBuffers();
         }
 
         protected new void MakeCurrent()
         {
-            globalContext.MakeCurrent(WindowInfo);
+            global_context.MakeCurrent(WindowInfo);
         }
 
         protected abstract IEnumerable<IPosition> CorePositions { get; }
@@ -401,18 +387,18 @@ namespace CrashEdit
 
         protected virtual void PrintDebug()
         {
-            console += $"Zoom: {render.Projection.Distance}\nMove Speed: {GetMoveSpeed()}\n";
-            console += string.Format("Render time: {0:F2}ms\nTotal time: {1:F2}ms\n", render.DebugRenderMs, dbgRunMs);
+            con_debug += $"Zoom: {render.Projection.Distance}\nMove Speed: {GetMoveSpeed()}\n";
+            con_debug += string.Format("Render time: {0:F2}ms\nTotal time: {1:F2}ms\n", render.DebugRenderMs, dbg_run_ms);
         }
 
         protected virtual void PrintHelp()
         {
-            consoleHelp += Resources.ViewerControls_Move + '\n';
-            consoleHelp += Resources.ViewerControls_MoveAligned + '\n';
-            consoleHelp += Resources.ViewerControls_AimAndZoom + '\n';
-            consoleHelp += KeyboardControls.ToggleHelp.Print(BoolToEnable(showHelp));
-            consoleHelp += KeyboardControls.ResetCamera.Print();
-            consoleHelp += KeyboardControls.ToggleTextures.Print(BoolToEnable(render.EnableTexture));
+            con_help += Resources.ViewerControls_Move + '\n';
+            con_help += Resources.ViewerControls_MoveAligned + '\n';
+            con_help += Resources.ViewerControls_AimAndZoom + '\n';
+            con_help += KeyboardControls.ToggleHelp.Print(BoolToEnable(showHelp));
+            con_help += KeyboardControls.ResetCamera.Print();
+            con_help += KeyboardControls.ToggleTextures.Print(BoolToEnable(render.EnableTexture));
         }
 
         protected virtual void RunLogic()
@@ -448,7 +434,7 @@ namespace CrashEdit
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            glDebugContextString = "pre-run";
+            dbgContextString = "pre-run";
             if (!loaded)
             {
                 MakeCurrent();
@@ -459,7 +445,7 @@ namespace CrashEdit
             {
                 Stopwatch watchRun = Stopwatch.StartNew();
 
-                glDebugContextString = "run";
+                dbgContextString = "run";
 
                 render.DebugRenderMs = 0;
 
@@ -468,7 +454,7 @@ namespace CrashEdit
                 // mutex lock to prevent races with the renderinfo timer and using the renderinfo itself
                 lock (render.mLock)
                 {
-                    glDebugContextString = "setup";
+                    dbgContextString = "setup";
 
                     // update font
                     if (fontTable.Size != Settings.Default.FontSize || fontTable.FileName != Settings.Default.FontName)
@@ -493,32 +479,32 @@ namespace CrashEdit
                     var rot_mat = Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot));
                     render.Projection.Forward = -(rot_mat * new Vector4(0, 0, 1, 1)).Xyz;
                     render.Projection.View = Matrix4.CreateTranslation(render.Projection.RealTrans) * rot_mat;
-                    // console += $"trans: {-render.Projection.Trans} -> real_trans: {-render.Projection.RealTrans}\n";
+                    // con_debug += $"trans: {-render.Projection.Trans} -> real_trans: {-render.Projection.RealTrans}\n";
 
                     // render
-                    glDebugContextString = "render " + GetType().ToString();
+                    dbgContextString = "render " + GetType().ToString();
                     Render();
 
                     // post render
-                    glDebugContextString = "post-render";
+                    dbgContextString = "post-render";
                     PostRender();
 
                     PrintHelp();
                     PrintDebug();
                     if (showHelp)
-                        AddText(consoleHelp, Width, Height - 8, (Rgba)Color4.White, size: 0.9f, flags: TextRenderFlags.Right | TextRenderFlags.Bottom | TextRenderFlags.Default);
+                        AddText(con_help, Width, Height - 8, (Rgba)Color4.White, size: 0.9f, flags: TextRenderFlags.Right | TextRenderFlags.Bottom | TextRenderFlags.Default);
                     if (Settings.Default.Font2DEnable)
-                        AddText(console, 0, 0, (Rgba)Color4.White, size: 0.9f);
+                        AddText(con_debug, 0, 0, (Rgba)Color4.White, size: 0.9f);
                     vaoText.UserScale = new Vector3(Width, Height, 1);
                     vaoText.RenderAndDiscard(render);
-                    console = string.Empty;
-                    consoleHelp = string.Empty;
+                    con_debug = string.Empty;
+                    con_help = string.Empty;
                 }
 
-                dbgRunMs = watchRun.ElapsedMillisecondsFull();
+                dbg_run_ms = watchRun.ElapsedMillisecondsFull();
 
                 // swap the front/back buffers so what we just rendered to the back buffer is displayed in the window.
-                glDebugContextString = "swap-buffers";
+                dbgContextString = "swap-buffers";
                 SwapBuffers();
             }
             base.OnPaint(e);
@@ -528,7 +514,7 @@ namespace CrashEdit
         {
             SetBlendMode(BlendMode.Solid);
 
-            if (UseGrid && Settings.Default.DisplayAnimGrid)
+            if (Settings.Default.DisplayAnimGrid)
             {
                 RenderAxes(new Vector3(0));
 
@@ -594,7 +580,7 @@ namespace CrashEdit
             {
                 var text_dist_vec = render.Projection.RealTrans + pos;
                 var cam_to_text_factor = 1 / Vector3.Dot(text_dist_vec, render.Projection.Forward);
-                // console += $"text_dist: {text_dist_vec.Length} dot: {cam_to_text_factor}\n";
+                // con_debug += $"text_dist: {text_dist_vec.Length} dot: {cam_to_text_factor}\n";
                 size *= cam_to_text_factor * render.Projection.Height / 50;
             }
             return AddText(text, (screen_pos.Xy + new Vector2(1)) * new Vector2(Width, Height) / 2 + new Vector2(ofs_x, ofs_y), col, size, flags);
@@ -640,7 +626,7 @@ namespace CrashEdit
 
             var cur_ofs = start_ofs;
             cur_ofs.Y += fontTable.LineHeight * size.Y;
-            int start_idx = vaoText.VertCount;
+            int start_idx = vaoText.vert_count;
             for (int i = 0; i < text.Length; ++i)
             {
                 var c = text[i];
@@ -674,7 +660,7 @@ namespace CrashEdit
                 float kAdvanceX = (float)glyph.AdvanceX * size.X;
                 var kSize = new Vector2(glyph.Width, glyph.Height) * size;
 
-                int idx = vaoText.VertCount;
+                int idx = vaoText.vert_count;
                 var char_ofs = cur_ofs + new Vector2(kBearingX, -kBearingY);
                 vaoText.PushAttrib(trans: new Vector3(char_ofs + kSize * new Vector2(0, 0)), st: new Vector2(glyph.Left, glyph.Top), rgba: col);
                 vaoText.PushAttrib(trans: new Vector3(char_ofs + kSize * new Vector2(1, 0)), st: new Vector2(glyph.Right, glyph.Top), rgba: col);
@@ -694,7 +680,7 @@ namespace CrashEdit
 
                 cur_ofs.X += kAdvanceX;
             }
-            int end_idx = vaoText.VertCount;
+            int end_idx = vaoText.vert_count;
             if ((flags & TextRenderFlags.Shadow) != 0)
             {
                 for (int i = 0; i < end_idx - start_idx; ++i)
@@ -1008,10 +994,10 @@ namespace CrashEdit
         {
             render.Dispose();
 
-            if (globalContextWindow == this)
+            if (global_context_window == this)
             {
-                globalContextWindow = null;
-                globalContext = null;
+                global_context_window = null;
+                global_context = null;
             }
             Context?.Dispose();
 

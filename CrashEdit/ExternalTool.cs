@@ -61,11 +61,9 @@ namespace CrashEdit
                 WorkingDirectory = Path.GetDirectoryName(exe),
                 UseShellExecute = false
             };
-            using (var proc = Process.Start(psi))
-            {
-                proc.WaitForExit();
-                return proc.ExitCode;
-            }
+            using var proc = Process.Start(psi);
+            proc.WaitForExit();
+            return proc.ExitCode;
         }
     }
 }

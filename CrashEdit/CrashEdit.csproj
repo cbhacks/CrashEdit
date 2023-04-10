@@ -348,7 +348,6 @@
     <Compile Include="Render\RenderInfo.cs" />
     <Compile Include="Render\Shader.cs" />
     <Compile Include="Render\ShaderFuncs.cs" />
-    <Compile Include="Render\MultiPassVAO.cs" />
     <Compile Include="Render\Vertex.cs" />
     <Compile Include="Render\VAO.cs" />
     <Compile Include="Utils\GameScales.cs" />

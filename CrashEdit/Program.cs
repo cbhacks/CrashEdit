@@ -21,19 +21,17 @@ namespace CrashEdit
         public static SortedDictionary<string, string> C3AnimLinks = new(new ENameComparer());
         public static void SaveC3AnimLinks()
         {
-            using (XmlWriter writer = XmlWriter.Create("CrashEdit.exe.animmodel.config", new XmlWriterSettings() { Indent = true, IndentChars = "\t" }))
+            using XmlWriter writer = XmlWriter.Create("CrashEdit.exe.animmodel.config", new XmlWriterSettings() { Indent = true, IndentChars = "\t" });
+            writer.WriteStartElement("animmodels");
+            foreach (var kvp in C3AnimLinks)
             {
-                writer.WriteStartElement("animmodels");
-                foreach (var kvp in C3AnimLinks)
-                {
-                    writer.WriteStartElement("animmodel");
-                    writer.WriteAttributeString("anim", kvp.Key);
-                    writer.WriteAttributeString("model", kvp.Value);
-                    writer.WriteEndElement();
-                }
+                writer.WriteStartElement("animmodel");
+                writer.WriteAttributeString("anim", kvp.Key);
+                writer.WriteAttributeString("model", kvp.Value);
                 writer.WriteEndElement();
-                writer.Flush();
             }
+            writer.WriteEndElement();
+            writer.Flush();
         }
 
         public static void LoadC3AnimLinks()
@@ -65,7 +63,7 @@ namespace CrashEdit
             }
         }
 
-        public static GLViewerLoader TopLevelGLViewer = null;
+        public static GLViewerLoader TopLevelGLViewer { get; set; } = null;
 
         [STAThread]
         internal static void Main(string[] args)

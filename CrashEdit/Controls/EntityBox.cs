@@ -1640,20 +1640,18 @@ namespace CrashEdit
             {
                 pos[i] = new Position(entity.Positions[i].X, entity.Positions[i].Y, entity.Positions[i].Z);
             }
-            using (InterpolatorForm interpolator = new InterpolatorForm(pos))
+            using InterpolatorForm interpolator = new InterpolatorForm(pos);
+            if (interpolator.ShowDialog() == DialogResult.OK)
             {
-                if (interpolator.ShowDialog() == DialogResult.OK)
+                for (int m = interpolator.Start - 1, i = interpolator.End - 2; i > m; --i)
                 {
-                    for (int m = interpolator.Start - 1, i = interpolator.End - 2; i > m; --i)
-                    {
-                        entity.Positions.RemoveAt(i);
-                    }
-                    for (int i = 0; i < interpolator.Amount; ++i)
-                    {
-                        entity.Positions.Insert(i + interpolator.Start, new EntityPosition(interpolator.NewPositions[i + 1]));
-                    }
-                    UpdatePosition();
+                    entity.Positions.RemoveAt(i);
                 }
+                for (int i = 0; i < interpolator.Amount; ++i)
+                {
+                    entity.Positions.Insert(i + interpolator.Start, new EntityPosition(interpolator.NewPositions[i + 1]));
+                }
+                UpdatePosition();
             }
         }
 
