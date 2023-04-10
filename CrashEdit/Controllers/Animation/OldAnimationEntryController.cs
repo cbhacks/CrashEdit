@@ -8,8 +8,7 @@ namespace CrashEdit.CE
         public OldAnimationEntryController(OldAnimationEntry oldanimationentry, SubcontrollerGroup parentGroup) : base(oldanimationentry, parentGroup)
         {
             OldAnimationEntry = oldanimationentry;
-            AddMenu ("Export as OBJ (game geometry)", Menu_Export_OBJ_Game);
-            AddMenu ("Export as OBJ (processed geometry)", Menu_Export_OBJ_Processed);
+            AddMenu ("Export as OBJ", Menu_Export_OBJ);
         }
 
         public override bool EditorAvailable => true;
@@ -21,8 +20,7 @@ namespace CrashEdit.CE
 
         public OldAnimationEntry OldAnimationEntry { get; }
         
-
-        private void Menu_Export_OBJ_Processed()
+        private void Menu_Export_OBJ ()
         {
             FileUtil.SelectSaveFile (out string output, FileFilters.OBJ, FileFilters.Any);
             
@@ -38,30 +36,7 @@ namespace CrashEdit.CE
                 if (node.Legacy is not OldFrameController frame)
                     continue;
 
-                string final = path + Path.DirectorySeparatorChar + filename + id.ToString () + ext;
-                File.WriteAllBytes (final, frame.ToProcessedOBJ ());
-                id++;
-            }
-        }
-
-        private void Menu_Export_OBJ_Game ()
-        {
-            FileUtil.SelectSaveFile (out string output, FileFilters.OBJ, FileFilters.Any);
-            
-            // modify the path to add a number before the extension
-            string ext = Path.GetExtension (output);
-            string filename = Path.GetFileNameWithoutExtension (output);
-            string path = Path.GetDirectoryName (output);
-
-            int id = 0;
-
-            foreach (Controller node in Modern.SubcontrollerGroups.SelectMany (x => x.Members))
-            {
-                if (node.Legacy is not OldFrameController frame)
-                    continue;
-
-                string final = path + Path.DirectorySeparatorChar + filename + id.ToString () + ext;
-                File.WriteAllBytes (final, frame.ToGameOBJ ());
+                frame.ToOBJ (path, filename + id.ToString());
                 id++;
             }
         }
