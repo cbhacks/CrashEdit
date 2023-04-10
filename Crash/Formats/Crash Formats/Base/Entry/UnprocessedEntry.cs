@@ -26,7 +26,7 @@ namespace Crash
 
                 var resultOut = result.Unprocess();
                 if (Items.Count != resultOut.Items.Count) {
-                    ErrorManager.SignalIgnorableError("Entry: Processed entry deprocesses to different item count");
+                    ErrorManager.SignalIgnorableError($"Entry: Processed entry {EName} deprocesses to different item count");
                     return result;
                 }
 
@@ -47,7 +47,7 @@ namespace Crash
                         if (shorterData[j] == longerData[j])
                             continue;
 
-                        ErrorManager.SignalIgnorableError($"Entry: Processed entry deprocesses to different data on item {i}");
+                        ErrorManager.SignalIgnorableError($"Entry: Processed entry {EName} deprocesses to different data on item {i}");
                         return result;
                     }
 
@@ -60,7 +60,7 @@ namespace Crash
                         if (longerData[j] == 0)
                             continue;
 
-                        ErrorManager.SignalIgnorableError($"Entry: Processed entry deprocesses to different data on item {i}");
+                        ErrorManager.SignalIgnorableError($"Entry: Processed entry {EName} deprocesses to different data on item {i}");
                         return result;
                     }
                 }
@@ -69,7 +69,7 @@ namespace Crash
             }
             else
             {
-                ErrorManager.SignalError("UnprocessedEntry: Unknown entry type");
+                ErrorManager.SignalError($"UnprocessedEntry: Unknown entry type ({EName})");
                 return null;
             }
         }

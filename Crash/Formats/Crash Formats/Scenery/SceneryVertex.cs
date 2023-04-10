@@ -21,25 +21,21 @@ namespace Crash
             int unknownx = x & 0xF;
             int unknowny = y & 0xF;
             int unknownz = z & 0xF;
-            x >>= 4;
-            y >>= 4;
-            z >>= 4;
             if (!is_c3)
-            {
-                return new SceneryVertex((short)x >> 4, (short)y >> 4, (short)y >> 4, unknownx, unknowny, unknownz, is_c3);
-            }
-            return new SceneryVertex(x,y,z,unknownx,unknowny,unknownz,is_c3);
+                return new SceneryVertex((short)x >> 4, (short)y >> 4, (short)z >> 4, unknownx, unknowny, unknownz, is_c3);
+            else
+                return new SceneryVertex(x >> 4, y >> 4, z >> 4, unknownx, unknowny, unknownz, is_c3);
         }
 
         public SceneryVertex(int x,int y,int z,int unknownx,int unknowny,int unknownz,bool is_c3 = false)
         {
             int min = is_c3 ? 0 : -0x800;
             int max = is_c3 ? 0xFFF : 0x7FF;
-            if (x < -min || x > max)
+            if (x < min || x > max)
                 throw new ArgumentOutOfRangeException("x");
-            if (y < -min || y > max)
+            if (y < min || y > max)
                 throw new ArgumentOutOfRangeException("y");
-            if (z < -min || z > max)
+            if (z < min || z > max)
                 throw new ArgumentOutOfRangeException("z");
             if (unknownx < 0 || unknownx > 0xF)
                 throw new ArgumentOutOfRangeException("unknownx");
