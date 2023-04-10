@@ -19,6 +19,7 @@ namespace CrashEdit
         private bool is_master_zone;
         private byte zone_alpha;
         private Vector3 zone_trans;
+        private bool time_trial_mode;
 
         private Rgba GetZoneColor(Color4 color)
         {
@@ -93,12 +94,14 @@ namespace CrashEdit
         {
             base.PrintHelp();
             consoleHelp += octreeRenderer.PrintHelp();
+            consoleHelp += KeyboardControls.ToggleTimeTrial.Print(BoolToEnable(time_trial_mode));
         }
 
         protected override void RunLogic()
         {
             base.RunLogic();
             octreeRenderer.RunLogic();
+            if (KPress(KeyboardControls.ToggleTimeTrial)) time_trial_mode = !time_trial_mode;
         }
 
         private IList<ZoneEntry> GetZones()
@@ -248,6 +251,7 @@ namespace CrashEdit
                     else if (entity.Subtype.HasValue && entity.Type == 34)
                     {
                         draw_type = false;
+                        int timetrialcontents = entity.TimeTrialReward.HasValue ? entity.TimeTrialReward.Value >> 8 : 0;
                         if (entity.Subtype.Value == 29)
                         {
                             float size_x = 1, size_y = 1, size_z = 1;
@@ -258,11 +262,11 @@ namespace CrashEdit
                                 size_z = entity.Settings[2].Value / 4096f;
                                 text_y += AddText3D($"{size_x} x {size_y} x {size_z}", trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
                             }
-                            RenderBoxEntity(trans, entity.Subtype.Value, size_x, size_y, size_z);
+                            RenderBoxEntity(trans, entity.Subtype.Value, timetrialcontents, size_x, size_y, size_z);
                         }
                         else
                         {
-                            RenderBoxEntity(trans, entity.Subtype.Value);
+                            RenderBoxEntity(trans, entity.Subtype.Value, timetrialcontents);
                             if (entity.Settings.Count > 0)
                             {
                                 int pickup = entity.Settings[0].ValueB;
@@ -400,10 +404,10 @@ namespace CrashEdit
             return texture != OldResources.UnknownPickupTexture;
         }
 
-        private void RenderBoxEntity(Vector3 trans, int subtype, float size_x = 1, float size_y = 1, float size_z = 1)
+        private void RenderBoxEntity(Vector3 trans, int subtype, int timetrialcontents, float size_x = 1, float size_y = 1, float size_z = 1)
         {
-            Rectangle sideTexRect = OldResources.TexMap[GetBoxSideTexture(subtype)];
-            Rectangle topTexRect = OldResources.TexMap[GetBoxTopTexture(subtype)];
+            Rectangle sideTexRect = OldResources.TexMap[GetBoxSideTexture(subtype, timetrialcontents)];
+            Rectangle topTexRect = OldResources.TexMap[GetBoxTopTexture(subtype, timetrialcontents)];
             Vector2[] uvs = new Vector2[6];
             uvs[0] = new Vector2(sideTexRect.Left, sideTexRect.Bottom);
             uvs[1] = new Vector2(sideTexRect.Left, sideTexRect.Top);
@@ -437,93 +441,114 @@ namespace CrashEdit
             }
         }
 
-        private Bitmap GetBoxTopTexture(int subtype)
+        private Bitmap GetBoxTopTexture(int subtype, int timetrialcontents)
         {
             switch (subtype)
             {
                 case 0: // TNT
                 case 16: // TNT AutoGrav
-                    return (OldResources.TNTBoxTopTexture);
+                    return OldResources.TNTBoxTopTexture;
                 case 2: // Empty
-                case 3: // Spring
                 case 6: // Fruit
                 case 8: // Life
-                case 9: // Doctor
                 case 10: // Pickup
                 case 11: // POW
                 case 17: // Pickup AutoGrav
                 case 20: // Empty AutoGrav
                 case 25: // Slot
-                    return (OldResources.EmptyBoxTexture);
+                    if (time_trial_mode && timetrialcontents >= 111 && timetrialcontents <= 113)
+                        return OldResources.TimeBoxTopTexture;
+                    else
+                        return OldResources.EmptyBoxTexture;
+                case 3: // Spring
+                case 9: // Doctor
+                    return OldResources.EmptyBoxTexture;
                 case 4: // Continue
-                    return (OldResources.ContinueBoxTexture);
+                    return time_trial_mode ? OldResources.EmptyBoxTexture : OldResources.ContinueBoxTexture;
                 case 5: // Iron
                 case 7: // Action
                 case 15: // Iron Spring
                 case 27: // Iron Continue
                 case 28: // Clock
-                    return (OldResources.IronBoxTexture);
+                    return OldResources.IronBoxTexture;
                 case 18: // Nitro
-                    return (OldResources.NitroBoxTopTexture);
+                    return OldResources.NitroBoxTopTexture;
                 case 23: // Steel
-                    return (OldResources.SteelBoxTexture);
+                    return OldResources.SteelBoxTexture;
                 case 24: // Action Nitro
-                    return (OldResources.ActionNitroBoxTopTexture);
+                    return OldResources.ActionNitroBoxTopTexture;
                 case 26: // Time ?
-                    return (OldResources.TimeBoxTopTexture);
+                    return OldResources.TimeBoxTopTexture;
                 default:
-                    return (OldResources.UnknownBoxTopTexture);
+                    return OldResources.UnknownBoxTopTexture;
             }
         }
 
-        private Bitmap GetBoxSideTexture(int subtype)
+        private Bitmap GetBoxSideTexture(int subtype, int timetrialcontents)
         {
             switch (subtype)
             {
                 case 0: // TNT
                 case 16: // TNT AutoGrav
-                    return (OldResources.TNTBoxTexture);
+                    return OldResources.TNTBoxTexture;
                 case 2: // Empty
                 case 20: // Empty AutoGrav
-                    return (OldResources.EmptyBoxTexture);
+                    return time_trial_mode ? LoadBoxSideTextureTimeTrial(timetrialcontents) : OldResources.EmptyBoxTexture;
                 case 3: // Spring
-                    return (OldResources.SpringBoxTexture);
+                    return OldResources.SpringBoxTexture;
                 case 4: // Continue
-                    return (OldResources.ContinueBoxTexture);
+                    return time_trial_mode ? OldResources.EmptyBoxTexture : OldResources.ContinueBoxTexture;
                 case 5: // Iron
-                    return (OldResources.IronBoxTexture);
+                    return OldResources.IronBoxTexture;
                 case 6: // Fruit
-                    return (OldResources.FruitBoxTexture);
+                    return time_trial_mode ? LoadBoxSideTextureTimeTrial(timetrialcontents) : OldResources.FruitBoxTexture;
                 case 7: // Action
-                    return (OldResources.ActionBoxTexture);
+                    return OldResources.ActionBoxTexture;
                 case 8: // Life
-                    return (OldResources.LifeBoxTexture);
+                    return time_trial_mode ? LoadBoxSideTextureTimeTrial(timetrialcontents) : OldResources.LifeBoxTexture;
                 case 9: // Doctor
-                    return (OldResources.DoctorBoxTexture);
+                    return OldResources.DoctorBoxTexture;
                 case 10: // Pickup
                 case 17: // Pickup AutoGrav
-                    return (OldResources.PickupBoxTexture);
+                    return time_trial_mode ? LoadBoxSideTextureTimeTrial(timetrialcontents) : OldResources.PickupBoxTexture;
                 case 11: // POW
-                    return (OldResources.POWBoxTexture);
+                    return OldResources.POWBoxTexture;
                 case 13: // Ghost
                 case 19: // Ghost Iron
-                    return (OldResources.UnknownBoxTopTexture);
+                    return OldResources.UnknownBoxTopTexture;
                 case 15: // Iron Spring
-                    return (OldResources.IronSpringBoxTexture);
+                    return OldResources.IronSpringBoxTexture;
                 case 18: // Nitro
-                    return (OldResources.NitroBoxTexture);
+                    return OldResources.NitroBoxTexture;
                 case 23: // Steel
-                    return (OldResources.SteelBoxTexture);
+                    return OldResources.SteelBoxTexture;
                 case 24: // Action Nitro
-                    return (OldResources.ActionNitroBoxTexture);
+                    return OldResources.ActionNitroBoxTexture;
                 case 25: // Slot
-                    return (OldResources.SlotBoxTexture);
+                    return time_trial_mode ? LoadBoxSideTextureTimeTrial(timetrialcontents) : OldResources.SlotBoxTexture;
                 case 27: // Iron Continue
-                    return (OldResources.IronContinueBoxTexture);
+                    return time_trial_mode ? OldResources.IronBoxTexture : OldResources.IronContinueBoxTexture;
                 case 28: // Clock
-                    return (OldResources.ClockBoxTexture);
+                    return OldResources.ClockBoxTexture;
                 default:
-                    return (OldResources.UnknownBoxTexture);
+                    return OldResources.UnknownBoxTexture;
+            }
+        }
+
+        private Bitmap LoadBoxSideTextureTimeTrial(int timetrialreward)
+        {
+            switch (timetrialreward)
+            {
+                case 102: // Doctor
+                    return OldResources.DoctorBoxTexture;
+                case 111: // Time 1
+                    return OldResources.Time1BoxTexture;
+                case 112: // Time 2
+                    return OldResources.Time2BoxTexture;
+                case 113: // Time 3
+                    return OldResources.Time3BoxTexture;
+                default: // Empty
+                    return OldResources.EmptyBoxTexture;
             }
         }
 
@@ -532,13 +557,13 @@ namespace CrashEdit
             switch (subtype)
             {
                 case 5: // Life
-                    return (OldResources.LifeTexture);
+                    return OldResources.LifeTexture;
                 case 6: // Mask
-                    return (OldResources.MaskTexture);
+                    return OldResources.MaskTexture;
                 case 16: // Apple
-                    return (OldResources.AppleTexture);
+                    return OldResources.AppleTexture;
                 default:
-                    return (OldResources.UnknownPickupTexture);
+                    return OldResources.UnknownPickupTexture;
             }
         }
 
