@@ -121,6 +121,8 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\3D\OctreeRenderer.cs" />
+    <Compile Include="Exporters\OBJExporter.cs" />
+    <Compile Include="Exporters\TextureExporter.cs" />
     <Compile Include="ExternalTool.cs" />
     <Compile Include="Forms\ErrorReporter.cs">
       <SubType>Form</SubType>
@@ -568,7 +570,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
