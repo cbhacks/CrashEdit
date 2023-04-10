@@ -25,10 +25,12 @@ public class OBJExporter
         public int V1;
         public int V2;
         public int V3;
+        public int? V4;
         public string material;
         public int? UV1;
         public int? UV2;
         public int? UV3;
+        public int? UV4;
     }
 
     class Vertex
@@ -139,6 +141,61 @@ public class OBJExporter
     }
 
     /// <summary>
+    /// Adds a simple face using the given vertices
+    /// </summary>
+    /// <param name="v1"></param>
+    /// <param name="v2"></param>
+    /// <param name="v3"></param>
+    /// <param name="material"></param>
+    /// <param name="uv1"></param>
+    /// <param name="uv2"></param>
+    /// <param name="uv3"></param>
+    public void AddFace (int v1, int v2, int v3, int v4, string material = null, Vector2? uv1 = null, Vector2? uv2 = null, Vector2? uv3 = null, Vector2? uv4 = null)
+    {
+        // add uv coordinates to the lists first
+        int? uv1id = null;
+        int? uv2id = null;
+        int? uv3id = null;
+        int? uv4id = null;
+
+        if (
+            (uv1 is null && (uv2 is not null || uv3 is not null || uv4 is not null)) ||
+            (uv2 is null && (uv1 is not null || uv3 is not null || uv4 is not null)) ||
+            (uv3 is null && (uv1 is not null || uv2 is not null || uv4 is not null)) ||
+            (uv4 is null && (uv1 is not null || uv2 is not null || uv3 is not null))
+        )
+            throw new InvalidDataException ("UVs must all be null or all have values");
+
+        if (uv1 is not null)
+        {
+            uv1id = this.uvs.Count;
+            uv2id = this.uvs.Count + 1;
+            uv3id = this.uvs.Count + 2;
+            uv4id = this.uvs.Count + 3;
+
+            this.uvs.Add (uv1.Value);
+            this.uvs.Add (uv2.Value);
+            this.uvs.Add (uv3.Value);
+            this.uvs.Add (uv4.Value);
+        }
+        
+        this.faces.Add (
+            new Face
+            {
+                material = material ?? DEFAULT_MATERIAL,
+                V1 = v1,
+                V2 = v2,
+                V3 = v3,
+                V4 = v4,
+                UV1 = uv1id,
+                UV2 = uv2id,
+                UV3 = uv3id,
+                UV4 = uv4id
+            }
+        );
+    }
+    
+    /// <summary>
     /// Creates a new face with it's own vertices and uv coordinates
     /// </summary>
     /// <param name="v1"></param>
@@ -214,6 +271,99 @@ public class OBJExporter
         );
     }
 
+    /// <summary>
+    /// Creates a new face with it's own vertices and uv coordinates
+    /// </summary>
+    /// <param name="v1"></param>
+    /// <param name="v2"></param>
+    /// <param name="v3"></param>
+    /// <param name="v4"></param>
+    /// <param name="c1"></param>
+    /// <param name="c2"></param>
+    /// <param name="c3"></param>
+    /// <param name="c4"></param>
+    /// <param name="material"></param>
+    /// <param name="uv2"></param>
+    /// <param name="uv3"></param>
+    /// <param name="uv1"></param>
+    /// <param name="uv4"></param>
+    public void AddFace (Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4, Vector3 c1, Vector3 c2, Vector3 c3, Vector3 c4, string material = null, Vector2? uv1 = null, Vector2? uv2 = null, Vector2? uv3 = null, Vector2? uv4 = null)
+    {
+        int v1id = this.vertices.Count;
+        int v2id = this.vertices.Count + 1;
+        int v3id = this.vertices.Count + 2;
+        int v4id = this.vertices.Count + 3;
+        int? uv1id = null;
+        int? uv2id = null;
+        int? uv3id = null;
+        int? uv4id = null;
+
+        if (
+            (uv1 is null && (uv2 is not null || uv3 is not null || uv4 is not null)) ||
+            (uv2 is null && (uv1 is not null || uv3 is not null || uv4 is not null)) ||
+            (uv3 is null && (uv1 is not null || uv2 is not null || uv4 is not null)) ||
+            (uv4 is null && (uv1 is not null || uv2 is not null || uv3 is not null))
+        )
+            throw new InvalidDataException ("UVs must all be null or all have values");
+
+        if (uv1 is not null)
+        {
+            uv1id = this.uvs.Count;
+            uv2id = this.uvs.Count + 1;
+            uv3id = this.uvs.Count + 2;
+            uv4id = this.uvs.Count + 3;
+
+            this.uvs.Add (uv1.Value);
+            this.uvs.Add (uv2.Value);
+            this.uvs.Add (uv3.Value);
+            this.uvs.Add (uv4.Value);
+        }
+
+        this.vertices.Add (
+            new Vertex
+            {
+                position = v1,
+                color = c1
+            }
+        );
+        this.vertices.Add (
+            new Vertex
+            {
+                position = v2,
+                color = c2
+            }
+        );
+        this.vertices.Add (
+            new Vertex
+            {
+                position = v3,
+                color = c3
+            }
+        );
+        this.vertices.Add (
+            new Vertex
+            {
+                position = v4,
+                color = c4
+            }
+        );
+        
+        this.faces.Add (
+            new Face
+            {
+                material = material,
+                V1 = v1id,
+                V2 = v2id,
+                V3 = v3id,
+                V4 = v4id,
+                UV1 = uv1id,
+                UV2 = uv2id,
+                UV3 = uv3id,
+                UV4 = uv4id
+            }
+        );
+    }
+    
     private void ExportMaterials (string path, string modelname)
     {
         // first write all the textures to disk
@@ -326,22 +476,56 @@ public class OBJExporter
             // write face information, UVs must all be null or have value
             // at the same time, so this check is safe
             if (face.UV1 is null)
-                writer.WriteLine (
-                    "f {0} {1} {2}",
-                    face.V1 + 1,
-                    face.V2 + 1,
-                    face.V3 + 1
-                );
+            {
+                if (face.V4 is null)
+                {
+                    writer.WriteLine (
+                        "f {0} {1} {2}",
+                        face.V1 + 1,
+                        face.V2 + 1,
+                        face.V3 + 1
+                    );
+                }
+                else
+                {
+                    writer.WriteLine (
+                        "f {0} {1} {2} {3}",
+                        face.V1 + 1,
+                        face.V2 + 1,
+                        face.V3 + 1,
+                        face.V4 + 1
+                    );
+                }
+            }
             else
-                writer.WriteLine (
-                    "f {0}/{3} {1}/{4} {2}/{5}",
-                    face.V1 + 1,
-                    face.V2 + 1,
-                    face.V3 + 1,
-                    face.UV1 + 1,
-                    face.UV2 + 1,
-                    face.UV3 + 1
-                );
+            {
+                if (face.V4 is null)
+                {
+                    writer.WriteLine (
+                        "f {0}/{3} {1}/{4} {2}/{5}",
+                        face.V1 + 1,
+                        face.V2 + 1,
+                        face.V3 + 1,
+                        face.UV1 + 1,
+                        face.UV2 + 1,
+                        face.UV3 + 1
+                    );
+                }
+                else
+                {
+                    writer.WriteLine (
+                        "f {0}/{4} {1}/{5} {2}/{6} {3}/{7}",
+                        face.V1 + 1,
+                        face.V2 + 1,
+                        face.V3 + 1,
+                        face.V4 + 1,
+                        face.UV1 + 1,
+                        face.UV2 + 1,
+                        face.UV3 + 1,
+                        face.UV4 + 1
+                    );
+                }
+            }
         }
         
         writer.Flush ();
