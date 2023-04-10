@@ -87,13 +87,14 @@ namespace CrashEdit.CE
                 if (info.Item1 && info.Item2 is not null)
                 {
                     var value = info.Item2.Value;
-                    
+                    int textureEID = model.GetTPAG (value.Page);
+
                     material = objTranslate.FirstOrDefault (x => 
                         x.Value.color == value.ColorMode &&
                         x.Value.blend == value.BlendMode &&
                         x.Value.clutx == value.ClutX &&
                         x.Value.cluty == value.ClutY &&
-                        x.Value.page == textureEIDs [model.GetTPAG (value.Page)]
+                        x.Value.page == textureEIDs [textureEID]
                     ).Key;
 
                     // ignore the texinfo if there's already a texture with the exact same settings stored
@@ -101,10 +102,10 @@ namespace CrashEdit.CE
                     {
                         var texinfo = new TexInfoUnpacked (
                             true, color: value.ColorMode, blend: value.BlendMode, clutx: value.ClutX, cluty: value.ClutY,
-                            page: textureEIDs [model.GetTPAG (value.Page)]
+                            page: textureEIDs [textureEID]
                         );
 
-                        var tpag = this.AnimationEntryController.NSF.GetEntry <TextureChunk> (textureEIDs.First (x => x.Value == texinfo.page).Key);
+                        var tpag = this.AnimationEntryController.NSF.GetEntry <TextureChunk> (textureEIDs.First (x => x.Key == textureEID).Key);
 
                         Bitmap texture = TextureExporter.CreateTexture (tpag.Data, texinfo);
 

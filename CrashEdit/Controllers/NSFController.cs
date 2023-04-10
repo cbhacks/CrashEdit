@@ -332,8 +332,7 @@ namespace CrashEdit.CE
             {
                 var offset = new Vector3 (scenery.XOffset, scenery.YOffset, scenery.ZOffset);
                 var scale = new Vector3 (1 / GameScales.WorldC1);
-
-
+                
                 for (int i = 0; i < scenery.TPAGCount; i++)
                 {
                     int tpag_eid = scenery.GetTPAG (i);
@@ -370,12 +369,14 @@ namespace CrashEdit.CE
                         // ignore the texinfo if there's already a texture with the exact same settings stored
                         if (material is null)
                         {
+                            int textureEID = scenery.GetTPAG (value.Page);
+                            
                             var texinfo = new TexInfoUnpacked (
                                 true, color: value.ColorMode, blend: value.BlendMode, clutx: value.ClutX, cluty: value.ClutY,
-                                page: textureEIDs [scenery.GetTPAG (value.Page)]
+                                page: textureEIDs [textureEID]
                             );
 
-                            var tpag = this.NSF.GetEntry <TextureChunk> (textureEIDs.First (x => x.Value == texinfo.page).Key);
+                            var tpag = this.NSF.GetEntry <TextureChunk> (textureEIDs.First (x => x.Key == textureEID).Key);
 
                             Bitmap texture = TextureExporter.CreateTexture (tpag.Data, texinfo);
 
@@ -438,13 +439,14 @@ namespace CrashEdit.CE
                     if (info.Item1 && info.Item2 is not null)
                     {
                         var value = info.Item2.Value;
+                        int textureEID = scenery.GetTPAG (value.Page);
 
                         material = objTranslate.FirstOrDefault (x =>
                             x.Value.color == value.ColorMode &&
                             x.Value.blend == value.BlendMode &&
                             x.Value.clutx == value.ClutX &&
                             x.Value.cluty == value.ClutY &&
-                            x.Value.page == textureEIDs [scenery.GetTPAG (value.Page)]
+                            x.Value.page == textureEIDs [textureEID]
                         ).Key;
 
                         // ignore the texinfo if there's already a texture with the exact same settings stored
@@ -452,10 +454,10 @@ namespace CrashEdit.CE
                         {
                             var texinfo = new TexInfoUnpacked (
                                 true, color: value.ColorMode, blend: value.BlendMode, clutx: value.ClutX, cluty: value.ClutY,
-                                page: textureEIDs [scenery.GetTPAG (value.Page)]
+                                page: textureEIDs [textureEID]
                             );
 
-                            var tpag = this.NSF.GetEntry <TextureChunk> (textureEIDs.First (x => x.Value == texinfo.page).Key);
+                            var tpag = this.NSF.GetEntry <TextureChunk> (textureEIDs.First (x => x.Key == textureEID).Key);
 
                             Bitmap texture = TextureExporter.CreateTexture (tpag.Data, texinfo);
 
