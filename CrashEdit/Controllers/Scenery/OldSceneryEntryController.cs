@@ -10,7 +10,8 @@ namespace CrashEdit.CE
             OldSceneryEntry = oldsceneryentry;
             AddMenuSeparator();
             AddMenu("Export as OBJ", Menu_Export_OBJ);
-            AddMenu("Export as COLLADA", Menu_Export_COLLADA);
+            InvalidateNode();
+            InvalidateNodeImage();
         }
 
         public override bool EditorAvailable => true;
@@ -29,15 +30,6 @@ namespace CrashEdit.CE
                 return;
             }
             FileUtil.SaveFile(OldSceneryEntry.ToOBJ(), FileFilters.OBJ, FileFilters.Any);
-        }
-
-        private void Menu_Export_COLLADA()
-        {
-            if (MessageBox.Show("Exporting to COLLADA is experimental.\nTexture information will not be exported.\n\nContinue anyway?", "Export as COLLADA", MessageBoxButtons.YesNo) != DialogResult.Yes)
-            {
-                return;
-            }
-            FileUtil.SaveFile(OldSceneryEntry.ToCOLLADA(), FileFilters.COLLADA, FileFilters.Any);
         }
     }
 }
