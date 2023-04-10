@@ -487,14 +487,13 @@
     <EmbeddedResource Include="Render\Shaders\axes.vert" />
     <EmbeddedResource Include="Render\Shaders\default4.frag" />
     <EmbeddedResource Include="Render\Shaders\crash1-generic.vert" />
-    <EmbeddedResource Include="Render\Shaders\test.vert" />
-    <EmbeddedResource Include="Render\Shaders\line-model.vert" />
+    <EmbeddedResource Include="Render\Shaders\line-debug.vert" />
     <EmbeddedResource Include="Render\Shaders\line-static.vert" />
     <EmbeddedResource Include="Render\Shaders\line-usercolor.vert" />
     <EmbeddedResource Include="Render\Shaders\crash1-generic.frag" />
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
-    <EmbeddedResource Include="Render\Shaders\box-model.vert" />
+    <EmbeddedResource Include="Render\Shaders\box-debug.vert" />
     <EmbeddedResource Include="Render\Shaders\sprite.vert" />
     <EmbeddedResource Include="Render\Shaders\sprite.frag" />
     <EmbeddedResource Include="Render\Shaders\generic.vert" />

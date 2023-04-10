@@ -68,10 +68,10 @@ namespace CrashEdit
 
             // init vertex array objects
             vaoAxes = new VAO(shaderContext, "axes", PrimitiveType.Lines, vert_count: AxesPos.Length);
-            vaoSphereLine = new VAO(shaderContext, "line-model", PrimitiveType.LineStrip);
-            vaoGridLine = new VAO(shaderContext, "line-usercolor", PrimitiveType.Lines);
-            vaoDebugBoxTri = new VAO(shaderContext, "box-model", PrimitiveType.Triangles, vert_count: BoxTriIndices.Length);
-            vaoDebugBoxLine = new VAO(shaderContext, "box-model", PrimitiveType.Lines, vert_count: BoxLineIndices.Length);
+            vaoSphereLine = new VAO(shaderContext, "line-debug", PrimitiveType.LineStrip);
+            vaoGridLine = new VAO(shaderContext, "line-debug-usercolor", PrimitiveType.Lines);
+            vaoDebugBoxTri = new VAO(shaderContext, "box-debug", PrimitiveType.Triangles, vert_count: BoxTriIndices.Length);
+            vaoDebugBoxLine = new VAO(shaderContext, "box-debug", PrimitiveType.Lines, vert_count: BoxLineIndices.Length);
             vaoDebugSprite = new VAO(shaderContext, "sprite-debug", PrimitiveType.TriangleFan, vert_count: SpriteVerts.Length);
             vaoSprites = new VAO(shaderContext, "sprite", PrimitiveType.Triangles);
             vaoLines = new VAO(shaderContext, "line", PrimitiveType.Lines);

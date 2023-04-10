@@ -39,7 +39,7 @@ namespace CrashEdit
             sh.UniformMat4("modelMatrix", ref model);
         }
 
-        internal static void RenderLineModel(Shader sh, RenderInfo ri, VAO vao)
+        internal static void RenderLineDebug(Shader sh, RenderInfo ri, VAO vao)
         {
             Matrix4 model = Matrix4.CreateFromAxisAngle(vao.UserAxis.Xyz, vao.UserAxis.W);
 
