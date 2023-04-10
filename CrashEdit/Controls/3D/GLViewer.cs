@@ -407,8 +407,9 @@ namespace CrashEdit
 
         protected virtual void PrintHelp()
         {
-            consoleHelp += "W/A/S/D to move, Q/E to pan up/down\nHold Ctrl for aligned movement.\n";
-            consoleHelp += "Left mouse to aim, scroll wheel to zoom.\n";
+            consoleHelp += Resources.ViewerControls_Move + '\n';
+            consoleHelp += Resources.ViewerControls_MoveAligned + '\n';
+            consoleHelp += Resources.ViewerControls_AimAndZoom + '\n';
             consoleHelp += KeyboardControls.ToggleHelp.Print(BoolToEnable(showHelp));
             consoleHelp += KeyboardControls.ResetCamera.Print();
             consoleHelp += KeyboardControls.ToggleTextures.Print(BoolToEnable(render.EnableTexture));

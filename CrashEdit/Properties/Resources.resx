@@ -771,8 +771,17 @@ as Meters: {3:F3}m</value>
   <data name="Config_chkViewerShowHelp" xml:space="preserve">
     <value>Display help text by default</value>
   </data>
+  <data name="ViewerControls_AimAndZoom" xml:space="preserve">
+    <value>Left mouse to aim, scroll wheel to zoom</value>
+  </data>
   <data name="ViewerControls_ChangeCullMode" xml:space="preserve">
     <value>Scroll through culling modes (current: {0})</value>
+  </data>
+  <data name="ViewerControls_Move" xml:space="preserve">
+    <value>W/A/S/D to move, Q/E to pan up/down</value>
+  </data>
+  <data name="ViewerControls_MoveAligned" xml:space="preserve">
+    <value>Hold Ctrl for aligned movement</value>
   </data>
   <data name="ViewerControls_OpenOctreeWindow" xml:space="preserve">
     <value>Open octree node window</value>

@@ -2037,11 +2037,38 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Left mouse to aim, scroll wheel to zoom.
+        /// </summary>
+        internal static string ViewerControls_AimAndZoom {
+            get {
+                return ResourceManager.GetString("ViewerControls_AimAndZoom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scroll through culling modes (current: {0}).
         /// </summary>
         internal static string ViewerControls_ChangeCullMode {
             get {
                 return ResourceManager.GetString("ViewerControls_ChangeCullMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to W/A/S/D to move, Q/E to pan up/down.
+        /// </summary>
+        internal static string ViewerControls_Move {
+            get {
+                return ResourceManager.GetString("ViewerControls_Move", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hold Ctrl for aligned movement.
+        /// </summary>
+        internal static string ViewerControls_MoveAligned {
+            get {
+                return ResourceManager.GetString("ViewerControls_MoveAligned", resourceCulture);
             }
         }
         
