@@ -34,6 +34,7 @@
             System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
             System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
             System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+            this.chkViewerShowHelp = new System.Windows.Forms.CheckBox();
             this.chkFont2DEnable = new System.Windows.Forms.CheckBox();
             this.chkFont3DAutoscale = new System.Windows.Forms.CheckBox();
             this.chkFont3DEnable = new System.Windows.Forms.CheckBox();
@@ -92,7 +93,7 @@
             tableLayoutPanel1.AutoSize = true;
             tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             tableLayoutPanel1.ColumnCount = 1;
-            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             tableLayoutPanel1.Controls.Add(panel2, 0, 1);
             tableLayoutPanel1.Controls.Add(panel1, 0, 0);
             tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -101,13 +102,14 @@
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            tableLayoutPanel1.Size = new System.Drawing.Size(441, 207);
+            tableLayoutPanel1.Size = new System.Drawing.Size(424, 224);
             tableLayoutPanel1.TabIndex = 9;
             // 
             // panel2
             // 
             panel2.AutoSize = true;
             panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            panel2.Controls.Add(this.chkViewerShowHelp);
             panel2.Controls.Add(this.chkFont2DEnable);
             panel2.Controls.Add(this.chkFont3DAutoscale);
             panel2.Controls.Add(this.chkFont3DEnable);
@@ -120,8 +122,22 @@
             panel2.Location = new System.Drawing.Point(3, 58);
             panel2.Name = "panel2";
             panel2.Padding = new System.Windows.Forms.Padding(10, 5, 10, 5);
-            panel2.Size = new System.Drawing.Size(435, 146);
+            panel2.Size = new System.Drawing.Size(418, 163);
             panel2.TabIndex = 11;
+            // 
+            // chkViewerShowHelp
+            // 
+            this.chkViewerShowHelp.AutoSize = true;
+            this.chkViewerShowHelp.Checked = true;
+            this.chkViewerShowHelp.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkViewerShowHelp.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkViewerShowHelp.Location = new System.Drawing.Point(10, 141);
+            this.chkViewerShowHelp.Name = "chkViewerShowHelp";
+            this.chkViewerShowHelp.Size = new System.Drawing.Size(398, 17);
+            this.chkViewerShowHelp.TabIndex = 7;
+            this.chkViewerShowHelp.Text = "Display help text by default";
+            this.chkViewerShowHelp.UseVisualStyleBackColor = true;
+            this.chkViewerShowHelp.CheckedChanged += new System.EventHandler(this.chkViewerShowHelp_CheckedChanged);
             // 
             // chkFont2DEnable
             // 
@@ -131,7 +147,7 @@
             this.chkFont2DEnable.Dock = System.Windows.Forms.DockStyle.Top;
             this.chkFont2DEnable.Location = new System.Drawing.Point(10, 124);
             this.chkFont2DEnable.Name = "chkFont2DEnable";
-            this.chkFont2DEnable.Size = new System.Drawing.Size(415, 17);
+            this.chkFont2DEnable.Size = new System.Drawing.Size(398, 17);
             this.chkFont2DEnable.TabIndex = 6;
             this.chkFont2DEnable.Text = "Display debug text";
             this.chkFont2DEnable.UseVisualStyleBackColor = true;
@@ -145,7 +161,7 @@
             this.chkFont3DAutoscale.Dock = System.Windows.Forms.DockStyle.Top;
             this.chkFont3DAutoscale.Location = new System.Drawing.Point(10, 107);
             this.chkFont3DAutoscale.Name = "chkFont3DAutoscale";
-            this.chkFont3DAutoscale.Size = new System.Drawing.Size(415, 17);
+            this.chkFont3DAutoscale.Size = new System.Drawing.Size(398, 17);
             this.chkFont3DAutoscale.TabIndex = 7;
             this.chkFont3DAutoscale.Text = "Scale entity text";
             this.chkFont3DAutoscale.UseVisualStyleBackColor = true;
@@ -159,7 +175,7 @@
             this.chkFont3DEnable.Dock = System.Windows.Forms.DockStyle.Top;
             this.chkFont3DEnable.Location = new System.Drawing.Point(10, 90);
             this.chkFont3DEnable.Name = "chkFont3DEnable";
-            this.chkFont3DEnable.Size = new System.Drawing.Size(415, 17);
+            this.chkFont3DEnable.Size = new System.Drawing.Size(398, 17);
             this.chkFont3DEnable.TabIndex = 5;
             this.chkFont3DEnable.Text = "Display entity text";
             this.chkFont3DEnable.UseVisualStyleBackColor = true;
@@ -173,7 +189,7 @@
             this.chkCollisionDisplay.Dock = System.Windows.Forms.DockStyle.Top;
             this.chkCollisionDisplay.Location = new System.Drawing.Point(10, 73);
             this.chkCollisionDisplay.Name = "chkCollisionDisplay";
-            this.chkCollisionDisplay.Size = new System.Drawing.Size(415, 17);
+            this.chkCollisionDisplay.Size = new System.Drawing.Size(398, 17);
             this.chkCollisionDisplay.TabIndex = 2;
             this.chkCollisionDisplay.Text = "Display frame collision by default";
             this.chkCollisionDisplay.UseVisualStyleBackColor = true;
@@ -187,7 +203,7 @@
             this.chkNormalDisplay.Dock = System.Windows.Forms.DockStyle.Top;
             this.chkNormalDisplay.Location = new System.Drawing.Point(10, 56);
             this.chkNormalDisplay.Name = "chkNormalDisplay";
-            this.chkNormalDisplay.Size = new System.Drawing.Size(415, 17);
+            this.chkNormalDisplay.Size = new System.Drawing.Size(398, 17);
             this.chkNormalDisplay.TabIndex = 0;
             this.chkNormalDisplay.Text = "Display normals";
             this.chkNormalDisplay.UseVisualStyleBackColor = true;
@@ -201,7 +217,7 @@
             this.chkPatchNSDSavesNSF.Dock = System.Windows.Forms.DockStyle.Top;
             this.chkPatchNSDSavesNSF.Location = new System.Drawing.Point(10, 39);
             this.chkPatchNSDSavesNSF.Name = "chkPatchNSDSavesNSF";
-            this.chkPatchNSDSavesNSF.Size = new System.Drawing.Size(415, 17);
+            this.chkPatchNSDSavesNSF.Size = new System.Drawing.Size(398, 17);
             this.chkPatchNSDSavesNSF.TabIndex = 7;
             this.chkPatchNSDSavesNSF.Text = "(Patch NSD) Always save NSF after NSD patching";
             this.chkPatchNSDSavesNSF.UseVisualStyleBackColor = true;
@@ -215,7 +231,7 @@
             this.chkDeleteInvalidEntries.Dock = System.Windows.Forms.DockStyle.Top;
             this.chkDeleteInvalidEntries.Location = new System.Drawing.Point(10, 22);
             this.chkDeleteInvalidEntries.Name = "chkDeleteInvalidEntries";
-            this.chkDeleteInvalidEntries.Size = new System.Drawing.Size(415, 17);
+            this.chkDeleteInvalidEntries.Size = new System.Drawing.Size(398, 17);
             this.chkDeleteInvalidEntries.TabIndex = 5;
             this.chkDeleteInvalidEntries.Text = "(Patch NSD) Delete non-existent entries from load lists";
             this.chkDeleteInvalidEntries.UseVisualStyleBackColor = true;
@@ -229,7 +245,7 @@
             this.chkUseAnimLinks.Dock = System.Windows.Forms.DockStyle.Top;
             this.chkUseAnimLinks.Location = new System.Drawing.Point(10, 5);
             this.chkUseAnimLinks.Name = "chkUseAnimLinks";
-            this.chkUseAnimLinks.Size = new System.Drawing.Size(415, 17);
+            this.chkUseAnimLinks.Size = new System.Drawing.Size(398, 17);
             this.chkUseAnimLinks.TabIndex = 3;
             this.chkUseAnimLinks.Text = "(Crash 3) Used saved animation-model links";
             this.chkUseAnimLinks.UseVisualStyleBackColor = true;
@@ -245,7 +261,7 @@
             panel1.Location = new System.Drawing.Point(3, 3);
             panel1.Name = "panel1";
             panel1.Padding = new System.Windows.Forms.Padding(10, 5, 10, 5);
-            panel1.Size = new System.Drawing.Size(435, 49);
+            panel1.Size = new System.Drawing.Size(418, 49);
             panel1.TabIndex = 10;
             // 
             // dpdLang
@@ -287,7 +303,7 @@
             tableLayoutPanel2.RowCount = 2;
             tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            tableLayoutPanel2.Size = new System.Drawing.Size(441, 52);
+            tableLayoutPanel2.Size = new System.Drawing.Size(424, 52);
             tableLayoutPanel2.TabIndex = 0;
             // 
             // lblH
@@ -376,7 +392,7 @@
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 1;
             tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            tableLayoutPanel3.Size = new System.Drawing.Size(447, 90);
+            tableLayoutPanel3.Size = new System.Drawing.Size(430, 90);
             tableLayoutPanel3.TabIndex = 3;
             // 
             // fraAnimGrid
@@ -462,7 +478,7 @@
             this.fraFont.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fraFont.Location = new System.Drawing.Point(223, 3);
             this.fraFont.Name = "fraFont";
-            this.fraFont.Size = new System.Drawing.Size(221, 84);
+            this.fraFont.Size = new System.Drawing.Size(204, 84);
             this.fraFont.TabIndex = 8;
             this.fraFont.TabStop = false;
             this.fraFont.Text = "Font Renderer";
@@ -553,14 +569,14 @@
             this.fraMisc.Dock = System.Windows.Forms.DockStyle.Top;
             this.fraMisc.Location = new System.Drawing.Point(0, 161);
             this.fraMisc.Name = "fraMisc";
-            this.fraMisc.Size = new System.Drawing.Size(447, 226);
+            this.fraMisc.Size = new System.Drawing.Size(430, 243);
             this.fraMisc.TabIndex = 1;
             this.fraMisc.TabStop = false;
             this.fraMisc.Text = "Miscellaneous";
             // 
             // cmdReset
             // 
-            this.cmdReset.Location = new System.Drawing.Point(3, 394);
+            this.cmdReset.Location = new System.Drawing.Point(3, 410);
             this.cmdReset.Name = "cmdReset";
             this.cmdReset.Size = new System.Drawing.Size(100, 23);
             this.cmdReset.TabIndex = 1;
@@ -576,7 +592,7 @@
             this.fraSize.Dock = System.Windows.Forms.DockStyle.Top;
             this.fraSize.Location = new System.Drawing.Point(0, 90);
             this.fraSize.Name = "fraSize";
-            this.fraSize.Size = new System.Drawing.Size(447, 71);
+            this.fraSize.Size = new System.Drawing.Size(430, 71);
             this.fraSize.TabIndex = 1;
             this.fraSize.TabStop = false;
             this.fraSize.Text = "Default Window Size";
@@ -599,7 +615,7 @@
             this.Controls.Add(this.fraSize);
             this.Controls.Add(tableLayoutPanel3);
             this.Name = "ConfigEditor";
-            this.Size = new System.Drawing.Size(447, 465);
+            this.Size = new System.Drawing.Size(430, 455);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             panel2.ResumeLayout(false);
@@ -662,5 +678,6 @@
         private System.Windows.Forms.CheckBox chkFont3DAutoscale;
         private System.Windows.Forms.GroupBox fraMisc;
         private System.Windows.Forms.Label lblLang;
+        private System.Windows.Forms.CheckBox chkViewerShowHelp;
     }
 }

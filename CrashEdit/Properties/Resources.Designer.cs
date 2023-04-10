@@ -200,6 +200,15 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Display help text by default.
+        /// </summary>
+        internal static string Config_chkViewerShowHelp {
+            get {
+                return ResourceManager.GetString("Config_chkViewerShowHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset Settings.
         /// </summary>
         internal static string Config_cmdReset {

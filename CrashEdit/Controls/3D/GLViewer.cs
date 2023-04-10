@@ -180,11 +180,12 @@ namespace CrashEdit
             public static readonly ControlsKeyboardInfo ToggleLerp = new(Keys.I, "Enable animation interpolation ({0})");
             public static readonly ControlsKeyboardInfo ToggleNormals = new(Keys.N, "Show normals ({0})");
             public static readonly ControlsKeyboardInfo ChangeCullMode = new(Keys.U, "Scroll through culling modes (current: {0})");
-            public static readonly ControlsKeyboardInfo ToggleHelp = new(Keys.H, "Show help text ({0})");
+            public static readonly ControlsKeyboardInfo ToggleHelp = new(Keys.H, "Toggle help text ({0})");
         }
         #endregion
 
         protected readonly NSF nsf;
+        private bool showHelp = Settings.Default.ViewerShowHelp;
 
         // Whether to render a grid at origin point or not.
         protected abstract bool UseGrid { get; }
@@ -408,6 +409,7 @@ namespace CrashEdit
         {
             consoleHelp += "W/A/S/D to move, Q/E to pan up/down\nHold Ctrl for aligned movement.\n";
             consoleHelp += "Left mouse to aim, scroll wheel to zoom.\n";
+            consoleHelp += KeyboardControls.ToggleHelp.Print(BoolToEnable(showHelp));
             consoleHelp += KeyboardControls.ResetCamera.Print();
             consoleHelp += KeyboardControls.ToggleTextures.Print(BoolToEnable(render.EnableTexture));
         }
@@ -440,6 +442,7 @@ namespace CrashEdit
                 ResetCamera();
             }
             if (KPress(KeyboardControls.ToggleTextures)) render.EnableTexture = !render.EnableTexture;
+            if (KPress(KeyboardControls.ToggleHelp)) showHelp = !showHelp;
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -501,7 +504,7 @@ namespace CrashEdit
 
                     PrintHelp();
                     PrintDebug();
-                    if (Settings.Default.Font2DEnable)
+                    if (showHelp)
                         AddText(consoleHelp, Width, Height - 8, (Rgba)Color4.White, size: 0.9f, flags: TextRenderFlags.Right | TextRenderFlags.Bottom | TextRenderFlags.Default);
                     if (Settings.Default.Font2DEnable)
                         AddText(console, 0, 0, (Rgba)Color4.White, size: 0.9f);
