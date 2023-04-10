@@ -168,19 +168,19 @@ namespace CrashEdit
         #region Default controls.
         public static class KeyboardControls
         {
-            public static readonly ControlsKeyboardInfo ResetCamera = new(Keys.R, "Reset camera");
-            public static readonly ControlsKeyboardInfo ToggleTextures = new(Keys.T, "Enable textures ({0})");
-            public static readonly ControlsKeyboardInfo ToggleZoneOctree = new(Keys.C, "Show zone collision octree ({0})");
-            public static readonly ControlsKeyboardInfo ToggleZoneOctreeOutline = new(Keys.V, "Toggle octree wireframe ({0})");
-            public static readonly ControlsKeyboardInfo ToggleZoneOctreeNeighbors = new(Keys.Z, "Show octree for neighbor zones ({0})");
-            public static readonly ControlsKeyboardInfo OpenOctreeWindow = new(Keys.B, "Open octree node window");
-            public static readonly ControlsKeyboardInfo ToggleZoneOctreeFlip = new(Keys.O, "Flip octree ({0})");
-            public static readonly ControlsKeyboardInfo ToggleTimeTrial = new(Keys.Y, "Toggle time trial mode ({0})");
-            public static readonly ControlsKeyboardInfo ToggleCollisionAnim = new(Keys.C, "Show collision boxes ({0})");
-            public static readonly ControlsKeyboardInfo ToggleLerp = new(Keys.I, "Enable animation interpolation ({0})");
-            public static readonly ControlsKeyboardInfo ToggleNormals = new(Keys.N, "Show normals ({0})");
-            public static readonly ControlsKeyboardInfo ChangeCullMode = new(Keys.U, "Scroll through culling modes (current: {0})");
-            public static readonly ControlsKeyboardInfo ToggleHelp = new(Keys.H, "Toggle help text ({0})");
+            public static readonly ControlsKeyboardInfo ResetCamera = new(Keys.R, Resources.ViewerControls_ResetCamera);
+            public static readonly ControlsKeyboardInfo ToggleTextures = new(Keys.T, Resources.ViewerControls_ToggleTextures);
+            public static readonly ControlsKeyboardInfo ToggleZoneOctree = new(Keys.C, Resources.ViewerControls_ToggleZoneOctree);
+            public static readonly ControlsKeyboardInfo ToggleZoneOctreeOutline = new(Keys.V, Resources.ViewerControls_ToggleZoneOctreeOutline);
+            public static readonly ControlsKeyboardInfo ToggleZoneOctreeNeighbors = new(Keys.Z, Resources.ViewerControls_ToggleZoneOctreeNeighbors);
+            public static readonly ControlsKeyboardInfo OpenOctreeWindow = new(Keys.B, Resources.ViewerControls_OpenOctreeWindow);
+            public static readonly ControlsKeyboardInfo ToggleZoneOctreeFlip = new(Keys.O, Resources.ViewerControls_ToggleZoneOctreeFlip);
+            public static readonly ControlsKeyboardInfo ToggleTimeTrial = new(Keys.Y, Resources.ViewerControls_ToggleTimeTrial);
+            public static readonly ControlsKeyboardInfo ToggleCollisionAnim = new(Keys.C, Resources.ViewerControls_ToggleCollisionAnim);
+            public static readonly ControlsKeyboardInfo ToggleLerp = new(Keys.I, Resources.ViewerControls_ToggleLerp);
+            public static readonly ControlsKeyboardInfo ToggleNormals = new(Keys.N, Resources.ViewerControls_ToggleNormals);
+            public static readonly ControlsKeyboardInfo ChangeCullMode = new(Keys.U, Resources.ViewerControls_ChangeCullMode);
+            public static readonly ControlsKeyboardInfo ToggleHelp = new(Keys.H, Resources.ViewerControls_ToggleHelp);
         }
         #endregion
 
