@@ -451,7 +451,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Render\version.txt" />
     <Content Include="Resources\Computer_File_053.gif" />
     <Content Include="Resources\Computer_File_063.gif" />
     <Content Include="Resources\Computer_File_064.gif" />
