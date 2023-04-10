@@ -125,6 +125,7 @@
     </Compile>
     <Compile Include="Controls\3D\OctreeRenderer.cs" />
     <Compile Include="Exporters\FrameExtensions.cs" />
+    <Compile Include="Exporters\MaterialExtensions.cs" />
     <Compile Include="Exporters\OBJExporter.cs" />
     <Compile Include="Exporters\SceneryExtensions.cs" />
     <Compile Include="Exporters\TextureExporter.cs" />
