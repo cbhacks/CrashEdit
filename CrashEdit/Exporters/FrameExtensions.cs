@@ -7,6 +7,10 @@ using OpenTK;
 
 namespace CrashEdit.Exporters;
 
+// TODO: ALL FRAMES CLASSES/STRUCTS SHOULD HAVE A BASE INTERFACE WITH DATA IN COMMON
+// TODO: THAT WOULD MAKE WORKING WITH THEM EASIER FOR THINGS LIKE THESE WHERE YOU ONLY NEED THE DATA
+// TODO: THEY HAVE IN COMMON, BUT CHANGING THAT IS OUT OF THE SCOPE OF THESE COMMITS
+// TODO: BUT THAT WOULD CUT DOWN THE METHODS HERE TO JUST ONE OR TWO
 public static class FrameExtensions
 {
     public static void AddFrame (this OBJExporter exporter, NSF nsf, OldFrame frame, ref Dictionary <int, int> textureEIDs, ref Dictionary <string, TexInfoUnpacked> objTranslate)
@@ -41,47 +45,7 @@ public static class FrameExtensions
 
             if (str is OldModelTexture t)
             {
-                int page = textureEIDs [t.EID];
-                color = new Vector3 (t.R, t.G, t.B) / 255F;
-
-                // add the texture to the list too
-                material = objTranslate.FirstOrDefault (x =>
-                    x.Value.color == t.ColorMode &&
-                    x.Value.blend == t.BlendMode &&
-                    x.Value.clutx == t.ClutX &&
-                    x.Value.cluty == t.ClutY &&
-                    x.Value.page == page
-                ).Key;
-
-                if (material is null)
-                {
-                    var texinfo = new TexInfoUnpacked (
-                        true, color: t.ColorMode, blend: t.BlendMode,
-                        clutx: t.ClutX, cluty: t.ClutY,
-                        face: Convert.ToInt32 (t.N),
-                        page: textureEIDs [t.EID]
-                    );
-
-                    var tpag = nsf.GetEntry <TextureChunk> (t.EID);
-                    Bitmap texture = TextureExporter.CreateTexture (tpag.Data, texinfo);
-
-                    // the material name changes
-                    material = exporter.AddTexture (((int) texinfo).ToString ("X8"), texture);
-
-                    // add it to the lookup table too
-                    objTranslate [material] = texinfo;
-                }
-
-                Vector2 texsize = t.ColorMode switch
-                {
-                    0 => new Vector2 (1024, 128),
-                    1 => new Vector2 (512, 128),
-                    _ => new Vector2 (256, 128)
-                };
-
-                uv3 = new Vector2 (t.U3 / texsize.X, (128 - t.V3) / texsize.Y);
-                uv2 = new Vector2 (t.U2 / texsize.X, (128 - t.V2) / texsize.Y);
-                uv1 = new Vector2 (t.U1 / texsize.X, (128 - t.V1) / texsize.Y);
+                material = exporter.AddTexture (nsf, t, ref textureEIDs, ref objTranslate, out color, out uv1, out uv2, out uv3);
             }
             else if (str is OldSceneryColor c)
             {
@@ -131,66 +95,11 @@ public static class FrameExtensions
         // iterate all the triangles, get the texture modes and build information about those
         foreach (var tri in model.Triangles)
         {
-            var info = TextureUtils.ProcessTextureInfoC2 (0, tri.Texture, tri.Animated, model.Textures, model.AnimatedTextures);
-            string material = null;
-            Vector2? uv1 = null, uv2 = null, uv3 = null;
-            bool nocull = tri.Subtype == 0 || tri.Subtype == 2;
-            bool flip = (tri.Type == 2 ^ tri.Subtype == 3) && !nocull;
-            
-            // parse the texture and add it to the exporter
-            if (info.Item1 && info.Item2 is not null)
-            {
-                var value = info.Item2.Value;
-                int textureEID = model.GetTPAG (value.Page);
-                int page = textureEIDs [textureEID];
-
-                material = objTranslate.FirstOrDefault (x => 
-                    x.Value.color == value.ColorMode &&
-                    x.Value.blend == value.BlendMode &&
-                    x.Value.clutx == value.ClutX &&
-                    x.Value.cluty == value.ClutY &&
-                    x.Value.page == page
-                ).Key;
-
-                // ignore the texinfo if there's already a texture with the exact same settings stored
-                if (material is null)
-                {
-                    var texinfo = new TexInfoUnpacked (
-                        true, color: value.ColorMode, blend: value.BlendMode, clutx: value.ClutX, cluty: value.ClutY,
-                        page: textureEIDs [textureEID]
-                    );
-
-                    var tpag = nsf.GetEntry <TextureChunk> (textureEIDs.First (x => x.Key == textureEID).Key);
-
-                    Bitmap texture = TextureExporter.CreateTexture (tpag.Data, texinfo);
-
-                    // the material name changes
-                    material = exporter.AddTexture (((int) texinfo).ToString ("X8"), texture);
-                    
-                    // add it to the lookup table too
-                    objTranslate [material] = texinfo;
-                }
-
-                Vector2 texsize = value.ColorMode switch
-                {
-                    0 => new Vector2 (1024, 128),
-                    1 => new Vector2 (512, 128),
-                    _ => new Vector2 (256, 128)
-                };
-                
-                uv2 = new Vector2 (value.X2 / texsize.X, (128 - value.Y2) / texsize.Y);
-
-                if ((tri.Type != 2 && !flip) || (tri.Type == 2 && tri.Subtype == 1))
-                {
-                    uv1 = new (value.X3 / texsize.X, (128 - value.Y3) / texsize.Y);
-                    uv3 = new (value.X1 / texsize.X, (128 - value.Y1) / texsize.Y);
-                }
-                else
-                {
-                    uv3 = new (value.X3 / texsize.X, (128 - value.Y3) / texsize.Y);
-                    uv1 = new (value.X1 / texsize.X, (128 - value.Y1) / texsize.Y);
-                }
-            }
+            string material = exporter.AddTexture (
+                nsf, tri, model, ref textureEIDs, ref objTranslate,
+                out var uv1, out var uv2, out var uv3,
+                out bool flip
+            );
 
             // add the face
             SceneryColor fc1 = model.Colors [tri.Color [!flip ? 0 : 2]];
