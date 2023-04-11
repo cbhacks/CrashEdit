@@ -30,7 +30,7 @@ namespace Crash
                 ErrorManager.SignalError("Frame: Header size value is invalid");
             }
             FrameCollision[] collision = new FrameCollision[collisioncount];
-            for (int i = 0; i < collisioncount; ++i) // these vertices are NEVER compressed
+            for (int i = 0; i < collisioncount; ++i)
             {
                 collision[i] = new FrameCollision(BitConv.FromInt32(data,24+i*0x28),
                     BitConv.FromInt32(data,28+i*0x28),BitConv.FromInt32(data,32+i*0x28),BitConv.FromInt32(data,36+i*0x28),
@@ -274,9 +274,9 @@ namespace Crash
             for (int i = 0; i < collision.Count; ++i)
             {
                 BitConv.ToInt32(result,24+i*0x28+0x00,collision[i].U);
-                BitConv.ToInt32(result,24+i*0x28+0x04,collision[i].XO);
-                BitConv.ToInt32(result,24+i*0x28+0x08,collision[i].YO);
-                BitConv.ToInt32(result,24+i*0x28+0x0C,collision[i].ZO);
+                BitConv.ToInt32(result,24+i*0x28+0x04,collision[i].XOffset);
+                BitConv.ToInt32(result,24+i*0x28+0x08,collision[i].YOffset);
+                BitConv.ToInt32(result,24+i*0x28+0x0C,collision[i].ZOffset);
                 BitConv.ToInt32(result,24+i*0x28+0x10,collision[i].X1);
                 BitConv.ToInt32(result,24+i*0x28+0x14,collision[i].Y1);
                 BitConv.ToInt32(result,24+i*0x28+0x18,collision[i].Z1);
@@ -313,9 +313,9 @@ namespace Crash
             for (int i = 0; i < collision.Count; ++i)
             {
                 BitConv.ToInt32(result,28+i*0x28+0x00,collision[i].U);
-                BitConv.ToInt32(result,28+i*0x28+0x04,collision[i].XO);
-                BitConv.ToInt32(result,28+i*0x28+0x08,collision[i].YO);
-                BitConv.ToInt32(result,28+i*0x28+0x0C,collision[i].ZO);
+                BitConv.ToInt32(result,28+i*0x28+0x04,collision[i].XOffset);
+                BitConv.ToInt32(result,28+i*0x28+0x08,collision[i].YOffset);
+                BitConv.ToInt32(result,28+i*0x28+0x0C,collision[i].ZOffset);
                 BitConv.ToInt32(result,28+i*0x28+0x10,collision[i].X1);
                 BitConv.ToInt32(result,28+i*0x28+0x14,collision[i].Y1);
                 BitConv.ToInt32(result,28+i*0x28+0x18,collision[i].Z1);

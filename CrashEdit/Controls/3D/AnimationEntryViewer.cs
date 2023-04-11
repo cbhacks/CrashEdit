@@ -153,7 +153,7 @@ namespace CrashEdit
                     {
                         var c1 = new Vector3(col.X1, col.Y1, col.Z1) / GameScales.CollisionC1;
                         var c2 = new Vector3(col.X2, col.Y2, col.Z2) / GameScales.CollisionC1;
-                        var ct = new Vector3(col.XO, col.YO, col.ZO) / GameScales.CollisionC1;
+                        var ct = new Vector3(col.XOffset, col.YOffset, col.ZOffset) / GameScales.CollisionC1;
                         var pos = c1 + ct;
                         var size = c2 - c1;
                         AddBox(pos, size, new Rgba(0, 255, 0, 255 / 5), false);

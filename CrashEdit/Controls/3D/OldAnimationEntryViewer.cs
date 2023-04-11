@@ -171,9 +171,9 @@ namespace CrashEdit
                 }
                 if (enable_collision)
                 {
-                    var c1 = new Vector3(frame1.X1, frame1.Y1, frame1.Z1) / GameScales.CollisionC1;
-                    var c2 = new Vector3(frame1.X2, frame1.Y2, frame1.Z2) / GameScales.CollisionC1;
-                    var ct = new Vector3(frame1.XGlobal, frame1.YGlobal, frame1.ZGlobal) / GameScales.CollisionC1;
+                    var c1 = new Vector3(frame1.collision.X1, frame1.collision.Y1, frame1.collision.Z1) / GameScales.CollisionC1;
+                    var c2 = new Vector3(frame1.collision.X2, frame1.collision.Y2, frame1.collision.Z2) / GameScales.CollisionC1;
+                    var ct = new Vector3(frame1.collision.XOffset, frame1.collision.YOffset, frame1.collision.ZOffset) / GameScales.CollisionC1;
                     var pos = c1 + ct;
                     var size = c2 - c1;
                     AddBox(pos, size, new Rgba(0, 255, 0, 255 / 5), false);

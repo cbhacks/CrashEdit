@@ -11,20 +11,20 @@
             X2 = x2;
             Y2 = y2;
             Z2 = z2;
-            XO = xo;
-            YO = yo;
-            ZO = zo;
+            XOffset = xo;
+            YOffset = yo;
+            ZOffset = zo;
         }
 
-        public int U { get; }
-        public int XO { get; }
-        public int YO { get; }
-        public int ZO { get; }
-        public int X1 { get; }
-        public int Y1 { get; }
-        public int Z1 { get; }
-        public int X2 { get; }
-        public int Y2 { get; }
-        public int Z2 { get; }
+        public int U { get; set; }
+        public int XOffset { get; set; }
+        public int YOffset { get; set; }
+        public int ZOffset { get; set; }
+        public int X1 { get; set; }
+        public int Y1 { get; set; }
+        public int Z1 { get; set; }
+        public int X2 { get; set; }
+        public int Y2 { get; set; }
+        public int Z2 { get; set; }
     }
 }
