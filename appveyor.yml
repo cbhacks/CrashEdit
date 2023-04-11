@@ -27,8 +27,8 @@ after_build:
   - copy .\CrashEdit\bin\Debug\DiscUtils.Core.dll pkg
   - copy .\CrashEdit\bin\Debug\DiscUtils.Iso9660.dll pkg
   - copy .\CrashEdit\bin\Debug\DiscUtils.Streams.dll pkg
-  - copy .\CrashEdit\bin\Debug\DiscUtils.Sharpfont.dll pkg
-  - copy .\CrashEdit\bin\Debug\DiscUtils.Sharpfont.dll.config pkg
+  - copy .\CrashEdit\bin\Debug\Sharpfont.dll pkg
+  - copy .\CrashEdit\bin\Debug\Sharpfont.dll.config pkg
   - mkdir pkg\Win32
   - xcopy Win32 pkg\Win32 /s /e
   - mkdir pkg\Win64
