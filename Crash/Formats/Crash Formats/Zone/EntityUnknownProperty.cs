@@ -2,13 +2,13 @@ namespace Crash
 {
     public sealed class EntityUnknownProperty : EntityProperty
     {
-        private byte type;
-        private byte elementsize;
-        private short unknown;
-        private bool issparse;
-        private bool hasmetavalues;
+        private readonly byte type;
+        private readonly byte elementsize;
+        private readonly short unknown;
+        private readonly bool issparse;
+        private readonly bool hasmetavalues;
 
-        public EntityUnknownProperty(byte type,byte elementsize,short unknown,bool issparse,bool hasmetavalues,byte[] data)
+        public EntityUnknownProperty(byte type, byte elementsize, short unknown, bool issparse, bool hasmetavalues, byte[] data)
         {
             this.type = type;
             this.elementsize = elementsize;

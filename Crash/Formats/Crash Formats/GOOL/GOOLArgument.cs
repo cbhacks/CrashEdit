@@ -11,7 +11,7 @@
 
     public struct GOOLArgument
     {
-        public GOOLArgument(int value,GOOLArgumentTypes type = GOOLArgumentTypes.Value)
+        public GOOLArgument(int value, GOOLArgumentTypes type = GOOLArgumentTypes.Value)
         {
             Value = value;
             Type = type;

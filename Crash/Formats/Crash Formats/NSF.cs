@@ -5,7 +5,7 @@ namespace Crash
 {
     public sealed class NSF
     {
-        private static byte[] ReadChunk(byte[] data,ref int offset,out bool compressed)
+        private static byte[] ReadChunk(byte[] data, ref int offset, out bool compressed)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
@@ -15,8 +15,8 @@ namespace Crash
             {
                 ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
             }
-            byte[] result = new byte [Chunk.Length];
-            short magic = BitConv.FromInt16(data,offset);
+            byte[] result = new byte[Chunk.Length];
+            short magic = BitConv.FromInt16(data, offset);
             if (magic == Chunk.Magic)
             {
                 if (data.Length < offset + Chunk.Length)
@@ -24,7 +24,7 @@ namespace Crash
                     ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
                 }
                 compressed = false;
-                Array.Copy(data,offset,result,0,Chunk.Length);
+                Array.Copy(data, offset, result, 0, Chunk.Length);
                 offset += Chunk.Length;
             }
             else if (magic == Chunk.CompressedMagic)
@@ -34,9 +34,9 @@ namespace Crash
                     ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
                 }
                 compressed = true;
-                short zero = BitConv.FromInt16(data,offset + 2);
-                int length = BitConv.FromInt32(data,offset + 4);
-                int skip = BitConv.FromInt32(data,offset + 8);
+                short zero = BitConv.FromInt16(data, offset + 2);
+                int length = BitConv.FromInt32(data, offset + 4);
+                int skip = BitConv.FromInt32(data, offset + 8);
                 if (zero != 0)
                 {
                     ErrorManager.SignalIgnorableError("NSF.ReadChunk: Zero value is wrong");
@@ -90,7 +90,7 @@ namespace Crash
                         // Do NOT use Array.Copy as
                         // overlap is possible i.e. span
                         // may be greater than seek
-                        for (int i = 0;i < span;++i)
+                        for (int i = 0; i < span; ++i)
                         {
                             result[pos + i] = result[pos - seek + i];
                         }
@@ -102,7 +102,7 @@ namespace Crash
                         {
                             ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
                         }
-                        Array.Copy(data,offset,result,pos,prefix);
+                        Array.Copy(data, offset, result, pos, prefix);
                         offset += prefix;
                         pos += prefix;
                     }
@@ -116,7 +116,7 @@ namespace Crash
                 {
                     ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
                 }
-                Array.Copy(data,offset,result,pos,Chunk.Length - length);
+                Array.Copy(data, offset, result, pos, Chunk.Length - length);
                 offset += (Chunk.Length - length);
             }
             else if (magic == 0) // Fixes some sort of read error
@@ -149,7 +149,7 @@ namespace Crash
             List<bool> chunkcompression = new List<bool>();
             while (offset < data.Length)
             {
-                byte[] chunkdata = ReadChunk(data,ref offset,out bool compressed);
+                byte[] chunkdata = ReadChunk(data, ref offset, out bool compressed);
                 UnprocessedChunk chunk = Chunk.Load(chunkdata, nsf);
                 if (firstid == null)
                 {
@@ -173,7 +173,7 @@ namespace Crash
                 chunkcompression.Add(compressed);
                 if (prelude != null && nsf.Chunks.Count < prelude.Count)
                 {
-                    for (int i = 0;i < Chunk.Length;i++)
+                    for (int i = 0; i < Chunk.Length; i++)
                     {
                         if (prelude[nsf.Chunks.Count].Data[i] != chunk.Data[i])
                         {
@@ -202,7 +202,7 @@ namespace Crash
             return nsf;
         }
 
-        public static NSF LoadAndProcess(byte[] data,GameVersion gameversion)
+        public static NSF LoadAndProcess(byte[] data, GameVersion gameversion)
         {
             NSF nsf = Load(data);
             nsf.ProcessAll(gameversion);
@@ -220,7 +220,7 @@ namespace Crash
 
         public void ProcessAll(GameVersion gameversion)
         {
-            for (int i = 0;i < Chunks.Count;i++)
+            for (int i = 0; i < Chunks.Count; i++)
             {
                 if (Chunks[i] is UnprocessedChunk uchunk)
                 {
@@ -244,13 +244,13 @@ namespace Crash
             }
         }
 
-        public T GetEntry<T>(string ename) where T : class,IEntry
+        public T GetEntry<T>(string ename) where T : class, IEntry
         {
             return GetEntry<T>(Entry.ENameToEID(ename));
         }
 
         const bool USE_OLD_LOOKUP = true;
-        public T GetEntry<T>(int eid) where T : class,IEntry
+        public T GetEntry<T>(int eid) where T : class, IEntry
         {
             if (eid == Entry.NullEID)
                 return null;
@@ -352,26 +352,27 @@ namespace Crash
 
         public byte[] Save()
         {
-            byte[] data = new byte [Chunks.Count * Chunk.Length];
-            for (int i = 0;i < Chunks.Count;i++)
+            byte[] data = new byte[Chunks.Count * Chunk.Length];
+            for (int i = 0; i < Chunks.Count; i++)
             {
-                Chunks[i].Save(i * 2 + 1).CopyTo(data,i * Chunk.Length);
+                Chunks[i].Save(i * 2 + 1).CopyTo(data, i * Chunk.Length);
             }
             return data;
         }
 
-        public Tuple<int[],IList<NSDLink>> MakeNSDIndex()
+        public Tuple<int[], IList<NSDLink>> MakeNSDIndex()
         {
             foreach (Chunk chunk in Chunks)
             {
                 if (chunk is EntryChunk entrychunk)
                 {
                     List<Entry> entries = new List<Entry>(entrychunk.Entries);
-                    entries.Sort(delegate (Entry a, Entry b) {
+                    entries.Sort(delegate (Entry a, Entry b)
+                    {
                         int c = a.HashKey - b.HashKey;
                         if (c == 0)
                         {
-                            c = new ENameComparer().Compare(a.EName,b.EName);
+                            c = new ENameComparer().Compare(a.EName, b.EName);
                         }
                         return c;
                     });
@@ -416,7 +417,7 @@ namespace Crash
             }
             while (curkey < 256)
                 hashkeymap[curkey++] = index.Count - 1;
-            return new Tuple<int[],IList<NSDLink>>(hashkeymap,index);
+            return new Tuple<int[], IList<NSDLink>>(hashkeymap, index);
         }
     }
 }

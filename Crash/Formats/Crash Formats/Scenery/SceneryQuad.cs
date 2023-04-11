@@ -9,9 +9,9 @@ namespace Crash
             if (data == null)
                 throw new ArgumentNullException("data");
             if (data.Length != 8)
-                throw new ArgumentException("Value must be 8 bytes long.","data");
-            int worda = BitConv.FromInt32(data,0);
-            int wordb = BitConv.FromInt32(data,4);
+                throw new ArgumentException("Value must be 8 bytes long.", "data");
+            int worda = BitConv.FromInt32(data, 0);
+            int wordb = BitConv.FromInt32(data, 4);
             int vertexa = (worda >> 8) & 0xFFF;
             int vertexb = (worda >> 20) & 0xFFF;
             int vertexd = (wordb >> 8) & 0xFFF;
@@ -19,10 +19,10 @@ namespace Crash
             short texture = (short)(((byte)wordb & 0xF) | (((byte)worda & 0x7F) << 4));
             byte unknown = (byte)(wordb >> 4 & 0xF);
             bool animated = (worda & 0x80) != 0;
-            return new SceneryQuad(vertexa,vertexb,vertexc,vertexd,texture,unknown,animated);
+            return new SceneryQuad(vertexa, vertexb, vertexc, vertexd, texture, unknown, animated);
         }
 
-        public SceneryQuad(int vertexa,int vertexb,int vertexc,int vertexd,short texture,byte unknown,bool animated)
+        public SceneryQuad(int vertexa, int vertexb, int vertexc, int vertexd, short texture, byte unknown, bool animated)
         {
             if (vertexa < 0 || vertexa > 0xFFF)
                 throw new ArgumentOutOfRangeException("vertexa");
@@ -51,11 +51,11 @@ namespace Crash
 
         public byte[] Save()
         {
-            byte[] data = new byte [8];
+            byte[] data = new byte[8];
             int worda = (VertexA << 8) | (VertexB << 20) | (Animated ? 0x80 : 0) | (Texture >> 4);
             int wordb = (VertexD << 8) | (VertexC << 20) | (Unknown << 4) | (Texture & 0xF);
-            BitConv.ToInt32(data,0,worda);
-            BitConv.ToInt32(data,4,wordb);
+            BitConv.ToInt32(data, 0, worda);
+            BitConv.ToInt32(data, 4, wordb);
             return data;
         }
     }

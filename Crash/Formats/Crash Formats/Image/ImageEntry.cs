@@ -4,7 +4,7 @@ namespace Crash
 {
     public sealed class ImageEntry : MysteryMultiItemEntry
     {
-        public ImageEntry(IEnumerable<byte[]> items,int eid) : base(items,eid)
+        public ImageEntry(IEnumerable<byte[]> items, int eid) : base(items, eid)
         {
         }
 

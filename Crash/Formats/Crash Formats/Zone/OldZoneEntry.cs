@@ -4,10 +4,10 @@ namespace Crash
 {
     public sealed class OldZoneEntry : Entry
     {
-        private List<OldCamera> cameras;
-        private List<OldEntity> entities;
+        private readonly List<OldCamera> cameras;
+        private readonly List<OldEntity> entities;
 
-        public OldZoneEntry(byte[] header,byte[] layout,IEnumerable<OldCamera> cameras,IEnumerable<OldEntity> entities,int eid)
+        public OldZoneEntry(byte[] header, byte[] layout, IEnumerable<OldCamera> cameras, IEnumerable<OldEntity> entities, int eid)
             : base(eid)
         {
             Header = header;
@@ -30,14 +30,14 @@ namespace Crash
 
         public int HeaderCount
         {
-            get => BitConv.FromInt32(Header,0x204);
-            set => BitConv.ToInt32(Header,0x204,value);
+            get => BitConv.FromInt32(Header, 0x204);
+            set => BitConv.ToInt32(Header, 0x204, value);
         }
 
         public int ZoneCount
         {
-            get => BitConv.FromInt32(Header,0x210);
-            set => BitConv.ToInt32(Header,0x210,value);
+            get => BitConv.FromInt32(Header, 0x210);
+            set => BitConv.ToInt32(Header, 0x210, value);
         }
 
         public int GetLinkedWorld(int idx) => BitConv.FromInt32(Header, 0x4 + idx * 0x40);
@@ -94,8 +94,8 @@ namespace Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            BitConv.ToInt32(Header,0x208,cameras.Count);
-            BitConv.ToInt32(Header,0x20C,entities.Count);
+            BitConv.ToInt32(Header, 0x208, cameras.Count);
+            BitConv.ToInt32(Header, 0x20C, entities.Count);
             byte[][] items = new byte[2 + entities.Count + cameras.Count][];
             items[0] = Header;
             items[1] = Layout;
@@ -107,7 +107,7 @@ namespace Crash
             {
                 items[2 + cameras.Count + i] = entities[i].Save();
             }
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

@@ -1,12 +1,12 @@
 ﻿namespace Crash.GOOLIns
 {
-    [GOOLInstruction(50,GameVersion.Crash2)]
-    [GOOLInstruction(50,GameVersion.Crash3)]
+    [GOOLInstruction(50, GameVersion.Crash2)]
+    [GOOLInstruction(50, GameVersion.Crash3)]
     public sealed class Bra : GOOLInstruction
     {
-        public Bra(int value, GOOLEntry gool) : base(value,gool)
+        public Bra(int value, GOOLEntry gool) : base(value, gool)
         {
-            Args['I'] = new GOOLArgument(BitConv.SignExtendInt32(Args['I'].Value,10)); // sign-extension
+            Args['I'] = new GOOLArgument(BitConv.SignExtendInt32(Args['I'].Value, 10)); // sign-extension
         }
 
         public override string Name => "BRA";

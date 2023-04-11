@@ -868,8 +868,12 @@ namespace CrashEdit
             switch (bmode)
             {
                 case BlendMode.Solid:
-                case BlendMode.Trans:
                     GL.DepthMask(true);
+                    GL.BlendEquation(BlendEquationMode.FuncAdd);
+                    GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+                    break;
+                case BlendMode.Trans:
+                    GL.DepthMask(false);
                     GL.BlendEquation(BlendEquationMode.FuncAdd);
                     GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
                     break;

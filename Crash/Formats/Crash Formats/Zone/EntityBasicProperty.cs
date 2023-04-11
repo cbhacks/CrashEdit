@@ -1,6 +1,6 @@
 using System;
-using System.Reflection;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Crash
 {
@@ -58,7 +58,7 @@ namespace Crash
 
         public List<EntityPropertyRow<T>> Rows { get; }
 
-        internal override void LoadToField(object obj,FieldInfo field)
+        internal override void LoadToField(object obj, FieldInfo field)
         {
             if (field.FieldType == typeof(T?))
             {
@@ -68,7 +68,7 @@ namespace Crash
                     {
                         if (Rows[0].Values.Count == 1)
                         {
-                            field.SetValue(obj,Rows[0].Values[0]);
+                            field.SetValue(obj, Rows[0].Values[0]);
                         }
                         else
                         {
@@ -93,7 +93,7 @@ namespace Crash
                     {
                         List<T> list = new List<T>();
                         list.AddRange(Rows[0].Values);
-                        field.SetValue(obj,list);
+                        field.SetValue(obj, list);
                     }
                     else
                     {
@@ -107,11 +107,11 @@ namespace Crash
             }
             else if (field.FieldType == GetType())
             {
-                field.SetValue(obj,this);
+                field.SetValue(obj, this);
             }
             else
             {
-                base.LoadToField(obj,field);
+                base.LoadToField(obj, field);
             }
         }
 
@@ -130,30 +130,30 @@ namespace Crash
             {
                 length += Rows.Count * 2;
             }
-            Aligner.Align(ref length,4);
+            Aligner.Align(ref length, 4);
             foreach (EntityPropertyRow<T> row in Rows)
             {
                 length += row.Values.Count * ElementSize;
             }
-            Aligner.Align(ref length,4);
-            byte[] data = new byte [length];
+            Aligner.Align(ref length, 4);
+            byte[] data = new byte[length];
             int offset = 0;
             if (IsSparse)
             {
                 foreach (EntityPropertyRow<T> row in Rows)
                 {
-                    BitConv.ToInt16(data,offset,(short)row.Values.Count);
+                    BitConv.ToInt16(data, offset, (short)row.Values.Count);
                     offset += 2;
                 }
             }
             else if (Rows.Count == 0)
             {
-                BitConv.ToInt16(data,offset,0);
+                BitConv.ToInt16(data, offset, 0);
                 offset += 2;
             }
             else
             {
-                BitConv.ToInt16(data,offset,(short)Rows[0].Values.Count);
+                BitConv.ToInt16(data, offset, (short)Rows[0].Values.Count);
                 offset += 2;
             }
             if (HasMetaValues)
@@ -164,24 +164,24 @@ namespace Crash
                     {
                         throw new InvalidOperationException("EntityPropertyRow MetaValues must be consistently present or non-present.");
                     }
-                    BitConv.ToInt16(data,offset,row.MetaValue.Value);
+                    BitConv.ToInt16(data, offset, row.MetaValue.Value);
                     offset += 2;
                 }
             }
-            Aligner.Align(ref offset,4);
-            byte[] elementdata = new byte [ElementSize];
+            Aligner.Align(ref offset, 4);
+            byte[] elementdata = new byte[ElementSize];
             foreach (EntityPropertyRow<T> row in Rows)
             {
                 foreach (T value in row.Values)
                 {
-                    SaveElement(elementdata,value);
-                    elementdata.CopyTo(data,offset);
+                    SaveElement(elementdata, value);
+                    elementdata.CopyTo(data, offset);
                     offset += ElementSize;
                 }
             }
             return data;
         }
 
-        protected abstract void SaveElement(byte[] data,T value);
+        protected abstract void SaveElement(byte[] data, T value);
     }
 }

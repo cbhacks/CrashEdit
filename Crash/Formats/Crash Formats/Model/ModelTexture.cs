@@ -9,7 +9,7 @@ namespace Crash
             if (data == null)
                 throw new ArgumentNullException("data");
             if (data.Length != 12)
-                throw new ArgumentException("Value must be 12 bytes long.","data");
+                throw new ArgumentException("Value must be 12 bytes long.", "data");
             byte u1 = data[0];
             byte v1 = data[1];
             byte clutx = (byte)(data[2] & 0xF);
@@ -25,10 +25,10 @@ namespace Crash
             byte v3 = data[9];
             byte u4 = data[10];
             byte v4 = data[11];
-            return new ModelTexture(u1,v1,cluty1,clutx,cluty2,u2,v2,colormode,blendmode,segment,textureoffset,u3,v3,u4,v4);
+            return new ModelTexture(u1, v1, cluty1, clutx, cluty2, u2, v2, colormode, blendmode, segment, textureoffset, u3, v3, u4, v4);
         }
 
-        public ModelTexture(byte u1,byte v1,byte cluty1,byte clutx,byte cluty2,byte u2,byte v2,byte colormode,byte blendmode,byte segment,byte textureoffset,byte u3,byte v3,byte u4,byte v4)
+        public ModelTexture(byte u1, byte v1, byte cluty1, byte clutx, byte cluty2, byte u2, byte v2, byte colormode, byte blendmode, byte segment, byte textureoffset, byte u3, byte v3, byte u4, byte v4)
         {
             U1 = u1;
             V1 = v1;
@@ -46,15 +46,15 @@ namespace Crash
             ColorMode = colormode;
             Page = textureoffset;
 
-            int xoff = (1 << (2-ColorMode)) * 64 * Segment;
+            int xoff = (1 << (2 - ColorMode)) * 64 * Segment;
             Left = Math.Min(U1, Math.Min(U2, U3)) + xoff;
             Top = Math.Min(V1, Math.Min(V2, V3));
             Width = Math.Max(U1, Math.Max(U2, U3)) + xoff - Left;
             Height = Math.Max(V1, Math.Max(V2, V3)) - Top;
-            int tx1 = U1+xoff;
-            int tx2 = U2+xoff;
-            int tx3 = U3+xoff;
-            int tx4 = U4+xoff;
+            int tx1 = U1 + xoff;
+            int tx2 = U2 + xoff;
+            int tx3 = U3 + xoff;
+            int tx4 = U4 + xoff;
             if (tx1 > tx2 || tx1 > tx3) ++tx1;
             if (tx2 > tx1 || tx2 > tx3) ++tx2;
             if (tx3 > tx2 || tx3 > tx1) ++tx3;
@@ -112,7 +112,7 @@ namespace Crash
             byte[] result = new byte[12];
             result[0] = U1;
             result[1] = V1;
-            result[2] = (byte)((ClutY1  << 4) | ClutX);
+            result[2] = (byte)((ClutY1 << 4) | ClutX);
             result[3] = ClutY2;
             result[4] = U2;
             result[5] = V2;

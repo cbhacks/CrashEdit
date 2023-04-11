@@ -2,11 +2,11 @@ using System;
 
 namespace Crash
 {
-    [EntryType(2,GameVersion.Crash2)]
-    [EntryType(2,GameVersion.Crash3)]
+    [EntryType(2, GameVersion.Crash2)]
+    [EntryType(2, GameVersion.Crash3)]
     public sealed class ModelEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid,GameVersion version)
+        public override Entry Load(byte[][] items, int eid, GameVersion version)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -14,7 +14,7 @@ namespace Crash
             {
                 ErrorManager.SignalError("ModelEntry: Wrong number of items");
             }
-            int structcount = BitConv.FromInt32(items[0],0x2C);
+            int structcount = BitConv.FromInt32(items[0], 0x2C);
             if (items[1].Length != structcount * 4)
             {
                 ErrorManager.SignalError("ModelEntry: Polygon count mismatch");
@@ -34,19 +34,19 @@ namespace Crash
             {
                 ErrorManager.SignalError("ModelEntry: Animated texture count mismatch");
             }
-            uint[] structs = new uint [structcount];
-            for (int i = 0;i < structcount;++i)
+            uint[] structs = new uint[structcount];
+            for (int i = 0; i < structcount; ++i)
             {
-                structs[i] = (uint)BitConv.FromInt32(items[1], i*4);
+                structs[i] = (uint)BitConv.FromInt32(items[1], i * 4);
             }
             SceneryColor[] colors = new SceneryColor[colorcount];
             for (int i = 0; i < colorcount; i++)
             {
-                byte r = items[2][0+4*i];
-                byte g = items[2][1+4*i];
-                byte b = items[2][2+4*i];
-                byte e = items[2][3+4*i];
-                colors[i] = new SceneryColor(r,g,b,e);
+                byte r = items[2][0 + 4 * i];
+                byte g = items[2][1 + 4 * i];
+                byte b = items[2][2 + 4 * i];
+                byte e = items[2][3 + 4 * i];
+                colors[i] = new SceneryColor(r, g, b, e);
             }
             ModelTexture[] textures = new ModelTexture[texturecount];
             for (int i = 0; i < texturecount; i++)
@@ -62,7 +62,7 @@ namespace Crash
                 Array.Copy(items[4], i * 4, animatedtexturedata, 0, animatedtexturedata.Length);
                 animatedtextures[i] = ModelExtendedTexture.Load(animatedtexturedata);
             }
-            int positioncount = BitConv.FromInt32(items[0],0x38) - BitConv.FromInt32(items[0],0x4C);
+            int positioncount = BitConv.FromInt32(items[0], 0x38) - BitConv.FromInt32(items[0], 0x4C);
             ModelPosition[] positions = new ModelPosition[positioncount];
             if (items.Length == 6)
             {
@@ -82,7 +82,7 @@ namespace Crash
                 positioncount = 0;
                 positions = null;
             }
-            return new ModelEntry(items[0],structs,colors,textures,animatedtextures,positions,eid);
+            return new ModelEntry(items[0], structs, colors, textures, animatedtextures, positions, eid);
         }
     }
 }

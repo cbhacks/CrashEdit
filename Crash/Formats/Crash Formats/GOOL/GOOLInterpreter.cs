@@ -152,7 +152,7 @@ namespace Crash
         Down = 0x4000,
         Left = 0x8000
     }
-    
+
     public static class GOOLInterpreter
     {
         public static GOOLVersion GetVersion(GameVersion ver)

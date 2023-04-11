@@ -1,4 +1,4 @@
 namespace Crash
 {
-    public delegate void ErrorSignalEventHandler(object sender,ErrorSignalEventArgs e);
+    public delegate void ErrorSignalEventHandler(object sender, ErrorSignalEventArgs e);
 }

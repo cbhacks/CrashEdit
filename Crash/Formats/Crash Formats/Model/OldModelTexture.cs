@@ -16,17 +16,17 @@ namespace Crash
             byte blendmode = (byte)((data[3] >> 5) & 0x3);
             bool n = (data[3] & 0x10) != 0;
             byte clutx = (byte)(data[3] & 0xF);
-            int eid = BitConv.FromInt32(data,4);
-            int texinfo = BitConv.FromInt32(data,8);
+            int eid = BitConv.FromInt32(data, 4);
+            int texinfo = BitConv.FromInt32(data, 8);
             int uvindex = (texinfo >> 22) & 0x3FF;
             byte colormode = (byte)(texinfo >> 20 & 3);
             byte segment = (byte)(texinfo >> 18 & 3);
             byte xoffu = (byte)(texinfo >> 13 & 0x1F);
             byte cluty = (byte)(texinfo >> 6 & 0x7F);
             byte yoffu = (byte)(texinfo & 0x1F);
-            return new OldModelTexture(uvindex,clutx,cluty,xoffu,yoffu,colormode,blendmode,segment,r,g,b,n,eid);
+            return new OldModelTexture(uvindex, clutx, cluty, xoffu, yoffu, colormode, blendmode, segment, r, g, b, n, eid);
         }
-        public OldModelTexture(int uvindex,byte clutx,byte cluty,byte xoffu,byte yoffu,byte colormode,byte blendmode,byte segment,byte r,byte g,byte b,bool n,int eid)
+        public OldModelTexture(int uvindex, byte clutx, byte cluty, byte xoffu, byte yoffu, byte colormode, byte blendmode, byte segment, byte r, byte g, byte b, bool n, int eid)
         {
             UVIndex = uvindex;
             ClutX = clutx;
@@ -41,7 +41,7 @@ namespace Crash
             B = b;
             N = n;
             EID = eid;
-            
+
             int w = 4 << (UVIndex % 5);
             int h = 4 << ((UVIndex / 5) % 5);
             int xoff = ((64 << (2 - ColorMode)) * Segment) + ((2 << (2 - ColorMode)) * XOffU);
@@ -54,7 +54,7 @@ namespace Crash
             V2 = h * ((0x9E7186 >> winding) & 1) + yoff;
             V3 = h * ((0x6DB249 >> winding) & 1) + yoff;
         }
-        
+
         public byte R { get; }
         public byte G { get; }
         public byte B { get; }

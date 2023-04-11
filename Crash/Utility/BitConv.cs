@@ -4,7 +4,7 @@ namespace Crash
 {
     public static class BitConv
     {
-        public static short FromInt16(byte[] str,int offset)
+        public static short FromInt16(byte[] str, int offset)
         {
             if (str == null)
                 throw new ArgumentNullException("str");
@@ -18,7 +18,7 @@ namespace Crash
             return (short)result;
         }
 
-        public static int FromInt24(byte[] str,int offset)
+        public static int FromInt24(byte[] str, int offset)
         {
             if (str == null)
                 throw new ArgumentNullException("str");
@@ -40,7 +40,7 @@ namespace Crash
             return result;
         }
 
-        public static int FromInt32(byte[] str,int offset)
+        public static int FromInt32(byte[] str, int offset)
         {
             if (str == null)
                 throw new ArgumentNullException("str");
@@ -56,7 +56,7 @@ namespace Crash
             return result;
         }
 
-        public static void ToInt16(byte[] str,int offset,short value)
+        public static void ToInt16(byte[] str, int offset, short value)
         {
             if (str == null)
                 throw new ArgumentNullException("str");
@@ -68,7 +68,7 @@ namespace Crash
             str[offset + 1] = (byte)(value >> 8);
         }
 
-        public static void ToInt24(byte[] str,int offset,int value)
+        public static void ToInt24(byte[] str, int offset, int value)
         {
             if (str == null)
                 throw new ArgumentNullException("str");
@@ -83,7 +83,7 @@ namespace Crash
             str[offset + 2] = (byte)(value >> 8 * 2);
         }
 
-        public static void ToInt32(byte[] str,int offset,int value)
+        public static void ToInt32(byte[] str, int offset, int value)
         {
             if (str == null)
                 throw new ArgumentNullException("str");
@@ -110,7 +110,7 @@ namespace Crash
         // sign-extend values with nonconventional bit lengths
         public static int SignExtendInt32(int value, int bitlength)
         {
-            return value << (32-bitlength) >> (32-bitlength);
+            return value << (32 - bitlength) >> (32 - bitlength);
         }
     }
 }

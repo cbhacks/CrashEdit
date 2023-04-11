@@ -2,7 +2,7 @@ namespace Crash
 {
     public sealed class NSDLink
     {
-        public NSDLink(int chunkid,int entryid)
+        public NSDLink(int chunkid, int entryid)
         {
             ChunkID = chunkid;
             EntryID = entryid;

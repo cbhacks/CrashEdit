@@ -1,17 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using System.Collections.Generic;
 
 namespace Crash
 {
     public sealed class OldSceneryEntry : Entry
     {
-        private List<OldSceneryPolygon> polygons;
-        private List<OldSceneryVertex> vertices;
-        private List<OldModelStruct> structs;
+        private readonly List<OldSceneryPolygon> polygons;
+        private readonly List<OldSceneryVertex> vertices;
+        private readonly List<OldModelStruct> structs;
 
-        public OldSceneryEntry(byte[] info,IEnumerable<OldSceneryPolygon> polygons,IEnumerable<OldSceneryVertex> vertices,IEnumerable<OldModelStruct> structs,byte[] extradata,int eid) : base(eid)
+        public OldSceneryEntry(byte[] info, IEnumerable<OldSceneryPolygon> polygons, IEnumerable<OldSceneryVertex> vertices, IEnumerable<OldModelStruct> structs, byte[] extradata, int eid) : base(eid)
         {
             Info = info ?? throw new ArgumentNullException("info");
             this.polygons = new List<OldSceneryPolygon>(polygons);
@@ -63,23 +63,23 @@ namespace Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte [ExtraData == null ? 3 : 4][];
+            byte[][] items = new byte[ExtraData == null ? 3 : 4][];
             items[0] = Info;
-            items[1] = new byte [polygons.Count * 8];
-            for (int i = 0;i < polygons.Count;i++)
+            items[1] = new byte[polygons.Count * 8];
+            for (int i = 0; i < polygons.Count; i++)
             {
-                polygons[i].Save().CopyTo(items[1],i * 8);
+                polygons[i].Save().CopyTo(items[1], i * 8);
             }
-            items[2] = new byte [vertices.Count * 8];
-            for (int i = 0;i < vertices.Count;i++)
+            items[2] = new byte[vertices.Count * 8];
+            for (int i = 0; i < vertices.Count; i++)
             {
-                vertices[i].Save().CopyTo(items[2],i * 8);
+                vertices[i].Save().CopyTo(items[2], i * 8);
             }
             if (ExtraData != null)
             {
                 items[3] = ExtraData;
             }
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
 
         public byte[] ToOBJ()
@@ -91,13 +91,13 @@ namespace Crash
                     obj.WriteLine("# Vertices");
                     foreach (OldSceneryVertex vertex in vertices)
                     {
-                        obj.WriteLine("v {0} {1} {2}",vertex.X,vertex.Y,vertex.Z);
+                        obj.WriteLine("v {0} {1} {2}", vertex.X, vertex.Y, vertex.Z);
                     }
                     obj.WriteLine();
                     obj.WriteLine("# Polygons");
                     foreach (OldSceneryPolygon polygon in polygons)
                     {
-                        obj.WriteLine("f {0} {1} {2}",polygon.VertexA + 1,polygon.VertexB + 1,polygon.VertexC + 1);
+                        obj.WriteLine("f {0} {1} {2}", polygon.VertexA + 1, polygon.VertexB + 1, polygon.VertexC + 1);
                     }
                 }
                 return stream.ToArray();
@@ -113,16 +113,16 @@ namespace Crash
                 {
                     xmlwriter.WriteStartDocument();
                     xmlwriter.WriteStartElement("COLLADA");
-                    xmlwriter.WriteAttributeString("xmlns","http://www.collada.org/2005/11/COLLADASchema");
-                    xmlwriter.WriteAttributeString("version","1.4.1");
+                    xmlwriter.WriteAttributeString("xmlns", "http://www.collada.org/2005/11/COLLADASchema");
+                    xmlwriter.WriteAttributeString("version", "1.4.1");
                     xmlwriter.WriteStartElement("library_geometries");
                     xmlwriter.WriteStartElement("geometry");
                     xmlwriter.WriteStartElement("mesh");
                     xmlwriter.WriteStartElement("source");
-                    xmlwriter.WriteAttributeString("id","positions");
+                    xmlwriter.WriteAttributeString("id", "positions");
                     xmlwriter.WriteStartElement("float_array");
-                    xmlwriter.WriteAttributeString("id","positions-array");
-                    xmlwriter.WriteAttributeString("count",(vertices.Count * 3).ToString());
+                    xmlwriter.WriteAttributeString("id", "positions-array");
+                    xmlwriter.WriteAttributeString("count", (vertices.Count * 3).ToString());
                     foreach (OldSceneryVertex vertex in vertices)
                     {
                         xmlwriter.WriteValue(vertex.X);
@@ -135,29 +135,29 @@ namespace Crash
                     xmlwriter.WriteEndElement();
                     xmlwriter.WriteStartElement("technique_common");
                     xmlwriter.WriteStartElement("accessor");
-                    xmlwriter.WriteAttributeString("source","#positions-array");
-                    xmlwriter.WriteAttributeString("count",vertices.Count.ToString());
-                    xmlwriter.WriteAttributeString("stride","3");
+                    xmlwriter.WriteAttributeString("source", "#positions-array");
+                    xmlwriter.WriteAttributeString("count", vertices.Count.ToString());
+                    xmlwriter.WriteAttributeString("stride", "3");
                     xmlwriter.WriteStartElement("param");
-                    xmlwriter.WriteAttributeString("name","X");
-                    xmlwriter.WriteAttributeString("type","float");
+                    xmlwriter.WriteAttributeString("name", "X");
+                    xmlwriter.WriteAttributeString("type", "float");
                     xmlwriter.WriteEndElement();
                     xmlwriter.WriteStartElement("param");
-                    xmlwriter.WriteAttributeString("name","Y");
-                    xmlwriter.WriteAttributeString("type","float");
+                    xmlwriter.WriteAttributeString("name", "Y");
+                    xmlwriter.WriteAttributeString("type", "float");
                     xmlwriter.WriteEndElement();
                     xmlwriter.WriteStartElement("param");
-                    xmlwriter.WriteAttributeString("name","Y");
-                    xmlwriter.WriteAttributeString("type","float");
+                    xmlwriter.WriteAttributeString("name", "Y");
+                    xmlwriter.WriteAttributeString("type", "float");
                     xmlwriter.WriteEndElement();
                     xmlwriter.WriteEndElement();
                     xmlwriter.WriteEndElement();
                     xmlwriter.WriteEndElement();
                     xmlwriter.WriteStartElement("source");
-                    xmlwriter.WriteAttributeString("id","colors");
+                    xmlwriter.WriteAttributeString("id", "colors");
                     xmlwriter.WriteStartElement("float_array");
-                    xmlwriter.WriteAttributeString("id","colors-array");
-                    xmlwriter.WriteAttributeString("count",(vertices.Count * 3).ToString());
+                    xmlwriter.WriteAttributeString("id", "colors-array");
+                    xmlwriter.WriteAttributeString("count", (vertices.Count * 3).ToString());
                     foreach (OldSceneryVertex vertex in vertices)
                     {
                         xmlwriter.WriteValue(vertex.Red / 256.0);
@@ -170,41 +170,41 @@ namespace Crash
                     xmlwriter.WriteEndElement();
                     xmlwriter.WriteStartElement("technique_common");
                     xmlwriter.WriteStartElement("accessor");
-                    xmlwriter.WriteAttributeString("source","#colors-array");
-                    xmlwriter.WriteAttributeString("count",vertices.Count.ToString());
-                    xmlwriter.WriteAttributeString("stride","3");
+                    xmlwriter.WriteAttributeString("source", "#colors-array");
+                    xmlwriter.WriteAttributeString("count", vertices.Count.ToString());
+                    xmlwriter.WriteAttributeString("stride", "3");
                     xmlwriter.WriteStartElement("param");
-                    xmlwriter.WriteAttributeString("name","R");
-                    xmlwriter.WriteAttributeString("type","float");
+                    xmlwriter.WriteAttributeString("name", "R");
+                    xmlwriter.WriteAttributeString("type", "float");
                     xmlwriter.WriteEndElement();
                     xmlwriter.WriteStartElement("param");
-                    xmlwriter.WriteAttributeString("name","G");
-                    xmlwriter.WriteAttributeString("type","float");
+                    xmlwriter.WriteAttributeString("name", "G");
+                    xmlwriter.WriteAttributeString("type", "float");
                     xmlwriter.WriteEndElement();
                     xmlwriter.WriteStartElement("param");
-                    xmlwriter.WriteAttributeString("name","B");
-                    xmlwriter.WriteAttributeString("type","float");
+                    xmlwriter.WriteAttributeString("name", "B");
+                    xmlwriter.WriteAttributeString("type", "float");
                     xmlwriter.WriteEndElement();
                     xmlwriter.WriteEndElement();
                     xmlwriter.WriteEndElement();
                     xmlwriter.WriteEndElement();
                     xmlwriter.WriteStartElement("vertices");
-                    xmlwriter.WriteAttributeString("id","vertices");
+                    xmlwriter.WriteAttributeString("id", "vertices");
                     xmlwriter.WriteStartElement("input");
-                    xmlwriter.WriteAttributeString("semantic","POSITION");
-                    xmlwriter.WriteAttributeString("source","positions");
+                    xmlwriter.WriteAttributeString("semantic", "POSITION");
+                    xmlwriter.WriteAttributeString("source", "positions");
                     xmlwriter.WriteEndElement();
                     xmlwriter.WriteStartElement("input");
-                    xmlwriter.WriteAttributeString("semantic","COLOR");
-                    xmlwriter.WriteAttributeString("source","colors");
+                    xmlwriter.WriteAttributeString("semantic", "COLOR");
+                    xmlwriter.WriteAttributeString("source", "colors");
                     xmlwriter.WriteEndElement();
                     xmlwriter.WriteEndElement();
                     xmlwriter.WriteStartElement("triangles");
-                    xmlwriter.WriteAttributeString("count",polygons.Count.ToString());
+                    xmlwriter.WriteAttributeString("count", polygons.Count.ToString());
                     xmlwriter.WriteStartElement("input");
-                    xmlwriter.WriteAttributeString("semantic","VERTEX");
-                    xmlwriter.WriteAttributeString("source","vertices");
-                    xmlwriter.WriteAttributeString("offset","0");
+                    xmlwriter.WriteAttributeString("semantic", "VERTEX");
+                    xmlwriter.WriteAttributeString("source", "vertices");
+                    xmlwriter.WriteAttributeString("offset", "0");
                     xmlwriter.WriteEndElement();
                     xmlwriter.WriteStartElement("p");
                     foreach (OldSceneryPolygon polygon in polygons)

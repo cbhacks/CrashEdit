@@ -2,7 +2,7 @@ namespace Crash
 {
     public struct OldSLSTPolygonID
     {
-        public OldSLSTPolygonID(short id,byte world,byte copy)
+        public OldSLSTPolygonID(short id, byte world, byte copy)
         {
             ID = id;
             World = world;

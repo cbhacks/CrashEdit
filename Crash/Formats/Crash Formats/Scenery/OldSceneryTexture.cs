@@ -22,10 +22,10 @@ namespace Crash
             byte xoffu = (byte)(texinfo >> 13 & 0x1F);
             byte cluty = (byte)(texinfo >> 6 & 0x7F);
             byte yoffu = (byte)(texinfo & 0x1F);
-            return new OldSceneryTexture(uvindex,clutx,cluty,xoffu,yoffu,colormode,blendmode,segment,r,g,b);
+            return new OldSceneryTexture(uvindex, clutx, cluty, xoffu, yoffu, colormode, blendmode, segment, r, g, b);
         }
 
-        public OldSceneryTexture(int uvindex,byte clutx,byte cluty,byte xoffu,byte yoffu,byte colormode,byte blendmode,byte segment,byte r,byte g,byte b)
+        public OldSceneryTexture(int uvindex, byte clutx, byte cluty, byte xoffu, byte yoffu, byte colormode, byte blendmode, byte segment, byte r, byte g, byte b)
         {
             UVIndex = uvindex;
             ClutX = clutx;
@@ -51,7 +51,7 @@ namespace Crash
             V2 = h * ((0x9E7186 >> winding) & 1) + yoff;
             V3 = h * ((0x6DB249 >> winding) & 1) + yoff;
         }
-        
+
         public byte R { get; }
         public byte G { get; }
         public byte B { get; }

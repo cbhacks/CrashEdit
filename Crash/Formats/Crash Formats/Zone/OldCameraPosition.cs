@@ -2,7 +2,7 @@ namespace Crash
 {
     public readonly struct OldCameraPosition
     {
-        public OldCameraPosition(short x,short y,short z,short xrot,short yrot,short zrot)
+        public OldCameraPosition(short x, short y, short z, short xrot, short yrot, short zrot)
         {
             X = x;
             Y = y;

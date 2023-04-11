@@ -1,5 +1,5 @@
-using System.Reflection;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Crash
 {
@@ -16,7 +16,7 @@ namespace Crash
         public override byte Type => 1;
         public override byte ElementSize => 1;
 
-        internal override void LoadToField(object obj,FieldInfo field)
+        internal override void LoadToField(object obj, FieldInfo field)
         {
             if (field.FieldType == typeof(string))
             {
@@ -24,8 +24,8 @@ namespace Crash
                 {
                     if (Rows[0].MetaValue == null)
                     {
-                        byte[] bytestr = new byte [Rows[0].Values.Count];
-                        for (int i = 0;i < bytestr.Length;i++)
+                        byte[] bytestr = new byte[Rows[0].Values.Count];
+                        for (int i = 0; i < bytestr.Length; i++)
                         {
                             bytestr[i] = Rows[0].Values[i];
                         }
@@ -38,7 +38,7 @@ namespace Crash
                         {
                             ErrorManager.SignalIgnorableError("EntityProperty: String is not null-terminated");
                         }
-                        field.SetValue(obj,str);
+                        field.SetValue(obj, str);
                     }
                     else
                     {
@@ -52,11 +52,11 @@ namespace Crash
             }
             else
             {
-                base.LoadToField(obj,field);
+                base.LoadToField(obj, field);
             }
         }
 
-        protected override void SaveElement(byte[] data,byte value)
+        protected override void SaveElement(byte[] data, byte value)
         {
             data[0] = value;
         }

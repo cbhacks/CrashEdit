@@ -2,7 +2,7 @@ namespace Crash
 {
     public sealed class NSDSpawnPoint
     {
-        public NSDSpawnPoint(int zoneeid,int camera,int unknown,int spawnx,int spawny,int spawnz)
+        public NSDSpawnPoint(int zoneeid, int camera, int unknown, int spawnx, int spawny, int spawnz)
         {
             ZoneEID = zoneeid;
             Camera = camera;

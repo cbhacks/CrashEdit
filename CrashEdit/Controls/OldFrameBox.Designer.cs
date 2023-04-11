@@ -53,9 +53,9 @@ namespace CrashEdit
             this.lblZG = new System.Windows.Forms.Label();
             this.lblYG = new System.Windows.Forms.Label();
             this.lblXG = new System.Windows.Forms.Label();
-            this.numZG = new System.Windows.Forms.NumericUpDown();
-            this.numYG = new System.Windows.Forms.NumericUpDown();
-            this.numXG = new System.Windows.Forms.NumericUpDown();
+            this.numZOffsetCollision = new System.Windows.Forms.NumericUpDown();
+            this.numYOffsetCollision = new System.Windows.Forms.NumericUpDown();
+            this.numXOffsetCollision = new System.Windows.Forms.NumericUpDown();
             this.fraG2 = new System.Windows.Forms.GroupBox();
             this.lblZ2 = new System.Windows.Forms.Label();
             this.lblY2 = new System.Windows.Forms.Label();
@@ -87,9 +87,9 @@ namespace CrashEdit
             this.fraUnknown.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUnknown)).BeginInit();
             this.fraGG.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numZG)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numYG)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numXG)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numZOffsetCollision)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numYOffsetCollision)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numXOffsetCollision)).BeginInit();
             this.fraG2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numZ2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numY2)).BeginInit();
@@ -371,9 +371,9 @@ namespace CrashEdit
             // fraUnknown
             // 
             this.fraUnknown.Controls.Add(this.numUnknown);
-            this.fraUnknown.Location = new System.Drawing.Point(147, 245);
+            this.fraUnknown.Location = new System.Drawing.Point(3, 245);
             this.fraUnknown.Name = "fraUnknown";
-            this.fraUnknown.Size = new System.Drawing.Size(110, 51);
+            this.fraUnknown.Size = new System.Drawing.Size(124, 51);
             this.fraUnknown.TabIndex = 12;
             this.fraUnknown.TabStop = false;
             this.fraUnknown.Text = "Unknown";
@@ -392,7 +392,7 @@ namespace CrashEdit
             0,
             -2147483648});
             this.numUnknown.Name = "numUnknown";
-            this.numUnknown.Size = new System.Drawing.Size(98, 20);
+            this.numUnknown.Size = new System.Drawing.Size(112, 20);
             this.numUnknown.TabIndex = 2;
             this.numUnknown.ValueChanged += new System.EventHandler(this.numUnknown_ValueChanged);
             // 
@@ -401,12 +401,12 @@ namespace CrashEdit
             this.fraGG.Controls.Add(this.lblZG);
             this.fraGG.Controls.Add(this.lblYG);
             this.fraGG.Controls.Add(this.lblXG);
-            this.fraGG.Controls.Add(this.numZG);
-            this.fraGG.Controls.Add(this.numYG);
-            this.fraGG.Controls.Add(this.numXG);
-            this.fraGG.Location = new System.Drawing.Point(3, 245);
+            this.fraGG.Controls.Add(this.numZOffsetCollision);
+            this.fraGG.Controls.Add(this.numYOffsetCollision);
+            this.fraGG.Controls.Add(this.numXOffsetCollision);
+            this.fraGG.Location = new System.Drawing.Point(133, 245);
             this.fraGG.Name = "fraGG";
-            this.fraGG.Size = new System.Drawing.Size(136, 98);
+            this.fraGG.Size = new System.Drawing.Size(124, 98);
             this.fraGG.TabIndex = 11;
             this.fraGG.TabStop = false;
             this.fraGG.Text = "Collision Offset";
@@ -438,59 +438,59 @@ namespace CrashEdit
             this.lblXG.TabIndex = 3;
             this.lblXG.Text = "X";
             // 
-            // numZG
+            // numZOffsetCollision
             // 
-            this.numZG.Location = new System.Drawing.Point(23, 71);
-            this.numZG.Maximum = new decimal(new int[] {
+            this.numZOffsetCollision.Location = new System.Drawing.Point(23, 71);
+            this.numZOffsetCollision.Maximum = new decimal(new int[] {
             2147483647,
             0,
             0,
             0});
-            this.numZG.Minimum = new decimal(new int[] {
+            this.numZOffsetCollision.Minimum = new decimal(new int[] {
             -2147483648,
             0,
             0,
             -2147483648});
-            this.numZG.Name = "numZG";
-            this.numZG.Size = new System.Drawing.Size(107, 20);
-            this.numZG.TabIndex = 4;
-            this.numZG.ValueChanged += new System.EventHandler(this.numZGlobal_ValueChanged);
+            this.numZOffsetCollision.Name = "numZOffsetCollision";
+            this.numZOffsetCollision.Size = new System.Drawing.Size(95, 20);
+            this.numZOffsetCollision.TabIndex = 4;
+            this.numZOffsetCollision.ValueChanged += new System.EventHandler(this.numZOffsetCollision_ValueChanged);
             // 
-            // numYG
+            // numYOffsetCollision
             // 
-            this.numYG.Location = new System.Drawing.Point(23, 45);
-            this.numYG.Maximum = new decimal(new int[] {
+            this.numYOffsetCollision.Location = new System.Drawing.Point(23, 45);
+            this.numYOffsetCollision.Maximum = new decimal(new int[] {
             2147483647,
             0,
             0,
             0});
-            this.numYG.Minimum = new decimal(new int[] {
+            this.numYOffsetCollision.Minimum = new decimal(new int[] {
             -2147483648,
             0,
             0,
             -2147483648});
-            this.numYG.Name = "numYG";
-            this.numYG.Size = new System.Drawing.Size(107, 20);
-            this.numYG.TabIndex = 3;
-            this.numYG.ValueChanged += new System.EventHandler(this.numYGlobal_ValueChanged);
+            this.numYOffsetCollision.Name = "numYOffsetCollision";
+            this.numYOffsetCollision.Size = new System.Drawing.Size(95, 20);
+            this.numYOffsetCollision.TabIndex = 3;
+            this.numYOffsetCollision.ValueChanged += new System.EventHandler(this.numYOffsetCollision_ValueChanged);
             // 
-            // numXG
+            // numXOffsetCollision
             // 
-            this.numXG.Location = new System.Drawing.Point(23, 19);
-            this.numXG.Maximum = new decimal(new int[] {
+            this.numXOffsetCollision.Location = new System.Drawing.Point(23, 19);
+            this.numXOffsetCollision.Maximum = new decimal(new int[] {
             2147483647,
             0,
             0,
             0});
-            this.numXG.Minimum = new decimal(new int[] {
+            this.numXOffsetCollision.Minimum = new decimal(new int[] {
             -2147483648,
             0,
             0,
             -2147483648});
-            this.numXG.Name = "numXG";
-            this.numXG.Size = new System.Drawing.Size(107, 20);
-            this.numXG.TabIndex = 2;
-            this.numXG.ValueChanged += new System.EventHandler(this.numXGlobal_ValueChanged);
+            this.numXOffsetCollision.Name = "numXOffsetCollision";
+            this.numXOffsetCollision.Size = new System.Drawing.Size(95, 20);
+            this.numXOffsetCollision.TabIndex = 2;
+            this.numXOffsetCollision.ValueChanged += new System.EventHandler(this.numXOffsetCollision_ValueChanged);
             // 
             // fraG2
             // 
@@ -804,9 +804,9 @@ namespace CrashEdit
             ((System.ComponentModel.ISupportInitialize)(this.numUnknown)).EndInit();
             this.fraGG.ResumeLayout(false);
             this.fraGG.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numZG)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numYG)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numXG)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numZOffsetCollision)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numYOffsetCollision)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numXOffsetCollision)).EndInit();
             this.fraG2.ResumeLayout(false);
             this.fraG2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numZ2)).EndInit();
@@ -872,9 +872,9 @@ namespace CrashEdit
         private System.Windows.Forms.Label lblZG;
         private System.Windows.Forms.Label lblYG;
         private System.Windows.Forms.Label lblXG;
-        private System.Windows.Forms.NumericUpDown numZG;
-        private System.Windows.Forms.NumericUpDown numYG;
-        private System.Windows.Forms.NumericUpDown numXG;
+        private System.Windows.Forms.NumericUpDown numZOffsetCollision;
+        private System.Windows.Forms.NumericUpDown numYOffsetCollision;
+        private System.Windows.Forms.NumericUpDown numXOffsetCollision;
         private System.Windows.Forms.GroupBox fraUnknown;
         private System.Windows.Forms.NumericUpDown numUnknown;
     }

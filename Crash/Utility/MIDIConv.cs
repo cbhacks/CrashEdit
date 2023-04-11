@@ -4,7 +4,7 @@ namespace Crash
 {
     public static class MIDIConv
     {
-        public static int From3BE(byte[] str,int offset)
+        public static int From3BE(byte[] str, int offset)
         {
             if (str == null)
                 throw new ArgumentNullException("str");
@@ -19,7 +19,7 @@ namespace Crash
             return result;
         }
 
-        public static void To3BE(byte[] str,int offset,int value)
+        public static void To3BE(byte[] str, int offset, int value)
         {
             if (str == null)
                 throw new ArgumentNullException("str");

@@ -1,18 +1,18 @@
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Crash
 {
     public sealed class SceneryEntry : Entry
     {
-        private List<SceneryVertex> vertices;
-        private List<SceneryTriangle> triangles;
-        private List<SceneryQuad> quads;
-        private List<ModelTexture> textures;
-        private List<SceneryColor> colors;
-        private List<ModelExtendedTexture> animatedtextures;
+        private readonly List<SceneryVertex> vertices;
+        private readonly List<SceneryTriangle> triangles;
+        private readonly List<SceneryQuad> quads;
+        private readonly List<ModelTexture> textures;
+        private readonly List<SceneryColor> colors;
+        private readonly List<ModelExtendedTexture> animatedtextures;
 
-        public SceneryEntry(byte[] info,IEnumerable<SceneryVertex> vertices,IEnumerable<SceneryTriangle> triangles,IEnumerable<SceneryQuad> quads,IEnumerable<ModelTexture> textures,IEnumerable<SceneryColor> colors,IEnumerable<ModelExtendedTexture> animatedtextures,bool is_c3,int eid)
+        public SceneryEntry(byte[] info, IEnumerable<SceneryVertex> vertices, IEnumerable<SceneryTriangle> triangles, IEnumerable<SceneryQuad> quads, IEnumerable<ModelTexture> textures, IEnumerable<SceneryColor> colors, IEnumerable<ModelExtendedTexture> animatedtextures, bool is_c3, int eid)
             : base(eid)
         {
             Info = info;
@@ -37,20 +37,20 @@ namespace Crash
 
         public int XOffset
         {
-            get => BitConv.FromInt32(Info,0);
-            set => BitConv.ToInt32(Info,0,value);
+            get => BitConv.FromInt32(Info, 0);
+            set => BitConv.ToInt32(Info, 0, value);
         }
 
         public int YOffset
         {
-            get => BitConv.FromInt32(Info,4);
-            set => BitConv.ToInt32(Info,4,value);
+            get => BitConv.FromInt32(Info, 4);
+            set => BitConv.ToInt32(Info, 4, value);
         }
 
         public int ZOffset
         {
-            get => BitConv.FromInt32(Info,8);
-            set => BitConv.ToInt32(Info,8,value);
+            get => BitConv.FromInt32(Info, 8);
+            set => BitConv.ToInt32(Info, 8, value);
         }
 
         public bool IsSky
@@ -65,24 +65,24 @@ namespace Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte [7][];
+            byte[][] items = new byte[7][];
             items[0] = Info;
-            items[1] = new byte [Aligner.Align(vertices.Count * 6,4)];
-            for (int i = 0;i < vertices.Count;i++)
+            items[1] = new byte[Aligner.Align(vertices.Count * 6, 4)];
+            for (int i = 0; i < vertices.Count; i++)
             {
-                vertices[i].SaveXY().CopyTo(items[1],(vertices.Count - 1 - i) * 4);
-                vertices[i].SaveZ().CopyTo(items[1],vertices.Count * 4 + i * 2);
+                vertices[i].SaveXY().CopyTo(items[1], (vertices.Count - 1 - i) * 4);
+                vertices[i].SaveZ().CopyTo(items[1], vertices.Count * 4 + i * 2);
             }
-            items[2] = new byte [Aligner.Align(triangles.Count * 6,4)];
-            for (int i = 0;i < triangles.Count;i++)
+            items[2] = new byte[Aligner.Align(triangles.Count * 6, 4)];
+            for (int i = 0; i < triangles.Count; i++)
             {
-                triangles[i].SaveA().CopyTo(items[2],(triangles.Count - 1 - i) * 4);
-                triangles[i].SaveB().CopyTo(items[2],triangles.Count * 4 + i * 2);
+                triangles[i].SaveA().CopyTo(items[2], (triangles.Count - 1 - i) * 4);
+                triangles[i].SaveB().CopyTo(items[2], triangles.Count * 4 + i * 2);
             }
-            items[3] = new byte [quads.Count * 8];
-            for (int i = 0;i < quads.Count;i++)
+            items[3] = new byte[quads.Count * 8];
+            for (int i = 0; i < quads.Count; i++)
             {
-                quads[i].Save().CopyTo(items[3],i * 8);
+                quads[i].Save().CopyTo(items[3], i * 8);
             }
             items[4] = new byte[textures.Count * 12];
             for (int i = 0; i < textures.Count; i++)
@@ -102,7 +102,7 @@ namespace Crash
             {
                 animatedtextures[i].Save().CopyTo(items[6], i * 4);
             }
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

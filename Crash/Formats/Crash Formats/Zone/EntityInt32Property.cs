@@ -1,5 +1,5 @@
-using System.Reflection;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Crash
 {
@@ -16,7 +16,7 @@ namespace Crash
         public override byte Type => 19;
         public override byte ElementSize => 4;
 
-        internal override void LoadToField(object obj,FieldInfo field)
+        internal override void LoadToField(object obj, FieldInfo field)
         {
             if (field.FieldType == typeof(EntityID?))
             {
@@ -26,7 +26,7 @@ namespace Crash
                     {
                         if (Rows[0].Values.Count == 1)
                         {
-                            field.SetValue(obj,new EntityID(Rows[0].Values[0]));
+                            field.SetValue(obj, new EntityID(Rows[0].Values[0]));
                         }
                         else
                         {
@@ -44,7 +44,7 @@ namespace Crash
                     {
                         if (Rows[0].Values.Count == 1 && Rows[1].Values.Count == 1)
                         {
-                            field.SetValue(obj,new EntityID(Rows[0].Values[0],Rows[1].Values[0]));
+                            field.SetValue(obj, new EntityID(Rows[0].Values[0], Rows[1].Values[0]));
                         }
                         else
                         {
@@ -63,13 +63,13 @@ namespace Crash
             }
             else
             {
-                base.LoadToField(obj,field);
+                base.LoadToField(obj, field);
             }
         }
 
-        protected override void SaveElement(byte[] data,int value)
+        protected override void SaveElement(byte[] data, int value)
         {
-            BitConv.ToInt32(data,0,value);
+            BitConv.ToInt32(data, 0, value);
         }
     }
 }

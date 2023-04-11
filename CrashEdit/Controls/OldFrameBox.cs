@@ -210,16 +210,16 @@ namespace CrashEdit
 
         private void UpdateFactor1()
         {
-            numX1.Value = frame.X1;
-            numY1.Value = frame.Y1;
-            numZ1.Value = frame.Z1;
+            numX1.Value = frame.collision.X1;
+            numY1.Value = frame.collision.Y1;
+            numZ1.Value = frame.collision.Z1;
         }
 
         private void UpdateFactor2()
         {
-            numX2.Value = frame.X2;
-            numY2.Value = frame.Y2;
-            numZ2.Value = frame.Z2;
+            numX2.Value = frame.collision.X2;
+            numY2.Value = frame.collision.Y2;
+            numZ2.Value = frame.collision.Z2;
         }
 
         private void UpdateFactorG()
@@ -228,9 +228,9 @@ namespace CrashEdit
             {
                 fraGG.Visible = false;
             }
-            numXG.Value = frame.XGlobal;
-            numYG.Value = frame.YGlobal;
-            numZG.Value = frame.ZGlobal;
+            numXOffsetCollision.Value = frame.collision.XOffset;
+            numYOffsetCollision.Value = frame.collision.YOffset;
+            numZOffsetCollision.Value = frame.collision.ZOffset;
         }
 
         private void numXOffset_ValueChanged(object sender, EventArgs e)
@@ -250,47 +250,47 @@ namespace CrashEdit
 
         private void numX1_ValueChanged(object sender, EventArgs e)
         {
-            frame.X1 = (int)numX1.Value;
+            frame.collision.X1 = (int)numX1.Value;
         }
 
         private void numY1_ValueChanged(object sender, EventArgs e)
         {
-            frame.Y1 = (int)numY1.Value;
+            frame.collision.Y1 = (int)numY1.Value;
         }
 
         private void numZ1_ValueChanged(object sender, EventArgs e)
         {
-            frame.Z1 = (int)numZ1.Value;
+            frame.collision.Z1 = (int)numZ1.Value;
         }
 
         private void numX2_ValueChanged(object sender, EventArgs e)
         {
-            frame.X2 = (int)numX2.Value;
+            frame.collision.X2 = (int)numX2.Value;
         }
 
         private void numY2_ValueChanged(object sender, EventArgs e)
         {
-            frame.Y2 = (int)numY2.Value;
+            frame.collision.Y2 = (int)numY2.Value;
         }
 
         private void numZ2_ValueChanged(object sender, EventArgs e)
         {
-            frame.Z2 = (int)numZ2.Value;
+            frame.collision.Z2 = (int)numZ2.Value;
         }
 
-        private void numXGlobal_ValueChanged(object sender, EventArgs e)
+        private void numXOffsetCollision_ValueChanged(object sender, EventArgs e)
         {
-            frame.XGlobal = (int)numXG.Value;
+            frame.collision.XOffset = (int)numXOffsetCollision.Value;
         }
 
-        private void numYGlobal_ValueChanged(object sender, EventArgs e)
+        private void numYOffsetCollision_ValueChanged(object sender, EventArgs e)
         {
-            frame.YGlobal = (int)numYG.Value;
+            frame.collision.YOffset = (int)numYOffsetCollision.Value;
         }
 
-        private void numZGlobal_ValueChanged(object sender, EventArgs e)
+        private void numZOffsetCollision_ValueChanged(object sender, EventArgs e)
         {
-            frame.ZGlobal = (int)numZG.Value;
+            frame.collision.ZOffset = (int)numZOffsetCollision.Value;
         }
 
         private void UpdateOffset()

@@ -2,7 +2,7 @@ namespace Crash
 {
     public struct OldCameraNeighbor
     {
-        public OldCameraNeighbor(byte linktype,byte zoneindex,byte cameraindex,byte flag)
+        public OldCameraNeighbor(byte linktype, byte zoneindex, byte cameraindex, byte flag)
         {
             LinkType = linktype;
             ZoneIndex = zoneindex;

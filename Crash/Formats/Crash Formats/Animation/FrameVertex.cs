@@ -2,7 +2,7 @@ namespace Crash
 {
     public readonly struct FrameVertex
     {
-        public FrameVertex(byte x,byte y,byte z)
+        public FrameVertex(byte x, byte y, byte z)
         {
             X = x;
             Y = y;

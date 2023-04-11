@@ -1,6 +1,6 @@
 using System;
-using System.Diagnostics;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Crash
 {
@@ -9,7 +9,7 @@ namespace Crash
         private static int skipdepth;
         private static WeakReference ignoredSubjectRef; // target of current Ignore All
 
-        private static Stack<object> subjects = new Stack<object>();
+        private static readonly Stack<object> subjects = new Stack<object>();
 
         static ErrorManager()
         {
