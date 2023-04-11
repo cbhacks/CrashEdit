@@ -26,10 +26,10 @@
             byte type = (byte)(structure >> 26 & 0x01); // T
             bool flag = (structure >> 27 & 0x1) != 0; // F
             byte tritype = (byte)(structure >> 28); // Y/S
-            return new ModelTriangle(texture,animated,color,key,unknown,type,flag,tritype);
+            return new ModelTriangle(texture, animated, color, key, unknown, type, flag, tritype);
         }
 
-        public ModelTriangle(byte texture,bool animated,byte color,byte key,byte unknown,byte type,bool flag,byte tritype)
+        public ModelTriangle(byte texture, bool animated, byte color, byte key, byte unknown, byte type, bool flag, byte tritype)
         {
             TextureIndex = texture;
             Animated = animated;
@@ -59,10 +59,10 @@
         {
             byte color1 = (byte)(structure >> 2 & 0x7F);
             byte color2 = (byte)(structure >> 9 & 0x7F);
-            return new ModelColor(color1,color2);
+            return new ModelColor(color1, color2);
         }
 
-        public ModelColor(byte color1,byte color2)
+        public ModelColor(byte color1, byte color2)
         {
             Color1 = color1;
             Color2 = color2;

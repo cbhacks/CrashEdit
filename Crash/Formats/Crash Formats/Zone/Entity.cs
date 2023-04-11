@@ -1,21 +1,21 @@
 using System;
-using System.Reflection;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Crash
 {
     public sealed class Entity
     {
-        private static Dictionary<short,FieldInfo> propertyfields;
+        private static readonly Dictionary<short, FieldInfo> propertyfields;
 
         static Entity()
         {
-            propertyfields = new Dictionary<short,FieldInfo>();
+            propertyfields = new Dictionary<short, FieldInfo>();
             foreach (FieldInfo field in typeof(Entity).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
             {
-                foreach (EntityPropertyFieldAttribute attribute in field.GetCustomAttributes(typeof(EntityPropertyFieldAttribute),false))
+                foreach (EntityPropertyFieldAttribute attribute in field.GetCustomAttributes(typeof(EntityPropertyFieldAttribute), false))
                 {
-                    propertyfields.Add(attribute.ID,field);
+                    propertyfields.Add(attribute.ID, field);
                 }
             }
         }
@@ -26,8 +26,8 @@ namespace Crash
             {
                 ErrorManager.SignalError("Entity: Data is too short");
             }
-            int length = BitConv.FromInt32(data,0);
-            int propertycount = BitConv.FromInt32(data,12);
+            int length = BitConv.FromInt32(data, 0);
+            int propertycount = BitConv.FromInt32(data, 12);
             if (length != data.Length)
             {
                 ErrorManager.SignalIgnorableError("Entity: Length field mismatch");
@@ -40,16 +40,16 @@ namespace Crash
             {
                 ErrorManager.SignalError("Entity: Data is too short");
             }
-            Dictionary<short,EntityProperty> properties = new Dictionary<short,EntityProperty>();
-            for (int i = 0;i < propertycount;i++)
+            Dictionary<short, EntityProperty> properties = new Dictionary<short, EntityProperty>();
+            for (int i = 0; i < propertycount; i++)
             {
-                short id = BitConv.FromInt16(data,16 + i * 8);
-                int offset = (ushort)BitConv.FromInt16(data,18 + i * 8) + 12;
-                int nextoffset = (i == propertycount - 1) ? data.Length : ((ushort)BitConv.FromInt16(data,26 + i * 8) + 12);
+                short id = BitConv.FromInt16(data, 16 + i * 8);
+                int offset = (ushort)BitConv.FromInt16(data, 18 + i * 8) + 12;
+                int nextoffset = (i == propertycount - 1) ? data.Length : ((ushort)BitConv.FromInt16(data, 26 + i * 8) + 12);
                 byte type = data[20 + i * 8];
                 if (id == 0x103 && type == 0x13) type = 4; // force-fix a stupid bug
                 byte elementsize = data[21 + i * 8];
-                short unknown = BitConv.FromInt16(data,22 + i * 8);
+                short unknown = BitConv.FromInt16(data, 22 + i * 8);
                 if (offset > data.Length)
                 {
                     ErrorManager.SignalError("Entity: Property begins out of bounds");
@@ -68,10 +68,10 @@ namespace Crash
                 }
                 else
                 {
-                    byte[] propertydata = new byte [nextoffset - offset];
-                    Array.Copy(data,offset,propertydata,0,propertydata.Length);
-                    EntityProperty property = EntityProperty.Load(type,elementsize,unknown,i == propertycount - 1,propertydata);
-                    properties.Add(id,property);
+                    byte[] propertydata = new byte[nextoffset - offset];
+                    Array.Copy(data, offset, propertydata, 0, propertydata.Length);
+                    EntityProperty property = EntityProperty.Load(type, elementsize, unknown, i == propertycount - 1, propertydata);
+                    properties.Add(id, property);
                 }
             }
             return new Entity(properties);
@@ -85,11 +85,11 @@ namespace Crash
         [EntityPropertyField(0x32)]
         private int? zmod;
         [EntityPropertyField(0x4B)]
-        private List<EntityPosition> positions = null;
+        private readonly List<EntityPosition> positions = null;
         [EntityPropertyField(0x9F)]
         private EntityID? id;
         [EntityPropertyField(0xA4)]
-        private List<EntitySetting> settings = null;
+        private readonly List<EntitySetting> settings = null;
         [EntityPropertyField(0xA9)]
         private int? type;
         [EntityPropertyField(0xAA)]
@@ -119,7 +119,7 @@ namespace Crash
         [EntityPropertyField(0x277)]
         private int? ddasettings = null;
         [EntityPropertyField(0x287)]
-        private List<EntityVictim> victims = null;
+        private readonly List<EntityVictim> victims = null;
         [EntityPropertyField(0x288)]
         private int? ddasection = null;
         [EntityPropertyField(0x28B)]
@@ -131,27 +131,27 @@ namespace Crash
         [EntityPropertyField(0x337)]
         private EntitySetting? bonusboxcount = null;
 
-        private Dictionary<short,EntityProperty> extraproperties;
+        private readonly Dictionary<short, EntityProperty> extraproperties;
 
-        public Entity(IDictionary<short,EntityProperty> properties)
+        public Entity(IDictionary<short, EntityProperty> properties)
         {
-            extraproperties = new Dictionary<short,EntityProperty>(properties);
-            foreach (KeyValuePair<short,FieldInfo> pair in propertyfields)
+            extraproperties = new Dictionary<short, EntityProperty>(properties);
+            foreach (KeyValuePair<short, FieldInfo> pair in propertyfields)
             {
                 short id = pair.Key;
                 FieldInfo field = pair.Value;
                 if (field.FieldType.IsGenericType && field.FieldType.GetGenericTypeDefinition() == typeof(List<>))
                 {
-                    field.SetValue(this,Activator.CreateInstance(field.FieldType));
+                    field.SetValue(this, Activator.CreateInstance(field.FieldType));
                 }
                 else
                 {
-                    field.SetValue(this,null);
+                    field.SetValue(this, null);
                 }
                 if (extraproperties.ContainsKey(id))
                 {
                     EntityProperty property = extraproperties[id];
-                    property.LoadToField(this,field);
+                    property.LoadToField(this, field);
                     extraproperties.Remove(id);
                 }
             }
@@ -186,7 +186,7 @@ namespace Crash
                 {
                     if (id.HasValue)
                     {
-                        id = new EntityID(value.Value,id.Value.AlternateID);
+                        id = new EntityID(value.Value, id.Value.AlternateID);
                     }
                     else
                     {
@@ -214,7 +214,7 @@ namespace Crash
             {
                 if (id != null)
                 {
-                    id = new EntityID(id.Value.ID,value);
+                    id = new EntityID(id.Value.ID, value);
                 }
                 else
                 {
@@ -341,7 +341,7 @@ namespace Crash
             set => bonusboxcount = value;
         }
 
-        public IDictionary<short,EntityProperty> ExtraProperties => extraproperties;
+        public IDictionary<short, EntityProperty> ExtraProperties => extraproperties;
 
         public byte[] Save()
         {
@@ -349,42 +349,42 @@ namespace Crash
                 ErrorManager.SignalIgnorableError("Entity: Entity contains one load list but not the other");
             if (DrawListA != null ^ DrawListB != null)
                 ErrorManager.SignalIgnorableError("Entity: Entity contains one draw list but not the other");
-            SortedDictionary<short,EntityProperty> properties = new SortedDictionary<short,EntityProperty>(extraproperties);
-            foreach (KeyValuePair<short,FieldInfo> pair in propertyfields)
+            SortedDictionary<short, EntityProperty> properties = new SortedDictionary<short, EntityProperty>(extraproperties);
+            foreach (KeyValuePair<short, FieldInfo> pair in propertyfields)
             {
                 short id = pair.Key;
                 FieldInfo field = pair.Value;
                 EntityProperty property = EntityProperty.LoadFromField(field.GetValue(this));
                 if (property != null)
                 {
-                    properties.Add(id,property);
+                    properties.Add(id, property);
                 }
             }
-            byte[] header = new byte [16 + 8 * properties.Count];
+            byte[] header = new byte[16 + 8 * properties.Count];
             List<byte> result = new List<byte>();
             int i = 0;
             int offset = header.Length - 12;
-            foreach (KeyValuePair<short,EntityProperty> pair in properties)
+            foreach (KeyValuePair<short, EntityProperty> pair in properties)
             {
                 EntityProperty property = pair.Value;
-                BitConv.ToInt16(header,16 + 8 * i + 0,pair.Key);
+                BitConv.ToInt16(header, 16 + 8 * i + 0, pair.Key);
                 unchecked
                 {
-                    BitConv.ToInt16(header,16 + 8 * i + 2,(short)offset);
+                    BitConv.ToInt16(header, 16 + 8 * i + 2, (short)offset);
                 }
                 header[16 + 8 * i + 4] = (byte)(property.Type | ((i == properties.Count - 1) ? 128 : 0) | (property.IsSparse ? 64 : 0) | (property.HasMetaValues ? 32 : 0));
                 header[16 + 8 * i + 5] = property.ElementSize;
-                BitConv.ToInt16(header,16 + 8 * i + 6,property.RowCount);
+                BitConv.ToInt16(header, 16 + 8 * i + 6, property.RowCount);
                 byte[] propertydata = property.Save();
                 i++;
                 offset += propertydata.Length;
                 result.AddRange(propertydata);
             }
-            BitConv.ToInt32(header,0,offset + 12);
-            BitConv.ToInt32(header,4,0);
-            BitConv.ToInt32(header,8,0);
-            BitConv.ToInt32(header,12,properties.Count);
-            result.InsertRange(0,header);
+            BitConv.ToInt32(header, 0, offset + 12);
+            BitConv.ToInt32(header, 4, 0);
+            BitConv.ToInt32(header, 8, 0);
+            BitConv.ToInt32(header, 12, properties.Count);
+            result.InsertRange(0, header);
             return result.ToArray();
         }
 

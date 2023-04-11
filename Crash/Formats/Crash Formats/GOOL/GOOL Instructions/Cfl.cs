@@ -4,7 +4,7 @@
     [GOOLInstruction(130, GameVersion.Crash1BetaMAR08)]
     public sealed class Cfl_95 : GOOLInstruction
     {
-        public Cfl_95(int value,GOOLEntry gool) : base(value,gool)
+        public Cfl_95(int value, GOOLEntry gool) : base(value, gool)
         {
             if (Args['T'].Value == 0)
                 Args['I'] = new GOOLArgument(BitConv.SignExtendInt32(Args['I'].Value, 9)); // sign-extension
@@ -86,7 +86,7 @@
                             return str + $"pop {v} values";
                         }
                     case 1:
-                        return str + $"change to state {GetArg('I')}"+ (v > 0 ? $" with {GetArg('V')} arguments" : string.Empty);
+                        return str + $"change to state {GetArg('I')}" + (v > 0 ? $" with {GetArg('V')} arguments" : string.Empty);
                     case 2:
                         return str + "return";
                 }
@@ -95,11 +95,11 @@
         }
     }
 
-    [GOOLInstruction(130,GameVersion.Crash1)]
-    [GOOLInstruction(130,GameVersion.Crash1BetaMAY11)]
+    [GOOLInstruction(130, GameVersion.Crash1)]
+    [GOOLInstruction(130, GameVersion.Crash1BetaMAY11)]
     public sealed class Cfl : GOOLInstruction
     {
-        public Cfl(int value,GOOLEntry gool) : base(value,gool)
+        public Cfl(int value, GOOLEntry gool) : base(value, gool)
         {
             if (Args['T'].Value == 0)
                 Args['I'] = new GOOLArgument(BitConv.SignExtendInt32(Args['I'].Value, 10)); // sign-extension
@@ -181,7 +181,7 @@
                             return str + $"pop {v} values";
                         }
                     case 1:
-                        return str + $"change to state {GetArg('I')}"+ (v > 0 ? $" with {GetArg('V')} arguments" : string.Empty);
+                        return str + $"change to state {GetArg('I')}" + (v > 0 ? $" with {GetArg('V')} arguments" : string.Empty);
                     case 2:
                         return str + "return";
                 }

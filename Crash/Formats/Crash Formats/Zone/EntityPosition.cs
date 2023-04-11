@@ -2,7 +2,7 @@ namespace Crash
 {
     public readonly struct EntityPosition
     {
-        public EntityPosition(short x,short y,short z)
+        public EntityPosition(short x, short y, short z)
         {
             X = x;
             Y = y;

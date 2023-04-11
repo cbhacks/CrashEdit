@@ -4,7 +4,7 @@ namespace Crash
 {
     public sealed class EntityPropertyRow<T>
     {
-        private List<T> values;
+        private readonly List<T> values;
 
         public EntityPropertyRow()
         {

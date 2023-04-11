@@ -11,17 +11,17 @@ namespace Crash
             EID = eid;
         }
 
-        public EntryAddException(int eid,string message) : base(message)
+        public EntryAddException(int eid, string message) : base(message)
         {
             EID = eid;
         }
 
-        public EntryAddException(int eid,string message,Exception inner) : base(message,inner)
+        public EntryAddException(int eid, string message, Exception inner) : base(message, inner)
         {
             EID = eid;
         }
 
-        protected EntryAddException(SerializationInfo info,StreamingContext context) : base(info,context)
+        protected EntryAddException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
 

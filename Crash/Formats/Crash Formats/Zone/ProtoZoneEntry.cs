@@ -4,10 +4,10 @@ namespace Crash
 {
     public sealed class ProtoZoneEntry : Entry
     {
-        private List<OldCamera> cameras;
-        private List<ProtoEntity> entities;
+        private readonly List<OldCamera> cameras;
+        private readonly List<ProtoEntity> entities;
 
-        public ProtoZoneEntry(byte[] header,byte[] layout,IEnumerable<OldCamera> cameras,IEnumerable<ProtoEntity> entities,int eid)
+        public ProtoZoneEntry(byte[] header, byte[] layout, IEnumerable<OldCamera> cameras, IEnumerable<ProtoEntity> entities, int eid)
             : base(eid)
         {
             Header = header;
@@ -105,7 +105,7 @@ namespace Crash
             {
                 items[2 + cameras.Count + i] = entities[i].Save();
             }
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

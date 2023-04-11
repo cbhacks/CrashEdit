@@ -1,6 +1,6 @@
 using System;
-using System.Reflection;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Crash
 {
@@ -10,17 +10,17 @@ namespace Crash
         public const short Magic = 0x1234;
         public const short CompressedMagic = 0x1235;
 
-        internal static Dictionary<short,ChunkLoader> loaders;
+        internal static Dictionary<short, ChunkLoader> loaders;
 
         static Chunk()
         {
-            loaders = new Dictionary<short,ChunkLoader>();
+            loaders = new Dictionary<short, ChunkLoader>();
             foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
             {
-                foreach (ChunkTypeAttribute attribute in type.GetCustomAttributes(typeof(ChunkTypeAttribute),false))
+                foreach (ChunkTypeAttribute attribute in type.GetCustomAttributes(typeof(ChunkTypeAttribute), false))
                 {
                     ChunkLoader loader = (ChunkLoader)Activator.CreateInstance(type);
-                    loaders.Add(attribute.Type,loader);
+                    loaders.Add(attribute.Type, loader);
                 }
             }
         }
@@ -30,9 +30,9 @@ namespace Crash
             if (data == null)
                 throw new ArgumentNullException("data");
             if (data.Length != Length)
-                throw new ArgumentException("Value must be 65536 bytes long.","data");
+                throw new ArgumentException("Value must be 65536 bytes long.", "data");
             uint checksum = 0x12345678;
-            for (int i = 0;i < Length;i++)
+            for (int i = 0; i < Length; i++)
             {
                 if (i < 12 || i >= 16)
                 {
@@ -45,7 +45,7 @@ namespace Crash
 
         public static UnprocessedChunk Load(byte[] data, NSF nsf)
         {
-            short magic = BitConv.FromInt16(data,0);
+            short magic = BitConv.FromInt16(data, 0);
             if (magic != Magic)
             {
                 ErrorManager.SignalIgnorableError("Chunk: Magic number is wrong");

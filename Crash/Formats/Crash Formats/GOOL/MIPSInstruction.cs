@@ -188,7 +188,7 @@
                     SetInsParams("swr", MIPSInstructionFormats.LoadStore); break;
             }
         }
-        
+
         private string GetMIPSReg(int reg)
         {
             return $"${(MIPSRegisters)reg}";

@@ -2,7 +2,7 @@ namespace Crash
 {
     public struct ProtoEntityPosition
     {
-        public ProtoEntityPosition(sbyte x,sbyte y,sbyte z)
+        public ProtoEntityPosition(sbyte x, sbyte y, sbyte z)
         {
             X = x;
             Y = y;

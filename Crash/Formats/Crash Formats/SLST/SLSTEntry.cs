@@ -5,7 +5,7 @@ namespace Crash
 {
     public sealed class SLSTEntry : Entry
     {
-        private List<SLSTDelta> deltas;
+        private readonly List<SLSTDelta> deltas;
 
         public SLSTEntry(SLSTSource start, SLSTSource end, IEnumerable<SLSTDelta> deltas, int eid) : base(eid)
         {
@@ -25,12 +25,12 @@ namespace Crash
         {
             byte[][] items = new byte[deltas.Count + 2][];
             items[0] = Start.Save();
-            for (int i = 0;i < deltas.Count;++i)
+            for (int i = 0; i < deltas.Count; ++i)
             {
-                items[1+i] = deltas[i].Save();
+                items[1 + i] = deltas[i].Save();
             }
             items[1 + deltas.Count] = End.Save();
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

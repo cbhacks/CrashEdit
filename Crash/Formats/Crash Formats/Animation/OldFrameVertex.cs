@@ -9,17 +9,17 @@ namespace Crash
             if (data == null)
                 throw new ArgumentNullException("data");
             if (data.Length != 6)
-                throw new ArgumentException("Value must be 6 bytes long.","data");
+                throw new ArgumentException("Value must be 6 bytes long.", "data");
             byte x = data[0];
             byte y = data[1];
             byte z = data[2];
             sbyte normalx = (sbyte)data[3];
             sbyte normaly = (sbyte)data[4];
             sbyte normalz = (sbyte)data[5];
-            return new OldFrameVertex(x,y,z,normalx,normaly,normalz);
+            return new OldFrameVertex(x, y, z, normalx, normaly, normalz);
         }
 
-        public OldFrameVertex(byte x,byte y,byte z,sbyte normalx,sbyte normaly,sbyte normalz)
+        public OldFrameVertex(byte x, byte y, byte z, sbyte normalx, sbyte normaly, sbyte normalz)
         {
             X = x;
             Y = y;
@@ -44,7 +44,7 @@ namespace Crash
 
         public byte[] Save()
         {
-            byte[] data = new byte [6];
+            byte[] data = new byte[6];
             data[0] = X;
             data[1] = Y;
             data[2] = Z;

@@ -1,10 +1,10 @@
 ﻿namespace Crash.GOOLIns
 {
-    [GOOLInstruction(55,GameVersion.Crash2)]
-    [GOOLInstruction(55,GameVersion.Crash3)]
+    [GOOLInstruction(55, GameVersion.Crash2)]
+    [GOOLInstruction(55, GameVersion.Crash3)]
     public sealed class Ceqz : GOOLInstruction
     {
-        public Ceqz(int value,GOOLEntry gool) : base(value,gool) { }
+        public Ceqz(int value, GOOLEntry gool) : base(value, gool) { }
 
         public override string Name => "CEQZ";
         public override string Format => "SSSSSSSSSS VVVV (RRRRRR) 01 10";

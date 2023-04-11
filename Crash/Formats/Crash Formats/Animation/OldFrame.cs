@@ -14,7 +14,7 @@ namespace Crash
             {
                 ErrorManager.SignalError("OldFrame: Data is too short");
             }
-            int vertexcount = BitConv.FromInt32(data,0);
+            int vertexcount = BitConv.FromInt32(data, 0);
             if (vertexcount < 0 || vertexcount > Chunk.Length / 6)
             {
                 ErrorManager.SignalError("OldFrame: Vertex count is invalid");
@@ -38,24 +38,25 @@ namespace Crash
             {
                 ErrorManager.SignalError("OldFrame: Data is too large");
             }
-            int modeleid = BitConv.FromInt32(data,4);
-            int xoffset = BitConv.FromInt32(data,8);
-            int yoffset = BitConv.FromInt32(data,12);
-            int zoffset = BitConv.FromInt32(data,16);
-            int x1 = BitConv.FromInt32(data,20);
-            int y1 = BitConv.FromInt32(data,24);
-            int z1 = BitConv.FromInt32(data,28);
-            int x2 = BitConv.FromInt32(data,32);
-            int y2 = BitConv.FromInt32(data,36);
-            int z2 = BitConv.FromInt32(data,40);
+            int modeleid = BitConv.FromInt32(data, 4);
+            int xoffset = BitConv.FromInt32(data, 8);
+            int yoffset = BitConv.FromInt32(data, 12);
+            int zoffset = BitConv.FromInt32(data, 16);
+            int x1 = BitConv.FromInt32(data, 20);
+            int y1 = BitConv.FromInt32(data, 24);
+            int z1 = BitConv.FromInt32(data, 28);
+            int x2 = BitConv.FromInt32(data, 32);
+            int y2 = BitConv.FromInt32(data, 36);
+            int z2 = BitConv.FromInt32(data, 40);
             int xoffset_col = 0;
             int yoffset_col = 0;
             int zoffset_col = 0;
             int ofs = 44;
-            if (!proto) {
-                xoffset_col = BitConv.FromInt32(data,44);
-                yoffset_col = BitConv.FromInt32(data,48);
-                zoffset_col = BitConv.FromInt32(data,52);
+            if (!proto)
+            {
+                xoffset_col = BitConv.FromInt32(data, 44);
+                yoffset_col = BitConv.FromInt32(data, 48);
+                zoffset_col = BitConv.FromInt32(data, 52);
                 ofs += 12;
             }
             OldFrameVertex[] vertices = new OldFrameVertex[vertexcount];
@@ -72,10 +73,10 @@ namespace Crash
             return new OldFrame(modeleid, xoffset, yoffset, zoffset, new FrameCollision(0, xoffset_col, yoffset_col, zoffset_col, x1, y1, z1, x2, y2, z2), vertices, unknown, unknown2, proto);
         }
 
-        private List<OldFrameVertex> vertices;
+        private readonly List<OldFrameVertex> vertices;
         public FrameCollision collision;
 
-        public OldFrame(int modeleid,int xoffset,int yoffset,int zoffset,FrameCollision collision,IEnumerable<OldFrameVertex> vertices,short unknown,short? unknown2,bool proto)
+        public OldFrame(int modeleid, int xoffset, int yoffset, int zoffset, FrameCollision collision, IEnumerable<OldFrameVertex> vertices, short unknown, short? unknown2, bool proto)
         {
             this.vertices = new List<OldFrameVertex>(vertices);
             ModelEID = modeleid;
@@ -101,24 +102,24 @@ namespace Crash
 
         public byte[] Save()
         {
-            byte[] data = new byte [44 + vertices.Count * 6 + 2 + (Unknown2.HasValue? 2:0) + (!Proto ? 12 : 0)];
-            BitConv.ToInt32(data,0,vertices.Count);
-            BitConv.ToInt32(data,4,ModelEID);
-            BitConv.ToInt32(data,8,XOffset);
-            BitConv.ToInt32(data,12,YOffset);
-            BitConv.ToInt32(data,16,ZOffset);
-            BitConv.ToInt32(data,20,collision.X1);
-            BitConv.ToInt32(data,24,collision.Y1);
-            BitConv.ToInt32(data,28,collision.Z1);
-            BitConv.ToInt32(data,32,collision.X2);
-            BitConv.ToInt32(data,36,collision.Y2);
-            BitConv.ToInt32(data,40,collision.Z2);
+            byte[] data = new byte[44 + vertices.Count * 6 + 2 + (Unknown2.HasValue ? 2 : 0) + (!Proto ? 12 : 0)];
+            BitConv.ToInt32(data, 0, vertices.Count);
+            BitConv.ToInt32(data, 4, ModelEID);
+            BitConv.ToInt32(data, 8, XOffset);
+            BitConv.ToInt32(data, 12, YOffset);
+            BitConv.ToInt32(data, 16, ZOffset);
+            BitConv.ToInt32(data, 20, collision.X1);
+            BitConv.ToInt32(data, 24, collision.Y1);
+            BitConv.ToInt32(data, 28, collision.Z1);
+            BitConv.ToInt32(data, 32, collision.X2);
+            BitConv.ToInt32(data, 36, collision.Y2);
+            BitConv.ToInt32(data, 40, collision.Z2);
             int ofs = 44;
             if (!Proto)
             {
-                BitConv.ToInt32(data,44, collision.XOffset);
-                BitConv.ToInt32(data,48, collision.YOffset);
-                BitConv.ToInt32(data,52, collision.ZOffset);
+                BitConv.ToInt32(data, 44, collision.XOffset);
+                BitConv.ToInt32(data, 48, collision.YOffset);
+                BitConv.ToInt32(data, 52, collision.ZOffset);
                 ofs += 12;
             }
             for (int i = 0; i < vertices.Count; i++)
@@ -157,17 +158,17 @@ namespace Crash
                     obj.WriteLine("# Vertices");
                     foreach (OldFrameVertex vertex in vertices)
                     {
-                        obj.WriteLine("v {0} {1} {2}",vertex.X - xorigin,vertex.Y - yorigin,vertex.Z - zorigin);
+                        obj.WriteLine("v {0} {1} {2}", vertex.X - xorigin, vertex.Y - yorigin, vertex.Z - zorigin);
                     }
                     foreach (OldFrameVertex vertex in vertices)
                     {
-                        obj.WriteLine("vn {0} {1} {2}",vertex.NormalX/127.0,vertex.NormalY/127.0,vertex.NormalZ/127.0);
+                        obj.WriteLine("vn {0} {1} {2}", vertex.NormalX / 127.0, vertex.NormalY / 127.0, vertex.NormalZ / 127.0);
                     }
                     obj.WriteLine();
                     obj.WriteLine("# Polygons");
                     foreach (OldModelPolygon polygon in model.Polygons)
                     {
-                        obj.WriteLine("f {0}//{0} {1}//{1} {2}//{2}", polygon.VertexA / 6 + 1,polygon.VertexB / 6 + 1,polygon.VertexC / 6 + 1);
+                        obj.WriteLine("f {0}//{0} {1}//{1} {2}//{2}", polygon.VertexA / 6 + 1, polygon.VertexB / 6 + 1, polygon.VertexC / 6 + 1);
                     }
                 }
                 return stream.ToArray();

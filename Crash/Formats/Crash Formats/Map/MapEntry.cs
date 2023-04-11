@@ -4,9 +4,9 @@ namespace Crash
 {
     public sealed class MapEntry : Entry
     {
-        private List<OldEntity> entities;
+        private readonly List<OldEntity> entities;
 
-        public MapEntry(byte[] header,byte[] layout,IEnumerable<OldEntity> entities,int eid) : base(eid)
+        public MapEntry(byte[] header, byte[] layout, IEnumerable<OldEntity> entities, int eid) : base(eid)
         {
             Header = header;
             Layout = layout;
@@ -20,7 +20,7 @@ namespace Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            BitConv.ToInt32(Header,0xC,entities.Count);
+            BitConv.ToInt32(Header, 0xC, entities.Count);
             byte[][] items = new byte[2 + entities.Count][];
             items[0] = Header;
             items[1] = Layout;
@@ -28,7 +28,7 @@ namespace Crash
             {
                 items[2 + i] = entities[i].Save();
             }
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

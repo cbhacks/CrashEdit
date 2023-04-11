@@ -2,7 +2,7 @@ namespace Crash
 {
     public readonly struct Position : IPosition
     {
-        public static readonly Position Unit = new Position(1,1,1);
+        public static readonly Position Unit = new Position(1, 1, 1);
 
         public Position(float x, float y, float z)
         {

@@ -14,11 +14,11 @@ namespace Crash
         {
         }
 
-        public LoadSkippedException(string message,Exception inner) : base(message,inner)
+        public LoadSkippedException(string message, Exception inner) : base(message, inner)
         {
         }
 
-        protected LoadSkippedException(SerializationInfo info,StreamingContext context) : base(info,context)
+        protected LoadSkippedException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }
