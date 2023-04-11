@@ -159,11 +159,6 @@ namespace CrashEdit
                 RenderFramePass(BlendMode.Subtractive);
                 RenderFramePass(BlendMode.Additive);
 
-                // restore things
-                vaoModel[0].UserTrans = new Vector3(0);
-                vaoModel[0].UserScale = new Vector3(1);
-                vaoModel[0].UserCullMode = 0;
-
                 if (enable_normals && !colored)
                 {
                     var ofs = vaoModel[0].UserTrans;
@@ -184,6 +179,11 @@ namespace CrashEdit
                     AddBox(pos, size, new Rgba(0, 255, 0, 255 / 5), false);
                     AddBox(pos, size, new Rgba(0, 255, 0, 255), true);
                 }
+
+                // restore things
+                vaoModel[0].UserTrans = new Vector3(0);
+                vaoModel[0].UserScale = new Vector3(1);
+                vaoModel[0].UserCullMode = 0;
             }
         }
 
