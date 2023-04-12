@@ -30,12 +30,34 @@ public class TextureExporter
                     (data [info.cluty * 512 + ((clutx + entry) * 2 + 1)] << 8)
                 );
 
+                int red = (int) (((color & 0x1F) / 31F) * 255);
+                int green = (int) ((((color >> 5) & 0x1F) / 31F) * 255);
+                int blue = (int) ((((color >> 10) & 0x1F) / 31F) * 255);
+                int a = ((color >> 15) & 0x1);
+                int alpha = 255;
+
+                if (info.blend == 0 && (info.color == 0 || info.color == 1))
+                {
+                    if (a == 1)
+                        alpha = 127;
+                    else
+                        alpha = 255;
+
+                    if (red == 0 && green == 0 && blue == 0 && a == 0)
+                        alpha = 0;
+                }
+                else if (info.blend == 1 && (info.color == 0 || info.color == 1))
+                {
+                    if (red == 0 && green == 0 && blue == 0 && a == 0)
+                        alpha = 0;
+                }
+
                 // colors are in rgb15 format
                 Color c = Color.FromArgb (
-                    ((color >> 15) & 0x1) * 255,
-                    (int) (((color & 0x1F) / 31F) * 255),
-                    (int) ((((color >> 5) & 0x1F) / 31F) * 255),
-                    (int) ((((color >> 10) & 0x1F) / 31F) * 255)
+                    alpha,
+                    red,
+                    green,
+                    blue
                 );
                 
                 bmp.SetPixel (x, y, c);
@@ -66,12 +88,34 @@ public class TextureExporter
                     (data [info.cluty * 512 + ((clutx + entry) * 2 + 1)] << 8)
                 );
 
+                int red = (int) (((color & 0x1F) / 31F) * 255);
+                int green = (int) ((((color >> 5) & 0x1F) / 31F) * 255);
+                int blue = (int) ((((color >> 10) & 0x1F) / 31F) * 255);
+                int a = ((color >> 15) & 0x1);
+                int alpha = 255;
+
+                if (info.blend == 0 && (info.color == 0 || info.color == 1))
+                {
+                    if (a == 1)
+                        alpha = 127;
+                    else
+                        alpha = 255;
+
+                    if (red == 0 && green == 0 && blue == 0 && a == 0)
+                        alpha = 0;
+                }
+                else if (info.blend == 1 && (info.color == 0 || info.color == 1))
+                {
+                    if (red == 0 && green == 0 && blue == 0 && a == 0)
+                        alpha = 0;
+                }
+
                 // colors are in rgb15 format
                 Color c = Color.FromArgb (
-                    ((color >> 15) & 0x1) * 255,
-                    (int) (((color & 0x1F) / 31F) * 255),
-                    (int) ((((color >> 5) & 0x1F) / 31F) * 255),
-                    (int) ((((color >> 10) & 0x1F) / 31F) * 255)
+                    alpha,
+                    red,
+                    green,
+                    blue
                 );
                 
                 bmp.SetPixel (x, y, c);
