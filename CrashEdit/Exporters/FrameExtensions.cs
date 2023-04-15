@@ -65,10 +65,12 @@ public static class FrameExtensions
 
     public static void AddFrame (this OBJExporter exporter, NSF nsf, Frame frame, ref Dictionary <int, int> textureEIDs, ref Dictionary <string, TexInfoUnpacked> objTranslate)
     {
+        // TODO: SUPPORT CRASH2 AND CRASH3 PROPER SCALING
+        // offset correction is 4f in Crash2, 32f in Crash3
         var model = nsf.GetEntry<ModelEntry>(frame.ModelEID);
         var vertices = frame.MakeVertices (model);
         var offset = new Vector3 (frame.XOffset, frame.YOffset, frame.ZOffset) / 4F;
-        var scale = new Vector3 (model.ScaleX, model.ScaleY, model.ScaleZ) / (GameScales.ModelC1 * GameScales.AnimC1);
+        var scale = new Vector3 (model.ScaleX, model.ScaleY, model.ScaleZ) / GameScales.ModelC1 / GameScales.AnimC1;
         
         // detect how many textures are used and their eids to prepare the image
 

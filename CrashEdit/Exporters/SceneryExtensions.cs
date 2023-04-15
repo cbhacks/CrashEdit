@@ -65,7 +65,7 @@ public static class SceneryExtensions
     public static void AddScenery (this OBJExporter exporter, NSF nsf, SceneryEntry scenery, ref Dictionary <int, int> textureEIDs, ref Dictionary <string, TexInfoUnpacked> objTranslate)
     {
         var offset = new Vector3 (scenery.XOffset, scenery.YOffset, scenery.ZOffset);
-        var scale = new Vector3 (1 / GameScales.WorldC1);
+        //var scale = new Vector3 (1 / GameScales.WorldC1);
         
         for (int i = 0; i < scenery.TPAGCount; i++)
         {
@@ -103,9 +103,9 @@ public static class SceneryExtensions
             Vector3 c3 = new Vector3 (fc3.Red, fc3.Green, fc3.Blue) / 255f;
 
             exporter.AddFace (
-                (v1 + offset / 16) * scale,
-                (v2 + offset / 16) * scale,
-                (v3 + offset / 16) * scale,
+                (v1 * 16 + offset) / GameScales.WorldC1,
+                (v2 * 16 + offset) / GameScales.WorldC1,
+                (v3 * 16 + offset) / GameScales.WorldC1,
                 c1, c2, c3,
                 material,
                 uv1, uv2, uv3
@@ -143,10 +143,10 @@ public static class SceneryExtensions
             Vector3 c4 = new Vector3 (fc4.Red, fc4.Green, fc4.Blue) / 255f;
 
             exporter.AddFace (
-                (v1 + offset / 16) * scale,
-                (v2 + offset / 16) * scale,
-                (v3 + offset / 16) * scale,
-                (v4 + offset / 16) * scale,
+                (v1 * 16 + offset) / GameScales.WorldC1,
+                (v2 * 16 + offset) / GameScales.WorldC1,
+                (v3 * 16 + offset) / GameScales.WorldC1,
+                (v4 * 16 + offset) / GameScales.WorldC1,
                 c1, c2, c3, c4,
                 material,
                 uv1, uv2, uv3, uv4

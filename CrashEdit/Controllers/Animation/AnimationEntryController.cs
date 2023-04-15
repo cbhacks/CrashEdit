@@ -31,13 +31,14 @@ namespace CrashEdit.CE
             string path = Path.GetDirectoryName (output);
 
             int id = 0;
+            int count = Node.Nodes.Count.ToString().Length;
 
             foreach (Controller node in Modern.SubcontrollerGroups.SelectMany (x => x.Members))
             {
                 if (node.Legacy is not FrameController frame)
                     continue;
 
-                frame.ToOBJ (path, filename + id.ToString());
+                frame.ToOBJ (path, filename + id.ToString().PadLeft (count, '0'));
                 id++;
             }
         }
