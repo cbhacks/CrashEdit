@@ -59,7 +59,7 @@ public static class MaterialExtensions
                 Bitmap texture = TextureExporter.CreateTexture (tpag.Data, texinfo);
 
                 // the material name changes
-                material = exporter.AddTexture ($"{((int)texinfo).ToString("X8")}c{texinfo.color}b{texinfo.blend}", texture);
+                material = exporter.AddTexture ($"{textureEID}-{((int)texinfo).ToString("X8")}c{texinfo.color}b{texinfo.blend}", texture);
                 
                 // add it to the lookup table too
                 objTranslate [material] = texinfo;
@@ -117,7 +117,7 @@ public static class MaterialExtensions
                 Bitmap texture = TextureExporter.CreateTexture (tpag.Data, texinfo);
 
                 // the material name changes
-                material = exporter.AddTexture ($"{((int)texinfo).ToString("X8")}c{texinfo.color}b{texinfo.blend}", texture);
+                material = exporter.AddTexture ($"{textureEID}-{((int)texinfo).ToString("X8")}c{texinfo.color}b{texinfo.blend}", texture);
 
                 // add it to the lookup table too
                 objTranslate [material] = texinfo;
@@ -166,7 +166,7 @@ public static class MaterialExtensions
                 Bitmap texture = TextureExporter.CreateTexture (tpag.Data, texinfo);
 
                 // the material name changes
-                material = exporter.AddTexture ($"{((int)texinfo).ToString("X8")}c{texinfo.color}b{texinfo.blend}", texture);
+                material = exporter.AddTexture ($"{textureEID}-{((int)texinfo).ToString("X8")}c{texinfo.color}b{texinfo.blend}", texture);
 
                 // add it to the lookup table too
                 objTranslate [material] = texinfo;
@@ -210,7 +210,7 @@ public static class MaterialExtensions
             Bitmap texture = TextureExporter.CreateTexture (tpag.Data, texinfo);
                     
             // the material name changes
-            material = exporter.AddTexture ($"{((int)texinfo).ToString("X8")}c{texinfo.color}b{texinfo.blend}", texture);
+            material = exporter.AddTexture ($"{textureEID}-{((int)texinfo).ToString("X8")}c{texinfo.color}b{texinfo.blend}", texture);
                     
             // add it to the lookup table too
             objTranslate [material] = texinfo;
@@ -253,7 +253,7 @@ public static class MaterialExtensions
             Bitmap texture = TextureExporter.CreateTexture (tpag.Data, texinfo);
 
             // the material name changes
-            material = exporter.AddTexture ($"{((int)texinfo).ToString("X8")}c{texinfo.color}b{texinfo.blend}", texture);
+            material = exporter.AddTexture ($"{t.EID}-{((int)texinfo).ToString("X8")}c{texinfo.color}b{texinfo.blend}", texture);
 
             // add it to the lookup table too
             objTranslate [material] = texinfo;
