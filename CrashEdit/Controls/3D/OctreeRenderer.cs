@@ -222,7 +222,7 @@ namespace CrashEdit
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(0, i, ii), cur_nodes);
                         if (i > 0 && ii > 0)
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(0, i - 1, ii - 1), cur_nodes);
-                        else if (i > 0)
+                        if (i > 0)
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(0, i - 1, ii), cur_nodes);
                         if (ii > 0)
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(0, i, ii - 1), cur_nodes);
@@ -230,16 +230,16 @@ namespace CrashEdit
                 }
                 cur_size = new Vector3(0, size.Y, 0);
                 cur_nodes = new Vector3w(0, ynodes, 0);
-                for (int i = 0; i < xnodes; ++i)
+                for (int i = 0; i <= xnodes; ++i)
                 {
-                    for (int ii = 0; ii < znodes; ++ii)
+                    for (int ii = 0; ii <= znodes; ++ii)
                     {
                         Vector3 cur_trans = new(trans.X + size.X / xnodes * i, trans.Y, trans.Z + size.Z / znodes * ii);
                         if (i < xnodes && ii < znodes)
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(i, 0, ii), cur_nodes);
                         if (i > 0 && ii > 0)
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(i - 1, 0, ii - 1), cur_nodes);
-                        else if (i > 0)
+                        if (i > 0)
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(i - 1, 0, ii), cur_nodes);
                         if (ii > 0)
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(i, 0, ii - 1), cur_nodes);
@@ -247,16 +247,16 @@ namespace CrashEdit
                 }
                 cur_size = new Vector3(0, 0, size.Z);
                 cur_nodes = new Vector3w(0, 0, znodes);
-                for (int i = 0; i < xnodes; ++i)
+                for (int i = 0; i <= xnodes; ++i)
                 {
-                    for (int ii = 0; ii < ynodes; ++ii)
+                    for (int ii = 0; ii <= ynodes; ++ii)
                     {
                         Vector3 cur_trans = new(trans.X + size.X / xnodes * i, trans.Y + size.Y / ynodes * ii, trans.Z);
                         if (i < xnodes && ii < ynodes)
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(i, ii, 0), cur_nodes);
                         if (i > 0 && ii > 0)
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(i - 1, ii - 1, 0), cur_nodes);
-                        else if (i > 0)
+                        if (i > 0)
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(i - 1, ii, 0), cur_nodes);
                         if (ii > 0)
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(i, ii - 1, 0), cur_nodes);
