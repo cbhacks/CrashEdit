@@ -230,11 +230,11 @@ namespace CrashEdit
                         continue;
                     bool nocull = tri.Subtype == 0 || tri.Subtype == 2;
                     bool flip = (tri.Type == 2 ^ tri.Subtype == 3) && !nocull;
-                    int tex = TexInfoUnpacked.Pack(false, face: nocull ? 1 : 0); // completely untextured
+                    VertexTexInfo tex = new(false, face: nocull ? 1 : 0); // completely untextured
                     if (polygon_texture_info.Item2.HasValue)
                     {
                         var info = polygon_texture_info.Item2.Value;
-                        tex |= TexInfoUnpacked.Pack(true, color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY, page: tex_eids[model.GetTPAG(info.Page)]);
+                        tex = new(true, color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY, face: nocull ? 1 : 0, page: tex_eids[model.GetTPAG(info.Page)]);
                         vao.Verts[vao.vert_count + 1].st = new(info.X2, info.Y2);
                         if ((tri.Type != 2 && !flip) || (tri.Type == 2 && tri.Subtype == 1))
                         {
@@ -249,7 +249,7 @@ namespace CrashEdit
                             vao.Verts[vao.vert_count + 2].st = new(info.X3, info.Y3);
                         }
 
-                        blend_mask |= TexInfoUnpacked.GetBlendMode(info.BlendMode);
+                        blend_mask |= VertexTexInfo.GetBlendMode(info.BlendMode);
                     }
                     vao.Verts[vao.vert_count + 2].tex = tex;
 

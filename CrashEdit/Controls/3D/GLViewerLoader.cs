@@ -33,6 +33,12 @@ namespace CrashEdit
             int max_tex_size = GL.GetInteger(GetPName.MaxTextureSize);
             Console.WriteLine($"Maximum texture size: {max_tex_size}");
 
+            Console.WriteLine("Checking OpenGL caps...");
+            foreach (var cap in (EnableCap[])Enum.GetValues(typeof(EnableCap)))
+            {
+                Console.WriteLine($"    {Enum.GetName(typeof(EnableCap), cap)}: {GL.IsEnabled(cap)}");
+            }
+
             int flags = GL.GetInteger(GetPName.ContextFlags);
             // Console.WriteLine($"flags: {flags}");
             if ((flags & (int)ContextFlagMask.ContextFlagDebugBit) != 0)

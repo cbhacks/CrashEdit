@@ -136,16 +136,16 @@ namespace CrashEdit
                 var polygon_texture_info = ProcessTextureInfoC2(tri.Texture, tri.Animated, world.Textures, world.AnimatedTextures);
                 if (!polygon_texture_info.Item1)
                     continue;
-                int tex = 0; // completely untextured
+                VertexTexInfo tex = new(false); // completely untextured
                 if (polygon_texture_info.Item2.HasValue)
                 {
                     var info = polygon_texture_info.Item2.Value;
-                    tex = TexInfoUnpacked.Pack(true, color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY, page: tex_eids[world.GetTPAG(info.Page)]);
+                    tex = new(true, color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY, page: tex_eids[world.GetTPAG(info.Page)]);
                     vaoWorld.Verts[vaoWorld.vert_count + 0].st = new(info.X2, info.Y2);
                     vaoWorld.Verts[vaoWorld.vert_count + 1].st = new(info.X1, info.Y1);
                     vaoWorld.Verts[vaoWorld.vert_count + 2].st = new(info.X3, info.Y3);
 
-                    blend_mask |= TexInfoUnpacked.GetBlendMode(info.BlendMode);
+                    blend_mask |= VertexTexInfo.GetBlendMode(info.BlendMode);
                 }
                 vaoWorld.Verts[vaoWorld.vert_count + 2].tex = tex;
 
@@ -159,17 +159,17 @@ namespace CrashEdit
                 var polygon_texture_info = ProcessTextureInfoC2(quad.Texture, quad.Animated, world.Textures, world.AnimatedTextures);
                 if (!polygon_texture_info.Item1)
                     continue;
-                int tex = 0; // completely untextured
+                VertexTexInfo tex = new(false); // completely untextured
                 if (polygon_texture_info.Item2.HasValue)
                 {
                     var info = polygon_texture_info.Item2.Value;
-                    tex = TexInfoUnpacked.Pack(true, color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY, page: tex_eids[world.GetTPAG(info.Page)]);
+                    tex = new(true, color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY, page: tex_eids[world.GetTPAG(info.Page)]);
                     vaoWorld.Verts[vaoWorld.vert_count + 0].st = new(info.X2, info.Y2);
                     vaoWorld.Verts[vaoWorld.vert_count + 1].st = new(info.X1, info.Y1);
                     vaoWorld.Verts[vaoWorld.vert_count + 2].st = new(info.X3, info.Y3);
                     vaoWorld.Verts[vaoWorld.vert_count + 4].st = new(info.X4, info.Y4);
 
-                    blend_mask |= TexInfoUnpacked.GetBlendMode(info.BlendMode);
+                    blend_mask |= VertexTexInfo.GetBlendMode(info.BlendMode);
                 }
                 vaoWorld.Verts[vaoWorld.vert_count + 2].tex = tex;
 

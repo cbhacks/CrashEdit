@@ -133,14 +133,14 @@ namespace CrashEdit
                     vaoWorld.Verts[vaoWorld.vert_count + 1].st = new(tex.U2, tex.V2);
                     vaoWorld.Verts[vaoWorld.vert_count + 2].st = new(tex.U1, tex.V1);
 
-                    vaoWorld.Verts[vaoWorld.vert_count + 2].tex = TexInfoUnpacked.Pack(true, color: tex.ColorMode, blend: tex.BlendMode,
-                                                                                            clutx: tex.ClutX, cluty: tex.ClutY,
-                                                                                            page: tex_eids[world.GetTPAG(polygon.Page)]);
+                    vaoWorld.Verts[vaoWorld.vert_count + 2].tex = new VertexTexInfo(true, color: tex.ColorMode, blend: tex.BlendMode,
+                                                                                          clutx: tex.ClutX, cluty: tex.ClutY,
+                                                                                          page: tex_eids[world.GetTPAG(polygon.Page)]);
                     RenderVertex(world, polygon.VertexA);
                     RenderVertex(world, polygon.VertexB);
                     RenderVertex(world, polygon.VertexC);
 
-                    blend_mask |= TexInfoUnpacked.GetBlendMode(tex.BlendMode);
+                    blend_mask |= VertexTexInfo.GetBlendMode(tex.BlendMode);
                 }
                 else
                 {

@@ -128,7 +128,7 @@ namespace CrashEdit
 
         private static IGraphicsContext global_context;
         private static GLControl global_context_window;
-        private static readonly GraphicsMode default_graphics_settings = new(new ColorFormat(8, 8, 8, 8), 24, 8);
+        private static readonly GraphicsMode default_graphics_settings = new(32, 24, 8);
         #endregion
 
         protected readonly RenderInfo render;

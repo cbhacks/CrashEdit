@@ -68,7 +68,7 @@ namespace CrashEdit
             EnableAttrib("uv", 2, VertexAttribPointerType.Float, false, "st");
             EnableAttrib("normal", 4, VertexAttribPointerType.Int2101010Rev, true, "normal");
             EnableAttrib("color", 4, VertexAttribPointerType.UnsignedByte, true, "rgba");
-            EnableAttribI("tex", 1, VertexAttribIntegerType.Int, "tex");
+            EnableAttribI("tex", 2, VertexAttribIntegerType.Short, "tex");
             EnableAttrib("misc", 4, VertexAttribPointerType.Float, false, "misc");
         }
 
@@ -90,7 +90,7 @@ namespace CrashEdit
             vert_count++;
         }
 
-        public void PushAttrib(Vector3? trans = null, int? normal = null, Vector2? st = null, Rgba? rgba = null, TexInfoUnpacked? tex = null, Vector4? misc = null)
+        public void PushAttrib(Vector3? trans = null, int? normal = null, Vector2? st = null, Rgba? rgba = null, VertexTexInfo? tex = null, Vector4? misc = null)
         {
             TestRealloc();
             if (trans != null)

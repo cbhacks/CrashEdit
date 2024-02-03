@@ -71,7 +71,7 @@ namespace CrashEdit
         public readonly Vector4 ToVec4() => new Vector4(X, Y, Z, 0);
     }
 
-    public struct TexInfoUnpacked
+    public struct VertexTexInfo
     {
         public bool enable;
         public int color;
@@ -81,7 +81,7 @@ namespace CrashEdit
         public int face;
         public int page;
 
-        public TexInfoUnpacked(bool enable, int color = 0, int blend = 0, int clutx = 0, int cluty = 0, int face = 0, int page = 0)
+        public VertexTexInfo(bool enable, int color = 0, int blend = 0, int clutx = 0, int cluty = 0, int face = 0, int page = 0)
         {
             this.enable = enable;
             this.color = color;
@@ -92,17 +92,19 @@ namespace CrashEdit
             this.page = page;
         }
 
-        public static explicit operator TexInfoUnpacked(int v)
+        public static implicit operator VertexTexInfo(int v)
         {
-            return new TexInfoUnpacked((v & 1) != 0, (v >> 1) & 0x3, (v >> 3) & 0x3, (v >> 5) & 0xf, (v >> 9) & 0x7f, (v >> 16) & 0x1, v >> 17);
+            return new VertexTexInfo((v & 1) != 0, (v >> 1) & 0x3, (v >> 3) & 0x3, (v >> 5) & 0xf, (v >> 9) & 0x7f, (v >> 16) & 0x1, v >> 17);
         }
 
         public static int Pack(bool enable, int color = 0, int blend = 0, int clutx = 0, int cluty = 0, int face = 0, int page = 0)
         {
-            return (enable ? 1 : 0) | (color << 1) | (blend << 3) | (clutx << 5) | (cluty << 9) | (face << 16) | (page << 17);
+            return (color << 0) | (blend << 2) | (clutx << 4) | (cluty << 8) | (face << 15) | ((enable ? page : -1) << 16);
         }
 
-        public static explicit operator int(TexInfoUnpacked p)
+        public readonly int Pack() => this;
+
+        public static implicit operator int(VertexTexInfo p)
         {
             return Pack(p.enable, p.color, p.blend, p.clutx, p.cluty, p.face, p.page);
         }
@@ -114,8 +116,8 @@ namespace CrashEdit
                 case 0: return GLViewer.BlendMode.Trans;
                 case 1: return GLViewer.BlendMode.Additive;
                 case 2: return GLViewer.BlendMode.Subtractive;
-                default:
-                case 3: return GLViewer.BlendMode.Solid;
+                case 3:
+                default: return GLViewer.BlendMode.Solid;
             }
         }
 
