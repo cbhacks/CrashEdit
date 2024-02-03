@@ -145,7 +145,7 @@ namespace CrashEdit
                     {
                         MathExt.Lerp(ref vaoModel[0].Verts[i].trans, vaoModel[1].Verts[i].trans, interp);
                         if (!colored)
-                            MathExt.Lerp(ref vaoModel[0].Verts[i].normal, vaoModel[1].Verts[i].normal, interp);
+                            vaoModel[0].Verts[i].normal = Vertex.PackNormal(MathExt.Lerp(Vertex.UnpackNormal(vaoModel[0].Verts[i].normal), Vertex.UnpackNormal(vaoModel[1].Verts[i].normal), interp));
                         else
                             MathExt.Lerp(ref vaoModel[0].Verts[i].rgba, vaoModel[1].Verts[i].rgba, interp);
                     }
@@ -166,7 +166,7 @@ namespace CrashEdit
                     {
                         var p = (vaoModel[0].Verts[i].trans + ofs) * vaoModel[0].UserScale;
                         vaoLines.PushAttrib(trans: p, rgba: (Rgba)Color4.White);
-                        vaoLines.PushAttrib(trans: p + vaoModel[0].Verts[i].normal * 0.1f, rgba: (Rgba)Color4.Cyan);
+                        vaoLines.PushAttrib(trans: p + Vertex.UnpackNormal(vaoModel[0].Verts[i].normal) * 0.1f, rgba: (Rgba)Color4.Cyan);
                     }
                 }
                 if (enable_collision)
@@ -296,7 +296,7 @@ namespace CrashEdit
             }
             else
             {
-                vao.Verts[cur_vert_idx].normal = new Vector3(vert.NormalX, vert.NormalY, vert.NormalZ) / 127;
+                vao.Verts[cur_vert_idx].normal = Vertex.PackNormal(new Vector3(vert.NormalX, vert.NormalY, vert.NormalZ) / 127);
             }
             vao.vert_count++;
         }

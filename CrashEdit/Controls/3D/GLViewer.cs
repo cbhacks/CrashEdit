@@ -41,11 +41,11 @@ namespace CrashEdit
             new(0, 0, +1.0f)
         };
 
-        protected static readonly Vector3[] SpriteVerts = new Vector3[4] {
-            new(-.5f, -.5f, 0),
-            new(-.5f, +.5f, 0),
-            new(+.5f, +.5f, 0),
-            new(+.5f, -.5f, 0)
+        protected static readonly Vector2[] SpriteVerts = new Vector2[4] {
+            new(-.5f, -.5f),
+            new(-.5f, +.5f),
+            new(+.5f, +.5f),
+            new(+.5f, -.5f)
         };
 
         protected static readonly Vector3[] BoxVerts = new Vector3[8] {
@@ -116,6 +116,7 @@ namespace CrashEdit
         protected static VAO vaoLinesThick;
         protected static VAO vaoSprites;
         protected static VAO vaoText;
+        protected static VAO vaoOctree;
         // note: there's multiple buffers because of blending
         protected const int ANIM_BUF_MAX = 2;
         protected static VAO[] vaoListCrash1 = new VAO[ANIM_BUF_MAX];
@@ -354,17 +355,22 @@ namespace CrashEdit
         // for each instance
         protected virtual void GLLoad()
         {
-            var run_load_static = (Type t) =>
+            void run_load_static(Type t)
             {
                 if (!loaded_static_types.Contains(t))
                 {
+                    if (t.BaseType != null && t.BaseType != typeof(object))
+                    {
+                        run_load_static(t.BaseType);
+                    }
                     Console.WriteLine($"GLLoadStatic {t.Name}");
                     var func = t.GetMethod("GLLoadStatic", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
                     func?.Invoke(this, new object[] { });
                     loaded_static_types.Add(t);
                 }
-            };
+            }
             run_load_static(Program.TopLevelGLViewer.GetType());
+            // will run this on parent types first
             run_load_static(GetType());
 
             ResetCamera();
@@ -382,7 +388,7 @@ namespace CrashEdit
 
         public static string BoolToEnable(bool enable)
         {
-            return enable ? "enabled" : "disabled";
+            return enable ? "on" : "off";
         }
 
         protected virtual void PrintDebug()
@@ -801,7 +807,7 @@ namespace CrashEdit
             vaoDebugSprite.DiscardVerts();
             for (int i = 0; i < SpriteVerts.Length; ++i)
             {
-                vaoDebugSprite.PushAttrib(trans: SpriteVerts[i], st: uvs[i]);
+                vaoDebugSprite.PushAttrib(trans: new Vector3(SpriteVerts[i]), st: uvs[i]);
             }
             vaoDebugSprite.UserTrans = trans;
             vaoDebugSprite.UserScale = new Vector3(size);
@@ -822,8 +828,63 @@ namespace CrashEdit
             uvs[5] = new Vector2(texRect.Left, texRect.Bottom);
             for (int i = 0; i < SpriteTriIndices.Length; ++i)
             {
-                vaoSprites.PushAttrib(trans: trans, rgba: col, st: uvs[i], normal: SpriteVerts[SpriteTriIndices[i]] * new Vector3(size));
+                vaoSprites.PushAttrib(trans: trans, rgba: col, st: uvs[i], misc: new Vector4(SpriteVerts[SpriteTriIndices[i]] * size));
             }
+        }
+
+        public void AddOctreeX(Vector3 trans, Vector3 trans_size, int node, Vector3w nodes_size)
+        {
+            vaoOctree.PushAttrib(trans: trans, misc: new Vector3w(node, 0, 0).ToVec4());
+            vaoOctree.PushAttrib(trans: trans + new Vector3(0, trans_size.Y, 0), misc: new Vector3w(node, nodes_size.Y, 0).ToVec4());
+            vaoOctree.PushAttrib(trans: trans + new Vector3(0, 0, trans_size.Z), misc: new Vector3w(node, 0, nodes_size.Z).ToVec4());
+            vaoOctree.PushAttrib(trans: trans + new Vector3(0, 0, trans_size.Z), misc: new Vector3w(node, 0, nodes_size.Z).ToVec4());
+            vaoOctree.PushAttrib(trans: trans + new Vector3(0, trans_size.Y, 0), misc: new Vector3w(node, nodes_size.Y, 0).ToVec4());
+            vaoOctree.PushAttrib(trans: trans + trans_size, misc: new Vector3w(node, nodes_size.Y, nodes_size.Z).ToVec4());
+        }
+
+        public void AddOctreeY(Vector3 trans, Vector3 trans_size, int node, Vector3w nodes_size)
+        {
+            vaoOctree.PushAttrib(trans: trans, misc: new Vector3w(0, node, 0).ToVec4());
+            vaoOctree.PushAttrib(trans: trans + new Vector3(trans_size.X, 0, 0), misc: new Vector3w(nodes_size.X, node, 0).ToVec4());
+            vaoOctree.PushAttrib(trans: trans + new Vector3(0, 0, trans_size.Z), misc: new Vector3w(0, node, nodes_size.Z).ToVec4());
+            vaoOctree.PushAttrib(trans: trans + new Vector3(0, 0, trans_size.Z), misc: new Vector3w(0, node, nodes_size.Z).ToVec4());
+            vaoOctree.PushAttrib(trans: trans + new Vector3(trans_size.X, 0, 0), misc: new Vector3w(nodes_size.X, node, 0).ToVec4());
+            vaoOctree.PushAttrib(trans: trans + trans_size, misc: new Vector3w(nodes_size.X, node, nodes_size.Z).ToVec4());
+        }
+
+        public void AddOctreeZ(Vector3 trans, Vector3 trans_size, int node, Vector3w nodes_size)
+        {
+            vaoOctree.PushAttrib(trans: trans, misc: new Vector3w(0, 0, node).ToVec4());
+            vaoOctree.PushAttrib(trans: trans + new Vector3(trans_size.X, 0, 0), misc: new Vector3w(nodes_size.X, 0, node).ToVec4());
+            vaoOctree.PushAttrib(trans: trans + new Vector3(0, trans_size.Y, 0), misc: new Vector3w(0, nodes_size.Y, node).ToVec4());
+            vaoOctree.PushAttrib(trans: trans + new Vector3(0, trans_size.Y, 0), misc: new Vector3w(0, nodes_size.Y, node).ToVec4());
+            vaoOctree.PushAttrib(trans: trans + new Vector3(trans_size.X, 0, 0), misc: new Vector3w(nodes_size.X, 0, node).ToVec4());
+            vaoOctree.PushAttrib(trans: trans + trans_size, misc: new Vector3w(nodes_size.X, nodes_size.Y, node).ToVec4());
+        }
+
+        public void AddOctreeLine(Vector3 trans, Vector3 line_size, Vector3w node, Vector3w node_size)
+        {
+            vaoOctree.PushAttrib(trans: trans, misc: node.ToVec4());
+            vaoOctree.PushAttrib(trans: trans + line_size, misc: (node + node_size).ToVec4());
+        }
+
+        public void OctreeSetNodeShadeMax(float amt)
+        {
+            vaoOctree.UserFloat = amt;
+        }
+
+        public void OctreeSetOutline(bool outline)
+        {
+            if (outline)
+                vaoOctree.Primitive = PrimitiveType.Lines;
+            else
+                vaoOctree.Primitive = PrimitiveType.Triangles;
+        }
+
+        public void RenderOctree()
+        {
+            SetBlendMode(BlendMode.Solid);
+            vaoOctree.RenderAndDiscard(render);
         }
 
         protected float RelativeX(float pos) => Width * pos;

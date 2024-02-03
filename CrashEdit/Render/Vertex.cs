@@ -1,5 +1,7 @@
-﻿using OpenTK;
+﻿using Crash;
+using OpenTK;
 using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 using System.Runtime.InteropServices;
 
 namespace CrashEdit
@@ -44,6 +46,31 @@ namespace CrashEdit
         {
             return new Color4(c.r, c.g, c.b, c.a);
         }
+    }
+
+    [StructLayout(LayoutKind.Sequential, Size = 12)]
+    public struct Vector3w
+    {
+        public int X;
+        public int Y;
+        public int Z;
+
+        public Vector3w(int x, int y, int z)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+        }
+
+        public static Vector3w operator +(Vector3w left, Vector3w right)
+        {
+            left.X += right.X;
+            left.Y += right.Y;
+            left.Z += right.Z;
+            return left;
+        }
+
+        public readonly Vector4 ToVec4() => new Vector4(X, Y, Z, 0);
     }
 
     public struct TexInfoUnpacked
@@ -94,20 +121,31 @@ namespace CrashEdit
             }
         }
 
-        public GLViewer.BlendMode GetBlendMode()
+        public readonly GLViewer.BlendMode GetBlendMode()
         {
             return GetBlendMode(blend);
         }
     }
 
-    [StructLayout(LayoutKind.Explicit, Size = 48)]
+    [StructLayout(LayoutKind.Explicit, Size = 64)]
     public struct Vertex
     {
         [FieldOffset(00)] public Vector3 trans;
         [FieldOffset(12)] public Rgba rgba;
-        [FieldOffset(16)] public Vector3 normal;
+        [FieldOffset(16)] public Vector2 st;
+        [FieldOffset(24)] public int normal;
         [FieldOffset(28)] public int tex;
-        [FieldOffset(32)] public Vector2 st;
-        // 40
+        [FieldOffset(32)] public Vector4 misc;
+        // 48 - 16 bytes free
+
+        public static Vector3 UnpackNormal(int normal)
+        {
+            return new Vector3((((normal >> 0) & 0x3FF) - 512) / 511f, (((normal >> 10) & 0x3FF) - 512) / 511f, (((normal >> 20) & 0x3FF) - 512) / 511f);
+        }
+
+        public static int PackNormal(Vector3 normal)
+        {
+            return (((int)(normal.X * 511) + 512) << 0) | (((int)(normal.Y * 511) + 512) << 10) | (((int)(normal.Z * 511) + 512) << 20);
+        }
     }
 }

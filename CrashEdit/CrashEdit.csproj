@@ -497,6 +497,8 @@
     <EmbeddedResource Include="Render\Shaders\sprite-generic.vert" />
     <EmbeddedResource Include="Render\Shaders\screen.frag" />
     <EmbeddedResource Include="Render\Shaders\screen.vert" />
+    <EmbeddedResource Include="Render\Shaders\octree.frag" />
+    <EmbeddedResource Include="Render\Shaders\octree.vert" />
     <None Include="Resources\objects_012_red.gif" />
     <Content Include="Resources\objects_012_violet.gif" />
     <None Include="Resources\objects_012_yellow.gif" />

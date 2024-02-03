@@ -202,7 +202,7 @@ namespace CrashEdit
             if (octree_renderer.enable && (is_master_zone || octree_renderer.show_neighbor_zones))
             {
                 octree_renderer.alpha = zone_alpha;
-                octree_renderer.RenderOctree(zone.Layout, 0x1C, zone_trans.X, zone_trans.Y, zone_trans.Z, zoneSize.X, zoneSize.Y, zoneSize.Z, zone.CollisionDepthX, zone.CollisionDepthY, zone.CollisionDepthZ);
+                octree_renderer.RenderOctree(zone.Layout, 0x1C, zone_trans, zoneSize, zone.CollisionDepthX, zone.CollisionDepthY, zone.CollisionDepthZ);
             }
         }
 

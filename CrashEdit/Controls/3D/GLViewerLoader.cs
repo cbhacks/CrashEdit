@@ -30,6 +30,9 @@ namespace CrashEdit
             // version print
             Console.WriteLine($"OpenGL version: {GL.GetString(StringName.Version)}");
 
+            int max_tex_size = GL.GetInteger(GetPName.MaxTextureSize);
+            Console.WriteLine($"Maximum texture size: {max_tex_size}");
+
             int flags = GL.GetInteger(GetPName.ContextFlags);
             // Console.WriteLine($"flags: {flags}");
             if ((flags & (int)ContextFlagMask.ContextFlagDebugBit) != 0)
@@ -76,6 +79,7 @@ namespace CrashEdit
             vaoLinesThick = new VAO(shaderContext, "line", PrimitiveType.Lines);
             vaoTris = new VAO(shaderContext, "generic", PrimitiveType.Triangles);
             vaoText = new VAO(shaderContext, "screen", PrimitiveType.Triangles);
+            vaoOctree = new VAO(shaderContext, "octree", PrimitiveType.Triangles);
             for (int i = 0; i < ANIM_BUF_MAX; ++i)
             {
                 vaoListCrash1[i] = new(shaderContext, "crash1", PrimitiveType.Triangles);

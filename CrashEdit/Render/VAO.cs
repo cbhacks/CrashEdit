@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace CrashEdit
 {
-    public class VAO : IDisposable
+    public sealed class VAO : IDisposable
     {
         private Vertex[] verts;
         private readonly Stopwatch watch = new();
@@ -22,9 +22,8 @@ namespace CrashEdit
 
         public int vert_count;
 
-        internal void EnableAttrib(string attrib_name, int size, VertexAttribPointerType type, bool normalized, string field_name)
+        private void EnableAttrib(string attrib_name, int size, VertexAttribPointerType type, bool normalized, string field_name)
         {
-
             int temp = GL.GetAttribLocation(Shader.ID, attrib_name);
             if (temp == -1)
             {
@@ -37,9 +36,8 @@ namespace CrashEdit
             }
         }
 
-        internal void EnableAttribI(string attrib_name, int size, VertexAttribIntegerType type, string field_name)
+        private void EnableAttribI(string attrib_name, int size, VertexAttribIntegerType type, string field_name)
         {
-
             int temp = GL.GetAttribLocation(Shader.ID, attrib_name);
             if (temp == -1)
             {
@@ -68,9 +66,10 @@ namespace CrashEdit
             GL.BufferData(BufferTarget.ArrayBuffer, vert_count * Marshal.SizeOf<Vertex>(), IntPtr.Zero, BufferUsageHint.DynamicDraw);
             EnableAttrib("position", 3, VertexAttribPointerType.Float, false, "trans");
             EnableAttrib("uv", 2, VertexAttribPointerType.Float, false, "st");
-            EnableAttrib("normal", 3, VertexAttribPointerType.Float, false, "normal");
+            EnableAttrib("normal", 4, VertexAttribPointerType.Int2101010Rev, true, "normal");
             EnableAttrib("color", 4, VertexAttribPointerType.UnsignedByte, true, "rgba");
             EnableAttribI("tex", 1, VertexAttribIntegerType.Int, "tex");
+            EnableAttrib("misc", 4, VertexAttribPointerType.Float, false, "misc");
         }
 
         public void TestRealloc() => TestRealloc(vert_count);
@@ -91,7 +90,7 @@ namespace CrashEdit
             vert_count++;
         }
 
-        public void PushAttrib(Vector3? trans = null, Vector3? normal = null, Vector2? st = null, Rgba? rgba = null, TexInfoUnpacked? tex = null)
+        public void PushAttrib(Vector3? trans = null, int? normal = null, Vector2? st = null, Rgba? rgba = null, TexInfoUnpacked? tex = null, Vector4? misc = null)
         {
             TestRealloc();
             if (trans != null)
@@ -104,6 +103,8 @@ namespace CrashEdit
                 Verts[vert_count].rgba = rgba.Value;
             if (tex != null)
                 Verts[vert_count].tex = (int)tex.Value;
+            if (misc != null)
+                Verts[vert_count].misc = misc.Value;
             vert_count++;
         }
 
@@ -196,6 +197,7 @@ namespace CrashEdit
         public Vector3 UserColorAmb;
         public Vector3 UserColorDiff;
         public int UserCullMode; // 0 - no cull, 1 - backface (default), 2 - frontface
+        public float UserFloat;
 
         public enum ColorModeEnum { Default = 0, GradientY = 1, Solid = 2 };
         public ColorModeEnum ColorMode;
