@@ -1,7 +1,5 @@
-﻿using Crash;
-using OpenTK;
+﻿using OpenTK;
 using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
 using System.Runtime.InteropServices;
 
 namespace CrashEdit
