@@ -24,8 +24,6 @@ after_build:
   - copy .\CrashEdit\bin\Debug\CrashEdit.exe pkg
   - copy .\CrashEdit\bin\Debug\CrashEdit.exe.config pkg
   - copy .\CrashEdit\bin\Debug\ISO2PSX.dll pkg
-  - copy .\CrashEdit\bin\Debug\ja\Crash.UI.resources.dll pkg
-  - copy .\CrashEdit\bin\Debug\ja\CrashEdit.resources.dll pkg
   - copy .\CrashHacks\bin\Debug\CrashHacks.exe pkg
   - copy .\CrashEdit\bin\Debug\OpenTK.dll pkg
   - copy .\CrashEdit\bin\Debug\OpenTK.GLControl.dll pkg
@@ -34,6 +32,9 @@ after_build:
   - copy .\CrashEdit\bin\Debug\DiscUtils.Streams.dll pkg
   - copy .\CrashEdit\bin\Debug\SharpFont.dll pkg
   - copy .\CrashEdit\bin\Debug\SharpFont.dll.config pkg
+  - mkdir pkg\ja
+  - copy .\CrashEdit\bin\Debug\ja\Crash.UI.resources.dll pkg\ja
+  - copy .\CrashEdit\bin\Debug\ja\CrashEdit.resources.dll pkg\ja
   - mkdir pkg\Win32
   - xcopy .\CrashEdit\bin\Debug\Win32 pkg\Win32 /s /e
   - mkdir pkg\Win64
