@@ -8,6 +8,11 @@ environment:
     secure: i2KP8L+z+Txf6sYqGwZ8d7I+kDxQfLRBfLimncCKu8xPv3oF6hFsvVKFRVh/Tnd+
 configuration: Debug
 platform: Any CPU
+assembly_info:
+  patch: true
+  file: Version.cs
+  assembly_version: '0.3.{build}'
+  assembly_file_version: '0.3.{build}'
 build_script:
   - nuget restore CrashEdit.sln
   - msbuild CrashEdit.sln
@@ -27,8 +32,8 @@ after_build:
   - copy .\CrashEdit\bin\Debug\DiscUtils.Core.dll pkg
   - copy .\CrashEdit\bin\Debug\DiscUtils.Iso9660.dll pkg
   - copy .\CrashEdit\bin\Debug\DiscUtils.Streams.dll pkg
-  - copy .\CrashEdit\bin\Debug\Sharpfont.dll pkg
-  - copy .\CrashEdit\bin\Debug\Sharpfont.dll.config pkg
+  - copy .\CrashEdit\bin\Debug\SharpFont.dll pkg
+  - copy .\CrashEdit\bin\Debug\SharpFont.dll.config pkg
   - mkdir pkg\Win32
   - xcopy .\CrashEdit\bin\Debug\Win32 pkg\Win32 /s /e
   - mkdir pkg\Win64
