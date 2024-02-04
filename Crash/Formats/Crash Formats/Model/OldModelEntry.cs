@@ -5,10 +5,10 @@ namespace Crash
 {
     public sealed class OldModelEntry : Entry
     {
-        private List<OldModelPolygon> polygons;
-        private List<OldModelStruct> structs;
+        private readonly List<OldModelPolygon> polygons;
+        private readonly List<OldModelStruct> structs;
 
-        public OldModelEntry(byte[] info,IEnumerable<OldModelPolygon> polygons,IEnumerable<OldModelStruct> structs,int eid) : base(eid)
+        public OldModelEntry(byte[] info, IEnumerable<OldModelPolygon> polygons, IEnumerable<OldModelStruct> structs, int eid) : base(eid)
         {
             if (polygons == null)
                 throw new ArgumentNullException("polygons");
@@ -28,14 +28,14 @@ namespace Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte [2][];
+            byte[][] items = new byte[2][];
             items[0] = Info;
-            items[1] = new byte [polygons.Count * 8];
-            for (int i = 0;i < polygons.Count;i++)
+            items[1] = new byte[polygons.Count * 8];
+            for (int i = 0; i < polygons.Count; i++)
             {
-                polygons[i].Save().CopyTo(items[1],i * 8);
+                polygons[i].Save().CopyTo(items[1], i * 8);
             }
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

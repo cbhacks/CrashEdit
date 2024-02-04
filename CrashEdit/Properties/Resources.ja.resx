@@ -301,7 +301,7 @@
   <data name="Text_CloseDirtyFilePrompt" xml:space="preserve">
     <value>ファイル "{0}" は保存されていません。続行しますか？</value>
   </data>
-  <data name="Config_FraLang" xml:space="preserve">
+  <data name="Config_lblLang" xml:space="preserve">
     <value>言語　＊再起動が必要です</value>
   </data>
   <data name="EntityBox_ChkBonusBoxCount" xml:space="preserve">
@@ -431,10 +431,10 @@
     <value>設定のリセット</value>
   </data>
   <data name="Config_fraAnimGrid" xml:space="preserve">
-    <value>アニメーションビューワーのグリッド線</value>
+    <value>3Dビューワーのグリッド線</value>
   </data>
   <data name="Config_fraClearCol" xml:space="preserve">
-    <value>クリア</value>
+    <value>クリアカラー</value>
   </data>
   <data name="Config_fraSize" xml:space="preserve">
     <value>ウィンドウのサイズ</value>
@@ -732,5 +732,29 @@
   </data>
   <data name="MakeBIN_Making" xml:space="preserve">
     <value>BIN の作成</value>
+  </data>
+  <data name="Config_fraFont" xml:space="preserve">
+    <value>フォントレンダラ</value>
+  </data>
+  <data name="Config_lblFontName" xml:space="preserve">
+    <value>フォント</value>
+  </data>
+  <data name="Config_lblFontSize" xml:space="preserve">
+    <value>フォントサイズ</value>
+  </data>
+  <data name="Config_chkFont2DEnable" xml:space="preserve">
+    <value>デバッグテキストを表示する</value>
+  </data>
+  <data name="Config_chkFont3DAutoscale" xml:space="preserve">
+    <value>エンティティテキストをスケールする</value>
+  </data>
+  <data name="Config_chkFont3DEnable" xml:space="preserve">
+    <value>エンティティテキストを表示する</value>
+  </data>
+  <data name="Config_fraMisc" xml:space="preserve">
+    <value>他のセッティング</value>
+  </data>
+  <data name="Misc" xml:space="preserve">
+    <value>雑</value>
   </data>
 </root>

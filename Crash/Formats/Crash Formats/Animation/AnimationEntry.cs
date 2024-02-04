@@ -4,9 +4,9 @@ namespace Crash
 {
     public sealed class AnimationEntry : Entry
     {
-        private List<Frame> frames;
+        private readonly List<Frame> frames;
 
-        public AnimationEntry(IEnumerable<Frame> frames,bool isnew,int eid) : base(eid)
+        public AnimationEntry(IEnumerable<Frame> frames, bool isnew, int eid) : base(eid)
         {
             this.frames = new List<Frame>(frames);
             IsNew = isnew;
@@ -19,12 +19,12 @@ namespace Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte [frames.Count][];
-            for (int i = 0;i < frames.Count;i++)
+            byte[][] items = new byte[frames.Count][];
+            for (int i = 0; i < frames.Count; i++)
             {
                 items[i] = frames[i].Save();
             }
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

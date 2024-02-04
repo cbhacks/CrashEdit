@@ -4,7 +4,7 @@ namespace Crash
 {
     public sealed class UnprocessedChunk : Chunk
     {
-        public UnprocessedChunk(byte[] data)
+        public UnprocessedChunk(byte[] data, NSF nsf) : base(nsf)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
@@ -22,7 +22,7 @@ namespace Crash
         {
             if (loaders.ContainsKey(Type))
             {
-                return loaders[Type].Load(chunkid,Data);
+                return loaders[Type].Load(chunkid, Data, NSF);
             }
             else
             {

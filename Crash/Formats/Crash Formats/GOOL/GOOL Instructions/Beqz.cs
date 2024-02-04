@@ -1,12 +1,12 @@
 ﻿namespace Crash.GOOLIns
 {
-    [GOOLInstruction(52,GameVersion.Crash2)]
-    [GOOLInstruction(52,GameVersion.Crash3)]
+    [GOOLInstruction(52, GameVersion.Crash2)]
+    [GOOLInstruction(52, GameVersion.Crash3)]
     public sealed class Beqz : GOOLInstruction
     {
-        public Beqz(int value,GOOLEntry gool) : base(value,gool)
+        public Beqz(int value, GOOLEntry gool) : base(value, gool)
         {
-            Args['I'] = new GOOLArgument(BitConv.SignExtendInt32(Args['I'].Value,10)); // sign-extension
+            Args['I'] = new GOOLArgument(BitConv.SignExtendInt32(Args['I'].Value, 10)); // sign-extension
         }
 
         public override string Name => "BEQZ";

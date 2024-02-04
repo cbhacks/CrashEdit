@@ -301,7 +301,7 @@
   <data name="Text_CloseDirtyFilePrompt" xml:space="preserve">
     <value>The file "{0}" has not been saved since it was last modified. Continue anyway?</value>
   </data>
-  <data name="Config_FraLang" xml:space="preserve">
+  <data name="Config_lblLang" xml:space="preserve">
     <value>Language (requires restart)</value>
   </data>
   <data name="EntityBox_ChkBonusBoxCount" xml:space="preserve">
@@ -433,7 +433,7 @@
     <value>Reset Settings</value>
   </data>
   <data name="Config_fraAnimGrid" xml:space="preserve">
-    <value>Animation Viewer World Grid</value>
+    <value>3D Viewer Grid</value>
   </data>
   <data name="Config_fraClearCol" xml:space="preserve">
     <value>Clear Color</value>
@@ -445,10 +445,10 @@
     <value>Amount</value>
   </data>
   <data name="Config_lblH" xml:space="preserve">
-    <value>Width</value>
+    <value>Height</value>
   </data>
   <data name="Config_lblW" xml:space="preserve">
-    <value>Height</value>
+    <value>Width</value>
   </data>
   <data name="Crash3AnimationSelector_Desc" xml:space="preserve">
     <value>Type in a Model (or Compressed Model) name and press Enter.</value>
@@ -743,5 +743,80 @@
 as Angle: {1:F}deg
 as Time: {2:F}s
 as Meters: {3:F3}m</value>
+  </data>
+  <data name="Config_fraFont" xml:space="preserve">
+    <value>Font Renderer</value>
+  </data>
+  <data name="Config_lblFontName" xml:space="preserve">
+    <value>Font</value>
+  </data>
+  <data name="Config_lblFontSize" xml:space="preserve">
+    <value>Font Size</value>
+  </data>
+  <data name="Config_chkFont2DEnable" xml:space="preserve">
+    <value>Display debug text</value>
+  </data>
+  <data name="Config_chkFont3DAutoscale" xml:space="preserve">
+    <value>Scale entity text</value>
+  </data>
+  <data name="Config_chkFont3DEnable" xml:space="preserve">
+    <value>Display entity text</value>
+  </data>
+  <data name="Config_fraMisc" xml:space="preserve">
+    <value>Other Settings</value>
+  </data>
+  <data name="Misc" xml:space="preserve">
+    <value>Miscellaneous</value>
+  </data>
+  <data name="Config_chkViewerShowHelp" xml:space="preserve">
+    <value>Display help text by default</value>
+  </data>
+  <data name="ViewerControls_AimAndZoom" xml:space="preserve">
+    <value>Left mouse to aim, scroll wheel to zoom</value>
+  </data>
+  <data name="ViewerControls_ChangeCullMode" xml:space="preserve">
+    <value>Scroll through culling modes (current: {0})</value>
+  </data>
+  <data name="ViewerControls_Move" xml:space="preserve">
+    <value>W/A/S/D to move, Q/E to pan up/down</value>
+  </data>
+  <data name="ViewerControls_MoveAligned" xml:space="preserve">
+    <value>Hold Ctrl for aligned movement</value>
+  </data>
+  <data name="ViewerControls_OpenOctreeWindow" xml:space="preserve">
+    <value>Open octree node window</value>
+  </data>
+  <data name="ViewerControls_ResetCamera" xml:space="preserve">
+    <value>Reset camera</value>
+  </data>
+  <data name="ViewerControls_ToggleCollisionAnim" xml:space="preserve">
+    <value>Show collision boxes ({0})</value>
+  </data>
+  <data name="ViewerControls_ToggleHelp" xml:space="preserve">
+    <value>Toggle help text ({0})</value>
+  </data>
+  <data name="ViewerControls_ToggleLerp" xml:space="preserve">
+    <value>Enable animation interpolation ({0})</value>
+  </data>
+  <data name="ViewerControls_ToggleNormals" xml:space="preserve">
+    <value>Show normals ({0})</value>
+  </data>
+  <data name="ViewerControls_ToggleTextures" xml:space="preserve">
+    <value>Enable textures ({0})</value>
+  </data>
+  <data name="ViewerControls_ToggleTimeTrial" xml:space="preserve">
+    <value>Toggle time trial mode ({0})</value>
+  </data>
+  <data name="ViewerControls_ToggleZoneOctree" xml:space="preserve">
+    <value>Show zone collision octree ({0})</value>
+  </data>
+  <data name="ViewerControls_ToggleZoneOctreeFlip" xml:space="preserve">
+    <value>Flip octree ({0})</value>
+  </data>
+  <data name="ViewerControls_ToggleZoneOctreeNeighbors" xml:space="preserve">
+    <value>Show octree for neighbor zones ({0})</value>
+  </data>
+  <data name="ViewerControls_ToggleZoneOctreeOutline" xml:space="preserve">
+    <value>Toggle octree wireframe ({0})</value>
   </data>
 </root>

@@ -2,8 +2,8 @@ namespace Crash
 {
     public interface IPosition
     {
-        double X { get; }
-        double Y { get; }
-        double Z { get; }
+        float X { get; }
+        float Y { get; }
+        float Z { get; }
     }
 }

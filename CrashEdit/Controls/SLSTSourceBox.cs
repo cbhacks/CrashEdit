@@ -5,7 +5,7 @@ namespace CrashEdit
 {
     public sealed class SLSTSourceBox : UserControl
     {
-        private ListBox lstValues;
+        private readonly ListBox lstValues;
 
         public SLSTSourceBox(SLSTSource slstitem)
         {
@@ -13,10 +13,10 @@ namespace CrashEdit
             {
                 Dock = DockStyle.Fill
             };
-            lstValues.Items.Add(string.Format("Count: {0}",slstitem.Polygons.Count));
+            lstValues.Items.Add(string.Format("Count: {0}", slstitem.Polygons.Count));
             foreach (SLSTPolygonID value in slstitem.Polygons)
             {
-                lstValues.Items.Add(string.Format("Polygon {2}-{0} (World {1})",value.ID,value.World,value.State));
+                lstValues.Items.Add(string.Format("Polygon {2}-{0} (World {1})", value.ID, value.World, value.State));
             }
             Controls.Add(lstValues);
         }

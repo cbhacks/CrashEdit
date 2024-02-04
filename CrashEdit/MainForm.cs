@@ -1,15 +1,15 @@
 using Crash;
 using Crash.UI;
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 namespace CrashEdit
 {
     public partial class MainForm : Form
     {
-        private List<ToolStripItem> syncstripitems;
+        private readonly List<ToolStripItem> syncstripitems;
 
         public MainForm()
         {
@@ -81,7 +81,7 @@ namespace CrashEdit
             {
                 stripitem.Enabled = false;
             }
-            for (int i = 0;i < mnuUndo.DropDownItems.Count;i++)
+            for (int i = 0; i < mnuUndo.DropDownItems.Count; i++)
             {
                 object tag = mnuUndo.DropDownItems[i].Tag;
                 if (tag is int && (int)tag != 1)
@@ -167,12 +167,12 @@ namespace CrashEdit
             }
         }
 
-        private void MainControl_SyncMasterUI(object sender,EventArgs e)
+        private void MainControl_SyncMasterUI(object sender, EventArgs e)
         {
             SyncUI();
         }
 
-        private void uxTabs_Selected(object sender,TabControlEventArgs e)
+        private void uxTabs_Selected(object sender, TabControlEventArgs e)
         {
             switch (e.Action)
             {
@@ -192,7 +192,7 @@ namespace CrashEdit
             SyncUI();
         }
 
-        private void mniFileOpen_Click(object sender,EventArgs e)
+        private void mniFileOpen_Click(object sender, EventArgs e)
         {
             if (dlgOpenNSF.ShowDialog(this) == DialogResult.OK)
             {
@@ -230,22 +230,22 @@ namespace CrashEdit
             }
         }
 
-        private void mniFileSave_Click(object sender,EventArgs e)
+        private void mniFileSave_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        private void mniFileSaveAs_Click(object sender,EventArgs e)
+        private void mniFileSaveAs_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        private void mniFilePatchNSD_Click(object sender,EventArgs e)
+        private void mniFilePatchNSD_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        private void mniFileClose_Click(object sender,EventArgs e)
+        private void mniFileClose_Click(object sender, EventArgs e)
         {
             TabPage tab = uxTabs.SelectedTab;
             if (tab.Tag is MainControl maincontrol)
@@ -264,12 +264,12 @@ namespace CrashEdit
             tab.Dispose();
         }
 
-        private void mniFileExit_Click(object sender,EventArgs e)
+        private void mniFileExit_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void mniEditAction_Click(object sender,EventArgs e)
+        private void mniEditAction_Click(object sender, EventArgs e)
         {
             MainControl maincontrol = (MainControl)uxTabs.SelectedTab.Tag;
             Crash.UI.Action action = (Crash.UI.Action)((ToolStripItem)sender).Tag;
@@ -279,89 +279,89 @@ namespace CrashEdit
                 // Action is read-only, e.g. model exports, etc
                 return;
             }
-            maincontrol.CommandManager.Submit(command,action.GetText(maincontrol.SelectedController));
+            maincontrol.CommandManager.Submit(command, action.GetText(maincontrol.SelectedController));
         }
 
-        private void mniFindFind_Click(object sender,EventArgs e)
+        private void mniFindFind_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        private void mniFindFindNext_Click(object sender,EventArgs e)
+        private void mniFindFindNext_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        private void mniFindEntryID_Click(object sender,EventArgs e)
+        private void mniFindEntryID_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        private void mniFindEntryName_Click(object sender,EventArgs e)
+        private void mniFindEntryName_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        private void mniFindObjectName_Click(object sender,EventArgs e)
+        private void mniFindObjectName_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        private void mniUndoRedo_Click(object sender,EventArgs e)
+        private void mniUndoRedo_Click(object sender, EventArgs e)
         {
             MainControl maincontrol = (MainControl)uxTabs.SelectedTab.Tag;
             maincontrol.CommandManager.Redo((int)((ToolStripItem)(sender ?? mniUndoRedo)).Tag);
         }
 
-        private void mniUndoUndo_Click(object sender,EventArgs e)
+        private void mniUndoUndo_Click(object sender, EventArgs e)
         {
             MainControl maincontrol = (MainControl)uxTabs.SelectedTab.Tag;
             maincontrol.CommandManager.Undo((int)((ToolStripItem)(sender ?? mniUndoUndo)).Tag);
         }
 
-        private void tbiOpen_Click(object sender,EventArgs e)
+        private void tbiOpen_Click(object sender, EventArgs e)
         {
-            mniFileOpen_Click(null,null);
+            mniFileOpen_Click(null, null);
         }
 
-        private void tbiSave_Click(object sender,EventArgs e)
+        private void tbiSave_Click(object sender, EventArgs e)
         {
-            mniFileSave_Click(null,null);
+            mniFileSave_Click(null, null);
         }
 
-        private void tbiClose_Click(object sender,EventArgs e)
+        private void tbiClose_Click(object sender, EventArgs e)
         {
-            mniFileClose_Click(null,null);
+            mniFileClose_Click(null, null);
         }
 
-        private void tbiPatchNSD_Click(object sender,EventArgs e)
+        private void tbiPatchNSD_Click(object sender, EventArgs e)
         {
-            mniFilePatchNSD_Click(null,null);
+            mniFilePatchNSD_Click(null, null);
         }
 
-        private void tbiFind_Click(object sender,EventArgs e)
+        private void tbiFind_Click(object sender, EventArgs e)
         {
-            mniFindFind_Click(null,null);
+            mniFindFind_Click(null, null);
         }
 
-        private void tbiFindNext_Click(object sender,EventArgs e)
+        private void tbiFindNext_Click(object sender, EventArgs e)
         {
-            mniFindFindNext_Click(null,null);
+            mniFindFindNext_Click(null, null);
         }
 
-        private void tbiGotoEID_Click(object sender,EventArgs e)
+        private void tbiGotoEID_Click(object sender, EventArgs e)
         {
-            mniFindEntryID_Click(null,null);
+            mniFindEntryID_Click(null, null);
         }
 
-        private void tbiUndo_Click(object sender,EventArgs e)
+        private void tbiUndo_Click(object sender, EventArgs e)
         {
-            mniUndoUndo_Click(null,null);
+            mniUndoUndo_Click(null, null);
         }
 
-        private void tbiRedo_Click(object sender,EventArgs e)
+        private void tbiRedo_Click(object sender, EventArgs e)
         {
-            mniUndoRedo_Click(null,null);
+            mniUndoRedo_Click(null, null);
         }
     }
 }

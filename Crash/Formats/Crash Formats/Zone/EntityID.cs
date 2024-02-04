@@ -8,7 +8,7 @@ namespace Crash
             AlternateID = null;
         }
 
-        public EntityID(int id,int? alternateid)
+        public EntityID(int id, int? alternateid)
         {
             ID = id;
             AlternateID = alternateid;

@@ -4,14 +4,14 @@ namespace CrashEdit
 {
     public sealed class ItemController : Controller
     {
-        public ItemController(MysteryMultiItemEntryController mysteryentrycontroller,byte[] item)
+        public ItemController(MysteryMultiItemEntryController mysteryentrycontroller, byte[] item)
         {
             MysteryEntryController = mysteryentrycontroller;
             Item = item;
             if (mysteryentrycontroller != null)
             {
-                AddMenu("Replace Item",Menu_Replace_Item);
-                AddMenu("Delete Item",Menu_Delete_Item);
+                AddMenu("Replace Item", Menu_Replace_Item);
+                AddMenu("Delete Item", Menu_Delete_Item);
             }
             InvalidateNode();
             InvalidateNodeImage();

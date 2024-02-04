@@ -9,8 +9,8 @@ namespace CrashEdit
 {
     public partial class EntityBox : UserControl
     {
-        private Controller controller;
-        private Entity entity;
+        private readonly EntityController controller;
+        private readonly Entity entity;
 
         private int positionindex;
         private int settingindex;
@@ -158,13 +158,6 @@ namespace CrashEdit
             };
         }
 
-        public EntityBox(NewEntityController controller)
-        {
-            this.controller = controller;
-            entity = controller.Entity;
-            MainInit();
-        }
-
         public EntityBox(EntityController controller)
         {
             this.controller = controller;
@@ -184,7 +177,7 @@ namespace CrashEdit
                 arg / 256F,
                 arg / (float)0x1000 * 360,
                 arg / (OldMainForm.PAL ? 25F : 30F),
-                arg / (256F*400));
+                arg / (256F * 400));
         }
 
         private void UpdateName()
@@ -201,14 +194,14 @@ namespace CrashEdit
             }
         }
 
-        private void chkName_CheckedChanged(object sender,EventArgs e)
+        private void chkName_CheckedChanged(object sender, EventArgs e)
         {
             txtName.Enabled = chkName.Checked;
             entity.Name = chkName.Checked ? txtName.Text : null;
             InvalidateNodes();
         }
 
-        private void txtName_TextChanged(object sender,EventArgs e)
+        private void txtName_TextChanged(object sender, EventArgs e)
         {
             entity.Name = txtName.Text;
             InvalidateNodes();
@@ -219,7 +212,7 @@ namespace CrashEdit
             dirty.Push(true);
             if (positionindex >= entity.Positions.Count)
             {
-                positionindex = entity.Positions.Count-1;
+                positionindex = entity.Positions.Count - 1;
             }
             // Do not make this else if,
             // sometimes both will run.
@@ -241,9 +234,9 @@ namespace CrashEdit
             }
             else
             {
-                lblPositionIndex.Text = $"{positionindex+1} / {entity.Positions.Count}";
+                lblPositionIndex.Text = $"{positionindex + 1} / {entity.Positions.Count}";
                 cmdPreviousPosition.Enabled = positionindex > 0;
-                cmdNextPosition.Enabled = positionindex < entity.Positions.Count-1;
+                cmdNextPosition.Enabled = positionindex < entity.Positions.Count - 1;
                 cmdInsertPosition.Enabled = true;
                 cmdRemovePosition.Enabled = true;
                 lblX.Enabled = lblY.Enabled = lblZ.Enabled = numX.Enabled = numY.Enabled = numZ.Enabled = true;
@@ -255,25 +248,25 @@ namespace CrashEdit
             dirty.Pop();
         }
 
-        private void cmdPreviousPosition_Click(object sender,EventArgs e)
+        private void cmdPreviousPosition_Click(object sender, EventArgs e)
         {
             --positionindex;
             UpdatePosition();
         }
 
-        private void cmdNextPosition_Click(object sender,EventArgs e)
+        private void cmdNextPosition_Click(object sender, EventArgs e)
         {
             ++positionindex;
             UpdatePosition();
         }
 
-        private void cmdInsertPosition_Click(object sender,EventArgs e)
+        private void cmdInsertPosition_Click(object sender, EventArgs e)
         {
-            entity.Positions.Insert(positionindex,entity.Positions[positionindex]);
+            entity.Positions.Insert(positionindex, entity.Positions[positionindex]);
             UpdatePosition();
         }
 
-        private void cmdRemovePosition_Click(object sender,EventArgs e)
+        private void cmdRemovePosition_Click(object sender, EventArgs e)
         {
             entity.Positions.RemoveAt(positionindex);
             UpdatePosition();
@@ -281,7 +274,7 @@ namespace CrashEdit
                 InvalidateNodes();
         }
 
-        private void cmdAppendPosition_Click(object sender,EventArgs e)
+        private void cmdAppendPosition_Click(object sender, EventArgs e)
         {
             positionindex = entity.Positions.Count;
             if (entity.Positions.Count > 0)
@@ -290,37 +283,37 @@ namespace CrashEdit
             }
             else
             {
-                entity.Positions.Add(new EntityPosition(0,0,0));
+                entity.Positions.Add(new EntityPosition(0, 0, 0));
             }
             UpdatePosition();
             if (entity.Positions.Count == 1)
                 InvalidateNodes();
         }
 
-        private void numX_ValueChanged(object sender,EventArgs e)
+        private void numX_ValueChanged(object sender, EventArgs e)
         {
             if (!Dirty)
             {
                 EntityPosition pos = entity.Positions[positionindex];
-                entity.Positions[positionindex] = new EntityPosition((short)numX.Value,pos.Y,pos.Z);
+                entity.Positions[positionindex] = new EntityPosition((short)numX.Value, pos.Y, pos.Z);
             }
         }
 
-        private void numY_ValueChanged(object sender,EventArgs e)
+        private void numY_ValueChanged(object sender, EventArgs e)
         {
             if (!Dirty)
             {
                 EntityPosition pos = entity.Positions[positionindex];
-                entity.Positions[positionindex] = new EntityPosition(pos.X,(short)numY.Value,pos.Z);
+                entity.Positions[positionindex] = new EntityPosition(pos.X, (short)numY.Value, pos.Z);
             }
         }
 
-        private void numZ_ValueChanged(object sender,EventArgs e)
+        private void numZ_ValueChanged(object sender, EventArgs e)
         {
             if (!Dirty)
             {
                 EntityPosition pos = entity.Positions[positionindex];
-                entity.Positions[positionindex] = new EntityPosition(pos.X,pos.Y,(short)numZ.Value);
+                entity.Positions[positionindex] = new EntityPosition(pos.X, pos.Y, (short)numZ.Value);
             }
         }
 
@@ -352,10 +345,10 @@ namespace CrashEdit
             }
             else
             {
-                lblSettingIndex.Text = $"{settingindex+1} / {entity.Settings.Count}";
+                lblSettingIndex.Text = $"{settingindex + 1} / {entity.Settings.Count}";
                 lblArgAs.Text = MakeArgAsText();
                 cmdPreviousSetting.Enabled = settingindex > 0;
-                cmdNextSetting.Enabled = settingindex < entity.Settings.Count-1;
+                cmdNextSetting.Enabled = settingindex < entity.Settings.Count - 1;
                 cmdRemoveSetting.Enabled =
                 lblArgAs.Enabled =
                 numSettingA.Enabled =
@@ -368,47 +361,47 @@ namespace CrashEdit
             dirty.Pop();
         }
 
-        private void cmdPreviousSetting_Click(object sender,EventArgs e)
+        private void cmdPreviousSetting_Click(object sender, EventArgs e)
         {
             --settingindex;
             UpdateSettings();
         }
 
-        private void cmdNextSetting_Click(object sender,EventArgs e)
+        private void cmdNextSetting_Click(object sender, EventArgs e)
         {
             ++settingindex;
             UpdateSettings();
         }
 
-        private void cmdAddSetting_Click(object sender,EventArgs e)
+        private void cmdAddSetting_Click(object sender, EventArgs e)
         {
-            entity.Settings.Add(new EntitySetting(0,0));
+            entity.Settings.Add(new EntitySetting(0, 0));
             UpdateSettings();
         }
 
-        private void cmdRemoveSetting_Click(object sender,EventArgs e)
+        private void cmdRemoveSetting_Click(object sender, EventArgs e)
         {
             entity.Settings.RemoveAt(settingindex);
             UpdateSettings();
         }
 
-        private void numSettingA_ValueChanged(object sender,EventArgs e)
+        private void numSettingA_ValueChanged(object sender, EventArgs e)
         {
             if (!Dirty)
             {
                 EntitySetting s = entity.Settings[settingindex];
-                entity.Settings[settingindex] = new EntitySetting((byte)numSettingA.Value,s.ValueB);
+                entity.Settings[settingindex] = new EntitySetting((byte)numSettingA.Value, s.ValueB);
                 SetCVal(entity.Settings[settingindex].Value);
                 lblArgAs.Text = MakeArgAsText();
             }
         }
 
-        private void numSettingB_ValueChanged(object sender,EventArgs e)
+        private void numSettingB_ValueChanged(object sender, EventArgs e)
         {
             if (!Dirty)
             {
                 EntitySetting s = entity.Settings[settingindex];
-                entity.Settings[settingindex] = new EntitySetting(s.ValueA,(int)numSettingB.Value);
+                entity.Settings[settingindex] = new EntitySetting(s.ValueA, (int)numSettingB.Value);
                 SetCVal(entity.Settings[settingindex].Value);
                 lblArgAs.Text = MakeArgAsText();
             }
@@ -469,7 +462,7 @@ namespace CrashEdit
             chkID2.Enabled = entity.ID.HasValue;
         }
 
-        private void chkID_CheckedChanged(object sender,EventArgs e)
+        private void chkID_CheckedChanged(object sender, EventArgs e)
         {
             numID.Enabled = chkID.Checked;
             chkID2.Enabled = chkID.Checked;
@@ -485,13 +478,13 @@ namespace CrashEdit
             InvalidateNodes();
         }
 
-        private void numID_ValueChanged(object sender,EventArgs e)
+        private void numID_ValueChanged(object sender, EventArgs e)
         {
             entity.ID = (int)numID.Value;
             InvalidateNodes();
         }
 
-        private void chkID2_CheckedChanged(object sender,EventArgs e)
+        private void chkID2_CheckedChanged(object sender, EventArgs e)
         {
             numID2.Enabled = chkID2.Checked;
             if (chkID2.Checked)
@@ -504,7 +497,7 @@ namespace CrashEdit
             }
         }
 
-        private void numID2_ValueChanged(object sender,EventArgs e)
+        private void numID2_ValueChanged(object sender, EventArgs e)
         {
             entity.AlternateID = (int)numID2.Value;
         }
@@ -519,7 +512,7 @@ namespace CrashEdit
             chkType.Checked = entity.Type.HasValue;
         }
 
-        private void chkType_CheckedChanged(object sender,EventArgs e)
+        private void chkType_CheckedChanged(object sender, EventArgs e)
         {
             numType.Enabled = chkType.Checked;
             if (chkType.Checked)
@@ -532,7 +525,7 @@ namespace CrashEdit
             }
         }
 
-        private void numType_ValueChanged(object sender,EventArgs e)
+        private void numType_ValueChanged(object sender, EventArgs e)
         {
             entity.Type = (int)numType.Value;
         }
@@ -547,7 +540,7 @@ namespace CrashEdit
             chkSubtype.Checked = entity.Subtype.HasValue;
         }
 
-        private void chkSubtype_CheckedChanged(object sender,EventArgs e)
+        private void chkSubtype_CheckedChanged(object sender, EventArgs e)
         {
             numSubtype.Enabled = chkSubtype.Checked;
             if (chkSubtype.Checked)
@@ -560,7 +553,7 @@ namespace CrashEdit
             }
         }
 
-        private void numSubtype_ValueChanged(object sender,EventArgs e)
+        private void numSubtype_ValueChanged(object sender, EventArgs e)
         {
             entity.Subtype = (int)numSubtype.Value;
         }
@@ -581,12 +574,12 @@ namespace CrashEdit
             chkBonusBoxCount.Checked = entity.BonusBoxCount.HasValue;
         }
 
-        private void chkBoxCount_CheckedChanged(object sender,EventArgs e)
+        private void chkBoxCount_CheckedChanged(object sender, EventArgs e)
         {
             numBoxCount.Enabled = chkBoxCount.Checked;
             if (chkBoxCount.Checked)
             {
-                entity.BoxCount = new EntitySetting(0,(int)numBoxCount.Value);
+                entity.BoxCount = new EntitySetting(0, (int)numBoxCount.Value);
             }
             else
             {
@@ -594,9 +587,9 @@ namespace CrashEdit
             }
         }
 
-        private void numBoxCount_ValueChanged(object sender,EventArgs e)
+        private void numBoxCount_ValueChanged(object sender, EventArgs e)
         {
-            entity.BoxCount = new EntitySetting(0,(int)numBoxCount.Value);
+            entity.BoxCount = new EntitySetting(0, (int)numBoxCount.Value);
         }
 
         private void chkBonusBoxCount_CheckedChanged(object sender, EventArgs e)
@@ -617,7 +610,7 @@ namespace CrashEdit
             entity.BonusBoxCount = new EntitySetting(0, (int)numBonusBoxCount.Value);
         }
 
-        private void cmdClearAllVictims_Click(object sender,EventArgs e)
+        private void cmdClearAllVictims_Click(object sender, EventArgs e)
         {
             entity.Victims.Clear();
             UpdateVictim();
@@ -628,7 +621,7 @@ namespace CrashEdit
             dirty.Push(true);
             if (victimindex >= entity.Victims.Count)
             {
-                victimindex = entity.Victims.Count-1;
+                victimindex = entity.Victims.Count - 1;
             }
             // Do not make this else if,
             // sometimes both will run.
@@ -648,9 +641,9 @@ namespace CrashEdit
             }
             else
             {
-                lblVictimIndex.Text = $"{victimindex+1} / {entity.Victims.Count}";
+                lblVictimIndex.Text = $"{victimindex + 1} / {entity.Victims.Count}";
                 cmdPreviousVictim.Enabled = victimindex > 0;
-                cmdNextVictim.Enabled = victimindex < entity.Victims.Count-1;
+                cmdNextVictim.Enabled = victimindex < entity.Victims.Count - 1;
                 cmdRemoveVictim.Enabled =
                 numVictimID.Enabled =
                 cmdClearAllVictims.Enabled = true;
@@ -659,23 +652,23 @@ namespace CrashEdit
             dirty.Pop();
         }
 
-        private void cmdPreviousVictim_Click(object sender,EventArgs e)
+        private void cmdPreviousVictim_Click(object sender, EventArgs e)
         {
             --victimindex;
             UpdateVictim();
         }
 
-        private void cmdNextVictim_Click(object sender,EventArgs e)
+        private void cmdNextVictim_Click(object sender, EventArgs e)
         {
             ++victimindex;
             UpdateVictim();
         }
 
-        private void cmdInsertVictim_Click(object sender,EventArgs e)
+        private void cmdInsertVictim_Click(object sender, EventArgs e)
         {
             if (entity.Victims.Count > 0)
             {
-                entity.Victims.Insert(victimindex,entity.Victims[victimindex]);
+                entity.Victims.Insert(victimindex, entity.Victims[victimindex]);
             }
             else
             {
@@ -685,13 +678,13 @@ namespace CrashEdit
             UpdateVictim();
         }
 
-        private void cmdRemoveVictim_Click(object sender,EventArgs e)
+        private void cmdRemoveVictim_Click(object sender, EventArgs e)
         {
             entity.Victims.RemoveAt(victimindex);
             UpdateVictim();
         }
 
-        private void numVictimID_ValueChanged(object sender,EventArgs e)
+        private void numVictimID_ValueChanged(object sender, EventArgs e)
         {
             if (!Dirty)
             {
@@ -705,10 +698,10 @@ namespace CrashEdit
             {
                 fraLoadListPayload.Enabled = entity.LoadListB != null;
                 if (loadlistarowindex >= entity.LoadListA.RowCount)
-                    loadlistarowindex = entity.LoadListA.RowCount-1;
+                    loadlistarowindex = entity.LoadListA.RowCount - 1;
                 lblMetavalueLoadA.Enabled = true;
                 numMetavalueLoadA.Enabled = true;
-                lblLoadListRowIndexA.Text = $"{loadlistarowindex+1} / {entity.LoadListA.RowCount}";
+                lblLoadListRowIndexA.Text = $"{loadlistarowindex + 1} / {entity.LoadListA.RowCount}";
                 numMetavalueLoadA.Value = entity.LoadListA.Rows[loadlistarowindex].MetaValue.Value;
                 cmdPrevRowA.Enabled = loadlistarowindex > 0;
                 cmdNextRowA.Enabled = loadlistarowindex + 1 < entity.LoadListA.RowCount;
@@ -716,14 +709,14 @@ namespace CrashEdit
                 if (entity.LoadListA.Rows[loadlistarowindex].Values.Count > 0)
                 {
                     if (loadlistaeidindex >= entity.LoadListA.Rows[loadlistarowindex].Values.Count)
-                        loadlistaeidindex = entity.LoadListA.Rows[loadlistarowindex].Values.Count-1;
+                        loadlistaeidindex = entity.LoadListA.Rows[loadlistarowindex].Values.Count - 1;
                     cmdInsertEIDA.Enabled = true;
                     cmdRemoveEIDA.Enabled = true;
                     txtEIDA.Enabled = true;
                     lblEIDErrA.Visible = true;
                     cmdPrevEIDA.Enabled = loadlistaeidindex > 0;
                     cmdNextEIDA.Enabled = loadlistaeidindex + 1 < entity.LoadListA.Rows[loadlistarowindex].Values.Count;
-                    lblEIDIndexA.Text = $"{loadlistaeidindex+1} / {entity.LoadListA.Rows[loadlistarowindex].Values.Count}";
+                    lblEIDIndexA.Text = $"{loadlistaeidindex + 1} / {entity.LoadListA.Rows[loadlistarowindex].Values.Count}";
                     txtEIDA.Text = Entry.EIDToEName(entity.LoadListA.Rows[loadlistarowindex].Values[loadlistaeidindex]);
                 }
                 else
@@ -838,7 +831,7 @@ namespace CrashEdit
                 newrow.MetaValue = entity.LoadListA.Rows[loadlistarowindex].MetaValue;
                 foreach (var val in entity.LoadListA.Rows[loadlistarowindex].Values)
                     newrow.Values.Add(val);
-                entity.LoadListA.Rows.Insert(loadlistarowindex,newrow);
+                entity.LoadListA.Rows.Insert(loadlistarowindex, newrow);
             }
             UpdateLoadListA();
         }
@@ -854,10 +847,10 @@ namespace CrashEdit
             {
                 fraLoadListPayload.Enabled = entity.LoadListA != null;
                 if (loadlistbrowindex >= entity.LoadListB.RowCount)
-                    loadlistbrowindex = entity.LoadListB.RowCount-1;
+                    loadlistbrowindex = entity.LoadListB.RowCount - 1;
                 lblMetavalueLoadB.Enabled = true;
                 numMetavalueLoadB.Enabled = true;
-                lblLoadListRowIndexB.Text = $"{loadlistbrowindex+1} / {entity.LoadListB.RowCount}";
+                lblLoadListRowIndexB.Text = $"{loadlistbrowindex + 1} / {entity.LoadListB.RowCount}";
                 numMetavalueLoadB.Value = entity.LoadListB.Rows[loadlistbrowindex].MetaValue.Value;
                 cmdPrevRowB.Enabled = loadlistbrowindex > 0;
                 cmdNextRowB.Enabled = loadlistbrowindex + 1 < entity.LoadListB.RowCount;
@@ -865,14 +858,14 @@ namespace CrashEdit
                 if (entity.LoadListB.Rows[loadlistbrowindex].Values.Count > 0)
                 {
                     if (loadlistbeidindex >= entity.LoadListB.Rows[loadlistbrowindex].Values.Count)
-                        loadlistbeidindex = entity.LoadListB.Rows[loadlistbrowindex].Values.Count-1;
+                        loadlistbeidindex = entity.LoadListB.Rows[loadlistbrowindex].Values.Count - 1;
                     cmdInsertEIDB.Enabled = true;
                     cmdRemoveEIDB.Enabled = true;
                     txtEIDB.Enabled = true;
                     lblEIDErrB.Visible = true;
                     cmdPrevEIDB.Enabled = loadlistbeidindex > 0;
                     cmdNextEIDB.Enabled = loadlistbeidindex + 1 < entity.LoadListB.Rows[loadlistbrowindex].Values.Count;
-                    lblEIDIndexB.Text = $"{loadlistbeidindex+1} / {entity.LoadListB.Rows[loadlistbrowindex].Values.Count}";
+                    lblEIDIndexB.Text = $"{loadlistbeidindex + 1} / {entity.LoadListB.Rows[loadlistbrowindex].Values.Count}";
                     txtEIDB.Text = Entry.EIDToEName(entity.LoadListB.Rows[loadlistbrowindex].Values[loadlistbeidindex]);
                 }
                 else
@@ -987,7 +980,7 @@ namespace CrashEdit
                 newrow.MetaValue = entity.LoadListB.Rows[loadlistbrowindex].MetaValue;
                 foreach (var val in entity.LoadListB.Rows[loadlistbrowindex].Values)
                     newrow.Values.Add(val);
-                entity.LoadListB.Rows.Insert(loadlistbrowindex,newrow);
+                entity.LoadListB.Rows.Insert(loadlistbrowindex, newrow);
             }
             UpdateLoadListB();
         }
@@ -1002,10 +995,10 @@ namespace CrashEdit
             if (entity.DrawListA != null && entity.DrawListA.RowCount != 0)
             {
                 if (drawlistarowindex >= entity.DrawListA.RowCount)
-                    drawlistarowindex = entity.DrawListA.RowCount-1;
+                    drawlistarowindex = entity.DrawListA.RowCount - 1;
                 lblMetavalueDrawA.Enabled = true;
                 numMetavalueDrawA.Enabled = true;
-                lblDrawListRowIndexA.Text = $"{drawlistarowindex+1} / {entity.DrawListA.RowCount}";
+                lblDrawListRowIndexA.Text = $"{drawlistarowindex + 1} / {entity.DrawListA.RowCount}";
                 numMetavalueDrawA.Value = entity.DrawListA.Rows[drawlistarowindex].MetaValue.Value;
                 cmdPrevRowDrawA.Enabled = drawlistarowindex > 0;
                 cmdNextRowDrawA.Enabled = drawlistarowindex + 1 < entity.DrawListA.RowCount;
@@ -1020,7 +1013,7 @@ namespace CrashEdit
                     numEntityA.Enabled = true;
                     cmdPrevEntityA.Enabled = drawlistaentityindex > 0;
                     cmdNextEntityA.Enabled = drawlistaentityindex + 1 < entity.DrawListA.Rows[drawlistarowindex].Values.Count;
-                    lblEntityIndexA.Text = $"{drawlistaentityindex+1} / {entity.DrawListA.Rows[drawlistarowindex].Values.Count}";
+                    lblEntityIndexA.Text = $"{drawlistaentityindex + 1} / {entity.DrawListA.Rows[drawlistarowindex].Values.Count}";
                     numEntityA.Value = entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] >> 8 & 0xFFFF;
                 }
                 else
@@ -1107,39 +1100,17 @@ namespace CrashEdit
 
         private void numEntityA_ValueChanged(object sender, EventArgs e)
         {
-            if (controller is EntityController c)
+            foreach (ZoneEntry zone in controller.ZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<ZoneEntry>())
             {
-                foreach (ZoneEntry zone in c.ZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<ZoneEntry>())
+                foreach (Entity otherentity in zone.Entities)
                 {
-                    foreach (Entity otherentity in zone.Entities)
+                    if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityA.Value)
                     {
-                        if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityA.Value)
+                        for (int i = 0; i < controller.ZoneEntryController.ZoneEntry.ZoneCount; ++i)
                         {
-                            for (int i = 0; i < c.ZoneEntryController.ZoneEntry.ZoneCount; ++i)
+                            if (zone.EID == BitConv.FromInt32(controller.ZoneEntryController.ZoneEntry.Header, 0x194 + i * 4))
                             {
-                                if (zone.EID == BitConv.FromInt32(c.ZoneEntryController.ZoneEntry.Header, 0x194 + i * 4))
-                                {
-                                    entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            else if (controller is NewEntityController nc)
-            {
-                foreach (NewZoneEntry zone in nc.NewZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<NewZoneEntry>())
-                {
-                    foreach (Entity otherentity in zone.Entities)
-                    {
-                        if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityA.Value)
-                        {
-                            for (int i = 0; i < nc.NewZoneEntryController.NewZoneEntry.ZoneCount; ++i)
-                            {
-                                if (zone.EID == BitConv.FromInt32(nc.NewZoneEntryController.NewZoneEntry.Header, 0x194 + i * 4))
-                                {
-                                    entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
-                                }
+                                entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
                             }
                         }
                     }
@@ -1168,7 +1139,7 @@ namespace CrashEdit
                 newrow.MetaValue = entity.DrawListA.Rows[drawlistarowindex].MetaValue;
                 foreach (var val in entity.DrawListA.Rows[drawlistarowindex].Values)
                     newrow.Values.Add(val);
-                entity.DrawListA.Rows.Insert(drawlistarowindex,newrow);
+                entity.DrawListA.Rows.Insert(drawlistarowindex, newrow);
             }
             UpdateDrawListA();
         }
@@ -1183,10 +1154,10 @@ namespace CrashEdit
             if (entity.DrawListB != null && entity.DrawListB.RowCount != 0)
             {
                 if (drawlistbrowindex >= entity.DrawListB.RowCount)
-                    drawlistbrowindex = entity.DrawListB.RowCount-1;
+                    drawlistbrowindex = entity.DrawListB.RowCount - 1;
                 lblMetavalueDrawB.Enabled = true;
                 numMetavalueDrawB.Enabled = true;
-                lblDrawListRowIndexB.Text = $"{drawlistbrowindex+1} / {entity.DrawListB.RowCount}";
+                lblDrawListRowIndexB.Text = $"{drawlistbrowindex + 1} / {entity.DrawListB.RowCount}";
                 numMetavalueDrawB.Value = entity.DrawListB.Rows[drawlistbrowindex].MetaValue.Value;
                 cmdPrevRowDrawB.Enabled = drawlistbrowindex > 0;
                 cmdNextRowDrawB.Enabled = drawlistbrowindex + 1 < entity.DrawListB.RowCount;
@@ -1201,7 +1172,7 @@ namespace CrashEdit
                     numEntityB.Enabled = true;
                     cmdPrevEntityB.Enabled = drawlistbentityindex > 0;
                     cmdNextEntityB.Enabled = drawlistbentityindex + 1 < entity.DrawListB.Rows[drawlistbrowindex].Values.Count;
-                    lblEntityIndexB.Text = $"{drawlistbentityindex+1} / {entity.DrawListB.Rows[drawlistbrowindex].Values.Count}";
+                    lblEntityIndexB.Text = $"{drawlistbentityindex + 1} / {entity.DrawListB.Rows[drawlistbrowindex].Values.Count}";
                     numEntityB.Value = entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] >> 8 & 0xFFFF;
                 }
                 else
@@ -1288,39 +1259,17 @@ namespace CrashEdit
 
         private void numEntityB_ValueChanged(object sender, EventArgs e)
         {
-            if (controller is EntityController c)
+            foreach (ZoneEntry zone in controller.ZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<ZoneEntry>())
             {
-                foreach (ZoneEntry zone in c.ZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<ZoneEntry>())
+                foreach (Entity otherentity in zone.Entities)
                 {
-                    foreach (Entity otherentity in zone.Entities)
+                    if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityB.Value)
                     {
-                        if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityB.Value)
+                        for (int i = 0; i < controller.ZoneEntryController.ZoneEntry.ZoneCount; ++i)
                         {
-                            for (int i = 0; i < c.ZoneEntryController.ZoneEntry.ZoneCount; ++i)
+                            if (zone.EID == BitConv.FromInt32(controller.ZoneEntryController.ZoneEntry.Header, 0x194 + i * 4))
                             {
-                                if (zone.EID == BitConv.FromInt32(c.ZoneEntryController.ZoneEntry.Header, 0x194 + i * 4))
-                                {
-                                    entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            else if (controller is NewEntityController nc)
-            {
-                foreach (NewZoneEntry zone in nc.NewZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<NewZoneEntry>())
-                {
-                    foreach (Entity otherentity in zone.Entities)
-                    {
-                        if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityB.Value)
-                        {
-                            for (int i = 0; i < nc.NewZoneEntryController.NewZoneEntry.ZoneCount; ++i)
-                            {
-                                if (zone.EID == BitConv.FromInt32(nc.NewZoneEntryController.NewZoneEntry.Header, 0x194 + i * 4))
-                                {
-                                    entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
-                                }
+                                entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
                             }
                         }
                     }
@@ -1349,7 +1298,7 @@ namespace CrashEdit
                 newrow.MetaValue = entity.DrawListB.Rows[drawlistbrowindex].MetaValue;
                 foreach (var val in entity.DrawListB.Rows[drawlistbrowindex].Values)
                     newrow.Values.Add(val);
-                entity.DrawListB.Rows.Insert(drawlistbrowindex,newrow);
+                entity.DrawListB.Rows.Insert(drawlistbrowindex, newrow);
             }
             UpdateDrawListB();
         }
@@ -1644,23 +1593,11 @@ namespace CrashEdit
             }
             EvList<Chunk> chunks = null;
             HashSet<Entry> entries = null;
-            if (controller is EntityController c2c)
+            chunks = controller.ZoneEntryController.EntryChunkController.NSFController.NSF.Chunks;
+            entries = new HashSet<Entry>();
+            foreach (int eid in loadedentries)
             {
-                chunks = c2c.ZoneEntryController.EntryChunkController.NSFController.NSF.Chunks;
-                entries = new HashSet<Entry>();
-                foreach (int eid in loadedentries)
-                {
-                    entries.Add(c2c.ZoneEntryController.EntryChunkController.NSFController.NSF.GetEntry<Entry>(eid));
-                }
-            }
-            else if (controller is NewEntityController c3c)
-            {
-                chunks = c3c.NewZoneEntryController.EntryChunkController.NSFController.NSF.Chunks;
-                entries = new HashSet<Entry>();
-                foreach (int eid in loadedentries)
-                {
-                    entries.Add(c3c.NewZoneEntryController.EntryChunkController.NSFController.NSF.GetEntry<Entry>(eid));
-                }
+                entries.Add(controller.ZoneEntryController.EntryChunkController.NSFController.NSF.GetEntry<Entry>(eid));
             }
             HashSet<Chunk> loadedchunks = new HashSet<Chunk>();
             foreach (Chunk chunk in chunks)
@@ -1703,23 +1640,21 @@ namespace CrashEdit
             {
                 pos[i] = new Position(entity.Positions[i].X, entity.Positions[i].Y, entity.Positions[i].Z);
             }
-            using (InterpolatorForm interpolator = new InterpolatorForm(pos))
+            using InterpolatorForm interpolator = new InterpolatorForm(pos);
+            if (interpolator.ShowDialog() == DialogResult.OK)
             {
-                if (interpolator.ShowDialog() == DialogResult.OK)
+                for (int m = interpolator.Start - 1, i = interpolator.End - 2; i > m; --i)
                 {
-                    for (int m = interpolator.Start - 1, i = interpolator.End - 2; i > m; --i)
-                    {
-                        entity.Positions.RemoveAt(i);
-                    }
-                    for (int i = 0; i < interpolator.Amount; ++i)
-                    {
-                        entity.Positions.Insert(i + interpolator.Start, new EntityPosition(interpolator.NewPositions[i + 1]));
-                    }
-                    UpdatePosition();
+                    entity.Positions.RemoveAt(i);
                 }
+                for (int i = 0; i < interpolator.Amount; ++i)
+                {
+                    entity.Positions.Insert(i + interpolator.Start, new EntityPosition(interpolator.NewPositions[i + 1]));
+                }
+                UpdatePosition();
             }
         }
-        
+
         private void UpdateTTReward()
         {
             if (entity.TimeTrialReward.HasValue)
@@ -1861,7 +1796,7 @@ namespace CrashEdit
                 neighborsettingindex = Math.Min(entity.Neighbors.Rows[neighborindex].Values.Count - 1, neighborsettingindex);
                 if (entity.Neighbors.Rows[neighborindex].Values.Count > 0)
                 {
-                    lblNeighborSetting.Text = $"{neighborsettingindex+1} / {entity.Neighbors.Rows[neighborindex].Values.Count}";
+                    lblNeighborSetting.Text = $"{neighborsettingindex + 1} / {entity.Neighbors.Rows[neighborindex].Values.Count}";
                     cmdPrevNeighborSetting.Enabled = neighborsettingindex > 0;
                     cmdNextNeighborSetting.Enabled = neighborsettingindex + 1 < entity.Neighbors.Rows[neighborindex].Values.Count;
                     cmdRemoveNeighborSetting.Enabled =
@@ -1951,7 +1886,7 @@ namespace CrashEdit
                 newrow.MetaValue = entity.Neighbors.Rows[neighborindex].MetaValue;
                 foreach (var val in entity.Neighbors.Rows[neighborindex].Values)
                     newrow.Values.Add(val);
-                entity.Neighbors.Rows.Insert(neighborindex,newrow);
+                entity.Neighbors.Rows.Insert(neighborindex, newrow);
             }
             UpdateNeighbors();
         }
@@ -2045,11 +1980,11 @@ namespace CrashEdit
             if (entity.FOV != null && entity.FOV.RowCount != 0)
             {
                 if (fovframeindex >= entity.FOV.RowCount)
-                    fovframeindex = entity.FOV.RowCount-1;
+                    fovframeindex = entity.FOV.RowCount - 1;
                 lblFOVPosition.Enabled = true;
                 numFOVPosition.Enabled = true;
                 numFOVPosition.Value = entity.FOV.Rows[fovframeindex].MetaValue.Value;
-                lblFOVFrame.Text = $"{fovframeindex+1} / {entity.FOV.RowCount}";
+                lblFOVFrame.Text = $"{fovframeindex + 1} / {entity.FOV.RowCount}";
                 cmdPrevFOVFrame.Enabled = fovframeindex > 0;
                 cmdNextFOVFrame.Enabled = fovframeindex + 1 < entity.FOV.RowCount;
                 cmdRemoveFOVFrame.Enabled = true;
@@ -2063,7 +1998,7 @@ namespace CrashEdit
                     numFOV.Enabled = true;
                     cmdPrevFOV.Enabled = fovindex > 0;
                     cmdNextFOV.Enabled = fovindex + 1 < entity.FOV.Rows[fovframeindex].Values.Count;
-                    lblFOVIndex.Text = $"{fovindex+1} / {entity.FOV.Rows[fovframeindex].Values.Count}";
+                    lblFOVIndex.Text = $"{fovindex + 1} / {entity.FOV.Rows[fovframeindex].Values.Count}";
                     numFOV.Value = entity.FOV.Rows[fovframeindex].Values[fovindex].VictimID;
                 }
                 else
@@ -2127,7 +2062,7 @@ namespace CrashEdit
                 newrow.MetaValue = entity.FOV.Rows[fovframeindex].MetaValue;
                 foreach (var val in entity.FOV.Rows[fovframeindex].Values)
                     newrow.Values.Add(val);
-                entity.FOV.Rows.Insert(fovframeindex,newrow);
+                entity.FOV.Rows.Insert(fovframeindex, newrow);
             }
             UpdateFOV();
         }

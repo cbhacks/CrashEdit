@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
@@ -9,292 +10,342 @@ namespace CrashEdit
     internal static class OldResources
     {
         [Resource("NSDIcon")]
-        private static Icon nsdicon = null;
+        private static readonly Icon nsdicon = null;
 
         [Resource("NSFIcon")]
-        private static Icon nsficon = null;
+        private static readonly Icon nsficon = null;
 
         [Resource("CBHacksIcon")]
-        private static Icon cbhacksicon = null;
+        private static readonly Icon cbhacksicon = null;
 
         [Resource("ArrowImage")]
-        private static Image arrowimage = null;
+        private static readonly Image arrowimage = null;
 
         [Resource("BinocularsImage")]
-        private static Image binocularsimage = null;
+        private static readonly Image binocularsimage = null;
 
         [Resource("BinocularsNextImage")]
-        private static Image binocularsnextimage = null;
+        private static readonly Image binocularsnextimage = null;
 
         [Resource("FileImage")]
-        private static Image fileimage = null;
+        private static readonly Image fileimage = null;
 
         [Resource("FolderImage")]
-        private static Image folderimage = null;
+        private static readonly Image folderimage = null;
 
         [Resource("ImageImage")]
-        private static Image imageimage = null;
+        private static readonly Image imageimage = null;
 
         [Resource("MusicImage")]
-        private static Image musicimage = null;
+        private static readonly Image musicimage = null;
 
         [Resource("MusicRedImage")]
-        private static Image musicredimage = null;
+        private static readonly Image musicredimage = null;
 
         [Resource("MusicYellowImage")]
-        private static Image musicyellowimage = null;
+        private static readonly Image musicyellowimage = null;
 
         [Resource("OpenImage")]
-        private static Image openimage = null;
+        private static readonly Image openimage = null;
 
         [Resource("SaveImage")]
-        private static Image saveimage = null;
+        private static readonly Image saveimage = null;
 
         [Resource("SpeakerImage")]
-        private static Image speakerimage = null;
+        private static readonly Image speakerimage = null;
 
         [Resource("ThingImage")]
-        private static Image thingimage = null;
+        private static readonly Image thingimage = null;
 
         [Resource("BlueJournalImage")]
-        private static Image bluejournalimage = null;
+        private static readonly Image bluejournalimage = null;
 
         [Resource("WhiteJournalImage")]
-        private static Image whitejournalimage = null;
+        private static readonly Image whitejournalimage = null;
 
         [Resource("YellowJournalImage")]
-        private static Image yellowjournalimage = null;
+        private static readonly Image yellowjournalimage = null;
 
         [Resource("PointTexture")]
-        private static Bitmap pointtexture = null;
+        private static readonly Bitmap pointtexture = null;
 
         [Resource("MaskTexture")]
-        [ExternalTexture(10,3,2,2)]
-        private static Bitmap masktexture = null;
+        [ExternalTexture(10, 3, 2, 2)]
+        private static readonly Bitmap masktexture = null;
 
         [Resource("LifeTexture")]
-        [ExternalTexture(0,4,2,1)]
-        private static Bitmap lifetexture = null;
+        [ExternalTexture(0, 4, 2, 1)]
+        private static readonly Bitmap lifetexture = null;
 
         [Resource("AppleTexture")]
-        [ExternalTexture(0,3)]
-        private static Bitmap appletexture = null;
+        [ExternalTexture(0, 3)]
+        private static readonly Bitmap appletexture = null;
 
         [Resource("TNTBoxTexture")]
-        [ExternalTexture(1,0)]
-        private static Bitmap tntboxtexture = null;
+        [ExternalTexture(1, 0)]
+        private static readonly Bitmap tntboxtexture = null;
 
         [Resource("TNTBoxTopTexture")]
-        [ExternalTexture(0,0)]
-        private static Bitmap tntboxtoptexture = null;
+        [ExternalTexture(0, 0)]
+        private static readonly Bitmap tntboxtoptexture = null;
 
         [Resource("EmptyBoxTexture")]
-        [ExternalTexture(5,0)]
-        private static Bitmap emptyboxtexture = null;
+        [ExternalTexture(5, 0)]
+        private static readonly Bitmap emptyboxtexture = null;
 
         [Resource("SpringBoxTexture")]
-        [ExternalTexture(6,0)]
-        private static Bitmap springboxtexture = null;
+        [ExternalTexture(6, 0)]
+        private static readonly Bitmap springboxtexture = null;
 
         [Resource("ContinueBoxTexture")]
-        [ExternalTexture(7,0)]
-        private static Bitmap continueboxtexture = null;
+        [ExternalTexture(7, 0)]
+        private static readonly Bitmap continueboxtexture = null;
 
         [Resource("IronBoxTexture")]
-        [ExternalTexture(8,0)]
-        private static Bitmap ironboxtexture = null;
+        [ExternalTexture(8, 0)]
+        private static readonly Bitmap ironboxtexture = null;
 
         [Resource("FruitBoxTexture")]
-        [ExternalTexture(9,0)]
-        private static Bitmap fruitboxtexture = null;
+        [ExternalTexture(9, 0)]
+        private static readonly Bitmap fruitboxtexture = null;
 
         [Resource("ActionBoxTexture")]
-        [ExternalTexture(10,0)]
-        private static Bitmap actionboxtexture = null;
+        [ExternalTexture(10, 0)]
+        private static readonly Bitmap actionboxtexture = null;
 
         [Resource("LifeBoxTexture")]
-        [ExternalTexture(11,0)]
-        private static Bitmap lifeboxtexture = null;
+        [ExternalTexture(11, 0)]
+        private static readonly Bitmap lifeboxtexture = null;
 
         [Resource("DoctorBoxTexture")]
-        [ExternalTexture(12,0)]
-        private static Bitmap doctorboxtexture = null;
+        [ExternalTexture(12, 0)]
+        private static readonly Bitmap doctorboxtexture = null;
 
         [Resource("PickupBoxTexture")]
-        [ExternalTexture(0,1)]
-        private static Bitmap pickupboxtexture = null;
+        [ExternalTexture(0, 1)]
+        private static readonly Bitmap pickupboxtexture = null;
 
         [Resource("UnknownBoxTexture")]
-        [ExternalTexture(1,1)]
-        private static Bitmap powboxtexture = null;
+        [ExternalTexture(1, 1)]
+        private static readonly Bitmap powboxtexture = null;
 
         [Resource("IronSpringBoxTexture")]
-        [ExternalTexture(2,1)]
-        private static Bitmap ironspringboxtexture = null;
+        [ExternalTexture(2, 1)]
+        private static readonly Bitmap ironspringboxtexture = null;
 
         [Resource("NitroBoxTexture")]
-        [ExternalTexture(4,1)]
-        private static Bitmap nitroboxtexture = null;
+        [ExternalTexture(4, 1)]
+        private static readonly Bitmap nitroboxtexture = null;
 
         [Resource("NitroBoxTopTexture")]
-        [ExternalTexture(3,1)]
-        private static Bitmap nitroboxtoptexture = null;
+        [ExternalTexture(3, 1)]
+        private static readonly Bitmap nitroboxtoptexture = null;
 
         [Resource("SteelBoxTexture")]
-        [ExternalTexture(5,1)]
-        private static Bitmap steelboxtexture = null;
+        [ExternalTexture(5, 1)]
+        private static readonly Bitmap steelboxtexture = null;
 
         [Resource("ActionNitroBoxTexture")]
-        [ExternalTexture(6,1)]
-        private static Bitmap actionnitroboxtexture = null;
+        [ExternalTexture(6, 1)]
+        private static readonly Bitmap actionnitroboxtexture = null;
 
         [Resource("ActionNitroBoxTopTexture")]
-        [ExternalTexture(8,0)]
-        private static Bitmap actionnitroboxtoptexture = null;
+        [ExternalTexture(8, 0)]
+        private static readonly Bitmap actionnitroboxtoptexture = null;
 
         [Resource("UnknownBoxTexture")]
-        [ExternalTexture(9,1)]
-        private static Bitmap slotboxtexture = null;
+        [ExternalTexture(9, 1)]
+        private static readonly Bitmap slotboxtexture = null;
 
         [Resource("UnknownBoxTexture")]
-        [ExternalTexture(3,2)]
-        private static Bitmap time1boxtexture = null;
+        [ExternalTexture(3, 2)]
+        private static readonly Bitmap time1boxtexture = null;
 
         [Resource("UnknownBoxTexture")]
-        [ExternalTexture(4,2)]
-        private static Bitmap time2boxtexture = null;
+        [ExternalTexture(4, 2)]
+        private static readonly Bitmap time2boxtexture = null;
 
         [Resource("UnknownBoxTexture")]
-        [ExternalTexture(5,2)]
-        private static Bitmap time3boxtexture = null;
+        [ExternalTexture(5, 2)]
+        private static readonly Bitmap time3boxtexture = null;
 
         [Resource("UnknownBoxTopTexture")]
-        [ExternalTexture(2,2)]
-        private static Bitmap timeboxtoptexture = null;
+        [ExternalTexture(2, 2)]
+        private static readonly Bitmap timeboxtoptexture = null;
 
         [Resource("UnknownBoxTexture")]
-        [ExternalTexture(6,2)]
-        private static Bitmap ironcontinueboxtexture = null;
+        [ExternalTexture(6, 2)]
+        private static readonly Bitmap ironcontinueboxtexture = null;
 
         [Resource("UnknownBoxTexture")]
-        [ExternalTexture(7,2)]
-        private static Bitmap clockboxtexture = null;
+        [ExternalTexture(7, 2)]
+        private static readonly Bitmap clockboxtexture = null;
 
         [Resource("UnknownBoxTexture")]
-        private static Bitmap unknownboxtexture = null;
+        private static readonly Bitmap unknownboxtexture = null;
 
         [Resource("UnknownBoxTopTexture")]
-        private static Bitmap unknownboxtoptexture = null;
+        private static readonly Bitmap unknownboxtoptexture = null;
 
         [Resource("UnknownPickupTexture")]
-        private static Bitmap unknownpickuptexture = null;
+        private static readonly Bitmap unknownpickuptexture = null;
 
         [Resource("GreyBuckle")]
-        private static Image greybuckle = null;
+        private static readonly Image greybuckle = null;
 
         [Resource("CodeBuckle")]
-        private static Image codebuckle = null;
+        private static readonly Image codebuckle = null;
 
         [Resource("CrimsonBuckle")]
-        private static Image crimsonbuckle = null;
+        private static readonly Image crimsonbuckle = null;
 
         [Resource("LimeBuckle")]
-        private static Image limebuckle = null;
+        private static readonly Image limebuckle = null;
 
         [Resource("BlueBuckle")]
-        private static Image bluebuckle = null;
+        private static readonly Image bluebuckle = null;
 
         [Resource("VioletBuckle")]
-        private static Image violetbuckle = null;
+        private static readonly Image violetbuckle = null;
 
         [Resource("RedBuckle")]
-        private static Image redbuckle = null;
+        private static readonly Image redbuckle = null;
 
         [Resource("YellowBuckle")]
-        private static Image yellowbuckle = null;
+        private static readonly Image yellowbuckle = null;
 
         [Resource("UnknownPickupTexture")]
-        [ExternalTexture(1,3)]
-        private static Bitmap fruitlime = null;
+        [ExternalTexture(1, 3)]
+        private static readonly Bitmap fruitlime = null;
 
         [Resource("UnknownPickupTexture")]
-        [ExternalTexture(2,3)]
-        private static Bitmap fruitcoconut = null;
+        [ExternalTexture(2, 3)]
+        private static readonly Bitmap fruitcoconut = null;
 
         [Resource("UnknownPickupTexture")]
-        [ExternalTexture(12,3,1,2)]
-        private static Bitmap fruitpineapple = null;
+        [ExternalTexture(12, 3, 1, 2)]
+        private static readonly Bitmap fruitpineapple = null;
 
         [Resource("UnknownPickupTexture")]
-        [ExternalTexture(3,3)]
-        private static Bitmap fruitstrawberry = null;
+        [ExternalTexture(3, 3)]
+        private static readonly Bitmap fruitstrawberry = null;
 
         [Resource("UnknownPickupTexture")]
-        [ExternalTexture(4,3)]
-        private static Bitmap fruitmango = null;
+        [ExternalTexture(4, 3)]
+        private static readonly Bitmap fruitmango = null;
 
         [Resource("UnknownPickupTexture")]
-        [ExternalTexture(5,3)]
-        private static Bitmap fruitlemon = null;
+        [ExternalTexture(5, 3)]
+        private static readonly Bitmap fruitlemon = null;
 
         [Resource("UnknownPickupTexture")]
-        [ExternalTexture(6,3)]
-        private static Bitmap fruityyy = null;
+        [ExternalTexture(6, 3)]
+        private static readonly Bitmap fruityyy = null;
 
         [Resource("UnknownPickupTexture")]
-        [ExternalTexture(7,3)]
-        private static Bitmap fruitgrape = null;
+        [ExternalTexture(7, 3)]
+        private static readonly Bitmap fruitgrape = null;
 
         [Resource("UnknownPickupTexture")]
-        [ExternalTexture(2,4,2,1)]
-        private static Bitmap fruitcortex = null;
+        [ExternalTexture(2, 4, 2, 1)]
+        private static readonly Bitmap fruitcortex = null;
 
         [Resource("UnknownPickupTexture")]
-        [ExternalTexture(8,3,2,2)]
-        private static Bitmap fruitbrio = null;
+        [ExternalTexture(8, 3, 2, 2)]
+        private static readonly Bitmap fruitbrio = null;
 
         [Resource("UnknownPickupTexture")]
-        [ExternalTexture(4,4,2,1)]
-        private static Bitmap fruittawna = null;
+        [ExternalTexture(4, 4, 2, 1)]
+        private static readonly Bitmap fruittawna = null;
+
+        private static readonly Bitmap alltex = null;
 
         static OldResources()
         {
-            ResourceManager manager = new ResourceManager("CrashEdit.OldResources",Assembly.GetExecutingAssembly());
-            foreach (FieldInfo field in typeof(OldResources).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+            List<FieldInfo> allfields = new();
+            foreach (var field in typeof(OldResources).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
             {
-                foreach (ResourceAttribute attribute in field.GetCustomAttributes(typeof(ResourceAttribute),false))
+                if (field.Name != "alltex")
                 {
-                    field.SetValue(null,manager.GetObject(attribute.Name));
+                    allfields.Add(field);
+                }
+            }
+            var manager = new ResourceManager("CrashEdit.OldResources", Assembly.GetExecutingAssembly());
+            foreach (FieldInfo field in allfields)
+            {
+                foreach (ResourceAttribute attribute in field.GetCustomAttributes(typeof(ResourceAttribute), false))
+                {
+                    field.SetValue(null, manager.GetObject(attribute.Name));
                 }
             }
             string exefilename = Assembly.GetExecutingAssembly().Location;
             string exedirname = Path.GetDirectoryName(exefilename);
-            string texturespngfilename = Path.Combine(exedirname,"Textures.png");
+            string texturespngfilename = Path.Combine(exedirname, "Textures.png");
             if (File.Exists(texturespngfilename))
             {
-                using (Image texturespng = Image.FromFile(texturespngfilename))
+                using Image texturespng = Image.FromFile(texturespngfilename);
+                foreach (FieldInfo field in allfields)
                 {
-                    foreach (FieldInfo field in typeof(OldResources).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+                    foreach (ExternalTextureAttribute attribute in field.GetCustomAttributes(typeof(ExternalTextureAttribute), false))
                     {
-                        foreach (ExternalTextureAttribute attribute in field.GetCustomAttributes(typeof(ExternalTextureAttribute),false))
+                        int w = attribute.W * 32;
+                        int h = attribute.H * 32;
+                        int x = attribute.X * 32;
+                        int y = attribute.Y * 32;
+                        if (texturespng.Width < x + w || texturespng.Height < y + h)
+                            continue;
+                        var texture = new Bitmap(w, h);
+                        using (Graphics g = Graphics.FromImage(texture))
                         {
-                            int w = attribute.W * 32;
-                            int h = attribute.H * 32;
-                            int x = attribute.X * 32;
-                            int y = attribute.Y * 32;
-                            if (texturespng.Width < x+w || texturespng.Height < y+h)
-                                continue;
-                            Bitmap texture = new Bitmap(w,h);
-                            using (Graphics g = Graphics.FromImage(texture))
-                            {
-                                g.DrawImage(texturespng,new Rectangle(0,0,w,h),new Rectangle(x,y,w,h),GraphicsUnit.Pixel);
-                            }
-                            field.SetValue(null,texture);
+                            g.DrawImage(texturespng, new Rectangle(0, 0, w, h), new Rectangle(x, y, w, h), GraphicsUnit.Pixel);
                         }
+                        field.SetValue(null, texture);
                     }
                 }
             }
+            List<Bitmap> bmps = new();
+            foreach (FieldInfo field in allfields)
+            {
+                if (field.FieldType == typeof(Bitmap))
+                {
+                    bmps.Add(field.GetValue(null) as Bitmap);
+                }
+            }
+            int aw = 0, tw = 0, th = 0, mh = int.MaxValue;
+            foreach (var bmp in bmps)
+            {
+                tw = Math.Max(tw, bmp.Width);
+                th = Math.Max(th, bmp.Height);
+                mh = Math.Min(mh, bmp.Height);
+                aw += bmp.Width;
+            }
+            bmps.Sort((Bitmap a, Bitmap b) =>
+            {
+                int d = b.Width - a.Width;
+                if (d == 0)
+                {
+                    d = b.Height - a.Height;
+                }
+                return d;
+            });
+            alltex = new(aw, th);
+            TexMap = new();
+            using (Graphics g = Graphics.FromImage(alltex))
+            {
+                int curx = 0;
+                foreach (var bmp in bmps)
+                {
+                    var destRect = new Rectangle(curx, 0, bmp.Width, bmp.Height);
+                    g.DrawImage(bmp, destRect, new Rectangle(0, 0, bmp.Width, bmp.Height), GraphicsUnit.Pixel);
+                    TexMap.Add(bmp, destRect);
+                    curx += bmp.Width;
+                }
+            }
+            // alltex.Save("test.png", System.Drawing.Imaging.ImageFormat.Png);
         }
+
+        public static Bitmap AllTex => alltex;
+        public static Dictionary<Bitmap, Rectangle> TexMap { get; }
 
         public static Icon NSDIcon => nsdicon;
         public static Icon NSFIcon => nsficon;
@@ -381,7 +432,7 @@ namespace CrashEdit
         [AttributeUsage(AttributeTargets.Field)]
         private class ExternalTextureAttribute : Attribute
         {
-            public ExternalTextureAttribute(int x,int y,int w = 1,int h = 1)
+            public ExternalTextureAttribute(int x, int y, int w = 1, int h = 1)
             {
                 X = x;
                 Y = y;

@@ -25,7 +25,7 @@ namespace Crash
             }
         }
 
-        public static short Pack1555(byte a1,byte b5,byte c5,byte d5)
+        public static short Pack1555(byte a1, byte b5, byte c5, byte d5)
         {
             if ((a1 & 0x1) != a1)
                 throw new ArgumentOutOfRangeException("A1 must be 1-bit.");
@@ -38,7 +38,7 @@ namespace Crash
             return (short)(a1 << 15 | b5 << 10 | c5 << 5 | d5);
         }
 
-        public static void Unpack1555(short data,out byte a1,out byte b5,out byte c5,out byte d5)
+        public static void Unpack1555(short data, out byte a1, out byte b5, out byte c5, out byte d5)
         {
             a1 = (byte)(data >> 15 & 0x1);
             b5 = (byte)(data >> 10 & 0x1F);
@@ -54,10 +54,10 @@ namespace Crash
             byte a = (byte)(p >> 15 & 1);
             switch (mode)
             {
-                case 0: a = a == 1 ? (byte)0x7F : (r+g+b == 0 ? (byte)0 : (byte)0xFF); break;
-                case 1: a = a == 1 ? (byte)0xFF : (r+g+b == 0 ? (byte)0 : (byte)0xFF); break;
-                case 2: a = a == 1 ? (byte)0xFF : (r+g+b == 0 ? (byte)0 : (byte)0xFF); break;
-                case 3: a = a == 1 ? (byte)0xFF : (r+g+b == 0 ? (byte)0 : (byte)0xFF); break;
+                case 0: a = a == 1 ? (byte)0x7F : (r + g + b == 0 ? (byte)0 : (byte)0xFF); break;
+                case 1: a = a == 1 ? (byte)0xFF : (r + g + b == 0 ? (byte)0 : (byte)0xFF); break;
+                case 2: a = a == 1 ? (byte)0xFF : (r + g + b == 0 ? (byte)0 : (byte)0xFF); break;
+                case 3: a = a == 1 ? (byte)0xFF : (r + g + b == 0 ? (byte)0 : (byte)0xFF); break;
             }
             return (a << 24) | (r << 16) | (g << 8) | b;
         }

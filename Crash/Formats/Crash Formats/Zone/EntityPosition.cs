@@ -1,8 +1,8 @@
 namespace Crash
 {
-    public struct EntityPosition : IPosition
+    public readonly struct EntityPosition
     {
-        public EntityPosition(short x,short y,short z)
+        public EntityPosition(short x, short y, short z)
         {
             X = x;
             Y = y;
@@ -19,8 +19,5 @@ namespace Crash
         public short X { get; }
         public short Y { get; }
         public short Z { get; }
-        double IPosition.X => X;
-        double IPosition.Y => Y;
-        double IPosition.Z => Z;
     }
 }

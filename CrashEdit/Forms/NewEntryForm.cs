@@ -17,7 +17,7 @@ namespace CrashEdit
             { EntryTypeGOOL, 11 }
         };
 
-        private NSF nsf;
+        private readonly NSF nsf;
 
         public NewEntryForm(NSFController nsfc)
         {

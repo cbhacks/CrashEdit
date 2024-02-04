@@ -4,11 +4,11 @@ namespace Crash
 {
     public sealed class WavebankChunk : EntryChunk
     {
-        public WavebankChunk()
+        public WavebankChunk(NSF nsf) : base(nsf)
         {
         }
 
-        public WavebankChunk(IEnumerable<Entry> entries) : base(entries)
+        public WavebankChunk(IEnumerable<Entry> entries, NSF nsf) : base(entries, nsf)
         {
         }
 

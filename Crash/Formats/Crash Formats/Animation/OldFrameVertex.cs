@@ -2,24 +2,24 @@ using System;
 
 namespace Crash
 {
-    public struct OldFrameVertex : IPosition
+    public readonly struct OldFrameVertex
     {
         public static OldFrameVertex Load(byte[] data)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
             if (data.Length != 6)
-                throw new ArgumentException("Value must be 6 bytes long.","data");
+                throw new ArgumentException("Value must be 6 bytes long.", "data");
             byte x = data[0];
             byte y = data[1];
             byte z = data[2];
             sbyte normalx = (sbyte)data[3];
             sbyte normaly = (sbyte)data[4];
             sbyte normalz = (sbyte)data[5];
-            return new OldFrameVertex(x,y,z,normalx,normaly,normalz);
+            return new OldFrameVertex(x, y, z, normalx, normaly, normalz);
         }
 
-        public OldFrameVertex(byte x,byte y,byte z,sbyte normalx,sbyte normaly,sbyte normalz)
+        public OldFrameVertex(byte x, byte y, byte z, sbyte normalx, sbyte normaly, sbyte normalz)
         {
             X = x;
             Y = y;
@@ -35,14 +35,16 @@ namespace Crash
         public sbyte NormalX { get; }
         public sbyte NormalY { get; }
         public sbyte NormalZ { get; }
-
-        double IPosition.X => X;
-        double IPosition.Y => Y;
-        double IPosition.Z => Z;
+        public byte R => (byte)NormalX;
+        public byte G => (byte)NormalY;
+        public byte B => (byte)NormalZ;
+        public float Red => R / 255f;
+        public float Green => G / 255f;
+        public float Blue => B / 255f;
 
         public byte[] Save()
         {
-            byte[] data = new byte [6];
+            byte[] data = new byte[6];
             data[0] = X;
             data[1] = Y;
             data[2] = Z;

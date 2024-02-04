@@ -6,7 +6,7 @@ namespace Crash
     {
         private VH vh;
 
-        public OldMusicEntry(int vb0eid,int vb1eid,int vb2eid,int vb3eid,VH vh,SEP sep,int eid) : base(eid)
+        public OldMusicEntry(int vb0eid, int vb1eid, int vb2eid, int vb3eid, VH vh, SEP sep, int eid) : base(eid)
         {
             this.vh = vh ?? throw new ArgumentNullException("vh");
             SEP = sep ?? throw new ArgumentNullException("sep");
@@ -41,16 +41,16 @@ namespace Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte [3][];
-            items[0] = new byte [20];
-            BitConv.ToInt32(items[0],0,SEP.SEQs.Count);
-            BitConv.ToInt32(items[0],4,VB0EID);
-            BitConv.ToInt32(items[0],8,VB1EID);
-            BitConv.ToInt32(items[0],12,VB2EID);
-            BitConv.ToInt32(items[0],16,VB3EID);
+            byte[][] items = new byte[3][];
+            items[0] = new byte[20];
+            BitConv.ToInt32(items[0], 0, SEP.SEQs.Count);
+            BitConv.ToInt32(items[0], 4, VB0EID);
+            BitConv.ToInt32(items[0], 8, VB1EID);
+            BitConv.ToInt32(items[0], 12, VB2EID);
+            BitConv.ToInt32(items[0], 16, VB3EID);
             items[1] = vh.Save();
             items[2] = SEP.Save();
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

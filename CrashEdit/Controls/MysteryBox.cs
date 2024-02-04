@@ -5,12 +5,12 @@ namespace CrashEdit
 {
     public sealed class MysteryBox : UserControl
     {
-        private byte[] data;
+        private readonly byte[] data;
         private bool saving;
 
-        private ToolStrip tsToolbar;
-        private ToolStripButton tbbExport;
-        private HexBox hbData;
+        private readonly ToolStrip tsToolbar;
+        private readonly ToolStripButton tbbExport;
+        private readonly HexBox hbData;
 
         public MysteryBox(byte[] data)
         {
@@ -33,7 +33,7 @@ namespace CrashEdit
             Controls.Add(tsToolbar);
         }
 
-        void tbbExport_Click(object sender,EventArgs e)
+        void tbbExport_Click(object sender, EventArgs e)
         {
             if (!saving)
             {

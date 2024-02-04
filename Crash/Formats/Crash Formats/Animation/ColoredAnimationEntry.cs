@@ -4,9 +4,9 @@ namespace Crash
 {
     public sealed class ColoredAnimationEntry : Entry
     {
-        private List<OldFrame> frames;
+        private readonly List<OldFrame> frames;
 
-        public ColoredAnimationEntry(IEnumerable<OldFrame> frames,int eid) : base(eid)
+        public ColoredAnimationEntry(IEnumerable<OldFrame> frames, int eid) : base(eid)
         {
             this.frames = new List<OldFrame>(frames);
         }
@@ -16,12 +16,12 @@ namespace Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte [frames.Count][];
-            for (int i = 0;i < frames.Count;i++)
+            byte[][] items = new byte[frames.Count][];
+            for (int i = 0; i < frames.Count; i++)
             {
                 items[i] = frames[i].Save();
             }
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

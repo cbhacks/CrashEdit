@@ -2,9 +2,9 @@ using System;
 
 namespace Crash
 {
-    public sealed class TextureChunk : Chunk,IEntry
+    public sealed class TextureChunk : Chunk, IEntry
     {
-        public TextureChunk(byte[] data)
+        public TextureChunk(byte[] data, NSF nsf) : base(nsf)
         {
             Data = data ?? throw new ArgumentNullException("data");
         }
@@ -12,8 +12,8 @@ namespace Crash
         public override short Type => 1;
         public int EID
         {
-            get => BitConv.FromInt32(Data,4);
-            set => BitConv.ToInt32(Data,4,value);
+            get => BitConv.FromInt32(Data, 4);
+            set => BitConv.ToInt32(Data, 4, value);
         }
         public string EName => Entry.EIDToEName(EID);
         public int HashKey => EID >> 15 & 0xFF;
@@ -21,7 +21,7 @@ namespace Crash
 
         public override UnprocessedChunk Unprocess(int chunkid)
         {
-            return new UnprocessedChunk(Data);
+            return new UnprocessedChunk(Data, NSF);
         }
     }
 }

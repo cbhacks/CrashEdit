@@ -6,12 +6,12 @@ namespace Crash
     public sealed class ModelEntry : Entry
     {
         private List<ModelTransformedTriangle> triangles;
-        private List<SceneryColor> colors;
-        private List<ModelTexture> textures;
-        private List<ModelExtendedTexture> animatedtextures;
-        private List<ModelPosition> positions;
+        private readonly List<SceneryColor> colors;
+        private readonly List<ModelTexture> textures;
+        private readonly List<ModelExtendedTexture> animatedtextures;
+        private readonly List<ModelPosition> positions;
 
-        public ModelEntry(byte[] info,uint[] polygons,IEnumerable<SceneryColor> colors,IEnumerable<ModelTexture> textures,IEnumerable<ModelExtendedTexture> animatedtextures,IEnumerable<ModelPosition> positions,int eid) : base(eid)
+        public ModelEntry(byte[] info, uint[] polygons, IEnumerable<SceneryColor> colors, IEnumerable<ModelTexture> textures, IEnumerable<ModelExtendedTexture> animatedtextures, IEnumerable<ModelPosition> positions, int eid) : base(eid)
         {
             Info = info ?? throw new ArgumentNullException("info");
             PolyData = polygons ?? throw new ArgumentNullException("polygons");
@@ -98,13 +98,13 @@ namespace Crash
                             break;
                         case 1:
                             int ci = -1;
-                            if (lastcolor < lastnonbb-2) // 3
-                                ci = ((ModelTriangle)structs[lastnonbb-2]).ColorIndex;
-                            else if (lastcolor == lastnonbb-2) // 1
+                            if (lastcolor < lastnonbb - 2) // 3
+                                ci = ((ModelTriangle)structs[lastnonbb - 2]).ColorIndex;
+                            else if (lastcolor == lastnonbb - 2) // 1
                                 ci = ((ModelColor)structs[lastcolor]).Color1;
-                            else if (lastcolor == lastnonbb-1) // 2
+                            else if (lastcolor == lastnonbb - 1) // 2
                                 ci = ((ModelColor)structs[lastcolor]).Color2;
-                            else if (lastcolor > lastnonbb-2) // 4
+                            else if (lastcolor > lastnonbb - 2) // 4
                                 ci = ((ModelColor)structs[lastcolor]).Color2;
                             triangles.Add(new ModelTransformedTriangle(
                                 vtx[cur_v],
@@ -124,11 +124,11 @@ namespace Crash
                                 lastvalidcc = i;
                                 triangles.Add(new ModelTransformedTriangle(
                                     vtx[cur_v],
-                                    vtx[cur_v+1],
-                                    vtx[cur_v+2],
+                                    vtx[cur_v + 1],
+                                    vtx[cur_v + 2],
                                     t.ColorIndex,
-                                    ((ModelTriangle)structs[i+1]).ColorIndex,
-                                    ((ModelTriangle)structs[i+2]).ColorIndex,
+                                    ((ModelTriangle)structs[i + 1]).ColorIndex,
+                                    ((ModelTriangle)structs[i + 2]).ColorIndex,
                                     t.TextureIndex,
                                     t.TriangleType,
                                     t.TriangleSubtype,
@@ -159,6 +159,21 @@ namespace Crash
             }
         }
 
+        public int GetFrameBitCount()
+        {
+            int result = 0;
+            if (Positions != null)
+            {
+                foreach (var p in Positions)
+                {
+                    result += p.XBits + 1;
+                    result += p.YBits + 1;
+                    result += p.ZBits + 1;
+                }
+            }
+            return result;
+        }
+
         public override int Type => 2;
         public byte[] Info { get; }
         public uint[] PolyData { get; }
@@ -171,6 +186,7 @@ namespace Crash
         public int ScaleX => BitConv.FromInt32(Info, 0);
         public int ScaleY => BitConv.FromInt32(Info, 4);
         public int ScaleZ => BitConv.FromInt32(Info, 8);
+        public int GetTPAG(int idx) => BitConv.FromInt32(Info, 0xC + 4 * idx);
         public int VertexCount => BitConv.FromInt32(Info, 0x38);
         public int TPAGCount => BitConv.FromInt32(Info, 0x40);
         public int PolyCount => BitConv.FromInt32(Info, 0x44);
@@ -180,15 +196,15 @@ namespace Crash
             byte itemcount = 5;
             if (Positions != null)
                 itemcount = 6;
-            byte[][] items = new byte [itemcount][];
+            byte[][] items = new byte[itemcount][];
             items[0] = Info;
-            items[1] = new byte [PolyData.Length * 4];
-            for (int i = 0;i < PolyData.Length; i++)
+            items[1] = new byte[PolyData.Length * 4];
+            for (int i = 0; i < PolyData.Length; i++)
             {
-                BitConv.ToInt32(items[1],i*4,(int)PolyData[i]);
+                BitConv.ToInt32(items[1], i * 4, (int)PolyData[i]);
             }
             items[2] = new byte[colors.Count * 4];
-            for (int i = 0;i < colors.Count;i++)
+            for (int i = 0; i < colors.Count; i++)
             {
                 items[2][i * 4] = Colors[i].Red;
                 items[2][i * 4 + 1] = Colors[i].Green;
@@ -213,7 +229,7 @@ namespace Crash
                     positions[i].Save().CopyTo(items[5], i * 4);
                 }
             }
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

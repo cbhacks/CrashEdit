@@ -5,7 +5,7 @@ namespace CrashEdit
 {
     public sealed class SLSTSourceController : Controller
     {
-        public SLSTSourceController(SLSTEntryController slstentrycontroller,SLSTSource slstsource)
+        public SLSTSourceController(SLSTEntryController slstentrycontroller, SLSTSource slstsource)
         {
             SLSTEntryController = slstentrycontroller;
             SLSTSource = slstsource;

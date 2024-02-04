@@ -5,12 +5,12 @@ namespace CrashEdit
 {
     public sealed class OldEntityController : Controller
     {
-        public OldEntityController(OldZoneEntryController oldzoneentrycontroller,OldEntity entity)
+        public OldEntityController(OldZoneEntryController oldzoneentrycontroller, OldEntity entity)
         {
             OldZoneEntryController = oldzoneentrycontroller;
             OldEntity = entity;
-            AddMenu("Duplicate Entity",Menu_Duplicate);
-            AddMenu("Delete Entity",Menu_Delete);
+            AddMenu("Duplicate Entity", Menu_Duplicate);
+            AddMenu("Delete Entity", Menu_Delete);
             InvalidateNode();
             InvalidateNodeImage();
         }
@@ -19,15 +19,15 @@ namespace CrashEdit
         {
             MapEntryController = oldt17entrycontroller;
             OldEntity = entity;
-            AddMenu("Duplicate Entity",Menu_MapDuplicate);
-            AddMenu("Delete Entity",Menu_MapDelete);
+            AddMenu("Duplicate Entity", Menu_MapDuplicate);
+            AddMenu("Delete Entity", Menu_MapDelete);
             InvalidateNode();
             InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.OldEntityController_Text,OldEntity.ID,OldEntity.Type,OldEntity.Subtype);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.OldEntityController_Text, OldEntity.ID, OldEntity.Type, OldEntity.Subtype);
         }
 
         public override void InvalidateNodeImage()
@@ -69,7 +69,7 @@ namespace CrashEdit
             OldEntity newentity = OldEntity.Load(OldEntity.Save());
             newentity.ID = id;
             OldZoneEntryController.OldZoneEntry.Entities.Add(newentity);
-            OldZoneEntryController.AddNode(new OldEntityController(OldZoneEntryController,newentity));
+            OldZoneEntryController.AddNode(new OldEntityController(OldZoneEntryController, newentity));
         }
 
         private void Menu_Delete()
@@ -77,7 +77,7 @@ namespace CrashEdit
             OldZoneEntryController.OldZoneEntry.Entities.Remove(OldEntity);
             Dispose();
         }
-        
+
         private void Menu_MapDuplicate()
         {
             short id = 6;
@@ -101,7 +101,7 @@ namespace CrashEdit
             OldEntity newentity = OldEntity.Load(OldEntity.Save());
             newentity.ID = id;
             MapEntryController.MapEntry.Entities.Add(newentity);
-            MapEntryController.AddNode(new OldEntityController(MapEntryController,newentity));
+            MapEntryController.AddNode(new OldEntityController(MapEntryController, newentity));
         }
 
         private void Menu_MapDelete()

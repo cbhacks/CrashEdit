@@ -1,10 +1,10 @@
 ﻿namespace Crash.GOOLIns
 {
-    [GOOLInstruction(53,GameVersion.Crash2)]
-    [GOOLInstruction(53,GameVersion.Crash3)]
+    [GOOLInstruction(53, GameVersion.Crash2)]
+    [GOOLInstruction(53, GameVersion.Crash3)]
     public sealed class Cst : GOOLInstruction
     {
-        public Cst(int value,GOOLEntry gool) : base(value,gool) { }
+        public Cst(int value, GOOLEntry gool) : base(value, gool) { }
 
         public override string Name => "CST";
         public override string Format => "SSSSSSSSSS VVVV (RRRRRR) 00 10";

@@ -4,13 +4,13 @@ namespace CrashEdit
 {
     public abstract class MysteryMultiItemEntryController : EntryController
     {
-        public MysteryMultiItemEntryController(EntryChunkController entrychunkcontroller,MysteryMultiItemEntry mysteryentry) : base(entrychunkcontroller,mysteryentry)
+        public MysteryMultiItemEntryController(EntryChunkController entrychunkcontroller, MysteryMultiItemEntry mysteryentry) : base(entrychunkcontroller, mysteryentry)
         {
             MysteryEntry = mysteryentry;
-            AddMenu("Add Item",Menu_Add_Item);
+            AddMenu("Add Item", Menu_Add_Item);
             foreach (byte[] item in mysteryentry.Items)
             {
-                AddNode(new ItemController(this,item));
+                AddNode(new ItemController(this, item));
             }
         }
 

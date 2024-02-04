@@ -4,17 +4,17 @@ namespace CrashEdit
 {
     public sealed class UnprocessedEntryController : MysteryMultiItemEntryController
     {
-        public UnprocessedEntryController(EntryChunkController entrychunkcontroller,UnprocessedEntry unprocessedentry) : base(entrychunkcontroller,unprocessedentry)
+        public UnprocessedEntryController(EntryChunkController entrychunkcontroller, UnprocessedEntry unprocessedentry) : base(entrychunkcontroller, unprocessedentry)
         {
             UnprocessedEntry = unprocessedentry;
-            AddMenu(string.Format(Crash.UI.Properties.Resources.UnprocessedEntryController_AcProcess,UnprocessedEntry.EName),Menu_Process_Entry);
+            AddMenu(string.Format(Crash.UI.Properties.Resources.UnprocessedEntryController_AcProcess, UnprocessedEntry.EName), Menu_Process_Entry);
             InvalidateNode();
             InvalidateNodeImage();
         }
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.UnprocessedEntryController_Text,UnprocessedEntry.Type,UnprocessedEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.UnprocessedEntryController_Text, UnprocessedEntry.Type, UnprocessedEntry.EName);
         }
 
         public override void InvalidateNodeImage()
@@ -38,10 +38,10 @@ namespace CrashEdit
             }
             var trv = Node.TreeView;
             trv.BeginUpdate();
-            int index = EntryChunkController.EntryChunk.Entries.IndexOf(UnprocessedEntry);
-            EntryChunkController.EntryChunk.Entries[index] = processedentry;
+            int index = UnprocessedEntry.ChunkIndexOf();
+            processedentry.ChunkReplaceWith(UnprocessedEntry);
             EntryController processedentrycontroller = EntryChunkController.CreateEntryController(processedentry);
-            EntryChunkController.InsertNode(index,processedentrycontroller);
+            EntryChunkController.InsertNode(index, processedentrycontroller);
             if (Node.IsSelected)
             {
                 Node.TreeView.SelectedNode = processedentrycontroller.Node;

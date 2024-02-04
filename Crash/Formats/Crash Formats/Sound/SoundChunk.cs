@@ -4,11 +4,11 @@ namespace Crash
 {
     public sealed class SoundChunk : EntryChunk
     {
-        public SoundChunk()
+        public SoundChunk(NSF nsf) : base(nsf)
         {
         }
 
-        public SoundChunk(IEnumerable<Entry> entries) : base(entries)
+        public SoundChunk(IEnumerable<Entry> entries, NSF nsf) : base(entries, nsf)
         {
         }
 

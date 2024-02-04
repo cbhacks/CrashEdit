@@ -4,7 +4,7 @@ namespace CrashEdit
 {
     public sealed class T15EntryController : MysteryUniItemEntryController
     {
-        public T15EntryController(EntryChunkController entrychunkcontroller,T15Entry t15entry) : base(entrychunkcontroller,t15entry)
+        public T15EntryController(EntryChunkController entrychunkcontroller, T15Entry t15entry) : base(entrychunkcontroller, t15entry)
         {
             T15Entry = t15entry;
             InvalidateNode();
@@ -13,7 +13,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("T15 ({0})",T15Entry.EName);
+            Node.Text = string.Format("T15 ({0})", T15Entry.EName);
         }
 
         public override void InvalidateNodeImage()

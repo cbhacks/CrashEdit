@@ -4,15 +4,15 @@ namespace CrashEdit
 {
     public sealed class SEQController : Controller
     {
-        public SEQController(MusicEntryController musicentrycontroller,SEQ seq)
+        public SEQController(MusicEntryController musicentrycontroller, SEQ seq)
         {
             MusicEntryController = musicentrycontroller;
             SEQ = seq;
-            AddMenu("Replace SEQ",Menu_Replace_SEQ);
-            AddMenu("Delete SEQ",Menu_Delete_SEQ);
+            AddMenu("Replace SEQ", Menu_Replace_SEQ);
+            AddMenu("Delete SEQ", Menu_Delete_SEQ);
             AddMenuSeparator();
-            AddMenu("Export SEQ",Menu_Export_SEQ);
-            AddMenu("Export SEQ as MIDI",Menu_Export_SEQ_MIDI);
+            AddMenu("Export SEQ", Menu_Export_SEQ);
+            AddMenu("Export SEQ as MIDI", Menu_Export_SEQ_MIDI);
             InvalidateNode();
             InvalidateNodeImage();
         }
@@ -34,7 +34,7 @@ namespace CrashEdit
         private void Menu_Replace_SEQ()
         {
             int i = MusicEntryController.MusicEntry.SEP.SEQs.IndexOf(SEQ);
-            byte[] data = FileUtil.OpenFile(FileFilters.SEQ,FileFilters.Any);
+            byte[] data = FileUtil.OpenFile(FileFilters.SEQ, FileFilters.Any);
             if (data != null)
             {
                 SEQ = SEQ.Load(data);
@@ -51,13 +51,13 @@ namespace CrashEdit
         private void Menu_Export_SEQ()
         {
             byte[] data = SEQ.Save();
-            FileUtil.SaveFile(data,FileFilters.SEQ,FileFilters.Any);
+            FileUtil.SaveFile(data, FileFilters.SEQ, FileFilters.Any);
         }
 
         private void Menu_Export_SEQ_MIDI()
         {
             byte[] data = SEQ.ToMIDI();
-            FileUtil.SaveFile(data,FileFilters.MIDI,FileFilters.Any);
+            FileUtil.SaveFile(data, FileFilters.MIDI, FileFilters.Any);
         }
     }
 }

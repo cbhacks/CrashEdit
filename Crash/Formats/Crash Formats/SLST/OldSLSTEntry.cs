@@ -5,9 +5,9 @@ namespace Crash
 {
     public sealed class OldSLSTEntry : Entry
     {
-        private List<OldSLSTDelta> deltas;
+        private readonly List<OldSLSTDelta> deltas;
 
-        public OldSLSTEntry(OldSLSTSource start, OldSLSTSource end, IEnumerable<OldSLSTDelta> deltas,int eid) : base(eid)
+        public OldSLSTEntry(OldSLSTSource start, OldSLSTSource end, IEnumerable<OldSLSTDelta> deltas, int eid) : base(eid)
         {
             if (deltas == null)
                 throw new ArgumentNullException("deltas");
@@ -23,14 +23,14 @@ namespace Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte [deltas.Count + 2][];
+            byte[][] items = new byte[deltas.Count + 2][];
             items[0] = Start.Save();
-            for (int i = 0;i < deltas.Count;++i)
+            for (int i = 0; i < deltas.Count; ++i)
             {
-                items[1+i] = deltas[i].Save();
+                items[1 + i] = deltas[i].Save();
             }
             items[1 + deltas.Count] = End.Save();
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

@@ -1,14 +1,13 @@
 using Crash;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CrashEdit
 {
     public partial class ProtoEntityBox : UserControl
     {
-        private ProtoEntityController controller;
-        private ProtoEntity entity;
+        private readonly ProtoEntityController controller;
+        private readonly ProtoEntity entity;
 
         public ProtoEntityBox(ProtoEntityController controller)
         {
@@ -35,17 +34,17 @@ namespace CrashEdit
             numZ.Value = entity.StartZ;
         }
 
-        private void numX_ValueChanged(object sender,EventArgs e)
+        private void numX_ValueChanged(object sender, EventArgs e)
         {
             entity.StartX = (short)numX.Value;
         }
 
-        private void numY_ValueChanged(object sender,EventArgs e)
+        private void numY_ValueChanged(object sender, EventArgs e)
         {
             entity.StartY = (short)numY.Value;
         }
 
-        private void numZ_ValueChanged(object sender,EventArgs e)
+        private void numZ_ValueChanged(object sender, EventArgs e)
         {
             entity.StartZ = (short)numZ.Value;
         }
@@ -55,7 +54,7 @@ namespace CrashEdit
             numID.Value = entity.ID;
         }
 
-        private void numID_ValueChanged(object sender,EventArgs e)
+        private void numID_ValueChanged(object sender, EventArgs e)
         {
             entity.ID = (short)numID.Value;
         }
@@ -65,7 +64,7 @@ namespace CrashEdit
             numType.Value = entity.Type;
         }
 
-        private void numType_ValueChanged(object sender,EventArgs e)
+        private void numType_ValueChanged(object sender, EventArgs e)
         {
             entity.Type = (byte)numType.Value;
             UpdateCodeString();
@@ -76,7 +75,7 @@ namespace CrashEdit
             numSubtype.Value = entity.Subtype;
         }
 
-        private void numSubtype_ValueChanged(object sender,EventArgs e)
+        private void numSubtype_ValueChanged(object sender, EventArgs e)
         {
             entity.Subtype = (byte)numSubtype.Value;
         }

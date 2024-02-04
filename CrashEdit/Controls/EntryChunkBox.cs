@@ -5,11 +5,11 @@ namespace CrashEdit
 {
     public sealed class EntryChunkBox : UserControl
     {
-        private EntryChunkController controller;
+        private readonly EntryChunkController controller;
 
         private int totalsize;
 
-        private ListBox lstEntryList;
+        private readonly ListBox lstEntryList;
 
         public EntryChunkBox(EntryChunkController controller)
         {
@@ -18,7 +18,7 @@ namespace CrashEdit
             lstEntryList = new ListBox { Dock = DockStyle.Fill };
 
             Controls.Add(lstEntryList);
-            
+
             Invalidated += EntryChunkBox_Invalidated;
         }
 

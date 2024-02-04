@@ -5,10 +5,10 @@ namespace Crash
 {
     public sealed class CommandManager
     {
-        private Stack<Command> undochain;
-        private Stack<Command> redochain;
-        private Stack<string> undostrchain;
-        private Stack<string> redostrchain;
+        private readonly Stack<Command> undochain;
+        private readonly Stack<Command> redochain;
+        private readonly Stack<string> undostrchain;
+        private readonly Stack<string> redostrchain;
         private int? cleanoffset;
 
         public event EventHandler CommandExecuted;
@@ -64,7 +64,7 @@ namespace Crash
             redostrchain.Push(undostrchain.Pop());
             if (CommandExecuted != null)
             {
-                CommandExecuted(this,EventArgs.Empty);
+                CommandExecuted(this, EventArgs.Empty);
             }
         }
 
@@ -76,7 +76,7 @@ namespace Crash
                 throw new ArgumentOutOfRangeException("times");
             if (times > undochain.Count)
                 throw new InvalidOperationException();
-            for (int i = 0;i < times;i++)
+            for (int i = 0; i < times; i++)
             {
                 Undo();
             }
@@ -94,7 +94,7 @@ namespace Crash
             undostrchain.Push(redostrchain.Pop());
             if (CommandExecuted != null)
             {
-                CommandExecuted(this,EventArgs.Empty);
+                CommandExecuted(this, EventArgs.Empty);
             }
         }
 
@@ -106,13 +106,13 @@ namespace Crash
                 throw new ArgumentOutOfRangeException("times");
             if (times > redochain.Count)
                 throw new InvalidOperationException();
-            for (int i = 0;i < times;i++)
+            for (int i = 0; i < times; i++)
             {
                 Redo();
             }
         }
 
-        public void Submit(Command command,string str)
+        public void Submit(Command command, string str)
         {
             if (cleanoffset.HasValue && cleanoffset.Value < 0)
             {

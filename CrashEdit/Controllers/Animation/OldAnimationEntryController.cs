@@ -1,17 +1,16 @@
 using Crash;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CrashEdit
 {
     public sealed class OldAnimationEntryController : EntryController
     {
-        public OldAnimationEntryController(EntryChunkController entrychunkcontroller,OldAnimationEntry oldanimationentry) : base(entrychunkcontroller,oldanimationentry)
+        public OldAnimationEntryController(EntryChunkController entrychunkcontroller, OldAnimationEntry oldanimationentry) : base(entrychunkcontroller, oldanimationentry)
         {
             OldAnimationEntry = oldanimationentry;
             foreach (OldFrame frame in oldanimationentry.Frames)
             {
-                AddNode(new OldFrameController(this,frame));
+                AddNode(new OldFrameController(this, frame));
             }
             InvalidateNode();
             InvalidateNodeImage();
@@ -19,7 +18,9 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.OldAnimationEntryController_Text,OldAnimationEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.OldAnimationEntryController_Text, OldAnimationEntry.EName);
+            Node.Text = string.Format(OldAnimationEntry.Proto ? Crash.UI.Properties.Resources.ProtoAnimationEntryController_Text
+                                                              : Crash.UI.Properties.Resources.OldAnimationEntryController_Text, OldAnimationEntry.EName);
         }
 
         public override void InvalidateNodeImage()
@@ -30,13 +31,7 @@ namespace CrashEdit
 
         protected override Control CreateEditor()
         {
-            OldModelEntry modelentry = EntryChunkController.NSFController.NSF.GetEntry<OldModelEntry>(OldAnimationEntry.Frames[0].ModelEID);
-            Dictionary<int,TextureChunk> textures = new Dictionary<int,TextureChunk>();
-            if (modelentry != null)
-                foreach (OldModelStruct str in modelentry.Structs)
-                    if (str is OldModelTexture tex && !textures.ContainsKey(tex.EID))
-                        textures.Add(tex.EID,EntryChunkController.NSFController.NSF.GetEntry<TextureChunk>(tex.EID));
-            return new UndockableControl(new OldAnimationEntryViewer(OldAnimationEntry.Frames,false,modelentry,textures));
+            return new UndockableControl(new OldAnimationEntryViewer(NSF, Entry.EID));
         }
 
         public OldAnimationEntry OldAnimationEntry { get; }

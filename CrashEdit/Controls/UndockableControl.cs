@@ -5,7 +5,7 @@ namespace CrashEdit
 {
     public sealed class UndockableControl : UserControl
     {
-        private Control control;
+        private readonly Control control;
         private Form form;
 
         public UndockableControl(Control control)
@@ -22,7 +22,7 @@ namespace CrashEdit
         {
             switch (keyData)
             {
-                case Keys.D:
+                case Keys.P:
                     return true;
             }
             return base.IsInputKey(keyData);
@@ -33,7 +33,7 @@ namespace CrashEdit
             base.OnKeyDown(e);
             switch (e.KeyCode)
             {
-                case Keys.D:
+                case Keys.P:
                     if (form == null)
                     {
                         form = new Form
@@ -41,11 +41,14 @@ namespace CrashEdit
                             Text = "Undocked Control",
                             Width = Width,
                             Height = Height,
-                            FormBorderStyle = FormBorderStyle.SizableToolWindow
+                            FormBorderStyle = FormBorderStyle.Sizable,
+                            MaximizeBox = true,
+                            MinimizeBox = true,
+                            ControlBox = true
                         };
                         Controls.Remove(control);
                         form.Controls.Add(control);
-                        form.FormClosed += delegate (object sender,FormClosedEventArgs ee)
+                        form.FormClosed += delegate (object sender, FormClosedEventArgs ee)
                         {
                             form.Controls.Remove(control);
                             Controls.Add(control);
@@ -61,7 +64,7 @@ namespace CrashEdit
             }
         }
 
-        protected override bool ProcessCmdKey(ref Message msg,Keys keyData)
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (IsInputKey((Keys)msg.WParam))
             {
@@ -70,17 +73,14 @@ namespace CrashEdit
             }
             else
             {
-                return base.ProcessCmdKey(ref msg,keyData);
+                return base.ProcessCmdKey(ref msg, keyData);
             }
         }
 
         protected override void Dispose(bool disposing)
         {
             control.Dispose();
-            if (form != null)
-            {
-                form.Dispose();
-            }
+            form?.Dispose();
             base.Dispose(disposing);
         }
     }

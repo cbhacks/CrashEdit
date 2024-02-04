@@ -6,8 +6,8 @@ namespace CrashEdit
 {
     public partial class OldCameraBox : UserControl
     {
-        private OldCameraController controller;
-        private OldCamera camera;
+        private readonly OldCameraController controller;
+        private readonly OldCamera camera;
 
         private bool positiondirty;
         private int positionindex;
@@ -68,7 +68,7 @@ namespace CrashEdit
             }
             else
             {
-                lblPositionIndex.Text = string.Format("{0} / {1}",positionindex + 1,camera.Positions.Count);
+                lblPositionIndex.Text = string.Format("{0} / {1}", positionindex + 1, camera.Positions.Count);
                 cmdPreviousPosition.Enabled = (positionindex > 0);
                 cmdFirstPosition.Enabled = (positionindex > 0);
                 cmdNextPosition.Enabled = (positionindex < camera.Positions.Count - 1);
@@ -97,44 +97,44 @@ namespace CrashEdit
             positiondirty = false;
         }
 
-        private void cmdPreviousPosition_Click(object sender,EventArgs e)
+        private void cmdPreviousPosition_Click(object sender, EventArgs e)
         {
             positionindex--;
             UpdatePosition();
         }
 
-        private void cmdNextPosition_Click(object sender,EventArgs e)
+        private void cmdNextPosition_Click(object sender, EventArgs e)
         {
             positionindex++;
             UpdatePosition();
         }
 
-        private void cmdLastPosition_Click(object sender,EventArgs e)
+        private void cmdLastPosition_Click(object sender, EventArgs e)
         {
             positionindex = camera.Positions.Count - 1;
             UpdatePosition();
         }
 
-        private void cmdNextAndRemovePosition_Click(object sender,EventArgs e)
+        private void cmdNextAndRemovePosition_Click(object sender, EventArgs e)
         {
             positionindex++;
             camera.Positions.RemoveAt(positionindex);
             UpdatePosition();
         }
 
-        private void cmdInsertPosition_Click(object sender,EventArgs e)
+        private void cmdInsertPosition_Click(object sender, EventArgs e)
         {
-            camera.Positions.Insert(positionindex,camera.Positions[positionindex]);
+            camera.Positions.Insert(positionindex, camera.Positions[positionindex]);
             UpdatePosition();
         }
 
-        private void cmdRemovePosition_Click(object sender,EventArgs e)
+        private void cmdRemovePosition_Click(object sender, EventArgs e)
         {
             camera.Positions.RemoveAt(positionindex);
             UpdatePosition();
         }
 
-        private void cmdAppendPosition_Click(object sender,EventArgs e)
+        private void cmdAppendPosition_Click(object sender, EventArgs e)
         {
             positionindex = camera.Positions.Count;
             if (camera.Positions.Count > 0)
@@ -143,62 +143,62 @@ namespace CrashEdit
             }
             else
             {
-                camera.Positions.Add(new OldCameraPosition(0,0,0,0,0,0));
+                camera.Positions.Add(new OldCameraPosition(0, 0, 0, 0, 0, 0));
             }
             UpdatePosition();
         }
 
-        private void numX_ValueChanged(object sender,EventArgs e)
+        private void numX_ValueChanged(object sender, EventArgs e)
         {
             if (!positiondirty)
             {
                 OldCameraPosition pos = camera.Positions[positionindex];
-                camera.Positions[positionindex] = new OldCameraPosition((short)numX.Value,pos.Y,pos.Z,pos.XRot,pos.YRot,pos.ZRot);
+                camera.Positions[positionindex] = new OldCameraPosition((short)numX.Value, pos.Y, pos.Z, pos.XRot, pos.YRot, pos.ZRot);
             }
         }
 
-        private void numY_ValueChanged(object sender,EventArgs e)
+        private void numY_ValueChanged(object sender, EventArgs e)
         {
             if (!positiondirty)
             {
                 OldCameraPosition pos = camera.Positions[positionindex];
-                camera.Positions[positionindex] = new OldCameraPosition(pos.X,(short)numY.Value,pos.Z,pos.XRot,pos.YRot,pos.ZRot);
+                camera.Positions[positionindex] = new OldCameraPosition(pos.X, (short)numY.Value, pos.Z, pos.XRot, pos.YRot, pos.ZRot);
             }
         }
 
-        private void numZ_ValueChanged(object sender,EventArgs e)
+        private void numZ_ValueChanged(object sender, EventArgs e)
         {
             if (!positiondirty)
             {
                 OldCameraPosition pos = camera.Positions[positionindex];
-                camera.Positions[positionindex] = new OldCameraPosition(pos.X,pos.Y,(short)numZ.Value,pos.XRot,pos.YRot,pos.ZRot);
+                camera.Positions[positionindex] = new OldCameraPosition(pos.X, pos.Y, (short)numZ.Value, pos.XRot, pos.YRot, pos.ZRot);
             }
         }
 
-        private void numXRot_ValueChanged(object sender,EventArgs e)
+        private void numXRot_ValueChanged(object sender, EventArgs e)
         {
             if (!positiondirty)
             {
                 OldCameraPosition pos = camera.Positions[positionindex];
-                camera.Positions[positionindex] = new OldCameraPosition(pos.X,pos.Y,pos.Z,(short)numXRot.Value,pos.YRot,pos.ZRot);
+                camera.Positions[positionindex] = new OldCameraPosition(pos.X, pos.Y, pos.Z, (short)numXRot.Value, pos.YRot, pos.ZRot);
             }
         }
 
-        private void numYRot_ValueChanged(object sender,EventArgs e)
+        private void numYRot_ValueChanged(object sender, EventArgs e)
         {
             if (!positiondirty)
             {
                 OldCameraPosition pos = camera.Positions[positionindex];
-                camera.Positions[positionindex] = new OldCameraPosition(pos.X,pos.Y,pos.Z,pos.XRot,(short)numYRot.Value,pos.ZRot);
+                camera.Positions[positionindex] = new OldCameraPosition(pos.X, pos.Y, pos.Z, pos.XRot, (short)numYRot.Value, pos.ZRot);
             }
         }
 
-        private void numZRot_ValueChanged(object sender,EventArgs e)
+        private void numZRot_ValueChanged(object sender, EventArgs e)
         {
             if (!positiondirty)
             {
                 OldCameraPosition pos = camera.Positions[positionindex];
-                camera.Positions[positionindex] = new OldCameraPosition(pos.X,pos.Y,pos.Z,pos.XRot,pos.YRot,(short)numYRot.Value);
+                camera.Positions[positionindex] = new OldCameraPosition(pos.X, pos.Y, pos.Z, pos.XRot, pos.YRot, (short)numYRot.Value);
             }
         }
 
@@ -215,12 +215,12 @@ namespace CrashEdit
             txtSLST.Text = Entry.EIDToEName(camera.SLSTEID);
         }
 
-        private void numMode_ValueChanged(object sender,EventArgs e)
+        private void numMode_ValueChanged(object sender, EventArgs e)
         {
             camera.Mode = (short)numMode.Value;
         }
 
-        private void numZoom_ValueChanged(object sender,EventArgs e)
+        private void numZoom_ValueChanged(object sender, EventArgs e)
         {
             camera.Zoom = (short)numZoom.Value;
         }
@@ -246,7 +246,7 @@ namespace CrashEdit
             numRelativeFlag4.Value = camera.Neighbors[3].Flag;
         }
 
-        private void numNeighborCount_ValueChanged(object sender,EventArgs e)
+        private void numNeighborCount_ValueChanged(object sender, EventArgs e)
         {
             camera.NeighborCount = (int)numNeighborCount.Value;
             fraNeighbor0.Enabled = camera.NeighborCount >= 1;
@@ -255,87 +255,87 @@ namespace CrashEdit
             fraNeighbor3.Enabled = camera.NeighborCount >= 4;
         }
 
-        private void numRelative1_ValueChanged(object sender,EventArgs e)
+        private void numRelative1_ValueChanged(object sender, EventArgs e)
         {
             camera.Neighbors[0].LinkType = (byte)numRelative1.Value;
         }
 
-        private void numRelative2_ValueChanged(object sender,EventArgs e)
+        private void numRelative2_ValueChanged(object sender, EventArgs e)
         {
             camera.Neighbors[1].LinkType = (byte)numRelative2.Value;
         }
 
-        private void numRelative3_ValueChanged(object sender,EventArgs e)
+        private void numRelative3_ValueChanged(object sender, EventArgs e)
         {
             camera.Neighbors[2].LinkType = (byte)numRelative3.Value;
         }
 
-        private void numRelative4_ValueChanged(object sender,EventArgs e)
+        private void numRelative4_ValueChanged(object sender, EventArgs e)
         {
             camera.Neighbors[3].LinkType = (byte)numRelative4.Value;
         }
 
-        private void numParentZone1_ValueChanged(object sender,EventArgs e)
+        private void numParentZone1_ValueChanged(object sender, EventArgs e)
         {
             camera.Neighbors[0].ZoneIndex = (byte)numParentZone1.Value;
         }
 
-        private void numParentZone2_ValueChanged(object sender,EventArgs e)
+        private void numParentZone2_ValueChanged(object sender, EventArgs e)
         {
             camera.Neighbors[1].ZoneIndex = (byte)numParentZone2.Value;
         }
 
-        private void numParentZone3_ValueChanged(object sender,EventArgs e)
+        private void numParentZone3_ValueChanged(object sender, EventArgs e)
         {
             camera.Neighbors[2].ZoneIndex = (byte)numParentZone3.Value;
         }
 
-        private void numParentZone4_ValueChanged(object sender,EventArgs e)
+        private void numParentZone4_ValueChanged(object sender, EventArgs e)
         {
             camera.Neighbors[3].ZoneIndex = (byte)numParentZone4.Value;
         }
 
-        private void numPathItem1_ValueChanged(object sender,EventArgs e)
+        private void numPathItem1_ValueChanged(object sender, EventArgs e)
         {
             camera.Neighbors[0].CameraIndex = (byte)numPathItem1.Value;
         }
 
-        private void numPathItem2_ValueChanged(object sender,EventArgs e)
+        private void numPathItem2_ValueChanged(object sender, EventArgs e)
         {
             camera.Neighbors[1].CameraIndex = (byte)numPathItem2.Value;
         }
 
-        private void numPathItem3_ValueChanged(object sender,EventArgs e)
+        private void numPathItem3_ValueChanged(object sender, EventArgs e)
         {
             camera.Neighbors[2].CameraIndex = (byte)numPathItem3.Value;
         }
 
-        private void numPathItem4_ValueChanged(object sender,EventArgs e)
+        private void numPathItem4_ValueChanged(object sender, EventArgs e)
         {
             camera.Neighbors[3].CameraIndex = (byte)numPathItem4.Value;
         }
 
-        private void numRelativeFlag1_ValueChanged(object sender,EventArgs e)
+        private void numRelativeFlag1_ValueChanged(object sender, EventArgs e)
         {
             camera.Neighbors[0].Flag = (byte)numRelativeFlag1.Value;
         }
 
-        private void numRelativeFlag2_ValueChanged(object sender,EventArgs e)
+        private void numRelativeFlag2_ValueChanged(object sender, EventArgs e)
         {
             camera.Neighbors[1].Flag = (byte)numRelativeFlag2.Value;
         }
 
-        private void numRelativeFlag3_ValueChanged(object sender,EventArgs e)
+        private void numRelativeFlag3_ValueChanged(object sender, EventArgs e)
         {
             camera.Neighbors[2].Flag = (byte)numRelativeFlag3.Value;
         }
 
-        private void numRelativeFlag4_ValueChanged(object sender,EventArgs e)
+        private void numRelativeFlag4_ValueChanged(object sender, EventArgs e)
         {
             camera.Neighbors[3].Flag = (byte)numRelativeFlag4.Value;
         }
 
-        private void cmdFirstPosition_Click(object sender,EventArgs e)
+        private void cmdFirstPosition_Click(object sender, EventArgs e)
         {
             positionindex = 0;
             UpdatePosition();
@@ -348,22 +348,22 @@ namespace CrashEdit
             numZDir.Value = (decimal)(camera.ZDir / 4096.0);
         }
 
-        private void numXDir_ValueChanged(object sender,EventArgs e)
+        private void numXDir_ValueChanged(object sender, EventArgs e)
         {
             camera.XDir = (short)(numXDir.Value * 4096);
         }
 
-        private void numYDir_ValueChanged(object sender,EventArgs e)
+        private void numYDir_ValueChanged(object sender, EventArgs e)
         {
             camera.YDir = (short)(numYDir.Value * 4096);
         }
 
-        private void numZDir_ValueChanged(object sender,EventArgs e)
+        private void numZDir_ValueChanged(object sender, EventArgs e)
         {
             camera.ZDir = (short)(numZDir.Value * 4096);
         }
 
-        private void numAvgDist_ValueChanged(object sender,EventArgs e)
+        private void numAvgDist_ValueChanged(object sender, EventArgs e)
         {
             camera.AvgDist = (short)numAvgDist.Value;
         }
@@ -381,12 +381,12 @@ namespace CrashEdit
             for (int i = 0; i < camera.Positions.Count; ++i)
             {
                 if (i == 0) continue;
-                var p1 = camera.Positions[i-1];
+                var p1 = camera.Positions[i - 1];
                 var p2 = camera.Positions[i];
                 dist += Math.Sqrt(Math.Pow((p2.X - p1.X) * (camera.XDir / 4096.0), 2) + Math.Pow((p2.Y - p1.Y) * (camera.YDir / 4096.0), 2) + Math.Pow((p2.Z - p1.Z) * (camera.ZDir / 4096.0), 2));
             }
 
-            numAvgDist.Value = (short)(dist / (camera.Positions.Count-1));
+            numAvgDist.Value = (short)(dist / (camera.Positions.Count - 1));
         }
 
         private void numEntryPoint_ValueChanged(object sender, EventArgs e)
@@ -430,28 +430,26 @@ namespace CrashEdit
             {
                 pos[i] = new Position(camera.Positions[i].X, camera.Positions[i].Y, camera.Positions[i].Z);
             }
-            using (InterpolatorForm interpolator = new InterpolatorForm(pos))
+            using InterpolatorForm interpolator = new InterpolatorForm(pos);
+            if (interpolator.ShowDialog() == DialogResult.OK)
             {
-                if (interpolator.ShowDialog() == DialogResult.OK)
+                Position startrot = new Position(camera.Positions[interpolator.Start - 1].XRot, camera.Positions[interpolator.Start - 1].YRot, camera.Positions[interpolator.Start - 1].ZRot);
+                Position deltarot = new Position(camera.Positions[interpolator.End - 1].XRot, camera.Positions[interpolator.End - 1].YRot, camera.Positions[interpolator.End - 1].ZRot) - startrot;
+                for (int m = interpolator.Start - 1, i = interpolator.End - 2; i > m; --i)
                 {
-                    Position startrot = new Position(camera.Positions[interpolator.Start-1].XRot,camera.Positions[interpolator.Start-1].YRot,camera.Positions[interpolator.Start-1].ZRot);
-                    Position deltarot = new Position(camera.Positions[interpolator.End-1].XRot,camera.Positions[interpolator.End-1].YRot,camera.Positions[interpolator.End-1].ZRot) - startrot;
-                    for (int m = interpolator.Start-1, i = interpolator.End-2; i > m; --i)
-                    {
-                        camera.Positions.RemoveAt(i);
-                    }
-                    for (int i = 0; i < interpolator.Amount; ++i)
-                    {
-                        double delta = InterpolatorForm.MathFuncs[interpolator.Func].Invoke((double)(i+1)/(interpolator.Amount+1),interpolator.Order);
-                        camera.Positions.Insert(i+interpolator.Start,new OldCameraPosition((short)interpolator.NewPositions[i+1].X,(short)interpolator.NewPositions[i+1].Y,(short)interpolator.NewPositions[i+1].Z,
-                            (short)(deltarot.X*delta+startrot.X),
-                            (short)(deltarot.Y*delta+startrot.Y),
-                            (short)(deltarot.Z*delta+startrot.Z)
-                            ));
-                    }
-                    UpdatePosition();
-                    InvalidateNodes();
+                    camera.Positions.RemoveAt(i);
                 }
+                for (int i = 0; i < interpolator.Amount; ++i)
+                {
+                    double delta = InterpolatorForm.MathFuncs[interpolator.Func].Invoke((double)(i + 1) / (interpolator.Amount + 1), interpolator.Order);
+                    camera.Positions.Insert(i + interpolator.Start, new OldCameraPosition((short)interpolator.NewPositions[i + 1].X, (short)interpolator.NewPositions[i + 1].Y, (short)interpolator.NewPositions[i + 1].Z,
+                        (short)(deltarot.X * delta + startrot.X),
+                        (short)(deltarot.Y * delta + startrot.Y),
+                        (short)(deltarot.Z * delta + startrot.Z)
+                        ));
+                }
+                UpdatePosition();
+                InvalidateNodes();
             }
         }
     }

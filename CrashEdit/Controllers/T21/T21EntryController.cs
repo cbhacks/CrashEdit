@@ -4,7 +4,7 @@ namespace CrashEdit
 {
     public sealed class T21EntryController : MysteryMultiItemEntryController
     {
-        public T21EntryController(EntryChunkController entrychunkcontroller,T21Entry t21entry) : base(entrychunkcontroller,t21entry)
+        public T21EntryController(EntryChunkController entrychunkcontroller, T21Entry t21entry) : base(entrychunkcontroller, t21entry)
         {
             T21Entry = t21entry;
             InvalidateNode();
@@ -13,7 +13,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format("T21 ({0})",T21Entry.EName);
+            Node.Text = string.Format("T21 ({0})", T21Entry.EName);
         }
 
         public override void InvalidateNodeImage()

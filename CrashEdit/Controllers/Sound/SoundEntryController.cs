@@ -5,7 +5,7 @@ namespace CrashEdit
 {
     public sealed class SoundEntryController : EntryController
     {
-        public SoundEntryController(EntryChunkController entrychunkcontroller,SoundEntry soundentry) : base(entrychunkcontroller,soundentry)
+        public SoundEntryController(EntryChunkController entrychunkcontroller, SoundEntry soundentry) : base(entrychunkcontroller, soundentry)
         {
             SoundEntry = soundentry;
             InvalidateNode();
@@ -14,7 +14,7 @@ namespace CrashEdit
 
         public override void InvalidateNode()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.SoundEntryController_Text,SoundEntry.EName);
+            Node.Text = string.Format(Crash.UI.Properties.Resources.SoundEntryController_Text, SoundEntry.EName);
         }
 
         public override void InvalidateNodeImage()

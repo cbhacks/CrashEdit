@@ -1,8 +1,8 @@
 namespace Crash
 {
-    public struct FrameVertex : IPosition
+    public readonly struct FrameVertex
     {
-        public FrameVertex(byte x,byte y,byte z)
+        public FrameVertex(byte x, byte y, byte z)
         {
             X = x;
             Y = y;
@@ -12,9 +12,5 @@ namespace Crash
         public byte X { get; }
         public byte Y { get; }
         public byte Z { get; }
-
-        double IPosition.X => X;
-        double IPosition.Y => Y;
-        double IPosition.Z => Z;
     }
 }

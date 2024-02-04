@@ -12,8 +12,8 @@ namespace Crash
         protected const string NullFormat = "000001111101";
         protected const int NullRef = 0xBE0;
         protected const int DoubleStackRef = 0xBF0;
-        
-        private Dictionary<char, GOOLArgument> args;
+
+        private readonly Dictionary<char, GOOLArgument> args;
 
         public abstract string Name { get; }
         public abstract string Format { get; } // [] means a GOOL ref, () means a process field, valid digits are any letter + 0, 1 and -, and each correspond to one bit. Bitfields must be contiguous. Spaces are removed in parsing.
@@ -25,7 +25,7 @@ namespace Crash
         public int Opcode => Value >> 24 & 0xFF;
         public IDictionary<char, GOOLArgument> Args => args;
 
-        public GOOLInstruction(int value,GOOLEntry gool)
+        public GOOLInstruction(int value, GOOLEntry gool)
         {
             GOOL = gool;
             Value = value;
@@ -243,7 +243,7 @@ namespace Crash
                 }
                 if ((val & 0x80) == 0)
                 {
-                    int n = BitConv.SignExtendInt32(val,7);
+                    int n = BitConv.SignExtendInt32(val, 7);
                     return string.Format("{0}[{1}]", n >= 0 ? "stack" : "arg", (n < 0 ? -n - 1 : n).TransformedString());
                 }
                 if (val != 0xBE0)
@@ -263,7 +263,7 @@ namespace Crash
                     //if (link == 0)
                     //    return ((ObjectFields)(val & 0x3F)).ToString();
                     //else
-                        return $"{ObjectFields.self + link}->{(ObjectFields)(val & 0x3F)}";
+                    return $"{ObjectFields.self + link}->{(ObjectFields)(val & 0x3F)}";
                 }
                 if ((val & 0x1FF) == 0x1F)
                     return "[sp]";
@@ -277,7 +277,7 @@ namespace Crash
         {
             if ((val & 0x400) == 0)
             {
-                int n = BitConv.SignExtendInt32(val,7);
+                int n = BitConv.SignExtendInt32(val, 7);
                 return string.Format("{0}[{1}]", n >= 0 ? "stack" : "arg", (n < 0 ? -n - 1 : n).TransformedString());
             }
             else

@@ -68,7 +68,7 @@ namespace Crash.UI
         {
             protected override string GetText(NSFController c) => Properties.Resources.NSFController_AcAddNormalChunk;
 
-            protected override Command Activate(NSFController c) => c.NSF.Chunks.CmAdd(new NormalChunk());
+            protected override Command Activate(NSFController c) => c.NSF.Chunks.CmAdd(new NormalChunk(c.NSF));
         }
     }
 }

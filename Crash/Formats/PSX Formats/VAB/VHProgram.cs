@@ -5,21 +5,21 @@ namespace Crash
 {
     public sealed class VHProgram
     {
-        public static VHProgram Load(byte[] data,byte[] tonedata,bool isoldversion)
+        public static VHProgram Load(byte[] data, byte[] tonedata, bool isoldversion)
         {
             if (data.Length != 16)
-                throw new ArgumentException("Value must be 16 bytes long.","data");
+                throw new ArgumentException("Value must be 16 bytes long.", "data");
             if (tonedata.Length != 512)
-                throw new ArgumentException("Value must be 512 bytes long.","tonedata");
+                throw new ArgumentException("Value must be 512 bytes long.", "tonedata");
             byte tonecount = data[0];
             byte volume = data[1];
             byte priority = data[2];
             byte mode = data[3];
             byte panning = data[4];
             byte reserved1 = data[5];
-            short attribute = BitConv.FromInt16(data,6);
-            int reserved2 = BitConv.FromInt32(data,8);
-            int reserved3 = BitConv.FromInt32(data,12);
+            short attribute = BitConv.FromInt16(data, 6);
+            int reserved2 = BitConv.FromInt32(data, 8);
+            int reserved3 = BitConv.FromInt32(data, 12);
             if (tonecount < 0 || tonecount > 16)
             {
                 ErrorManager.SignalError("VHProgram: Tone count is wrong");
@@ -36,17 +36,17 @@ namespace Crash
             {
                 ErrorManager.SignalIgnorableError("VHProgram: Reserved value 3 is wrong");
             }
-            VHTone[] tones = new VHTone [tonecount];
-            for (int i = 0;i < tonecount;i++)
+            VHTone[] tones = new VHTone[tonecount];
+            for (int i = 0; i < tonecount; i++)
             {
-                byte[] thistonedata = new byte [32];
-                Array.Copy(tonedata,i * 32,thistonedata,0,32);
+                byte[] thistonedata = new byte[32];
+                Array.Copy(tonedata, i * 32, thistonedata, 0, 32);
                 tones[i] = VHTone.Load(thistonedata);
             }
-            return new VHProgram(isoldversion,volume,priority,mode,panning,attribute,tones);
+            return new VHProgram(isoldversion, volume, priority, mode, panning, attribute, tones);
         }
 
-        private List<VHTone> tones;
+        private readonly List<VHTone> tones;
 
         public VHProgram(bool isoldversion)
         {
@@ -70,7 +70,7 @@ namespace Crash
             tones = new List<VHTone>();
         }
 
-        public VHProgram(bool isoldversion,byte volume,byte priority,byte mode,byte panning,short attribute,IEnumerable<VHTone> tones)
+        public VHProgram(bool isoldversion, byte volume, byte priority, byte mode, byte panning, short attribute, IEnumerable<VHTone> tones)
         {
             if (tones == null)
                 throw new ArgumentNullException("tones");
@@ -93,27 +93,27 @@ namespace Crash
 
         public byte[] Save()
         {
-            byte[] data = new byte [16];
+            byte[] data = new byte[16];
             data[0] = (byte)tones.Count;
             data[1] = Volume;
             data[2] = Priority;
             data[3] = Mode;
             data[4] = Panning;
             data[5] = IsOldVersion ? (byte)0x00 : (byte)0xFF;
-            BitConv.ToInt16(data,6,Attribute);
-            BitConv.ToInt32(data,8,-1);
-            BitConv.ToInt32(data,12,-1);
+            BitConv.ToInt16(data, 6, Attribute);
+            BitConv.ToInt32(data, 8, -1);
+            BitConv.ToInt32(data, 12, -1);
             return data;
         }
 
-        public RIFF ToDLSInstrument(int programnumber,bool drumkit)
+        public RIFF ToDLSInstrument(int programnumber, bool drumkit)
         {
             RIFF ins = new RIFF("ins ");
-            byte[] insh = new byte [12];
-            BitConv.ToInt32(insh,0,tones.Count);
-            BitConv.ToInt32(insh,4,drumkit ? (1 << 31) : 0);
-            BitConv.ToInt32(insh,8,programnumber);
-            ins.Items.Add(new RIFFData("insh",insh));
+            byte[] insh = new byte[12];
+            BitConv.ToInt32(insh, 0, tones.Count);
+            BitConv.ToInt32(insh, 4, drumkit ? (1 << 31) : 0);
+            BitConv.ToInt32(insh, 8, programnumber);
+            ins.Items.Add(new RIFFData("insh", insh));
             RIFF lrgn = new RIFF("lrgn");
             foreach (VHTone tone in tones)
             {

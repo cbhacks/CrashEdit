@@ -4,11 +4,11 @@ namespace Crash
 {
     public sealed class NormalChunk : EntryChunk
     {
-        public NormalChunk()
+        public NormalChunk(NSF nsf) : base(nsf)
         {
         }
 
-        public NormalChunk(IEnumerable<Entry> entries) : base(entries)
+        public NormalChunk(IEnumerable<Entry> entries, NSF nsf) : base(entries, nsf)
         {
         }
 

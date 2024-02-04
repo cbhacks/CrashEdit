@@ -1,8 +1,8 @@
 namespace Crash
 {
-    public struct OldCameraPosition : IPosition
+    public readonly struct OldCameraPosition
     {
-        public OldCameraPosition(short x,short y,short z,short xrot,short yrot,short zrot)
+        public OldCameraPosition(short x, short y, short z, short xrot, short yrot, short zrot)
         {
             X = x;
             Y = y;
@@ -18,8 +18,5 @@ namespace Crash
         public short XRot { get; }
         public short YRot { get; }
         public short ZRot { get; }
-        double IPosition.X => X;
-        double IPosition.Y => Y;
-        double IPosition.Z => Z;
     }
 }

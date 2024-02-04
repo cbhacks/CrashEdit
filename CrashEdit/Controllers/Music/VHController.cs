@@ -4,14 +4,14 @@ namespace CrashEdit
 {
     public sealed class VHController : Controller
     {
-        public VHController(MusicEntryController musicentrycontroller,VH vh)
+        public VHController(MusicEntryController musicentrycontroller, VH vh)
         {
             MusicEntryController = musicentrycontroller;
             VH = vh;
-            AddMenu("Replace VH",Menu_Replace_VH);
-            AddMenu("Delete VH",Menu_Delete_VH);
+            AddMenu("Replace VH", Menu_Replace_VH);
+            AddMenu("Delete VH", Menu_Delete_VH);
             AddMenuSeparator();
-            AddMenu("Export VH",Menu_Export_VH);
+            AddMenu("Export VH", Menu_Export_VH);
             InvalidateNode();
             InvalidateNodeImage();
         }
@@ -32,7 +32,7 @@ namespace CrashEdit
 
         private void Menu_Replace_VH()
         {
-            byte[] data = FileUtil.OpenFile(FileFilters.VH,FileFilters.Any);
+            byte[] data = FileUtil.OpenFile(FileFilters.VH, FileFilters.Any);
             if (data != null)
             {
                 VH = VH.Load(data);
@@ -49,7 +49,7 @@ namespace CrashEdit
         private void Menu_Export_VH()
         {
             byte[] data = VH.Save();
-            FileUtil.SaveFile(data,FileFilters.VH,FileFilters.Any);
+            FileUtil.SaveFile(data, FileFilters.VH, FileFilters.Any);
         }
     }
 }

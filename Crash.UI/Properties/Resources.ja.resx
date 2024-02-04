@@ -354,4 +354,7 @@
   <data name="TextureChunkController_AcOpenViewer" xml:space="preserve">
     <value>ビューアーを開く</value>
   </data>
+  <data name="NSFController_AcShowLevelZones" xml:space="preserve">
+    <value>全てのゾーンを表示</value>
+  </data>
 </root>

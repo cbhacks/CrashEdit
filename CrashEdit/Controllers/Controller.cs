@@ -25,12 +25,12 @@ namespace CrashEdit
             Node.Nodes.Add(controller.Node);
         }
 
-        public void InsertNode(int index,Controller controller)
+        public void InsertNode(int index, Controller controller)
         {
-            Node.Nodes.Insert(index,controller.Node);
+            Node.Nodes.Insert(index, controller.Node);
         }
 
-        protected void AddMenu(string text,ControllerMenuDelegate proc)
+        protected void AddMenu(string text, ControllerMenuDelegate proc)
         {
             void handler(object sender, EventArgs e)
             {
@@ -41,14 +41,14 @@ namespace CrashEdit
                 }
                 catch (GUIException ex)
                 {
-                    MessageBox.Show(ex.Message,text,MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
                     ErrorManager.ExitSubject();
                 }
             }
-            ContextMenu.MenuItems.Add(text,handler);
+            ContextMenu.MenuItems.Add(text, handler);
         }
 
         protected void AddMenuSeparator()
@@ -104,7 +104,7 @@ namespace CrashEdit
             }
         }
 
-        public virtual bool Move(Controller newcontroller,bool commit)
+        public virtual bool Move(Controller newcontroller, bool commit)
         {
             return false;
         }
@@ -113,7 +113,7 @@ namespace CrashEdit
         {
             TreeNode[] nodes = new TreeNode[Node.Nodes.Count];
             int i = 0;
-            foreach(TreeNode node in Node.Nodes)
+            foreach (TreeNode node in Node.Nodes)
             {
                 nodes[i++] = node;
             }
@@ -127,7 +127,7 @@ namespace CrashEdit
                     }
                 }
             }
-            Node.Remove(); // <-- this line makes the TreeNodeCollection volatile, so the node references must be copies onto a separate list beforehand
+            Node.Remove(); // <-- this line makes the TreeNodeCollection volatile, so the node references must be copied onto a separate list beforehand
             ContextMenu.Dispose();
             if (editor != null)
             {

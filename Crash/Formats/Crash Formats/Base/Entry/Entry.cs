@@ -1,6 +1,6 @@
 using System;
-using System.Reflection;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Crash
 {
@@ -18,30 +18,30 @@ namespace Crash
             "EID final character mismatch."
         };
 
-        internal static Dictionary<GameVersion,Dictionary<int,EntryLoader>> loadersets;
+        internal static Dictionary<GameVersion, Dictionary<int, EntryLoader>> loadersets;
 
         static Entry()
         {
-            loadersets = new Dictionary<GameVersion,Dictionary<int,EntryLoader>>();
+            loadersets = new Dictionary<GameVersion, Dictionary<int, EntryLoader>>();
         }
 
-        internal static Dictionary<int,EntryLoader> GetLoaders(GameVersion gameversion)
+        internal static Dictionary<int, EntryLoader> GetLoaders(GameVersion gameversion)
         {
             if (!loadersets.ContainsKey(gameversion))
             {
-                Dictionary<int,EntryLoader> loaders = new Dictionary<int,EntryLoader>();
+                Dictionary<int, EntryLoader> loaders = new Dictionary<int, EntryLoader>();
                 foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
                 {
-                    foreach (EntryTypeAttribute attribute in type.GetCustomAttributes(typeof(EntryTypeAttribute),false))
+                    foreach (EntryTypeAttribute attribute in type.GetCustomAttributes(typeof(EntryTypeAttribute), false))
                     {
                         if (attribute.GameVersion == gameversion)
                         {
                             EntryLoader loader = (EntryLoader)Activator.CreateInstance(type);
-                            loaders.Add(attribute.Type,loader);
+                            loaders.Add(attribute.Type, loader);
                         }
                     }
                 }
-                loadersets.Add(gameversion,loaders);
+                loadersets.Add(gameversion, loaders);
             }
             return loadersets[gameversion];
         }
@@ -54,10 +54,10 @@ namespace Crash
             {
                 ErrorManager.SignalError("Entry: Data is too short");
             }
-            int magic = BitConv.FromInt32(data,0);
-            int eid = BitConv.FromInt32(data,4);
-            int type = BitConv.FromInt32(data,8);
-            int itemcount = BitConv.FromInt32(data,12);
+            int magic = BitConv.FromInt32(data, 0);
+            int eid = BitConv.FromInt32(data, 4);
+            int type = BitConv.FromInt32(data, 8);
+            int itemcount = BitConv.FromInt32(data, 12);
             if (magic != Magic)
             {
                 ErrorManager.SignalIgnorableError("Entry: Magic number is wrong");
@@ -70,12 +70,12 @@ namespace Crash
             {
                 ErrorManager.SignalError("Entry: Data is too short");
             }
-            byte[][] items = new byte [itemcount][];
+            byte[][] items = new byte[itemcount][];
             byte[] itemdata;
-            for (int i = 0;i < itemcount;++i)
+            for (int i = 0; i < itemcount; ++i)
             {
-                int itemstart = BitConv.FromInt32(data,16 + i * 4);
-                int itemend = BitConv.FromInt32(data,20 + i * 4);
+                int itemstart = BitConv.FromInt32(data, 16 + i * 4);
+                int itemend = BitConv.FromInt32(data, 20 + i * 4);
                 if (itemstart < 0)
                 {
                     ErrorManager.SignalError("Entry: Item begins out of bounds");
@@ -89,18 +89,18 @@ namespace Crash
                     ErrorManager.SignalError("Entry: Item ends out of bounds");
                 }
                 int itemsize = itemend - itemstart;
-                itemdata = new byte [itemsize];
-                Array.Copy(data,itemstart,itemdata,0,itemsize);
+                itemdata = new byte[itemsize];
+                Array.Copy(data, itemstart, itemdata, 0, itemsize);
                 items[i] = itemdata;
             }
-            return new UnprocessedEntry(items,eid,type);
+            return new UnprocessedEntry(items, eid, type);
         }
 
         public static string EIDToEName(int eid)
         {
-            char[] str = new char [5];
+            char[] str = new char[5];
             eid >>= 1;
-            for (int i = 0;i < 5;i++)
+            for (int i = 0; i < 5; i++)
             {
                 str[4 - i] = ENameCharacterSet[eid & 0x3F];
                 eid >>= 6;
@@ -132,6 +132,7 @@ namespace Crash
         public int EID { get; set; }
         public string EName => EIDToEName(EID);
         public int HashKey => EID >> 15 & 0xFF;
+        public EntryChunk Chunk { get; set; }
 
         public virtual bool IgnoreResaveErrors => false;
 
@@ -140,6 +141,59 @@ namespace Crash
         public virtual byte[] Save()
         {
             return Unprocess().Save();
+        }
+
+        public int ChunkIndexOf()
+        {
+            if (Chunk == null) return -1;
+            return Chunk.Entries.IndexOf(this);
+        }
+
+        // replace an Entry in its chunk with this one.
+        public bool ChunkReplaceWith(Entry old)
+        {
+            var idx = old.ChunkIndexOf();
+            if (idx == -1) return false;
+            old.Chunk.Entries[idx] = this;
+            Chunk = old.Chunk;
+            return true;
+        }
+
+        public bool ChunkAddTo(EntryChunk chunk)
+        {
+            Chunk = chunk;
+            if (Chunk != null && !Chunk.Entries.Contains(this))
+            {
+                try
+                {
+                    Chunk.Entries.Add(this);
+                }
+                catch (ArgumentException)
+                {
+                    Chunk.Entries.Remove(this);
+                    throw new EntryAddException(EID);
+                    // return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public bool ChunkRemove()
+        {
+            if (Chunk != null)
+            {
+                var r = Chunk.Entries.Remove(this);
+                Chunk = null;
+                return r;
+            }
+            return false;
+        }
+
+        public void ChunkMoveTo(EntryChunk chunk)
+        {
+            ChunkRemove();
+            ChunkAddTo(chunk);
         }
 
         ///<summary> Verifies the integrity of an entry name and returns an error string if it is invalid, returns and empty string on success.</summary>

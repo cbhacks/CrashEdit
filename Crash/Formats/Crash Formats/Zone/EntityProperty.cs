@@ -1,27 +1,27 @@
 using System;
-using System.Reflection;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Crash
 {
     public abstract class EntityProperty
     {
-        private static Dictionary<byte,EntityPropertyLoader> loaders;
+        private static readonly Dictionary<byte, EntityPropertyLoader> loaders;
 
         static EntityProperty()
         {
-            loaders = new Dictionary<byte,EntityPropertyLoader>();
+            loaders = new Dictionary<byte, EntityPropertyLoader>();
             foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
             {
-                foreach (EntityPropertyTypeAttribute attribute in type.GetCustomAttributes(typeof(EntityPropertyTypeAttribute),false))
+                foreach (EntityPropertyTypeAttribute attribute in type.GetCustomAttributes(typeof(EntityPropertyTypeAttribute), false))
                 {
                     EntityPropertyLoader loader = (EntityPropertyLoader)Activator.CreateInstance(type);
-                    loaders.Add(attribute.Type,loader);
+                    loaders.Add(attribute.Type, loader);
                 }
             }
         }
 
-        public static EntityProperty Load(byte type,byte elementsize,short unknown,bool last,byte[] data)
+        public static EntityProperty Load(byte type, byte elementsize, short unknown, bool last, byte[] data)
         {
             if (((type & 128) != 0) != last)
             {
@@ -32,15 +32,15 @@ namespace Crash
             type &= 31;
             if (loaders.ContainsKey(type))
             {
-                return loaders[type].Load(elementsize,unknown,issparse,hasmetavalues,data);
+                return loaders[type].Load(elementsize, unknown, issparse, hasmetavalues, data);
             }
             else
             {
-                return new EntityUnknownProperty(type,elementsize,unknown,issparse,hasmetavalues,data);
+                return new EntityUnknownProperty(type, elementsize, unknown, issparse, hasmetavalues, data);
             }
         }
 
-        private static bool LoadFromFieldOf<T>(out EntityProperty property,object obj,Type type) where T : struct
+        private static bool LoadFromFieldOf<T>(out EntityProperty property, object obj, Type type) where T : struct
         {
             if (obj is T?)
             {
@@ -143,7 +143,7 @@ namespace Crash
         public abstract bool IsSparse { get; }
         public abstract bool HasMetaValues { get; }
 
-        internal virtual void LoadToField(object obj,FieldInfo field)
+        internal virtual void LoadToField(object obj, FieldInfo field)
         {
             ErrorManager.SignalError("EntityProperty: Type mismatch");
         }

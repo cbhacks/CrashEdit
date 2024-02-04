@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <Import Project="..\packages\SharpFont.4.0.1\build\SharpFont.props" Condition="Exists('..\packages\SharpFont.4.0.1\build\SharpFont.props')" />
+  <Import Project="..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props" Condition="Exists('..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -19,6 +21,23 @@
     <OldToolsVersion>2.0</OldToolsVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,6 +62,45 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\Icons\cbhacks-logo-new.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>10.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>10.0</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>10.0</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>10.0</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>10.0</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -78,6 +136,10 @@
     <Compile Include="Controllers\GOOL\GOOLEntryController.cs" />
     <Compile Include="Controllers\Image\ImageEntryController.cs" />
     <Compile Include="Controllers\Map\MapEntryController.cs" />
+    <Compile Include="Controls\3D\ControlsKeyboardInfo.cs" />
+    <Compile Include="Controls\3D\GLViewerLoader.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\BufferedTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -97,7 +159,7 @@
     <Compile Include="Controls\PaletteEntryBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\CommonZoneEntryViewer.cs" />
+    <Compile Include="Controls\3D\OctreeRenderer.cs" />
     <Compile Include="ExternalTool.cs" />
     <Compile Include="Forms\ErrorReporter.cs">
       <SubType>Form</SubType>
@@ -131,14 +193,12 @@
     </Compile>
     <Compile Include="Controllers\Animation\AnimationEntryController.cs" />
     <Compile Include="Controllers\Animation\FrameController.cs" />
-    <Compile Include="Controllers\Animation\ProtoAnimationEntryController.cs" />
     <Compile Include="Controllers\Base\Chunk\ChunkController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\ControllerMenuDelegate.cs" />
     <Compile Include="Controllers\Animation\OldAnimationEntryController.cs" />
     <Compile Include="Controllers\Animation\OldFrameController.cs" />
     <Compile Include="Controllers\Model\ModelEntryController.cs" />
-    <Compile Include="Controllers\Scenery\NewSceneryEntryController.cs" />
     <Compile Include="Controllers\Scenery\ProtoSceneryEntryController.cs" />
     <Compile Include="Controllers\SLST\OldSLSTDeltaController.cs" />
     <Compile Include="Controllers\SLST\SLSTDeltaController.cs" />
@@ -151,7 +211,6 @@
     <Compile Include="Controllers\Music\OldMusicEntryController.cs" />
     <Compile Include="Controllers\Palette\PaletteEntryController.cs" />
     <Compile Include="Controllers\T6\T6EntryController.cs" />
-    <Compile Include="Controllers\Zone\NewEntityController.cs" />
     <Compile Include="Controllers\Zone\OldCameraController.cs" />
     <Compile Include="Controllers\Zone\ProtoZoneEntryController.cs" />
     <Compile Include="Controllers\Zone\ProtoEntityController.cs" />
@@ -166,7 +225,6 @@
     <Compile Include="Controllers\Unprocessed\UnprocessedChunkController.cs" />
     <Compile Include="Controllers\Base\Entry\ItemController.cs" />
     <Compile Include="Controllers\Zone\EntityController.cs" />
-    <Compile Include="Controllers\Zone\NewZoneEntryController.cs" />
     <Compile Include="Controllers\Zone\ZoneEntryController.cs" />
     <Compile Include="Controllers\Unprocessed\UnprocessedEntryController.cs" />
     <Compile Include="Controllers\SLST\SLSTEntryController.cs" />
@@ -187,7 +245,7 @@
     <Compile Include="Controllers\Sound\SoundChunkController.cs" />
     <Compile Include="Controllers\NSFController.cs" />
     <Compile Include="Controllers\Speech\SpeechChunkController.cs" />
-    <Compile Include="Controls\AnimationEntryViewer.cs">
+    <Compile Include="Controls\3D\AnimationEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\OldFrameBox.cs">
@@ -202,10 +260,10 @@
     <Compile Include="Controls\OldCameraBox.Designer.cs">
       <DependentUpon>OldCameraBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProtoZoneEntryViewer.cs">
+    <Compile Include="Controls\3D\ProtoZoneEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\ProtoSceneryEntryViewer.cs">
+    <Compile Include="Controls\3D\ProtoSceneryEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ProtoEntityBox.cs">
@@ -220,16 +278,13 @@
     <Compile Include="Controls\OldEntityBox.Designer.cs">
       <DependentUpon>OldEntityBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\NewSceneryEntryViewer.cs">
+    <Compile Include="Controls\3D\SceneryEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\SceneryEntryViewer.cs">
+    <Compile Include="Controls\3D\OldAnimationEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\OldAnimationEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\OldSceneryEntryViewer.cs">
+    <Compile Include="Controls\3D\OldSceneryEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\EntryChunkBox.cs">
@@ -250,7 +305,7 @@
     <Compile Include="Controls\SLSTDeltaBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\ThreeDimensionalViewer.cs">
+    <Compile Include="Controls\3D\GLViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\EntityBox.cs">
@@ -259,13 +314,10 @@
     <Compile Include="Controls\EntityBox.Designer.cs">
       <DependentUpon>EntityBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\OldZoneEntryViewer.cs">
+    <Compile Include="Controls\3D\OldZoneEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\NewZoneEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ZoneEntryViewer.cs">
+    <Compile Include="Controls\3D\ZoneEntryViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\UndockableControl.cs">
@@ -326,19 +378,36 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Render\FontTable.cs" />
+    <Compile Include="Render\ProjectionInfo.cs" />
+    <Compile Include="Render\RenderInfo.cs" />
+    <Compile Include="Render\Shader.cs" />
+    <Compile Include="Render\ShaderFuncs.cs" />
+    <Compile Include="Render\Vertex.cs" />
+    <Compile Include="Render\VAO.cs" />
+    <Compile Include="Utils\GameScales.cs" />
+    <Compile Include="Utils\MathExt.cs" />
+    <Compile Include="Utils\ResourceLoad.cs" />
+    <Compile Include="Utils\StopwatchExt.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\OpenTK.dll</HintPath>
+    <Reference Include="DiscUtils.Core, Version=0.16.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
+      <HintPath>..\packages\DiscUtils.Core.0.16.13\lib\net45\DiscUtils.Core.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\OpenTK.GLControl.dll</HintPath>
+    <Reference Include="DiscUtils.Iso9660, Version=0.16.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
+      <HintPath>..\packages\DiscUtils.Iso9660.0.16.13\lib\net45\DiscUtils.Iso9660.dll</HintPath>
     </Reference>
-    <Reference Include="DiscUtils, Version=0.10.0.0, Culture=neutral, PublicKeyToken=60a04f11f1df810d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DiscUtils.dll</HintPath>
+    <Reference Include="DiscUtils.Streams, Version=0.16.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
+      <HintPath>..\packages\DiscUtils.Streams.0.16.13\lib\net45\DiscUtils.Streams.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK, Version=3.3.3.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.3.3.3\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl, Version=3.3.3.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.GLControl.3.3.3\lib\net20\OpenTK.GLControl.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpFont, Version=4.0.1.200, Culture=neutral, PublicKeyToken=48add4c483071cdf, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpFont.4.0.1\lib\net45\SharpFont.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -448,6 +517,24 @@
     <Content Include="Resources\objects_012_crimson.gif" />
     <Content Include="Resources\objects_012_gray.gif" />
     <Content Include="Resources\objects_012_lime.gif" />
+    <EmbeddedResource Include="Render\Shaders\axes.vert" />
+    <EmbeddedResource Include="Render\Shaders\default4.frag" />
+    <EmbeddedResource Include="Render\Shaders\crash1-generic.vert" />
+    <EmbeddedResource Include="Render\Shaders\line-debug.vert" />
+    <EmbeddedResource Include="Render\Shaders\line-static.vert" />
+    <EmbeddedResource Include="Render\Shaders\line-usercolor.vert" />
+    <EmbeddedResource Include="Render\Shaders\crash1-generic.frag" />
+    <None Include="OpenTK.dll.config" />
+    <None Include="packages.config" />
+    <EmbeddedResource Include="Render\Shaders\box-debug.vert" />
+    <EmbeddedResource Include="Render\Shaders\sprite.vert" />
+    <EmbeddedResource Include="Render\Shaders\sprite.frag" />
+    <EmbeddedResource Include="Render\Shaders\generic.vert" />
+    <EmbeddedResource Include="Render\Shaders\sprite-generic.vert" />
+    <EmbeddedResource Include="Render\Shaders\screen.frag" />
+    <EmbeddedResource Include="Render\Shaders\screen.vert" />
+    <EmbeddedResource Include="Render\Shaders\octree.frag" />
+    <EmbeddedResource Include="Render\Shaders\octree.vert" />
     <None Include="Resources\objects_012_red.gif" />
     <Content Include="Resources\objects_012_violet.gif" />
     <None Include="Resources\objects_012_yellow.gif" />
@@ -501,4 +588,36 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props'))" />
+    <Error Condition="!Exists('..\packages\SharpFont.4.0.1\build\SharpFont.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SharpFont.4.0.1\build\SharpFont.props'))" />
+  </Target>
+  <PropertyGroup>
+    <PostBuildEvent>if '$(Platform)' == 'AnyCPU' (
+  call "$(ProjectDir)CopyLibs.bat" "$(SolutionDir)\"
+)
+if '$(Platform)' == 'x64' (
+  call "$(ProjectDir)CopyLibs64.bat" "$(SolutionDir)\"
+)
+if '$(Platform)' == 'x86' (
+  call "$(ProjectDir)CopyLibs32.bat" "$(SolutionDir)\"
+)
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>
