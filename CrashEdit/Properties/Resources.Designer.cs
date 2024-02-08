@@ -128,6 +128,15 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cache shader uniform locations.
+        /// </summary>
+        internal static string Config_chkCacheShaderUniformLoc {
+            get {
+                return ResourceManager.GetString("Config_chkCacheShaderUniformLoc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Display frame collision by default.
         /// </summary>
         internal static string Config_chkCollisionDisplay {

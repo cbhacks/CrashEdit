@@ -83,6 +83,7 @@ namespace CrashEdit
             chkFont3DAutoscale.Checked = Settings.Default.Font3DAutoscale;
             chkFont2DEnable.Checked = Settings.Default.Font2DEnable;
             chkViewerShowHelp.Checked = Settings.Default.ViewerShowHelp;
+            chkCacheShaderUniformLoc.Checked = Settings.Default.CacheShaderUniformLoc;
             cdlClearCol.Color = picClearCol.BackColor = Color.FromArgb(Settings.Default.ClearColorRGB);
             sldNodeShadeAmt.Value = (int)(Settings.Default.NodeShadeMax * 100);
 
@@ -110,6 +111,7 @@ namespace CrashEdit
             chkFont3DEnable.Text = Resources.Config_chkFont3DEnable;
             chkFont2DEnable.Text = Resources.Config_chkFont2DEnable;
             chkViewerShowHelp.Text = Resources.Config_chkViewerShowHelp;
+            chkCacheShaderUniformLoc.Text = Resources.Config_chkCacheShaderUniformLoc;
             cmdReset.Text = Resources.Config_cmdReset;
         }
 
@@ -222,6 +224,12 @@ namespace CrashEdit
         private void chkViewerShowHelp_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Default.ViewerShowHelp = chkViewerShowHelp.Checked;
+            Settings.Default.Save();
+        }
+
+        private void chkCacheShaderUniformLoc_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.CacheShaderUniformLoc = chkCacheShaderUniformLoc.Checked;
             Settings.Default.Save();
         }
 

@@ -9,7 +9,7 @@
       <Value Profile="(Default)">747</Value>
     </Setting>
     <Setting Name="DefaultFormH" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">560</Value>
+      <Value Profile="(Default)">567</Value>
     </Setting>
     <Setting Name="DisplayNormals" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -58,6 +58,9 @@
     </Setting>
     <Setting Name="NodeShadeMax" Type="System.Single" Scope="User">
       <Value Profile="(Default)">0.2</Value>
+    </Setting>
+    <Setting Name="CacheShaderUniformLoc" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

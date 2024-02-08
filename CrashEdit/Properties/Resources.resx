@@ -822,4 +822,7 @@ as Meters: {3:F3}m</value>
   <data name="Config_fraNodeShadeAmt" xml:space="preserve">
     <value>Collision Node Shade Amount</value>
   </data>
+  <data name="Config_chkCacheShaderUniformLoc" xml:space="preserve">
+    <value>Cache shader uniform locations</value>
+  </data>
 </root>

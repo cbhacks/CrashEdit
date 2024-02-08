@@ -69,6 +69,7 @@
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.chkCacheShaderUniformLoc = new System.Windows.Forms.CheckBox();
             tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
@@ -385,13 +386,14 @@
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            tableLayoutPanel1.Size = new System.Drawing.Size(452, 224);
+            tableLayoutPanel1.Size = new System.Drawing.Size(452, 231);
             tableLayoutPanel1.TabIndex = 9;
             // 
             // panel2
             // 
             panel2.AutoSize = true;
             panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            panel2.Controls.Add(this.chkCacheShaderUniformLoc);
             panel2.Controls.Add(this.chkViewerShowHelp);
             panel2.Controls.Add(this.chkFont2DEnable);
             panel2.Controls.Add(this.chkFont3DAutoscale);
@@ -402,10 +404,10 @@
             panel2.Controls.Add(this.chkDeleteInvalidEntries);
             panel2.Controls.Add(this.chkUseAnimLinks);
             panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            panel2.Location = new System.Drawing.Point(3, 58);
+            panel2.Location = new System.Drawing.Point(3, 48);
             panel2.Name = "panel2";
             panel2.Padding = new System.Windows.Forms.Padding(10, 5, 10, 5);
-            panel2.Size = new System.Drawing.Size(446, 163);
+            panel2.Size = new System.Drawing.Size(446, 180);
             panel2.TabIndex = 11;
             // 
             // chkViewerShowHelp
@@ -543,8 +545,8 @@
             panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             panel1.Location = new System.Drawing.Point(3, 3);
             panel1.Name = "panel1";
-            panel1.Padding = new System.Windows.Forms.Padding(10, 5, 10, 5);
-            panel1.Size = new System.Drawing.Size(446, 49);
+            panel1.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            panel1.Size = new System.Drawing.Size(446, 39);
             panel1.TabIndex = 10;
             // 
             // dpdLang
@@ -552,7 +554,7 @@
             this.dpdLang.Dock = System.Windows.Forms.DockStyle.Top;
             this.dpdLang.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.dpdLang.FormattingEnabled = true;
-            this.dpdLang.Location = new System.Drawing.Point(10, 23);
+            this.dpdLang.Location = new System.Drawing.Point(10, 18);
             this.dpdLang.MaximumSize = new System.Drawing.Size(133, 0);
             this.dpdLang.Name = "dpdLang";
             this.dpdLang.Size = new System.Drawing.Size(133, 21);
@@ -562,7 +564,7 @@
             // 
             this.lblLang.AutoSize = true;
             this.lblLang.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblLang.Location = new System.Drawing.Point(10, 5);
+            this.lblLang.Location = new System.Drawing.Point(10, 0);
             this.lblLang.Name = "lblLang";
             this.lblLang.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
             this.lblLang.Size = new System.Drawing.Size(133, 18);
@@ -579,7 +581,7 @@
             this.fraMisc.Margin = new System.Windows.Forms.Padding(6);
             this.fraMisc.MaximumSize = new System.Drawing.Size(458, 0);
             this.fraMisc.Name = "fraMisc";
-            this.fraMisc.Size = new System.Drawing.Size(458, 243);
+            this.fraMisc.Size = new System.Drawing.Size(458, 250);
             this.fraMisc.TabIndex = 1;
             this.fraMisc.TabStop = false;
             this.fraMisc.Text = "Miscellaneous";
@@ -665,7 +667,7 @@
             this.panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel3.Controls.Add(this.cmdReset);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel3.Location = new System.Drawing.Point(3, 419);
+            this.panel3.Location = new System.Drawing.Point(3, 426);
             this.panel3.Name = "panel3";
             this.panel3.Padding = new System.Windows.Forms.Padding(3);
             this.panel3.Size = new System.Drawing.Size(468, 38);
@@ -680,8 +682,22 @@
             this.panel4.Location = new System.Drawing.Point(3, 170);
             this.panel4.Name = "panel4";
             this.panel4.Padding = new System.Windows.Forms.Padding(3);
-            this.panel4.Size = new System.Drawing.Size(468, 249);
+            this.panel4.Size = new System.Drawing.Size(468, 256);
             this.panel4.TabIndex = 13;
+            // 
+            // chkCacheShaderUniformLoc
+            // 
+            this.chkCacheShaderUniformLoc.AutoSize = true;
+            this.chkCacheShaderUniformLoc.Checked = true;
+            this.chkCacheShaderUniformLoc.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkCacheShaderUniformLoc.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkCacheShaderUniformLoc.Location = new System.Drawing.Point(10, 158);
+            this.chkCacheShaderUniformLoc.Name = "chkCacheShaderUniformLoc";
+            this.chkCacheShaderUniformLoc.Size = new System.Drawing.Size(426, 17);
+            this.chkCacheShaderUniformLoc.TabIndex = 8;
+            this.chkCacheShaderUniformLoc.Text = "Cache shader uniform locations";
+            this.chkCacheShaderUniformLoc.UseVisualStyleBackColor = true;
+            this.chkCacheShaderUniformLoc.CheckedChanged += new System.EventHandler(this.chkCacheShaderUniformLoc_CheckedChanged);
             // 
             // ConfigEditor
             // 
@@ -696,7 +712,7 @@
             this.Controls.Add(tableLayoutPanel3);
             this.Name = "ConfigEditor";
             this.Padding = new System.Windows.Forms.Padding(3);
-            this.Size = new System.Drawing.Size(474, 478);
+            this.Size = new System.Drawing.Size(474, 488);
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numH)).EndInit();
@@ -773,5 +789,6 @@
         private System.Windows.Forms.Label lblLang;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.CheckBox chkCacheShaderUniformLoc;
     }
 }

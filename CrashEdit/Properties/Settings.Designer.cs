@@ -49,7 +49,7 @@ namespace CrashEdit.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("560")]
+        [global::System.Configuration.DefaultSettingValueAttribute("567")]
         public int DefaultFormH {
             get {
                 return ((int)(this["DefaultFormH"]));
@@ -248,6 +248,18 @@ namespace CrashEdit.Properties {
             }
             set {
                 this["NodeShadeMax"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CacheShaderUniformLoc {
+            get {
+                return ((bool)(this["CacheShaderUniformLoc"]));
+            }
+            set {
+                this["CacheShaderUniformLoc"] = value;
             }
         }
     }

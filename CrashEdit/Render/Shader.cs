@@ -1,4 +1,5 @@
-﻿using OpenTK;
+﻿using CrashEdit.Properties;
+using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System;
@@ -147,14 +148,29 @@ namespace CrashEdit
             GL.DeleteProgram(ID);
         }
 
-        public void UniformMat4(string name, ref Matrix4 mat) => GL.UniformMatrix4(GL.GetUniformLocation(ID, name), false, ref mat);
-        public void UniformMat3(string name, ref Matrix3 mat) => GL.UniformMatrix3(GL.GetUniformLocation(ID, name), false, ref mat);
-        public void UniformVec3(string name, ref Vector3 vec) => GL.Uniform3(GL.GetUniformLocation(ID, name), ref vec);
-        public void UniformVec4(string name, ref Vector4 vec) => GL.Uniform4(GL.GetUniformLocation(ID, name), ref vec);
-        public void UniformVec4(string name, ref Color4 col) => GL.Uniform4(GL.GetUniformLocation(ID, name), col.R, col.G, col.B, col.A);
-        public void UniformFloat(string name, float val) => GL.Uniform1(GL.GetUniformLocation(ID, name), val);
-        public void UniformInt(string name, int val) => GL.Uniform1(GL.GetUniformLocation(ID, name), val);
-        public void UniformBool(string name, bool val) => GL.Uniform1(GL.GetUniformLocation(ID, name), Convert.ToInt32(val));
+        private readonly Dictionary<string, int> uniform_locs = new();
+
+        private int GetUniformLocation(string name)
+        {
+            if (!Settings.Default.CacheShaderUniformLoc)
+                return GL.GetUniformLocation(ID, name);
+
+            if (!uniform_locs.TryGetValue(name, out int loc))
+            {
+                loc = GL.GetUniformLocation(ID, name);
+                uniform_locs.Add(name, loc);
+            }
+            return loc;
+        }
+
+        public void UniformMat4(string name, ref Matrix4 mat) => GL.UniformMatrix4(GetUniformLocation(name), false, ref mat);
+        public void UniformMat3(string name, ref Matrix3 mat) => GL.UniformMatrix3(GetUniformLocation(name), false, ref mat);
+        public void UniformVec3(string name, ref Vector3 vec) => GL.Uniform3(GetUniformLocation(name), ref vec);
+        public void UniformVec4(string name, ref Vector4 vec) => GL.Uniform4(GetUniformLocation(name), ref vec);
+        public void UniformVec4(string name, ref Color4 col) => GL.Uniform4(GetUniformLocation(name), col.R, col.G, col.B, col.A);
+        public void UniformFloat(string name, float val) => GL.Uniform1(GetUniformLocation(name), val);
+        public void UniformInt(string name, int val) => GL.Uniform1(GetUniformLocation(name), val);
+        public void UniformBool(string name, bool val) => GL.Uniform1(GetUniformLocation(name), Convert.ToInt32(val));
 
         public void Render(RenderInfo ri, VAO vao)
         {
