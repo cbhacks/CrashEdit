@@ -819,4 +819,7 @@ as Meters: {3:F3}m</value>
   <data name="ViewerControls_ToggleZoneOctreeOutline" xml:space="preserve">
     <value>Toggle octree wireframe ({0})</value>
   </data>
+  <data name="Config_fraNodeShadeAmt" xml:space="preserve">
+    <value>Collision Node Shade Amount</value>
+  </data>
 </root>

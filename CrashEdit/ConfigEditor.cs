@@ -53,9 +53,14 @@ namespace CrashEdit
         public ConfigEditor()
         {
             InitializeComponent();
+            // note: if language data is not found, this will just grab the english name. TODO fix this
             foreach (string lang in Languages)
-                dpdLang.Items.Add(Resources.ResourceManager.GetString("Language", new System.Globalization.CultureInfo(lang)));
-            dpdLang.SelectedItem = Resources.ResourceManager.GetString("Language", new System.Globalization.CultureInfo(Settings.Default.Language));
+            {
+                string name = Resources.ResourceManager.GetString("Language", new System.Globalization.CultureInfo(lang)) ?? "N/A";
+                dpdLang.Items.Add($"{name} ({lang})");
+                if (lang == Settings.Default.Language)
+                    dpdLang.SelectedIndex = dpdLang.Items.Count - 1;
+            }
             dpdLang.SelectedIndexChanged += new EventHandler(dpdLang_SelectedIndexChanged);
             MakeFontsList();
             dpdFont.SelectedIndexChanged += new EventHandler(dpdFont_SelectedIndexChanged);
@@ -79,6 +84,7 @@ namespace CrashEdit
             chkFont2DEnable.Checked = Settings.Default.Font2DEnable;
             chkViewerShowHelp.Checked = Settings.Default.ViewerShowHelp;
             cdlClearCol.Color = picClearCol.BackColor = Color.FromArgb(Settings.Default.ClearColorRGB);
+            sldNodeShadeAmt.Value = (int)(Settings.Default.NodeShadeMax * 100);
 
             dpdLang.MaximumSize = new Size(lblLang.Width, 0);
 
@@ -87,6 +93,7 @@ namespace CrashEdit
             fraClearCol.Text = Resources.Config_fraClearCol;
             fraAnimGrid.Text = Resources.Config_fraAnimGrid;
             fraFont.Text = Resources.Config_fraFont;
+            fraNodeShadeAmt.Text = Resources.Config_fraNodeShadeAmt;
             lblLang.Text = Resources.Config_lblLang;
             lblW.Text = Resources.Config_lblW;
             lblH.Text = Resources.Config_lblH;
@@ -215,6 +222,12 @@ namespace CrashEdit
         private void chkViewerShowHelp_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Default.ViewerShowHelp = chkViewerShowHelp.Checked;
+            Settings.Default.Save();
+        }
+
+        private void sldNodeShadeAmt_Scroll(object sender, EventArgs e)
+        {
+            Settings.Default.NodeShadeMax = sldNodeShadeAmt.Value / 100f;
             Settings.Default.Save();
         }
     }

@@ -254,6 +254,15 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Collision Node Shade Amount.
+        /// </summary>
+        internal static string Config_fraNodeShadeAmt {
+            get {
+                return ResourceManager.GetString("Config_fraNodeShadeAmt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Default Window Size.
         /// </summary>
         internal static string Config_fraSize {

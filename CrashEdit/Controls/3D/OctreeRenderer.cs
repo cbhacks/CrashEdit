@@ -1,4 +1,5 @@
 ﻿using Crash;
+using CrashEdit.Properties;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
@@ -20,7 +21,6 @@ namespace CrashEdit
         public bool outline;
         public byte alpha;
         public bool show_neighbor_zones;
-        public float node_shade_max;
 
         private readonly GLViewer viewer;
 
@@ -41,7 +41,6 @@ namespace CrashEdit
             node_filter = 0;
             outline = false;
             show_neighbor_zones = false;
-            node_shade_max = 0.2f;
             this.viewer = viewer;
         }
 
@@ -291,7 +290,7 @@ namespace CrashEdit
                 }
             }
 
-            viewer.OctreeSetNodeShadeMax(node_shade_max);
+            viewer.OctreeSetNodeShadeMax(Settings.Default.NodeShadeMax);
             viewer.OctreeSetOutline(outline);
 
             viewer.RenderOctree();
