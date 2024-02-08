@@ -50,6 +50,29 @@ namespace CrashEdit
             }
         }
 
+        /// <summary>
+        /// Allows the user to select a path to save a file but leaves the actual file saving to the caller
+        ///
+        /// Useful for batch exports of OBJ files
+        /// </summary>
+        /// <param name="filename">The filename to write as</param>
+        /// <param name="filters"></param>
+        /// <returns>If the user selected a file to save</returns>
+        public static bool SelectSaveFile (out string filename, params string [] filters)
+        {
+            savefiledlg.Filter = string.Join("|", filters);
+            if (savefiledlg.ShowDialog(Owner) == DialogResult.OK)
+            {
+                filename = savefiledlg.FileName;
+                return true;
+            }
+            else
+            {
+                filename = null;
+                return false;
+            }
+        }
+        
         public static bool SaveFile(byte[] data, params string[] filters)
         {
             if (data == null)

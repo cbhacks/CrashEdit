@@ -133,46 +133,5 @@ namespace Crash
             }
             return data;
         }
-
-        public byte[] ToOBJ(OldModelEntry model)
-        {
-            long xorigin = 0;
-            long yorigin = 0;
-            long zorigin = 0;
-            //foreach (OldFrameVertex vertex in vertices)
-            //{
-            //    xorigin += vertex.X;
-            //    yorigin += vertex.Y;
-            //    zorigin += vertex.Z;
-            //}
-            //xorigin /= vertices.Count;
-            //yorigin /= vertices.Count;
-            //zorigin /= vertices.Count;
-            xorigin -= XOffset;
-            yorigin -= YOffset;
-            zorigin -= ZOffset;
-            using (MemoryStream stream = new MemoryStream())
-            {
-                using (StreamWriter obj = new StreamWriter(stream))
-                {
-                    obj.WriteLine("# Vertices");
-                    foreach (OldFrameVertex vertex in vertices)
-                    {
-                        obj.WriteLine("v {0} {1} {2}", vertex.X - xorigin, vertex.Y - yorigin, vertex.Z - zorigin);
-                    }
-                    foreach (OldFrameVertex vertex in vertices)
-                    {
-                        obj.WriteLine("vn {0} {1} {2}", vertex.NormalX / 127.0, vertex.NormalY / 127.0, vertex.NormalZ / 127.0);
-                    }
-                    obj.WriteLine();
-                    obj.WriteLine("# Polygons");
-                    foreach (OldModelPolygon polygon in model.Polygons)
-                    {
-                        obj.WriteLine("f {0}//{0} {1}//{1} {2}//{2}", polygon.VertexA / 6 + 1, polygon.VertexB / 6 + 1, polygon.VertexC / 6 + 1);
-                    }
-                }
-                return stream.ToArray();
-            }
-        }
     }
 }

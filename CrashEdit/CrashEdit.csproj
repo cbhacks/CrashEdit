@@ -160,6 +160,11 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\3D\OctreeRenderer.cs" />
+    <Compile Include="Exporters\FrameExtensions.cs" />
+    <Compile Include="Exporters\MaterialExtensions.cs" />
+    <Compile Include="Exporters\OBJExporter.cs" />
+    <Compile Include="Exporters\SceneryExtensions.cs" />
+    <Compile Include="Exporters\TextureExporter.cs" />
     <Compile Include="ExternalTool.cs" />
     <Compile Include="Forms\ErrorReporter.cs">
       <SubType>Form</SubType>
@@ -389,6 +394,7 @@
     <Compile Include="Utils\MathExt.cs" />
     <Compile Include="Utils\ResourceLoad.cs" />
     <Compile Include="Utils\StopwatchExt.cs" />
+    <Compile Include="Utils\TextureUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="DiscUtils.Core, Version=0.16.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
@@ -600,7 +606,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>

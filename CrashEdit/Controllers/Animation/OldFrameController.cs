@@ -1,5 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 using Crash;
 using System.Windows.Forms;
+using CrashEdit.Exporters;
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace CrashEdit
 {
@@ -9,7 +18,7 @@ namespace CrashEdit
         {
             OldAnimationEntryController = oldanimationentrycontroller;
             OldFrame = oldframe;
-            AddMenu("Export as OBJ", Menu_Export_OBJ);
+            AddMenu ("Export as OBJ (game geometry)", Menu_Export_OBJ);
             InvalidateNode();
             InvalidateNodeImage();
         }
@@ -56,16 +65,21 @@ namespace CrashEdit
 
         private void Menu_Export_OBJ()
         {
-            OldModelEntry modelentry = OldAnimationEntryController.EntryChunkController.NSFController.NSF.GetEntry<OldModelEntry>(OldFrame.ModelEID);
-            if (modelentry == null)
-            {
-                throw new GUIException("The linked model entry could not be found.");
-            }
-            if (MessageBox.Show("Texture and color information will not be exported.\n\nContinue anyway?", "Export as OBJ", MessageBoxButtons.YesNo) != DialogResult.Yes)
-            {
+            if (!FileUtil.SelectSaveFile (out string filename, FileFilters.OBJ, FileFilters.Any))
                 return;
-            }
-            FileUtil.SaveFile(OldFrame.ToOBJ(modelentry), FileFilters.OBJ, FileFilters.Any);
+            
+            ToOBJ (Path.GetDirectoryName (filename), Path.GetFileNameWithoutExtension (filename));
+        }
+
+        public void ToOBJ(string path, string modelname)
+        {
+            Dictionary <int, int> textureEIDs = new Dictionary <int, int> ();
+            Dictionary <string, TexInfoUnpacked> objTranslate = new Dictionary <string, TexInfoUnpacked> ();
+            
+            var exporter = new OBJExporter ();
+            
+            exporter.AddFrame (OldAnimationEntryController.NSF, OldFrame, ref textureEIDs, ref objTranslate);
+            exporter.Export (path, modelname);
         }
     }
 }

@@ -225,7 +225,7 @@ namespace CrashEdit
                 }
                 foreach (var tri in model.Triangles)
                 {
-                    var polygon_texture_info = ProcessTextureInfoC2(tri.Texture, tri.Animated, model.Textures, model.AnimatedTextures);
+                    var polygon_texture_info = TextureUtils.ProcessTextureInfoC2 (this.render.RealCurrentFrame, tri.Texture, tri.Animated, model.Textures, model.AnimatedTextures);
                     if (!polygon_texture_info.Item1)
                         continue;
                     bool nocull = tri.Subtype == 0 || tri.Subtype == 2;

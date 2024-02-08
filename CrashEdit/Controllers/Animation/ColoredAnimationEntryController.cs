@@ -1,3 +1,4 @@
+using System.IO;
 using Crash;
 using System.Windows.Forms;
 
@@ -13,8 +14,33 @@ namespace CrashEdit
             {
                 AddNode(new ColoredFrameController(this, frame));
             }
+            AddMenu ("Export as OBJ", Menu_Export_OBJ);
+
             InvalidateNode();
             InvalidateNodeImage();
+        }
+
+        private void Menu_Export_OBJ()
+        {
+            if (!FileUtil.SelectSaveFile (out string output, FileFilters.OBJ, FileFilters.Any))
+                return;
+            
+            // modify the path to add a number before the extension
+            string ext = Path.GetExtension (output);
+            string filename = Path.GetFileNameWithoutExtension (output);
+            string path = Path.GetDirectoryName (output);
+
+            int id = 0;
+            int count = Node.Nodes.Count.ToString().Length;
+
+            foreach (TreeNode node in Node.Nodes)
+            {
+                if (node.Tag is not ColoredFrameController frame)
+                    continue;
+
+                frame.ToOBJ (path, filename + id.ToString().PadLeft (count, '0'));
+                id++;
+            }
         }
 
         public override void InvalidateNode()
