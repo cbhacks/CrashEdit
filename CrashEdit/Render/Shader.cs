@@ -68,11 +68,13 @@ namespace CrashEdit
                     GL.CompileShader(id);
 
                     GL.GetShader(id, ShaderParameter.CompileStatus, out int s);
+                    string log = GL.GetShaderInfoLog(id);
                     if (s == 0)
-                    {
-                        Console.WriteLine($"Error compiling shader {vert}:");
-                        Console.WriteLine(GL.GetShaderInfoLog(id));
-                    }
+                        Console.WriteLine($"Error compiling shader {vert}:\n{log}");
+                    else if (string.IsNullOrEmpty(log))
+                        Console.WriteLine($"Shader {vert} compiled successfully.");
+                    else
+                        Console.WriteLine($"Shader {vert} compiled successfully:\n {log}");
 
                     vertshaders.Add(vert, id);
                 }
@@ -83,11 +85,13 @@ namespace CrashEdit
                     GL.CompileShader(id);
 
                     GL.GetShader(id, ShaderParameter.CompileStatus, out int s);
+                    string log = GL.GetShaderInfoLog(id);
                     if (s == 0)
-                    {
-                        Console.WriteLine($"Error compiling shader {frag}:");
-                        Console.WriteLine(GL.GetShaderInfoLog(id));
-                    }
+                        Console.WriteLine($"Error compiling shader {frag}:\n{log}");
+                    else if (string.IsNullOrEmpty(log))
+                        Console.WriteLine($"Shader {frag} compiled successfully.");
+                    else
+                        Console.WriteLine($"Shader {frag} compiled successfully:\n {log}");
 
                     fragshaders.Add(frag, id);
                 }
@@ -133,6 +137,9 @@ namespace CrashEdit
             GL.AttachShader(ID, VertShaderID);
             GL.AttachShader(ID, FragShaderID);
             GL.LinkProgram(ID);
+            string log = GL.GetProgramInfoLog(ID);
+            if (!string.IsNullOrEmpty(log))
+                Console.WriteLine($"When linking {name}:\n {log}");
         }
 
         public void Dispose()
@@ -151,6 +158,10 @@ namespace CrashEdit
 
         public void Render(RenderInfo ri, VAO vao)
         {
+            GL.ValidateProgram(ID);
+            string log = GL.GetProgramInfoLog(ID);
+            if (!string.IsNullOrEmpty(log))
+                Console.WriteLine($"When validating {Name}:\n {log}");
             GL.UseProgram(ID);
             if (Info.PreRenderFunc == null)
                 ShaderInfo.PreRenderDefault(this, ri, vao);

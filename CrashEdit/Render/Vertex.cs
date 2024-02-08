@@ -68,7 +68,7 @@ namespace CrashEdit
             return left;
         }
 
-        public readonly Vector4 ToVec4() => new Vector4(X, Y, Z, 0);
+        public readonly Vector4 ToVec4() => new(X, Y, Z, 0);
     }
 
     public struct VertexTexInfo
