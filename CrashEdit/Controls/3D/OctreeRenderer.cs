@@ -261,6 +261,8 @@ namespace CrashEdit
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(i, ii - 1, 0), cur_nodes);
                     }
                 }
+
+                viewer.OctreeSetNodeShadeMax(0);
             }
             else
             {
@@ -288,9 +290,10 @@ namespace CrashEdit
                     if (i > 0)
                         viewer.AddOctreeZ(cur_trans, new Vector3(size.X, size.Y, 0), i - 1, new Vector3w(xnodes, ynodes, 0));
                 }
+
+                viewer.OctreeSetNodeShadeMax(Settings.Default.NodeShadeMax);
             }
 
-            viewer.OctreeSetNodeShadeMax(Settings.Default.NodeShadeMax);
             viewer.OctreeSetOutline(outline);
 
             viewer.RenderOctree();
@@ -298,7 +301,7 @@ namespace CrashEdit
 
         public void RenderOctreeNode(byte[] data, int offset, int x, int y, int z, Vector3 trans, Vector3 size, int xmax, int ymax, int zmax)
         {
-            void fill_nodes(int value)
+            void fill_nodes(ushort value)
             {
                 for (int i = x; i < x + (1 << xmax); ++i)
                 {
@@ -306,7 +309,12 @@ namespace CrashEdit
                     {
                         for (int iii = z; iii < z + (1 << zmax); ++iii)
                         {
-                            nodes_unpacked[i][ii][iii] = value;
+                            // pack the node resolution into the upper 16 bits (5-5-5 currently) so the node renderer can merge them
+                            // if we're not just sending null nodes that is
+                            if (value != 0)
+                                nodes_unpacked[i][ii][iii] = value | (xmax << 16) | (ymax << 21) | (zmax << 26);
+                            else
+                                nodes_unpacked[i][ii][iii] = 0;
                         }
                     }
                 }
@@ -373,7 +381,7 @@ namespace CrashEdit
                 if (node_filter != 0 && node_filter != value)
                     return;
                 // viewer.AddBox(new Vector3(x, y, z), new Vector3(w, h, d), colors, outline);
-                fill_nodes(value);
+                fill_nodes((ushort)value);
             }
             else if (value != 0)
             {
