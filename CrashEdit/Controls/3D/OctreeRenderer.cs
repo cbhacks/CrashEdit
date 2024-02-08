@@ -11,7 +11,7 @@ namespace CrashEdit
 {
     public class OctreeRenderer : IDisposable
     {
-        public static Rgba[] nodeColors = new Rgba[0x8000];
+        public static Rgba[] node_colors = new Rgba[0x8000];
         private const float COLOR_RANGE = 0.75f;
 
         // settings
@@ -60,7 +60,7 @@ namespace CrashEdit
                 int r = random.Next(range) + min;
                 int g = random.Next(range) + min;
                 int b = random.Next(range) + min;
-                nodeColors[i] = new((byte)r, (byte)g, (byte)b, 255);
+                node_colors[i] = new((byte)r, (byte)g, (byte)b, 255);
             }
             colors_uploaded = false;
         }
@@ -136,7 +136,7 @@ namespace CrashEdit
                 {
                     ListViewItem lsi = new();
                     lsi.Text = string.Format("{2:X2}:{1:X2}:{0:X1}", node >> 1 & 0x7, node >> 4 & 0x3F, node >> 10 & 0x3F);
-                    lsi.BackColor = (Color)(Color4)nodeColors[node >> 1];
+                    lsi.BackColor = (Color)(Color4)node_colors[node >> 1];
                     lsi.ForeColor = lsi.BackColor.GetBrightness() >= 0.5 ? Color.Black : Color.White;
                     lsi.Tag = node;
                     lst.Items.Add(lsi);
@@ -185,7 +185,7 @@ namespace CrashEdit
                 GL.BindTexture(TextureTarget.Texture2D, texColors);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, 256, 128, 0, PixelFormat.Rgba, PixelType.UnsignedByte, nodeColors);
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, 256, 128, 0, PixelFormat.Rgba, PixelType.UnsignedByte, node_colors);
                 colors_uploaded = true;
             }
 
