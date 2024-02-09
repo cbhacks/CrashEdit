@@ -32,7 +32,7 @@ namespace CrashEdit
             else
             {
                 GL.EnableVertexAttribArray(temp);
-                GL.VertexAttribPointer(temp, size, type, normalized, Marshal.SizeOf<Vertex>(), Marshal.OffsetOf<Vertex>(field_name));
+                GL.VertexAttribPointer(temp, size, type, normalized, Vertex.SIZEOF, Marshal.OffsetOf<Vertex>(field_name));
             }
         }
 
@@ -46,7 +46,7 @@ namespace CrashEdit
             else
             {
                 GL.EnableVertexAttribArray(temp);
-                GL.VertexAttribIPointer(temp, size, type, Marshal.SizeOf<Vertex>(), Marshal.OffsetOf<Vertex>(field_name));
+                GL.VertexAttribIPointer(temp, size, type, Vertex.SIZEOF, Marshal.OffsetOf<Vertex>(field_name));
             }
         }
 
@@ -63,7 +63,7 @@ namespace CrashEdit
             // set up the array
             GL.BindVertexArray(ID);
             GL.BindBuffer(BufferTarget.ArrayBuffer, Buffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, vert_count * Marshal.SizeOf<Vertex>(), IntPtr.Zero, BufferUsageHint.DynamicDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, 0, IntPtr.Zero, BufferUsageHint.DynamicDraw);
             EnableAttrib("position", 3, VertexAttribPointerType.Float, false, "trans");
             EnableAttrib("uv", 2, VertexAttribPointerType.Float, false, "st");
             EnableAttrib("normal", 4, VertexAttribPointerType.Int2101010Rev, true, "normal");
@@ -77,7 +77,7 @@ namespace CrashEdit
         {
             if (vert_count >= Verts.Length)
             {
-                Console.WriteLine($"Realloc buffer {Verts.Length} -> {Verts.Length * 2}");
+                Console.WriteLine($"Realloc {Shader.Name} buffer {Verts.Length} -> {Verts.Length * 2}");
                 Array.Resize(ref verts, Verts.Length * 2);
                 TestRealloc(vert_count);
             }
@@ -179,7 +179,7 @@ namespace CrashEdit
             // Bind the VAO
             GL.BindVertexArray(ID);
             GL.BindBuffer(BufferTarget.ArrayBuffer, Buffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, vert_count * Marshal.SizeOf<Vertex>(), Verts, BufferUsageHint.StreamDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, vert_count * Vertex.SIZEOF, Verts, BufferUsageHint.DynamicDraw);
 
             Shader.Render(ri, this);
             GL.DrawArrays(Primitive, 0, vert_count);

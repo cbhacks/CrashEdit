@@ -137,9 +137,11 @@ namespace CrashEdit
         }
     }
 
-    [StructLayout(LayoutKind.Explicit, Size = 64)]
+
+    [StructLayout(LayoutKind.Explicit, Size = SIZEOF)]
     public struct Vertex
     {
+        public const int SIZEOF = 64;
         [FieldOffset(00)] public Vector3 trans;
         [FieldOffset(12)] public Rgba rgba;
         [FieldOffset(16)] public Vector2 st;
