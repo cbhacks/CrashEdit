@@ -68,6 +68,7 @@ namespace CrashEdit
 
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
+            GL.Disable(EnableCap.Dither);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
             // init all shaders

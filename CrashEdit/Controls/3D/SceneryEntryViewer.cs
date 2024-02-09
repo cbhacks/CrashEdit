@@ -147,6 +147,8 @@ namespace CrashEdit
 
                     blend_mask |= VertexTexInfo.GetBlendMode(info.BlendMode);
                 }
+                vaoWorld.Verts[vaoWorld.vert_count + 0].tex = tex;
+                vaoWorld.Verts[vaoWorld.vert_count + 1].tex = tex;
                 vaoWorld.Verts[vaoWorld.vert_count + 2].tex = tex;
 
                 RenderVertex(world, tri.VertexA);
@@ -171,7 +173,12 @@ namespace CrashEdit
 
                     blend_mask |= VertexTexInfo.GetBlendMode(info.BlendMode);
                 }
+                vaoWorld.Verts[vaoWorld.vert_count + 0].tex = tex;
+                vaoWorld.Verts[vaoWorld.vert_count + 1].tex = tex;
                 vaoWorld.Verts[vaoWorld.vert_count + 2].tex = tex;
+                vaoWorld.Verts[vaoWorld.vert_count + 3].tex = tex;
+                vaoWorld.Verts[vaoWorld.vert_count + 4].tex = tex;
+                vaoWorld.Verts[vaoWorld.vert_count + 5].tex = tex;
 
                 RenderVertex(world, quad.VertexA);
                 RenderVertex(world, quad.VertexB);

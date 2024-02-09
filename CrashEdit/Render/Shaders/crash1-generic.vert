@@ -24,15 +24,15 @@ out int p_TexPage;
 
 void main(void)
 {
-    gl_Position = PVM * vec4( (position+trans)*scale, 1.0 );
     p_Color = vec4(color.rgb, 1.0);
     p_UV = uv;
     p_Tex = tex.x;
     p_TexPage = tex.y;
     
-    if (p_TexPage >= 0 && enableTex != 0) {
-        int bmode = (p_Tex >> 2) & 0x3;
+    if (p_TexPage >= 0 && enableTex != 0 && ((p_Tex >> 2) & 0x3) != blendmask && blendmask != 3) {
         // discard wrong blend modes, but always let textures pass on solid render
-        if (bmode != blendmask && blendmask != 3) gl_Position = vec4(0);
+        gl_Position = vec4(0);
+    } else {
+        gl_Position = PVM * vec4( (position+trans)*scale, 1.0 );
     }
 }

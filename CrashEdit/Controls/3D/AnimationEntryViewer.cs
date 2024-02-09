@@ -251,6 +251,8 @@ namespace CrashEdit
 
                         blend_mask |= VertexTexInfo.GetBlendMode(info.BlendMode);
                     }
+                    vao.Verts[vao.vert_count + 0].tex = tex;
+                    vao.Verts[vao.vert_count + 1].tex = tex;
                     vao.Verts[vao.vert_count + 2].tex = tex;
 
                     for (int i = 0; i < 3; ++i)

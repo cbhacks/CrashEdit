@@ -247,10 +247,12 @@ namespace CrashEdit
                         vao.Verts[cur_idx + 0].st = new(tex.U3, tex.V3);
                         vao.Verts[cur_idx + 1].st = new(tex.U2, tex.V2);
                         vao.Verts[cur_idx + 2].st = new(tex.U1, tex.V1);
-                        vao.Verts[cur_idx + 2].tex = new VertexTexInfo(true, color: tex.ColorMode, blend: tex.BlendMode,
+                        vao.Verts[cur_idx + 0].tex = new VertexTexInfo(true, color: tex.ColorMode, blend: tex.BlendMode,
                                                                              clutx: tex.ClutX, cluty: tex.ClutY,
                                                                              face: Convert.ToInt32(tex.N),
                                                                              page: tex_eids[tex.EID]);
+                        vao.Verts[cur_idx + 1].tex = vao.Verts[cur_idx + 0].tex;
+                        vao.Verts[cur_idx + 2].tex = vao.Verts[cur_idx + 0].tex;
                         RenderVertex(vao, frame, polygon.VertexC / 6);
                         RenderVertex(vao, frame, polygon.VertexB / 6);
                         RenderVertex(vao, frame, polygon.VertexA / 6);
@@ -263,7 +265,9 @@ namespace CrashEdit
                         vao.Verts[cur_idx].rgba = new(col.R, col.G, col.B, 255);
                         vao.Verts[cur_idx + 1].rgba = vao.Verts[cur_idx].rgba;
                         vao.Verts[cur_idx + 2].rgba = vao.Verts[cur_idx].rgba;
-                        vao.Verts[cur_idx + 2].tex = new VertexTexInfo(false, face: Convert.ToInt32(col.N));
+                        vao.Verts[cur_idx + 0].tex = new VertexTexInfo(false, face: Convert.ToInt32(col.N));
+                        vao.Verts[cur_idx + 1].tex = vao.Verts[cur_idx + 0].tex;
+                        vao.Verts[cur_idx + 2].tex = vao.Verts[cur_idx + 0].tex;
                         RenderVertex(vao, frame, polygon.VertexC / 6);
                         RenderVertex(vao, frame, polygon.VertexB / 6);
                         RenderVertex(vao, frame, polygon.VertexA / 6);

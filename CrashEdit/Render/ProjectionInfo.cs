@@ -21,11 +21,11 @@ namespace CrashEdit
         public float Width;
         public float Height;
 
-        public float Aspect => Width / Height;
+        public readonly float Aspect => Width / Height;
 
-        public Matrix4 PVM => View * Perspective;
-        public Vector3 RealTrans => Trans - Backward * Distance;
-        public Vector3 Backward => -Forward;
+        public readonly Matrix4 PVM => View * Perspective;
+        public readonly Vector3 RealTrans => Trans - Backward * Distance;
+        public readonly Vector3 Backward => -Forward;
 
         public const float Aspect4x3 = 4f / 3f;
         public const float Aspect16x9 = 16f / 9f;
