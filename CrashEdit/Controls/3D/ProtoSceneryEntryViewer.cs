@@ -53,17 +53,17 @@ namespace CrashEdit
             }
         }
 
-        private Dictionary<int, int> CollectTPAGs()
+        private Dictionary<int, short> CollectTPAGs()
         {
             // collect tpag eids
-            Dictionary<int, int> tex_eids = new();
+            Dictionary<int, short> tex_eids = new();
             foreach (var world in GetWorlds())
             {
                 for (int i = 0, m = world.TPAGCount; i < m; ++i)
                 {
                     int tpag_eid = world.GetTPAG(i);
                     if (!tex_eids.ContainsKey(tpag_eid))
-                        tex_eids[tpag_eid] = tex_eids.Count;
+                        tex_eids[tpag_eid] = (short)tex_eids.Count;
                 }
             }
             return tex_eids;
@@ -101,7 +101,7 @@ namespace CrashEdit
             RenderWorldPass(BlendMode.Additive);
         }
 
-        protected void RenderWorld(ProtoSceneryEntry world, Dictionary<int, int> tex_eids)
+        protected void RenderWorld(ProtoSceneryEntry world, Dictionary<int, short> tex_eids)
         {
             world_offset = new Vector3(world.XOffset, world.YOffset, world.ZOffset);
             foreach (ProtoSceneryPolygon polygon in world.Polygons)
@@ -116,9 +116,7 @@ namespace CrashEdit
                     vaoWorld.Verts[vaoWorld.vert_count + 1].st = new(tex.U2, tex.V2);
                     vaoWorld.Verts[vaoWorld.vert_count + 2].st = new(tex.U1, tex.V1);
 
-                    vaoWorld.Verts[vaoWorld.vert_count + 0].tex = new VertexTexInfo(true, color: tex.ColorMode, blend: tex.BlendMode,
-                                                                                          clutx: tex.ClutX, cluty: tex.ClutY,
-                                                                                          page: tex_eids[world.GetTPAG(polygon.Page)]);
+                    vaoWorld.Verts[vaoWorld.vert_count + 0].tex = new VertexTexInfo(tex_eids[world.GetTPAG(polygon.Page)], color: tex.ColorMode, blend: tex.BlendMode, clutx: tex.ClutX, cluty: tex.ClutY);
                     vaoWorld.Verts[vaoWorld.vert_count + 1].tex = vaoWorld.Verts[vaoWorld.vert_count + 0].tex;
                     vaoWorld.Verts[vaoWorld.vert_count + 2].tex = vaoWorld.Verts[vaoWorld.vert_count + 0].tex;
                     RenderVertex(world, polygon.VertexA);
@@ -133,9 +131,9 @@ namespace CrashEdit
                     vaoWorld.Verts[vaoWorld.vert_count].rgba = new(col.R, col.G, col.B, 255);
                     vaoWorld.Verts[vaoWorld.vert_count + 1].rgba = vaoWorld.Verts[vaoWorld.vert_count].rgba;
                     vaoWorld.Verts[vaoWorld.vert_count + 2].rgba = vaoWorld.Verts[vaoWorld.vert_count].rgba;
-                    vaoWorld.Verts[vaoWorld.vert_count + 0].tex = new VertexTexInfo(false);
-                    vaoWorld.Verts[vaoWorld.vert_count + 1].tex = new VertexTexInfo(false);
-                    vaoWorld.Verts[vaoWorld.vert_count + 2].tex = new VertexTexInfo(false);
+                    vaoWorld.Verts[vaoWorld.vert_count + 0].tex = new VertexTexInfo();
+                    vaoWorld.Verts[vaoWorld.vert_count + 1].tex = new VertexTexInfo();
+                    vaoWorld.Verts[vaoWorld.vert_count + 2].tex = new VertexTexInfo();
                     RenderVertex(world, polygon.VertexA);
                     RenderVertex(world, polygon.VertexB);
                     RenderVertex(world, polygon.VertexC);

@@ -2,7 +2,7 @@ using System;
 
 namespace Crash
 {
-    public struct SceneryTriangle
+    public class SceneryTriangle
     {
         public static SceneryTriangle Load(byte[] adata, byte[] bdata)
         {

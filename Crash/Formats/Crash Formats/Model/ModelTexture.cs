@@ -2,7 +2,7 @@ using System;
 
 namespace Crash
 {
-    public struct ModelTexture
+    public class ModelTexture
     {
         public static ModelTexture Load(byte[] data)
         {

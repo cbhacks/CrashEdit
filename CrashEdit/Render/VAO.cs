@@ -90,21 +90,47 @@ namespace CrashEdit
             vert_count++;
         }
 
-        public void PushAttrib(Vector3? trans = null, int? normal = null, Vector2? st = null, Rgba? rgba = null, VertexTexInfo? tex = null, Vector4? misc = null)
+        public void PushAttrib(Vector3 trans = default)
         {
             TestRealloc();
-            if (trans != null)
-                Verts[vert_count].trans = trans.Value;
-            if (normal != null)
-                Verts[vert_count].normal = normal.Value;
-            if (st != null)
-                Verts[vert_count].st = st.Value;
-            if (rgba != null)
-                Verts[vert_count].rgba = rgba.Value;
-            if (tex != null)
-                Verts[vert_count].tex = (int)tex.Value;
-            if (misc != null)
-                Verts[vert_count].misc = misc.Value;
+            Verts[vert_count].trans = trans;
+            vert_count++;
+        }
+
+        public void PushAttrib(Vector3 trans = default, Rgba rgba = default)
+        {
+            TestRealloc();
+            Verts[vert_count].trans = trans;
+            Verts[vert_count].rgba = rgba;
+            vert_count++;
+        }
+
+        public void PushAttrib(Vector3 trans = default, Vector2 st = default)
+        {
+            TestRealloc();
+            Verts[vert_count].trans = trans;
+            Verts[vert_count].st = st;
+            vert_count++;
+        }
+
+        public void PushAttrib(Vector3 trans = default, Vector2 st = default, Rgba rgba = default)
+        {
+            TestRealloc();
+            Verts[vert_count].trans = trans;
+            Verts[vert_count].st = st;
+            Verts[vert_count].rgba = rgba;
+            vert_count++;
+        }
+
+        public void PushAttrib(Vector3 trans = default, int normal = default, Vector2 st = default, Rgba rgba = default, VertexTexInfo tex = default, Vector4 misc = default)
+        {
+            TestRealloc();
+            Verts[vert_count].trans = trans;
+            Verts[vert_count].normal = normal;
+            Verts[vert_count].st = st;
+            Verts[vert_count].rgba = rgba;
+            Verts[vert_count].tex = (int)tex;
+            Verts[vert_count].misc = misc;
             vert_count++;
         }
 

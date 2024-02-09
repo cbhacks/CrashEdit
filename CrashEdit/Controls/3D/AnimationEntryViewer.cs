@@ -184,15 +184,15 @@ namespace CrashEdit
             if (KPress(KeyboardControls.ChangeCullMode)) cull_mode = ++cull_mode % 3;
         }
 
-        private Dictionary<int, int> CollectTPAGs(ModelEntry model)
+        private Dictionary<int, short> CollectTPAGs(ModelEntry model)
         {
             // collect tpag eids
-            Dictionary<int, int> tex_eids = new();
+            Dictionary<int, short> tex_eids = new();
             for (int i = 0, m = model.TPAGCount; i < m; ++i)
             {
                 int tpag_eid = model.GetTPAG(i);
                 if (!tex_eids.ContainsKey(tpag_eid))
-                    tex_eids[tpag_eid] = tex_eids.Count;
+                    tex_eids[tpag_eid] = (short)tex_eids.Count;
             }
             return tex_eids;
         }
@@ -225,16 +225,15 @@ namespace CrashEdit
                 }
                 foreach (var tri in model.Triangles)
                 {
-                    var polygon_texture_info = ProcessTextureInfoC2(tri.Texture, tri.Animated, model.Textures, model.AnimatedTextures);
-                    if (!polygon_texture_info.Item1)
+                    if (!ProcessTextureInfoC2(tri.Texture, tri.Animated, model.Textures, model.AnimatedTextures, out var polygon_texture_info))
                         continue;
                     bool nocull = tri.Subtype == 0 || tri.Subtype == 2;
                     bool flip = (tri.Type == 2 ^ tri.Subtype == 3) && !nocull;
-                    VertexTexInfo tex = new(false, face: nocull ? 1 : 0); // completely untextured
-                    if (polygon_texture_info.Item2.HasValue)
+                    VertexTexInfo tex = new(-1, face: nocull ? 1 : 0); // completely untextured
+                    if (polygon_texture_info != null)
                     {
-                        var info = polygon_texture_info.Item2.Value;
-                        tex = new(true, color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY, face: nocull ? 1 : 0, page: tex_eids[model.GetTPAG(info.Page)]);
+                        var info = polygon_texture_info;
+                        tex = new(tex_eids[model.GetTPAG(info.Page)], color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY, face: nocull ? 1 : 0);
                         vao.Verts[vao.vert_count + 1].st = new(info.X2, info.Y2);
                         if ((tri.Type != 2 && !flip) || (tri.Type == 2 && tri.Subtype == 1))
                         {

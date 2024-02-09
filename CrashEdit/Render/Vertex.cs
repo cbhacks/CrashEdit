@@ -1,5 +1,6 @@
 ﻿using OpenTK;
 using OpenTK.Graphics;
+using System.Drawing.Printing;
 using System.Runtime.InteropServices;
 
 namespace CrashEdit
@@ -71,43 +72,52 @@ namespace CrashEdit
         public readonly Vector4 ToVec4() => new(X, Y, Z, 0);
     }
 
+    [StructLayout(LayoutKind.Sequential, Size = 4)]
     public struct VertexTexInfo
     {
-        public bool enable;
-        public int color;
-        public int blend;
-        public int clutx;
-        public int cluty;
-        public int face;
-        public int page;
+        private int info;
 
-        public VertexTexInfo(bool enable, int color = 0, int blend = 0, int clutx = 0, int cluty = 0, int face = 0, int page = 0)
+        public VertexTexInfo()
         {
-            this.enable = enable;
-            this.color = color;
-            this.blend = blend;
-            this.clutx = clutx;
-            this.cluty = cluty;
-            this.face = face;
-            this.page = page;
+            info = 0;
+            Page = -1;
         }
+
+        public VertexTexInfo(short page, int color = 0, int blend = 0, int clutx = 0, int cluty = 0, int face = 0)
+        {
+            info = 0;
+            Page = page;
+            Color = color;
+            Blend = blend;
+            ClutX = clutx;
+            ClutY = cluty;
+            Face = face;
+        }
+
+        public VertexTexInfo(int info)
+        {
+            this.info = info;
+        }
+
+        public int Color { readonly get => (info >> 0) & 0x3; set => info = (info & ~(0x3 << 0)) | (value << 0); }
+        public int Blend { readonly get => (info >> 2) & 0x3; set => info = (info & ~(0x3 << 2)) | (value << 2); }
+        public int ClutX { readonly get => (info >> 4) & 0xF; set => info = (info & ~(0xF << 4)) | (value << 4); }
+        public int ClutY { readonly get => (info >> 8) & 0x7F; set => info = (info & ~(0x7F << 8)) | (value << 8); }
+        public int Face { readonly get => (info >> 15) & 0x1; set => info = (info & ~(0x1 << 15)) | (value << 15); }
+        public short Page { readonly get => (short)(info >> 16); set => info = (info & 0xFFFF) | (value << 16); }
+        public readonly bool Enable => Page >= 0;
 
         public static implicit operator VertexTexInfo(int v)
         {
-            return new VertexTexInfo((v & 1) != 0, (v >> 1) & 0x3, (v >> 3) & 0x3, (v >> 5) & 0xf, (v >> 9) & 0x7f, (v >> 16) & 0x1, v >> 17);
+            return new VertexTexInfo(v);
         }
-
-        public static int Pack(bool enable, int color = 0, int blend = 0, int clutx = 0, int cluty = 0, int face = 0, int page = 0)
-        {
-            return (color << 0) | (blend << 2) | (clutx << 4) | (cluty << 8) | (face << 15) | ((enable ? page : -1) << 16);
-        }
-
-        public readonly int Pack() => this;
 
         public static implicit operator int(VertexTexInfo p)
         {
-            return Pack(p.enable, p.color, p.blend, p.clutx, p.cluty, p.face, p.page);
+            return p.info;
         }
+
+        public readonly int Pack() => info;
 
         public static GLViewer.BlendMode GetBlendMode(int blend)
         {
@@ -123,7 +133,7 @@ namespace CrashEdit
 
         public readonly GLViewer.BlendMode GetBlendMode()
         {
-            return GetBlendMode(blend);
+            return GetBlendMode(Blend);
         }
     }
 

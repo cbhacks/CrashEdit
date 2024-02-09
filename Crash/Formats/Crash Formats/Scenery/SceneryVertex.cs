@@ -2,7 +2,7 @@ using System;
 
 namespace Crash
 {
-    public readonly struct SceneryVertex
+    public class SceneryVertex
     {
         public static SceneryVertex Load(byte[] xydata, byte[] zdata, bool is_c3 = false)
         {

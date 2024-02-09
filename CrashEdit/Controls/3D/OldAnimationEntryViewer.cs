@@ -205,15 +205,15 @@ namespace CrashEdit
             if (KPress(KeyboardControls.ToggleNormals)) enable_normals = !enable_normals;
         }
 
-        private Dictionary<int, int> CollectTPAGs(OldModelEntry model)
+        private Dictionary<int, short> CollectTPAGs(OldModelEntry model)
         {
             // collect tpag eids
-            Dictionary<int, int> tex_eids = new();
+            Dictionary<int, short> tex_eids = new();
             foreach (OldModelStruct str in model.Structs)
             {
                 if (str is OldModelTexture tex && !tex_eids.ContainsKey(tex.EID))
                 {
-                    tex_eids[tex.EID] = tex_eids.Count;
+                    tex_eids[tex.EID] = (short)tex_eids.Count;
                 }
             }
             return tex_eids;
@@ -247,10 +247,9 @@ namespace CrashEdit
                         vao.Verts[cur_idx + 0].st = new(tex.U3, tex.V3);
                         vao.Verts[cur_idx + 1].st = new(tex.U2, tex.V2);
                         vao.Verts[cur_idx + 2].st = new(tex.U1, tex.V1);
-                        vao.Verts[cur_idx + 0].tex = new VertexTexInfo(true, color: tex.ColorMode, blend: tex.BlendMode,
-                                                                             clutx: tex.ClutX, cluty: tex.ClutY,
-                                                                             face: Convert.ToInt32(tex.N),
-                                                                             page: tex_eids[tex.EID]);
+                        vao.Verts[cur_idx + 0].tex = new VertexTexInfo(tex_eids[tex.EID], color: tex.ColorMode, blend: tex.BlendMode,
+                                                                                          clutx: tex.ClutX, cluty: tex.ClutY,
+                                                                                          face: Convert.ToInt32(tex.N));
                         vao.Verts[cur_idx + 1].tex = vao.Verts[cur_idx + 0].tex;
                         vao.Verts[cur_idx + 2].tex = vao.Verts[cur_idx + 0].tex;
                         RenderVertex(vao, frame, polygon.VertexC / 6);
@@ -265,7 +264,7 @@ namespace CrashEdit
                         vao.Verts[cur_idx].rgba = new(col.R, col.G, col.B, 255);
                         vao.Verts[cur_idx + 1].rgba = vao.Verts[cur_idx].rgba;
                         vao.Verts[cur_idx + 2].rgba = vao.Verts[cur_idx].rgba;
-                        vao.Verts[cur_idx + 0].tex = new VertexTexInfo(false, face: Convert.ToInt32(col.N));
+                        vao.Verts[cur_idx + 0].tex = new VertexTexInfo(-1, face: Convert.ToInt32(col.N));
                         vao.Verts[cur_idx + 1].tex = vao.Verts[cur_idx + 0].tex;
                         vao.Verts[cur_idx + 2].tex = vao.Verts[cur_idx + 0].tex;
                         RenderVertex(vao, frame, polygon.VertexC / 6);
@@ -295,8 +294,8 @@ namespace CrashEdit
             {
                 Rgba old_rgba = vao.Verts[cur_vert_idx].rgba;
                 vao.Verts[cur_vert_idx].rgba = new Rgba((byte)(old_rgba.r * 2 * vert.Red),
-                                                                  (byte)(old_rgba.g * 2 * vert.Green),
-                                                                  (byte)(old_rgba.b * 2 * vert.Blue), 255);
+                                                        (byte)(old_rgba.g * 2 * vert.Green),
+                                                        (byte)(old_rgba.b * 2 * vert.Blue), 255);
             }
             else
             {

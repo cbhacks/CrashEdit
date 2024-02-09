@@ -951,7 +951,7 @@ namespace CrashEdit
             }
         }
 
-        protected void SetupTPAGs(Dictionary<int, int> tex_eids)
+        protected void SetupTPAGs(Dictionary<int, short> tex_eids)
         {
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, texTpages);
@@ -973,17 +973,17 @@ namespace CrashEdit
             }
         }
 
-        protected Tuple<bool, ModelTexture?> ProcessTextureInfoC2(int in_tex_id, bool animated, IList<ModelTexture> textures, IList<ModelExtendedTexture> animated_textures)
+        protected bool ProcessTextureInfoC2(int in_tex_id, bool animated, IList<ModelTexture> textures, IList<ModelExtendedTexture> animated_textures, out ModelTexture tex)
         {
             if (in_tex_id != 0 || animated)
             {
-                ModelTexture? info_temp = null;
                 int tex_id = in_tex_id - 1;
                 if (animated)
                 {
                     if (++tex_id >= animated_textures.Count)
                     {
-                        return new(false, null);
+                        tex = default;
+                        return false;
                     }
                     var anim = animated_textures[tex_id];
                     // check if it's an untextured polygon
@@ -1005,22 +1005,29 @@ namespace CrashEdit
                         }
                         if (tex_id >= textures.Count)
                         {
-                            return new(false, null);
+                            tex = default;
+                            return false;
                         }
-                        info_temp = textures[tex_id];
+                        tex = textures[tex_id];
+                    }
+                    else
+                    {
+                        tex = default;
                     }
                 }
                 else
                 {
                     if (tex_id >= textures.Count)
                     {
-                        return new(false, null);
+                        tex = default;
+                        return false;
                     }
-                    info_temp = textures[tex_id];
+                    tex = textures[tex_id];
                 }
-                return new(true, info_temp);
+                return true;
             }
-            return new(true, null);
+            tex = default;
+            return true;
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

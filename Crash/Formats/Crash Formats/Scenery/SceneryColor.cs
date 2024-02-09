@@ -1,6 +1,6 @@
 namespace Crash
 {
-    public struct SceneryColor
+    public readonly struct SceneryColor
     {
         public SceneryColor(byte red, byte green, byte blue) : this(red, green, blue, 0)
         {

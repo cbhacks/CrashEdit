@@ -385,6 +385,7 @@
     <Compile Include="Render\ShaderFuncs.cs" />
     <Compile Include="Render\Vertex.cs" />
     <Compile Include="Render\VAO.cs" />
+    <Compile Include="Utils\ArrayRef.cs" />
     <Compile Include="Utils\GameScales.cs" />
     <Compile Include="Utils\MathExt.cs" />
     <Compile Include="Utils\ResourceLoad.cs" />

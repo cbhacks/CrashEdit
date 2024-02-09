@@ -1,5 +1,6 @@
 using Crash;
 using OpenTK;
+using System;
 using System.Collections.Generic;
 
 namespace CrashEdit
@@ -66,17 +67,17 @@ namespace CrashEdit
             }
         }
 
-        private Dictionary<int, int> CollectTPAGs()
+        private Dictionary<int, short> CollectTPAGs()
         {
             // collect tpag eids
-            Dictionary<int, int> tex_eids = new();
+            Dictionary<int, short> tex_eids = new();
             foreach (var world in GetWorlds())
             {
                 for (int i = 0, m = world.TPAGCount; i < m; ++i)
                 {
                     int tpag_eid = world.GetTPAG(i);
                     if (!tex_eids.ContainsKey(tpag_eid))
-                        tex_eids[tpag_eid] = tex_eids.Count;
+                        tex_eids[tpag_eid] = (short)tex_eids.Count;
                 }
             }
             return tex_eids;
@@ -120,7 +121,7 @@ namespace CrashEdit
             }
         }
 
-        protected void RenderWorld(SceneryEntry world, Dictionary<int, int> tex_eids)
+        protected void RenderWorld(SceneryEntry world, Dictionary<int, short> tex_eids)
         {
             if (world.IsSky)
             {
@@ -133,14 +134,13 @@ namespace CrashEdit
             foreach (SceneryTriangle tri in world.Triangles)
             {
                 if (tri.VertexA >= world.Vertices.Count || tri.VertexB >= world.Vertices.Count || tri.VertexC >= world.Vertices.Count) continue;
-                var polygon_texture_info = ProcessTextureInfoC2(tri.Texture, tri.Animated, world.Textures, world.AnimatedTextures);
-                if (!polygon_texture_info.Item1)
+                if (!ProcessTextureInfoC2(tri.Texture, tri.Animated, world.Textures, world.AnimatedTextures, out var polygon_texture_info))
                     continue;
-                VertexTexInfo tex = new(false); // completely untextured
-                if (polygon_texture_info.Item2.HasValue)
+                VertexTexInfo tex = new(); // completely untextured
+                if (polygon_texture_info != null)
                 {
-                    var info = polygon_texture_info.Item2.Value;
-                    tex = new(true, color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY, page: tex_eids[world.GetTPAG(info.Page)]);
+                    var info = polygon_texture_info;
+                    tex = new(tex_eids[world.GetTPAG(info.Page)], color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY);
                     vaoWorld.Verts[vaoWorld.vert_count + 0].st = new(info.X2, info.Y2);
                     vaoWorld.Verts[vaoWorld.vert_count + 1].st = new(info.X1, info.Y1);
                     vaoWorld.Verts[vaoWorld.vert_count + 2].st = new(info.X3, info.Y3);
@@ -158,14 +158,13 @@ namespace CrashEdit
             foreach (SceneryQuad quad in world.Quads)
             {
                 if (quad.VertexA >= world.Vertices.Count || quad.VertexB >= world.Vertices.Count || quad.VertexC >= world.Vertices.Count || quad.VertexD >= world.Vertices.Count) continue;
-                var polygon_texture_info = ProcessTextureInfoC2(quad.Texture, quad.Animated, world.Textures, world.AnimatedTextures);
-                if (!polygon_texture_info.Item1)
+                if (!ProcessTextureInfoC2(quad.Texture, quad.Animated, world.Textures, world.AnimatedTextures, out var polygon_texture_info))
                     continue;
-                VertexTexInfo tex = new(false); // completely untextured
-                if (polygon_texture_info.Item2.HasValue)
+                VertexTexInfo tex = new(); // completely untextured
+                if (polygon_texture_info != null)
                 {
-                    var info = polygon_texture_info.Item2.Value;
-                    tex = new(true, color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY, page: tex_eids[world.GetTPAG(info.Page)]);
+                    var info = polygon_texture_info;
+                    tex = new(tex_eids[world.GetTPAG(info.Page)], color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY);
                     vaoWorld.Verts[vaoWorld.vert_count + 0].st = new(info.X2, info.Y2);
                     vaoWorld.Verts[vaoWorld.vert_count + 1].st = new(info.X1, info.Y1);
                     vaoWorld.Verts[vaoWorld.vert_count + 2].st = new(info.X3, info.Y3);
