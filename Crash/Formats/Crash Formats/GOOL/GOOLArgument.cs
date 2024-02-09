@@ -6,10 +6,11 @@
         Ref,
         ProcessField,
         DestRef,
-        None = Value
+        None,
+        Signed
     }
 
-    public struct GOOLArgument
+    public readonly struct GOOLArgument
     {
         public GOOLArgument(int value, GOOLArgumentTypes type = GOOLArgumentTypes.Value)
         {

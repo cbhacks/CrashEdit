@@ -51,11 +51,7 @@ namespace Crash
                     }
                 }
             }
-            return new GOOLEntry(goolver, items[0], items[1], ins,
-                statemap,
-                statedesc,
-                anims,
-                eid);
+            return new GOOLEntry(goolver, items[0], items[1], ins, statemap, statedesc, anims, eid);
         }
     }
 

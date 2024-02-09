@@ -194,12 +194,12 @@ namespace Crash
             switch (ins.GOOL.Version)
             {
                 case GOOLVersion.Version0:
-                    return ins is Cfl_95 r0 && r0.Args['T'].Value == 2;
+                    return ins.Type == typeof(Cfl_95) && ins.Args['T'].Value == 2;
                 case GOOLVersion.Version1:
-                    return ins is Cfl r1 && r1.Args['T'].Value == 2;
+                    return ins.Type == typeof(Cfl) && ins.Args['T'].Value == 2;
                 case GOOLVersion.Version2:
                 case GOOLVersion.Version3:
-                    return ins is Ret;
+                    return ins.Type == typeof(Ret);
                 default:
                     return false;
             }
@@ -211,7 +211,7 @@ namespace Crash
             {
                 case GOOLVersion.Version2:
                 case GOOLVersion.Version3:
-                    return ins is Mips;
+                    return ins.Type == typeof(Mips);
                 default:
                     return false;
             }

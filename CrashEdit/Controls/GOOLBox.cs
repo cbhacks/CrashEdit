@@ -118,11 +118,11 @@ namespace CrashEdit
                 else
                 {
                     returned = GOOLInterpreter.IsReturnInstruction(ins);
-                    if (!(ins is GOOLInvalidInstruction))
+                    if (ins is not GOOLUnknownInstruction)
                         ++goolcount;
                 }
-                string comment = ins.Comment;
-                lstCode.Items.Add(string.Format("{0,-05}\t{1,-4}\t{2,-30}\t{3}", i, ins.Name, ins.Arguments, !string.IsNullOrWhiteSpace(comment) ? $"# {comment}" : ""));
+                string comment = ins.GetComment();
+                lstCode.Items.Add(string.Format("{0,-05}\t{1,-4}\t{2,-30}\t{3}", i, ins.GetName(), ins.Arguments, !string.IsNullOrWhiteSpace(comment) ? $"# {comment}" : ""));
             }
 
             if (goolcount != goolentry.Instructions.Count)
