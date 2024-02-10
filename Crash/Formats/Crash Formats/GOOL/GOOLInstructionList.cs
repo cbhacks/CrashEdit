@@ -193,7 +193,7 @@ namespace Crash.GOOLIns
     [GOOLInstruction(14, GameVersion.Crash1BetaMAY11)]
     [GOOLInstruction(14, GameVersion.Crash2)]
     [GOOLInstruction(14, GameVersion.Crash3)]
-    public sealed class Lxor
+    public sealed class Xorl
     {
         public static string GetName(GOOLInstruction ins) => "XORL";
         public static string GetFormat() => GOOLInstruction.DefaultFormatLR;
@@ -206,7 +206,7 @@ namespace Crash.GOOLIns
     [GOOLInstruction(15, GameVersion.Crash1BetaMAY11)]
     [GOOLInstruction(15, GameVersion.Crash2)]
     [GOOLInstruction(15, GameVersion.Crash3)]
-    public sealed class Ltst
+    public sealed class Tsta
     {
         public static string GetName(GOOLInstruction ins) => "TSTA";
         public static string GetFormat() => GOOLInstruction.DefaultFormatLR;
@@ -1178,9 +1178,9 @@ namespace Crash.GOOLIns
     [GOOLInstruction(143, GameVersion.Crash1BetaMAY11)]
     [GOOLInstruction(68, GameVersion.Crash2)]
     [GOOLInstruction(68, GameVersion.Crash3)]
-    public sealed class Sevb
+    public sealed class Bevt
     {
-        public static string GetName(GOOLInstruction ins) => "SEVB";
+        public static string GetName(GOOLInstruction ins) => "BEVT";
         public static string GetFormat() => "[EEEEEEEEEEEE] (RRRRRR) AAA LLL";
         public static string GetComment(GOOLInstruction ins) => $"{(ins.Args['R'].Value > 0 ? $"if {ins.GetArg('R')}, " : "")}send event {ins.GetArg('E')} type {ins.GetArg('L')} to every object" + (ins.Args['A'].Value > 0 ? $" with {ins.GetArg('A')} argument(s)" : "");
     }
@@ -1191,9 +1191,9 @@ namespace Crash.GOOLIns
     [GOOLInstruction(144, GameVersion.Crash1BetaMAY11)]
     [GOOLInstruction(69, GameVersion.Crash2)]
     [GOOLInstruction(69, GameVersion.Crash3)]
-    public sealed class Sevc
+    public sealed class Cevt
     {
-        public static string GetName(GOOLInstruction ins) => "SEVC";
+        public static string GetName(GOOLInstruction ins) => "CEVT";
         public static string GetFormat() => "[EEEEEEEEEEEE] (RRRRRR) AAA (LLL)";
         public static string GetComment(GOOLInstruction ins) => $"{(ins.Args['R'].Value > 0 ? $"if {ins.GetArg('R')}, " : "")}cascade event {ins.GetArg('E')} from {ins.GetArg('L')}" + (ins.Args['A'].Value > 0 ? $" with {ins.GetArg('A')} argument(s)" : "");
     }
