@@ -195,7 +195,7 @@ namespace Crash.GOOLIns
     [GOOLInstruction(14, GameVersion.Crash3)]
     public sealed class Lxor
     {
-        public static string GetName(GOOLInstruction ins) => "LXOR";
+        public static string GetName(GOOLInstruction ins) => "XORL";
         public static string GetFormat() => GOOLInstruction.DefaultFormatLR;
         public static string GetComment(GOOLInstruction ins) => $"{ins.GetArg('L')} ^ {ins.GetArg('R')}";
     }
@@ -208,7 +208,7 @@ namespace Crash.GOOLIns
     [GOOLInstruction(15, GameVersion.Crash3)]
     public sealed class Ltst
     {
-        public static string GetName(GOOLInstruction ins) => "LTST";
+        public static string GetName(GOOLInstruction ins) => "TSTA";
         public static string GetFormat() => GOOLInstruction.DefaultFormatLR;
         public static string GetComment(GOOLInstruction ins) => $"{ins.GetArg('L')} has {ins.GetArg('R')}";
     }
