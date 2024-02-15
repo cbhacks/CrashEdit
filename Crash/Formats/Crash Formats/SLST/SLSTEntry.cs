@@ -10,7 +10,7 @@ namespace Crash
         public SLSTEntry(SLSTSource start, SLSTSource end, IEnumerable<SLSTDelta> deltas, int eid) : base(eid)
         {
             if (deltas == null)
-                throw new ArgumentNullException("deltas");
+                throw new ArgumentNullException(nameof(deltas));
             this.deltas = new List<SLSTDelta>(deltas);
             Start = start;
             End = end;

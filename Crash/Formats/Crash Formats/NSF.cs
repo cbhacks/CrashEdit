@@ -8,9 +8,9 @@ namespace Crash
         private static byte[] ReadChunk(byte[] data, ref int offset, out bool compressed)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (offset < 0 || offset > data.Length)
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
             if (data.Length < offset + 2)
             {
                 ErrorManager.SignalError("NSF.ReadChunk: Data is too short");
@@ -140,7 +140,7 @@ namespace Crash
         public static NSF Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             var nsf = new NSF();
             int offset = 0;
             int? firstid = null;

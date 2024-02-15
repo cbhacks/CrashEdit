@@ -32,17 +32,17 @@ namespace Crash
             int min = is_c3 ? 0 : -0x800;
             int max = is_c3 ? 0xFFF : 0x7FF;
             if (x < min || x > max)
-                throw new ArgumentOutOfRangeException("x");
+                throw new ArgumentOutOfRangeException(nameof(x));
             if (y < min || y > max)
-                throw new ArgumentOutOfRangeException("y");
+                throw new ArgumentOutOfRangeException(nameof(y));
             if (z < min || z > max)
-                throw new ArgumentOutOfRangeException("z");
+                throw new ArgumentOutOfRangeException(nameof(z));
             if (unknownx < 0 || unknownx > 0xF)
-                throw new ArgumentOutOfRangeException("unknownx");
+                throw new ArgumentOutOfRangeException(nameof(unknownx));
             if (unknowny < 0 || unknowny > 0xF)
-                throw new ArgumentOutOfRangeException("unknowny");
+                throw new ArgumentOutOfRangeException(nameof(unknowny));
             if (unknownz < 0 || unknownz > 0xF)
-                throw new ArgumentOutOfRangeException("unknownz");
+                throw new ArgumentOutOfRangeException(nameof(unknownz));
             X = x;
             Y = y;
             Z = z;

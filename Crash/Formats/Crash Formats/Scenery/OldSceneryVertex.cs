@@ -7,9 +7,9 @@ namespace Crash
         public static OldSceneryVertex Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length != 8)
-                throw new ArgumentException("Value must be 8 bytes long.", "data");
+                throw new ArgumentException("Value must be 8 bytes long.", nameof(data));
             short x = (short)(BitConv.FromInt16(data, 4) & 0xFFF8);
             short y = (short)(BitConv.FromInt16(data, 6) & 0xFFF8);
             int zhigh = data[6] & 7;
@@ -26,11 +26,11 @@ namespace Crash
         public OldSceneryVertex(short x, short y, short z, byte red, byte green, byte blue, bool fx)
         {
             if ((x & 0x7) != 0)
-                throw new ArgumentException("Value must be a multiple of 8.", "x");
+                throw new ArgumentException("Value must be a multiple of 8.", nameof(x));
             if ((y & 0x7) != 0)
-                throw new ArgumentException("Value must be a multiple of 8.", "y");
+                throw new ArgumentException("Value must be a multiple of 8.", nameof(y));
             if ((z & 0x7) != 0)
-                throw new ArgumentException("Value must be a multiple of 8.", "z");
+                throw new ArgumentException("Value must be a multiple of 8.", nameof(z));
             X = x;
             Y = y;
             Z = z;

@@ -9,7 +9,7 @@ namespace Crash
         public WavebankEntry(int id, SampleSet samples, int eid) : base(eid)
         {
             ID = id;
-            Samples = samples ?? throw new ArgumentNullException("samples");
+            Samples = samples ?? throw new ArgumentNullException(nameof(samples));
         }
 
         public override int Type => 14;

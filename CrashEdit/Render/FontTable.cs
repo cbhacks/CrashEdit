@@ -150,7 +150,7 @@ namespace CrashEdit
             Stopwatch watch = Stopwatch.StartNew();
             LoadFontBitmap(lib, fname, size);
             LoadFontTextureGL(tex_id);
-            Console.WriteLine(string.Format("Successfully loaded font {1} {2} in {0:F3} seconds", watch.ElapsedMillisecondsFull() / 1000, Face.FamilyName, Face.StyleName));
+            Console.WriteLine("Successfully loaded font {1} {2} in {0:F3} seconds", watch.ElapsedMillisecondsFull() / 1000, Face.FamilyName, Face.StyleName);
             return tex_id;
         }
     }

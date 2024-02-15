@@ -10,7 +10,7 @@ namespace Crash
         public static SEQ Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             // All SEP/SEQ stuff is big-endian, like MIDI
             if (data.Length < 15)
             {
@@ -37,11 +37,11 @@ namespace Crash
         public SEQ(short resolution, int tempo, short rhythm, byte[] data)
         {
             if ((tempo & 0xFF000000) != 0)
-                throw new ArgumentOutOfRangeException("tempo");
+                throw new ArgumentOutOfRangeException(nameof(tempo));
             Resolution = resolution;
             Tempo = tempo;
             Rhythm = rhythm;
-            Data = data ?? throw new ArgumentNullException("data");
+            Data = data ?? throw new ArgumentNullException(nameof(data));
         }
 
         public short Resolution { get; }

@@ -12,13 +12,13 @@ namespace Crash
         public static short FromADPCM(int sample, int factor, int predict, ref double s0, ref double s1)
         {
             if ((sample & 0xF) != sample)
-                throw new ArgumentOutOfRangeException("sample");
+                throw new ArgumentOutOfRangeException(nameof(sample));
             if ((factor & 0xF) != factor)
-                throw new ArgumentOutOfRangeException("factor");
+                throw new ArgumentOutOfRangeException(nameof(factor));
             if ((predict & 0xF) != predict)
-                throw new ArgumentOutOfRangeException("predict");
+                throw new ArgumentOutOfRangeException(nameof(predict));
             if (predict >= 16)
-                throw new ArgumentOutOfRangeException("predict");
+                throw new ArgumentOutOfRangeException(nameof(predict));
             sample <<= 12;
             sample = (short)sample; // Sign extend
             sample >>= factor;

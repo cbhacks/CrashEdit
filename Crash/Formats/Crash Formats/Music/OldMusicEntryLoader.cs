@@ -8,7 +8,7 @@ namespace Crash
         public override Entry Load(byte[][] items, int eid, GameVersion version)
         {
             if (items == null)
-                throw new ArgumentNullException("items");
+                throw new ArgumentNullException(nameof(items));
             if (items.Length != 3)
             {
                 ErrorManager.SignalError("OldMusicEntry: Wrong number of items");

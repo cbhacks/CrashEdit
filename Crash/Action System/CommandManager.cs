@@ -15,11 +15,11 @@ namespace Crash
 
         public CommandManager()
         {
-            this.undochain = new Stack<Command>();
-            this.redochain = new Stack<Command>();
-            this.undostrchain = new Stack<string>();
-            this.redostrchain = new Stack<string>();
-            this.cleanoffset = 0;
+            undochain = new Stack<Command>();
+            redochain = new Stack<Command>();
+            undostrchain = new Stack<string>();
+            redostrchain = new Stack<string>();
+            cleanoffset = 0;
         }
 
         public int UndoDepth
@@ -73,7 +73,7 @@ namespace Crash
             if (times == 0)
                 return;
             if (times < 0)
-                throw new ArgumentOutOfRangeException("times");
+                throw new ArgumentOutOfRangeException(nameof(times));
             if (times > undochain.Count)
                 throw new InvalidOperationException();
             for (int i = 0; i < times; i++)
@@ -103,7 +103,7 @@ namespace Crash
             if (times == 0)
                 return;
             if (times < 0)
-                throw new ArgumentOutOfRangeException("times");
+                throw new ArgumentOutOfRangeException(nameof(times));
             if (times > redochain.Count)
                 throw new InvalidOperationException();
             for (int i = 0; i < times; i++)

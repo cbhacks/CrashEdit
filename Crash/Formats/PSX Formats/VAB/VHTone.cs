@@ -7,7 +7,7 @@ namespace Crash
         public static VHTone Load(byte[] data)
         {
             if (data.Length != 32)
-                throw new ArgumentException("Value must be 32 bytes long.", "data");
+                throw new ArgumentException("Value must be 32 bytes long.", nameof(data));
             byte priority = data[0];
             byte mode = data[1];
             byte volume = data[2];

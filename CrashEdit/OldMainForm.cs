@@ -211,15 +211,15 @@ namespace CrashEdit
                 WorkerReportsProgress = true,
                 WorkerSupportsCancellation = false
             };
-            bgwMakeBIN.DoWork += new DoWorkEventHandler(bgwMakeBIN_DoWork);
-            bgwMakeBIN.ProgressChanged += new ProgressChangedEventHandler(bgwMakeBIN_ProgressChanged);
-            bgwMakeBIN.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgwMakeBIN_RunWorkerCompleted);
+            bgwMakeBIN.DoWork += bgwMakeBIN_DoWork;
+            bgwMakeBIN.ProgressChanged += bgwMakeBIN_ProgressChanged;
+            bgwMakeBIN.RunWorkerCompleted += bgwMakeBIN_RunWorkerCompleted;
             dlgProgress = null;
 
             Icon = OldResources.CBHacksIcon;
             Width = Settings.Default.DefaultFormW;
             Height = Settings.Default.DefaultFormH;
-            Text = $"CrashEdit v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
+            Text = $"CrashEdit v{Assembly.GetExecutingAssembly().GetName().Version}";
             Controls.Add(tbcTabs);
             Controls.Add(tsToolbar);
 

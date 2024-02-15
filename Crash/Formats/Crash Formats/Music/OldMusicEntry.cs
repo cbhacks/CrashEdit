@@ -8,8 +8,8 @@ namespace Crash
 
         public OldMusicEntry(int vb0eid, int vb1eid, int vb2eid, int vb3eid, VH vh, SEP sep, int eid) : base(eid)
         {
-            this.vh = vh ?? throw new ArgumentNullException("vh");
-            SEP = sep ?? throw new ArgumentNullException("sep");
+            this.vh = vh ?? throw new ArgumentNullException(nameof(vh));
+            SEP = sep ?? throw new ArgumentNullException(nameof(sep));
             VB0EID = vb0eid;
             VB1EID = vb1eid;
             VB2EID = vb2eid;
@@ -32,7 +32,7 @@ namespace Crash
             set
             {
                 if (vh == null)
-                    throw new ArgumentNullException("vh");
+                    throw new ArgumentNullException(nameof(vh));
                 vh = value;
             }
         }

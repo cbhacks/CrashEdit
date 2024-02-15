@@ -6,7 +6,7 @@ namespace Crash
     {
         public TextureChunk(byte[] data, NSF nsf) : base(nsf)
         {
-            Data = data ?? throw new ArgumentNullException("data");
+            Data = data ?? throw new ArgumentNullException(nameof(data));
         }
 
         public override short Type => 1;

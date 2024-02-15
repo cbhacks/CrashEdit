@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Crash
+﻿namespace Crash
 {
     public class GOOLUnknownInstruction : GOOLInstruction
     {

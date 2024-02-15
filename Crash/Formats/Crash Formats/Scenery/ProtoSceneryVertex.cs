@@ -7,9 +7,9 @@ namespace Crash
         public static ProtoSceneryVertex Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length != 6)
-                throw new ArgumentException("Value must be 6 bytes long.", "data");
+                throw new ArgumentException("Value must be 6 bytes long.", nameof(data));
             short x = BitConv.FromInt16(data, 0);
             short y = BitConv.FromInt16(data, 2);
             short z = BitConv.FromInt16(data, 4);

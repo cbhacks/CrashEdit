@@ -7,9 +7,9 @@ namespace Crash
         public static OldFrameVertex Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length != 6)
-                throw new ArgumentException("Value must be 6 bytes long.", "data");
+                throw new ArgumentException("Value must be 6 bytes long.", nameof(data));
             byte x = data[0];
             byte y = data[1];
             byte z = data[2];

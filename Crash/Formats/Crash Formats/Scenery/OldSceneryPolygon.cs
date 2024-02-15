@@ -7,9 +7,9 @@ namespace Crash
         public static OldSceneryPolygon Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length != 8)
-                throw new ArgumentException("Value must be 8 bytes long.", "data");
+                throw new ArgumentException("Value must be 8 bytes long.", nameof(data));
             int worda = BitConv.FromInt32(data, 0);
             int wordb = BitConv.FromInt32(data, 4);
             int vertexa = (worda >> 20) & 0xFFF;
@@ -25,13 +25,13 @@ namespace Crash
         public OldSceneryPolygon(int vertexa, int vertexb, int vertexc, int modelstruct, byte page, byte anim0, byte unknown)
         {
             if (vertexa < 0 || vertexa > 0xFFF)
-                throw new ArgumentOutOfRangeException("vertexa");
+                throw new ArgumentOutOfRangeException(nameof(vertexa));
             if (vertexb < 0 || vertexb > 0xFFF)
-                throw new ArgumentOutOfRangeException("vertexb");
+                throw new ArgumentOutOfRangeException(nameof(vertexb));
             if (vertexc < 0 || vertexc > 0xFFF)
-                throw new ArgumentOutOfRangeException("vertexc");
+                throw new ArgumentOutOfRangeException(nameof(vertexc));
             if (modelstruct < 0 || modelstruct > 0xFFF)
-                throw new ArgumentOutOfRangeException("unknown1");
+                throw new ArgumentOutOfRangeException(nameof(modelstruct));
             VertexA = vertexa;
             VertexB = vertexb;
             VertexC = vertexc;

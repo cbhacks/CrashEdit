@@ -28,9 +28,9 @@ namespace Crash
         public static int CalculateChecksum(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length != Length)
-                throw new ArgumentException("Value must be 65536 bytes long.", "data");
+                throw new ArgumentException("Value must be 65536 bytes long.", nameof(data));
             uint checksum = 0x12345678;
             for (int i = 0; i < Length; i++)
             {

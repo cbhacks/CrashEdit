@@ -8,7 +8,7 @@ namespace Crash
         public static NSD Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length < 0x6FC)
             {
                 ErrorManager.SignalError("NSD: Data is too short");
@@ -96,7 +96,7 @@ namespace Crash
         public static NSD LoadC3(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length < 0x7FC)
             {
                 ErrorManager.SignalError("NSD: Data is too short");
@@ -186,25 +186,25 @@ namespace Crash
         public NSD(int[] hashkeymap, int chunkcount, int[] leveldata, int uncompressedchunksec, int preludecount, int[] compressedchunkinfo, IEnumerable<NSDLink> index, int blank, int id, int entitycount, int[] goolmap, byte[] extradata, IEnumerable<NSDSpawnPoint> spawns, byte[] imagedata)
         {
             if (hashkeymap == null)
-                throw new ArgumentNullException("firstentries");
+                throw new ArgumentNullException(nameof(hashkeymap));
             if (leveldata == null)
-                throw new ArgumentNullException("leveldata");
+                throw new ArgumentNullException(nameof(leveldata));
             if (compressedchunkinfo == null)
-                throw new ArgumentNullException("compressedchunkinfo");
+                throw new ArgumentNullException(nameof(compressedchunkinfo));
             if (index == null)
-                throw new ArgumentNullException("index");
+                throw new ArgumentNullException(nameof(index));
             if (goolmap == null)
-                throw new ArgumentNullException("goolmap");
+                throw new ArgumentNullException(nameof(goolmap));
             if (spawns == null)
-                throw new ArgumentNullException("spawns");
+                throw new ArgumentNullException(nameof(spawns));
             if (hashkeymap.Length != 256)
-                throw new ArgumentException("Value must be 256 ints long.", "firstentries");
+                throw new ArgumentException("Value must be 256 ints long.", nameof(hashkeymap));
             if (leveldata.Length != 4)
-                throw new ArgumentException("Value must be 4 ints long.", "leveldata");
+                throw new ArgumentException("Value must be 4 ints long.", nameof(leveldata));
             if (compressedchunkinfo.Length != 64)
-                throw new ArgumentException("Value must be 64 ints long.", "compressedchunkinfo");
+                throw new ArgumentException("Value must be 64 ints long.", nameof(compressedchunkinfo));
             if (goolmap.Length != 64 && goolmap.Length != 128)
-                throw new ArgumentException("Value must be 64 or 128 ints long.", "goolmap");
+                throw new ArgumentException("Value must be 64 or 128 ints long.", nameof(goolmap));
             HashKeyMap = hashkeymap;
             ChunkCount = chunkcount;
             LevelData = leveldata;
@@ -216,9 +216,9 @@ namespace Crash
             ID = id;
             EntityCount = entitycount;
             GOOLMap = goolmap;
-            ExtraData = extradata ?? throw new ArgumentNullException("extradata");
+            ExtraData = extradata ?? throw new ArgumentNullException(nameof(extradata));
             this.spawns = new List<NSDSpawnPoint>(spawns);
-            ImageData = imagedata ?? throw new ArgumentNullException("image");
+            ImageData = imagedata ?? throw new ArgumentNullException(nameof(imagedata));
         }
 
         public int[] HashKeyMap { get; set; }

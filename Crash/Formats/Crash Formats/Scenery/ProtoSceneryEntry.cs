@@ -13,7 +13,7 @@ namespace Crash
 
         public ProtoSceneryEntry(byte[] info, IEnumerable<ProtoSceneryPolygon> polygons, IEnumerable<ProtoSceneryVertex> vertices, IEnumerable<OldModelStruct> structs, short? pad, int eid) : base(eid)
         {
-            Info = info ?? throw new ArgumentNullException("info");
+            Info = info ?? throw new ArgumentNullException(nameof(info));
             this.polygons = new List<ProtoSceneryPolygon>(polygons);
             this.vertices = new List<ProtoSceneryVertex>(vertices);
             this.structs = new List<OldModelStruct>(structs);

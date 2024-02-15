@@ -13,7 +13,7 @@ namespace Crash
 
         public OldSceneryEntry(byte[] info, IEnumerable<OldSceneryPolygon> polygons, IEnumerable<OldSceneryVertex> vertices, IEnumerable<OldModelStruct> structs, byte[] extradata, int eid) : base(eid)
         {
-            Info = info ?? throw new ArgumentNullException("info");
+            Info = info ?? throw new ArgumentNullException(nameof(info));
             this.polygons = new List<OldSceneryPolygon>(polygons);
             this.vertices = new List<OldSceneryVertex>(vertices);
             this.structs = new List<OldModelStruct>(structs);
@@ -21,7 +21,7 @@ namespace Crash
 
             if (IsSky && BitConv.FromInt32(Info, 0x1C) != 1)
             {
-                throw new ArgumentOutOfRangeException("Info.IsSky");
+                throw new Exception("sky value not 1");
             }
         }
 

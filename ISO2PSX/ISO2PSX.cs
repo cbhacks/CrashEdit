@@ -7,11 +7,11 @@ internal static class BitConv
     public static int FromInt32(byte[] str, int offset)
     {
         if (str == null)
-            throw new ArgumentNullException("str");
+            throw new ArgumentNullException(nameof(str));
         if (offset < 0)
-            throw new ArgumentOutOfRangeException("offset");
+            throw new ArgumentOutOfRangeException(nameof(offset));
         if (offset + 4 > str.Length)
-            throw new ArgumentOutOfRangeException("offset");
+            throw new ArgumentOutOfRangeException(nameof(offset));
         int result = 0;
         result |= str[offset + 0] << 8 * 0;
         result |= str[offset + 1] << 8 * 1;
@@ -23,11 +23,11 @@ internal static class BitConv
     public static void ToInt32(byte[] str, int offset, int value)
     {
         if (str == null)
-            throw new ArgumentNullException("str");
+            throw new ArgumentNullException(nameof(str));
         if (offset < 0)
-            throw new ArgumentOutOfRangeException("offset");
+            throw new ArgumentOutOfRangeException(nameof(offset));
         if (offset + 4 > str.Length)
-            throw new ArgumentOutOfRangeException("offset");
+            throw new ArgumentOutOfRangeException(nameof(offset));
         str[offset] = (byte)value;
         str[offset + 1] = (byte)(value >> 8);
         str[offset + 2] = (byte)(value >> 8 * 2);

@@ -8,7 +8,7 @@ namespace Crash
         public static SLSTSource Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length < 4)
             {
                 ErrorManager.SignalError("SLSTSource: Data is too short");
@@ -43,7 +43,7 @@ namespace Crash
         public SLSTSource(IEnumerable<SLSTPolygonID> polygons)
         {
             if (polygons == null)
-                throw new ArgumentNullException("polygons");
+                throw new ArgumentNullException(nameof(polygons));
             this.polygons = new List<SLSTPolygonID>(polygons);
         }
 

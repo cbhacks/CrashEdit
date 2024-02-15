@@ -44,7 +44,7 @@ namespace Crash
         public ProtoEntity(short flags, byte spawn, byte unk, short id, short startx, short starty, short startz, short vecx, short vecy, short vecz, byte type, byte subtype, IEnumerable<ProtoEntityPosition> deltas, short nullfield1)
         {
             if (deltas == null)
-                throw new ArgumentNullException("index");
+                throw new ArgumentNullException(nameof(deltas));
             Flags = flags;
             Spawn = spawn;
             Unk = unk;

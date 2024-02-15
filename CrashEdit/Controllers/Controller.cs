@@ -8,6 +8,7 @@ namespace CrashEdit
     public abstract class Controller : IDisposable
     {
         private Control editor;
+        private bool disposing;
 
         public Controller()
         {
@@ -36,7 +37,7 @@ namespace CrashEdit
             {
                 try
                 {
-                    ErrorManager.EnterSubject(new Object());
+                    ErrorManager.EnterSubject(new object());
                     proc();
                 }
                 catch (GUIException ex)
@@ -95,7 +96,7 @@ namespace CrashEdit
         {
             get
             {
-                if (editor == null)
+                if (editor == null && !disposing)
                 {
                     editor = CreateEditor();
                     editor.Dock = DockStyle.Fill;
@@ -111,6 +112,7 @@ namespace CrashEdit
 
         public virtual void Dispose()
         {
+            disposing = true;
             TreeNode[] nodes = new TreeNode[Node.Nodes.Count];
             int i = 0;
             foreach (TreeNode node in Node.Nodes)
@@ -119,20 +121,15 @@ namespace CrashEdit
             }
             for (i = 0; i < nodes.Length; ++i)
             {
-                if (nodes[i].Tag != null)
+                if (nodes[i].Tag != null && nodes[i].Tag is Controller t)
                 {
-                    if (nodes[i].Tag is Controller t)
-                    {
-                        t.Dispose();
-                    }
+                    t.Dispose();
                 }
             }
             Node.Remove(); // <-- this line makes the TreeNodeCollection volatile, so the node references must be copied onto a separate list beforehand
             ContextMenu.Dispose();
-            if (editor != null)
-            {
-                editor.Dispose();
-            }
+            editor?.Dispose();
+            editor = null;
         }
     }
 }

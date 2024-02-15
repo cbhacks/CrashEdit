@@ -10,7 +10,7 @@ namespace Crash
         public OldSLSTEntry(OldSLSTSource start, OldSLSTSource end, IEnumerable<OldSLSTDelta> deltas, int eid) : base(eid)
         {
             if (deltas == null)
-                throw new ArgumentNullException("deltas");
+                throw new ArgumentNullException(nameof(deltas));
             this.deltas = new List<OldSLSTDelta>(deltas);
             Start = start;
             End = end;

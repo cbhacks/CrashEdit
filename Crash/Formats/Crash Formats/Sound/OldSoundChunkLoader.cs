@@ -8,7 +8,7 @@ namespace Crash
         public override Chunk Load(Entry[] entries, NSF nsf)
         {
             if (entries == null)
-                throw new ArgumentNullException("entries");
+                throw new ArgumentNullException(nameof(entries));
             return new OldSoundChunk(entries, nsf);
         }
     }

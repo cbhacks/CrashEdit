@@ -797,13 +797,14 @@ namespace CrashEdit
         {
             var texRect = OldResources.TexMap[texture];
             //Console.WriteLine($"TEXTURE: {texRect.Left},{texRect.Top}/{texRect.Right},{texRect.Bottom}");
-            var uvs = new Vector2[4];
-            uvs[0] = new Vector2(texRect.Left, texRect.Bottom);
-            uvs[1] = new Vector2(texRect.Left, texRect.Top);
-            uvs[2] = new Vector2(texRect.Right, texRect.Top);
-            //uvs[3] = new Vector2(texRect.Right, texRect.Top);
-            uvs[3] = new Vector2(texRect.Right, texRect.Bottom);
-            //uvs[5] = new Vector2(texRect.Left, texRect.Bottom);
+            Span<Vector2> uvs = stackalloc Vector2[4] {
+                new Vector2(texRect.Left, texRect.Bottom),
+                new Vector2(texRect.Left, texRect.Top),
+                new Vector2(texRect.Right, texRect.Top),
+                // new Vector2(texRect.Right, texRect.Top),
+                new Vector2(texRect.Right, texRect.Bottom),
+                // new Vector2(texRect.Left, texRect.Bottom)
+            };
             vaoDebugSprite.DiscardVerts();
             for (int i = 0; i < SpriteVerts.Length; ++i)
             {
@@ -819,13 +820,14 @@ namespace CrashEdit
         {
             var texRect = OldResources.TexMap[texture];
             //Console.WriteLine($"TEXTURE: {texRect.Left},{texRect.Top}/{texRect.Right},{texRect.Bottom}");
-            var uvs = new Vector2[6];
-            uvs[0] = new Vector2(texRect.Left, texRect.Bottom);
-            uvs[1] = new Vector2(texRect.Left, texRect.Top);
-            uvs[2] = new Vector2(texRect.Right, texRect.Top);
-            uvs[3] = new Vector2(texRect.Right, texRect.Top);
-            uvs[4] = new Vector2(texRect.Right, texRect.Bottom);
-            uvs[5] = new Vector2(texRect.Left, texRect.Bottom);
+            Span<Vector2> uvs = stackalloc Vector2[6] {
+                 new Vector2(texRect.Left, texRect.Bottom),
+                 new Vector2(texRect.Left, texRect.Top),
+                 new Vector2(texRect.Right, texRect.Top),
+                 new Vector2(texRect.Right, texRect.Top),
+                 new Vector2(texRect.Right, texRect.Bottom),
+                 new Vector2(texRect.Left, texRect.Bottom)
+            };
             for (int i = 0; i < SpriteTriIndices.Length; ++i)
             {
                 vaoSprites.PushAttrib(trans: trans, rgba: col, st: uvs[i], misc: new Vector4(SpriteVerts[SpriteTriIndices[i]] * size));

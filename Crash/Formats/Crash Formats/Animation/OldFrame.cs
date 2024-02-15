@@ -9,7 +9,7 @@ namespace Crash
         public static OldFrame Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length < 56)
             {
                 ErrorManager.SignalError("OldFrame: Data is too short");

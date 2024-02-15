@@ -45,7 +45,7 @@ namespace Crash
         public OldEntity(int header, short flags, byte spawn, byte unk, short id, short vecx, short vecy, short vecz, byte type, byte subtype, IEnumerable<EntityPosition> positions, short nullfield1)
         {
             if (positions == null)
-                throw new ArgumentNullException("index");
+                throw new ArgumentNullException(nameof(positions));
             Header = header;
             Flags = flags;
             Spawn = spawn;

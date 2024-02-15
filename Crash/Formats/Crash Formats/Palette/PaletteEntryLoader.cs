@@ -10,7 +10,7 @@ namespace Crash
         public override Entry Load(byte[][] items, int eid, GameVersion version)
         {
             if (items == null)
-                throw new ArgumentNullException("items");
+                throw new ArgumentNullException(nameof(items));
             return new PaletteEntry(items, eid);
         }
     }

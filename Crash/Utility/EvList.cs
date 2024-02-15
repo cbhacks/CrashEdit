@@ -19,7 +19,7 @@ namespace Crash
         public EvList(IEnumerable<T> collection)
         {
             if (collection == null)
-                throw new ArgumentNullException("collection");
+                throw new ArgumentNullException(nameof(collection));
             list = new List<T>(collection);
         }
 
@@ -51,7 +51,7 @@ namespace Crash
         public Command CmSet(int i, T item)
         {
             if (i < 0 || i >= list.Count)
-                throw new ArgumentOutOfRangeException("i");
+                throw new ArgumentOutOfRangeException(nameof(i));
             return new SetCommand(this, i, item);
         }
 
@@ -128,7 +128,7 @@ namespace Crash
         public Command CmInsert(int i, T item)
         {
             if (i < 0 || i > list.Count)
-                throw new ArgumentOutOfRangeException("i");
+                throw new ArgumentOutOfRangeException(nameof(i));
             return new InsertCommand(this, i, item);
         }
 
@@ -182,7 +182,7 @@ namespace Crash
         public Command CmRemoveAt(int i)
         {
             if (i < 0 || i >= list.Count)
-                throw new ArgumentOutOfRangeException("i");
+                throw new ArgumentOutOfRangeException(nameof(i));
             return new RemoveCommand(this, i);
         }
 

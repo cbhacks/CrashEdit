@@ -2,6 +2,7 @@ using Crash;
 using CrashEdit.Properties;
 using OpenTK;
 using OpenTK.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -320,15 +321,15 @@ namespace CrashEdit
         private void RenderBoxEntity(Vector3 trans, int subtype)
         {
             Rectangle sideTexRect = OldResources.TexMap[GetBoxSideTexture(subtype)];
-            Rectangle topTexRect = OldResources.TexMap[GetBoxTopTexture(subtype)];
-            Vector2[] uvs = new Vector2[6];
-            uvs[0] = new Vector2(sideTexRect.Left, sideTexRect.Bottom);
-            uvs[1] = new Vector2(sideTexRect.Left, sideTexRect.Top);
-            uvs[2] = new Vector2(sideTexRect.Right, sideTexRect.Top);
-            uvs[3] = new Vector2(sideTexRect.Right, sideTexRect.Top);
-            uvs[4] = new Vector2(sideTexRect.Right, sideTexRect.Bottom);
-            uvs[5] = new Vector2(sideTexRect.Left, sideTexRect.Bottom);
-            Rgba[] cols = new Rgba[5]
+            Span<Vector2> uvs_side = stackalloc Vector2[6] {
+                new Vector2(sideTexRect.Left, sideTexRect.Bottom),
+                new Vector2(sideTexRect.Left, sideTexRect.Top),
+                new Vector2(sideTexRect.Right, sideTexRect.Top),
+                new Vector2(sideTexRect.Right, sideTexRect.Top),
+                new Vector2(sideTexRect.Right, sideTexRect.Bottom),
+                new Vector2(sideTexRect.Left, sideTexRect.Bottom)
+            };
+            Span<Rgba> cols = stackalloc Rgba[5]
             {
                 GetZoneColor(93*2, 93*2, 93*2),
                 GetZoneColor(51*2, 51*2, 76*2),
@@ -338,17 +339,21 @@ namespace CrashEdit
             };
             for (int i = 0; i < 3 * 6; ++i)
             {
-                vaoTris.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6], st: uvs[i % 6]);
+                vaoTris.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6], st: uvs_side[i % 6]);
             }
-            uvs[0] = new Vector2(topTexRect.Left, topTexRect.Bottom);
-            uvs[1] = new Vector2(topTexRect.Left, topTexRect.Top);
-            uvs[2] = new Vector2(topTexRect.Right, topTexRect.Top);
-            uvs[3] = new Vector2(topTexRect.Right, topTexRect.Top);
-            uvs[4] = new Vector2(topTexRect.Right, topTexRect.Bottom);
-            uvs[5] = new Vector2(topTexRect.Left, topTexRect.Bottom);
+            
+            Rectangle topTexRect = OldResources.TexMap[GetBoxTopTexture(subtype)];
+            Span<Vector2> uvs_top = stackalloc Vector2[6] {
+                new Vector2(topTexRect.Left, topTexRect.Bottom),
+                new Vector2(topTexRect.Left, topTexRect.Top),
+                new Vector2(topTexRect.Right, topTexRect.Top),
+                new Vector2(topTexRect.Right, topTexRect.Top),
+                new Vector2(topTexRect.Right, topTexRect.Bottom),
+                new Vector2(topTexRect.Left, topTexRect.Bottom)
+            };
             for (int i = 4 * 6; i < 6 * 6; ++i)
             {
-                vaoTris.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6 - 1], st: uvs[i % 6]);
+                vaoTris.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6 - 1], st: uvs_top[i % 6]);
             }
         }
 

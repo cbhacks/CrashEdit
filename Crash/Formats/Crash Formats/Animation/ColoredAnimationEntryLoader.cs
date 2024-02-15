@@ -10,7 +10,7 @@ namespace Crash
         public override Entry Load(byte[][] items, int eid, GameVersion version)
         {
             if (items == null)
-                throw new ArgumentNullException("items");
+                throw new ArgumentNullException(nameof(items));
             OldFrame[] frames = new OldFrame[items.Length];
             for (int i = 0; i < frames.Length; i++)
             {

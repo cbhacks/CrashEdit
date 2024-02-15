@@ -28,13 +28,13 @@ namespace Crash
         public static short Pack1555(byte a1, byte b5, byte c5, byte d5)
         {
             if ((a1 & 0x1) != a1)
-                throw new ArgumentOutOfRangeException("A1 must be 1-bit.");
+                throw new ArgumentOutOfRangeException(nameof(a1), "must be 1-bit.");
             if ((b5 & 0x1F) != b5)
-                throw new ArgumentOutOfRangeException("B5 must be 5-bit.");
+                throw new ArgumentOutOfRangeException(nameof(b5), "must be 5-bit.");
             if ((c5 & 0x1F) != c5)
-                throw new ArgumentOutOfRangeException("C5 must be 5-bit.");
+                throw new ArgumentOutOfRangeException(nameof(c5), "must be 5-bit.");
             if ((d5 & 0x1F) != d5)
-                throw new ArgumentOutOfRangeException("D5 must be 5-bit.");
+                throw new ArgumentOutOfRangeException(nameof(d5), "must be 5-bit.");
             return (short)(a1 << 15 | b5 << 10 | c5 << 5 | d5);
         }
 

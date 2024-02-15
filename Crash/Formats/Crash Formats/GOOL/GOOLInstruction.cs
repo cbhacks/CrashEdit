@@ -165,7 +165,7 @@ namespace Crash
         public string GetArg(char a)
         {
             if (!args.ContainsKey(a))
-                throw new ArgumentException($"GetArg: Argument `{a}` not found", "a");
+                throw new ArgumentException($"GetArg: Argument `{a}` not found", nameof(a));
             switch (args[a].Type)
             {
                 case GOOLArgumentTypes.Ref:
@@ -182,7 +182,7 @@ namespace Crash
         public bool TryGetImmediate(char a, out int val)
         {
             if (!args.ContainsKey(a))
-                throw new ArgumentException($"GetArg: Argument `{a}` not found", "a");
+                throw new ArgumentException($"GetArg: Argument `{a}` not found", nameof(a));
             switch (args[a].Type)
             {
                 case GOOLArgumentTypes.Ref:

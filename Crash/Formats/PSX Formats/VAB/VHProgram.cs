@@ -8,9 +8,9 @@ namespace Crash
         public static VHProgram Load(byte[] data, byte[] tonedata, bool isoldversion)
         {
             if (data.Length != 16)
-                throw new ArgumentException("Value must be 16 bytes long.", "data");
+                throw new ArgumentException("Value must be 16 bytes long.", nameof(data));
             if (tonedata.Length != 512)
-                throw new ArgumentException("Value must be 512 bytes long.", "tonedata");
+                throw new ArgumentException("Value must be 512 bytes long.", nameof(tonedata));
             byte tonecount = data[0];
             byte volume = data[1];
             byte priority = data[2];
@@ -73,7 +73,7 @@ namespace Crash
         public VHProgram(bool isoldversion, byte volume, byte priority, byte mode, byte panning, short attribute, IEnumerable<VHTone> tones)
         {
             if (tones == null)
-                throw new ArgumentNullException("tones");
+                throw new ArgumentNullException(nameof(tones));
             IsOldVersion = isoldversion;
             Volume = volume;
             Priority = priority;

@@ -7,7 +7,7 @@ namespace Crash
         internal static GOOLEntry LoadGOOL(GOOLVersion goolver, byte[][] items, int eid)
         {
             if (items == null)
-                throw new ArgumentNullException("items");
+                throw new ArgumentNullException(nameof(items));
             if (items.Length != 3 && items.Length != 5 && items.Length != 6)
             {
                 ErrorManager.SignalError("GOOLEntry: Wrong number of items");

@@ -49,7 +49,7 @@ namespace Crash
         public static UnprocessedEntry Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length < 16)
             {
                 ErrorManager.SignalError("Entry: Data is too short");

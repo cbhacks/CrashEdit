@@ -7,7 +7,7 @@ namespace Crash
         public UnprocessedChunk(byte[] data, NSF nsf) : base(nsf)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length != Length)
                 throw new ArgumentException("Data must be 65536 bytes long.");
             Data = data;

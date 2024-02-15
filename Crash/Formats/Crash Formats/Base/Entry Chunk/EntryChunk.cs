@@ -17,7 +17,7 @@ namespace Crash
         public EntryChunk(IEnumerable<Entry> entries, NSF nsf) : base(nsf)
         {
             if (entries == null)
-                throw new ArgumentNullException("entries");
+                throw new ArgumentNullException(nameof(entries));
             Entries = new EvList<Entry>();
             Entries.ItemAdded += Entries_ItemAdded;
             Entries.ItemRemoved += Entries_ItemRemoved;

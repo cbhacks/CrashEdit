@@ -122,6 +122,24 @@ namespace CrashEdit
             vert_count++;
         }
 
+        public void PushAttrib(Vector3 trans = default, Vector2 st = default, Rgba rgba = default, Vector4 misc = default)
+        {
+            TestRealloc();
+            Verts[vert_count].trans = trans;
+            Verts[vert_count].st = st;
+            Verts[vert_count].rgba = rgba;
+            Verts[vert_count].misc = misc;
+            vert_count++;
+        }
+
+        public void PushAttrib(Vector3 trans = default, Vector4 misc = default)
+        {
+            TestRealloc();
+            Verts[vert_count].trans = trans;
+            Verts[vert_count].misc = misc;
+            vert_count++;
+        }
+
         public void PushAttrib(Vector3 trans = default, int normal = default, Vector2 st = default, Rgba rgba = default, VertexTexInfo tex = default, Vector4 misc = default)
         {
             TestRealloc();
@@ -129,7 +147,7 @@ namespace CrashEdit
             Verts[vert_count].normal = normal;
             Verts[vert_count].st = st;
             Verts[vert_count].rgba = rgba;
-            Verts[vert_count].tex = (int)tex;
+            Verts[vert_count].tex = tex;
             Verts[vert_count].misc = misc;
             vert_count++;
         }

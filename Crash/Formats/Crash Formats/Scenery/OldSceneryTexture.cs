@@ -7,9 +7,9 @@ namespace Crash
         public static OldSceneryTexture Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length != 8)
-                throw new ArgumentException("Value must be 8 bytes long.", "data");
+                throw new ArgumentException("Value must be 8 bytes long.", nameof(data));
             byte r = data[0];
             byte g = data[1];
             byte b = data[2];

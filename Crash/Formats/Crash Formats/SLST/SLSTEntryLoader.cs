@@ -9,7 +9,7 @@ namespace Crash
         public override Entry Load(byte[][] items, int eid, GameVersion version)
         {
             if (items == null)
-                throw new ArgumentNullException("items");
+                throw new ArgumentNullException(nameof(items));
             if (items.Length < 2)
                 ErrorManager.SignalError("SLSTEntry: Item count is wrong");
             SLSTSource sourcestart = SLSTSource.Load(items[0]);

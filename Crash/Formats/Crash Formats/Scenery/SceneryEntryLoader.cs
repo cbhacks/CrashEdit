@@ -9,7 +9,7 @@ namespace Crash
         public override Entry Load(byte[][] items, int eid, GameVersion version)
         {
             if (items == null)
-                throw new ArgumentNullException("items");
+                throw new ArgumentNullException(nameof(items));
             if (items.Length != 7)
             {
                 ErrorManager.SignalError("SceneryEntry: Wrong number of items");

@@ -8,7 +8,7 @@ namespace Crash
         public static ProtoNSD Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length < 0x408)
             {
                 ErrorManager.SignalError("ProtoNSD: Data is too short");
@@ -45,9 +45,9 @@ namespace Crash
         public ProtoNSD(int[] hashkeymap, int chunkcount, IEnumerable<NSDLink> index)
         {
             if (hashkeymap == null)
-                throw new ArgumentNullException("firstentries");
+                throw new ArgumentNullException(nameof(hashkeymap));
             if (index == null)
-                throw new ArgumentNullException("index");
+                throw new ArgumentNullException(nameof(index));
             HashKeyMap = hashkeymap;
             ChunkCount = chunkcount;
             Index = new List<NSDLink>(index);

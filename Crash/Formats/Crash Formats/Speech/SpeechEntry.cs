@@ -6,7 +6,7 @@ namespace Crash
     {
         public SpeechEntry(SampleSet samples, int eid) : base(eid)
         {
-            Samples = samples ?? throw new ArgumentNullException("samples");
+            Samples = samples ?? throw new ArgumentNullException(nameof(samples));
         }
 
         public override int Type => 20;

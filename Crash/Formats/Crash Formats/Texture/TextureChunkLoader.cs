@@ -8,7 +8,7 @@ namespace Crash
         public override Chunk Load(int chunkid, byte[] data, NSF nsf)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             return new TextureChunk(data, nsf);
         }
     }

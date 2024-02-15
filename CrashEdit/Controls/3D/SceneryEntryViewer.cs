@@ -1,6 +1,5 @@
 using Crash;
 using OpenTK;
-using System;
 using System.Collections.Generic;
 
 namespace CrashEdit

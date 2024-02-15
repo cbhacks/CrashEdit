@@ -123,9 +123,9 @@ namespace Crash
         public VH(bool isoldversion, int vbsize, byte volume, byte panning, byte attribute1, byte attribute2, IDictionary<int, VHProgram> programs, IEnumerable<int> waves)
         {
             if (programs == null)
-                throw new ArgumentNullException("programs");
+                throw new ArgumentNullException(nameof(programs));
             if (waves == null)
-                throw new ArgumentNullException("waves");
+                throw new ArgumentNullException(nameof(waves));
             IsOldVersion = isoldversion;
             VBSize = vbsize;
             Volume = volume;

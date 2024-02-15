@@ -63,7 +63,7 @@ namespace Crash
         public OldCamera(int slsteid, int garbage, int neighborcount, OldCameraNeighbor[] neighbors, byte entrypoint, byte exitpoint, short mode, short avgdist, short zoom, short unk1, short unk2, short unk3, short xdir, short ydir, short zdir, IEnumerable<OldCameraPosition> position, short blank)
         {
             if (position == null)
-                throw new ArgumentNullException("position");
+                throw new ArgumentNullException(nameof(position));
             SLSTEID = slsteid;
             Garbage = garbage;
             NeighborCount = neighborcount;

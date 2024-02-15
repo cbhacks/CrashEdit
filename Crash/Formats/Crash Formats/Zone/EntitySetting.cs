@@ -7,7 +7,7 @@ namespace Crash
         public EntitySetting(byte valuea, int valueb)
         {
             if (valueb < -8388608 || valueb > 8388607)
-                throw new ArgumentOutOfRangeException("valueb");
+                throw new ArgumentOutOfRangeException(nameof(valueb));
             Value = valuea | (valueb << 8);
         }
 

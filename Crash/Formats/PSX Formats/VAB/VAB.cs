@@ -8,9 +8,9 @@ namespace Crash
         public static VAB Join(VH vh, SampleLine[] vb)
         {
             if (vh == null)
-                throw new ArgumentNullException("vh");
+                throw new ArgumentNullException(nameof(vh));
             if (vb == null)
-                throw new ArgumentNullException("vb");
+                throw new ArgumentNullException(nameof(vb));
             if (vh.VBSize != vb.Length)
             {
                 ErrorManager.SignalIgnorableError("VAB: VB size field mismatch");
