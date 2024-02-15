@@ -28,7 +28,10 @@ namespace CrashEdit
         private bool form_want_update = false;
         private bool form_want_select = false;
 
-        private int[][][] nodes_unpacked = null;
+        private int[] nodes;
+        private int nodes_x;
+        private int nodes_y;
+        private int nodes_z;
         private readonly List<ushort> node_types = new();
 
         private static int texColors = 0;
@@ -155,25 +158,15 @@ namespace CrashEdit
             }
         }
 
+        private int GetNodeArrayIndex(int x, int y, int z) => x + y * nodes_x + z * nodes_y * nodes_x;
+
         public void RenderOctree(byte[] data, int start_offset, Vector3 trans, Vector3 size, int xmax, int ymax, int zmax)
         {
-            int xnodes = 1 << xmax;
-            int ynodes = 1 << ymax;
-            int znodes = 1 << zmax;
+            nodes_x = 1 << xmax;
+            nodes_y = 1 << ymax;
+            nodes_z = 1 << zmax;
 
-            nodes_unpacked = new int[xnodes][][];
-            for (int i = 0; i < xnodes; i++)
-            {
-                nodes_unpacked[i] = new int[ynodes][];
-                for (int ii = 0; ii < ynodes; ii++)
-                {
-                    nodes_unpacked[i][ii] = new int[znodes];
-                    for (int iii = 0; iii < znodes; iii++)
-                    {
-                        nodes_unpacked[i][ii][iii] = 0;
-                    }
-                }
-            }
+            nodes = new int[nodes_x * nodes_y * nodes_z];
 
             if (texColors == 0) texColors = GL.GenTexture();
             if (texNodes == 0) texNodes = GL.GenTexture();
@@ -190,34 +183,22 @@ namespace CrashEdit
 
             RenderOctreeNode(data, start_offset, 0, 0, 0, trans, size, xmax, ymax, zmax);
 
-            int[] allnodes = new int[xnodes * ynodes * znodes];
-            for (int i = 0; i < nodes_unpacked.Length; i++)
-            {
-                for (int ii = 0; ii < nodes_unpacked[i].Length; ii++)
-                {
-                    for (int iii = 0; iii < nodes_unpacked[i][ii].Length; iii++)
-                    {
-                        allnodes[i + ii * xnodes + iii * ynodes * xnodes] = nodes_unpacked[i][ii][iii];
-                    }
-                }
-            }
-
             GL.ActiveTexture(TextureUnit.Texture4);
             GL.BindTexture(TextureTarget.Texture3D, texNodes);
             GL.TexParameter(TextureTarget.Texture3D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture3D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-            GL.TexImage3D(TextureTarget.Texture3D, 0, PixelInternalFormat.R32i, xnodes, ynodes, znodes, 0, PixelFormat.RedInteger, PixelType.Int, allnodes);
+            GL.TexImage3D(TextureTarget.Texture3D, 0, PixelInternalFormat.R32i, nodes_x, nodes_y, nodes_z, 0, PixelFormat.RedInteger, PixelType.Int, nodes);
 
             if (outline)
             {
-                Vector3 cur_size = new Vector3(size.X, 0, 0);
-                Vector3w cur_nodes = new Vector3w(xnodes, 0, 0);
-                for (int i = 0; i <= ynodes; ++i)
+                Vector3 cur_size = new(size.X, 0, 0);
+                Vector3w cur_nodes = new(nodes_x, 0, 0);
+                for (int i = 0; i <= nodes_y; ++i)
                 {
-                    for (int ii = 0; ii <= znodes; ++ii)
+                    for (int ii = 0; ii <= nodes_z; ++ii)
                     {
-                        Vector3 cur_trans = new(trans.X, trans.Y + size.Y / ynodes * i, trans.Z + size.Z / znodes * ii);
-                        if (i < ynodes && ii < znodes)
+                        Vector3 cur_trans = new(trans.X, trans.Y + size.Y / nodes_y * i, trans.Z + size.Z / nodes_z * ii);
+                        if (i < nodes_y && ii < nodes_z)
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(0, i, ii), cur_nodes);
                         if (i > 0 && ii > 0)
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(0, i - 1, ii - 1), cur_nodes);
@@ -227,14 +208,14 @@ namespace CrashEdit
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(0, i, ii - 1), cur_nodes);
                     }
                 }
-                cur_size = new Vector3(0, size.Y, 0);
-                cur_nodes = new Vector3w(0, ynodes, 0);
-                for (int i = 0; i <= xnodes; ++i)
+                cur_size = new(0, size.Y, 0);
+                cur_nodes = new(0, nodes_y, 0);
+                for (int i = 0; i <= nodes_x; ++i)
                 {
-                    for (int ii = 0; ii <= znodes; ++ii)
+                    for (int ii = 0; ii <= nodes_z; ++ii)
                     {
-                        Vector3 cur_trans = new(trans.X + size.X / xnodes * i, trans.Y, trans.Z + size.Z / znodes * ii);
-                        if (i < xnodes && ii < znodes)
+                        Vector3 cur_trans = new(trans.X + size.X / nodes_x * i, trans.Y, trans.Z + size.Z / nodes_z * ii);
+                        if (i < nodes_x && ii < nodes_z)
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(i, 0, ii), cur_nodes);
                         if (i > 0 && ii > 0)
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(i - 1, 0, ii - 1), cur_nodes);
@@ -244,14 +225,14 @@ namespace CrashEdit
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(i, 0, ii - 1), cur_nodes);
                     }
                 }
-                cur_size = new Vector3(0, 0, size.Z);
-                cur_nodes = new Vector3w(0, 0, znodes);
-                for (int i = 0; i <= xnodes; ++i)
+                cur_size = new(0, 0, size.Z);
+                cur_nodes = new(0, 0, nodes_z);
+                for (int i = 0; i <= nodes_x; ++i)
                 {
-                    for (int ii = 0; ii <= ynodes; ++ii)
+                    for (int ii = 0; ii <= nodes_y; ++ii)
                     {
-                        Vector3 cur_trans = new(trans.X + size.X / xnodes * i, trans.Y + size.Y / ynodes * ii, trans.Z);
-                        if (i < xnodes && ii < ynodes)
+                        Vector3 cur_trans = new(trans.X + size.X / nodes_x * i, trans.Y + size.Y / nodes_y * ii, trans.Z);
+                        if (i < nodes_x && ii < nodes_y)
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(i, ii, 0), cur_nodes);
                         if (i > 0 && ii > 0)
                             viewer.AddOctreeLine(cur_trans, cur_size, new Vector3w(i - 1, ii - 1, 0), cur_nodes);
@@ -266,29 +247,29 @@ namespace CrashEdit
             }
             else
             {
-                for (int i = 0; i <= xnodes; ++i)
+                for (int i = 0; i <= nodes_x; ++i)
                 {
-                    Vector3 cur_trans = new(trans.X + size.X / xnodes * i, trans.Y, trans.Z);
-                    if (i < xnodes)
-                        viewer.AddOctreeX(cur_trans, new Vector3(0, size.Y, size.Z), i, new Vector3w(0, ynodes, znodes));
+                    Vector3 cur_trans = new(trans.X + size.X / nodes_x * i, trans.Y, trans.Z);
+                    if (i < nodes_x)
+                        viewer.AddOctreeX(cur_trans, new Vector3(0, size.Y, size.Z), i, new Vector3w(0, nodes_y, nodes_z));
                     if (i > 0)
-                        viewer.AddOctreeX(cur_trans, new Vector3(0, size.Y, size.Z), i - 1, new Vector3w(0, ynodes, znodes));
+                        viewer.AddOctreeX(cur_trans, new Vector3(0, size.Y, size.Z), i - 1, new Vector3w(0, nodes_y, nodes_z));
                 }
-                for (int i = 0; i <= ynodes; ++i)
+                for (int i = 0; i <= nodes_y; ++i)
                 {
-                    Vector3 cur_trans = new(trans.X, trans.Y + size.Y / ynodes * i, trans.Z);
-                    if (i < ynodes)
-                        viewer.AddOctreeY(cur_trans, new Vector3(size.X, 0, size.Z), i, new Vector3w(xnodes, 0, znodes));
+                    Vector3 cur_trans = new(trans.X, trans.Y + size.Y / nodes_y * i, trans.Z);
+                    if (i < nodes_y)
+                        viewer.AddOctreeY(cur_trans, new Vector3(size.X, 0, size.Z), i, new Vector3w(nodes_x, 0, nodes_z));
                     if (i > 0)
-                        viewer.AddOctreeY(cur_trans, new Vector3(size.X, 0, size.Z), i - 1, new Vector3w(xnodes, 0, znodes));
+                        viewer.AddOctreeY(cur_trans, new Vector3(size.X, 0, size.Z), i - 1, new Vector3w(nodes_x, 0, nodes_z));
                 }
-                for (int i = 0; i <= znodes; ++i)
+                for (int i = 0; i <= nodes_z; ++i)
                 {
-                    Vector3 cur_trans = new(trans.X, trans.Y, trans.Z + size.Z / znodes * i);
-                    if (i < znodes)
-                        viewer.AddOctreeZ(cur_trans, new Vector3(size.X, size.Y, 0), i, new Vector3w(xnodes, ynodes, 0));
+                    Vector3 cur_trans = new(trans.X, trans.Y, trans.Z + size.Z / nodes_z * i);
+                    if (i < nodes_z)
+                        viewer.AddOctreeZ(cur_trans, new Vector3(size.X, size.Y, 0), i, new Vector3w(nodes_x, nodes_y, 0));
                     if (i > 0)
-                        viewer.AddOctreeZ(cur_trans, new Vector3(size.X, size.Y, 0), i - 1, new Vector3w(xnodes, ynodes, 0));
+                        viewer.AddOctreeZ(cur_trans, new Vector3(size.X, size.Y, 0), i - 1, new Vector3w(nodes_x, nodes_y, 0));
                 }
 
                 viewer.OctreeSetNodeShadeMax(Settings.Default.NodeShadeMax);
@@ -311,11 +292,9 @@ namespace CrashEdit
                         for (int iii = z; iii < z + (1 << zmax); ++iii)
                         {
                             // pack the node resolution into the upper 16 bits (5-5-5 currently) so the node renderer can merge them
-                            // if we're not just sending null nodes that is
+                            // don't do it on null nodes so we can just check for 0
                             if (value != 0)
-                                nodes_unpacked[i][ii][iii] = value | (xmax << 16) | (ymax << 21) | (zmax << 26);
-                            else
-                                nodes_unpacked[i][ii][iii] = 0;
+                                nodes[GetNodeArrayIndex(i, ii, iii)] = value | (xmax << 16) | (ymax << 21) | (zmax << 26);
                         }
                     }
                 }
