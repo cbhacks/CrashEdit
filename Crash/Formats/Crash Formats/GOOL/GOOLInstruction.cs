@@ -195,7 +195,7 @@ namespace Crash
 
         private string GetArguments()
         {
-            if (Args.Count == 0) return "\t";
+            if (Args.Count == 0) return "";
             string finalargs = string.Empty;
 
             bool multiple = false;
@@ -207,8 +207,6 @@ namespace Crash
                 multiple = true;
             }
 
-            if (finalargs.Length < 5)
-                finalargs += "\t";
             return finalargs;
         }
 
