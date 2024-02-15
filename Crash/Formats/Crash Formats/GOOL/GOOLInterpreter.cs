@@ -155,6 +155,36 @@ namespace Crash
 
     public static class GOOLInterpreter
     {
+        private static string[] GlobalsCrash1 = new string[512];
+        private static string[] GlobalsCrash2 = new string[512];
+        private static string[] GlobalsCrash3 = new string[512];
+
+        static GOOLInterpreter()
+        {
+            GlobalsCrash1[0x0] = "*level*";
+            GlobalsCrash1[0x44] = "*debug*";
+
+            GlobalsCrash2[0x0] = GlobalsCrash1[0x0];
+            GlobalsCrash2[0x44] = GlobalsCrash1[0x44];
+
+            GlobalsCrash3[0x0] = GlobalsCrash2[0x0];
+            GlobalsCrash3[0x44] = GlobalsCrash2[0x44];
+        }
+
+        public static string GetGlobalName(GOOLVersion version, int index)
+        {
+            var globals = GlobalsCrash1;
+            switch (version)
+            {
+                case GOOLVersion.Version2: globals = GlobalsCrash2; break;
+                case GOOLVersion.Version3: globals = GlobalsCrash3; break;
+            }
+
+            if (index < 0 || index >= globals.Length)
+                return null;
+            return globals[index];
+        }
+
         public static GOOLVersion GetVersion(GameVersion ver)
         {
             switch (ver)
@@ -194,12 +224,12 @@ namespace Crash
             switch (ins.GOOL.Version)
             {
                 case GOOLVersion.Version0:
-                    return ins is Cfl_95 r0 && r0.Args['T'].Value == 2;
+                    return ins.Type == typeof(Cfl_95) && ins.Args['T'].Value == 2;
                 case GOOLVersion.Version1:
-                    return ins is Cfl r1 && r1.Args['T'].Value == 2;
+                    return ins.Type == typeof(Cfl) && ins.Args['T'].Value == 2;
                 case GOOLVersion.Version2:
                 case GOOLVersion.Version3:
-                    return ins is Ret;
+                    return ins.Type == typeof(Ret);
                 default:
                     return false;
             }
@@ -211,7 +241,7 @@ namespace Crash
             {
                 case GOOLVersion.Version2:
                 case GOOLVersion.Version3:
-                    return ins is Mips;
+                    return ins.Type == typeof(Mips);
                 default:
                     return false;
             }

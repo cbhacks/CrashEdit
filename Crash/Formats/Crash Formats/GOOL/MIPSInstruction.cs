@@ -46,7 +46,7 @@
             mipsformat = fmt;
         }
 
-        public MIPSInstruction(int value, GOOLEntry gool) : base(value, gool)
+        public MIPSInstruction(int value, GOOLEntry gool) : base(value, gool, null)
         {
             if (value == 0)
             {
@@ -194,7 +194,7 @@
             return $"${(MIPSRegisters)reg}";
         }
 
-        public override string Name => mipsname;
+        public override string GetName() => mipsname;
         public override string Arguments
         {
             get
@@ -241,7 +241,7 @@
                 }
             }
         }
-        public override string Comment => string.Empty;
-        public override string Format => string.Empty;
+        public override string GetComment() => string.Empty;
+        public override string GetFormat() => string.Empty;
     }
 }

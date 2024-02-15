@@ -1,32 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Crash
 {
-    public abstract class GOOLInstruction
+    public class GOOLInstruction
     {
-        protected const string DefaultFormat = "[AAAAAAAAAAAA] [BBBBBBBBBBBB]";
-        protected const string DefaultFormatLR = "[LLLLLLLLLLLL] [RRRRRRRRRRRR]";
-        protected const string DefaultFormatDS = "[DDDDDDDDDDDD] [SSSSSSSSSSSS]";
-        protected const string DefaultFormatDS2 = "{DDDDDDDDDDDD} [SSSSSSSSSSSS]";
-        protected const string NullFormat = "000001111101";
-        protected const int NullRef = 0xBE0;
-        protected const int DoubleStackRef = 0xBF0;
+        public const string DefaultFormat = "[AAAAAAAAAAAA] [BBBBBBBBBBBB]";
+        public const string DefaultFormatLR = "[LLLLLLLLLLLL] [RRRRRRRRRRRR]";
+        public const string DefaultFormatDS = "[DDDDDDDDDDDD] [SSSSSSSSSSSS]";
+        public const string DefaultFormatDS2 = "{DDDDDDDDDDDD} [SSSSSSSSSSSS]";
+        public const string NullFormat = "000001111101";
+        public const int NullRef = 0xBE0;
+        public const int DoubleStackRef = 0xBF0;
 
         private readonly Dictionary<char, GOOLArgument> args;
+        private readonly Type type;
 
-        public abstract string Name { get; }
-        public abstract string Format { get; } // [] means a GOOL ref, () means a process field, valid digits are any letter + 0, 1 and -, and each correspond to one bit. Bitfields must be contiguous. Spaces are removed in parsing.
-        public abstract string Comment { get; }
+        public virtual string GetName()
+        {
+            var method = type.GetMethod("GetName", BindingFlags.Public | BindingFlags.Static);
+            return (string)method.Invoke(null, new object[] { this });
+        }
+
+        public virtual string GetFormat()
+        {
+            var method = type.GetMethod("GetFormat", BindingFlags.Public | BindingFlags.Static);
+            return (string)method.Invoke(null, null);
+        }
+
+        public virtual string GetComment()
+        {
+            var method = type.GetMethod("GetComment", BindingFlags.Public | BindingFlags.Static);
+            return (string)method.Invoke(null, new object[] { this });
+        }
+
         public virtual string Arguments => GetArguments();
         public GOOLEntry GOOL { get; }
+        public Type Type => type;
         public int Value { get; set; }
         public int UnusedArg { get; private set; }
         public int Opcode => Value >> 24 & 0xFF;
         public IDictionary<char, GOOLArgument> Args => args;
 
-        public GOOLInstruction(int value, GOOLEntry gool)
+        public GOOLInstruction(int value, GOOLEntry gool, Type type)
         {
+            this.type = type;
             GOOL = gool;
             Value = value;
             args = new Dictionary<char, GOOLArgument>();
@@ -36,21 +55,23 @@ namespace Crash
 
         private void LoadFormat()
         {
+            // [] means a GOOL ref, () means a process field, valid digits are any letter + 0, 1 and -, and each correspond to one bit. Bitfields must be contiguous. Spaces are removed in parsing.
             args.Clear();
             int vbits = 0;
             int lastv = 0;
             int lastbits = 0;
             char lasta = '\0';
             GOOLArgumentTypes type = GOOLArgumentTypes.None;
-            for (int i = 0; i < Format.Length; ++i)
+            string format = GetFormat();
+            for (int i = 0; i < format.Length; ++i)
             {
-                char c = Format[i];
-                if (char.IsWhiteSpace(c) && !char.IsLetter(c) && (c != '-' && c != '0' && c != '1' && c != '[' && c != ']' && c != '(' && c != ')' && c != '{' && c != '}')) continue;
-                if (c == '[' || c == '{')
+                char c = format[i];
+                if (char.IsWhiteSpace(c) || (!char.IsLetter(c) && (c != '-' && c != '0' && c != '1' && c != '[' && c != ']' && c != '(' && c != ')' && c != '{' && c != '}' && c != '<' && c != '>'))) continue;
+                if (c == '[' || c == '{' || c == '(' || c == '<')
                 {
                     if (type != GOOLArgumentTypes.None)
                         ErrorManager.SignalError("GOOLInstruction: Bad format");
-                    if (c != lasta && c != '0' && c != '1' && c != '-')
+                    if (c != lasta)
                     {
                         if (vbits - lastbits > 0)
                             args.Add(lasta, new GOOLArgument(lastv));
@@ -59,43 +80,34 @@ namespace Crash
                         lasta = c;
                         lastv = 0;
                     }
-                    type = c == '[' ? GOOLArgumentTypes.Ref : GOOLArgumentTypes.DestRef;
-                }
-                else if (c == '(')
-                {
-                    if (type != GOOLArgumentTypes.None)
-                        ErrorManager.SignalError("GOOLInstruction: Bad format");
-                    if (c != lasta && c != '0' && c != '1' && c != '-')
+                    switch (c)
                     {
-                        if (vbits - lastbits > 0)
-                            args.Add(lasta, new GOOLArgument(lastv));
-
-                        lastbits = vbits;
-                        lasta = c;
-                        lastv = 0;
+                        case '[': type = GOOLArgumentTypes.Ref; break;
+                        case '{': type = GOOLArgumentTypes.DestRef; break;
+                        case '(': type = GOOLArgumentTypes.ProcessField; break;
+                        case '<': type = GOOLArgumentTypes.Signed; break;
                     }
-                    type = GOOLArgumentTypes.ProcessField;
                 }
-                else if (c == ']' || c == '}')
+                else if (c == ']' || c == '}' || c == ')' || c == '>')
                 {
-                    if (type != (c == ']' ? GOOLArgumentTypes.Ref : GOOLArgumentTypes.DestRef))
-                        ErrorManager.SignalError("GOOLInstruction: Bad format");
-                    if (vbits - lastbits < 12)
+                    var want_type = GOOLArgumentTypes.None;
+                    switch (c)
                     {
-                        ErrorManager.SignalError("GOOLInstruction: Bad format, GOOL ref must be at least 12 bits wide");
+                        case ']': want_type = GOOLArgumentTypes.Ref; break;
+                        case '}': want_type = GOOLArgumentTypes.DestRef; break;
+                        case ')': want_type = GOOLArgumentTypes.ProcessField; break;
+                        case '>': want_type = GOOLArgumentTypes.Signed; break;
                     }
-                    if (vbits - lastbits > 0)
-                        args.Add(lasta, new GOOLArgument(lastv, type));
 
-                    lastbits = vbits;
-                    lasta = c;
-                    lastv = 0;
-                    type = GOOLArgumentTypes.None;
-                }
-                else if (c == ')')
-                {
-                    if (type != GOOLArgumentTypes.ProcessField)
+                    if (type != want_type)
                         ErrorManager.SignalError("GOOLInstruction: Bad format");
+                    if ((type == GOOLArgumentTypes.Ref || type == GOOLArgumentTypes.DestRef) && vbits - lastbits < 12)
+                        ErrorManager.SignalError("GOOLInstruction: Bad format, GOOL ref must be at least 12 bits long");
+                    if (vbits - lastbits == 0)
+                        ErrorManager.SignalError("GOOLInstruction: Bad format, argument was 0 bits long");
+
+                    if (type == GOOLArgumentTypes.Signed)
+                        lastv = BitConv.SignExtendInt32(lastv, vbits - lastbits);
                     if (vbits - lastbits > 0)
                         args.Add(lasta, new GOOLArgument(lastv, type));
 
@@ -133,7 +145,7 @@ namespace Crash
             }
             if (vbits != 24)
             {
-                ErrorManager.SignalError("GOOLInstruction: Format has wrong length");
+                ErrorManager.SignalError($"GOOLInstruction: Bad format, read {vbits} bits instead of 24");
             }
             if (type != GOOLArgumentTypes.None)
             {
@@ -150,10 +162,10 @@ namespace Crash
             return Value;
         }
 
-        protected string GetArg(char a)
+        public string GetArg(char a)
         {
             if (!args.ContainsKey(a))
-                throw new ArgumentException("GetArg: Argument not found", "a");
+                throw new ArgumentException($"GetArg: Argument `{a}` not found", "a");
             switch (args[a].Type)
             {
                 case GOOLArgumentTypes.Ref:
@@ -167,9 +179,23 @@ namespace Crash
             }
         }
 
+        public bool TryGetImmediate(char a, out int val)
+        {
+            if (!args.ContainsKey(a))
+                throw new ArgumentException($"GetArg: Argument `{a}` not found", "a");
+            switch (args[a].Type)
+            {
+                case GOOLArgumentTypes.Ref:
+                    return GetRefValImm(args[a].Value, out val);
+                default:
+                    val = 0;
+                    return false;
+            }
+        }
+
         private string GetArguments()
         {
-            if (Args.Count == 0) return "\t";
+            if (Args.Count == 0) return "";
             string finalargs = string.Empty;
 
             bool multiple = false;
@@ -181,8 +207,6 @@ namespace Crash
                 multiple = true;
             }
 
-            if (finalargs.Length < 5)
-                finalargs += "\t";
             return finalargs;
         }
 
@@ -212,7 +236,7 @@ namespace Crash
                                 return $"({cval.TransformedString()})";
                         }
                         else
-                            return $"[pool$({off.TransformedString()})]";
+                            return $"L({off.TransformedString()})";
                     }
                 }
                 else
@@ -227,7 +251,7 @@ namespace Crash
                     }
                     else
                     {
-                        return $"[ext$({off.TransformedString()})]";
+                        return $"EL({off.TransformedString()})";
                     }
                 }
             }
@@ -271,6 +295,62 @@ namespace Crash
                     return ((ObjectFields)(val & 0x1FF)).ToString();
             }
             return "[null]";
+        }
+
+        private bool GetRefValImm(int val, out int ret)
+        {
+            if ((val & 0x800) == 0)
+            {
+                int off = val & 0x3FF;
+                if ((val & 0x400) == 0)
+                {
+                    if (GOOL.Format == 1 && off < GOOL.Data.Length) // external GOOL entries will logically not have local data...
+                    {
+                        ret = GOOL.Data[off];
+                        if (off < GOOL.EntryCount)
+                            return false;
+                        else
+                            return true;
+                    }
+                    else
+                    {
+                        if (GOOL.ParentGOOL != null && GOOL.Format == 0 && off < GOOL.ParentGOOL.Data.Length)
+                        {
+                            ret = GOOL.ParentGOOL.Data[off];
+                            if (off < GOOL.ParentGOOL.EntryCount)
+                                return false;
+                            else
+                                return true;
+                        }
+                    }
+                }
+                else
+                {
+                    if (GOOL.Format == 0 && off < GOOL.Data.Length) // local GOOL entries will logically not have external data...
+                    {
+                        ret = GOOL.Data[off];
+                        if (off < GOOL.EntryCount)
+                            return false;
+                        else
+                            return true;
+                    }
+                }
+            }
+            if ((val & 0x400) == 0)
+            {
+                if ((val & 0x200) == 0)
+                {
+                    ret = val << 0x17 >> 0xF;
+                    return true;
+                }
+                if ((val & 0x100) == 0)
+                {
+                    ret = val << 0x18 >> 0x14;
+                    return true;
+                }
+            }
+            ret = 0;
+            return false;
         }
 
         private string GetDestRefVal(int val)

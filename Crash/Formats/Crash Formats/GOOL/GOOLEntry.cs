@@ -39,17 +39,10 @@ namespace Crash
                     int opcode = ins >> 24 & 0xFF;
                     if (opset.ContainsKey(opcode))
                     {
-                        try
-                        {
-                            return (GOOLInstruction)Activator.CreateInstance(opset[opcode], ins, this);
-                        }
-                        catch (TargetInvocationException ex)
-                        {
-                            throw ex.InnerException;
-                        }
+                        return new GOOLInstruction(ins, this, opset[opcode]);
                     }
                 }
-                return new GOOLInvalidInstruction(ins, this);
+                return new GOOLUnknownInstruction(ins, this);
             }
             else
             {
@@ -80,12 +73,10 @@ namespace Crash
                 if (mips)
                 {
                     MIPSInstruction prev = null;
-                    if (this.instructions[this.instructions.Count - 2] is MIPSInstruction)
-                        prev = (MIPSInstruction)this.instructions[this.instructions.Count - 2];
+                    if (this.instructions[this.instructions.Count - 2] is MIPSInstruction mips_ins)
+                        prev = mips_ins;
                     if (prev != null && (prev.Value == 0x03E0A809 || prev.Value == 0x03E00008)) // native mips returns or ends here
-                    {
                         mips = false;
-                    }
                 }
                 else
                     mips = GOOLInterpreter.IsMIPSInstruction(ins);
