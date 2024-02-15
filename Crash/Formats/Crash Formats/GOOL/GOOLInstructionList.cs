@@ -466,7 +466,16 @@ namespace Crash.GOOLIns
     {
         public static string GetName(GOOLInstruction ins) => "GVAR";
         public static string GetFormat() => "[IIIIIIIIIIII] 000001111101";
-        public static string GetComment(GOOLInstruction ins) => $"push global[{ins.GetArg('I')}]";
+        public static string GetComment(GOOLInstruction ins)
+        {
+            if (ins.TryGetImmediate('I', out int gindex))
+            {
+                var name = GOOLInterpreter.GetGlobalName(ins.GOOL.Version, gindex >> 8);
+                if (name != null)
+                    return $"push global {name}";
+            }
+            return $"push global[{ins.GetArg('I')}]";
+        }
     }
 
     [GOOLInstruction(32, GameVersion.Crash1)]
@@ -479,7 +488,16 @@ namespace Crash.GOOLIns
     {
         public static string GetName(GOOLInstruction ins) => "GVAW";
         public static string GetFormat() => "[IIIIIIIIIIII] [SSSSSSSSSSSS]";
-        public static string GetComment(GOOLInstruction ins) => $"global[{ins.GetArg('I')}] = {ins.GetArg('S')}";
+        public static string GetComment(GOOLInstruction ins)
+        {
+            if (ins.TryGetImmediate('I', out int gindex))
+            {
+                var name = GOOLInterpreter.GetGlobalName(ins.GOOL.Version, gindex >> 8);
+                if (name != null)
+                    return $"global {name} = {ins.GetArg('S')}";
+            }
+            return $"global[{ins.GetArg('I')}] = {ins.GetArg('S')}";
+        }
     }
 
     [GOOLInstruction(33, GameVersion.Crash1)]

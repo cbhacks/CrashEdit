@@ -179,6 +179,20 @@ namespace Crash
             }
         }
 
+        public bool TryGetImmediate(char a, out int val)
+        {
+            if (!args.ContainsKey(a))
+                throw new ArgumentException($"GetArg: Argument `{a}` not found", "a");
+            switch (args[a].Type)
+            {
+                case GOOLArgumentTypes.Ref:
+                    return GetRefValImm(args[a].Value, out val);
+                default:
+                    val = 0;
+                    return false;
+            }
+        }
+
         private string GetArguments()
         {
             if (Args.Count == 0) return "\t";
@@ -283,6 +297,62 @@ namespace Crash
                     return ((ObjectFields)(val & 0x1FF)).ToString();
             }
             return "[null]";
+        }
+
+        private bool GetRefValImm(int val, out int ret)
+        {
+            if ((val & 0x800) == 0)
+            {
+                int off = val & 0x3FF;
+                if ((val & 0x400) == 0)
+                {
+                    if (GOOL.Format == 1 && off < GOOL.Data.Length) // external GOOL entries will logically not have local data...
+                    {
+                        ret = GOOL.Data[off];
+                        if (off < GOOL.EntryCount)
+                            return false;
+                        else
+                            return true;
+                    }
+                    else
+                    {
+                        if (GOOL.ParentGOOL != null && GOOL.Format == 0 && off < GOOL.ParentGOOL.Data.Length)
+                        {
+                            ret = GOOL.ParentGOOL.Data[off];
+                            if (off < GOOL.ParentGOOL.EntryCount)
+                                return false;
+                            else
+                                return true;
+                        }
+                    }
+                }
+                else
+                {
+                    if (GOOL.Format == 0 && off < GOOL.Data.Length) // local GOOL entries will logically not have external data...
+                    {
+                        ret = GOOL.Data[off];
+                        if (off < GOOL.EntryCount)
+                            return false;
+                        else
+                            return true;
+                    }
+                }
+            }
+            if ((val & 0x400) == 0)
+            {
+                if ((val & 0x200) == 0)
+                {
+                    ret = val << 0x17 >> 0xF;
+                    return true;
+                }
+                if ((val & 0x100) == 0)
+                {
+                    ret = val << 0x18 >> 0x14;
+                    return true;
+                }
+            }
+            ret = 0;
+            return false;
         }
 
         private string GetDestRefVal(int val)
