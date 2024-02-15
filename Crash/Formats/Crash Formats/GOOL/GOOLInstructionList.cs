@@ -750,29 +750,29 @@ namespace Crash.GOOLIns
 
     [GOOLInstruction(53, GameVersion.Crash2)]
     [GOOLInstruction(53, GameVersion.Crash3)]
-    public sealed class Cst
+    public sealed class Go
     {
-        public static string GetName(GOOLInstruction ins) => "CST";
+        public static string GetName(GOOLInstruction ins) => "GO";
         public static string GetFormat() => "SSSSSSSSSS VVVV (RRRRRR) 00 10";
-        public static string GetComment(GOOLInstruction ins) => $"change to state {ins.GetArg('S')}" + (ins.Args['V'].Value > 0 ? $" with {ins.GetArg('V')} argument(s)" : string.Empty);
+        public static string GetComment(GOOLInstruction ins) => $"go to state {ins.GetArg('S')}" + (ins.Args['V'].Value > 0 ? $" with {ins.GetArg('V')} argument(s)" : string.Empty);
     }
 
     [GOOLInstruction(54, GameVersion.Crash2)]
     [GOOLInstruction(54, GameVersion.Crash3)]
-    public sealed class Cnez
+    public sealed class Gnez
     {
-        public static string GetName(GOOLInstruction ins) => "CNEZ";
+        public static string GetName(GOOLInstruction ins) => "GNEZ";
         public static string GetFormat() => "SSSSSSSSSS VVVV (RRRRRR) 10 10";
-        public static string GetComment(GOOLInstruction ins) => $"if {(ObjectFields)ins.Args['R'].Value} is true, change to state {ins.GetArg('S')}" + (ins.Args['V'].Value > 0 ? $" with {ins.GetArg('V')} argument(s)" : string.Empty);
+        public static string GetComment(GOOLInstruction ins) => $"if {(ObjectFields)ins.Args['R'].Value} is true, go to state {ins.GetArg('S')}" + (ins.Args['V'].Value > 0 ? $" with {ins.GetArg('V')} argument(s)" : string.Empty);
     }
 
     [GOOLInstruction(55, GameVersion.Crash2)]
     [GOOLInstruction(55, GameVersion.Crash3)]
-    public sealed class Ceqz
+    public sealed class Geqz
     {
-        public static string GetName(GOOLInstruction ins) => "CEQZ";
+        public static string GetName(GOOLInstruction ins) => "GEQZ";
         public static string GetFormat() => "SSSSSSSSSS VVVV (RRRRRR) 01 10";
-        public static string GetComment(GOOLInstruction ins) => $"if {(ObjectFields)ins.Args['R'].Value} is false, change to state {ins.GetArg('S')}" + (ins.Args['V'].Value > 0 ? $" with {ins.GetArg('V')} argument(s)" : string.Empty);
+        public static string GetComment(GOOLInstruction ins) => $"if {(ObjectFields)ins.Args['R'].Value} is false, go to state {ins.GetArg('S')}" + (ins.Args['V'].Value > 0 ? $" with {ins.GetArg('V')} argument(s)" : string.Empty);
     }
 
     [GOOLInstruction(130, GameVersion.Crash1Beta1995)]
@@ -798,11 +798,11 @@ namespace Crash.GOOLIns
                     switch (ins.Args['C'].Value)
                     {
                         case 0:
-                            return "CST";
+                            return "GO";
                         case 1:
-                            return "CNEZ";
+                            return "GNEZ";
                         case 2:
-                            return "CEQZ";
+                            return "GEQZ";
                     }
                     break;
                 case 2:
@@ -851,7 +851,7 @@ namespace Crash.GOOLIns
                         return str + $"pop {v} values";
                     }
                 case 1:
-                    return str + $"change to state {ins.GetArg('I')}" + (v > 0 ? $" with {ins.GetArg('V')} arguments" : string.Empty);
+                    return str + $"go to state {ins.GetArg('I')}" + (v > 0 ? $" with {ins.GetArg('V')} arguments" : string.Empty);
                 case 2:
                     return str + "return";
             }
@@ -882,11 +882,11 @@ namespace Crash.GOOLIns
                     switch (ins.Args['C'].Value)
                     {
                         case 0:
-                            return "CST";
+                            return "GO";
                         case 1:
-                            return "CNEZ";
+                            return "GNEZ";
                         case 2:
-                            return "CEQZ";
+                            return "GEQZ";
                     }
                     break;
                 case 2:
@@ -935,7 +935,7 @@ namespace Crash.GOOLIns
                         return str + $"pop {v} values";
                     }
                 case 1:
-                    return str + $"change to state {ins.GetArg('I')}" + (v > 0 ? $" with {ins.GetArg('V')} arguments" : string.Empty);
+                    return str + $"go to state {ins.GetArg('I')}" + (v > 0 ? $" with {ins.GetArg('V')} arguments" : string.Empty);
                 case 2:
                     return str + "return";
             }
