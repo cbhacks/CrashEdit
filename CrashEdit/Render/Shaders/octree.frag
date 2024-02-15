@@ -6,6 +6,7 @@ layout(binding=4) uniform isampler3D tNodes;
 in vec3 pNode;
 
 uniform float uNodeShadeMax;
+uniform float uNodeAlpha;
 
 out vec4 fColor;
 
@@ -25,5 +26,6 @@ void main()
         // because the nodes are rendered on axis-aligned quads, only 2 axes can be non-integers, so we divide by 2 and not 3
         float shade = (packed_fracs.x + packed_fracs.y + packed_fracs.z) / 2 * uNodeShadeMax;
         fColor.rgb *= 1 - shade;
+        fColor.a = uNodeAlpha;
     }
 }

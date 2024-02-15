@@ -294,6 +294,7 @@ namespace CrashEdit
                 viewer.OctreeSetNodeShadeMax(Settings.Default.NodeShadeMax);
             }
 
+            viewer.OctreeSetNodeAlpha(alpha / 255f);
             viewer.OctreeSetOutline(outline);
 
             viewer.RenderOctree();

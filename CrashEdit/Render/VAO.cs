@@ -242,6 +242,7 @@ namespace CrashEdit
         public Vector3 UserColorDiff;
         public int UserCullMode; // 0 - no cull, 1 - backface (default), 2 - frontface
         public float UserFloat;
+        public float UserFloat2;
 
         public enum ColorModeEnum { Default = 0, GradientY = 1, Solid = 2 };
         public ColorModeEnum ColorMode;

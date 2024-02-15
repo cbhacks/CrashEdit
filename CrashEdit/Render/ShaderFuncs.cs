@@ -57,6 +57,7 @@ namespace CrashEdit
         internal static void RenderOctree(Shader sh, RenderInfo ri, VAO vao)
         {
             sh.UniformFloat("uNodeShadeMax", vao.UserFloat);
+            sh.UniformFloat("uNodeAlpha", vao.UserFloat2);
         }
     }
 }

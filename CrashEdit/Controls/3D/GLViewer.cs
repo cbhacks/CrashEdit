@@ -875,6 +875,11 @@ namespace CrashEdit
             vaoOctree.UserFloat = amt;
         }
 
+        public void OctreeSetNodeAlpha(float alpha)
+        {
+            vaoOctree.UserFloat2 = alpha;
+        }
+
         public void OctreeSetOutline(bool outline)
         {
             if (outline)
