@@ -166,7 +166,10 @@ namespace CrashEdit
             nodes_y = 1 << ymax;
             nodes_z = 1 << zmax;
 
-            nodes = new int[nodes_x * nodes_y * nodes_z];
+            if (nodes == null || nodes.Length < nodes_x * nodes_y * nodes_z)
+                nodes = new int[nodes_x * nodes_y * nodes_z];
+            else
+                nodes.Initialize();
 
             if (texColors == 0) texColors = GL.GenTexture();
             if (texNodes == 0) texNodes = GL.GenTexture();
