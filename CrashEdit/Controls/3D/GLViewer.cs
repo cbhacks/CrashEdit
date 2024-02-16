@@ -124,7 +124,7 @@ namespace CrashEdit
         protected static VAO vaoDebugBoxTri;
         protected static VAO vaoDebugBoxLine;
         protected static VAO vaoDebugSprite;
-        public static string dbgContextString = "*unknown*";
+        public static List<string> dbgContextDir = new();
 
         private static IGraphicsContext global_context;
         private static GLControl global_context_window;
@@ -386,7 +386,7 @@ namespace CrashEdit
             keyspressed.Clear();
         }
 
-        public static string BoolToEnable(bool enable)
+        public static string OnOffName(bool enable)
         {
             return enable ? "on" : "off";
         }
@@ -402,9 +402,9 @@ namespace CrashEdit
             con_help += Resources.ViewerControls_Move + '\n';
             con_help += Resources.ViewerControls_MoveAligned + '\n';
             con_help += Resources.ViewerControls_AimAndZoom + '\n';
-            con_help += KeyboardControls.ToggleHelp.Print(BoolToEnable(showHelp));
+            con_help += KeyboardControls.ToggleHelp.Print(OnOffName(showHelp));
             con_help += KeyboardControls.ResetCamera.Print();
-            con_help += KeyboardControls.ToggleTextures.Print(BoolToEnable(render.EnableTexture));
+            con_help += KeyboardControls.ToggleTextures.Print(OnOffName(render.EnableTexture));
         }
 
         protected virtual void RunLogic()
@@ -440,18 +440,20 @@ namespace CrashEdit
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            dbgContextString = "pre-run";
+            dbgContextDir.Clear();
             if (!loaded)
             {
+                dbgContextDir.Add("load");
                 MakeCurrent();
                 GLLoad();
                 loaded = true;
+                dbgContextDir.RemoveLast();
             }
             else if (run)
             {
                 Stopwatch watchRun = Stopwatch.StartNew();
 
-                dbgContextString = "run";
+                dbgContextDir.Add("render");
 
                 render.DebugRenderMs = 0;
 
@@ -460,7 +462,7 @@ namespace CrashEdit
                 // mutex lock to prevent races with the renderinfo timer and using the renderinfo itself
                 lock (render.mLock)
                 {
-                    dbgContextString = "setup";
+                    dbgContextDir.Add("setup");
 
                     // update font
                     if (fontTable.Size != Settings.Default.FontSize || fontTable.FileName != Settings.Default.FontName)
@@ -486,32 +488,41 @@ namespace CrashEdit
                     render.Projection.Forward = -(rot_mat * new Vector4(0, 0, 1, 1)).Xyz;
                     render.Projection.View = Matrix4.CreateTranslation(render.Projection.RealTrans) * rot_mat;
                     // con_debug += $"trans: {-render.Projection.Trans} -> real_trans: {-render.Projection.RealTrans}\n";
+                    
+                    dbgContextDir.RemoveLast();
+                    dbgContextDir.Add(GetType().ToString());
 
                     // render
-                    dbgContextString = "render " + GetType().ToString();
+                    dbgContextDir.Add("render");
                     Render();
+                    dbgContextDir.RemoveLast();
 
                     // post render
-                    dbgContextString = "post-render";
+                    dbgContextDir.Add("post-render");
                     PostRender();
+                    dbgContextDir.RemoveLast();
 
                     PrintHelp();
                     PrintDebug();
                     if (showHelp)
-                        AddText(con_help, Width, Height - 8, (Rgba)Color4.White, size: 0.9f, flags: TextRenderFlags.Right | TextRenderFlags.Bottom | TextRenderFlags.Default);
+                        AddText(con_help, Width, Height - 8, (Rgba)Color4.White, size: 0.85f, flags: TextRenderFlags.Right | TextRenderFlags.Bottom | TextRenderFlags.Default);
                     if (Settings.Default.Font2DEnable)
-                        AddText(con_debug, 0, 0, (Rgba)Color4.White, size: 0.9f);
+                        AddText(con_debug, 0, 0, (Rgba)Color4.White, size: 0.85f);
                     vaoText.UserScale = new Vector3(Width, Height, 1);
                     vaoText.RenderAndDiscard(render);
                     con_debug = string.Empty;
                     con_help = string.Empty;
+
+                    dbgContextDir.RemoveLast();
                 }
 
                 dbg_run_ms = watchRun.ElapsedMillisecondsFull();
 
                 // swap the front/back buffers so what we just rendered to the back buffer is displayed in the window.
-                dbgContextString = "swap-buffers";
+                dbgContextDir.RemoveLast();
+                dbgContextDir.Add("swap-buffers");
                 SwapBuffers();
+                dbgContextDir.RemoveLast();
             }
             base.OnPaint(e);
         }

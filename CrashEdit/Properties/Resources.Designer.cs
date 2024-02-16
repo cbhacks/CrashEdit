@@ -2064,7 +2064,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scroll through culling modes (current: {0}).
+        ///   Looks up a localized string similar to Change culling modes (current: {0}).
         /// </summary>
         internal static string ViewerControls_ChangeCullMode {
             get {
@@ -2109,7 +2109,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show collision boxes ({0}).
+        ///   Looks up a localized string similar to Toggle collision boxes ({0}).
         /// </summary>
         internal static string ViewerControls_ToggleCollisionAnim {
             get {
@@ -2127,7 +2127,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable animation interpolation ({0}).
+        ///   Looks up a localized string similar to Toggle animation interpolation ({0}).
         /// </summary>
         internal static string ViewerControls_ToggleLerp {
             get {
@@ -2136,7 +2136,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show normals ({0}).
+        ///   Looks up a localized string similar to Toggle normals ({0}).
         /// </summary>
         internal static string ViewerControls_ToggleNormals {
             get {
@@ -2145,7 +2145,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable textures ({0}).
+        ///   Looks up a localized string similar to Toggle textures ({0}).
         /// </summary>
         internal static string ViewerControls_ToggleTextures {
             get {
@@ -2163,7 +2163,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show zone collision octree ({0}).
+        ///   Looks up a localized string similar to Toggle zone collision octree ({0}).
         /// </summary>
         internal static string ViewerControls_ToggleZoneOctree {
             get {
@@ -2181,7 +2181,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show octree for neighbor zones ({0}).
+        ///   Looks up a localized string similar to Toggle neighbor zone octree ({0}).
         /// </summary>
         internal static string ViewerControls_ToggleZoneOctreeNeighbors {
             get {

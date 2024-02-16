@@ -90,10 +90,10 @@ namespace CrashEdit
 
         public string PrintHelp()
         {
-            return GLViewer.KeyboardControls.ToggleZoneOctree.Print(GLViewer.BoolToEnable(enable))
+            return GLViewer.KeyboardControls.ToggleZoneOctree.Print(GLViewer.OnOffName(enable))
                 + (!enable ? "" :
-                   GLViewer.KeyboardControls.ToggleZoneOctreeOutline.Print(GLViewer.BoolToEnable(outline))
-                 + GLViewer.KeyboardControls.ToggleZoneOctreeNeighbors.Print(GLViewer.BoolToEnable(show_neighbor_zones))
+                   GLViewer.KeyboardControls.ToggleZoneOctreeOutline.Print(GLViewer.OnOffName(outline))
+                 + GLViewer.KeyboardControls.ToggleZoneOctreeNeighbors.Print(GLViewer.OnOffName(show_neighbor_zones))
                  + GLViewer.KeyboardControls.OpenOctreeWindow.Print()
                     );
         }

@@ -1,4 +1,5 @@
-﻿using OpenTK;
+﻿using Crash;
+using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System;
@@ -175,8 +176,7 @@ namespace CrashEdit
 
             watch.Restart();
 
-            var backup_state = GLViewer.dbgContextString;
-            GLViewer.dbgContextString = "vao " + Shader.Name;
+            GLViewer.dbgContextDir.Add(Shader.Name);
 
             GL.GetBoolean(GetPName.DepthWritemask, out bool glZBufWrite);
             GL.GetBoolean(GetPName.DepthTest, out bool glZBufRead);
@@ -218,7 +218,7 @@ namespace CrashEdit
                 GL.LineWidth(glLineWidth);
             }
 
-            GLViewer.dbgContextString = backup_state;
+            GLViewer.dbgContextDir.RemoveLast();
 
             ri.DebugRenderMs += watch.StopAndElapsedMillisecondsFull();
         }

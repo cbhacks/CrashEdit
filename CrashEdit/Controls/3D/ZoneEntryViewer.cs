@@ -95,7 +95,7 @@ namespace CrashEdit
         {
             base.PrintHelp();
             con_help += octree_renderer.PrintHelp();
-            con_help += KeyboardControls.ToggleTimeTrial.Print(BoolToEnable(time_trial_mode));
+            con_help += KeyboardControls.ToggleTimeTrial.Print(OnOffName(time_trial_mode));
         }
 
         protected override void RunLogic()

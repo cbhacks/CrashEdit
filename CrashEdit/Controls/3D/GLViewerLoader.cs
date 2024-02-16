@@ -62,7 +62,23 @@ namespace CrashEdit
                             level = "INFO";
                             break;
                     }
-                    Console.WriteLine($"[{dbgContextString}] OpenGL {level}: {msg}");
+                    string context = null;
+                    if (dbgContextDir.Count > 0)
+                    {
+                        foreach (var c in dbgContextDir)
+                        {
+                            if (!string.IsNullOrEmpty(context))
+                            {
+                                context += "/";
+                            }
+                            context += c;
+                        }
+                    }
+                    else
+                    {
+                        context = "*unknown*";
+                    }
+                    Console.WriteLine($"[{context}] OpenGL {level}: {msg}");
                 }, IntPtr.Zero);
             }
 
