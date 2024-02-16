@@ -187,10 +187,7 @@ namespace CrashEdit
             zone_trans = new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
             Vector3 zoneSize = new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1;
             AddText3D(zone.EName, zone_trans + new Vector3(zoneSize.X, 0, zoneSize.Z) / 2, GetZoneColor(Color4.White), size: 2, flags: TextRenderFlags.Shadow | TextRenderFlags.Top | TextRenderFlags.Center);
-            AddBox(zone_trans,
-                   new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1,
-                   GetZoneColor(Color4.White),
-                   true);
+            AddBox(zone_trans, new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1, GetZoneColor(Color4.White), true);
             foreach (OldEntity entity in zone.Entities)
             {
                 RenderEntity(entity);
@@ -236,8 +233,6 @@ namespace CrashEdit
                         else if (pickup == 103) pickup_name = "cortex";
                         else if (pickup == 104) pickup_name = "brio";
                         else if (pickup == 105) pickup_name = "tawna";
-                        else if (pickup >= 200 && pickup < 264) pickup_name = "crystal-" + (pickup - 200);
-                        else if (pickup >= 300 && pickup < 364) pickup_name = "gem-" + (pickup - 300);
                         text_y += AddText3D(pickup_name, trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
                         int link_a = entity.VecZ;
                         var link_info = link_a == 0 ? null : nsf.GetEntityC1(link_a);
@@ -247,10 +242,28 @@ namespace CrashEdit
                             var lzone = link_info.Item2;
                             if (link.Positions.Count > 0)
                             {
+                                float wave_pad = 0.15f;
+                                float wave_ramp = 0.3f;
+                                float wave_sustain = 0.15f;
+                                float cycle_size = 1 + wave_pad * 2 + wave_ramp * 2 + wave_sustain;
+                                float cycle = (float)(render.CurrentTime % 4) / 4 * cycle_size;
+                                float lerp_ramp_end = cycle - wave_pad;
+                                float lerp_sustain_end = lerp_ramp_end - wave_ramp;
+                                float lerp_sustain_start = lerp_sustain_end - wave_sustain;
+                                float lerp_ramp_start = lerp_sustain_start - wave_ramp;
+
                                 var lzone_trans = new Vector3(lzone.X, lzone.Y, lzone.Z) / GameScales.ZoneC1;
                                 Vector3 link_trans = new Vector3(link.Positions[0].X, link.Positions[0].Y, link.Positions[0].Z) / GameScales.ZoneEntityC1 + lzone_trans;
                                 vaoLinesThick.PushAttrib(trans: trans, rgba: GetZoneColor(Color4.Red));
-                                vaoLinesThick.PushAttrib(trans: link_trans, rgba: GetZoneColor(Color4.Lime));
+                                vaoLinesThick.PushAttrib(trans: MathExt.Lerp(trans, link_trans, lerp_ramp_start), rgba: GetZoneColor(Color4.Red));
+                                vaoLinesThick.PushAttrib(trans: MathExt.Lerp(trans, link_trans, lerp_ramp_start), rgba: GetZoneColor(MathExt.Lerp(Color4.Red, Color4.Lime, (-lerp_ramp_start) / wave_ramp)));
+                                vaoLinesThick.PushAttrib(trans: MathExt.Lerp(trans, link_trans, lerp_sustain_start), rgba: GetZoneColor(MathExt.Lerp(Color4.Red, Color4.Lime, -(lerp_ramp_start - 1) / wave_ramp)));
+                                vaoLinesThick.PushAttrib(trans: MathExt.Lerp(trans, link_trans, lerp_sustain_start), rgba: GetZoneColor(Color4.Lime));
+                                vaoLinesThick.PushAttrib(trans: MathExt.Lerp(trans, link_trans, lerp_sustain_end), rgba: GetZoneColor(Color4.Lime));
+                                vaoLinesThick.PushAttrib(trans: MathExt.Lerp(trans, link_trans, lerp_sustain_end), rgba: GetZoneColor(MathExt.Lerp(Color4.Red, Color4.Lime, lerp_ramp_end / wave_ramp)));
+                                vaoLinesThick.PushAttrib(trans: MathExt.Lerp(trans, link_trans, lerp_ramp_end), rgba: GetZoneColor(MathExt.Lerp(Color4.Red, Color4.Lime, (lerp_ramp_end - 1) / wave_ramp)));
+                                vaoLinesThick.PushAttrib(trans: MathExt.Lerp(trans, link_trans, lerp_ramp_end), rgba: GetZoneColor(Color4.Red));
+                                vaoLinesThick.PushAttrib(trans: link_trans, rgba: GetZoneColor(Color4.Red));
                             }
                         }
                     }
