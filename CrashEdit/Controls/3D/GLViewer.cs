@@ -391,6 +391,17 @@ namespace CrashEdit
             return enable ? "on" : "off";
         }
 
+        public static string CullModeName(int mode)
+        {
+            switch (mode)
+            {
+                case 0: return "frontface culling";
+                case 1: return "backface culling";
+                case 2:
+                default: return "no culling";
+            }
+        }
+
         protected virtual void PrintDebug()
         {
             con_debug += $"Zoom: {render.Projection.Distance}\nMove Speed: {GetMoveSpeed()}\n";
