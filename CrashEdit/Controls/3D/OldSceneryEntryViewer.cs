@@ -121,7 +121,7 @@ namespace CrashEdit
         protected void RenderWorld(OldSceneryEntry world, Dictionary<int, short> tex_eids)
         {
             if (world.IsSky)
-                world_offset = MathExt.Div(-render.Projection.RealTrans, vaoWorld.UserScale);
+                world_offset = MathExt.Div(-render.Projection.Trans, vaoWorld.UserScale);
             else
                 world_offset = new Vector3(world.XOffset, world.YOffset, world.ZOffset);
             foreach (OldSceneryPolygon polygon in world.Polygons)

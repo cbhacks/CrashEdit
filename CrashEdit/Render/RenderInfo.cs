@@ -22,8 +22,8 @@ namespace CrashEdit
         public void Reset()
         {
             Projection.Distance = ProjectionInfo.InitialDistance;
-            Projection.Trans = new(0, 0, 0);
-            Projection.Rot = new(BaseRot, 0, 0);
+            Projection.CamTrans = new(0, 0, 0);
+            Projection.CamRot = new(BaseRot, 0, 0);
             Projection.Scale = new(1);
             MoveMode = RendererMoveMode.Anchored;
         }

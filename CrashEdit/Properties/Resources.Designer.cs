@@ -2073,6 +2073,24 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Anchor to zone camera.
+        /// </summary>
+        internal static string ViewerControls_EnterZoneAnchor {
+            get {
+                return ResourceManager.GetString("ViewerControls_EnterZoneAnchor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Return to normal view.
+        /// </summary>
+        internal static string ViewerControls_ExitZoneAnchor {
+            get {
+                return ResourceManager.GetString("ViewerControls_ExitZoneAnchor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to W/A/S/D to move, Q/E to pan up/down.
         /// </summary>
         internal static string ViewerControls_Move {
@@ -2195,6 +2213,42 @@ namespace CrashEdit.Properties {
         internal static string ViewerControls_ToggleZoneOctreeOutline {
             get {
                 return ResourceManager.GetString("ViewerControls_ToggleZoneOctreeOutline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to W/A/S/D/Q/E to move.
+        /// </summary>
+        internal static string ViewerControls_ZoneAnchorMove {
+            get {
+                return ResourceManager.GetString("ViewerControls_ZoneAnchorMove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go to next camera.
+        /// </summary>
+        internal static string ViewerControls_ZoneAnchorNextCam {
+            get {
+                return ResourceManager.GetString("ViewerControls_ZoneAnchorNextCam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mouse to pan.
+        /// </summary>
+        internal static string ViewerControls_ZoneAnchorPan {
+            get {
+                return ResourceManager.GetString("ViewerControls_ZoneAnchorPan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go to previous camera.
+        /// </summary>
+        internal static string ViewerControls_ZoneAnchorPrevCam {
+            get {
+                return ResourceManager.GetString("ViewerControls_ZoneAnchorPrevCam", resourceCulture);
             }
         }
     }

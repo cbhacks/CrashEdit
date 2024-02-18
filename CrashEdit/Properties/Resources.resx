@@ -825,4 +825,22 @@ as Meters: {3:F3}m</value>
   <data name="Config_chkCacheShaderUniformLoc" xml:space="preserve">
     <value>Cache shader uniform locations</value>
   </data>
+  <data name="ViewerControls_EnterZoneAnchor" xml:space="preserve">
+    <value>Anchor to zone camera</value>
+  </data>
+  <data name="ViewerControls_ExitZoneAnchor" xml:space="preserve">
+    <value>Return to normal view</value>
+  </data>
+  <data name="ViewerControls_ZoneAnchorMove" xml:space="preserve">
+    <value>W/A/S/D/Q/E to move</value>
+  </data>
+  <data name="ViewerControls_ZoneAnchorPan" xml:space="preserve">
+    <value>Mouse to pan</value>
+  </data>
+  <data name="ViewerControls_ZoneAnchorPrevCam" xml:space="preserve">
+    <value>Go to previous camera</value>
+  </data>
+  <data name="ViewerControls_ZoneAnchorNextCam" xml:space="preserve">
+    <value>Go to next camera</value>
+  </data>
 </root>

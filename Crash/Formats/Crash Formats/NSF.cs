@@ -218,6 +218,12 @@ namespace Crash
         public EvList<Chunk> Chunks { get; }
         public Dictionary<int, IEntry> EntryMap { get; set; }
 
+        public int GetScreenOffset()
+        {
+            // TODO use NSD
+            return 288;
+        }
+
         public void ProcessAll(GameVersion gameversion)
         {
             for (int i = 0; i < Chunks.Count; i++)

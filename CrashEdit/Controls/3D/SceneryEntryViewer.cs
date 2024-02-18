@@ -124,7 +124,7 @@ namespace CrashEdit
         {
             if (world.IsSky)
             {
-                world_offset = MathExt.Div(-render.Projection.RealTrans, vaoWorld.UserScale);
+                world_offset = MathExt.Div(-render.Projection.Trans, vaoWorld.UserScale);
                 if (world.IsC3)
                     world_offset -= new Vector3(0x2000);
             }
