@@ -252,7 +252,7 @@ namespace Crash
         const bool USE_OLD_LOOKUP = true;
         public T GetEntry<T>(int eid) where T : class, IEntry
         {
-            if (eid == Entry.NullEID)
+            if (eid == Entry.NullEID || !Entry.ValidEID(eid))
                 return null;
             if (EntryMap.ContainsKey(eid))
             {
@@ -264,12 +264,12 @@ namespace Crash
                 {
                     if (chunk is IEntry ientrychunk)
                     {
-                        if (ientrychunk.EID == eid && ientrychunk is T)
+                        if (ientrychunk.EID == eid)
                         {
-                            return (T)ientrychunk;
+                            return ientrychunk as T;
                         }
                     }
-                    if (chunk is EntryChunk entrychunk)
+                    else if (chunk is EntryChunk entrychunk)
                     {
                         T entry = entrychunk.FindEID<T>(eid);
                         if (entry != null)
