@@ -1,10 +1,24 @@
 ﻿using OpenTK;
 using OpenTK.Graphics;
+using System;
 
 namespace CrashEdit
 {
     public static class MathExt
     {
+        public static float TruncatePart(this float v)
+        {
+            return v - (float)Math.Truncate(v);
+        }
+
+        public static Vector3 Div(Vector3 a, Vector3 b)
+        {
+            a.X /= b.X;
+            a.Y /= b.Y;
+            a.Z /= b.Z;
+            return a;
+        }
+
         public static float Lerp(float a, float b, float amt)
         {
             if (amt <= 0) return a;
@@ -29,26 +43,6 @@ namespace CrashEdit
             }
         }
 
-        public static Vector3 Lerp(Vector3 a, Vector3 b, float amt)
-        {
-            Lerp(ref a, b, amt);
-            return a;
-        }
-
-        public static Vector3 LerpScale(Vector3 a, Vector3 b, float amt, float amt_min, float amt_max)
-        {
-            Lerp(ref a, b, (amt - amt_min) / (amt_max - amt_min));
-            return a;
-        }
-
-        public static Vector3 Div(Vector3 a, Vector3 b)
-        {
-            a.X /= b.X;
-            a.Y /= b.Y;
-            a.Z /= b.Z;
-            return a;
-        }
-
         public static Color4 Lerp(Color4 col1, Color4 col2, float amt)
         {
             if (amt <= 0) return col1;
@@ -59,11 +53,6 @@ namespace CrashEdit
                 col1.B + (col2.B - col1.B) * amt,
                 col1.A + (col2.A - col1.A) * amt
                 );
-        }
-
-        public static Color4 LerpScale(Color4 a, Color4 b, float amt, float amt_min, float amt_max)
-        {
-            return Lerp(a, b, (amt - amt_min) / (amt_max - amt_min));
         }
 
         public static void Lerp(ref Rgba a, Rgba b, float amt)
@@ -83,10 +72,32 @@ namespace CrashEdit
             }
         }
 
+        public static Vector3 Lerp(Vector3 a, Vector3 b, float amt)
+        {
+            Lerp(ref a, b, amt);
+            return a;
+        }
+
         public static Rgba Lerp(Rgba a, Rgba b, float amt)
         {
             Lerp(ref a, b, amt);
             return a;
+        }
+
+        public static Vector3 LerpScale(Vector3 a, Vector3 b, float amt, float amt_min, float amt_max)
+        {
+            Lerp(ref a, b, (amt - amt_min) / (amt_max - amt_min));
+            return a;
+        }
+
+        public static Color4 LerpScale(Color4 a, Color4 b, float amt, float amt_min, float amt_max)
+        {
+            return Lerp(a, b, (amt - amt_min) / (amt_max - amt_min));
+        }
+
+        public static float LerpScale(float a, float b, float amt, float amt_min, float amt_max)
+        {
+            return Lerp(a, b, (amt - amt_min) / (amt_max - amt_min));
         }
 
         public static int Log2(int v)
