@@ -162,11 +162,11 @@ namespace CrashEdit
         {
             if (!keysdown.Contains(key & Keys.KeyCode))
                 return false;
-            if ((key & Keys.Shift) != 0 && !keysdown.Contains(Keys.ShiftKey) && !keysdown.Contains(Keys.LShiftKey) && !keysdown.Contains(Keys.RShiftKey))
+            if (((key & Keys.Shift) != 0) != (keysdown.Contains(Keys.ShiftKey) || keysdown.Contains(Keys.LShiftKey) || keysdown.Contains(Keys.RShiftKey)))
                 return false;
-            if ((key & Keys.Control) != 0 && !keysdown.Contains(Keys.ControlKey) && !keysdown.Contains(Keys.LControlKey) && !keysdown.Contains(Keys.RControlKey))
+            if (((key & Keys.Control) != 0) != (keysdown.Contains(Keys.ControlKey) || keysdown.Contains(Keys.LControlKey) || keysdown.Contains(Keys.RControlKey)))
                 return false;
-            if ((key & Keys.Alt) != 0 && !keysdown.Contains(Keys.Menu) && !keysdown.Contains(Keys.LMenu) && !keysdown.Contains(Keys.RMenu))
+            if (((key & Keys.Alt) != 0) != (keysdown.Contains(Keys.Menu) || keysdown.Contains(Keys.LMenu) || keysdown.Contains(Keys.RMenu)))
                 return false;
             return true;
         }
@@ -175,11 +175,11 @@ namespace CrashEdit
         {
             if (!keyspressed.Contains(key & Keys.KeyCode))
                 return false;
-            if ((key & Keys.Shift) != 0 && !keysdown.Contains(Keys.ShiftKey) && !keysdown.Contains(Keys.LShiftKey) && !keysdown.Contains(Keys.RShiftKey))
+            if (((key & Keys.Shift) != 0) != (keysdown.Contains(Keys.ShiftKey) || keysdown.Contains(Keys.LShiftKey) || keysdown.Contains(Keys.RShiftKey)))
                 return false;
-            if ((key & Keys.Control) != 0 && !keysdown.Contains(Keys.ControlKey) && !keysdown.Contains(Keys.LControlKey) && !keysdown.Contains(Keys.RControlKey))
+            if (((key & Keys.Control) != 0) != (keysdown.Contains(Keys.ControlKey) || keysdown.Contains(Keys.LControlKey) || keysdown.Contains(Keys.RControlKey)))
                 return false;
-            if ((key & Keys.Alt) != 0 && !keysdown.Contains(Keys.Menu) && !keysdown.Contains(Keys.LMenu) && !keysdown.Contains(Keys.RMenu))
+            if (((key & Keys.Alt) != 0) != (keysdown.Contains(Keys.Menu) || keysdown.Contains(Keys.LMenu) || keysdown.Contains(Keys.RMenu)))
                 return false;
             return true;
         }
