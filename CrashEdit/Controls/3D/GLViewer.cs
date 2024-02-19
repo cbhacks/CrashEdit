@@ -208,6 +208,7 @@ namespace CrashEdit
             public static readonly ControlsKeyboardInfo ExitZoneAnchor = new(Keys.Control | Keys.O, Resources.ViewerControls_ExitZoneAnchor);
             public static readonly ControlsKeyboardInfo ZoneAnchorPrevCam = new(Keys.Left, Resources.ViewerControls_ZoneAnchorPrevCam);
             public static readonly ControlsKeyboardInfo ZoneAnchorNextCam = new(Keys.Right, Resources.ViewerControls_ZoneAnchorNextCam);
+            public static readonly ControlsKeyboardInfo ZoneAnchorSortList = new(Keys.L, Resources.ViewerControls_ZoneAnchorSortList);
         }
         #endregion
 

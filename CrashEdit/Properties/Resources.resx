@@ -843,4 +843,7 @@ as Meters: {3:F3}m</value>
   <data name="ViewerControls_ZoneAnchorNextCam" xml:space="preserve">
     <value>Go to next camera</value>
   </data>
+  <data name="ViewerControls_ZoneAnchorSortList" xml:space="preserve">
+    <value>Toggle sort list ({0})</value>
+  </data>
 </root>

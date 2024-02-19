@@ -2251,5 +2251,14 @@ namespace CrashEdit.Properties {
                 return ResourceManager.GetString("ViewerControls_ZoneAnchorPrevCam", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle sort list ({0}).
+        /// </summary>
+        internal static string ViewerControls_ZoneAnchorSortList {
+            get {
+                return ResourceManager.GetString("ViewerControls_ZoneAnchorSortList", resourceCulture);
+            }
+        }
     }
 }
