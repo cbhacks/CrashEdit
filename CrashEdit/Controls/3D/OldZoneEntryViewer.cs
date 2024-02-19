@@ -25,6 +25,7 @@ namespace CrashEdit
         private float anchor_cam_pos;
         private int anchor_next_cam;
         private int anchor_prev_cam;
+        private int anchor_zone;
 
         private Rgba GetZoneColor(Color4 color)
         {
@@ -107,18 +108,20 @@ namespace CrashEdit
             con_help += octree_renderer.PrintHelp();
         }
 
-        private OldCamera GetNeighborCamera(OldCamera cam, int neighbor_index, bool allow_other_zones)
+        private OldCamera GetNeighborCamera(OldCamera cam, int neighbor_index, out int neighbor_zone_eid)
         {
+            neighbor_zone_eid = Entry.NullEID;
             if (neighbor_index >= cam.NeighborCount || neighbor_index < 0)
                 return null;
 
             // TODO camera should have reference to its zone
             var neighbor = cam.Neighbors[neighbor_index];
-            var zone = GetMasterZone();
-            var neighbor_zone = allow_other_zones ? nsf.GetEntry<OldZoneEntry>(zone.GetLinkedZone(neighbor.ZoneIndex)) : (neighbor.ZoneIndex == 0 ? zone : null);
+            var zone = nsf.GetEntry<OldZoneEntry>(anchor_zone);
+            var neighbor_zone = nsf.GetEntry<OldZoneEntry>(zone.GetLinkedZone(neighbor.ZoneIndex));
             if (neighbor_zone == null || neighbor.CameraIndex >= neighbor_zone.Cameras.Count)
                 return null;
 
+            neighbor_zone_eid = neighbor_zone.EID;
             return neighbor_zone.Cameras[neighbor.CameraIndex];
         }
 
@@ -126,7 +129,7 @@ namespace CrashEdit
         {
             for (var i = 0; i < cam.NeighborCount; ++i)
             {
-                if (GetNeighborCamera(cam, i, false) == want_cam)
+                if (GetNeighborCamera(cam, i, out int n) == want_cam)
                     return i;
             }
             return -1;
@@ -165,6 +168,7 @@ namespace CrashEdit
                 }
                 if (anchor_cam != null)
                 {
+                    anchor_zone = master.EID;
                     SetBestNeighborCams(true, true);
                     anchor_cam_pos = 0;
                     anchormode = true;
@@ -183,8 +187,8 @@ namespace CrashEdit
         {
             if (anchormode)
             {
-                OldZoneEntry master_zone = GetMasterZone();
-                if (master_zone == null || !master_zone.Cameras.Contains(anchor_cam) || anchor_cam.Positions.Count == 0)
+                var zone = nsf.GetEntry<OldZoneEntry>(anchor_zone);
+                if (zone == null || !zone.Cameras.Contains(anchor_cam) || anchor_cam.Positions.Count == 0)
                 {
                     ExitAnchorMode();
                 }
@@ -205,7 +209,7 @@ namespace CrashEdit
             }
             else if (CheckAnchorMode())
             {
-                OldZoneEntry zone = GetMasterZone();
+                var zone = nsf.GetEntry<OldZoneEntry>(anchor_zone);
                 int anchor_cam_index = zone.Cameras.IndexOf(anchor_cam);
                 if (KPress(KeyboardControls.ZoneAnchorPrevCam) && anchor_cam_index > 0)
                 {
@@ -249,14 +253,15 @@ namespace CrashEdit
                 {
                     if (anchor_next_cam != -1)
                     {
-                        var newcam = GetNeighborCamera(anchor_cam, anchor_next_cam, false);
+                        var newcam = GetNeighborCamera(anchor_cam, anchor_next_cam, out int newzone);
                         if (newcam != null)
                         {
                             anchor_cam_pos -= anchor_cam.Positions.Count - 1;
 
                             anchor_prev_cam = GetNeighborIndexForCamera(newcam, anchor_cam);
                             anchor_cam = newcam;
-                            SetBestNeighborCams(false, true);
+                            anchor_zone = newzone;
+                            SetBestNeighborCams(anchor_prev_cam == -1, true);
                         }
                     }
                 }
@@ -264,7 +269,7 @@ namespace CrashEdit
                 {
                     if (anchor_prev_cam != -1)
                     {
-                        var newcam = GetNeighborCamera(anchor_cam, anchor_prev_cam, false);
+                        var newcam = GetNeighborCamera(anchor_cam, anchor_prev_cam, out int newzone);
                         if (newcam != null)
                         {
                             // note that the position index will be negative here
@@ -272,7 +277,8 @@ namespace CrashEdit
 
                             anchor_next_cam = GetNeighborIndexForCamera(newcam, anchor_cam);
                             anchor_cam = newcam;
-                            SetBestNeighborCams(true, false);
+                            anchor_zone = newzone;
+                            SetBestNeighborCams(true, anchor_next_cam == -1);
                         }
                     }
                 }
@@ -323,6 +329,17 @@ namespace CrashEdit
 
             if (CheckAnchorMode())
             {
+                master_zone = nsf.GetEntry<OldZoneEntry>(anchor_zone);
+                allzones.Clear();
+                for (int i = 0; i < master_zone.ZoneCount; ++i)
+                {
+                    var lzone = nsf.GetEntry<OldZoneEntry>(master_zone.GetLinkedZone(i));
+                    if (lzone != null && !allzones.Contains(lzone))
+                    {
+                        allzones.Add(lzone);
+                    }
+                }
+
                 con_debug += $"prev-cam: {anchor_prev_cam}\n";
                 con_debug += $"next-cam: {anchor_next_cam}\n";
                 var pos1 = anchor_cam.Positions[(int)Math.Floor(anchor_cam_pos)];
