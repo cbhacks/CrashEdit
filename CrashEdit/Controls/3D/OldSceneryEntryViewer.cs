@@ -112,9 +112,12 @@ namespace CrashEdit
 
                 // render passes
                 RenderWorldPass(BlendMode.Solid);
-                RenderWorldPass(BlendMode.Trans);
-                RenderWorldPass(BlendMode.Subtractive);
-                RenderWorldPass(BlendMode.Additive);
+                if (render.EnableTexture)
+                {
+                    RenderWorldPass(BlendMode.Trans);
+                    RenderWorldPass(BlendMode.Subtractive);
+                    RenderWorldPass(BlendMode.Additive);
+                }
             }
         }
 
