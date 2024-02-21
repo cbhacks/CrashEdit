@@ -143,7 +143,6 @@ namespace CrashEdit
         private bool loaded = false;
         private static readonly HashSet<Type> loaded_static_types = new();
 
-        protected bool anchormode = false;
         private readonly HashSet<Keys> keysdown = new();
         private readonly HashSet<Keys> keyspressed = new();
         private bool mouseright = false;
@@ -158,28 +157,38 @@ namespace CrashEdit
         public const float DefaultZFar = DefaultZNear * 0x4000;
         #endregion
 
-        public bool KDown(Keys key)
+        private bool KeyDownShift() => keysdown.Contains(Keys.ShiftKey) || keysdown.Contains(Keys.LShiftKey) || keysdown.Contains(Keys.RShiftKey);
+        private bool KeyDownControl() => keysdown.Contains(Keys.ControlKey) || keysdown.Contains(Keys.LControlKey) || keysdown.Contains(Keys.RControlKey);
+        private bool KeyDownAlt() => keysdown.Contains(Keys.Menu) || keysdown.Contains(Keys.LMenu) || keysdown.Contains(Keys.RMenu);
+
+        public bool KDown(Keys key, bool ignore_modifiers = false)
         {
-            if (!keysdown.Contains(key & Keys.KeyCode))
+            if ((key & Keys.KeyCode) != Keys.None && !keysdown.Contains(key & Keys.KeyCode))
                 return false;
-            if (((key & Keys.Shift) != 0) != (keysdown.Contains(Keys.ShiftKey) || keysdown.Contains(Keys.LShiftKey) || keysdown.Contains(Keys.RShiftKey)))
+            bool shift = (key & Keys.Shift) != 0;
+            bool control = (key & Keys.Control) != 0;
+            bool alt = (key & Keys.Alt) != 0;
+            if (ignore_modifiers ? (shift && !KeyDownShift()) : (shift != KeyDownShift()))
                 return false;
-            if (((key & Keys.Control) != 0) != (keysdown.Contains(Keys.ControlKey) || keysdown.Contains(Keys.LControlKey) || keysdown.Contains(Keys.RControlKey)))
+            if (ignore_modifiers ? (control && !KeyDownControl()) : (control != KeyDownControl()))
                 return false;
-            if (((key & Keys.Alt) != 0) != (keysdown.Contains(Keys.Menu) || keysdown.Contains(Keys.LMenu) || keysdown.Contains(Keys.RMenu)))
+            if (ignore_modifiers ? (alt && !KeyDownAlt()) : (alt != KeyDownAlt()))
                 return false;
             return true;
         }
 
-        public bool KPress(Keys key)
+        public bool KPress(Keys key, bool ignore_modifiers = false)
         {
-            if (!keyspressed.Contains(key & Keys.KeyCode))
+            if ((key & Keys.KeyCode) != Keys.None && !keyspressed.Contains(key & Keys.KeyCode))
                 return false;
-            if (((key & Keys.Shift) != 0) != (keysdown.Contains(Keys.ShiftKey) || keysdown.Contains(Keys.LShiftKey) || keysdown.Contains(Keys.RShiftKey)))
+            bool shift = (key & Keys.Shift) != 0;
+            bool control = (key & Keys.Control) != 0;
+            bool alt = (key & Keys.Alt) != 0;
+            if (ignore_modifiers ? (shift && !KeyDownShift()) : (shift != KeyDownShift()))
                 return false;
-            if (((key & Keys.Control) != 0) != (keysdown.Contains(Keys.ControlKey) || keysdown.Contains(Keys.LControlKey) || keysdown.Contains(Keys.RControlKey)))
+            if (ignore_modifiers ? (control && !KeyDownControl()) : (control != KeyDownControl()))
                 return false;
-            if (((key & Keys.Alt) != 0) != (keysdown.Contains(Keys.Menu) || keysdown.Contains(Keys.LMenu) || keysdown.Contains(Keys.RMenu)))
+            if (ignore_modifiers ? (alt && !KeyDownAlt()) : (alt != KeyDownAlt()))
                 return false;
             return true;
         }
@@ -209,6 +218,7 @@ namespace CrashEdit
             public static readonly ControlsKeyboardInfo ZoneAnchorPrevCam = new(Keys.Left, Resources.ViewerControls_ZoneAnchorPrevCam);
             public static readonly ControlsKeyboardInfo ZoneAnchorNextCam = new(Keys.Right, Resources.ViewerControls_ZoneAnchorNextCam);
             public static readonly ControlsKeyboardInfo ZoneAnchorSortList = new(Keys.L, Resources.ViewerControls_ZoneAnchorSortList);
+            public static readonly ControlsKeyboardInfo ZoneAnchorDetach = new(Keys.K, Resources.ViewerControls_ZoneAnchorDetach);
         }
         #endregion
 
@@ -336,9 +346,9 @@ namespace CrashEdit
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             base.OnMouseWheel(e);
-            lock (render.mLock)
+            if (CanZoom())
             {
-                if (!anchormode)
+                lock (render.mLock)
                 {
                     float delta = (float)e.Delta / SystemInformation.MouseWheelScrollDelta * zoomspeed;
                     delta *= 0.3f + 1.7f * (render.Projection.Distance / ProjectionInfo.MaxInitialDistance);
@@ -362,21 +372,18 @@ namespace CrashEdit
             base.OnMouseMove(e);
             lock (render.mLock)
             {
-                if (mouseleft)
+                if (mouseleft && CanAim())
                 {
-                    if (!anchormode)
-                    {
-                        float rotx = render.Projection.CamRot.X;
-                        float rotz = render.Projection.CamRot.Y;
-                        rotz += MathHelper.DegreesToRadians(e.X - mousex) * rotspeed;
-                        rotx += MathHelper.DegreesToRadians(e.Y - mousey) * rotspeed;
-                        if (rotx > RenderInfo.MaxRot)
-                            rotx = RenderInfo.MaxRot;
-                        if (rotx < RenderInfo.MinRot)
-                            rotx = RenderInfo.MinRot;
-                        render.Projection.CamRot.X = rotx;
-                        render.Projection.CamRot.Y = rotz;
-                    }
+                    float rotx = render.Projection.CamRot.X;
+                    float rotz = render.Projection.CamRot.Y;
+                    rotz += MathHelper.DegreesToRadians(e.X - mousex) * rotspeed;
+                    rotx += MathHelper.DegreesToRadians(e.Y - mousey) * rotspeed;
+                    if (rotx > RenderInfo.MaxRot)
+                        rotx = RenderInfo.MaxRot;
+                    if (rotx < RenderInfo.MinRot)
+                        rotx = RenderInfo.MinRot;
+                    render.Projection.CamRot.X = rotx;
+                    render.Projection.CamRot.Y = rotz;
                 }
                 if (mouseright)
                 {
@@ -444,11 +451,19 @@ namespace CrashEdit
 
         protected virtual void PrintHelp()
         {
-            if (!anchormode)
+            if (CanMove())
             {
                 con_help += Resources.ViewerControls_Move + '\n';
                 con_help += Resources.ViewerControls_MoveAligned + '\n';
+            }
+            if (CanAim() && CanZoom())
                 con_help += Resources.ViewerControls_AimAndZoom + '\n';
+            else if (CanAim())
+                con_help += Resources.ViewerControls_Aim + '\n';
+            else if (CanZoom())
+                con_help += Resources.ViewerControls_Zoom + '\n';
+            if (CanResetCamera())
+            {
                 con_help += KeyboardControls.ResetCamera.Print();
             }
             con_help += KeyboardControls.ToggleTextures.Print(OnOffName(render.EnableTexture));
@@ -457,10 +472,10 @@ namespace CrashEdit
 
         protected virtual void RunLogic()
         {
-            if (!anchormode)
+            if (CanMove())
             {
                 var d = GetMoveSpeed() * PerFrame;
-                if (KDown(Keys.ControlKey))
+                if (KDown(Keys.Control))
                 {
                     if (KDown(Keys.W)) render.Projection.CamTrans.Z += d;
                     if (KDown(Keys.S)) render.Projection.CamTrans.Z -= d;
@@ -471,31 +486,33 @@ namespace CrashEdit
                 }
                 else
                 {
-                    var r = Matrix4.CreateFromQuaternion(render.Projection.Rot);
-                    if (KDown(Keys.W)) render.Projection.CamTrans += (r * new Vector4(0, 0, d, 1)).Xyz;
-                    if (KDown(Keys.S)) render.Projection.CamTrans -= (r * new Vector4(0, 0, d, 1)).Xyz;
-                    if (KDown(Keys.A)) render.Projection.CamTrans += (r * new Vector4(d, 0, 0, 1)).Xyz;
-                    if (KDown(Keys.D)) render.Projection.CamTrans -= (r * new Vector4(d, 0, 0, 1)).Xyz;
-                    if (KDown(Keys.E)) render.Projection.CamTrans += (r * new Vector4(0, d, 0, 1)).Xyz;
-                    if (KDown(Keys.Q)) render.Projection.CamTrans -= (r * new Vector4(0, d, 0, 1)).Xyz;
+                    var r = Matrix3.CreateFromQuaternion(render.Projection.Rot);
+                    if (KDown(Keys.W)) render.Projection.CamTrans += (r * new Vector3(0, 0, d));
+                    if (KDown(Keys.S)) render.Projection.CamTrans -= (r * new Vector3(0, 0, d));
+                    if (KDown(Keys.A)) render.Projection.CamTrans += (r * new Vector3(d, 0, 0));
+                    if (KDown(Keys.D)) render.Projection.CamTrans -= (r * new Vector3(d, 0, 0));
+                    if (KDown(Keys.E)) render.Projection.CamTrans += (r * new Vector3(0, d, 0));
+                    if (KDown(Keys.Q)) render.Projection.CamTrans -= (r * new Vector3(0, d, 0));
                 }
-                if (KPress(KeyboardControls.ResetCamera))
-                {
-                    render.Reset();
-                    ResetCamera();
-                }
+            }
+            if (CanResetCamera() && KPress(KeyboardControls.ResetCamera))
+            {
+                render.Reset();
+                ResetCamera();
             }
             if (KPress(KeyboardControls.ToggleTextures)) render.EnableTexture = !render.EnableTexture;
             if (KPress(KeyboardControls.ToggleHelp)) showHelp = !showHelp;
         }
 
+        protected virtual bool CanMove() => true;
+        protected virtual bool CanAim() => true;
+        protected virtual bool CanZoom() => true;
+        public virtual bool CanResetCamera() => true;
+
         protected void ForceViewTransRot(Vector3 trans, Vector3 rot)
         {
-            render.Projection.Trans = -trans;
-            render.Projection.Rot = new Quaternion(rot);
-            var rot_mat = Matrix4.CreateFromQuaternion(render.Projection.Rot);
-            render.Projection.Forward = -(rot_mat * new Vector4(0, 0, 1, 1)).Xyz;
-            render.Projection.View = Matrix4.CreateTranslation(render.Projection.Trans) * rot_mat;
+            render.Projection.SetTrans(trans);
+            render.Projection.SetRotation(rot);
             con_debug += $"forcing trans {trans}\n";
             con_debug += $"forcing rot {rot}\n";
         }
@@ -548,8 +565,6 @@ namespace CrashEdit
                     render.Projection.SetPerspective(60, render.Projection.Aspect, DefaultZNear, DefaultZFar);
                     render.Projection.SetRotation(render.Projection.CamRot);
                     render.Projection.SetTrans(-render.Projection.CamTrans - render.Projection.Forward * render.Projection.Distance);
-                    con_debug += $"cam-trans: {-render.Projection.CamTrans} -> trans: {-render.Projection.Trans}\n";
-                    con_debug += $"cam-rot: {render.Projection.CamRot}\n";
                     
                     dbgContextDir.RemoveLast();
 
@@ -570,7 +585,7 @@ namespace CrashEdit
                     if (showHelp)
                         AddText(con_help, Width, Height - 8, (Rgba)Color4.White, size: 0.85f, flags: TextRenderFlags.Right | TextRenderFlags.Bottom | TextRenderFlags.Default);
                     if (Settings.Default.Font2DEnable)
-                        AddText(con_debug, 0, 0, (Rgba)Color4.White, size: 0.85f);
+                        AddText(con_debug, 0, 0, (Rgba)Color4.White, size: 0.8f);
                     vaoText.UserScale = new Vector3(Width, Height, 1);
                     vaoText.RenderAndDiscard(render);
                     con_debug = string.Empty;
@@ -991,8 +1006,7 @@ namespace CrashEdit
             float midx = (maxx + minx) / 2;
             float midy = (maxy + miny) / 2;
             float midz = (maxz + minz) / 2;
-            render.Projection.Distance = Math.Min(ProjectionInfo.MaxInitialDistance, Math.Max(render.Projection.Distance, (float)(Math.Sqrt(Math.Pow(maxx - minx, 2) + Math.Pow(maxy - miny, 2) + Math.Pow(maxz - minz, 2)) * 1.2)));
-            //render.Projection.Distance += 0;
+            render.Projection.Distance = Math.Min(ProjectionInfo.MaxInitialDistance, Math.Max(render.Projection.Distance, (float)(Math.Sqrt(Math.Pow(maxx - minx, 2) + Math.Pow(maxy - miny, 2) + Math.Pow(maxz - minz, 2))) * 0.8f));
             render.Projection.CamTrans.X = -midx;
             render.Projection.CamTrans.Y = -midy;
             render.Projection.CamTrans.Z = -midz;

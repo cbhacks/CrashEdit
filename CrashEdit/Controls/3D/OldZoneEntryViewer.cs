@@ -21,12 +21,18 @@ namespace CrashEdit
         private byte zone_alpha;
         private Vector3 zone_trans;
 
+        private bool anchormode = false;
         private OldCamera anchor_cam;
         private float anchor_cam_pos;
         private int anchor_next_cam;
         private int anchor_prev_cam;
         private int anchor_zone;
         private bool anchor_sortlist = true;
+        private bool anchor_detach;
+        private Vector3 anchor_last_trans;
+        private Vector3 anchor_last_rot;
+        private Vector3 anchor_backup_trans;
+        private Vector3 anchor_backup_rot;
 
         private Rgba GetZoneColor(Color4 color)
         {
@@ -102,6 +108,7 @@ namespace CrashEdit
                 con_help += KeyboardControls.ZoneAnchorNextCam.Print();
                 con_help += KeyboardControls.ZoneAnchorPrevCam.Print();
                 con_help += KeyboardControls.ZoneAnchorSortList.Print(OnOffName(anchor_sortlist));
+                con_help += KeyboardControls.ZoneAnchorDetach.Print(OnOffName(anchor_detach));
             }
             else
             {
@@ -131,7 +138,7 @@ namespace CrashEdit
         {
             for (var i = 0; i < cam.NeighborCount; ++i)
             {
-                if (object.ReferenceEquals(GetNeighborCamera(cam, i, out int n), want_cam))
+                if (ReferenceEquals(GetNeighborCamera(cam, i, out int n), want_cam))
                     return i;
             }
             return -1;
@@ -153,6 +160,11 @@ namespace CrashEdit
             }
         }
 
+        protected override bool CanMove() => !anchormode || anchor_detach;
+        protected override bool CanAim() => !anchormode || anchor_detach;
+        protected override bool CanZoom() => !anchormode;
+        public override bool CanResetCamera() => !anchormode;
+
         private bool EnterAnchorMode()
         {
             if (anchormode)
@@ -172,9 +184,12 @@ namespace CrashEdit
                 }
                 if (anchor_cam != null)
                 {
+                    anchor_backup_trans = render.Projection.CamTrans;
+                    anchor_backup_rot = render.Projection.CamRot;
                     anchor_zone = master.EID;
                     SetBestNeighborCams(true, true);
                     anchor_cam_pos = 0;
+                    anchor_detach = false;
                     anchormode = true;
                 }
             }
@@ -185,6 +200,8 @@ namespace CrashEdit
         {
             if (!anchormode)
                 return;
+            render.Projection.CamTrans = anchor_backup_trans;
+            render.Projection.CamRot = anchor_backup_rot;
             anchormode = false;
             anchor_cam = null;
         }
@@ -230,25 +247,22 @@ namespace CrashEdit
                     SetBestNeighborCams(true, true);
                 }
 
-                int move_x, move_y, move_z;
-                if (KDown(Keys.D))
-                    move_x = 1;
-                else if (KDown(Keys.A))
-                    move_x = -1;
-                else
-                    move_x = 0;
-                if (KDown(Keys.S))
-                    move_z = 1;
-                else if (KDown(Keys.W))
-                    move_z = -1;
-                else
-                    move_z = 0;
-                if (KDown(Keys.Q))
-                    move_y = 1;
-                else if (KDown(Keys.E))
-                    move_y = -1;
-                else
-                    move_y = 0;
+                int move_x = 0, move_y = 0, move_z = 0;
+                if (!anchor_detach || KDown(Keys.Shift))
+                {
+                    if (KDown(Keys.D, anchor_detach))
+                        move_x = 1;
+                    else if (KDown(Keys.A, anchor_detach))
+                        move_x = -1;
+                    if (KDown(Keys.S, anchor_detach))
+                        move_z = 1;
+                    else if (KDown(Keys.W, anchor_detach))
+                        move_z = -1;
+                    if (KDown(Keys.Q, anchor_detach))
+                        move_y = 1;
+                    else if (KDown(Keys.E, anchor_detach))
+                        move_y = -1;
+                }
 
                 float move_speed = (anchor_cam.Mode == 1 || anchor_cam.Mode == 3 ? 30 : GameScales.ZoneCameraC1 * 6 / anchor_cam.AvgDist) * PerFrame;
                 anchor_cam_pos += anchor_cam.XDir / 4096F * move_x * move_speed;
@@ -294,6 +308,20 @@ namespace CrashEdit
 
                 if (KPress(KeyboardControls.ZoneAnchorSortList)) anchor_sortlist = !anchor_sortlist;
 
+                if (KPress(KeyboardControls.ZoneAnchorDetach))
+                {
+                    if (anchor_detach)
+                    {
+                        anchor_detach = false;
+                    }
+                    else
+                    {
+                        render.Projection.CamTrans = -anchor_last_trans;
+                        render.Projection.CamRot = anchor_last_rot;
+                        anchor_detach = true;
+                    }
+                }
+
                 if (KPress(KeyboardControls.ExitZoneAnchor))
                 {
                     ExitAnchorMode();
@@ -330,6 +358,53 @@ namespace CrashEdit
                 return nsf.GetEntry<OldZoneEntry>(this_zone);
         }
 
+        private void DrawCameraFov(Vector3 trans, Vector3 rot, float fovx, float fovy, bool fill)
+        {
+            var mrot = Matrix3.CreateFromQuaternion(new(rot.X, rot.Y, 0));
+            var forward = mrot * new Vector3(0, 0, -1);
+            mrot = Matrix3.CreateFromAxisAngle(forward, -rot.Z) * mrot;
+
+            var corner = new Vector3(fovx, fovy, 1).Normalized();
+            var ntl = mrot * new Vector3(-corner.X, corner.Y, -corner.Z);
+            var ntr = mrot * new Vector3(corner.X, corner.Y, -corner.Z);
+            var nbl = mrot * new Vector3(-corner.X, -corner.Y, -corner.Z);
+            var nbr = mrot * new Vector3(corner.X, -corner.Y, -corner.Z);
+
+            float cornerlen = (float)MathExt.Pythagoras(MathExt.Pythagoras(fovx, 1), fovy);
+            float near = 1;
+            float far = near + 2;
+            near *= cornerlen;
+            far *= cornerlen;
+
+            Rgba color = (Rgba)Color4.Lime;
+            Span<Vector3> frameverts = stackalloc Vector3[8] {
+                trans + ntl * near,
+                trans + ntl * far,
+                trans + ntr * near,
+                trans + ntr * far,
+                trans + nbl * near,
+                trans + nbl * far,
+                trans + nbr * near,
+                trans + nbr * far,
+            };
+            for (int i = 0; i < BoxLineIndices.Length; ++i)
+            {
+                vaoLines.PushAttrib(trans: frameverts[BoxLineIndices[i]], rgba: color);
+            }
+            if (fill)
+            {
+                var side_verts = BoxTriIndices.Length / 6;
+                for (int i = side_verts * 1; i < side_verts * 3; ++i)
+                {
+                    vaoTris.PushAttrib(trans: frameverts[BoxTriIndices[i]], rgba: new(color, 64), st: new Vector2(-1));
+                }
+                for (int i = side_verts * 4; i < side_verts * 6; ++i)
+                {
+                    vaoTris.PushAttrib(trans: frameverts[BoxTriIndices[i]], rgba: new(color, 64), st: new Vector2(-1));
+                }
+            }
+        }
+
         protected override void Render()
         {
             var allzones = GetZones();
@@ -364,13 +439,24 @@ namespace CrashEdit
                 Vector3 master_zone_trans = new Vector3(master_zone.X, master_zone.Y, master_zone.Z) / GameScales.ZoneC1;
                 Vector3 trans = MathExt.Lerp(new Vector3(pos1.X, pos1.Y, pos1.Z), new Vector3(pos2.X, pos2.Y, pos2.Z), lerp) / GameScales.ZoneCameraC1 + master_zone_trans;
                 Vector3 rot = MathExt.Lerp(new Vector3(-pos1.XRot, -pos1.YRot, -pos1.ZRot), new Vector3(-pos2.XRot, -pos2.YRot, -pos2.ZRot), lerp) / 0x800 * MathHelper.Pi;
-                ForceViewTransRot(trans, rot);
-                // TODO method
-                float yratio = DefaultZNear * (float)Math.Tan(0.5f * MathHelper.DegreesToRadians(64)) / (nsf.GetScreenOffset() / 256f);
-                float left = -yratio * ProjectionInfo.Aspect8x5;
-                float right = yratio * ProjectionInfo.Aspect8x5;
+                float near = DefaultZNear;
+                float far = DefaultZFar;
+                float yratio = (float)Math.Tan(0.5f * MathHelper.DegreesToRadians(64)) / (nsf.GetScreenOffset() / 256f);
+                float xratio = yratio * ProjectionInfo.Aspect8x5;
                 yratio *= 256f / 240f;
-                render.Projection.Perspective = Matrix4.CreatePerspectiveOffCenter(left, right, -yratio, yratio, DefaultZNear, DefaultZFar);
+                render.Projection.Perspective = Matrix4.CreatePerspectiveOffCenter(near * -xratio, near * xratio, near * -yratio, near * yratio, near, far);
+
+                anchor_last_trans = trans;
+                anchor_last_rot = rot;
+                if (anchor_detach)
+                {
+                    ForceViewTransRot(-render.Projection.CamTrans, render.Projection.CamRot);
+                    DrawCameraFov(trans, rot, xratio, yratio, true);
+                }
+                else
+                {
+                    ForceViewTransRot(trans, rot);
+                }
 
                 if (anchor_sortlist)
                 {
@@ -435,8 +521,6 @@ namespace CrashEdit
             }
             foreach (OldCamera camera in zone.Cameras)
             {
-                if (anchormode && camera == anchor_cam)
-                    continue;
                 RenderCamera(camera);
             }
 
@@ -551,7 +635,7 @@ namespace CrashEdit
                 var trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneCameraC1 + zone_trans;
                 if (anchormode)
                 {
-                    zone_alpha = (byte)MathExt.LerpScale(0, zone_alpha, Vector3.Distance(trans, -render.Projection.Trans), 3, 7);
+                    zone_alpha = (byte)MathExt.LerpScale(0, zone_alpha, Vector3.Distance(trans, -render.Projection.Trans), 4, 8);
                     if (zone_alpha == 0)
                         continue;
                 }
@@ -565,7 +649,7 @@ namespace CrashEdit
                 AddSprite(trans, new Vector2(1), GetZoneColor(Color4.Yellow), OldResources.PointTexture);
 
                 float ang2rad = MathHelper.Pi / 2048;
-                var quatAng = Quaternion.FromEulerAngles(-position.XRot * ang2rad, -position.YRot * ang2rad, -position.ZRot * ang2rad);
+                var quatAng = Quaternion.FromEulerAngles(-position.XRot * ang2rad, -position.YRot * ang2rad, 0);
                 var rot_mat = Matrix4.CreateFromQuaternion(quatAng);
                 var test_vec = (rot_mat * new Vector4(0, 0, -1, 1)).Xyz;
 

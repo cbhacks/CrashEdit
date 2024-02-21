@@ -826,7 +826,7 @@ as Meters: {3:F3}m</value>
     <value>Cache shader uniform locations</value>
   </data>
   <data name="ViewerControls_EnterZoneAnchor" xml:space="preserve">
-    <value>Anchor to zone camera</value>
+    <value>Enter camera rail view</value>
   </data>
   <data name="ViewerControls_ExitZoneAnchor" xml:space="preserve">
     <value>Return to normal view</value>
@@ -845,5 +845,14 @@ as Meters: {3:F3}m</value>
   </data>
   <data name="ViewerControls_ZoneAnchorSortList" xml:space="preserve">
     <value>Toggle sort list ({0})</value>
+  </data>
+  <data name="ViewerControls_ZoneAnchorDetach" xml:space="preserve">
+    <value>Toggle detach from rail ({0})</value>
+  </data>
+  <data name="ViewerControls_Aim" xml:space="preserve">
+    <value>Left mouse to aim</value>
+  </data>
+  <data name="ViewerControls_Zoom" xml:space="preserve">
+    <value>Scroll wheel to zoom</value>
   </data>
 </root>

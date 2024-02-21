@@ -2055,6 +2055,15 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Left mouse to aim.
+        /// </summary>
+        internal static string ViewerControls_Aim {
+            get {
+                return ResourceManager.GetString("ViewerControls_Aim", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Left mouse to aim, scroll wheel to zoom.
         /// </summary>
         internal static string ViewerControls_AimAndZoom {
@@ -2073,7 +2082,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Anchor to zone camera.
+        ///   Looks up a localized string similar to Enter camera rail view.
         /// </summary>
         internal static string ViewerControls_EnterZoneAnchor {
             get {
@@ -2217,6 +2226,15 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Toggle detach from rail ({0}).
+        /// </summary>
+        internal static string ViewerControls_ZoneAnchorDetach {
+            get {
+                return ResourceManager.GetString("ViewerControls_ZoneAnchorDetach", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to W/A/S/D/Q/E to move.
         /// </summary>
         internal static string ViewerControls_ZoneAnchorMove {
@@ -2258,6 +2276,15 @@ namespace CrashEdit.Properties {
         internal static string ViewerControls_ZoneAnchorSortList {
             get {
                 return ResourceManager.GetString("ViewerControls_ZoneAnchorSortList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scroll wheel to zoom.
+        /// </summary>
+        internal static string ViewerControls_Zoom {
+            get {
+                return ResourceManager.GetString("ViewerControls_Zoom", resourceCulture);
             }
         }
     }

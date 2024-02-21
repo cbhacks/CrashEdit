@@ -100,6 +100,13 @@ namespace CrashEdit
             return Lerp(a, b, (amt - amt_min) / (amt_max - amt_min));
         }
 
+        public static void Zero(ref Vector3 v)
+        {
+            v.X = 0;
+            v.Y = 0;
+            v.Z = 0;
+        }
+
         public static int Log2(int v)
         {
             for (int i = 31; i-- > 0;)
@@ -116,6 +123,16 @@ namespace CrashEdit
                 if (v >= (1 << i)) return (uint)i;
             }
             return uint.MaxValue;
+        }
+
+        public static double Pythagoras(double a, double b)
+        {
+            return Math.Sqrt(a * a + b * b);
+        }
+
+        public static double Sec(double theta)
+        {
+            return Pythagoras(Math.Tan(theta), 1);
         }
     }
 }
