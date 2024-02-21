@@ -123,6 +123,11 @@ namespace Crash
             return eid;
         }
 
+        public static bool ValidEID(int eid)
+        {
+            return unchecked((eid & 0x1) != 0 && (eid & 0x80000000) == 0);
+        }
+
         public Entry(int eid)
         {
             EID = eid;

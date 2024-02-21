@@ -190,10 +190,10 @@ namespace CrashEdit
         protected override void PrintHelp()
         {
             base.PrintHelp();
-            con_help += KeyboardControls.ToggleCollisionAnim.Print(BoolToEnable(enable_collision));
-            con_help += KeyboardControls.ToggleLerp.Print(BoolToEnable(enable_interp));
-            con_help += KeyboardControls.ChangeCullMode.Print(cull_mode);
-            con_help += KeyboardControls.ToggleNormals.Print(BoolToEnable(enable_normals));
+            con_help += KeyboardControls.ToggleCollisionAnim.Print(OnOffName(enable_collision));
+            con_help += KeyboardControls.ToggleLerp.Print(OnOffName(enable_interp));
+            con_help += KeyboardControls.ChangeCullMode.Print(CullModeName(cull_mode));
+            con_help += KeyboardControls.ToggleNormals.Print(OnOffName(enable_normals));
         }
 
         protected override void RunLogic()

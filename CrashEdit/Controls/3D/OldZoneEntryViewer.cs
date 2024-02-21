@@ -21,6 +21,19 @@ namespace CrashEdit
         private byte zone_alpha;
         private Vector3 zone_trans;
 
+        private bool anchormode = false;
+        private OldCamera anchor_cam;
+        private float anchor_cam_pos;
+        private int anchor_next_cam;
+        private int anchor_prev_cam;
+        private int anchor_zone;
+        private bool anchor_sortlist = true;
+        private bool anchor_detach;
+        private Vector3 anchor_last_trans;
+        private Vector3 anchor_last_rot;
+        private Vector3 anchor_backup_trans;
+        private Vector3 anchor_backup_rot;
+
         private Rgba GetZoneColor(Color4 color)
         {
             return new Rgba(color, zone_alpha);
@@ -88,13 +101,232 @@ namespace CrashEdit
         protected override void PrintHelp()
         {
             base.PrintHelp();
+            if (anchormode)
+            {
+                con_help += Resources.ViewerControls_ZoneAnchorMove + '\n';
+                con_help += KeyboardControls.ExitZoneAnchor.Print();
+                con_help += KeyboardControls.ZoneAnchorNextCam.Print();
+                con_help += KeyboardControls.ZoneAnchorPrevCam.Print();
+                con_help += KeyboardControls.ZoneAnchorSortList.Print(OnOffName(anchor_sortlist));
+                con_help += KeyboardControls.ZoneAnchorDetach.Print(OnOffName(anchor_detach));
+            }
+            else
+            {
+                con_help += KeyboardControls.EnterZoneAnchor.Print();
+            }
             con_help += octree_renderer.PrintHelp();
+        }
+
+        private OldCamera GetNeighborCamera(OldCamera cam, int neighbor_index, out int neighbor_zone_eid)
+        {
+            neighbor_zone_eid = Entry.NullEID;
+            if (neighbor_index >= cam.NeighborCount || neighbor_index < 0)
+                return null;
+
+            // TODO camera should have reference to its zone
+            var neighbor = cam.Neighbors[neighbor_index];
+            var zone = nsf.GetEntry<OldZoneEntry>(anchor_zone);
+            var neighbor_zone = nsf.GetEntry<OldZoneEntry>(zone.GetLinkedZone(neighbor.ZoneIndex));
+            if (neighbor_zone == null || neighbor.CameraIndex >= neighbor_zone.Cameras.Count)
+                return null;
+
+            neighbor_zone_eid = neighbor_zone.EID;
+            return neighbor_zone.Cameras[neighbor.CameraIndex];
+        }
+
+        private int GetNeighborIndexForCamera(OldCamera cam, OldCamera want_cam)
+        {
+            for (var i = 0; i < cam.NeighborCount; ++i)
+            {
+                if (ReferenceEquals(GetNeighborCamera(cam, i, out int n), want_cam))
+                    return i;
+            }
+            return -1;
+        }
+
+        private void SetBestNeighborCams(bool prev, bool next)
+        {
+            if (prev)
+                anchor_prev_cam = -1;
+            if (next)
+                anchor_next_cam = -1;
+            for (var i = 0; i < anchor_cam.NeighborCount; ++i)
+            {
+                var neighbor = anchor_cam.Neighbors[i];
+                if ((neighbor.LinkType & 0x1) != 0 && prev && i != anchor_next_cam)
+                    anchor_prev_cam = i;
+                else if ((neighbor.LinkType & 0x2) != 0 && next && i != anchor_prev_cam)
+                    anchor_next_cam = i;
+            }
+        }
+
+        protected override bool CanMove() => !anchormode || anchor_detach;
+        protected override bool CanAim() => !anchormode || anchor_detach;
+        protected override bool CanZoom() => !anchormode;
+        public override bool CanResetCamera() => !anchormode;
+
+        private bool EnterAnchorMode()
+        {
+            if (anchormode)
+                return true;
+            var master = GetMasterZone();
+            if (master != null && master.Cameras.Count > 0)
+            {
+                anchor_cam = null;
+                foreach (var cam in master.Cameras)
+                {
+                    if (cam.Positions.Count == 0)
+                        continue;
+                    if (anchor_cam == null || (cam.Mode == 5 && anchor_cam.Mode != 5))
+                    {
+                        anchor_cam = cam;
+                    }
+                }
+                if (anchor_cam != null)
+                {
+                    anchor_backup_trans = render.Projection.CamTrans;
+                    anchor_backup_rot = render.Projection.CamRot;
+                    anchor_zone = master.EID;
+                    SetBestNeighborCams(true, true);
+                    anchor_cam_pos = 0;
+                    anchor_detach = false;
+                    anchormode = true;
+                }
+            }
+            return anchormode;
+        }
+
+        private void ExitAnchorMode()
+        {
+            if (!anchormode)
+                return;
+            render.Projection.CamTrans = anchor_backup_trans;
+            render.Projection.CamRot = anchor_backup_rot;
+            anchormode = false;
+            anchor_cam = null;
+        }
+
+        private bool CheckAnchorMode()
+        {
+            if (anchormode)
+            {
+                var zone = nsf.GetEntry<OldZoneEntry>(anchor_zone);
+                if (zone == null || !zone.Cameras.Contains(anchor_cam) || anchor_cam.Positions.Count == 0)
+                {
+                    ExitAnchorMode();
+                }
+            }
+            return anchormode;
         }
 
         protected override void RunLogic()
         {
             base.RunLogic();
             octree_renderer.RunLogic();
+            if (!anchormode)
+            {
+                if (this_zone != Entry.NullEID && KPress(KeyboardControls.EnterZoneAnchor))
+                {
+                    EnterAnchorMode();
+                }
+            }
+            else if (CheckAnchorMode())
+            {
+                var zone = nsf.GetEntry<OldZoneEntry>(anchor_zone);
+                int anchor_cam_index = zone.Cameras.IndexOf(anchor_cam);
+                if (KPress(KeyboardControls.ZoneAnchorPrevCam) && anchor_cam_index > 0)
+                {
+                    anchor_cam = zone.Cameras[anchor_cam_index - 1];
+                    anchor_cam_pos = 0;
+                    SetBestNeighborCams(true, true);
+                }
+                if (KPress(KeyboardControls.ZoneAnchorNextCam) && anchor_cam_index < zone.Cameras.Count - 1)
+                {
+                    anchor_cam = zone.Cameras[anchor_cam_index + 1];
+                    anchor_cam_pos = 0;
+                    SetBestNeighborCams(true, true);
+                }
+
+                int move_x = 0, move_y = 0, move_z = 0;
+                if (!anchor_detach || KDown(Keys.Shift))
+                {
+                    if (KDown(Keys.D, anchor_detach))
+                        move_x = 1;
+                    else if (KDown(Keys.A, anchor_detach))
+                        move_x = -1;
+                    if (KDown(Keys.S, anchor_detach))
+                        move_z = 1;
+                    else if (KDown(Keys.W, anchor_detach))
+                        move_z = -1;
+                    if (KDown(Keys.Q, anchor_detach))
+                        move_y = 1;
+                    else if (KDown(Keys.E, anchor_detach))
+                        move_y = -1;
+                }
+
+                float move_speed = (anchor_cam.Mode == 1 || anchor_cam.Mode == 3 ? 30 : GameScales.ZoneCameraC1 * 6 / anchor_cam.AvgDist) * PerFrame;
+                anchor_cam_pos += anchor_cam.XDir / 4096F * move_x * move_speed;
+                anchor_cam_pos += anchor_cam.YDir / 4096F * move_y * move_speed;
+                anchor_cam_pos += anchor_cam.ZDir / 4096F * move_z * move_speed;
+                
+                if (anchor_cam_pos > anchor_cam.Positions.Count - 1)
+                {
+                    if (anchor_next_cam != -1)
+                    {
+                        var newcam = GetNeighborCamera(anchor_cam, anchor_next_cam, out int newzone);
+                        if (newcam != null)
+                        {
+                            anchor_cam_pos -= anchor_cam.Positions.Count - 1;
+
+                            anchor_zone = newzone;
+                            anchor_prev_cam = GetNeighborIndexForCamera(newcam, anchor_cam);
+                            anchor_cam = newcam;
+                            SetBestNeighborCams(anchor_prev_cam == -1, true);
+                        }
+                    }
+                }
+                else if (anchor_cam_pos < 0)
+                {
+                    if (anchor_prev_cam != -1)
+                    {
+                        var newcam = GetNeighborCamera(anchor_cam, anchor_prev_cam, out int newzone);
+                        if (newcam != null)
+                        {
+                            // note that the position index will be negative here
+                            anchor_cam_pos += newcam.Positions.Count - 1;
+
+                            anchor_zone = newzone;
+                            anchor_next_cam = GetNeighborIndexForCamera(newcam, anchor_cam);
+                            anchor_cam = newcam;
+                            SetBestNeighborCams(true, anchor_next_cam == -1);
+                        }
+                    }
+                }
+
+                // always make sure position is clamped
+                anchor_cam_pos = Math.Max(0, Math.Min(anchor_cam_pos, anchor_cam.Positions.Count - 1));
+
+                if (KPress(KeyboardControls.ZoneAnchorSortList)) anchor_sortlist = !anchor_sortlist;
+
+                if (KPress(KeyboardControls.ZoneAnchorDetach))
+                {
+                    if (anchor_detach)
+                    {
+                        anchor_detach = false;
+                    }
+                    else
+                    {
+                        render.Projection.CamTrans = -anchor_last_trans;
+                        render.Projection.CamRot = anchor_last_rot;
+                        anchor_detach = true;
+                    }
+                }
+
+                if (KPress(KeyboardControls.ExitZoneAnchor))
+                {
+                    ExitAnchorMode();
+                }
+            }
         }
 
         private IList<OldZoneEntry> GetZones()
@@ -118,16 +350,123 @@ namespace CrashEdit
             return ret;
         }
 
+        private OldZoneEntry GetMasterZone()
+        {
+            if (!zones.Contains(this_zone))
+                return null;
+            else
+                return nsf.GetEntry<OldZoneEntry>(this_zone);
+        }
+
+        private void DrawCameraFov(Vector3 trans, Vector3 rot, float fovx, float fovy, bool fill)
+        {
+            var mrot = Matrix3.CreateFromQuaternion(new(rot.X, rot.Y, 0));
+            var forward = mrot * new Vector3(0, 0, -1);
+            mrot = Matrix3.CreateFromAxisAngle(forward, -rot.Z) * mrot;
+
+            var corner = new Vector3(fovx, fovy, 1).Normalized();
+            var ntl = mrot * new Vector3(-corner.X, corner.Y, -corner.Z);
+            var ntr = mrot * new Vector3(corner.X, corner.Y, -corner.Z);
+            var nbl = mrot * new Vector3(-corner.X, -corner.Y, -corner.Z);
+            var nbr = mrot * new Vector3(corner.X, -corner.Y, -corner.Z);
+
+            float cornerlen = (float)MathExt.Pythagoras(MathExt.Pythagoras(fovx, 1), fovy);
+            float near = 1;
+            float far = near + 2;
+            near *= cornerlen;
+            far *= cornerlen;
+
+            Rgba color = (Rgba)Color4.Lime;
+            Span<Vector3> frameverts = stackalloc Vector3[8] {
+                trans + ntl * near,
+                trans + ntl * far,
+                trans + ntr * near,
+                trans + ntr * far,
+                trans + nbl * near,
+                trans + nbl * far,
+                trans + nbr * near,
+                trans + nbr * far,
+            };
+            for (int i = 0; i < BoxLineIndices.Length; ++i)
+            {
+                vaoLines.PushAttrib(trans: frameverts[BoxLineIndices[i]], rgba: color);
+            }
+            if (fill)
+            {
+                var side_verts = BoxTriIndices.Length / 6;
+                for (int i = side_verts * 1; i < side_verts * 3; ++i)
+                {
+                    vaoTris.PushAttrib(trans: frameverts[BoxTriIndices[i]], rgba: new(color, 64), st: new Vector2(-1));
+                }
+                for (int i = side_verts * 4; i < side_verts * 6; ++i)
+                {
+                    vaoTris.PushAttrib(trans: frameverts[BoxTriIndices[i]], rgba: new(color, 64), st: new Vector2(-1));
+                }
+            }
+        }
+
         protected override void Render()
         {
             var allzones = GetZones();
-            OldZoneEntry master_zone = null;
-            foreach (var zone in allzones)
+            OldZoneEntry master_zone = GetMasterZone();
+
+            SetSortList(null);
+            if (CheckAnchorMode())
             {
-                if (zone.EID == this_zone)
+                master_zone = nsf.GetEntry<OldZoneEntry>(anchor_zone);
+                allzones.Clear();
+                for (int i = 0; i < master_zone.ZoneCount; ++i)
                 {
-                    master_zone = zone;
-                    break;
+                    var lzone = nsf.GetEntry<OldZoneEntry>(master_zone.GetLinkedZone(i));
+                    if (lzone != null && !allzones.Contains(lzone))
+                    {
+                        allzones.Add(lzone);
+                    }
+                }
+
+                var prev_cam = GetNeighborCamera(anchor_cam, anchor_prev_cam, out int prev_zone_id);
+                var next_cam = GetNeighborCamera(anchor_cam, anchor_next_cam, out int next_zone_id);
+                var prev_zone = nsf.GetEntry<OldZoneEntry>(prev_zone_id);
+                var next_zone = nsf.GetEntry<OldZoneEntry>(next_zone_id);
+                con_debug += $"current-cam: {master_zone.EName} cam {master_zone.Cameras.IndexOf(anchor_cam)}\n";
+                if (anchor_prev_cam != -1)
+                    con_debug += $"prev-cam: neighbor {anchor_prev_cam} ({prev_zone.EName} cam {prev_zone.Cameras.IndexOf(prev_cam)})\n";
+                if (anchor_next_cam != -1)
+                    con_debug += $"next-cam: neighbor {anchor_next_cam} ({next_zone.EName} cam {next_zone.Cameras.IndexOf(next_cam)})\n";
+                var pos1 = anchor_cam.Positions[(int)Math.Floor(anchor_cam_pos)];
+                var pos2 = anchor_cam.Positions[(int)Math.Ceiling(anchor_cam_pos)];
+                float lerp = anchor_cam_pos.TruncatePart();
+                Vector3 master_zone_trans = new Vector3(master_zone.X, master_zone.Y, master_zone.Z) / GameScales.ZoneC1;
+                Vector3 trans = MathExt.Lerp(new Vector3(pos1.X, pos1.Y, pos1.Z), new Vector3(pos2.X, pos2.Y, pos2.Z), lerp) / GameScales.ZoneCameraC1 + master_zone_trans;
+                Vector3 rot = MathExt.Lerp(new Vector3(-pos1.XRot, -pos1.YRot, -pos1.ZRot), new Vector3(-pos2.XRot, -pos2.YRot, -pos2.ZRot), lerp) / 0x800 * MathHelper.Pi;
+                float near = DefaultZNear;
+                float far = DefaultZFar;
+                float yratio = (float)Math.Tan(0.5f * MathHelper.DegreesToRadians(64)) / (nsf.GetScreenOffset() / 256f);
+                float xratio = yratio * ProjectionInfo.Aspect8x5;
+                yratio *= 256f / 240f;
+                render.Projection.Perspective = Matrix4.CreatePerspectiveOffCenter(near * -xratio, near * xratio, near * -yratio, near * yratio, near, far);
+
+                anchor_last_trans = trans;
+                anchor_last_rot = rot;
+                if (anchor_detach)
+                {
+                    ForceViewTransRot(-render.Projection.CamTrans, render.Projection.CamRot);
+                    DrawCameraFov(trans, rot, xratio, yratio, true);
+                }
+                else
+                {
+                    ForceViewTransRot(trans, rot);
+                }
+
+                if (anchor_sortlist)
+                {
+                    var slst = nsf.GetEntry<OldSLSTEntry>(anchor_cam.SLSTEID);
+                    if (slst != null)
+                    {
+                        var polys = slst.DecodeAt((int)Math.Floor(anchor_cam_pos));
+                        con_debug += string.Format("wgeo polys: {0}/1460({1:F2}%)/2610({2:F2}%)\n", polys.Count, 100f*polys.Count/1460, 100f*polys.Count/2610);
+                        SetSortList(polys);
+                    }
                 }
             }
 
@@ -137,7 +476,7 @@ namespace CrashEdit
                 for (int i = 0; i < zone.WorldCount; ++i)
                 {
                     var world = zone.GetLinkedWorld(i);
-                    if (!worlds.Contains(world))
+                    if (!worlds.Contains(world) || (anchormode && anchor_sortlist))
                         worlds.Add(world);
                 }
             }
@@ -152,6 +491,8 @@ namespace CrashEdit
                 }
             }
 
+            base.Render();
+
             is_master_zone = true;
             zone_alpha = 255;
             if (master_zone != null)
@@ -162,20 +503,6 @@ namespace CrashEdit
                 is_master_zone = false;
                 zone_alpha = 128;
             }
-            else
-            {
-                foreach (var zone in allzones)
-                {
-                    RenderZone(zone);
-                }
-                allzones.Clear();
-            }
-
-            // render early
-            PostRender();
-
-            base.Render();
-
             foreach (var zone in allzones)
             {
                 RenderZone(zone);
@@ -187,10 +514,7 @@ namespace CrashEdit
             zone_trans = new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
             Vector3 zoneSize = new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1;
             AddText3D(zone.EName, zone_trans + new Vector3(zoneSize.X, 0, zoneSize.Z) / 2, GetZoneColor(Color4.White), size: 2, flags: TextRenderFlags.Shadow | TextRenderFlags.Top | TextRenderFlags.Center);
-            AddBox(zone_trans,
-                   new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1,
-                   GetZoneColor(Color4.White),
-                   true);
+            AddBox(zone_trans, new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1, GetZoneColor(Color4.White), true);
             foreach (OldEntity entity in zone.Entities)
             {
                 RenderEntity(entity);
@@ -236,8 +560,6 @@ namespace CrashEdit
                         else if (pickup == 103) pickup_name = "cortex";
                         else if (pickup == 104) pickup_name = "brio";
                         else if (pickup == 105) pickup_name = "tawna";
-                        else if (pickup >= 200 && pickup < 264) pickup_name = "crystal-" + (pickup - 200);
-                        else if (pickup >= 300 && pickup < 364) pickup_name = "gem-" + (pickup - 300);
                         text_y += AddText3D(pickup_name, trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
                         int link_a = entity.VecZ;
                         var link_info = link_a == 0 ? null : nsf.GetEntityC1(link_a);
@@ -247,10 +569,28 @@ namespace CrashEdit
                             var lzone = link_info.Item2;
                             if (link.Positions.Count > 0)
                             {
+                                float wave_pad = 0.15f;
+                                float wave_ramp = 0.3f;
+                                float wave_sustain = 0.15f;
+                                float cycle_size = 1 + wave_pad * 2 + wave_ramp * 2 + wave_sustain;
+                                float cycle = (float)(render.CurrentTime % 4) / 4 * cycle_size;
+                                float lerp_ramp_end = cycle - wave_pad;
+                                float lerp_sustain_end = lerp_ramp_end - wave_ramp;
+                                float lerp_sustain_start = lerp_sustain_end - wave_sustain;
+                                float lerp_ramp_start = lerp_sustain_start - wave_ramp;
+
                                 var lzone_trans = new Vector3(lzone.X, lzone.Y, lzone.Z) / GameScales.ZoneC1;
                                 Vector3 link_trans = new Vector3(link.Positions[0].X, link.Positions[0].Y, link.Positions[0].Z) / GameScales.ZoneEntityC1 + lzone_trans;
                                 vaoLinesThick.PushAttrib(trans: trans, rgba: GetZoneColor(Color4.Red));
-                                vaoLinesThick.PushAttrib(trans: link_trans, rgba: GetZoneColor(Color4.Lime));
+                                vaoLinesThick.PushAttrib(trans: MathExt.Lerp(trans, link_trans, lerp_ramp_start), rgba: GetZoneColor(Color4.Red));
+                                vaoLinesThick.PushAttrib(trans: MathExt.Lerp(trans, link_trans, lerp_ramp_start), rgba: GetZoneColor(MathExt.Lerp(Color4.Red, Color4.Lime, (-lerp_ramp_start) / wave_ramp)));
+                                vaoLinesThick.PushAttrib(trans: MathExt.Lerp(trans, link_trans, lerp_sustain_start), rgba: GetZoneColor(MathExt.Lerp(Color4.Red, Color4.Lime, -(lerp_ramp_start - 1) / wave_ramp)));
+                                vaoLinesThick.PushAttrib(trans: MathExt.Lerp(trans, link_trans, lerp_sustain_start), rgba: GetZoneColor(Color4.Lime));
+                                vaoLinesThick.PushAttrib(trans: MathExt.Lerp(trans, link_trans, lerp_sustain_end), rgba: GetZoneColor(Color4.Lime));
+                                vaoLinesThick.PushAttrib(trans: MathExt.Lerp(trans, link_trans, lerp_sustain_end), rgba: GetZoneColor(MathExt.Lerp(Color4.Red, Color4.Lime, lerp_ramp_end / wave_ramp)));
+                                vaoLinesThick.PushAttrib(trans: MathExt.Lerp(trans, link_trans, lerp_ramp_end), rgba: GetZoneColor(MathExt.Lerp(Color4.Red, Color4.Lime, (lerp_ramp_end - 1) / wave_ramp)));
+                                vaoLinesThick.PushAttrib(trans: MathExt.Lerp(trans, link_trans, lerp_ramp_end), rgba: GetZoneColor(Color4.Red));
+                                vaoLinesThick.PushAttrib(trans: link_trans, rgba: GetZoneColor(Color4.Red));
                             }
                         }
                     }
@@ -287,20 +627,29 @@ namespace CrashEdit
 
         private void RenderCamera(OldCamera camera)
         {
-            for (int i = 1; i < camera.Positions.Count; ++i)
+            byte alpha_backup;
+            for (int i = 0; i < camera.Positions.Count; ++i, zone_alpha = alpha_backup)
             {
-                vaoLines.PushAttrib(trans: new Vector3(camera.Positions[i - 1].X, camera.Positions[i - 1].Y, camera.Positions[i - 1].Z) / GameScales.ZoneCameraC1 + zone_trans,
-                                    rgba: GetZoneColor(Color4.Green));
-                vaoLines.PushAttrib(trans: new Vector3(camera.Positions[i].X, camera.Positions[i].Y, camera.Positions[i].Z) / GameScales.ZoneCameraC1 + zone_trans,
-                                    rgba: GetZoneColor(Color4.Green));
-            }
-            foreach (OldCameraPosition position in camera.Positions)
-            {
-                Vector3 trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneCameraC1 + zone_trans;
+                alpha_backup = zone_alpha;
+                var position = camera.Positions[i];
+                var trans = new Vector3(position.X, position.Y, position.Z) / GameScales.ZoneCameraC1 + zone_trans;
+                if (anchormode)
+                {
+                    zone_alpha = (byte)MathExt.LerpScale(0, zone_alpha, Vector3.Distance(trans, -render.Projection.Trans), 4, 8);
+                    if (zone_alpha == 0)
+                        continue;
+                }
+                if (i > 0)
+                {
+                    var prev_position = camera.Positions[i - 1];
+                    vaoLines.PushAttrib(trans: new Vector3(prev_position.X, prev_position.Y, prev_position.Z) / GameScales.ZoneCameraC1 + zone_trans, rgba: GetZoneColor(Color4.Green));
+                    vaoLines.PushAttrib(trans: trans, rgba: GetZoneColor(Color4.Green));
+                }
+
                 AddSprite(trans, new Vector2(1), GetZoneColor(Color4.Yellow), OldResources.PointTexture);
 
                 float ang2rad = MathHelper.Pi / 2048;
-                var quatAng = Quaternion.FromEulerAngles(-position.XRot * ang2rad, -position.YRot * ang2rad, -position.ZRot * ang2rad);
+                var quatAng = Quaternion.FromEulerAngles(-position.XRot * ang2rad, -position.YRot * ang2rad, 0);
                 var rot_mat = Matrix4.CreateFromQuaternion(quatAng);
                 var test_vec = (rot_mat * new Vector4(0, 0, -1, 1)).Xyz;
 

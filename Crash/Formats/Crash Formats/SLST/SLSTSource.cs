@@ -31,8 +31,8 @@ namespace Crash
             for (int i = 0; i < count; i++)
             {
                 short id = (short)(BitConv.FromInt16(data, 4 + i * 2) & 0x07FF);
-                byte state = (byte)((data[5 + i * 2] >> 3) & 0x3);
-                byte world = (byte)((data[5 + i * 2] >> 5) & 0x7);
+                byte state = (byte)((id >> 11) & 0x3);
+                byte world = (byte)((id >> 13) & 0x7);
                 polygons[i] = new SLSTPolygonID(id, state, world);
             }
             return new SLSTSource(polygons);

@@ -198,7 +198,7 @@ namespace CrashEdit
             if (!positiondirty)
             {
                 OldCameraPosition pos = camera.Positions[positionindex];
-                camera.Positions[positionindex] = new OldCameraPosition(pos.X, pos.Y, pos.Z, pos.XRot, pos.YRot, (short)numYRot.Value);
+                camera.Positions[positionindex] = new OldCameraPosition(pos.X, pos.Y, pos.Z, pos.XRot, pos.YRot, (short)numZRot.Value);
             }
         }
 

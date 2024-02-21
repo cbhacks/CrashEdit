@@ -1,10 +1,24 @@
 ﻿using OpenTK;
 using OpenTK.Graphics;
+using System;
 
 namespace CrashEdit
 {
     public static class MathExt
     {
+        public static float TruncatePart(this float v)
+        {
+            return v - (float)Math.Truncate(v);
+        }
+
+        public static Vector3 Div(Vector3 a, Vector3 b)
+        {
+            a.X /= b.X;
+            a.Y /= b.Y;
+            a.Z /= b.Z;
+            return a;
+        }
+
         public static float Lerp(float a, float b, float amt)
         {
             if (amt <= 0) return a;
@@ -27,20 +41,6 @@ namespace CrashEdit
                 a.Y += (b.Y - a.Y) * amt;
                 a.Z += (b.Z - a.Z) * amt;
             }
-        }
-
-        public static Vector3 Lerp(Vector3 a, Vector3 b, float amt)
-        {
-            Lerp(ref a, b, amt);
-            return a;
-        }
-
-        public static Vector3 Div(Vector3 a, Vector3 b)
-        {
-            a.X /= b.X;
-            a.Y /= b.Y;
-            a.Z /= b.Z;
-            return a;
         }
 
         public static Color4 Lerp(Color4 col1, Color4 col2, float amt)
@@ -72,10 +72,39 @@ namespace CrashEdit
             }
         }
 
+        public static Vector3 Lerp(Vector3 a, Vector3 b, float amt)
+        {
+            Lerp(ref a, b, amt);
+            return a;
+        }
+
         public static Rgba Lerp(Rgba a, Rgba b, float amt)
         {
             Lerp(ref a, b, amt);
             return a;
+        }
+
+        public static Vector3 LerpScale(Vector3 a, Vector3 b, float amt, float amt_min, float amt_max)
+        {
+            Lerp(ref a, b, (amt - amt_min) / (amt_max - amt_min));
+            return a;
+        }
+
+        public static Color4 LerpScale(Color4 a, Color4 b, float amt, float amt_min, float amt_max)
+        {
+            return Lerp(a, b, (amt - amt_min) / (amt_max - amt_min));
+        }
+
+        public static float LerpScale(float a, float b, float amt, float amt_min, float amt_max)
+        {
+            return Lerp(a, b, (amt - amt_min) / (amt_max - amt_min));
+        }
+
+        public static void Zero(ref Vector3 v)
+        {
+            v.X = 0;
+            v.Y = 0;
+            v.Z = 0;
         }
 
         public static int Log2(int v)
@@ -94,6 +123,16 @@ namespace CrashEdit
                 if (v >= (1 << i)) return (uint)i;
             }
             return uint.MaxValue;
+        }
+
+        public static double Pythagoras(double a, double b)
+        {
+            return Math.Sqrt(a * a + b * b);
+        }
+
+        public static double Sec(double theta)
+        {
+            return Pythagoras(Math.Tan(theta), 1);
         }
     }
 }

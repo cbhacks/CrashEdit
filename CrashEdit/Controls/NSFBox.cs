@@ -86,7 +86,7 @@ namespace CrashEdit
                 {
                     pnSplit.Panel2.Controls.Clear();
                     pnSplit.Panel2.Controls.Add(t.Editor);
-                    t.Editor.Invalidate();
+                    t.Editor?.Invalidate();
                 }
             }
         }

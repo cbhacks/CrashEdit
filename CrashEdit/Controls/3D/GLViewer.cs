@@ -124,7 +124,7 @@ namespace CrashEdit
         protected static VAO vaoDebugBoxTri;
         protected static VAO vaoDebugBoxLine;
         protected static VAO vaoDebugSprite;
-        public static string dbgContextString = "*unknown*";
+        public static List<string> dbgContextDir = new();
 
         private static IGraphicsContext global_context;
         private static GLControl global_context_window;
@@ -152,13 +152,47 @@ namespace CrashEdit
         private readonly float movespeed = 10f;
         private readonly float rotspeed = 0.5f;
         private readonly float zoomspeed = 1f;
-        private const float PerFrame = 1 / 60f;
+        protected const float PerFrame = 1 / 60f;
         public const float DefaultZNear = 0.2f;
         public const float DefaultZFar = DefaultZNear * 0x4000;
         #endregion
 
-        public bool KDown(Keys key) => keysdown.Contains(key);
-        public bool KPress(Keys key) => keyspressed.Contains(key);
+        private bool KeyDownShift() => keysdown.Contains(Keys.ShiftKey) || keysdown.Contains(Keys.LShiftKey) || keysdown.Contains(Keys.RShiftKey);
+        private bool KeyDownControl() => keysdown.Contains(Keys.ControlKey) || keysdown.Contains(Keys.LControlKey) || keysdown.Contains(Keys.RControlKey);
+        private bool KeyDownAlt() => keysdown.Contains(Keys.Menu) || keysdown.Contains(Keys.LMenu) || keysdown.Contains(Keys.RMenu);
+
+        public bool KDown(Keys key, bool ignore_modifiers = false)
+        {
+            if ((key & Keys.KeyCode) != Keys.None && !keysdown.Contains(key & Keys.KeyCode))
+                return false;
+            bool shift = (key & Keys.Shift) != 0;
+            bool control = (key & Keys.Control) != 0;
+            bool alt = (key & Keys.Alt) != 0;
+            if (ignore_modifiers ? (shift && !KeyDownShift()) : (shift != KeyDownShift()))
+                return false;
+            if (ignore_modifiers ? (control && !KeyDownControl()) : (control != KeyDownControl()))
+                return false;
+            if (ignore_modifiers ? (alt && !KeyDownAlt()) : (alt != KeyDownAlt()))
+                return false;
+            return true;
+        }
+
+        public bool KPress(Keys key, bool ignore_modifiers = false)
+        {
+            if ((key & Keys.KeyCode) != Keys.None && !keyspressed.Contains(key & Keys.KeyCode))
+                return false;
+            bool shift = (key & Keys.Shift) != 0;
+            bool control = (key & Keys.Control) != 0;
+            bool alt = (key & Keys.Alt) != 0;
+            if (ignore_modifiers ? (shift && !KeyDownShift()) : (shift != KeyDownShift()))
+                return false;
+            if (ignore_modifiers ? (control && !KeyDownControl()) : (control != KeyDownControl()))
+                return false;
+            if (ignore_modifiers ? (alt && !KeyDownAlt()) : (alt != KeyDownAlt()))
+                return false;
+            return true;
+        }
+
         public bool KDown(ControlsKeyboardInfo control) => KDown(control.Key);
         public bool KPress(ControlsKeyboardInfo control) => KPress(control.Key);
         private float GetMoveSpeed() => movespeed * 0.2f + movespeed * 0.8f * (render.Projection.Distance / (ProjectionInfo.MaxInitialDistance * 0.2f));
@@ -172,13 +206,19 @@ namespace CrashEdit
             public static readonly ControlsKeyboardInfo ToggleZoneOctreeOutline = new(Keys.V, Resources.ViewerControls_ToggleZoneOctreeOutline);
             public static readonly ControlsKeyboardInfo ToggleZoneOctreeNeighbors = new(Keys.Z, Resources.ViewerControls_ToggleZoneOctreeNeighbors);
             public static readonly ControlsKeyboardInfo OpenOctreeWindow = new(Keys.B, Resources.ViewerControls_OpenOctreeWindow);
-            public static readonly ControlsKeyboardInfo ToggleZoneOctreeFlip = new(Keys.O, Resources.ViewerControls_ToggleZoneOctreeFlip);
+            public static readonly ControlsKeyboardInfo ToggleZoneOctreeFlip = new(Keys.F, Resources.ViewerControls_ToggleZoneOctreeFlip);
             public static readonly ControlsKeyboardInfo ToggleTimeTrial = new(Keys.Y, Resources.ViewerControls_ToggleTimeTrial);
             public static readonly ControlsKeyboardInfo ToggleCollisionAnim = new(Keys.C, Resources.ViewerControls_ToggleCollisionAnim);
             public static readonly ControlsKeyboardInfo ToggleLerp = new(Keys.I, Resources.ViewerControls_ToggleLerp);
             public static readonly ControlsKeyboardInfo ToggleNormals = new(Keys.N, Resources.ViewerControls_ToggleNormals);
             public static readonly ControlsKeyboardInfo ChangeCullMode = new(Keys.U, Resources.ViewerControls_ChangeCullMode);
             public static readonly ControlsKeyboardInfo ToggleHelp = new(Keys.H, Resources.ViewerControls_ToggleHelp);
+            public static readonly ControlsKeyboardInfo EnterZoneAnchor = new(Keys.Control | Keys.O, Resources.ViewerControls_EnterZoneAnchor);
+            public static readonly ControlsKeyboardInfo ExitZoneAnchor = new(Keys.Control | Keys.O, Resources.ViewerControls_ExitZoneAnchor);
+            public static readonly ControlsKeyboardInfo ZoneAnchorPrevCam = new(Keys.Left, Resources.ViewerControls_ZoneAnchorPrevCam);
+            public static readonly ControlsKeyboardInfo ZoneAnchorNextCam = new(Keys.Right, Resources.ViewerControls_ZoneAnchorNextCam);
+            public static readonly ControlsKeyboardInfo ZoneAnchorSortList = new(Keys.L, Resources.ViewerControls_ZoneAnchorSortList);
+            public static readonly ControlsKeyboardInfo ZoneAnchorDetach = new(Keys.K, Resources.ViewerControls_ZoneAnchorDetach);
         }
         #endregion
 
@@ -306,13 +346,14 @@ namespace CrashEdit
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             base.OnMouseWheel(e);
-            lock (render.mLock)
+            if (CanZoom())
             {
-                var olddist = render.Projection.Distance;
-                float delta = (float)e.Delta / SystemInformation.MouseWheelScrollDelta * zoomspeed;
-                delta *= 0.3f + 1.7f * (render.Projection.Distance / ProjectionInfo.MaxInitialDistance);
-                render.Projection.Distance = Math.Max(ProjectionInfo.MinDistance, Math.Min(render.Projection.Distance - delta, ProjectionInfo.MaxDistance));
-                // render.Projection.Trans -= (Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot)) * new Vector4(0, 0, render.Distance - olddist, 1)).Xyz;
+                lock (render.mLock)
+                {
+                    float delta = (float)e.Delta / SystemInformation.MouseWheelScrollDelta * zoomspeed;
+                    delta *= 0.3f + 1.7f * (render.Projection.Distance / ProjectionInfo.MaxInitialDistance);
+                    render.Projection.Distance = Math.Max(ProjectionInfo.MinDistance, Math.Min(render.Projection.Distance - delta, ProjectionInfo.MaxDistance));
+                }
             }
         }
 
@@ -331,20 +372,20 @@ namespace CrashEdit
             base.OnMouseMove(e);
             lock (render.mLock)
             {
-                if (mouseleft)
+                if (mouseleft && CanAim())
                 {
-                    float rotx = render.Projection.Rot.X;
-                    float rotz = render.Projection.Rot.Y;
+                    float rotx = render.Projection.CamRot.X;
+                    float rotz = render.Projection.CamRot.Y;
                     rotz += MathHelper.DegreesToRadians(e.X - mousex) * rotspeed;
                     rotx += MathHelper.DegreesToRadians(e.Y - mousey) * rotspeed;
                     if (rotx > RenderInfo.MaxRot)
                         rotx = RenderInfo.MaxRot;
                     if (rotx < RenderInfo.MinRot)
                         rotx = RenderInfo.MinRot;
-                    render.Projection.Rot.X = rotx;
-                    render.Projection.Rot.Y = rotz;
+                    render.Projection.CamRot.X = rotx;
+                    render.Projection.CamRot.Y = rotz;
                 }
-                else if (mouseright)
+                if (mouseright)
                 {
                 }
                 mousex = e.X;
@@ -386,9 +427,20 @@ namespace CrashEdit
             keyspressed.Clear();
         }
 
-        public static string BoolToEnable(bool enable)
+        public static string OnOffName(bool enable)
         {
             return enable ? "on" : "off";
+        }
+
+        public static string CullModeName(int mode)
+        {
+            switch (mode)
+            {
+                case 0: return "frontface culling";
+                case 1: return "backface culling";
+                case 2:
+                default: return "no culling";
+            }
         }
 
         protected virtual void PrintDebug()
@@ -399,37 +451,51 @@ namespace CrashEdit
 
         protected virtual void PrintHelp()
         {
-            con_help += Resources.ViewerControls_Move + '\n';
-            con_help += Resources.ViewerControls_MoveAligned + '\n';
-            con_help += Resources.ViewerControls_AimAndZoom + '\n';
-            con_help += KeyboardControls.ToggleHelp.Print(BoolToEnable(showHelp));
-            con_help += KeyboardControls.ResetCamera.Print();
-            con_help += KeyboardControls.ToggleTextures.Print(BoolToEnable(render.EnableTexture));
+            if (CanMove())
+            {
+                con_help += Resources.ViewerControls_Move + '\n';
+                con_help += Resources.ViewerControls_MoveAligned + '\n';
+            }
+            if (CanAim() && CanZoom())
+                con_help += Resources.ViewerControls_AimAndZoom + '\n';
+            else if (CanAim())
+                con_help += Resources.ViewerControls_Aim + '\n';
+            else if (CanZoom())
+                con_help += Resources.ViewerControls_Zoom + '\n';
+            if (CanResetCamera())
+            {
+                con_help += KeyboardControls.ResetCamera.Print();
+            }
+            con_help += KeyboardControls.ToggleTextures.Print(OnOffName(render.EnableTexture));
+            con_help += KeyboardControls.ToggleHelp.Print(OnOffName(showHelp));
         }
 
         protected virtual void RunLogic()
         {
-            var d = GetMoveSpeed() * PerFrame;
-            if (KDown(Keys.ControlKey))
+            if (CanMove())
             {
-                if (KDown(Keys.W)) render.Projection.Trans.Z += d;
-                if (KDown(Keys.S)) render.Projection.Trans.Z -= d;
-                if (KDown(Keys.A)) render.Projection.Trans.X += d;
-                if (KDown(Keys.D)) render.Projection.Trans.X -= d;
-                if (KDown(Keys.E)) render.Projection.Trans.Y += d;
-                if (KDown(Keys.Q)) render.Projection.Trans.Y -= d;
+                var d = GetMoveSpeed() * PerFrame;
+                if (KDown(Keys.Control))
+                {
+                    if (KDown(Keys.W)) render.Projection.CamTrans.Z += d;
+                    if (KDown(Keys.S)) render.Projection.CamTrans.Z -= d;
+                    if (KDown(Keys.A)) render.Projection.CamTrans.X += d;
+                    if (KDown(Keys.D)) render.Projection.CamTrans.X -= d;
+                    if (KDown(Keys.E)) render.Projection.CamTrans.Y += d;
+                    if (KDown(Keys.Q)) render.Projection.CamTrans.Y -= d;
+                }
+                else
+                {
+                    var r = Matrix3.CreateFromQuaternion(render.Projection.Rot);
+                    if (KDown(Keys.W)) render.Projection.CamTrans += (r * new Vector3(0, 0, d));
+                    if (KDown(Keys.S)) render.Projection.CamTrans -= (r * new Vector3(0, 0, d));
+                    if (KDown(Keys.A)) render.Projection.CamTrans += (r * new Vector3(d, 0, 0));
+                    if (KDown(Keys.D)) render.Projection.CamTrans -= (r * new Vector3(d, 0, 0));
+                    if (KDown(Keys.E)) render.Projection.CamTrans += (r * new Vector3(0, d, 0));
+                    if (KDown(Keys.Q)) render.Projection.CamTrans -= (r * new Vector3(0, d, 0));
+                }
             }
-            else
-            {
-                var r = Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot));
-                if (KDown(Keys.W)) render.Projection.Trans += (r * new Vector4(0, 0, d, 1)).Xyz;
-                if (KDown(Keys.S)) render.Projection.Trans -= (r * new Vector4(0, 0, d, 1)).Xyz;
-                if (KDown(Keys.A)) render.Projection.Trans += (r * new Vector4(d, 0, 0, 1)).Xyz;
-                if (KDown(Keys.D)) render.Projection.Trans -= (r * new Vector4(d, 0, 0, 1)).Xyz;
-                if (KDown(Keys.E)) render.Projection.Trans += (r * new Vector4(0, d, 0, 1)).Xyz;
-                if (KDown(Keys.Q)) render.Projection.Trans -= (r * new Vector4(0, d, 0, 1)).Xyz;
-            }
-            if (KPress(KeyboardControls.ResetCamera))
+            if (CanResetCamera() && KPress(KeyboardControls.ResetCamera))
             {
                 render.Reset();
                 ResetCamera();
@@ -438,20 +504,35 @@ namespace CrashEdit
             if (KPress(KeyboardControls.ToggleHelp)) showHelp = !showHelp;
         }
 
+        protected virtual bool CanMove() => true;
+        protected virtual bool CanAim() => true;
+        protected virtual bool CanZoom() => true;
+        public virtual bool CanResetCamera() => true;
+
+        protected void ForceViewTransRot(Vector3 trans, Vector3 rot)
+        {
+            render.Projection.SetTrans(trans);
+            render.Projection.SetRotation(rot);
+            con_debug += $"forcing trans {trans}\n";
+            con_debug += $"forcing rot {rot}\n";
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
-            dbgContextString = "pre-run";
+            dbgContextDir.Clear();
             if (!loaded)
             {
+                dbgContextDir.Add("load");
                 MakeCurrent();
                 GLLoad();
                 loaded = true;
+                dbgContextDir.RemoveLast();
             }
             else if (run)
             {
                 Stopwatch watchRun = Stopwatch.StartNew();
 
-                dbgContextString = "run";
+                dbgContextDir.Add("render");
 
                 render.DebugRenderMs = 0;
 
@@ -460,7 +541,7 @@ namespace CrashEdit
                 // mutex lock to prevent races with the renderinfo timer and using the renderinfo itself
                 lock (render.mLock)
                 {
-                    dbgContextString = "setup";
+                    dbgContextDir.Add("setup");
 
                     // update font
                     if (fontTable.Size != Settings.Default.FontSize || fontTable.FileName != Settings.Default.FontName)
@@ -480,38 +561,46 @@ namespace CrashEdit
                     GL.ClearColor(Color.FromArgb(col));
                     GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-                    // set up view matrices (45deg FOV)
-                    render.Projection.Perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45), render.Projection.Aspect, DefaultZNear, DefaultZFar);
-                    var rot_mat = Matrix4.CreateFromQuaternion(new Quaternion(render.Projection.Rot));
-                    render.Projection.Forward = -(rot_mat * new Vector4(0, 0, 1, 1)).Xyz;
-                    render.Projection.View = Matrix4.CreateTranslation(render.Projection.RealTrans) * rot_mat;
-                    // con_debug += $"trans: {-render.Projection.Trans} -> real_trans: {-render.Projection.RealTrans}\n";
+                    // set up view matrices (60deg FOV)
+                    render.Projection.SetPerspective(60, render.Projection.Aspect, DefaultZNear, DefaultZFar);
+                    render.Projection.SetRotation(render.Projection.CamRot);
+                    render.Projection.SetTrans(-render.Projection.CamTrans - render.Projection.Forward * render.Projection.Distance);
+                    
+                    dbgContextDir.RemoveLast();
+
+                    dbgContextDir.Add(GetType().ToString());
 
                     // render
-                    dbgContextString = "render " + GetType().ToString();
+                    dbgContextDir.Add("render");
                     Render();
+                    dbgContextDir.RemoveLast();
 
                     // post render
-                    dbgContextString = "post-render";
+                    dbgContextDir.Add("post-render");
                     PostRender();
+                    dbgContextDir.RemoveLast();
 
                     PrintHelp();
                     PrintDebug();
                     if (showHelp)
-                        AddText(con_help, Width, Height - 8, (Rgba)Color4.White, size: 0.9f, flags: TextRenderFlags.Right | TextRenderFlags.Bottom | TextRenderFlags.Default);
+                        AddText(con_help, Width, Height - 8, (Rgba)Color4.White, size: 0.85f, flags: TextRenderFlags.Right | TextRenderFlags.Bottom | TextRenderFlags.Default);
                     if (Settings.Default.Font2DEnable)
-                        AddText(con_debug, 0, 0, (Rgba)Color4.White, size: 0.9f);
+                        AddText(con_debug, 0, 0, (Rgba)Color4.White, size: 0.8f);
                     vaoText.UserScale = new Vector3(Width, Height, 1);
                     vaoText.RenderAndDiscard(render);
                     con_debug = string.Empty;
                     con_help = string.Empty;
+
+                    dbgContextDir.RemoveLast();
                 }
 
                 dbg_run_ms = watchRun.ElapsedMillisecondsFull();
 
                 // swap the front/back buffers so what we just rendered to the back buffer is displayed in the window.
-                dbgContextString = "swap-buffers";
+                dbgContextDir.RemoveLast();
+                dbgContextDir.Add("swap-buffers");
                 SwapBuffers();
+                dbgContextDir.RemoveLast();
             }
             base.OnPaint(e);
         }
@@ -569,7 +658,7 @@ namespace CrashEdit
 
         public Vector2 AddText3D(string text, Vector3 pos, Rgba col, float size = 1, TextRenderFlags flags = TextRenderFlags.Default, float ofs_x = 0, float ofs_y = 0)
         {
-            var screen_pos = new Vector4(pos, 1) * render.Projection.PVM;
+            var screen_pos = new Vector4(pos, 1) * render.Projection.GetPVM();
             screen_pos /= screen_pos.W;
             if (screen_pos.Z >= 1 || screen_pos.Z <= -1)
                 return new Vector2(0);
@@ -584,7 +673,7 @@ namespace CrashEdit
             }
             if ((flags & TextRenderFlags.Unscaled) == 0)
             {
-                var text_dist_vec = render.Projection.RealTrans + pos;
+                var text_dist_vec = render.Projection.Trans + pos;
                 var cam_to_text_factor = 1 / Vector3.Dot(text_dist_vec, render.Projection.Forward);
                 // con_debug += $"text_dist: {text_dist_vec.Length} dot: {cam_to_text_factor}\n";
                 size *= cam_to_text_factor * render.Projection.Height / 50;
@@ -917,13 +1006,12 @@ namespace CrashEdit
             float midx = (maxx + minx) / 2;
             float midy = (maxy + miny) / 2;
             float midz = (maxz + minz) / 2;
-            render.Projection.Distance = Math.Min(ProjectionInfo.MaxInitialDistance, Math.Max(render.Projection.Distance, (float)(Math.Sqrt(Math.Pow(maxx - minx, 2) + Math.Pow(maxy - miny, 2) + Math.Pow(maxz - minz, 2)) * 1.2)));
-            //render.Projection.Distance += 0;
-            render.Projection.Trans.X = -midx;
-            render.Projection.Trans.Y = -midy;
-            render.Projection.Trans.Z = -midz;
-            render.Projection.Rot.Y = 0;
-            render.Projection.Rot.X = MathHelper.DegreesToRadians(15);
+            render.Projection.Distance = Math.Min(ProjectionInfo.MaxInitialDistance, Math.Max(render.Projection.Distance, (float)(Math.Sqrt(Math.Pow(maxx - minx, 2) + Math.Pow(maxy - miny, 2) + Math.Pow(maxz - minz, 2))) * 0.8f));
+            render.Projection.CamTrans.X = -midx;
+            render.Projection.CamTrans.Y = -midy;
+            render.Projection.CamTrans.Z = -midz;
+            render.Projection.CamRot.Y = 0;
+            render.Projection.CamRot.X = MathHelper.DegreesToRadians(15);
             Invalidate();
         }
 
@@ -1035,6 +1123,19 @@ namespace CrashEdit
             }
             tex = default;
             return true;
+        }
+
+        protected override bool IsInputKey(Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.Right:
+                case Keys.Left:
+                case Keys.Up:
+                case Keys.Down:
+                    return true;
+            }
+            return base.IsInputKey(keyData);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

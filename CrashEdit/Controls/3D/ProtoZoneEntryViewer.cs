@@ -95,7 +95,7 @@ namespace CrashEdit
             base.PrintHelp();
             con_help += octree_renderer.PrintHelp();
             if (octree_renderer.enable)
-                con_help += KeyboardControls.ToggleZoneOctreeFlip.Print(BoolToEnable(octreeFlip));
+                con_help += KeyboardControls.ToggleZoneOctreeFlip.Print(OnOffName(octreeFlip));
         }
 
         protected override void RunLogic()

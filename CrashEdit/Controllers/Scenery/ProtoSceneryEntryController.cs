@@ -104,15 +104,15 @@ namespace CrashEdit
                         {
                             var poly = polygons[k];
                             if (poly.VertexA == j)
-                                poly.VertexA = i;
+                                poly.VertexA = (short)i;
                             else if (poly.VertexA > j)
                                 --poly.VertexA;
                             if (poly.VertexB == j)
-                                poly.VertexB = i;
+                                poly.VertexB = (short)i;
                             else if (poly.VertexB > j)
                                 --poly.VertexB;
                             if (poly.VertexC == j)
-                                poly.VertexC = i;
+                                poly.VertexC = (short)i;
                             else if (poly.VertexC > j)
                                 --poly.VertexC;
                             polygons[k] = poly;

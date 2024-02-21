@@ -22,8 +22,8 @@ namespace CrashEdit
         public void Reset()
         {
             Projection.Distance = ProjectionInfo.InitialDistance;
-            Projection.Trans = new(0, 0, 0);
-            Projection.Rot = new(BaseRot, 0, 0);
+            Projection.CamTrans = new(0, 0, 0);
+            Projection.CamRot = new(BaseRot, 0, 0);
             Projection.Scale = new(1);
             MoveMode = RendererMoveMode.Anchored;
         }
@@ -40,6 +40,7 @@ namespace CrashEdit
         public long RealCurrentFrame => _framewatch.ElapsedFrames();
         public double FullCurrentFrame => _framewatch.ElapsedFramesFull();
         public long MissedFrames => RealCurrentFrame - _framehits;
+        public double CurrentTime => _framewatch.ElapsedSeconds();
 
         public readonly object mLock = new();
 

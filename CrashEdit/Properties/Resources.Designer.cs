@@ -2055,6 +2055,15 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Left mouse to aim.
+        /// </summary>
+        internal static string ViewerControls_Aim {
+            get {
+                return ResourceManager.GetString("ViewerControls_Aim", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Left mouse to aim, scroll wheel to zoom.
         /// </summary>
         internal static string ViewerControls_AimAndZoom {
@@ -2064,11 +2073,29 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scroll through culling modes (current: {0}).
+        ///   Looks up a localized string similar to Change culling modes (current: {0}).
         /// </summary>
         internal static string ViewerControls_ChangeCullMode {
             get {
                 return ResourceManager.GetString("ViewerControls_ChangeCullMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter camera rail view.
+        /// </summary>
+        internal static string ViewerControls_EnterZoneAnchor {
+            get {
+                return ResourceManager.GetString("ViewerControls_EnterZoneAnchor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Return to normal view.
+        /// </summary>
+        internal static string ViewerControls_ExitZoneAnchor {
+            get {
+                return ResourceManager.GetString("ViewerControls_ExitZoneAnchor", resourceCulture);
             }
         }
         
@@ -2109,7 +2136,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show collision boxes ({0}).
+        ///   Looks up a localized string similar to Toggle collision boxes ({0}).
         /// </summary>
         internal static string ViewerControls_ToggleCollisionAnim {
             get {
@@ -2127,7 +2154,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable animation interpolation ({0}).
+        ///   Looks up a localized string similar to Toggle animation interpolation ({0}).
         /// </summary>
         internal static string ViewerControls_ToggleLerp {
             get {
@@ -2136,7 +2163,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show normals ({0}).
+        ///   Looks up a localized string similar to Toggle normals ({0}).
         /// </summary>
         internal static string ViewerControls_ToggleNormals {
             get {
@@ -2145,7 +2172,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable textures ({0}).
+        ///   Looks up a localized string similar to Toggle textures ({0}).
         /// </summary>
         internal static string ViewerControls_ToggleTextures {
             get {
@@ -2163,7 +2190,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show zone collision octree ({0}).
+        ///   Looks up a localized string similar to Toggle zone collision octree ({0}).
         /// </summary>
         internal static string ViewerControls_ToggleZoneOctree {
             get {
@@ -2181,7 +2208,7 @@ namespace CrashEdit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show octree for neighbor zones ({0}).
+        ///   Looks up a localized string similar to Toggle neighbor zone octree ({0}).
         /// </summary>
         internal static string ViewerControls_ToggleZoneOctreeNeighbors {
             get {
@@ -2195,6 +2222,69 @@ namespace CrashEdit.Properties {
         internal static string ViewerControls_ToggleZoneOctreeOutline {
             get {
                 return ResourceManager.GetString("ViewerControls_ToggleZoneOctreeOutline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle detach from rail ({0}).
+        /// </summary>
+        internal static string ViewerControls_ZoneAnchorDetach {
+            get {
+                return ResourceManager.GetString("ViewerControls_ZoneAnchorDetach", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to W/A/S/D/Q/E to move.
+        /// </summary>
+        internal static string ViewerControls_ZoneAnchorMove {
+            get {
+                return ResourceManager.GetString("ViewerControls_ZoneAnchorMove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go to next camera.
+        /// </summary>
+        internal static string ViewerControls_ZoneAnchorNextCam {
+            get {
+                return ResourceManager.GetString("ViewerControls_ZoneAnchorNextCam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mouse to pan.
+        /// </summary>
+        internal static string ViewerControls_ZoneAnchorPan {
+            get {
+                return ResourceManager.GetString("ViewerControls_ZoneAnchorPan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go to previous camera.
+        /// </summary>
+        internal static string ViewerControls_ZoneAnchorPrevCam {
+            get {
+                return ResourceManager.GetString("ViewerControls_ZoneAnchorPrevCam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle sort list ({0}).
+        /// </summary>
+        internal static string ViewerControls_ZoneAnchorSortList {
+            get {
+                return ResourceManager.GetString("ViewerControls_ZoneAnchorSortList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scroll wheel to zoom.
+        /// </summary>
+        internal static string ViewerControls_Zoom {
+            get {
+                return ResourceManager.GetString("ViewerControls_Zoom", resourceCulture);
             }
         }
     }

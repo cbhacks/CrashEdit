@@ -36,7 +36,7 @@ namespace CrashEdit
             Console.WriteLine("Checking OpenGL caps...");
             foreach (var cap in (EnableCap[])Enum.GetValues(typeof(EnableCap)))
             {
-                Console.WriteLine($"    {Enum.GetName(typeof(EnableCap), cap)}: {GL.IsEnabled(cap)}");
+                Console.WriteLine($"    {cap}: {GL.IsEnabled(cap)}");
             }
 
             int flags = GL.GetInteger(GetPName.ContextFlags);
@@ -62,7 +62,23 @@ namespace CrashEdit
                             level = "INFO";
                             break;
                     }
-                    Console.WriteLine($"[{dbgContextString}] OpenGL {level}: {msg}");
+                    string context = null;
+                    if (dbgContextDir.Count > 0)
+                    {
+                        foreach (var c in dbgContextDir)
+                        {
+                            if (!string.IsNullOrEmpty(context))
+                            {
+                                context += "/";
+                            }
+                            context += c;
+                        }
+                    }
+                    else
+                    {
+                        context = "*unknown*";
+                    }
+                    Console.WriteLine($"[{context}] OpenGL {level}: {msg}");
                 }, IntPtr.Zero);
             }
 
@@ -94,6 +110,7 @@ namespace CrashEdit
 
             vaoGridLine.UserColor1 = Color4.Gray;
             vaoText.ZBufDisable = true;
+            vaoText.ZBufDisableRead = true;
             vaoLinesThick.LineWidth = 5;
 
             for (int i = 0; i < AxesPos.Length; ++i)

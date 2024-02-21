@@ -90,10 +90,10 @@ namespace CrashEdit
 
         public string PrintHelp()
         {
-            return GLViewer.KeyboardControls.ToggleZoneOctree.Print(GLViewer.BoolToEnable(enable))
+            return GLViewer.KeyboardControls.ToggleZoneOctree.Print(GLViewer.OnOffName(enable))
                 + (!enable ? "" :
-                   GLViewer.KeyboardControls.ToggleZoneOctreeOutline.Print(GLViewer.BoolToEnable(outline))
-                 + GLViewer.KeyboardControls.ToggleZoneOctreeNeighbors.Print(GLViewer.BoolToEnable(show_neighbor_zones))
+                   GLViewer.KeyboardControls.ToggleZoneOctreeOutline.Print(GLViewer.OnOffName(outline))
+                 + GLViewer.KeyboardControls.ToggleZoneOctreeNeighbors.Print(GLViewer.OnOffName(show_neighbor_zones))
                  + GLViewer.KeyboardControls.OpenOctreeWindow.Print()
                     );
         }
@@ -166,7 +166,17 @@ namespace CrashEdit
             nodes_y = 1 << ymax;
             nodes_z = 1 << zmax;
 
-            nodes = new int[nodes_x * nodes_y * nodes_z];
+            if (nodes == null || nodes.Length < nodes_x * nodes_y * nodes_z)
+            {
+                nodes = new int[nodes_x * nodes_y * nodes_z];
+            }
+            else
+            {
+                for (int i = 0; i < nodes.Length; i++)
+                {
+                    nodes[i] = 0;
+                }
+            }
 
             if (texColors == 0) texColors = GL.GenTexture();
             if (texNodes == 0) texNodes = GL.GenTexture();
