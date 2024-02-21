@@ -131,7 +131,7 @@ namespace CrashEdit
         {
             for (var i = 0; i < cam.NeighborCount; ++i)
             {
-                if (GetNeighborCamera(cam, i, out int n) == want_cam)
+                if (object.ReferenceEquals(GetNeighborCamera(cam, i, out int n), want_cam))
                     return i;
             }
             return -1;
@@ -146,15 +146,17 @@ namespace CrashEdit
             for (var i = 0; i < anchor_cam.NeighborCount; ++i)
             {
                 var neighbor = anchor_cam.Neighbors[i];
-                if (neighbor.LinkType == 0x1 && prev)
+                if ((neighbor.LinkType & 0x1) != 0 && prev && i != anchor_next_cam)
                     anchor_prev_cam = i;
-                if (neighbor.LinkType == 0x2 && next)
+                else if ((neighbor.LinkType & 0x2) != 0 && next && i != anchor_prev_cam)
                     anchor_next_cam = i;
             }
         }
 
         private bool EnterAnchorMode()
         {
+            if (anchormode)
+                return true;
             var master = GetMasterZone();
             if (master != null && master.Cameras.Count > 0)
             {
@@ -181,6 +183,8 @@ namespace CrashEdit
 
         private void ExitAnchorMode()
         {
+            if (!anchormode)
+                return;
             anchormode = false;
             anchor_cam = null;
         }
@@ -260,9 +264,9 @@ namespace CrashEdit
                         {
                             anchor_cam_pos -= anchor_cam.Positions.Count - 1;
 
+                            anchor_zone = newzone;
                             anchor_prev_cam = GetNeighborIndexForCamera(newcam, anchor_cam);
                             anchor_cam = newcam;
-                            anchor_zone = newzone;
                             SetBestNeighborCams(anchor_prev_cam == -1, true);
                         }
                     }
@@ -277,9 +281,9 @@ namespace CrashEdit
                             // note that the position index will be negative here
                             anchor_cam_pos += newcam.Positions.Count - 1;
 
+                            anchor_zone = newzone;
                             anchor_next_cam = GetNeighborIndexForCamera(newcam, anchor_cam);
                             anchor_cam = newcam;
-                            anchor_zone = newzone;
                             SetBestNeighborCams(true, anchor_next_cam == -1);
                         }
                     }
@@ -345,8 +349,15 @@ namespace CrashEdit
                     }
                 }
 
-                con_debug += $"prev-cam: {anchor_prev_cam}\n";
-                con_debug += $"next-cam: {anchor_next_cam}\n";
+                var prev_cam = GetNeighborCamera(anchor_cam, anchor_prev_cam, out int prev_zone_id);
+                var next_cam = GetNeighborCamera(anchor_cam, anchor_next_cam, out int next_zone_id);
+                var prev_zone = nsf.GetEntry<OldZoneEntry>(prev_zone_id);
+                var next_zone = nsf.GetEntry<OldZoneEntry>(next_zone_id);
+                con_debug += $"current-cam: {master_zone.EName} cam {master_zone.Cameras.IndexOf(anchor_cam)}\n";
+                if (anchor_prev_cam != -1)
+                    con_debug += $"prev-cam: neighbor {anchor_prev_cam} ({prev_zone.EName} cam {prev_zone.Cameras.IndexOf(prev_cam)})\n";
+                if (anchor_next_cam != -1)
+                    con_debug += $"next-cam: neighbor {anchor_next_cam} ({next_zone.EName} cam {next_zone.Cameras.IndexOf(next_cam)})\n";
                 var pos1 = anchor_cam.Positions[(int)Math.Floor(anchor_cam_pos)];
                 var pos2 = anchor_cam.Positions[(int)Math.Ceiling(anchor_cam_pos)];
                 float lerp = anchor_cam_pos.TruncatePart();
