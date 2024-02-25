@@ -1,13 +1,15 @@
-namespace Crash
+using System;
+
+namespace CrashEdit.Crash
 {
     [ChunkType(4)]
     public sealed class WavebankChunkLoader : EntryChunkLoader
     {
-        public override Chunk Load(Entry[] entries, NSF nsf)
+        public override EntryChunk Load(Entry[] entries)
         {
             if (entries == null)
-                throw new ArgumentNullException(nameof(entries));
-            return new WavebankChunk(entries, nsf);
+                throw new ArgumentNullException("entries");
+            return new WavebankChunk(entries);
         }
     }
 }

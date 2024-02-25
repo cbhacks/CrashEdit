@@ -1,36 +1,28 @@
-using Crash;
+using CrashEdit.Crash;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(OldAnimationEntry))]
     public sealed class OldAnimationEntryController : EntryController
     {
-        public OldAnimationEntryController(EntryChunkController entrychunkcontroller, OldAnimationEntry oldanimationentry) : base(entrychunkcontroller, oldanimationentry)
+        public OldAnimationEntryController(OldAnimationEntry oldanimationentry, SubcontrollerGroup parentGroup) : base(oldanimationentry, parentGroup)
         {
             OldAnimationEntry = oldanimationentry;
-            foreach (OldFrame frame in oldanimationentry.Frames)
-            {
-                AddNode(new OldFrameController(this, frame));
-            }
-            InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.OldAnimationEntryController_Text, OldAnimationEntry.EName);
-            Node.Text = string.Format(OldAnimationEntry.Proto ? Crash.UI.Properties.Resources.ProtoAnimationEntryController_Text
-                                                              : Crash.UI.Properties.Resources.OldAnimationEntryController_Text, OldAnimationEntry.EName);
-        }
+        public override bool EditorAvailable => true;
 
-        public override void InvalidateNodeImage()
+        public override Control CreateEditor()
         {
-            Node.ImageKey = "limeb";
-            Node.SelectedImageKey = "limeb";
-        }
-
-        protected override Control CreateEditor()
-        {
-            return new UndockableControl(new OldAnimationEntryViewer(NSF, Entry.EID));
+            OldModelEntry modelentry = GetEntry<OldModelEntry>(OldAnimationEntry.Frames[0].ModelEID);
+            Dictionary<int,TextureChunk> textures = new Dictionary<int,TextureChunk>();
+            if (modelentry != null)
+                foreach (OldModelStruct str in modelentry.Structs)
+                    if (str is OldModelTexture tex && !textures.ContainsKey(tex.EID))
+                        textures.Add(tex.EID,GetEntry<TextureChunk>(tex.EID));
+            return new OldAnimationEntryViewer(OldAnimationEntry.Frames,false,modelentry,textures);
         }
 
         public OldAnimationEntry OldAnimationEntry { get; }

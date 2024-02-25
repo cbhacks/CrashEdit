@@ -1,13 +1,15 @@
-namespace Crash
+using System;
+
+namespace CrashEdit.Crash
 {
     [ChunkType(5)]
     public sealed class SpeechChunkLoader : EntryChunkLoader
     {
-        public override Chunk Load(Entry[] entries, NSF nsf)
+        public override EntryChunk Load(Entry[] entries)
         {
             if (entries == null)
-                throw new ArgumentNullException(nameof(entries));
-            return new SpeechChunk(entries, nsf);
+                throw new ArgumentNullException("entries");
+            return new SpeechChunk(entries);
         }
     }
 }

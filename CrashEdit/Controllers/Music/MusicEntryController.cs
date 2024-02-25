@@ -1,46 +1,24 @@
-using Crash;
+using CrashEdit.Crash;
+using System;
+using System.Windows.Forms;
+using System.Collections.Generic;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(MusicEntry))]
     public sealed class MusicEntryController : EntryController
     {
-        public MusicEntryController(EntryChunkController entrychunkcontroller, MusicEntry musicentry) : base(entrychunkcontroller, musicentry)
+        public MusicEntryController(MusicEntry musicentry, SubcontrollerGroup parentGroup) : base(musicentry, parentGroup)
         {
             MusicEntry = musicentry;
-            if (musicentry.VH != null)
-            {
-                AddNode(new VHController(this, musicentry.VH));
-            }
-            foreach (SEQ seq in musicentry.SEP.SEQs)
-            {
-                AddNode(new SEQController(this, seq));
-            }
             AddMenuSeparator();
-            AddMenu("Import VH", Menu_Import_VH);
-            AddMenu("Import SEQ", Menu_Import_SEQ);
+            AddMenu("Export Linked VH",Menu_Export_Linked_VH);
+            AddMenu("Export Linked VB",Menu_Export_Linked_VB);
+            AddMenu("Export Linked VAB",Menu_Export_Linked_VAB);
+            AddMenu("Export Linked VAB as DLS",Menu_Export_Linked_VAB_DLS);
             AddMenuSeparator();
-            AddMenu("Export SEP", Menu_Export_SEP);
-            AddMenuSeparator();
-            AddMenu("Export Linked VH", Menu_Export_Linked_VH);
-            AddMenu("Export Linked VB", Menu_Export_Linked_VB);
-            AddMenu("Export Linked VAB", Menu_Export_Linked_VAB);
-            AddMenu("Export Linked VAB as DLS", Menu_Export_Linked_VAB_DLS);
-            AddMenuSeparator();
-            AddMenu("Replace Linked VB", Menu_Replace_Linked_VB);
-            AddMenu("Replace Linked VAB", Menu_Replace_Linked_VAB);
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.MusicEntryController_Text, MusicEntry.EName);
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            Node.ImageKey = "music";
-            Node.SelectedImageKey = "music";
+            AddMenu("Replace Linked VB",Menu_Replace_Linked_VB);
+            AddMenu("Replace Linked VAB",Menu_Replace_Linked_VAB);
         }
 
         public MusicEntry MusicEntry { get; }
@@ -90,76 +68,44 @@ namespace CrashEdit
         {
             VH vh = FindLinkedVH();
             SampleLine[] vb = FindLinkedVB();
-            return VAB.Join(vh, vb);
-        }
-
-        private void Menu_Import_VH()
-        {
-            if (MusicEntry.VH != null)
-            {
-                throw new GUIException("This music entry already contains a VH file.");
-            }
-            byte[] data = FileUtil.OpenFile(FileFilters.VH, FileFilters.VAB, FileFilters.Any);
-            if (data != null)
-            {
-                VH vh = VH.Load(data);
-                MusicEntry.VH = vh;
-                InsertNode(0, new VHController(this, vh));
-            }
-        }
-
-        private void Menu_Import_SEQ()
-        {
-            byte[] data = FileUtil.OpenFile(FileFilters.SEQ, FileFilters.Any);
-            if (data != null)
-            {
-                SEQ seq = SEQ.Load(data);
-                MusicEntry.SEP.SEQs.Add(seq);
-                AddNode(new SEQController(this, seq));
-            }
-        }
-
-        private void Menu_Export_SEP()
-        {
-            byte[] data = MusicEntry.SEP.Save();
-            FileUtil.SaveFile(data, FileFilters.SEP, FileFilters.Any);
+            return VAB.Join(vh,vb);
         }
 
         private void Menu_Export_Linked_VH()
         {
             VH vh = FindLinkedVH();
             byte[] data = vh.Save();
-            FileUtil.SaveFile(data, FileFilters.VH, FileFilters.Any);
+            FileUtil.SaveFile(data,FileFilters.VH,FileFilters.Any);
         }
 
         private void Menu_Export_Linked_VB()
         {
             SampleLine[] vb = FindLinkedVB();
             byte[] data = new SampleSet(vb).Save();
-            FileUtil.SaveFile(data, FileFilters.VB, FileFilters.Any);
+            FileUtil.SaveFile(data,FileFilters.VB,FileFilters.Any);
         }
 
         private void Menu_Export_Linked_VAB()
         {
             VAB vab = FindLinkedVAB();
             byte[] data = vab.Save();
-            FileUtil.SaveFile(data, FileFilters.VAB, FileFilters.Any);
+            FileUtil.SaveFile(data,FileFilters.VAB,FileFilters.Any);
         }
 
         private void Menu_Export_Linked_VAB_DLS()
         {
-            if (MessageBox.Show("Exporting to DLS is experimental.\n\nContinue anyway?", "Export Linked VAB as DLS", MessageBoxButtons.YesNo) != DialogResult.Yes)
+            if (MessageBox.Show("Exporting to DLS is experimental.\n\nContinue anyway?","Export Linked VAB as DLS",MessageBoxButtons.YesNo) != DialogResult.Yes)
             {
                 return;
             }
             VAB vab = FindLinkedVAB();
             byte[] data = vab.ToDLS().Save();
-            FileUtil.SaveFile(data, FileFilters.DLS, FileFilters.Any);
+            FileUtil.SaveFile(data,FileFilters.DLS,FileFilters.Any);
         }
 
         private void Menu_Replace_Linked_VB()
         {
-            byte[] data = FileUtil.OpenFile(FileFilters.VB, FileFilters.Any);
+            byte[] data = FileUtil.OpenFile(FileFilters.VB,FileFilters.Any);
             if (data == null) return;
             ReplaceLinkedVB(SampleSet.Load(data).SampleLines);
         }
@@ -174,7 +120,7 @@ namespace CrashEdit
 
                 VH vh = VH.Load(vab_data);
 
-                int vb_offset = 2592 + 32 * 16 * vh.Programs.Count;
+                int vb_offset = 2592+32*16*vh.Programs.Count;
                 if ((vab_data.Length - vb_offset) % 16 != 0)
                 {
                     ErrorManager.SignalIgnorableError("extra feature: VB size is invalid");
@@ -198,15 +144,8 @@ namespace CrashEdit
                     throw new GUIException("The linked music entry was found but does not contain a VH file.");
                 }
 
-                if (vhentry != MusicEntry)
-                {
-                    throw new GUIException("This operation can only be done on the Music Entry which contains its own VH file.");
-                }
-
                 vhentry.VH = vh;
                 ReplaceLinkedVB(vb);
-                ((Controller)Node.Nodes[0].Tag).Dispose();
-                InsertNode(0, new VHController(this, vh));
             }
             catch (LoadAbortedException)
             {

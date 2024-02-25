@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     public abstract class EntityBasicProperty<T> : EntityProperty where T : struct
     {

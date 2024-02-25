@@ -1,6 +1,8 @@
-using Crash;
+using CrashEdit.Crash;
+using System;
+using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class OldCameraBox : UserControl
     {
@@ -20,11 +22,6 @@ namespace CrashEdit
             UpdateNeighbor();
             UpdateDir();
             positionindex = 0;
-        }
-
-        private void InvalidateNodes()
-        {
-            controller.InvalidateNode();
         }
 
         private void UpdatePosition()

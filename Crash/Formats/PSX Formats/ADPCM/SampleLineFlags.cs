@@ -1,4 +1,6 @@
-namespace Crash
+using System;
+
+namespace CrashEdit.Crash
 {
     [Flags]
     public enum SampleLineFlags : byte

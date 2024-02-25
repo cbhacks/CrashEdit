@@ -1,4 +1,4 @@
-﻿namespace CrashEdit
+﻿namespace CrashEdit.CE
 {
     public partial class NewEntryForm
     {

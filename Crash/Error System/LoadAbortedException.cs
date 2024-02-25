@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     [Serializable]
     public class LoadAbortedException : Exception

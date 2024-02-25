@@ -1,28 +1,20 @@
-using Crash;
+using CrashEdit.Crash;
+using System.Drawing;
+using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(OldModelEntry))]
     public sealed class OldModelEntryController : EntryController
     {
-        public OldModelEntryController(EntryChunkController entrychunkcontroller, OldModelEntry oldmodelentry) : base(entrychunkcontroller, oldmodelentry)
+        public OldModelEntryController(OldModelEntry oldmodelentry, SubcontrollerGroup parentGroup) : base(oldmodelentry, parentGroup)
         {
             OldModelEntry = oldmodelentry;
-            InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.OldModelEntryController_Text, OldModelEntry.EName);
-        }
+        public override bool EditorAvailable => true;
 
-        public override void InvalidateNodeImage()
-        {
-            Node.ImageKey = "crimsonb";
-            Node.SelectedImageKey = "crimsonb";
-        }
-
-        protected override Control CreateEditor()
+        public override Control CreateEditor()
         {
             return new Label { Text = string.Format("Polygon count: {0}", BitConv.FromInt32(OldModelEntry.Info, 0)), TextAlign = ContentAlignment.MiddleCenter };
         }

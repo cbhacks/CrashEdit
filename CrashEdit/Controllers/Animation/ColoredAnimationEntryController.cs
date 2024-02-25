@@ -1,38 +1,31 @@
-using Crash;
+using CrashEdit.Crash;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(ColoredAnimationEntry))]
     public sealed class ColoredAnimationEntryController : EntryController
     {
-        public ColoredAnimationEntryController(EntryChunkController entrychunkcontroller, ColoredAnimationEntry coloredanimationentry)
-            : base(entrychunkcontroller, coloredanimationentry)
+        public ColoredAnimationEntryController(ColoredAnimationEntry cutsceneanimationentry, SubcontrollerGroup parentGroup)
+            : base(cutsceneanimationentry, parentGroup)
         {
-            ColoredAnimationEntry = coloredanimationentry;
-            foreach (OldFrame frame in coloredanimationentry.Frames)
-            {
-                AddNode(new ColoredFrameController(this, frame));
-            }
-            InvalidateNode();
-            InvalidateNodeImage();
+            CutsceneAnimationEntry = cutsceneanimationentry;
         }
 
-        public override void InvalidateNode()
+        public override bool EditorAvailable => true;
+
+        public override Control CreateEditor()
         {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.ColoredAnimationEntryController_Text, ColoredAnimationEntry.EName);
+            OldModelEntry modelentry = GetEntry<OldModelEntry>(CutsceneAnimationEntry.Frames[0].ModelEID);
+            Dictionary<int,TextureChunk> textures = new Dictionary<int,TextureChunk>();
+            foreach (OldModelStruct str in modelentry.Structs)
+                if (str is OldModelTexture tex && !textures.ContainsKey(tex.EID))
+                    textures.Add(tex.EID,GetEntry<TextureChunk>(tex.EID));
+            return new OldAnimationEntryViewer(CutsceneAnimationEntry.Frames,true,modelentry,textures);
         }
 
-        public override void InvalidateNodeImage()
-        {
-            Node.ImageKey = "limeb";
-            Node.SelectedImageKey = "limeb";
-        }
-
-        protected override Control CreateEditor()
-        {
-            return new UndockableControl(new OldAnimationEntryViewer(NSF, Entry.EID));
-        }
-
-        public ColoredAnimationEntry ColoredAnimationEntry { get; }
+        public ColoredAnimationEntry CutsceneAnimationEntry { get; }
     }
 }
 

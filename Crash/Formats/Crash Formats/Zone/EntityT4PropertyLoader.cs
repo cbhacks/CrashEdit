@@ -1,4 +1,6 @@
-namespace Crash
+using System.Collections.Generic;
+
+namespace CrashEdit.Crash
 {
     [EntityPropertyType(4)]
     public sealed class EntityT4PropertyLoader : EntityBasicPropertyLoader<int>
@@ -7,7 +9,7 @@ namespace Crash
 
         protected override int LoadElement(byte[] data)
         {
-            return BitConv.FromInt32(data, 0);
+            return BitConv.FromInt32(data,0);
         }
 
         protected override EntityProperty Load(IEnumerable<EntityPropertyRow<int>> rows)

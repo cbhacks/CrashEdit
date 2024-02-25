@@ -1,11 +1,13 @@
-namespace Crash
+using System;
+
+namespace CrashEdit.Crash
 {
     public struct EntitySetting
     {
-        public EntitySetting(byte valuea, int valueb)
+        public EntitySetting(byte valuea,int valueb)
         {
             if (valueb < -8388608 || valueb > 8388607)
-                throw new ArgumentOutOfRangeException(nameof(valueb));
+                throw new ArgumentOutOfRangeException("valueb");
             Value = valuea | (valueb << 8);
         }
 

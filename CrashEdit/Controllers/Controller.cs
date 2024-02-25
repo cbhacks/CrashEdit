@@ -1,132 +1,38 @@
-using Crash;
+using CrashEdit.Crash;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
-    public abstract class Controller : IDisposable
+    public abstract class LegacyController : CrashEdit.LegacyController
     {
-        private Control editor;
-        private bool disposing;
+        public LegacyController(SubcontrollerGroup parentGroup, object resource) : base(parentGroup, resource) {}
 
-        public Controller()
+        protected void AddMenu(string text,ControllerMenuDelegate proc)
         {
-            ContextMenu = new();
-            Node = new TreeNode
-            {
-                Tag = this,
-                ContextMenuStrip = ContextMenu
-            };
-            editor = null;
-        }
-
-        public void AddNode(Controller controller)
-        {
-            Node.Nodes.Add(controller.Node);
-        }
-
-        public void InsertNode(int index, Controller controller)
-        {
-            Node.Nodes.Insert(index, controller.Node);
-        }
-
-        protected void AddMenu(string text, ControllerMenuDelegate proc)
-        {
-            void handler(object sender, EventArgs e)
-            {
-                try
-                {
-                    ErrorManager.EnterSubject(new object());
-                    proc();
-                }
-                catch (GUIException ex)
-                {
-                    MessageBox.Show(ex.Message, text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                finally
-                {
-                    ErrorManager.ExitSubject();
-                }
-            }
-            ContextMenu.Items.Add(text, null, handler);
+            LegacyVerbs.Add(new LegacyVerb(text, new Action(proc)));
         }
 
         protected void AddMenuSeparator()
         {
-            ContextMenu.Items.Add("-");
+            // FIXME
         }
 
-        public abstract void InvalidateNode();
-        public abstract void InvalidateNodeImage();
+        public GameVersion GameVersion =>
+            (Modern.Root.Resource as LevelWorkspace)?.GameVersion ?? GameVersion.None;
 
-        protected virtual Control CreateEditor()
-        {
-            Label label = new()
-            {
-                TextAlign = ContentAlignment.MiddleCenter,
-                Text = "No options available"
-            };
-            return label;
+        public NSF GetNSF() {
+            return (Modern.Root.Resource as LevelWorkspace)?.NSF;
         }
 
-        protected void InvalidateEditor()
-        {
-            if (editor != null)
-            {
-                Control container = editor.Parent;
-                if (container != null)
-                {
-                    container.Controls.Remove(editor);
-                }
-                editor.Dispose();
-                editor = null;
-                if (Node.IsSelected)
-                {
-                    Node.TreeView.SelectedNode = null;
-                    Node.TreeView.SelectedNode = Node;
-                }
-            }
+        public T GetEntry<T>(int eid) where T : class, IEntry {
+            return (Modern.Root.Resource as LevelWorkspace)?.NSF?.GetEntry<T>(eid);
         }
 
-        public TreeNode Node { get; }
-        public ContextMenuStrip ContextMenu { get; }
-
-        public Control Editor
-        {
-            get
-            {
-                if (editor == null && !disposing)
-                {
-                    editor = CreateEditor();
-                    editor.Dock = DockStyle.Fill;
-                }
-                return editor;
-            }
-        }
-
-        public virtual bool Move(Controller newcontroller, bool commit)
-        {
-            return false;
-        }
-
-        public virtual void Dispose()
-        {
-            disposing = true;
-            TreeNode[] nodes = new TreeNode[Node.Nodes.Count];
-            int i = 0;
-            foreach (TreeNode node in Node.Nodes)
-            {
-                nodes[i++] = node;
-            }
-            for (i = 0; i < nodes.Length; ++i)
-            {
-                if (nodes[i].Tag != null && nodes[i].Tag is Controller t)
-                {
-                    t.Dispose();
-                }
-            }
-            Node.Remove(); // <-- this line makes the TreeNodeCollection volatile, so the node references must be copied onto a separate list beforehand
-            ContextMenu.Dispose();
-            editor?.Dispose();
-            editor = null;
+        public IEnumerable<T> GetEntries<T>() where T : class, IEntry {
+            return (Modern.Root.Resource as LevelWorkspace)?.NSF?.GetEntries<T>();
         }
     }
 }

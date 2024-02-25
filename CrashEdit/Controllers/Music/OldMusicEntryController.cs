@@ -1,38 +1,19 @@
-using Crash;
+using CrashEdit.Crash;
+using System.Windows.Forms;
+using System.Collections.Generic;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(OldMusicEntry))]
     public sealed class OldMusicEntryController : EntryController
     {
-        public OldMusicEntryController(EntryChunkController entrychunkcontroller, OldMusicEntry oldmusicentry) : base(entrychunkcontroller, oldmusicentry)
+        public OldMusicEntryController(OldMusicEntry oldmusicentry, SubcontrollerGroup parentGroup) : base(oldmusicentry, parentGroup)
         {
             OldMusicEntry = oldmusicentry;
-            AddNode(new OldVHController(this, oldmusicentry.VH));
-            foreach (SEQ seq in oldmusicentry.SEP.SEQs)
-            {
-                AddNode(new OldSEQController(this, seq));
-            }
             AddMenuSeparator();
-            AddMenu("Import SEQ", Menu_Import_SEQ);
-            AddMenuSeparator();
-            AddMenu("Export SEP", Menu_Export_SEP);
-            AddMenuSeparator();
-            AddMenu("Export Linked VB", Menu_Export_Linked_VB);
-            AddMenu("Export Linked VAB", Menu_Export_Linked_VAB);
-            AddMenu("Export Linked VAB as DLS", Menu_Export_Linked_VAB_DLS);
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.OldMusicEntryController_Text, OldMusicEntry.EName);
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            Node.ImageKey = "music";
-            Node.SelectedImageKey = "music";
+            AddMenu("Export Linked VB",Menu_Export_Linked_VB);
+            AddMenu("Export Linked VAB",Menu_Export_Linked_VAB);
+            AddMenu("Export Linked VAB as DLS",Menu_Export_Linked_VAB_DLS);
         }
 
         public OldMusicEntry OldMusicEntry { get; }
@@ -58,49 +39,32 @@ namespace CrashEdit
         private VAB FindLinkedVAB()
         {
             SampleLine[] vb = FindLinkedVB();
-            return VAB.Join(OldMusicEntry.VH, vb);
-        }
-
-        private void Menu_Import_SEQ()
-        {
-            byte[] data = FileUtil.OpenFile(FileFilters.SEQ, FileFilters.Any);
-            if (data != null)
-            {
-                SEQ seq = SEQ.Load(data);
-                OldMusicEntry.SEP.SEQs.Add(seq);
-                AddNode(new OldSEQController(this, seq));
-            }
-        }
-
-        private void Menu_Export_SEP()
-        {
-            byte[] data = OldMusicEntry.SEP.Save();
-            FileUtil.SaveFile(data, FileFilters.SEP, FileFilters.Any);
+            return VAB.Join(OldMusicEntry.VH,vb);
         }
 
         private void Menu_Export_Linked_VB()
         {
             SampleLine[] vb = FindLinkedVB();
             byte[] data = new SampleSet(vb).Save();
-            FileUtil.SaveFile(data, FileFilters.VB, FileFilters.Any);
+            FileUtil.SaveFile(data,FileFilters.VB,FileFilters.Any);
         }
 
         private void Menu_Export_Linked_VAB()
         {
             VAB vab = FindLinkedVAB();
             byte[] data = vab.Save();
-            FileUtil.SaveFile(data, FileFilters.VAB, FileFilters.Any);
+            FileUtil.SaveFile(data,FileFilters.VAB,FileFilters.Any);
         }
 
         private void Menu_Export_Linked_VAB_DLS()
         {
-            if (MessageBox.Show("Exporting to DLS is experimental.\n\nContinue anyway?", "Export Linked VAB as DLS", MessageBoxButtons.YesNo) != DialogResult.Yes)
+            if (MessageBox.Show("Exporting to DLS is experimental.\n\nContinue anyway?","Export Linked VAB as DLS",MessageBoxButtons.YesNo) != DialogResult.Yes)
             {
                 return;
             }
             VAB vab = FindLinkedVAB();
             byte[] data = vab.ToDLS().Save();
-            FileUtil.SaveFile(data, FileFilters.DLS, FileFilters.Any);
+            FileUtil.SaveFile(data,FileFilters.DLS,FileFilters.Any);
         }
     }
 }

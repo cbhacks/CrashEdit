@@ -1,4 +1,7 @@
-namespace Crash
+using System;
+using System.Collections.Generic;
+
+namespace CrashEdit.Crash
 {
     public sealed class VH
     {
@@ -12,8 +15,8 @@ namespace Crash
             {
                 ErrorManager.SignalError("VH: Data is too short");
             }
-            int magic = BitConv.FromInt32(data, 0);
-            int version = BitConv.FromInt32(data, 4);
+            int magic = BitConv.FromInt32(data,0);
+            int version = BitConv.FromInt32(data,4);
             if (magic != Magic)
             {
                 ErrorManager.SignalIgnorableError("VH: Magic number is wrong");
@@ -32,17 +35,17 @@ namespace Crash
                 ErrorManager.SignalIgnorableError("VH: Version number is wrong");
                 isoldversion = true;
             }
-            int id = BitConv.FromInt32(data, 8);
-            int size = BitConv.FromInt32(data, 12);
-            short reserved1 = BitConv.FromInt16(data, 16);
-            short programcount = BitConv.FromInt16(data, 18);
-            short tonecount = BitConv.FromInt16(data, 20);
-            short wavecount = BitConv.FromInt16(data, 22);
+            int id = BitConv.FromInt32(data,8);
+            int size = BitConv.FromInt32(data,12);
+            short reserved1 = BitConv.FromInt16(data,16);
+            short programcount = BitConv.FromInt16(data,18);
+            short tonecount = BitConv.FromInt16(data,20);
+            short wavecount = BitConv.FromInt16(data,22);
             byte volume = data[24];
             byte panning = data[25];
             byte attribute1 = data[26];
             byte attribute2 = data[27];
-            int reserved2 = BitConv.FromInt32(data, 28);
+            int reserved2 = BitConv.FromInt32(data,28);
             if (id != 0)
             {
                 ErrorManager.SignalIgnorableError("VH: ID is wrong");
@@ -80,11 +83,11 @@ namespace Crash
             {
                 ErrorManager.SignalError("VH: Data is too short");
             }
-            Dictionary<int, VHProgram> programs = new Dictionary<int, VHProgram>();
-            for (int i = 0; i < 128; i++)
+            Dictionary<int,VHProgram> programs = new Dictionary<int,VHProgram>();
+            for (int i = 0;i < 128;i++)
             {
-                byte[] programdata = new byte[16];
-                Array.Copy(data, 32 + 16 * i, programdata, 0, 16);
+                byte[] programdata = new byte [16];
+                Array.Copy(data,32 + 16 * i,programdata,0,16);
                 if (programdata[0] == 0)
                 {
                     continue;
@@ -93,43 +96,43 @@ namespace Crash
                 {
                     ErrorManager.SignalError("VH: Program count field mismatch");
                 }
-                byte[] tonedata = new byte[32 * 16];
-                Array.Copy(data, 32 + 16 * 128 + 32 * 16 * programs.Count, tonedata, 0, 32 * 16);
-                programs.Add(i, VHProgram.Load(programdata, tonedata, isoldversion));
+                byte[] tonedata = new byte [32 * 16];
+                Array.Copy(data,32 + 16 * 128 + 32 * 16 * programs.Count,tonedata,0,32 * 16);
+                programs.Add(i,VHProgram.Load(programdata,tonedata,isoldversion));
             }
             if (programs.Count != programcount)
             {
                 ErrorManager.SignalError("VH: Program count field mismatch");
             }
-            int[] waves = new int[wavecount];
-            for (int i = 0; i < wavecount; i++)
+            int[] waves = new int [wavecount];
+            for (int i = 0;i < wavecount;i++)
             {
-                int wave = BitConv.FromInt16(data, 32 + 16 * 128 + 32 * 16 * programcount + 2 + i * 2);
+                int wave = BitConv.FromInt16(data,32 + 16 * 128 + 32 * 16 * programcount + 2 + i * 2);
                 if (wave % 2 != 0)
                 {
                     ErrorManager.SignalError("VH: Wave size is invalid");
                 }
                 waves[i] = wave / 2;
             }
-            return new VH(isoldversion, vbsize, volume, panning, attribute1, attribute2, programs, waves);
+            return new VH(isoldversion,vbsize,volume,panning,attribute1,attribute2,programs,waves);
         }
 
-        private readonly Dictionary<int, VHProgram> programs;
-        private readonly List<int> waves;
+        private Dictionary<int,VHProgram> programs;
+        private List<int> waves;
 
-        public VH(bool isoldversion, int vbsize, byte volume, byte panning, byte attribute1, byte attribute2, IDictionary<int, VHProgram> programs, IEnumerable<int> waves)
+        public VH(bool isoldversion,int vbsize,byte volume,byte panning,byte attribute1,byte attribute2,IDictionary<int,VHProgram> programs,IEnumerable<int> waves)
         {
             if (programs == null)
-                throw new ArgumentNullException(nameof(programs));
+                throw new ArgumentNullException("programs");
             if (waves == null)
-                throw new ArgumentNullException(nameof(waves));
+                throw new ArgumentNullException("waves");
             IsOldVersion = isoldversion;
             VBSize = vbsize;
             Volume = volume;
             Panning = panning;
             Attribute1 = attribute1;
             Attribute2 = attribute2;
-            this.programs = new Dictionary<int, VHProgram>(programs);
+            this.programs = new Dictionary<int,VHProgram>(programs);
             this.waves = new List<int>(waves);
         }
 
@@ -139,61 +142,61 @@ namespace Crash
         public byte Panning { get; }
         public byte Attribute1 { get; }
         public byte Attribute2 { get; }
-        public IDictionary<int, VHProgram> Programs => programs;
+        public IDictionary<int,VHProgram> Programs => programs;
         public IList<int> Waves => waves;
 
         public byte[] Save()
         {
-            byte[] data = new byte[2592 + 32 * 16 * programs.Count];
-            BitConv.ToInt32(data, 0, Magic);
-            BitConv.ToInt32(data, 4, IsOldVersion ? OldVersion : Version);
-            BitConv.ToInt32(data, 8, 0);
-            BitConv.ToInt32(data, 12, data.Length + VBSize * 16);
-            BitConv.ToInt16(data, 16, -0x1112);
+            byte[] data = new byte [2592 + 32 * 16 * programs.Count];
+            BitConv.ToInt32(data,0,Magic);
+            BitConv.ToInt32(data,4,IsOldVersion ? OldVersion : Version);
+            BitConv.ToInt32(data,8,0);
+            BitConv.ToInt32(data,12,data.Length + VBSize * 16);
+            BitConv.ToInt16(data,16,-0x1112);
             int tonecount = 0;
             foreach (VHProgram program in programs.Values)
             {
                 tonecount += program.Tones.Count;
             }
-            BitConv.ToInt16(data, 18, (short)programs.Count);
-            BitConv.ToInt16(data, 20, (short)tonecount);
-            BitConv.ToInt16(data, 22, (short)waves.Count);
+            BitConv.ToInt16(data,18,(short)programs.Count);
+            BitConv.ToInt16(data,20,(short)tonecount);
+            BitConv.ToInt16(data,22,(short)waves.Count);
             data[24] = Volume;
             data[25] = Panning;
             data[26] = Attribute1;
             data[27] = Attribute2;
-            BitConv.ToInt32(data, 28, -1);
-            for (int i = 0; i < 128; i++)
+            BitConv.ToInt32(data,28,-1);
+            for (int i = 0;i < 128;i++)
             {
                 if (programs.ContainsKey(i))
                 {
-                    programs[i].Save().CopyTo(data, 32 + 16 * i);
+                    programs[i].Save().CopyTo(data,32 + 16 * i);
                 }
                 else
                 {
-                    new VHProgram(IsOldVersion).Save().CopyTo(data, 32 + 16 * i);
+                    new VHProgram(IsOldVersion).Save().CopyTo(data,32 + 16 * i);
                 }
             }
             int ii = 0;
-            foreach (KeyValuePair<int, VHProgram> kvp in programs)
+            foreach (KeyValuePair<int,VHProgram> kvp in programs)
             {
                 VHProgram program = kvp.Value;
-                for (int j = 0; j < 16; j++)
+                for (int j = 0;j < 16;j++)
                 {
                     if (j < program.Tones.Count)
                     {
-                        program.Tones[j].Save(kvp.Key).CopyTo(data, 2080 + 32 * 16 * ii + 32 * j);
+                        program.Tones[j].Save(kvp.Key).CopyTo(data,2080 + 32 * 16 * ii + 32 * j);
                     }
                     else
                     {
-                        new VHTone(IsOldVersion).Save(kvp.Key).CopyTo(data, 2080 + 32 * 16 * ii + 32 * j);
+                        new VHTone(IsOldVersion).Save(kvp.Key).CopyTo(data,2080 + 32 * 16 * ii + 32 * j);
                     }
                 }
                 ii++;
             }
-            for (int i = 0; i < waves.Count; i++)
+            for (int i = 0;i < waves.Count;i++)
             {
-                BitConv.ToInt16(data, 2080 + 32 * 16 * programs.Count + 2 + i * 2, (short)(waves[i] * 2));
+                BitConv.ToInt16(data,2080 + 32 * 16 * programs.Count + 2 + i * 2,(short)(waves[i] * 2));
             }
             return data;
         }

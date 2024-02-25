@@ -1,6 +1,6 @@
 // Based on code by bITmASTER and nextvolume
 // http://psxsdk.googlecode.com/svn-history/r13/trunk/tools/vag2wav.c
-namespace Crash
+namespace CrashEdit.Crash
 {
     public static class ADPCMConv
     {

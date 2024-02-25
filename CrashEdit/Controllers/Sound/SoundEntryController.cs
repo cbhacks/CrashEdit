@@ -1,28 +1,19 @@
-using Crash;
+using CrashEdit.Crash;
+using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(SoundEntry))]
     public sealed class SoundEntryController : EntryController
     {
-        public SoundEntryController(EntryChunkController entrychunkcontroller, SoundEntry soundentry) : base(entrychunkcontroller, soundentry)
+        public SoundEntryController(SoundEntry soundentry, SubcontrollerGroup parentGroup) : base(soundentry, parentGroup)
         {
             SoundEntry = soundentry;
-            InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.SoundEntryController_Text, SoundEntry.EName);
-        }
+        public override bool EditorAvailable => true;
 
-        public override void InvalidateNodeImage()
-        {
-            Node.ImageKey = "speaker";
-            Node.SelectedImageKey = "speaker";
-        }
-
-        protected override Control CreateEditor()
+        public override Control CreateEditor()
         {
             return new SoundBox(SoundEntry);
         }

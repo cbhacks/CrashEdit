@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class EntityUInt8Property : EntityBasicProperty<byte>
     {

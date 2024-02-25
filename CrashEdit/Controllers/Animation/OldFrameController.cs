@@ -1,47 +1,37 @@
-using Crash;
+using CrashEdit.Crash;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
-    public sealed class OldFrameController : Controller
+    [OrphanLegacyController(typeof(OldFrame))]
+    public sealed class OldFrameController : LegacyController
     {
-        public OldFrameController(OldAnimationEntryController oldanimationentrycontroller, OldFrame oldframe)
+        public OldFrameController(OldFrame oldframe, SubcontrollerGroup parentGroup) : base(parentGroup, oldframe)
         {
-            OldAnimationEntryController = oldanimationentrycontroller;
             OldFrame = oldframe;
             AddMenu("Export as OBJ", Menu_Export_OBJ);
-            InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
+        public override bool EditorAvailable => true;
+
+        public override Control CreateEditor()
         {
-            Node.Text = Crash.UI.Properties.Resources.FrameController_Text;
-        }
+            TabControl tbcTabs = new TabControl() { Dock = DockStyle.Fill };
+            OldModelEntry modelentry = GetEntry<OldModelEntry>(OldFrame.ModelEID);
 
-        public override void InvalidateNodeImage()
-        {
-            Node.ImageKey = "arrow";
-            Node.SelectedImageKey = "arrow";
-        }
+            OldFrameBox framebox = new OldFrameBox(this);
+            framebox.Dock = DockStyle.Fill;
+            Dictionary<int,TextureChunk> textures = new Dictionary<int,TextureChunk>();
+            foreach (OldModelStruct str in modelentry.Structs)
+                if (str is OldModelTexture tex && !textures.ContainsKey(tex.EID))
+                    textures.Add(tex.EID, GetEntry<TextureChunk>(tex.EID));
+            OldAnimationEntryViewer viewerbox = new OldAnimationEntryViewer(OldFrame,ColoredAnimationEntryController != null,modelentry,textures) { Dock = DockStyle.Fill };
 
-        protected override Control CreateEditor()
-        {
-            var tbcTabs = new TabControl() { Dock = DockStyle.Fill };
-
-            var framebox = new OldFrameBox(this)
-            {
-                Dock = DockStyle.Fill
-            };
-            var entry = OldAnimationEntryController.OldAnimationEntry;
-            var viewerbox = new OldAnimationEntryViewer(OldAnimationEntryController.NSF, entry.EID, entry.Frames.IndexOf(OldFrame))
-            {
-                Dock = DockStyle.Fill
-            };
-
-            var edittab = new TabPage("Editor");
+            TabPage edittab = new TabPage("Editor");
             edittab.Controls.Add(framebox);
-            var viewertab = new TabPage("Viewer");
-            viewertab.Controls.Add(new UndockableControl(viewerbox));
+            TabPage viewertab = new TabPage("Viewer");
+            viewertab.Controls.Add(viewerbox);
 
             tbcTabs.TabPages.Add(viewertab);
             tbcTabs.TabPages.Add(edittab);
@@ -50,21 +40,23 @@ namespace CrashEdit
             return tbcTabs;
         }
 
-        public OldAnimationEntryController OldAnimationEntryController { get; }
+        public ProtoAnimationEntryController ProtoAnimationEntryController => Modern.Parent.Legacy as ProtoAnimationEntryController;
+        public OldAnimationEntryController OldAnimationEntryController => Modern.Parent.Legacy as OldAnimationEntryController;
+        public ColoredAnimationEntryController ColoredAnimationEntryController => Modern.Parent.Legacy as ColoredAnimationEntryController;
         public OldFrame OldFrame { get; }
 
         private void Menu_Export_OBJ()
         {
-            OldModelEntry modelentry = OldAnimationEntryController.EntryChunkController.NSFController.NSF.GetEntry<OldModelEntry>(OldFrame.ModelEID);
+            OldModelEntry modelentry = GetEntry<OldModelEntry>(OldFrame.ModelEID);
             if (modelentry == null)
             {
                 throw new GUIException("The linked model entry could not be found.");
             }
-            if (MessageBox.Show("Texture and color information will not be exported.\n\nContinue anyway?", "Export as OBJ", MessageBoxButtons.YesNo) != DialogResult.Yes)
+            if (MessageBox.Show("Texture and color information will not be exported.\n\nContinue anyway?","Export as OBJ",MessageBoxButtons.YesNo) != DialogResult.Yes)
             {
                 return;
             }
-            FileUtil.SaveFile(OldFrame.ToOBJ(modelentry), FileFilters.OBJ, FileFilters.Any);
+            FileUtil.SaveFile(OldFrame.ToOBJ(modelentry),FileFilters.OBJ,FileFilters.Any);
         }
     }
 }

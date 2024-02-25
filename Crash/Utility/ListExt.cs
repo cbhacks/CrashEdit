@@ -1,4 +1,6 @@
-﻿namespace Crash
+﻿using System.Collections.Generic;
+
+namespace CrashEdit.Crash
 {
     public static class ListExt
     {
@@ -8,11 +10,6 @@
             list[a] = list[b];
             list[b] = temp;
             return list;
-        }
-
-        public static void RemoveLast<T>(this IList<T> list)
-        {
-            list.RemoveAt(list.Count - 1);
         }
     }
 }

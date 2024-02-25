@@ -1,14 +1,16 @@
-namespace Crash
+using System;
+
+namespace CrashEdit.Crash
 {
     public struct ModelPosition
     {
         public static ModelPosition Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException(nameof(data));
+                throw new ArgumentNullException("data");
             if (data.Length != 4)
-                throw new ArgumentException("Value must be 4 bytes long.", nameof(data));
-            int structure = BitConv.FromInt32(data, 0);
+                throw new ArgumentException("Value must be 4 bytes long.","data");
+            int structure = BitConv.FromInt32(data,0);
             return new ModelPosition(structure);
         }
 

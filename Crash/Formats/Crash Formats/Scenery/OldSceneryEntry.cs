@@ -1,6 +1,6 @@
 using System.Xml;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class OldSceneryEntry : Entry
     {
@@ -22,9 +22,14 @@ namespace Crash
             }
         }
 
+        public override string Title => $"Old Scenery ({EName})";
+        public override string ImageKey => "ThingBlue";
+
         public override int Type => 3;
         public byte[] Info { get; }
-        public byte[] ExtraData { get; }
+
+        [SubresourceSlot(AllowNull = true)]
+        public byte[] ExtraData { get; set; }
 
         public int XOffset
         {

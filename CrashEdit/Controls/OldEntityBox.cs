@@ -1,6 +1,8 @@
-using Crash;
+using CrashEdit.Crash;
+using System;
+using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class OldEntityBox : UserControl
     {
@@ -22,11 +24,6 @@ namespace CrashEdit
             UpdateSettings();
             UpdateCodeString();
             positionindex = 0;
-        }
-
-        private void InvalidateNodes()
-        {
-            controller.InvalidateNode();
         }
 
         private void UpdatePosition()
@@ -95,21 +92,18 @@ namespace CrashEdit
         {
             positionindex++;
             entity.Positions.RemoveAt(positionindex);
-            InvalidateNodes();
             UpdatePosition();
         }
 
         private void cmdInsertPosition_Click(object sender, EventArgs e)
         {
             entity.Positions.Insert(positionindex, entity.Positions[positionindex]);
-            InvalidateNodes();
             UpdatePosition();
         }
 
         private void cmdRemovePosition_Click(object sender, EventArgs e)
         {
             entity.Positions.RemoveAt(positionindex);
-            InvalidateNodes();
             UpdatePosition();
         }
 
@@ -124,7 +118,6 @@ namespace CrashEdit
             {
                 entity.Positions.Add(new EntityPosition(0, 0, 0));
             }
-            InvalidateNodes();
             UpdatePosition();
         }
 

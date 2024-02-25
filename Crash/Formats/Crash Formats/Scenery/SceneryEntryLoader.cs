@@ -1,13 +1,14 @@
-namespace Crash
+using System;
+
+namespace CrashEdit.Crash
 {
-    [EntryType(3, GameVersion.Crash2)]
-    [EntryType(3, GameVersion.Crash3)]
+    [EntryType(3,GameVersion.Crash2)]
     public sealed class SceneryEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items, int eid, GameVersion version)
+        public override Entry Load(byte[][] items,int eid)
         {
             if (items == null)
-                throw new ArgumentNullException(nameof(items));
+                throw new ArgumentNullException("items");
             if (items.Length != 7)
             {
                 ErrorManager.SignalError("SceneryEntry: Wrong number of items");
@@ -22,11 +23,11 @@ namespace Crash
             int texturecount = BitConv.FromInt32(items[0], 28);
             int colorcount = BitConv.FromInt32(items[0], 32);
             int animatedtexturecount = BitConv.FromInt32(items[0], 36);
-            if (items[1].Length != Aligner.Align(vertexcount * 6, 4))
+            if (items[1].Length != Aligner.Align(vertexcount * 6,4))
             {
                 ErrorManager.SignalError("SceneryEntry: Vertex count mismatch");
             }
-            if (items[2].Length != Aligner.Align(trianglecount * 6, 4))
+            if (items[2].Length != Aligner.Align(trianglecount * 6,4))
             {
                 ErrorManager.SignalError("SceneryEntry: Triangle count mismatch");
             }
@@ -53,7 +54,7 @@ namespace Crash
                 byte[] zdata = new byte[2];
                 Array.Copy(items[1], (vertexcount - 1 - i) * 4, xydata, 0, xydata.Length);
                 Array.Copy(items[1], vertexcount * 4 + i * 2, zdata, 0, zdata.Length);
-                vertices[i] = SceneryVertex.Load(xydata, zdata, version == GameVersion.Crash3);
+                vertices[i] = SceneryVertex.Load(xydata, zdata);
             }
             SceneryTriangle[] triangles = new SceneryTriangle[trianglecount];
             for (int i = 0; i < trianglecount; i++)
@@ -85,7 +86,7 @@ namespace Crash
                 byte green = items[5][i * 4 + 1];
                 byte blue = items[5][i * 4 + 2];
                 byte extra = items[5][i * 4 + 3];
-                colors[i] = new SceneryColor(red, green, blue, extra);
+                colors[i] = new SceneryColor(red,green,blue,extra);
             }
             ModelExtendedTexture[] animatedtextures = new ModelExtendedTexture[animatedtexturecount];
             for (int i = 0; i < animatedtexturecount; i++)
@@ -94,7 +95,7 @@ namespace Crash
                 Array.Copy(items[6], i * 4, animatedtexturedata, 0, animatedtexturedata.Length);
                 animatedtextures[i] = ModelExtendedTexture.Load(animatedtexturedata);
             }
-            return new SceneryEntry(items[0], vertices, triangles, quads, textures, colors, animatedtextures, version == GameVersion.Crash3, eid);
+            return new SceneryEntry(items[0],vertices,triangles,quads,textures,colors,animatedtextures,eid);
         }
     }
 }

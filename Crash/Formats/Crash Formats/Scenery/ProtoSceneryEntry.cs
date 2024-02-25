@@ -1,6 +1,6 @@
 using System.Xml;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class ProtoSceneryEntry : Entry
     {
@@ -16,6 +16,9 @@ namespace Crash
             this.structs = new List<OldModelStruct>(structs);
             Pad = pad;
         }
+
+        public override string Title => $"Prototype Scenery ({EName})";
+        public override string ImageKey => "ThingBlue";
 
         public override int Type => 3;
         public byte[] Info { get; }

@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+        <TargetFramework>net47</TargetFramework>
+        <EnableDefaultItems>false</EnableDefaultItems>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <LangVersion>8.0</LangVersion>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Company>cbhacks</Company>
+        <Description>Unofficial Crash Bandicoot 1/2/3 Level Editor</Description>
+        <AssemblyTitle>CrashEdit 'Main' module</AssemblyTitle>
+        <Version>2.0.0</Version>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="Core/**/*.cs" />
+        <Compile Include="Crash/**/*.cs" />
+        <EmbeddedResource Include="Embeds/Images/*.gif" />
+        <EmbeddedResource Include="Embeds/Images/*.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="System.Windows.Forms" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.Memory" Version="4.5.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="OpenTK" Version="3.3.2" />
+        <PackageReference Include="OpenTK.GLControl" Version="3.1.0" />
+        <PackageReference Include="DiscUtils.Iso9660" Version="0.16.4" />
+    </ItemGroup>
+
+</Project>

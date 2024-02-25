@@ -1,21 +1,24 @@
-namespace Crash
+using System;
+using System.Collections.Generic;
+
+namespace CrashEdit.Crash
 {
     public sealed class SampleSet
     {
         public static SampleSet Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException(nameof(data));
+                throw new ArgumentNullException("data");
             if (data.Length % 16 != 0)
             {
                 ErrorManager.SignalError("SampleSet: Length is invalid");
             }
             int samplelinecount = data.Length / 16;
-            SampleLine[] samplelines = new SampleLine[samplelinecount];
-            for (int i = 0; i < samplelinecount; i++)
+            SampleLine[] samplelines = new SampleLine [samplelinecount];
+            for (int i = 0;i < samplelinecount;i++)
             {
-                byte[] linedata = new byte[16];
-                Array.Copy(data, i * 16, linedata, 0, 16);
+                byte[] linedata = new byte [16];
+                Array.Copy(data,i * 16,linedata,0,16);
                 samplelines[i] = SampleLine.Load(linedata);
             }
             return new SampleSet(samplelines);
@@ -24,7 +27,7 @@ namespace Crash
         public SampleSet(IEnumerable<SampleLine> samplelines)
         {
             if (samplelines == null)
-                throw new ArgumentNullException(nameof(samplelines));
+                throw new ArgumentNullException("samplelines");
             SampleLines = new List<SampleLine>(samplelines);
         }
 
@@ -32,10 +35,10 @@ namespace Crash
 
         public byte[] Save()
         {
-            byte[] data = new byte[SampleLines.Count * 16];
-            for (int i = 0; i < SampleLines.Count; i++)
+            byte[] data = new byte [SampleLines.Count * 16];
+            for (int i = 0;i < SampleLines.Count;i++)
             {
-                SampleLines[i].Save().CopyTo(data, i * 16);
+                SampleLines[i].Save().CopyTo(data,i * 16);
             }
             return data;
         }
@@ -51,7 +54,7 @@ namespace Crash
                 {
                     break;
                 }
-                data.AddRange(line.ToPCM(ref s0, ref s1));
+                data.AddRange(line.ToPCM(ref s0,ref s1));
             }
             return data.ToArray();
         }

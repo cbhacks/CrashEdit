@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     public class GOOLInstruction
     {

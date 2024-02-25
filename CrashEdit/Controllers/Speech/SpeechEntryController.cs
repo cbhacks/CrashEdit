@@ -1,28 +1,19 @@
-using Crash;
+using CrashEdit.Crash;
+using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(SpeechEntry))]
     public sealed class SpeechEntryController : EntryController
     {
-        public SpeechEntryController(EntryChunkController entrychunkcontroller, SpeechEntry speechentry) : base(entrychunkcontroller, speechentry)
+        public SpeechEntryController(SpeechEntry speechentry, SubcontrollerGroup parentGroup) : base(speechentry, parentGroup)
         {
             SpeechEntry = speechentry;
-            InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.SpeechEntryController_Text, SpeechEntry.EName);
-        }
+        public override bool EditorAvailable => true;
 
-        public override void InvalidateNodeImage()
-        {
-            Node.ImageKey = "speaker";
-            Node.SelectedImageKey = "speaker";
-        }
-
-        protected override Control CreateEditor()
+        public override Control CreateEditor()
         {
             return new SoundBox(SpeechEntry);
         }

@@ -1,5 +1,5 @@
 using System;
-using Crash;
+using CrashEdit.Crash;
 
 namespace CrashHacks
 {

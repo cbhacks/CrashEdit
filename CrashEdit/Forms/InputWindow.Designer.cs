@@ -1,4 +1,4 @@
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     partial class InputWindow
     {

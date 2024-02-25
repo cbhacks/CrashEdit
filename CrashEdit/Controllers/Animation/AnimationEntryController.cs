@@ -1,37 +1,41 @@
-using Crash;
+using CrashEdit.Crash;
+using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(AnimationEntry))]
     public sealed class AnimationEntryController : EntryController
     {
-        public AnimationEntryController(EntryChunkController entrychunkcontroller, AnimationEntry animationentry) : base(entrychunkcontroller, animationentry)
+        public AnimationEntryController(AnimationEntry animationentry, SubcontrollerGroup parentGroup) : base(animationentry, parentGroup)
         {
             AnimationEntry = animationentry;
-            foreach (Frame frame in animationentry.Frames)
+        }
+
+        public override bool EditorAvailable => true;
+
+        public override Control CreateEditor()
+        {
+            if (!AnimationEntry.IsNew)
             {
-                AddNode(new FrameController(this, frame));
+                ModelEntry modelentry = FindEID<ModelEntry>(AnimationEntry.Frames[0].ModelEID);
+                if (modelentry != null)
+                {
+                    TextureChunk[] texturechunks = new TextureChunk[modelentry.TPAGCount];
+                    for (int i = 0; i < texturechunks.Length; ++i)
+                    {
+                        texturechunks[i] = FindEID<TextureChunk>(BitConv.FromInt32(modelentry.Info,0xC+i*4));
+                    }
+                    return new AnimationEntryViewer(AnimationEntry.Frames,modelentry,texturechunks);
+                }
+                else
+                {
+                    return new AnimationEntryViewer(AnimationEntry.Frames,null,null);
+                }
             }
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.AnimationEntryController_Text, AnimationEntry.EName);
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            Node.ImageKey = "limeb";
-            Node.SelectedImageKey = "limeb";
-        }
-
-        protected override Control CreateEditor()
-        {
-            if (AnimationEntry.IsNew)
-                return new Crash3AnimationSelector(NSF, AnimationEntry);
             else
-                return new UndockableControl(new AnimationEntryViewer(NSF, Entry.EID));
+            {
+                return new Crash3AnimationSelector(AnimationEntry, GetNSF());
+            }
         }
 
         public AnimationEntry AnimationEntry { get; }

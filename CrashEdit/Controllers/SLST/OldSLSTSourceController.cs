@@ -1,34 +1,23 @@
-using Crash;
+using CrashEdit.Crash;
+using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
-    public sealed class OldSLSTSourceController : Controller
+    [OrphanLegacyController(typeof(OldSLSTSource))]
+    public sealed class OldSLSTSourceController : LegacyController
     {
-        public OldSLSTSourceController(OldSLSTEntryController oldslstentrycontroller, OldSLSTSource oldslstsource)
+        public OldSLSTSourceController(OldSLSTSource oldslstsource, SubcontrollerGroup parentGroup) : base(parentGroup, oldslstsource)
         {
-            OldSLSTEntryController = oldslstentrycontroller;
             OldSLSTSource = oldslstsource;
-            InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
-        {
-            Node.Text = "Source";
-        }
+        public override bool EditorAvailable => true;
 
-        public override void InvalidateNodeImage()
-        {
-            Node.ImageKey = "arrow";
-            Node.SelectedImageKey = "arrow";
-        }
-
-        protected override Control CreateEditor()
+        public override Control CreateEditor()
         {
             return new OldSLSTSourceBox(OldSLSTSource);
         }
 
-        public OldSLSTEntryController OldSLSTEntryController { get; }
         public OldSLSTSource OldSLSTSource { get; }
     }
 }

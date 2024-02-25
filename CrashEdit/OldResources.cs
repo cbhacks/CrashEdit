@@ -1,66 +1,12 @@
 using System.Reflection;
 using System.Resources;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     internal static class OldResources
     {
-        [Resource("NSDIcon")]
-        private static readonly Icon nsdicon = null;
-
-        [Resource("NSFIcon")]
-        private static readonly Icon nsficon = null;
-
         [Resource("CBHacksIcon")]
         private static readonly Icon cbhacksicon = null;
-
-        [Resource("ArrowImage")]
-        private static readonly Image arrowimage = null;
-
-        [Resource("BinocularsImage")]
-        private static readonly Image binocularsimage = null;
-
-        [Resource("BinocularsNextImage")]
-        private static readonly Image binocularsnextimage = null;
-
-        [Resource("FileImage")]
-        private static readonly Image fileimage = null;
-
-        [Resource("FolderImage")]
-        private static readonly Image folderimage = null;
-
-        [Resource("ImageImage")]
-        private static readonly Image imageimage = null;
-
-        [Resource("MusicImage")]
-        private static readonly Image musicimage = null;
-
-        [Resource("MusicRedImage")]
-        private static readonly Image musicredimage = null;
-
-        [Resource("MusicYellowImage")]
-        private static readonly Image musicyellowimage = null;
-
-        [Resource("OpenImage")]
-        private static readonly Image openimage = null;
-
-        [Resource("SaveImage")]
-        private static readonly Image saveimage = null;
-
-        [Resource("SpeakerImage")]
-        private static readonly Image speakerimage = null;
-
-        [Resource("ThingImage")]
-        private static readonly Image thingimage = null;
-
-        [Resource("BlueJournalImage")]
-        private static readonly Image bluejournalimage = null;
-
-        [Resource("WhiteJournalImage")]
-        private static readonly Image whitejournalimage = null;
-
-        [Resource("YellowJournalImage")]
-        private static readonly Image yellowjournalimage = null;
 
         [Resource("PointTexture")]
         private static readonly Bitmap pointtexture = null;
@@ -186,30 +132,6 @@ namespace CrashEdit
         [Resource("UnknownPickupTexture")]
         private static readonly Bitmap unknownpickuptexture = null;
 
-        [Resource("GreyBuckle")]
-        private static readonly Image greybuckle = null;
-
-        [Resource("CodeBuckle")]
-        private static readonly Image codebuckle = null;
-
-        [Resource("CrimsonBuckle")]
-        private static readonly Image crimsonbuckle = null;
-
-        [Resource("LimeBuckle")]
-        private static readonly Image limebuckle = null;
-
-        [Resource("BlueBuckle")]
-        private static readonly Image bluebuckle = null;
-
-        [Resource("VioletBuckle")]
-        private static readonly Image violetbuckle = null;
-
-        [Resource("RedBuckle")]
-        private static readonly Image redbuckle = null;
-
-        [Resource("YellowBuckle")]
-        private static readonly Image yellowbuckle = null;
-
         [Resource("UnknownPickupTexture")]
         [ExternalTexture(1, 3)]
         private static readonly Bitmap fruitlime = null;
@@ -258,6 +180,7 @@ namespace CrashEdit
 
         static OldResources()
         {
+            ResourceManager manager = new ResourceManager("CrashEdit.CE.OldResources",Assembly.GetExecutingAssembly());
             List<FieldInfo> allfields = new();
             foreach (var field in typeof(OldResources).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
             {
@@ -266,7 +189,6 @@ namespace CrashEdit
                     allfields.Add(field);
                 }
             }
-            var manager = new ResourceManager("CrashEdit.OldResources", Assembly.GetExecutingAssembly());
             foreach (FieldInfo field in allfields)
             {
                 foreach (ResourceAttribute attribute in field.GetCustomAttributes(typeof(ResourceAttribute), false))
@@ -343,25 +265,7 @@ namespace CrashEdit
         public static Bitmap AllTex => alltex;
         public static Dictionary<Bitmap, Rectangle> TexMap { get; }
 
-        public static Icon NSDIcon => nsdicon;
-        public static Icon NSFIcon => nsficon;
         public static Icon CBHacksIcon => cbhacksicon;
-        public static Image ArrowImage => arrowimage;
-        public static Image BinocularsImage => binocularsimage;
-        public static Image BinocularsNextImage => binocularsnextimage;
-        public static Image FileImage => fileimage;
-        public static Image FolderImage => folderimage;
-        public static Image ImageImage => imageimage;
-        public static Image MusicImage => musicimage;
-        public static Image MusicRedImage => musicredimage;
-        public static Image MusicYellowImage => musicyellowimage;
-        public static Image OpenImage => openimage;
-        public static Image SaveImage => saveimage;
-        public static Image SpeakerImage => speakerimage;
-        public static Image ThingImage => thingimage;
-        public static Image BlueJournalImage => bluejournalimage;
-        public static Image WhiteJournalImage => whitejournalimage;
-        public static Image YellowJournalImage => yellowjournalimage;
         public static Bitmap AppleTexture => appletexture;
         public static Bitmap LifeTexture => lifetexture;
         public static Bitmap MaskTexture => masktexture;
@@ -394,14 +298,6 @@ namespace CrashEdit
         public static Bitmap UnknownBoxTexture => unknownboxtexture;
         public static Bitmap UnknownBoxTopTexture => unknownboxtoptexture;
         public static Bitmap UnknownPickupTexture => unknownpickuptexture;
-        public static Image BlueBuckle => bluebuckle;
-        public static Image CodeBuckle => codebuckle;
-        public static Image CrimsonBuckle => crimsonbuckle;
-        public static Image GreyBuckle => greybuckle;
-        public static Image LimeBuckle => limebuckle;
-        public static Image VioletBuckle => violetbuckle;
-        public static Image RedBuckle => redbuckle;
-        public static Image YellowBuckle => yellowbuckle;
         public static Bitmap LimeTexture => fruitlime;
         public static Bitmap CoconutTexture => fruitcoconut;
         public static Bitmap StrawberryTexture => fruitstrawberry;

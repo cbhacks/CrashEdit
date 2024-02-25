@@ -1,4 +1,6 @@
-namespace Crash
+using System;
+
+namespace CrashEdit.Crash
 {
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class EntityPropertyTypeAttribute : Attribute

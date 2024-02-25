@@ -1,10 +1,11 @@
-using Crash;
+using CrashEdit.Crash;
+using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class SLSTDeltaBox : UserControl
     {
-        private readonly ListBox lstValues;
+        private ListBox lstValues;
 
         public SLSTDeltaBox(SLSTDelta slstitem)
         {
@@ -12,9 +13,9 @@ namespace CrashEdit
             {
                 Dock = DockStyle.Fill
             };
-            lstValues.Items.Add(string.Format("Remove Nodes: {0}", slstitem.RemoveNodes.Count));
-            lstValues.Items.Add(string.Format("Add Nodes: {0}", slstitem.AddNodes.Count));
-            lstValues.Items.Add(string.Format("Swap Nodes: {0}", slstitem.SwapNodes.Count));
+            lstValues.Items.Add(string.Format("Remove Nodes: {0}",slstitem.RemoveNodes.Count));
+            lstValues.Items.Add(string.Format("Add Nodes: {0}",slstitem.AddNodes.Count));
+            lstValues.Items.Add(string.Format("Swap Nodes: {0}",slstitem.SwapNodes.Count));
             Controls.Add(lstValues);
         }
     }

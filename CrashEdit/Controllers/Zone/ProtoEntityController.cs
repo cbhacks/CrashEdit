@@ -1,36 +1,26 @@
-using Crash;
+using CrashEdit.Crash;
+using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
-    public sealed class ProtoEntityController : Controller
+    [OrphanLegacyController(typeof(ProtoEntity))]
+    public sealed class ProtoEntityController : LegacyController
     {
-        public ProtoEntityController(ProtoZoneEntryController oldzoneentrycontroller, ProtoEntity entity)
+        public ProtoEntityController(ProtoEntity entity, SubcontrollerGroup parentGroup) : base(parentGroup, entity)
         {
-            ProtoZoneEntryController = oldzoneentrycontroller;
             Entity = entity;
             //AddMenu("Duplicate Entity",Menu_Duplicate);
             //AddMenu("Delete Entity",Menu_Delete);
-            InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.OldEntityController_Text, Entity.ID, Entity.Type, Entity.Subtype);
-        }
+        public override bool EditorAvailable => true;
 
-        public override void InvalidateNodeImage()
-        {
-            Node.ImageKey = "arrow";
-            Node.SelectedImageKey = "arrow";
-        }
-
-        protected override Control CreateEditor()
+        public override Control CreateEditor()
         {
             return new ProtoEntityBox(this);
         }
 
-        public ProtoZoneEntryController ProtoZoneEntryController { get; }
+        public ProtoZoneEntryController ProtoZoneEntryController => (ProtoZoneEntryController)Modern.Parent.Legacy;
 
         public ProtoEntity Entity { get; }
 
@@ -55,7 +45,6 @@ namespace CrashEdit
         //    ProtoEntity newentity = ProtoEntity.Load(Entity.Save());
         //    newentity.ID = maxid;
         //    ProtoZoneEntryController.ProtoZoneEntry.Entities.Add(newentity);
-        //    ProtoZoneEntryController.AddNode(new ProtoEntityController(ProtoZoneEntryController,newentity));
         //}
 
         //private void Menu_Delete()
@@ -63,7 +52,6 @@ namespace CrashEdit
         //    int entitycount = BitConv.FromInt32(ProtoZoneEntryController.ProtoZoneEntry.Header,0x20C);
         //    BitConv.ToInt32(ProtoZoneEntryController.ProtoZoneEntry.Header,0x20C,entitycount - 1);
         //    ProtoZoneEntryController.ProtoZoneEntry.Entities.Remove(Entity);
-        //    Dispose();
         //}
     }
 }

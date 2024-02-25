@@ -1,4 +1,6 @@
-﻿namespace Crash
+﻿using System;
+
+namespace CrashEdit.Crash
 {
     public sealed class ENameComparer : StringComparer
     {

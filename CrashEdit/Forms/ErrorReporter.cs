@@ -1,10 +1,12 @@
-using Crash;
+using CrashEdit.Crash;
+using System;
+using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class ErrorReporter : Form
     {
-        private readonly IWin32Window owner = null;
+        private IWin32Window owner = null;
 
         private bool lastcheckedwasskip = false;
 
@@ -23,7 +25,7 @@ namespace CrashEdit
             optBreak.Text = Properties.Resources.ErrorReporter_Break;
         }
 
-        private void ErrorManager_Signal(object sender, ErrorSignalEventArgs e)
+        private void ErrorManager_Signal(object sender,ErrorSignalEventArgs e)
         {
             lblMessage.Text = e.Message;
             optSkip.Enabled = e.CanSkip;
@@ -73,7 +75,7 @@ namespace CrashEdit
             }
         }
 
-        private void cmdOK_Click(object sender, EventArgs e)
+        private void cmdOK_Click(object sender,EventArgs e)
         {
             DialogResult = DialogResult.OK;
         }

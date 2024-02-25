@@ -1,61 +1,44 @@
-using Crash;
-using Crash.UI;
-using CrashEdit.Forms;
-using CrashEdit.Properties;
+using CrashEdit.Crash;
+using CrashEdit.CrashUI;
+using CrashEdit.CE.Forms;
+using CrashEdit.CE.Properties;
 using DiscUtils.Iso9660;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
-    public sealed class OldMainForm : Form
+    public sealed class OldMainForm : MainForm
     {
-        private static readonly ImageList imglist;
+        private ToolStripButton tbbOpen;
+        private ToolStripButton tbbSave;
+        private ToolStripButton tbbPatchNSD;
+        private ToolStripButton tbbClose;
+        private ToolStripMenuItem tbxMakeBIN;
+        private ToolStripMenuItem tbxMakeBINUSA;
+        private ToolStripMenuItem tbxMakeBINEUR;
+        private ToolStripMenuItem tbxMakeBINJAP;
+        private ToolStripMenuItem tbxConvertVHVB;
+        private ToolStripMenuItem tbxConvertVAB;
+        private ToolStripMenuItem tbbExtra;
+        private ToolStripButton tbbPlay;
+        private TabControl tbcTabs;
+        private GameVersionForm dlgGameVersion;
+        private ToolStripButton tbbPAL;
 
-        static OldMainForm()
-        {
-            imglist = new ImageList { ColorDepth = ColorDepth.Depth32Bit };
-            try
-            {
-                imglist.Images.Add("default", OldResources.FileImage);
-                imglist.Images.Add("tb_open", OldResources.OpenImage);
-                imglist.Images.Add("tb_save", OldResources.SaveImage);
-                imglist.Images.Add("tb_patchnsd", OldResources.SaveImage);
-                imglist.Images.Add("tb_close", OldResources.FolderImage);
-                imglist.Images.Add("tb_find", OldResources.BinocularsImage);
-                imglist.Images.Add("tb_findnext", OldResources.BinocularsNextImage);
-            }
-            catch
-            {
-                imglist.Images.Clear();
-            }
-        }
+        private FolderBrowserDialog dlgMakeBINDir = new FolderBrowserDialog();
+        private SaveFileDialog dlgMakeBINFile = new SaveFileDialog();
 
-        private readonly ToolStrip tsToolbar;
-        private readonly ToolStripButton tbbOpen;
-        private readonly ToolStripButton tbbSave;
-        private readonly ToolStripButton tbbPatchNSD;
-        private readonly ToolStripButton tbbClose;
-        private readonly ToolStripButton tbbFind;
-        private readonly ToolStripButton tbbFindNext;
-        private readonly ToolStripMenuItem tbxMakeBIN;
-        private readonly ToolStripMenuItem tbxMakeBINUSA;
-        private readonly ToolStripMenuItem tbxMakeBINEUR;
-        private readonly ToolStripMenuItem tbxMakeBINJAP;
-        private readonly ToolStripMenuItem tbxConvertVHVB;
-        private readonly ToolStripMenuItem tbxConvertVAB;
-        private readonly ToolStripDropDownButton tbbExtra;
-        private readonly ToolStripButton tbbPlay;
-        private readonly TabControl tbcTabs;
-        private readonly GameVersionForm dlgGameVersion;
-        private readonly ToolStripButton tbbPAL;
-
-        private readonly FolderBrowserDialog dlgMakeBINDir = new FolderBrowserDialog();
-        private readonly SaveFileDialog dlgMakeBINFile = new SaveFileDialog();
-
-        private readonly BackgroundWorker bgwMakeBIN;
+        private BackgroundWorker bgwMakeBIN;
         private ProgressBarForm dlgProgress;
 
         public static bool PAL { get; private set; } = false;
@@ -67,7 +50,8 @@ namespace CrashEdit
             tbbOpen = new ToolStripButton
             {
                 Text = Resources.Toolbar_Open,
-                ImageKey = "tb_open",
+                ImageKey = "FolderOpen",
+                DisplayStyle = ToolStripItemDisplayStyle.Image,
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
             tbbOpen.Click += new EventHandler(tbbOpen_Click);
@@ -75,7 +59,8 @@ namespace CrashEdit
             tbbSave = new ToolStripButton
             {
                 Text = Resources.Toolbar_Save,
-                ImageKey = "tb_save",
+                ImageKey = "Floppy",
+                DisplayStyle = ToolStripItemDisplayStyle.Image,
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
             tbbSave.Click += new EventHandler(tbbSave_Click);
@@ -83,7 +68,8 @@ namespace CrashEdit
             tbbPatchNSD = new ToolStripButton
             {
                 Text = Resources.Toolbar_PatchNSD,
-                ImageKey = "tb_patchnsd",
+                ImageKey = "Floppy",
+                DisplayStyle = ToolStripItemDisplayStyle.Image,
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
             tbbPatchNSD.Click += new EventHandler(tbbPatchNSD_Click);
@@ -91,26 +77,11 @@ namespace CrashEdit
             tbbClose = new ToolStripButton
             {
                 Text = Resources.Toolbar_Close,
-                ImageKey = "tb_close",
+                ImageKey = "Folder",
+                DisplayStyle = ToolStripItemDisplayStyle.Image,
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
             tbbClose.Click += new EventHandler(tbbClose_Click);
-
-            tbbFind = new ToolStripButton
-            {
-                Text = Resources.Toolbar_Find,
-                ImageKey = "tb_find",
-                TextImageRelation = TextImageRelation.ImageAboveText
-            };
-            tbbFind.Click += new EventHandler(tbbFind_Click);
-
-            tbbFindNext = new ToolStripButton
-            {
-                Text = Resources.Toolbar_FindNext,
-                ImageKey = "tb_findnext",
-                TextImageRelation = TextImageRelation.ImageAboveText
-            };
-            tbbFindNext.Click += new EventHandler(tbbFindNext_Click);
 
             tbxMakeBIN = new ToolStripMenuItem();
             tbxMakeBIN.Text = Resources.OldMainForm_tbxMakeBIN;
@@ -136,9 +107,8 @@ namespace CrashEdit
             tbxConvertVAB.Text = Resources.OldMainForm_tbxConvertVAB;
             tbxConvertVAB.Click += new EventHandler(tbxConvertVAB_Click);
 
-            tbbExtra = new ToolStripDropDownButton();
+            tbbExtra = new ToolStripMenuItem();
             tbbExtra.Text = Resources.OldMainForm_tbbExtra;
-            tbbExtra.DropDown = new ToolStripDropDown { LayoutStyle = ToolStripLayoutStyle.VerticalStackWithOverflow };
             tbbExtra.DropDown.Items.Add(tbxMakeBIN);
             tbbExtra.DropDown.Items.Add(tbxMakeBINUSA);
             tbbExtra.DropDown.Items.Add(tbxMakeBINEUR);
@@ -163,28 +133,19 @@ namespace CrashEdit
             };
             tbbPlay.Click += new EventHandler(tbbPlay_Click);
 
-            tsToolbar = new ToolStrip
-            {
-                Dock = DockStyle.Top,
-                ImageList = imglist
-            };
-            tsToolbar.Items.Add(tbbOpen);
-            tsToolbar.Items.Add(tbbSave);
-            tsToolbar.Items.Add(tbbPatchNSD);
-            tsToolbar.Items.Add(tbbClose);
-            tsToolbar.Items.Add(new ToolStripSeparator());
-            tsToolbar.Items.Add(tbbFind);
-            tsToolbar.Items.Add(tbbFindNext);
-            tsToolbar.Items.Add(new ToolStripSeparator());
-            tsToolbar.Items.Add(tbbExtra);
-            tsToolbar.Items.Add(tbbPAL);
-            tsToolbar.Items.Add(new ToolStripSeparator());
-            tsToolbar.Items.Add(tbbPlay);
+            ToolStrip.Items.Insert(0, tbbOpen);
+            ToolStrip.Items.Insert(1, tbbSave);
+            ToolStrip.Items.Insert(2, new ToolStripSeparator());
+            ToolStrip.Items.Insert(3, tbbPatchNSD);
+            ToolStrip.Items.Insert(4, new ToolStripSeparator());
+            ToolStrip.Items.Insert(5, tbbClose);
+            ToolStrip.Items.Insert(6, new ToolStripSeparator());
+            ToolStrip.Items.Insert(7, tbbPAL);
+            ToolStrip.Items.Insert(8, tbbPlay);
+            ToolStrip.Items.Insert(9, new ToolStripSeparator());
+            MenuStrip.Items.Add(tbbExtra);
 
-            tbcTabs = new TabControl
-            {
-                Dock = DockStyle.Fill
-            };
+            tbcTabs = TabControl;
             tbcTabs.SelectedIndexChanged += tbcTabs_SelectedIndexChanged;
 
             TabPage configtab = new TabPage("CrashEdit")
@@ -195,7 +156,7 @@ namespace CrashEdit
 
             tbcTabs.TabPages.Add(configtab);
 
-            tbcTabs_SelectedIndexChanged(null, null);
+            tbcTabs_SelectedIndexChanged(null,null);
 
             dlgGameVersion = new GameVersionForm();
 
@@ -204,17 +165,15 @@ namespace CrashEdit
                 WorkerReportsProgress = true,
                 WorkerSupportsCancellation = false
             };
-            bgwMakeBIN.DoWork += bgwMakeBIN_DoWork;
-            bgwMakeBIN.ProgressChanged += bgwMakeBIN_ProgressChanged;
-            bgwMakeBIN.RunWorkerCompleted += bgwMakeBIN_RunWorkerCompleted;
+            bgwMakeBIN.DoWork += new DoWorkEventHandler(bgwMakeBIN_DoWork);
+            bgwMakeBIN.ProgressChanged += new ProgressChangedEventHandler(bgwMakeBIN_ProgressChanged);
+            bgwMakeBIN.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgwMakeBIN_RunWorkerCompleted);
             dlgProgress = null;
 
             Icon = OldResources.CBHacksIcon;
             Width = Settings.Default.DefaultFormW;
             Height = Settings.Default.DefaultFormH;
-            Text = $"CrashEdit v{Assembly.GetExecutingAssembly().GetName().Version}";
-            Controls.Add(tbcTabs);
-            Controls.Add(tsToolbar);
+            Text = $"CrashEdit v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
 
             dlgMakeBINFile.Filter = "Playstation Disc Images (*.bin)|*.bin";
         }
@@ -225,8 +184,6 @@ namespace CrashEdit
             tbbSave.Enabled =
             tbbPatchNSD.Enabled =
             tbbClose.Enabled =
-            tbbFind.Enabled =
-            tbbFindNext.Enabled =
             tbbPlay.Enabled = tab != null && tab.Tag is NSFBox;
         }
 
@@ -247,8 +204,7 @@ namespace CrashEdit
             var nsfFilename = tbcTabs.SelectedTab.Text;
 
             var nsfFilenameBase = Path.GetFileName(nsfFilename);
-            if (nsfFilenameBase.Length != 12)
-            {
+            if (nsfFilenameBase.Length != 12) {
                 MessageBox.Show(string.Format(Resources.Playtest_Error1, nsfFilename), Resources.Playtest_Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -267,40 +223,33 @@ namespace CrashEdit
             }
             else
             {
-                MessageBox.Show(string.Format(Resources.Playtest_Error2, nsfFilename), Resources.Playtest_Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(string.Format(Resources.Playtest_Error2, nsfFilename), Resources.Playtest_Title, MessageBoxButtons.OK,MessageBoxIcon.Error);
                 return;
             }
 
-            if (!File.Exists(nsdFilename))
-            {
+            if (!File.Exists(nsdFilename)) {
                 MessageBox.Show(string.Format(Resources.Playtest_Error3, nsdFilename), Resources.Playtest_Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             string exeFilename = null;
             var isofsPath = Path.GetDirectoryName(Path.GetDirectoryName(nsfFilename));
-            foreach (string s in Directory.GetFiles(isofsPath))
-            {
-                if (Regex.IsMatch(Path.GetFileName(s).ToUpper(), @"^(S[CL][UEP]S_\d\d\d\.\d\d|PSX\.EXE)$"))
-                {
+            foreach (string s in Directory.GetFiles(isofsPath)) {
+                if (Regex.IsMatch(Path.GetFileName(s).ToUpper(), @"^(S[CL][UEP]S_\d\d\d\.\d\d|PSX\.EXE)$")) {
                     exeFilename = s;
                     break;
                 }
             }
-            if (exeFilename == null)
-            {
+            if (exeFilename == null) {
                 MessageBox.Show(Resources.Playtest_Error4, Resources.Playtest_Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             string kdatDir = Path.Combine(isofsPath, "S3");
             string kdatFilename = null;
-            if (Directory.Exists(kdatDir))
-            {
-                foreach (string s in Directory.GetFiles(kdatDir))
-                {
-                    if (Path.GetFileName(s).ToUpper() == "KDAT.DAT")
-                    {
+            if (Directory.Exists(kdatDir)) {
+                foreach (string s in Directory.GetFiles(kdatDir)) {
+                    if (Path.GetFileName(s).ToUpper() == "KDAT.DAT") {
                         kdatFilename = s;
                         break;
                     }
@@ -309,12 +258,9 @@ namespace CrashEdit
 
             string warpscusDir = Path.Combine(isofsPath, "S0");
             string warpscusFilename = null;
-            if (Directory.Exists(warpscusDir))
-            {
-                foreach (string s in Directory.GetFiles(warpscusDir))
-                {
-                    if (Regex.IsMatch(Path.GetFileName(s).ToUpper(), @"^WARPSC[UEP]S\.BIN$"))
-                    {
+            if (Directory.Exists(warpscusDir)) {
+                foreach (string s in Directory.GetFiles(warpscusDir)) {
+                    if (Regex.IsMatch(Path.GetFileName(s).ToUpper(), @"^WARPSC[UEP]S\.BIN$")) {
                         warpscusFilename = s;
                         break;
                     }
@@ -322,8 +268,7 @@ namespace CrashEdit
             }
 
             string basePath;
-            do
-            {
+            do {
                 basePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             } while (Directory.Exists(basePath));
             Directory.CreateDirectory(basePath);
@@ -349,8 +294,7 @@ namespace CrashEdit
 
             var regionStr = PAL ? "pal" : "ntsc";
 
-            Task.Run(() =>
-            {
+            Task.Run(() => {
                 ExternalTool.Invoke("pcsx-hdbg", $"gamefile=\"{binPath}\" bootlevel={levelID} region={regionStr}");
                 Directory.Delete(basePath, true);
             });
@@ -361,46 +305,38 @@ namespace CrashEdit
             return PAL ? RatePAL : RateNTSC;
         }
 
-        void tbbOpen_Click(object sender, EventArgs e)
+        void tbbOpen_Click(object sender,EventArgs e)
         {
             OpenNSF();
         }
 
-        void tbbSave_Click(object sender, EventArgs e)
+        void tbbSave_Click(object sender,EventArgs e)
         {
             SaveNSF(false);
         }
 
-        void tbbPatchNSD_Click(object sender, EventArgs e)
+        void tbbPatchNSD_Click(object sender,EventArgs e)
         {
             PatchNSD();
         }
 
-        void tbbClose_Click(object sender, EventArgs e)
+        void tbbClose_Click(object sender,EventArgs e)
         {
             CloseNSF();
         }
 
-        void tbbFind_Click(object sender, EventArgs e)
-        {
-            Find();
-        }
-
-        void tbbFindNext_Click(object sender, EventArgs e)
-        {
-            FindNext();
-        }
-
         public void OpenNSF()
         {
-            using OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = FileFilters.NSF + "|" + FileFilters.Any;
-            dialog.Multiselect = true;
-            if (dialog.ShowDialog(this) == DialogResult.OK)
+            using (OpenFileDialog dialog = new OpenFileDialog())
             {
-                foreach (string filename in dialog.FileNames)
+                dialog.Filter = FileFilters.NSF + "|" + FileFilters.Any;
+                dialog.Multiselect = true;
+                if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    OpenNSF(filename);
+                    foreach (string filename in dialog.FileNames)
+                    {
+                        OpenNSF(filename);
+                    }
                 }
             }
         }
@@ -412,8 +348,8 @@ namespace CrashEdit
                 byte[] nsfdata = File.ReadAllBytes(filename);
                 if (dlgGameVersion.ShowDialog(this) == DialogResult.OK)
                 {
-                    NSF nsf = NSF.LoadAndProcess(nsfdata, dlgGameVersion.SelectedVersion);
-                    OpenNSF(filename, nsf, dlgGameVersion.SelectedVersion);
+                    NSF nsf = NSF.LoadAndProcess(nsfdata,dlgGameVersion.SelectedVersion);
+                    OpenNSF(filename,nsf,dlgGameVersion.SelectedVersion);
                 }
             }
             catch (LoadAbortedException)
@@ -421,12 +357,16 @@ namespace CrashEdit
             }
         }
 
-        public void OpenNSF(string filename, NSF nsf, GameVersion gameversion)
+        public void OpenNSF(string filename,NSF nsf,GameVersion gameversion)
         {
-            NSFBox nsfbox = new NSFBox(nsf, gameversion)
+            var ws = new LevelWorkspace();
+            ws.NSF = nsf;
+            ws.GameVersion = gameversion;
+            NSFBox nsfbox = new NSFBox(this, ws)
             {
                 Dock = DockStyle.Fill
             };
+            nsfbox.ActiveControllerChanged += MainControl_ActiveControllerChanged;
 
             TabPage nsftab = new TabPage(filename)
             {
@@ -445,67 +385,67 @@ namespace CrashEdit
                 string filename = tbcTabs.SelectedTab.Text;
                 NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
                 NSF nsf = nsfbox.NSF;
-                SaveNSF(filename, nsf, ignore_warnings);
+                SaveNSF(filename,nsf,ignore_warnings);
                 switch (nsfbox.NSFController.GameVersion)
                 {
-                    case GameVersion.Crash1:
-                        foreach (OldZoneEntry zone in nsf.GetEntries<OldZoneEntry>())
+                case GameVersion.Crash1:
+                    foreach (OldZoneEntry zone in nsf.GetEntries<OldZoneEntry>())
+                    {
+                        foreach (OldEntity entity in zone.Entities)
                         {
-                            foreach (OldEntity entity in zone.Entities)
+                            if (entity.ID >= 0x130)
                             {
-                                if (entity.ID >= 0x130)
+                                MessageBox.Show(string.Format("An entity (ID {0}) exceeds maximum ID of 303.", entity.ID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
+                            else if (entity.ID <= 0)
+                            {
+                                MessageBox.Show(string.Format("An entity has invalid ID {0}.", entity.ID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
+                        }
+                    }
+                    break;
+                case GameVersion.Crash2:
+                    foreach (ZoneEntry zone in nsf.GetEntries<ZoneEntry>())
+                        {
+                        foreach (Entity entity in zone.Entities)
+                        {
+                            if ((entity.ID != null && entity.ID >= 0x400) || (entity.AlternateID != null && entity.AlternateID >= 0x400))
+                            {
+                                if (entity.Name != null)
                                 {
-                                    MessageBox.Show(string.Format("An entity (ID {0}) exceeds maximum ID of 303.", entity.ID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    MessageBox.Show(string.Format("Entity {0} (ID {1}) exceeds maximum ID of 1023.", entity.Name, entity.ID != null ? entity.ID : entity.AlternateID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                                 }
-                                else if (entity.ID <= 0)
+                                else
                                 {
-                                    MessageBox.Show(string.Format("An entity has invalid ID {0}.", entity.ID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    MessageBox.Show(string.Format("An entity (ID {0}) exceeds maximum ID of 1023.", entity.ID != null ? entity.ID : entity.AlternateID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                }
+                            }
+                            else if ((entity.ID != null && entity.ID <= 0) || (entity.AlternateID != null && entity.AlternateID <= 0))
+                            {
+                                if (entity.Name != null)
+                                {
+                                    MessageBox.Show(string.Format("Entity {0} has invalid ID {1}.", entity.Name, entity.ID != null ? entity.ID : entity.AlternateID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                }
+                                else
+                                {
+                                    MessageBox.Show(string.Format("An entity has invalid ID {0}.", entity.ID != null ? entity.ID : entity.AlternateID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                                 }
                             }
                         }
-                        break;
-                    case GameVersion.Crash2:
-                        foreach (ZoneEntry zone in nsf.GetEntries<ZoneEntry>())
-                        {
-                            foreach (Entity entity in zone.Entities)
-                            {
-                                if ((entity.ID != null && entity.ID >= 0x400) || (entity.AlternateID != null && entity.AlternateID >= 0x400))
-                                {
-                                    if (entity.Name != null)
-                                    {
-                                        MessageBox.Show(string.Format("Entity {0} (ID {1}) exceeds maximum ID of 1023.", entity.Name, entity.ID != null ? entity.ID : entity.AlternateID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show(string.Format("An entity (ID {0}) exceeds maximum ID of 1023.", entity.ID != null ? entity.ID : entity.AlternateID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                    }
-                                }
-                                else if ((entity.ID != null && entity.ID <= 0) || (entity.AlternateID != null && entity.AlternateID <= 0))
-                                {
-                                    if (entity.Name != null)
-                                    {
-                                        MessageBox.Show(string.Format("Entity {0} has invalid ID {1}.", entity.Name, entity.ID != null ? entity.ID : entity.AlternateID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show(string.Format("An entity has invalid ID {0}.", entity.ID != null ? entity.ID : entity.AlternateID), "Entity ID Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                    }
-                                }
-                            }
-                        }
-                        break;
+                    }
+                    break;
                 }
             }
         }
 
-        public void SaveNSF(string filename, NSF nsf, bool ignore_warnings)
+        public void SaveNSF(string filename,NSF nsf,bool ignore_warnings)
         {
             try
             {
                 byte[] nsfdata = nsf.Save();
-                if (ignore_warnings || MessageBox.Show(Resources.SaveNSF, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (ignore_warnings ? true : MessageBox.Show(Resources.SaveNSF, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    File.WriteAllBytes(filename, nsfdata);
+                    File.WriteAllBytes(filename,nsfdata);
                 }
             }
             catch (PackingException ex)
@@ -539,24 +479,20 @@ namespace CrashEdit
                 }
                 else
                 {
-                    MessageBox.Show(string.Format(Resources.PatchNSD_Error1, filename), Resources.PatchNSD_Title1, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(string.Format(Resources.PatchNSD_Error1, filename), Resources.PatchNSD_Title1, MessageBoxButtons.OK,MessageBoxIcon.Error);
                     return;
                 }
                 NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
                 bool exists = true;
                 if (!File.Exists(filename))
                 {
-                    //if (MessageBox.Show("NSD file does not exist. Create one?", "Patch NSD", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information) != DialogResult.Yes)
-                    {
-                        return;
-                    }
-                    //if (nsfbox.NSFController.GameVersion != GameVersion.Crash1BetaMAR08 && MessageBox.Show("Default NSD file is not a valid NSD file and needs to be manually fixed using a hex editor. Continue anyway?", "Patch NSD", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
-                    //{
-                    //    return;
-                    //}
-                    //exists = false;
+                    return;
                 }
-                PatchNSD(filename, exists, nsfbox.NSFController, false);
+                PatchNSD(filename,exists,nsfbox.NSFController,false);
+                nsfbox.Workspace.Sync();
+                nsfbox.RootController.Sync();
+                nsfbox.Sync();
+                OnResyncSuggested(EventArgs.Empty);
             }
         }
 
@@ -588,7 +524,7 @@ namespace CrashEdit
                         break;
                     case GameVersion.Crash3:
                         {
-                            NSD nsd = data != null ? NSD.LoadC3(data) : new NSD(new int[256], 0, new int[4], 0, 0, new int[64], new NSDLink[0], 0, 0x3F, 0, new int[128], new byte[0xFC], new NSDSpawnPoint[1] { new NSDSpawnPoint(Entry.NullEID, 0, 0, 0, 0, 0) }, new byte[0]);
+                            NewNSD nsd = data != null ? NewNSD.Load(data) : new NewNSD(new int[256], 0, new int[4], 0, 0, new int[64], new NSDLink[0], 0, 0x3F, 0, new int[128], new byte[0xFC], new NSDSpawnPoint[1] { new NSDSpawnPoint(Entry.NullEID, 0, 0, 0, 0, 0) }, new byte[0]);
                             PatchNSD(nsd, nsf, filename, ignore_warnings);
                         }
                         break;
@@ -596,48 +532,28 @@ namespace CrashEdit
                         if (!ignore_warnings) MessageBox.Show(Resources.PatchNSD_Error2, Resources.PatchNSD_Title1, MessageBoxButtons.OK);
                         return;
                 }
-                nsfc.Node.TreeView.BeginUpdate();
                 bool order_updated = false;
-                foreach (TreeNode node in nsfc.Node.Nodes) // nsd patching might have moved entries, recreate moved entry chunks if that's the case
+                // FIXME - reimplement below to not use controller tree, or better yet rework entire NSD patching system
+                order_updated = true;
+                #if false
+                foreach (var ecc in nsfc.LegacySubcontrollers.OfType<EntryChunkController>()) // nsd patching might have moved entries, recreate moved entry chunks if that's the case
                 {
-                    if (node.Tag is EntryChunkController entrychunkcontroller)
+                    for (int i = 0; i < ecc.LegacySubcontrollers.Count; i++)
                     {
-                        int i = 0;
-                        TreeNode[] nodes = new TreeNode[node.Nodes.Count];
-                        foreach (TreeNode oldnode in node.Nodes)
+                        var c = (EntryController)ecc.LegacySubcontrollers[i];
+                        if (c.Entry != ecc.EntryChunk.Entries[i])
                         {
-                            nodes[i++] = oldnode;
-                        }
-                        for (i = 0; i < nodes.Length; ++i)
-                        {
-                            EntryController c = (EntryController)nodes[i].Tag;
-                            if (c.Entry != entrychunkcontroller.EntryChunk.Entries[i])
-                            {
-                                for (i = 0; i < nodes.Length; ++i)
-                                {
-                                    if (nodes[i].IsSelected)
-                                    {
-                                        nodes[i].TreeView.SelectedNode = nodes[i].Parent;
-                                    }
-                                    if (nodes[i].Tag != null)
-                                    {
-                                        if (nodes[i].Tag is Controller t)
-                                        {
-                                            t.Dispose();
-                                        }
-                                    }
-                                }
-                                entrychunkcontroller.PopulateNodes();
-                                order_updated = true;
-                                break;
-                            }
+                            ecc.LegacySubcontrollers.Clear();
+                            ecc.PopulateNodes();
+                            order_updated = true;
+                            break;
                         }
                     }
                 }
-                nsfc.Node.TreeView.EndUpdate();
+                #endif
                 if (!no_nsf_overwrite)
                 {
-                    if (ignore_warnings || Settings.Default.PatchNSDSavesNSF || (order_updated && MessageBox.Show(Resources.PatchNSD3, Resources.PatchNSD_Title1, MessageBoxButtons.YesNo) == DialogResult.Yes))
+                    if (ignore_warnings || Settings.Default.PatchNSDSavesNSF ? true : (order_updated && MessageBox.Show(Resources.PatchNSD3, Resources.PatchNSD_Title1, MessageBoxButtons.YesNo) == DialogResult.Yes))
                     {
                         SaveNSF(ignore_warnings);
                     }
@@ -645,6 +561,61 @@ namespace CrashEdit
             }
             catch (LoadAbortedException)
             {
+            }
+        }
+
+        public void PatchNSD(NewNSD nsd, NSF nsf, string path, bool ignore_warnings)
+        {
+            nsd.ChunkCount = nsf.Chunks.Count;
+            var indexdata = nsf.MakeNSDIndex();
+            nsd.HashKeyMap = indexdata.Item1;
+            nsd.Index = indexdata.Item2;
+            PatchNSDGoolMap(nsd.GOOLMap, nsf, ignore_warnings);
+
+            // patch object entity count
+            nsd.EntityCount = 0;
+            foreach (NewZoneEntry zone in nsf.GetEntries<NewZoneEntry>())
+                foreach (Entity ent in zone.Entities)
+                    if (ent.ID != null)
+                        ++nsd.EntityCount;
+
+            if (ignore_warnings ? true : MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                File.WriteAllBytes(path, nsd.Save());
+            }
+            if (!ignore_warnings && MessageBox.Show(Resources.PatchNSD2, Resources.PatchNSD_Title2, MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                int[] eids = new int[nsd.Index.Count];
+                for (int i = 0; i < eids.Length; ++i)
+                    eids[i] = nsd.Index[i].EntryID;
+                foreach (NewZoneEntry zone in nsf.GetEntries<NewZoneEntry>())
+                {
+                    foreach (Entity ent in zone.Entities)
+                    {
+                        if (ent.LoadListA != null)
+                        {
+                            foreach (EntityPropertyRow<int> row in ent.LoadListA.Rows)
+                            {
+                                List<int> values = (List<int>)row.Values;
+                                values.Sort(delegate (int a, int b) {
+                                    return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
+                                });
+                                if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.GetEntry<IEntry>(eid) == null);
+                            }
+                        }
+                        if (ent.LoadListB != null)
+                        {
+                            foreach (EntityPropertyRow<int> row in ent.LoadListB.Rows)
+                            {
+                                List<int> values = (List<int>)row.Values;
+                                values.Sort(delegate (int a, int b) {
+                                    return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
+                                });
+                                if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.GetEntry<IEntry>(eid) == null);
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -663,7 +634,7 @@ namespace CrashEdit
                     if (ent.ID != null)
                         ++nsd.EntityCount;
 
-            if (ignore_warnings || MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ignore_warnings ? true : MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
             }
@@ -681,9 +652,8 @@ namespace CrashEdit
                             foreach (EntityPropertyRow<int> row in ent.LoadListA.Rows)
                             {
                                 List<int> values = (List<int>)row.Values;
-                                values.Sort(delegate (int a, int b)
-                                {
-                                    return Array.IndexOf(eids, a) - Array.IndexOf(eids, b);
+                                values.Sort(delegate (int a, int b) {
+                                    return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
                                 });
                                 if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.GetEntry<IEntry>(eid) == null);
                             }
@@ -693,9 +663,8 @@ namespace CrashEdit
                             foreach (EntityPropertyRow<int> row in ent.LoadListB.Rows)
                             {
                                 List<int> values = (List<int>)row.Values;
-                                values.Sort(delegate (int a, int b)
-                                {
-                                    return Array.IndexOf(eids, a) - Array.IndexOf(eids, b);
+                                values.Sort(delegate (int a, int b) {
+                                    return Array.IndexOf(eids,a) - Array.IndexOf(eids,b);
                                 });
                                 if (Settings.Default.DeleteInvalidEntries) values.RemoveAll(eid => nsf.GetEntry<IEntry>(eid) == null);
                             }
@@ -712,7 +681,7 @@ namespace CrashEdit
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
             PatchNSDGoolMap(nsd.GOOLMap, nsf, ignore_warnings);
-            if (ignore_warnings || MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ignore_warnings ? true : MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
             }
@@ -724,7 +693,7 @@ namespace CrashEdit
             var indexdata = nsf.MakeNSDIndex();
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
-            if (ignore_warnings || MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ignore_warnings ? true : MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
             }
@@ -756,7 +725,7 @@ namespace CrashEdit
                 }
             }
         }
-
+        
         public void CloseNSF()
         {
             string filename = tbcTabs.SelectedTab.Text;
@@ -782,57 +751,35 @@ namespace CrashEdit
             }
         }
 
-        public void Find()
-        {
-            if (tbcTabs.SelectedTab != null)
-            {
-                NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
-                using InputWindow inputwindow = new InputWindow();
-                if (inputwindow.ShowDialog(this) == DialogResult.OK)
-                {
-                    nsfbox.Find(inputwindow.Input);
-                }
-            }
-        }
-
-        public void FindNext()
-        {
-            if (tbcTabs.SelectedTab != null)
-            {
-                NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
-                nsfbox.FindNext();
-            }
-        }
-
         void AddDirectoryToISO(CDBuilder fs, string prefix, DirectoryInfo dir)
         {
-            foreach (DirectoryInfo subdir in dir.GetDirectories())
-            {
+            foreach (DirectoryInfo subdir in dir.GetDirectories()) {
                 AddDirectoryToISO(fs, $"{prefix}{subdir.Name}\\", subdir);
             }
-            foreach (FileInfo file in dir.GetFiles())
-            {
+            foreach (FileInfo file in dir.GetFiles()) {
                 fs.AddFile($"{prefix}{file.Name};1", file.FullName);
             }
         }
 
-        private void bgwMakeBIN_DoWork(object sender, DoWorkEventArgs e)
+        private void bgwMakeBIN_DoWork(object sender,DoWorkEventArgs e)
         {
             object[] args = (object[])e.Argument;
             CDBuilder fs = (CDBuilder)args[0];
             string filename = (string)args[1];
-            while (!dlgProgress.IsShown) ;
-            using FileStream output = new FileStream(filename, FileMode.Create, FileAccess.Write);
-            using Stream input = fs.Build();
-            ISO2PSX.Run(input, output, bgwMakeBIN);
+            while (!dlgProgress.IsShown);
+            using (FileStream output = new FileStream(filename, FileMode.Create, FileAccess.Write))
+            using (Stream input = fs.Build())
+            {
+                ISO2PSX.Run(input, output, bgwMakeBIN);
+            }
         }
 
-        private void bgwMakeBIN_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void bgwMakeBIN_ProgressChanged(object sender,ProgressChangedEventArgs e)
         {
             dlgProgress.ProgressBar.Value = e.ProgressPercentage;
         }
 
-        private void bgwMakeBIN_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void bgwMakeBIN_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e)
         {
             dlgProgress.Close();
         }
@@ -850,7 +797,7 @@ namespace CrashEdit
             }
         }
 
-        void tbxMakeBIN_Click(object sender, EventArgs e)
+        void tbxMakeBIN_Click(object sender,EventArgs e)
         {
 
             if (dlgMakeBINDir.ShowDialog(this) != DialogResult.OK)
@@ -859,8 +806,7 @@ namespace CrashEdit
             string cnffile = Path.Combine(dlgMakeBINDir.SelectedPath, "SYSTEM.CNF");
             string exefile = Path.Combine(dlgMakeBINDir.SelectedPath, "PSX.EXE");
 
-            if (!File.Exists(cnffile) && !File.Exists(exefile))
-            {
+            if (!File.Exists(cnffile) && !File.Exists(exefile)) {
                 if (MessageBox.Show(Resources.MakeBIN_NoSystemFiles, Resources.MakeBIN_Title, MessageBoxButtons.YesNo, MessageBoxIcon.Stop) != DialogResult.Yes)
                     return;
             }
@@ -878,72 +824,50 @@ namespace CrashEdit
             log.AppendLine();
 
             string cueFilename = Path.ChangeExtension(dlgMakeBINFile.FileName, ".cue");
-            if (!File.Exists(cueFilename))
-            {
-                try
-                {
-                    using (var cue = new StreamWriter(cueFilename))
-                    {
+            if (!File.Exists(cueFilename)) {
+                try {
+                    using (var cue = new StreamWriter(cueFilename)) {
                         cue.WriteLine($"FILE \"{Path.GetFileName(dlgMakeBINFile.FileName)}\" BINARY");
                         cue.WriteLine("  TRACK 01 MODE2/2352");
                         cue.WriteLine("    INDEX 01 00:00:00");
                     }
                     log.AppendLine(Resources.MakeBIN_CueSuccess);
                     log.AppendLine();
-                }
-                catch (IOException ex)
-                {
+                } catch (IOException ex) {
                     log.AppendLine(string.Format(Resources.MakeBIN_CueFail, ex));
                     log.AppendLine();
                 }
-            }
-            else
-            {
+            } else {
                 log.AppendLine(Resources.MakeBIN_CueExists);
                 log.AppendLine();
             }
 
             string imprintOpt;
-            if (sender == tbxMakeBINUSA)
-            {
+            if (sender == tbxMakeBINUSA) {
                 imprintOpt = ":cdxa-imprint --psx-scea";
-            }
-            else if (sender == tbxMakeBINEUR)
-            {
+            } else if (sender == tbxMakeBINEUR) {
                 imprintOpt = ":cdxa-imprint --psx-scee";
-            }
-            else if (sender == tbxMakeBINJAP)
-            {
+            } else if (sender == tbxMakeBINJAP) {
                 imprintOpt = ":cdxa-imprint --psx-scei";
-            }
-            else
-            {
+            } else {
                 log.Append(Resources.Done);
                 MessageBox.Show(log.ToString());
                 return;
             }
 
             log.AppendLine(Resources.MakeBIN_DRNSF_Launch);
-            try
-            {
-                if (ExternalTool.Invoke("drnsf", $"{imprintOpt} -- \"{dlgMakeBINFile.FileName}\"") != 0)
-                {
+            try {
+                if (ExternalTool.Invoke("drnsf", $"{imprintOpt} -- \"{dlgMakeBINFile.FileName}\"") != 0) {
                     log.AppendLine(Resources.MakeBIN_DRNSF_Error);
                     log.AppendLine();
-                }
-                else
-                {
+                } else {
                     log.AppendLine(Resources.MakeBIN_DRNSF_Success);
                     log.AppendLine();
                 }
-            }
-            catch (FileNotFoundException)
-            {
+            } catch (FileNotFoundException) {
                 log.AppendLine(Resources.MakeBIN_DRNSF_Unavailable);
                 log.AppendLine();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 log.AppendLine(string.Format(Resources.MakeBIN_DRNSF_Fail, ex));
                 log.AppendLine();
             }
@@ -951,7 +875,7 @@ namespace CrashEdit
             MessageBox.Show(log.ToString());
         }
 
-        void tbxConvertVHVB_Click(object sender, EventArgs e)
+        void tbxConvertVHVB_Click(object sender,EventArgs e)
         {
             try
             {
@@ -966,7 +890,7 @@ namespace CrashEdit
                 {
                     ErrorManager.SignalIgnorableError(Resources.ConvertVHVB_Error);
                 }
-                SampleLine[] vb = new SampleLine[vb_data.Length / 16];
+                SampleLine[] vb = new SampleLine [vb_data.Length / 16];
                 byte[] line_data = new byte[16];
                 for (int i = 0; i < vb.Length; i++)
                 {
@@ -983,7 +907,7 @@ namespace CrashEdit
             }
         }
 
-        void tbxConvertVAB_Click(object sender, EventArgs e)
+        void tbxConvertVAB_Click(object sender,EventArgs e)
         {
             try
             {
@@ -993,13 +917,13 @@ namespace CrashEdit
 
                 VH vh = VH.Load(vab_data);
 
-                int vb_offset = 2592 + 32 * 16 * vh.Programs.Count;
+                int vb_offset = 2592+32*16*vh.Programs.Count;
                 if ((vab_data.Length - vb_offset) % 16 != 0)
                 {
                     ErrorManager.SignalIgnorableError(Resources.ConvertVAB_Error);
                 }
                 vh.VBSize = (vab_data.Length - vb_offset) / 16;
-                SampleLine[] vb = new SampleLine[vh.VBSize];
+                SampleLine[] vb = new SampleLine [vh.VBSize];
                 byte[] line_data = new byte[16];
                 for (int i = 0; i < vb.Length; i++)
                 {

@@ -1,15 +1,18 @@
-namespace Crash
+using System.IO;
+using System.Collections.Generic;
+
+namespace CrashEdit.Crash
 {
     public sealed class SceneryEntry : Entry
     {
-        private readonly List<SceneryVertex> vertices;
-        private readonly List<SceneryTriangle> triangles;
-        private readonly List<SceneryQuad> quads;
-        private readonly List<ModelTexture> textures;
-        private readonly List<SceneryColor> colors;
-        private readonly List<ModelExtendedTexture> animatedtextures;
+        private List<SceneryVertex> vertices;
+        private List<SceneryTriangle> triangles;
+        private List<SceneryQuad> quads;
+        private List<ModelTexture> textures;
+        private List<SceneryColor> colors;
+        private List<ModelExtendedTexture> animatedtextures;
 
-        public SceneryEntry(byte[] info, IEnumerable<SceneryVertex> vertices, IEnumerable<SceneryTriangle> triangles, IEnumerable<SceneryQuad> quads, IEnumerable<ModelTexture> textures, IEnumerable<SceneryColor> colors, IEnumerable<ModelExtendedTexture> animatedtextures, bool is_c3, int eid)
+        public SceneryEntry(byte[] info,IEnumerable<SceneryVertex> vertices,IEnumerable<SceneryTriangle> triangles,IEnumerable<SceneryQuad> quads,IEnumerable<ModelTexture> textures,IEnumerable<SceneryColor> colors,IEnumerable<ModelExtendedTexture> animatedtextures,int eid)
             : base(eid)
         {
             Info = info;
@@ -19,8 +22,10 @@ namespace Crash
             this.textures = new List<ModelTexture>(textures);
             this.colors = new List<SceneryColor>(colors);
             this.animatedtextures = new List<ModelExtendedTexture>(animatedtextures);
-            IsC3 = is_c3;
         }
+
+        public override string Title => $"Scenery ({EName})";
+        public override string ImageKey => "ThingBlue";
 
         public override int Type => 3;
         public byte[] Info { get; }
@@ -30,56 +35,45 @@ namespace Crash
         public IList<ModelTexture> Textures => textures;
         public IList<SceneryColor> Colors => colors;
         public IList<ModelExtendedTexture> AnimatedTextures => animatedtextures;
-        public bool IsC3 { get; }
 
         public int XOffset
         {
-            get => BitConv.FromInt32(Info, 0);
-            set => BitConv.ToInt32(Info, 0, value);
+            get => BitConv.FromInt32(Info,0);
+            set => BitConv.ToInt32(Info,0,value);
         }
 
         public int YOffset
         {
-            get => BitConv.FromInt32(Info, 4);
-            set => BitConv.ToInt32(Info, 4, value);
+            get => BitConv.FromInt32(Info,4);
+            set => BitConv.ToInt32(Info,4,value);
         }
 
         public int ZOffset
         {
-            get => BitConv.FromInt32(Info, 8);
-            set => BitConv.ToInt32(Info, 8, value);
+            get => BitConv.FromInt32(Info,8);
+            set => BitConv.ToInt32(Info,8,value);
         }
-
-        public bool IsSky
-        {
-            get => BitConv.FromInt32(Info, 12) != 0;
-            set => BitConv.ToInt32(Info, 12, value ? 1 : 0);
-        }
-
-        public int TPAGCount => BitConv.FromInt32(Info, 0x28);
-
-        public int GetTPAG(int idx) => BitConv.FromInt32(Info, 0x2C + 4 * idx);
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte[7][];
+            byte[][] items = new byte [7][];
             items[0] = Info;
-            items[1] = new byte[Aligner.Align(vertices.Count * 6, 4)];
-            for (int i = 0; i < vertices.Count; i++)
+            items[1] = new byte [Aligner.Align(vertices.Count * 6,4)];
+            for (int i = 0;i < vertices.Count;i++)
             {
-                vertices[i].SaveXY().CopyTo(items[1], (vertices.Count - 1 - i) * 4);
-                vertices[i].SaveZ().CopyTo(items[1], vertices.Count * 4 + i * 2);
+                vertices[i].SaveXY().CopyTo(items[1],(vertices.Count - 1 - i) * 4);
+                vertices[i].SaveZ().CopyTo(items[1],vertices.Count * 4 + i * 2);
             }
-            items[2] = new byte[Aligner.Align(triangles.Count * 6, 4)];
-            for (int i = 0; i < triangles.Count; i++)
+            items[2] = new byte [Aligner.Align(triangles.Count * 6,4)];
+            for (int i = 0;i < triangles.Count;i++)
             {
-                triangles[i].SaveA().CopyTo(items[2], (triangles.Count - 1 - i) * 4);
-                triangles[i].SaveB().CopyTo(items[2], triangles.Count * 4 + i * 2);
+                triangles[i].SaveA().CopyTo(items[2],(triangles.Count - 1 - i) * 4);
+                triangles[i].SaveB().CopyTo(items[2],triangles.Count * 4 + i * 2);
             }
-            items[3] = new byte[quads.Count * 8];
-            for (int i = 0; i < quads.Count; i++)
+            items[3] = new byte [quads.Count * 8];
+            for (int i = 0;i < quads.Count;i++)
             {
-                quads[i].Save().CopyTo(items[3], i * 8);
+                quads[i].Save().CopyTo(items[3],i * 8);
             }
             items[4] = new byte[textures.Count * 12];
             for (int i = 0; i < textures.Count; i++)
@@ -99,7 +93,7 @@ namespace Crash
             {
                 animatedtextures[i].Save().CopyTo(items[6], i * 4);
             }
-            return new UnprocessedEntry(items, EID, Type);
+            return new UnprocessedEntry(items,EID,Type);
         }
 
         public byte[] ToOBJ()
@@ -161,14 +155,14 @@ namespace Crash
                     }
                     ply.WriteLine("ply");
                     ply.WriteLine("format ascii 1.0");
-                    ply.WriteLine("element vertex {0}", Vertices.Count);
+                    ply.WriteLine("element vertex {0}",Vertices.Count);
                     ply.WriteLine("property int x");
                     ply.WriteLine("property int y");
                     ply.WriteLine("property int z");
                     ply.WriteLine("property uchar red");
                     ply.WriteLine("property uchar green");
                     ply.WriteLine("property uchar blue");
-                    ply.WriteLine("element face {0}", polycount);
+                    ply.WriteLine("element face {0}",polycount);
                     ply.WriteLine("property list uchar int vertex_index");
                     ply.WriteLine("end_header");
                     foreach (SceneryVertex vertex in vertices)
@@ -221,7 +215,7 @@ namespace Crash
                     xmlwriter.WriteStartElement("float_array");
                     xmlwriter.WriteAttributeString("id", "positions-array");
                     xmlwriter.WriteAttributeString("count", (vertices.Count * 3).ToString());
-                    foreach (SceneryVertex vertex in vertices)
+                    foreach (NewSceneryVertex vertex in vertices)
                     {
                         xmlwriter.WriteValue(vertex.X + XOffset / 4);
                         xmlwriter.WriteWhitespace(" ");
@@ -256,7 +250,7 @@ namespace Crash
                     xmlwriter.WriteStartElement("float_array");
                     xmlwriter.WriteAttributeString("id", "colors-array");
                     xmlwriter.WriteAttributeString("count", (vertices.Count * 3).ToString());
-                    foreach (SceneryVertex vertex in vertices)
+                    foreach (NewSceneryVertex vertex in vertices)
                     {
                         if (vertex.Color < Colors.Count)
                         {

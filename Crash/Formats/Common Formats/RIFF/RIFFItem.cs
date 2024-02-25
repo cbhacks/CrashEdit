@@ -1,4 +1,6 @@
-namespace Crash
+using System;
+
+namespace CrashEdit.Crash
 {
     public abstract class RIFFItem
     {
@@ -7,9 +9,9 @@ namespace Crash
         public RIFFItem(string name)
         {
             if (name == null)
-                throw new ArgumentNullException(nameof(name));
+                throw new ArgumentNullException("name");
             if (name.Length != 4)
-                throw new ArgumentException("Value must be 4 characters long.", nameof(name));
+                throw new ArgumentException("Value must be 4 characters long.","name");
             this.name = name;
         }
 
@@ -19,7 +21,7 @@ namespace Crash
             set
             {
                 if (name.Length != 4)
-                    throw new ArgumentException("Value must be 4 characters long.", nameof(name));
+                    throw new ArgumentException("Value must be 4 characters long.", "name");
                 name = value;
             }
         }

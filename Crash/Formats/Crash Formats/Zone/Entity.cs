@@ -1,8 +1,8 @@
 using System.Reflection;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
-    public sealed class Entity
+    public sealed class Entity : IResource
     {
         private static readonly Dictionary<short, FieldInfo> propertyfields;
 
@@ -154,6 +154,13 @@ namespace Crash
                 }
             }
         }
+
+        public string Title =>
+            (Name != null && ID != null) ? $"{Name} [ID {ID}]" :
+            (ID != null) ? $"Entity [ID {ID}]" :
+            "Entity";
+
+        public string ImageKey => "Arrow";
 
         //public int? Mode
         //{

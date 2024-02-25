@@ -1,4 +1,6 @@
-﻿namespace Crash
+﻿using System;
+
+namespace CrashEdit.Crash
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public sealed class GOOLInstructionAttribute : Attribute

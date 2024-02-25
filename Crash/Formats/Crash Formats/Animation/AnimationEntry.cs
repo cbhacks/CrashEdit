@@ -1,28 +1,33 @@
-namespace Crash
+using System.Collections.Generic;
+
+namespace CrashEdit.Crash
 {
     public sealed class AnimationEntry : Entry
     {
-        private readonly List<Frame> frames;
-
-        public AnimationEntry(IEnumerable<Frame> frames, bool isnew, int eid) : base(eid)
+        public AnimationEntry(IEnumerable<Frame> frames,bool isnew,int eid) : base(eid)
         {
-            this.frames = new List<Frame>(frames);
+            Frames.AddRange(frames);
             IsNew = isnew;
         }
 
+        public override string Title => $"Animation ({EName})";
+        public override string ImageKey => "ThingLime";
+
         public override int Type => 1;
-        public IList<Frame> Frames => frames;
+
+        [SubresourceList]
+        public List<Frame> Frames { get; } = new List<Frame>();
 
         public bool IsNew { get; }
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte[frames.Count][];
-            for (int i = 0; i < frames.Count; i++)
+            byte[][] items = new byte [Frames.Count][];
+            for (int i = 0;i < Frames.Count;i++)
             {
-                items[i] = frames[i].Save();
+                items[i] = Frames[i].Save();
             }
-            return new UnprocessedEntry(items, EID, Type);
+            return new UnprocessedEntry(items,EID,Type);
         }
     }
 }

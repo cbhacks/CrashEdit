@@ -1,4 +1,4 @@
-﻿namespace Crash.UI
+﻿namespace CrashEdit.CrashUI
 {
     partial class GameVersionForm
     {

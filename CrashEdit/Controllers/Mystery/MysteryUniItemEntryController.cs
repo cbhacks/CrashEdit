@@ -1,15 +1,19 @@
-using Crash;
+using CrashEdit.Crash;
+using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
-    public abstract class MysteryUniItemEntryController : EntryController
+    [OrphanLegacyController(typeof(MysteryUniItemEntry))]
+    public class MysteryUniItemEntryController : EntryController
     {
-        public MysteryUniItemEntryController(EntryChunkController entrychunkcontroller, MysteryUniItemEntry mysteryentry) : base(entrychunkcontroller, mysteryentry)
+        public MysteryUniItemEntryController(MysteryUniItemEntry mysteryentry, SubcontrollerGroup parentGroup) : base(mysteryentry, parentGroup)
         {
             MysteryEntry = mysteryentry;
         }
 
-        protected override Control CreateEditor()
+        public override bool EditorAvailable => true;
+
+        public override Control CreateEditor()
         {
             return new MysteryBox(MysteryEntry.Data);
         }

@@ -1,4 +1,4 @@
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntryType(7, GameVersion.Crash2)]
     [EntryType(7, GameVersion.Crash3)]

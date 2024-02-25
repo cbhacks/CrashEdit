@@ -1,8 +1,8 @@
 using System.Reflection;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
-    public abstract class Chunk
+    public abstract class Chunk : IResource
     {
         public const int Length = 65536;
         public const short Magic = 0x1234;
@@ -51,13 +51,16 @@ namespace Crash
             return new UnprocessedChunk(data, nsf);
         }
 
+        public abstract string Title { get; }
+        public abstract string ImageKey { get; }
+
         public abstract short Type { get; }
 
-        public abstract UnprocessedChunk Unprocess(int chunkid);
+        public abstract UnprocessedChunk Unprocess();
 
-        public virtual byte[] Save(int chunkid)
+        public virtual byte[] Save()
         {
-            return Unprocess(chunkid).Save(chunkid);
+            return Unprocess().Save();
         }
 
         public NSF NSF { get; set; }

@@ -1,4 +1,6 @@
-﻿namespace CrashEdit.Forms
+﻿using System.Windows.Forms;
+
+namespace CrashEdit.CE.Forms
 {
     public partial class ProgressBarForm : Form
     {
