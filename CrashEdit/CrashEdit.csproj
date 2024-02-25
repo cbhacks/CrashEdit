@@ -30,7 +30,6 @@
     <None Remove="CopyLibs.bat" />
     <None Remove="CopyLibs32.bat" />
     <None Remove="CopyLibs64.bat" />
-    <None Remove="Render\Shaders\axes.vert" />
     <None Remove="Render\Shaders\box-debug.vert" />
     <None Remove="Render\Shaders\crash1-generic.frag" />
     <None Remove="Render\Shaders\crash1-generic.vert" />
@@ -52,7 +51,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Render\Shaders\axes.vert" />
     <EmbeddedResource Include="Render\Shaders\box-debug.vert" />
     <EmbeddedResource Include="Render\Shaders\crash1-generic.frag" />
     <EmbeddedResource Include="Render\Shaders\crash1-generic.vert" />

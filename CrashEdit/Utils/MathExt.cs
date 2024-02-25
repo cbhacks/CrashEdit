@@ -105,6 +105,14 @@ namespace CrashEdit
             v.Z = 0;
         }
 
+        public static Vector3 Abs(this Vector3 v)
+        {
+            v.X = Math.Abs(v.X);
+            v.Y = Math.Abs(v.Y);
+            v.Z = Math.Abs(v.Z);
+            return v;
+        }
+
         public static int Log2(int v)
         {
             for (int i = 31; i-- > 0;)

@@ -8,7 +8,6 @@ namespace CrashEdit
     {
         internal static readonly Dictionary<string, ShaderInfo> Infos = new()
         {
-            { "axes",           new ShaderInfo("axes.vert", "default4.frag") },
             { "line",           new ShaderInfo("line-static.vert", "default4.frag") },
             { "line-debug",     new ShaderInfo("line-debug.vert", "default4.frag", func: RenderLineDebug) },
             { "crash1",         new ShaderInfo("crash1-generic.vert", "crash1-generic.frag") },

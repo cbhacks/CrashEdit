@@ -98,24 +98,22 @@ namespace CrashEdit
         private static readonly Dictionary<int, Vector3[]> GridPosCache = new();
         protected static ShaderContext shaders;
         protected static FontTable fontTable;
-        protected static Library fontLib = new();
+        protected static readonly Library fontLib = new();
 
         protected static int texTpages;
         protected static int texSprites;
         protected static int texFont;
-        protected static VBO vboAxes;
         protected static VBO vboTris;
         protected static VBO vboLines;
         protected static VBO vboLinesThick;
         protected static VBO vboSprites;
         protected static VBO vboText;
         protected static VBO vboOctree;
-        public static List<string> dbgContextDir = [];
+        public static readonly List<string> dbgContextDir = [];
 
         protected static readonly GLControlSettings default_graphics_settings = new() { APIVersion = new(4, 3), DepthBits = 24, Flags = ContextFlags.Debug | ContextFlags.ForwardCompatible };
         #endregion
 
-        protected VAO vaoAxes;
         protected VAO vaoTris;
         protected VAO vaoLines;
         protected VAO vaoLinesThick;
@@ -278,7 +276,6 @@ namespace CrashEdit
 
         private static void LoadGLStatic()
         {
-            vboAxes = new(AxesPos.Length);
             vboTris = new();
             vboLines = new();
             vboLinesThick = new();
@@ -322,7 +319,6 @@ namespace CrashEdit
             fontTable.BindFontGL(texFont);
 
             // init vertex array objects
-            vaoAxes = new VAO(shaders.GetShader("axes"), PrimitiveType.Lines, vboAxes);
             vaoSprites = new VAO(shaders.GetShader("sprite"), PrimitiveType.Triangles, vboSprites);
             vaoLines = new VAO(shaders.GetShader("line"), PrimitiveType.Lines, vboLines);
             vaoLinesThick = new VAO(shaders.GetShader("line"), PrimitiveType.Lines, vboLinesThick);
@@ -333,12 +329,6 @@ namespace CrashEdit
             vaoText.ZBufDisable = true;
             vaoText.ZBufDisableRead = true;
             vaoLinesThick.LineWidth = 5;
-
-            vaoAxes.DiscardVerts();
-            for (int i = 0; i < AxesPos.Length; ++i)
-            {
-                vaoAxes.PushAttrib(trans: AxesPos[i]);
-            }
 
             qryGpuTime = GL.GenQuery();
 
@@ -553,7 +543,7 @@ namespace CrashEdit
 
             if (Settings.Default.DisplayAnimGrid)
             {
-                RenderAxes(new Vector3(0));
+                AddAxes(new Vector3(0));
                 AddLineGrid(Settings.Default.AnimGridLen, (Rgba)Color4.Gray);
             }
         }
@@ -568,10 +558,13 @@ namespace CrashEdit
             vaoSprites.RenderAndDiscard(render);
         }
 
-        private void RenderAxes(Vector3 pos)
+        private void AddAxes(Vector3 pos)
         {
-            vaoAxes.UserTrans = pos;
-            vaoAxes.Render(render);
+            for (int i = 0; i < AxesPos.Length; ++i)
+            {
+                Vector3 color = AxesPos[i].Abs().Normalized();
+                vaoLines.PushAttrib(trans: AxesPos[i] + pos, rgba: (Rgba)new Color4(color.X, color.Y, color.Z, 1));
+            }
         }
 
 
@@ -1207,7 +1200,6 @@ namespace CrashEdit
 
             GL.DeleteQuery(qryGpuTime);
 
-            vaoAxes?.Dispose();
             vaoSprites?.Dispose();
             vaoLines?.Dispose();
             vaoLinesThick?.Dispose();
