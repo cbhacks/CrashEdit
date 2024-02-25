@@ -15,13 +15,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Core/**/*.cs" />
-        <Compile Include="Crash/**/*.cs" />
-        <EmbeddedResource Include="Embeds/Images/*.gif" />
-        <EmbeddedResource Include="Embeds/Images/*.png" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Compile Remove="CopyPtr\**" />
       <Compile Remove="Crash.UI\**" />
       <Compile Remove="CrashEdit\**" />
