@@ -1,4 +1,4 @@
-﻿namespace CrashEdit
+﻿namespace CrashEdit.CE
 {
     // scaling factors used across different types of art
     public static class GameScales

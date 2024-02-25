@@ -8,8 +8,8 @@ namespace CrashEdit.Crash
         public OldModelEntry(byte[] info, IEnumerable<OldModelPolygon> polygons, IEnumerable<OldModelStruct> structs, int eid) : base(eid)
         {
             if (polygons == null)
-                throw new ArgumentNullException("polygons");
-            Info = info ?? throw new ArgumentNullException("info");
+                throw new ArgumentNullException(nameof(polygons));
+            Info = info ?? throw new ArgumentNullException(nameof(info));
             this.polygons = new List<OldModelPolygon>(polygons);
             this.structs = new List<OldModelStruct>(structs);
         }

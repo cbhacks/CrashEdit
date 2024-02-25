@@ -5,7 +5,7 @@ namespace CrashEdit.Crash
         public static ProtoNSD Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length < 0x408)
             {
                 ErrorManager.SignalError("ProtoNSD: Data is too short");
@@ -44,7 +44,7 @@ namespace CrashEdit.Crash
             if (hashkeymap == null)
                 throw new ArgumentNullException("firstentries");
             if (index == null)
-                throw new ArgumentNullException("index");
+                throw new ArgumentNullException(nameof(index));
             HashKeyMap = hashkeymap;
             ChunkCount = chunkcount;
             Index = new List<NSDLink>(index);

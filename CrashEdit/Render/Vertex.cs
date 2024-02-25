@@ -1,7 +1,7 @@
 ﻿using OpenTK.Mathematics;
 using System.Runtime.InteropServices;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     [StructLayout(LayoutKind.Sequential, Size = 4)]
     public struct Rgba

@@ -41,14 +41,14 @@ namespace CrashEdit.Crash
             return (int)checksum;
         }
 
-        public static UnprocessedChunk Load(byte[] data, NSF nsf)
+        public static UnprocessedChunk Load(byte[] data)
         {
             short magic = BitConv.FromInt16(data, 0);
             if (magic != Magic)
             {
                 ErrorManager.SignalIgnorableError("Chunk: Magic number is wrong");
             }
-            return new UnprocessedChunk(data, nsf);
+            return new UnprocessedChunk(data);
         }
 
         public abstract string Title { get; }
@@ -61,13 +61,6 @@ namespace CrashEdit.Crash
         public virtual byte[] Save()
         {
             return Unprocess().Save();
-        }
-
-        public NSF NSF { get; set; }
-
-        public Chunk(NSF nsf)
-        {
-            NSF = nsf;
         }
     }
 }

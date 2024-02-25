@@ -5,13 +5,13 @@ namespace CrashEdit.Crash
         public static SceneryTriangle Load(byte[] adata, byte[] bdata)
         {
             if (adata == null)
-                throw new ArgumentNullException("adata");
+                throw new ArgumentNullException(nameof(adata));
             if (bdata == null)
-                throw new ArgumentNullException("bdata");
+                throw new ArgumentNullException(nameof(bdata));
             if (adata.Length != 4)
-                throw new ArgumentException("Value must be 4 bytes long.", "adata");
+                throw new ArgumentException("Value must be 4 bytes long.", nameof(adata));
             if (bdata.Length != 2)
-                throw new ArgumentException("Value must be 2 bytes long.", "bdata");
+                throw new ArgumentException("Value must be 2 bytes long.", nameof(bdata));
             int avalue = BitConv.FromInt32(adata, 0);
             short bvalue = BitConv.FromInt16(bdata, 0);
             int vertexa = (avalue >> 8) & 0xFFF;
@@ -25,13 +25,13 @@ namespace CrashEdit.Crash
         public SceneryTriangle(int vertexa, int vertexb, int vertexc, short texture, bool animated)
         {
             if (vertexa < 0 || vertexa > 0xFFF)
-                throw new ArgumentOutOfRangeException("vertexa");
+                throw new ArgumentOutOfRangeException(nameof(vertexa));
             if (vertexb < 0 || vertexb > 0xFFF)
-                throw new ArgumentOutOfRangeException("vertexb");
+                throw new ArgumentOutOfRangeException(nameof(vertexb));
             if (vertexc < 0 || vertexc > 0xFFF)
-                throw new ArgumentOutOfRangeException("vertexc");
+                throw new ArgumentOutOfRangeException(nameof(vertexc));
             if (texture < 0 || texture > 0x7FF)
-                throw new ArgumentOutOfRangeException("texture");
+                throw new ArgumentOutOfRangeException(nameof(texture));
             VertexA = vertexa;
             VertexB = vertexb;
             VertexC = vertexc;

@@ -7,8 +7,8 @@ namespace CrashEdit.Crash
         public RIFFData(string name, byte[] data) : base(name)
         {
             if (name == null)
-                throw new ArgumentNullException("name");
-            this.data = data ?? throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(name));
+            this.data = data ?? throw new ArgumentNullException(nameof(data));
         }
 
         public override int Length => data.Length + 8;

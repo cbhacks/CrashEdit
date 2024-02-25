@@ -5,9 +5,9 @@ namespace CrashEdit.Crash
         public static SceneryQuad Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length != 8)
-                throw new ArgumentException("Value must be 8 bytes long.", "data");
+                throw new ArgumentException("Value must be 8 bytes long.", nameof(data));
             int worda = BitConv.FromInt32(data, 0);
             int wordb = BitConv.FromInt32(data, 4);
             int vertexa = (worda >> 8) & 0xFFF;
@@ -23,13 +23,13 @@ namespace CrashEdit.Crash
         public SceneryQuad(int vertexa, int vertexb, int vertexc, int vertexd, short texture, byte unknown, bool animated)
         {
             if (vertexa < 0 || vertexa > 0xFFF)
-                throw new ArgumentOutOfRangeException("vertexa");
+                throw new ArgumentOutOfRangeException(nameof(vertexa));
             if (vertexb < 0 || vertexb > 0xFFF)
-                throw new ArgumentOutOfRangeException("vertexb");
+                throw new ArgumentOutOfRangeException(nameof(vertexb));
             if (vertexc < 0 || vertexc > 0xFFF)
-                throw new ArgumentOutOfRangeException("vertexc");
+                throw new ArgumentOutOfRangeException(nameof(vertexc));
             if (vertexd < 0 || vertexd > 0xFFF)
-                throw new ArgumentOutOfRangeException("vertexd");
+                throw new ArgumentOutOfRangeException(nameof(vertexd));
             VertexA = vertexa;
             VertexB = vertexb;
             VertexC = vertexc;

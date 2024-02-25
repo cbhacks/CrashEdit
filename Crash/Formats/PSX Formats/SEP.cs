@@ -8,9 +8,9 @@ namespace CrashEdit.Crash
         public static SEP Load(byte[] data, int seqcount)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (seqcount < 0)
-                throw new ArgumentOutOfRangeException("seqcount");
+                throw new ArgumentOutOfRangeException(nameof(seqcount));
             // All SEP/SEQ stuff is big-endian, like MIDI
             if (data.Length < 6)
             {
@@ -66,7 +66,7 @@ namespace CrashEdit.Crash
         public SEP(IEnumerable<SEQ> seqs)
         {
             if (seqs == null)
-                throw new ArgumentNullException("seqs");
+                throw new ArgumentNullException(nameof(seqs));
             this.seqs = new List<SEQ>(seqs);
         }
 

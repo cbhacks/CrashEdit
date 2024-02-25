@@ -5,7 +5,7 @@ namespace CrashEdit.Crash
         public static OldSLSTDelta Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length < 8)
             {
                 ErrorManager.SignalError("OldSLSTDelta: Data is too short");
@@ -59,11 +59,11 @@ namespace CrashEdit.Crash
         public OldSLSTDelta(IEnumerable<short> removenodes, IEnumerable<short> addnodes, IEnumerable<short> swapnodes)
         {
             if (removenodes == null)
-                throw new ArgumentNullException("removenodes");
+                throw new ArgumentNullException(nameof(removenodes));
             if (addnodes == null)
-                throw new ArgumentNullException("addnodes");
+                throw new ArgumentNullException(nameof(addnodes));
             if (swapnodes == null)
-                throw new ArgumentNullException("swapnodes");
+                throw new ArgumentNullException(nameof(swapnodes));
             this.removenodes = new List<short>(removenodes);
             this.addnodes = new List<short>(addnodes);
             this.swapnodes = new List<short>(swapnodes);

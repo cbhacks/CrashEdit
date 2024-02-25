@@ -49,7 +49,7 @@ namespace CrashEdit.CE
         public static bool SaveFile(byte[] data, params string[] filters)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             savefiledlg.Filter = string.Join("|", filters);
             if (savefiledlg.ShowDialog(Owner) == DialogResult.OK)
             {
@@ -65,7 +65,7 @@ namespace CrashEdit.CE
         public static bool SaveFile(string defaultname, byte[] data, params string[] filters)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             savefiledlg.Filter = string.Join("|", filters);
             savefiledlg.FileName = defaultname;
             if (savefiledlg.ShowDialog(Owner) == DialogResult.OK)

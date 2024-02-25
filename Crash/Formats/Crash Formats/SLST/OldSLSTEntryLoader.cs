@@ -9,7 +9,7 @@ namespace CrashEdit.Crash
         public override Entry Load(byte[][] items, int eid)
         {
             if (items == null)
-                throw new ArgumentNullException("items");
+                throw new ArgumentNullException(nameof(items));
             if (items.Length < 2)
                 ErrorManager.SignalError("OldSLSTEntry: Item count is wrong");
             OldSLSTSource sourcestart = OldSLSTSource.Load(items[0]);

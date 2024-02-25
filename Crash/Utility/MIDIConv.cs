@@ -5,11 +5,11 @@ namespace CrashEdit.Crash
         public static int From3BE(byte[] str, int offset)
         {
             if (str == null)
-                throw new ArgumentNullException("str");
+                throw new ArgumentNullException(nameof(str));
             if (offset < 0)
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 3 > str.Length)
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
             int result = 0;
             result |= str[offset + 0] << 8 * 2;
             result |= str[offset + 1] << 8 * 1;
@@ -20,13 +20,13 @@ namespace CrashEdit.Crash
         public static void To3BE(byte[] str, int offset, int value)
         {
             if (str == null)
-                throw new ArgumentNullException("str");
+                throw new ArgumentNullException(nameof(str));
             if (offset < 0)
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 3 > str.Length)
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
             if ((value & 0xFFFFFF) != value)
-                throw new ArgumentOutOfRangeException("value");
+                throw new ArgumentOutOfRangeException(nameof(value));
             str[offset + 0] = (byte)((value >> 8 * 2) & 0xFF);
             str[offset + 1] = (byte)((value >> 8 * 1) & 0xFF);
             str[offset + 2] = (byte)((value >> 8 * 0) & 0xFF);

@@ -7,7 +7,7 @@ namespace CrashEdit.Crash
         public RIFF(string name) : base(name)
         {
             if (name == null)
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             items = new List<RIFFItem>();
         }
 

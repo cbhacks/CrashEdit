@@ -1,13 +1,13 @@
 namespace CrashEdit.Crash
 {
-    public struct OldFrameVertex : IPosition
+    public readonly struct OldFrameVertex
     {
         public static OldFrameVertex Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length != 6)
-                throw new ArgumentException("Value must be 6 bytes long.", "data");
+                throw new ArgumentException("Value must be 6 bytes long.", nameof(data));
             byte x = data[0];
             byte y = data[1];
             byte z = data[2];
@@ -33,10 +33,12 @@ namespace CrashEdit.Crash
         public sbyte NormalX { get; }
         public sbyte NormalY { get; }
         public sbyte NormalZ { get; }
-
-        double IPosition.X => X;
-        double IPosition.Y => Y;
-        double IPosition.Z => Z;
+        public byte R => (byte)NormalX;
+        public byte G => (byte)NormalY;
+        public byte B => (byte)NormalZ;
+        public float Red => R / 255f;
+        public float Green => G / 255f;
+        public float Blue => B / 255f;
 
         public byte[] Save()
         {

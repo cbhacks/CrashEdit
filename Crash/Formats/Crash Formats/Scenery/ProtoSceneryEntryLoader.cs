@@ -6,7 +6,7 @@ namespace CrashEdit.Crash
         public override Entry Load(byte[][] items, int eid)
         {
             if (items == null)
-                throw new ArgumentNullException("items");
+                throw new ArgumentNullException(nameof(items));
             if (items.Length != 3)
             {
                 ErrorManager.SignalError("ProtoSceneryEntry: Wrong number of items");

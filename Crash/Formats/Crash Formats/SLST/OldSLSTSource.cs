@@ -5,7 +5,7 @@ namespace CrashEdit.Crash
         public static OldSLSTSource Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length < 4)
             {
                 ErrorManager.SignalError("OldSLSTSource: Data is too short");
@@ -27,10 +27,7 @@ namespace CrashEdit.Crash
             OldSLSTPolygonID[] polygons = new OldSLSTPolygonID[count];
             for (int i = 0; i < count; i++)
             {
-                short id = (short)(BitConv.FromInt16(data, 4 + i * 2) & 0x0FFF);
-                byte world = (byte)((data[5+i*2] >> 4) & 0x7);
-                byte copy = (byte)((data[5+i*2] >> 7) & 0x1);
-                polygons[i] = new OldSLSTPolygonID(id, world, copy);
+                polygons[i] = new OldSLSTPolygonID(BitConv.FromInt16(data, 4 + i * 2));
             }
             return new OldSLSTSource(polygons);
         }
@@ -40,7 +37,7 @@ namespace CrashEdit.Crash
         public OldSLSTSource(IEnumerable<OldSLSTPolygonID> polygons)
         {
             if (polygons == null)
-                throw new ArgumentNullException("polygons");
+                throw new ArgumentNullException(nameof(polygons));
             this.polygons = new List<OldSLSTPolygonID>(polygons);
         }
 
@@ -57,7 +54,7 @@ namespace CrashEdit.Crash
             BitConv.ToInt16(data, 2, 0);
             for (int i = 0; i < polygons.Count; i++)
             {
-                BitConv.ToInt16(data, 4+i*2, (short)((ushort)polygons[i].ID | polygons[i].World << 12 | polygons[i].Copy << 15));
+                BitConv.ToInt16(data, 4 + i * 2, (short)polygons[i].Poly);
             }
             return data;
         }

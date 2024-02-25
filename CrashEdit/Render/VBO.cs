@@ -1,6 +1,6 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class VBO : IDisposable
     {

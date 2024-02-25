@@ -3,7 +3,7 @@ using SharpFont;
 using SharpFont.Gdi;
 using System.Diagnostics;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public class FontTable : Dictionary<uint, FontTableEntry>
     {

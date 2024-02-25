@@ -6,7 +6,7 @@ namespace CrashEdit.Crash
 
         public OldMusicEntry(int vb0eid, int vb1eid, int vb2eid, int vb3eid, VH vh, SEP sep, int eid) : base(eid)
         {
-            this.vh = vh ?? throw new ArgumentNullException("vh");
+            this.vh = vh ?? throw new ArgumentNullException(nameof(vh));
             Tracks.AddRange(sep.SEQs);
             VB0EID = vb0eid;
             VB1EID = vb1eid;

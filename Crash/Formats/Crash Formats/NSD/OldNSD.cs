@@ -5,7 +5,7 @@ namespace CrashEdit.Crash
         public static OldNSD Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length < 1672)
             {
                 ErrorManager.SignalError("OldNSD: Data is too short");
@@ -74,21 +74,21 @@ namespace CrashEdit.Crash
             if (hashkeymap == null)
                 throw new ArgumentNullException("firstentries");
             if (leveldata == null)
-                throw new ArgumentNullException("leveldata");
+                throw new ArgumentNullException(nameof(leveldata));
             if (compressedchunkinfo == null)
-                throw new ArgumentNullException("compressedchunkinfo");
+                throw new ArgumentNullException(nameof(compressedchunkinfo));
             if (index == null)
-                throw new ArgumentNullException("index");
+                throw new ArgumentNullException(nameof(index));
             if (goolmap == null)
-                throw new ArgumentNullException("goolmap");
+                throw new ArgumentNullException(nameof(goolmap));
             if (hashkeymap.Length != 256)
                 throw new ArgumentException("Value must be 256 ints long.", "firstentries");
             if (leveldata.Length != 4)
-                throw new ArgumentException("Value must be 4 ints long.", "leveldata");
+                throw new ArgumentException("Value must be 4 ints long.", nameof(leveldata));
             if (compressedchunkinfo.Length != 64)
-                throw new ArgumentException("Value must be 64 ints long.", "compressedchunkinfo");
+                throw new ArgumentException("Value must be 64 ints long.", nameof(compressedchunkinfo));
             if (goolmap.Length != 64)
-                throw new ArgumentException("Value must be 64 ints long.", "goolmap");
+                throw new ArgumentException("Value must be 64 ints long.", nameof(goolmap));
             HashKeyMap = hashkeymap;
             ChunkCount = chunkcount;
             LevelData = leveldata;
@@ -102,7 +102,7 @@ namespace CrashEdit.Crash
             Camera = camera;
             Unknown = unknown;
             GOOLMap = goolmap;
-            ExtraData = extradata ?? throw new ArgumentNullException("extradata");
+            ExtraData = extradata ?? throw new ArgumentNullException(nameof(extradata));
         }
 
         public int[] HashKeyMap { get; set; }

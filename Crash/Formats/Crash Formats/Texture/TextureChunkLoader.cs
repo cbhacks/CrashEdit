@@ -6,7 +6,7 @@ namespace CrashEdit.Crash
         public override Chunk Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             return new TextureChunk(data);
         }
     }

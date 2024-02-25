@@ -5,8 +5,10 @@ using OpenTK.WinForms;
 using SharpFont;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using CrashEdit.Crash;
+using CrashEdit.CE.Properties;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     [Flags]
     public enum TextRenderFlags

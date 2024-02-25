@@ -5,9 +5,9 @@ namespace CrashEdit.Crash
         public static ProtoSceneryPolygon Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length != 12)
-                throw new ArgumentException("Value must be 12 bytes long.", "data");
+                throw new ArgumentException("Value must be 12 bytes long.", nameof(data));
             int[] words = new int[3] { BitConv.FromInt32(data, 0), BitConv.FromInt32(data, 4), BitConv.FromInt32(data, 8) };
             short texture = (short)(words[0] & 0xFFF);
             int page = words[0] >> 12 & 0x7;

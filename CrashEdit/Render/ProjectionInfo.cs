@@ -1,6 +1,6 @@
 ﻿using OpenTK.Mathematics;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public struct ProjectionInfo
     {

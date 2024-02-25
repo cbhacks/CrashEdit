@@ -5,9 +5,9 @@ namespace CrashEdit.Crash
         public static OldModelPolygon Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length != 8)
-                throw new ArgumentException("Value must be 8 bytes long.", "data");
+                throw new ArgumentException("Value must be 8 bytes long.", nameof(data));
             short vertexa = BitConv.FromInt16(data, 0);
             short vertexb = BitConv.FromInt16(data, 2);
             short vertexc = BitConv.FromInt16(data, 4);

@@ -3,7 +3,7 @@ using OpenTK.Mathematics;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class VAO : IDisposable
     {

@@ -5,9 +5,9 @@ namespace CrashEdit.Crash
         public static SampleLine Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length != 16)
-                throw new ArgumentException("Value must be 16 bytes long.", "data");
+                throw new ArgumentException("Value must be 16 bytes long.", nameof(data));
             byte[] newdata = new byte[14];
             Array.Copy(data, 2, newdata, 0, 14);
             return new SampleLine(data[0], (SampleLineFlags)data[1], newdata);
@@ -19,9 +19,9 @@ namespace CrashEdit.Crash
         public SampleLine(byte info, SampleLineFlags flags, byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length != 14)
-                throw new ArgumentException("Value must be 14 bytes long.", "data");
+                throw new ArgumentException("Value must be 14 bytes long.", nameof(data));
             this.info = info;
             Flags = flags;
             this.data = data;

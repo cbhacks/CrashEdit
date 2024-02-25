@@ -8,7 +8,7 @@ namespace CrashEdit.Crash
         public override Entry Load(byte[][] items, int eid)
         {
             if (items == null)
-                throw new ArgumentNullException("items");
+                throw new ArgumentNullException(nameof(items));
             if (items.Length < 2)
             {
                 ErrorManager.SignalError("OldZoneEntry: Wrong number of items");

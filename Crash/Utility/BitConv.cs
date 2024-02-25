@@ -5,11 +5,11 @@ namespace CrashEdit.Crash
         public static short FromInt16(byte[] str, int offset)
         {
             if (str == null)
-                throw new ArgumentNullException("str");
+                throw new ArgumentNullException(nameof(str));
             if (offset < 0)
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 2 > str.Length)
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
             int result = 0;
             result |= str[offset + 0] << 8 * 0;
             result |= str[offset + 1] << 8 * 1;
@@ -19,11 +19,11 @@ namespace CrashEdit.Crash
         public static int FromInt24(byte[] str, int offset)
         {
             if (str == null)
-                throw new ArgumentNullException("str");
+                throw new ArgumentNullException(nameof(str));
             if (offset < 0)
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 3 > str.Length)
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
             int result = 0;
             result |= str[offset + 0] << 8 * 0;
             result |= str[offset + 1] << 8 * 1;
@@ -41,11 +41,11 @@ namespace CrashEdit.Crash
         public static int FromInt32(byte[] str, int offset)
         {
             if (str == null)
-                throw new ArgumentNullException("str");
+                throw new ArgumentNullException(nameof(str));
             if (offset < 0)
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 4 > str.Length)
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
             int result = 0;
             result |= str[offset + 0] << 8 * 0;
             result |= str[offset + 1] << 8 * 1;
@@ -57,11 +57,11 @@ namespace CrashEdit.Crash
         public static void ToInt16(byte[] str, int offset, short value)
         {
             if (str == null)
-                throw new ArgumentNullException("str");
+                throw new ArgumentNullException(nameof(str));
             if (offset < 0)
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 2 > str.Length)
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
             str[offset] = (byte)value;
             str[offset + 1] = (byte)(value >> 8);
         }
@@ -69,13 +69,13 @@ namespace CrashEdit.Crash
         public static void ToInt24(byte[] str, int offset, int value)
         {
             if (str == null)
-                throw new ArgumentNullException("str");
+                throw new ArgumentNullException(nameof(str));
             if (offset < 0)
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 3 > str.Length)
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
             if (value < -8388608 || value > 8388607)
-                throw new ArgumentOutOfRangeException("value");
+                throw new ArgumentOutOfRangeException(nameof(value));
             str[offset] = (byte)value;
             str[offset + 1] = (byte)(value >> 8);
             str[offset + 2] = (byte)(value >> 8 * 2);
@@ -84,11 +84,11 @@ namespace CrashEdit.Crash
         public static void ToInt32(byte[] str, int offset, int value)
         {
             if (str == null)
-                throw new ArgumentNullException("str");
+                throw new ArgumentNullException(nameof(str));
             if (offset < 0)
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 4 > str.Length)
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
             str[offset] = (byte)value;
             str[offset + 1] = (byte)(value >> 8);
             str[offset + 2] = (byte)(value >> 8 * 2);

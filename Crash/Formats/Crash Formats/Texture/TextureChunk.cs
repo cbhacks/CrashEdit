@@ -4,7 +4,7 @@ namespace CrashEdit.Crash
     {
         public TextureChunk(byte[] data)
         {
-            Data = data ?? throw new ArgumentNullException("data");
+            Data = data ?? throw new ArgumentNullException(nameof(data));
         }
 
         public override string Title => $"Texture Chunk ({EName})";

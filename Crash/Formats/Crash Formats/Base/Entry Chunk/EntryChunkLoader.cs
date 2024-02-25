@@ -5,7 +5,7 @@ namespace CrashEdit.Crash
         public sealed override Chunk Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length != Chunk.Length)
                 throw new ArgumentException("Data must be 65536 bytes long.");
             int chunkid = BitConv.FromInt32(data, 4);

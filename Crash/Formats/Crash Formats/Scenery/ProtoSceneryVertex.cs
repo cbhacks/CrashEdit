@@ -1,13 +1,13 @@
 namespace CrashEdit.Crash
 {
-    public struct ProtoSceneryVertex : IPosition
+    public readonly struct ProtoSceneryVertex
     {
         public static ProtoSceneryVertex Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length != 6)
-                throw new ArgumentException("Value must be 6 bytes long.", "data");
+                throw new ArgumentException("Value must be 6 bytes long.", nameof(data));
             short x = BitConv.FromInt16(data, 0);
             short y = BitConv.FromInt16(data, 2);
             short z = BitConv.FromInt16(data, 4);
@@ -24,9 +24,6 @@ namespace CrashEdit.Crash
         public short X { get; }
         public short Y { get; }
         public short Z { get; }
-        double IPosition.X => X;
-        double IPosition.Y => Y;
-        double IPosition.Z => Z;
 
         public byte[] Save()
         {

@@ -4,7 +4,7 @@ namespace CrashEdit.Crash
     {
         public MysteryUniItemEntry(byte[] data, int eid) : base(eid)
         {
-            Data = data ?? throw new ArgumentNullException("data");
+            Data = data ?? throw new ArgumentNullException(nameof(data));
         }
 
         public byte[] Data { get; }

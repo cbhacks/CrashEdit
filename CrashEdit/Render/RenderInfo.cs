@@ -1,7 +1,7 @@
 ﻿using OpenTK.Mathematics;
 using System.Diagnostics;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public enum RendererMoveMode { Free, Anchored }
 

@@ -5,7 +5,7 @@ namespace CrashEdit.Crash
         public static SampleSet Load(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length % 16 != 0)
             {
                 ErrorManager.SignalError("SampleSet: Length is invalid");
@@ -24,7 +24,7 @@ namespace CrashEdit.Crash
         public SampleSet(IEnumerable<SampleLine> samplelines)
         {
             if (samplelines == null)
-                throw new ArgumentNullException("samplelines");
+                throw new ArgumentNullException(nameof(samplelines));
             SampleLines = new List<SampleLine>(samplelines);
         }
 

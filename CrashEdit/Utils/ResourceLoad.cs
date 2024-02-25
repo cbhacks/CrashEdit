@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public static class ResourceLoad
     {

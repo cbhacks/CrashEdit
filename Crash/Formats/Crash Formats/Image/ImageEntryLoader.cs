@@ -9,7 +9,7 @@ namespace CrashEdit.Crash
         public override Entry Load(byte[][] items, int eid)
         {
             if (items == null)
-                throw new ArgumentNullException("items");
+                throw new ArgumentNullException(nameof(items));
             return new ImageEntry(items, eid);
         }
     }

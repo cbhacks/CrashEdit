@@ -5,7 +5,7 @@ namespace CrashEdit.Crash
         public UnprocessedChunk(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             if (data.Length != Length)
                 throw new ArgumentException("Data must be 65536 bytes long.");
             Data = data;
