@@ -1,36 +1,33 @@
 using CrashEdit.Crash;
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
     [OrphanLegacyController(typeof(NSF))]
     public sealed class NSFController : LegacyController
     {
-        public NSFController(NSF nsf,SubcontrollerGroup parentGroup) : base(parentGroup, nsf)
+        public NSFController(NSF nsf, SubcontrollerGroup parentGroup) : base(parentGroup, nsf)
         {
             NSF = nsf;
-            AddMenu(CrashUI.Properties.Resources.NSFController_AcAddNormalChunk,Menu_Add_NormalChunk);
+            AddMenu(CrashUI.Properties.Resources.NSFController_AcAddNormalChunk, Menu_Add_NormalChunk);
             if (GameVersion != GameVersion.Crash2 && GameVersion != GameVersion.Crash3 && GameVersion != GameVersion.Crash1)
-                AddMenu(CrashUI.Properties.Resources.NSFController_AcAddOldSoundChunk,Menu_Add_OldSoundChunk);
-            AddMenu(CrashUI.Properties.Resources.NSFController_AcAddSoundChunk,Menu_Add_SoundChunk);
-            AddMenu(CrashUI.Properties.Resources.NSFController_AcAddWavebankChunk,Menu_Add_WavebankChunk);
-            AddMenu(CrashUI.Properties.Resources.NSFController_AcAddSpeechChunk,Menu_Add_SpeechChunk);
-            AddMenu(CrashUI.Properties.Resources.NSFController_AcImportChunk,Menu_Import_Chunk);
+                AddMenu(CrashUI.Properties.Resources.NSFController_AcAddOldSoundChunk, Menu_Add_OldSoundChunk);
+            AddMenu(CrashUI.Properties.Resources.NSFController_AcAddSoundChunk, Menu_Add_SoundChunk);
+            AddMenu(CrashUI.Properties.Resources.NSFController_AcAddWavebankChunk, Menu_Add_WavebankChunk);
+            AddMenu(CrashUI.Properties.Resources.NSFController_AcAddSpeechChunk, Menu_Add_SpeechChunk);
+            AddMenu(CrashUI.Properties.Resources.NSFController_AcImportChunk, Menu_Import_Chunk);
             if (GameVersion == GameVersion.Crash2 || GameVersion == GameVersion.Crash3)
             {
                 AddMenuSeparator();
-                AddMenu(CrashUI.Properties.Resources.NSFController_AcFixDetonator,Menu_Fix_Detonator);
-                AddMenu(CrashUI.Properties.Resources.NSFController_AcFixBoxCount,Menu_Fix_BoxCount);
+                AddMenu(CrashUI.Properties.Resources.NSFController_AcFixDetonator, Menu_Fix_Detonator);
+                AddMenu(CrashUI.Properties.Resources.NSFController_AcFixBoxCount, Menu_Fix_BoxCount);
                 AddMenuSeparator();
             }
             if (GameVersion == GameVersion.Crash1 || GameVersion == GameVersion.Crash1BetaMAR08 || GameVersion == GameVersion.Crash1BetaMAY11)
-                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC1);
+                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC1);
             else if (GameVersion == GameVersion.Crash2)
-                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC2);
+                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC2);
             else if (GameVersion == GameVersion.Crash3)
-                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel,Menu_ShowLevelC3);
+                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC3);
         }
 
         public NSF NSF { get; }
@@ -197,7 +194,7 @@ namespace CrashEdit.CE
             {
                 if (willy.BoxCount.HasValue)
                 {
-                    willy.BoxCount = new EntitySetting(0,boxcount);
+                    willy.BoxCount = new EntitySetting(0, boxcount);
                 }
             }
         }
@@ -209,20 +206,20 @@ namespace CrashEdit.CE
             foreach (OldSceneryEntry entry in NSF.GetEntries<OldSceneryEntry>())
             {
                 sceneryentries.Add(entry);
-                TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info,0x18)];
+                TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info, 0x18)];
                 for (int i = 0; i < texturechunks.Length; ++i)
                 {
-                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info,0x20+i*4));
+                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info, 0x20+i*4));
                 }
                 sortedtexturechunks.Add(texturechunks);
             }
             Form frm = new Form() { Text = "Loading...", Width = 480, Height = 360 };
             frm.Show();
-            OldSceneryEntryViewer viewer = new OldSceneryEntryViewer(sceneryentries,sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
+            OldSceneryEntryViewer viewer = new OldSceneryEntryViewer(sceneryentries, sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
             frm.Controls.Add(viewer);
             frm.Text = string.Empty;
         }
-        
+
         private void Menu_ShowLevelC2()
         {
             List<TextureChunk[]> sortedtexturechunks = new List<TextureChunk[]>();
@@ -230,16 +227,16 @@ namespace CrashEdit.CE
             foreach (SceneryEntry entry in NSF.GetEntries<SceneryEntry>())
             {
                 sceneryentries.Add(entry);
-                TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info,0x28)];
+                TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info, 0x28)];
                 for (int i = 0; i < texturechunks.Length; ++i)
                 {
-                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info,0x2C+i*4));
+                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info, 0x2C+i*4));
                 }
                 sortedtexturechunks.Add(texturechunks);
             }
             Form frm = new Form() { Text = "Loading...", Width = 480, Height = 360 };
             frm.Show();
-            SceneryEntryViewer viewer = new SceneryEntryViewer(sceneryentries,sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
+            SceneryEntryViewer viewer = new SceneryEntryViewer(sceneryentries, sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
             frm.Controls.Add(viewer);
             frm.Text = string.Empty;
         }
@@ -251,16 +248,16 @@ namespace CrashEdit.CE
             foreach (NewSceneryEntry entry in NSF.GetEntries<NewSceneryEntry>())
             {
                 sceneryentries.Add(entry);
-                TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info,0x28)];
+                TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info, 0x28)];
                 for (int i = 0; i < texturechunks.Length; ++i)
                 {
-                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info,0x2C+i*4));
+                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info, 0x2C+i*4));
                 }
                 sortedtexturechunks.Add(texturechunks);
             }
             Form frm = new Form() { Text = "Loading...", Width = 480, Height = 360 };
             frm.Show();
-            NewSceneryEntryViewer viewer = new NewSceneryEntryViewer(sceneryentries,sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
+            NewSceneryEntryViewer viewer = new NewSceneryEntryViewer(sceneryentries, sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
             frm.Controls.Add(viewer);
             frm.Text = string.Empty;
         }

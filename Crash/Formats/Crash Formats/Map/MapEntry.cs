@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     public sealed class MapEntry : Entry
     {
-        public MapEntry(byte[] header,byte[] layout,IEnumerable<OldEntity> entities,int eid) : base(eid)
+        public MapEntry(byte[] header, byte[] layout, IEnumerable<OldEntity> entities, int eid) : base(eid)
         {
             Header = header;
             Layout = layout;
@@ -27,7 +25,7 @@ namespace CrashEdit.Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            BitConv.ToInt32(Header,0xC,Entities.Count);
+            BitConv.ToInt32(Header, 0xC, Entities.Count);
             byte[][] items = new byte[2 + Entities.Count][];
             items[0] = Header;
             items[1] = Layout;
@@ -35,7 +33,7 @@ namespace CrashEdit.Crash
             {
                 items[2 + i] = Entities[i].Save();
             }
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

@@ -1,11 +1,10 @@
+namespace CrashEdit
+{
 
-using System;
+    public sealed class FindPreviousCommand : Command
+    {
 
-namespace CrashEdit {
-
-    public sealed class FindPreviousCommand : Command {
-
-        public FindPreviousCommand(ICommandHost host) : base(host) {}
+        public FindPreviousCommand(ICommandHost host) : base(host) { }
 
         public override string Text => "Find Previous";
 
@@ -15,7 +14,8 @@ namespace CrashEdit {
             WsHost?.SearchPredicate != null &&
             WsHost?.ActiveController != null;
 
-        public override bool Execute() {
+        public override bool Execute()
+        {
             if (WsHost == null)
                 throw new InvalidOperationException();
             if (WsHost.SearchPredicate == null)
@@ -28,8 +28,10 @@ namespace CrashEdit {
             w.Cursor = WsHost.ActiveController;
 
             // Regress until a match is found. The initial selection is not eligible.
-            while (w.MoveToPreviousDFS()) {
-                if (WsHost.SearchPredicate(w.Cursor)) {
+            while (w.MoveToPreviousDFS())
+            {
+                if (WsHost.SearchPredicate(w.Cursor))
+                {
                     // Match found.
                     WsHost.ActiveController = w.Cursor;
                     return true;

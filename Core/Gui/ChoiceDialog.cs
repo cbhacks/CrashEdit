@@ -1,20 +1,21 @@
-
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace CrashEdit {
+namespace CrashEdit
+{
 
-    public sealed class ChoiceDialog : Form {
+    public sealed class ChoiceDialog : Form
+    {
 
-        public ChoiceDialog() {
+        public ChoiceDialog()
+        {
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             MinimumSize = new Size(300, 1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
 
-            OverallTable = new TableLayoutPanel {
+            OverallTable = new TableLayoutPanel
+            {
                 Dock = DockStyle.Fill,
                 AutoSize = true,
                 AutoSizeMode = AutoSizeMode.GrowAndShrink,
@@ -23,13 +24,15 @@ namespace CrashEdit {
             };
             Controls.Add(OverallTable);
 
-            MessageLabel = new Label {
+            MessageLabel = new Label
+            {
                 AutoSize = true,
                 Text = "Make a selection.",
             };
             OverallTable.Controls.Add(MessageLabel);
 
-            ChoiceButtonTable = new TableLayoutPanel {
+            ChoiceButtonTable = new TableLayoutPanel
+            {
                 Dock = DockStyle.Fill,
                 AutoSize = true,
                 AutoSizeMode = AutoSizeMode.GrowAndShrink,
@@ -37,11 +40,13 @@ namespace CrashEdit {
             };
             OverallTable.Controls.Add(ChoiceButtonTable);
 
-            CancelButton = new Button {
+            CancelButton = new Button
+            {
                 Text = "Cancel",
                 Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
             };
-            CancelButton.Click += (sender, e) => {
+            CancelButton.Click += (sender, e) =>
+            {
                 SelectedChoice = null;
                 DialogResult = DialogResult.Cancel;
             };
@@ -49,7 +54,8 @@ namespace CrashEdit {
             base.CancelButton = CancelButton;
         }
 
-        public string MessageText {
+        public string MessageText
+        {
             get => MessageLabel.Text;
             set => MessageLabel.Text = value;
         }
@@ -66,11 +72,13 @@ namespace CrashEdit {
 
         private static Font _choiceFont = new Font(Button.DefaultFont.FontFamily, 16, GraphicsUnit.Pixel);
 
-        public void AddChoice(UserChoice choice) {
+        public void AddChoice(UserChoice choice)
+        {
             if (choice == null)
                 throw new ArgumentNullException();
 
-            var button = new Button {
+            var button = new Button
+            {
                 AutoSize = true,
                 Margin = new Padding(0, 3, 0, 3),
                 Padding = new Padding(12),
@@ -87,18 +95,21 @@ namespace CrashEdit {
                     AnchorStyles.Left |
                     AnchorStyles.Right,
             };
-            button.Click += (sender, e) => {
+            button.Click += (sender, e) =>
+            {
                 SelectedChoice = choice;
                 DialogResult = DialogResult.OK;
             };
             ChoiceButtonTable.Controls.Add(button);
         }
 
-        public void AddChoices(IEnumerable<UserChoice> choices) {
+        public void AddChoices(IEnumerable<UserChoice> choices)
+        {
             if (choices == null)
                 throw new ArgumentNullException();
 
-            foreach (var c in choices) {
+            foreach (var c in choices)
+            {
                 AddChoice(c);
             }
         }

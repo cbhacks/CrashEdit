@@ -1,9 +1,6 @@
+using CrashEdit.Crash;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using CrashEdit.Crash;
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Xml;
 
 namespace CrashEdit.CE
@@ -83,7 +80,7 @@ namespace CrashEdit.CE
                 if (!SetDllDirectory(path))
                     throw new System.ComponentModel.Win32Exception();
             }
-            
+
             Registrar.Init();
             Registrar.RegisterAssembly(typeof(Program).Assembly);
 

@@ -1,8 +1,6 @@
+namespace CrashEdit
+{
 
-using System;
-
-namespace CrashEdit {
-
-    public abstract class SubresourceAttribute : Attribute {}
+    public abstract class SubresourceAttribute : Attribute { }
 
 }

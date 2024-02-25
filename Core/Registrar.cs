@@ -1,11 +1,10 @@
-
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 
-namespace CrashEdit {
+namespace CrashEdit
+{
 
-    public static class Registrar {
+    public static class Registrar
+    {
 
         private static HashSet<Assembly> RegisteredAssemblies { get; } =
             new HashSet<Assembly>();
@@ -17,13 +16,13 @@ namespace CrashEdit {
             new HashSet<MethodInfo>();
 
         [AttributeUsage(AttributeTargets.Method)]
-        public sealed class AssemblyProcessorAttribute : Attribute {}
+        public sealed class AssemblyProcessorAttribute : Attribute { }
 
         [AttributeUsage(AttributeTargets.Method)]
-        public sealed class TypeProcessorAttribute : Attribute {}
+        public sealed class TypeProcessorAttribute : Attribute { }
 
         [AttributeUsage(AttributeTargets.Method)]
-        public sealed class FunctionProcessorAttribute : Attribute {}
+        public sealed class FunctionProcessorAttribute : Attribute { }
 
         private delegate void AssemblyProcessor(Assembly assembly);
 
@@ -40,64 +39,79 @@ namespace CrashEdit {
         private static List<FunctionProcessor> FunctionProcessors { get; } =
             new List<FunctionProcessor>();
 
-        public static void Init() {
+        public static void Init()
+        {
             RegisterAssembly(Assembly.GetExecutingAssembly());
         }
 
-        public static void RegisterAssembly(Assembly assembly) {
+        public static void RegisterAssembly(Assembly assembly)
+        {
             if (!RegisteredAssemblies.Add(assembly))
                 return;
 
-            foreach (var proc in AssemblyProcessors) {
+            foreach (var proc in AssemblyProcessors)
+            {
                 proc(assembly);
             }
 
-            foreach (var type in assembly.GetTypes()) {
+            foreach (var type in assembly.GetTypes())
+            {
                 RegisterType(type);
             }
         }
 
-        private static void RegisterType(Type type) {
+        private static void RegisterType(Type type)
+        {
             if (!RegisteredTypes.Add(type))
                 return;
 
-            foreach (var proc in TypeProcessors) {
+            foreach (var proc in TypeProcessors)
+            {
                 proc(type);
             }
 
-            foreach (var methodInfo in type.GetMethods(BindingFlags.Static | BindingFlags.NonPublic)) {
+            foreach (var methodInfo in type.GetMethods(BindingFlags.Static | BindingFlags.NonPublic))
+            {
                 RegisterFunction(methodInfo);
             }
         }
 
-        private static void RegisterFunction(MethodInfo methodInfo) {
+        private static void RegisterFunction(MethodInfo methodInfo)
+        {
             if (!RegisteredFunctions.Add(methodInfo))
                 return;
 
-            foreach (var proc in FunctionProcessors) {
+            foreach (var proc in FunctionProcessors)
+            {
                 proc(methodInfo);
             }
 
-            if (methodInfo.IsDefined(typeof(AssemblyProcessorAttribute), false)) {
+            if (methodInfo.IsDefined(typeof(AssemblyProcessorAttribute), false))
+            {
                 var proc = (AssemblyProcessor)methodInfo.CreateDelegate(typeof(AssemblyProcessor));
                 AssemblyProcessors.Add(proc);
-                foreach (var assembly in RegisteredAssemblies) {
+                foreach (var assembly in RegisteredAssemblies)
+                {
                     proc(assembly);
                 }
             }
 
-            if (methodInfo.IsDefined(typeof(TypeProcessorAttribute), false)) {
+            if (methodInfo.IsDefined(typeof(TypeProcessorAttribute), false))
+            {
                 var proc = (TypeProcessor)methodInfo.CreateDelegate(typeof(TypeProcessor));
                 TypeProcessors.Add(proc);
-                foreach (var type in RegisteredTypes) {
+                foreach (var type in RegisteredTypes)
+                {
                     proc(type);
                 }
             }
 
-            if (methodInfo.IsDefined(typeof(FunctionProcessorAttribute), false)) {
+            if (methodInfo.IsDefined(typeof(FunctionProcessorAttribute), false))
+            {
                 var proc = (FunctionProcessor)methodInfo.CreateDelegate(typeof(FunctionProcessor));
                 FunctionProcessors.Add(proc);
-                foreach (var function in RegisteredFunctions) {
+                foreach (var function in RegisteredFunctions)
+                {
                     proc(function);
                 }
             }

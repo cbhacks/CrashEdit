@@ -1,11 +1,11 @@
+namespace CrashEdit
+{
 
-using System;
+    public abstract class Command
+    {
 
-namespace CrashEdit {
-
-    public abstract class Command {
-
-        public Command(ICommandHost host) {
+        public Command(ICommandHost host)
+        {
             if (host == null)
                 throw new ArgumentNullException();
 

@@ -1,13 +1,13 @@
-
-using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace CrashEdit {
+namespace CrashEdit
+{
 
-    public class MainControl : UserControl, IWorkspaceHost, IVerbExecutor {
+    public class MainControl : UserControl, IWorkspaceHost, IVerbExecutor
+    {
 
-        public MainControl(IUserInterface ui, Controller rootController) {
+        public MainControl(IUserInterface ui, Controller rootController)
+        {
             if (ui == null)
                 throw new ArgumentNullException();
             if (rootController == null)
@@ -16,24 +16,28 @@ namespace CrashEdit {
             Ui = ui;
             RootController = rootController;
 
-            Split = new SplitContainer {
+            Split = new SplitContainer
+            {
                 Dock = DockStyle.Fill
             };
             Controls.Add(Split);
 
-            ResourceTree = new ResourceTreeView(this) {
+            ResourceTree = new ResourceTreeView(this)
+            {
                 Dock = DockStyle.Fill,
                 RootController = RootController,
                 HideSelection = false
             };
-            ResourceTree.SelectedControllerChanged += (sender, e) => {
+            ResourceTree.SelectedControllerChanged += (sender, e) =>
+            {
                 _activeController = ResourceTree.SelectedController;
                 ResourceBox.ActiveController = _activeController;
                 OnActiveControllerChanged(EventArgs.Empty);
             };
             Split.Panel1.Controls.Add(ResourceTree);
 
-            ResourceBox = new ResourceBox {
+            ResourceBox = new ResourceBox
+            {
                 Dock = DockStyle.Fill
             };
             Split.Panel2.Controls.Add(ResourceBox);
@@ -45,9 +49,11 @@ namespace CrashEdit {
 
         private Controller? _activeController;
 
-        public Controller? ActiveController {
+        public Controller? ActiveController
+        {
             get { return _activeController; }
-            set {
+            set
+            {
                 if (_activeController == value)
                     return;
 
@@ -60,18 +66,23 @@ namespace CrashEdit {
 
         private string _searchQuery = "";
 
-        public string SearchQuery {
+        public string SearchQuery
+        {
             get { return _searchQuery; }
-            set {
+            set
+            {
                 if (_searchQuery == value)
                     return;
 
                 _searchQuery = value;
 
                 var queryLowerCase = value.ToLower();
-                if (value == "") {
+                if (value == "")
+                {
                     SearchPredicate = null;
-                } else {
+                }
+                else
+                {
                     SearchPredicate = (x =>
                         x.Text.ToLower().Contains(queryLowerCase));
                 }
@@ -86,12 +97,14 @@ namespace CrashEdit {
 
         public ResourceBox ResourceBox { get; }
 
-        public void Sync() {
+        public void Sync()
+        {
             ResourceTree.Sync();
             ResourceBox.Sync();
         }
 
-        public void ExecuteVerb(Verb verb) {
+        public void ExecuteVerb(Verb verb)
+        {
             if (verb == null)
                 throw new ArgumentNullException();
 
@@ -101,7 +114,8 @@ namespace CrashEdit {
             Sync();
         }
 
-        public void ExecuteVerbChoice(List<Verb> verbs) {
+        public void ExecuteVerbChoice(List<Verb> verbs)
+        {
             if (verbs == null)
                 throw new ArgumentNullException();
 
@@ -113,8 +127,10 @@ namespace CrashEdit {
             ExecuteVerb(verbs[0]);
         }
 
-        protected virtual void OnActiveControllerChanged(EventArgs e) {
-            if (ActiveControllerChanged != null) {
+        protected virtual void OnActiveControllerChanged(EventArgs e)
+        {
+            if (ActiveControllerChanged != null)
+            {
                 ActiveControllerChanged(this, e);
             }
         }

@@ -1,6 +1,4 @@
 using CrashEdit.Crash;
-using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
@@ -10,7 +8,7 @@ namespace CrashEdit.CE
         public MapEntryController(MapEntry mapentry, SubcontrollerGroup parentGroup) : base(mapentry, parentGroup)
         {
             MapEntry = mapentry;
-            AddMenu("Add Entity",Menu_AddEntity);
+            AddMenu("Add Entity", Menu_AddEntity);
         }
 
         public override bool EditorAvailable => true;
@@ -42,7 +40,7 @@ namespace CrashEdit.CE
                 ++id;
                 continue;
             }
-            OldEntity newentity = OldEntity.Load(new OldEntity(0x0018,3,0,id,0,0,0,0,0,new List<EntityPosition>() { new EntityPosition(0,0,0) },0).Save());
+            OldEntity newentity = OldEntity.Load(new OldEntity(0x0018, 3, 0, id, 0, 0, 0, 0, 0, new List<EntityPosition>() { new EntityPosition(0, 0, 0) }, 0).Save());
             MapEntry.Entities.Add(newentity);
         }
     }

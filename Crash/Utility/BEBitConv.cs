@@ -1,10 +1,8 @@
-using System;
-
 namespace CrashEdit.Crash
 {
     public static class BEBitConv
     {
-        public static short FromInt16(byte[] str,int offset)
+        public static short FromInt16(byte[] str, int offset)
         {
             if (str == null)
                 throw new ArgumentNullException("str");
@@ -18,7 +16,7 @@ namespace CrashEdit.Crash
             return (short)result;
         }
 
-        public static int FromInt32(byte[] str,int offset)
+        public static int FromInt32(byte[] str, int offset)
         {
             if (str == null)
                 throw new ArgumentNullException("str");
@@ -34,7 +32,7 @@ namespace CrashEdit.Crash
             return result;
         }
 
-        public static void ToInt16(byte[] str,int offset,short value)
+        public static void ToInt16(byte[] str, int offset, short value)
         {
             if (str == null)
                 throw new ArgumentNullException("str");
@@ -46,7 +44,7 @@ namespace CrashEdit.Crash
             str[offset + 1] = (byte)((value >> 8 * 0) & 0xFF);
         }
 
-        public static void ToInt32(byte[] str,int offset,int value)
+        public static void ToInt32(byte[] str, int offset, int value)
         {
             if (str == null)
                 throw new ArgumentNullException("str");

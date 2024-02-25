@@ -1,28 +1,32 @@
-
-using System;
 using System.Windows.Forms;
 
-namespace CrashEdit {
+namespace CrashEdit
+{
 
-    public sealed class ByteArrayHexEditor : Editor {
+    public sealed class ByteArrayHexEditor : Editor
+    {
 
         public override string Text => "Hex";
 
-        public override bool ApplicableForSubject(Controller subj) {
+        public override bool ApplicableForSubject(Controller subj)
+        {
             if (subj == null)
                 throw new ArgumentNullException();
 
             return subj.Resource is byte[];
         }
 
-        protected override Control MakeControl() {
-            return new HexView {
+        protected override Control MakeControl()
+        {
+            return new HexView
+            {
                 Data = (byte[])Subject.Resource,
                 DataChangeHandler = HexView_DataChangeHandler,
             };
         }
 
-        private bool HexView_DataChangeHandler(int destOffset, int destLength, byte[] source) {
+        private bool HexView_DataChangeHandler(int destOffset, int destLength, byte[] source)
+        {
             var data = (byte[])Subject.Resource;
 
             if (destLength != source.Length)
@@ -34,7 +38,8 @@ namespace CrashEdit {
             return true;
         }
 
-        public override void Sync() {
+        public override void Sync()
+        {
             ((HexView)Control).Invalidate();
         }
 

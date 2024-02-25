@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     public abstract class EntityBasicPropertyLoader<T> : EntityPropertyLoader where T : struct
     {
-        public sealed override EntityProperty Load(byte elementsize,short unknown,bool issparse,bool hasmetavalues,byte[] data)
+        public sealed override EntityProperty Load(byte elementsize, short unknown, bool issparse, bool hasmetavalues, byte[] data)
         {
             if (elementsize != ElementSize)
             {
@@ -16,7 +13,7 @@ namespace CrashEdit.Crash
                 ErrorManager.SignalError("EntityProperty: Unknown value is invalid");
             }
             List<EntityPropertyRow<T>> rows = new List<EntityPropertyRow<T>>();
-            for (int i = 0;i < unknown;i++)
+            for (int i = 0; i < unknown; i++)
             {
                 rows.Add(new EntityPropertyRow<T>());
             }
@@ -29,9 +26,9 @@ namespace CrashEdit.Crash
                 }
                 foreach (EntityPropertyRow<T> row in rows)
                 {
-                    int valuecount = (ushort)BitConv.FromInt16(data,offset);
+                    int valuecount = (ushort)BitConv.FromInt16(data, offset);
                     offset += 2;
-                    for (int i = 0;i < valuecount;i++)
+                    for (int i = 0; i < valuecount; i++)
                     {
                         row.Values.Add(new T());
                     }
@@ -43,11 +40,11 @@ namespace CrashEdit.Crash
                 {
                     ErrorManager.SignalError("EntityProperty: Not enough data");
                 }
-                int valuecount = (ushort)BitConv.FromInt16(data,offset);
+                int valuecount = (ushort)BitConv.FromInt16(data, offset);
                 offset += 2;
                 foreach (EntityPropertyRow<T> row in rows)
                 {
-                    for (int i = 0;i < valuecount;i++)
+                    for (int i = 0; i < valuecount; i++)
                     {
                         row.Values.Add(new T());
                     }
@@ -61,27 +58,27 @@ namespace CrashEdit.Crash
                 }
                 foreach (EntityPropertyRow<T> row in rows)
                 {
-                    short metavalue = BitConv.FromInt16(data,offset);
+                    short metavalue = BitConv.FromInt16(data, offset);
                     offset += 2;
                     row.MetaValue = metavalue;
                 }
             }
-            Aligner.Align(ref offset,4);
-            byte[] elementdata = new byte [elementsize];
+            Aligner.Align(ref offset, 4);
+            byte[] elementdata = new byte[elementsize];
             foreach (EntityPropertyRow<T> row in rows)
             {
                 if (offset + row.Values.Count * elementsize > data.Length)
                 {
                     ErrorManager.SignalError("EntityProperty: Not enough data");
                 }
-                for (int i = 0;i < row.Values.Count;i++)
+                for (int i = 0; i < row.Values.Count; i++)
                 {
-                    Array.Copy(data,offset,elementdata,0,elementsize);
+                    Array.Copy(data, offset, elementdata, 0, elementsize);
                     offset += elementsize;
                     row.Values[i] = LoadElement(elementdata);
                 }
             }
-            Aligner.Align(ref offset,4);
+            Aligner.Align(ref offset, 4);
             if (offset < data.Length)
             {
                 ErrorManager.SignalIgnorableError("EntityProperty: More data than expected");

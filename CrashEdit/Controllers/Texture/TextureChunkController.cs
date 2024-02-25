@@ -1,6 +1,4 @@
 using CrashEdit.Crash;
-using System;
-using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
@@ -10,9 +8,9 @@ namespace CrashEdit.CE
         public TextureChunkController(TextureChunk texturechunk, SubcontrollerGroup parentGroup) : base(texturechunk, parentGroup)
         {
             TextureChunk = texturechunk;
-            AddMenu(CrashUI.Properties.Resources.TextureChunkController_AcRecalcChecksum,Menu_Recalculate_Checksum);
-            AddMenu(CrashUI.Properties.Resources.TextureChunkController_AcRename,Menu_Rename_Entry);
-            AddMenu(CrashUI.Properties.Resources.TextureChunkController_AcOpenViewer,Menu_Open_Viewer);
+            AddMenu(CrashUI.Properties.Resources.TextureChunkController_AcRecalcChecksum, Menu_Recalculate_Checksum);
+            AddMenu(CrashUI.Properties.Resources.TextureChunkController_AcRename, Menu_Rename_Entry);
+            AddMenu(CrashUI.Properties.Resources.TextureChunkController_AcOpenViewer, Menu_Open_Viewer);
         }
 
         public override bool EditorAvailable => Type.GetType("Mono.Runtime") == null;

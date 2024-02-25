@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CrashEdit.Crash
+﻿namespace CrashEdit.Crash
 {
     public sealed class ENameComparer : StringComparer
     {

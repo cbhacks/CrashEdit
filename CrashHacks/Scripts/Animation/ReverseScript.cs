@@ -1,7 +1,3 @@
-using CrashEdit.Crash;
-using System;
-using System.Collections.Generic;
-
 namespace CrashHacks.Scripts.Animation
 {
     public sealed class ReverseScript : Script
@@ -37,7 +33,7 @@ namespace CrashHacks.Scripts.Animation
             }
         }
 
-        public override void Run(object value,GameVersion gameversion)
+        public override void Run(object value, GameVersion gameversion)
         {
             if (value is AnimationEntry entry)
             {

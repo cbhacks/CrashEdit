@@ -1,12 +1,10 @@
+namespace CrashEdit
+{
 
-using System;
-using System.Collections.Generic;
+    public sealed class UndockCommand : Command
+    {
 
-namespace CrashEdit {
-
-    public sealed class UndockCommand : Command {
-
-        public UndockCommand(MainForm host) : base(host) {}
+        public UndockCommand(MainForm host) : base(host) { }
 
         public override string Text => "Undock";
 
@@ -15,7 +13,8 @@ namespace CrashEdit {
         public override bool Ready =>
             (WsHost as MainControl)?.ResourceBox?.CanToggleUndock == true;
 
-        public override bool Execute() {
+        public override bool Execute()
+        {
             if (!(WsHost is MainControl mainCtl))
                 throw new InvalidOperationException();
             if (!mainCtl.ResourceBox.CanToggleUndock)

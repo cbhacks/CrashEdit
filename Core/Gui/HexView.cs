@@ -1,21 +1,24 @@
-
-using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace CrashEdit {
+namespace CrashEdit
+{
 
-    public sealed class HexView : UserControl {
+    public sealed class HexView : UserControl
+    {
 
-        public HexView() {
+        public HexView()
+        {
             ResetLayout();
         }
 
         // The number of columns in the viewer.
         private int _columnCount = 0x10;
-        public int ColumnCount {
+        public int ColumnCount
+        {
             get => _columnCount;
-            set {
+            set
+            {
                 if (value == _columnCount)
                     return;
                 if (value < 1)
@@ -31,9 +34,11 @@ namespace CrashEdit {
         // of background colors in the viewer, to make it easier to identify columns and word
         // boundaries. If set to zero, this functionality is disabled.
         private int _columnsPerGroup = 4;
-        public int ColumnsPerGroup {
+        public int ColumnsPerGroup
+        {
             get => _columnsPerGroup;
-            set {
+            set
+            {
                 if (value == _columnsPerGroup)
                     return;
                 if (value < 0)
@@ -53,9 +58,11 @@ namespace CrashEdit {
 
         // The number of columns to skip before the first byte shown to the user.
         private int _firstByteColumn = 0;
-        public int FirstByteColumn {
+        public int FirstByteColumn
+        {
             get => _firstByteColumn;
-            set {
+            set
+            {
                 if (value == _firstByteColumn)
                     return;
                 if (value < 0)
@@ -70,9 +77,11 @@ namespace CrashEdit {
         // The address of the first byte. This is for display purposes only; the first byte
         // is always accessed at Data[0], the second at Data[1], then Data[2], etc.
         private long _firstByteAddress = 0;
-        public long FirstByteAddress {
+        public long FirstByteAddress
+        {
             get => _firstByteAddress;
-            set {
+            set
+            {
                 if (value == _firstByteAddress)
                     return;
 
@@ -106,11 +115,14 @@ namespace CrashEdit {
         //
         // Invalidate() must be called manually whenever the contents of the memory change.
         private ReadOnlyMemory<byte> _data;
-        public ReadOnlyMemory<byte> Data {
+        public ReadOnlyMemory<byte> Data
+        {
             get => _data;
-            set {
+            set
+            {
                 _data = value;
-                if (ByteCursor > _data.Length) {
+                if (ByteCursor > _data.Length)
+                {
                     ByteCursor = _data.Length;
                 }
                 ResetLayout();
@@ -145,9 +157,11 @@ namespace CrashEdit {
         //
         // If this property is null, editing is disabled entirely.
         private Func<int, int, byte[], bool>? _dataChangeHandler = null;
-        public Func<int, int, byte[], bool>? DataChangeHandler {
+        public Func<int, int, byte[], bool>? DataChangeHandler
+        {
             get => _dataChangeHandler;
-            set {
+            set
+            {
                 if (value == _dataChangeHandler)
                     return;
 
@@ -159,13 +173,16 @@ namespace CrashEdit {
         // If editing is enabled, setting this true further allows editing features which require
         // data resizing, such as insertions and deletions.
         private bool _allowResize = false;
-        public bool AllowResize {
+        public bool AllowResize
+        {
             get => _allowResize;
-            set {
+            set
+            {
                 _allowResize = value;
 
                 // Cancel any in-progress append inputs if resizing was just disabled.
-                if (!value && _pendingInput != null && ByteCursor == Data.Length) {
+                if (!value && _pendingInput != null && ByteCursor == Data.Length)
+                {
                     ClearInput();
                 }
             }
@@ -176,7 +193,8 @@ namespace CrashEdit {
         // values advance backward similarly, stopping on zero.
         //
         // This also scrolls the view in the control to fully display the new target.
-        public int MoveBy(int delta) {
+        public int MoveBy(int delta)
+        {
             int oldCursor = ByteCursor;
             MoveTo(ByteCursor + delta);
             return ByteCursor - oldCursor;
@@ -187,17 +205,23 @@ namespace CrashEdit {
         // valid range and false is returned.
         //
         // This also scrolls the view in the control to fully display the new target.
-        public bool MoveTo(int target) {
+        public bool MoveTo(int target)
+        {
             int oldCursor = ByteCursor;
 
             bool inRange;
-            if (target < 0) {
+            if (target < 0)
+            {
                 ByteCursor = 0;
                 inRange = false;
-            } else if (target > Data.Length) {
+            }
+            else if (target > Data.Length)
+            {
                 ByteCursor = Data.Length;
                 inRange = false;
-            } else {
+            }
+            else
+            {
                 ByteCursor = target;
                 inRange = true;
             }
@@ -223,17 +247,24 @@ namespace CrashEdit {
             Invalidate(newRect);
 
             Point newScrollPos = AutoScrollPosition;
-            if (newRect.Left < 0) {
+            if (newRect.Left < 0)
+            {
                 newScrollPos.X -= newRect.Left;
-            } else if (newRect.Right > ClientSize.Width) {
+            }
+            else if (newRect.Right > ClientSize.Width)
+            {
                 newScrollPos.X -= (newRect.Right - ClientSize.Width);
             }
-            if (newRect.Top < 0) {
+            if (newRect.Top < 0)
+            {
                 newScrollPos.Y -= newRect.Top;
-            } else if (newRect.Bottom > ClientSize.Height) {
+            }
+            else if (newRect.Bottom > ClientSize.Height)
+            {
                 newScrollPos.Y -= (newRect.Bottom - ClientSize.Height);
             }
-            if (newScrollPos != AutoScrollPosition) {
+            if (newScrollPos != AutoScrollPosition)
+            {
                 // AutoScrollPosition is a poor API which requires you to set the inverse values
                 // of what you expect to get back.
                 AutoScrollPosition = new Point(
@@ -246,7 +277,8 @@ namespace CrashEdit {
 
         // Enable special keys which would otherwise not be delivered to OnKeyDown.
         protected override bool IsInputKey(Keys keyData) =>
-            keyData switch {
+            keyData switch
+            {
                 Keys.Up => true,
                 Keys.Down => true,
                 Keys.Left => true,
@@ -255,8 +287,10 @@ namespace CrashEdit {
             };
 
         // Handle keyboard inputs.
-        protected override void OnKeyDown(KeyEventArgs e) {
-            switch (e.KeyCode) {
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
                 case Keys.Up:
                     // Move up by one cell.
                     MoveBy(-ColumnCount);
@@ -289,10 +323,13 @@ namespace CrashEdit {
 
                 case Keys.Home:
                     // Move to the start ...
-                    if (e.Control) {
+                    if (e.Control)
+                    {
                         // ... of the entire data.
                         MoveTo(0);
-                    } else {
+                    }
+                    else
+                    {
                         // ... of the current row.
                         MoveBy(-ByteCursorColumn);
                     }
@@ -300,10 +337,13 @@ namespace CrashEdit {
 
                 case Keys.End:
                     // Move to the end ...
-                    if (e.Control) {
+                    if (e.Control)
+                    {
                         // ... of the entire data.
                         MoveTo(Data.Length);
-                    } else {
+                    }
+                    else
+                    {
                         // ... of the current row.
                         MoveBy(ColumnCount - ByteCursorColumn - 1);
                     }
@@ -388,8 +428,10 @@ namespace CrashEdit {
         private int YStep => _borderSize + _padding + CharSize.Height + _padding;
 
         // Recomputes and applies the control's layout and desired display size.
-        private void ResetLayout() {
-            using (var g = CreateGraphics()) {
+        private void ResetLayout()
+        {
+            using (var g = CreateGraphics())
+            {
                 CharSize = TextRenderer.MeasureText(g, "A", _font, Size.Empty, TextFormatFlags.NoPadding);
             }
             AddressCharCount = 5; // sensible minimum
@@ -401,10 +443,12 @@ namespace CrashEdit {
             );
         }
 
-        protected override void OnMouseClick(MouseEventArgs e) {
+        protected override void OnMouseClick(MouseEventArgs e)
+        {
             base.OnMouseClick(e);
 
-            if (e.Button == MouseButtons.Left) {
+            if (e.Button == MouseButtons.Left)
+            {
                 if (e.X - AutoScrollPosition.X < XStart)
                     return;
                 if (e.Y - AutoScrollPosition.Y < YStart)
@@ -426,18 +470,21 @@ namespace CrashEdit {
             }
         }
 
-        protected override void OnGotFocus(EventArgs e) {
+        protected override void OnGotFocus(EventArgs e)
+        {
             base.OnGotFocus(e);
             InvalidateCell(ByteCursorColumn, ByteCursorRow);
         }
 
-        protected override void OnLostFocus(EventArgs e) {
+        protected override void OnLostFocus(EventArgs e)
+        {
             base.OnLostFocus(e);
             InvalidateCell(ByteCursorColumn, ByteCursorRow);
         }
 
         // Handles drawing the HexView.
-        protected override void OnPaint(PaintEventArgs e) {
+        protected override void OnPaint(PaintEventArgs e)
+        {
             base.OnPaint(e);
 
             var clipRect = e.ClipRectangle;
@@ -454,15 +501,18 @@ namespace CrashEdit {
             // Determine which rows need to be drawn.
             int visRowFirst = (int)Math.Floor((clipRect.Top - YStart) / (float)YStep);
             int visRowLast = (int)Math.Ceiling((clipRect.Bottom - YStart + _borderSize) / (float)YStep);
-            if (visRowFirst < 0) {
+            if (visRowFirst < 0)
+            {
                 visRowFirst = 0;
             }
-            if (visRowLast >= RowCount) {
+            if (visRowLast >= RowCount)
+            {
                 visRowLast = RowCount - 1;
             }
 
             // Draw each visible row.
-            for (int row = visRowFirst; row <= visRowLast; row++) {
+            for (int row = visRowFirst; row <= visRowLast; row++)
+            {
                 int rowY = YStart + YStep * row;
                 int rowFirstByte = row * ColumnCount - FirstByteColumn;
                 long rowAddress = FirstRowAddress + row * ColumnCount;
@@ -482,15 +532,21 @@ namespace CrashEdit {
 
                 // Determine which columns need to be drawn.
                 int colFirst;
-                if (row == 0) {
+                if (row == 0)
+                {
                     colFirst = FirstByteColumn;
-                } else {
+                }
+                else
+                {
                     colFirst = 0;
                 }
                 int colLast;
-                if (row == RowCount - 1) {
+                if (row == RowCount - 1)
+                {
                     colLast = data.Length - rowFirstByte; // include one-past-the-end
-                } else {
+                }
+                else
+                {
                     colLast = ColumnCount - 1;
                 }
 
@@ -503,7 +559,8 @@ namespace CrashEdit {
                     _borderSize);
 
                 // Draw each cell.
-                for (int col = colFirst; col <= colLast; col++) {
+                for (int col = colFirst; col <= colLast; col++)
+                {
                     int colX = XStart + XStep * col;
                     int cellByte = rowFirstByte + col;
 
@@ -516,7 +573,8 @@ namespace CrashEdit {
                         YStep - _borderSize);
 
                     // If this is the last column, also draw the right border.
-                    if (col == colLast) {
+                    if (col == colLast)
+                    {
                         e.Graphics.FillRectangle(
                             _borderBrush,
                             XStart + XStep * (col + 1),
@@ -532,16 +590,23 @@ namespace CrashEdit {
 
                     Brush fgBrush;
                     Brush bgBrush;
-                    if (cellByte == ByteCursor) {
+                    if (cellByte == ByteCursor)
+                    {
                         fgBrush = _fgSelectedBrush;
                         bgBrush = _bgSelectedBrush;
-                    } else if (data[cellByte] == 0) {
+                    }
+                    else if (data[cellByte] == 0)
+                    {
                         fgBrush = _fgZeroBrush;
                         bgBrush = _bgZeroBrush;
-                    } else if (ColumnsPerGroup != 0 && col / ColumnsPerGroup % 2 == 1) {
+                    }
+                    else if (ColumnsPerGroup != 0 && col / ColumnsPerGroup % 2 == 1)
+                    {
                         fgBrush = _fgAlternateBrush;
                         bgBrush = _bgAlternateBrush;
-                    } else {
+                    }
+                    else
+                    {
                         fgBrush = _fgNormalBrush;
                         bgBrush = _bgNormalBrush;
                     }
@@ -557,7 +622,8 @@ namespace CrashEdit {
 
                     // Draw the cell value.
                     var text = data[cellByte].ToString("X2");
-                    if (_pendingInput != null && cellByte == ByteCursor) {
+                    if (_pendingInput != null && cellByte == ByteCursor)
+                    {
                         // Skip the first nybble if the user is typing a new byte value.
                         text = " " + text[1];
                     }
@@ -571,7 +637,8 @@ namespace CrashEdit {
 
                 // Draw the bottom border for this row, unless the next row will draw it for us
                 // as its top border.
-                if (row == visRowLast || row == RowCount - 2) {
+                if (row == visRowLast || row == RowCount - 2)
+                {
                     e.Graphics.FillRectangle(
                         _borderBrush,
                         XStart + XStep * colFirst,
@@ -582,7 +649,8 @@ namespace CrashEdit {
             }
 
             // Draw a special border around the selected cell, if we have focus.
-            if (Focused) {
+            if (Focused)
+            {
                 e.Graphics.FillRectangle(
                     _selectedBorderBrush,
                     XStart + XStep * ByteCursorColumn,
@@ -610,7 +678,8 @@ namespace CrashEdit {
             }
 
             // Draw the input nybble if input is in progress as well.
-            if (_pendingInput != null) {
+            if (_pendingInput != null)
+            {
                 var cellInnerRect = new Rectangle();
                 cellInnerRect.X = XStart + XStep * ByteCursorColumn + _borderSize;
                 cellInnerRect.Y = YStart + YStep * ByteCursorRow + _borderSize;
@@ -626,7 +695,8 @@ namespace CrashEdit {
             }
         }
 
-        public void InvalidateCell(int col, int row) {
+        public void InvalidateCell(int col, int row)
+        {
             if (col < 0 || col >= ColumnCount)
                 throw new ArgumentException();
             if (row < 0 || row >= RowCount)
@@ -640,8 +710,10 @@ namespace CrashEdit {
             Invalidate(rect);
         }
 
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
                 _data = Memory<byte>.Empty;
             }
 
@@ -650,7 +722,8 @@ namespace CrashEdit {
 
         private int? _pendingInput;
 
-        public bool InputNybble(int value) {
+        public bool InputNybble(int value)
+        {
             if (value < 0 || value > 0xF)
                 throw new ArgumentException();
 
@@ -662,27 +735,35 @@ namespace CrashEdit {
             if (ByteCursor == Data.Length && !AllowResize)
                 return false;
 
-            if (_pendingInput == null) {
+            if (_pendingInput == null)
+            {
                 // First half of the input (upper 4 bits).
                 _pendingInput = value;
                 InvalidateCell(ByteCursorColumn, ByteCursorRow);
                 return true;
-            } else {
+            }
+            else
+            {
                 // Second half of the input (lower 4 bits).
                 value |= _pendingInput.Value << 4;
                 _pendingInput = null;
 
-                if (ByteCursor == Data.Length) {
+                if (ByteCursor == Data.Length)
+                {
                     // Attempt to append.
-                    bool ok = DataChangeHandler(ByteCursor, 0, new byte[] {(byte)value});
-                    if (ok) {
+                    bool ok = DataChangeHandler(ByteCursor, 0, new byte[] { (byte)value });
+                    if (ok)
+                    {
                         MoveBy(1); // this also invalidates the cell
                     }
                     return ok;
-                } else {
+                }
+                else
+                {
                     // Attempt to overwrite.
-                    bool ok = DataChangeHandler(ByteCursor, 1, new byte[] {(byte)value});
-                    if (ok) {
+                    bool ok = DataChangeHandler(ByteCursor, 1, new byte[] { (byte)value });
+                    if (ok)
+                    {
                         MoveBy(1); // this also invalidates the cell
                     }
                     return ok;
@@ -690,8 +771,10 @@ namespace CrashEdit {
             }
         }
 
-        public void ClearInput() {
-            if (_pendingInput != null) {
+        public void ClearInput()
+        {
+            if (_pendingInput != null)
+            {
                 _pendingInput = null;
                 InvalidateCell(ByteCursorColumn, ByteCursorRow);
             }

@@ -1,9 +1,8 @@
+namespace CrashEdit.Crash
+{
 
-using System;
-
-namespace CrashEdit.Crash {
-
-    public sealed class VhExporter : Exporter<VH> {
+    public sealed class VhExporter : Exporter<VH>
+    {
 
         public override string Text => "PlayStation VH";
 
@@ -11,7 +10,8 @@ namespace CrashEdit.Crash {
             "PlayStation VAB headers (*.vh)|*.vh;*.VH"
         };
 
-        public override bool Export(IUserInterface ui, out ReadOnlySpan<byte> buf, VH res) {
+        public override bool Export(IUserInterface ui, out ReadOnlySpan<byte> buf, VH res)
+        {
             if (ui == null)
                 throw new ArgumentNullException();
             if (res == null)

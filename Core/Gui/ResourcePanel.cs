@@ -1,21 +1,21 @@
-
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace CrashEdit {
+namespace CrashEdit
+{
 
-    public class ResourcePanel : UserControl {
+    public class ResourcePanel : UserControl
+    {
 
-        public ResourcePanel(Controller ctlr) {
+        public ResourcePanel(Controller ctlr)
+        {
             if (ctlr == null)
                 throw new ArgumentNullException();
 
             Controller = ctlr;
 
-            TabControl = new TabControl {
+            TabControl = new TabControl
+            {
                 Dock = DockStyle.Fill
             };
             Controls.Add(TabControl);
@@ -25,10 +25,12 @@ namespace CrashEdit {
                 .Select(x => (Editor)Activator.CreateInstance(x.GetType()))
                 .ToList();
 
-            if (Editors.Count == 0) {
+            if (Editors.Count == 0)
+            {
                 // No editors available for this resource.
                 TabControl.TabPages.Add("None");
-                TabControl.TabPages[0].Controls.Add(new Label {
+                TabControl.TabPages[0].Controls.Add(new Label
+                {
                     Dock = DockStyle.Fill,
                     TextAlign = ContentAlignment.MiddleCenter,
                     Text = "No editors are available for this resource."
@@ -36,7 +38,8 @@ namespace CrashEdit {
                 return;
             }
 
-            foreach (var editor in Editors) {
+            foreach (var editor in Editors)
+            {
                 editor.Initialize(ctlr);
                 editor.Control.Dock = DockStyle.Fill;
 
@@ -56,9 +59,12 @@ namespace CrashEdit {
 
         public TabControl TabControl { get; }
 
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
-                foreach (var editor in Editors) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                foreach (var editor in Editors)
+                {
                     editor.Dispose();
                 }
             }

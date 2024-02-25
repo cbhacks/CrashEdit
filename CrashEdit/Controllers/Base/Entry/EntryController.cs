@@ -1,5 +1,4 @@
 using CrashEdit.Crash;
-using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
@@ -9,10 +8,10 @@ namespace CrashEdit.CE
         public EntryController(Entry entry, SubcontrollerGroup parentGroup) : base(parentGroup, entry)
         {
             Entry = entry;
-            AddMenu(string.Format(CrashUI.Properties.Resources.EntryController_AcRename,entry.EName),Menu_Rename_Entry);
+            AddMenu(string.Format(CrashUI.Properties.Resources.EntryController_AcRename, entry.EName), Menu_Rename_Entry);
             if (!(this is UnprocessedEntryController))
             {
-                AddMenu(string.Format(CrashUI.Properties.Resources.EntryController_AcDeprocess,entry.EName),Menu_Unprocess_Entry);
+                AddMenu(string.Format(CrashUI.Properties.Resources.EntryController_AcDeprocess, entry.EName), Menu_Unprocess_Entry);
             }
         }
 
@@ -21,9 +20,12 @@ namespace CrashEdit.CE
 
         public override bool CanMoveTo(CrashEdit.LegacyController newcontroller)
         {
-            if (newcontroller is EntryChunkController) {
+            if (newcontroller is EntryChunkController)
+            {
                 return true;
-            } else {
+            }
+            else
+            {
                 return base.CanMoveTo(newcontroller);
             }
         }
@@ -41,7 +43,7 @@ namespace CrashEdit.CE
             }
         }
 
-        protected T FindEID<T>(int eid) where T : class,IEntry
+        protected T FindEID<T>(int eid) where T : class, IEntry
         {
             return GetEntry<T>(eid);
         }
@@ -63,11 +65,11 @@ namespace CrashEdit.CE
                 {
                     Entry.EID = newentrywindow.EID;
                     EntryChunkController.NeedsNewEditor = true;
-                    LegacyVerbs[0]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcDelete,Entry.EName);
-                    LegacyVerbs[1]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcRename,Entry.EName);
+                    LegacyVerbs[0]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcDelete, Entry.EName);
+                    LegacyVerbs[1]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcRename, Entry.EName);
                     if (!(this is UnprocessedEntryController))
                     {
-                        LegacyVerbs[2]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcDeprocess,Entry.EName);
+                        LegacyVerbs[2]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcDeprocess, Entry.EName);
                     }
                 }
             }

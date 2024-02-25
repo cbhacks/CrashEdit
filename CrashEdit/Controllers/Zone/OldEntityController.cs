@@ -1,5 +1,4 @@
 using CrashEdit.Crash;
-using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
@@ -9,7 +8,7 @@ namespace CrashEdit.CE
         public OldEntityController(OldEntity entity, SubcontrollerGroup parentGroup) : base(parentGroup, entity)
         {
             OldEntity = entity;
-            AddMenu("Duplicate Entity",Menu_Duplicate);
+            AddMenu("Duplicate Entity", Menu_Duplicate);
         }
 
         public override bool EditorAvailable => true;
@@ -56,7 +55,7 @@ namespace CrashEdit.CE
             newentity.ID = id;
             OldZoneEntryController.OldZoneEntry.Entities.Add(newentity);
         }
-        
+
         private void Menu_MapDuplicate()
         {
             short id = 6;

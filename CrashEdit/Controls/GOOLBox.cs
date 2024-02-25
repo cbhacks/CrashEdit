@@ -1,5 +1,4 @@
 using CrashEdit.Crash;
-using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
@@ -16,7 +15,7 @@ namespace CrashEdit.CE
             lstCode.Items.Add($"Type: {goolentry.ID}");
             lstCode.Items.Add($"Category: {goolentry.Category / 0x100}");
             lstCode.Items.Add($"Format: {goolentry.Format}");
-            lstCode.Items.Add(string.Format("Stack Start: {0} ({1})",(ObjectFields)goolentry.StackStart,(goolentry.StackStart*4+GOOLInterpreter.GetProcessOff(goolentry.Version)).TransformedString()));
+            lstCode.Items.Add(string.Format("Stack Start: {0} ({1})", (ObjectFields)goolentry.StackStart, (goolentry.StackStart*4+GOOLInterpreter.GetProcessOff(goolentry.Version)).TransformedString()));
             lstCode.Items.Add($"Interrupt Count: {goolentry.EventCount}");
             lstCode.Items.Add($"Entry Count: {goolentry.EntryCount}");
             if (goolentry.Format == 1)
@@ -55,7 +54,7 @@ namespace CrashEdit.CE
                     short tpc = (short)(goolentry.StateDescriptors[i].TPC & 0x3FFF);
                     short cpc = (short)(goolentry.StateDescriptors[i].CPC & 0x3FFF);
                     int stategooleid = goolentry.Data[goolentry.StateDescriptors[i].GOOLID];
-                    lstCode.Items.Add($"State_{i} [{Entry.EIDToEName(stategooleid)}] (State Flags: {string.Format("0x{0:X}",goolentry.StateDescriptors[i].StateFlags)} | C-Flags: {string.Format("0x{0:X}",goolentry.StateDescriptors[i].CFlags)})");
+                    lstCode.Items.Add($"State_{i} [{Entry.EIDToEName(stategooleid)}] (State Flags: {string.Format("0x{0:X}", goolentry.StateDescriptors[i].StateFlags)} | C-Flags: {string.Format("0x{0:X}", goolentry.StateDescriptors[i].CFlags)})");
                     if (epc != 0x3FFF)
                         lstCode.Items.Add($"\tEPC: {epc}" + ((goolentry.StateDescriptors[i].EPC & 0x4000) == 0x4000 ? " (external)" : ""));
                     else
@@ -122,7 +121,7 @@ namespace CrashEdit.CE
                         ++goolcount;
                 }
                 string comment = ins.Comment;
-                lstCode.Items.Add(string.Format("{0,-05}\t{1,-4}\t{2,-30}\t{3}",i,ins.Name,ins.Arguments,!string.IsNullOrWhiteSpace(comment) ? $"# {comment}" : ""));
+                lstCode.Items.Add(string.Format("{0,-05}\t{1,-4}\t{2,-30}\t{3}", i, ins.Name, ins.Arguments, !string.IsNullOrWhiteSpace(comment) ? $"# {comment}" : ""));
             }
 
             if (goolcount != goolentry.Instructions.Count)

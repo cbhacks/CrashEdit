@@ -1,5 +1,3 @@
-using System;
-
 namespace CrashEdit.Crash
 {
     public abstract class EntryChunkLoader : ChunkLoader
@@ -10,9 +8,9 @@ namespace CrashEdit.Crash
                 throw new ArgumentNullException("data");
             if (data.Length != Chunk.Length)
                 throw new ArgumentException("Data must be 65536 bytes long.");
-            int chunkid = BitConv.FromInt32(data,4);
-            int entrycount = BitConv.FromInt32(data,8);
-            int checksum = BitConv.FromInt32(data,12);
+            int chunkid = BitConv.FromInt32(data, 4);
+            int entrycount = BitConv.FromInt32(data, 8);
+            int checksum = BitConv.FromInt32(data, 12);
             int headersize = 20 + entrycount * 4;
             if (entrycount < 0)
             {
@@ -26,12 +24,12 @@ namespace CrashEdit.Crash
             {
                 ErrorManager.SignalError("EntryChunk: Data is too short");
             }
-            Entry[] entries = new Entry [entrycount];
+            Entry[] entries = new Entry[entrycount];
             byte[] entrydata;
-            for (int i = 0;i < entrycount;i++)
+            for (int i = 0; i < entrycount; i++)
             {
-                int entrystart = BitConv.FromInt32(data,16 + i * 4);
-                int entryend = BitConv.FromInt32(data,20 + i * 4);
+                int entrystart = BitConv.FromInt32(data, 16 + i * 4);
+                int entryend = BitConv.FromInt32(data, 20 + i * 4);
                 if (entrystart < 0)
                 {
                     ErrorManager.SignalError("EntryChunk: Entry begins out of bounds");
@@ -45,8 +43,8 @@ namespace CrashEdit.Crash
                     ErrorManager.SignalError("EntryChunk: Entry ends out of bounds");
                 }
                 int entrysize = entryend - entrystart;
-                entrydata = new byte [entrysize];
-                Array.Copy(data,entrystart,entrydata,0,entrysize);
+                entrydata = new byte[entrysize];
+                Array.Copy(data, entrystart, entrydata, 0, entrysize);
                 entries[i] = Entry.Load(entrydata);
             }
             var result = Load(entries);

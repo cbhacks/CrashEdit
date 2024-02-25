@@ -1,9 +1,8 @@
+namespace CrashEdit
+{
 
-using System;
-
-namespace CrashEdit {
-
-    public abstract class TransitiveVerb : Verb {
+    public abstract class TransitiveVerb : Verb
+    {
 
         public Controller? Source { get; set; }
 

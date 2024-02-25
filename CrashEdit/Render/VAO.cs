@@ -1,5 +1,4 @@
-﻿using Crash;
-using OpenTK.Graphics.OpenGL4;
+﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using System.Diagnostics;
 using System.Runtime.InteropServices;

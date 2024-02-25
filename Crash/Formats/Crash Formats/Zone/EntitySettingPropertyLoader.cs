@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     [EntityPropertyType(5)]
@@ -9,7 +7,7 @@ namespace CrashEdit.Crash
 
         protected override EntitySetting LoadElement(byte[] data)
         {
-            return new EntitySetting(BitConv.FromInt32(data,0));
+            return new EntitySetting(BitConv.FromInt32(data, 0));
         }
 
         protected override EntityProperty Load(IEnumerable<EntityPropertyRow<EntitySetting>> rows)

@@ -68,6 +68,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CrashEdit.Main.csproj" />
     <ProjectReference Include="..\Crash\Crash.csproj" />
     <ProjectReference Include="..\Crash.UI\Crash.UI.csproj" />
     <ProjectReference Include="..\CopyPtr\CopyPtr.csproj" />

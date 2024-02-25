@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     [EntityPropertyType(6)]
@@ -9,10 +7,10 @@ namespace CrashEdit.Crash
 
         protected override EntityPosition LoadElement(byte[] data)
         {
-            short x = BitConv.FromInt16(data,0);
-            short y = BitConv.FromInt16(data,2);
-            short z = BitConv.FromInt16(data,4);
-            return new EntityPosition(x,y,z);
+            short x = BitConv.FromInt16(data, 0);
+            short y = BitConv.FromInt16(data, 2);
+            short z = BitConv.FromInt16(data, 4);
+            return new EntityPosition(x, y, z);
         }
 
         protected override EntityProperty Load(IEnumerable<EntityPropertyRow<EntityPosition>> rows)

@@ -1,5 +1,4 @@
 using CrashEdit.Crash;
-using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
@@ -10,8 +9,8 @@ namespace CrashEdit.CE
         {
             SceneryEntry = sceneryentry;
             AddMenuSeparator();
-            AddMenu("Export as Wavefront OBJ",Menu_Export_OBJ);
-            AddMenu("Export as Stanford PLY",Menu_Export_PLY);
+            AddMenu("Export as Wavefront OBJ", Menu_Export_OBJ);
+            AddMenu("Export as Stanford PLY", Menu_Export_PLY);
             //AddMenu("Export as COLLADA",Menu_Export_COLLADA);
             AddMenu("Fix coords imported from Crash 3", Menu_Fix_WGEOv3);
         }
@@ -20,12 +19,12 @@ namespace CrashEdit.CE
 
         public override Control CreateEditor()
         {
-            TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(SceneryEntry.Info,0x28)];
+            TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(SceneryEntry.Info, 0x28)];
             for (int i = 0; i < texturechunks.Length; ++i)
             {
-                texturechunks[i] = FindEID<TextureChunk>(BitConv.FromInt32(SceneryEntry.Info,0x2C+i*4));
+                texturechunks[i] = FindEID<TextureChunk>(BitConv.FromInt32(SceneryEntry.Info, 0x2C+i*4));
             }
-            return new SceneryEntryViewer(SceneryEntry,texturechunks);
+            return new SceneryEntryViewer(SceneryEntry, texturechunks);
         }
 
         public SceneryEntry SceneryEntry { get; }
@@ -59,7 +58,7 @@ namespace CrashEdit.CE
 
         private void Menu_Fix_WGEOv3()
         {
-            for (int i = 0;i < SceneryEntry.Vertices.Count;i++)
+            for (int i = 0; i < SceneryEntry.Vertices.Count; i++)
             {
                 SceneryVertex vtx = SceneryEntry.Vertices[i];
                 SceneryEntry.Vertices[i] = new SceneryVertex(

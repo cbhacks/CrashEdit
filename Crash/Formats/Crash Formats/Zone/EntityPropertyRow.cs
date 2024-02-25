@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     public sealed class EntityPropertyRow<T>

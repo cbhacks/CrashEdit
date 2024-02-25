@@ -1,20 +1,21 @@
+namespace CrashEdit
+{
 
-using System;
-
-namespace CrashEdit {
-
-    public sealed class LegacyMoveVerb : TransitiveVerb {
+    public sealed class LegacyMoveVerb : TransitiveVerb
+    {
 
         public override string Text => "Move here";
 
-        public override bool ApplicableForSource(Controller src) {
+        public override bool ApplicableForSource(Controller src)
+        {
             if (src == null)
                 throw new ArgumentNullException();
 
             return (src.Legacy != null);
         }
 
-        public override bool ApplicableForTransit(Controller src, Controller dest) {
+        public override bool ApplicableForTransit(Controller src, Controller dest)
+        {
             if (src == null)
                 throw new ArgumentNullException();
             if (dest == null)
@@ -28,7 +29,8 @@ namespace CrashEdit {
             return src.Legacy.CanMoveTo(dest.Legacy);
         }
 
-        public override void Execute(IUserInterface ui) {
+        public override void Execute(IUserInterface ui)
+        {
             if (ui == null)
                 throw new ArgumentNullException();
             if (Source == null)

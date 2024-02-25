@@ -1,5 +1,3 @@
-using System;
-
 namespace CrashEdit.Crash
 {
     public static class PixelConv
@@ -25,7 +23,7 @@ namespace CrashEdit.Crash
             }
         }
 
-        public static short Pack1555(byte a1,byte b5,byte c5,byte d5)
+        public static short Pack1555(byte a1, byte b5, byte c5, byte d5)
         {
             if ((a1 & 0x1) != a1)
                 throw new ArgumentOutOfRangeException("A1 must be 1-bit.");
@@ -38,7 +36,7 @@ namespace CrashEdit.Crash
             return (short)(a1 << 15 | b5 << 10 | c5 << 5 | d5);
         }
 
-        public static void Unpack1555(short data,out byte a1,out byte b5,out byte c5,out byte d5)
+        public static void Unpack1555(short data, out byte a1, out byte b5, out byte c5, out byte d5)
         {
             a1 = (byte)(data >> 15 & 0x1);
             b5 = (byte)(data >> 10 & 0x1F);

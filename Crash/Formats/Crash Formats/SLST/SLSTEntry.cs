@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     public sealed class SLSTEntry : Entry
@@ -32,12 +29,12 @@ namespace CrashEdit.Crash
         {
             byte[][] items = new byte[Deltas.Count + 2][];
             items[0] = Start.Save();
-            for (int i = 0;i < Deltas.Count;++i)
+            for (int i = 0; i < Deltas.Count; ++i)
             {
                 items[1+i] = Deltas[i].Save();
             }
             items[1 + Deltas.Count] = End.Save();
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

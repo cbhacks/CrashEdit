@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     public abstract class EntryChunk : Chunk
@@ -26,7 +23,7 @@ namespace CrashEdit.Crash
 
         public void ProcessAll(GameVersion gameversion)
         {
-            for (int i = 0;i < Entries.Count;i++)
+            for (int i = 0; i < Entries.Count; i++)
             {
                 if (Entries[i] is UnprocessedEntry)
                 {
@@ -48,7 +45,7 @@ namespace CrashEdit.Crash
             }
         }
 
-        public T FindEID<T>(int eid) where T : class,IEntry
+        public T FindEID<T>(int eid) where T : class, IEntry
         {
             foreach (Entry entry in Entries)
             {
@@ -62,31 +59,31 @@ namespace CrashEdit.Crash
 
         public override UnprocessedChunk Unprocess()
         {
-            byte[] data = new byte [Length];
-            BitConv.ToInt16(data,0,Magic);
-            BitConv.ToInt16(data,2,Type);
-            BitConv.ToInt32(data,4,ChunkId);
-            BitConv.ToInt32(data,8,Entries.Count);
+            byte[] data = new byte[Length];
+            BitConv.ToInt16(data, 0, Magic);
+            BitConv.ToInt16(data, 2, Type);
+            BitConv.ToInt32(data, 4, ChunkId);
+            BitConv.ToInt32(data, 8, Entries.Count);
             // Checksum is here, but calculated later
             int offset = 20 + Entries.Count * 4;
-            for (int i = 0;i < Entries.Count;i++)
+            for (int i = 0; i < Entries.Count; i++)
             {
                 UnprocessedEntry entry = Entries[i].Unprocess();
                 byte[] entrydata = entry.Save();
                 offset += entry.HeaderLength;
-                Aligner.Align(ref offset,Alignment);
+                Aligner.Align(ref offset, Alignment);
                 offset -= entry.HeaderLength;
                 if (offset + entrydata.Length > Length)
                 {
                     throw new PackingException(entry.EID);
                 }
-                BitConv.ToInt32(data,16 + i * 4,offset);
-                entrydata.CopyTo(data,offset);
+                BitConv.ToInt32(data, 16 + i * 4, offset);
+                entrydata.CopyTo(data, offset);
                 offset += entrydata.Length;
             }
-            BitConv.ToInt32(data,16 + Entries.Count * 4,offset);
+            BitConv.ToInt32(data, 16 + Entries.Count * 4, offset);
             int checksum = CalculateChecksum(data);
-            BitConv.ToInt32(data,12,checksum);
+            BitConv.ToInt32(data, 12, checksum);
             return new UnprocessedChunk(data);
         }
     }

@@ -1,30 +1,33 @@
-
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace CrashEdit {
+namespace CrashEdit
+{
 
-    public class ResourceBox : UserControl {
+    public class ResourceBox : UserControl
+    {
 
-        public ResourceBox() {
-            NoResourceLabel = new Label {
+        public ResourceBox()
+        {
+            NoResourceLabel = new Label
+            {
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleCenter,
                 Text = "Nothing is selected."
             };
             Controls.Add(NoResourceLabel);
 
-            UndockedLabel = new Label {
+            UndockedLabel = new Label
+            {
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleCenter,
                 Text = "This editor is currently undocked.\n\nClick to focus.",
                 Visible = false
             };
-            UndockedLabel.Click += (sender, e) => {
-                if (ActivePanelUndockForm != null) {
+            UndockedLabel.Click += (sender, e) =>
+            {
+                if (ActivePanelUndockForm != null)
+                {
                     ActivePanelUndockForm.Focus();
                 }
             };
@@ -33,16 +36,21 @@ namespace CrashEdit {
 
         private Controller? _activeController;
 
-        public Controller? ActiveController {
+        public Controller? ActiveController
+        {
             get { return _activeController; }
-            set {
+            set
+            {
                 if (_activeController == value)
                     return;
 
-                if (value != null) {
-                    if (!AllPanels.TryGetValue(value, out var panel)) {
+                if (value != null)
+                {
+                    if (!AllPanels.TryGetValue(value, out var panel))
+                    {
                         // This controller does not have a panel yet, so make one.
-                        panel = new ResourcePanel(value) {
+                        panel = new ResourcePanel(value)
+                        {
                             Dock = DockStyle.Fill,
                             Visible = false
                         };
@@ -51,7 +59,9 @@ namespace CrashEdit {
                     }
 
                     ActivePanel = panel;
-                } else {
+                }
+                else
+                {
                     ActivePanel = null;
                 }
 
@@ -61,23 +71,31 @@ namespace CrashEdit {
 
         private ResourcePanel? _activePanel;
 
-        public ResourcePanel? ActivePanel {
+        public ResourcePanel? ActivePanel
+        {
             get { return _activePanel; }
-            private set {
+            private set
+            {
                 if (_activePanel == value)
                     return;
 
                 // Hide the controls for the current value.
-                if (_activePanel != null) {
-                    if (ActivePanelUndockForm != null) {
+                if (_activePanel != null)
+                {
+                    if (ActivePanelUndockForm != null)
+                    {
                         // The panel was active but undocked.
                         UndockedLabel.Visible = false;
                         ActivePanelUndockForm = null;
-                    } else {
+                    }
+                    else
+                    {
                         // The panel was active and visible.
                         _activePanel.Visible = false;
                     }
-                } else {
+                }
+                else
+                {
                     // No panel was active.
                     NoResourceLabel.Visible = false;
                 }
@@ -85,16 +103,22 @@ namespace CrashEdit {
                 _activePanel = value;
 
                 // Show the controls for the new value.
-                if (value != null) {
-                    if (UndockForms.TryGetValue(value, out var form)) {
+                if (value != null)
+                {
+                    if (UndockForms.TryGetValue(value, out var form))
+                    {
                         // The panel is now active, but is currently undocked.
                         UndockedLabel.Visible = true;
                         ActivePanelUndockForm = form;
-                    } else {
+                    }
+                    else
+                    {
                         // The panel is now active and visible.
                         value.Visible = true;
                     }
-                } else {
+                }
+                else
+                {
                     // No panel is now active.
                     NoResourceLabel.Visible = true;
                 }
@@ -107,15 +131,18 @@ namespace CrashEdit {
             ActivePanel != null &&
             !ActivePanel.IsEmpty;
 
-        public void ToggleUndock() {
+        public void ToggleUndock()
+        {
             if (ActivePanel == null)
                 throw new InvalidOperationException();
             if (ActivePanel.IsEmpty)
                 throw new InvalidOperationException();
 
-            if (ActivePanelUndockForm == null) {
+            if (ActivePanelUndockForm == null)
+            {
                 // Create the new undock form.
-                ActivePanelUndockForm = new Form() {
+                ActivePanelUndockForm = new Form()
+                {
                     Text = ActiveController!.Text,
                     Icon = Embeds.GetIcon(ActiveController.ImageKey),
                     ClientSize = ActivePanel.Size,
@@ -134,15 +161,19 @@ namespace CrashEdit {
                 // Display the form.
                 ActivePanelUndockForm.Show(this);
                 ActivePanelUndockForm.Focus();
-            } else {
+            }
+            else
+            {
                 // Panel is already undocked, so redock it.
                 // The closing event handler will do the rest of the work.
                 ActivePanelUndockForm.Close();
             }
         }
 
-        private void UndockForm_FormClosing(object sender, FormClosingEventArgs e) {
-            if (sender == ActivePanelUndockForm) {
+        private void UndockForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (sender == ActivePanelUndockForm)
+            {
                 // Hide the undocked message.
                 UndockedLabel.Visible = false;
 
@@ -153,7 +184,9 @@ namespace CrashEdit {
                 // Discard the undock form.
                 ActivePanelUndockForm = null;
                 UndockForms.Remove(ActivePanel!);
-            } else {
+            }
+            else
+            {
                 var form = (Form)sender;
                 var panel = (ResourcePanel)form.Tag;
                 panel.Visible = false;
@@ -173,19 +206,23 @@ namespace CrashEdit {
 
         public Label UndockedLabel { get; }
 
-        public void Sync() {
+        public void Sync()
+        {
             // Destroy panels for controllers which have died.
-            foreach (var kvp in AllPanels.ToList().Where(x => x.Key.Dead)) {
+            foreach (var kvp in AllPanels.ToList().Where(x => x.Key.Dead))
+            {
                 var ctlr = kvp.Key;
                 var panel = kvp.Value;
 
                 // Deselect the controller if it is selected.
-                if (ctlr == ActiveController) {
+                if (ctlr == ActiveController)
+                {
                     ActiveController = null;
                 }
 
                 // Redock the panel if it is undocked.
-                if (UndockForms.TryGetValue(panel, out var form)) {
+                if (UndockForms.TryGetValue(panel, out var form))
+                {
                     form.Close();
                 }
 
@@ -196,7 +233,8 @@ namespace CrashEdit {
             }
 
             // Update undock form titlebars and icons.
-            foreach (var kvp in UndockForms) {
+            foreach (var kvp in UndockForms)
+            {
                 var ctlr = kvp.Key.Controller;
                 var form = kvp.Value;
                 form.Text = ctlr.Text;
@@ -204,9 +242,12 @@ namespace CrashEdit {
             }
         }
 
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
-                while (UndockForms.Count > 0) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                while (UndockForms.Count > 0)
+                {
                     UndockForms.Values.First().Close();
                 }
             }

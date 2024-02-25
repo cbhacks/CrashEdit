@@ -1,30 +1,32 @@
+namespace CrashEdit
+{
 
-using System;
-using System.Linq;
-using System.IO;
-
-namespace CrashEdit {
-
-    public sealed class ImportAddVerb : GroupVerb {
+    public sealed class ImportAddVerb : GroupVerb
+    {
 
         public override string Text => "Import from file...";
 
         public override string ImageKey => "FolderOpen";
 
-        public override bool ApplicableForGroup(SubcontrollerGroup group) {
+        public override bool ApplicableForGroup(SubcontrollerGroup group)
+        {
             if (group == null)
                 throw new ArgumentNullException();
 
-            if (group.CanAdd) {
+            if (group.CanAdd)
+            {
                 return Importer.AllImporters
                     .Where(x => group.ResourceType.IsAssignableFrom(x.ResourceType))
                     .Any();
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
 
-        public override void Execute(IUserInterface ui) {
+        public override void Execute(IUserInterface ui)
+        {
             if (ui == null)
                 throw new ArgumentNullException();
             if (Group == null)
@@ -40,7 +42,8 @@ namespace CrashEdit {
             // TODO - multiple choices?
 
             // Get the input filename from the user.
-            if (!ui.ShowImportDialog(out var filename, importer.FileFilters)) {
+            if (!ui.ShowImportDialog(out var filename, importer.FileFilters))
+            {
                 return;
             }
 
@@ -48,7 +51,8 @@ namespace CrashEdit {
             var buf = File.ReadAllBytes(filename);
 
             // Create a resource from the raw data.
-            if (!importer.Import(ui, buf, out var res)) {
+            if (!importer.Import(ui, buf, out var res))
+            {
                 return;
             }
 

@@ -1,13 +1,13 @@
-
-using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace CrashEdit {
+namespace CrashEdit
+{
 
-    public abstract class LegacyController {
+    public abstract class LegacyController
+    {
 
-        public LegacyController(SubcontrollerGroup? parentGroup, object resource) {
+        public LegacyController(SubcontrollerGroup? parentGroup, object resource)
+        {
             if (resource == null)
                 throw new ArgumentNullException();
 
@@ -24,17 +24,20 @@ namespace CrashEdit {
 
         public virtual bool EditorAvailable => false;
 
-        public virtual Control CreateEditor() {
+        public virtual Control CreateEditor()
+        {
             throw new NotSupportedException();
         }
 
         public bool NeedsNewEditor { get; set; }
 
-        public virtual bool CanMoveTo(LegacyController dest) {
+        public virtual bool CanMoveTo(LegacyController dest)
+        {
             return false;
         }
 
-        public virtual void MoveTo(LegacyController dest) {
+        public virtual void MoveTo(LegacyController dest)
+        {
             throw new NotSupportedException();
         }
 
@@ -42,9 +45,11 @@ namespace CrashEdit {
             new Dictionary<Type, Type>();
 
         [Registrar.TypeProcessor]
-        private static void ProcessOrphanControllerType(Type type) {
+        private static void ProcessOrphanControllerType(Type type)
+        {
             var attrs = type.GetCustomAttributes(typeof(OrphanLegacyControllerAttribute), false);
-            foreach (OrphanLegacyControllerAttribute attr in attrs) {
+            foreach (OrphanLegacyControllerAttribute attr in attrs)
+            {
                 OrphanControllerTypes.Add(attr.ResourceType, type);
             }
         }

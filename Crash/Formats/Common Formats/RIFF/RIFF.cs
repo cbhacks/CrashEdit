@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     public sealed class RIFF : RIFFItem
@@ -32,17 +29,17 @@ namespace CrashEdit.Crash
         public override byte[] Save(Endianness endianness)
         {
             byte[] data = SaveBody(endianness);
-            byte[] result = new byte [12 + data.Length];
+            byte[] result = new byte[12 + data.Length];
             result[0] = (byte)'R';
             result[1] = (byte)'I';
             result[2] = (byte)'F';
             result[3] = (byte)'F';
-            AutoBitConv.ToInt32(endianness,result,4,data.Length + 4);
+            AutoBitConv.ToInt32(endianness, result, 4, data.Length + 4);
             result[8] = (byte)Name[0];
             result[9] = (byte)Name[1];
             result[10] = (byte)Name[2];
             result[11] = (byte)Name[3];
-            data.CopyTo(result,12);
+            data.CopyTo(result, 12);
             return result;
         }
 

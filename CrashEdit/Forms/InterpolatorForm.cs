@@ -1,13 +1,10 @@
 ﻿using CrashEdit.Crash;
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
     public partial class InterpolatorForm : Form
     {
-        public static Dictionary<string,MathCalc> MathFuncs = new Dictionary<string, MathCalc>()
+        public static Dictionary<string, MathCalc> MathFuncs = new Dictionary<string, MathCalc>()
         {
             { "Linear", MathFunctionLinear },
             { "Inverse Linear", MathFunctionInverseLinear },
@@ -26,7 +23,7 @@ namespace CrashEdit.CE
                 Close();
             }
             this.positions = new List<Position>(positions);
-            NewPositions = new Position [0];
+            NewPositions = new Position[0];
 
             InitializeComponent();
 
@@ -36,7 +33,7 @@ namespace CrashEdit.CE
             dpdFunc.SelectedIndex = 0;
             numAmount.Maximum = short.MaxValue - positions.Count;
             numEnd.Maximum = positions.Count;
-            numEnd_ValueChanged(null,null);
+            numEnd_ValueChanged(null, null);
             UpdatePosition();
 
             Text = Properties.Resources.InterpolatorForm;
@@ -53,7 +50,7 @@ namespace CrashEdit.CE
             fraPosition.Text = Properties.Resources.InterpolatorForm_fraPosition;
             fraTension.Text = Properties.Resources.InterpolatorForm_fraTension;
         }
-        
+
         private double Tension => (double)numTension.Value;
 
         public Position[] NewPositions { get; private set; }
@@ -132,7 +129,7 @@ namespace CrashEdit.CE
                 NewPositions[NewPositions.Length - 1] = end;
                 for (int i = 1, s = NewPositions.Length-1; i < s + 1; ++i)
                 {
-                    NewPositions[i] = delta * MathFuncs[Func].Invoke((double)i/s,Order) + start;
+                    NewPositions[i] = delta * MathFuncs[Func].Invoke((double)i/s, Order) + start;
                 }
                 delta /= Amount+1;
                 lblAverage.Text = $"Average Point Distance: {(int)Math.Sqrt(delta.X*delta.X+delta.Y*delta.Y+delta.Z*delta.Z)}";
@@ -158,7 +155,7 @@ namespace CrashEdit.CE
                 Position distpos;
                 for (int i = 1, s = oldpositions.Length-1; i < s + 1; ++i)
                 {
-                    oldpositions[i] = GetBezierPoint(subpositions, weights, MathFuncs[Func].Invoke((double)i/s,Order));
+                    oldpositions[i] = GetBezierPoint(subpositions, weights, MathFuncs[Func].Invoke((double)i/s, Order));
                     distpos = oldpositions[i] - oldpositions[i - 1];
                     dist += Math.Sqrt(distpos.X * distpos.X + distpos.Y * distpos.Y + distpos.Z * distpos.Z);
                     arclen[i] = dist;
@@ -168,7 +165,7 @@ namespace CrashEdit.CE
                 // recalculate points for equidistance
                 for (int i = 1, s = NewPositions.Length-1; i < s; ++i)
                 {
-                    NewPositions[i] = FindPointByDistance(oldpositions, arclen, MathFuncs[Func].Invoke((double)i/s,Order));
+                    NewPositions[i] = FindPointByDistance(oldpositions, arclen, MathFuncs[Func].Invoke((double)i/s, Order));
                 }
             }
         }
@@ -210,7 +207,7 @@ namespace CrashEdit.CE
             int n = controlcount-1;
             for (int i = 0; i < controlcount; ++i)
             {
-                newpos += GetBinomial(n,i) * Math.Pow(1.0-t,n-i) * Math.Pow(t,i) * weights[i] * Position.Unit;
+                newpos += GetBinomial(n, i) * Math.Pow(1.0-t, n-i) * Math.Pow(t, i) * weights[i] * Position.Unit;
             }
             return newpos;
         }
@@ -221,41 +218,41 @@ namespace CrashEdit.CE
             int n = control.Count-1;
             for (int i = 0; i < control.Count; ++i)
             {
-                newpos += GetBinomial(n,i) * Math.Pow(1.0-t,n-i) * Math.Pow(t,i) * weights[i] * control[i] / GetBezierBasisPoint(control.Count, weights, t);
+                newpos += GetBinomial(n, i) * Math.Pow(1.0-t, n-i) * Math.Pow(t, i) * weights[i] * control[i] / GetBezierBasisPoint(control.Count, weights, t);
             }
             return newpos;
         }
 
-        public delegate double MathCalc(double x,double o);
+        public delegate double MathCalc(double x, double o);
 
-        private static double MathFunctionLinear(double x,double o)
+        private static double MathFunctionLinear(double x, double o)
         {
-            return Math.Pow(x,o);
+            return Math.Pow(x, o);
         }
 
-        private static double MathFunctionInverseLinear(double x,double o)
+        private static double MathFunctionInverseLinear(double x, double o)
         {
-            return 1 - MathFunctionLinear(-x+1,o);
+            return 1 - MathFunctionLinear(-x+1, o);
         }
 
-        internal static double MathFuncQuadrPolinomial1(double x,double o)
+        internal static double MathFuncQuadrPolinomial1(double x, double o)
         {
-            return Math.Min(Math.Pow(2*Math.Max(x,0),o)/2,0.5);
+            return Math.Min(Math.Pow(2*Math.Max(x, 0), o)/2, 0.5);
         }
 
-        internal static double MathFuncQuadrPolinomial2(double x,double o)
+        internal static double MathFuncQuadrPolinomial2(double x, double o)
         {
-            return 0.5 - MathFuncQuadrPolinomial1(1 - x,o);
+            return 0.5 - MathFuncQuadrPolinomial1(1 - x, o);
         }
 
-        private static double MathFunctionDouble(double x,double o)
+        private static double MathFunctionDouble(double x, double o)
         {
-            return MathFuncQuadrPolinomial1(x,o) + MathFuncQuadrPolinomial2(x,o);
+            return MathFuncQuadrPolinomial1(x, o) + MathFuncQuadrPolinomial2(x, o);
         }
 
-        private static double MathFunctionInverseDouble(double x,double o)
+        private static double MathFunctionInverseDouble(double x, double o)
         {
-            return MathFuncQuadrPolinomial1(x-0.5,o) + MathFuncQuadrPolinomial2(x+0.5,o);
+            return MathFuncQuadrPolinomial1(x-0.5, o) + MathFuncQuadrPolinomial2(x+0.5, o);
         }
 
         private void numStart_ValueChanged(object sender, EventArgs e)

@@ -1,5 +1,3 @@
-using CrashEdit.Crash;
-
 namespace CrashHacks.Scripts.Zone
 {
     public sealed class DistanceUnfogScript : Script
@@ -35,7 +33,7 @@ namespace CrashHacks.Scripts.Zone
             }
         }
 
-        public override void Run(object value,GameVersion gameversion)
+        public override void Run(object value, GameVersion gameversion)
         {
             if (value is ZoneEntry)
             {

@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     public sealed class MusicEntry : Entry
     {
-        public MusicEntry(int vheid,int vb0eid,int vb1eid,int vb2eid,int vb3eid,int vb4eid,int vb5eid,int vb6eid,VH vh,SEP sep,int eid) : base(eid)
+        public MusicEntry(int vheid, int vb0eid, int vb1eid, int vb2eid, int vb3eid, int vb4eid, int vb5eid, int vb6eid, VH vh, SEP sep, int eid) : base(eid)
         {
             Tracks.AddRange(sep.SEQs);
             VHEID = vheid;
@@ -44,27 +41,27 @@ namespace CrashEdit.Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte [3][];
-            items[0] = new byte [36];
-            BitConv.ToInt32(items[0],0,Tracks.Count);
-            BitConv.ToInt32(items[0],4,VHEID);
-            BitConv.ToInt32(items[0],8,VB0EID);
-            BitConv.ToInt32(items[0],12,VB1EID);
-            BitConv.ToInt32(items[0],16,VB2EID);
-            BitConv.ToInt32(items[0],20,VB3EID);
-            BitConv.ToInt32(items[0],24,VB4EID);
-            BitConv.ToInt32(items[0],28,VB5EID);
-            BitConv.ToInt32(items[0],32,VB6EID);
+            byte[][] items = new byte[3][];
+            items[0] = new byte[36];
+            BitConv.ToInt32(items[0], 0, Tracks.Count);
+            BitConv.ToInt32(items[0], 4, VHEID);
+            BitConv.ToInt32(items[0], 8, VB0EID);
+            BitConv.ToInt32(items[0], 12, VB1EID);
+            BitConv.ToInt32(items[0], 16, VB2EID);
+            BitConv.ToInt32(items[0], 20, VB3EID);
+            BitConv.ToInt32(items[0], 24, VB4EID);
+            BitConv.ToInt32(items[0], 28, VB5EID);
+            BitConv.ToInt32(items[0], 32, VB6EID);
             if (VH != null)
             {
                 items[1] = VH.Save();
             }
             else
             {
-                items[1] = new byte [0];
+                items[1] = new byte[0];
             }
             items[2] = new SEP(Tracks).Save();
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

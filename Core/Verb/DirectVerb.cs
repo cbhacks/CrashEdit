@@ -1,9 +1,8 @@
+namespace CrashEdit
+{
 
-using System;
-
-namespace CrashEdit {
-
-    public abstract class DirectVerb : Verb {
+    public abstract class DirectVerb : Verb
+    {
 
         public Controller? Subject { get; set; }
 

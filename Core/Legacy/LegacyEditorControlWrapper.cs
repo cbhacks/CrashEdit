@@ -1,12 +1,13 @@
-
-using System;
 using System.Windows.Forms;
 
-namespace CrashEdit {
+namespace CrashEdit
+{
 
-    public sealed class LegacyEditorControlWrapper : UserControl {
+    public sealed class LegacyEditorControlWrapper : UserControl
+    {
 
-        public LegacyEditorControlWrapper(LegacyController legacyCtlr) {
+        public LegacyEditorControlWrapper(LegacyController legacyCtlr)
+        {
             if (legacyCtlr == null)
                 throw new ArgumentNullException();
 
@@ -21,8 +22,10 @@ namespace CrashEdit {
 
         public Control InnerControl { get; private set; }
 
-        public void Sync() {
-            if (LegacyController.NeedsNewEditor) {
+        public void Sync()
+        {
+            if (LegacyController.NeedsNewEditor)
+            {
                 LegacyController.NeedsNewEditor = false;
                 Controls.Remove(InnerControl);
                 InnerControl.Dispose();

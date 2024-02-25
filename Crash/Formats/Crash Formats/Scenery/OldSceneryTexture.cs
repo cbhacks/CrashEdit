@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CrashEdit.Crash
+﻿namespace CrashEdit.Crash
 {
     public struct OldSceneryTexture : OldModelStruct
     {
@@ -22,9 +20,9 @@ namespace CrashEdit.Crash
             byte xoffu = (byte)(texinfo >> 13 & 0x1F);
             byte cluty = (byte)(texinfo >> 6 & 0x7F);
             byte yoffu = (byte)(texinfo & 0x1F);
-            return new OldSceneryTexture(uvindex,clutx,cluty,xoffu,yoffu,colormode,blendmode,segment,r,g,b);
+            return new OldSceneryTexture(uvindex, clutx, cluty, xoffu, yoffu, colormode, blendmode, segment, r, g, b);
         }
-        public OldSceneryTexture(int uvindex,byte clutx,byte cluty,byte xoffu,byte yoffu,byte colormode,byte blendmode,byte segment,byte r,byte g,byte b)
+        public OldSceneryTexture(int uvindex, byte clutx, byte cluty, byte xoffu, byte yoffu, byte colormode, byte blendmode, byte segment, byte r, byte g, byte b)
         {
             UVIndex = uvindex;
             ClutX = clutx;
@@ -37,7 +35,7 @@ namespace CrashEdit.Crash
             R = r;
             G = g;
             B = b;
-            
+
             Width = 4 << (UVIndex % 5);
             Height = 4 << ((UVIndex / 5) % 5);
             int winding = UVIndex / 25;
@@ -60,7 +58,7 @@ namespace CrashEdit.Crash
             Y2 = (v2 + yoff) / 128.0;
             Y3 = (v3 + yoff) / 128.0;
         }
-        
+
         public byte R { get; }
         public byte G { get; }
         public byte B { get; }

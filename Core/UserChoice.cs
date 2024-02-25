@@ -1,9 +1,8 @@
+namespace CrashEdit
+{
 
-using System;
-
-namespace CrashEdit {
-
-    public sealed class UserChoice {
+    public sealed class UserChoice
+    {
 
         public string? Text { get; set; }
 

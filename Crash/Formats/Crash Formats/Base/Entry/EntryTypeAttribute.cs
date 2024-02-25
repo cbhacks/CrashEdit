@@ -1,11 +1,9 @@
-using System;
-
 namespace CrashEdit.Crash
 {
-    [AttributeUsage(AttributeTargets.Class,AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public sealed class EntryTypeAttribute : Attribute
     {
-        public EntryTypeAttribute(int type,GameVersion gameversion)
+        public EntryTypeAttribute(int type, GameVersion gameversion)
         {
             Type = type;
             GameVersion = gameversion;

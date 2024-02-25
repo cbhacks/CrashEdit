@@ -1,5 +1,3 @@
-using CrashEdit.Crash;
-
 namespace CrashHacks.Scripts.Scenery.Color
 {
     public sealed class GrayscaleScript : BaseScript
@@ -19,7 +17,7 @@ namespace CrashHacks.Scripts.Scenery.Color
             get { return "chekwob"; }
         }
 
-        public override void Run(ref byte r,ref byte g,ref byte b)
+        public override void Run(ref byte r, ref byte g, ref byte b)
         {
             byte avg = (byte)((r + g + b) / 3);
             r = avg;

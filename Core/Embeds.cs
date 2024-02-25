@@ -1,24 +1,27 @@
-
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace CrashEdit {
+namespace CrashEdit
+{
 
-    public static class Embeds {
+    public static class Embeds
+    {
 
         public const string Prefix = "CrashEdit.Main.Embeds.";
 
-        static Embeds() {
+        static Embeds()
+        {
             var asm = typeof(Embeds).Assembly;
-            foreach (var fullName in asm.GetManifestResourceNames()) {
+            foreach (var fullName in asm.GetManifestResourceNames())
+            {
                 if (!fullName.StartsWith(Prefix))
                     continue;
 
                 var name = fullName.Substring(Prefix.Length);
-                if (name.StartsWith("Images.")) {
-                    using (var stream = asm.GetManifestResourceStream(fullName)) {
+                if (name.StartsWith("Images."))
+                {
+                    using (var stream = asm.GetManifestResourceStream(fullName))
+                    {
                         var bmpName = name.Split('.')[1];
                         var bitmap = new Bitmap(stream);
                         Bitmaps.Add(bmpName, bitmap);
@@ -37,15 +40,18 @@ namespace CrashEdit {
         public static ImageList ImageList { get; } =
             new ImageList();
 
-        public static Icon? GetIcon(string imageKey) {
+        public static Icon? GetIcon(string imageKey)
+        {
             if (imageKey == null)
                 throw new ArgumentNullException();
 
-            if (Icons.TryGetValue(imageKey, out var icon)) {
+            if (Icons.TryGetValue(imageKey, out var icon))
+            {
                 return icon;
             }
 
-            if (!Bitmaps.TryGetValue(imageKey, out var bitmap)) {
+            if (!Bitmaps.TryGetValue(imageKey, out var bitmap))
+            {
                 return null;
             }
 

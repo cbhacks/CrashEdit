@@ -1,12 +1,13 @@
-
-using System;
 using System.Reflection;
 
-namespace CrashEdit {
+namespace CrashEdit
+{
 
-    public sealed class SubcontrollerSlotGroup : SubcontrollerGroup {
+    public sealed class SubcontrollerSlotGroup : SubcontrollerGroup
+    {
 
-        public SubcontrollerSlotGroup(Controller owner, PropertyInfo property, SubresourceSlotAttribute attr) : base(owner) {
+        public SubcontrollerSlotGroup(Controller owner, PropertyInfo property, SubresourceSlotAttribute attr) : base(owner)
+        {
             if (property == null)
                 throw new ArgumentNullException();
 
@@ -31,7 +32,8 @@ namespace CrashEdit {
 
         public override bool CanAdd => CanSet && Property.GetValue(Owner.Resource) == null;
 
-        public override void Add(object res) {
+        public override void Add(object res)
+        {
             if (res == null)
                 throw new ArgumentNullException();
             if (!CanAdd)
@@ -42,7 +44,8 @@ namespace CrashEdit {
 
         public override bool CanRemove => CanSetNull && Property.GetValue(Owner.Resource) != null;
 
-        public override void Remove(Controller subctlr) {
+        public override void Remove(Controller subctlr)
+        {
             if (subctlr == null)
                 throw new ArgumentNullException();
             if (!CanRemove)
@@ -55,7 +58,8 @@ namespace CrashEdit {
 
         public override bool CanReplace => CanSet && Property.GetValue(Owner.Resource) != null;
 
-        public override void Replace(Controller subctlr, object newRes) {
+        public override void Replace(Controller subctlr, object newRes)
+        {
             if (subctlr == null)
                 throw new ArgumentNullException();
             if (newRes == null)
@@ -68,20 +72,29 @@ namespace CrashEdit {
             Property.SetValue(Owner.Resource, newRes);
         }
 
-        public override void Sync() {
+        public override void Sync()
+        {
             object value = Property.GetValue(Owner.Resource);
 
-            if (value == null) {
-                if (Members.Count != 0) {
+            if (value == null)
+            {
+                if (Members.Count != 0)
+                {
                     Members[0].Kill();
                     Members.Clear();
                 }
-            } else if (Members.Count == 0) {
+            }
+            else if (Members.Count == 0)
+            {
                 Members.Add(Controller.Make(value, this));
-            } else if (Members[0].Resource != value) {
+            }
+            else if (Members[0].Resource != value)
+            {
                 Members[0].Kill();
                 Members[0] = Controller.Make(value, this);
-            } else {
+            }
+            else
+            {
                 Members[0].Sync();
             }
         }

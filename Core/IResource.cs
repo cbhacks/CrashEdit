@@ -1,9 +1,8 @@
+namespace CrashEdit
+{
 
-using System;
-
-namespace CrashEdit {
-
-    public interface IResource {
+    public interface IResource
+    {
 
         public string Title { get; }
 

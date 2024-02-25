@@ -1,9 +1,8 @@
+namespace CrashEdit
+{
 
-using System;
-
-namespace CrashEdit {
-
-    public abstract class GroupVerb : Verb {
+    public abstract class GroupVerb : Verb
+    {
 
         public SubcontrollerGroup? Group { get; set; }
 

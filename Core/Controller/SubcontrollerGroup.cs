@@ -1,12 +1,11 @@
+namespace CrashEdit
+{
 
-using System;
-using System.Collections.Generic;
+    public abstract class SubcontrollerGroup
+    {
 
-namespace CrashEdit {
-
-    public abstract class SubcontrollerGroup {
-
-        public SubcontrollerGroup(Controller owner) {
+        public SubcontrollerGroup(Controller owner)
+        {
             if (owner == null)
                 throw new ArgumentNullException();
 

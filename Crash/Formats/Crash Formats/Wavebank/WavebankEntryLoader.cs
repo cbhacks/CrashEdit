@@ -1,15 +1,13 @@
-using System;
-
 namespace CrashEdit.Crash
 {
-    [EntryType(14,GameVersion.Crash1BetaMAR08)]
-    [EntryType(14,GameVersion.Crash1BetaMAY11)]
-    [EntryType(14,GameVersion.Crash1)]
-    [EntryType(14,GameVersion.Crash2)]
-    [EntryType(14,GameVersion.Crash3)]
+    [EntryType(14, GameVersion.Crash1BetaMAR08)]
+    [EntryType(14, GameVersion.Crash1BetaMAY11)]
+    [EntryType(14, GameVersion.Crash1)]
+    [EntryType(14, GameVersion.Crash2)]
+    [EntryType(14, GameVersion.Crash3)]
     public sealed class WavebankEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items,int eid)
+        public override Entry Load(byte[][] items, int eid)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
@@ -21,8 +19,8 @@ namespace CrashEdit.Crash
             {
                 ErrorManager.SignalError("WavebankEntry: First item length is wrong");
             }
-            int id = BitConv.FromInt32(items[0],0);
-            int length = BitConv.FromInt32(items[0],4);
+            int id = BitConv.FromInt32(items[0], 0);
+            int length = BitConv.FromInt32(items[0], 4);
             if (id < 0 || id > 6)
             {
                 ErrorManager.SignalIgnorableError("WavebankEntry: ID is invalid");
@@ -31,7 +29,7 @@ namespace CrashEdit.Crash
             {
                 ErrorManager.SignalIgnorableError("WavebankEntry: Length field mismatch");
             }
-            return new WavebankEntry(id,SampleSet.Load(items[1]),eid);
+            return new WavebankEntry(id, SampleSet.Load(items[1]), eid);
         }
     }
 }

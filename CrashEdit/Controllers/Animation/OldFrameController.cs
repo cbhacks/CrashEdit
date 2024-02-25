@@ -1,6 +1,4 @@
 using CrashEdit.Crash;
-using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
@@ -22,11 +20,11 @@ namespace CrashEdit.CE
 
             OldFrameBox framebox = new OldFrameBox(this);
             framebox.Dock = DockStyle.Fill;
-            Dictionary<int,TextureChunk> textures = new Dictionary<int,TextureChunk>();
+            Dictionary<int, TextureChunk> textures = new Dictionary<int, TextureChunk>();
             foreach (OldModelStruct str in modelentry.Structs)
                 if (str is OldModelTexture tex && !textures.ContainsKey(tex.EID))
                     textures.Add(tex.EID, GetEntry<TextureChunk>(tex.EID));
-            OldAnimationEntryViewer viewerbox = new OldAnimationEntryViewer(OldFrame,ColoredAnimationEntryController != null,modelentry,textures) { Dock = DockStyle.Fill };
+            OldAnimationEntryViewer viewerbox = new OldAnimationEntryViewer(OldFrame, ColoredAnimationEntryController != null, modelentry, textures) { Dock = DockStyle.Fill };
 
             TabPage edittab = new TabPage("Editor");
             edittab.Controls.Add(framebox);
@@ -52,11 +50,11 @@ namespace CrashEdit.CE
             {
                 throw new GUIException("The linked model entry could not be found.");
             }
-            if (MessageBox.Show("Texture and color information will not be exported.\n\nContinue anyway?","Export as OBJ",MessageBoxButtons.YesNo) != DialogResult.Yes)
+            if (MessageBox.Show("Texture and color information will not be exported.\n\nContinue anyway?", "Export as OBJ", MessageBoxButtons.YesNo) != DialogResult.Yes)
             {
                 return;
             }
-            FileUtil.SaveFile(OldFrame.ToOBJ(modelentry),FileFilters.OBJ,FileFilters.Any);
+            FileUtil.SaveFile(OldFrame.ToOBJ(modelentry), FileFilters.OBJ, FileFilters.Any);
         }
     }
 }

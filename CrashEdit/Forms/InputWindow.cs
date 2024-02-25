@@ -1,6 +1,3 @@
-using System;
-using System.Windows.Forms;
-
 namespace CrashEdit.CE
 {
     public partial class InputWindow : Form
@@ -14,12 +11,12 @@ namespace CrashEdit.CE
 
         public string Input => txtInput.Text;
 
-        private void cmdOK_Click(object sender,EventArgs e)
+        private void cmdOK_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
         }
 
-        private void cmdCancel_Click(object sender,EventArgs e)
+        private void cmdCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
         }

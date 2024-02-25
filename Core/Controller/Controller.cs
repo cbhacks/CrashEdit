@@ -1,20 +1,20 @@
+namespace CrashEdit
+{
 
-using System;
-using System.Linq;
-using System.Collections.Generic;
+    public sealed class Controller
+    {
 
-namespace CrashEdit {
-
-    public sealed class Controller {
-
-        public static Controller Make(object resource, SubcontrollerGroup? parentGroup) {
+        public static Controller Make(object resource, SubcontrollerGroup? parentGroup)
+        {
             if (resource == null)
                 throw new ArgumentNullException();
 
             var type = resource.GetType();
-            while (type != null) {
-                if (LegacyController.OrphanControllerTypes.TryGetValue(type, out var legacyCtlrType)) {
-                    var args = new object?[] {resource, parentGroup};
+            while (type != null)
+            {
+                if (LegacyController.OrphanControllerTypes.TryGetValue(type, out var legacyCtlrType))
+                {
+                    var args = new object?[] { resource, parentGroup };
                     var legacyCtlr = (LegacyController)Activator.CreateInstance(legacyCtlrType, args);
                     return legacyCtlr.Modern;
                 }
@@ -24,7 +24,8 @@ namespace CrashEdit {
             return new Controller(resource, parentGroup);
         }
 
-        private Controller(object resource, SubcontrollerGroup? parentGroup) {
+        private Controller(object resource, SubcontrollerGroup? parentGroup)
+        {
             if (resource == null)
                 throw new ArgumentNullException();
 
@@ -32,20 +33,28 @@ namespace CrashEdit {
             ParentGroup = parentGroup;
 
             var type = resource.GetType();
-            foreach (var property in type.GetProperties()) {
+            foreach (var property in type.GetProperties())
+            {
                 var attr = property
                     .GetCustomAttributes(typeof(SubresourceAttribute), true)
                     .SingleOrDefault();
 
-                if (attr == null) {
+                if (attr == null)
+                {
                     // Not a subresource.
-                } else if (attr is SubresourceSlotAttribute slotAttr) {
+                }
+                else if (attr is SubresourceSlotAttribute slotAttr)
+                {
                     // Single (possibly null) subresource.
                     SubcontrollerGroups.Add(new SubcontrollerSlotGroup(this, property, slotAttr));
-                } else if (attr is SubresourceListAttribute listAttr) {
+                }
+                else if (attr is SubresourceListAttribute listAttr)
+                {
                     // List of zero or more subresources.
                     SubcontrollerGroups.Add(new SubcontrollerListGroup(this, property, listAttr));
-                } else {
+                }
+                else
+                {
                     throw new NotImplementedException();
                 }
             }
@@ -53,7 +62,8 @@ namespace CrashEdit {
             SubcontrollerGroups.Sort((x, y) => x.Order - y.Order);
         }
 
-        public Controller(LegacyController legacy, SubcontrollerGroup? parentGroup) : this(legacy.Resource, parentGroup) {
+        public Controller(LegacyController legacy, SubcontrollerGroup? parentGroup) : this(legacy.Resource, parentGroup)
+        {
             if (legacy == null)
                 throw new ArgumentNullException();
 
@@ -82,13 +92,16 @@ namespace CrashEdit {
 
         public bool Dead { get; private set; }
 
-        public void Kill() {
+        public void Kill()
+        {
             if (Dead)
                 throw new InvalidOperationException();
 
             Dead = true;
-            foreach (var ctlrGroup in SubcontrollerGroups) {
-                foreach (var ctlr in ctlrGroup.Members) {
+            foreach (var ctlrGroup in SubcontrollerGroups)
+            {
+                foreach (var ctlr in ctlrGroup.Members)
+                {
                     ctlr.Kill();
                 }
             }
@@ -96,11 +109,13 @@ namespace CrashEdit {
 
         public LegacyController? Legacy { get; }
 
-        public void Sync() {
+        public void Sync()
+        {
             if (Dead)
                 throw new InvalidOperationException();
 
-            foreach (var subctlrGroup in SubcontrollerGroups) {
+            foreach (var subctlrGroup in SubcontrollerGroups)
+            {
                 subctlrGroup.Sync();
             }
         }

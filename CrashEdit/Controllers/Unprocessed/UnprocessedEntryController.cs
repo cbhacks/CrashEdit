@@ -8,7 +8,7 @@ namespace CrashEdit.CE
         public UnprocessedEntryController(UnprocessedEntry unprocessedentry, SubcontrollerGroup parentGroup) : base(unprocessedentry, parentGroup)
         {
             UnprocessedEntry = unprocessedentry;
-            AddMenu(string.Format(CrashUI.Properties.Resources.UnprocessedEntryController_AcProcess,UnprocessedEntry.EName),Menu_Process_Entry);
+            AddMenu(string.Format(CrashUI.Properties.Resources.UnprocessedEntryController_AcProcess, UnprocessedEntry.EName), Menu_Process_Entry);
         }
 
         public UnprocessedEntry UnprocessedEntry { get; }

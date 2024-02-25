@@ -9,7 +9,7 @@ namespace CrashEdit.CE
             Chunk = chunk;
             if (!(this is UnprocessedChunkController))
             {
-                AddMenu(CrashUI.Properties.Resources.ChunkController_AcDeprocess,Menu_Unprocess_Chunk);
+                AddMenu(CrashUI.Properties.Resources.ChunkController_AcDeprocess, Menu_Unprocess_Chunk);
             }
         }
 

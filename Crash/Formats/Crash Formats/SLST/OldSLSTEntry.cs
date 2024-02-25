@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     public sealed class OldSLSTEntry : Entry
     {
-        public OldSLSTEntry(OldSLSTSource start, OldSLSTSource end, IEnumerable<OldSLSTDelta> deltas,int eid) : base(eid)
+        public OldSLSTEntry(OldSLSTSource start, OldSLSTSource end, IEnumerable<OldSLSTDelta> deltas, int eid) : base(eid)
         {
             if (deltas == null)
                 throw new ArgumentNullException("deltas");
@@ -30,14 +27,14 @@ namespace CrashEdit.Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte [Deltas.Count + 2][];
+            byte[][] items = new byte[Deltas.Count + 2][];
             items[0] = Start.Save();
-            for (int i = 0;i < Deltas.Count;++i)
+            for (int i = 0; i < Deltas.Count; ++i)
             {
                 items[1+i] = Deltas[i].Save();
             }
             items[1 + Deltas.Count] = End.Save();
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

@@ -1,15 +1,15 @@
-
-using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace CrashEdit {
+namespace CrashEdit
+{
 
-    public abstract class Editor : IDisposable {
+    public abstract class Editor : IDisposable
+    {
 
         public bool IsInitialized { get; private set; }
 
-        public void Initialize(Controller subj) {
+        public void Initialize(Controller subj)
+        {
             if (subj == null)
                 throw new ArgumentNullException();
             if (IsDisposed)
@@ -22,15 +22,18 @@ namespace CrashEdit {
             IsInitialized = true;
             _subject = subj;
             _control = MakeControl();
-            if (_control == null) {
+            if (_control == null)
+            {
                 throw new Exception();
             }
         }
 
         private Controller? _subject;
 
-        public Controller Subject {
-            get {
+        public Controller Subject
+        {
+            get
+            {
                 if (IsDisposed)
                     throw new ObjectDisposedException(GetType().FullName);
                 if (_subject == null)
@@ -42,8 +45,10 @@ namespace CrashEdit {
 
         private Control? _control;
 
-        public Control Control {
-            get {
+        public Control Control
+        {
+            get
+            {
                 if (IsDisposed)
                     throw new ObjectDisposedException(GetType().FullName);
                 if (_control == null)
@@ -63,9 +68,12 @@ namespace CrashEdit {
 
         public bool IsDisposed { get; private set; }
 
-        public void Dispose() {
-            if (!IsDisposed) {
-                if (_control != null) {
+        public void Dispose()
+        {
+            if (!IsDisposed)
+            {
+                if (_control != null)
+                {
                     _control.Dispose();
                 }
             }
@@ -76,7 +84,8 @@ namespace CrashEdit {
             new List<Editor>();
 
         [Registrar.TypeProcessor]
-        private static void ProcessEditorType(Type type) {
+        private static void ProcessEditorType(Type type)
+        {
             if (!typeof(Editor).IsAssignableFrom(type))
                 return;
             if (type.IsAbstract)

@@ -1,11 +1,11 @@
+namespace CrashEdit
+{
 
-using System;
+    public sealed class LegacyVerb : Verb
+    {
 
-namespace CrashEdit {
-
-    public sealed class LegacyVerb : Verb {
-
-        public LegacyVerb(string text, Action proc) {
+        public LegacyVerb(string text, Action proc)
+        {
             if (text == null)
                 throw new ArgumentNullException();
             if (proc == null)
@@ -21,7 +21,8 @@ namespace CrashEdit {
 
         private Action Proc { get; }
 
-        public override void Execute(IUserInterface ui) {
+        public override void Execute(IUserInterface ui)
+        {
             if (ui == null)
                 throw new ArgumentNullException();
 

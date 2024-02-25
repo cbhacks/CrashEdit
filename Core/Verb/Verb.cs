@@ -1,10 +1,8 @@
+namespace CrashEdit
+{
 
-using System;
-using System.Collections.Generic;
-
-namespace CrashEdit {
-
-    public abstract class Verb : ICloneable {
+    public abstract class Verb : ICloneable
+    {
 
         public abstract string Text { get; }
 
@@ -12,7 +10,8 @@ namespace CrashEdit {
 
         public abstract void Execute(IUserInterface ui);
 
-        public virtual object Clone() {
+        public virtual object Clone()
+        {
             return MemberwiseClone();
         }
 
@@ -20,7 +19,8 @@ namespace CrashEdit {
             new List<Verb>();
 
         [Registrar.TypeProcessor]
-        private static void ProcessVerbType(Type type) {
+        private static void ProcessVerbType(Type type)
+        {
             if (!typeof(Verb).IsAssignableFrom(type))
                 return;
             if (type.IsAbstract)

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     public sealed class OldSLSTSource
@@ -13,8 +10,8 @@ namespace CrashEdit.Crash
             {
                 ErrorManager.SignalError("OldSLSTSource: Data is too short");
             }
-            short count = BitConv.FromInt16(data,0);
-            short type = BitConv.FromInt16(data,2);
+            short count = BitConv.FromInt16(data, 0);
+            short type = BitConv.FromInt16(data, 2);
             if (count < 0)
             {
                 ErrorManager.SignalError("OldSLSTSource: Value count is negative");
@@ -28,12 +25,12 @@ namespace CrashEdit.Crash
                 ErrorManager.SignalError("OldSLSTSource: Type is wrong");
             }
             OldSLSTPolygonID[] polygons = new OldSLSTPolygonID[count];
-            for (int i = 0;i < count;i++)
+            for (int i = 0; i < count; i++)
             {
-                short id = (short)(BitConv.FromInt16(data,4 + i * 2) & 0x0FFF);
+                short id = (short)(BitConv.FromInt16(data, 4 + i * 2) & 0x0FFF);
                 byte world = (byte)((data[5+i*2] >> 4) & 0x7);
                 byte copy = (byte)((data[5+i*2] >> 7) & 0x1);
-                polygons[i] = new OldSLSTPolygonID(id,world,copy);
+                polygons[i] = new OldSLSTPolygonID(id, world, copy);
             }
             return new OldSLSTSource(polygons);
         }
@@ -51,16 +48,16 @@ namespace CrashEdit.Crash
 
         public byte[] Save()
         {
-            byte[] data = new byte [4 + polygons.Count * 2];
+            byte[] data = new byte[4 + polygons.Count * 2];
             if (polygons.Count > short.MaxValue)
             {
                 throw new Exception();
             }
-            BitConv.ToInt16(data,0,(short)polygons.Count);
-            BitConv.ToInt16(data,2,0);
-            for (int i = 0;i < polygons.Count;i++)
+            BitConv.ToInt16(data, 0, (short)polygons.Count);
+            BitConv.ToInt16(data, 2, 0);
+            for (int i = 0; i < polygons.Count; i++)
             {
-                BitConv.ToInt16(data,4+i*2,(short)((ushort)polygons[i].ID | polygons[i].World << 12 | polygons[i].Copy << 15));
+                BitConv.ToInt16(data, 4+i*2, (short)((ushort)polygons[i].ID | polygons[i].World << 12 | polygons[i].Copy << 15));
             }
             return data;
         }

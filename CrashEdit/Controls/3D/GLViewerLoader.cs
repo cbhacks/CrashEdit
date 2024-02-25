@@ -1,5 +1,3 @@
-using Crash;
-using CrashEdit.Properties;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Desktop;
 using System.Drawing.Imaging;

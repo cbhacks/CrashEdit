@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     public sealed class ProtoZoneEntry : Entry
     {
-        public ProtoZoneEntry(byte[] header,byte[] layout,IEnumerable<OldCamera> cameras,IEnumerable<ProtoEntity> entities,int eid)
+        public ProtoZoneEntry(byte[] header, byte[] layout, IEnumerable<OldCamera> cameras, IEnumerable<ProtoEntity> entities, int eid)
             : base(eid)
         {
             Header = header;
@@ -32,26 +30,26 @@ namespace CrashEdit.Crash
 
         public int HeaderCount
         {
-            get => BitConv.FromInt32(Header,0x204);
-            set => BitConv.ToInt32(Header,0x204,value);
+            get => BitConv.FromInt32(Header, 0x204);
+            set => BitConv.ToInt32(Header, 0x204, value);
         }
 
         public int CameraCount
         {
-            get => BitConv.FromInt32(Header,0x208);
-            set => BitConv.ToInt32(Header,0x208,value);
+            get => BitConv.FromInt32(Header, 0x208);
+            set => BitConv.ToInt32(Header, 0x208, value);
         }
 
         public int EntityCount
         {
-            get => BitConv.FromInt32(Header,0x20C);
-            set => BitConv.ToInt32(Header,0x20C,value);
+            get => BitConv.FromInt32(Header, 0x20C);
+            set => BitConv.ToInt32(Header, 0x20C, value);
         }
 
         public int ZoneCount
         {
-            get => BitConv.FromInt32(Header,0x210);
-            set => BitConv.ToInt32(Header,0x210,value);
+            get => BitConv.FromInt32(Header, 0x210);
+            set => BitConv.ToInt32(Header, 0x210, value);
         }
 
         public override UnprocessedEntry Unprocess()
@@ -67,7 +65,7 @@ namespace CrashEdit.Crash
             {
                 items[2 + Cameras.Count + i] = Entities[i].Save();
             }
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

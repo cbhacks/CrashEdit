@@ -1,6 +1,3 @@
-using System;
-using System.Windows.Forms;
-
 namespace CrashHacks
 {
     internal static class MainClass

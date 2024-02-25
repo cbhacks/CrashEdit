@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     public sealed class SEP
@@ -8,7 +5,7 @@ namespace CrashEdit.Crash
         public const int Magic = SEQ.Magic;
         public const short Version = 0;
 
-        public static SEP Load(byte[] data,int seqcount)
+        public static SEP Load(byte[] data, int seqcount)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
@@ -19,8 +16,8 @@ namespace CrashEdit.Crash
             {
                 ErrorManager.SignalError("SEP: Data is too short");
             }
-            int magic = BEBitConv.FromInt32(data,0);
-            short version = BEBitConv.FromInt16(data,4);
+            int magic = BEBitConv.FromInt32(data, 0);
+            short version = BEBitConv.FromInt16(data, 4);
             if (magic != Magic)
             {
                 ErrorManager.SignalIgnorableError("SEP: Magic number is wrong");
@@ -30,19 +27,19 @@ namespace CrashEdit.Crash
                 ErrorManager.SignalIgnorableError("SEP: Version number is wrong");
             }
             int offset = 6;
-            SEQ[] seqs = new SEQ [seqcount];
-            for (int i = 0;i < seqcount;i++)
+            SEQ[] seqs = new SEQ[seqcount];
+            for (int i = 0; i < seqcount; i++)
             {
                 if (data.Length < offset + 13)
                 {
                     ErrorManager.SignalError("SEP: Data is too short");
                 }
-                short seqid = BEBitConv.FromInt16(data,offset);
-                short resolution = BEBitConv.FromInt16(data,offset + 2);
+                short seqid = BEBitConv.FromInt16(data, offset);
+                short resolution = BEBitConv.FromInt16(data, offset + 2);
                 // tempo is 3 (yes, three) bytes
-                int tempo = MIDIConv.From3BE(data,offset + 4);
-                short rhythm = BEBitConv.FromInt16(data,offset + 7);
-                int length = BEBitConv.FromInt32(data,offset + 9);
+                int tempo = MIDIConv.From3BE(data, offset + 4);
+                short rhythm = BEBitConv.FromInt16(data, offset + 7);
+                int length = BEBitConv.FromInt32(data, offset + 9);
                 if (seqid != i)
                 {
                     ErrorManager.SignalIgnorableError("SEP: Track number is wrong");
@@ -56,9 +53,9 @@ namespace CrashEdit.Crash
                 {
                     ErrorManager.SignalError("SEP: Data is too short");
                 }
-                byte[] seqdata = new byte [length];
-                Array.Copy(data,offset,seqdata,0,length);
-                seqs[i] = new SEQ(resolution,tempo,rhythm,seqdata);
+                byte[] seqdata = new byte[length];
+                Array.Copy(data, offset, seqdata, 0, length);
+                seqs[i] = new SEQ(resolution, tempo, rhythm, seqdata);
                 offset += length;
             }
             return new SEP(seqs);
@@ -83,20 +80,20 @@ namespace CrashEdit.Crash
                 length += 13;
                 length += seq.Data.Length;
             }
-            byte[] data = new byte [length];
-            BEBitConv.ToInt32(data,0,Magic);
-            BEBitConv.ToInt16(data,4,Version);
+            byte[] data = new byte[length];
+            BEBitConv.ToInt32(data, 0, Magic);
+            BEBitConv.ToInt16(data, 4, Version);
             int offset = 6;
-            for (int i = 0;i < seqs.Count;i++)
+            for (int i = 0; i < seqs.Count; i++)
             {
                 SEQ seq = seqs[i];
-                BEBitConv.ToInt16(data,offset,(short)i);
-                BEBitConv.ToInt16(data,offset + 2,seq.Resolution);
-                MIDIConv.To3BE(data,offset + 4,seq.Tempo);
-                BEBitConv.ToInt16(data,offset + 7,seq.Rhythm);
-                BEBitConv.ToInt32(data,offset + 9,seq.Data.Length);
+                BEBitConv.ToInt16(data, offset, (short)i);
+                BEBitConv.ToInt16(data, offset + 2, seq.Resolution);
+                MIDIConv.To3BE(data, offset + 4, seq.Tempo);
+                BEBitConv.ToInt16(data, offset + 7, seq.Rhythm);
+                BEBitConv.ToInt32(data, offset + 9, seq.Data.Length);
                 offset += 13;
-                seq.Data.CopyTo(data,offset);
+                seq.Data.CopyTo(data, offset);
                 offset += seq.Data.Length;
             }
             return data;

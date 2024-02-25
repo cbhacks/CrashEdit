@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     public sealed class T17Entry : MysteryMultiItemEntry
     {
-        public T17Entry(IEnumerable<byte[]> items,int eid) : base(items,eid)
+        public T17Entry(IEnumerable<byte[]> items, int eid) : base(items, eid)
         {
         }
 

@@ -1,7 +1,4 @@
 ﻿using CrashEdit.CE.Properties;
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {

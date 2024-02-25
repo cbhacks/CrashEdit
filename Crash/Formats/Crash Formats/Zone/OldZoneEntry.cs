@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     public sealed class OldZoneEntry : Entry
     {
-        public OldZoneEntry(byte[] header,byte[] layout,IEnumerable<OldCamera> cameras,IEnumerable<OldEntity> entities,int eid)
+        public OldZoneEntry(byte[] header, byte[] layout, IEnumerable<OldCamera> cameras, IEnumerable<OldEntity> entities, int eid)
             : base(eid)
         {
             Header = header;
@@ -32,20 +30,20 @@ namespace CrashEdit.Crash
 
         public int HeaderCount
         {
-            get => BitConv.FromInt32(Header,0x204);
-            set => BitConv.ToInt32(Header,0x204,value);
+            get => BitConv.FromInt32(Header, 0x204);
+            set => BitConv.ToInt32(Header, 0x204, value);
         }
 
         public int ZoneCount
         {
-            get => BitConv.FromInt32(Header,0x210);
-            set => BitConv.ToInt32(Header,0x210,value);
+            get => BitConv.FromInt32(Header, 0x210);
+            set => BitConv.ToInt32(Header, 0x210, value);
         }
 
         public override UnprocessedEntry Unprocess()
         {
-            BitConv.ToInt32(Header,0x208,Cameras.Count);
-            BitConv.ToInt32(Header,0x20C,Entities.Count);
+            BitConv.ToInt32(Header, 0x208, Cameras.Count);
+            BitConv.ToInt32(Header, 0x20C, Entities.Count);
             byte[][] items = new byte[2 + Entities.Count + Cameras.Count][];
             items[0] = Header;
             items[1] = Layout;
@@ -57,7 +55,7 @@ namespace CrashEdit.Crash
             {
                 items[2 + Cameras.Count + i] = Entities[i].Save();
             }
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

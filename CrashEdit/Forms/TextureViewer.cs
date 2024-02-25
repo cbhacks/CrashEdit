@@ -1,9 +1,5 @@
 ﻿using CrashEdit.Crash;
-using System;
-using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
@@ -170,7 +166,7 @@ namespace CrashEdit.CE
                         new Rectangle(x-3,y-3,w+5,h+5)
                     });
                     pen.Color = Color.White;
-                    g.DrawRectangle(pen, new Rectangle(x-2,y-2,w+3,h+3));
+                    g.DrawRectangle(pen, new Rectangle(x-2, y-2, w+3, h+3));
                 }
                 selectedregion.X = x;
                 selectedregion.Y = y;

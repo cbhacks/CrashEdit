@@ -1,7 +1,3 @@
-using System;
-using System.IO;
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     public class OldFrame
@@ -14,7 +10,7 @@ namespace CrashEdit.Crash
             {
                 ErrorManager.SignalError("OldFrame: Data is too short");
             }
-            int vertexcount = BitConv.FromInt32(data,0);
+            int vertexcount = BitConv.FromInt32(data, 0);
             if (vertexcount < 0 || vertexcount > Chunk.Length / 6)
             {
                 ErrorManager.SignalError("OldFrame: Vertex count is invalid");
@@ -38,53 +34,54 @@ namespace CrashEdit.Crash
             {
                 ErrorManager.SignalError("OldFrame: Data is too large");
             }
-            int modeleid = BitConv.FromInt32(data,4);
-            int xoffset = BitConv.FromInt32(data,8);
-            int yoffset = BitConv.FromInt32(data,12);
-            int zoffset = BitConv.FromInt32(data,16);
-            int x1 = BitConv.FromInt32(data,20);
-            int y1 = BitConv.FromInt32(data,24);
-            int z1 = BitConv.FromInt32(data,28);
-            int x2 = BitConv.FromInt32(data,32);
-            int y2 = BitConv.FromInt32(data,36);
-            int z2 = BitConv.FromInt32(data,40);
-            if (!proto) {
-                int xglobal = BitConv.FromInt32(data,44);
-                int yglobal = BitConv.FromInt32(data,48);
-                int zglobal = BitConv.FromInt32(data,52);
-                OldFrameVertex[] vertices = new OldFrameVertex [vertexcount];
-                for (int i = 0;i < vertexcount;i++)
+            int modeleid = BitConv.FromInt32(data, 4);
+            int xoffset = BitConv.FromInt32(data, 8);
+            int yoffset = BitConv.FromInt32(data, 12);
+            int zoffset = BitConv.FromInt32(data, 16);
+            int x1 = BitConv.FromInt32(data, 20);
+            int y1 = BitConv.FromInt32(data, 24);
+            int z1 = BitConv.FromInt32(data, 28);
+            int x2 = BitConv.FromInt32(data, 32);
+            int y2 = BitConv.FromInt32(data, 36);
+            int z2 = BitConv.FromInt32(data, 40);
+            if (!proto)
+            {
+                int xglobal = BitConv.FromInt32(data, 44);
+                int yglobal = BitConv.FromInt32(data, 48);
+                int zglobal = BitConv.FromInt32(data, 52);
+                OldFrameVertex[] vertices = new OldFrameVertex[vertexcount];
+                for (int i = 0; i < vertexcount; i++)
                 {
-                    vertices[i] = new OldFrameVertex(data[56+i*6+0],data[56+i*6+1],data[56+i*6+2],(sbyte)data[56+i*6+3],(sbyte)data[56+i*6+4],(sbyte)data[56+i*6+5]);
+                    vertices[i] = new OldFrameVertex(data[56+i*6+0], data[56+i*6+1], data[56+i*6+2], (sbyte)data[56+i*6+3], (sbyte)data[56+i*6+4], (sbyte)data[56+i*6+5]);
                 }
-                short unknown = BitConv.FromInt16(data,56 + vertexcount * 6);
+                short unknown = BitConv.FromInt16(data, 56 + vertexcount * 6);
                 short? unknown2 = null;
                 if (data.Length >= 56 + vertexcount * 6 + 4)
                 {
-                    unknown2 = BitConv.FromInt16(data,58 + vertexcount * 6);
+                    unknown2 = BitConv.FromInt16(data, 58 + vertexcount * 6);
                 }
-                return new OldFrame(modeleid,xoffset,yoffset,zoffset,x1,y1,z1,x2,y2,z2,xglobal,yglobal,zglobal,vertices,unknown,unknown2,proto);
+                return new OldFrame(modeleid, xoffset, yoffset, zoffset, x1, y1, z1, x2, y2, z2, xglobal, yglobal, zglobal, vertices, unknown, unknown2, proto);
             }
             else
             {
-                OldFrameVertex[] vertices = new OldFrameVertex [vertexcount];
-                for (int i = 0;i < vertexcount;i++)
+                OldFrameVertex[] vertices = new OldFrameVertex[vertexcount];
+                for (int i = 0; i < vertexcount; i++)
                 {
-                    vertices[i] = new OldFrameVertex(data[44+i*6+0],data[44+i*6+1],data[44+i*6+2],(sbyte)data[44+i*6+3],(sbyte)data[44+i*6+4],(sbyte)data[44+i*6+5]);
+                    vertices[i] = new OldFrameVertex(data[44+i*6+0], data[44+i*6+1], data[44+i*6+2], (sbyte)data[44+i*6+3], (sbyte)data[44+i*6+4], (sbyte)data[44+i*6+5]);
                 }
-                short unknown = BitConv.FromInt16(data,44 + vertexcount * 6);
+                short unknown = BitConv.FromInt16(data, 44 + vertexcount * 6);
                 short? unknown2 = null;
                 if (data.Length >= 44 + vertexcount * 6 + 4)
                 {
-                    unknown2 = BitConv.FromInt16(data,46 + vertexcount * 6);
+                    unknown2 = BitConv.FromInt16(data, 46 + vertexcount * 6);
                 }
-                return new OldFrame(modeleid,xoffset,yoffset,zoffset,x1,y1,z1,x2,y2,z2,0,0,0,vertices,unknown,unknown2,proto);
+                return new OldFrame(modeleid, xoffset, yoffset, zoffset, x1, y1, z1, x2, y2, z2, 0, 0, 0, vertices, unknown, unknown2, proto);
             }
         }
 
         private List<OldFrameVertex> vertices;
 
-        public OldFrame(int modeleid,int xoffset,int yoffset,int zoffset,int x1,int y1,int z1,int x2,int y2,int z2,int xglobal,int yglobal,int zglobal,IEnumerable<OldFrameVertex> vertices,short unknown,short? unknown2,bool proto)
+        public OldFrame(int modeleid, int xoffset, int yoffset, int zoffset, int x1, int y1, int z1, int x2, int y2, int z2, int xglobal, int yglobal, int zglobal, IEnumerable<OldFrameVertex> vertices, short unknown, short? unknown2, bool proto)
         {
             this.vertices = new List<OldFrameVertex>(vertices);
             ModelEID = modeleid;
@@ -127,43 +124,43 @@ namespace CrashEdit.Crash
 
         public byte[] Save()
         {
-            byte[] data = new byte [44 + vertices.Count * 6 + 2 + (Unknown2.HasValue? 2:0) + (!Proto ? 12 : 0)];
-            BitConv.ToInt32(data,0,vertices.Count);
-            BitConv.ToInt32(data,4,ModelEID);
-            BitConv.ToInt32(data,8,XOffset);
-            BitConv.ToInt32(data,12,YOffset);
-            BitConv.ToInt32(data,16,ZOffset);
-            BitConv.ToInt32(data,20,X1);
-            BitConv.ToInt32(data,24,Y1);
-            BitConv.ToInt32(data,28,Z1);
-            BitConv.ToInt32(data,32,X2);
-            BitConv.ToInt32(data,36,Y2);
-            BitConv.ToInt32(data,40,Z2);
+            byte[] data = new byte[44 + vertices.Count * 6 + 2 + (Unknown2.HasValue ? 2 : 0) + (!Proto ? 12 : 0)];
+            BitConv.ToInt32(data, 0, vertices.Count);
+            BitConv.ToInt32(data, 4, ModelEID);
+            BitConv.ToInt32(data, 8, XOffset);
+            BitConv.ToInt32(data, 12, YOffset);
+            BitConv.ToInt32(data, 16, ZOffset);
+            BitConv.ToInt32(data, 20, X1);
+            BitConv.ToInt32(data, 24, Y1);
+            BitConv.ToInt32(data, 28, Z1);
+            BitConv.ToInt32(data, 32, X2);
+            BitConv.ToInt32(data, 36, Y2);
+            BitConv.ToInt32(data, 40, Z2);
             if (!Proto)
             {
-                BitConv.ToInt32(data,44,XGlobal);
-                BitConv.ToInt32(data,48,YGlobal);
-                BitConv.ToInt32(data,52,ZGlobal);
-                for (int i = 0;i < vertices.Count;i++)
+                BitConv.ToInt32(data, 44, XGlobal);
+                BitConv.ToInt32(data, 48, YGlobal);
+                BitConv.ToInt32(data, 52, ZGlobal);
+                for (int i = 0; i < vertices.Count; i++)
                 {
-                    vertices[i].Save().CopyTo(data,56 + i * 6);
+                    vertices[i].Save().CopyTo(data, 56 + i * 6);
                 }
-                BitConv.ToInt16(data,56 + vertices.Count * 6,Unknown);
+                BitConv.ToInt16(data, 56 + vertices.Count * 6, Unknown);
                 if (Unknown2.HasValue)
                 {
-                    BitConv.ToInt16(data,58 + vertices.Count * 6,Unknown2.Value);
+                    BitConv.ToInt16(data, 58 + vertices.Count * 6, Unknown2.Value);
                 }
             }
             else
             {
-                for (int i = 0;i < vertices.Count;i++)
+                for (int i = 0; i < vertices.Count; i++)
                 {
-                    vertices[i].Save().CopyTo(data,44 + i * 6);
+                    vertices[i].Save().CopyTo(data, 44 + i * 6);
                 }
-                BitConv.ToInt16(data,44 + vertices.Count * 6,Unknown);
+                BitConv.ToInt16(data, 44 + vertices.Count * 6, Unknown);
                 if (Unknown2.HasValue)
                 {
-                    BitConv.ToInt16(data,46 + vertices.Count * 6,Unknown2.Value);
+                    BitConv.ToInt16(data, 46 + vertices.Count * 6, Unknown2.Value);
                 }
             }
             return data;
@@ -193,17 +190,17 @@ namespace CrashEdit.Crash
                     obj.WriteLine("# Vertices");
                     foreach (OldFrameVertex vertex in vertices)
                     {
-                        obj.WriteLine("v {0} {1} {2}",vertex.X - xorigin,vertex.Y - yorigin,vertex.Z - zorigin);
+                        obj.WriteLine("v {0} {1} {2}", vertex.X - xorigin, vertex.Y - yorigin, vertex.Z - zorigin);
                     }
                     foreach (OldFrameVertex vertex in vertices)
                     {
-                        obj.WriteLine("vn {0} {1} {2}",vertex.NormalX/127.0,vertex.NormalY/127.0,vertex.NormalZ/127.0);
+                        obj.WriteLine("vn {0} {1} {2}", vertex.NormalX/127.0, vertex.NormalY/127.0, vertex.NormalZ/127.0);
                     }
                     obj.WriteLine();
                     obj.WriteLine("# Polygons");
                     foreach (OldModelPolygon polygon in model.Polygons)
                     {
-                        obj.WriteLine("f {0}//{0} {1}//{1} {2}//{2}", polygon.VertexA / 6 + 1,polygon.VertexB / 6 + 1,polygon.VertexC / 6 + 1);
+                        obj.WriteLine("f {0}//{0} {1}//{1} {2}//{2}", polygon.VertexA / 6 + 1, polygon.VertexB / 6 + 1, polygon.VertexC / 6 + 1);
                     }
                 }
                 return stream.ToArray();

@@ -1,9 +1,8 @@
+namespace CrashEdit.Crash
+{
 
-using System;
-
-namespace CrashEdit.Crash {
-
-    public sealed class ChunkExporter : Exporter<Chunk> {
+    public sealed class ChunkExporter : Exporter<Chunk>
+    {
 
         public override string Text => "Crash Bandicoot NSF chunk (page)";
 
@@ -11,7 +10,8 @@ namespace CrashEdit.Crash {
             "nschunk files (*.nschunk)|*.nschunk;*.NSCHUNK"
         };
 
-        public override bool Export(IUserInterface ui, out ReadOnlySpan<byte> buf, Chunk res) {
+        public override bool Export(IUserInterface ui, out ReadOnlySpan<byte> buf, Chunk res)
+        {
             if (ui == null)
                 throw new ArgumentNullException();
             if (res == null)

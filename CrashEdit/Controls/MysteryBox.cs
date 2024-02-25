@@ -1,6 +1,3 @@
-using System;
-using System.Windows.Forms;
-
 namespace CrashEdit.CE
 {
     public sealed class MysteryBox : UserControl
@@ -33,7 +30,7 @@ namespace CrashEdit.CE
             Controls.Add(tsToolbar);
         }
 
-        void tbbExport_Click(object sender,EventArgs e)
+        void tbbExport_Click(object sender, EventArgs e)
         {
             if (!saving)
             {

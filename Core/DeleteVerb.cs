@@ -1,22 +1,23 @@
+namespace CrashEdit
+{
 
-using System;
-
-namespace CrashEdit {
-
-    public sealed class DeleteVerb : DirectVerb {
+    public sealed class DeleteVerb : DirectVerb
+    {
 
         public override string Text => "Delete";
 
         public override string ImageKey => "Erase";
 
-        public override bool ApplicableForSubject(Controller subj) {
+        public override bool ApplicableForSubject(Controller subj)
+        {
             if (subj == null)
                 throw new ArgumentNullException();
 
             return subj.ParentGroup?.CanRemove ?? false;
         }
 
-        public override void Execute(IUserInterface ui) {
+        public override void Execute(IUserInterface ui)
+        {
             if (ui == null)
                 throw new ArgumentNullException();
             if (Subject == null)

@@ -1,30 +1,32 @@
+namespace CrashEdit
+{
 
-using System;
-using System.Linq;
-using System.IO;
-
-namespace CrashEdit {
-
-    public sealed class ImportReplaceVerb : DirectVerb {
+    public sealed class ImportReplaceVerb : DirectVerb
+    {
 
         public override string Text => "Replace from file...";
 
         public override string ImageKey => "Fire";
 
-        public override bool ApplicableForSubject(Controller subj) {
+        public override bool ApplicableForSubject(Controller subj)
+        {
             if (subj == null)
                 throw new ArgumentNullException();
 
-            if (subj.ParentGroup?.CanReplace == true) {
+            if (subj.ParentGroup?.CanReplace == true)
+            {
                 return Importer.AllImporters
                     .Where(x => subj.ParentGroup.ResourceType.IsAssignableFrom(x.ResourceType))
                     .Any();
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
 
-        public override void Execute(IUserInterface ui) {
+        public override void Execute(IUserInterface ui)
+        {
             if (ui == null)
                 throw new ArgumentNullException();
             if (Subject == null)
@@ -42,7 +44,8 @@ namespace CrashEdit {
             // TODO - multiple choices?
 
             // Get the input filename from the user.
-            if (!ui.ShowImportDialog(out var filename, importer.FileFilters)) {
+            if (!ui.ShowImportDialog(out var filename, importer.FileFilters))
+            {
                 return;
             }
 
@@ -50,7 +53,8 @@ namespace CrashEdit {
             var buf = File.ReadAllBytes(filename);
 
             // Create a resource from the raw data.
-            if (!importer.Import(ui, buf, out var res)) {
+            if (!importer.Import(ui, buf, out var res))
+            {
                 return;
             }
 

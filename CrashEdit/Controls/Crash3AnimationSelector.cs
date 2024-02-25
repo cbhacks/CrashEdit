@@ -1,6 +1,4 @@
 ﻿using CrashEdit.Crash;
-using System;
-using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
@@ -105,15 +103,15 @@ namespace CrashEdit.CE
                         TextureChunk[] texturechunks = new TextureChunk[modelentry.TPAGCount];
                         for (int i = 0; i < texturechunks.Length; ++i)
                         {
-                            texturechunks[i] = nsf.GetEntry<TextureChunk>(BitConv.FromInt32(modelentry.Info,0xC+i*4));
+                            texturechunks[i] = nsf.GetEntry<TextureChunk>(BitConv.FromInt32(modelentry.Info, 0xC+i*4));
                         }
                         if (frame == null)
                         {
-                            rewardcontrol = new AnimationEntryViewer(anim.Frames,modelentry,texturechunks);
+                            rewardcontrol = new AnimationEntryViewer(anim.Frames, modelentry, texturechunks);
                         }
                         else
                         {
-                            rewardcontrol = new AnimationEntryViewer(frame,modelentry,texturechunks);
+                            rewardcontrol = new AnimationEntryViewer(frame, modelentry, texturechunks);
                         }
                         if (sender != null)
                         {
@@ -132,11 +130,11 @@ namespace CrashEdit.CE
                     {
                         if (frame == null)
                         {
-                            rewardcontrol = new AnimationEntryViewer(anim.Frames,null,null);
+                            rewardcontrol = new AnimationEntryViewer(anim.Frames, null, null);
                         }
                         else
                         {
-                            rewardcontrol = new AnimationEntryViewer(frame,null,null);
+                            rewardcontrol = new AnimationEntryViewer(frame, null, null);
                         }
                     }
                     rewardcontrol.Dock = DockStyle.Fill;

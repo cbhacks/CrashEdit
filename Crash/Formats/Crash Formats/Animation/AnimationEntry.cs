@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     public sealed class AnimationEntry : Entry
     {
-        public AnimationEntry(IEnumerable<Frame> frames,bool isnew,int eid) : base(eid)
+        public AnimationEntry(IEnumerable<Frame> frames, bool isnew, int eid) : base(eid)
         {
             Frames.AddRange(frames);
             IsNew = isnew;
@@ -22,12 +20,12 @@ namespace CrashEdit.Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte [Frames.Count][];
-            for (int i = 0;i < Frames.Count;i++)
+            byte[][] items = new byte[Frames.Count][];
+            for (int i = 0; i < Frames.Count; i++)
             {
                 items[i] = Frames[i].Save();
             }
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

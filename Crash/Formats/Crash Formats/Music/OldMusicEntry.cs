@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     public sealed class OldMusicEntry : Entry
     {
         private VH vh;
 
-        public OldMusicEntry(int vb0eid,int vb1eid,int vb2eid,int vb3eid,VH vh,SEP sep,int eid) : base(eid)
+        public OldMusicEntry(int vb0eid, int vb1eid, int vb2eid, int vb3eid, VH vh, SEP sep, int eid) : base(eid)
         {
             this.vh = vh ?? throw new ArgumentNullException("vh");
             Tracks.AddRange(sep.SEQs);
@@ -47,16 +44,16 @@ namespace CrashEdit.Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte [3][];
-            items[0] = new byte [20];
-            BitConv.ToInt32(items[0],0,Tracks.Count);
-            BitConv.ToInt32(items[0],4,VB0EID);
-            BitConv.ToInt32(items[0],8,VB1EID);
-            BitConv.ToInt32(items[0],12,VB2EID);
-            BitConv.ToInt32(items[0],16,VB3EID);
+            byte[][] items = new byte[3][];
+            items[0] = new byte[20];
+            BitConv.ToInt32(items[0], 0, Tracks.Count);
+            BitConv.ToInt32(items[0], 4, VB0EID);
+            BitConv.ToInt32(items[0], 8, VB1EID);
+            BitConv.ToInt32(items[0], 12, VB2EID);
+            BitConv.ToInt32(items[0], 16, VB3EID);
             items[1] = vh.Save();
             items[2] = new SEP(Tracks).Save();
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

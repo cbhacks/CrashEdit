@@ -1,5 +1,3 @@
-using System;
-
 namespace CrashEdit.Crash
 {
     public struct ModelExtendedTexture
@@ -9,8 +7,8 @@ namespace CrashEdit.Crash
             if (data == null)
                 throw new ArgumentNullException("data");
             if (data.Length != 4)
-                throw new ArgumentException("Value must be 4 bytes long.","data");
-            int rest = BitConv.FromInt32(data,0);
+                throw new ArgumentException("Value must be 4 bytes long.", "data");
+            int rest = BitConv.FromInt32(data, 0);
             return new ModelExtendedTexture(rest);
         }
 
@@ -18,7 +16,7 @@ namespace CrashEdit.Crash
         {
             Data = data;
         }
-        
+
         public int Data { get; }
 
         public int Offset => Data & 0x7FF;

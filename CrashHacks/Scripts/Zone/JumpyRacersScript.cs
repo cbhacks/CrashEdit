@@ -1,6 +1,3 @@
-using CrashEdit.Crash;
-using System;
-
 namespace CrashHacks.Scripts.Zone
 {
     public sealed class JumpyRacersScript : Script
@@ -40,7 +37,7 @@ namespace CrashHacks.Scripts.Zone
             }
         }
 
-        public override void Run(object value,GameVersion gameversion)
+        public override void Run(object value, GameVersion gameversion)
         {
             if (value is ZoneEntry)
             {
@@ -50,14 +47,14 @@ namespace CrashHacks.Scripts.Zone
                     if (entity.Name != null && entity.Name.StartsWith("obj_hot"))
                     {
                         double m = -0.1;
-                        for (int i = 0;i < entity.Positions.Count;i++)
+                        for (int i = 0; i < entity.Positions.Count; i++)
                         {
                             EntityPosition pos = entity.Positions[i];
                             short x = pos.X;
                             short y = pos.Y;
                             short z = pos.Z;
                             y += (short)(Math.Sin(m += 0.1) * 400);
-                            entity.Positions[i] = new EntityPosition(x,y,z);
+                            entity.Positions[i] = new EntityPosition(x, y, z);
                         }
                     }
                 }

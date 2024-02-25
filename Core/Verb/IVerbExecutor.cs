@@ -1,10 +1,8 @@
+namespace CrashEdit
+{
 
-using System;
-using System.Collections.Generic;
-
-namespace CrashEdit {
-
-    public interface IVerbExecutor {
+    public interface IVerbExecutor
+    {
 
         void ExecuteVerb(Verb verb);
 

@@ -1,5 +1,3 @@
-using CrashEdit.Crash;
-
 namespace CrashHacks.Scripts.Scenery
 {
     public sealed class NoTexScript : Script
@@ -24,11 +22,11 @@ namespace CrashHacks.Scripts.Scenery
             }
         }
 
-        public override void Run(object value,GameVersion gameversion)
+        public override void Run(object value, GameVersion gameversion)
         {
             if (value is SceneryEntry e)
             {
-                for (int i = 0;i < e.Triangles.Count;i++)
+                for (int i = 0; i < e.Triangles.Count; i++)
                 {
                     SceneryTriangle tri = e.Triangles[i];
                     int vertexa = tri.VertexA;
@@ -36,9 +34,9 @@ namespace CrashHacks.Scripts.Scenery
                     int vertexc = tri.VertexC;
                     short texture = 0;
                     bool animated = false;
-                    e.Triangles[i] = new SceneryTriangle(vertexa,vertexb,vertexc,texture,animated);
+                    e.Triangles[i] = new SceneryTriangle(vertexa, vertexb, vertexc, texture, animated);
                 }
-                for (int i = 0;i < e.Quads.Count;i++)
+                for (int i = 0; i < e.Quads.Count; i++)
                 {
                     SceneryQuad quad = e.Quads[i];
                     int vertexa = quad.VertexA;
@@ -48,7 +46,7 @@ namespace CrashHacks.Scripts.Scenery
                     short texture = 0;
                     byte unknown = 0;
                     bool animated = false;
-                    e.Quads[i] = new SceneryQuad(vertexa,vertexb,vertexc,vertexd,texture,unknown,animated);
+                    e.Quads[i] = new SceneryQuad(vertexa, vertexb, vertexc, vertexd, texture, unknown, animated);
                 }
             }
         }

@@ -1,6 +1,4 @@
 using CrashEdit.Crash;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {

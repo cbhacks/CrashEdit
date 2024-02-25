@@ -1,9 +1,8 @@
+namespace CrashEdit.Crash
+{
 
-using System;
-
-namespace CrashEdit.Crash {
-
-    public sealed class EntryExporter : Exporter<Entry> {
+    public sealed class EntryExporter : Exporter<Entry>
+    {
 
         public override string Text => "Crash Bandicoot NSF entry";
 
@@ -11,7 +10,8 @@ namespace CrashEdit.Crash {
             "nsentry files (*.nsentry)|*.nsentry;*.NSENTRY"
         };
 
-        public override bool Export(IUserInterface ui, out ReadOnlySpan<byte> buf, Entry res) {
+        public override bool Export(IUserInterface ui, out ReadOnlySpan<byte> buf, Entry res)
+        {
             if (ui == null)
                 throw new ArgumentNullException();
             if (res == null)

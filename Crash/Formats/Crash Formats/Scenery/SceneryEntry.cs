@@ -1,6 +1,3 @@
-using System.IO;
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     public sealed class SceneryEntry : Entry
@@ -12,7 +9,7 @@ namespace CrashEdit.Crash
         private List<SceneryColor> colors;
         private List<ModelExtendedTexture> animatedtextures;
 
-        public SceneryEntry(byte[] info,IEnumerable<SceneryVertex> vertices,IEnumerable<SceneryTriangle> triangles,IEnumerable<SceneryQuad> quads,IEnumerable<ModelTexture> textures,IEnumerable<SceneryColor> colors,IEnumerable<ModelExtendedTexture> animatedtextures,int eid)
+        public SceneryEntry(byte[] info, IEnumerable<SceneryVertex> vertices, IEnumerable<SceneryTriangle> triangles, IEnumerable<SceneryQuad> quads, IEnumerable<ModelTexture> textures, IEnumerable<SceneryColor> colors, IEnumerable<ModelExtendedTexture> animatedtextures, int eid)
             : base(eid)
         {
             Info = info;
@@ -38,42 +35,42 @@ namespace CrashEdit.Crash
 
         public int XOffset
         {
-            get => BitConv.FromInt32(Info,0);
-            set => BitConv.ToInt32(Info,0,value);
+            get => BitConv.FromInt32(Info, 0);
+            set => BitConv.ToInt32(Info, 0, value);
         }
 
         public int YOffset
         {
-            get => BitConv.FromInt32(Info,4);
-            set => BitConv.ToInt32(Info,4,value);
+            get => BitConv.FromInt32(Info, 4);
+            set => BitConv.ToInt32(Info, 4, value);
         }
 
         public int ZOffset
         {
-            get => BitConv.FromInt32(Info,8);
-            set => BitConv.ToInt32(Info,8,value);
+            get => BitConv.FromInt32(Info, 8);
+            set => BitConv.ToInt32(Info, 8, value);
         }
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte [7][];
+            byte[][] items = new byte[7][];
             items[0] = Info;
-            items[1] = new byte [Aligner.Align(vertices.Count * 6,4)];
-            for (int i = 0;i < vertices.Count;i++)
+            items[1] = new byte[Aligner.Align(vertices.Count * 6, 4)];
+            for (int i = 0; i < vertices.Count; i++)
             {
-                vertices[i].SaveXY().CopyTo(items[1],(vertices.Count - 1 - i) * 4);
-                vertices[i].SaveZ().CopyTo(items[1],vertices.Count * 4 + i * 2);
+                vertices[i].SaveXY().CopyTo(items[1], (vertices.Count - 1 - i) * 4);
+                vertices[i].SaveZ().CopyTo(items[1], vertices.Count * 4 + i * 2);
             }
-            items[2] = new byte [Aligner.Align(triangles.Count * 6,4)];
-            for (int i = 0;i < triangles.Count;i++)
+            items[2] = new byte[Aligner.Align(triangles.Count * 6, 4)];
+            for (int i = 0; i < triangles.Count; i++)
             {
-                triangles[i].SaveA().CopyTo(items[2],(triangles.Count - 1 - i) * 4);
-                triangles[i].SaveB().CopyTo(items[2],triangles.Count * 4 + i * 2);
+                triangles[i].SaveA().CopyTo(items[2], (triangles.Count - 1 - i) * 4);
+                triangles[i].SaveB().CopyTo(items[2], triangles.Count * 4 + i * 2);
             }
-            items[3] = new byte [quads.Count * 8];
-            for (int i = 0;i < quads.Count;i++)
+            items[3] = new byte[quads.Count * 8];
+            for (int i = 0; i < quads.Count; i++)
             {
-                quads[i].Save().CopyTo(items[3],i * 8);
+                quads[i].Save().CopyTo(items[3], i * 8);
             }
             items[4] = new byte[textures.Count * 12];
             for (int i = 0; i < textures.Count; i++)
@@ -93,7 +90,7 @@ namespace CrashEdit.Crash
             {
                 animatedtextures[i].Save().CopyTo(items[6], i * 4);
             }
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
 
         public byte[] ToOBJ()
@@ -155,14 +152,14 @@ namespace CrashEdit.Crash
                     }
                     ply.WriteLine("ply");
                     ply.WriteLine("format ascii 1.0");
-                    ply.WriteLine("element vertex {0}",Vertices.Count);
+                    ply.WriteLine("element vertex {0}", Vertices.Count);
                     ply.WriteLine("property int x");
                     ply.WriteLine("property int y");
                     ply.WriteLine("property int z");
                     ply.WriteLine("property uchar red");
                     ply.WriteLine("property uchar green");
                     ply.WriteLine("property uchar blue");
-                    ply.WriteLine("element face {0}",polycount);
+                    ply.WriteLine("element face {0}", polycount);
                     ply.WriteLine("property list uchar int vertex_index");
                     ply.WriteLine("end_header");
                     foreach (SceneryVertex vertex in vertices)

@@ -1,10 +1,8 @@
+namespace CrashEdit
+{
 
-using System;
-using System.Collections.Generic;
-
-namespace CrashEdit {
-
-    public interface IUserInterface {
+    public interface IUserInterface
+    {
 
         void ShowError(string msg);
 

@@ -1,5 +1,3 @@
-using System;
-
 namespace CrashEdit.Crash
 {
     public struct ModelTexture
@@ -9,7 +7,7 @@ namespace CrashEdit.Crash
             if (data == null)
                 throw new ArgumentNullException("data");
             if (data.Length != 12)
-                throw new ArgumentException("Value must be 12 bytes long.","data");
+                throw new ArgumentException("Value must be 12 bytes long.", "data");
             byte u1 = data[0];
             byte v1 = data[1];
             byte clutx = (byte)(data[2] & 0xF);
@@ -25,10 +23,10 @@ namespace CrashEdit.Crash
             byte v3 = data[9];
             byte u4 = data[10];
             byte v4 = data[11];
-            return new ModelTexture(u1,v1,cluty1,clutx,cluty2,u2,v2,colormode,blendmode,segment,textureoffset,u3,v3,u4,v4);
+            return new ModelTexture(u1, v1, cluty1, clutx, cluty2, u2, v2, colormode, blendmode, segment, textureoffset, u3, v3, u4, v4);
         }
 
-        public ModelTexture(byte u1,byte v1,byte cluty1,byte clutx,byte cluty2,byte u2,byte v2,byte colormode,byte blendmode,byte segment,byte textureoffset,byte u3,byte v3,byte u4,byte v4)
+        public ModelTexture(byte u1, byte v1, byte cluty1, byte clutx, byte cluty2, byte u2, byte v2, byte colormode, byte blendmode, byte segment, byte textureoffset, byte u3, byte v3, byte u4, byte v4)
         {
             U1 = u1;
             V1 = v1;

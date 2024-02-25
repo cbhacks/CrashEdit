@@ -1,7 +1,3 @@
-using System;
-using System.IO;
-using System.Windows.Forms;
-
 namespace CrashEdit.CE
 {
     public static class FileUtil
@@ -19,7 +15,7 @@ namespace CrashEdit.CE
 
         public static byte[] OpenFile(params string[] filters)
         {
-            openfiledlg.Filter = string.Join("|",filters);
+            openfiledlg.Filter = string.Join("|", filters);
             openfiledlg.Multiselect = false;
             if (openfiledlg.ShowDialog(Owner) == DialogResult.OK)
             {
@@ -33,12 +29,12 @@ namespace CrashEdit.CE
 
         public static byte[][] OpenFiles(params string[] filters)
         {
-            openfiledlg.Filter = string.Join("|",filters);
+            openfiledlg.Filter = string.Join("|", filters);
             openfiledlg.Multiselect = true;
             if (openfiledlg.ShowDialog(Owner) == DialogResult.OK)
             {
-                byte[][] result = new byte [openfiledlg.FileNames.Length][];
-                for (int i = 0;i < openfiledlg.FileNames.Length;i++)
+                byte[][] result = new byte[openfiledlg.FileNames.Length][];
+                for (int i = 0; i < openfiledlg.FileNames.Length; i++)
                 {
                     result[i] = File.ReadAllBytes(openfiledlg.FileNames[i]);
                 }
@@ -50,14 +46,14 @@ namespace CrashEdit.CE
             }
         }
 
-        public static bool SaveFile(byte[] data,params string[] filters)
+        public static bool SaveFile(byte[] data, params string[] filters)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
-            savefiledlg.Filter = string.Join("|",filters);
+            savefiledlg.Filter = string.Join("|", filters);
             if (savefiledlg.ShowDialog(Owner) == DialogResult.OK)
             {
-                File.WriteAllBytes(savefiledlg.FileName,data);
+                File.WriteAllBytes(savefiledlg.FileName, data);
                 return true;
             }
             else
@@ -66,15 +62,15 @@ namespace CrashEdit.CE
             }
         }
 
-        public static bool SaveFile(string defaultname,byte[] data,params string[] filters)
+        public static bool SaveFile(string defaultname, byte[] data, params string[] filters)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
-            savefiledlg.Filter = string.Join("|",filters);
+            savefiledlg.Filter = string.Join("|", filters);
             savefiledlg.FileName = defaultname;
             if (savefiledlg.ShowDialog(Owner) == DialogResult.OK)
             {
-                File.WriteAllBytes(savefiledlg.FileName,data);
+                File.WriteAllBytes(savefiledlg.FileName, data);
                 return true;
             }
             else

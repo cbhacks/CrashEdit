@@ -1,5 +1,4 @@
 using CrashEdit.Crash;
-using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
@@ -23,13 +22,13 @@ namespace CrashEdit.CE
                     TextureChunk[] texturechunks = new TextureChunk[modelentry.TPAGCount];
                     for (int i = 0; i < texturechunks.Length; ++i)
                     {
-                        texturechunks[i] = FindEID<TextureChunk>(BitConv.FromInt32(modelentry.Info,0xC+i*4));
+                        texturechunks[i] = FindEID<TextureChunk>(BitConv.FromInt32(modelentry.Info, 0xC+i*4));
                     }
-                    return new AnimationEntryViewer(AnimationEntry.Frames,modelentry,texturechunks);
+                    return new AnimationEntryViewer(AnimationEntry.Frames, modelentry, texturechunks);
                 }
                 else
                 {
-                    return new AnimationEntryViewer(AnimationEntry.Frames,null,null);
+                    return new AnimationEntryViewer(AnimationEntry.Frames, null, null);
                 }
             }
             else

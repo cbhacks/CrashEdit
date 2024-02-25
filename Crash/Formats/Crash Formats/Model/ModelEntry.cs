@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     public sealed class ModelEntry : Entry
@@ -11,7 +8,7 @@ namespace CrashEdit.Crash
         private List<ModelExtendedTexture> animatedtextures;
         private List<ModelPosition> positions;
 
-        public ModelEntry(byte[] info,uint[] polygons,IEnumerable<SceneryColor> colors,IEnumerable<ModelTexture> textures,IEnumerable<ModelExtendedTexture> animatedtextures,IEnumerable<ModelPosition> positions,int eid) : base(eid)
+        public ModelEntry(byte[] info, uint[] polygons, IEnumerable<SceneryColor> colors, IEnumerable<ModelTexture> textures, IEnumerable<ModelExtendedTexture> animatedtextures, IEnumerable<ModelPosition> positions, int eid) : base(eid)
         {
             Info = info ?? throw new ArgumentNullException("info");
             PolyData = polygons ?? throw new ArgumentNullException("polygons");
@@ -190,15 +187,15 @@ namespace CrashEdit.Crash
             byte itemcount = 5;
             if (Positions != null)
                 itemcount = 6;
-            byte[][] items = new byte [itemcount][];
+            byte[][] items = new byte[itemcount][];
             items[0] = Info;
-            items[1] = new byte [PolyData.Length * 4];
-            for (int i = 0;i < PolyData.Length; i++)
+            items[1] = new byte[PolyData.Length * 4];
+            for (int i = 0; i < PolyData.Length; i++)
             {
-                BitConv.ToInt32(items[1],i*4,(int)PolyData[i]);
+                BitConv.ToInt32(items[1], i*4, (int)PolyData[i]);
             }
             items[2] = new byte[colors.Count * 4];
-            for (int i = 0;i < colors.Count;i++)
+            for (int i = 0; i < colors.Count; i++)
             {
                 items[2][i * 4] = Colors[i].Red;
                 items[2][i * 4 + 1] = Colors[i].Green;
@@ -223,7 +220,7 @@ namespace CrashEdit.Crash
                     positions[i].Save().CopyTo(items[5], i * 4);
                 }
             }
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

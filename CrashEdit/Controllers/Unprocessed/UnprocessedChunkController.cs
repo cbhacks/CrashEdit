@@ -1,5 +1,4 @@
 using CrashEdit.Crash;
-using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
@@ -9,7 +8,7 @@ namespace CrashEdit.CE
         public UnprocessedChunkController(UnprocessedChunk unprocessedchunk, SubcontrollerGroup parentGroup) : base(unprocessedchunk, parentGroup)
         {
             UnprocessedChunk = unprocessedchunk;
-            AddMenu(CrashUI.Properties.Resources.UnprocessedChunkController_AcProcess,Menu_Process_Chunk);
+            AddMenu(CrashUI.Properties.Resources.UnprocessedChunkController_AcProcess, Menu_Process_Chunk);
         }
 
         public override bool EditorAvailable => true;

@@ -1,10 +1,8 @@
+namespace CrashEdit
+{
 
-using System;
-using System.Collections.Generic;
-
-namespace CrashEdit {
-
-    public abstract class Exporter {
+    public abstract class Exporter
+    {
 
         public abstract Type ResourceType { get; }
 
@@ -18,7 +16,8 @@ namespace CrashEdit {
             new List<Exporter>();
 
         [Registrar.TypeProcessor]
-        private static void ProcessExporterType(Type type) {
+        private static void ProcessExporterType(Type type)
+        {
             if (!typeof(Exporter).IsAssignableFrom(type))
                 return;
             if (type.IsAbstract)
@@ -29,11 +28,13 @@ namespace CrashEdit {
 
     }
 
-    public abstract class Exporter<T> : Exporter {
+    public abstract class Exporter<T> : Exporter
+    {
 
         public sealed override Type ResourceType => typeof(T);
 
-        public sealed override bool Export(IUserInterface ui, out ReadOnlySpan<byte> buf, object res) {
+        public sealed override bool Export(IUserInterface ui, out ReadOnlySpan<byte> buf, object res)
+        {
             if (ui == null)
                 throw new ArgumentNullException();
             if (res == null)

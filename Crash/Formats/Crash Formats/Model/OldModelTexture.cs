@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CrashEdit.Crash
+﻿namespace CrashEdit.Crash
 {
     public struct OldModelTexture : OldModelStruct
     {
@@ -16,17 +14,17 @@ namespace CrashEdit.Crash
             byte blendmode = (byte)((data[3] >> 5) & 0x3);
             bool n = (data[3] & 0x10) != 0;
             byte clutx = (byte)(data[3] & 0xF);
-            int eid = BitConv.FromInt32(data,4);
-            int texinfo = BitConv.FromInt32(data,8);
+            int eid = BitConv.FromInt32(data, 4);
+            int texinfo = BitConv.FromInt32(data, 8);
             int uvindex = (texinfo >> 22) & 0x3FF;
             byte colormode = (byte)(texinfo >> 20 & 3);
             byte segment = (byte)(texinfo >> 18 & 3);
             byte xoffu = (byte)(texinfo >> 13 & 0x1F);
             byte cluty = (byte)(texinfo >> 6 & 0x7F);
             byte yoffu = (byte)(texinfo & 0x1F);
-            return new OldModelTexture(uvindex,clutx,cluty,xoffu,yoffu,colormode,blendmode,segment,r,g,b,n,eid);
+            return new OldModelTexture(uvindex, clutx, cluty, xoffu, yoffu, colormode, blendmode, segment, r, g, b, n, eid);
         }
-        public OldModelTexture(int uvindex,byte clutx,byte cluty,byte xoffu,byte yoffu,byte colormode,byte blendmode,byte segment,byte r,byte g,byte b,bool n,int eid)
+        public OldModelTexture(int uvindex, byte clutx, byte cluty, byte xoffu, byte yoffu, byte colormode, byte blendmode, byte segment, byte r, byte g, byte b, bool n, int eid)
         {
             UVIndex = uvindex;
             ClutX = clutx;
@@ -41,7 +39,7 @@ namespace CrashEdit.Crash
             B = b;
             N = n;
             EID = eid;
-            
+
             Width = 4 << (UVIndex % 5);
             Height = 4 << ((UVIndex / 5) % 5);
             int winding = UVIndex / 25;
@@ -64,7 +62,7 @@ namespace CrashEdit.Crash
             Y2 = (v2 + yoff) / 128.0;
             Y3 = (v3 + yoff) / 128.0;
         }
-        
+
         public byte R { get; }
         public byte G { get; }
         public byte B { get; }

@@ -1,13 +1,14 @@
-
-using System;
 using System.Runtime.CompilerServices;
 
-namespace CrashEdit {
+namespace CrashEdit
+{
 
     [AttributeUsage(AttributeTargets.Property)]
-    public sealed class SubresourceListAttribute : SubresourceAttribute {
+    public sealed class SubresourceListAttribute : SubresourceAttribute
+    {
 
-        public SubresourceListAttribute([CallerLineNumber] int order = 0) {
+        public SubresourceListAttribute([CallerLineNumber] int order = 0)
+        {
             Order = order;
         }
 

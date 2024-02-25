@@ -1,9 +1,5 @@
-using CrashEdit.Crash;
 using CrashEdit.CE.Properties;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
 namespace CrashEdit.CE
 {
@@ -189,13 +185,13 @@ namespace CrashEdit.CE
             }
         }
 
-        private void chkName_CheckedChanged(object sender,EventArgs e)
+        private void chkName_CheckedChanged(object sender, EventArgs e)
         {
             txtName.Enabled = chkName.Checked;
             entity.Name = chkName.Checked ? txtName.Text : null;
         }
 
-        private void txtName_TextChanged(object sender,EventArgs e)
+        private void txtName_TextChanged(object sender, EventArgs e)
         {
             entity.Name = txtName.Text;
         }
@@ -241,31 +237,31 @@ namespace CrashEdit.CE
             dirty.Pop();
         }
 
-        private void cmdPreviousPosition_Click(object sender,EventArgs e)
+        private void cmdPreviousPosition_Click(object sender, EventArgs e)
         {
             --positionindex;
             UpdatePosition();
         }
 
-        private void cmdNextPosition_Click(object sender,EventArgs e)
+        private void cmdNextPosition_Click(object sender, EventArgs e)
         {
             ++positionindex;
             UpdatePosition();
         }
 
-        private void cmdInsertPosition_Click(object sender,EventArgs e)
+        private void cmdInsertPosition_Click(object sender, EventArgs e)
         {
-            entity.Positions.Insert(positionindex,entity.Positions[positionindex]);
+            entity.Positions.Insert(positionindex, entity.Positions[positionindex]);
             UpdatePosition();
         }
 
-        private void cmdRemovePosition_Click(object sender,EventArgs e)
+        private void cmdRemovePosition_Click(object sender, EventArgs e)
         {
             entity.Positions.RemoveAt(positionindex);
             UpdatePosition();
         }
 
-        private void cmdAppendPosition_Click(object sender,EventArgs e)
+        private void cmdAppendPosition_Click(object sender, EventArgs e)
         {
             positionindex = entity.Positions.Count;
             if (entity.Positions.Count > 0)
@@ -274,35 +270,35 @@ namespace CrashEdit.CE
             }
             else
             {
-                entity.Positions.Add(new EntityPosition(0,0,0));
+                entity.Positions.Add(new EntityPosition(0, 0, 0));
             }
             UpdatePosition();
         }
 
-        private void numX_ValueChanged(object sender,EventArgs e)
+        private void numX_ValueChanged(object sender, EventArgs e)
         {
             if (!Dirty)
             {
                 EntityPosition pos = entity.Positions[positionindex];
-                entity.Positions[positionindex] = new EntityPosition((short)numX.Value,pos.Y,pos.Z);
+                entity.Positions[positionindex] = new EntityPosition((short)numX.Value, pos.Y, pos.Z);
             }
         }
 
-        private void numY_ValueChanged(object sender,EventArgs e)
+        private void numY_ValueChanged(object sender, EventArgs e)
         {
             if (!Dirty)
             {
                 EntityPosition pos = entity.Positions[positionindex];
-                entity.Positions[positionindex] = new EntityPosition(pos.X,(short)numY.Value,pos.Z);
+                entity.Positions[positionindex] = new EntityPosition(pos.X, (short)numY.Value, pos.Z);
             }
         }
 
-        private void numZ_ValueChanged(object sender,EventArgs e)
+        private void numZ_ValueChanged(object sender, EventArgs e)
         {
             if (!Dirty)
             {
                 EntityPosition pos = entity.Positions[positionindex];
-                entity.Positions[positionindex] = new EntityPosition(pos.X,pos.Y,(short)numZ.Value);
+                entity.Positions[positionindex] = new EntityPosition(pos.X, pos.Y, (short)numZ.Value);
             }
         }
 
@@ -350,47 +346,47 @@ namespace CrashEdit.CE
             dirty.Pop();
         }
 
-        private void cmdPreviousSetting_Click(object sender,EventArgs e)
+        private void cmdPreviousSetting_Click(object sender, EventArgs e)
         {
             --settingindex;
             UpdateSettings();
         }
 
-        private void cmdNextSetting_Click(object sender,EventArgs e)
+        private void cmdNextSetting_Click(object sender, EventArgs e)
         {
             ++settingindex;
             UpdateSettings();
         }
 
-        private void cmdAddSetting_Click(object sender,EventArgs e)
+        private void cmdAddSetting_Click(object sender, EventArgs e)
         {
-            entity.Settings.Add(new EntitySetting(0,0));
+            entity.Settings.Add(new EntitySetting(0, 0));
             UpdateSettings();
         }
 
-        private void cmdRemoveSetting_Click(object sender,EventArgs e)
+        private void cmdRemoveSetting_Click(object sender, EventArgs e)
         {
             entity.Settings.RemoveAt(settingindex);
             UpdateSettings();
         }
 
-        private void numSettingA_ValueChanged(object sender,EventArgs e)
+        private void numSettingA_ValueChanged(object sender, EventArgs e)
         {
             if (!Dirty)
             {
                 EntitySetting s = entity.Settings[settingindex];
-                entity.Settings[settingindex] = new EntitySetting((byte)numSettingA.Value,s.ValueB);
+                entity.Settings[settingindex] = new EntitySetting((byte)numSettingA.Value, s.ValueB);
                 SetCVal(entity.Settings[settingindex].Value);
                 lblArgAs.Text = MakeArgAsText();
             }
         }
 
-        private void numSettingB_ValueChanged(object sender,EventArgs e)
+        private void numSettingB_ValueChanged(object sender, EventArgs e)
         {
             if (!Dirty)
             {
                 EntitySetting s = entity.Settings[settingindex];
-                entity.Settings[settingindex] = new EntitySetting(s.ValueA,(int)numSettingB.Value);
+                entity.Settings[settingindex] = new EntitySetting(s.ValueA, (int)numSettingB.Value);
                 SetCVal(entity.Settings[settingindex].Value);
                 lblArgAs.Text = MakeArgAsText();
             }
@@ -451,7 +447,7 @@ namespace CrashEdit.CE
             chkID2.Enabled = entity.ID.HasValue;
         }
 
-        private void chkID_CheckedChanged(object sender,EventArgs e)
+        private void chkID_CheckedChanged(object sender, EventArgs e)
         {
             numID.Enabled = chkID.Checked;
             chkID2.Enabled = chkID.Checked;
@@ -466,12 +462,12 @@ namespace CrashEdit.CE
             }
         }
 
-        private void numID_ValueChanged(object sender,EventArgs e)
+        private void numID_ValueChanged(object sender, EventArgs e)
         {
             entity.ID = (int)numID.Value;
         }
 
-        private void chkID2_CheckedChanged(object sender,EventArgs e)
+        private void chkID2_CheckedChanged(object sender, EventArgs e)
         {
             numID2.Enabled = chkID2.Checked;
             if (chkID2.Checked)
@@ -484,7 +480,7 @@ namespace CrashEdit.CE
             }
         }
 
-        private void numID2_ValueChanged(object sender,EventArgs e)
+        private void numID2_ValueChanged(object sender, EventArgs e)
         {
             entity.AlternateID = (int)numID2.Value;
         }
@@ -499,7 +495,7 @@ namespace CrashEdit.CE
             chkType.Checked = entity.Type.HasValue;
         }
 
-        private void chkType_CheckedChanged(object sender,EventArgs e)
+        private void chkType_CheckedChanged(object sender, EventArgs e)
         {
             numType.Enabled = chkType.Checked;
             if (chkType.Checked)
@@ -512,7 +508,7 @@ namespace CrashEdit.CE
             }
         }
 
-        private void numType_ValueChanged(object sender,EventArgs e)
+        private void numType_ValueChanged(object sender, EventArgs e)
         {
             entity.Type = (int)numType.Value;
         }
@@ -527,7 +523,7 @@ namespace CrashEdit.CE
             chkSubtype.Checked = entity.Subtype.HasValue;
         }
 
-        private void chkSubtype_CheckedChanged(object sender,EventArgs e)
+        private void chkSubtype_CheckedChanged(object sender, EventArgs e)
         {
             numSubtype.Enabled = chkSubtype.Checked;
             if (chkSubtype.Checked)
@@ -540,7 +536,7 @@ namespace CrashEdit.CE
             }
         }
 
-        private void numSubtype_ValueChanged(object sender,EventArgs e)
+        private void numSubtype_ValueChanged(object sender, EventArgs e)
         {
             entity.Subtype = (int)numSubtype.Value;
         }
@@ -561,12 +557,12 @@ namespace CrashEdit.CE
             chkBonusBoxCount.Checked = entity.BonusBoxCount.HasValue;
         }
 
-        private void chkBoxCount_CheckedChanged(object sender,EventArgs e)
+        private void chkBoxCount_CheckedChanged(object sender, EventArgs e)
         {
             numBoxCount.Enabled = chkBoxCount.Checked;
             if (chkBoxCount.Checked)
             {
-                entity.BoxCount = new EntitySetting(0,(int)numBoxCount.Value);
+                entity.BoxCount = new EntitySetting(0, (int)numBoxCount.Value);
             }
             else
             {
@@ -574,9 +570,9 @@ namespace CrashEdit.CE
             }
         }
 
-        private void numBoxCount_ValueChanged(object sender,EventArgs e)
+        private void numBoxCount_ValueChanged(object sender, EventArgs e)
         {
-            entity.BoxCount = new EntitySetting(0,(int)numBoxCount.Value);
+            entity.BoxCount = new EntitySetting(0, (int)numBoxCount.Value);
         }
 
         private void chkBonusBoxCount_CheckedChanged(object sender, EventArgs e)
@@ -597,7 +593,7 @@ namespace CrashEdit.CE
             entity.BonusBoxCount = new EntitySetting(0, (int)numBonusBoxCount.Value);
         }
 
-        private void cmdClearAllVictims_Click(object sender,EventArgs e)
+        private void cmdClearAllVictims_Click(object sender, EventArgs e)
         {
             entity.Victims.Clear();
             UpdateVictim();
@@ -639,23 +635,23 @@ namespace CrashEdit.CE
             dirty.Pop();
         }
 
-        private void cmdPreviousVictim_Click(object sender,EventArgs e)
+        private void cmdPreviousVictim_Click(object sender, EventArgs e)
         {
             --victimindex;
             UpdateVictim();
         }
 
-        private void cmdNextVictim_Click(object sender,EventArgs e)
+        private void cmdNextVictim_Click(object sender, EventArgs e)
         {
             ++victimindex;
             UpdateVictim();
         }
 
-        private void cmdInsertVictim_Click(object sender,EventArgs e)
+        private void cmdInsertVictim_Click(object sender, EventArgs e)
         {
             if (entity.Victims.Count > 0)
             {
-                entity.Victims.Insert(victimindex,entity.Victims[victimindex]);
+                entity.Victims.Insert(victimindex, entity.Victims[victimindex]);
             }
             else
             {
@@ -665,13 +661,13 @@ namespace CrashEdit.CE
             UpdateVictim();
         }
 
-        private void cmdRemoveVictim_Click(object sender,EventArgs e)
+        private void cmdRemoveVictim_Click(object sender, EventArgs e)
         {
             entity.Victims.RemoveAt(victimindex);
             UpdateVictim();
         }
 
-        private void numVictimID_ValueChanged(object sender,EventArgs e)
+        private void numVictimID_ValueChanged(object sender, EventArgs e)
         {
             if (!Dirty)
             {
@@ -818,7 +814,7 @@ namespace CrashEdit.CE
                 newrow.MetaValue = entity.LoadListA.Rows[loadlistarowindex].MetaValue;
                 foreach (var val in entity.LoadListA.Rows[loadlistarowindex].Values)
                     newrow.Values.Add(val);
-                entity.LoadListA.Rows.Insert(loadlistarowindex,newrow);
+                entity.LoadListA.Rows.Insert(loadlistarowindex, newrow);
             }
             UpdateLoadListA();
         }
@@ -967,7 +963,7 @@ namespace CrashEdit.CE
                 newrow.MetaValue = entity.LoadListB.Rows[loadlistbrowindex].MetaValue;
                 foreach (var val in entity.LoadListB.Rows[loadlistbrowindex].Values)
                     newrow.Values.Add(val);
-                entity.LoadListB.Rows.Insert(loadlistbrowindex,newrow);
+                entity.LoadListB.Rows.Insert(loadlistbrowindex, newrow);
             }
             UpdateLoadListB();
         }
@@ -1150,7 +1146,7 @@ namespace CrashEdit.CE
                 newrow.MetaValue = entity.DrawListA.Rows[drawlistarowindex].MetaValue;
                 foreach (var val in entity.DrawListA.Rows[drawlistarowindex].Values)
                     newrow.Values.Add(val);
-                entity.DrawListA.Rows.Insert(drawlistarowindex,newrow);
+                entity.DrawListA.Rows.Insert(drawlistarowindex, newrow);
             }
             UpdateDrawListA();
         }
@@ -1333,7 +1329,7 @@ namespace CrashEdit.CE
                 newrow.MetaValue = entity.DrawListB.Rows[drawlistbrowindex].MetaValue;
                 foreach (var val in entity.DrawListB.Rows[drawlistbrowindex].Values)
                     newrow.Values.Add(val);
-                entity.DrawListB.Rows.Insert(drawlistbrowindex,newrow);
+                entity.DrawListB.Rows.Insert(drawlistbrowindex, newrow);
             }
             UpdateDrawListB();
         }
@@ -1691,7 +1687,7 @@ namespace CrashEdit.CE
                 }
             }
         }
-        
+
         private void UpdateTTReward()
         {
             if (entity.TimeTrialReward.HasValue)
@@ -1923,7 +1919,7 @@ namespace CrashEdit.CE
                 newrow.MetaValue = entity.Neighbors.Rows[neighborindex].MetaValue;
                 foreach (var val in entity.Neighbors.Rows[neighborindex].Values)
                     newrow.Values.Add(val);
-                entity.Neighbors.Rows.Insert(neighborindex,newrow);
+                entity.Neighbors.Rows.Insert(neighborindex, newrow);
             }
             UpdateNeighbors();
         }
@@ -2099,7 +2095,7 @@ namespace CrashEdit.CE
                 newrow.MetaValue = entity.FOV.Rows[fovframeindex].MetaValue;
                 foreach (var val in entity.FOV.Rows[fovframeindex].Values)
                     newrow.Values.Add(val);
-                entity.FOV.Rows.Insert(fovframeindex,newrow);
+                entity.FOV.Rows.Insert(fovframeindex, newrow);
             }
             UpdateFOV();
         }

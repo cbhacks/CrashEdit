@@ -1,23 +1,27 @@
-
-using System;
 using System.Windows.Forms;
 
-namespace CrashEdit {
+namespace CrashEdit
+{
 
-    public class ToolStripCommandButton : ToolStripButton {
+    public class ToolStripCommandButton : ToolStripButton
+    {
 
         private Command? _command;
 
-        public Command? Command {
+        public Command? Command
+        {
             get { return _command; }
-            set {
+            set
+            {
                 if (_command == value)
                     return;
 
-                if (_command != null) {
+                if (_command != null)
+                {
                     _command.Host.ResyncSuggested -= Command_Host_ResyncSuggested;
                 }
-                if (value != null) {
+                if (value != null)
+                {
                     value.Host.ResyncSuggested += Command_Host_ResyncSuggested;
                 }
 
@@ -26,8 +30,10 @@ namespace CrashEdit {
             }
         }
 
-        public void Sync() {
-            if (Command == null) {
+        public void Sync()
+        {
+            if (Command == null)
+            {
                 Enabled = false;
                 Text = null;
                 ImageKey = null;
@@ -40,21 +46,27 @@ namespace CrashEdit {
             Enabled = Command.Ready;
         }
 
-        protected override void OnClick(EventArgs e) {
-            if (Command != null && Command.Ready) {
+        protected override void OnClick(EventArgs e)
+        {
+            if (Command != null && Command.Ready)
+            {
                 Command.Execute();
             }
 
             base.OnClick(e);
         }
 
-        private void Command_Host_ResyncSuggested(object sender, EventArgs e) {
+        private void Command_Host_ResyncSuggested(object sender, EventArgs e)
+        {
             Sync();
         }
 
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
-                if (_command != null) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_command != null)
+                {
                     _command.Host.ResyncSuggested -= Command_Host_ResyncSuggested;
                     _command = null;
                 }

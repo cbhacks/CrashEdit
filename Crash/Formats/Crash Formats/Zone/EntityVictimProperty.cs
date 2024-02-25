@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace CrashEdit.Crash
 {
     public sealed class EntityVictimProperty : EntityBasicProperty<EntityVictim>
@@ -15,9 +13,9 @@ namespace CrashEdit.Crash
         public override byte Type => 18;
         public override byte ElementSize => 2;
 
-        protected override void SaveElement(byte[] data,EntityVictim value)
+        protected override void SaveElement(byte[] data, EntityVictim value)
         {
-            BitConv.ToInt16(data,0,value.VictimID);
+            BitConv.ToInt16(data, 0, value.VictimID);
         }
     }
 }

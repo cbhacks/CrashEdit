@@ -1,5 +1,3 @@
-using Crash;
-using CrashEdit.Properties;
 using OpenTK.Mathematics;
 
 namespace CrashEdit

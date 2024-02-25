@@ -1,29 +1,33 @@
-
-using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace CrashEdit {
+namespace CrashEdit
+{
 
-    public abstract class MainForm : Form, ICommandHost {
+    public abstract class MainForm : Form, ICommandHost
+    {
 
-        public MainForm() {
-            TabControl = new TabControl {
+        public MainForm()
+        {
+            TabControl = new TabControl
+            {
                 Dock = DockStyle.Fill
             };
-            TabControl.SelectedIndexChanged += (sender, e) => {
+            TabControl.SelectedIndexChanged += (sender, e) =>
+            {
                 OnResyncSuggested(EventArgs.Empty);
             };
             Controls.Add(TabControl);
 
             // Toolbar
-            ToolStrip = new ToolStrip {
+            ToolStrip = new ToolStrip
+            {
                 ImageList = Embeds.ImageList
             };
             Controls.Add(ToolStrip);
 
             // Toolbar -> Undock
-            ToolStrip.Items.Add(new ToolStripCommandButton {
+            ToolStrip.Items.Add(new ToolStripCommandButton
+            {
                 DisplayStyle = ToolStripItemDisplayStyle.Image,
                 Command = new UndockCommand(this)
             });
@@ -32,58 +36,73 @@ namespace CrashEdit {
             // reverse order (i.e. right to left) !
 
             // Toolbar -> Find Last
-            ToolStrip.Items.Add(new ToolStripCommandButton {
+            ToolStrip.Items.Add(new ToolStripCommandButton
+            {
                 Alignment = ToolStripItemAlignment.Right,
                 DisplayStyle = ToolStripItemDisplayStyle.Image,
                 Command = new FindLastCommand(this)
             });
 
             // Toolbar -> Find Next
-            ToolStrip.Items.Add(new ToolStripCommandButton {
+            ToolStrip.Items.Add(new ToolStripCommandButton
+            {
                 Alignment = ToolStripItemAlignment.Right,
                 DisplayStyle = ToolStripItemDisplayStyle.Image,
                 Command = new FindNextCommand(this)
             });
 
             // Toolbar -> Find Previous
-            ToolStrip.Items.Add(new ToolStripCommandButton {
+            ToolStrip.Items.Add(new ToolStripCommandButton
+            {
                 Alignment = ToolStripItemAlignment.Right,
                 DisplayStyle = ToolStripItemDisplayStyle.Image,
                 Command = new FindPreviousCommand(this)
             });
 
             // Toolbar -> Find First
-            ToolStrip.Items.Add(new ToolStripCommandButton {
+            ToolStrip.Items.Add(new ToolStripCommandButton
+            {
                 Alignment = ToolStripItemAlignment.Right,
                 DisplayStyle = ToolStripItemDisplayStyle.Image,
                 Command = new FindFirstCommand(this)
             });
 
             // Toolbar -> Search box
-            SearchBox = new ToolStripTextBox {
+            SearchBox = new ToolStripTextBox
+            {
                 Alignment = ToolStripItemAlignment.Right,
                 Enabled = false
             };
-            SearchBox.TextChanged += (sender, e) => {
-                if (ActiveWorkspaceHost is MainControl mainCtl) {
-                    if (mainCtl.SearchQuery != SearchBox.Text) {
+            SearchBox.TextChanged += (sender, e) =>
+            {
+                if (ActiveWorkspaceHost is MainControl mainCtl)
+                {
+                    if (mainCtl.SearchQuery != SearchBox.Text)
+                    {
                         mainCtl.SearchQuery = SearchBox.Text;
                         OnResyncSuggested(EventArgs.Empty);
                     }
                 }
             };
-            SearchBox.KeyPress += (sender, e) => {
-                if (e.KeyChar == '\r') {
+            SearchBox.KeyPress += (sender, e) =>
+            {
+                if (e.KeyChar == '\r')
+                {
                     // Start a search if the user pressed enter, if valid.
                     var findFirst = new FindFirstCommand(this);
-                    if (findFirst.Ready) {
+                    if (findFirst.Ready)
+                    {
                         e.Handled = true;
-                        if (findFirst.Execute()) {
+                        if (findFirst.Execute())
+                        {
                             // Select the tree view after successful search.
-                            if (ActiveWorkspaceHost is MainControl mainCtl) {
+                            if (ActiveWorkspaceHost is MainControl mainCtl)
+                            {
                                 mainCtl.ResourceTree.Focus();
                             }
-                        } else {
+                        }
+                        else
+                        {
                             // Reselect the search field otherwise.
                             SearchBox.Focus();
                             SearchBox.SelectAll();
@@ -94,7 +113,8 @@ namespace CrashEdit {
             ToolStrip.Items.Add(SearchBox);
 
             // Toolbar -> Find (label and icon)
-            ToolStrip.Items.Add(new ToolStripLabel {
+            ToolStrip.Items.Add(new ToolStripLabel
+            {
                 Alignment = ToolStripItemAlignment.Right,
                 DisplayStyle = ToolStripItemDisplayStyle.Image,
                 Text = "Find",
@@ -102,67 +122,78 @@ namespace CrashEdit {
             });
 
             // Menubar
-            MenuStrip = new MenuStrip {
+            MenuStrip = new MenuStrip
+            {
                 ImageList = Embeds.ImageList
             };
             Controls.Add(MenuStrip);
 
             // Menubar -> File
-            FileMenu = new ToolStripMenuItem {
+            FileMenu = new ToolStripMenuItem
+            {
                 Text = "&File"
             };
             FileMenu.DropDown.ImageList = Embeds.ImageList;
             MenuStrip.Items.Add(FileMenu);
 
             // Menubar -> File -> Exit
-            var exitMenuItem = new ToolStripMenuItem {
+            var exitMenuItem = new ToolStripMenuItem
+            {
                 Text = "&Exit"
             };
-            exitMenuItem.Click += (sender, e) => {
+            exitMenuItem.Click += (sender, e) =>
+            {
                 Application.Exit();
             };
             FileMenu.DropDownItems.Add(exitMenuItem);
 
             // Menubar -> Edit
-            EditMenu = new ToolStripMenuItem {
+            EditMenu = new ToolStripMenuItem
+            {
                 Text = "&Edit"
             };
             EditMenu.DropDown.ImageList = Embeds.ImageList;
             MenuStrip.Items.Add(EditMenu);
 
             // Menubar -> Edit -> Find
-            var findMenuItem = new ToolStripMenuItem {
+            var findMenuItem = new ToolStripMenuItem
+            {
                 Text = "&Find",
                 ImageKey = "MagnifyingGlass",
                 ShortcutKeys = Keys.Control | Keys.F
             };
-            findMenuItem.Click += (sender, e) => {
+            findMenuItem.Click += (sender, e) =>
+            {
                 SearchBox.Focus();
                 SearchBox.SelectAll();
             };
             EditMenu.DropDownItems.Add(findMenuItem);
 
             // Menubar -> Edit -> Find Next
-            EditMenu.DropDownItems.Add(new ToolStripCommandMenuItem {
+            EditMenu.DropDownItems.Add(new ToolStripCommandMenuItem
+            {
                 Command = new FindNextCommand(this),
                 ShortcutKeys = Keys.F3
             });
 
             // Menubar -> Edit -> Find Previous
-            EditMenu.DropDownItems.Add(new ToolStripCommandMenuItem {
+            EditMenu.DropDownItems.Add(new ToolStripCommandMenuItem
+            {
                 Command = new FindPreviousCommand(this),
                 ShortcutKeys = Keys.Shift | Keys.F3
             });
 
             // Menubar -> View
-            ViewMenu = new ToolStripMenuItem {
+            ViewMenu = new ToolStripMenuItem
+            {
                 Text = "&View"
             };
             ViewMenu.DropDown.ImageList = Embeds.ImageList;
             MenuStrip.Items.Add(ViewMenu);
 
             // Menubar -> View -> Undock
-            ViewMenu.DropDownItems.Add(new ToolStripCommandMenuItem {
+            ViewMenu.DropDownItems.Add(new ToolStripCommandMenuItem
+            {
                 Command = new UndockCommand(this),
                 ShortcutKeys = Keys.Control | Keys.D
             });
@@ -192,7 +223,8 @@ namespace CrashEdit {
 
         public SaveFileDialog ExportDialog { get; }
 
-        public void ShowError(string msg) {
+        public void ShowError(string msg)
+        {
             MessageBox.Show(
                 this,
                 msg,
@@ -201,61 +233,76 @@ namespace CrashEdit {
                 MessageBoxIcon.Error);
         }
 
-        public bool ShowImportDialog(out string? filename, string[] fileFilters) {
+        public bool ShowImportDialog(out string? filename, string[] fileFilters)
+        {
             if (fileFilters == null)
                 throw new ArgumentNullException();
 
             var filter = string.Join("|", fileFilters);
-            if (filter != "") {
+            if (filter != "")
+            {
                 filter += '|';
             }
             filter += "All files (*.*)|*.*";
             ImportDialog.Filter = filter;
             ImportDialog.FilterIndex = 1;
 
-            if (ImportDialog.ShowDialog(this) == DialogResult.OK) {
+            if (ImportDialog.ShowDialog(this) == DialogResult.OK)
+            {
                 filename = ImportDialog.FileName;
                 return true;
-            } else {
+            }
+            else
+            {
                 filename = null;
                 return false;
             }
         }
 
-        public bool ShowExportDialog(out string? filename, string[] fileFilters) {
+        public bool ShowExportDialog(out string? filename, string[] fileFilters)
+        {
             if (fileFilters == null)
                 throw new ArgumentNullException();
 
             var filter = string.Join("|", fileFilters);
-            if (filter != "") {
+            if (filter != "")
+            {
                 filter += '|';
             }
             filter += "All files (*.*)|*.*";
             ExportDialog.Filter = filter;
             ExportDialog.FilterIndex = 1;
 
-            if (ExportDialog.ShowDialog(this) == DialogResult.OK) {
+            if (ExportDialog.ShowDialog(this) == DialogResult.OK)
+            {
                 filename = ExportDialog.FileName;
                 return true;
-            } else {
+            }
+            else
+            {
                 filename = null;
                 return false;
             }
         }
 
-        public UserChoice? ShowChoiceDialog(string msg, IEnumerable<UserChoice> choices) {
+        public UserChoice? ShowChoiceDialog(string msg, IEnumerable<UserChoice> choices)
+        {
             if (msg == null)
                 throw new ArgumentNullException();
             if (choices == null)
                 throw new ArgumentNullException();
 
-            using (var dialog = new ChoiceDialog()) {
+            using (var dialog = new ChoiceDialog())
+            {
                 dialog.MessageText = msg;
                 dialog.AddChoices(choices);
                 var result = dialog.ShowDialog(this);
-                if (result == DialogResult.OK) {
+                if (result == DialogResult.OK)
+                {
                     return dialog.SelectedChoice;
-                } else {
+                }
+                else
+                {
                     return null;
                 }
             }
@@ -263,21 +310,28 @@ namespace CrashEdit {
 
         public event EventHandler? ResyncSuggested;
 
-        protected virtual void OnResyncSuggested(EventArgs e) {
-            if (ActiveWorkspaceHost is MainControl mainCtl) {
+        protected virtual void OnResyncSuggested(EventArgs e)
+        {
+            if (ActiveWorkspaceHost is MainControl mainCtl)
+            {
                 SearchBox.Enabled = true;
                 SearchBox.Text = mainCtl.SearchQuery;
-            } else {
+            }
+            else
+            {
                 SearchBox.Enabled = false;
                 SearchBox.Text = "";
             }
-            if (ResyncSuggested != null) {
+            if (ResyncSuggested != null)
+            {
                 ResyncSuggested(this, e);
             }
         }
 
-        protected void MainControl_ActiveControllerChanged(object sender, EventArgs e) {
-            if (sender == ActiveWorkspaceHost) {
+        protected void MainControl_ActiveControllerChanged(object sender, EventArgs e)
+        {
+            if (sender == ActiveWorkspaceHost)
+            {
                 OnResyncSuggested(EventArgs.Empty);
             }
         }

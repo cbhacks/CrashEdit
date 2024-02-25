@@ -1,6 +1,4 @@
 using CrashEdit.Crash;
-using System.Windows.Forms;
-using System.Collections.Generic;
 
 namespace CrashEdit.CE
 {
@@ -10,8 +8,8 @@ namespace CrashEdit.CE
         public EntityController(Entity entity, SubcontrollerGroup parentGroup) : base(parentGroup, entity)
         {
             Entity = entity;
-            AddMenu("Duplicate Entity",Menu_Duplicate);
-            AddMenu("Delete Entity",Menu_Delete);
+            AddMenu("Duplicate Entity", Menu_Duplicate);
+            AddMenu("Delete Entity", Menu_Delete);
         }
 
         public override bool EditorAvailable => true;
@@ -173,9 +171,9 @@ namespace CrashEdit.CE
                 foreach (ZoneEntry zone in GetEntries<ZoneEntry>())
                 {
                     int zoneindex = -1;
-                    for (int z = 0, s = BitConv.FromInt32(zone.Header,0x190); z < s; ++z)
+                    for (int z = 0, s = BitConv.FromInt32(zone.Header, 0x190); z < s; ++z)
                     {
-                        if (BitConv.FromInt32(zone.Header,0x194+z*4) == ZoneEntry.EID)
+                        if (BitConv.FromInt32(zone.Header, 0x194+z*4) == ZoneEntry.EID)
                         {
                             zoneindex = z;
                             break;

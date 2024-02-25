@@ -1,5 +1,4 @@
 using CrashEdit.Crash;
-using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
@@ -9,7 +8,7 @@ namespace CrashEdit.CE
         public OldCameraController(OldCamera camera, SubcontrollerGroup parentGroup) : base(parentGroup, camera)
         {
             Camera = camera;
-            AddMenu("Delete Camera",Menu_Delete);
+            AddMenu("Delete Camera", Menu_Delete);
         }
 
         public override bool EditorAvailable => true;
@@ -24,13 +23,16 @@ namespace CrashEdit.CE
         public OldZoneEntryController OldZoneEntryController => Modern.Parent.Legacy as OldZoneEntryController;
         public OldZoneEntry OldZoneEntry => OldZoneEntryController.OldZoneEntry;
         public OldCamera Camera { get; }
-        
+
         private void Menu_Delete()
         {
-            if (ProtoZoneEntryController != null) {
+            if (ProtoZoneEntryController != null)
+            {
                 ProtoZoneEntry.Cameras.Remove(Camera);
                 ProtoZoneEntry.CameraCount = ProtoZoneEntry.Cameras.Count;
-            } else {
+            }
+            else
+            {
                 OldZoneEntry.Cameras.Remove(Camera);
             }
         }

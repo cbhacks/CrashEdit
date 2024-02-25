@@ -1,10 +1,8 @@
-using System;
-
 namespace CrashEdit.Crash
 {
     public sealed class SoundEntry : Entry
     {
-        public SoundEntry(SampleSet samples,int eid) : base(eid)
+        public SoundEntry(SampleSet samples, int eid) : base(eid)
         {
             Samples = samples ?? throw new ArgumentNullException("samples");
         }
@@ -17,9 +15,9 @@ namespace CrashEdit.Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte [1][];
+            byte[][] items = new byte[1][];
             items[0] = Samples.Save();
-            return new UnprocessedEntry(items,EID,Type);
+            return new UnprocessedEntry(items, EID, Type);
         }
     }
 }

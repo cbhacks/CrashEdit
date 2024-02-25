@@ -1,5 +1,3 @@
-using CrashEdit.Crash;
-
 namespace CrashHacks.Scripts.Scenery
 {
     public abstract class FXScript : Script
@@ -10,7 +8,7 @@ namespace CrashHacks.Scripts.Scenery
 
         public override string Name
         {
-            get { return string.Format("Set scenery FX to mode {0}",Mode); }
+            get { return string.Format("Set scenery FX to mode {0}", Mode); }
         }
 
         public override string Description
@@ -48,12 +46,12 @@ namespace CrashHacks.Scripts.Scenery
             }
         }
 
-        public override void Run(object value,GameVersion gameversion)
+        public override void Run(object value, GameVersion gameversion)
         {
             if (value is SceneryEntry)
             {
                 SceneryEntry entry = (SceneryEntry)value;
-                for (int i = 0;i < entry.Vertices.Count;i++)
+                for (int i = 0; i < entry.Vertices.Count; i++)
                 {
                     SceneryVertex vertex = entry.Vertices[i];
                     int x = vertex.X;
@@ -65,7 +63,7 @@ namespace CrashHacks.Scripts.Scenery
                     int color = vertex.Color;
                     unknowny &= 3;
                     unknowny |= Mode << 2;
-                    entry.Vertices[i] = new SceneryVertex(x,y,z,unknownx,unknowny,unknownz);
+                    entry.Vertices[i] = new SceneryVertex(x, y, z, unknownx, unknowny, unknownz);
                 }
             }
         }

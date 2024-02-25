@@ -1,9 +1,8 @@
+namespace CrashEdit
+{
 
-using System;
-
-namespace CrashEdit {
-
-    public interface ICommandHost : IUserInterface {
+    public interface ICommandHost : IUserInterface
+    {
 
         IWorkspaceHost? ActiveWorkspaceHost { get; }
 

@@ -1,7 +1,4 @@
 using CrashEdit.Crash;
-using System;
-using System.Windows.Forms;
-using System.Collections.Generic;
 
 namespace CrashEdit.CE
 {
@@ -12,13 +9,13 @@ namespace CrashEdit.CE
         {
             MusicEntry = musicentry;
             AddMenuSeparator();
-            AddMenu("Export Linked VH",Menu_Export_Linked_VH);
-            AddMenu("Export Linked VB",Menu_Export_Linked_VB);
-            AddMenu("Export Linked VAB",Menu_Export_Linked_VAB);
-            AddMenu("Export Linked VAB as DLS",Menu_Export_Linked_VAB_DLS);
+            AddMenu("Export Linked VH", Menu_Export_Linked_VH);
+            AddMenu("Export Linked VB", Menu_Export_Linked_VB);
+            AddMenu("Export Linked VAB", Menu_Export_Linked_VAB);
+            AddMenu("Export Linked VAB as DLS", Menu_Export_Linked_VAB_DLS);
             AddMenuSeparator();
-            AddMenu("Replace Linked VB",Menu_Replace_Linked_VB);
-            AddMenu("Replace Linked VAB",Menu_Replace_Linked_VAB);
+            AddMenu("Replace Linked VB", Menu_Replace_Linked_VB);
+            AddMenu("Replace Linked VAB", Menu_Replace_Linked_VAB);
         }
 
         public MusicEntry MusicEntry { get; }
@@ -68,44 +65,44 @@ namespace CrashEdit.CE
         {
             VH vh = FindLinkedVH();
             SampleLine[] vb = FindLinkedVB();
-            return VAB.Join(vh,vb);
+            return VAB.Join(vh, vb);
         }
 
         private void Menu_Export_Linked_VH()
         {
             VH vh = FindLinkedVH();
             byte[] data = vh.Save();
-            FileUtil.SaveFile(data,FileFilters.VH,FileFilters.Any);
+            FileUtil.SaveFile(data, FileFilters.VH, FileFilters.Any);
         }
 
         private void Menu_Export_Linked_VB()
         {
             SampleLine[] vb = FindLinkedVB();
             byte[] data = new SampleSet(vb).Save();
-            FileUtil.SaveFile(data,FileFilters.VB,FileFilters.Any);
+            FileUtil.SaveFile(data, FileFilters.VB, FileFilters.Any);
         }
 
         private void Menu_Export_Linked_VAB()
         {
             VAB vab = FindLinkedVAB();
             byte[] data = vab.Save();
-            FileUtil.SaveFile(data,FileFilters.VAB,FileFilters.Any);
+            FileUtil.SaveFile(data, FileFilters.VAB, FileFilters.Any);
         }
 
         private void Menu_Export_Linked_VAB_DLS()
         {
-            if (MessageBox.Show("Exporting to DLS is experimental.\n\nContinue anyway?","Export Linked VAB as DLS",MessageBoxButtons.YesNo) != DialogResult.Yes)
+            if (MessageBox.Show("Exporting to DLS is experimental.\n\nContinue anyway?", "Export Linked VAB as DLS", MessageBoxButtons.YesNo) != DialogResult.Yes)
             {
                 return;
             }
             VAB vab = FindLinkedVAB();
             byte[] data = vab.ToDLS().Save();
-            FileUtil.SaveFile(data,FileFilters.DLS,FileFilters.Any);
+            FileUtil.SaveFile(data, FileFilters.DLS, FileFilters.Any);
         }
 
         private void Menu_Replace_Linked_VB()
         {
-            byte[] data = FileUtil.OpenFile(FileFilters.VB,FileFilters.Any);
+            byte[] data = FileUtil.OpenFile(FileFilters.VB, FileFilters.Any);
             if (data == null) return;
             ReplaceLinkedVB(SampleSet.Load(data).SampleLines);
         }

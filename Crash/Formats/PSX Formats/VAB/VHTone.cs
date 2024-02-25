@@ -1,5 +1,3 @@
-using System;
-
 namespace CrashEdit.Crash
 {
     public sealed class VHTone
@@ -7,7 +5,7 @@ namespace CrashEdit.Crash
         public static VHTone Load(byte[] data)
         {
             if (data.Length != 32)
-                throw new ArgumentException("Value must be 32 bytes long.","data");
+                throw new ArgumentException("Value must be 32 bytes long.", "data");
             byte priority = data[0];
             byte mode = data[1];
             byte volume = data[2];
@@ -24,14 +22,14 @@ namespace CrashEdit.Crash
             byte pitchbendmaximum = data[13];
             byte reserved1 = data[14];
             byte reserved2 = data[15];
-            short adsr1 = BitConv.FromInt16(data,16);
-            short adsr2 = BitConv.FromInt16(data,18);
+            short adsr1 = BitConv.FromInt16(data, 16);
+            short adsr2 = BitConv.FromInt16(data, 18);
             // Unused 2 bytes here
-            short wave = BitConv.FromInt16(data,22);
-            short reserved3 = BitConv.FromInt16(data,24);
-            short reserved4 = BitConv.FromInt16(data,26);
-            short reserved5 = BitConv.FromInt16(data,28);
-            short reserved6 = BitConv.FromInt16(data,30);
+            short wave = BitConv.FromInt16(data, 22);
+            short reserved3 = BitConv.FromInt16(data, 24);
+            short reserved4 = BitConv.FromInt16(data, 26);
+            short reserved5 = BitConv.FromInt16(data, 28);
+            short reserved6 = BitConv.FromInt16(data, 30);
             if (reserved1 != 0xB1)
             {
                 ErrorManager.SignalIgnorableError("VHTone: Reserved value 1 is wrong");
@@ -56,7 +54,7 @@ namespace CrashEdit.Crash
             {
                 ErrorManager.SignalIgnorableError("VHTone: Reserved value 6 is wrong");
             }
-            return new VHTone(priority,mode,volume,panning,centernote,pitchshift,minimumnote,maximumnote,vibratowidth,vibratotime,portamentowidth,portamentotime,pitchbendminimum,pitchbendmaximum,adsr1,adsr2,wave);
+            return new VHTone(priority, mode, volume, panning, centernote, pitchshift, minimumnote, maximumnote, vibratowidth, vibratotime, portamentowidth, portamentotime, pitchbendminimum, pitchbendmaximum, adsr1, adsr2, wave);
         }
 
         public VHTone(bool isoldversion)
@@ -109,7 +107,7 @@ namespace CrashEdit.Crash
         }
 
         // This is ridiculous! There has to be a better way.
-        public VHTone(byte priority,byte mode,byte volume,byte panning,byte centernote,byte pitchshift,byte minimumnote,byte maximumnote,byte vibratowidth,byte vibratotime,byte portamentowidth,byte portamentotime,byte pitchbendminimum,byte pitchbendmaximum,short adsr1,short adsr2,short wave)
+        public VHTone(byte priority, byte mode, byte volume, byte panning, byte centernote, byte pitchshift, byte minimumnote, byte maximumnote, byte vibratowidth, byte vibratotime, byte portamentowidth, byte portamentotime, byte pitchbendminimum, byte pitchbendmaximum, short adsr1, short adsr2, short wave)
         {
             Priority = priority;
             Mode = mode;
@@ -150,7 +148,7 @@ namespace CrashEdit.Crash
 
         public byte[] Save(int program)
         {
-            byte[] data = new byte [32];
+            byte[] data = new byte[32];
             data[0] = Priority;
             data[1] = Mode;
             data[2] = Volume;
@@ -167,46 +165,46 @@ namespace CrashEdit.Crash
             data[13] = PitchBendMaximum;
             data[14] = 0xB1;
             data[15] = 0xB2;
-            BitConv.ToInt16(data,16,ADSR1);
-            BitConv.ToInt16(data,18,ADSR2);
-            BitConv.ToInt16(data,20,(short)program);
-            BitConv.ToInt16(data,22,Wave);
-            BitConv.ToInt16(data,24,0xC0);
-            BitConv.ToInt16(data,26,0xC1);
-            BitConv.ToInt16(data,28,0xC2);
-            BitConv.ToInt16(data,30,0xC3);
+            BitConv.ToInt16(data, 16, ADSR1);
+            BitConv.ToInt16(data, 18, ADSR2);
+            BitConv.ToInt16(data, 20, (short)program);
+            BitConv.ToInt16(data, 22, Wave);
+            BitConv.ToInt16(data, 24, 0xC0);
+            BitConv.ToInt16(data, 26, 0xC1);
+            BitConv.ToInt16(data, 28, 0xC2);
+            BitConv.ToInt16(data, 30, 0xC3);
             return data;
         }
 
         public RIFF ToDLSRegion()
         {
             RIFF rgn = new RIFF("rgn ");
-            byte[] rgnh = new byte [12];
-            BitConv.ToInt16(rgnh,0,MinimumNote);
-            BitConv.ToInt16(rgnh,2,MaximumNote);
-            BitConv.ToInt16(rgnh,4,0);
-            BitConv.ToInt16(rgnh,6,127);
-            BitConv.ToInt16(rgnh,8,0);
-            BitConv.ToInt16(rgnh,10,0);
-            rgn.Items.Add(new RIFFData("rgnh",rgnh));
-            byte[] wsmp = new byte [20 /* 36 */];
-            BitConv.ToInt32(wsmp,0,20);
-            BitConv.ToInt16(wsmp,4,CenterNote);
-            BitConv.ToInt16(wsmp,6,PitchShift);
-            BitConv.ToInt32(wsmp,8,Volume - 64 << 16);
-            BitConv.ToInt32(wsmp,12,0);
-            BitConv.ToInt32(wsmp,16,0 /* 1 */);
+            byte[] rgnh = new byte[12];
+            BitConv.ToInt16(rgnh, 0, MinimumNote);
+            BitConv.ToInt16(rgnh, 2, MaximumNote);
+            BitConv.ToInt16(rgnh, 4, 0);
+            BitConv.ToInt16(rgnh, 6, 127);
+            BitConv.ToInt16(rgnh, 8, 0);
+            BitConv.ToInt16(rgnh, 10, 0);
+            rgn.Items.Add(new RIFFData("rgnh", rgnh));
+            byte[] wsmp = new byte[20 /* 36 */];
+            BitConv.ToInt32(wsmp, 0, 20);
+            BitConv.ToInt16(wsmp, 4, CenterNote);
+            BitConv.ToInt16(wsmp, 6, PitchShift);
+            BitConv.ToInt32(wsmp, 8, Volume - 64 << 16);
+            BitConv.ToInt32(wsmp, 12, 0);
+            BitConv.ToInt32(wsmp, 16, 0 /* 1 */);
             /*BitConv.ToInt32(wsmp,20,16);
             BitConv.ToInt32(wsmp,24,0);
             BitConv.ToInt32(wsmp,28,LOOPSTART);
             BitConv.ToInt32(wsmp,28,LOOPLENGTH);*/
-            rgn.Items.Add(new RIFFData("wsmp",wsmp));
-            byte[] wlnk = new byte [12];
-            BitConv.ToInt16(wlnk,0,0);
-            BitConv.ToInt16(wlnk,2,0);
-            BitConv.ToInt32(wlnk,4,3); // ???
-            BitConv.ToInt32(wlnk,8,Wave - 1);
-            rgn.Items.Add(new RIFFData("wlnk",wlnk));
+            rgn.Items.Add(new RIFFData("wsmp", wsmp));
+            byte[] wlnk = new byte[12];
+            BitConv.ToInt16(wlnk, 0, 0);
+            BitConv.ToInt16(wlnk, 2, 0);
+            BitConv.ToInt32(wlnk, 4, 3); // ???
+            BitConv.ToInt32(wlnk, 8, Wave - 1);
+            rgn.Items.Add(new RIFFData("wlnk", wlnk));
             return rgn;
         }
     }

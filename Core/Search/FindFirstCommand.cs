@@ -1,11 +1,10 @@
+namespace CrashEdit
+{
 
-using System;
+    public sealed class FindFirstCommand : Command
+    {
 
-namespace CrashEdit {
-
-    public sealed class FindFirstCommand : Command {
-
-        public FindFirstCommand(ICommandHost host) : base(host) {}
+        public FindFirstCommand(ICommandHost host) : base(host) { }
 
         public override string Text => "Find First";
 
@@ -14,7 +13,8 @@ namespace CrashEdit {
         public override bool Ready =>
             WsHost?.SearchPredicate != null;
 
-        public override bool Execute() {
+        public override bool Execute()
+        {
             if (WsHost == null)
                 throw new InvalidOperationException();
             if (WsHost.SearchPredicate == null)
@@ -25,8 +25,10 @@ namespace CrashEdit {
             w.Cursor = WsHost.RootController;
 
             // Advance depth-first until a match is found.
-            while(!WsHost.SearchPredicate(w.Cursor)) {
-                if (!w.MoveToNextDFS()) {
+            while (!WsHost.SearchPredicate(w.Cursor))
+            {
+                if (!w.MoveToNextDFS())
+                {
                     // Nothing in the entire tree matches.
                     Host.ShowError("No results found.");
                     return false;

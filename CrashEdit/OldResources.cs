@@ -180,7 +180,7 @@ namespace CrashEdit.CE
 
         static OldResources()
         {
-            ResourceManager manager = new ResourceManager("CrashEdit.CE.OldResources",Assembly.GetExecutingAssembly());
+            ResourceManager manager = new ResourceManager("CrashEdit.CE.OldResources", Assembly.GetExecutingAssembly());
             List<FieldInfo> allfields = new();
             foreach (var field in typeof(OldResources).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
             {

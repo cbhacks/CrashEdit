@@ -1,5 +1,4 @@
 using CrashEdit.Crash;
-using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
@@ -18,7 +17,7 @@ namespace CrashEdit.CE
             lstEntryList = new ListBox { Dock = DockStyle.Fill };
 
             Controls.Add(lstEntryList);
-            
+
             Invalidated += EntryChunkBox_Invalidated;
         }
 

@@ -99,7 +99,8 @@ namespace CrashEdit.Crash
             Anims = anims;
         }
 
-        public override string Title => Version switch {
+        public override string Title => Version switch
+        {
             GOOLVersion.Version0 => $"Prototype GOOL ({EName})",
             GOOLVersion.Version1 => $"GOOL ({EName})",
             GOOLVersion.Version2 => $"GOOLv2 ({EName})",

@@ -1,6 +1,4 @@
 using CrashEdit.Crash;
-using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace CrashEdit.CE
 {
@@ -11,20 +9,20 @@ namespace CrashEdit.CE
             : base(zoneentry, parentGroup)
         {
             OldZoneEntry = zoneentry;
-            AddMenu("Add Camera",Menu_AddCamera);
-            AddMenu("Add Entity",Menu_AddEntity);
+            AddMenu("Add Camera", Menu_AddCamera);
+            AddMenu("Add Entity", Menu_AddEntity);
         }
 
         public override bool EditorAvailable => true;
 
         public override Control CreateEditor()
         {
-            int linkedsceneryentrycount = BitConv.FromInt32(OldZoneEntry.Header,0);
+            int linkedsceneryentrycount = BitConv.FromInt32(OldZoneEntry.Header, 0);
             OldSceneryEntry[] linkedsceneryentries = new OldSceneryEntry[linkedsceneryentrycount];
             TextureChunk[][] totaltexturechunks = new TextureChunk[linkedsceneryentrycount][];
             for (int i = 0; i < linkedsceneryentrycount; i++)
             {
-                linkedsceneryentries[i] = FindEID<OldSceneryEntry>(BitConv.FromInt32(OldZoneEntry.Header,4 + i * 64));
+                linkedsceneryentries[i] = FindEID<OldSceneryEntry>(BitConv.FromInt32(OldZoneEntry.Header, 4 + i * 64));
                 TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(linkedsceneryentries[i].Info, 0x18)];
                 for (int j = 0; j < texturechunks.Length; ++j)
                 {
@@ -32,20 +30,20 @@ namespace CrashEdit.CE
                 }
                 totaltexturechunks[i] = texturechunks;
             }
-            int linkedzoneentrycount = BitConv.FromInt32(OldZoneEntry.Header,528);
+            int linkedzoneentrycount = BitConv.FromInt32(OldZoneEntry.Header, 528);
             OldZoneEntry[] linkedzoneentries = new OldZoneEntry[linkedzoneentrycount];
             for (int i = 0; i < linkedzoneentrycount; i++)
             {
-                linkedzoneentries[i] = FindEID<OldZoneEntry>(BitConv.FromInt32(OldZoneEntry.Header,532 + i * 4));
+                linkedzoneentries[i] = FindEID<OldZoneEntry>(BitConv.FromInt32(OldZoneEntry.Header, 532 + i * 4));
             }
-            return new OldZoneEntryViewer(OldZoneEntry,linkedsceneryentries,totaltexturechunks,linkedzoneentries);
+            return new OldZoneEntryViewer(OldZoneEntry, linkedsceneryentries, totaltexturechunks, linkedzoneentries);
         }
 
         public OldZoneEntry OldZoneEntry { get; }
 
         void Menu_AddCamera()
         {
-            OldCamera newcam = OldCamera.Load(new OldCamera(Entry.ENameToEID("NONE!"),0,0,new OldCameraNeighbor[4],0,0,0,0,1600,0,0,0,0,0,0,new List<OldCameraPosition>(),0).Save());
+            OldCamera newcam = OldCamera.Load(new OldCamera(Entry.ENameToEID("NONE!"), 0, 0, new OldCameraNeighbor[4], 0, 0, 0, 0, 1600, 0, 0, 0, 0, 0, 0, new List<OldCameraPosition>(), 0).Save());
             OldZoneEntry.Cameras.Add(newcam);
         }
 
@@ -69,7 +67,7 @@ namespace CrashEdit.CE
                 ++id;
                 continue;
             }
-            OldEntity newentity = OldEntity.Load(new OldEntity(0x0018,3,0,id,0,0,0,0,0,new List<EntityPosition>() { new EntityPosition(0,0,0) },0).Save());
+            OldEntity newentity = OldEntity.Load(new OldEntity(0x0018, 3, 0, id, 0, 0, 0, 0, 0, new List<EntityPosition>() { new EntityPosition(0, 0, 0) }, 0).Save());
             OldZoneEntry.Entities.Add(newentity);
         }
     }

@@ -1,12 +1,12 @@
-
-using System;
-
-namespace CrashEdit {
+namespace CrashEdit
+{
 
     [AttributeUsage(AttributeTargets.Class)]
-    public sealed class OrphanLegacyControllerAttribute : Attribute {
+    public sealed class OrphanLegacyControllerAttribute : Attribute
+    {
 
-        public OrphanLegacyControllerAttribute(Type resType) {
+        public OrphanLegacyControllerAttribute(Type resType)
+        {
             if (resType == null)
                 throw new ArgumentNullException();
 

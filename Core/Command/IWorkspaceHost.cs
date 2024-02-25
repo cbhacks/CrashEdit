@@ -1,9 +1,8 @@
+namespace CrashEdit
+{
 
-using System;
-
-namespace CrashEdit {
-
-    public interface IWorkspaceHost {
+    public interface IWorkspaceHost
+    {
 
         Controller RootController { get; }
 
