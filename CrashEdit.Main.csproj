@@ -15,6 +15,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <FrameworkReference Include="Microsoft.WindowsDesktop.App" />
       <Compile Remove="CopyPtr\**" />
       <Compile Remove="Crash.UI\**" />
       <Compile Remove="CrashEdit\**" />
