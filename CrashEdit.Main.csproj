@@ -1,14 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <OutputType>Library</OutputType>
-        <TargetFramework>net47</TargetFramework>
-        <EnableDefaultItems>false</EnableDefaultItems>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
 
-    <PropertyGroup>
-        <LangVersion>8.0</LangVersion>
-    </PropertyGroup>
 
     <PropertyGroup>
         <Company>cbhacks</Company>
@@ -25,17 +22,27 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="System.Windows.Forms" />
+      <Compile Remove="CopyPtr\**" />
+      <Compile Remove="Crash.UI\**" />
+      <Compile Remove="CrashEdit\**" />
+      <Compile Remove="CrashHacks\**" />
+      <Compile Remove="ISO2PSX\**" />
+      <EmbeddedResource Remove="CopyPtr\**" />
+      <EmbeddedResource Remove="Crash.UI\**" />
+      <EmbeddedResource Remove="CrashEdit\**" />
+      <EmbeddedResource Remove="CrashHacks\**" />
+      <EmbeddedResource Remove="ISO2PSX\**" />
+      <None Remove="CopyPtr\**" />
+      <None Remove="Crash.UI\**" />
+      <None Remove="CrashEdit\**" />
+      <None Remove="CrashHacks\**" />
+      <None Remove="ISO2PSX\**" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Memory" Version="4.5.4" />
+      <None Remove=".gitignore" />
+      <None Remove="LICENSE.md" />
+      <None Remove="packages.config" />
+      <None Remove="README.md" />
     </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="OpenTK" Version="3.3.2" />
-        <PackageReference Include="OpenTK.GLControl" Version="3.1.0" />
-        <PackageReference Include="DiscUtils.Iso9660" Version="0.16.4" />
-    </ItemGroup>
-
 </Project>

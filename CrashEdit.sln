@@ -1,17 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30413.136
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrashEdit.Main", "CrashEdit.Main.csproj", "{ff8431dc-537f-4523-8f38-03fdd36879d5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrashEdit.Main", "CrashEdit.Main.csproj", "{DAC0C3C2-00C8-4778-8EE5-B2045B2F7989}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrashEdit", "CrashEdit\CrashEdit.csproj", "{ECE059C1-0706-45F3-B897-7026376F49A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrashEdit", "CrashEdit\CrashEdit.csproj", "{ECE059C1-0706-45F3-B897-7026376F49A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crash.UI", "Crash.UI\Crash.UI.csproj", "{3B43FB3E-338F-4FA2-9B43-C6E4DE63DC8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crash.UI", "Crash.UI\Crash.UI.csproj", "{3B43FB3E-338F-4FA2-9B43-C6E4DE63DC8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrashHacks", "CrashHacks\CrashHacks.csproj", "{A6253B76-7091-403D-B96B-DB7DB78ACA87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrashHacks", "CrashHacks\CrashHacks.csproj", "{A6253B76-7091-403D-B96B-DB7DB78ACA87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISO2PSX", "ISO2PSX\ISO2PSX.csproj", "{B25E0901-A824-4C47-B2B4-048B8C154CCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ISO2PSX", "ISO2PSX\ISO2PSX.csproj", "{B25E0901-A824-4C47-B2B4-048B8C154CCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{ff8431dc-537f-4523-8f38-03fdd36879d5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ff8431dc-537f-4523-8f38-03fdd36879d5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ff8431dc-537f-4523-8f38-03fdd36879d5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ff8431dc-537f-4523-8f38-03fdd36879d5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ECE059C1-0706-45F3-B897-7026376F49A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ECE059C1-0706-45F3-B897-7026376F49A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECE059C1-0706-45F3-B897-7026376F49A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +35,10 @@ Global
 		{B25E0901-A824-4C47-B2B4-048B8C154CCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B25E0901-A824-4C47-B2B4-048B8C154CCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B25E0901-A824-4C47-B2B4-048B8C154CCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAC0C3C2-00C8-4778-8EE5-B2045B2F7989}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAC0C3C2-00C8-4778-8EE5-B2045B2F7989}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAC0C3C2-00C8-4778-8EE5-B2045B2F7989}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAC0C3C2-00C8-4778-8EE5-B2045B2F7989}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
