@@ -24,7 +24,7 @@ namespace CrashEdit.CE
         private int fovframeindex;
         private int fovindex;
 
-        private Timer argtexttimer;
+        private System.Windows.Forms.Timer argtexttimer;
 
         internal Stack<bool> dirty = new Stack<bool>();
         internal bool Dirty => dirty.Count > 0 && dirty.Peek();

@@ -1,6 +1,8 @@
 using OpenTK.Mathematics;
+using CrashEdit.Crash;
+using CrashEdit.CE.Properties;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class OldZoneEntryViewer : OldSceneryEntryViewer
     {

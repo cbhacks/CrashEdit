@@ -1,3 +1,5 @@
+using CrashEdit.Crash;
+
 namespace CrashEdit.Crash
 {
     public sealed class NSD
@@ -6,7 +8,7 @@ namespace CrashEdit.Crash
         {
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
-            if (data.Length < 1788)
+            if (data.Length < 0x6FC)
             {
                 ErrorManager.SignalError("NSD: Data is too short");
             }
@@ -20,19 +22,19 @@ namespace CrashEdit.Crash
             {
                 ErrorManager.SignalError("NSD: Entry count is negative");
             }
-            if (data.Length < 1788 + entrycount * 8)
+            if (data.Length < 0x6FC + entrycount * 8)
             {
                 ErrorManager.SignalError("NSD: Data is too short");
             }
             int[] hashkeymap = new int[256];
             for (int i = 0; i < 256; i++)
             {
-                hashkeymap[i] = BitConv.FromInt32(data, i*4);
+                hashkeymap[i] = BitConv.FromInt32(data, i * 4);
             }
             int[] leveldata = new int[4];
             for (int i = 0; i < 4; i++)
             {
-                leveldata[i] = BitConv.FromInt32(data, 0x408+i*4);
+                leveldata[i] = BitConv.FromInt32(data, 0x408 + i * 4);
             }
             int uncompressedchunksec = BitConv.FromInt32(data, 0x418);
             int preludecount = BitConv.FromInt32(data, 0x41C);
@@ -44,58 +46,147 @@ namespace CrashEdit.Crash
             NSDLink[] index = new NSDLink[entrycount];
             for (int i = 0; i < entrycount; i++)
             {
-                int chunkid = BitConv.FromInt32(data, 0x520+8*i);
-                int entryid = BitConv.FromInt32(data, 0x520+8*i+4);
+                int chunkid = BitConv.FromInt32(data, 0x520 + 8 * i);
+                int entryid = BitConv.FromInt32(data, 0x520 + 8 * i + 4);
                 index[i] = new NSDLink(chunkid, entryid);
             }
-            int spawncount = BitConv.FromInt32(data, 0x520+8*entrycount);
+            int spawncount = BitConv.FromInt32(data, 0x520 + 8 * entrycount);
             if (spawncount <= 0)
             {
                 ErrorManager.SignalIgnorableError("NSD: Not enough spawn points");
             }
-            if (data.Length < 1788 + entrycount * 8 + spawncount * 24)
+            if (data.Length < 0x6FC + entrycount * 8 + spawncount * 24)
             {
                 ErrorManager.SignalError("NSD: Data is too short");
             }
-            int blank = BitConv.FromInt32(data, 0x524+8*entrycount);
+            int blank = BitConv.FromInt32(data, 0x524 + 8 * entrycount);
             if (blank != 0)
             {
                 ErrorManager.SignalIgnorableError("NSD: Blank value is not blank");
                 blank = 0;
             }
-            int id = BitConv.FromInt32(data, 0x528+8*entrycount);
-            int entitycount = BitConv.FromInt32(data, 0x52C+8*entrycount);
+            int id = BitConv.FromInt32(data, 0x528 + 8 * entrycount);
+            int entitycount = BitConv.FromInt32(data, 0x52C + 8 * entrycount);
             int[] goolmap = new int[64];
             for (int i = 0; i < 64; ++i)
             {
-                goolmap[i] = BitConv.FromInt32(data, 0x530+8*entrycount+i*4);
+                goolmap[i] = BitConv.FromInt32(data, 0x530 + 8 * entrycount + i * 4);
             }
             int extralength = 0xCC;
             byte[] extradata = new byte[extralength];
-            Array.Copy(data, 0x630+8*entrycount, extradata, 0, extralength);
+            Array.Copy(data, 0x630 + 8 * entrycount, extradata, 0, extralength);
             NSDSpawnPoint[] spawns = new NSDSpawnPoint[spawncount];
             for (int i = 0; i < spawncount; ++i)
             {
-                int zone = BitConv.FromInt32(data, 0x6FC+8*entrycount+24*i);
-                int camera = BitConv.FromInt32(data, 0x6FC+8*entrycount+24*i+4);
-                int unknown = BitConv.FromInt32(data, 0x6FC+8*entrycount+24*i+8);
-                int x = BitConv.FromInt32(data, 0x6FC+8*entrycount+24*i+12);
-                int y = BitConv.FromInt32(data, 0x6FC+8*entrycount+24*i+16);
-                int z = BitConv.FromInt32(data, 0x6FC+8*entrycount+24*i+20);
+                int zone = BitConv.FromInt32(data, 0x6FC + 8 * entrycount + 24 * i);
+                int camera = BitConv.FromInt32(data, 0x6FC + 8 * entrycount + 24 * i + 4);
+                int unknown = BitConv.FromInt32(data, 0x6FC + 8 * entrycount + 24 * i + 8);
+                int x = BitConv.FromInt32(data, 0x6FC + 8 * entrycount + 24 * i + 12);
+                int y = BitConv.FromInt32(data, 0x6FC + 8 * entrycount + 24 * i + 16);
+                int z = BitConv.FromInt32(data, 0x6FC + 8 * entrycount + 24 * i + 20);
                 spawns[i] = new NSDSpawnPoint(zone, camera, unknown, x, y, z);
             }
-            extralength = data.Length - (0x6FC+8*entrycount+24*spawncount);
+            extralength = data.Length - (0x6FC + 8 * entrycount + 24 * spawncount);
             byte[] imagedata = new byte[extralength];
-            Array.Copy(data, data.Length-extralength, imagedata, 0, extralength);
+            Array.Copy(data, data.Length - extralength, imagedata, 0, extralength);
             return new NSD(hashkeymap, chunkcount, leveldata, uncompressedchunksec, preludecount, compressedchunkinfo, index, blank, id, entitycount, goolmap, extradata, spawns, imagedata);
         }
 
-        private List<NSDSpawnPoint> spawns;
+        public static NSD LoadC3(byte[] data)
+        {
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
+            if (data.Length < 0x7FC)
+            {
+                ErrorManager.SignalError("NSD: Data is too short");
+            }
+            int chunkcount = BitConv.FromInt32(data, 0x400);
+            if (chunkcount < 0)
+            {
+                ErrorManager.SignalError("NSD: Chunk count is negative");
+            }
+            int entrycount = BitConv.FromInt32(data, 0x404);
+            if (entrycount < 0)
+            {
+                ErrorManager.SignalError("NSD: Entry count is negative");
+            }
+            if (data.Length < 0x7FC + entrycount * 8)
+            {
+                ErrorManager.SignalError("NSD: Data is too short");
+            }
+            int[] hashkeymap = new int[256];
+            for (int i = 0; i < 256; i++)
+            {
+                hashkeymap[i] = BitConv.FromInt32(data, i * 4);
+            }
+            int[] leveldata = new int[4];
+            for (int i = 0; i < 4; i++)
+            {
+                leveldata[i] = BitConv.FromInt32(data, 0x408 + i * 4);
+            }
+            int uncompressedchunksec = BitConv.FromInt32(data, 0x418);
+            int preludecount = BitConv.FromInt32(data, 0x41C);
+            int[] compressedchunkinfo = new int[64];
+            for (int i = 0; i < 64; i++)
+            {
+                compressedchunkinfo[i] = BitConv.FromInt32(data, 0x420 + i * 4);
+            }
+            NSDLink[] index = new NSDLink[entrycount];
+            for (int i = 0; i < entrycount; i++)
+            {
+                int chunkid = BitConv.FromInt32(data, 0x520 + 8 * i);
+                int entryid = BitConv.FromInt32(data, 0x520 + 8 * i + 4);
+                index[i] = new NSDLink(chunkid, entryid);
+            }
+            int spawncount = BitConv.FromInt32(data, 0x520 + 8 * entrycount);
+            if (spawncount <= 0)
+            {
+                ErrorManager.SignalIgnorableError("NSD: Not enough spawn points");
+            }
+            if (data.Length < 0x7FC + entrycount * 8 + spawncount * 24)
+            {
+                ErrorManager.SignalError("NSD: Data is too short");
+            }
+            int blank = BitConv.FromInt32(data, 0x524 + 8 * entrycount);
+            if (blank != 0)
+            {
+                ErrorManager.SignalIgnorableError("NSD: Blank value is not blank");
+                blank = 0;
+            }
+            int id = BitConv.FromInt32(data, 0x528 + 8 * entrycount);
+            int entitycount = BitConv.FromInt32(data, 0x52C + 8 * entrycount);
+            int[] goolmap = new int[128];
+            for (int i = 0; i < 128; ++i)
+            {
+                goolmap[i] = BitConv.FromInt32(data, 0x530 + 8 * entrycount + i * 4);
+            }
+            int extralength = 0xCC;
+            byte[] extradata = new byte[extralength];
+            Array.Copy(data, 0x730 + 8 * entrycount, extradata, 0, extralength);
+            NSDSpawnPoint[] spawns = new NSDSpawnPoint[spawncount];
+            for (int i = 0; i < spawncount; ++i)
+            {
+                int zone = BitConv.FromInt32(data, 0x7FC + 8 * entrycount + 24 * i);
+                int camera = BitConv.FromInt32(data, 0x7FC + 8 * entrycount + 24 * i + 4);
+                int unknown = BitConv.FromInt32(data, 0x7FC + 8 * entrycount + 24 * i + 8);
+                int x = BitConv.FromInt32(data, 0x7FC + 8 * entrycount + 24 * i + 12);
+                int y = BitConv.FromInt32(data, 0x7FC + 8 * entrycount + 24 * i + 16);
+                int z = BitConv.FromInt32(data, 0x7FC + 8 * entrycount + 24 * i + 20);
+                spawns[i] = new NSDSpawnPoint(zone, camera, unknown, x, y, z);
+            }
+            extralength = data.Length - (0x7FC + 8 * entrycount + 24 * spawncount);
+            byte[] imagedata = new byte[extralength];
+            Array.Copy(data, data.Length - extralength, imagedata, 0, extralength);
+            return new NSD(hashkeymap, chunkcount, leveldata, uncompressedchunksec, preludecount, compressedchunkinfo, index, blank, id, entitycount, goolmap, extradata, spawns, imagedata);
+        }
+
+
+private List<NSDSpawnPoint> spawns;
 
         public NSD(int[] hashkeymap, int chunkcount, int[] leveldata, int uncompressedchunksec, int preludecount, int[] compressedchunkinfo, IEnumerable<NSDLink> index, int blank, int id, int entitycount, int[] goolmap, byte[] extradata, IEnumerable<NSDSpawnPoint> spawns, byte[] imagedata)
         {
             if (hashkeymap == null)
-                throw new ArgumentNullException("firstentries");
+                throw new ArgumentNullException(nameof(hashkeymap));
             if (leveldata == null)
                 throw new ArgumentNullException(nameof(leveldata));
             if (compressedchunkinfo == null)
@@ -112,8 +203,8 @@ namespace CrashEdit.Crash
                 throw new ArgumentException("Value must be 4 ints long.", nameof(leveldata));
             if (compressedchunkinfo.Length != 64)
                 throw new ArgumentException("Value must be 64 ints long.", nameof(compressedchunkinfo));
-            if (goolmap.Length != 64)
-                throw new ArgumentException("Value must be 64 ints long.", nameof(goolmap));
+            if (goolmap.Length != 64 && goolmap.Length != 128)
+                throw new ArgumentException("Value must be 64 or 128 ints long.", nameof(goolmap));
             HashKeyMap = hashkeymap;
             ChunkCount = chunkcount;
             LevelData = leveldata;
@@ -127,7 +218,7 @@ namespace CrashEdit.Crash
             GOOLMap = goolmap;
             ExtraData = extradata ?? throw new ArgumentNullException(nameof(extradata));
             this.spawns = new List<NSDSpawnPoint>(spawns);
-            ImageData = imagedata ?? throw new ArgumentNullException("image");
+            ImageData = imagedata ?? throw new ArgumentNullException(nameof(imagedata));
         }
 
         public int[] HashKeyMap { get; set; }
@@ -149,16 +240,17 @@ namespace CrashEdit.Crash
         {
             int entrycount = Index.Count;
             int spawncount = spawns.Count;
-            byte[] result = new byte[0x630+8*entrycount+24*spawncount + ExtraData.Length + ImageData.Length];
+            int ofs = GOOLMap.Length * 4;
+            byte[] result = new byte[0x530 + ofs + 8 * entrycount + 24 * spawncount + ExtraData.Length + ImageData.Length];
             for (int i = 0; i < 256; i++)
             {
-                BitConv.ToInt32(result, i*4, HashKeyMap[i]);
+                BitConv.ToInt32(result, i * 4, HashKeyMap[i]);
             }
             BitConv.ToInt32(result, 0x400, ChunkCount);
             BitConv.ToInt32(result, 0x404, entrycount);
             for (int i = 0; i < LevelData.Length; i++)
             {
-                BitConv.ToInt32(result, 0x408+i*4, LevelData[i]);
+                BitConv.ToInt32(result, 0x408 + i * 4, LevelData[i]);
             }
             // Keeps preludes
             //BitConv.ToInt32(result,0x418,UncompressedChunkSec);
@@ -169,28 +261,28 @@ namespace CrashEdit.Crash
             //}
             for (int i = 0; i < entrycount; ++i)
             {
-                BitConv.ToInt32(result, 0x520+i*8, Index[i].ChunkID);
-                BitConv.ToInt32(result, 0x524+i*8, Index[i].EntryID);
+                BitConv.ToInt32(result, 0x520 + i * 8, Index[i].ChunkID);
+                BitConv.ToInt32(result, 0x524 + i * 8, Index[i].EntryID);
             }
-            BitConv.ToInt32(result, 0x520+8*entrycount, spawncount);
-            BitConv.ToInt32(result, 0x524+8*entrycount, Blank);
-            BitConv.ToInt32(result, 0x528+8*entrycount, ID);
-            BitConv.ToInt32(result, 0x52C+8*entrycount, EntityCount);
-            for (int i = 0; i < 64; ++i)
+            BitConv.ToInt32(result, 0x520 + 8 * entrycount, spawncount);
+            BitConv.ToInt32(result, 0x524 + 8 * entrycount, Blank);
+            BitConv.ToInt32(result, 0x528 + 8 * entrycount, ID);
+            BitConv.ToInt32(result, 0x52C + 8 * entrycount, EntityCount);
+            for (int i = 0; i < GOOLMap.Length; ++i)
             {
-                BitConv.ToInt32(result, 0x530+8*entrycount+i*4, GOOLMap[i]);
+                BitConv.ToInt32(result, 0x530 + 8 * entrycount + i * 4, GOOLMap[i]);
             }
-            Array.Copy(ExtraData, 0, result, 0x630+entrycount*8, ExtraData.Length);
+            Array.Copy(ExtraData, 0, result, 0x530 + ofs + entrycount * 8, ExtraData.Length);
             for (int i = 0; i < spawncount; ++i)
             {
-                BitConv.ToInt32(result, 0x630+8*entrycount+ExtraData.Length+i*24+0, spawns[i].ZoneEID);
-                BitConv.ToInt32(result, 0x630+8*entrycount+ExtraData.Length+i*24+4, spawns[i].Camera);
-                BitConv.ToInt32(result, 0x630+8*entrycount+ExtraData.Length+i*24+8, spawns[i].Unknown);
-                BitConv.ToInt32(result, 0x630+8*entrycount+ExtraData.Length+i*24+12, spawns[i].SpawnX);
-                BitConv.ToInt32(result, 0x630+8*entrycount+ExtraData.Length+i*24+16, spawns[i].SpawnY);
-                BitConv.ToInt32(result, 0x630+8*entrycount+ExtraData.Length+i*24+20, spawns[i].SpawnZ);
+                BitConv.ToInt32(result, 0x530 + ofs + 8 * entrycount + ExtraData.Length + i * 24 + 0, spawns[i].ZoneEID);
+                BitConv.ToInt32(result, 0x530 + ofs + 8 * entrycount + ExtraData.Length + i * 24 + 4, spawns[i].Camera);
+                BitConv.ToInt32(result, 0x530 + ofs + 8 * entrycount + ExtraData.Length + i * 24 + 8, spawns[i].Unknown);
+                BitConv.ToInt32(result, 0x530 + ofs + 8 * entrycount + ExtraData.Length + i * 24 + 12, spawns[i].SpawnX);
+                BitConv.ToInt32(result, 0x530 + ofs + 8 * entrycount + ExtraData.Length + i * 24 + 16, spawns[i].SpawnY);
+                BitConv.ToInt32(result, 0x530 + ofs + 8 * entrycount + ExtraData.Length + i * 24 + 20, spawns[i].SpawnZ);
             }
-            Array.Copy(ImageData, 0, result, 0x630+entrycount*8+ExtraData.Length+spawncount*24, ImageData.Length);
+            Array.Copy(ImageData, 0, result, 0x530 + ofs + entrycount * 8 + ExtraData.Length + spawncount * 24, ImageData.Length);
             return result;
         }
     }

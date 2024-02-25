@@ -1,3 +1,5 @@
+
+using CrashEdit.Crash;
 namespace CrashHacks.Scripts.Scenery.Color
 {
     public sealed class GrayscaleScript : BaseScript

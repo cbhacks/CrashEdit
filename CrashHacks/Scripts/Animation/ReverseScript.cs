@@ -1,3 +1,5 @@
+
+using CrashEdit.Crash;
 namespace CrashHacks.Scripts.Animation
 {
     public sealed class ReverseScript : Script
