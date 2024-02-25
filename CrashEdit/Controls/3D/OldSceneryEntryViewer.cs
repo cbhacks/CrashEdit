@@ -1,7 +1,6 @@
 using Crash;
-using OpenTK;
-using System.Collections.Generic;
-using System.Linq;
+using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 
 namespace CrashEdit
 {
@@ -10,18 +9,31 @@ namespace CrashEdit
         private List<int> worlds;
         private List<OldSLSTPolygonID> sortlist;
 
-        private VAO vaoWorld => vaoListCrash1[0];
+        private static VBO vboWorld;
+        private VAO vaoWorld;
         Vector3 world_offset;
         private BlendMode blend_mask;
 
         public OldSceneryEntryViewer(NSF nsf, int world) : base(nsf)
         {
-            worlds = new() { world };
+            worlds = [world];
         }
 
         public OldSceneryEntryViewer(NSF nsf, IEnumerable<int> worlds) : base(nsf)
         {
             this.worlds = new(worlds);
+        }
+
+        private static void LoadGLStatic()
+        {
+            vboWorld = new VBO();
+        }
+
+        protected override void LoadGL()
+        {
+            base.LoadGL();
+
+            vaoWorld = new(shaders.GetShader("crash1"), PrimitiveType.Triangles, vboWorld);
         }
 
         protected IEnumerable<OldSceneryEntry> GetWorlds()
@@ -171,13 +183,13 @@ namespace CrashEdit
             OldModelStruct str = world.Structs[polygon.ModelStruct];
             if (str is OldSceneryTexture tex)
             {
-                vaoWorld.Verts[vaoWorld.vert_count + 0].st = new(tex.U3, tex.V3);
-                vaoWorld.Verts[vaoWorld.vert_count + 1].st = new(tex.U2, tex.V2);
-                vaoWorld.Verts[vaoWorld.vert_count + 2].st = new(tex.U1, tex.V1);
+                vaoWorld.Verts[vaoWorld.CurVert + 0].st = new(tex.U3, tex.V3);
+                vaoWorld.Verts[vaoWorld.CurVert + 1].st = new(tex.U2, tex.V2);
+                vaoWorld.Verts[vaoWorld.CurVert + 2].st = new(tex.U1, tex.V1);
 
-                vaoWorld.Verts[vaoWorld.vert_count + 0].tex = new VertexTexInfo(tex_eids[world.GetTPAG(polygon.Page)], color: tex.ColorMode, blend: tex.BlendMode, clutx: tex.ClutX, cluty: tex.ClutY);
-                vaoWorld.Verts[vaoWorld.vert_count + 1].tex = vaoWorld.Verts[vaoWorld.vert_count + 0].tex;
-                vaoWorld.Verts[vaoWorld.vert_count + 2].tex = vaoWorld.Verts[vaoWorld.vert_count + 0].tex;
+                vaoWorld.Verts[vaoWorld.CurVert + 0].tex = new VertexTexInfo(tex_eids[world.GetTPAG(polygon.Page)], color: tex.ColorMode, blend: tex.BlendMode, clutx: tex.ClutX, cluty: tex.ClutY);
+                vaoWorld.Verts[vaoWorld.CurVert + 1].tex = vaoWorld.Verts[vaoWorld.CurVert + 0].tex;
+                vaoWorld.Verts[vaoWorld.CurVert + 2].tex = vaoWorld.Verts[vaoWorld.CurVert + 0].tex;
                 RenderVertex(world, polygon.VertexA);
                 RenderVertex(world, polygon.VertexB);
                 RenderVertex(world, polygon.VertexC);
@@ -186,9 +198,9 @@ namespace CrashEdit
             }
             else
             {
-                vaoWorld.Verts[vaoWorld.vert_count + 0].tex = new VertexTexInfo();
-                vaoWorld.Verts[vaoWorld.vert_count + 1].tex = new VertexTexInfo();
-                vaoWorld.Verts[vaoWorld.vert_count + 2].tex = new VertexTexInfo();
+                vaoWorld.Verts[vaoWorld.CurVert + 0].tex = new VertexTexInfo();
+                vaoWorld.Verts[vaoWorld.CurVert + 1].tex = new VertexTexInfo();
+                vaoWorld.Verts[vaoWorld.CurVert + 2].tex = new VertexTexInfo();
                 RenderVertex(world, polygon.VertexA);
                 RenderVertex(world, polygon.VertexB);
                 RenderVertex(world, polygon.VertexC);
@@ -208,9 +220,16 @@ namespace CrashEdit
         private void RenderVertex(OldSceneryEntry world, int vert_idx)
         {
             OldSceneryVertex vert = world.Vertices[vert_idx];
-            vaoWorld.Verts[vaoWorld.vert_count].trans = new Vector3(vert.X, vert.Y, vert.Z) + world_offset;
-            vaoWorld.Verts[vaoWorld.vert_count].rgba = new(vert.Red, vert.Green, vert.Blue, 255);
-            vaoWorld.vert_count++;
+            vaoWorld.Verts[vaoWorld.CurVert].trans = new Vector3(vert.X, vert.Y, vert.Z) + world_offset;
+            vaoWorld.Verts[vaoWorld.CurVert].rgba = new(vert.Red, vert.Green, vert.Blue, 255);
+            vaoWorld.CurVert++;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            vaoWorld?.Dispose();
+
+            base.Dispose(disposing);
         }
     }
 }

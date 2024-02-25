@@ -1,18 +1,16 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using SharpFont;
-using System;
-using System.Collections.Generic;
+using SharpFont.Gdi;
 using System.Diagnostics;
-using System.Drawing;
 
 namespace CrashEdit
 {
     public class FontTable : Dictionary<uint, FontTableEntry>
     {
-        public Face Face { get; private set; }
-        public Bitmap Bitmap { get; private set; }
+        public Face? Face { get; private set; }
+        public Bitmap? Bitmap { get; private set; }
         public float Size { get; private set; }
-        public string FileName { get; private set; }
+        public string? FileName { get; private set; }
         public float Width { get; private set; }
         public float Height { get; private set; }
         public float Adjust { get; private set; }
@@ -27,7 +25,7 @@ namespace CrashEdit
             Clear();
         }
 
-        public Bitmap LoadFontBitmap(Library lib, string fname, float size)
+        public Bitmap? LoadFontBitmap(Library lib, string fname, float size)
         {
             Stopwatch watch = Stopwatch.StartNew();
 
@@ -127,7 +125,7 @@ namespace CrashEdit
             return Bitmap;
         }
 
-        public int LoadFontTextureGL(int tex_id)
+        public int UploadFontGL(int tex_id)
         {
             GL.ActiveTexture(TextureUnit.Texture2);
             GL.BindTexture(TextureTarget.Texture2D, tex_id);
@@ -145,39 +143,34 @@ namespace CrashEdit
             return tex_id;
         }
 
-        public int LoadFontAndLoadToGL(int tex_id, Library lib, string fname, float size)
+        public void BindFontGL(int tex_id)
+        {
+            GL.ActiveTexture(TextureUnit.Texture2);
+            GL.BindTexture(TextureTarget.Texture2D, tex_id);
+        }
+
+        public int LoadFontAndUpload(int tex_id, Library lib, string fname, float size)
         {
             Stopwatch watch = Stopwatch.StartNew();
             LoadFontBitmap(lib, fname, size);
-            LoadFontTextureGL(tex_id);
+            UploadFontGL(tex_id);
             Console.WriteLine("Successfully loaded font {1} {2} in {0:F3} seconds", watch.ElapsedMillisecondsFull() / 1000, Face.FamilyName, Face.StyleName);
             return tex_id;
         }
     }
 
-    public sealed class FontTableEntry
+    public sealed class FontTableEntry(Bitmap bmp, GlyphMetrics metrics, float advance, uint glyph_id)
     {
         public float Left { get; set; }
         public float Top { get; set; }
         public float Right { get; set; }
         public float Bottom { get; set; }
-        public float Width { get; private set; }
-        public float Height { get; private set; }
-        public float AdvanceX { get; private set; }
-        public float BearingX { get; private set; }
-        public float BearingY { get; private set; }
-        public Bitmap Glyph { get; private set; }
-        public uint GlyphID { get; private set; }
-
-        public FontTableEntry(Bitmap bmp, GlyphMetrics metrics, float advance, uint glyph_id)
-        {
-            AdvanceX = advance;
-            Width = (float)metrics.Width;
-            Height = (float)metrics.Height;
-            BearingX = (float)metrics.HorizontalBearingX;
-            BearingY = (float)metrics.HorizontalBearingY;
-            Glyph = bmp;
-            GlyphID = glyph_id;
-        }
+        public float Width { get; private set; } = (float)metrics.Width;
+        public float Height { get; private set; } = (float)metrics.Height;
+        public float AdvanceX { get; private set; } = advance;
+        public float BearingX { get; private set; } = (float)metrics.HorizontalBearingX;
+        public float BearingY { get; private set; } = (float)metrics.HorizontalBearingY;
+        public Bitmap Glyph { get; private set; } = bmp;
+        public uint GlyphID { get; private set; } = glyph_id;
     }
 }

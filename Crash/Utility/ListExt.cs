@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Crash
+﻿namespace Crash
 {
     public static class ListExt
     {

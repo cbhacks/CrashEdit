@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Crash
 {
     public abstract class EntityBasicPropertyLoader<T> : EntityPropertyLoader where T : struct

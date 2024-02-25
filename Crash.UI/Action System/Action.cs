@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace Crash.UI
@@ -25,7 +23,7 @@ namespace Crash.UI
 
         public virtual bool CheckCompatibility(Controller c) => true;
 
-        public virtual string GetText(Controller c) => string.Format("{0} @ {1}",this,c);
+        public virtual string GetText(Controller c) => string.Format("{0} @ {1}", this, c);
 
         public abstract Command Activate(Controller c);
     }
@@ -55,7 +53,7 @@ namespace Crash.UI
 
         protected virtual bool CheckCompatibility(T c) => true;
 
-        protected virtual string GetText(T c) => string.Format("{0} @ {1}",this,c);
+        protected virtual string GetText(T c) => string.Format("{0} @ {1}", this, c);
 
         protected abstract Command Activate(T c);
     }

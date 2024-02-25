@@ -1,4 +1,3 @@
-using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -53,37 +52,37 @@ namespace Crash.UI
 
         public void DeepPopulate(EvListEventHandler<Controller> handler)
         {
-            for (int i = 0;i < Subcontrollers.Count;i++)
+            for (int i = 0; i < Subcontrollers.Count; i++)
             {
                 EvListEventArgs<Controller> e = new EvListEventArgs<Controller>();
                 e.Index = i;
                 e.Item = Subcontrollers[i];
-                handler(this,e);
+                handler(this, e);
                 e.Item.DeepPopulate(handler);
             }
         }
 
-        private void Subcontrollers_ItemAdded(object sender,EvListEventArgs<Controller> e)
+        private void Subcontrollers_ItemAdded(object sender, EvListEventArgs<Controller> e)
         {
-            Subcontrollers_DeepItemAdded(this,e);
+            Subcontrollers_DeepItemAdded(this, e);
             e.Item.DeepItemAdded += Subcontrollers_DeepItemAdded;
             e.Item.DeepItemRemoved += Subcontrollers_DeepItemRemoved;
             e.Item.DeepPopulate(Subcontrollers_DeepItemAdded);
         }
 
-        private void Subcontrollers_ItemRemoved(object sender,EvListEventArgs<Controller> e)
+        private void Subcontrollers_ItemRemoved(object sender, EvListEventArgs<Controller> e)
         {
             e.Item.Subcontrollers.Clear();
-            Subcontrollers_DeepItemRemoved(this,e);
+            Subcontrollers_DeepItemRemoved(this, e);
             e.Item.Dispose();
         }
 
-        private void Subcontrollers_DeepItemAdded(object sender,EvListEventArgs<Controller> e)
+        private void Subcontrollers_DeepItemAdded(object sender, EvListEventArgs<Controller> e)
         {
             DeepItemAdded?.Invoke(sender, e);
         }
 
-        private void Subcontrollers_DeepItemRemoved(object sender,EvListEventArgs<Controller> e)
+        private void Subcontrollers_DeepItemRemoved(object sender, EvListEventArgs<Controller> e)
         {
             DeepItemRemoved?.Invoke(sender, e);
         }

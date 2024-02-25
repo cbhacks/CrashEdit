@@ -1,5 +1,3 @@
-using System;
-
 namespace Crash
 {
     [AttributeUsage(AttributeTargets.Class)]

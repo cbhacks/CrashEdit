@@ -1,6 +1,6 @@
 using Crash;
-using OpenTK;
-using System.Collections.Generic;
+using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 
 namespace CrashEdit
 {
@@ -8,18 +8,31 @@ namespace CrashEdit
     {
         private List<int> worlds;
 
-        private VAO vaoWorld => vaoListCrash1[0];
+        private static VBO vboWorld;
+        private VAO vaoWorld;
         Vector3 world_offset;
         private BlendMode blend_mask;
 
         public ProtoSceneryEntryViewer(NSF nsf, int world) : base(nsf)
         {
-            worlds = new() { world };
+            worlds = [world];
         }
 
         public ProtoSceneryEntryViewer(NSF nsf, IEnumerable<int> worlds) : base(nsf)
         {
             this.worlds = new(worlds);
+        }
+
+        private static void LoadGLStatic()
+        {
+            vboWorld = new VBO();
+        }
+
+        protected override void LoadGL()
+        {
+            base.LoadGL();
+
+            vaoWorld = new(shaders.GetShader("crash1"), PrimitiveType.Triangles, vboWorld);
         }
 
         protected IEnumerable<ProtoSceneryEntry> GetWorlds()
@@ -109,16 +122,16 @@ namespace CrashEdit
                 OldModelStruct str = world.Structs[polygon.Texture];
                 if (str is OldSceneryTexture tex)
                 {
-                    vaoWorld.Verts[vaoWorld.vert_count].rgba = new(tex.R, tex.G, tex.B, 255);
-                    vaoWorld.Verts[vaoWorld.vert_count + 1].rgba = vaoWorld.Verts[vaoWorld.vert_count].rgba;
-                    vaoWorld.Verts[vaoWorld.vert_count + 2].rgba = vaoWorld.Verts[vaoWorld.vert_count].rgba;
-                    vaoWorld.Verts[vaoWorld.vert_count + 0].st = new(tex.U3, tex.V3);
-                    vaoWorld.Verts[vaoWorld.vert_count + 1].st = new(tex.U2, tex.V2);
-                    vaoWorld.Verts[vaoWorld.vert_count + 2].st = new(tex.U1, tex.V1);
+                    vaoWorld.Verts[vaoWorld.CurVert].rgba = new(tex.R, tex.G, tex.B, 255);
+                    vaoWorld.Verts[vaoWorld.CurVert + 1].rgba = vaoWorld.Verts[vaoWorld.CurVert].rgba;
+                    vaoWorld.Verts[vaoWorld.CurVert + 2].rgba = vaoWorld.Verts[vaoWorld.CurVert].rgba;
+                    vaoWorld.Verts[vaoWorld.CurVert + 0].st = new(tex.U3, tex.V3);
+                    vaoWorld.Verts[vaoWorld.CurVert + 1].st = new(tex.U2, tex.V2);
+                    vaoWorld.Verts[vaoWorld.CurVert + 2].st = new(tex.U1, tex.V1);
 
-                    vaoWorld.Verts[vaoWorld.vert_count + 0].tex = new VertexTexInfo(tex_eids[world.GetTPAG(polygon.Page)], color: tex.ColorMode, blend: tex.BlendMode, clutx: tex.ClutX, cluty: tex.ClutY);
-                    vaoWorld.Verts[vaoWorld.vert_count + 1].tex = vaoWorld.Verts[vaoWorld.vert_count + 0].tex;
-                    vaoWorld.Verts[vaoWorld.vert_count + 2].tex = vaoWorld.Verts[vaoWorld.vert_count + 0].tex;
+                    vaoWorld.Verts[vaoWorld.CurVert + 0].tex = new VertexTexInfo(tex_eids[world.GetTPAG(polygon.Page)], color: tex.ColorMode, blend: tex.BlendMode, clutx: tex.ClutX, cluty: tex.ClutY);
+                    vaoWorld.Verts[vaoWorld.CurVert + 1].tex = vaoWorld.Verts[vaoWorld.CurVert + 0].tex;
+                    vaoWorld.Verts[vaoWorld.CurVert + 2].tex = vaoWorld.Verts[vaoWorld.CurVert + 0].tex;
                     RenderVertex(world, polygon.VertexA);
                     RenderVertex(world, polygon.VertexB);
                     RenderVertex(world, polygon.VertexC);
@@ -128,12 +141,12 @@ namespace CrashEdit
                 else
                 {
                     OldSceneryColor col = (OldSceneryColor)str;
-                    vaoWorld.Verts[vaoWorld.vert_count].rgba = new(col.R, col.G, col.B, 255);
-                    vaoWorld.Verts[vaoWorld.vert_count + 1].rgba = vaoWorld.Verts[vaoWorld.vert_count].rgba;
-                    vaoWorld.Verts[vaoWorld.vert_count + 2].rgba = vaoWorld.Verts[vaoWorld.vert_count].rgba;
-                    vaoWorld.Verts[vaoWorld.vert_count + 0].tex = new VertexTexInfo();
-                    vaoWorld.Verts[vaoWorld.vert_count + 1].tex = new VertexTexInfo();
-                    vaoWorld.Verts[vaoWorld.vert_count + 2].tex = new VertexTexInfo();
+                    vaoWorld.Verts[vaoWorld.CurVert].rgba = new(col.R, col.G, col.B, 255);
+                    vaoWorld.Verts[vaoWorld.CurVert + 1].rgba = vaoWorld.Verts[vaoWorld.CurVert].rgba;
+                    vaoWorld.Verts[vaoWorld.CurVert + 2].rgba = vaoWorld.Verts[vaoWorld.CurVert].rgba;
+                    vaoWorld.Verts[vaoWorld.CurVert + 0].tex = new VertexTexInfo();
+                    vaoWorld.Verts[vaoWorld.CurVert + 1].tex = new VertexTexInfo();
+                    vaoWorld.Verts[vaoWorld.CurVert + 2].tex = new VertexTexInfo();
                     RenderVertex(world, polygon.VertexA);
                     RenderVertex(world, polygon.VertexB);
                     RenderVertex(world, polygon.VertexC);
@@ -154,8 +167,15 @@ namespace CrashEdit
         private void RenderVertex(ProtoSceneryEntry world, int vert_idx)
         {
             ProtoSceneryVertex vert = world.Vertices[vert_idx];
-            vaoWorld.Verts[vaoWorld.vert_count].trans = new Vector3(vert.X, vert.Y, vert.Z) + world_offset;
-            vaoWorld.vert_count++;
+            vaoWorld.Verts[vaoWorld.CurVert].trans = new Vector3(vert.X, vert.Y, vert.Z) + world_offset;
+            vaoWorld.CurVert++;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            vaoWorld?.Dispose();
+
+            base.Dispose(disposing);
         }
     }
 }

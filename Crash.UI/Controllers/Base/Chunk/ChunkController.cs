@@ -2,7 +2,7 @@ namespace Crash.UI
 {
     public abstract class ChunkController : Controller
     {
-        public ChunkController(NSFController up,Chunk chunk)
+        public ChunkController(NSFController up, Chunk chunk)
         {
             Up = up;
             Chunk = chunk;
@@ -19,7 +19,7 @@ namespace Crash.UI
                 if (c is IEntryController)
                 {
                     return string.Format(Properties.Resources.ChunkController_AcDeleteWithEName,
-                        Entry.EIDToEName(((IEntryController) c).Entry.EID));
+                        Entry.EIDToEName(((IEntryController)c).Entry.EID));
                 }
                 else
                 {
@@ -44,7 +44,7 @@ namespace Crash.UI
                 if (c is IEntryController)
                 {
                     return string.Format(Properties.Resources.ChunkController_AcDeprocessWithEName,
-                        Entry.EIDToEName(((IEntryController) c).Entry.EID));
+                        Entry.EIDToEName(((IEntryController)c).Entry.EID));
                 }
                 else
                 {
@@ -56,7 +56,7 @@ namespace Crash.UI
             {
                 int index = c.Up.NSF.Chunks.IndexOf(c.Chunk);
                 UnprocessedChunk unprocessedchunk = c.Chunk.Unprocess(index * 2 + 1);
-                return c.Up.NSF.Chunks.CmSet(index,unprocessedchunk);
+                return c.Up.NSF.Chunks.CmSet(index, unprocessedchunk);
             }
         }
     }

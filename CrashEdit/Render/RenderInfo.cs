@@ -1,8 +1,5 @@
-﻿using OpenTK;
-using System;
+﻿using OpenTK.Mathematics;
 using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace CrashEdit
 {
@@ -31,7 +28,7 @@ namespace CrashEdit
         private bool masterexit = true;
         private long _framehits;
         private readonly Task _frametask;
-        private readonly Timer _frametimer;
+        private readonly System.Windows.Forms.Timer _frametimer;
         private readonly Stopwatch _framewatch;
 
         public double DebugRenderMs { get; set; }

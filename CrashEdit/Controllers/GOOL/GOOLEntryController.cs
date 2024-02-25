@@ -1,6 +1,5 @@
 using Crash;
 using Crash.GOOLIns;
-using System.Windows.Forms;
 
 namespace CrashEdit
 {

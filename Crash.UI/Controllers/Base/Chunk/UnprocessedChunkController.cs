@@ -2,7 +2,7 @@ namespace Crash.UI
 {
     public sealed class UnprocessedChunkController : ChunkController
     {
-        public UnprocessedChunkController(NSFController up,UnprocessedChunk chunk) : base(up,chunk)
+        public UnprocessedChunkController(NSFController up, UnprocessedChunk chunk) : base(up, chunk)
         {
             Chunk = chunk;
         }
@@ -19,7 +19,7 @@ namespace Crash.UI
             {
                 int index = c.Up.NSF.Chunks.IndexOf(c.Chunk);
                 Chunk processedchunk = c.Chunk.Process(index * 2 + 1);
-                return c.Up.NSF.Chunks.CmSet(index,processedchunk);
+                return c.Up.NSF.Chunks.CmSet(index, processedchunk);
             }
         }
     }

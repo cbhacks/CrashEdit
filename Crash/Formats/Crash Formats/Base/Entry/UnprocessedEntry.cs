@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Crash
 {
     public sealed class UnprocessedEntry : MysteryMultiItemEntry

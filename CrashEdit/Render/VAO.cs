@@ -1,8 +1,6 @@
 ﻿using Crash;
-using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
-using System;
+using OpenTK.Mathematics;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -10,18 +8,18 @@ namespace CrashEdit
 {
     public sealed class VAO : IDisposable
     {
-        private Vertex[] verts;
         private readonly Stopwatch watch = new();
 
         public int ID { get; }
-        public int Buffer { get; }
+
+        public VBO VBO { get; }
 
         public Shader Shader { get; }
 
         public PrimitiveType Primitive { get; set; }
-        public Vertex[] Verts { get => verts; }
 
-        public int vert_count;
+        public Vertex[] Verts => VBO.Verts;
+        public int CurVert { get => VBO.CurVert; set => VBO.CurVert = value; }
 
         private void EnableAttrib(string attrib_name, int size, VertexAttribPointerType type, bool normalized, string field_name)
         {
@@ -51,20 +49,18 @@ namespace CrashEdit
             }
         }
 
-        public VAO(ShaderContext shaders, string shadername, PrimitiveType prim, int vert_count = 1024)
+        public VAO(Shader shader, PrimitiveType prim, VBO buffer)
         {
-            Shader = shaders.GetShader(shadername);
+            Shader = shader;
             Primitive = prim;
-            verts = new Vertex[vert_count];
 
-            // Create the vertex array object (VAO) and VBO for the program.
+            // Create the vertex array object (VAO) and assign VBO
             ID = GL.GenVertexArray();
-            Buffer = GL.GenBuffer();
+            VBO = buffer;
 
             // set up the array
             GL.BindVertexArray(ID);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, Buffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, 0, IntPtr.Zero, BufferUsageHint.DynamicDraw);
+            VBO.Bind();
             EnableAttrib("position", 3, VertexAttribPointerType.Float, false, "trans");
             EnableAttrib("uv", 2, VertexAttribPointerType.Float, false, "st");
             EnableAttrib("normal", 4, VertexAttribPointerType.Int2101010Rev, true, "normal");
@@ -73,106 +69,120 @@ namespace CrashEdit
             EnableAttrib("misc", 4, VertexAttribPointerType.Float, false, "misc");
         }
 
-        public void TestRealloc() => TestRealloc(vert_count);
+        public VAO(VAO other)
+        {
+            Shader = other.Shader;
+            Primitive = other.Primitive;
+
+            // Create the vertex array object (VAO), but no buffer (that will be sourced from the other VAO)
+            ID = GL.GenVertexArray();
+            VBO = other.VBO;
+
+            // set up the array
+            GL.BindVertexArray(ID);
+            VBO.Bind();
+            EnableAttrib("position", 3, VertexAttribPointerType.Float, false, "trans");
+            EnableAttrib("uv", 2, VertexAttribPointerType.Float, false, "st");
+            EnableAttrib("normal", 4, VertexAttribPointerType.Int2101010Rev, true, "normal");
+            EnableAttrib("color", 4, VertexAttribPointerType.UnsignedByte, true, "rgba");
+            EnableAttribI("tex", 2, VertexAttribIntegerType.Short, "tex");
+            EnableAttrib("misc", 4, VertexAttribPointerType.Float, false, "misc");
+        }
+
+        public void TestRealloc() => VBO.TestRealloc();
         public void TestRealloc(int vert_count)
         {
-            if (vert_count >= Verts.Length)
-            {
-                Console.WriteLine($"Realloc {Shader.Name} buffer {Verts.Length} -> {Verts.Length * 2}");
-                Array.Resize(ref verts, Verts.Length * 2);
-                TestRealloc(vert_count);
-            }
+            VBO.TestRealloc(vert_count);
         }
 
         public void CopyAttrib(int idx)
         {
             TestRealloc();
-            Verts[vert_count] = Verts[idx];
-            vert_count++;
+            Verts[VBO.CurVert] = Verts[idx];
+            VBO.CurVert++;
         }
 
         public void PushAttrib(Vector3 trans = default)
         {
             TestRealloc();
-            Verts[vert_count].trans = trans;
-            vert_count++;
+            Verts[VBO.CurVert].trans = trans;
+            VBO.CurVert++;
         }
 
         public void PushAttrib(Vector3 trans = default, Rgba rgba = default)
         {
             TestRealloc();
-            Verts[vert_count].trans = trans;
-            Verts[vert_count].rgba = rgba;
-            vert_count++;
+            Verts[VBO.CurVert].trans = trans;
+            Verts[VBO.CurVert].rgba = rgba;
+            VBO.CurVert++;
         }
 
         public void PushAttrib(Vector3 trans = default, Vector2 st = default)
         {
             TestRealloc();
-            Verts[vert_count].trans = trans;
-            Verts[vert_count].st = st;
-            vert_count++;
+            Verts[VBO.CurVert].trans = trans;
+            Verts[VBO.CurVert].st = st;
+            VBO.CurVert++;
         }
 
         public void PushAttrib(Vector3 trans = default, Vector2 st = default, Rgba rgba = default)
         {
             TestRealloc();
-            Verts[vert_count].trans = trans;
-            Verts[vert_count].st = st;
-            Verts[vert_count].rgba = rgba;
-            vert_count++;
+            Verts[VBO.CurVert].trans = trans;
+            Verts[VBO.CurVert].st = st;
+            Verts[VBO.CurVert].rgba = rgba;
+            VBO.CurVert++;
         }
 
         public void PushAttrib(Vector3 trans = default, Vector2 st = default, Rgba rgba = default, Vector4 misc = default)
         {
             TestRealloc();
-            Verts[vert_count].trans = trans;
-            Verts[vert_count].st = st;
-            Verts[vert_count].rgba = rgba;
-            Verts[vert_count].misc = misc;
-            vert_count++;
+            Verts[VBO.CurVert].trans = trans;
+            Verts[VBO.CurVert].st = st;
+            Verts[VBO.CurVert].rgba = rgba;
+            Verts[VBO.CurVert].misc = misc;
+            VBO.CurVert++;
         }
 
         public void PushAttrib(Vector3 trans = default, Vector4 misc = default)
         {
             TestRealloc();
-            Verts[vert_count].trans = trans;
-            Verts[vert_count].misc = misc;
-            vert_count++;
+            Verts[VBO.CurVert].trans = trans;
+            Verts[VBO.CurVert].misc = misc;
+            VBO.CurVert++;
         }
 
         public void PushAttrib(Vector3 trans = default, int normal = default, Vector2 st = default, Rgba rgba = default, VertexTexInfo tex = default, Vector4 misc = default)
         {
             TestRealloc();
-            Verts[vert_count].trans = trans;
-            Verts[vert_count].normal = normal;
-            Verts[vert_count].st = st;
-            Verts[vert_count].rgba = rgba;
-            Verts[vert_count].tex = tex;
-            Verts[vert_count].misc = misc;
-            vert_count++;
+            Verts[VBO.CurVert].trans = trans;
+            Verts[VBO.CurVert].normal = normal;
+            Verts[VBO.CurVert].st = st;
+            Verts[VBO.CurVert].rgba = rgba;
+            Verts[VBO.CurVert].tex = tex;
+            Verts[VBO.CurVert].misc = misc;
+            VBO.CurVert++;
         }
 
         public void Dispose()
         {
-            GL.DeleteBuffer(Buffer);
             GL.DeleteVertexArray(ID);
         }
 
         public void DiscardVerts()
         {
-            vert_count = 0;
+            VBO.CurVert = 0;
         }
 
         public void Render(RenderInfo ri)
         {
+            if (VBO.CurVert <= 0)
+                return;
+
             if (ri == null)
             {
                 throw new ArgumentException("null render context");
             }
-
-            if (vert_count <= 0)
-                return;
 
             watch.Restart();
 
@@ -196,11 +206,9 @@ namespace CrashEdit
 
             // Bind the VAO
             GL.BindVertexArray(ID);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, Buffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, vert_count * Vertex.SIZEOF, Verts, BufferUsageHint.DynamicDraw);
-
+            VBO.Upload();
             Shader.Render(ri, this);
-            GL.DrawArrays(Primitive, 0, vert_count);
+            GL.DrawArrays(Primitive, 0, VBO.CurVert);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindVertexArray(0);

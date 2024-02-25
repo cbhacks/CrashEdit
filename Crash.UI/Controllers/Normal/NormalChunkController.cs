@@ -2,7 +2,7 @@ namespace Crash.UI
 {
     public sealed class NormalChunkController : EntryChunkController
     {
-        public NormalChunkController(NSFController up,NormalChunk chunk) : base(up,chunk)
+        public NormalChunkController(NSFController up, NormalChunk chunk) : base(up, chunk)
         {
             Chunk = chunk;
         }

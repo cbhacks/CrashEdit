@@ -1,7 +1,4 @@
 using Crash;
-using System;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace CrashEdit
 {
@@ -12,11 +9,11 @@ namespace CrashEdit
 
         public Controller()
         {
-            ContextMenu = new ContextMenu();
+            ContextMenu = new();
             Node = new TreeNode
             {
                 Tag = this,
-                ContextMenu = ContextMenu
+                ContextMenuStrip = ContextMenu
             };
             editor = null;
         }
@@ -49,12 +46,12 @@ namespace CrashEdit
                     ErrorManager.ExitSubject();
                 }
             }
-            ContextMenu.MenuItems.Add(text, handler);
+            ContextMenu.Items.Add(text, null, handler);
         }
 
         protected void AddMenuSeparator()
         {
-            ContextMenu.MenuItems.Add("-");
+            ContextMenu.Items.Add("-");
         }
 
         public abstract void InvalidateNode();
@@ -62,7 +59,7 @@ namespace CrashEdit
 
         protected virtual Control CreateEditor()
         {
-            Label label = new Label
+            Label label = new()
             {
                 TextAlign = ContentAlignment.MiddleCenter,
                 Text = "No options available"
@@ -90,7 +87,7 @@ namespace CrashEdit
         }
 
         public TreeNode Node { get; }
-        public ContextMenu ContextMenu { get; }
+        public ContextMenuStrip ContextMenu { get; }
 
         public Control Editor
         {

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Crash
 {
     public sealed class OldEntity

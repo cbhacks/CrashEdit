@@ -1,6 +1,3 @@
-using System.Drawing;
-using System.Windows.Forms;
-
 namespace CrashEdit
 {
     public sealed class UndockableControl : UserControl

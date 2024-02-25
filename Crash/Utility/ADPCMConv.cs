@@ -1,5 +1,3 @@
-using System;
-
 // Based on code by bITmASTER and nextvolume
 // http://psxsdk.googlecode.com/svn-history/r13/trunk/tools/vag2wav.c
 namespace Crash

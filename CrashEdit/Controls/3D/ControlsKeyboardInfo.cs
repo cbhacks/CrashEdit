@@ -1,6 +1,4 @@
-﻿using System.Windows.Forms;
-
-namespace CrashEdit
+﻿namespace CrashEdit
 {
     public sealed class ControlsKeyboardInfo
     {

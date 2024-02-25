@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.IO;
-
 namespace Crash
 {
     public sealed class SceneryEntry : Entry

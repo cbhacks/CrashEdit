@@ -1,5 +1,3 @@
-using System.Windows.Forms;
-
 namespace CrashEdit
 {
     public sealed class ItemController : Controller

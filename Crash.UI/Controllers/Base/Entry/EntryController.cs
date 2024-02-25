@@ -1,10 +1,10 @@
 namespace Crash.UI
 {
-    public abstract class EntryController : Controller,IEntryController
+    public abstract class EntryController : Controller, IEntryController
     {
         private EntryChunkController up;
 
-        public EntryController(EntryChunkController up,Entry entry)
+        public EntryController(EntryChunkController up, Entry entry)
         {
             this.up = up;
             Entry = entry;
@@ -18,7 +18,7 @@ namespace Crash.UI
         {
             protected override string GetText(EntryController c)
             {
-                return string.Format(Properties.Resources.EntryController_AcDelete,c.Entry.EName);
+                return string.Format(Properties.Resources.EntryController_AcDelete, c.Entry.EName);
             }
 
             protected override Command Activate(EntryController c)
@@ -36,12 +36,12 @@ namespace Crash.UI
                 return true;
             }
 
-            protected override string GetText(EntryController c) => string.Format(Properties.Resources.EntryController_AcDeprocess,c.Entry.EName);
+            protected override string GetText(EntryController c) => string.Format(Properties.Resources.EntryController_AcDeprocess, c.Entry.EName);
 
             protected override Command Activate(EntryController c)
             {
                 UnprocessedEntry unprocessedentry = c.Entry.Unprocess();
-                return c.up.Chunk.Entries.CmSet(c.up.Chunk.Entries.IndexOf(c.Entry),unprocessedentry);
+                return c.up.Chunk.Entries.CmSet(c.up.Chunk.Entries.IndexOf(c.Entry), unprocessedentry);
             }
         }
     }

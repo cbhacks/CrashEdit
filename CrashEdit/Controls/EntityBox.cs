@@ -1,9 +1,5 @@
 using Crash;
 using CrashEdit.Properties;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace CrashEdit
 {
@@ -28,7 +24,7 @@ namespace CrashEdit
         private int fovframeindex;
         private int fovindex;
 
-        private Timer argtexttimer;
+        private System.Windows.Forms.Timer argtexttimer;
 
         internal Stack<bool> dirty = new Stack<bool>();
         internal bool Dirty => dirty.Count > 0 && dirty.Peek();
@@ -147,7 +143,7 @@ namespace CrashEdit
             chkSettingHex_CheckedChanged(null, null);
 
             // use a Timer because of PAL switch
-            argtexttimer = new Timer()
+            argtexttimer = new()
             {
                 Enabled = true,
                 Interval = 40

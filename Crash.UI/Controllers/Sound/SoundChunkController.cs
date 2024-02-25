@@ -2,7 +2,7 @@ namespace Crash.UI
 {
     public sealed class SoundChunkController : EntryChunkController
     {
-        public SoundChunkController(NSFController up,SoundChunk chunk) : base(up,chunk)
+        public SoundChunkController(NSFController up, SoundChunk chunk) : base(up, chunk)
         {
             Chunk = chunk;
         }

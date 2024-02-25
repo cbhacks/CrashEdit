@@ -1,5 +1,3 @@
-using System;
-
 namespace Crash
 {
     public sealed class UnprocessedChunk : Chunk

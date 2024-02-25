@@ -1,5 +1,3 @@
-using System;
-
 namespace Crash
 {
     public abstract class RIFFItem

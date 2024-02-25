@@ -1,11 +1,6 @@
 using Crash;
 using CrashEdit.Properties;
-using OpenTK;
-using OpenTK.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
+using OpenTK.Mathematics;
 
 namespace CrashEdit
 {
@@ -61,7 +56,7 @@ namespace CrashEdit
         protected override void OnInvalidated(InvalidateEventArgs e)
         {
             base.OnInvalidated(e);
-            octree_renderer?.UpdateForm();
+            octree_renderer.UpdateForm();
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -268,7 +263,7 @@ namespace CrashEdit
                 anchor_cam_pos += anchor_cam.XDir / 4096F * move_x * move_speed;
                 anchor_cam_pos += anchor_cam.YDir / 4096F * move_y * move_speed;
                 anchor_cam_pos += anchor_cam.ZDir / 4096F * move_z * move_speed;
-                
+
                 if (anchor_cam_pos > anchor_cam.Positions.Count - 1)
                 {
                     if (anchor_next_cam != -1)
@@ -407,6 +402,8 @@ namespace CrashEdit
 
         protected override void Render()
         {
+            octree_renderer.MarkColorsDirty();
+
             var allzones = GetZones();
             OldZoneEntry master_zone = GetMasterZone();
 
@@ -690,7 +687,7 @@ namespace CrashEdit
             {
                 vaoTris.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6], st: uvs_side[i % 6]);
             }
-            
+
             Rectangle topTexRect = OldResources.TexMap[GetBoxTopTexture(subtype)];
             Span<Vector2> uvs_top = stackalloc Vector2[6] {
                 new Vector2(topTexRect.Left, topTexRect.Bottom),

@@ -1,9 +1,7 @@
 using Crash;
 using CrashEdit.Properties;
-using OpenTK;
-using OpenTK.Graphics;
-using System;
-using System.Collections.Generic;
+using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 
 namespace CrashEdit
 {
@@ -17,10 +15,11 @@ namespace CrashEdit
         private bool enable_interp = true;
         private int cull_mode = 1;
 
-        private VAO[] vaoModel => vaoListCrash1;
+        private static VBO[] vboModel;
+        private VAO[] vaoModel = new VAO[2];
         private BlendMode blend_mask;
 
-        private readonly Vector3[][] transUncompressedVerts = new Vector3[ANIM_BUF_MAX][];
+        private readonly Vector3[][] transUncompressedVerts = new Vector3[2][];
 
         public AnimationEntryViewer(NSF nsf, int anim_eid, int frame = -1, int model_eid = Entry.NullEID) : base(nsf)
         {
@@ -28,9 +27,24 @@ namespace CrashEdit
             frame_id = frame;
             this.model_eid = model_eid;
 
-            for (int i = 0; i < ANIM_BUF_MAX; ++i)
+            for (int i = 0; i < 2; ++i)
             {
-                transUncompressedVerts[i] = new Vector3[0];
+                transUncompressedVerts[i] = [];
+            }
+        }
+
+        private static void LoadGLStatic()
+        {
+            vboModel = [new(), new()];
+        }
+
+        protected override void LoadGL()
+        {
+            base.LoadGL();
+
+            for (int i = 0; i < 2; ++i)
+            {
+                vaoModel[i] = new(shaders.GetShader("crash1"), PrimitiveType.Triangles, vboModel[i]);
             }
         }
 
@@ -129,7 +143,7 @@ namespace CrashEdit
                     {
                         MathExt.Lerp(ref transUncompressedVerts[0][i], transUncompressedVerts[1][i], interp);
                     }
-                    for (int i = 0; i < vaoModel[0].vert_count; ++i)
+                    for (int i = 0; i < vaoModel[0].CurVert; ++i)
                     {
                         MathExt.Lerp(ref vaoModel[0].Verts[i].trans, vaoModel[1].Verts[i].trans, interp);
                         MathExt.Lerp(ref vaoModel[0].Verts[i].rgba, vaoModel[1].Verts[i].rgba, interp);
@@ -234,34 +248,34 @@ namespace CrashEdit
                     {
                         var info = polygon_texture_info;
                         tex = new(tex_eids[model.GetTPAG(info.Page)], color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY, face: nocull ? 1 : 0);
-                        vao.Verts[vao.vert_count + 1].st = new(info.X2, info.Y2);
+                        vao.Verts[vao.CurVert + 1].st = new(info.X2, info.Y2);
                         if ((tri.Type != 2 && !flip) || (tri.Type == 2 && tri.Subtype == 1))
                         {
-                            vao.Verts[vao.vert_count + 0].st = new(info.X3, info.Y3);
-                            vao.Verts[vao.vert_count + 1].st = new(info.X2, info.Y2);
-                            vao.Verts[vao.vert_count + 2].st = new(info.X1, info.Y1);
+                            vao.Verts[vao.CurVert + 0].st = new(info.X3, info.Y3);
+                            vao.Verts[vao.CurVert + 1].st = new(info.X2, info.Y2);
+                            vao.Verts[vao.CurVert + 2].st = new(info.X1, info.Y1);
                         }
                         else
                         {
-                            vao.Verts[vao.vert_count + 0].st = new(info.X1, info.Y1);
-                            vao.Verts[vao.vert_count + 1].st = new(info.X2, info.Y2);
-                            vao.Verts[vao.vert_count + 2].st = new(info.X3, info.Y3);
+                            vao.Verts[vao.CurVert + 0].st = new(info.X1, info.Y1);
+                            vao.Verts[vao.CurVert + 1].st = new(info.X2, info.Y2);
+                            vao.Verts[vao.CurVert + 2].st = new(info.X3, info.Y3);
                         }
 
                         blend_mask |= VertexTexInfo.GetBlendMode(info.BlendMode);
                     }
-                    vao.Verts[vao.vert_count + 0].tex = tex;
-                    vao.Verts[vao.vert_count + 1].tex = tex;
-                    vao.Verts[vao.vert_count + 2].tex = tex;
+                    vao.Verts[vao.CurVert + 0].tex = tex;
+                    vao.Verts[vao.CurVert + 1].tex = tex;
+                    vao.Verts[vao.CurVert + 2].tex = tex;
 
                     for (int i = 0; i < 3; ++i)
                     {
                         var v_n = !flip ? i : 2 - i;
                         var c = model.Colors[tri.Color[v_n]];
                         var v = verts[tri.Vertex[v_n] + frame.SpecialVertexCount];
-                        vao.Verts[vao.vert_count].rgba = new(c.Red, c.Green, c.Blue, 255);
-                        vao.Verts[vao.vert_count].trans = new(v.X, v.Z, v.Y);
-                        vao.vert_count++;
+                        vao.Verts[vao.CurVert].rgba = new(c.Red, c.Green, c.Blue, 255);
+                        vao.Verts[vao.CurVert].trans = new(v.X, v.Z, v.Y);
+                        vao.CurVert++;
                     }
                 }
             }
@@ -275,6 +289,16 @@ namespace CrashEdit
                 vaoModel[0].BlendMask = BlendModeIndex(pass);
                 vaoModel[0].Render(render);
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            for (var i = 0; i < vaoModel.Length; ++i)
+            {
+                vaoModel[i]?.Dispose();
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

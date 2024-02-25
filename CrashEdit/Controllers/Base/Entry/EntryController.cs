@@ -1,5 +1,4 @@
 using Crash;
-using System.Windows.Forms;
 
 namespace CrashEdit
 {
@@ -86,12 +85,12 @@ namespace CrashEdit
                 Entry.EID = newentrywindow.EID;
                 InvalidateNode();
                 EntryChunkController.Editor.Invalidate();
-                ContextMenu.MenuItems[0].Text = string.Format(Crash.UI.Properties.Resources.EntryController_AcExport, Entry.EName);
-                ContextMenu.MenuItems[1].Text = string.Format(Crash.UI.Properties.Resources.EntryController_AcDelete, Entry.EName);
-                ContextMenu.MenuItems[2].Text = string.Format(Crash.UI.Properties.Resources.EntryController_AcRename, Entry.EName);
+                ContextMenu.Items[0].Text = string.Format(Crash.UI.Properties.Resources.EntryController_AcExport, Entry.EName);
+                ContextMenu.Items[1].Text = string.Format(Crash.UI.Properties.Resources.EntryController_AcDelete, Entry.EName);
+                ContextMenu.Items[2].Text = string.Format(Crash.UI.Properties.Resources.EntryController_AcRename, Entry.EName);
                 if (!(this is UnprocessedEntryController))
                 {
-                    ContextMenu.MenuItems[3].Text = string.Format(Crash.UI.Properties.Resources.EntryController_AcDeprocess, Entry.EName);
+                    ContextMenu.Items[3].Text = string.Format(Crash.UI.Properties.Resources.EntryController_AcDeprocess, Entry.EName);
                 }
             }
         }

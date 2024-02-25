@@ -1,10 +1,6 @@
 using Crash;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using System.Xml;
 
 namespace CrashEdit
@@ -114,6 +110,7 @@ namespace CrashEdit
             {
                 FileUtil.Owner = mainform;
                 TopLevelGLViewer = new GLViewerLoader();
+                mainform.Controls.Add(TopLevelGLViewer);
                 Application.Run(mainform);
             }
 

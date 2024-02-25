@@ -2,7 +2,7 @@ namespace Crash.UI
 {
     public sealed class WavebankChunkController : EntryChunkController
     {
-        public WavebankChunkController(NSFController up,WavebankChunk chunk) : base(up,chunk)
+        public WavebankChunkController(NSFController up, WavebankChunk chunk) : base(up, chunk)
         {
             Chunk = chunk;
         }

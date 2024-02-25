@@ -1,5 +1,4 @@
-﻿using OpenTK;
-using System;
+﻿using OpenTK.Mathematics;
 
 namespace CrashEdit
 {

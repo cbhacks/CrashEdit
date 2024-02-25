@@ -1,10 +1,6 @@
 using Crash;
 using CrashEdit.Properties;
-using OpenTK;
-using OpenTK.Graphics;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
+using OpenTK.Mathematics;
 
 namespace CrashEdit
 {
