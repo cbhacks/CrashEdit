@@ -243,17 +243,12 @@ namespace CrashEdit
         public Vector3 UserScale;
         public Quaternion UserQuat;
         public Vector4 UserAxis;
-        public Color4 UserColor1;
-        public Color4 UserColor2;
         public Matrix3 UserMat3;
         public Vector3 UserColorAmb;
         public Vector3 UserColorDiff;
         public int UserCullMode; // 0 - no cull, 1 - backface (default), 2 - frontface
         public float UserFloat;
         public float UserFloat2;
-
-        public enum ColorModeEnum { Default = 0, GradientY = 1, Solid = 2 };
-        public ColorModeEnum ColorMode;
 
         public int BlendMask;
 

@@ -30,12 +30,10 @@
     <None Remove="CopyLibs.bat" />
     <None Remove="CopyLibs32.bat" />
     <None Remove="CopyLibs64.bat" />
-    <None Remove="Render\Shaders\box-debug.vert" />
     <None Remove="Render\Shaders\crash1-generic.frag" />
     <None Remove="Render\Shaders\crash1-generic.vert" />
     <None Remove="Render\Shaders\default4.frag" />
     <None Remove="Render\Shaders\generic.vert" />
-    <None Remove="Render\Shaders\line-debug.vert" />
     <None Remove="Render\Shaders\line-static.vert" />
     <None Remove="Render\Shaders\octree.frag" />
     <None Remove="Render\Shaders\octree.vert" />
@@ -43,7 +41,6 @@
     <None Remove="Render\Shaders\screen.vert" />
     <None Remove="Render\Shaders\sprite-generic.vert" />
     <None Remove="Render\Shaders\sprite.frag" />
-    <None Remove="Render\Shaders\sprite.vert" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,12 +48,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Render\Shaders\box-debug.vert" />
     <EmbeddedResource Include="Render\Shaders\crash1-generic.frag" />
     <EmbeddedResource Include="Render\Shaders\crash1-generic.vert" />
     <EmbeddedResource Include="Render\Shaders\default4.frag" />
     <EmbeddedResource Include="Render\Shaders\generic.vert" />
-    <EmbeddedResource Include="Render\Shaders\line-debug.vert" />
     <EmbeddedResource Include="Render\Shaders\line-static.vert" />
     <EmbeddedResource Include="Render\Shaders\octree.frag" />
     <EmbeddedResource Include="Render\Shaders\octree.vert" />
@@ -64,7 +59,6 @@
     <EmbeddedResource Include="Render\Shaders\screen.vert" />
     <EmbeddedResource Include="Render\Shaders\sprite-generic.vert" />
     <EmbeddedResource Include="Render\Shaders\sprite.frag" />
-    <EmbeddedResource Include="Render\Shaders\sprite.vert" />
   </ItemGroup>
 
   <ItemGroup>
