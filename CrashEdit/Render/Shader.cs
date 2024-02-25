@@ -12,7 +12,6 @@ namespace CrashEdit
             { "line",           new ShaderInfo("line-static.vert", "default4.frag") },
             { "line-debug",     new ShaderInfo("line-debug.vert", "default4.frag", func: RenderLineDebug) },
             { "crash1",         new ShaderInfo("crash1-generic.vert", "crash1-generic.frag") },
-            { "line-debug-usercolor", new ShaderInfo("line-usercolor.vert", "default4.frag") },
             { "box-debug",      new ShaderInfo("box-debug.vert", "default4.frag") },
             { "sprite-debug",   new ShaderInfo("sprite.vert", "sprite.frag") },
             { "sprite",         new ShaderInfo("sprite-generic.vert", "sprite.frag", func: RenderSprite) },

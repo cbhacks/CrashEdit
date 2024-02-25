@@ -103,7 +103,6 @@ namespace CrashEdit
         protected static int texTpages;
         protected static int texSprites;
         protected static int texFont;
-        protected static VBO vboGridLine;
         protected static VBO vboAxes;
         protected static VBO vboTris;
         protected static VBO vboLines;
@@ -116,8 +115,6 @@ namespace CrashEdit
         protected static readonly GLControlSettings default_graphics_settings = new() { APIVersion = new(4, 3), DepthBits = 24, Flags = ContextFlags.Debug | ContextFlags.ForwardCompatible };
         #endregion
 
-        // these two should disappear TODO
-        protected VAO vaoGridLine;
         protected VAO vaoAxes;
         protected VAO vaoTris;
         protected VAO vaoLines;
@@ -225,90 +222,6 @@ namespace CrashEdit
         protected readonly NSF nsf;
         private bool showHelp = Settings.Default.ViewerShowHelp;
 
-        #region Functions for generating static data for some helper renderers.
-        protected void AddLineSphere(VAO vao, int resolution, Vector3 trans)
-        {
-            if (resolution < 0)
-                throw new ArgumentOutOfRangeException(nameof(resolution), "Sphere resolution cannot be less than 0.");
-
-            if (!SpherePosCache.TryGetValue(resolution, out var verts))
-            {
-                int long_amt = resolution * 4;
-                int lat_amt = resolution;
-                int pt_nb = 1 + long_amt * (2 + 2 * lat_amt) + (1 + long_amt) * (1 + 2 * lat_amt);
-                var pos = new Vector3[pt_nb];
-                int i = 1;
-                pos[0] = new Vector3(0, 0, 1);
-                bool even = true;
-                for (int ii = 0; ii < long_amt; ++ii)
-                {
-                    var rotmat = Matrix3.CreateRotationZ((float)ii / long_amt * MathHelper.TwoPi);
-                    if (ii % 2 == 0)
-                    {
-                        for (int iii = 0, l_m = 2 + lat_amt * 2; iii < l_m; ++iii)
-                        {
-                            pos[i++] = pos[0] * Matrix3.CreateRotationX((float)(iii + 1) / l_m * MathHelper.Pi) * rotmat;
-                        }
-                        even = true;
-                    }
-                    else
-                    {
-                        for (int iii = 0, l_m = 2 + lat_amt * 2; iii < l_m; ++iii)
-                        {
-                            pos[i++] = pos[0] * Matrix3.CreateRotationX((float)(l_m - iii - 1) / l_m * MathHelper.Pi) * rotmat;
-                        }
-                        even = false;
-                    }
-                }
-                for (int ii = 1, l_m = lat_amt * 2 + 2; ii < l_m; ++ii)
-                {
-                    Matrix3 rotmat = !even ? Matrix3.CreateRotationX((float)ii / l_m * MathHelper.Pi) : Matrix3.CreateRotationX((float)(l_m - ii) / l_m * MathHelper.Pi);
-                    for (int iii = 0; iii <= long_amt; ++iii)
-                    {
-                        pos[i++] = pos[0] * rotmat * Matrix3.CreateRotationZ((float)iii / long_amt * MathHelper.TwoPi);
-                    }
-                }
-
-                verts = pos;
-                SpherePosCache.Add(resolution, pos);
-            }
-
-            for (int i = 0; i < verts.Length; ++i)
-            {
-                vao.PushAttrib(trans: verts[i] + trans);
-            }
-        }
-
-        protected void AddLineGrid(VAO vao, int resolution)
-        {
-            if (resolution < 0)
-                throw new ArgumentOutOfRangeException(nameof(resolution), "Grid resolution cannot be less than 0.");
-
-            if (!GridPosCache.TryGetValue(resolution, out var verts))
-            {
-                var pos = new Vector3[4 * resolution * 2];
-                var border = resolution * 1f - 0.5f;
-
-                var pi = 0;
-                for (int i = 0; i < resolution * 2; ++i)
-                {
-                    pos[pi++] = new Vector3(-border + i, 0, -border);
-                    pos[pi++] = new Vector3(-border + i, 0, +border);
-                    pos[pi++] = new Vector3(-border, 0, -border + i);
-                    pos[pi++] = new Vector3(+border, 0, -border + i);
-                }
-
-                verts = pos;
-                GridPosCache.Add(resolution, pos);
-            }
-
-            for (int i = 0; i < verts.Length; ++i)
-            {
-                vao.PushAttrib(trans: verts[i]);
-            }
-        }
-        #endregion
-
         public GLViewer(NSF nsf = null) : base(default_graphics_settings)
         {
             render = new RenderInfo(this);
@@ -365,7 +278,6 @@ namespace CrashEdit
 
         private static void LoadGLStatic()
         {
-            vboGridLine = new();
             vboAxes = new(AxesPos.Length);
             vboTris = new();
             vboLines = new();
@@ -411,7 +323,6 @@ namespace CrashEdit
 
             // init vertex array objects
             vaoAxes = new VAO(shaders.GetShader("axes"), PrimitiveType.Lines, vboAxes);
-            vaoGridLine = new VAO(shaders.GetShader("line-debug-usercolor"), PrimitiveType.Lines, vboGridLine);
             vaoSprites = new VAO(shaders.GetShader("sprite"), PrimitiveType.Triangles, vboSprites);
             vaoLines = new VAO(shaders.GetShader("line"), PrimitiveType.Lines, vboLines);
             vaoLinesThick = new VAO(shaders.GetShader("line"), PrimitiveType.Lines, vboLinesThick);
@@ -419,7 +330,6 @@ namespace CrashEdit
             vaoText = new VAO(shaders.GetShader("screen"), PrimitiveType.Triangles, vboText);
             vaoOctree = new VAO(shaders.GetShader("octree"), PrimitiveType.Triangles, vboOctree);
 
-            vaoGridLine.UserColor1 = Color4.Gray;
             vaoText.ZBufDisable = true;
             vaoText.ZBufDisableRead = true;
             vaoLinesThick.LineWidth = 5;
@@ -644,9 +554,7 @@ namespace CrashEdit
             if (Settings.Default.DisplayAnimGrid)
             {
                 RenderAxes(new Vector3(0));
-
-                AddLineGrid(vaoGridLine, Settings.Default.AnimGridLen);
-                vaoGridLine.RenderAndDiscard(render);
+                AddLineGrid(Settings.Default.AnimGridLen, (Rgba)Color4.Gray);
             }
         }
 
@@ -666,6 +574,8 @@ namespace CrashEdit
             vaoAxes.Render(render);
         }
 
+
+        #region Functions for generating shapes and text on the debug renderers.
         public Vector2 AddText3D(string text, Vector3 pos, Rgba col, float size = 1, TextRenderFlags flags = TextRenderFlags.Default, float ofs_x = 0, float ofs_y = 0)
         {
             var screen_pos = new Vector4(pos, 1) * render.Projection.GetPVM();
@@ -909,6 +819,89 @@ namespace CrashEdit
                 vaoSprites.PushAttrib(trans: trans, rgba: col, st: uvs[i], misc: new Vector4(SpriteVerts[SpriteTriIndices[i]] * size));
             }
         }
+
+        protected void AddLineGrid(int resolution, Rgba color)
+        {
+            if (resolution < 0)
+                throw new ArgumentOutOfRangeException(nameof(resolution), "Grid resolution cannot be less than 0.");
+
+            if (!GridPosCache.TryGetValue(resolution, out var verts))
+            {
+                var pos = new Vector3[4 * resolution * 2];
+                var border = resolution * 1f - 0.5f;
+
+                var pi = 0;
+                for (int i = 0; i < resolution * 2; ++i)
+                {
+                    pos[pi++] = new Vector3(-border + i, 0, -border);
+                    pos[pi++] = new Vector3(-border + i, 0, +border);
+                    pos[pi++] = new Vector3(-border, 0, -border + i);
+                    pos[pi++] = new Vector3(+border, 0, -border + i);
+                }
+
+                verts = pos;
+                GridPosCache.Add(resolution, pos);
+            }
+
+            for (int i = 0; i < verts.Length; ++i)
+            {
+                vaoLines.PushAttrib(trans: verts[i], rgba: color);
+            }
+        }
+
+        protected void AddLineSphere(int resolution, Vector3 trans, float radius, Rgba color)
+        {
+            if (resolution < 0)
+                throw new ArgumentOutOfRangeException(nameof(resolution), "Sphere resolution cannot be less than 0.");
+
+            if (!SpherePosCache.TryGetValue(resolution, out var verts))
+            {
+                int long_amt = resolution * 4;
+                int lat_amt = resolution;
+                int pt_nb = 1 + long_amt * (2 + 2 * lat_amt) + (1 + long_amt) * (1 + 2 * lat_amt);
+                var pos = new Vector3[pt_nb];
+                int i = 1;
+                pos[0] = new Vector3(0, 0, 1);
+                bool even = true;
+                for (int ii = 0; ii < long_amt; ++ii)
+                {
+                    var rotmat = Matrix3.CreateRotationZ((float)ii / long_amt * MathHelper.TwoPi);
+                    if (ii % 2 == 0)
+                    {
+                        for (int iii = 0, l_m = 2 + lat_amt * 2; iii < l_m; ++iii)
+                        {
+                            pos[i++] = pos[0] * Matrix3.CreateRotationX((float)(iii + 1) / l_m * MathHelper.Pi) * rotmat;
+                        }
+                        even = true;
+                    }
+                    else
+                    {
+                        for (int iii = 0, l_m = 2 + lat_amt * 2; iii < l_m; ++iii)
+                        {
+                            pos[i++] = pos[0] * Matrix3.CreateRotationX((float)(l_m - iii - 1) / l_m * MathHelper.Pi) * rotmat;
+                        }
+                        even = false;
+                    }
+                }
+                for (int ii = 1, l_m = lat_amt * 2 + 2; ii < l_m; ++ii)
+                {
+                    Matrix3 rotmat = !even ? Matrix3.CreateRotationX((float)ii / l_m * MathHelper.Pi) : Matrix3.CreateRotationX((float)(l_m - ii) / l_m * MathHelper.Pi);
+                    for (int iii = 0; iii <= long_amt; ++iii)
+                    {
+                        pos[i++] = pos[0] * rotmat * Matrix3.CreateRotationZ((float)iii / long_amt * MathHelper.TwoPi);
+                    }
+                }
+
+                verts = pos;
+                SpherePosCache.Add(resolution, pos);
+            }
+
+            for (int i = 0; i < verts.Length; ++i)
+            {
+                vaoLines.PushAttrib(trans: verts[i] * radius + trans, rgba: color);
+            }
+        }
+        #endregion
 
         public void AddOctreeX(Vector3 trans, Vector3 trans_size, int node, Vector3w nodes_size)
         {
@@ -1215,7 +1208,6 @@ namespace CrashEdit
             GL.DeleteQuery(qryGpuTime);
 
             vaoAxes?.Dispose();
-            vaoGridLine?.Dispose();
             vaoSprites?.Dispose();
             vaoLines?.Dispose();
             vaoLinesThick?.Dispose();

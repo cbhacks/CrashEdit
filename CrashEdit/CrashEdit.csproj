@@ -38,7 +38,6 @@
     <None Remove="Render\Shaders\generic.vert" />
     <None Remove="Render\Shaders\line-debug.vert" />
     <None Remove="Render\Shaders\line-static.vert" />
-    <None Remove="Render\Shaders\line-usercolor.vert" />
     <None Remove="Render\Shaders\octree.frag" />
     <None Remove="Render\Shaders\octree.vert" />
     <None Remove="Render\Shaders\screen.frag" />
@@ -61,7 +60,6 @@
     <EmbeddedResource Include="Render\Shaders\generic.vert" />
     <EmbeddedResource Include="Render\Shaders\line-debug.vert" />
     <EmbeddedResource Include="Render\Shaders\line-static.vert" />
-    <EmbeddedResource Include="Render\Shaders\line-usercolor.vert" />
     <EmbeddedResource Include="Render\Shaders\octree.frag" />
     <EmbeddedResource Include="Render\Shaders\octree.vert" />
     <EmbeddedResource Include="Render\Shaders\screen.frag" />
