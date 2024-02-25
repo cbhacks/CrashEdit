@@ -1,5 +1,4 @@
-﻿using CrashEdit.Properties;
-using OpenTK.Graphics.OpenGL4;
+﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 
 namespace CrashEdit
@@ -138,21 +137,12 @@ namespace CrashEdit
         public void Dispose()
         {
             GL.DeleteProgram(ID);
+            GC.SuppressFinalize(this);
         }
-
-        private readonly Dictionary<string, int> uniform_locs = new();
 
         private int GetUniformLocation(string name)
         {
-            if (!Settings.Default.CacheShaderUniformLoc)
-                return GL.GetUniformLocation(ID, name);
-
-            if (!uniform_locs.TryGetValue(name, out int loc))
-            {
-                loc = GL.GetUniformLocation(ID, name);
-                uniform_locs.Add(name, loc);
-            }
-            return loc;
+            return GL.GetUniformLocation(ID, name);
         }
 
         public void UniformMat4(string name, ref Matrix4 mat) => GL.UniformMatrix4(GetUniformLocation(name), false, ref mat);

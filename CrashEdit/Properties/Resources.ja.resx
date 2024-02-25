@@ -440,13 +440,7 @@
     <value>ウィンドウのサイズ</value>
   </data>
   <data name="Config_lblAnimGrid" xml:space="preserve">
-    <value>数</value>
-  </data>
-  <data name="Config_lblH" xml:space="preserve">
-    <value>高さ</value>
-  </data>
-  <data name="Config_lblW" xml:space="preserve">
-    <value>幅</value>
+    <value>サイズ</value>
   </data>
   <data name="Crash3AnimationSelector_Desc" xml:space="preserve">
     <value>モデル  (または圧縮モデル) の名前を入力してエンターキーを押してください。</value>

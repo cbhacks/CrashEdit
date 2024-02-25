@@ -442,13 +442,7 @@
     <value>Default Window Size</value>
   </data>
   <data name="Config_lblAnimGrid" xml:space="preserve">
-    <value>Amount</value>
-  </data>
-  <data name="Config_lblH" xml:space="preserve">
-    <value>Height</value>
-  </data>
-  <data name="Config_lblW" xml:space="preserve">
-    <value>Width</value>
+    <value>Size</value>
   </data>
   <data name="Crash3AnimationSelector_Desc" xml:space="preserve">
     <value>Type in a Model (or Compressed Model) name and press Enter.</value>
@@ -821,9 +815,6 @@ as Meters: {3:F3}m</value>
   </data>
   <data name="Config_fraNodeShadeAmt" xml:space="preserve">
     <value>Collision Node Shade Amount</value>
-  </data>
-  <data name="Config_chkCacheShaderUniformLoc" xml:space="preserve">
-    <value>Cache shader uniform locations</value>
   </data>
   <data name="ViewerControls_EnterZoneAnchor" xml:space="preserve">
     <value>Enter camera rail view</value>

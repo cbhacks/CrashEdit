@@ -74,6 +74,21 @@
     <ProjectReference Include="..\ISO2PSX\ISO2PSX.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="if '$(Platform)' == 'AnyCPU' (&#xD;&#xA;  rmdir &quot;$(TargetDir)Win32&quot;&#xD;&#xA;  rmdir &quot;$(TargetDir)Win64&quot;&#xD;&#xA;  mkdir &quot;$(TargetDir)Win32&quot;&#xD;&#xA;  mkdir &quot;$(TargetDir)Win64&quot;&#xD;&#xA;  copy /Y &quot;$(ProjectDir)freetype6-win32.dll&quot; &quot;$(TargetDir)Win32/freetype6.dll&quot;&#xD;&#xA;  copy /Y &quot;$(ProjectDir)freetype6-win64.dll&quot; &quot;$(TargetDir)Win64/freetype6.dll&quot;&#xD;&#xA;)" />
   </Target>
