@@ -61,11 +61,6 @@ namespace CrashEdit
             }
         }
 
-        public void MarkColorsDirty()
-        {
-            colors_uploaded = false;
-        }
-
         public void UpdateForm()
         {
             if (octree_form != null)
@@ -180,10 +175,10 @@ namespace CrashEdit
             if (texColors == 0) texColors = GL.GenTexture();
             if (texNodes == 0) texNodes = GL.GenTexture();
 
+            GL.ActiveTexture(TextureUnit.Texture3);
+            GL.BindTexture(TextureTarget.Texture2D, texColors);
             if (!colors_uploaded)
             {
-                GL.ActiveTexture(TextureUnit.Texture3);
-                GL.BindTexture(TextureTarget.Texture2D, texColors);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
                 GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, 256, 128, 0, PixelFormat.Rgba, PixelType.UnsignedByte, node_colors);

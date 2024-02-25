@@ -402,8 +402,6 @@ namespace CrashEdit
 
         protected override void Render()
         {
-            octree_renderer.MarkColorsDirty();
-
             var allzones = GetZones();
             OldZoneEntry master_zone = GetMasterZone();
 
