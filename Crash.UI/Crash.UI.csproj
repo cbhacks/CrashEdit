@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Crash\Crash.csproj" />
+    <ProjectReference Include="..\CrashEdit.Main.csproj" />
 	<FrameworkReference Include="Microsoft.WindowsDesktop.App" />
   </ItemGroup>
 

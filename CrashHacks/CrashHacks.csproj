@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Crash.UI\Crash.UI.csproj" />
-    <ProjectReference Include="..\Crash\Crash.csproj" />
+    <ProjectReference Include="..\CrashEdit.Main.csproj" />
     <ProjectReference Include="..\ISO2PSX\ISO2PSX.csproj" />
   </ItemGroup>
 
