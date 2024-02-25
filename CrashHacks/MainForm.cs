@@ -1,9 +1,9 @@
+using CrashEdit.Crash;
 using CrashEdit.CrashUI;
 using DiscUtils.Iso9660;
 using System.ComponentModel;
 using System.Reflection;
 using System.Text;
-using CrashEdit.Crash;
 
 namespace CrashHacks
 {
