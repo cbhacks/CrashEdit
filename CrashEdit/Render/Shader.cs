@@ -22,12 +22,12 @@ namespace CrashEdit
         public ShaderRenderFunc PreRenderFunc { get; }
         public ShaderRenderFunc RenderFunc { get; }
 
-        internal ShaderInfo(string vert, string frag, ShaderRenderFunc func = null, ShaderRenderFunc prefunc = null)
+        internal ShaderInfo(string vert, string frag, ShaderRenderFunc? func = null, ShaderRenderFunc? prefunc = null)
         {
             VertShaderName = vert;
             FragShaderName = frag;
-            RenderFunc = func;
-            PreRenderFunc = prefunc;
+            RenderFunc = func ?? RenderDefault;
+            PreRenderFunc = prefunc ?? PreRenderDefault;
         }
     }
 
@@ -171,14 +171,8 @@ namespace CrashEdit
             if (!string.IsNullOrEmpty(log))
                 Console.WriteLine($"When validating {Name}:\n {log}");
             GL.UseProgram(ID);
-            if (Info.PreRenderFunc == null)
-                ShaderInfo.PreRenderDefault(this, ri, vao);
-            else
-                Info.PreRenderFunc(this, ri, vao);
-            if (Info.RenderFunc == null)
-                ShaderInfo.RenderDefault(this, ri, vao);
-            else
-                Info.RenderFunc(this, ri, vao);
+            Info.PreRenderFunc(this, ri, vao);
+            Info.RenderFunc(this, ri, vao);
         }
     }
 }
