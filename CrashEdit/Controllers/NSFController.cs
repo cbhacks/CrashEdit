@@ -23,14 +23,26 @@ namespace CrashEdit.CE
                 AddMenuSeparator();
             }
             if (GameVersion == GameVersion.Crash1 || GameVersion == GameVersion.Crash1BetaMAR08 || GameVersion == GameVersion.Crash1BetaMAY11)
+            {
                 AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC1);
-            else if (GameVersion == GameVersion.Crash2)
+                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelZonesC1);
+            }
+            else if (GameVersion == GameVersion.Crash1Beta1995)
+            {
+                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC1Proto);
+                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelZonesC1Proto);
+            }
+            else if (GameVersion == GameVersion.Crash2 || GameVersion == GameVersion.Crash3)
+            {
                 AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC2);
-            else if (GameVersion == GameVersion.Crash3)
-                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC3);
+                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelZonesC2);
+            }
         }
 
         public NSF NSF { get; }
+
+        private Form ShowLevelForm { get; set; }
+        private Form ShowLevelZonesForm { get; set; }
 
         private void Menu_Add_NormalChunk()
         {
@@ -123,40 +135,6 @@ namespace CrashEdit.CE
                             case 18: // nitro
                             case 20: // auto empty
                             case 21: // empty 2
-                                boxcount++;
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                }
-            }
-            foreach (NewZoneEntry zone in NSF.GetEntries<NewZoneEntry>())
-            {
-                foreach (Entity entity in zone.Entities)
-                {
-                    if (entity.Type == 0 && entity.Subtype == 0)
-                    {
-                        willys.Add(entity);
-                    }
-                    else if (entity.Type == 34)
-                    {
-                        switch (entity.Subtype)
-                        {
-                            case 0: // tnt
-                            case 2: // empty
-                            case 3: // spring
-                            case 4: // continue
-                            case 6: // fruit
-                            case 8: // life
-                            case 9: // doctor
-                            case 10: // pickup
-                            case 11: // pow
-                            case 13: // ghost
-                            case 17: // auto pickup
-                            case 18: // nitro
-                            case 20: // auto empty
-                            case 21: // empty 2
                             case 25: // slot
                                 boxcount++;
                                 break;
@@ -164,13 +142,13 @@ namespace CrashEdit.CE
                                 break;
                         }
                     }
-                    else if (entity.Type == 36)
-                    {
-                        if (entity.Subtype == 1)
-                        {
-                            boxcount++;
-                        }
-                    }
+                    //else if (entity.Type == 36)
+                    //{
+                    //    if (entity.Subtype == 1)
+                    //    {
+                    //        boxcount++;
+                    //    }
+                    //}
                 }
             }
             foreach (Entity willy in willys)
@@ -184,65 +162,140 @@ namespace CrashEdit.CE
 
         private void Menu_ShowLevelC1()
         {
-            List<TextureChunk[]> sortedtexturechunks = new List<TextureChunk[]>();
-            List<OldSceneryEntry> sceneryentries = new List<OldSceneryEntry>();
-            foreach (OldSceneryEntry entry in NSF.GetEntries<OldSceneryEntry>())
+            if (ShowLevelForm != null)
             {
-                sceneryentries.Add(entry);
-                TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info, 0x18)];
-                for (int i = 0; i < texturechunks.Length; ++i)
-                {
-                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info, 0x20 + i * 4));
-                }
-                sortedtexturechunks.Add(texturechunks);
+                ShowLevelForm.Focus();
+                return;
             }
-            Form frm = new Form() { Text = "Loading...", Width = 480, Height = 360 };
-            frm.Show();
-            OldSceneryEntryViewer viewer = new OldSceneryEntryViewer(sceneryentries, sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
-            frm.Controls.Add(viewer);
-            frm.Text = string.Empty;
+            ShowLevelForm = new() { Text = "Loading...", Width = 480, Height = 360 };
+            ShowLevelForm.Show();
+            List<int> worlds = new();
+            foreach (var entry in NSF.GetEntries<OldSceneryEntry>())
+            {
+                worlds.Add(entry.EID);
+            }
+            OldSceneryEntryViewer viewer = new(NSF, worlds) { Dock = DockStyle.Fill };
+            ShowLevelForm.Controls.Add(viewer);
+            ShowLevelForm.Text = string.Empty;
+            ShowLevelForm.FormClosing += (object sender, FormClosingEventArgs e) =>
+            {
+                ShowLevelForm = null;
+            };
+        }
+
+        private void Menu_ShowLevelZonesC1()
+        {
+            if (ShowLevelZonesForm != null)
+            {
+                ShowLevelZonesForm.Focus();
+                return;
+            }
+            ShowLevelZonesForm = new() { Text = "Loading...", Width = 480, Height = 360 };
+            ShowLevelZonesForm.Show();
+            List<int> zones = new();
+            foreach (var entry in NSF.GetEntries<OldZoneEntry>())
+            {
+                zones.Add(entry.EID);
+            }
+            OldZoneEntryViewer viewer = new(NSF, zones) { Dock = DockStyle.Fill };
+            ShowLevelZonesForm.Controls.Add(viewer);
+            ShowLevelZonesForm.Text = string.Empty;
+            ShowLevelZonesForm.FormClosing += (object sender, FormClosingEventArgs e) =>
+            {
+                ShowLevelZonesForm = null;
+            };
+        }
+
+        private void Menu_ShowLevelC1Proto()
+        {
+            if (ShowLevelForm != null)
+            {
+                ShowLevelForm.Focus();
+                return;
+            }
+            ShowLevelForm = new() { Text = "Loading...", Width = 480, Height = 360 };
+            ShowLevelForm.Show();
+            List<int> worlds = new();
+            foreach (var entry in NSF.GetEntries<ProtoSceneryEntry>())
+            {
+                worlds.Add(entry.EID);
+            }
+            ProtoSceneryEntryViewer viewer = new(NSF, worlds) { Dock = DockStyle.Fill };
+            ShowLevelForm.Controls.Add(viewer);
+            ShowLevelForm.Text = string.Empty;
+            ShowLevelForm.FormClosing += (object sender, FormClosingEventArgs e) =>
+            {
+                ShowLevelForm = null;
+            };
+        }
+
+        private void Menu_ShowLevelZonesC1Proto()
+        {
+            if (ShowLevelZonesForm != null)
+            {
+                ShowLevelZonesForm.Focus();
+                return;
+            }
+            ShowLevelZonesForm = new() { Text = "Loading...", Width = 480, Height = 360 };
+            ShowLevelZonesForm.Show();
+            List<int> zones = new();
+            foreach (var entry in NSF.GetEntries<ProtoZoneEntry>())
+            {
+                zones.Add(entry.EID);
+            }
+            ProtoZoneEntryViewer viewer = new(NSF, zones) { Dock = DockStyle.Fill };
+            ShowLevelZonesForm.Controls.Add(viewer);
+            ShowLevelZonesForm.Text = string.Empty;
+            ShowLevelZonesForm.FormClosing += (object sender, FormClosingEventArgs e) =>
+            {
+                ShowLevelZonesForm = null;
+            };
         }
 
         private void Menu_ShowLevelC2()
         {
-            List<TextureChunk[]> sortedtexturechunks = new List<TextureChunk[]>();
-            List<SceneryEntry> sceneryentries = new List<SceneryEntry>();
-            foreach (SceneryEntry entry in NSF.GetEntries<SceneryEntry>())
+            if (ShowLevelForm != null)
             {
-                sceneryentries.Add(entry);
-                TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info, 0x28)];
-                for (int i = 0; i < texturechunks.Length; ++i)
-                {
-                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info, 0x2C + i * 4));
-                }
-                sortedtexturechunks.Add(texturechunks);
+                ShowLevelForm.Focus();
+                return;
             }
-            Form frm = new Form() { Text = "Loading...", Width = 480, Height = 360 };
-            frm.Show();
-            SceneryEntryViewer viewer = new SceneryEntryViewer(sceneryentries, sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
-            frm.Controls.Add(viewer);
-            frm.Text = string.Empty;
+            ShowLevelForm = new() { Text = "Loading...", Width = 480, Height = 360 };
+            ShowLevelForm.Show();
+            List<int> worlds = new();
+            foreach (var entry in NSF.GetEntries<SceneryEntry>())
+            {
+                worlds.Add(entry.EID);
+            }
+            SceneryEntryViewer viewer = new(NSF, worlds) { Dock = DockStyle.Fill };
+            ShowLevelForm.Controls.Add(viewer);
+            ShowLevelForm.Text = string.Empty;
+            ShowLevelForm.FormClosing += (object sender, FormClosingEventArgs e) =>
+            {
+                ShowLevelForm = null;
+            };
         }
 
-        private void Menu_ShowLevelC3()
+        private void Menu_ShowLevelZonesC2()
         {
-            List<TextureChunk[]> sortedtexturechunks = new List<TextureChunk[]>();
-            List<NewSceneryEntry> sceneryentries = new List<NewSceneryEntry>();
-            foreach (NewSceneryEntry entry in NSF.GetEntries<NewSceneryEntry>())
+            if (ShowLevelZonesForm != null)
             {
-                sceneryentries.Add(entry);
-                TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info, 0x28)];
-                for (int i = 0; i < texturechunks.Length; ++i)
-                {
-                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info, 0x2C + i * 4));
-                }
-                sortedtexturechunks.Add(texturechunks);
+                ShowLevelZonesForm.Focus();
+                return;
             }
-            Form frm = new Form() { Text = "Loading...", Width = 480, Height = 360 };
-            frm.Show();
-            NewSceneryEntryViewer viewer = new NewSceneryEntryViewer(sceneryentries, sortedtexturechunks.ToArray()) { Dock = DockStyle.Fill };
-            frm.Controls.Add(viewer);
-            frm.Text = string.Empty;
+            ShowLevelZonesForm = new() { Text = "Loading...", Width = 480, Height = 360 };
+            ShowLevelZonesForm.Show();
+            List<int> zones = new();
+            foreach (var entry in NSF.GetEntries<ZoneEntry>())
+            {
+                zones.Add(entry.EID);
+            }
+            ZoneEntryViewer viewer = new(NSF, zones) { Dock = DockStyle.Fill };
+            ShowLevelZonesForm.Controls.Add(viewer);
+            ShowLevelZonesForm.Text = string.Empty;
+            ShowLevelZonesForm.FormClosing += (object sender, FormClosingEventArgs e) =>
+            {
+                ShowLevelZonesForm = null;
+            };
         }
 
         private void Menu_Import_Chunk()

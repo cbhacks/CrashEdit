@@ -4,13 +4,14 @@ namespace CrashEdit.CE
 {
     public sealed class GOOLBox : UserControl
     {
-        private ListBox lstCode;
+        private readonly ListBox lstCode;
 
         public GOOLBox(GOOLEntry goolentry)
         {
             lstCode = new ListBox
             {
-                Dock = DockStyle.Fill
+                Dock = DockStyle.Fill,
+                Font = new System.Drawing.Font("Cascadia Code SemiLight", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0)
             };
             lstCode.Items.Add($"Type: {goolentry.ID}");
             lstCode.Items.Add($"Category: {goolentry.Category / 0x100}");
@@ -34,9 +35,9 @@ namespace CrashEdit.CE
                             addedinterrupts = true;
                         }
                         if ((goolentry.StateMap[i] & 0x8000) != 0)
-                            lstCode.Items.Add($"\tInterrupt {i}: Sub_{goolentry.StateMap[i] & 0x3FFF}");
+                            lstCode.Items.Add($"    Interrupt {i}: Sub_{goolentry.StateMap[i] & 0x3FFF}");
                         else
-                            lstCode.Items.Add($"\tInterrupt {i}: State_{goolentry.StateMap[i]}");
+                            lstCode.Items.Add($"    Interrupt {i}: State_{goolentry.StateMap[i]}");
                     }
                 }
 
@@ -44,7 +45,7 @@ namespace CrashEdit.CE
                 for (int i = goolentry.EventCount; i < goolentry.StateMap.Length; ++i)
                 {
                     if (i > goolentry.EventCount && i + 1 == goolentry.StateMap.Length && goolentry.StateMap[i] == 0) continue;
-                    lstCode.Items.Add($"\tSubtype {i - goolentry.EventCount}: {(goolentry.StateMap[i] == 255 ? "invalid" : $"State_{goolentry.StateMap[i]}")}");
+                    lstCode.Items.Add($"    Subtype {i - goolentry.EventCount}: {(goolentry.StateMap[i] == 255 ? "invalid" : $"State_{goolentry.StateMap[i]}")}");
                 }
 
                 lstCode.Items.Add("");
@@ -56,17 +57,17 @@ namespace CrashEdit.CE
                     int stategooleid = goolentry.Data[goolentry.StateDescriptors[i].GOOLID];
                     lstCode.Items.Add($"State_{i} [{Entry.EIDToEName(stategooleid)}] (State Flags: {string.Format("0x{0:X}", goolentry.StateDescriptors[i].StateFlags)} | C-Flags: {string.Format("0x{0:X}", goolentry.StateDescriptors[i].CFlags)})");
                     if (epc != 0x3FFF)
-                        lstCode.Items.Add($"\tEPC: {epc}" + ((goolentry.StateDescriptors[i].EPC & 0x4000) == 0x4000 ? " (external)" : ""));
+                        lstCode.Items.Add($"    EPC: {epc}" + ((goolentry.StateDescriptors[i].EPC & 0x4000) == 0x4000 ? " (external)" : ""));
                     else
-                        lstCode.Items.Add("\tEvent block unavailable.");
+                        lstCode.Items.Add("    Event block unavailable.");
                     if (tpc != 0x3FFF)
-                        lstCode.Items.Add($"\tTPC: {tpc}" + ((goolentry.StateDescriptors[i].TPC & 0x4000) == 0x4000 ? " (external)" : ""));
+                        lstCode.Items.Add($"    TPC: {tpc}" + ((goolentry.StateDescriptors[i].TPC & 0x4000) == 0x4000 ? " (external)" : ""));
                     else
-                        lstCode.Items.Add("\tTrans block unavailable.");
+                        lstCode.Items.Add("    Trans block unavailable.");
                     if (cpc != 0x3FFF)
-                        lstCode.Items.Add($"\tCPC: {cpc}" + ((goolentry.StateDescriptors[i].CPC & 0x4000) == 0x4000 ? " (external)" : ""));
+                        lstCode.Items.Add($"    CPC: {cpc}" + ((goolentry.StateDescriptors[i].CPC & 0x4000) == 0x4000 ? " (external)" : ""));
                     else
-                        lstCode.Items.Add("\tCode block unavailable.");
+                        lstCode.Items.Add("    Code block unavailable.");
                 }
             }
 
@@ -117,11 +118,13 @@ namespace CrashEdit.CE
                 else
                 {
                     returned = GOOLInterpreter.IsReturnInstruction(ins);
-                    if (!(ins is GOOLInvalidInstruction))
+                    if (ins is not GOOLUnknownInstruction)
                         ++goolcount;
                 }
-                string comment = ins.Comment;
-                lstCode.Items.Add(string.Format("{0,-05}\t{1,-4}\t{2,-30}\t{3}", i, ins.Name, ins.Arguments, !string.IsNullOrWhiteSpace(comment) ? $"# {comment}" : ""));
+                string name = ins.GetName();
+                string args = ins.Arguments;
+                string comment = ins.GetComment();
+                lstCode.Items.Add(string.Format("{0,-6} {1,-6} {2,-28} {3}", i, name, args, !string.IsNullOrWhiteSpace(comment) ? $"# {comment}" : ""));
             }
 
             if (goolcount != goolentry.Instructions.Count)

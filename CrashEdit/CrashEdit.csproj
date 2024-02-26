@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <StartupObject>CrashEdit.Program</StartupObject>
+    <StartupObject>CrashEdit.CE.Program</StartupObject>
     <PackageIcon></PackageIcon>
     <ApplicationIcon>Resources\Icons\cbhacks-logo-new.ico</ApplicationIcon>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>

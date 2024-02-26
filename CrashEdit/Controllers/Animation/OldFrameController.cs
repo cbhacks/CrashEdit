@@ -23,7 +23,7 @@ namespace CrashEdit.CE
                 Dock = DockStyle.Fill
             };
             var entry = OldAnimationEntryController.OldAnimationEntry;
-            var viewerbox = new OldAnimationEntryViewer(OldAnimationEntryController.NSF, entry.EID, entry.Frames.IndexOf(OldFrame))
+            var viewerbox = new OldAnimationEntryViewer(GetNSF(), entry.EID, entry.Frames.IndexOf(OldFrame))
             {
                 Dock = DockStyle.Fill
             };

@@ -14,20 +14,10 @@ namespace CrashEdit.CE
 
         public override Control CreateEditor()
         {
-            if (!Frame.IsNew)
-            {
-                ModelEntry modelentry = GetEntry<ModelEntry>(Frame.ModelEID);
-                TextureChunk[] texturechunks = new TextureChunk[8];
-                for (int i = 0; i < 8; ++i)
-                {
-                    texturechunks[i] = GetEntry<TextureChunk>(BitConv.FromInt32(modelentry.Info, 0xC + i * 4));
-                }
-                return new AnimationEntryViewer(Frame, modelentry, texturechunks);
-            }
+            if (AnimationEntryController.AnimationEntry.IsNew)
+                return new Crash3AnimationSelector(GetNSF(), AnimationEntryController.AnimationEntry, Frame);
             else
-            {
-                return new Crash3AnimationSelector(AnimationEntryController.AnimationEntry, Frame, GetNSF());
-            }
+                return new AnimationEntryViewer(GetNSF(), AnimationEntryController.AnimationEntry.EID, AnimationEntryController.AnimationEntry.Frames.IndexOf(Frame));
         }
 
         public AnimationEntryController AnimationEntryController => (AnimationEntryController)Modern.Parent.Legacy;

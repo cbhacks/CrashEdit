@@ -442,7 +442,6 @@ namespace CrashEdit.CE
                         ));
                 }
                 UpdatePosition();
-                InvalidateNodes();
             }
         }
     }

@@ -4,9 +4,9 @@ namespace CrashEdit.CE
 {
     public partial class Crash3AnimationSelector : UserControl
     {
-        private NSF nsf;
-        private AnimationEntry anim;
-        private Frame frame;
+        private readonly NSF nsf;
+        private readonly AnimationEntry anim;
+        private readonly Frame frame;
         private Control rewardcontrol;
 
         public Crash3AnimationSelector(NSF nsf, AnimationEntry anim, Frame frame = null)
@@ -80,11 +80,6 @@ namespace CrashEdit.CE
                     }
                     if (modelentry != null)
                     {
-                        TextureChunk[] texturechunks = new TextureChunk[modelentry.TPAGCount];
-                        for (int i = 0; i < texturechunks.Length; ++i)
-                        {
-                            texturechunks[i] = nsf.GetEntry<TextureChunk>(BitConv.FromInt32(modelentry.Info, 0xC + i * 4));
-                        }
                         if (frame == null)
                             rewardcontrol = new AnimationEntryViewer(nsf, anim.EID, -1, modelentry.EID);
                         else
