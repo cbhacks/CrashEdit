@@ -1,9 +1,28 @@
+using System.Security.Cryptography;
+
 namespace CrashEdit.Crash
 {
     [EntryType(3, GameVersion.Crash2)]
     public sealed class SceneryEntryLoader : EntryLoader
     {
         public override Entry Load(byte[][] items, int eid)
+        {
+            return SceneryEntryLoaderInternal.LoadScenery(items, eid, false);
+        }
+    }
+
+    [EntryType(3, GameVersion.Crash3)]
+    public sealed class NewSceneryEntryLoader : EntryLoader
+    {
+        public override Entry Load(byte[][] items, int eid)
+        {
+            return SceneryEntryLoaderInternal.LoadScenery(items, eid, true);
+        }
+    }
+
+    internal static class SceneryEntryLoaderInternal
+    {
+        internal static Entry LoadScenery(byte[][] items, int eid, bool is_c3)
         {
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
@@ -52,7 +71,7 @@ namespace CrashEdit.Crash
                 byte[] zdata = new byte[2];
                 Array.Copy(items[1], (vertexcount - 1 - i) * 4, xydata, 0, xydata.Length);
                 Array.Copy(items[1], vertexcount * 4 + i * 2, zdata, 0, zdata.Length);
-                vertices[i] = SceneryVertex.Load(xydata, zdata);
+                vertices[i] = SceneryVertex.Load(xydata, zdata, is_c3);
             }
             SceneryTriangle[] triangles = new SceneryTriangle[trianglecount];
             for (int i = 0; i < trianglecount; i++)
@@ -93,7 +112,7 @@ namespace CrashEdit.Crash
                 Array.Copy(items[6], i * 4, animatedtexturedata, 0, animatedtexturedata.Length);
                 animatedtextures[i] = ModelExtendedTexture.Load(animatedtexturedata);
             }
-            return new SceneryEntry(items[0], vertices, triangles, quads, textures, colors, animatedtextures, eid);
+            return new SceneryEntry(items[0], vertices, triangles, quads, textures, colors, animatedtextures, is_c3, eid);
         }
     }
 }

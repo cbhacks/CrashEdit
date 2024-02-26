@@ -1,6 +1,6 @@
 namespace CrashEdit.Crash
 {
-    public struct ModelTexture
+    public class ModelTexture
     {
         public static ModelTexture Load(byte[] data)
         {
@@ -44,7 +44,6 @@ namespace CrashEdit.Crash
             ColorMode = colormode;
             Page = textureoffset;
 
-            double pw = 256 << (2 - ColorMode);
             int xoff = (1 << (2 - ColorMode)) * 64 * Segment;
             Left = Math.Min(U1, Math.Min(U2, U3)) + xoff;
             Top = Math.Min(V1, Math.Min(V2, V3));
@@ -58,10 +57,10 @@ namespace CrashEdit.Crash
             if (tx2 > tx1 || tx2 > tx3) ++tx2;
             if (tx3 > tx2 || tx3 > tx1) ++tx3;
             if (tx4 > tx2 || tx4 > tx3 || tx4 > tx1) ++tx4;
-            X1 = tx1 / pw;
-            X2 = tx2 / pw;
-            X3 = tx3 / pw;
-            X4 = tx4 / pw;
+            X1 = tx1;
+            X2 = tx2;
+            X3 = tx3;
+            X4 = tx4;
             int ty1 = V1;
             int ty2 = V2;
             int ty3 = V3;
@@ -70,10 +69,10 @@ namespace CrashEdit.Crash
             if (ty2 > ty1 || ty2 > ty3) ++ty2;
             if (ty3 > ty2 || ty3 > ty1) ++ty3;
             if (ty4 > ty2 || ty4 > ty3 || ty4 > ty1) ++ty4;
-            Y1 = ty1 / 128.0;
-            Y2 = ty2 / 128.0;
-            Y3 = ty3 / 128.0;
-            Y4 = ty4 / 128.0;
+            Y1 = ty1;
+            Y2 = ty2;
+            Y3 = ty3;
+            Y4 = ty4;
         }
 
         public byte ColorMode { get; set; }
@@ -97,14 +96,14 @@ namespace CrashEdit.Crash
         public int Top { get; }
         public int Width { get; }
         public int Height { get; }
-        public double X1 { get; }
-        public double X2 { get; }
-        public double X3 { get; }
-        public double X4 { get; }
-        public double Y1 { get; }
-        public double Y2 { get; }
-        public double Y3 { get; }
-        public double Y4 { get; }
+        public float X1 { get; }
+        public float X2 { get; }
+        public float X3 { get; }
+        public float X4 { get; }
+        public float Y1 { get; }
+        public float Y2 { get; }
+        public float Y3 { get; }
+        public float Y4 { get; }
 
         public byte[] Save()
         {

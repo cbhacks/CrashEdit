@@ -2,6 +2,7 @@
 using OpenTK.Mathematics;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using CrashEdit.Crash;
 
 namespace CrashEdit.CE
 {

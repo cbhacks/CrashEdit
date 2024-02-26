@@ -35,28 +35,18 @@
             R = r;
             G = g;
             B = b;
-
-            Width = 4 << (UVIndex % 5);
-            Height = 4 << ((UVIndex / 5) % 5);
-            int winding = UVIndex / 25;
-            int u1 = Width * ((0x30FF0C >> winding) & 1);
-            int v1 = Height * ((0xF3CC30 >> winding) & 1);
-            int u2 = Width * ((0x8799E1 >> winding) & 1);
-            int v2 = Height * ((0x9E7186 >> winding) & 1);
-            int u3 = Width * ((0x4B66D2 >> winding) & 1);
-            int v3 = Height * ((0x6DB249 >> winding) & 1);
-            double pw = 256 << (2 - ColorMode);
+            
+            int w = 4 << (UVIndex % 5);
+            int h = 4 << ((UVIndex / 5) % 5);
             int xoff = ((64 << (2 - ColorMode)) * Segment) + ((2 << (2 - ColorMode)) * XOffU);
             int yoff = YOffU * 4;
-            Left = Math.Min(u1, Math.Min(u2, u3)) + xoff;
-            Top = Math.Min(v1, Math.Min(v2, v3)) + yoff;
-
-            X1 = (u1 + xoff) / pw;
-            X2 = (u2 + xoff) / pw;
-            X3 = (u3 + xoff) / pw;
-            Y1 = (v1 + yoff) / 128.0;
-            Y2 = (v2 + yoff) / 128.0;
-            Y3 = (v3 + yoff) / 128.0;
+            int winding = UVIndex / 25;
+            U1 = w * ((0x30FF0C >> winding) & 1) + xoff;
+            U2 = w * ((0x8799E1 >> winding) & 1) + xoff;
+            U3 = w * ((0x4B66D2 >> winding) & 1) + xoff;
+            V1 = h * ((0xF3CC30 >> winding) & 1) + yoff;
+            V2 = h * ((0x9E7186 >> winding) & 1) + yoff;
+            V3 = h * ((0x6DB249 >> winding) & 1) + yoff;
         }
 
         public byte R { get; }
@@ -71,18 +61,12 @@
         public byte YOffU { get; }
         public byte BlendMode { get; }
         public byte Segment { get; }
-
-        public int Left { get; }
-        public int Top { get; }
-        public int Width { get; }
-        public int Height { get; }
-
-        public double X1 { get; }
-        public double X2 { get; }
-        public double X3 { get; }
-        public double Y1 { get; }
-        public double Y2 { get; }
-        public double Y3 { get; }
+        public int U1 { get; }
+        public int V1 { get; }
+        public int U2 { get; }
+        public int V2 { get; }
+        public int U3 { get; }
+        public int V3 { get; }
 
         public byte[] Save()
         {

@@ -9,7 +9,7 @@ namespace CrashEdit.Crash
         private List<SceneryColor> colors;
         private List<ModelExtendedTexture> animatedtextures;
 
-        public SceneryEntry(byte[] info, IEnumerable<SceneryVertex> vertices, IEnumerable<SceneryTriangle> triangles, IEnumerable<SceneryQuad> quads, IEnumerable<ModelTexture> textures, IEnumerable<SceneryColor> colors, IEnumerable<ModelExtendedTexture> animatedtextures, int eid)
+        public SceneryEntry(byte[] info, IEnumerable<SceneryVertex> vertices, IEnumerable<SceneryTriangle> triangles, IEnumerable<SceneryQuad> quads, IEnumerable<ModelTexture> textures, IEnumerable<SceneryColor> colors, IEnumerable<ModelExtendedTexture> animatedtextures, bool is_c3, int eid)
             : base(eid)
         {
             Info = info;
@@ -19,6 +19,7 @@ namespace CrashEdit.Crash
             this.textures = new List<ModelTexture>(textures);
             this.colors = new List<SceneryColor>(colors);
             this.animatedtextures = new List<ModelExtendedTexture>(animatedtextures);
+            IsC3 = is_c3;
         }
 
         public override string Title => $"Scenery ({EName})";
@@ -32,6 +33,7 @@ namespace CrashEdit.Crash
         public IList<ModelTexture> Textures => textures;
         public IList<SceneryColor> Colors => colors;
         public IList<ModelExtendedTexture> AnimatedTextures => animatedtextures;
+        public bool IsC3 { get; }
 
         public int XOffset
         {
@@ -50,6 +52,16 @@ namespace CrashEdit.Crash
             get => BitConv.FromInt32(Info, 8);
             set => BitConv.ToInt32(Info, 8, value);
         }
+
+        public bool IsSky
+        {
+            get => BitConv.FromInt32(Info, 12) != 0;
+            set => BitConv.ToInt32(Info, 12, value ? 1 : 0);
+        }
+
+        public int TPAGCount => BitConv.FromInt32(Info, 0x28);
+
+        public int GetTPAG(int idx) => BitConv.FromInt32(Info, 0x2C + 4 * idx);
 
         public override UnprocessedEntry Unprocess()
         {

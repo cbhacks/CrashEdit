@@ -16,6 +16,20 @@ namespace CrashEdit.Crash
             return (short)result;
         }
 
+        public static ushort FromUInt16(byte[] str, int offset)
+        {
+            if (str == null)
+                throw new ArgumentNullException(nameof(str));
+            if (offset < 0)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            if (offset + 2 > str.Length)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            int result = 0;
+            result |= str[offset + 0] << 8 * 0;
+            result |= str[offset + 1] << 8 * 1;
+            return (ushort)result;
+        }
+
         public static int FromInt24(byte[] str, int offset)
         {
             if (str == null)
