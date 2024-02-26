@@ -1,5 +1,3 @@
-
-using CrashEdit.Crash;
 namespace CrashHacks.Scripts.Other
 {
     public sealed class ScaleLevelScript : Script

@@ -28,8 +28,8 @@ namespace CrashEdit.Crash
             for (int i = 0; i < count; i++)
             {
                 short id = (short)(BitConv.FromInt16(data, 4 + i * 2) & 0x07FF);
-                byte state = (byte)((data[5+i*2] >> 3) & 0x3);
-                byte world = (byte)((data[5+i*2] >> 5) & 0x7);
+                byte state = (byte)((data[5 + i * 2] >> 3) & 0x3);
+                byte world = (byte)((data[5 + i * 2] >> 5) & 0x7);
                 polygons[i] = new SLSTPolygonID(id, state, world);
             }
             return new SLSTSource(polygons);
@@ -57,7 +57,7 @@ namespace CrashEdit.Crash
             BitConv.ToInt16(data, 2, 0);
             for (int i = 0; i < polygons.Count; i++)
             {
-                BitConv.ToInt16(data, 4+i*2, (short)((ushort)polygons[i].ID | polygons[i].State << 11 | polygons[i].World << 13));
+                BitConv.ToInt16(data, 4 + i * 2, (short)((ushort)polygons[i].ID | polygons[i].State << 11 | polygons[i].World << 13));
             }
             return data;
         }

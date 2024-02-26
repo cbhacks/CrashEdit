@@ -23,10 +23,10 @@ namespace CrashEdit.Crash
             for (int i = 0; i < 4; ++i)
             {
                 neighbors[i] = new OldCameraNeighbor(
-                    data[12+i*4+0],
-                    data[12+i*4+1],
-                    data[12+i*4+2],
-                    data[12+i*4+3]);
+                    data[12 + i * 4 + 0],
+                    data[12 + i * 4 + 1],
+                    data[12 + i * 4 + 2],
+                    data[12 + i * 4 + 3]);
             }
             byte entrypoint = data[28];
             byte exitpoint = data[29];
@@ -51,7 +51,7 @@ namespace CrashEdit.Crash
                 short zrot = BitConv.FromInt16(data, 60 + 12 * i);
                 position[i] = new OldCameraPosition(x, y, z, xrot, yrot, zrot);
             }
-            short blank = data.Length < 52 + 12*pointcount ? (short)0 : BitConv.FromInt16(data, 50 + 12*pointcount);
+            short blank = data.Length < 52 + 12 * pointcount ? (short)0 : BitConv.FromInt16(data, 50 + 12 * pointcount);
             return new OldCamera(slsteid, garbage, neighborcount, neighbors, entrypoint, exitpoint, mode, avgdist, zoom, unk1, unk2, unk3, xdir, ydir, zdir, position, blank);
         }
 
@@ -109,10 +109,10 @@ namespace CrashEdit.Crash
             BitConv.ToInt32(result, 8, NeighborCount);
             for (int i = 0; i < 4; ++i)
             {
-                result[12+i*4+0] = Neighbors[i].LinkType;
-                result[12+i*4+1] = Neighbors[i].ZoneIndex;
-                result[12+i*4+2] = Neighbors[i].CameraIndex;
-                result[12+i*4+3] = Neighbors[i].Flag;
+                result[12 + i * 4 + 0] = Neighbors[i].LinkType;
+                result[12 + i * 4 + 1] = Neighbors[i].ZoneIndex;
+                result[12 + i * 4 + 2] = Neighbors[i].CameraIndex;
+                result[12 + i * 4 + 3] = Neighbors[i].Flag;
             }
             result[28] = EntryPoint;
             result[29] = ExitPoint;
@@ -135,7 +135,7 @@ namespace CrashEdit.Crash
                 BitConv.ToInt16(result, 58 + i * 12, position[i].YRot);
                 BitConv.ToInt16(result, 60 + i * 12, position[i].ZRot);
             }
-            BitConv.ToInt16(result, 50 + position.Count*12, Blank);
+            BitConv.ToInt16(result, 50 + position.Count * 12, Blank);
             return result;
         }
     }

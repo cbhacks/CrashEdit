@@ -29,10 +29,10 @@ namespace CrashEdit.Crash
             FrameCollision[] collision = new FrameCollision[collisioncount];
             for (int i = 0; i < collisioncount; ++i) // these vertices are NEVER compressed
             {
-                collision[i] = new FrameCollision(BitConv.FromInt32(data, 24+i*0x28),
-                    BitConv.FromInt32(data, 28+i*0x28), BitConv.FromInt32(data, 32+i*0x28), BitConv.FromInt32(data, 36+i*0x28),
-                    BitConv.FromInt32(data, 40+i*0x28), BitConv.FromInt32(data, 44+i*0x28), BitConv.FromInt32(data, 48+i*0x28),
-                    BitConv.FromInt32(data, 52+i*0x28), BitConv.FromInt32(data, 56+i*0x28), BitConv.FromInt32(data, 60+i*0x28));
+                collision[i] = new FrameCollision(BitConv.FromInt32(data, 24 + i * 0x28),
+                    BitConv.FromInt32(data, 28 + i * 0x28), BitConv.FromInt32(data, 32 + i * 0x28), BitConv.FromInt32(data, 36 + i * 0x28),
+                    BitConv.FromInt32(data, 40 + i * 0x28), BitConv.FromInt32(data, 44 + i * 0x28), BitConv.FromInt32(data, 48 + i * 0x28),
+                    BitConv.FromInt32(data, 52 + i * 0x28), BitConv.FromInt32(data, 56 + i * 0x28), BitConv.FromInt32(data, 60 + i * 0x28));
             }
             int fake_headersize = 24 + collisioncount * 0x28;
             int specialvertexcount = (headersize - fake_headersize) / 3;
@@ -88,10 +88,10 @@ namespace CrashEdit.Crash
             FrameCollision[] collision = new FrameCollision[collisioncount];
             for (int i = 0; i < collisioncount; ++i) // these vertices are NEVER compressed
             {
-                collision[i] = new FrameCollision(BitConv.FromInt32(data, 28+i*0x28),
-                    BitConv.FromInt32(data, 32+i*0x28), BitConv.FromInt32(data, 36+i*0x28), BitConv.FromInt32(data, 40+i*0x28),
-                    BitConv.FromInt32(data, 44+i*0x28), BitConv.FromInt32(data, 48+i*0x28), BitConv.FromInt32(data, 52+i*0x28),
-                    BitConv.FromInt32(data, 56+i*0x28), BitConv.FromInt32(data, 60+i*0x28), BitConv.FromInt32(data, 64+i*0x28));
+                collision[i] = new FrameCollision(BitConv.FromInt32(data, 28 + i * 0x28),
+                    BitConv.FromInt32(data, 32 + i * 0x28), BitConv.FromInt32(data, 36 + i * 0x28), BitConv.FromInt32(data, 40 + i * 0x28),
+                    BitConv.FromInt32(data, 44 + i * 0x28), BitConv.FromInt32(data, 48 + i * 0x28), BitConv.FromInt32(data, 52 + i * 0x28),
+                    BitConv.FromInt32(data, 56 + i * 0x28), BitConv.FromInt32(data, 60 + i * 0x28), BitConv.FromInt32(data, 64 + i * 0x28));
             }
             int fake_headersize = 28 + collisioncount * 0x28;
             int specialvertexcount = (headersize - fake_headersize) / 3;
@@ -271,25 +271,25 @@ namespace CrashEdit.Crash
             BitConv.ToInt32(result, 20, HeaderSize);
             for (int i = 0; i < collision.Count; ++i)
             {
-                BitConv.ToInt32(result, 24+i*0x28+0x00, collision[i].U);
-                BitConv.ToInt32(result, 24+i*0x28+0x04, collision[i].XOffset);
-                BitConv.ToInt32(result, 24+i*0x28+0x08, collision[i].YOffset);
-                BitConv.ToInt32(result, 24+i*0x28+0x0C, collision[i].ZOffset);
-                BitConv.ToInt32(result, 24+i*0x28+0x10, collision[i].X1);
-                BitConv.ToInt32(result, 24+i*0x28+0x14, collision[i].Y1);
-                BitConv.ToInt32(result, 24+i*0x28+0x18, collision[i].Z1);
-                BitConv.ToInt32(result, 24+i*0x28+0x1C, collision[i].X2);
-                BitConv.ToInt32(result, 24+i*0x28+0x20, collision[i].Y2);
-                BitConv.ToInt32(result, 24+i*0x28+0x24, collision[i].Z2);
+                BitConv.ToInt32(result, 24 + i * 0x28 + 0x00, collision[i].U);
+                BitConv.ToInt32(result, 24 + i * 0x28 + 0x04, collision[i].XOffset);
+                BitConv.ToInt32(result, 24 + i * 0x28 + 0x08, collision[i].YOffset);
+                BitConv.ToInt32(result, 24 + i * 0x28 + 0x0C, collision[i].ZOffset);
+                BitConv.ToInt32(result, 24 + i * 0x28 + 0x10, collision[i].X1);
+                BitConv.ToInt32(result, 24 + i * 0x28 + 0x14, collision[i].Y1);
+                BitConv.ToInt32(result, 24 + i * 0x28 + 0x18, collision[i].Z1);
+                BitConv.ToInt32(result, 24 + i * 0x28 + 0x1C, collision[i].X2);
+                BitConv.ToInt32(result, 24 + i * 0x28 + 0x20, collision[i].Y2);
+                BitConv.ToInt32(result, 24 + i * 0x28 + 0x24, collision[i].Z2);
             }
             for (short i = 0; i < Temporals.Length / 32; ++i)
             {
                 int val = 0;
                 for (short j = 0; j < 32; ++j)
                 {
-                    val |= Convert.ToInt32(Temporals[i*32+j]) << (31-j);
+                    val |= Convert.ToInt32(Temporals[i * 32 + j]) << (31 - j);
                 }
-                BitConv.ToInt32(result, fake_headersize+i*4, val);
+                BitConv.ToInt32(result, fake_headersize + i * 4, val);
             }
             return result;
         }
@@ -310,25 +310,25 @@ namespace CrashEdit.Crash
             BitConv.ToInt32(result, 24, HeaderSize);
             for (int i = 0; i < collision.Count; ++i)
             {
-                BitConv.ToInt32(result, 28+i*0x28+0x00, collision[i].U);
-                BitConv.ToInt32(result, 28+i*0x28+0x04, collision[i].XOffset);
-                BitConv.ToInt32(result, 28+i*0x28+0x08, collision[i].YOffset);
-                BitConv.ToInt32(result, 28+i*0x28+0x0C, collision[i].ZOffset);
-                BitConv.ToInt32(result, 28+i*0x28+0x10, collision[i].X1);
-                BitConv.ToInt32(result, 28+i*0x28+0x14, collision[i].Y1);
-                BitConv.ToInt32(result, 28+i*0x28+0x18, collision[i].Z1);
-                BitConv.ToInt32(result, 28+i*0x28+0x1C, collision[i].X2);
-                BitConv.ToInt32(result, 28+i*0x28+0x20, collision[i].Y2);
-                BitConv.ToInt32(result, 28+i*0x28+0x24, collision[i].Z2);
+                BitConv.ToInt32(result, 28 + i * 0x28 + 0x00, collision[i].U);
+                BitConv.ToInt32(result, 28 + i * 0x28 + 0x04, collision[i].XOffset);
+                BitConv.ToInt32(result, 28 + i * 0x28 + 0x08, collision[i].YOffset);
+                BitConv.ToInt32(result, 28 + i * 0x28 + 0x0C, collision[i].ZOffset);
+                BitConv.ToInt32(result, 28 + i * 0x28 + 0x10, collision[i].X1);
+                BitConv.ToInt32(result, 28 + i * 0x28 + 0x14, collision[i].Y1);
+                BitConv.ToInt32(result, 28 + i * 0x28 + 0x18, collision[i].Z1);
+                BitConv.ToInt32(result, 28 + i * 0x28 + 0x1C, collision[i].X2);
+                BitConv.ToInt32(result, 28 + i * 0x28 + 0x20, collision[i].Y2);
+                BitConv.ToInt32(result, 28 + i * 0x28 + 0x24, collision[i].Z2);
             }
             for (short i = 0; i < Temporals.Length / 32; ++i)
             {
                 int val = 0;
                 for (short j = 0; j < 32; ++j)
                 {
-                    val |= Convert.ToInt32(Temporals[i*32+j]) << (31-j);
+                    val |= Convert.ToInt32(Temporals[i * 32 + j]) << (31 - j);
                 }
-                BitConv.ToInt32(result, fake_headersize+i*4, val);
+                BitConv.ToInt32(result, fake_headersize + i * 4, val);
             }
             return result;
         }

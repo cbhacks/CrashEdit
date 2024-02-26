@@ -31,7 +31,7 @@ namespace CrashEdit.Crash
             items[0] = Start.Save();
             for (int i = 0; i < Deltas.Count; ++i)
             {
-                items[1+i] = Deltas[i].Save();
+                items[1 + i] = Deltas[i].Save();
             }
             items[1 + Deltas.Count] = End.Save();
             return new UnprocessedEntry(items, EID, Type);

@@ -99,7 +99,7 @@ namespace CrashEdit.CE
                     int zoneindex = -1;
                     for (int z = 0, s = BitConv.FromInt32(zone.Header, 0x190); z < s; ++z)
                     {
-                        if (BitConv.FromInt32(zone.Header, 0x194+z*4) == ZoneEntry.EID)
+                        if (BitConv.FromInt32(zone.Header, 0x194 + z * 4) == ZoneEntry.EID)
                         {
                             zoneindex = z;
                             break;

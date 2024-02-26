@@ -1,4 +1,3 @@
-using CrashEdit.Crash;
 using CrashEdit.CrashUI;
 using DiscUtils.Iso9660;
 using System.ComponentModel;

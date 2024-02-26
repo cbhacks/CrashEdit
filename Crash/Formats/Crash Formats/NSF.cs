@@ -219,6 +219,12 @@ namespace CrashEdit.Crash
         [SubresourceList]
         public List<Chunk> Chunks { get; }
 
+        public int GetScreenOffset()
+        {
+            // TODO use NSD
+            return 288;
+        }
+
         public void ProcessAll(GameVersion gameversion)
         {
             for (int i = 0; i < Chunks.Count; i++)
@@ -252,16 +258,16 @@ namespace CrashEdit.Crash
 
         public T GetEntry<T>(int eid) where T : class, IEntry
         {
-            if (eid == Entry.NullEID)
+            if (eid == Entry.NullEID || !Entry.ValidEID(eid))
                 return null;
             foreach (Chunk chunk in Chunks)
             {
                 if (chunk is IEntry)
                 {
                     IEntry entry = (IEntry)chunk;
-                    if (entry.EID == eid && entry is T)
+                    if (entry.EID == eid)
                     {
-                        return (T)entry;
+                        return entry as T;
                     }
                 }
                 if (chunk is EntryChunk entrychunk)
@@ -301,6 +307,37 @@ namespace CrashEdit.Crash
                 }
             }
             return entries;
+        }
+        public Tuple<OldEntity, OldZoneEntry> GetEntityC1(int id)
+        {
+            foreach (var zone in GetEntries<OldZoneEntry>())
+            {
+                for (int i = 0; i < zone.Entities.Count; ++i)
+                {
+                    var entity = zone.Entities[i];
+                    if (entity.ID == id)
+                    {
+                        return new Tuple<OldEntity, OldZoneEntry>(entity, zone);
+                    }
+                }
+            }
+            return null;
+        }
+
+        public Tuple<Entity, ZoneEntry> GetEntityC2(int id)
+        {
+            foreach (var zone in GetEntries<ZoneEntry>())
+            {
+                for (int i = zone.CameraCount; i < zone.Entities.Count; ++i)
+                {
+                    var entity = zone.Entities[i];
+                    if (entity.ID == id)
+                    {
+                        return new Tuple<Entity, ZoneEntry>(entity, zone);
+                    }
+                }
+            }
+            return null;
         }
 
         public byte[] Save()

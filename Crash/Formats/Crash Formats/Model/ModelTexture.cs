@@ -44,24 +44,24 @@ namespace CrashEdit.Crash
             ColorMode = colormode;
             Page = textureoffset;
 
-            double pw = 256 << (2-ColorMode);
-            int xoff = (1 << (2-ColorMode)) * 64 * Segment;
+            double pw = 256 << (2 - ColorMode);
+            int xoff = (1 << (2 - ColorMode)) * 64 * Segment;
             Left = Math.Min(U1, Math.Min(U2, U3)) + xoff;
             Top = Math.Min(V1, Math.Min(V2, V3));
             Width = Math.Max(U1, Math.Max(U2, U3)) + xoff - Left;
             Height = Math.Max(V1, Math.Max(V2, V3)) - Top;
-            int tx1 = U1+xoff;
-            int tx2 = U2+xoff;
-            int tx3 = U3+xoff;
-            int tx4 = U4+xoff;
+            int tx1 = U1 + xoff;
+            int tx2 = U2 + xoff;
+            int tx3 = U3 + xoff;
+            int tx4 = U4 + xoff;
             if (tx1 > tx2 || tx1 > tx3) ++tx1;
             if (tx2 > tx1 || tx2 > tx3) ++tx2;
             if (tx3 > tx2 || tx3 > tx1) ++tx3;
             if (tx4 > tx2 || tx4 > tx3 || tx4 > tx1) ++tx4;
-            X1 = tx1/pw;
-            X2 = tx2/pw;
-            X3 = tx3/pw;
-            X4 = tx4/pw;
+            X1 = tx1 / pw;
+            X2 = tx2 / pw;
+            X3 = tx3 / pw;
+            X4 = tx4 / pw;
             int ty1 = V1;
             int ty2 = V2;
             int ty3 = V3;
@@ -70,10 +70,10 @@ namespace CrashEdit.Crash
             if (ty2 > ty1 || ty2 > ty3) ++ty2;
             if (ty3 > ty2 || ty3 > ty1) ++ty3;
             if (ty4 > ty2 || ty4 > ty3 || ty4 > ty1) ++ty4;
-            Y1 = ty1/128.0;
-            Y2 = ty2/128.0;
-            Y3 = ty3/128.0;
-            Y4 = ty4/128.0;
+            Y1 = ty1 / 128.0;
+            Y2 = ty2 / 128.0;
+            Y3 = ty3 / 128.0;
+            Y4 = ty4 / 128.0;
         }
 
         public byte ColorMode { get; set; }
@@ -111,7 +111,7 @@ namespace CrashEdit.Crash
             byte[] result = new byte[12];
             result[0] = U1;
             result[1] = V1;
-            result[2] = (byte)((ClutY1  << 4) | ClutX);
+            result[2] = (byte)((ClutY1 << 4) | ClutX);
             result[3] = ClutY2;
             result[4] = U2;
             result[5] = V2;

@@ -95,13 +95,13 @@ namespace CrashEdit.Crash
                             break;
                         case 1:
                             int ci = -1;
-                            if (lastcolor < lastnonbb-2) // 3
-                                ci = ((ModelTriangle)structs[lastnonbb-2]).ColorIndex;
-                            else if (lastcolor == lastnonbb-2) // 1
+                            if (lastcolor < lastnonbb - 2) // 3
+                                ci = ((ModelTriangle)structs[lastnonbb - 2]).ColorIndex;
+                            else if (lastcolor == lastnonbb - 2) // 1
                                 ci = ((ModelColor)structs[lastcolor]).Color1;
-                            else if (lastcolor == lastnonbb-1) // 2
+                            else if (lastcolor == lastnonbb - 1) // 2
                                 ci = ((ModelColor)structs[lastcolor]).Color2;
-                            else if (lastcolor > lastnonbb-2) // 4
+                            else if (lastcolor > lastnonbb - 2) // 4
                                 ci = ((ModelColor)structs[lastcolor]).Color2;
                             triangles.Add(new ModelTransformedTriangle(
                                 vtx[cur_v],
@@ -121,11 +121,11 @@ namespace CrashEdit.Crash
                                 lastvalidcc = i;
                                 triangles.Add(new ModelTransformedTriangle(
                                     vtx[cur_v],
-                                    vtx[cur_v+1],
-                                    vtx[cur_v+2],
+                                    vtx[cur_v + 1],
+                                    vtx[cur_v + 2],
                                     t.ColorIndex,
-                                    ((ModelTriangle)structs[i+1]).ColorIndex,
-                                    ((ModelTriangle)structs[i+2]).ColorIndex,
+                                    ((ModelTriangle)structs[i + 1]).ColorIndex,
+                                    ((ModelTriangle)structs[i + 2]).ColorIndex,
                                     t.TextureIndex,
                                     t.TriangleType,
                                     t.TriangleSubtype,
@@ -156,6 +156,21 @@ namespace CrashEdit.Crash
             }
         }
 
+        public int GetFrameBitCount()
+        {
+            int result = 0;
+            if (Positions != null)
+            {
+                foreach (var p in Positions)
+                {
+                    result += p.XBits + 1;
+                    result += p.YBits + 1;
+                    result += p.ZBits + 1;
+                }
+            }
+            return result;
+        }
+
         public override string Title =>
             (Positions == null) ?
             $"Model ({EName})" :
@@ -178,6 +193,7 @@ namespace CrashEdit.Crash
         public int ScaleX => BitConv.FromInt32(Info, 0);
         public int ScaleY => BitConv.FromInt32(Info, 4);
         public int ScaleZ => BitConv.FromInt32(Info, 8);
+        public int GetTPAG(int idx) => BitConv.FromInt32(Info, 0xC + 4 * idx);
         public int VertexCount => BitConv.FromInt32(Info, 0x38);
         public int TPAGCount => BitConv.FromInt32(Info, 0x40);
         public int PolyCount => BitConv.FromInt32(Info, 0x44);
@@ -192,7 +208,7 @@ namespace CrashEdit.Crash
             items[1] = new byte[PolyData.Length * 4];
             for (int i = 0; i < PolyData.Length; i++)
             {
-                BitConv.ToInt32(items[1], i*4, (int)PolyData[i]);
+                BitConv.ToInt32(items[1], i * 4, (int)PolyData[i]);
             }
             items[2] = new byte[colors.Count * 4];
             for (int i = 0; i < colors.Count; i++)

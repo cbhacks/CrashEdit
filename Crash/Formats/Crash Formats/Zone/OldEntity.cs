@@ -27,9 +27,9 @@ namespace CrashEdit.Crash
             EntityPosition[] positions = new EntityPosition[positioncount];
             for (int i = 0; i < positioncount; i++)
             {
-                short x = BitConv.FromInt16(data, 20 + 6*i);
-                short y = BitConv.FromInt16(data, 22 + 6*i);
-                short z = BitConv.FromInt16(data, 24 + 6*i);
+                short x = BitConv.FromInt16(data, 20 + 6 * i);
+                short y = BitConv.FromInt16(data, 22 + 6 * i);
+                short z = BitConv.FromInt16(data, 24 + 6 * i);
                 positions[i] = new EntityPosition(x, y, z);
             }
             short nullfield1 = BitConv.FromInt16(data, 20 + positioncount * 6);

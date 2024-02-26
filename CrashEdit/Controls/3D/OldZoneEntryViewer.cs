@@ -1,6 +1,6 @@
-using OpenTK.Mathematics;
-using CrashEdit.Crash;
 using CrashEdit.CE.Properties;
+using CrashEdit.Crash;
+using OpenTK.Mathematics;
 
 namespace CrashEdit.CE
 {
@@ -459,7 +459,7 @@ namespace CrashEdit.CE
                     if (slst != null)
                     {
                         var polys = slst.DecodeAt((int)Math.Floor(anchor_cam_pos));
-                        con_debug += string.Format("wgeo polys: {0}/1460({1:F2}%)/2610({2:F2}%)\n", polys.Count, 100f*polys.Count/1460, 100f*polys.Count/2610);
+                        con_debug += string.Format("wgeo polys: {0}/1460({1:F2}%)/2610({2:F2}%)\n", polys.Count, 100f * polys.Count / 1460, 100f * polys.Count / 2610);
                         SetSortList(polys);
                     }
                 }

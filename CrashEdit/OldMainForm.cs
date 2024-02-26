@@ -895,7 +895,7 @@ namespace CrashEdit.CE
 
                 VH vh = VH.Load(vab_data);
 
-                int vb_offset = 2592+32*16*vh.Programs.Count;
+                int vb_offset = 2592 + 32 * 16 * vh.Programs.Count;
                 if ((vab_data.Length - vb_offset) % 16 != 0)
                 {
                     ErrorManager.SignalIgnorableError(Resources.ConvertVAB_Error);

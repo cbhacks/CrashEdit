@@ -15,7 +15,7 @@ namespace CrashEdit.CE
             lstCode.Items.Add($"Type: {goolentry.ID}");
             lstCode.Items.Add($"Category: {goolentry.Category / 0x100}");
             lstCode.Items.Add($"Format: {goolentry.Format}");
-            lstCode.Items.Add(string.Format("Stack Start: {0} ({1})", (ObjectFields)goolentry.StackStart, (goolentry.StackStart*4+GOOLInterpreter.GetProcessOff(goolentry.Version)).TransformedString()));
+            lstCode.Items.Add(string.Format("Stack Start: {0} ({1})", (ObjectFields)goolentry.StackStart, (goolentry.StackStart * 4 + GOOLInterpreter.GetProcessOff(goolentry.Version)).TransformedString()));
             lstCode.Items.Add($"Interrupt Count: {goolentry.EventCount}");
             lstCode.Items.Add($"Entry Count: {goolentry.EntryCount}");
             if (goolentry.Format == 1)
@@ -43,7 +43,7 @@ namespace CrashEdit.CE
                 lstCode.Items.Add($"Available Subtypes: {goolentry.StateMap.Length - goolentry.EventCount}");
                 for (int i = goolentry.EventCount; i < goolentry.StateMap.Length; ++i)
                 {
-                    if (i > goolentry.EventCount && i+1 == goolentry.StateMap.Length && goolentry.StateMap[i] == 0) continue;
+                    if (i > goolentry.EventCount && i + 1 == goolentry.StateMap.Length && goolentry.StateMap[i] == 0) continue;
                     lstCode.Items.Add($"\tSubtype {i - goolentry.EventCount}: {(goolentry.StateMap[i] == 255 ? "invalid" : $"State_{goolentry.StateMap[i]}")}");
                 }
 
@@ -111,7 +111,7 @@ namespace CrashEdit.CE
                 GOOLInstruction ins = goolentry.Instructions[i];
                 if (ins is MIPSInstruction)
                 {
-                    returned = goolentry.Instructions[i-1].Value == 0x03E00008 && goolentry.Instructions[i-1] is MIPSInstruction;
+                    returned = goolentry.Instructions[i - 1].Value == 0x03E00008 && goolentry.Instructions[i - 1] is MIPSInstruction;
                     ++mipscount;
                 }
                 else

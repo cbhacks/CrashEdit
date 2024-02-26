@@ -49,8 +49,8 @@
             int v2 = Height * ((0x9E7186 >> winding) & 1);
             int u3 = Width * ((0x4B66D2 >> winding) & 1);
             int v3 = Height * ((0x6DB249 >> winding) & 1);
-            double pw = 256 << (2-ColorMode);
-            int xoff = ((64 << (2-ColorMode)) * Segment) + ((2 << (2-ColorMode)) * XOffU);
+            double pw = 256 << (2 - ColorMode);
+            int xoff = ((64 << (2 - ColorMode)) * Segment) + ((2 << (2 - ColorMode)) * XOffU);
             int yoff = YOffU * 4;
             Left = Math.Min(u1, Math.Min(u2, u3)) + xoff;
             Top = Math.Min(v1, Math.Min(v2, v3)) + yoff;

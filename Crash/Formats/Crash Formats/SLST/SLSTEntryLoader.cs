@@ -14,7 +14,7 @@ namespace CrashEdit.Crash
             SLSTDelta[] deltas = new SLSTDelta[items.Length - 2];
             for (int i = 0; i < items.Length - 2; i++)
             {
-                deltas[i] = SLSTDelta.Load(items[i+1]);
+                deltas[i] = SLSTDelta.Load(items[i + 1]);
             }
             SLSTSource sourceend = SLSTSource.Load(items[items.Length - 1]);
             return new SLSTEntry(sourcestart, sourceend, deltas, eid);

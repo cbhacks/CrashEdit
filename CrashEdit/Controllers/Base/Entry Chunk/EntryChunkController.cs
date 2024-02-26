@@ -85,8 +85,8 @@ namespace CrashEdit.CE
                                     BitConv.ToInt16(items[0], 0x32E, 0x400);
                                     for (int i = 0; i < 12; ++i)
                                     {
-                                        BitConv.ToInt16(items[0], 0x330+i*2, 0xFF);
-                                        BitConv.ToInt16(items[0], 0x360+i*2, 0xFF);
+                                        BitConv.ToInt16(items[0], 0x330 + i * 2, 0xFF);
+                                        BitConv.ToInt16(items[0], 0x360 + i * 2, 0xFF);
                                     }
                                     BitConv.ToInt16(items[0], 0x348, -4096); // 0xF000
                                     BitConv.ToInt16(items[0], 0x34A, 0x800);

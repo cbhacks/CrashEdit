@@ -1,5 +1,3 @@
-
-using CrashEdit.Crash;
 namespace CrashHacks.Scripts.Animation
 {
     public sealed class ShuffleScript : Script

@@ -1,8 +1,8 @@
+using CrashEdit.CE.Properties;
+using CrashEdit.Crash;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Desktop;
 using System.Drawing.Imaging;
-using CrashEdit.Crash;
-using CrashEdit.CE.Properties;
 
 namespace CrashEdit.CE
 {

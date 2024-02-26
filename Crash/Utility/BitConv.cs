@@ -108,7 +108,7 @@ namespace CrashEdit.Crash
         // sign-extend values with nonconventional bit lengths
         public static int SignExtendInt32(int value, int bitlength)
         {
-            return value << (32-bitlength) >> (32-bitlength);
+            return value << (32 - bitlength) >> (32 - bitlength);
         }
     }
 }

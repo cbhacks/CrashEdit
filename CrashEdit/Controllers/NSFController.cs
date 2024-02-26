@@ -66,23 +66,6 @@ namespace CrashEdit.CE
         {
             List<Entity> nitros = new List<Entity>();
             List<Entity> detonators = new List<Entity>();
-            foreach (NewZoneEntry entry in NSF.GetEntries<NewZoneEntry>())
-            {
-                foreach (Entity entity in entry.Entities)
-                {
-                    if (entity.Type == 34)
-                    {
-                        if (entity.Subtype == 18 && entity.ID.HasValue)
-                        {
-                            nitros.Add(entity);
-                        }
-                        else if (entity.Subtype == 24)
-                        {
-                            detonators.Add(entity);
-                        }
-                    }
-                }
-            }
             foreach (ZoneEntry entry in NSF.GetEntries<ZoneEntry>())
             {
                 foreach (Entity entity in entry.Entities)
@@ -209,7 +192,7 @@ namespace CrashEdit.CE
                 TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info, 0x18)];
                 for (int i = 0; i < texturechunks.Length; ++i)
                 {
-                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info, 0x20+i*4));
+                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info, 0x20 + i * 4));
                 }
                 sortedtexturechunks.Add(texturechunks);
             }
@@ -230,7 +213,7 @@ namespace CrashEdit.CE
                 TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info, 0x28)];
                 for (int i = 0; i < texturechunks.Length; ++i)
                 {
-                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info, 0x2C+i*4));
+                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info, 0x2C + i * 4));
                 }
                 sortedtexturechunks.Add(texturechunks);
             }
@@ -251,7 +234,7 @@ namespace CrashEdit.CE
                 TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(entry.Info, 0x28)];
                 for (int i = 0; i < texturechunks.Length; ++i)
                 {
-                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info, 0x2C+i*4));
+                    texturechunks[i] = NSF.GetEntry<TextureChunk>(BitConv.FromInt32(entry.Info, 0x2C + i * 4));
                 }
                 sortedtexturechunks.Add(texturechunks);
             }

@@ -20,7 +20,7 @@ namespace CrashEdit.Crash
             OldEntity[] entities = new OldEntity[entitycount];
             for (int i = 0; i < entitycount; ++i)
             {
-                entities[i] = OldEntity.Load(items[i+2]);
+                entities[i] = OldEntity.Load(items[i + 2]);
             }
             return new MapEntry(header, layout, entities, eid);
         }

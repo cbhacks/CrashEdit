@@ -73,12 +73,12 @@ namespace CrashEdit.CE
 
         private void UpdatePosition()
         {
-            lblPosition.Text = $"{positionindex+1} / {positions.Count}";
+            lblPosition.Text = $"{positionindex + 1} / {positions.Count}";
             numX.Value = (decimal)positions[positionindex].X;
             numY.Value = (decimal)positions[positionindex].Y;
             numZ.Value = (decimal)positions[positionindex].Z;
             cmdPrev.Enabled = positionindex > 0;
-            cmdNext.Enabled = positionindex < positions.Count-1;
+            cmdNext.Enabled = positionindex < positions.Count - 1;
         }
 
         private void cmdPrev_Click(object sender, EventArgs e)
@@ -127,12 +127,12 @@ namespace CrashEdit.CE
                 NewPositions = new Position[Amount + 2];
                 NewPositions[0] = start;
                 NewPositions[NewPositions.Length - 1] = end;
-                for (int i = 1, s = NewPositions.Length-1; i < s + 1; ++i)
+                for (int i = 1, s = NewPositions.Length - 1; i < s + 1; ++i)
                 {
-                    NewPositions[i] = delta * MathFuncs[Func].Invoke((double)i/s, Order) + start;
+                    NewPositions[i] = delta * MathFuncs[Func].Invoke((double)i / s, Order) + start;
                 }
-                delta /= Amount+1;
-                lblAverage.Text = $"Average Point Distance: {(int)Math.Sqrt(delta.X*delta.X+delta.Y*delta.Y+delta.Z*delta.Z)}";
+                delta /= Amount + 1;
+                lblAverage.Text = $"Average Point Distance: {(int)Math.Sqrt(delta.X * delta.X + delta.Y * delta.Y + delta.Z * delta.Z)}";
             }
             else
             {
@@ -153,9 +153,9 @@ namespace CrashEdit.CE
                 arclen[0] = 0;
                 double dist = 0;
                 Position distpos;
-                for (int i = 1, s = oldpositions.Length-1; i < s + 1; ++i)
+                for (int i = 1, s = oldpositions.Length - 1; i < s + 1; ++i)
                 {
-                    oldpositions[i] = GetBezierPoint(subpositions, weights, MathFuncs[Func].Invoke((double)i/s, Order));
+                    oldpositions[i] = GetBezierPoint(subpositions, weights, MathFuncs[Func].Invoke((double)i / s, Order));
                     distpos = oldpositions[i] - oldpositions[i - 1];
                     dist += Math.Sqrt(distpos.X * distpos.X + distpos.Y * distpos.Y + distpos.Z * distpos.Z);
                     arclen[i] = dist;
@@ -163,22 +163,22 @@ namespace CrashEdit.CE
                 dist /= NewPositions.Length - 1;
                 lblAverage.Text = $"Average Point Distance: {(int)dist}";
                 // recalculate points for equidistance
-                for (int i = 1, s = NewPositions.Length-1; i < s; ++i)
+                for (int i = 1, s = NewPositions.Length - 1; i < s; ++i)
                 {
-                    NewPositions[i] = FindPointByDistance(oldpositions, arclen, MathFuncs[Func].Invoke((double)i/s, Order));
+                    NewPositions[i] = FindPointByDistance(oldpositions, arclen, MathFuncs[Func].Invoke((double)i / s, Order));
                 }
             }
         }
 
         private static Position FindPointByDistance(Position[] positions, double[] arclen, double t)
         {
-            double targetlen = t * arclen[arclen.Length-1];
+            double targetlen = t * arclen[arclen.Length - 1];
             for (int i = 0; i < arclen.Length; ++i)
             {
                 if (targetlen == arclen[i])
                     return positions[i];
                 else if (targetlen < arclen[i])
-                    return positions[i-1] + (positions[i] - positions[i-1]) * ((targetlen - arclen[i-1]) / (arclen[i] - arclen[i-1]));
+                    return positions[i - 1] + (positions[i] - positions[i - 1]) * ((targetlen - arclen[i - 1]) / (arclen[i] - arclen[i - 1]));
             }
             return positions[positions.Length - 1];
         }
@@ -189,11 +189,11 @@ namespace CrashEdit.CE
             while (n >= Binomials.Count)
             {
                 int m = Binomials.Count;
-                long[] binomial = new long[m+1];
+                long[] binomial = new long[m + 1];
                 binomial[0] = 1;
                 for (int i = 1; i < m; ++i)
                 {
-                    binomial[i] = Binomials[m-1][i-1] + Binomials[m-1][i];
+                    binomial[i] = Binomials[m - 1][i - 1] + Binomials[m - 1][i];
                 }
                 binomial[m] = 1;
                 Binomials.Add(binomial);
@@ -204,10 +204,10 @@ namespace CrashEdit.CE
         private static Position GetBezierBasisPoint(int controlcount, double[] weights, double t)
         {
             Position newpos = new Position(0, 0, 0);
-            int n = controlcount-1;
+            int n = controlcount - 1;
             for (int i = 0; i < controlcount; ++i)
             {
-                newpos += GetBinomial(n, i) * Math.Pow(1.0-t, n-i) * Math.Pow(t, i) * weights[i] * Position.Unit;
+                newpos += GetBinomial(n, i) * Math.Pow(1.0 - t, n - i) * Math.Pow(t, i) * weights[i] * Position.Unit;
             }
             return newpos;
         }
@@ -215,10 +215,10 @@ namespace CrashEdit.CE
         private static Position GetBezierPoint(IList<Position> control, double[] weights, double t)
         {
             Position newpos = new Position(0, 0, 0);
-            int n = control.Count-1;
+            int n = control.Count - 1;
             for (int i = 0; i < control.Count; ++i)
             {
-                newpos += GetBinomial(n, i) * Math.Pow(1.0-t, n-i) * Math.Pow(t, i) * weights[i] * control[i] / GetBezierBasisPoint(control.Count, weights, t);
+                newpos += GetBinomial(n, i) * Math.Pow(1.0 - t, n - i) * Math.Pow(t, i) * weights[i] * control[i] / GetBezierBasisPoint(control.Count, weights, t);
             }
             return newpos;
         }
@@ -232,12 +232,12 @@ namespace CrashEdit.CE
 
         private static double MathFunctionInverseLinear(double x, double o)
         {
-            return 1 - MathFunctionLinear(-x+1, o);
+            return 1 - MathFunctionLinear(-x + 1, o);
         }
 
         internal static double MathFuncQuadrPolinomial1(double x, double o)
         {
-            return Math.Min(Math.Pow(2*Math.Max(x, 0), o)/2, 0.5);
+            return Math.Min(Math.Pow(2 * Math.Max(x, 0), o) / 2, 0.5);
         }
 
         internal static double MathFuncQuadrPolinomial2(double x, double o)
@@ -252,7 +252,7 @@ namespace CrashEdit.CE
 
         private static double MathFunctionInverseDouble(double x, double o)
         {
-            return MathFuncQuadrPolinomial1(x-0.5, o) + MathFuncQuadrPolinomial2(x+0.5, o);
+            return MathFuncQuadrPolinomial1(x - 0.5, o) + MathFuncQuadrPolinomial2(x + 0.5, o);
         }
 
         private void numStart_ValueChanged(object sender, EventArgs e)

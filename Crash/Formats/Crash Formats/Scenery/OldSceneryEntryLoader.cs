@@ -45,7 +45,7 @@ namespace CrashEdit.Crash
             OldModelStruct[] structs = new OldModelStruct[structcount];
             for (int i = 0; i < structs.Length; i++)
             {
-                structs[i] = ConvertPolyItem(items[0], 0x40+(i*4)); // advance 4 bytes for each parse; note that structs can overlap
+                structs[i] = ConvertPolyItem(items[0], 0x40 + (i * 4)); // advance 4 bytes for each parse; note that structs can overlap
             }
             byte[] extradata = null;
             if (items.Length >= 4)

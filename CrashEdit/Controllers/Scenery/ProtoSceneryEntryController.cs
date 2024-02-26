@@ -18,12 +18,7 @@ namespace CrashEdit.CE
 
         public override Control CreateEditor()
         {
-            TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(ProtoSceneryEntry.Info, 0x18)];
-            for (int i = 0; i < texturechunks.Length; ++i)
-            {
-                texturechunks[i] = FindEID<TextureChunk>(BitConv.FromInt32(ProtoSceneryEntry.Info, 0x20 + i * 4));
-            }
-            return new ProtoSceneryEntryViewer(ProtoSceneryEntry, texturechunks);
+            return new ProtoSceneryEntryViewer(GetNSF(), Entry.EID);
         }
 
         public ProtoSceneryEntry ProtoSceneryEntry { get; }
@@ -72,18 +67,18 @@ namespace CrashEdit.CE
                     g = 0x7F;
                     b = 0x7F;
                 }
-                polygons.Add(new OldSceneryPolygon(polygons.Count*3, polygons.Count*3+1, polygons.Count*3+2, protop.Texture, (byte)protop.Page, 0, 0));
+                polygons.Add(new OldSceneryPolygon(polygons.Count * 3, polygons.Count * 3 + 1, polygons.Count * 3 + 2, protop.Texture, (byte)protop.Page, 0, 0));
                 var va = ProtoSceneryEntry.Vertices[protop.VertexA];
                 var vb = ProtoSceneryEntry.Vertices[protop.VertexB];
                 var vc = ProtoSceneryEntry.Vertices[protop.VertexC];
-                vertices.Add(new OldSceneryVertex((short)((short)(va.X/8.0)*8), (short)((short)(va.Y/8.0)*8), (short)((short)(va.Z/8.0)*8), r, g, b, false));
-                vertices.Add(new OldSceneryVertex((short)((short)(vb.X/8.0)*8), (short)((short)(vb.Y/8.0)*8), (short)((short)(vb.Z/8.0)*8), r, g, b, false));
-                vertices.Add(new OldSceneryVertex((short)((short)(vc.X/8.0)*8), (short)((short)(vc.Y/8.0)*8), (short)((short)(vc.Z/8.0)*8), r, g, b, false));
+                vertices.Add(new OldSceneryVertex((short)((short)(va.X / 8.0) * 8), (short)((short)(va.Y / 8.0) * 8), (short)((short)(va.Z / 8.0) * 8), r, g, b, false));
+                vertices.Add(new OldSceneryVertex((short)((short)(vb.X / 8.0) * 8), (short)((short)(vb.Y / 8.0) * 8), (short)((short)(vb.Z / 8.0) * 8), r, g, b, false));
+                vertices.Add(new OldSceneryVertex((short)((short)(vc.X / 8.0) * 8), (short)((short)(vc.Y / 8.0) * 8), (short)((short)(vc.Z / 8.0) * 8), r, g, b, false));
             }
             for (int i = 0; i < vertices.Count; ++i)
             {
                 OldSceneryVertex basevertex = vertices[i];
-                for (int j = vertices.Count-1; j > i; --j)
+                for (int j = vertices.Count - 1; j > i; --j)
                 {
                     OldSceneryVertex testvertex = vertices[j];
                     if (basevertex.Red == testvertex.Red &&

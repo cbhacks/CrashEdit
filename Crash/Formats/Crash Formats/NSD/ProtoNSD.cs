@@ -27,13 +27,13 @@ namespace CrashEdit.Crash
             int[] hashkeymap = new int[256];
             for (int i = 0; i < 256; i++)
             {
-                hashkeymap[i] = BitConv.FromInt32(data, i*4);
+                hashkeymap[i] = BitConv.FromInt32(data, i * 4);
             }
             NSDLink[] index = new NSDLink[entrycount];
             for (int i = 0; i < entrycount; i++)
             {
-                int chunkid = BitConv.FromInt32(data, 0x408+8*i);
-                int entryid = BitConv.FromInt32(data, 0x408+8*i+4);
+                int chunkid = BitConv.FromInt32(data, 0x408 + 8 * i);
+                int entryid = BitConv.FromInt32(data, 0x408 + 8 * i + 4);
                 index[i] = new NSDLink(chunkid, entryid);
             }
             return new ProtoNSD(hashkeymap, chunkcount, index);
@@ -57,17 +57,17 @@ namespace CrashEdit.Crash
         public byte[] Save()
         {
             int entrycount = Index.Count;
-            byte[] result = new byte[0x408+8*entrycount];
+            byte[] result = new byte[0x408 + 8 * entrycount];
             for (int i = 0; i < 256; i++)
             {
-                BitConv.ToInt32(result, i*4, HashKeyMap[i]);
+                BitConv.ToInt32(result, i * 4, HashKeyMap[i]);
             }
             BitConv.ToInt32(result, 0x400, ChunkCount);
             BitConv.ToInt32(result, 0x404, entrycount);
             for (int i = 0; i < entrycount; ++i)
             {
-                BitConv.ToInt32(result, 0x408+i*8, Index[i].ChunkID);
-                BitConv.ToInt32(result, 0x40C+i*8, Index[i].EntryID);
+                BitConv.ToInt32(result, 0x408 + i * 8, Index[i].ChunkID);
+                BitConv.ToInt32(result, 0x40C + i * 8, Index[i].EntryID);
             }
             return result;
         }

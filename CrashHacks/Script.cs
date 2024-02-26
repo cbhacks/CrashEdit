@@ -1,5 +1,3 @@
-
-using CrashEdit.Crash;
 namespace CrashHacks
 {
     public abstract class Script

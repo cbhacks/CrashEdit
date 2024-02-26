@@ -19,12 +19,7 @@ namespace CrashEdit.CE
 
         public override Control CreateEditor()
         {
-            TextureChunk[] texturechunks = new TextureChunk[BitConv.FromInt32(SceneryEntry.Info, 0x28)];
-            for (int i = 0; i < texturechunks.Length; ++i)
-            {
-                texturechunks[i] = FindEID<TextureChunk>(BitConv.FromInt32(SceneryEntry.Info, 0x2C+i*4));
-            }
-            return new SceneryEntryViewer(SceneryEntry, texturechunks);
+            return new SceneryEntryViewer(GetNSF(), Entry.EID);
         }
 
         public SceneryEntry SceneryEntry { get; }

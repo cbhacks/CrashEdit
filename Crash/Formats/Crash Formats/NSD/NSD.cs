@@ -1,5 +1,3 @@
-using CrashEdit.Crash;
-
 namespace CrashEdit.Crash
 {
     public sealed class NSD
@@ -181,7 +179,7 @@ namespace CrashEdit.Crash
         }
 
 
-private List<NSDSpawnPoint> spawns;
+        private List<NSDSpawnPoint> spawns;
 
         public NSD(int[] hashkeymap, int chunkcount, int[] leveldata, int uncompressedchunksec, int preludecount, int[] compressedchunkinfo, IEnumerable<NSDLink> index, int blank, int id, int entitycount, int[] goolmap, byte[] extradata, IEnumerable<NSDSpawnPoint> spawns, byte[] imagedata)
         {

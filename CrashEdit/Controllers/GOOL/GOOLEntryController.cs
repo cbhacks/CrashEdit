@@ -1,4 +1,5 @@
 using CrashEdit.Crash;
+using CrashEdit.Crash.GOOLIns;
 
 namespace CrashEdit.CE
 {
@@ -34,15 +35,16 @@ namespace CrashEdit.CE
             byte[] newinstructions = new byte[GOOLEntry.Instructions.Count * 4];
             for (int i = 0; i < GOOLEntry.Instructions.Count; ++i)
             {
-                if (GOOLEntry.Instructions[i] is Cfl_95 cfl)
+                var ins = GOOLEntry.Instructions[i];
+                if (ins.Type == typeof(Cfl_95))
                 {
-                    int newval = cfl.Save();
-                    newval = (newval & ~0x3FF) | cfl.Args['I'].Value & 0x3FF;
-                    newval = (newval & ~0b11110000000000) | (cfl.Args['V'].Value << 10);
-                    BitConv.ToInt32(newinstructions, i*4, newval);
+                    int newval = ins.Save();
+                    newval = (newval & ~0x3FF) | ins.Args['I'].Value & 0x3FF;
+                    newval = (newval & ~0b11110000000000) | (ins.Args['V'].Value << 10);
+                    BitConv.ToInt32(newinstructions, i * 4, newval);
                 }
                 else
-                    BitConv.ToInt32(newinstructions, i*4, GOOLEntry.Instructions[i].Save());
+                    BitConv.ToInt32(newinstructions, i * 4, GOOLEntry.Instructions[i].Save());
             }
             GOOLEntry newgool = new GOOLEntry(GOOLVersion.Version1, GOOLEntry.Header, newinstructions, GOOLEntry.Data, GOOLEntry.StateMap, GOOLEntry.StateDescriptors, GOOLEntry.Anims, GOOLEntry.EID);
             FileUtil.SaveFile(newgool.Save(), FileFilters.NSEntry, FileFilters.Any);

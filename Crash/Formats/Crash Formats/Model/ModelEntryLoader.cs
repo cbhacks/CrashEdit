@@ -35,15 +35,15 @@ namespace CrashEdit.Crash
             uint[] structs = new uint[structcount];
             for (int i = 0; i < structcount; ++i)
             {
-                structs[i] = (uint)BitConv.FromInt32(items[1], i*4);
+                structs[i] = (uint)BitConv.FromInt32(items[1], i * 4);
             }
             SceneryColor[] colors = new SceneryColor[colorcount];
             for (int i = 0; i < colorcount; i++)
             {
-                byte r = items[2][0+4*i];
-                byte g = items[2][1+4*i];
-                byte b = items[2][2+4*i];
-                byte e = items[2][3+4*i];
+                byte r = items[2][0 + 4 * i];
+                byte g = items[2][1 + 4 * i];
+                byte b = items[2][2 + 4 * i];
+                byte e = items[2][3 + 4 * i];
                 colors[i] = new SceneryColor(r, g, b, e);
             }
             ModelTexture[] textures = new ModelTexture[texturecount];

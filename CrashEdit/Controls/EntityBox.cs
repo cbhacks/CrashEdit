@@ -143,7 +143,7 @@ namespace CrashEdit.CE
             chkSettingHex_CheckedChanged(null, null);
 
             // use a Timer because of PAL switch
-            argtexttimer = new Timer()
+            argtexttimer = new()
             {
                 Enabled = true,
                 Interval = 40
@@ -168,7 +168,7 @@ namespace CrashEdit.CE
                 arg / 256F,
                 arg / (float)0x1000 * 360,
                 arg / (OldMainForm.PAL ? 25F : 30F),
-                arg / (256F*400));
+                arg / (256F * 400));
         }
 
         private void UpdateName()
@@ -201,7 +201,7 @@ namespace CrashEdit.CE
             dirty.Push(true);
             if (positionindex >= entity.Positions.Count)
             {
-                positionindex = entity.Positions.Count-1;
+                positionindex = entity.Positions.Count - 1;
             }
             // Do not make this else if,
             // sometimes both will run.
@@ -223,9 +223,9 @@ namespace CrashEdit.CE
             }
             else
             {
-                lblPositionIndex.Text = $"{positionindex+1} / {entity.Positions.Count}";
+                lblPositionIndex.Text = $"{positionindex + 1} / {entity.Positions.Count}";
                 cmdPreviousPosition.Enabled = positionindex > 0;
-                cmdNextPosition.Enabled = positionindex < entity.Positions.Count-1;
+                cmdNextPosition.Enabled = positionindex < entity.Positions.Count - 1;
                 cmdInsertPosition.Enabled = true;
                 cmdRemovePosition.Enabled = true;
                 lblX.Enabled = lblY.Enabled = lblZ.Enabled = numX.Enabled = numY.Enabled = numZ.Enabled = true;
@@ -330,10 +330,10 @@ namespace CrashEdit.CE
             }
             else
             {
-                lblSettingIndex.Text = $"{settingindex+1} / {entity.Settings.Count}";
+                lblSettingIndex.Text = $"{settingindex + 1} / {entity.Settings.Count}";
                 lblArgAs.Text = MakeArgAsText();
                 cmdPreviousSetting.Enabled = settingindex > 0;
-                cmdNextSetting.Enabled = settingindex < entity.Settings.Count-1;
+                cmdNextSetting.Enabled = settingindex < entity.Settings.Count - 1;
                 cmdRemoveSetting.Enabled =
                 lblArgAs.Enabled =
                 numSettingA.Enabled =
@@ -604,7 +604,7 @@ namespace CrashEdit.CE
             dirty.Push(true);
             if (victimindex >= entity.Victims.Count)
             {
-                victimindex = entity.Victims.Count-1;
+                victimindex = entity.Victims.Count - 1;
             }
             // Do not make this else if,
             // sometimes both will run.
@@ -624,9 +624,9 @@ namespace CrashEdit.CE
             }
             else
             {
-                lblVictimIndex.Text = $"{victimindex+1} / {entity.Victims.Count}";
+                lblVictimIndex.Text = $"{victimindex + 1} / {entity.Victims.Count}";
                 cmdPreviousVictim.Enabled = victimindex > 0;
-                cmdNextVictim.Enabled = victimindex < entity.Victims.Count-1;
+                cmdNextVictim.Enabled = victimindex < entity.Victims.Count - 1;
                 cmdRemoveVictim.Enabled =
                 numVictimID.Enabled =
                 cmdClearAllVictims.Enabled = true;
@@ -681,10 +681,10 @@ namespace CrashEdit.CE
             {
                 fraLoadListPayload.Enabled = entity.LoadListB != null;
                 if (loadlistarowindex >= entity.LoadListA.RowCount)
-                    loadlistarowindex = entity.LoadListA.RowCount-1;
+                    loadlistarowindex = entity.LoadListA.RowCount - 1;
                 lblMetavalueLoadA.Enabled = true;
                 numMetavalueLoadA.Enabled = true;
-                lblLoadListRowIndexA.Text = $"{loadlistarowindex+1} / {entity.LoadListA.RowCount}";
+                lblLoadListRowIndexA.Text = $"{loadlistarowindex + 1} / {entity.LoadListA.RowCount}";
                 numMetavalueLoadA.Value = entity.LoadListA.Rows[loadlistarowindex].MetaValue.Value;
                 cmdPrevRowA.Enabled = loadlistarowindex > 0;
                 cmdNextRowA.Enabled = loadlistarowindex + 1 < entity.LoadListA.RowCount;
@@ -692,14 +692,14 @@ namespace CrashEdit.CE
                 if (entity.LoadListA.Rows[loadlistarowindex].Values.Count > 0)
                 {
                     if (loadlistaeidindex >= entity.LoadListA.Rows[loadlistarowindex].Values.Count)
-                        loadlistaeidindex = entity.LoadListA.Rows[loadlistarowindex].Values.Count-1;
+                        loadlistaeidindex = entity.LoadListA.Rows[loadlistarowindex].Values.Count - 1;
                     cmdInsertEIDA.Enabled = true;
                     cmdRemoveEIDA.Enabled = true;
                     txtEIDA.Enabled = true;
                     lblEIDErrA.Visible = true;
                     cmdPrevEIDA.Enabled = loadlistaeidindex > 0;
                     cmdNextEIDA.Enabled = loadlistaeidindex + 1 < entity.LoadListA.Rows[loadlistarowindex].Values.Count;
-                    lblEIDIndexA.Text = $"{loadlistaeidindex+1} / {entity.LoadListA.Rows[loadlistarowindex].Values.Count}";
+                    lblEIDIndexA.Text = $"{loadlistaeidindex + 1} / {entity.LoadListA.Rows[loadlistarowindex].Values.Count}";
                     txtEIDA.Text = Entry.EIDToEName(entity.LoadListA.Rows[loadlistarowindex].Values[loadlistaeidindex]);
                 }
                 else
@@ -830,10 +830,10 @@ namespace CrashEdit.CE
             {
                 fraLoadListPayload.Enabled = entity.LoadListA != null;
                 if (loadlistbrowindex >= entity.LoadListB.RowCount)
-                    loadlistbrowindex = entity.LoadListB.RowCount-1;
+                    loadlistbrowindex = entity.LoadListB.RowCount - 1;
                 lblMetavalueLoadB.Enabled = true;
                 numMetavalueLoadB.Enabled = true;
-                lblLoadListRowIndexB.Text = $"{loadlistbrowindex+1} / {entity.LoadListB.RowCount}";
+                lblLoadListRowIndexB.Text = $"{loadlistbrowindex + 1} / {entity.LoadListB.RowCount}";
                 numMetavalueLoadB.Value = entity.LoadListB.Rows[loadlistbrowindex].MetaValue.Value;
                 cmdPrevRowB.Enabled = loadlistbrowindex > 0;
                 cmdNextRowB.Enabled = loadlistbrowindex + 1 < entity.LoadListB.RowCount;
@@ -841,14 +841,14 @@ namespace CrashEdit.CE
                 if (entity.LoadListB.Rows[loadlistbrowindex].Values.Count > 0)
                 {
                     if (loadlistbeidindex >= entity.LoadListB.Rows[loadlistbrowindex].Values.Count)
-                        loadlistbeidindex = entity.LoadListB.Rows[loadlistbrowindex].Values.Count-1;
+                        loadlistbeidindex = entity.LoadListB.Rows[loadlistbrowindex].Values.Count - 1;
                     cmdInsertEIDB.Enabled = true;
                     cmdRemoveEIDB.Enabled = true;
                     txtEIDB.Enabled = true;
                     lblEIDErrB.Visible = true;
                     cmdPrevEIDB.Enabled = loadlistbeidindex > 0;
                     cmdNextEIDB.Enabled = loadlistbeidindex + 1 < entity.LoadListB.Rows[loadlistbrowindex].Values.Count;
-                    lblEIDIndexB.Text = $"{loadlistbeidindex+1} / {entity.LoadListB.Rows[loadlistbrowindex].Values.Count}";
+                    lblEIDIndexB.Text = $"{loadlistbeidindex + 1} / {entity.LoadListB.Rows[loadlistbrowindex].Values.Count}";
                     txtEIDB.Text = Entry.EIDToEName(entity.LoadListB.Rows[loadlistbrowindex].Values[loadlistbeidindex]);
                 }
                 else
@@ -978,10 +978,10 @@ namespace CrashEdit.CE
             if (entity.DrawListA != null && entity.DrawListA.RowCount != 0)
             {
                 if (drawlistarowindex >= entity.DrawListA.RowCount)
-                    drawlistarowindex = entity.DrawListA.RowCount-1;
+                    drawlistarowindex = entity.DrawListA.RowCount - 1;
                 lblMetavalueDrawA.Enabled = true;
                 numMetavalueDrawA.Enabled = true;
-                lblDrawListRowIndexA.Text = $"{drawlistarowindex+1} / {entity.DrawListA.RowCount}";
+                lblDrawListRowIndexA.Text = $"{drawlistarowindex + 1} / {entity.DrawListA.RowCount}";
                 numMetavalueDrawA.Value = entity.DrawListA.Rows[drawlistarowindex].MetaValue.Value;
                 cmdPrevRowDrawA.Enabled = drawlistarowindex > 0;
                 cmdNextRowDrawA.Enabled = drawlistarowindex + 1 < entity.DrawListA.RowCount;
@@ -996,7 +996,7 @@ namespace CrashEdit.CE
                     numEntityA.Enabled = true;
                     cmdPrevEntityA.Enabled = drawlistaentityindex > 0;
                     cmdNextEntityA.Enabled = drawlistaentityindex + 1 < entity.DrawListA.Rows[drawlistarowindex].Values.Count;
-                    lblEntityIndexA.Text = $"{drawlistaentityindex+1} / {entity.DrawListA.Rows[drawlistarowindex].Values.Count}";
+                    lblEntityIndexA.Text = $"{drawlistaentityindex + 1} / {entity.DrawListA.Rows[drawlistarowindex].Values.Count}";
                     numEntityA.Value = entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] >> 8 & 0xFFFF;
                 }
                 else
@@ -1083,41 +1083,17 @@ namespace CrashEdit.CE
 
         private void numEntityA_ValueChanged(object sender, EventArgs e)
         {
-            if (controller.ZoneEntryController != null)
+            foreach (ZoneEntry zone in controller.GetEntries<ZoneEntry>())
             {
-                var c = controller;
-                foreach (ZoneEntry zone in c.GetEntries<ZoneEntry>())
+                foreach (Entity otherentity in zone.Entities)
                 {
-                    foreach (Entity otherentity in zone.Entities)
+                    if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityA.Value)
                     {
-                        if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityA.Value)
+                        for (int i = 0; i < controller.ZoneEntryController.ZoneEntry.ZoneCount; ++i)
                         {
-                            for (int i = 0; i < c.ZoneEntryController.ZoneEntry.ZoneCount; ++i)
+                            if (zone.EID == BitConv.FromInt32(controller.ZoneEntryController.ZoneEntry.Header, 0x194 + i * 4))
                             {
-                                if (zone.EID == BitConv.FromInt32(c.ZoneEntryController.ZoneEntry.Header, 0x194 + i * 4))
-                                {
-                                    entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            else if (controller.NewZoneEntryController != null)
-            {
-                var nc = controller;
-                foreach (NewZoneEntry zone in nc.GetEntries<NewZoneEntry>())
-                {
-                    foreach (Entity otherentity in zone.Entities)
-                    {
-                        if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityA.Value)
-                        {
-                            for (int i = 0; i < nc.NewZoneEntryController.NewZoneEntry.ZoneCount; ++i)
-                            {
-                                if (zone.EID == BitConv.FromInt32(nc.NewZoneEntryController.NewZoneEntry.Header, 0x194 + i * 4))
-                                {
-                                    entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
-                                }
+                                entity.DrawListA.Rows[drawlistarowindex].Values[drawlistaentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
                             }
                         }
                     }
@@ -1161,10 +1137,10 @@ namespace CrashEdit.CE
             if (entity.DrawListB != null && entity.DrawListB.RowCount != 0)
             {
                 if (drawlistbrowindex >= entity.DrawListB.RowCount)
-                    drawlistbrowindex = entity.DrawListB.RowCount-1;
+                    drawlistbrowindex = entity.DrawListB.RowCount - 1;
                 lblMetavalueDrawB.Enabled = true;
                 numMetavalueDrawB.Enabled = true;
-                lblDrawListRowIndexB.Text = $"{drawlistbrowindex+1} / {entity.DrawListB.RowCount}";
+                lblDrawListRowIndexB.Text = $"{drawlistbrowindex + 1} / {entity.DrawListB.RowCount}";
                 numMetavalueDrawB.Value = entity.DrawListB.Rows[drawlistbrowindex].MetaValue.Value;
                 cmdPrevRowDrawB.Enabled = drawlistbrowindex > 0;
                 cmdNextRowDrawB.Enabled = drawlistbrowindex + 1 < entity.DrawListB.RowCount;
@@ -1179,7 +1155,7 @@ namespace CrashEdit.CE
                     numEntityB.Enabled = true;
                     cmdPrevEntityB.Enabled = drawlistbentityindex > 0;
                     cmdNextEntityB.Enabled = drawlistbentityindex + 1 < entity.DrawListB.Rows[drawlistbrowindex].Values.Count;
-                    lblEntityIndexB.Text = $"{drawlistbentityindex+1} / {entity.DrawListB.Rows[drawlistbrowindex].Values.Count}";
+                    lblEntityIndexB.Text = $"{drawlistbentityindex + 1} / {entity.DrawListB.Rows[drawlistbrowindex].Values.Count}";
                     numEntityB.Value = entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] >> 8 & 0xFFFF;
                 }
                 else
@@ -1266,41 +1242,17 @@ namespace CrashEdit.CE
 
         private void numEntityB_ValueChanged(object sender, EventArgs e)
         {
-            if (controller.ZoneEntryController != null)
+            foreach (ZoneEntry zone in controller.GetEntries<ZoneEntry>())
             {
-                var c = controller;
-                foreach (ZoneEntry zone in c.GetEntries<ZoneEntry>())
+                foreach (Entity otherentity in zone.Entities)
                 {
-                    foreach (Entity otherentity in zone.Entities)
+                    if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityB.Value)
                     {
-                        if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityB.Value)
+                        for (int i = 0; i < controller.ZoneEntryController.ZoneEntry.ZoneCount; ++i)
                         {
-                            for (int i = 0; i < c.ZoneEntryController.ZoneEntry.ZoneCount; ++i)
+                            if (zone.EID == BitConv.FromInt32(controller.ZoneEntryController.ZoneEntry.Header, 0x194 + i * 4))
                             {
-                                if (zone.EID == BitConv.FromInt32(c.ZoneEntryController.ZoneEntry.Header, 0x194 + i * 4))
-                                {
-                                    entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            else if (controller.NewZoneEntryController != null)
-            {
-                var nc = controller;
-                foreach (NewZoneEntry zone in nc.GetEntries<NewZoneEntry>())
-                {
-                    foreach (Entity otherentity in zone.Entities)
-                    {
-                        if (otherentity.ID.HasValue && otherentity.ID.Value == numEntityB.Value)
-                        {
-                            for (int i = 0; i < nc.NewZoneEntryController.NewZoneEntry.ZoneCount; ++i)
-                            {
-                                if (zone.EID == BitConv.FromInt32(nc.NewZoneEntryController.NewZoneEntry.Header, 0x194 + i * 4))
-                                {
-                                    entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
-                                }
+                                entity.DrawListB.Rows[drawlistbrowindex].Values[drawlistbentityindex] = (int)(i | (otherentity.ID << 8) | ((zone.Entities.IndexOf(otherentity) - BitConv.FromInt32(zone.Header, 0x188)) << 24));
                             }
                         }
                     }
@@ -1829,7 +1781,7 @@ namespace CrashEdit.CE
                 neighborsettingindex = Math.Min(entity.Neighbors.Rows[neighborindex].Values.Count - 1, neighborsettingindex);
                 if (entity.Neighbors.Rows[neighborindex].Values.Count > 0)
                 {
-                    lblNeighborSetting.Text = $"{neighborsettingindex+1} / {entity.Neighbors.Rows[neighborindex].Values.Count}";
+                    lblNeighborSetting.Text = $"{neighborsettingindex + 1} / {entity.Neighbors.Rows[neighborindex].Values.Count}";
                     cmdPrevNeighborSetting.Enabled = neighborsettingindex > 0;
                     cmdNextNeighborSetting.Enabled = neighborsettingindex + 1 < entity.Neighbors.Rows[neighborindex].Values.Count;
                     cmdRemoveNeighborSetting.Enabled =
@@ -2013,11 +1965,11 @@ namespace CrashEdit.CE
             if (entity.FOV != null && entity.FOV.RowCount != 0)
             {
                 if (fovframeindex >= entity.FOV.RowCount)
-                    fovframeindex = entity.FOV.RowCount-1;
+                    fovframeindex = entity.FOV.RowCount - 1;
                 lblFOVPosition.Enabled = true;
                 numFOVPosition.Enabled = true;
                 numFOVPosition.Value = entity.FOV.Rows[fovframeindex].MetaValue.Value;
-                lblFOVFrame.Text = $"{fovframeindex+1} / {entity.FOV.RowCount}";
+                lblFOVFrame.Text = $"{fovframeindex + 1} / {entity.FOV.RowCount}";
                 cmdPrevFOVFrame.Enabled = fovframeindex > 0;
                 cmdNextFOVFrame.Enabled = fovframeindex + 1 < entity.FOV.RowCount;
                 cmdRemoveFOVFrame.Enabled = true;
@@ -2031,7 +1983,7 @@ namespace CrashEdit.CE
                     numFOV.Enabled = true;
                     cmdPrevFOV.Enabled = fovindex > 0;
                     cmdNextFOV.Enabled = fovindex + 1 < entity.FOV.Rows[fovframeindex].Values.Count;
-                    lblFOVIndex.Text = $"{fovindex+1} / {entity.FOV.Rows[fovframeindex].Values.Count}";
+                    lblFOVIndex.Text = $"{fovindex + 1} / {entity.FOV.Rows[fovframeindex].Values.Count}";
                     numFOV.Value = entity.FOV.Rows[fovframeindex].Values[fovindex].VictimID;
                 }
                 else

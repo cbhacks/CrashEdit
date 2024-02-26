@@ -52,7 +52,7 @@ namespace CrashEdit.Crash
                 OldFrameVertex[] vertices = new OldFrameVertex[vertexcount];
                 for (int i = 0; i < vertexcount; i++)
                 {
-                    vertices[i] = new OldFrameVertex(data[56+i*6+0], data[56+i*6+1], data[56+i*6+2], (sbyte)data[56+i*6+3], (sbyte)data[56+i*6+4], (sbyte)data[56+i*6+5]);
+                    vertices[i] = new OldFrameVertex(data[56 + i * 6 + 0], data[56 + i * 6 + 1], data[56 + i * 6 + 2], (sbyte)data[56 + i * 6 + 3], (sbyte)data[56 + i * 6 + 4], (sbyte)data[56 + i * 6 + 5]);
                 }
                 short unknown = BitConv.FromInt16(data, 56 + vertexcount * 6);
                 short? unknown2 = null;
@@ -67,7 +67,7 @@ namespace CrashEdit.Crash
                 OldFrameVertex[] vertices = new OldFrameVertex[vertexcount];
                 for (int i = 0; i < vertexcount; i++)
                 {
-                    vertices[i] = new OldFrameVertex(data[44+i*6+0], data[44+i*6+1], data[44+i*6+2], (sbyte)data[44+i*6+3], (sbyte)data[44+i*6+4], (sbyte)data[44+i*6+5]);
+                    vertices[i] = new OldFrameVertex(data[44 + i * 6 + 0], data[44 + i * 6 + 1], data[44 + i * 6 + 2], (sbyte)data[44 + i * 6 + 3], (sbyte)data[44 + i * 6 + 4], (sbyte)data[44 + i * 6 + 5]);
                 }
                 short unknown = BitConv.FromInt16(data, 44 + vertexcount * 6);
                 short? unknown2 = null;
@@ -194,7 +194,7 @@ namespace CrashEdit.Crash
                     }
                     foreach (OldFrameVertex vertex in vertices)
                     {
-                        obj.WriteLine("vn {0} {1} {2}", vertex.NormalX/127.0, vertex.NormalY/127.0, vertex.NormalZ/127.0);
+                        obj.WriteLine("vn {0} {1} {2}", vertex.NormalX / 127.0, vertex.NormalY / 127.0, vertex.NormalZ / 127.0);
                     }
                     obj.WriteLine();
                     obj.WriteLine("# Polygons");

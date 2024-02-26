@@ -20,7 +20,7 @@ namespace CrashEdit.CE
                 TextureChunk[] texturechunks = new TextureChunk[8];
                 for (int i = 0; i < 8; ++i)
                 {
-                    texturechunks[i] = GetEntry<TextureChunk>(BitConv.FromInt32(modelentry.Info, 0xC+i*4));
+                    texturechunks[i] = GetEntry<TextureChunk>(BitConv.FromInt32(modelentry.Info, 0xC + i * 4));
                 }
                 return new AnimationEntryViewer(Frame, modelentry, texturechunks);
             }

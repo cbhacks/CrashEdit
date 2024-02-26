@@ -30,9 +30,9 @@ namespace CrashEdit.Crash
             ProtoEntityPosition[] deltas = new ProtoEntityPosition[positioncount - 1];
             for (int i = 0; i < deltas.Length; ++i)
             {
-                deltas[i] = new ProtoEntityPosition((sbyte)data[26+4*i], (sbyte)data[27+4*i], (sbyte)data[28+4*i]);
+                deltas[i] = new ProtoEntityPosition((sbyte)data[26 + 4 * i], (sbyte)data[27 + 4 * i], (sbyte)data[28 + 4 * i]);
             }
-            short nullfield1 = BitConv.FromInt16(data, 26+deltas.Length*4);
+            short nullfield1 = BitConv.FromInt16(data, 26 + deltas.Length * 4);
             return new ProtoEntity(flags, spawn, unk, id, startx, starty, startz, vecx, vecy, vecz, type, subtype, deltas, nullfield1);
         }
 
@@ -85,7 +85,7 @@ namespace CrashEdit.Crash
             result[6] = Spawn;
             result[7] = Unk;
             BitConv.ToInt16(result, 8, ID);
-            BitConv.ToInt16(result, 10, (short)(deltacount+1));
+            BitConv.ToInt16(result, 10, (short)(deltacount + 1));
             BitConv.ToInt16(result, 12, StartX);
             BitConv.ToInt16(result, 14, StartY);
             BitConv.ToInt16(result, 16, StartZ);
@@ -96,11 +96,11 @@ namespace CrashEdit.Crash
             result[25] = Subtype;
             for (int i = 0; i < deltacount; i++)
             {
-                result[26+i*4] = (byte)deltas[i].X;
-                result[27+i*4] = (byte)deltas[i].Y;
-                result[28+i*4] = (byte)deltas[i].Z;
+                result[26 + i * 4] = (byte)deltas[i].X;
+                result[27 + i * 4] = (byte)deltas[i].Y;
+                result[28 + i * 4] = (byte)deltas[i].Z;
             }
-            BitConv.ToInt16(result, 26+deltacount*4, Nullfield1);
+            BitConv.ToInt16(result, 26 + deltacount * 4, Nullfield1);
             return result;
         }
     }

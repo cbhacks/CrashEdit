@@ -31,11 +31,11 @@ namespace CrashEdit.Crash
             OldModelStruct[] structs = new OldModelStruct[structcount];
             for (int i = 0; i < structs.Length; i++)
             {
-                structs[i] = ConvertPolyItem(items[0], 0x40+(i*4)); // advance 4 bytes for each parse; note that structs can overlap
+                structs[i] = ConvertPolyItem(items[0], 0x40 + (i * 4)); // advance 4 bytes for each parse; note that structs can overlap
             }
             short? pad = null;
-            if (vertices.Length*6 + 2 == items[2].Length)
-                pad = BitConv.FromInt16(items[2], vertices.Length*6);
+            if (vertices.Length * 6 + 2 == items[2].Length)
+                pad = BitConv.FromInt16(items[2], vertices.Length * 6);
             return new ProtoSceneryEntry(items[0], polygons, vertices, structs, pad, eid);
         }
 

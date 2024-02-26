@@ -1,3 +1,5 @@
+using CrashEdit.CE.Properties;
+using CrashEdit.Crash;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
@@ -5,8 +7,6 @@ using OpenTK.WinForms;
 using SharpFont;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using CrashEdit.Crash;
-using CrashEdit.CE.Properties;
 
 namespace CrashEdit.CE
 {
@@ -364,7 +364,7 @@ namespace CrashEdit.CE
         protected virtual void PrintDebug()
         {
             con_debug += $"Zoom: {render.Projection.Distance}\nMove Speed: {GetMoveSpeed()}\n";
-            con_debug += string.Format("Render time: {0:F2}ms\nTotal time: {1:F2}ms\nGPU time: {2}us\n", render.DebugRenderMs, dbg_run_ms, dbg_gpu_time/1000);
+            con_debug += string.Format("Render time: {0:F2}ms\nTotal time: {1:F2}ms\nGPU time: {2}us\n", render.DebugRenderMs, dbg_run_ms, dbg_gpu_time / 1000);
         }
 
         protected virtual void PrintHelp()
@@ -458,7 +458,7 @@ namespace CrashEdit.CE
 
                 if (Focused)
                 {
-                    var a = 1+ 2;
+                    var a = 1 + 2;
                 }
                 dbgContextDir.Add("render");
                 render.DebugRenderMs = 0;
