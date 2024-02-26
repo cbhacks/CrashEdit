@@ -35,7 +35,7 @@
             R = r;
             G = g;
             B = b;
-            
+
             int w = 4 << (UVIndex % 5);
             int h = 4 << ((UVIndex / 5) % 5);
             int xoff = ((64 << (2 - ColorMode)) * Segment) + ((2 << (2 - ColorMode)) * XOffU);

@@ -47,7 +47,7 @@ namespace CrashEdit.Crash
                 int add_at = 0;
                 int rem_done = 0;
                 int add_done = 0;
-                
+
                 void read_rem_node()
                 {
                     if (rem_left > 0)

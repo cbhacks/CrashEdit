@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-
 namespace CrashEdit.Crash
 {
     [EntryType(3, GameVersion.Crash2)]

@@ -1,8 +1,8 @@
-﻿using OpenTK.Graphics.OpenGL4;
+﻿using CrashEdit.Crash;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using CrashEdit.Crash;
 
 namespace CrashEdit.CE
 {
