@@ -50,9 +50,9 @@ namespace CrashEdit.Crash
             int ofs = 44;
             if (!proto)
             {
-                int xglobal = BitConv.FromInt32(data, 44);
-                int yglobal = BitConv.FromInt32(data, 48);
-                int zglobal = BitConv.FromInt32(data, 52);
+                xoffset_col = BitConv.FromInt32(data, 44);
+                yoffset_col = BitConv.FromInt32(data, 48);
+                zoffset_col = BitConv.FromInt32(data, 52);
                 ofs += 12;
             }
             OldFrameVertex[] vertices = new OldFrameVertex[vertexcount];
