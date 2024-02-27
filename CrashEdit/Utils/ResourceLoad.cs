@@ -10,7 +10,7 @@ namespace CrashEdit.CE
         {
             var names = GetAllFileNames();
             var exe = Assembly.GetExecutingAssembly();
-            var fullname = string.Format("{0}.{1}", exe.GetName().Name, name.Replace("/", "."));
+            var fullname = string.Format("{0}.{1}", "CrashEdit.CE", name.Replace("/", "."));
             using var r = new StreamReader(exe.GetManifestResourceStream(fullname));
             return r.ReadToEnd();
         }

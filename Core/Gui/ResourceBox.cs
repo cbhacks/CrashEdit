@@ -159,7 +159,7 @@ namespace CrashEdit
                 UndockedLabel.Visible = true;
 
                 // Display the form.
-                ActivePanelUndockForm.Show(this);
+                ActivePanelUndockForm.Show();
                 ActivePanelUndockForm.Focus();
             }
             else

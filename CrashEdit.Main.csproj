@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -35,8 +35,82 @@
 
     <ItemGroup>
       <None Remove=".gitignore" />
+      <None Remove="Embeds\Images\Anchor.gif" />
+      <None Remove="Embeds\Images\Arrow.gif" />
+      <None Remove="Embeds\Images\Erase.gif" />
+      <None Remove="Embeds\Images\File.gif" />
+      <None Remove="Embeds\Images\Fire.png" />
+      <None Remove="Embeds\Images\Floppy.gif" />
+      <None Remove="Embeds\Images\Folder.gif" />
+      <None Remove="Embeds\Images\FolderOpen.gif" />
+      <None Remove="Embeds\Images\JournalBlue.gif" />
+      <None Remove="Embeds\Images\JournalCode.gif" />
+      <None Remove="Embeds\Images\JournalCyan.gif" />
+      <None Remove="Embeds\Images\JournalOrange.gif" />
+      <None Remove="Embeds\Images\JournalRed.gif" />
+      <None Remove="Embeds\Images\JournalWhite.gif" />
+      <None Remove="Embeds\Images\MagnifyingGlass.gif" />
+      <None Remove="Embeds\Images\MusicNoteBlue.gif" />
+      <None Remove="Embeds\Images\MusicNoteRed.gif" />
+      <None Remove="Embeds\Images\MusicNoteYellow.gif" />
+      <None Remove="Embeds\Images\Painting.gif" />
+      <None Remove="Embeds\Images\README.md" />
+      <None Remove="Embeds\Images\RecordFirst.gif" />
+      <None Remove="Embeds\Images\RecordLast.gif" />
+      <None Remove="Embeds\Images\RecordNext.gif" />
+      <None Remove="Embeds\Images\RecordPrevious.gif" />
+      <None Remove="Embeds\Images\Sitemap.png" />
+      <None Remove="Embeds\Images\SpeakerBlue.gif" />
+      <None Remove="Embeds\Images\SpeakerWhite.gif" />
+      <None Remove="Embeds\Images\ThingBlue.gif" />
+      <None Remove="Embeds\Images\ThingCode.gif" />
+      <None Remove="Embeds\Images\ThingCrimson.gif" />
+      <None Remove="Embeds\Images\ThingGray.gif" />
+      <None Remove="Embeds\Images\ThingLime.gif" />
+      <None Remove="Embeds\Images\ThingOrange.gif" />
+      <None Remove="Embeds\Images\ThingRed.gif" />
+      <None Remove="Embeds\Images\ThingViolet.gif" />
+      <None Remove="Embeds\Images\ThingYellow.gif" />
       <None Remove="LICENSE.md" />
       <None Remove="packages.config" />
       <None Remove="README.md" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Embeds\Images\Anchor.gif" />
+      <EmbeddedResource Include="Embeds\Images\Arrow.gif" />
+      <EmbeddedResource Include="Embeds\Images\Erase.gif" />
+      <EmbeddedResource Include="Embeds\Images\File.gif" />
+      <EmbeddedResource Include="Embeds\Images\Fire.png" />
+      <EmbeddedResource Include="Embeds\Images\Floppy.gif" />
+      <EmbeddedResource Include="Embeds\Images\Folder.gif" />
+      <EmbeddedResource Include="Embeds\Images\FolderOpen.gif" />
+      <EmbeddedResource Include="Embeds\Images\JournalBlue.gif" />
+      <EmbeddedResource Include="Embeds\Images\JournalCode.gif" />
+      <EmbeddedResource Include="Embeds\Images\JournalCyan.gif" />
+      <EmbeddedResource Include="Embeds\Images\JournalOrange.gif" />
+      <EmbeddedResource Include="Embeds\Images\JournalRed.gif" />
+      <EmbeddedResource Include="Embeds\Images\JournalWhite.gif" />
+      <EmbeddedResource Include="Embeds\Images\MagnifyingGlass.gif" />
+      <EmbeddedResource Include="Embeds\Images\MusicNoteBlue.gif" />
+      <EmbeddedResource Include="Embeds\Images\MusicNoteRed.gif" />
+      <EmbeddedResource Include="Embeds\Images\MusicNoteYellow.gif" />
+      <EmbeddedResource Include="Embeds\Images\Painting.gif" />
+      <EmbeddedResource Include="Embeds\Images\RecordFirst.gif" />
+      <EmbeddedResource Include="Embeds\Images\RecordLast.gif" />
+      <EmbeddedResource Include="Embeds\Images\RecordNext.gif" />
+      <EmbeddedResource Include="Embeds\Images\RecordPrevious.gif" />
+      <EmbeddedResource Include="Embeds\Images\Sitemap.png" />
+      <EmbeddedResource Include="Embeds\Images\SpeakerBlue.gif" />
+      <EmbeddedResource Include="Embeds\Images\SpeakerWhite.gif" />
+      <EmbeddedResource Include="Embeds\Images\ThingBlue.gif" />
+      <EmbeddedResource Include="Embeds\Images\ThingCode.gif" />
+      <EmbeddedResource Include="Embeds\Images\ThingCrimson.gif" />
+      <EmbeddedResource Include="Embeds\Images\ThingGray.gif" />
+      <EmbeddedResource Include="Embeds\Images\ThingLime.gif" />
+      <EmbeddedResource Include="Embeds\Images\ThingOrange.gif" />
+      <EmbeddedResource Include="Embeds\Images\ThingRed.gif" />
+      <EmbeddedResource Include="Embeds\Images\ThingViolet.gif" />
+      <EmbeddedResource Include="Embeds\Images\ThingYellow.gif" />
     </ItemGroup>
 </Project>

@@ -16,6 +16,7 @@
     <Company>cbhacks</Company>
     <PackageProjectUrl>cbhacks.com</PackageProjectUrl>
     <Title>CrashEdit [deprecate]</Title>
+    <RootNamespace>CrashEdit.CE</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -80,6 +81,15 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.ja.resx">
+      <CustomToolNamespace>CrashEdit.CE.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <CustomToolNamespace>CrashEdit.CE.Properties</CustomToolNamespace>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
