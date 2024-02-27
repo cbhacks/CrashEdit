@@ -19,6 +19,8 @@ namespace CrashEdit.CE
             Controls.Add(lstEntryList);
 
             Invalidated += EntryChunkBox_Invalidated;
+
+            PopulateList();
         }
 
         private void EntryChunkBox_Invalidated(object sender, InvalidateEventArgs e)

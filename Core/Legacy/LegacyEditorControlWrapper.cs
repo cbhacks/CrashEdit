@@ -33,6 +33,10 @@ namespace CrashEdit
                 InnerControl.Dock = DockStyle.Fill;
                 Controls.Add(InnerControl);
             }
+            else
+            {
+                InnerControl.Invalidate(true);
+            }
         }
 
     }

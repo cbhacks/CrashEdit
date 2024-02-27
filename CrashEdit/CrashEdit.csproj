@@ -31,6 +31,8 @@
     <None Remove="CopyLibs.bat" />
     <None Remove="CopyLibs32.bat" />
     <None Remove="CopyLibs64.bat" />
+    <None Remove="freetype6-win32.dll" />
+    <None Remove="freetype6-win64.dll" />
     <None Remove="Render\Shaders\crash1-generic.frag" />
     <None Remove="Render\Shaders\crash1-generic.vert" />
     <None Remove="Render\Shaders\default4.frag" />

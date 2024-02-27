@@ -985,7 +985,6 @@ namespace CrashEdit.CE
             render.Projection.CamTrans.Z = -midz;
             render.Projection.CamRot.Y = 0;
             render.Projection.CamRot.X = MathHelper.DegreesToRadians(15);
-            Invalidate();
         }
 
         [Flags]

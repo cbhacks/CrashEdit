@@ -1,9 +1,7 @@
 namespace CrashEdit
 {
-
     public sealed class DeleteVerb : DirectVerb
     {
-
         public override string Text => "Delete";
 
         public override string ImageKey => "Erase";

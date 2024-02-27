@@ -240,6 +240,14 @@ namespace CrashEdit
                 form.Text = ctlr.Text;
                 form.Icon = Embeds.GetIcon(ctlr.ImageKey);
             }
+
+            foreach (var panel in AllPanels.Values.Where(x => x.Visible))
+            {
+                foreach (var editor in panel.Editors)
+                {
+                    editor.Sync();
+                }
+            }
         }
 
         protected override void Dispose(bool disposing)

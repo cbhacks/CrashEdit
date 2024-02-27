@@ -3,10 +3,8 @@ using System.Reflection;
 
 namespace CrashEdit
 {
-
     public sealed class SubcontrollerListGroup : SubcontrollerGroup
     {
-
         public SubcontrollerListGroup(Controller owner, PropertyInfo property, SubresourceListAttribute attr) : base(owner)
         {
             if (property == null)
