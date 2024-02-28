@@ -8,8 +8,7 @@ namespace CrashEdit
 
         public LegacyController(SubcontrollerGroup? parentGroup, object resource)
         {
-            if (resource == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(resource);
 
             Resource = resource;
             Modern = new Controller(this, parentGroup);

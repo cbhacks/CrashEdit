@@ -10,8 +10,7 @@ namespace CrashEdit.Crash
     {
         public override Entry Load(byte[][] items, int eid)
         {
-            if (items == null)
-                throw new ArgumentNullException(nameof(items));
+            ArgumentNullException.ThrowIfNull(items);
             if (items.Length != 1)
             {
                 ErrorManager.SignalError("SoundEntry: Wrong number of items");

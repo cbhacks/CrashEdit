@@ -7,8 +7,7 @@ namespace CrashEdit.Crash
     {
         public override Entry Load(byte[][] items, int eid)
         {
-            if (items == null)
-                throw new ArgumentNullException(nameof(items));
+            ArgumentNullException.ThrowIfNull(items);
             if (items.Length != 1)
             {
                 ErrorManager.SignalError("T6Entry: Wrong number of items");

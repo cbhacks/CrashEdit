@@ -4,10 +4,8 @@ namespace CrashEdit.Crash
     {
         public static SceneryVertex Load(byte[] xydata, byte[] zdata, bool is_c3 = false)
         {
-            if (xydata == null)
-                throw new ArgumentNullException(nameof(xydata));
-            if (zdata == null)
-                throw new ArgumentNullException(nameof(zdata));
+            ArgumentNullException.ThrowIfNull(xydata);
+            ArgumentNullException.ThrowIfNull(zdata);
             if (xydata.Length != 4)
                 throw new ArgumentException("Value must be 4 bytes long.", nameof(xydata));
             if (zdata.Length != 2)

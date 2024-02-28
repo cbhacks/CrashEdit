@@ -35,8 +35,7 @@ namespace CrashEdit
 
         public sealed override bool Import(IUserInterface ui, ReadOnlySpan<byte> buf, out object? res)
         {
-            if (ui == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(ui);
 
             if (Import(ui, buf, out T t))
             {

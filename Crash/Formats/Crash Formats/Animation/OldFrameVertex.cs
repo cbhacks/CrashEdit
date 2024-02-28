@@ -4,8 +4,7 @@ namespace CrashEdit.Crash
     {
         public static OldFrameVertex Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length != 6)
                 throw new ArgumentException("Value must be 6 bytes long.", nameof(data));
             byte x = data[0];

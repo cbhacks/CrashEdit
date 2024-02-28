@@ -12,10 +12,8 @@ namespace CrashEdit.Crash
 
         public override bool Export(IUserInterface ui, out ReadOnlySpan<byte> buf, SEQ res)
         {
-            if (ui == null)
-                throw new ArgumentNullException();
-            if (res == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(ui);
+            ArgumentNullException.ThrowIfNull(res);
 
             buf = new ReadOnlySpan<byte>(res.ToMIDI());
             return true;

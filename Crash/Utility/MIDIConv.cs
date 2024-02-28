@@ -4,8 +4,7 @@ namespace CrashEdit.Crash
     {
         public static int From3BE(byte[] str, int offset)
         {
-            if (str == null)
-                throw new ArgumentNullException(nameof(str));
+            ArgumentNullException.ThrowIfNull(str);
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 3 > str.Length)
@@ -19,8 +18,7 @@ namespace CrashEdit.Crash
 
         public static void To3BE(byte[] str, int offset, int value)
         {
-            if (str == null)
-                throw new ArgumentNullException(nameof(str));
+            ArgumentNullException.ThrowIfNull(str);
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 3 > str.Length)

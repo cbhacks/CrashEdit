@@ -69,8 +69,7 @@ namespace CrashEdit.Crash
 
         public VHProgram(bool isoldversion, byte volume, byte priority, byte mode, byte panning, short attribute, IEnumerable<VHTone> tones)
         {
-            if (tones == null)
-                throw new ArgumentNullException(nameof(tones));
+            ArgumentNullException.ThrowIfNull(tones);
             IsOldVersion = isoldversion;
             Volume = volume;
             Priority = priority;

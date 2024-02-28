@@ -10,8 +10,7 @@ namespace CrashEdit
 
         public override bool ApplicableForSubject(Controller subj)
         {
-            if (subj == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(subj);
 
             return subj.Resource is byte[];
         }

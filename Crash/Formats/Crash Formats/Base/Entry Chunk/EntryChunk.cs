@@ -9,8 +9,7 @@ namespace CrashEdit.Crash
 
         public EntryChunk(IEnumerable<Entry> entries)
         {
-            if (entries == null)
-                throw new ArgumentNullException(nameof(entries));
+            ArgumentNullException.ThrowIfNull(entries);
             Entries = new List<Entry>(entries);
         }
 

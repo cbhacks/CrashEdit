@@ -6,8 +6,7 @@ namespace CrashEdit.Crash
 
         public RIFFItem(string name)
         {
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
+            ArgumentNullException.ThrowIfNull(name);
             if (name.Length != 4)
                 throw new ArgumentException("Value must be 4 characters long.", nameof(name));
             this.name = name;

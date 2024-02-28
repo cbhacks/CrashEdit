@@ -8,8 +8,7 @@ namespace CrashEdit
 
         public SubcontrollerSlotGroup(Controller owner, PropertyInfo property, SubresourceSlotAttribute attr) : base(owner)
         {
-            if (property == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(property);
 
             Property = property;
             Attribute = attr;
@@ -34,8 +33,7 @@ namespace CrashEdit
 
         public override void Add(object res)
         {
-            if (res == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(res);
             if (!CanAdd)
                 throw new InvalidOperationException();
 
@@ -46,8 +44,7 @@ namespace CrashEdit
 
         public override void Remove(Controller subctlr)
         {
-            if (subctlr == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(subctlr);
             if (!CanRemove)
                 throw new InvalidOperationException();
             if (Members.Count == 0 || Members[0] != subctlr)
@@ -60,10 +57,8 @@ namespace CrashEdit
 
         public override void Replace(Controller subctlr, object newRes)
         {
-            if (subctlr == null)
-                throw new ArgumentNullException();
-            if (newRes == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(subctlr);
+            ArgumentNullException.ThrowIfNull(newRes);
             if (!CanReplace)
                 throw new InvalidOperationException();
             if (Members.Count == 0 || Members[0] != subctlr)

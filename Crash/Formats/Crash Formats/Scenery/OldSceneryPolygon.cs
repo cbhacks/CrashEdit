@@ -4,8 +4,7 @@ namespace CrashEdit.Crash
     {
         public static OldSceneryPolygon Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length != 8)
                 throw new ArgumentException("Value must be 8 bytes long.", nameof(data));
             int worda = BitConv.FromInt32(data, 0);
@@ -29,7 +28,7 @@ namespace CrashEdit.Crash
             if (vertexc < 0 || vertexc > 0xFFF)
                 throw new ArgumentOutOfRangeException(nameof(vertexc));
             if (modelstruct < 0 || modelstruct > 0xFFF)
-                throw new ArgumentOutOfRangeException("unknown1");
+                throw new ArgumentOutOfRangeException(nameof(modelstruct));
             VertexA = vertexa;
             VertexB = vertexb;
             VertexC = vertexc;

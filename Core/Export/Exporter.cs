@@ -35,10 +35,8 @@ namespace CrashEdit
 
         public sealed override bool Export(IUserInterface ui, out ReadOnlySpan<byte> buf, object res)
         {
-            if (ui == null)
-                throw new ArgumentNullException();
-            if (res == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(ui);
+            ArgumentNullException.ThrowIfNull(res);
             if (!(res is T))
                 throw new ArgumentException();
 

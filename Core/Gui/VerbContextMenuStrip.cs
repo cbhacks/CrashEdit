@@ -10,8 +10,7 @@ namespace CrashEdit
 
         public VerbContextMenuStrip(IVerbExecutor executor)
         {
-            if (executor == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(executor);
 
             Executor = executor;
             ImageList = Embeds.ImageList;
@@ -69,8 +68,7 @@ namespace CrashEdit
 
         private void AddHeading(string text)
         {
-            if (text == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(text);
 
             Items.Add(new ToolStripMenuItem
             {

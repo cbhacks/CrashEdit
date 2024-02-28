@@ -4,8 +4,7 @@ internal static class BitConv
 {
     public static int FromInt32(byte[] str, int offset)
     {
-        if (str == null)
-            throw new ArgumentNullException(nameof(str));
+        ArgumentNullException.ThrowIfNull(str);
         if (offset < 0)
             throw new ArgumentOutOfRangeException(nameof(offset));
         if (offset + 4 > str.Length)
@@ -20,8 +19,7 @@ internal static class BitConv
 
     public static void ToInt32(byte[] str, int offset, int value)
     {
-        if (str == null)
-            throw new ArgumentNullException(nameof(str));
+        ArgumentNullException.ThrowIfNull(str);
         if (offset < 0)
             throw new ArgumentOutOfRangeException(nameof(offset));
         if (offset + 4 > str.Length)

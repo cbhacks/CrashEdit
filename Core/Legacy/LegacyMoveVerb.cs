@@ -8,18 +8,15 @@ namespace CrashEdit
 
         public override bool ApplicableForSource(Controller src)
         {
-            if (src == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(src);
 
             return (src.Legacy != null);
         }
 
         public override bool ApplicableForTransit(Controller src, Controller dest)
         {
-            if (src == null)
-                throw new ArgumentNullException();
-            if (dest == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(src);
+            ArgumentNullException.ThrowIfNull(dest);
 
             if (src.Legacy == null)
                 return false;
@@ -31,8 +28,7 @@ namespace CrashEdit
 
         public override void Execute(IUserInterface ui)
         {
-            if (ui == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(ui);
             if (Source == null)
                 throw new InvalidOperationException();
             if (Destination == null)

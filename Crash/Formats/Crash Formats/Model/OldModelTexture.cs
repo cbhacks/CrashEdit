@@ -4,8 +4,7 @@
     {
         public static OldModelTexture Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length != 12)
                 throw new ArgumentException("Value must be 12 bytes long.", nameof(data));
             byte r = data[0];

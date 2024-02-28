@@ -9,8 +9,7 @@ namespace CrashEdit
 
         public ResourcePanel(Controller ctlr)
         {
-            if (ctlr == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(ctlr);
 
             Controller = ctlr;
 

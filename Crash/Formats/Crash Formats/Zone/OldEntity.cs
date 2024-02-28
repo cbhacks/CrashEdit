@@ -40,8 +40,7 @@ namespace CrashEdit.Crash
 
         public OldEntity(short flags, byte spawn, byte unk, short id, short vecx, short vecy, short vecz, byte type, byte subtype, IEnumerable<EntityPosition> positions, short nullfield1)
         {
-            if (positions == null)
-                throw new ArgumentNullException("index");
+            ArgumentNullException.ThrowIfNull(positions);
             Flags = flags;
             Spawn = spawn;
             Unk = unk;

@@ -74,8 +74,7 @@ namespace CrashEdit
 
         public void AddChoice(UserChoice choice)
         {
-            if (choice == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(choice);
 
             var button = new Button
             {
@@ -105,8 +104,7 @@ namespace CrashEdit
 
         public void AddChoices(IEnumerable<UserChoice> choices)
         {
-            if (choices == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(choices);
 
             foreach (var c in choices)
             {

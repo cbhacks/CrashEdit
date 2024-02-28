@@ -6,8 +6,7 @@ namespace CrashEdit
 
         public Command(ICommandHost host)
         {
-            if (host == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(host);
 
             Host = host;
         }

@@ -4,8 +4,7 @@ namespace CrashEdit.Crash
     {
         private static byte[] ReadChunk(byte[] data, ref int offset, out bool compressed)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (offset < 0 || offset > data.Length)
                 throw new ArgumentOutOfRangeException(nameof(offset));
             if (data.Length < offset + 2)
@@ -136,8 +135,7 @@ namespace CrashEdit.Crash
 
         public static NSF Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             int offset = 0;
             int? firstid = null;
             List<UnprocessedChunk> prelude = null;
@@ -208,8 +206,7 @@ namespace CrashEdit.Crash
 
         public NSF(IEnumerable<Chunk> chunks)
         {
-            if (chunks == null)
-                throw new ArgumentNullException(nameof(chunks));
+            ArgumentNullException.ThrowIfNull(chunks);
             Chunks = new List<Chunk>(chunks);
         }
 

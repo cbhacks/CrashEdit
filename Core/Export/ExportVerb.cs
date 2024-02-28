@@ -10,8 +10,7 @@ namespace CrashEdit
 
         public override bool ApplicableForSubject(Controller subj)
         {
-            if (subj == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(subj);
 
             var type = subj.Resource.GetType();
             return Exporter.AllExporters
@@ -21,8 +20,7 @@ namespace CrashEdit
 
         public override void Execute(IUserInterface ui)
         {
-            if (ui == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(ui);
             if (Subject == null)
                 throw new InvalidOperationException();
 

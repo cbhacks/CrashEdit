@@ -42,8 +42,7 @@ namespace CrashEdit
 
         public static Icon? GetIcon(string imageKey)
         {
-            if (imageKey == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(imageKey);
 
             if (Icons.TryGetValue(imageKey, out var icon))
             {

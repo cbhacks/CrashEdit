@@ -4,8 +4,7 @@ namespace CrashEdit.Crash
     {
         public static OldNSD Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length < 1672)
             {
                 ErrorManager.SignalError("OldNSD: Data is too short");
@@ -71,16 +70,11 @@ namespace CrashEdit.Crash
 
         public OldNSD(int[] hashkeymap, int chunkcount, int[] leveldata, int uncompressedchunksec, int preludecount, int[] compressedchunkinfo, IEnumerable<NSDLink> index, int magic, int id, int startzone, int camera, int unknown, int[] goolmap, byte[] extradata)
         {
-            if (hashkeymap == null)
-                throw new ArgumentNullException("firstentries");
-            if (leveldata == null)
-                throw new ArgumentNullException(nameof(leveldata));
-            if (compressedchunkinfo == null)
-                throw new ArgumentNullException(nameof(compressedchunkinfo));
-            if (index == null)
-                throw new ArgumentNullException(nameof(index));
-            if (goolmap == null)
-                throw new ArgumentNullException(nameof(goolmap));
+            ArgumentNullException.ThrowIfNull(hashkeymap);
+            ArgumentNullException.ThrowIfNull(leveldata);
+            ArgumentNullException.ThrowIfNull(compressedchunkinfo);
+            ArgumentNullException.ThrowIfNull(index);
+            ArgumentNullException.ThrowIfNull(goolmap);
             if (hashkeymap.Length != 256)
                 throw new ArgumentException("Value must be 256 ints long.", "firstentries");
             if (leveldata.Length != 4)

@@ -22,8 +22,7 @@ namespace CrashEdit.Crash
     {
         internal static Entry LoadScenery(byte[][] items, int eid, bool is_c3)
         {
-            if (items == null)
-                throw new ArgumentNullException(nameof(items));
+            ArgumentNullException.ThrowIfNull(items);
             if (items.Length != 7)
             {
                 ErrorManager.SignalError("SceneryEntry: Wrong number of items");

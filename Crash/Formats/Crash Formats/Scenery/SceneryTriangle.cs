@@ -4,10 +4,8 @@ namespace CrashEdit.Crash
     {
         public static SceneryTriangle Load(byte[] adata, byte[] bdata)
         {
-            if (adata == null)
-                throw new ArgumentNullException(nameof(adata));
-            if (bdata == null)
-                throw new ArgumentNullException(nameof(bdata));
+            ArgumentNullException.ThrowIfNull(adata);
+            ArgumentNullException.ThrowIfNull(bdata);
             if (adata.Length != 4)
                 throw new ArgumentException("Value must be 4 bytes long.", nameof(adata));
             if (bdata.Length != 2)

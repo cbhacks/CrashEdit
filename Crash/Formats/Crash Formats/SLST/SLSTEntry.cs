@@ -4,8 +4,7 @@ namespace CrashEdit.Crash
     {
         public SLSTEntry(SLSTSource start, SLSTSource end, IEnumerable<SLSTDelta> deltas, int eid) : base(eid)
         {
-            if (deltas == null)
-                throw new ArgumentNullException(nameof(deltas));
+            ArgumentNullException.ThrowIfNull(deltas);
             Deltas.AddRange(deltas);
             Start = start;
             End = end;

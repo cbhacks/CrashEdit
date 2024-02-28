@@ -10,8 +10,7 @@ namespace CrashEdit
 
         public override bool ApplicableForGroup(SubcontrollerGroup group)
         {
-            if (group == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(group);
 
             if (group.CanAdd)
             {
@@ -27,8 +26,7 @@ namespace CrashEdit
 
         public override void Execute(IUserInterface ui)
         {
-            if (ui == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(ui);
             if (Group == null)
                 throw new InvalidOperationException();
 

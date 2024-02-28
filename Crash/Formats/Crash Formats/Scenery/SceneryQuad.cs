@@ -4,8 +4,7 @@ namespace CrashEdit.Crash
     {
         public static SceneryQuad Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length != 8)
                 throw new ArgumentException("Value must be 8 bytes long.", nameof(data));
             int worda = BitConv.FromInt32(data, 0);

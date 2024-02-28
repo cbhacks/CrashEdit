@@ -7,8 +7,7 @@ namespace CrashEdit
     {
         public SubcontrollerListGroup(Controller owner, PropertyInfo property, SubresourceListAttribute attr) : base(owner)
         {
-            if (property == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(property);
 
             var iEnumerableTypes = property.PropertyType.GetInterfaces()
                 .Concat(new Type[] { property.PropertyType })
@@ -107,8 +106,7 @@ namespace CrashEdit
 
         public override void Add(object res)
         {
-            if (res == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(res);
             if (!CanAdd)
                 throw new InvalidOperationException();
 
@@ -119,8 +117,7 @@ namespace CrashEdit
 
         public override void Remove(Controller subctlr)
         {
-            if (subctlr == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(subctlr);
             if (!CanRemove)
                 throw new InvalidOperationException();
             int index = Members.IndexOf(subctlr);
@@ -147,10 +144,8 @@ namespace CrashEdit
 
         public override void Replace(Controller subctlr, object newRes)
         {
-            if (subctlr == null)
-                throw new ArgumentNullException();
-            if (newRes == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(subctlr);
+            ArgumentNullException.ThrowIfNull(newRes);
             if (!CanReplace)
                 throw new InvalidOperationException();
             int index = Members.IndexOf(subctlr);

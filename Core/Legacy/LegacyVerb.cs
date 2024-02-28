@@ -6,10 +6,8 @@ namespace CrashEdit
 
         public LegacyVerb(string text, Action proc)
         {
-            if (text == null)
-                throw new ArgumentNullException();
-            if (proc == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(text);
+            ArgumentNullException.ThrowIfNull(proc);
 
             _text = text;
             Proc = proc;
@@ -23,8 +21,7 @@ namespace CrashEdit
 
         public override void Execute(IUserInterface ui)
         {
-            if (ui == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(ui);
 
             Proc();
         }

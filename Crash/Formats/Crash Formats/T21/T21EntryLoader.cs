@@ -6,8 +6,7 @@ namespace CrashEdit.Crash
     {
         public override Entry Load(byte[][] items, int eid)
         {
-            if (items == null)
-                throw new ArgumentNullException(nameof(items));
+            ArgumentNullException.ThrowIfNull(items);
             return new T21Entry(items, eid);
         }
     }

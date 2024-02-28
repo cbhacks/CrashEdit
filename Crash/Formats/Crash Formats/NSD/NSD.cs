@@ -4,8 +4,7 @@ namespace CrashEdit.Crash
     {
         public static NSD Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length < 0x6FC)
             {
                 ErrorManager.SignalError("NSD: Data is too short");
@@ -92,8 +91,7 @@ namespace CrashEdit.Crash
 
         public static NSD LoadC3(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length < 0x7FC)
             {
                 ErrorManager.SignalError("NSD: Data is too short");
@@ -183,18 +181,12 @@ namespace CrashEdit.Crash
 
         public NSD(int[] hashkeymap, int chunkcount, int[] leveldata, int uncompressedchunksec, int preludecount, int[] compressedchunkinfo, IEnumerable<NSDLink> index, int blank, int id, int entitycount, int[] goolmap, byte[] extradata, IEnumerable<NSDSpawnPoint> spawns, byte[] imagedata)
         {
-            if (hashkeymap == null)
-                throw new ArgumentNullException(nameof(hashkeymap));
-            if (leveldata == null)
-                throw new ArgumentNullException(nameof(leveldata));
-            if (compressedchunkinfo == null)
-                throw new ArgumentNullException(nameof(compressedchunkinfo));
-            if (index == null)
-                throw new ArgumentNullException(nameof(index));
-            if (goolmap == null)
-                throw new ArgumentNullException(nameof(goolmap));
-            if (spawns == null)
-                throw new ArgumentNullException(nameof(spawns));
+            ArgumentNullException.ThrowIfNull(hashkeymap);
+            ArgumentNullException.ThrowIfNull(leveldata);
+            ArgumentNullException.ThrowIfNull(compressedchunkinfo);
+            ArgumentNullException.ThrowIfNull(index);
+            ArgumentNullException.ThrowIfNull(goolmap);
+            ArgumentNullException.ThrowIfNull(spawns);
             if (hashkeymap.Length != 256)
                 throw new ArgumentException("Value must be 256 ints long.", "firstentries");
             if (leveldata.Length != 4)

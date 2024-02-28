@@ -4,8 +4,7 @@ namespace CrashEdit.Crash
     {
         public static OldSLSTSource Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length < 4)
             {
                 ErrorManager.SignalError("OldSLSTSource: Data is too short");
@@ -36,8 +35,7 @@ namespace CrashEdit.Crash
 
         public OldSLSTSource(IEnumerable<OldSLSTPolygonID> polygons)
         {
-            if (polygons == null)
-                throw new ArgumentNullException(nameof(polygons));
+            ArgumentNullException.ThrowIfNull(polygons);
             this.polygons = new List<OldSLSTPolygonID>(polygons);
         }
 

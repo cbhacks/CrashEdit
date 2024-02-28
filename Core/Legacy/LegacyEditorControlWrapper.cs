@@ -8,8 +8,7 @@ namespace CrashEdit
 
         public LegacyEditorControlWrapper(LegacyController legacyCtlr)
         {
-            if (legacyCtlr == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(legacyCtlr);
 
             LegacyController = legacyCtlr;
             legacyCtlr.NeedsNewEditor = false;

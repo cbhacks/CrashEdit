@@ -10,8 +10,7 @@ namespace CrashEdit.Crash
 
         public override bool Import(IUserInterface ui, ReadOnlySpan<byte> buf, out VH res)
         {
-            if (ui == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(ui);
 
             res = VH.Load(buf.ToArray());
             return true;

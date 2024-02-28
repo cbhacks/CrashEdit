@@ -9,8 +9,7 @@ namespace CrashEdit
 
         public ResourceTreeView(IVerbExecutor executor)
         {
-            if (executor == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(executor);
 
             Executor = executor;
             AllowDrop = true;
@@ -288,10 +287,8 @@ namespace CrashEdit
 
             public DragDropHelper(Controller src, List<TransitiveVerb> verbs)
             {
-                if (src == null)
-                    throw new ArgumentNullException();
-                if (verbs == null)
-                    throw new ArgumentNullException();
+                ArgumentNullException.ThrowIfNull(src);
+                ArgumentNullException.ThrowIfNull(verbs);
 
                 Source = src;
                 Verbs = verbs;

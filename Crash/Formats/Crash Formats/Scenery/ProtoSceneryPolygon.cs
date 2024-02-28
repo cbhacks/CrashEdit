@@ -4,8 +4,7 @@ namespace CrashEdit.Crash
     {
         public static ProtoSceneryPolygon Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length != 12)
                 throw new ArgumentException("Value must be 12 bytes long.", nameof(data));
             int[] words = new int[3] { BitConv.FromInt32(data, 0), BitConv.FromInt32(data, 4), BitConv.FromInt32(data, 8) };

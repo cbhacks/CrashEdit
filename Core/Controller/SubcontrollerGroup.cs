@@ -6,8 +6,7 @@ namespace CrashEdit
 
         public SubcontrollerGroup(Controller owner)
         {
-            if (owner == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(owner);
 
             Owner = owner;
         }

@@ -5,8 +5,7 @@ namespace CrashEdit.Crash
     {
         public override EntryChunk Load(Entry[] entries)
         {
-            if (entries == null)
-                throw new ArgumentNullException(nameof(entries));
+            ArgumentNullException.ThrowIfNull(entries);
             return new SoundChunk(entries);
         }
     }

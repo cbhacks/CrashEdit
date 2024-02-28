@@ -6,8 +6,7 @@ namespace CrashEdit
 
         public static Controller Make(object resource, SubcontrollerGroup? parentGroup)
         {
-            if (resource == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(resource);
 
             var type = resource.GetType();
             while (type != null)
@@ -26,8 +25,7 @@ namespace CrashEdit
 
         private Controller(object resource, SubcontrollerGroup? parentGroup)
         {
-            if (resource == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(resource);
 
             Resource = resource;
             ParentGroup = parentGroup;
@@ -64,8 +62,7 @@ namespace CrashEdit
 
         public Controller(LegacyController legacy, SubcontrollerGroup? parentGroup) : this(legacy.Resource, parentGroup)
         {
-            if (legacy == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(legacy);
 
             Legacy = legacy;
         }

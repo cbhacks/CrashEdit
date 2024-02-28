@@ -8,10 +8,8 @@ namespace CrashEdit
 
         public MainControl(IUserInterface ui, Controller rootController)
         {
-            if (ui == null)
-                throw new ArgumentNullException();
-            if (rootController == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(ui);
+            ArgumentNullException.ThrowIfNull(rootController);
 
             Ui = ui;
             RootController = rootController;
@@ -105,8 +103,7 @@ namespace CrashEdit
 
         public void ExecuteVerb(Verb verb)
         {
-            if (verb == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(verb);
 
             verb.Execute(Ui);
 
@@ -116,8 +113,7 @@ namespace CrashEdit
 
         public void ExecuteVerbChoice(List<Verb> verbs)
         {
-            if (verbs == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(verbs);
 
             // Don't bother if there are no choices.
             if (verbs.Count == 0)

@@ -6,8 +6,7 @@ namespace CrashEdit.Crash
 
         public RIFFData(string name, byte[] data) : base(name)
         {
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
+            ArgumentNullException.ThrowIfNull(name);
             this.data = data ?? throw new ArgumentNullException(nameof(data));
         }
 

@@ -10,8 +10,7 @@ namespace CrashEdit
 
         public void Initialize(Controller subj)
         {
-            if (subj == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(subj);
             if (IsDisposed)
                 throw new ObjectDisposedException(GetType().FullName);
             if (IsInitialized)

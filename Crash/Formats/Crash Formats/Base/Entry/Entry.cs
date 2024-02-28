@@ -46,8 +46,7 @@ namespace CrashEdit.Crash
 
         public static UnprocessedEntry Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length < 16)
             {
                 ErrorManager.SignalError("Entry: Data is too short");

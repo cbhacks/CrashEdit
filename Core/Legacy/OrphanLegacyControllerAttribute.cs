@@ -7,8 +7,7 @@ namespace CrashEdit
 
         public OrphanLegacyControllerAttribute(Type resType)
         {
-            if (resType == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(resType);
 
             ResourceType = resType;
         }

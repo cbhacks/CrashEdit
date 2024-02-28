@@ -235,8 +235,7 @@ namespace CrashEdit
 
         public bool ShowImportDialog(out string? filename, string[] fileFilters)
         {
-            if (fileFilters == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(fileFilters);
 
             var filter = string.Join("|", fileFilters);
             if (filter != "")
@@ -261,8 +260,7 @@ namespace CrashEdit
 
         public bool ShowExportDialog(out string? filename, string[] fileFilters)
         {
-            if (fileFilters == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(fileFilters);
 
             var filter = string.Join("|", fileFilters);
             if (filter != "")
@@ -287,10 +285,8 @@ namespace CrashEdit
 
         public UserChoice? ShowChoiceDialog(string msg, IEnumerable<UserChoice> choices)
         {
-            if (msg == null)
-                throw new ArgumentNullException();
-            if (choices == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(msg);
+            ArgumentNullException.ThrowIfNull(choices);
 
             using (var dialog = new ChoiceDialog())
             {

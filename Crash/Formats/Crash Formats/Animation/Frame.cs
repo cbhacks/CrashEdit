@@ -4,8 +4,7 @@ namespace CrashEdit.Crash
     {
         public static Frame Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length < 24)
             {
                 ErrorManager.SignalError("Frame: Data is too short");
@@ -59,8 +58,7 @@ namespace CrashEdit.Crash
 
         public static Frame LoadNew(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length < 28)
             {
                 ErrorManager.SignalError("NewFrame: Data is too short");

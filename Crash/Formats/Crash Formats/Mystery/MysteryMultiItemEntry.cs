@@ -6,8 +6,7 @@ namespace CrashEdit.Crash
 
         public MysteryMultiItemEntry(IEnumerable<byte[]> items, int eid) : base(eid)
         {
-            if (items == null)
-                throw new ArgumentNullException(nameof(items));
+            ArgumentNullException.ThrowIfNull(items);
             this.items = new List<byte[]>(items);
         }
 
