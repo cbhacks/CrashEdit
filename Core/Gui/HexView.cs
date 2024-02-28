@@ -1,3 +1,4 @@
+using CrashEdit.Crash;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -367,6 +368,11 @@ namespace CrashEdit
                 case Keys.Back:
                     // Backspace input, if possible.
                     ClearInput();
+                    break;
+
+                case Keys.N:
+                    // type out the EID for "NONE!"
+                    InputNone();
                     break;
 
                 default:
@@ -764,6 +770,37 @@ namespace CrashEdit
                     return ok;
                 }
             }
+        }
+
+        public bool InputNone()
+        {
+            // If edits are not allowed, fail now.
+            if (DataChangeHandler == null)
+                return false;
+
+            // If resizing is not allowed, fail if trying to append.
+            if (ByteCursor + 3 == Data.Length && !AllowResize)
+                return false;
+
+            // If cursor is not word-aligned
+            if (ByteCursor % 4 != 0)
+                return false;
+
+            if (_pendingInput != null)
+            {
+                _pendingInput = null;
+            }
+
+            bool ok = DataChangeHandler(ByteCursor, 4, [Entry.NullEID & 0xFF, (Entry.NullEID >> 8) & 0xFF, (Entry.NullEID >> 16) & 0xFF, (Entry.NullEID >> 24) & 0xFF]);
+            if (ok)
+            {
+                MoveBy(1);
+                MoveBy(1);
+                MoveBy(1);
+                MoveBy(1);
+            }
+
+            return true;
         }
 
         public void ClearInput()
