@@ -395,12 +395,12 @@ namespace CrashEdit.CE
                 var d = GetMoveSpeed() * PerFrame;
                 if (KDown(Keys.Control))
                 {
-                    if (KDown(Keys.W)) render.Projection.CamTrans.Z += d;
-                    if (KDown(Keys.S)) render.Projection.CamTrans.Z -= d;
-                    if (KDown(Keys.A)) render.Projection.CamTrans.X += d;
-                    if (KDown(Keys.D)) render.Projection.CamTrans.X -= d;
-                    if (KDown(Keys.E)) render.Projection.CamTrans.Y += d;
-                    if (KDown(Keys.Q)) render.Projection.CamTrans.Y -= d;
+                    if (KDown(Keys.W, true)) render.Projection.CamTrans.Z += d;
+                    if (KDown(Keys.S, true)) render.Projection.CamTrans.Z -= d;
+                    if (KDown(Keys.A, true)) render.Projection.CamTrans.X += d;
+                    if (KDown(Keys.D, true)) render.Projection.CamTrans.X -= d;
+                    if (KDown(Keys.E, true)) render.Projection.CamTrans.Y += d;
+                    if (KDown(Keys.Q, true)) render.Projection.CamTrans.Y -= d;
                 }
                 else
                 {
