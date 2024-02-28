@@ -20,10 +20,6 @@ namespace CrashEdit.Crash
             EID = eid;
         }
 
-        protected EntryAddException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
-
         public int EID { get; }
     }
 }
