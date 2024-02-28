@@ -393,8 +393,8 @@ namespace CrashEdit
         private static Brush _bgAlternateBrush = Brushes.LightGray;
 
         // Color for zero-value cells.
-        private static Brush _fgZeroBrush = Brushes.Navy;
-        private static Brush _bgZeroBrush = Brushes.DarkGray;
+        private static Brush _fgZeroBrush = Brushes.DimGray;
+        //private static Brush _bgZeroBrush = Brushes.White;
 
         // Color for the selected cell. This overrides the other colors.
         private static Brush _fgSelectedBrush = Brushes.White;
@@ -566,7 +566,7 @@ namespace CrashEdit
 
                     // Draw the left border.
                     e.Graphics.FillRectangle(
-                        _borderBrush,
+                        cellByte % 4 == 0 ? _borderBrush : Brushes.DarkGray,
                         XStart + XStep * col,
                         YStart + YStep * row + _borderSize,
                         _borderSize,
@@ -595,19 +595,14 @@ namespace CrashEdit
                         fgBrush = _fgSelectedBrush;
                         bgBrush = _bgSelectedBrush;
                     }
-                    else if (data[cellByte] == 0)
-                    {
-                        fgBrush = _fgZeroBrush;
-                        bgBrush = _bgZeroBrush;
-                    }
                     else if (ColumnsPerGroup != 0 && col / ColumnsPerGroup % 2 == 1)
                     {
-                        fgBrush = _fgAlternateBrush;
+                        fgBrush = data[cellByte] == 0 ? _fgZeroBrush : _fgAlternateBrush;
                         bgBrush = _bgAlternateBrush;
                     }
                     else
                     {
-                        fgBrush = _fgNormalBrush;
+                        fgBrush = data[cellByte] == 0 ? _fgZeroBrush : _fgNormalBrush;
                         bgBrush = _bgNormalBrush;
                     }
 
