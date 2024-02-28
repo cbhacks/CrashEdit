@@ -503,6 +503,8 @@ namespace CrashEdit
             var strFormat = new StringFormat();
             strFormat.Alignment = StringAlignment.Center;
             strFormat.LineAlignment = StringAlignment.Center;
+            strFormat.Trimming = StringTrimming.None;
+            strFormat.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
 
             // Determine which rows need to be drawn.
             int visRowFirst = (int)Math.Floor((clipRect.Top - YStart) / (float)YStep);
