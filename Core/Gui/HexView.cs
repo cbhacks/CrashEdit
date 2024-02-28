@@ -384,6 +384,9 @@ namespace CrashEdit
         // Border color drawn around cells.
         private static Brush _borderBrush = Brushes.Black;
 
+        // Border color drawn around cells of the same word.
+        private static Brush _borderWordBrush = Brushes.DarkGray;
+
         // Border color drawn around the selected cell.
         private static Brush _selectedBorderBrush = Brushes.Red;
 
@@ -574,7 +577,7 @@ namespace CrashEdit
 
                     // Draw the left border.
                     e.Graphics.FillRectangle(
-                        cellByte % 4 == 0 ? _borderBrush : Brushes.DarkGray,
+                        cellByte % 4 == 0 ? _borderBrush : _borderWordBrush,
                         XStart + XStep * col,
                         YStart + YStep * row + _borderSize,
                         _borderSize,
