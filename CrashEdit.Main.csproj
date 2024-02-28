@@ -16,17 +16,17 @@
 
     <ItemGroup>
       <FrameworkReference Include="Microsoft.WindowsDesktop.App" />
-      <Compile Remove="CopyPtr\**" />
+      <Compile Remove="FTBitmapExtensions\**" />
       <Compile Remove="Crash.UI\**" />
       <Compile Remove="CrashEdit\**" />
       <Compile Remove="CrashHacks\**" />
       <Compile Remove="ISO2PSX\**" />
-      <EmbeddedResource Remove="CopyPtr\**" />
+      <EmbeddedResource Remove="FTBitmapExtensions\**" />
       <EmbeddedResource Remove="Crash.UI\**" />
       <EmbeddedResource Remove="CrashEdit\**" />
       <EmbeddedResource Remove="CrashHacks\**" />
       <EmbeddedResource Remove="ISO2PSX\**" />
-      <None Remove="CopyPtr\**" />
+      <None Remove="FTBitmapExtensions\**" />
       <None Remove="Crash.UI\**" />
       <None Remove="CrashEdit\**" />
       <None Remove="CrashHacks\**" />
