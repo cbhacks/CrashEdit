@@ -64,6 +64,20 @@ namespace CrashEdit.Crash
             return result;
         }
 
+        public static int FromInt32(ReadOnlySpan<byte> str, int offset)
+        {
+            if (offset < 0)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            if (offset + 4 > str.Length)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            int result = 0;
+            result |= str[offset + 0] << 8 * 0;
+            result |= str[offset + 1] << 8 * 1;
+            result |= str[offset + 2] << 8 * 2;
+            result |= str[offset + 3] << 8 * 3;
+            return result;
+        }
+
         public static void ToInt16(byte[] str, int offset, short value)
         {
             ArgumentNullException.ThrowIfNull(str);

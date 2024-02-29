@@ -232,12 +232,7 @@ namespace CrashEdit
 
             int oldCol = (oldCursor + FirstByteColumn) % ColumnCount;
             int oldRow = (oldCursor + FirstByteColumn) / ColumnCount;
-            var oldRect = new Rectangle();
-            oldRect.X = XStart + XStep * oldCol + AutoScrollPosition.X;
-            oldRect.Y = YStart + YStep * oldRow + AutoScrollPosition.Y;
-            oldRect.Width = XStep + _borderSize;
-            oldRect.Height = YStep + _borderSize;
-            Invalidate(oldRect);
+            InvalidateCell(oldCol, oldRow);
 
             int newCol = (ByteCursor + FirstByteColumn) % ColumnCount;
             int newRow = (ByteCursor + FirstByteColumn) / ColumnCount;
@@ -246,7 +241,7 @@ namespace CrashEdit
             newRect.Y = YStart + YStep * newRow + AutoScrollPosition.Y;
             newRect.Width = XStep + _borderSize;
             newRect.Height = YStep + _borderSize;
-            Invalidate(newRect);
+            InvalidateCell(newCol, newRow);
 
             Point newScrollPos = AutoScrollPosition;
             if (newRect.Left < 0)
@@ -379,8 +374,18 @@ namespace CrashEdit
                 case Keys.Space:
                     // Input zero
                     // (lazy)
+                    if (_pendingInput != null)
+                    {
+                        _pendingInput = null;
+                    }
                     InputNybble(0);
                     InputNybble(0);
+                    break;
+
+                case Keys.Z:
+                    // Toggle chunk name view mode
+                    _modeChunkName = !_modeChunkName;
+                    Invalidate();
                     break;
 
                 default:
@@ -417,6 +422,11 @@ namespace CrashEdit
         private static Brush _fgSelectedBrush = Brushes.White;
         private static Brush _bgSelectedBrush = Brushes.Navy;
 
+        // Color for cells when they're being displayed as chunk names
+        private static Brush _fgChunkBrush = Brushes.White;
+        private static Brush _bgChunkBrush = Brushes.Chocolate;
+        private static Brush _bgSelectedChunkBrush = Brushes.Brown;
+
         // Size of borders between and around cells, in pixels.
         private static int _borderSize = 2;
 
@@ -443,6 +453,9 @@ namespace CrashEdit
 
         // The distance between the top of one row and the top of the next.
         private int YStep => _borderSize + _padding + CharSize.Height + _padding;
+
+        // Whether we're trying to display cells as chunk names or not
+        private bool _modeChunkName = false;
 
         // Recomputes and applies the control's layout and desired display size.
         private void ResetLayout()
@@ -582,14 +595,21 @@ namespace CrashEdit
                 {
                     int colX = XStart + XStep * col;
                     int cellByte = rowFirstByte + col;
+                    int chunkNameByteOfs = cellByte % 4;
+                    bool showChunkName = _modeChunkName && (cellByte - chunkNameByteOfs) + 3 < data.Length && (data[cellByte - chunkNameByteOfs] & 1) != 0 && (data[cellByte - chunkNameByteOfs + 3] & 0x80) == 0;
 
                     // Draw the left border.
-                    e.Graphics.FillRectangle(
-                        cellByte % 4 == 0 ? _borderBrush : _borderWordBrush,
-                        XStart + XStep * col,
-                        YStart + YStep * row + _borderSize,
-                        _borderSize,
-                        YStep - _borderSize);
+                    // In chunk name mode, only if we're at the left edge of a chunk name (or first column)
+                    bool leftBorderDrawn = !showChunkName || cellByte % 4 == 0 || col == 0;
+                    if (leftBorderDrawn)
+                    {
+                        e.Graphics.FillRectangle(
+                            cellByte % 4 == 0 ? _borderBrush : _borderWordBrush,
+                            XStart + XStep * col,
+                            YStart + YStep * row + _borderSize,
+                            _borderSize,
+                            YStep - _borderSize);
+                    }
 
                     // If this is the last column, also draw the right border.
                     if (col == colLast)
@@ -612,41 +632,59 @@ namespace CrashEdit
                     if (cellByte == ByteCursor)
                     {
                         fgBrush = _fgSelectedBrush;
-                        bgBrush = _bgSelectedBrush;
+                        bgBrush = showChunkName ? _bgSelectedChunkBrush : _bgSelectedBrush;
                     }
                     else if (ColumnsPerGroup != 0 && col / ColumnsPerGroup % 2 == 1)
                     {
                         fgBrush = data[cellByte] == 0 ? _fgZeroBrush : _fgAlternateBrush;
-                        bgBrush = _bgAlternateBrush;
+                        bgBrush = showChunkName ? _bgChunkBrush : _bgAlternateBrush;
                     }
                     else
                     {
                         fgBrush = data[cellByte] == 0 ? _fgZeroBrush : _fgNormalBrush;
-                        bgBrush = _bgNormalBrush;
+                        bgBrush = showChunkName ? _bgChunkBrush : _bgNormalBrush;
                     }
 
                     var cellInnerRect = new Rectangle();
-                    cellInnerRect.X = colX + _borderSize;
+                    cellInnerRect.X = colX + (leftBorderDrawn ? _borderSize : 0);
                     cellInnerRect.Y = rowY + _borderSize;
-                    cellInnerRect.Width = _padding + CharSize.Width * 2 + _padding;
+                    cellInnerRect.Width = _padding + CharSize.Width * 2 + _padding + (leftBorderDrawn ? 0 : _borderSize);
                     cellInnerRect.Height = _padding + CharSize.Height + _padding;
 
                     // Draw the background.
                     e.Graphics.FillRectangle(bgBrush, cellInnerRect);
 
                     // Draw the cell value.
-                    var text = data[cellByte].ToString("X2");
-                    if (_pendingInput != null && cellByte == ByteCursor)
+                    if (!showChunkName)
                     {
-                        // Skip the first nybble if the user is typing a new byte value.
-                        text = " " + text[1];
+                        var text = data[cellByte].ToString("X2");
+                        if (_pendingInput != null && cellByte == ByteCursor)
+                        {
+                            // Skip the first nybble if the user is typing a new byte value.
+                            text = " " + text[1];
+                        }
+                        e.Graphics.DrawString(
+                            text,
+                            _font,
+                            fgBrush,
+                            cellInnerRect,
+                            strFormat);
                     }
-                    e.Graphics.DrawString(
-                        text,
-                        _font,
-                        fgBrush,
-                        cellInnerRect,
-                        strFormat);
+                    else if (chunkNameByteOfs == 3)
+                    {
+                        // draw chunk name, occupying as many cells of the row as possible
+                        var text = Entry.EIDToEName(BitConv.FromInt32(data, cellByte - chunkNameByteOfs));
+                        int colSpan = (col % 4) - chunkNameByteOfs + 4;
+                        var oldWidth = cellInnerRect.Width;
+                        cellInnerRect.Width = oldWidth * colSpan - _borderSize;
+                        cellInnerRect.X -= cellInnerRect.Width - oldWidth;
+                        e.Graphics.DrawString(
+                            text,
+                            _font,
+                            _fgChunkBrush,
+                            cellInnerRect,
+                            strFormat);
+                    }
                 }
 
                 // Draw the bottom border for this row, unless the next row will draw it for us
@@ -722,6 +760,25 @@ namespace CrashEdit
             rect.Width = XStep + _borderSize;
             rect.Height = YStep + _borderSize;
             Invalidate(rect);
+            if (_modeChunkName)
+            {
+                int cellByte = row * ColumnCount - FirstByteColumn + col;
+                int cellByteChunkNameOfs = cellByte % 4;
+                int cellByteWordStart = cellByte - cellByteChunkNameOfs;
+                // temporarily disable this to prevent infinite recursion...
+                _modeChunkName = false;
+                // also update the remaining 3 cells in this word
+                for (int i = 0; i < 4; ++i)
+                {
+                    if (i == cellByteChunkNameOfs)
+                        continue;
+                    int thisByte = cellByteWordStart + i;
+                    int thisCol = (thisByte + FirstByteColumn) % ColumnCount;
+                    int thisRow = (thisByte + FirstByteColumn) / ColumnCount;
+                    InvalidateCell(thisCol, thisRow);
+                }
+                _modeChunkName = true;
+            }
         }
 
         protected override void Dispose(bool disposing)
