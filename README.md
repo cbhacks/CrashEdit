@@ -39,10 +39,6 @@ This is an experimental version of CrashEdit.
 
 ### Regressions
 
- * New hex editor is missing some commonly used special keys:
-   * Z to view EID's
-   * N to set a `NONE!` EID starting at the current position
- * Chunk space allocation viewer is broken
  * Localization support is reduced
  * Export SEP is missing; this can be achieved by exporting the third item from
  an unprocessed music entry.
