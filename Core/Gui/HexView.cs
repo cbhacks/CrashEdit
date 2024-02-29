@@ -371,8 +371,15 @@ namespace CrashEdit
                     break;
 
                 case Keys.N:
-                    // type out the EID for "NONE!"
+                    // Input the EID for "NONE!"
                     InputNone();
+                    break;
+
+                case Keys.Space:
+                    // Input zero
+                    // (lazy)
+                    InputNybble(0);
+                    InputNybble(0);
                     break;
 
                 default:
