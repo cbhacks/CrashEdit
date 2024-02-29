@@ -10,6 +10,7 @@ namespace CrashEdit
 
         public HexView()
         {
+            DoubleBuffered = true;
             ResetLayout();
         }
 
