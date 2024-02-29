@@ -14,6 +14,7 @@ namespace CrashEdit
             Executor = executor;
             AllowDrop = true;
             ImageList = Embeds.ImageList;
+            DoubleBuffered = true; // why the hell is this not the default!!
         }
 
         public IVerbExecutor Executor { get; }
