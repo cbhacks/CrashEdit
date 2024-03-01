@@ -1,6 +1,6 @@
 namespace CrashEdit
 {
-    public sealed class DeleteVerb : DirectVerb
+    public class DeleteVerb : DirectVerb
     {
         public override string Text => "Delete";
 

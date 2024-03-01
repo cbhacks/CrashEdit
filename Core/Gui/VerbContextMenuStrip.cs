@@ -89,10 +89,16 @@ namespace CrashEdit
                 Items.Clear();
 
                 var directVerbs = Verb.AllVerbs
-                    .OfType<DirectVerb>()
-                    .Where(x => x.ApplicableForSubject(Subject))
+                    .Where(x => x is DirectVerb d && d.ApplicableForSubject(Subject))
                     .ToList();
+                var verbstoadd = new List<Verb>();
                 foreach (var verb in directVerbs)
+                {
+                    // if we have a more specific verb type, use that one instead
+                    verbstoadd.RemoveAll(x => verb.GetType().IsSubclassOf(x.GetType()));
+                    verbstoadd.Add(verb);
+                }
+                foreach (var verb in verbstoadd)
                 {
                     if (Items.Count == 0)
                     {
@@ -100,6 +106,7 @@ namespace CrashEdit
                     }
 
                     var item = new ToolStripMenuItem();
+                    item.Tag = verb;
                     item.Text = verb.Text;
                     item.ImageKey = verb.ImageKey;
                     item.Click += (sender, e) =>

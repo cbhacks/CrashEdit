@@ -9,7 +9,6 @@ namespace CrashEdit.CE
         {
             Entity = entity;
             AddMenu("Duplicate Entity", Menu_Duplicate);
-            AddMenu("Delete Entity", Menu_Delete);
         }
 
         public override bool EditorAvailable => true;
@@ -78,73 +77,6 @@ namespace CrashEdit.CE
                     drawlist.Values.Add(maxid);
                 }
             }
-        }
-
-        private void Menu_Delete()
-        {
-            int index = -1;
-            if (ZoneEntry.Entities.IndexOf(Entity) < ZoneEntry.CameraCount)
-            {
-                --ZoneEntry.CameraCount;
-            }
-            else
-            {
-                index = ZoneEntry.Entities.IndexOf(Entity) - ZoneEntry.CameraCount;
-                --ZoneEntry.EntityCount;
-            }
-            if (Entity.ID.HasValue)
-            {
-                foreach (ZoneEntry zone in GetEntries<ZoneEntry>())
-                {
-                    int zoneindex = -1;
-                    for (int z = 0, s = BitConv.FromInt32(zone.Header, 0x190); z < s; ++z)
-                    {
-                        if (BitConv.FromInt32(zone.Header, 0x194 + z * 4) == ZoneEntry.EID)
-                        {
-                            zoneindex = z;
-                            break;
-                        }
-                    }
-                    foreach (Entity otherentity in zone.Entities)
-                    {
-                        if (otherentity.DrawListA != null)
-                        {
-                            foreach (EntityPropertyRow<int> row in otherentity.DrawListA.Rows)
-                            {
-                                for (int i = row.Values.Count - 1; i >= 0; --i)
-                                {
-                                    if ((row.Values[i] & 0xFFFF00) >> 8 == Entity.ID.Value)
-                                        row.Values.RemoveAt(i);
-                                    else if ((row.Values[i] & 0xFF) == zoneindex && ((row.Values[i] & 0xFF000000) >> 24) > index)
-                                    {
-                                        int newindex = (int)(row.Values[i] & 0xFF000000) >> 24;
-                                        row.Values[i] &= 0xFFFFFF;
-                                        row.Values[i] |= --newindex << 24;
-                                    }
-                                }
-                            }
-                        }
-                        if (otherentity.DrawListB != null)
-                        {
-                            foreach (EntityPropertyRow<int> row in otherentity.DrawListB.Rows)
-                            {
-                                for (int i = row.Values.Count - 1; i >= 0; --i)
-                                {
-                                    if ((row.Values[i] & 0xFFFF00) >> 8 == Entity.ID.Value)
-                                        row.Values.RemoveAt(i);
-                                    else if ((row.Values[i] & 0xFF) == zoneindex && ((row.Values[i] & 0xFF000000) >> 24) > index)
-                                    {
-                                        int newindex = (int)(row.Values[i] & 0xFF000000) >> 24;
-                                        row.Values[i] &= 0xFFFFFF;
-                                        row.Values[i] |= --newindex << 24;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            ZoneEntry.Entities.Remove(Entity);
         }
     }
 }
