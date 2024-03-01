@@ -19,8 +19,8 @@ uniform int enableTex;
 
 out vec4 p_Color;
 out vec2 p_UV;
-out int p_Tex;
-out int p_TexPage;
+out flat int p_Tex;
+out flat int p_TexPage;
 
 void main(void)
 {
