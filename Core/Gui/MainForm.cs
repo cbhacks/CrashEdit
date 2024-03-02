@@ -318,10 +318,7 @@ namespace CrashEdit
                 SearchBox.Enabled = false;
                 SearchBox.Text = "";
             }
-            if (ResyncSuggested != null)
-            {
-                ResyncSuggested(this, e);
-            }
+            ResyncSuggested?.Invoke(this, e);
         }
 
         protected void MainControl_ActiveControllerChanged(object sender, EventArgs e)

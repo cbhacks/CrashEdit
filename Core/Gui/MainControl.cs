@@ -125,10 +125,7 @@ namespace CrashEdit
 
         protected virtual void OnActiveControllerChanged(EventArgs e)
         {
-            if (ActiveControllerChanged != null)
-            {
-                ActiveControllerChanged(this, e);
-            }
+            ActiveControllerChanged?.Invoke(this, e);
         }
 
     }

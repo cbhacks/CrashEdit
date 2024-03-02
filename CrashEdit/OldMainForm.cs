@@ -166,7 +166,7 @@ namespace CrashEdit.CE
             Icon = OldResources.CBHacksIcon;
             Width = Settings.Default.DefaultFormW;
             Height = Settings.Default.DefaultFormH;
-            Text = $"CrashEdit v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
+            Text = $"CrashEdit v{Assembly.GetExecutingAssembly().GetName().Version}";
 
             dlgMakeBINFile.Filter = "Playstation Disc Images (*.bin)|*.bin";
         }

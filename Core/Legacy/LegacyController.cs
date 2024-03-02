@@ -40,8 +40,7 @@ namespace CrashEdit
             throw new NotSupportedException();
         }
 
-        public static Dictionary<Type, Type> OrphanControllerTypes =
-            new Dictionary<Type, Type>();
+        public static Dictionary<Type, Type> OrphanControllerTypes = [];
 
         [Registrar.TypeProcessor]
         private static void ProcessOrphanControllerType(Type type)

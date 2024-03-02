@@ -57,7 +57,7 @@ namespace CrashEdit
                     {
                         if (otherentity.DrawListA != null)
                         {
-                            foreach (EntityPropertyRow<int> row in otherentity.DrawListA.Rows)
+                            foreach (var row in otherentity.DrawListA.Rows)
                             {
                                 for (int i = row.Values.Count - 1; i >= 0; --i)
                                 {
@@ -74,7 +74,7 @@ namespace CrashEdit
                         }
                         if (otherentity.DrawListB != null)
                         {
-                            foreach (EntityPropertyRow<int> row in otherentity.DrawListB.Rows)
+                            foreach (var row in otherentity.DrawListB.Rows)
                             {
                                 for (int i = row.Values.Count - 1; i >= 0; --i)
                                 {

@@ -2,18 +2,13 @@ using System.Reflection;
 
 namespace CrashEdit
 {
-
     public static class Registrar
     {
+        private static HashSet<Assembly> RegisteredAssemblies { get; } = [];
 
-        private static HashSet<Assembly> RegisteredAssemblies { get; } =
-            new HashSet<Assembly>();
+        private static HashSet<Type> RegisteredTypes { get; } = [];
 
-        private static HashSet<Type> RegisteredTypes { get; } =
-            new HashSet<Type>();
-
-        private static HashSet<MethodInfo> RegisteredFunctions { get; } =
-            new HashSet<MethodInfo>();
+        private static HashSet<MethodInfo> RegisteredFunctions { get; } = [];
 
         [AttributeUsage(AttributeTargets.Method)]
         public sealed class AssemblyProcessorAttribute : Attribute { }
@@ -30,14 +25,11 @@ namespace CrashEdit
 
         private delegate void FunctionProcessor(MethodInfo methodInfo);
 
-        private static List<AssemblyProcessor> AssemblyProcessors { get; } =
-            new List<AssemblyProcessor>();
+        private static List<AssemblyProcessor> AssemblyProcessors { get; } = [];
 
-        private static List<TypeProcessor> TypeProcessors { get; } =
-            new List<TypeProcessor>();
+        private static List<TypeProcessor> TypeProcessors { get; } = [];
 
-        private static List<FunctionProcessor> FunctionProcessors { get; } =
-            new List<FunctionProcessor>();
+        private static List<FunctionProcessor> FunctionProcessors { get; } = [];
 
         public static void Init()
         {
