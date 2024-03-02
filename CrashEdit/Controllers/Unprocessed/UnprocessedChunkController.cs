@@ -11,13 +11,6 @@ namespace CrashEdit.CE
             AddMenu(CrashUI.Properties.Resources.UnprocessedChunkController_AcProcess, Menu_Process_Chunk);
         }
 
-        public override bool EditorAvailable => true;
-
-        public override Control CreateEditor()
-        {
-            return new MysteryBox(UnprocessedChunk.Data);
-        }
-
         public UnprocessedChunk UnprocessedChunk { get; }
 
         private void Menu_Process_Chunk()

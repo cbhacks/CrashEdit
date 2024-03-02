@@ -43,20 +43,10 @@ This is an experimental version of CrashEdit.
  * Export SEP is missing; this can be achieved by exporting the third item from
  an unprocessed music entry.
  * Patch NSD offers to save NSF even if entries were not moved around
- * Texture chunks are no longer labeled with their CID
- * New chunks are created with invalid CID 0
- * When chunks are deleted, the CID's of chunks afterward are not adjusted
- * New generalized "Delete" menu item (the one with red X icon) also appears on
-   entities, but does not properly update entity count, draw lists, etc.
 
 
 ### Other changes
 
- * Entry chunks remember their CID, rather than computing it on save
-   * The CID displayed in the tree label is the CID stored in the entry chunk
-   * Entry chunks with incorrect CID's can be loaded and they will remember
-     their incorrect CID
-   * Patch NSD still uses computed CID's for entry chunks
  * Unprocessed chunks are labeled their raw ID field in hex
  * C1 colored animation frames can now also use the existing normal C1 animation
    frame editor; note however the UI has not been updated for this purpose:

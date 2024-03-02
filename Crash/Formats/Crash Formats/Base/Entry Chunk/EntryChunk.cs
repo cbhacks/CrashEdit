@@ -13,8 +13,6 @@ namespace CrashEdit.Crash
             Entries = new List<Entry>(entries);
         }
 
-        public int ChunkId { get; set; }
-
         [SubresourceList]
         public List<Entry> Entries { get; set; }
 

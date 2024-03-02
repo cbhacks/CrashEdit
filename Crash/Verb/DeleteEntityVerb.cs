@@ -25,7 +25,7 @@ namespace CrashEdit
 
             var entity = Subject.Resource as Entity;
             var entityzone = Subject.Parent?.Resource as ZoneEntry;
-            var level = Subject.Root.Resource as LevelWorkspace;
+            var level = Subject.Root!.Resource as LevelWorkspace;
 
             if (entity == null || entityzone == null || level == null)
                 throw new InvalidOperationException();
@@ -42,7 +42,7 @@ namespace CrashEdit
             }
             if (entity.ID.HasValue)
             {
-                foreach (var zone in level.NSF.GetEntries<ZoneEntry>())
+                foreach (var zone in level.NSF!.GetEntries<ZoneEntry>())
                 {
                     int zoneindex = -1;
                     for (int z = 0, s = zone.ZoneCount; z < s; ++z)

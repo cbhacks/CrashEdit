@@ -495,8 +495,6 @@ namespace CrashEdit.CE
                     return;
                 }
                 PatchNSD(filename, exists, nsfbox.NSFController, false);
-                nsfbox.Workspace.Sync();
-                nsfbox.RootController.Sync();
                 nsfbox.Sync();
                 OnResyncSuggested(EventArgs.Empty);
             }

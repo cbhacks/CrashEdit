@@ -23,6 +23,8 @@ namespace CrashEdit.Crash
             }
         }
 
+        public virtual int ChunkId { get; set; }
+
         public static int CalculateChecksum(byte[] data)
         {
             ArgumentNullException.ThrowIfNull(data);

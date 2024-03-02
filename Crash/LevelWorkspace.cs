@@ -19,8 +19,11 @@ namespace CrashEdit.Crash
             AllEntriesByEid.Clear();
             if (NSF != null)
             {
+                int chunkid = -1;
                 foreach (var chunk in NSF.Chunks)
                 {
+                    chunkid += 2;
+                    chunk.ChunkId = chunkid;
                     if (chunk is IEntry ientry)
                     {
                         AllEntriesByEid.Add(ientry.EID, ientry);

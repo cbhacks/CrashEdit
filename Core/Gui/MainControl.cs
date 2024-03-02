@@ -95,8 +95,9 @@ namespace CrashEdit
 
         public ResourceBox ResourceBox { get; }
 
-        public void Sync()
+        public virtual void Sync()
         {
+            RootController.Sync();
             ResourceTree.Sync();
             ResourceBox.Sync();
         }
@@ -107,7 +108,6 @@ namespace CrashEdit
 
             verb.Execute(Ui);
 
-            RootController.Sync();
             Sync();
         }
 

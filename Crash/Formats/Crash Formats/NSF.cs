@@ -148,9 +148,9 @@ namespace CrashEdit.Crash
                 UnprocessedChunk chunk = Chunk.Load(chunkdata);
                 if (firstid == null)
                 {
-                    firstid = chunk.ID;
+                    firstid = chunk.ChunkId;
                 }
-                else if (firstid == chunk.ID)
+                else if (firstid == chunk.ChunkId)
                 {
                     if (prelude != null)
                     {

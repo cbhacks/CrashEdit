@@ -10,11 +10,11 @@ namespace CrashEdit.Crash
             Data = data;
         }
 
-        public override string Title => $"Unprocessed Chunk T{Type} ({ID:X08})";
+        public override string Title => $"Unprocessed Chunk T{Type} ({ChunkId:X04})";
         public override string ImageKey => "JournalOrange";
 
         public override short Type => BitConv.FromInt16(Data, 2);
-        public int ID => BitConv.FromInt32(Data, 4);
+        public override int ChunkId { get => BitConv.FromInt32(Data, 4); set => BitConv.ToInt32(Data, 4, value); }
 
         public byte[] Data { get; }
 

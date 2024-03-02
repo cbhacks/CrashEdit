@@ -111,6 +111,10 @@ namespace CrashEdit
             if (Dead)
                 throw new InvalidOperationException();
 
+            if (Resource is Workspace ws)
+            {
+                ws.Sync();
+            }
             foreach (var subctlrGroup in SubcontrollerGroups)
             {
                 subctlrGroup.Sync();
