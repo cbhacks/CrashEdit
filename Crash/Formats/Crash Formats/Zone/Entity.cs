@@ -42,8 +42,8 @@ namespace CrashEdit.Crash
             for (int i = 0; i < propertycount; i++)
             {
                 short id = BitConv.FromInt16(data, 16 + i * 8);
-                int offset = (ushort)BitConv.FromInt16(data, 18 + i * 8) + 12;
-                int nextoffset = (i == propertycount - 1) ? data.Length : ((ushort)BitConv.FromInt16(data, 26 + i * 8) + 12);
+                int offset = BitConv.FromUInt16(data, 18 + i * 8) + 12;
+                int nextoffset = (i == propertycount - 1) ? data.Length : (BitConv.FromUInt16(data, 26 + i * 8) + 12);
                 byte type = data[20 + i * 8];
                 if (id == 0x103 && type == 0x13) type = 4; // force-fix a stupid bug
                 byte elementsize = data[21 + i * 8];

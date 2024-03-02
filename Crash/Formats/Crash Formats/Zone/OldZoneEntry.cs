@@ -82,19 +82,19 @@ namespace CrashEdit.Crash
 
         public ushort CollisionDepthX
         {
-            get => (ushort)BitConv.FromInt16(Layout, 0x1E);
+            get => BitConv.FromUInt16(Layout, 0x1E);
             set => BitConv.ToInt16(Layout, 0x1E, (short)value);
         }
 
         public ushort CollisionDepthY
         {
-            get => (ushort)BitConv.FromInt16(Layout, 0x20);
+            get => BitConv.FromUInt16(Layout, 0x20);
             set => BitConv.ToInt16(Layout, 0x20, (short)value);
         }
 
         public ushort CollisionDepthZ
         {
-            get => (ushort)BitConv.FromInt16(Layout, 0x22);
+            get => BitConv.FromUInt16(Layout, 0x22);
             set => BitConv.ToInt16(Layout, 0x22, (short)value);
         }
 

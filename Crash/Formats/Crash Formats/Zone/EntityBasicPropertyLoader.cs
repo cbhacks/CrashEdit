@@ -26,7 +26,7 @@ namespace CrashEdit.Crash
                 }
                 foreach (EntityPropertyRow<T> row in rows)
                 {
-                    int valuecount = (ushort)BitConv.FromInt16(data, offset);
+                    int valuecount = BitConv.FromUInt16(data, offset);
                     offset += 2;
                     for (int i = 0; i < valuecount; i++)
                     {
@@ -40,7 +40,7 @@ namespace CrashEdit.Crash
                 {
                     ErrorManager.SignalError("EntityProperty: Not enough data");
                 }
-                int valuecount = (ushort)BitConv.FromInt16(data, offset);
+                int valuecount = BitConv.FromUInt16(data, offset);
                 offset += 2;
                 foreach (EntityPropertyRow<T> row in rows)
                 {

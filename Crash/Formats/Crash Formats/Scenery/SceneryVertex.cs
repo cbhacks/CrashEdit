@@ -25,11 +25,13 @@ namespace CrashEdit.Crash
 
         public SceneryVertex(int x, int y, int z, int unknownx, int unknowny, int unknownz, bool is_c3 = false)
         {
-            if (x < -0x800 || x > 0x7FF)
+            int min = is_c3 ? 0 : -0x800;
+            int max = is_c3 ? 0xFFF : 0x7FF;
+            if (x < min || x > max)
                 throw new ArgumentOutOfRangeException(nameof(x));
-            if (y < -0x800 || y > 0x7FF)
+            if (y < min || y > max)
                 throw new ArgumentOutOfRangeException(nameof(y));
-            if (z < -0x800 || z > 0x7FF)
+            if (z < min || z > max)
                 throw new ArgumentOutOfRangeException(nameof(z));
             if (unknownx < 0 || unknownx > 0xF)
                 throw new ArgumentOutOfRangeException(nameof(unknownx));
