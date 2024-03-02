@@ -99,19 +99,19 @@ namespace CrashEdit.CE
         [ExternalTexture(9, 1)]
         private static readonly Bitmap slotboxtexture = null;
 
-        [Resource("UnknownBoxTexture")]
+        [Resource("Time1BoxTexture")]
         [ExternalTexture(3, 2)]
         private static readonly Bitmap time1boxtexture = null;
 
-        [Resource("UnknownBoxTexture")]
+        [Resource("Time2BoxTexture")]
         [ExternalTexture(4, 2)]
         private static readonly Bitmap time2boxtexture = null;
 
-        [Resource("UnknownBoxTexture")]
+        [Resource("Time3BoxTexture")]
         [ExternalTexture(5, 2)]
         private static readonly Bitmap time3boxtexture = null;
 
-        [Resource("UnknownBoxTopTexture")]
+        [Resource("TimeBoxTopTexture")]
         [ExternalTexture(2, 2)]
         private static readonly Bitmap timeboxtoptexture = null;
 
