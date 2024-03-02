@@ -28,7 +28,7 @@ This is an experimental version of CrashEdit.
    * Frames[0], Frames[1], Frames[2], etc. for animation entries
    * Start, End, Deltas[0], Deltas[1], etc. for sort lists
  * Changes to Undock feature
-   * Activated with Ctrl-D instead of D
+   * Activated with Ctrl-D instead of ~~D~~ P
    * Available in the menu and toolbar
    * Now works with all editor types
  * Improvements to right-click actions in resource tree

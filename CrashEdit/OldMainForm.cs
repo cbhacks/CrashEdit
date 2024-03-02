@@ -449,7 +449,7 @@ namespace CrashEdit.CE
             try
             {
                 byte[] nsfdata = nsf.Save();
-                if (ignore_warnings ? true : MessageBox.Show(Resources.SaveNSF, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (ignore_warnings || MessageBox.Show(Resources.SaveNSF, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     File.WriteAllBytes(filename, nsfdata);
                 }

@@ -38,6 +38,8 @@ namespace CrashEdit.Crash
 
         public override byte[] Save()
         {
+            int checksum = CalculateChecksum(Data);
+            BitConv.ToInt32(Data, 12, checksum);
             return Data;
         }
     }

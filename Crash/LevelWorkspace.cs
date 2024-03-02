@@ -9,8 +9,7 @@ namespace CrashEdit.Crash
         [SubresourceSlot]
         public NSF? NSF { get; set; }
 
-        public Dictionary<int, IEntry> AllEntriesByEid { get; } =
-            new Dictionary<int, IEntry>();
+        public Dictionary<int, IEntry> AllEntriesByEid { get; } = [];
 
         public override void Sync()
         {
