@@ -116,7 +116,6 @@ namespace CrashEdit.Crash
 
         private List<FrameCollision> collision;
         private List<FrameVertex> vertices;
-        private static readonly int[] SignTable = { -1, -2, -4, -8, -16, -32, -64, -128 }; // used for decompression
         public IList<Position> MakeVertices(ModelEntry model)
         {
             IList<Position> verts = new Position[Vertices.Count];
@@ -140,19 +139,19 @@ namespace CrashEdit.Crash
                     // XZY frame data
 
                     // sign extending
-                    int x_vert = Temporals[bit_n++] ? SignTable[x_bits] : 0;
+                    int x_vert = Temporals[bit_n++] ? -1 << x_bits : 0;
                     for (int b = 0; b < x_bits; ++b)
                     {
                         x_vert |= Convert.ToByte(Temporals[bit_n++]) << (x_bits - 1 - b);
                     }
                     // sign extending
-                    int z_vert = Temporals[bit_n++] ? SignTable[z_bits] : 0;
+                    int z_vert = Temporals[bit_n++] ? -1 << z_bits : 0;
                     for (int b = 0; b < z_bits; ++b)
                     {
                         z_vert |= Convert.ToByte(Temporals[bit_n++]) << (z_bits - 1 - b);
                     }
                     // sign extending
-                    int y_vert = Temporals[bit_n++] ? SignTable[y_bits] : 0;
+                    int y_vert = Temporals[bit_n++] ? -1 << y_bits : 0;
                     for (int b = 0; b < y_bits; ++b)
                     {
                         y_vert |= Convert.ToByte(Temporals[bit_n++]) << (y_bits - 1 - b);
