@@ -21,12 +21,15 @@ namespace CrashEdit.CE
         public Vertex[] Verts => VBO.Verts;
         public int CurVert { get => VBO.CurVert; set => VBO.CurVert = value; }
 
+        private static readonly HashSet<string> WarnedShaders = [];
+
         private void EnableAttrib(string attrib_name, int size, VertexAttribPointerType type, bool normalized, string field_name)
         {
             int temp = GL.GetAttribLocation(Shader.ID, attrib_name);
             if (temp == -1)
             {
-                Console.WriteLine($"in shader {Shader.Name} did not find attrib {attrib_name}");
+                if (!WarnedShaders.Contains(Shader.Name))
+                    Console.WriteLine($"in shader {Shader.Name} did not find attrib {attrib_name}");
             }
             else
             {
@@ -40,13 +43,27 @@ namespace CrashEdit.CE
             int temp = GL.GetAttribLocation(Shader.ID, attrib_name);
             if (temp == -1)
             {
-                Console.WriteLine($"in shader {Shader.Name} did not find attrib {attrib_name}");
+                if (!WarnedShaders.Contains(Shader.Name))
+                    Console.WriteLine($"in shader {Shader.Name} did not find attrib {attrib_name}");
             }
             else
             {
                 GL.EnableVertexAttribArray(temp);
                 GL.VertexAttribIPointer(temp, size, type, Vertex.SIZEOF, Marshal.OffsetOf<Vertex>(field_name));
             }
+        }
+
+        private void EnableCommonAttribs()
+        {
+            // set up the array
+            GL.BindVertexArray(ID);
+            VBO.Bind();
+            EnableAttrib("position", 3, VertexAttribPointerType.Float, false, "trans");
+            EnableAttrib("uv", 2, VertexAttribPointerType.Float, false, "st");
+            EnableAttrib("normal", 4, VertexAttribPointerType.Int2101010Rev, true, "normal");
+            EnableAttrib("color", 4, VertexAttribPointerType.UnsignedByte, true, "rgba");
+            EnableAttribI("tex", 2, VertexAttribIntegerType.Short, "tex");
+            EnableAttrib("misc", 4, VertexAttribPointerType.Float, false, "misc");
         }
 
         public VAO(Shader shader, PrimitiveType prim, VBO buffer)
@@ -59,14 +76,8 @@ namespace CrashEdit.CE
             VBO = buffer;
 
             // set up the array
-            GL.BindVertexArray(ID);
-            VBO.Bind();
-            EnableAttrib("position", 3, VertexAttribPointerType.Float, false, "trans");
-            EnableAttrib("uv", 2, VertexAttribPointerType.Float, false, "st");
-            EnableAttrib("normal", 4, VertexAttribPointerType.Int2101010Rev, true, "normal");
-            EnableAttrib("color", 4, VertexAttribPointerType.UnsignedByte, true, "rgba");
-            EnableAttribI("tex", 2, VertexAttribIntegerType.Short, "tex");
-            EnableAttrib("misc", 4, VertexAttribPointerType.Float, false, "misc");
+            EnableCommonAttribs();
+            WarnedShaders.Add(Shader.Name);
         }
 
         public VAO(VAO other)
@@ -79,14 +90,8 @@ namespace CrashEdit.CE
             VBO = other.VBO;
 
             // set up the array
-            GL.BindVertexArray(ID);
-            VBO.Bind();
-            EnableAttrib("position", 3, VertexAttribPointerType.Float, false, "trans");
-            EnableAttrib("uv", 2, VertexAttribPointerType.Float, false, "st");
-            EnableAttrib("normal", 4, VertexAttribPointerType.Int2101010Rev, true, "normal");
-            EnableAttrib("color", 4, VertexAttribPointerType.UnsignedByte, true, "rgba");
-            EnableAttribI("tex", 2, VertexAttribIntegerType.Short, "tex");
-            EnableAttrib("misc", 4, VertexAttribPointerType.Float, false, "misc");
+            EnableCommonAttribs();
+            WarnedShaders.Add(Shader.Name);
         }
 
         public void TestRealloc() => VBO.TestRealloc();
