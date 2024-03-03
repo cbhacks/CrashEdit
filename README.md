@@ -285,12 +285,13 @@ Some in-repo libraries have been replaced:
 
 They have been replaced by the following Nuget packages:
 
- * `OpenTK` 3.3.2
- * `OpenTK.GLControl` 3.1.0
- * `DiscUtils.Iso9660` 0.16.4
+ * `OpenTK.WinForms` 4.0.0-pre7
+ * `DiscUtils.Iso9660` 0.16.13
+ * `SpaceWizards.SharpFont` 1.0.2
 
 These packages are referenced but are not included in the repo. Build tools such
-as Visual Studio, msbuild, dotnet cli, etc. should download these automatically.
+as Visual Studio, msbuild, dotnet cli, etc. should download these automatically,
+along with all their dependencies (not listed).
 
 
 ### Nullable references
