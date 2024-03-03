@@ -25,17 +25,17 @@ namespace CrashEdit.CE
             if (GameVersion == GameVersion.Crash1 || GameVersion == GameVersion.Crash1BetaMAR08 || GameVersion == GameVersion.Crash1BetaMAY11)
             {
                 AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC1);
-                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelZonesC1);
+                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevelZones, Menu_ShowLevelZonesC1);
             }
             else if (GameVersion == GameVersion.Crash1Beta1995)
             {
                 AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC1Proto);
-                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelZonesC1Proto);
+                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevelZones, Menu_ShowLevelZonesC1Proto);
             }
             else if (GameVersion == GameVersion.Crash2 || GameVersion == GameVersion.Crash3)
             {
                 AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelC2);
-                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevel, Menu_ShowLevelZonesC2);
+                AddMenu(CrashUI.Properties.Resources.NSFController_AcShowLevelZones, Menu_ShowLevelZonesC2);
             }
         }
 
