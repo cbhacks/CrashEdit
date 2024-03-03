@@ -14,21 +14,20 @@ in flat int p_TexPage;
 
 out vec4 f_col;
 
-int get_texel_bpp4(int u, int v) {
+uint get_texel_bpp4(uint u, uint v) {
     uint b = texelFetch(vram8, ivec2(u/2, v), 0).r;
     if ((u & 0x1) == 0) {
-        return int(b & 0xF);
+        return (b & 0xF);
     } else {
-        return int((b >> 4) & 0xF);
+        return ((b >> 4) & 0xF);
     }
 }
 
-int get_texel_bpp8(int u, int v) {
-    uint b = texelFetch(vram8, ivec2(u, v), 0).r;
-    return int(b);
+uint get_texel_bpp8(uint u, uint v) {
+    return texelFetch(vram8, ivec2(u, v), 0).r;
 }
 
-uvec4 get_texel_bpp16(int u, int v) {
+uvec4 get_texel_bpp16(uint u, uint v) {
     uint lo = texelFetch(vram8, ivec2(u*2, v), 0).r;
     uint hi = texelFetch(vram8, ivec2(u*2+1, v), 0).r;
     uint t = lo | (hi << 8);
@@ -53,10 +52,10 @@ void main()
     if (p_TexPage >= 0 && enableTex != 0) {
         int cmode = (p_Tex >> 0) & 0x3;
         int bmode = (p_Tex >> 2) & 0x3;
-        int cx = ((p_Tex >> 4) & 0xF) * 16;
-        int cy = ((p_Tex >> 8) & 0x7F) + p_TexPage * 128;
-        int u = int(p_UV.x);
-        int v = int(p_UV.y) + p_TexPage * 128;
+        uint cx = ((p_Tex >> 4) & 0xF) * 16;
+        uint cy = ((p_Tex >> 8) & 0x7F) + p_TexPage * 128;
+        uint u = uint(floor(p_UV.x));
+        uint v = uint(floor(p_UV.y)) + p_TexPage * 128;
         uvec4 texel;
         if (cmode == 0) {
             texel = get_texel_bpp16(cx+get_texel_bpp4(u, v), cy); // 4 bit
