@@ -139,14 +139,14 @@ namespace CrashEdit.CE
     [StructLayout(LayoutKind.Explicit, Size = SIZEOF)]
     public struct Vertex
     {
-        public const int SIZEOF = 64;
+        public const int SIZEOF = 48;
         [FieldOffset(00)] public Vector3 trans;
         [FieldOffset(12)] public Rgba rgba;
         [FieldOffset(16)] public Vector2 st;
         [FieldOffset(24)] public int normal;
         [FieldOffset(28)] public int tex;
         [FieldOffset(32)] public Vector4 misc;
-        // 48 - 16 bytes free
+        // 48 - 0 bytes free
 
         public static Vector3 UnpackNormal(int normal)
         {
