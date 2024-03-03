@@ -1143,8 +1143,8 @@ namespace CrashEdit.CE
                 {
                     float rotx = render.Projection.CamRot.X;
                     float rotz = render.Projection.CamRot.Y;
-                    rotz += MathHelper.DegreesToRadians(e.X - mousex) * rotspeed;
-                    rotx += MathHelper.DegreesToRadians(e.Y - mousey) * rotspeed;
+                    rotz += MathHelper.DegreesToRadians(e.X - mousex) * rotspeed / (Width / 400);
+                    rotx += MathHelper.DegreesToRadians(e.Y - mousey) * rotspeed / (Height / 300);
                     if (rotx > RenderInfo.MaxRot)
                         rotx = RenderInfo.MaxRot;
                     if (rotx < RenderInfo.MinRot)
