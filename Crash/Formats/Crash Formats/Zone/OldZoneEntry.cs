@@ -1,26 +1,32 @@
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class OldZoneEntry : Entry
     {
-        private readonly List<OldCamera> cameras;
-        private readonly List<OldEntity> entities;
-
         public OldZoneEntry(byte[] header, byte[] layout, IEnumerable<OldCamera> cameras, IEnumerable<OldEntity> entities, int eid)
             : base(eid)
         {
             Header = header;
             Layout = layout;
-            this.cameras = new List<OldCamera>(cameras);
-            this.entities = new List<OldEntity>(entities);
+            Cameras.AddRange(cameras);
+            Entities.AddRange(entities);
         }
 
+        public override string Title => $"Old Zone ({EName})";
+        public override string ImageKey => "ThingViolet";
+
         public override int Type => 7;
-        public byte[] Header { get; }
-        public byte[] Layout { get; }
-        public IList<OldCamera> Cameras => cameras;
-        public IList<OldEntity> Entities => entities;
+
+        [SubresourceSlot]
+        public byte[] Header { get; set; }
+
+        [SubresourceSlot]
+        public byte[] Layout { get; set; }
+
+        [SubresourceList]
+        public List<OldCamera> Cameras { get; } = new List<OldCamera>();
+
+        [SubresourceList]
+        public List<OldEntity> Entities { get; } = new List<OldEntity>();
 
         public int WorldCount
         {
@@ -76,36 +82,36 @@ namespace Crash
 
         public ushort CollisionDepthX
         {
-            get => (ushort)BitConv.FromInt16(Layout, 0x1E);
+            get => BitConv.FromUInt16(Layout, 0x1E);
             set => BitConv.ToInt16(Layout, 0x1E, (short)value);
         }
 
         public ushort CollisionDepthY
         {
-            get => (ushort)BitConv.FromInt16(Layout, 0x20);
+            get => BitConv.FromUInt16(Layout, 0x20);
             set => BitConv.ToInt16(Layout, 0x20, (short)value);
         }
 
         public ushort CollisionDepthZ
         {
-            get => (ushort)BitConv.FromInt16(Layout, 0x22);
+            get => BitConv.FromUInt16(Layout, 0x22);
             set => BitConv.ToInt16(Layout, 0x22, (short)value);
         }
 
         public override UnprocessedEntry Unprocess()
         {
-            BitConv.ToInt32(Header, 0x208, cameras.Count);
-            BitConv.ToInt32(Header, 0x20C, entities.Count);
-            byte[][] items = new byte[2 + entities.Count + cameras.Count][];
+            BitConv.ToInt32(Header, 0x208, Cameras.Count);
+            BitConv.ToInt32(Header, 0x20C, Entities.Count);
+            byte[][] items = new byte[2 + Entities.Count + Cameras.Count][];
             items[0] = Header;
             items[1] = Layout;
-            for (int i = 0; i < cameras.Count; i++)
+            for (int i = 0; i < Cameras.Count; i++)
             {
-                items[2 + i] = cameras[i].Save();
+                items[2 + i] = Cameras[i].Save();
             }
-            for (int i = 0; i < entities.Count; i++)
+            for (int i = 0; i < Entities.Count; i++)
             {
-                items[2 + cameras.Count + i] = entities[i].Save();
+                items[2 + Cameras.Count + i] = Entities[i].Save();
             }
             return new UnprocessedEntry(items, EID, Type);
         }

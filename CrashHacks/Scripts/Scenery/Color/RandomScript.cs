@@ -1,6 +1,3 @@
-using System;
-using Crash;
-
 namespace CrashHacks.Scripts.Scenery.Color
 {
     public sealed class RandomScript : BaseScript
@@ -27,11 +24,11 @@ namespace CrashHacks.Scripts.Scenery.Color
             get { return "chekwob"; }
         }
 
-        public override void Run(ref byte r,ref byte g,ref byte b)
+        public override void Run(ref byte r, ref byte g, ref byte b)
         {
-            r = (byte)random.Next(0,256);
-            g = (byte)random.Next(0,256);
-            b = (byte)random.Next(0,256);
+            r = (byte)random.Next(0, 256);
+            g = (byte)random.Next(0, 256);
+            b = (byte)random.Next(0, 256);
         }
     }
 }

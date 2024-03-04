@@ -1,13 +1,10 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public struct ProtoSceneryPolygon
     {
         public static ProtoSceneryPolygon Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length != 12)
                 throw new ArgumentException("Value must be 12 bytes long.", nameof(data));
             int[] words = new int[3] { BitConv.FromInt32(data, 0), BitConv.FromInt32(data, 4), BitConv.FromInt32(data, 8) };
@@ -40,9 +37,9 @@ namespace Crash
         public byte[] Save()
         {
             byte[] data = new byte[12];
-            int worda = Texture | (Page << 12);
+            int worda = (int)Texture | (Page << 12);
             int wordb = (VertexC >> 8 & 0xF) | (Unknown << 4);
-            int wordc = VertexA | (VertexB << 12) | ((VertexC & 0xFF) << 24);
+            int wordc = (int)VertexA | (VertexB << 12) | ((VertexC & 0xFF) << 24);
             BitConv.ToInt32(data, 0, worda);
             BitConv.ToInt32(data, 4, wordb);
             BitConv.ToInt32(data, 8, wordc);

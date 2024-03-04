@@ -1,8 +1,6 @@
-﻿using OpenTK;
-using OpenTK.Graphics;
-using System;
+﻿using OpenTK.Mathematics;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public static class MathExt
     {
@@ -105,6 +103,14 @@ namespace CrashEdit
             v.X = 0;
             v.Y = 0;
             v.Z = 0;
+        }
+
+        public static Vector3 Abs(this Vector3 v)
+        {
+            v.X = Math.Abs(v.X);
+            v.Y = Math.Abs(v.Y);
+            v.Z = Math.Abs(v.Z);
+            return v;
         }
 
         public static int Log2(int v)

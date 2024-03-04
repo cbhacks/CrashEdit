@@ -1,12 +1,10 @@
-using Crash;
-using System;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class ErrorReporter : Form
     {
-        private readonly IWin32Window owner = null;
+        private IWin32Window owner = null;
 
         private bool lastcheckedwasskip = false;
 

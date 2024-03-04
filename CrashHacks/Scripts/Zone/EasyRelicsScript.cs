@@ -1,6 +1,3 @@
-using Crash;
-using System;
-
 namespace CrashHacks.Scripts.Zone
 {
     public sealed class EasyRelicsScript : Script
@@ -41,7 +38,7 @@ namespace CrashHacks.Scripts.Zone
             }
         }
 
-        public override void Run(object value,GameVersion gameversion)
+        public override void Run(object value, GameVersion gameversion)
         {
             if (value is ZoneEntry)
             {
@@ -56,13 +53,13 @@ namespace CrashHacks.Scripts.Zone
                     row.Values.Add(0x7100);
                     property.Rows.Add(row);
                     entity.ExtraProperties[0x336] = property;
-                    for (int i = 0;i < entity.Positions.Count;i++)
+                    for (int i = 0; i < entity.Positions.Count; i++)
                     {
                         EntityPosition position = entity.Positions[i];
                         short x = (short)(position.X / 4);
                         short y = (short)(position.Y / 4);
                         short z = (short)(position.Z / 4);
-                        entity.Positions[i] = new EntityPosition(x,y,z);
+                        entity.Positions[i] = new EntityPosition(x, y, z);
                     }
                 }
             }

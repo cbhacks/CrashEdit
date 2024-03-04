@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class VH
     {
@@ -117,15 +114,13 @@ namespace Crash
             return new VH(isoldversion, vbsize, volume, panning, attribute1, attribute2, programs, waves);
         }
 
-        private readonly Dictionary<int, VHProgram> programs;
-        private readonly List<int> waves;
+        private Dictionary<int, VHProgram> programs;
+        private List<int> waves;
 
         public VH(bool isoldversion, int vbsize, byte volume, byte panning, byte attribute1, byte attribute2, IDictionary<int, VHProgram> programs, IEnumerable<int> waves)
         {
-            if (programs == null)
-                throw new ArgumentNullException(nameof(programs));
-            if (waves == null)
-                throw new ArgumentNullException(nameof(waves));
+            ArgumentNullException.ThrowIfNull(programs);
+            ArgumentNullException.ThrowIfNull(waves);
             IsOldVersion = isoldversion;
             VBSize = vbsize;
             Volume = volume;

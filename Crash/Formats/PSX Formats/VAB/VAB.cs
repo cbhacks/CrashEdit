@@ -1,16 +1,11 @@
-using System;
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class VAB
     {
         public static VAB Join(VH vh, SampleLine[] vb)
         {
-            if (vh == null)
-                throw new ArgumentNullException(nameof(vh));
-            if (vb == null)
-                throw new ArgumentNullException(nameof(vb));
+            ArgumentNullException.ThrowIfNull(vh);
+            ArgumentNullException.ThrowIfNull(vb);
             if (vh.VBSize != vb.Length)
             {
                 ErrorManager.SignalIgnorableError("VAB: VB size field mismatch");
@@ -35,13 +30,13 @@ namespace Crash
             return new VAB(vh.IsOldVersion, vh.Volume, vh.Panning, vh.Attribute1, vh.Attribute2, vh.Programs, waves);
         }
 
-        private readonly bool isoldversion;
-        private readonly byte volume;
-        private readonly byte panning;
-        private readonly byte attribute1;
-        private readonly byte attribute2;
-        private readonly Dictionary<int, VHProgram> programs;
-        private readonly List<SampleSet> waves;
+        private bool isoldversion;
+        private byte volume;
+        private byte panning;
+        private byte attribute1;
+        private byte attribute2;
+        private Dictionary<int, VHProgram> programs;
+        private List<SampleSet> waves;
 
         public VAB(bool isoldversion, byte volume, byte panning, byte attribute1, byte attribute2, IDictionary<int, VHProgram> programs, IEnumerable<SampleSet> waves)
         {

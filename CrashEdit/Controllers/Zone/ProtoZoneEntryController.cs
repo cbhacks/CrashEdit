@@ -1,45 +1,22 @@
-using Crash;
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(ProtoZoneEntry))]
     public sealed class ProtoZoneEntryController : EntryController
     {
-        public ProtoZoneEntryController(EntryChunkController entrychunkcontroller, ProtoZoneEntry zoneentry)
-            : base(entrychunkcontroller, zoneentry)
+        public ProtoZoneEntryController(ProtoZoneEntry zoneentry, SubcontrollerGroup parentGroup)
+            : base(zoneentry, parentGroup)
         {
             ProtoZoneEntry = zoneentry;
-            AddNode(new ItemController(null, zoneentry.Header));
-            AddNode(new ItemController(null, zoneentry.Layout));
-            foreach (OldCamera camera in zoneentry.Cameras)
-            {
-                AddNode(new OldCameraController(this, camera));
-            }
-            foreach (ProtoEntity entity in zoneentry.Entities)
-            {
-                AddNode(new ProtoEntityController(this, entity));
-            }
             AddMenu("Export as Crash 1 ZDAT", Menu_ExportAsC1);
-            InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.ProtoZoneEntryController_Text, ProtoZoneEntry.EName);
-        }
+        public override bool EditorAvailable => true;
 
-        public override void InvalidateNodeImage()
+        public override Control CreateEditor()
         {
-            Node.ImageKey = "violetb";
-            Node.SelectedImageKey = "violetb";
-        }
-
-        protected override Control CreateEditor()
-        {
-            return new UndockableControl(new ProtoZoneEntryViewer(NSF, ProtoZoneEntry.EID));
+            return new ProtoZoneEntryViewer(GetNSF(), Entry.EID);
         }
 
         public ProtoZoneEntry ProtoZoneEntry { get; }
@@ -79,7 +56,7 @@ namespace CrashEdit
                     z += (short)(delta.Z * 2);
                     pos.Add(new EntityPosition(x, y, z));
                 }
-                entities.Add(new OldEntity(0, protoentity.Flags, protoentity.Spawn, protoentity.Unk, (short)(protoentity.ID + 5), protoentity.VecX, protoentity.VecY, protoentity.VecZ, protoentity.Type, protoentity.Subtype, pos, protoentity.Nullfield1));
+                entities.Add(new OldEntity(protoentity.Flags, protoentity.Spawn, protoentity.Unk, (short)(protoentity.ID + 5), protoentity.VecX, protoentity.VecY, protoentity.VecZ, protoentity.Type, protoentity.Subtype, pos, protoentity.Nullfield1));
             }
             OldZoneEntry newzone = new OldZoneEntry(header, layout, ProtoZoneEntry.Cameras, entities, ProtoZoneEntry.EID);
             FileUtil.SaveFile(newzone.Save(), FileFilters.NSEntry, FileFilters.Any);

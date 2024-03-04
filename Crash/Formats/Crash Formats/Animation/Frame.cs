@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public class Frame
     {
         public static Frame Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length < 24)
             {
                 ErrorManager.SignalError("Frame: Data is too short");
@@ -30,7 +26,7 @@ namespace Crash
                 ErrorManager.SignalError("Frame: Header size value is invalid");
             }
             FrameCollision[] collision = new FrameCollision[collisioncount];
-            for (int i = 0; i < collisioncount; ++i)
+            for (int i = 0; i < collisioncount; ++i) // these vertices are NEVER compressed
             {
                 collision[i] = new FrameCollision(BitConv.FromInt32(data, 24 + i * 0x28),
                     BitConv.FromInt32(data, 28 + i * 0x28), BitConv.FromInt32(data, 32 + i * 0x28), BitConv.FromInt32(data, 36 + i * 0x28),
@@ -62,8 +58,7 @@ namespace Crash
 
         public static Frame LoadNew(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length < 28)
             {
                 ErrorManager.SignalError("NewFrame: Data is too short");
@@ -119,10 +114,8 @@ namespace Crash
             return new Frame(xoffset, yoffset, zoffset, unknown, unknown2, headersize, collision, vertices, specialvertexcount, temporals, true);
         }
 
-        private readonly List<FrameCollision> collision;
-        private readonly List<FrameVertex> vertices;
-
-        private static readonly int[] SignTable = { -1, -2, -4, -8, -16, -32, -64, -128 }; // used for decompression
+        private List<FrameCollision> collision;
+        private List<FrameVertex> vertices;
         public IList<Position> MakeVertices(ModelEntry model)
         {
             IList<Position> verts = new Position[Vertices.Count];
@@ -146,19 +139,19 @@ namespace Crash
                     // XZY frame data
 
                     // sign extending
-                    int x_vert = Temporals[bit_n++] ? SignTable[x_bits] : 0;
+                    int x_vert = Temporals[bit_n++] ? -1 << x_bits : 0;
                     for (int b = 0; b < x_bits; ++b)
                     {
                         x_vert |= Convert.ToByte(Temporals[bit_n++]) << (x_bits - 1 - b);
                     }
                     // sign extending
-                    int z_vert = Temporals[bit_n++] ? SignTable[z_bits] : 0;
+                    int z_vert = Temporals[bit_n++] ? -1 << z_bits : 0;
                     for (int b = 0; b < z_bits; ++b)
                     {
                         z_vert |= Convert.ToByte(Temporals[bit_n++]) << (z_bits - 1 - b);
                     }
                     // sign extending
-                    int y_vert = Temporals[bit_n++] ? SignTable[y_bits] : 0;
+                    int y_vert = Temporals[bit_n++] ? -1 << y_bits : 0;
                     for (int b = 0; b < y_bits; ++b)
                     {
                         y_vert |= Convert.ToByte(Temporals[bit_n++]) << (y_bits - 1 - b);
@@ -249,6 +242,8 @@ namespace Crash
         public short Unknown { get; }
 
         public bool IsNew { get; }
+
+        public bool Decompressed { get; set; } = false;
 
         public byte[] Save()
         {

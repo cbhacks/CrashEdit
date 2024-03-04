@@ -1,16 +1,13 @@
-using System.Collections.Generic;
-using System.IO;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class SceneryEntry : Entry
     {
-        private readonly List<SceneryVertex> vertices;
-        private readonly List<SceneryTriangle> triangles;
-        private readonly List<SceneryQuad> quads;
-        private readonly List<ModelTexture> textures;
-        private readonly List<SceneryColor> colors;
-        private readonly List<ModelExtendedTexture> animatedtextures;
+        private List<SceneryVertex> vertices;
+        private List<SceneryTriangle> triangles;
+        private List<SceneryQuad> quads;
+        private List<ModelTexture> textures;
+        private List<SceneryColor> colors;
+        private List<ModelExtendedTexture> animatedtextures;
 
         public SceneryEntry(byte[] info, IEnumerable<SceneryVertex> vertices, IEnumerable<SceneryTriangle> triangles, IEnumerable<SceneryQuad> quads, IEnumerable<ModelTexture> textures, IEnumerable<SceneryColor> colors, IEnumerable<ModelExtendedTexture> animatedtextures, bool is_c3, int eid)
             : base(eid)
@@ -24,6 +21,9 @@ namespace Crash
             this.animatedtextures = new List<ModelExtendedTexture>(animatedtextures);
             IsC3 = is_c3;
         }
+
+        public override string Title => $"Scenery ({EName})";
+        public override string ImageKey => "ThingBlue";
 
         public override int Type => 3;
         public byte[] Info { get; }
@@ -224,7 +224,7 @@ namespace Crash
                     xmlwriter.WriteStartElement("float_array");
                     xmlwriter.WriteAttributeString("id", "positions-array");
                     xmlwriter.WriteAttributeString("count", (vertices.Count * 3).ToString());
-                    foreach (SceneryVertex vertex in vertices)
+                    foreach (NewSceneryVertex vertex in vertices)
                     {
                         xmlwriter.WriteValue(vertex.X + XOffset / 4);
                         xmlwriter.WriteWhitespace(" ");
@@ -259,7 +259,7 @@ namespace Crash
                     xmlwriter.WriteStartElement("float_array");
                     xmlwriter.WriteAttributeString("id", "colors-array");
                     xmlwriter.WriteAttributeString("count", (vertices.Count * 3).ToString());
-                    foreach (SceneryVertex vertex in vertices)
+                    foreach (NewSceneryVertex vertex in vertices)
                     {
                         if (vertex.Color < Colors.Count)
                         {

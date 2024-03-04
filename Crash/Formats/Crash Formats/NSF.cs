@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
-    public sealed class NSF
+    public sealed class NSF : IResource
     {
         private static byte[] ReadChunk(byte[] data, ref int offset, out bool compressed)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (offset < 0 || offset > data.Length)
                 throw new ArgumentOutOfRangeException(nameof(offset));
             if (data.Length < offset + 2)
@@ -139,54 +135,53 @@ namespace Crash
 
         public static NSF Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
-            var nsf = new NSF();
+            ArgumentNullException.ThrowIfNull(data);
             int offset = 0;
             int? firstid = null;
             List<UnprocessedChunk> prelude = null;
+            List<Chunk> chunks = new List<Chunk>();
             List<bool> preludecompression = null;
             List<bool> chunkcompression = new List<bool>();
             while (offset < data.Length)
             {
                 byte[] chunkdata = ReadChunk(data, ref offset, out bool compressed);
-                UnprocessedChunk chunk = Chunk.Load(chunkdata, nsf);
+                UnprocessedChunk chunk = Chunk.Load(chunkdata);
                 if (firstid == null)
                 {
-                    firstid = chunk.ID;
+                    firstid = chunk.ChunkId;
                 }
-                else if (firstid == chunk.ID)
+                else if (firstid == chunk.ChunkId)
                 {
                     if (prelude != null)
                     {
                         ErrorManager.SignalError("NSF: Double prelude");
                     }
                     prelude = new List<UnprocessedChunk>();
-                    foreach (UnprocessedChunk unprocessedchunk in nsf.Chunks)
+                    foreach (UnprocessedChunk unprocessedchunk in chunks)
                     {
                         prelude.Add(unprocessedchunk);
                     }
-                    nsf.Chunks.Clear();
+                    chunks.Clear();
                     preludecompression = chunkcompression;
                     chunkcompression = new List<bool>();
                 }
                 chunkcompression.Add(compressed);
-                if (prelude != null && nsf.Chunks.Count < prelude.Count)
+                if (prelude != null && chunks.Count < prelude.Count)
                 {
                     for (int i = 0; i < Chunk.Length; i++)
                     {
-                        if (prelude[nsf.Chunks.Count].Data[i] != chunk.Data[i])
+                        if (prelude[chunks.Count].Data[i] != chunk.Data[i])
                         {
                             ErrorManager.SignalIgnorableError("NSF: Prelude data mismatch");
                             break;
                         }
                     }
                 }
-                nsf.Chunks.Add(chunk);
+                chunks.Add(chunk);
             }
             if (prelude != null)
             {
-                if (nsf.Chunks.Count < prelude.Count) // error merging for now
+                if (chunks.Count < prelude.Count) // error merging for now
                 {
                     ErrorManager.SignalIgnorableError("NSF: Prelude is longer than actual data");
                 }
@@ -199,7 +194,7 @@ namespace Crash
                     ErrorManager.SignalIgnorableError("NSF: Non-prelude chunk was compressed");
                 }
             }
-            return nsf;
+            return new NSF(chunks);
         }
 
         public static NSF LoadAndProcess(byte[] data, GameVersion gameversion)
@@ -209,14 +204,17 @@ namespace Crash
             return nsf;
         }
 
-        public NSF()
+        public NSF(IEnumerable<Chunk> chunks)
         {
-            Chunks = new EvList<Chunk>();
-            EntryMap = new Dictionary<int, IEntry>();
+            ArgumentNullException.ThrowIfNull(chunks);
+            Chunks = new List<Chunk>(chunks);
         }
 
-        public EvList<Chunk> Chunks { get; }
-        public Dictionary<int, IEntry> EntryMap { get; set; }
+        public string Title => "NSF";
+        public string ImageKey => "File";
+
+        [SubresourceList]
+        public List<Chunk> Chunks { get; }
 
         public int GetScreenOffset()
         {
@@ -228,12 +226,12 @@ namespace Crash
         {
             for (int i = 0; i < Chunks.Count; i++)
             {
-                if (Chunks[i] is UnprocessedChunk uchunk)
+                if (Chunks[i] is UnprocessedChunk)
                 {
                     ErrorManager.EnterSkipRegion();
                     try
                     {
-                        Chunks[i] = uchunk.Process(i * 2 + 1);
+                        Chunks[i] = ((UnprocessedChunk)Chunks[i]).Process();
                     }
                     catch (LoadSkippedException)
                     {
@@ -243,9 +241,9 @@ namespace Crash
                         ErrorManager.ExitSkipRegion();
                     }
                 }
-                if (Chunks[i] is EntryChunk echunk)
+                if (Chunks[i] is EntryChunk)
                 {
-                    echunk.ProcessAll(gameversion);
+                    ((EntryChunk)Chunks[i]).ProcessAll(gameversion);
                 }
             }
         }
@@ -255,75 +253,58 @@ namespace Crash
             return GetEntry<T>(Entry.ENameToEID(ename));
         }
 
-        const bool USE_OLD_LOOKUP = true;
         public T GetEntry<T>(int eid) where T : class, IEntry
         {
             if (eid == Entry.NullEID || !Entry.ValidEID(eid))
                 return null;
-            if (EntryMap.ContainsKey(eid))
+            foreach (Chunk chunk in Chunks)
             {
-                return EntryMap[eid] as T;
-            }
-            if (USE_OLD_LOOKUP)
-            {
-                foreach (Chunk chunk in Chunks)
+                if (chunk is IEntry)
                 {
-                    if (chunk is IEntry ientrychunk)
+                    IEntry entry = (IEntry)chunk;
+                    if (entry.EID == eid)
                     {
-                        if (ientrychunk.EID == eid)
-                        {
-                            return ientrychunk as T;
-                        }
+                        return entry as T;
                     }
-                    else if (chunk is EntryChunk entrychunk)
+                }
+                if (chunk is EntryChunk entrychunk)
+                {
+                    T entry = entrychunk.FindEID<T>(eid);
+                    if (entry != null)
                     {
-                        T entry = entrychunk.FindEID<T>(eid);
-                        if (entry != null)
-                        {
-                            return entry;
-                        }
+                        return entry;
                     }
                 }
             }
             return null;
         }
 
-        public List<T> GetEntries<T>() where T : IEntry
+        public List<T> GetEntries<T>() where T : class, IEntry
         {
             List<T> entries = new List<T>();
-            foreach (var val in EntryMap.Values)
+            foreach (Chunk chunk in Chunks)
             {
-                if (val is T want)
+                if (chunk is IEntry)
                 {
-                    entries.Add(want);
-                }
-            }
-            if (USE_OLD_LOOKUP)
-            {
-                foreach (Chunk chunk in Chunks)
-                {
-                    if (chunk is IEntry centry)
+                    IEntry entry = (IEntry)chunk;
+                    if (entry is T)
                     {
-                        if (centry is T c && !entries.Contains(c))
-                        {
-                            entries.Add(c);
-                        }
+                        entries.Add((T)entry);
                     }
-                    else if (chunk is EntryChunk entrychunk)
+                }
+                if (chunk is EntryChunk entrychunk)
+                {
+                    foreach (Entry entry in entrychunk.Entries)
                     {
-                        foreach (Entry entry in entrychunk.Entries)
+                        if (entry is T e)
                         {
-                            if (entry is T e && !entries.Contains(e))
-                            {
-                                entries.Add(e);
-                            }
+                            entries.Add(e);
                         }
                     }
                 }
             }
             return entries;
         }
-
         public Tuple<OldEntity, OldZoneEntry> GetEntityC1(int id)
         {
             foreach (var zone in GetEntries<OldZoneEntry>())
@@ -361,7 +342,7 @@ namespace Crash
             byte[] data = new byte[Chunks.Count * Chunk.Length];
             for (int i = 0; i < Chunks.Count; i++)
             {
-                Chunks[i].Save(i * 2 + 1).CopyTo(data, i * Chunk.Length);
+                Chunks[i].Save().CopyTo(data, i * Chunk.Length);
             }
             return data;
         }
@@ -382,7 +363,7 @@ namespace Crash
                         }
                         return c;
                     });
-                    entrychunk.Entries = new EvList<Entry>(entries);
+                    entrychunk.Entries = new List<Entry>(entries);
                 }
             }
             SortedDictionary<int, SortedDictionary<string, int>> newindex = new SortedDictionary<int, SortedDictionary<string, int>>();

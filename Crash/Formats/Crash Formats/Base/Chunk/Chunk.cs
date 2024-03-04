@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
-    public abstract class Chunk
+    public abstract class Chunk : IResource
     {
         public const int Length = 65536;
         public const short Magic = 0x1234;
@@ -25,10 +23,11 @@ namespace Crash
             }
         }
 
+        public virtual int ChunkId { get; set; }
+
         public static int CalculateChecksum(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length != Length)
                 throw new ArgumentException("Value must be 65536 bytes long.", nameof(data));
             uint checksum = 0x12345678;
@@ -43,30 +42,26 @@ namespace Crash
             return (int)checksum;
         }
 
-        public static UnprocessedChunk Load(byte[] data, NSF nsf)
+        public static UnprocessedChunk Load(byte[] data)
         {
             short magic = BitConv.FromInt16(data, 0);
             if (magic != Magic)
             {
                 ErrorManager.SignalIgnorableError("Chunk: Magic number is wrong");
             }
-            return new UnprocessedChunk(data, nsf);
+            return new UnprocessedChunk(data);
         }
+
+        public abstract string Title { get; }
+        public abstract string ImageKey { get; }
 
         public abstract short Type { get; }
 
-        public abstract UnprocessedChunk Unprocess(int chunkid);
+        public abstract UnprocessedChunk Unprocess();
 
-        public virtual byte[] Save(int chunkid)
+        public virtual byte[] Save()
         {
-            return Unprocess(chunkid).Save(chunkid);
-        }
-
-        public NSF NSF { get; set; }
-
-        public Chunk(NSF nsf)
-        {
-            NSF = nsf;
+            return Unprocess().Save();
         }
     }
 }

@@ -1,13 +1,11 @@
-using Crash;
-using System;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class ProtoEntityBox : UserControl
     {
-        private readonly ProtoEntityController controller;
-        private readonly ProtoEntity entity;
+        private ProtoEntityController controller;
+        private ProtoEntity entity;
 
         public ProtoEntityBox(ProtoEntityController controller)
         {
@@ -20,11 +18,6 @@ namespace CrashEdit
             UpdateSubtype();
             UpdateSettings();
             UpdateCodeString();
-        }
-
-        private void InvalidateNodes()
-        {
-            controller.InvalidateNode();
         }
 
         private void UpdateStartPosition()

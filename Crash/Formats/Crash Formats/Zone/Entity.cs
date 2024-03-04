@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
-    public sealed class Entity
+    public sealed class Entity : IResource
     {
         private static readonly Dictionary<short, FieldInfo> propertyfields;
 
@@ -44,8 +42,8 @@ namespace Crash
             for (int i = 0; i < propertycount; i++)
             {
                 short id = BitConv.FromInt16(data, 16 + i * 8);
-                int offset = (ushort)BitConv.FromInt16(data, 18 + i * 8) + 12;
-                int nextoffset = (i == propertycount - 1) ? data.Length : ((ushort)BitConv.FromInt16(data, 26 + i * 8) + 12);
+                int offset = BitConv.FromUInt16(data, 18 + i * 8) + 12;
+                int nextoffset = (i == propertycount - 1) ? data.Length : (BitConv.FromUInt16(data, 26 + i * 8) + 12);
                 byte type = data[20 + i * 8];
                 if (id == 0x103 && type == 0x13) type = 4; // force-fix a stupid bug
                 byte elementsize = data[21 + i * 8];
@@ -156,6 +154,13 @@ namespace Crash
                 }
             }
         }
+
+        public string Title =>
+            (Name != null && ID != null) ? $"{Name} [ID {ID}]" :
+            (ID != null) ? $"Entity [ID {ID}]" :
+            "Entity";
+
+        public string ImageKey => "Arrow";
 
         //public int? Mode
         //{

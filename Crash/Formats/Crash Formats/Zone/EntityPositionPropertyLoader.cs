@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntityPropertyType(6)]
     public sealed class EntityPositionPropertyLoader : EntityBasicPropertyLoader<EntityPosition>

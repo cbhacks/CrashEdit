@@ -1,6 +1,6 @@
-using Crash;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     partial class ErrorReporter
     {

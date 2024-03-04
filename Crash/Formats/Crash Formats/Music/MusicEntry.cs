@@ -1,12 +1,10 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class MusicEntry : Entry
     {
         public MusicEntry(int vheid, int vb0eid, int vb1eid, int vb2eid, int vb3eid, int vb4eid, int vb5eid, int vb6eid, VH vh, SEP sep, int eid) : base(eid)
         {
-            SEP = sep ?? throw new ArgumentNullException(nameof(sep));
+            Tracks.AddRange(sep.SEQs);
             VHEID = vheid;
             VB0EID = vb0eid;
             VB1EID = vb1eid;
@@ -18,6 +16,9 @@ namespace Crash
             VH = vh;
         }
 
+        public override string Title => $"Music ({EName})";
+        public override string ImageKey => "MusicNoteBlue";
+
         public override int Type => 13;
         public int VHEID { get; }
         public int VB0EID { get; }
@@ -27,8 +28,12 @@ namespace Crash
         public int VB4EID { get; }
         public int VB5EID { get; }
         public int VB6EID { get; }
+
+        [SubresourceSlot(AllowNull = true)]
         public VH VH { get; set; }
-        public SEP SEP { get; }
+
+        [SubresourceList]
+        public List<SEQ> Tracks { get; } = new List<SEQ>();
 
         // FIXME? - resaving of unused instrument metadata causes mismatches in
         // various game versions
@@ -38,7 +43,7 @@ namespace Crash
         {
             byte[][] items = new byte[3][];
             items[0] = new byte[36];
-            BitConv.ToInt32(items[0], 0, SEP.SEQs.Count);
+            BitConv.ToInt32(items[0], 0, Tracks.Count);
             BitConv.ToInt32(items[0], 4, VHEID);
             BitConv.ToInt32(items[0], 8, VB0EID);
             BitConv.ToInt32(items[0], 12, VB1EID);
@@ -55,7 +60,7 @@ namespace Crash
             {
                 items[1] = new byte[0];
             }
-            items[2] = SEP.Save();
+            items[2] = new SEP(Tracks).Save();
             return new UnprocessedEntry(items, EID, Type);
         }
     }

@@ -1,15 +1,16 @@
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class UnprocessedEntry : MysteryMultiItemEntry
     {
-        private readonly int type;
+        private int type;
 
         public UnprocessedEntry(IEnumerable<byte[]> items, int eid, int type) : base(items, eid)
         {
             this.type = type;
         }
+
+        public override string Title => $"Unprocessed T{Type} ({EName})";
+        public override string ImageKey => "ThingOrange";
 
         public override int Type => type;
         public int HeaderLength => 20 + Items.Count * 4;
@@ -19,7 +20,7 @@ namespace Crash
             Dictionary<int, EntryLoader> loaders = GetLoaders(gameversion);
             if (loaders.ContainsKey(type))
             {
-                var result = loaders[type].Load(((List<byte[]>)Items).ToArray(), EID, gameversion);
+                var result = loaders[type].Load(((List<byte[]>)Items).ToArray(), EID);
 
                 if (result.IgnoreResaveErrors)
                     return result;
@@ -27,7 +28,7 @@ namespace Crash
                 var resultOut = result.Unprocess();
                 if (Items.Count != resultOut.Items.Count)
                 {
-                    ErrorManager.SignalIgnorableError($"Entry: Processed entry {EName} deprocesses to different item count");
+                    ErrorManager.SignalIgnorableError("Entry: Processed entry deprocesses to different item count");
                     return result;
                 }
 
@@ -53,7 +54,7 @@ namespace Crash
                         if (shorterData[j] == longerData[j])
                             continue;
 
-                        ErrorManager.SignalIgnorableError($"Entry: Processed entry {EName} deprocesses to different data on item {i}");
+                        ErrorManager.SignalIgnorableError("Entry: Processed entry deprocesses to different item data");
                         return result;
                     }
 
@@ -67,7 +68,7 @@ namespace Crash
                         if (longerData[j] == 0)
                             continue;
 
-                        ErrorManager.SignalIgnorableError($"Entry: Processed entry {EName} deprocesses to different data on item {i}");
+                        ErrorManager.SignalIgnorableError("Entry: Processed entry deprocesses to different item data");
                         return result;
                     }
                 }
@@ -76,7 +77,7 @@ namespace Crash
             }
             else
             {
-                ErrorManager.SignalError($"UnprocessedEntry: Unknown entry type ({EName})");
+                ErrorManager.SignalError("UnprocessedEntry: Unknown entry type");
                 return null;
             }
         }

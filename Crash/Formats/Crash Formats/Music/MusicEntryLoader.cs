@@ -1,6 +1,4 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntryType(13, GameVersion.Crash1BetaMAY11)]
     [EntryType(13, GameVersion.Crash1)]
@@ -8,10 +6,9 @@ namespace Crash
     [EntryType(13, GameVersion.Crash3)]
     public sealed class MusicEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items, int eid, GameVersion version)
+        public override Entry Load(byte[][] items, int eid)
         {
-            if (items == null)
-                throw new ArgumentNullException(nameof(items));
+            ArgumentNullException.ThrowIfNull(items);
             if (items.Length != 3)
             {
                 ErrorManager.SignalError("MusicEntry: Wrong number of items");

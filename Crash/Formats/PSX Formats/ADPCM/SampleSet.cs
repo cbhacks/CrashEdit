@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class SampleSet
     {
         public static SampleSet Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length % 16 != 0)
             {
                 ErrorManager.SignalError("SampleSet: Length is invalid");
@@ -26,8 +22,7 @@ namespace Crash
 
         public SampleSet(IEnumerable<SampleLine> samplelines)
         {
-            if (samplelines == null)
-                throw new ArgumentNullException(nameof(samplelines));
+            ArgumentNullException.ThrowIfNull(samplelines);
             SampleLines = new List<SampleLine>(samplelines);
         }
 

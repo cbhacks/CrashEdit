@@ -1,68 +1,37 @@
-using Crash;
-using Crash.UI;
-using CrashEdit.Forms;
-using CrashEdit.Properties;
+using CrashEdit.CE.Forms;
+using CrashEdit.CE.Properties;
+using CrashEdit.Crash;
+using CrashEdit.CrashUI;
 using DiscUtils.Iso9660;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
-    public sealed class OldMainForm : Form
+    public sealed class OldMainForm : MainForm
     {
-        private static readonly ImageList imglist;
+        private ToolStripButton tbbOpen;
+        private ToolStripButton tbbSave;
+        private ToolStripButton tbbPatchNSD;
+        private ToolStripButton tbbClose;
+        private ToolStripMenuItem tbxMakeBIN;
+        private ToolStripMenuItem tbxMakeBINUSA;
+        private ToolStripMenuItem tbxMakeBINEUR;
+        private ToolStripMenuItem tbxMakeBINJAP;
+        private ToolStripMenuItem tbxConvertVHVB;
+        private ToolStripMenuItem tbxConvertVAB;
+        private ToolStripMenuItem tbbExtra;
+        private ToolStripButton tbbPlay;
+        private TabControl tbcTabs;
+        private GameVersionForm dlgGameVersion;
+        private ToolStripButton tbbPAL;
 
-        static OldMainForm()
-        {
-            imglist = new ImageList { ColorDepth = ColorDepth.Depth32Bit };
-            try
-            {
-                imglist.Images.Add("default", OldResources.FileImage);
-                imglist.Images.Add("tb_open", OldResources.OpenImage);
-                imglist.Images.Add("tb_save", OldResources.SaveImage);
-                imglist.Images.Add("tb_patchnsd", OldResources.SaveImage);
-                imglist.Images.Add("tb_close", OldResources.FolderImage);
-                imglist.Images.Add("tb_find", OldResources.BinocularsImage);
-                imglist.Images.Add("tb_findnext", OldResources.BinocularsNextImage);
-            }
-            catch
-            {
-                imglist.Images.Clear();
-            }
-        }
+        private FolderBrowserDialog dlgMakeBINDir = new FolderBrowserDialog();
+        private SaveFileDialog dlgMakeBINFile = new SaveFileDialog();
 
-        private readonly ToolStrip tsToolbar;
-        private readonly ToolStripButton tbbOpen;
-        private readonly ToolStripButton tbbSave;
-        private readonly ToolStripButton tbbPatchNSD;
-        private readonly ToolStripButton tbbClose;
-        private readonly ToolStripButton tbbFind;
-        private readonly ToolStripButton tbbFindNext;
-        private readonly ToolStripMenuItem tbxMakeBIN;
-        private readonly ToolStripMenuItem tbxMakeBINUSA;
-        private readonly ToolStripMenuItem tbxMakeBINEUR;
-        private readonly ToolStripMenuItem tbxMakeBINJAP;
-        private readonly ToolStripMenuItem tbxConvertVHVB;
-        private readonly ToolStripMenuItem tbxConvertVAB;
-        private readonly ToolStripDropDownButton tbbExtra;
-        private readonly ToolStripButton tbbPlay;
-        private readonly TabControl tbcTabs;
-        private readonly GameVersionForm dlgGameVersion;
-        private readonly ToolStripButton tbbPAL;
-
-        private readonly FolderBrowserDialog dlgMakeBINDir = new FolderBrowserDialog();
-        private readonly SaveFileDialog dlgMakeBINFile = new SaveFileDialog();
-
-        private readonly BackgroundWorker bgwMakeBIN;
+        private BackgroundWorker bgwMakeBIN;
         private ProgressBarForm dlgProgress;
 
         public static bool PAL { get; private set; } = false;
@@ -74,7 +43,8 @@ namespace CrashEdit
             tbbOpen = new ToolStripButton
             {
                 Text = Resources.Toolbar_Open,
-                ImageKey = "tb_open",
+                ImageKey = "FolderOpen",
+                DisplayStyle = ToolStripItemDisplayStyle.Image,
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
             tbbOpen.Click += new EventHandler(tbbOpen_Click);
@@ -82,7 +52,8 @@ namespace CrashEdit
             tbbSave = new ToolStripButton
             {
                 Text = Resources.Toolbar_Save,
-                ImageKey = "tb_save",
+                ImageKey = "Floppy",
+                DisplayStyle = ToolStripItemDisplayStyle.Image,
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
             tbbSave.Click += new EventHandler(tbbSave_Click);
@@ -90,7 +61,8 @@ namespace CrashEdit
             tbbPatchNSD = new ToolStripButton
             {
                 Text = Resources.Toolbar_PatchNSD,
-                ImageKey = "tb_patchnsd",
+                ImageKey = "Floppy",
+                DisplayStyle = ToolStripItemDisplayStyle.Image,
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
             tbbPatchNSD.Click += new EventHandler(tbbPatchNSD_Click);
@@ -98,26 +70,11 @@ namespace CrashEdit
             tbbClose = new ToolStripButton
             {
                 Text = Resources.Toolbar_Close,
-                ImageKey = "tb_close",
+                ImageKey = "Folder",
+                DisplayStyle = ToolStripItemDisplayStyle.Image,
                 TextImageRelation = TextImageRelation.ImageAboveText
             };
             tbbClose.Click += new EventHandler(tbbClose_Click);
-
-            tbbFind = new ToolStripButton
-            {
-                Text = Resources.Toolbar_Find,
-                ImageKey = "tb_find",
-                TextImageRelation = TextImageRelation.ImageAboveText
-            };
-            tbbFind.Click += new EventHandler(tbbFind_Click);
-
-            tbbFindNext = new ToolStripButton
-            {
-                Text = Resources.Toolbar_FindNext,
-                ImageKey = "tb_findnext",
-                TextImageRelation = TextImageRelation.ImageAboveText
-            };
-            tbbFindNext.Click += new EventHandler(tbbFindNext_Click);
 
             tbxMakeBIN = new ToolStripMenuItem();
             tbxMakeBIN.Text = Resources.OldMainForm_tbxMakeBIN;
@@ -143,9 +100,8 @@ namespace CrashEdit
             tbxConvertVAB.Text = Resources.OldMainForm_tbxConvertVAB;
             tbxConvertVAB.Click += new EventHandler(tbxConvertVAB_Click);
 
-            tbbExtra = new ToolStripDropDownButton();
+            tbbExtra = new ToolStripMenuItem();
             tbbExtra.Text = Resources.OldMainForm_tbbExtra;
-            tbbExtra.DropDown = new ToolStripDropDown { LayoutStyle = ToolStripLayoutStyle.VerticalStackWithOverflow };
             tbbExtra.DropDown.Items.Add(tbxMakeBIN);
             tbbExtra.DropDown.Items.Add(tbxMakeBINUSA);
             tbbExtra.DropDown.Items.Add(tbxMakeBINEUR);
@@ -170,28 +126,19 @@ namespace CrashEdit
             };
             tbbPlay.Click += new EventHandler(tbbPlay_Click);
 
-            tsToolbar = new ToolStrip
-            {
-                Dock = DockStyle.Top,
-                ImageList = imglist
-            };
-            tsToolbar.Items.Add(tbbOpen);
-            tsToolbar.Items.Add(tbbSave);
-            tsToolbar.Items.Add(tbbPatchNSD);
-            tsToolbar.Items.Add(tbbClose);
-            tsToolbar.Items.Add(new ToolStripSeparator());
-            tsToolbar.Items.Add(tbbFind);
-            tsToolbar.Items.Add(tbbFindNext);
-            tsToolbar.Items.Add(new ToolStripSeparator());
-            tsToolbar.Items.Add(tbbExtra);
-            tsToolbar.Items.Add(tbbPAL);
-            tsToolbar.Items.Add(new ToolStripSeparator());
-            tsToolbar.Items.Add(tbbPlay);
+            ToolStrip.Items.Insert(0, tbbOpen);
+            ToolStrip.Items.Insert(1, tbbSave);
+            ToolStrip.Items.Insert(2, new ToolStripSeparator());
+            ToolStrip.Items.Insert(3, tbbPatchNSD);
+            ToolStrip.Items.Insert(4, new ToolStripSeparator());
+            ToolStrip.Items.Insert(5, tbbClose);
+            ToolStrip.Items.Insert(6, new ToolStripSeparator());
+            ToolStrip.Items.Insert(7, tbbPAL);
+            ToolStrip.Items.Insert(8, tbbPlay);
+            ToolStrip.Items.Insert(9, new ToolStripSeparator());
+            MenuStrip.Items.Add(tbbExtra);
 
-            tbcTabs = new TabControl
-            {
-                Dock = DockStyle.Fill
-            };
+            tbcTabs = TabControl;
             tbcTabs.SelectedIndexChanged += tbcTabs_SelectedIndexChanged;
 
             TabPage configtab = new TabPage("CrashEdit")
@@ -211,17 +158,15 @@ namespace CrashEdit
                 WorkerReportsProgress = true,
                 WorkerSupportsCancellation = false
             };
-            bgwMakeBIN.DoWork += bgwMakeBIN_DoWork;
-            bgwMakeBIN.ProgressChanged += bgwMakeBIN_ProgressChanged;
-            bgwMakeBIN.RunWorkerCompleted += bgwMakeBIN_RunWorkerCompleted;
+            bgwMakeBIN.DoWork += new DoWorkEventHandler(bgwMakeBIN_DoWork);
+            bgwMakeBIN.ProgressChanged += new ProgressChangedEventHandler(bgwMakeBIN_ProgressChanged);
+            bgwMakeBIN.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgwMakeBIN_RunWorkerCompleted);
             dlgProgress = null;
 
             Icon = OldResources.CBHacksIcon;
             Width = Settings.Default.DefaultFormW;
             Height = Settings.Default.DefaultFormH;
             Text = $"CrashEdit v{Assembly.GetExecutingAssembly().GetName().Version}";
-            Controls.Add(tbcTabs);
-            Controls.Add(tsToolbar);
 
             dlgMakeBINFile.Filter = "Playstation Disc Images (*.bin)|*.bin";
         }
@@ -232,8 +177,6 @@ namespace CrashEdit
             tbbSave.Enabled =
             tbbPatchNSD.Enabled =
             tbbClose.Enabled =
-            tbbFind.Enabled =
-            tbbFindNext.Enabled =
             tbbPlay.Enabled = tab != null && tab.Tag is NSFBox;
         }
 
@@ -388,26 +331,18 @@ namespace CrashEdit
             CloseNSF();
         }
 
-        void tbbFind_Click(object sender, EventArgs e)
-        {
-            Find();
-        }
-
-        void tbbFindNext_Click(object sender, EventArgs e)
-        {
-            FindNext();
-        }
-
         public void OpenNSF()
         {
-            using OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = FileFilters.NSF + "|" + FileFilters.Any;
-            dialog.Multiselect = true;
-            if (dialog.ShowDialog(this) == DialogResult.OK)
+            using (OpenFileDialog dialog = new OpenFileDialog())
             {
-                foreach (string filename in dialog.FileNames)
+                dialog.Filter = FileFilters.NSF + "|" + FileFilters.Any;
+                dialog.Multiselect = true;
+                if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    OpenNSF(filename);
+                    foreach (string filename in dialog.FileNames)
+                    {
+                        OpenNSF(filename);
+                    }
                 }
             }
         }
@@ -430,10 +365,14 @@ namespace CrashEdit
 
         public void OpenNSF(string filename, NSF nsf, GameVersion gameversion)
         {
-            NSFBox nsfbox = new NSFBox(nsf, gameversion)
+            var ws = new LevelWorkspace();
+            ws.NSF = nsf;
+            ws.GameVersion = gameversion;
+            NSFBox nsfbox = new NSFBox(this, ws)
             {
                 Dock = DockStyle.Fill
             };
+            nsfbox.ActiveControllerChanged += MainControl_ActiveControllerChanged;
 
             TabPage nsftab = new TabPage(filename)
             {
@@ -553,17 +492,11 @@ namespace CrashEdit
                 bool exists = true;
                 if (!File.Exists(filename))
                 {
-                    //if (MessageBox.Show("NSD file does not exist. Create one?", "Patch NSD", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information) != DialogResult.Yes)
-                    {
-                        return;
-                    }
-                    //if (nsfbox.NSFController.GameVersion != GameVersion.Crash1BetaMAR08 && MessageBox.Show("Default NSD file is not a valid NSD file and needs to be manually fixed using a hex editor. Continue anyway?", "Patch NSD", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
-                    //{
-                    //    return;
-                    //}
-                    //exists = false;
+                    return;
                 }
                 PatchNSD(filename, exists, nsfbox.NSFController, false);
+                nsfbox.Sync();
+                OnResyncSuggested(EventArgs.Empty);
             }
         }
 
@@ -603,48 +536,28 @@ namespace CrashEdit
                         if (!ignore_warnings) MessageBox.Show(Resources.PatchNSD_Error2, Resources.PatchNSD_Title1, MessageBoxButtons.OK);
                         return;
                 }
-                nsfc.Node.TreeView.BeginUpdate();
                 bool order_updated = false;
-                foreach (TreeNode node in nsfc.Node.Nodes) // nsd patching might have moved entries, recreate moved entry chunks if that's the case
+                // FIXME - reimplement below to not use controller tree, or better yet rework entire NSD patching system
+                order_updated = true;
+#if false
+                foreach (var ecc in nsfc.LegacySubcontrollers.OfType<EntryChunkController>()) // nsd patching might have moved entries, recreate moved entry chunks if that's the case
                 {
-                    if (node.Tag is EntryChunkController entrychunkcontroller)
+                    for (int i = 0; i < ecc.LegacySubcontrollers.Count; i++)
                     {
-                        int i = 0;
-                        TreeNode[] nodes = new TreeNode[node.Nodes.Count];
-                        foreach (TreeNode oldnode in node.Nodes)
+                        var c = (EntryController)ecc.LegacySubcontrollers[i];
+                        if (c.Entry != ecc.EntryChunk.Entries[i])
                         {
-                            nodes[i++] = oldnode;
-                        }
-                        for (i = 0; i < nodes.Length; ++i)
-                        {
-                            EntryController c = (EntryController)nodes[i].Tag;
-                            if (c.Entry != entrychunkcontroller.EntryChunk.Entries[i])
-                            {
-                                for (i = 0; i < nodes.Length; ++i)
-                                {
-                                    if (nodes[i].IsSelected)
-                                    {
-                                        nodes[i].TreeView.SelectedNode = nodes[i].Parent;
-                                    }
-                                    if (nodes[i].Tag != null)
-                                    {
-                                        if (nodes[i].Tag is Controller t)
-                                        {
-                                            t.Dispose();
-                                        }
-                                    }
-                                }
-                                entrychunkcontroller.PopulateNodes();
-                                order_updated = true;
-                                break;
-                            }
+                            ecc.LegacySubcontrollers.Clear();
+                            ecc.PopulateNodes();
+                            order_updated = true;
+                            break;
                         }
                     }
                 }
-                nsfc.Node.TreeView.EndUpdate();
+#endif
                 if (!no_nsf_overwrite)
                 {
-                    if (ignore_warnings || Settings.Default.PatchNSDSavesNSF || (order_updated && MessageBox.Show(Resources.PatchNSD3, Resources.PatchNSD_Title1, MessageBoxButtons.YesNo) == DialogResult.Yes))
+                    if (ignore_warnings || Settings.Default.PatchNSDSavesNSF ? true : (order_updated && MessageBox.Show(Resources.PatchNSD3, Resources.PatchNSD_Title1, MessageBoxButtons.YesNo) == DialogResult.Yes))
                     {
                         SaveNSF(ignore_warnings);
                     }
@@ -670,7 +583,7 @@ namespace CrashEdit
                     if (ent.ID != null)
                         ++nsd.EntityCount;
 
-            if (ignore_warnings || MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ignore_warnings ? true : MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
             }
@@ -719,7 +632,7 @@ namespace CrashEdit
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
             PatchNSDGoolMap(nsd.GOOLMap, nsf, ignore_warnings);
-            if (ignore_warnings || MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ignore_warnings ? true : MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
             }
@@ -731,7 +644,7 @@ namespace CrashEdit
             var indexdata = nsf.MakeNSDIndex();
             nsd.HashKeyMap = indexdata.Item1;
             nsd.Index = indexdata.Item2;
-            if (ignore_warnings || MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ignore_warnings ? true : MessageBox.Show(Resources.PatchNSD1, Resources.Save_ConfirmationPrompt, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.WriteAllBytes(path, nsd.Save());
             }
@@ -789,28 +702,6 @@ namespace CrashEdit
             }
         }
 
-        public void Find()
-        {
-            if (tbcTabs.SelectedTab != null)
-            {
-                NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
-                using InputWindow inputwindow = new InputWindow();
-                if (inputwindow.ShowDialog(this) == DialogResult.OK)
-                {
-                    nsfbox.Find(inputwindow.Input);
-                }
-            }
-        }
-
-        public void FindNext()
-        {
-            if (tbcTabs.SelectedTab != null)
-            {
-                NSFBox nsfbox = (NSFBox)tbcTabs.SelectedTab.Tag;
-                nsfbox.FindNext();
-            }
-        }
-
         void AddDirectoryToISO(CDBuilder fs, string prefix, DirectoryInfo dir)
         {
             foreach (DirectoryInfo subdir in dir.GetDirectories())
@@ -829,9 +720,11 @@ namespace CrashEdit
             CDBuilder fs = (CDBuilder)args[0];
             string filename = (string)args[1];
             while (!dlgProgress.IsShown) ;
-            using FileStream output = new FileStream(filename, FileMode.Create, FileAccess.Write);
-            using Stream input = fs.Build();
-            ISO2PSX.Run(input, output, bgwMakeBIN);
+            using (FileStream output = new FileStream(filename, FileMode.Create, FileAccess.Write))
+            using (Stream input = fs.Build())
+            {
+                ISO2PSX.Run(input, output, bgwMakeBIN);
+            }
         }
 
         private void bgwMakeBIN_ProgressChanged(object sender, ProgressChangedEventArgs e)

@@ -1,6 +1,4 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class ChunkTypeAttribute : Attribute

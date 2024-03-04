@@ -1,11 +1,6 @@
-﻿using CrashEdit.Properties;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Windows.Forms;
+﻿using CrashEdit.CE.Properties;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class ConfigEditor : UserControl
     {
@@ -61,6 +56,7 @@ namespace CrashEdit
                 if (lang == Settings.Default.Language)
                     dpdLang.SelectedIndex = dpdLang.Items.Count - 1;
             }
+            dpdLang.SelectedItem = Resources.ResourceManager.GetString("Language", new System.Globalization.CultureInfo(Settings.Default.Language));
             dpdLang.SelectedIndexChanged += new EventHandler(dpdLang_SelectedIndexChanged);
             MakeFontsList();
             dpdFont.SelectedIndexChanged += new EventHandler(dpdFont_SelectedIndexChanged);
@@ -77,13 +73,13 @@ namespace CrashEdit
             chkNormalDisplay.Checked = Settings.Default.DisplayNormals;
             chkCollisionDisplay.Checked = Settings.Default.DisplayFrameCollision;
             chkUseAnimLinks.Checked = Settings.Default.UseAnimLinks;
+            cdlClearCol.Color = picClearCol.BackColor = System.Drawing.Color.FromArgb(Settings.Default.ClearColorRGB);
             chkDeleteInvalidEntries.Checked = Settings.Default.DeleteInvalidEntries;
             chkAnimGrid.Checked = Settings.Default.DisplayAnimGrid;
             chkFont3DEnable.Checked = Settings.Default.Font3DEnable;
             chkFont3DAutoscale.Checked = Settings.Default.Font3DAutoscale;
             chkFont2DEnable.Checked = Settings.Default.Font2DEnable;
             chkViewerShowHelp.Checked = Settings.Default.ViewerShowHelp;
-            chkCacheShaderUniformLoc.Checked = Settings.Default.CacheShaderUniformLoc;
             cdlClearCol.Color = picClearCol.BackColor = Color.FromArgb(Settings.Default.ClearColorRGB);
             sldNodeShadeAmt.Value = (int)(Settings.Default.NodeShadeMax * 100);
 
@@ -92,16 +88,15 @@ namespace CrashEdit
             fraMisc.Text = Resources.Config_fraMisc;
             fraSize.Text = Resources.Config_fraSize;
             fraClearCol.Text = Resources.Config_fraClearCol;
-            fraAnimGrid.Text = Resources.Config_fraAnimGrid;
             fraFont.Text = Resources.Config_fraFont;
             fraNodeShadeAmt.Text = Resources.Config_fraNodeShadeAmt;
             lblLang.Text = Resources.Config_lblLang;
-            lblW.Text = Resources.Config_lblW;
-            lblH.Text = Resources.Config_lblH;
             lblAnimGrid.Text = Resources.Config_lblAnimGrid;
             lblFontName.Text = Resources.Config_lblFontName;
             lblFontSize.Text = Resources.Config_lblFontSize;
+            fraAnimGrid.Text = Resources.Config_fraAnimGrid;
             chkAnimGrid.Text = Resources.Config_chkAnimGrid;
+            lblAnimGrid.Text = Resources.Config_lblAnimGrid;
             chkNormalDisplay.Text = Resources.Config_chkNormalDisplay;
             chkCollisionDisplay.Text = Resources.Config_chkCollisionDisplay;
             chkDeleteInvalidEntries.Text = Resources.Config_chkDeleteInvalidEntries;
@@ -111,7 +106,6 @@ namespace CrashEdit
             chkFont3DEnable.Text = Resources.Config_chkFont3DEnable;
             chkFont2DEnable.Text = Resources.Config_chkFont2DEnable;
             chkViewerShowHelp.Text = Resources.Config_chkViewerShowHelp;
-            chkCacheShaderUniformLoc.Text = Resources.Config_chkCacheShaderUniformLoc;
             cmdReset.Text = Resources.Config_cmdReset;
         }
 
@@ -196,7 +190,6 @@ namespace CrashEdit
             Settings.Default.PatchNSDSavesNSF = chkPatchNSDSavesNSF.Checked;
             Settings.Default.Save();
         }
-
         private void numFontSize_ValueChanged(object sender, EventArgs e)
         {
             Settings.Default.FontSize = (float)numFontSize.Value;
@@ -224,12 +217,6 @@ namespace CrashEdit
         private void chkViewerShowHelp_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Default.ViewerShowHelp = chkViewerShowHelp.Checked;
-            Settings.Default.Save();
-        }
-
-        private void chkCacheShaderUniformLoc_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.Default.CacheShaderUniformLoc = chkCacheShaderUniformLoc.Checked;
             Settings.Default.Save();
         }
 

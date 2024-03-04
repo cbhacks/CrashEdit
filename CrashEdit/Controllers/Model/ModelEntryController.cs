@@ -1,45 +1,18 @@
-using Crash;
-using System.Drawing;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(ModelEntry))]
     public sealed class ModelEntryController : EntryController
     {
-        public ModelEntryController(EntryChunkController entrychunkcontroller, ModelEntry modelentry) : base(entrychunkcontroller, modelentry)
+        public ModelEntryController(ModelEntry modelentry, SubcontrollerGroup parentGroup) : base(modelentry, parentGroup)
         {
             ModelEntry = modelentry;
-            InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
-        {
-            if (ModelEntry.Positions == null)
-            {
-                Node.Text = string.Format(Crash.UI.Properties.Resources.ModelEntryController_Text, ModelEntry.EName);
-            }
-            else
-            {
-                Node.Text = string.Format(Crash.UI.Properties.Resources.ModelEntryController_Compressed_Text, ModelEntry.EName);
-            }
-        }
+        public override bool EditorAvailable => true;
 
-        public override void InvalidateNodeImage()
-        {
-            if (ModelEntry.Positions == null)
-            {
-                Node.ImageKey = "crimsonb";
-                Node.SelectedImageKey = "crimsonb";
-            }
-            else
-            {
-                Node.ImageKey = "redb";
-                Node.SelectedImageKey = "redb";
-            }
-        }
-
-        protected override Control CreateEditor()
+        public override Control CreateEditor()
         {
             if (ModelEntry.Positions == null)
                 return new Label { Text = string.Format("Polygon count: {0}\nVertex count: {1}", ModelEntry.PolyCount, ModelEntry.VertexCount), TextAlign = ContentAlignment.MiddleCenter };

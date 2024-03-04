@@ -1,13 +1,10 @@
-﻿using System;
-
-namespace Crash
+﻿namespace CrashEdit.Crash
 {
     public struct OldSceneryTexture : OldModelStruct
     {
         public static OldSceneryTexture Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length != 8)
                 throw new ArgumentException("Value must be 8 bytes long.", nameof(data));
             byte r = data[0];
@@ -24,7 +21,6 @@ namespace Crash
             byte yoffu = (byte)(texinfo & 0x1F);
             return new OldSceneryTexture(uvindex, clutx, cluty, xoffu, yoffu, colormode, blendmode, segment, r, g, b);
         }
-
         public OldSceneryTexture(int uvindex, byte clutx, byte cluty, byte xoffu, byte yoffu, byte colormode, byte blendmode, byte segment, byte r, byte g, byte b)
         {
             UVIndex = uvindex;
@@ -65,10 +61,10 @@ namespace Crash
         public byte BlendMode { get; }
         public byte Segment { get; }
         public int U1 { get; }
-        public int U2 { get; }
-        public int U3 { get; }
         public int V1 { get; }
+        public int U2 { get; }
         public int V2 { get; }
+        public int U3 { get; }
         public int V3 { get; }
 
         public byte[] Save()

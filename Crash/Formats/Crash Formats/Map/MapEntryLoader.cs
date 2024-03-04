@@ -1,6 +1,4 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntryType(17, GameVersion.Crash1BetaMAR08)]
     [EntryType(17, GameVersion.Crash1BetaMAY11)]
@@ -8,10 +6,9 @@ namespace Crash
     [EntryType(17, GameVersion.Crash2)]
     public sealed class MapEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items, int eid, GameVersion version)
+        public override Entry Load(byte[][] items, int eid)
         {
-            if (items == null)
-                throw new ArgumentNullException(nameof(items));
+            ArgumentNullException.ThrowIfNull(items);
             if (items.Length < 2)
             {
                 ErrorManager.SignalError("MapEntry: Wrong number of items");

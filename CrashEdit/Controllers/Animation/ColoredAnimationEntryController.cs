@@ -1,36 +1,21 @@
-using Crash;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(ColoredAnimationEntry))]
     public sealed class ColoredAnimationEntryController : EntryController
     {
-        public ColoredAnimationEntryController(EntryChunkController entrychunkcontroller, ColoredAnimationEntry coloredanimationentry)
-            : base(entrychunkcontroller, coloredanimationentry)
+        public ColoredAnimationEntryController(ColoredAnimationEntry coloredanimationentry, SubcontrollerGroup parentGroup)
+            : base(coloredanimationentry, parentGroup)
         {
             ColoredAnimationEntry = coloredanimationentry;
-            foreach (OldFrame frame in coloredanimationentry.Frames)
-            {
-                AddNode(new ColoredFrameController(this, frame));
-            }
-            InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.ColoredAnimationEntryController_Text, ColoredAnimationEntry.EName);
-        }
+        public override bool EditorAvailable => true;
 
-        public override void InvalidateNodeImage()
+        public override Control CreateEditor()
         {
-            Node.ImageKey = "limeb";
-            Node.SelectedImageKey = "limeb";
-        }
-
-        protected override Control CreateEditor()
-        {
-            return new UndockableControl(new OldAnimationEntryViewer(NSF, Entry.EID));
+            return new OldAnimationEntryViewer(GetNSF(), Entry.EID);
         }
 
         public ColoredAnimationEntry ColoredAnimationEntry { get; }

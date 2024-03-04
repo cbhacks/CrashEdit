@@ -1,24 +1,27 @@
-using System;
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class OldSLSTEntry : Entry
     {
-        private readonly List<OldSLSTDelta> deltas;
-
         public OldSLSTEntry(OldSLSTSource start, OldSLSTSource end, IEnumerable<OldSLSTDelta> deltas, int eid) : base(eid)
         {
-            if (deltas == null)
-                throw new ArgumentNullException(nameof(deltas));
-            this.deltas = new List<OldSLSTDelta>(deltas);
+            ArgumentNullException.ThrowIfNull(deltas);
+            Deltas.AddRange(deltas);
             Start = start;
             End = end;
         }
 
+        public override string Title => $"Old Sort List ({EName})";
+        public override string ImageKey => "ThingGray";
+
         public override int Type => 4;
-        public IList<OldSLSTDelta> Deltas => deltas;
+
+        [SubresourceSlot]
         public OldSLSTSource Start { get; }
+
+        [SubresourceList]
+        public List<OldSLSTDelta> Deltas { get; } = new List<OldSLSTDelta>();
+
+        [SubresourceSlot]
         public OldSLSTSource End { get; }
 
         public List<OldSLSTPolygonID> DecodeAt(int index)
@@ -30,7 +33,7 @@ namespace Crash
             for (int d = 0; d + 1 <= index; ++d)
             {
                 dst.Clear();
-                var delta = deltas[d];
+                var delta = Deltas[d];
                 int srci = 0;
 
                 int remi = 0;
@@ -119,7 +122,6 @@ namespace Crash
                     int swap = delta.SwapNodes[i];
                     if (swap == -1)
                         break;
-
                     if ((swap & 0x8000) != 0)
                     {
                         swap_a = swap & 0x7FF;
@@ -148,13 +150,13 @@ namespace Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte[deltas.Count + 2][];
+            byte[][] items = new byte[Deltas.Count + 2][];
             items[0] = Start.Save();
-            for (int i = 0; i < deltas.Count; ++i)
+            for (int i = 0; i < Deltas.Count; ++i)
             {
-                items[1 + i] = deltas[i].Save();
+                items[1 + i] = Deltas[i].Save();
             }
-            items[1 + deltas.Count] = End.Save();
+            items[1 + Deltas.Count] = End.Save();
             return new UnprocessedEntry(items, EID, Type);
         }
     }

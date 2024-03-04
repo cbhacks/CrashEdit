@@ -1,6 +1,4 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class SpeechEntry : Entry
     {
@@ -8,6 +6,9 @@ namespace Crash
         {
             Samples = samples ?? throw new ArgumentNullException(nameof(samples));
         }
+
+        public override string Title => $"Speech ({EName})";
+        public override string ImageKey => "SpeakerWhite";
 
         public override int Type => 20;
         public SampleSet Samples { get; }

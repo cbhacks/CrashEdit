@@ -1,7 +1,3 @@
-using Crash;
-using System;
-using System.Collections.Generic;
-
 namespace CrashHacks.Scripts.Animation
 {
     public sealed class ShuffleScript : Script
@@ -46,19 +42,19 @@ namespace CrashHacks.Scripts.Animation
             }
         }
 
-        public override void Run(object value,GameVersion gameversion)
+        public override void Run(object value, GameVersion gameversion)
         {
             if (value is NSF nsf)
             {
                 List<AnimationEntry> entries = nsf.GetEntries<AnimationEntry>();
                 List<AnimationEntry> sourceentries = new List<AnimationEntry>();
-                for (int i = 0;i < entries.Count;i++)
+                for (int i = 0; i < entries.Count; i++)
                 {
-                    sourceentries.Insert(random.Next(i),new AnimationEntry(entries[i].Frames,entries[i].IsNew,entries[i].EID));
+                    sourceentries.Insert(random.Next(i), new AnimationEntry(entries[i].Frames, entries[i].IsNew, entries[i].EID));
                 }
                 foreach (AnimationEntry entry in entries)
                 {
-                    for (int i = 0;i < sourceentries.Count;i++)
+                    for (int i = 0; i < sourceentries.Count; i++)
                     {
                         AnimationEntry sourceentry = sourceentries[i];
                         if (sourceentry.Frames.Count == entry.Frames.Count && sourceentry.Save().Length <= entry.Save().Length)

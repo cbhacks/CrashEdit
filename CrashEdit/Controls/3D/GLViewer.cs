@@ -1,17 +1,14 @@
-using Crash;
-using CrashEdit.Properties;
-using OpenTK;
-using OpenTK.Graphics;
+using CrashEdit.CE.Properties;
+using CrashEdit.Crash;
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
+using OpenTK.WinForms;
 using SharpFont;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     [Flags]
     public enum TextRenderFlags
@@ -99,37 +96,30 @@ namespace CrashEdit
         #region Static fields for OpenGL renderer.
         private static readonly Dictionary<int, Vector3[]> SpherePosCache = new();
         private static readonly Dictionary<int, Vector3[]> GridPosCache = new();
-        private static int SpherePosLastUploaded = -1;
-        private static int GridPosLastUploaded = -1;
-        protected static VAO vaoSphereLine;
-        protected static VAO vaoGridLine;
-        protected static ShaderContext shaderContext;
+        protected static ShaderContext shaders;
         protected static FontTable fontTable;
-        protected static Library fontLib = new();
+        protected static readonly Library fontLib = new();
 
         protected static int texTpages;
         protected static int texSprites;
         protected static int texFont;
-        protected static VAO vaoAxes;
-        protected static VAO vaoTris;
-        protected static VAO vaoLines;
-        protected static VAO vaoLinesThick;
-        protected static VAO vaoSprites;
-        protected static VAO vaoText;
-        protected static VAO vaoOctree;
-        // note: there's multiple buffers because of blending
-        protected const int ANIM_BUF_MAX = 2;
-        protected static VAO[] vaoListCrash1 = new VAO[ANIM_BUF_MAX];
-        // these shouldn't be used
-        protected static VAO vaoDebugBoxTri;
-        protected static VAO vaoDebugBoxLine;
-        protected static VAO vaoDebugSprite;
-        public static List<string> dbgContextDir = new();
+        protected static VBO vboTris;
+        protected static VBO vboLines;
+        protected static VBO vboLinesThick;
+        protected static VBO vboSprites;
+        protected static VBO vboText;
+        protected static VBO vboOctree;
+        public static readonly List<string> dbgContextDir = [];
 
-        private static IGraphicsContext global_context;
-        private static GLControl global_context_window;
-        private static readonly GraphicsMode default_graphics_settings = new(32, 24, 8);
+        protected static readonly GLControlSettings default_graphics_settings = new() { APIVersion = new(4, 3), DepthBits = 24, Flags = ContextFlags.Debug | ContextFlags.ForwardCompatible };
         #endregion
+
+        protected VAO vaoTris;
+        protected VAO vaoLines;
+        protected VAO vaoLinesThick;
+        protected VAO vaoSprites;
+        protected VAO vaoText;
+        protected VAO vaoOctree;
 
         protected readonly RenderInfo render;
 
@@ -137,6 +127,9 @@ namespace CrashEdit
         protected string con_help;
         // debug timers
         private double dbg_run_ms;
+        private long dbg_gpu_time;
+        private int qryGpuTime;
+        private static bool debugInitPrinted = false;
 
         #region Internal fields for input status and handling.
         private bool run = false;
@@ -157,6 +150,7 @@ namespace CrashEdit
         public const float DefaultZFar = DefaultZNear * 0x4000;
         #endregion
 
+        #region Input handling
         private bool KeyDownShift() => keysdown.Contains(Keys.ShiftKey) || keysdown.Contains(Keys.LShiftKey) || keysdown.Contains(Keys.RShiftKey);
         private bool KeyDownControl() => keysdown.Contains(Keys.ControlKey) || keysdown.Contains(Keys.LControlKey) || keysdown.Contains(Keys.RControlKey);
         private bool KeyDownAlt() => keysdown.Contains(Keys.Menu) || keysdown.Contains(Keys.LMenu) || keysdown.Contains(Keys.RMenu);
@@ -195,7 +189,9 @@ namespace CrashEdit
 
         public bool KDown(ControlsKeyboardInfo control) => KDown(control.Key);
         public bool KPress(ControlsKeyboardInfo control) => KPress(control.Key);
-        private float GetMoveSpeed() => movespeed * 0.2f + movespeed * 0.8f * (render.Projection.Distance / (ProjectionInfo.MaxInitialDistance * 0.2f));
+        #endregion
+
+        private float GetMoveSpeed() => movespeed * (0.2f + 0.8f * (render.Projection.Distance / (ProjectionInfo.MaxInitialDistance * 0.2f)));
 
         #region Default controls.
         public static class KeyboardControls
@@ -225,177 +221,79 @@ namespace CrashEdit
         protected readonly NSF nsf;
         private bool showHelp = Settings.Default.ViewerShowHelp;
 
-        #region Functions for generating static data for some helper renderers.
-        protected static void MakeLineSphere(int resolution)
+        public GLViewer(NSF nsf = null) : base(default_graphics_settings)
         {
-            if (resolution < 0)
-                throw new ArgumentOutOfRangeException(nameof(resolution), "Sphere resolution cannot be less than 0.");
-            if (SpherePosLastUploaded == resolution) return;
-            if (!SpherePosCache.ContainsKey(resolution))
-            {
-                int long_amt = resolution * 4;
-                int lat_amt = resolution;
-                int pt_nb = 1 + long_amt * (2 + 2 * lat_amt) + (1 + long_amt) * (1 + 2 * lat_amt);
-                var pos = new Vector3[pt_nb];
-                int i = 1;
-                pos[0] = new Vector3(0, 0, 1);
-                bool even = true;
-                for (int ii = 0; ii < long_amt; ++ii)
-                {
-                    var rotmat = Matrix3.CreateRotationZ((float)ii / long_amt * MathHelper.TwoPi);
-                    if (ii % 2 == 0)
-                    {
-                        for (int iii = 0, l_m = 2 + lat_amt * 2; iii < l_m; ++iii)
-                        {
-                            pos[i++] = pos[0] * Matrix3.CreateRotationX((float)(iii + 1) / l_m * MathHelper.Pi) * rotmat;
-                        }
-                        even = true;
-                    }
-                    else
-                    {
-                        for (int iii = 0, l_m = 2 + lat_amt * 2; iii < l_m; ++iii)
-                        {
-                            pos[i++] = pos[0] * Matrix3.CreateRotationX((float)(l_m - iii - 1) / l_m * MathHelper.Pi) * rotmat;
-                        }
-                        even = false;
-                    }
-                }
-                for (int ii = 1, l_m = lat_amt * 2 + 2; ii < l_m; ++ii)
-                {
-                    Matrix3 rotmat;
-                    if (!even)
-                    {
-                        rotmat = Matrix3.CreateRotationX((float)ii / l_m * MathHelper.Pi);
-                    }
-                    else
-                    {
-                        rotmat = Matrix3.CreateRotationX((float)(l_m - ii) / l_m * MathHelper.Pi);
-                    }
-                    for (int iii = 0; iii <= long_amt; ++iii)
-                    {
-                        pos[i++] = pos[0] * (!even ? Matrix3.CreateRotationX((float)ii / l_m * MathHelper.Pi) : Matrix3.CreateRotationX((float)(l_m - ii) / l_m * MathHelper.Pi))
-                                          * Matrix3.CreateRotationZ((float)iii / long_amt * MathHelper.TwoPi);
-                    }
-                }
-                SpherePosCache.Add(resolution, pos);
-            }
-            var verts = SpherePosCache[resolution];
-            vaoGridLine.vert_count = 0;
-            for (int i = 0; i < verts.Length; ++i)
-            {
-                vaoSphereLine.PushAttrib(trans: verts[i]);
-            }
-            SpherePosLastUploaded = resolution;
-        }
-        protected static void MakeLineGrid(int resolution)
-        {
-            if (resolution < 0)
-                throw new ArgumentOutOfRangeException(nameof(resolution), "Grid resolution cannot be less than 0.");
-            if (GridPosLastUploaded == resolution) return;
-
-            if (!GridPosCache.ContainsKey(resolution))
-            {
-                var pos = new Vector3[4 * resolution * 2];
-                var border = resolution * 1f - 0.5f;
-
-                var pi = 0;
-                for (int i = 0; i < resolution * 2; ++i)
-                {
-                    pos[pi++] = new Vector3(-border + i, 0, -border);
-                    pos[pi++] = new Vector3(-border + i, 0, +border);
-                    pos[pi++] = new Vector3(-border, 0, -border + i);
-                    pos[pi++] = new Vector3(+border, 0, -border + i);
-                }
-
-                GridPosCache.Add(resolution, pos);
-            }
-
-            var verts = GridPosCache[resolution];
-            vaoGridLine.vert_count = 0;
-            for (int i = 0; i < verts.Length; ++i)
-            {
-                vaoGridLine.PushAttrib(trans: verts[i]);
-            }
-            GridPosLastUploaded = resolution;
-        }
-        #endregion
-
-        public GLViewer(NSF nsf = null) : base(default_graphics_settings, 4, 3, GraphicsContextFlags.Debug | GraphicsContextFlags.ForwardCompatible)
-        {
-            if (global_context == null)
-            {
-                global_context = Context;
-                global_context_window = this;
-            }
             render = new RenderInfo(this);
             this.nsf = nsf;
         }
 
-        protected new void SwapBuffers()
-        {
-            global_context_window.SwapBuffers();
-        }
-
-        protected new void MakeCurrent()
-        {
-            global_context.MakeCurrent(WindowInfo);
-        }
-
         protected abstract IEnumerable<IPosition> CorePositions { get; }
 
-        protected override void OnMouseWheel(MouseEventArgs e)
+        protected void EnableGLDebug()
         {
-            base.OnMouseWheel(e);
-            if (CanZoom())
+            int flags = GL.GetInteger(GetPName.ContextFlags);
+            // Console.WriteLine($"flags: {flags}");
+            if ((flags & (int)ContextFlagMask.ContextFlagDebugBit) != 0)
             {
-                lock (render.mLock)
+                if (!debugInitPrinted)
                 {
-                    float delta = (float)e.Delta / SystemInformation.MouseWheelScrollDelta * zoomspeed;
-                    delta *= 0.3f + 1.7f * (render.Projection.Distance / ProjectionInfo.MaxInitialDistance);
-                    render.Projection.Distance = Math.Max(ProjectionInfo.MinDistance, Math.Min(render.Projection.Distance - delta, ProjectionInfo.MaxDistance));
+                    Console.WriteLine("GL debug enabled.");
+                    debugInitPrinted = true;
                 }
+                // Enable debug callbacks.
+                GL.Enable(EnableCap.DebugOutput);
+                GL.DebugMessageCallback((source, type, id, severity, length, message, userParam) =>
+                {
+                    string msg = Marshal.PtrToStringAnsi(message);
+                    string level = "OTHER";
+                    switch (severity)
+                    {
+                        case DebugSeverity.DebugSeverityHigh:
+                            level = "ERROR";
+                            break;
+                        case DebugSeverity.DebugSeverityMedium:
+                            level = "WARN";
+                            break;
+                        case DebugSeverity.DebugSeverityLow:
+                            level = "INFO";
+                            break;
+                    }
+                    string context = null;
+                    if (dbgContextDir.Count > 0)
+                    {
+                        foreach (var c in dbgContextDir)
+                        {
+                            if (!string.IsNullOrEmpty(context))
+                            {
+                                context += "/";
+                            }
+                            context += c;
+                        }
+                    }
+                    else
+                    {
+                        context = "*unknown*";
+                    }
+                    Console.WriteLine($"[{context}] OpenGL {level}: {msg}");
+                }, IntPtr.Zero);
             }
         }
 
-        protected override void OnMouseUp(MouseEventArgs e)
+        private static void LoadGLStatic()
         {
-            base.OnMouseUp(e);
-            switch (e.Button)
-            {
-                case MouseButtons.Left: mouseleft = false; break;
-                case MouseButtons.Right: mouseright = false; break;
-            }
-        }
-
-        protected override void OnMouseMove(MouseEventArgs e)
-        {
-            base.OnMouseMove(e);
-            lock (render.mLock)
-            {
-                if (mouseleft && CanAim())
-                {
-                    float rotx = render.Projection.CamRot.X;
-                    float rotz = render.Projection.CamRot.Y;
-                    rotz += MathHelper.DegreesToRadians(e.X - mousex) * rotspeed;
-                    rotx += MathHelper.DegreesToRadians(e.Y - mousey) * rotspeed;
-                    if (rotx > RenderInfo.MaxRot)
-                        rotx = RenderInfo.MaxRot;
-                    if (rotx < RenderInfo.MinRot)
-                        rotx = RenderInfo.MinRot;
-                    render.Projection.CamRot.X = rotx;
-                    render.Projection.CamRot.Y = rotz;
-                }
-                if (mouseright)
-                {
-                }
-                mousex = e.X;
-                mousey = e.Y;
-            }
+            vboTris = new();
+            vboLines = new();
+            vboLinesThick = new();
+            vboSprites = new();
+            vboText = new();
+            vboOctree = new();
         }
 
         // for each instance
-        protected virtual void GLLoad()
+        protected virtual void LoadGL()
         {
+            EnableGLDebug();
+
             void run_load_static(Type t)
             {
                 if (!loaded_static_types.Contains(t))
@@ -404,15 +302,40 @@ namespace CrashEdit
                     {
                         run_load_static(t.BaseType);
                     }
-                    Console.WriteLine($"GLLoadStatic {t.Name}");
-                    var func = t.GetMethod("GLLoadStatic", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
-                    func?.Invoke(this, new object[] { });
+                    Console.WriteLine($"LoadGLStatic {t.Name}");
+                    var func = t.GetMethod("LoadGLStatic", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+                    func?.Invoke(this, []);
                     loaded_static_types.Add(t);
                 }
             }
-            run_load_static(Program.TopLevelGLViewer.GetType());
             // will run this on parent types first
             run_load_static(GetType());
+
+            GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.Blend);
+            GL.Disable(EnableCap.Dither);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
+            // bind texture units
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, texTpages);
+            GL.ActiveTexture(TextureUnit.Texture1);
+            GL.BindTexture(TextureTarget.Texture2D, texSprites);
+            fontTable.BindFontGL(texFont);
+
+            // init vertex array objects
+            vaoSprites = new VAO(shaders.GetShader("sprite"), PrimitiveType.Triangles, vboSprites);
+            vaoLines = new VAO(shaders.GetShader("line"), PrimitiveType.Lines, vboLines);
+            vaoLinesThick = new VAO(shaders.GetShader("line"), PrimitiveType.Lines, vboLinesThick);
+            vaoTris = new VAO(shaders.GetShader("generic"), PrimitiveType.Triangles, vboTris);
+            vaoText = new VAO(shaders.GetShader("screen"), PrimitiveType.Triangles, vboText);
+            vaoOctree = new VAO(shaders.GetShader("octree"), PrimitiveType.Triangles, vboOctree);
+
+            vaoText.ZBufDisable = true;
+            vaoText.ZBufDisableRead = true;
+            vaoLinesThick.LineWidth = 5;
+
+            qryGpuTime = GL.GenQuery();
 
             ResetCamera();
 
@@ -446,7 +369,7 @@ namespace CrashEdit
         protected virtual void PrintDebug()
         {
             con_debug += $"Zoom: {render.Projection.Distance}\nMove Speed: {GetMoveSpeed()}\n";
-            con_debug += string.Format("Render time: {0:F2}ms\nTotal time: {1:F2}ms\n", render.DebugRenderMs, dbg_run_ms);
+            con_debug += string.Format("Render time: {0:F2}ms\nTotal time: {1:F2}ms\nGPU time: {2}us\n", render.DebugRenderMs, dbg_run_ms, dbg_gpu_time / 1000);
         }
 
         protected virtual void PrintHelp()
@@ -477,12 +400,12 @@ namespace CrashEdit
                 var d = GetMoveSpeed() * PerFrame;
                 if (KDown(Keys.Control))
                 {
-                    if (KDown(Keys.W)) render.Projection.CamTrans.Z += d;
-                    if (KDown(Keys.S)) render.Projection.CamTrans.Z -= d;
-                    if (KDown(Keys.A)) render.Projection.CamTrans.X += d;
-                    if (KDown(Keys.D)) render.Projection.CamTrans.X -= d;
-                    if (KDown(Keys.E)) render.Projection.CamTrans.Y += d;
-                    if (KDown(Keys.Q)) render.Projection.CamTrans.Y -= d;
+                    if (KDown(Keys.W, true)) render.Projection.CamTrans.Z += d;
+                    if (KDown(Keys.S, true)) render.Projection.CamTrans.Z -= d;
+                    if (KDown(Keys.A, true)) render.Projection.CamTrans.X += d;
+                    if (KDown(Keys.D, true)) render.Projection.CamTrans.X -= d;
+                    if (KDown(Keys.E, true)) render.Projection.CamTrans.Y += d;
+                    if (KDown(Keys.Q, true)) render.Projection.CamTrans.Y -= d;
                 }
                 else
                 {
@@ -519,21 +442,30 @@ namespace CrashEdit
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            base.OnPaint(e);
             dbgContextDir.Clear();
             if (!loaded)
             {
                 dbgContextDir.Add("load");
                 MakeCurrent();
-                GLLoad();
+                LoadGL();
                 loaded = true;
                 dbgContextDir.RemoveLast();
             }
             else if (run)
             {
+                //if (default_graphics_settings.SharedContext == null)
+                //{
+                //    default_graphics_settings.SharedContext = Context as IGLFWGraphicsContext;
+                //    global_context_window = this;
+                //}
                 Stopwatch watchRun = Stopwatch.StartNew();
 
+                if (Focused)
+                {
+                    var a = 1 + 2;
+                }
                 dbgContextDir.Add("render");
-
                 render.DebugRenderMs = 0;
 
                 MakeCurrent();
@@ -543,10 +475,12 @@ namespace CrashEdit
                 {
                     dbgContextDir.Add("setup");
 
+                    GL.BeginQuery(QueryTarget.TimeElapsed, qryGpuTime);
+
                     // update font
                     if (fontTable.Size != Settings.Default.FontSize || fontTable.FileName != Settings.Default.FontName)
                     {
-                        fontTable.LoadFontAndLoadToGL(texFont, fontLib, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), Settings.Default.FontName), Settings.Default.FontSize);
+                        fontTable.LoadFontAndUpload(texFont, fontLib, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), Settings.Default.FontName), Settings.Default.FontSize);
                     }
 
                     // set up viewport clip
@@ -565,7 +499,7 @@ namespace CrashEdit
                     render.Projection.SetPerspective(60, render.Projection.Aspect, DefaultZNear, DefaultZFar);
                     render.Projection.SetRotation(render.Projection.CamRot);
                     render.Projection.SetTrans(-render.Projection.CamTrans - render.Projection.Forward * render.Projection.Distance);
-                    
+
                     dbgContextDir.RemoveLast();
 
                     dbgContextDir.Add(GetType().ToString());
@@ -591,6 +525,10 @@ namespace CrashEdit
                     con_debug = string.Empty;
                     con_help = string.Empty;
 
+                    GL.EndQuery(QueryTarget.TimeElapsed);
+
+                    GL.GetQueryObject(qryGpuTime, GetQueryObjectParam.QueryResult, out dbg_gpu_time);
+
                     dbgContextDir.RemoveLast();
                 }
 
@@ -602,7 +540,6 @@ namespace CrashEdit
                 SwapBuffers();
                 dbgContextDir.RemoveLast();
             }
-            base.OnPaint(e);
         }
 
         protected virtual void Render()
@@ -611,10 +548,8 @@ namespace CrashEdit
 
             if (Settings.Default.DisplayAnimGrid)
             {
-                RenderAxes(new Vector3(0));
-
-                MakeLineGrid(Settings.Default.AnimGridLen);
-                vaoGridLine.Render(render);
+                AddAxes(new Vector3(0));
+                AddLineGrid(Settings.Default.AnimGridLen, (Rgba)Color4.Gray);
             }
         }
 
@@ -628,34 +563,17 @@ namespace CrashEdit
             vaoSprites.RenderAndDiscard(render);
         }
 
-        private void RenderAxes(Vector3 pos)
+        private void AddAxes(Vector3 pos)
         {
-            vaoAxes.UserTrans = pos;
-            vaoAxes.Render(render);
+            for (int i = 0; i < AxesPos.Length; ++i)
+            {
+                Vector3 color = AxesPos[i].Abs().Normalized();
+                vaoLines.PushAttrib(trans: AxesPos[i] + pos, rgba: (Rgba)new Color4(color.X, color.Y, color.Z, 1));
+            }
         }
 
-        protected void DebugRenderBox(Vector3 pos, Vector3 size, Color4 col)
-        {
-            vaoDebugBoxTri.UserTrans = pos;
-            vaoDebugBoxTri.UserScale = size;
-            vaoDebugBoxTri.UserColor1 = col;
-            vaoDebugBoxTri.Render(render);
-        }
 
-        protected void DebugRenderBoxLine(Vector3 pos, Vector3 size, Color4 col)
-        {
-            vaoDebugBoxLine.UserTrans = pos;
-            vaoDebugBoxLine.UserScale = size;
-            vaoDebugBoxLine.UserColor1 = col;
-            vaoDebugBoxLine.Render(render);
-        }
-
-        protected void DebugRenderBoxLineFilled(Vector3 pos, Vector3 size, Color4 col_line, Color4 col_fill)
-        {
-            DebugRenderBoxLine(pos, size, col_line);
-            DebugRenderBox(pos, size, col_fill);
-        }
-
+        #region Functions for generating shapes and text on the debug renderers.
         public Vector2 AddText3D(string text, Vector3 pos, Rgba col, float size = 1, TextRenderFlags flags = TextRenderFlags.Default, float ofs_x = 0, float ofs_y = 0)
         {
             var screen_pos = new Vector4(pos, 1) * render.Projection.GetPVM();
@@ -721,7 +639,7 @@ namespace CrashEdit
 
             var cur_ofs = start_ofs;
             cur_ofs.Y += fontTable.LineHeight * size.Y;
-            int start_idx = vaoText.vert_count;
+            int start_idx = vaoText.CurVert;
             for (int i = 0; i < text.Length; ++i)
             {
                 var c = text[i];
@@ -755,7 +673,7 @@ namespace CrashEdit
                 float kAdvanceX = (float)glyph.AdvanceX * size.X;
                 var kSize = new Vector2(glyph.Width, glyph.Height) * size;
 
-                int idx = vaoText.vert_count;
+                int idx = vaoText.CurVert;
                 var char_ofs = cur_ofs + new Vector2(kBearingX, -kBearingY);
                 vaoText.PushAttrib(trans: new Vector3(char_ofs + kSize * new Vector2(0, 0)), st: new Vector2(glyph.Left, glyph.Top), rgba: col);
                 vaoText.PushAttrib(trans: new Vector3(char_ofs + kSize * new Vector2(1, 0)), st: new Vector2(glyph.Right, glyph.Top), rgba: col);
@@ -775,7 +693,7 @@ namespace CrashEdit
 
                 cur_ofs.X += kAdvanceX;
             }
-            int end_idx = vaoText.vert_count;
+            int end_idx = vaoText.CurVert;
             if ((flags & TextRenderFlags.Shadow) != 0)
             {
                 for (int i = 0; i < end_idx - start_idx; ++i)
@@ -882,29 +800,6 @@ namespace CrashEdit
         public void AddBoxAB(Vector3 a, Vector3 b, Rgba col, bool outline) => AddBox(a, b - a, col, outline);
         public void AddBoxAB(Vector3 a, Vector3 b, Rgba[] col, bool outline) => AddBox(a, b - a, col, outline);
 
-        protected void DebugRenderSprite(Vector3 trans, Vector2 size, Color4 col, Bitmap texture)
-        {
-            var texRect = OldResources.TexMap[texture];
-            //Console.WriteLine($"TEXTURE: {texRect.Left},{texRect.Top}/{texRect.Right},{texRect.Bottom}");
-            Span<Vector2> uvs = stackalloc Vector2[4] {
-                new Vector2(texRect.Left, texRect.Bottom),
-                new Vector2(texRect.Left, texRect.Top),
-                new Vector2(texRect.Right, texRect.Top),
-                // new Vector2(texRect.Right, texRect.Top),
-                new Vector2(texRect.Right, texRect.Bottom),
-                // new Vector2(texRect.Left, texRect.Bottom)
-            };
-            vaoDebugSprite.DiscardVerts();
-            for (int i = 0; i < SpriteVerts.Length; ++i)
-            {
-                vaoDebugSprite.PushAttrib(trans: new Vector3(SpriteVerts[i]), st: uvs[i]);
-            }
-            vaoDebugSprite.UserTrans = trans;
-            vaoDebugSprite.UserScale = new Vector3(size);
-            vaoDebugSprite.UserColor1 = col;
-            vaoDebugSprite.Render(render);
-        }
-
         protected void AddSprite(Vector3 trans, Vector2 size, Rgba col, Bitmap texture)
         {
             var texRect = OldResources.TexMap[texture];
@@ -922,6 +817,89 @@ namespace CrashEdit
                 vaoSprites.PushAttrib(trans: trans, rgba: col, st: uvs[i], misc: new Vector4(SpriteVerts[SpriteTriIndices[i]] * size));
             }
         }
+
+        protected void AddLineGrid(int resolution, Rgba color)
+        {
+            if (resolution < 0)
+                throw new ArgumentOutOfRangeException(nameof(resolution), "Grid resolution cannot be less than 0.");
+
+            if (!GridPosCache.TryGetValue(resolution, out var verts))
+            {
+                var pos = new Vector3[4 * resolution * 2];
+                var border = resolution * 1f - 0.5f;
+
+                var pi = 0;
+                for (int i = 0; i < resolution * 2; ++i)
+                {
+                    pos[pi++] = new Vector3(-border + i, 0, -border);
+                    pos[pi++] = new Vector3(-border + i, 0, +border);
+                    pos[pi++] = new Vector3(-border, 0, -border + i);
+                    pos[pi++] = new Vector3(+border, 0, -border + i);
+                }
+
+                verts = pos;
+                GridPosCache.Add(resolution, pos);
+            }
+
+            for (int i = 0; i < verts.Length; ++i)
+            {
+                vaoLines.PushAttrib(trans: verts[i], rgba: color);
+            }
+        }
+
+        protected void AddLineSphere(int resolution, Vector3 trans, float radius, Rgba color)
+        {
+            if (resolution < 0)
+                throw new ArgumentOutOfRangeException(nameof(resolution), "Sphere resolution cannot be less than 0.");
+
+            if (!SpherePosCache.TryGetValue(resolution, out var verts))
+            {
+                int long_amt = resolution * 4;
+                int lat_amt = resolution;
+                int pt_nb = 1 + long_amt * (2 + 2 * lat_amt) + (1 + long_amt) * (1 + 2 * lat_amt);
+                var pos = new Vector3[pt_nb];
+                int i = 1;
+                pos[0] = new Vector3(0, 0, 1);
+                bool even = true;
+                for (int ii = 0; ii < long_amt; ++ii)
+                {
+                    var rotmat = Matrix3.CreateRotationZ((float)ii / long_amt * MathHelper.TwoPi);
+                    if (ii % 2 == 0)
+                    {
+                        for (int iii = 0, l_m = 2 + lat_amt * 2; iii < l_m; ++iii)
+                        {
+                            pos[i++] = pos[0] * Matrix3.CreateRotationX((float)(iii + 1) / l_m * MathHelper.Pi) * rotmat;
+                        }
+                        even = true;
+                    }
+                    else
+                    {
+                        for (int iii = 0, l_m = 2 + lat_amt * 2; iii < l_m; ++iii)
+                        {
+                            pos[i++] = pos[0] * Matrix3.CreateRotationX((float)(l_m - iii - 1) / l_m * MathHelper.Pi) * rotmat;
+                        }
+                        even = false;
+                    }
+                }
+                for (int ii = 1, l_m = lat_amt * 2 + 2; ii < l_m; ++ii)
+                {
+                    Matrix3 rotmat = !even ? Matrix3.CreateRotationX((float)ii / l_m * MathHelper.Pi) : Matrix3.CreateRotationX((float)(l_m - ii) / l_m * MathHelper.Pi);
+                    for (int iii = 0; iii <= long_amt; ++iii)
+                    {
+                        pos[i++] = pos[0] * rotmat * Matrix3.CreateRotationZ((float)iii / long_amt * MathHelper.TwoPi);
+                    }
+                }
+
+                verts = pos;
+                SpherePosCache.Add(resolution, pos);
+            }
+
+            for (int i = 0; i < verts.Length; ++i)
+            {
+                vaoLines.PushAttrib(trans: verts[i] * radius + trans, rgba: color);
+            }
+        }
+        #endregion
 
         public void AddOctreeX(Vector3 trans, Vector3 trans_size, int node, Vector3w nodes_size)
         {
@@ -1012,7 +990,6 @@ namespace CrashEdit
             render.Projection.CamTrans.Z = -midz;
             render.Projection.CamRot.Y = 0;
             render.Projection.CamRot.X = MathHelper.DegreesToRadians(15);
-            Invalidate();
         }
 
         [Flags]
@@ -1056,14 +1033,14 @@ namespace CrashEdit
             if (tpage_h < tex_eids.Count * 128)
             {
                 // realloc if not enough texture mem
-                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8ui, 512, tex_eids.Count * 128, 0, OpenTK.Graphics.OpenGL4.PixelFormat.RedInteger, PixelType.UnsignedByte, IntPtr.Zero);
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8ui, 512, tex_eids.Count * 128, 0, PixelFormat.RedInteger, PixelType.UnsignedByte, IntPtr.Zero);
             }
             foreach (var kvp in tex_eids)
             {
                 var tpag = nsf.GetEntry<TextureChunk>(kvp.Key);
                 if (tpag != null)
                 {
-                    GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, kvp.Value * 128, 512, 128, OpenTK.Graphics.OpenGL4.PixelFormat.RedInteger, PixelType.UnsignedByte, tpag.Data);
+                    GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, kvp.Value * 128, 512, 128, PixelFormat.RedInteger, PixelType.UnsignedByte, tpag.Data);
                 }
             }
         }
@@ -1138,6 +1115,56 @@ namespace CrashEdit
             return base.IsInputKey(keyData);
         }
 
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            base.OnMouseWheel(e);
+            if (CanZoom())
+            {
+                lock (render.mLock)
+                {
+                    float delta = (float)e.Delta / SystemInformation.MouseWheelScrollDelta * zoomspeed;
+                    delta *= 0.3f + 1.7f * (render.Projection.Distance / ProjectionInfo.MaxInitialDistance);
+                    render.Projection.Distance = Math.Max(ProjectionInfo.MinDistance, Math.Min(render.Projection.Distance - delta, ProjectionInfo.MaxDistance));
+                }
+            }
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            base.OnMouseUp(e);
+            switch (e.Button)
+            {
+                case MouseButtons.Left: mouseleft = false; break;
+                case MouseButtons.Right: mouseright = false; break;
+            }
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            lock (render.mLock)
+            {
+                if (mouseleft && CanAim())
+                {
+                    float rotx = render.Projection.CamRot.X;
+                    float rotz = render.Projection.CamRot.Y;
+                    rotz += MathHelper.DegreesToRadians(e.X - mousex) * rotspeed / (Width / 400);
+                    rotx += MathHelper.DegreesToRadians(e.Y - mousey) * rotspeed / (Height / 300);
+                    if (rotx > RenderInfo.MaxRot)
+                        rotx = RenderInfo.MaxRot;
+                    if (rotx < RenderInfo.MinRot)
+                        rotx = RenderInfo.MinRot;
+                    render.Projection.CamRot.X = rotx;
+                    render.Projection.CamRot.Y = rotz;
+                }
+                if (mouseright)
+                {
+                }
+                mousex = e.X;
+                mousey = e.Y;
+            }
+        }
+
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -1163,6 +1190,7 @@ namespace CrashEdit
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
+            Focus(); // OpenTK bug here
             switch (e.Button)
             {
                 case MouseButtons.Left: mouseleft = true; /*mousex = e.X; mousey = e.Y;*/ break;
@@ -1174,12 +1202,14 @@ namespace CrashEdit
         {
             render.Dispose();
 
-            if (global_context_window == this)
-            {
-                global_context_window = null;
-                global_context = null;
-            }
-            Context?.Dispose();
+            GL.DeleteQuery(qryGpuTime);
+
+            vaoSprites?.Dispose();
+            vaoLines?.Dispose();
+            vaoLinesThick?.Dispose();
+            vaoTris?.Dispose();
+            vaoText?.Dispose();
+            vaoOctree?.Dispose();
 
             base.Dispose(disposing);
         }

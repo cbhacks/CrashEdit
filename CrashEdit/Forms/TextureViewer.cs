@@ -1,11 +1,7 @@
-﻿using Crash;
-using System;
-using System.Drawing;
+﻿using CrashEdit.Crash;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class TextureViewer : Form
     {
@@ -15,7 +11,7 @@ namespace CrashEdit
             Crash2
         }
 
-        private readonly TextureChunk chunk;
+        private TextureChunk chunk;
         private TextureType textype;
         private Rectangle selectedregion;
 
@@ -44,9 +40,11 @@ namespace CrashEdit
             {
                 if (e.Button == MouseButtons.Right && pictureBox1.Image != null && pictureBox1.Image is Bitmap bmp)
                 {
-                    using MemoryStream w = new MemoryStream();
-                    bmp.Clone(selectedregion, PixelFormat.Format32bppArgb).Save(w, ImageFormat.Png);
-                    FileUtil.SaveFile($"{chunk.EName}_{TexCY}_{TexCX}", w.ToArray(), FileFilters.PNG);
+                    using (MemoryStream w = new MemoryStream())
+                    {
+                        bmp.Clone(selectedregion, PixelFormat.Format32bppArgb).Save(w, ImageFormat.Png);
+                        FileUtil.SaveFile($"{chunk.EName}_{TexCY}_{TexCX}", w.ToArray(), FileFilters.PNG);
+                    }
                 }
             };
 

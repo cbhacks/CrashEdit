@@ -1,13 +1,11 @@
-using Crash;
-using System;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class OldFrameBox : UserControl
     {
-        private readonly OldFrameController controller;
-        private readonly OldFrame frame;
+        private OldFrameController controller;
+        private OldFrame frame;
 
         private bool vertexdirty;
         private int vertexindex;
@@ -24,11 +22,6 @@ namespace CrashEdit
             UpdateFactorG();
             UpdateOffset();
             vertexindex = 0;
-        }
-
-        private void InvalidateNodes()
-        {
-            controller.InvalidateNode();
         }
 
         private void UpdateVertice()
@@ -111,21 +104,18 @@ namespace CrashEdit
         {
             vertexindex++;
             frame.Vertices.RemoveAt(vertexindex);
-            InvalidateNodes();
             UpdateVertice();
         }
 
         private void cmdInsertVertice_Click(object sender, EventArgs e)
         {
             frame.Vertices.Insert(vertexindex, frame.Vertices[vertexindex]);
-            InvalidateNodes();
             UpdateVertice();
         }
 
         private void cmdRemoveVertice_Click(object sender, EventArgs e)
         {
             frame.Vertices.RemoveAt(vertexindex);
-            InvalidateNodes();
             UpdateVertice();
         }
 
@@ -140,7 +130,6 @@ namespace CrashEdit
             {
                 frame.Vertices.Add(new OldFrameVertex(0, 0, 0, 0, 0, 0));
             }
-            InvalidateNodes();
             UpdateVertice();
         }
 

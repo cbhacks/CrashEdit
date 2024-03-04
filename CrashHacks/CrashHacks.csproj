@@ -1,183 +1,41 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="15.0">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A6253B76-7091-403D-B96B-DB7DB78ACA87}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CrashHacks</RootNamespace>
-    <AssemblyName>CrashHacks</AssemblyName>
-    <StartupObject>
-    </StartupObject>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <OldToolsVersion>2.0</OldToolsVersion>
-    <TargetFrameworkProfile />
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <StartupObject>CrashHacks.MainClass</StartupObject>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
   <ItemGroup>
-    <Reference Include="DiscUtils.Core, Version=0.16.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
-      <HintPath>..\packages\DiscUtils.Core.0.16.13\lib\net45\DiscUtils.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="DiscUtils.Iso9660, Version=0.16.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
-      <HintPath>..\packages\DiscUtils.Iso9660.0.16.13\lib\net45\DiscUtils.Iso9660.dll</HintPath>
-    </Reference>
-    <Reference Include="DiscUtils.Streams, Version=0.16.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
-      <HintPath>..\packages\DiscUtils.Streams.0.16.13\lib\net45\DiscUtils.Streams.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
+    <PackageReference Include="DiscUtils.Iso9660" Version="0.16.13" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\Version.cs" />
-    <Compile Include="Main.cs" />
-    <Compile Include="MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
+    <ProjectReference Include="..\Crash.UI\Crash.UI.csproj" />
+    <ProjectReference Include="..\CrashEdit.Main.csproj" />
+    <ProjectReference Include="..\ISO2PSX\ISO2PSX.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Script.cs" />
-    <Compile Include="Scripts\Animation\ShuffleScript.cs" />
-    <Compile Include="Scripts\Animation\ReverseScript.cs" />
-    <Compile Include="Scripts\Other\ScaleLevelScript.cs" />
-    <Compile Include="Scripts\Other\SingleAnimationScript.cs" />
-    <Compile Include="Scripts\Scenery\Color\RandomScript.cs" />
-    <Compile Include="Scripts\Scenery\FeastScript.cs" />
-    <Compile Include="Scripts\Scenery\NoTexScript.cs" />
-    <Compile Include="Scripts\Scenery\ScrumpScript.cs" />
-    <Compile Include="Scripts\Zone\CloseCameraScript.cs" />
-    <Compile Include="Scripts\Zone\EasyRelicsScript.cs" />
-    <Compile Include="Scripts\Zone\NoWarpBarriersScript.cs" />
-    <Compile Include="Scripts\Zone\WalkOnCookerScript.cs" />
-    <Compile Include="Scripts\Zone\JumpyRacersScript.cs" />
-    <Compile Include="Scripts\Zone\WalkOnWaterScript.cs" />
-    <Compile Include="Scripts\Zone\ZoneCollisionFuckeryScript.cs" />
-    <Compile Include="Scripts\Zone\No298Script.cs" />
-    <Compile Include="Scripts\Zone\DistanceFogScript.cs" />
-    <Compile Include="Scripts\Zone\DistanceFogScript2.cs" />
-    <Compile Include="Scripts\Zone\DistanceUnfogScript.cs" />
-    <Compile Include="Scripts\Zone\GlobalTestScript.cs" />
-    <Compile Include="Scripts\Zone\GlobalBonusScript.cs" />
-    <Compile Include="Scripts\Zone\WaterFXScript.cs" />
-    <Compile Include="Scripts\Zone\NoDarknessScript.cs" />
-    <Compile Include="Scripts\Scenery\FXScript.cs" />
-    <Compile Include="Scripts\Scenery\Color\GrayscaleScript.cs" />
-    <Compile Include="Scripts\Scenery\Color\NoGreenScript.cs" />
-    <Compile Include="Scripts\Scenery\Color\NoBlueScript.cs" />
-    <Compile Include="Scripts\Scenery\Color\NoRedScript.cs" />
-    <Compile Include="Scripts\Scenery\Color\SwizzlePerMapScript.cs" />
-    <Compile Include="Scripts\Scenery\Color\BaseScript.cs" />
-    <Compile Include="SupportLevel.cs" />
   </ItemGroup>
+
   <ItemGroup>
-    <EmbeddedResource Include="MainForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <SubType>Designer</SubType>
+    <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-    <None Include="Resources\input-gaming-3.png" />
+    <Using Include="CrashEdit.Crash" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\media-optical-5.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Crash.UI\Crash.UI.csproj">
-      <Project>{3b43fb3e-338f-4fa2-9b43-c6e4de63dc8e}</Project>
-      <Name>Crash.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Crash\Crash.csproj">
-      <Project>{ffbfb4b9-97bd-4d21-91de-caf7ae9ddb65}</Project>
-      <Name>Crash</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ISO2PSX\ISO2PSX.csproj">
-      <Project>{b25e0901-a824-4c47-b2b4-048b8c154ccc}</Project>
-      <Name>ISO2PSX</Name>
-    </ProjectReference>
-  </ItemGroup>
+
 </Project>

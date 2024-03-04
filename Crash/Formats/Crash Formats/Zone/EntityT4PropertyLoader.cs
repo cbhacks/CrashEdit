@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntityPropertyType(4)]
     public sealed class EntityT4PropertyLoader : EntityBasicPropertyLoader<int>

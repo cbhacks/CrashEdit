@@ -28,181 +28,176 @@ namespace CrashHacks
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Zone",System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Scenery",System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("Other",System.Windows.Forms.HorizontalAlignment.Left);
+            ListViewGroup listViewGroup1 = new ListViewGroup("Zone", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup2 = new ListViewGroup("Scenery", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup3 = new ListViewGroup("Other", HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.tbMain = new System.Windows.Forms.ToolStrip();
-            this.tbiMakeISO = new System.Windows.Forms.ToolStripButton();
-            this.tbiChooseGameVersion = new System.Windows.Forms.ToolStripButton();
-            this.lblGameVersion = new System.Windows.Forms.ToolStripLabel();
-            this.lsvScripts = new System.Windows.Forms.ListView();
-            this.lscScriptName = new System.Windows.Forms.ColumnHeader();
-            this.lscScriptStatus = new System.Windows.Forms.ColumnHeader();
-            this.lblInfo = new System.Windows.Forms.Label();
-            this.dlgOpenDirectory = new System.Windows.Forms.FolderBrowserDialog();
-            this.dlgSaveISO = new System.Windows.Forms.SaveFileDialog();
-            this.bgwMakeISO = new System.ComponentModel.BackgroundWorker();
-            this.lblMessage = new System.Windows.Forms.Label();
-            this.uxProgress = new System.Windows.Forms.ProgressBar();
-            this.bgwMakeBIN = new System.ComponentModel.BackgroundWorker();
-            this.tbMain.SuspendLayout();
-            this.SuspendLayout();
+            tbMain = new ToolStrip();
+            tbiMakeISO = new ToolStripButton();
+            tbiChooseGameVersion = new ToolStripButton();
+            lblGameVersion = new ToolStripLabel();
+            lsvScripts = new ListView();
+            lscScriptName = new ColumnHeader();
+            lscScriptStatus = new ColumnHeader();
+            lblInfo = new Label();
+            dlgOpenDirectory = new FolderBrowserDialog();
+            dlgSaveISO = new SaveFileDialog();
+            bgwMakeISO = new System.ComponentModel.BackgroundWorker();
+            lblMessage = new Label();
+            uxProgress = new ProgressBar();
+            bgwMakeBIN = new System.ComponentModel.BackgroundWorker();
+            tbMain.SuspendLayout();
+            SuspendLayout();
             // 
             // tbMain
             // 
-            this.tbMain.ImageScalingSize = new System.Drawing.Size(24,24);
-            this.tbMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tbiMakeISO,
-            this.tbiChooseGameVersion,
-            this.lblGameVersion});
-            this.tbMain.Location = new System.Drawing.Point(0,0);
-            this.tbMain.Name = "tbMain";
-            this.tbMain.Size = new System.Drawing.Size(552,39);
-            this.tbMain.TabIndex = 0;
-            this.tbMain.Text = "toolStrip1";
+            tbMain.ImageScalingSize = new Size(24, 24);
+            tbMain.Items.AddRange(new ToolStripItem[] { tbiMakeISO, tbiChooseGameVersion, lblGameVersion });
+            tbMain.Location = new Point(0, 0);
+            tbMain.Name = "tbMain";
+            tbMain.Size = new Size(644, 39);
+            tbMain.TabIndex = 0;
+            tbMain.Text = "toolStrip1";
             // 
             // tbiMakeISO
             // 
-            this.tbiMakeISO.Enabled = false;
-            this.tbiMakeISO.Image = global::CrashHacks.Properties.Resources.media_optical_5;
-            this.tbiMakeISO.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tbiMakeISO.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbiMakeISO.Name = "tbiMakeISO";
-            this.tbiMakeISO.Size = new System.Drawing.Size(89,36);
-            this.tbiMakeISO.Text = "Make ISO";
-            this.tbiMakeISO.Click += new System.EventHandler(this.tbiMakeISO_Click);
+            tbiMakeISO.Enabled = false;
+            tbiMakeISO.Image = Properties.Resources.media_optical_5;
+            tbiMakeISO.ImageScaling = ToolStripItemImageScaling.None;
+            tbiMakeISO.ImageTransparentColor = Color.Magenta;
+            tbiMakeISO.Name = "tbiMakeISO";
+            tbiMakeISO.Size = new Size(93, 36);
+            tbiMakeISO.Text = "Make ISO";
+            tbiMakeISO.Click += tbiMakeISO_Click;
             // 
             // tbiChooseGameVersion
             // 
-            this.tbiChooseGameVersion.Image = global::CrashHacks.Properties.Resources.input_gaming_3;
-            this.tbiChooseGameVersion.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tbiChooseGameVersion.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbiChooseGameVersion.Name = "tbiChooseGameVersion";
-            this.tbiChooseGameVersion.Size = new System.Drawing.Size(102,36);
-            this.tbiChooseGameVersion.Text = "Select Game";
-            this.tbiChooseGameVersion.Click += new System.EventHandler(this.tbiChooseGameVersion_Click);
+            tbiChooseGameVersion.Image = Properties.Resources.input_gaming_3;
+            tbiChooseGameVersion.ImageScaling = ToolStripItemImageScaling.None;
+            tbiChooseGameVersion.ImageTransparentColor = Color.Magenta;
+            tbiChooseGameVersion.Name = "tbiChooseGameVersion";
+            tbiChooseGameVersion.Size = new Size(108, 36);
+            tbiChooseGameVersion.Text = "Select Game";
+            tbiChooseGameVersion.Click += tbiChooseGameVersion_Click;
             // 
             // lblGameVersion
             // 
-            this.lblGameVersion.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.lblGameVersion.Font = new System.Drawing.Font("Tahoma",14.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-            this.lblGameVersion.Name = "lblGameVersion";
-            this.lblGameVersion.Size = new System.Drawing.Size(172,36);
-            this.lblGameVersion.Text = "<GAME VERSION>";
+            lblGameVersion.Alignment = ToolStripItemAlignment.Right;
+            lblGameVersion.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblGameVersion.Name = "lblGameVersion";
+            lblGameVersion.Size = new Size(172, 36);
+            lblGameVersion.Text = "<GAME VERSION>";
             // 
             // lsvScripts
             // 
-            this.lsvScripts.CheckBoxes = true;
-            this.lsvScripts.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.lscScriptName,
-            this.lscScriptStatus});
-            this.lsvScripts.Dock = System.Windows.Forms.DockStyle.Fill;
+            lsvScripts.CheckBoxes = true;
+            lsvScripts.Columns.AddRange(new ColumnHeader[] { lscScriptName, lscScriptStatus });
+            lsvScripts.Dock = DockStyle.Fill;
             listViewGroup1.Header = "Zone";
             listViewGroup1.Name = "zone";
             listViewGroup2.Header = "Scenery";
             listViewGroup2.Name = "scenery";
             listViewGroup3.Header = "Other";
             listViewGroup3.Name = "other";
-            this.lsvScripts.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup1,
-            listViewGroup2,
-            listViewGroup3});
-            this.lsvScripts.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.lsvScripts.Location = new System.Drawing.Point(0,39);
-            this.lsvScripts.MultiSelect = false;
-            this.lsvScripts.Name = "lsvScripts";
-            this.lsvScripts.Size = new System.Drawing.Size(552,279);
-            this.lsvScripts.TabIndex = 1;
-            this.lsvScripts.UseCompatibleStateImageBehavior = false;
-            this.lsvScripts.View = System.Windows.Forms.View.Details;
-            this.lsvScripts.Visible = false;
-            this.lsvScripts.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.lsvScripts_ItemSelectionChanged);
+            lsvScripts.Groups.AddRange(new ListViewGroup[] { listViewGroup1, listViewGroup2, listViewGroup3 });
+            lsvScripts.HeaderStyle = ColumnHeaderStyle.Nonclickable;
+            lsvScripts.Location = new Point(0, 39);
+            lsvScripts.Margin = new Padding(4, 3, 4, 3);
+            lsvScripts.MultiSelect = false;
+            lsvScripts.Name = "lsvScripts";
+            lsvScripts.Size = new Size(644, 328);
+            lsvScripts.TabIndex = 1;
+            lsvScripts.UseCompatibleStateImageBehavior = false;
+            lsvScripts.View = View.Details;
+            lsvScripts.Visible = false;
+            lsvScripts.ItemSelectionChanged += lsvScripts_ItemSelectionChanged;
             // 
             // lscScriptName
             // 
-            this.lscScriptName.Text = "Name";
-            this.lscScriptName.Width = 421;
+            lscScriptName.Text = "Name";
+            lscScriptName.Width = 421;
             // 
             // lscScriptStatus
             // 
-            this.lscScriptStatus.Text = "Status";
-            this.lscScriptStatus.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.lscScriptStatus.Width = 100;
+            lscScriptStatus.Text = "Status";
+            lscScriptStatus.TextAlign = HorizontalAlignment.Center;
+            lscScriptStatus.Width = 100;
             // 
             // lblInfo
             // 
-            this.lblInfo.BackColor = System.Drawing.SystemColors.Control;
-            this.lblInfo.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblInfo.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lblInfo.Location = new System.Drawing.Point(0,318);
-            this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(552,152);
-            this.lblInfo.TabIndex = 2;
-            this.lblInfo.Text = resources.GetString("lblInfo.Text");
-            this.lblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            lblInfo.BackColor = SystemColors.Control;
+            lblInfo.BorderStyle = BorderStyle.Fixed3D;
+            lblInfo.Dock = DockStyle.Bottom;
+            lblInfo.Location = new Point(0, 367);
+            lblInfo.Margin = new Padding(4, 0, 4, 0);
+            lblInfo.Name = "lblInfo";
+            lblInfo.Size = new Size(644, 175);
+            lblInfo.TabIndex = 2;
+            lblInfo.Text = resources.GetString("lblInfo.Text");
+            lblInfo.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // dlgSaveISO
             // 
-            this.dlgSaveISO.Filter = "Playstation Disc Images (*.bin)|*.bin";
-            this.dlgSaveISO.Title = "Save ISO";
+            dlgSaveISO.Filter = "Playstation Disc Images (*.bin)|*.bin";
+            dlgSaveISO.Title = "Save ISO";
             // 
             // bgwMakeISO
             // 
-            this.bgwMakeISO.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwMakeISO_DoWork);
-            this.bgwMakeISO.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwMakeISO_RunWorkerCompleted);
+            bgwMakeISO.DoWork += bgwMakeISO_DoWork;
+            bgwMakeISO.RunWorkerCompleted += bgwMakeISO_RunWorkerCompleted;
             // 
             // lblMessage
             // 
-            this.lblMessage.BackColor = System.Drawing.SystemColors.Control;
-            this.lblMessage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblMessage.Font = new System.Drawing.Font("Microsoft Sans Serif",36F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-            this.lblMessage.Location = new System.Drawing.Point(0,39);
-            this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Size = new System.Drawing.Size(552,279);
-            this.lblMessage.TabIndex = 3;
-            this.lblMessage.Text = "Read the instructions below";
-            this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            lblMessage.BackColor = SystemColors.Control;
+            lblMessage.Dock = DockStyle.Fill;
+            lblMessage.Font = new Font("Microsoft Sans Serif", 36F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblMessage.Location = new Point(0, 39);
+            lblMessage.Margin = new Padding(4, 0, 4, 0);
+            lblMessage.Name = "lblMessage";
+            lblMessage.Size = new Size(644, 328);
+            lblMessage.TabIndex = 3;
+            lblMessage.Text = "Read the instructions below";
+            lblMessage.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // uxProgress
             // 
-            this.uxProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.uxProgress.BackColor = System.Drawing.SystemColors.Control;
-            this.uxProgress.Location = new System.Drawing.Point(12,440);
-            this.uxProgress.MarqueeAnimationSpeed = 25;
-            this.uxProgress.Name = "uxProgress";
-            this.uxProgress.Size = new System.Drawing.Size(528,18);
-            this.uxProgress.TabIndex = 4;
-            this.uxProgress.Visible = false;
+            uxProgress.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            uxProgress.BackColor = SystemColors.Control;
+            uxProgress.Location = new Point(14, 508);
+            uxProgress.Margin = new Padding(4, 3, 4, 3);
+            uxProgress.MarqueeAnimationSpeed = 25;
+            uxProgress.Name = "uxProgress";
+            uxProgress.Size = new Size(616, 21);
+            uxProgress.TabIndex = 4;
+            uxProgress.Visible = false;
             // 
             // bgwMakeBIN
             // 
-            this.bgwMakeBIN.WorkerReportsProgress = true;
-            this.bgwMakeBIN.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwMakeBIN_DoWork);
-            this.bgwMakeBIN.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwMakeBIN_RunWorkerCompleted);
-            this.bgwMakeBIN.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgwMakeBIN_ProgressChanged);
+            bgwMakeBIN.WorkerReportsProgress = true;
+            bgwMakeBIN.DoWork += bgwMakeBIN_DoWork;
+            bgwMakeBIN.ProgressChanged += bgwMakeBIN_ProgressChanged;
+            bgwMakeBIN.RunWorkerCompleted += bgwMakeBIN_RunWorkerCompleted;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.ClientSize = new System.Drawing.Size(552,470);
-            this.Controls.Add(this.uxProgress);
-            this.Controls.Add(this.lsvScripts);
-            this.Controls.Add(this.lblMessage);
-            this.Controls.Add(this.lblInfo);
-            this.Controls.Add(this.tbMain);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
-            this.Name = "MainForm";
-            this.Text = "CrashHacks";
-            this.tbMain.ResumeLayout(false);
-            this.tbMain.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.AppWorkspace;
+            ClientSize = new Size(644, 542);
+            Controls.Add(uxProgress);
+            Controls.Add(lsvScripts);
+            Controls.Add(lblMessage);
+            Controls.Add(lblInfo);
+            Controls.Add(tbMain);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Margin = new Padding(4, 3, 4, 3);
+            MaximizeBox = false;
+            Name = "MainForm";
+            Text = "CrashHacks";
+            tbMain.ResumeLayout(false);
+            tbMain.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

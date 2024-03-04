@@ -1,13 +1,10 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public class ModelTexture
     {
         public static ModelTexture Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length != 12)
                 throw new ArgumentException("Value must be 12 bytes long.", nameof(data));
             byte u1 = data[0];

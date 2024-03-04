@@ -1,13 +1,10 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public readonly struct OldSceneryVertex
     {
         public static OldSceneryVertex Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length != 8)
                 throw new ArgumentException("Value must be 8 bytes long.", nameof(data));
             short x = (short)(BitConv.FromInt16(data, 4) & 0xFFF8);

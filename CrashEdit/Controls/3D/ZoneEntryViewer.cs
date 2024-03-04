@@ -1,13 +1,8 @@
-using Crash;
-using CrashEdit.Properties;
-using OpenTK;
-using OpenTK.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
+using CrashEdit.CE.Properties;
+using CrashEdit.Crash;
+using OpenTK.Mathematics;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class ZoneEntryViewer : SceneryEntryViewer
     {
@@ -430,7 +425,7 @@ namespace CrashEdit
             {
                 vaoTris.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * size + new Vector3(0, 0.5f, 0), rgba: cols[i / 6], st: uvs_side[i % 6]);
             }
-            
+
             Rectangle topTexRect = OldResources.TexMap[GetBoxTopTexture(subtype, timetrialcontents)];
             Span<Vector2> uvs_top = stackalloc Vector2[6] {
                 new Vector2(topTexRect.Left, topTexRect.Bottom),

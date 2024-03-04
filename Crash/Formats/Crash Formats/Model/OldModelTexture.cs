@@ -1,13 +1,10 @@
-﻿using System;
-
-namespace Crash
+﻿namespace CrashEdit.Crash
 {
     public struct OldModelTexture : OldModelStruct
     {
         public static OldModelTexture Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length != 12)
                 throw new ArgumentException("Value must be 12 bytes long.", nameof(data));
             byte r = data[0];
@@ -71,10 +68,10 @@ namespace Crash
         public byte BlendMode { get; }
         public byte Segment { get; }
         public int U1 { get; }
-        public int U2 { get; }
-        public int U3 { get; }
         public int V1 { get; }
+        public int U2 { get; }
         public int V2 { get; }
+        public int U3 { get; }
         public int V3 { get; }
 
         public byte[] Save()

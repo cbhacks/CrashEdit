@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public class OldFrame
     {
         public static OldFrame Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length < 56)
             {
                 ErrorManager.SignalError("OldFrame: Data is too short");
@@ -73,7 +68,7 @@ namespace Crash
             return new OldFrame(modeleid, xoffset, yoffset, zoffset, new FrameCollision(0, xoffset_col, yoffset_col, zoffset_col, x1, y1, z1, x2, y2, z2), vertices, unknown, unknown2, proto);
         }
 
-        private readonly List<OldFrameVertex> vertices;
+        private List<OldFrameVertex> vertices;
         public FrameCollision collision;
 
         public OldFrame(int modeleid, int xoffset, int yoffset, int zoffset, FrameCollision collision, IEnumerable<OldFrameVertex> vertices, short unknown, short? unknown2, bool proto)

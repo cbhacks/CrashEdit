@@ -1,14 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.Reflection;
-using System.IO;
-using Crash;
-using Crash.UI;
+using CrashEdit.CrashUI;
 using DiscUtils.Iso9660;
+using System.ComponentModel;
+using System.Reflection;
+using System.Text;
 
 namespace CrashHacks
 {
@@ -18,7 +12,7 @@ namespace CrashHacks
         private GameVersion gameversion;
         private CDBuilder cdbuilder;
         private List<Script> scripts;
-        
+
         public string SourceDir
         {
             get { return dlgOpenDirectory.SelectedPath; }
@@ -69,7 +63,7 @@ namespace CrashHacks
                         tooltip.AppendLine("\u2022 Other (???)");
                 }
                 tooltip.AppendLine();
-                tooltip.AppendFormat("Author: {0}",script.Author);
+                tooltip.AppendFormat("Author: {0}", script.Author);
                 item.ToolTipText = tooltip.ToString();
                 item.Tag = script;
                 item.Group = lsvScripts.Groups["other"];
@@ -121,16 +115,16 @@ namespace CrashHacks
             lblGameVersion.Text = gameversion.ToString();
         }
 
-        private void tbiMakeISO_Click(object sender,EventArgs e)
+        private void tbiMakeISO_Click(object sender, EventArgs e)
         {
             if (dlgOpenDirectory.ShowDialog() != DialogResult.OK)
                 return;
             string path = dlgOpenDirectory.SelectedPath;
-            string cnffile = Path.Combine(path,"SYSTEM.CNF");
-            string exefile = Path.Combine(path,"PSX.EXE");
+            string cnffile = Path.Combine(path, "SYSTEM.CNF");
+            string exefile = Path.Combine(path, "PSX.EXE");
             if (!File.Exists(cnffile) && !File.Exists(exefile))
             {
-                if (MessageBox.Show("The selected drive or folder does not appear to contain the necessary game files. The directory you choose should contain a SYSTEM.CNF or PSX.EXE file as well as subdirectories with names such as S0, S1, S2, etc.\n\nContinue anyway?","CrashHacks",MessageBoxButtons.YesNo,MessageBoxIcon.Stop) != DialogResult.Yes)
+                if (MessageBox.Show("The selected drive or folder does not appear to contain the necessary game files. The directory you choose should contain a SYSTEM.CNF or PSX.EXE file as well as subdirectories with names such as S0, S1, S2, etc.\n\nContinue anyway?", "CrashHacks", MessageBoxButtons.YesNo, MessageBoxIcon.Stop) != DialogResult.Yes)
                     return;
             }
             if (dlgSaveISO.ShowDialog() != DialogResult.OK)
@@ -158,7 +152,7 @@ namespace CrashHacks
             bgwMakeISO.RunWorkerAsync(dlgOpenDirectory.SelectedPath);
         }
 
-        private void tbiChooseGameVersion_Click(object sender,EventArgs e)
+        private void tbiChooseGameVersion_Click(object sender, EventArgs e)
         {
             using (GameVersionForm gameversionform = new GameVersionForm())
             {
@@ -166,7 +160,7 @@ namespace CrashHacks
                 {
                     if (gameversionform.SelectedVersion == GameVersion.Crash1)
                     {
-                        if (MessageBox.Show("Retail (non-prototype) versions of Crash 1 are not properly supported. CrashHacks will output unusable NSF files for this game. Continue anyway?","CrashHacks",MessageBoxButtons.YesNo,MessageBoxIcon.Warning) != DialogResult.Yes)
+                        if (MessageBox.Show("Retail (non-prototype) versions of Crash 1 are not properly supported. CrashHacks will output unusable NSF files for this game. Continue anyway?", "CrashHacks", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
                             return;
                     }
                     SetGameVersion(gameversionform.SelectedVersion);
@@ -176,7 +170,7 @@ namespace CrashHacks
             }
         }
 
-        private void lsvScripts_ItemSelectionChanged(object sender,ListViewItemSelectionChangedEventArgs e)
+        private void lsvScripts_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             if (lsvScripts.SelectedItems.Count == 1)
                 lblInfo.Text = lsvScripts.SelectedItems[0].ToolTipText;
@@ -184,72 +178,75 @@ namespace CrashHacks
                 lblInfo.Text = defaultinfo;
         }
 
-        private void bgwMakeISO_DoWork(object sender,DoWorkEventArgs e)
+        private void bgwMakeISO_DoWork(object sender, DoWorkEventArgs e)
         {
             ErrorManager.Signal += ErrorManager_Signal;
             DirectoryInfo dir = new DirectoryInfo((string)e.Argument);
             foreach (DirectoryInfo subdir in dir.GetDirectories())
             {
-                bgwMakeISO_DoWork_BuildDirectory(subdir.Name,subdir);
+                bgwMakeISO_DoWork_BuildDirectory(subdir.Name, subdir);
             }
             foreach (FileInfo file in dir.GetFiles())
             {
-                bgwMakeISO_DoWork_BuildFile(file.Name,file);
+                bgwMakeISO_DoWork_BuildFile(file.Name, file);
             }
             ErrorManager.Signal -= ErrorManager_Signal;
         }
 
-        private void bgwMakeISO_DoWork_BuildDirectory(string path,DirectoryInfo dir)
+        private void bgwMakeISO_DoWork_BuildDirectory(string path, DirectoryInfo dir)
         {
             cdbuilder.AddDirectory(path);
             foreach (DirectoryInfo subdir in dir.GetDirectories())
             {
-                bgwMakeISO_DoWork_BuildDirectory(path + "\\" + subdir.Name,subdir);
+                bgwMakeISO_DoWork_BuildDirectory(path + "\\" + subdir.Name, subdir);
             }
             foreach (FileInfo file in dir.GetFiles())
             {
-                bgwMakeISO_DoWork_BuildFile(path + "\\" + file.Name,file);
+                bgwMakeISO_DoWork_BuildFile(path + "\\" + file.Name, file);
             }
         }
 
-        private void bgwMakeISO_DoWork_BuildFile(string path,FileInfo file)
+        private void bgwMakeISO_DoWork_BuildFile(string path, FileInfo file)
         {
             if (file.Extension.ToUpper() == ".NSF")
             {
                 byte[] data = File.ReadAllBytes(file.FullName);
                 if (scripts.Count > 0)
                 {
-                    NSF nsf = NSF.LoadAndProcess(data,gameversion);
+                    NSF nsf = NSF.LoadAndProcess(data, gameversion);
                     foreach (Script script in scripts)
                     {
-                        script.Run(nsf,gameversion);
+                        script.Run(nsf, gameversion);
                         foreach (Chunk chunk in nsf.Chunks)
                         {
-                            script.Run(chunk,gameversion);
+                            script.Run(chunk, gameversion);
                             if (chunk is EntryChunk entrychunk)
                             {
                                 foreach (Entry entry in entrychunk.Entries)
                                 {
-                                    script.Run(entry,gameversion);
+                                    script.Run(entry, gameversion);
                                 }
                             }
                         }
                     }
-                    try {
+                    try
+                    {
                         data = nsf.Save();
-                    } catch (PackingException ex) {
-                        throw new Exception(string.Format("packing error on file: {0}",file.FullName),ex);
+                    }
+                    catch (PackingException ex)
+                    {
+                        throw new Exception(string.Format("packing error on file: {0}", file.FullName), ex);
                     }
                 }
-                cdbuilder.AddFile(path + ";1",data);
+                cdbuilder.AddFile(path + ";1", data);
             }
             else
             {
-                cdbuilder.AddFile(path + ";1",file.FullName);
+                cdbuilder.AddFile(path + ";1", file.FullName);
             }
         }
 
-        private void bgwMakeISO_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e)
+        private void bgwMakeISO_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (e.Error == null)
             {
@@ -261,12 +258,12 @@ namespace CrashHacks
             }
             else
             {
-                MessageBox.Show("An error occurred:\n\n" + e.Error.ToString(),"CrashHacks",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show("An error occurred:\n\n" + e.Error.ToString(), "CrashHacks", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 FinishBuild();
             }
         }
 
-        private void ErrorManager_Signal(object sender,ErrorSignalEventArgs e)
+        private void ErrorManager_Signal(object sender, ErrorSignalEventArgs e)
         {
             if (e.CanIgnore)
             {
@@ -292,25 +289,25 @@ namespace CrashHacks
             uxProgress.Visible = false;
         }
 
-        private void bgwMakeBIN_DoWork(object sender,DoWorkEventArgs e)
+        private void bgwMakeBIN_DoWork(object sender, DoWorkEventArgs e)
         {
-            using (FileStream output = new FileStream((string)e.Argument,FileMode.Create,FileAccess.Write))
+            using (FileStream output = new FileStream((string)e.Argument, FileMode.Create, FileAccess.Write))
             using (Stream input = cdbuilder.Build())
             {
-                ISO2PSX.Run(input,output,bgwMakeBIN);
+                ISO2PSX.Run(input, output, bgwMakeBIN);
             }
         }
 
-        private void bgwMakeBIN_RunWorkerCompleted(object sender,RunWorkerCompletedEventArgs e)
+        private void bgwMakeBIN_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (e.Error != null)
             {
-                MessageBox.Show("An error occurred:\n\n" + e.Error.ToString(),"CrashHacks",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show("An error occurred:\n\n" + e.Error.ToString(), "CrashHacks", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             FinishBuild();
         }
 
-        private void bgwMakeBIN_ProgressChanged(object sender,ProgressChangedEventArgs e)
+        private void bgwMakeBIN_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             uxProgress.Value = e.ProgressPercentage;
         }

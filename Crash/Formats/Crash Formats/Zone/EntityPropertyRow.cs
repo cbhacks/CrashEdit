@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class EntityPropertyRow<T>
     {
-        private readonly List<T> values;
+        private List<T> values;
 
         public EntityPropertyRow()
         {

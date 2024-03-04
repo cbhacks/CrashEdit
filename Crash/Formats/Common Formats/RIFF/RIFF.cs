@@ -1,16 +1,12 @@
-using System;
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class RIFF : RIFFItem
     {
-        private readonly List<RIFFItem> items;
+        private List<RIFFItem> items;
 
         public RIFF(string name) : base(name)
         {
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
+            ArgumentNullException.ThrowIfNull(name);
             items = new List<RIFFItem>();
         }
 

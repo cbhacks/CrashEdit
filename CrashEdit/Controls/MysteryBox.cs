@@ -1,16 +1,13 @@
-using System;
-using System.Windows.Forms;
-
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class MysteryBox : UserControl
     {
-        private readonly byte[] data;
+        private byte[] data;
         private bool saving;
 
-        private readonly ToolStrip tsToolbar;
-        private readonly ToolStripButton tbbExport;
-        private readonly HexBox hbData;
+        private ToolStrip tsToolbar;
+        private ToolStripButton tbbExport;
+        private HexBox hbData;
 
         public MysteryBox(byte[] data)
         {

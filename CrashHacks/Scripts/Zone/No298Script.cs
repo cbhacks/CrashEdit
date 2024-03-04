@@ -1,5 +1,3 @@
-using Crash;
-
 namespace CrashHacks.Scripts.Zone
 {
     public sealed class No298Script : Script
@@ -29,7 +27,7 @@ namespace CrashHacks.Scripts.Zone
             return SupportLevel.Experimental;
         }
 
-        public override void Run(object value,GameVersion gameversion)
+        public override void Run(object value, GameVersion gameversion)
         {
             if (value is ZoneEntry)
             {

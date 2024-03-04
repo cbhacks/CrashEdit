@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CrashEdit.Properties {
+namespace CrashEdit.CE.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -37,7 +37,7 @@ namespace CrashEdit.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("747")]
+        [global::System.Configuration.DefaultSettingValueAttribute("800")]
         public int DefaultFormW {
             get {
                 return ((int)(this["DefaultFormW"]));
@@ -49,7 +49,7 @@ namespace CrashEdit.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("567")]
+        [global::System.Configuration.DefaultSettingValueAttribute("600")]
         public int DefaultFormH {
             get {
                 return ((int)(this["DefaultFormH"]));
@@ -248,18 +248,6 @@ namespace CrashEdit.Properties {
             }
             set {
                 this["NodeShadeMax"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool CacheShaderUniformLoc {
-            get {
-                return ((bool)(this["CacheShaderUniformLoc"]));
-            }
-            set {
-                this["CacheShaderUniformLoc"] = value;
             }
         }
     }

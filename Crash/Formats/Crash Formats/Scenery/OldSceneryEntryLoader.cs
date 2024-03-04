@@ -1,16 +1,13 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntryType(3, GameVersion.Crash1BetaMAR08)]
     [EntryType(3, GameVersion.Crash1BetaMAY11)]
     [EntryType(3, GameVersion.Crash1)]
     public sealed class OldSceneryEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items, int eid, GameVersion version)
+        public override Entry Load(byte[][] items, int eid)
         {
-            if (items == null)
-                throw new ArgumentNullException(nameof(items));
+            ArgumentNullException.ThrowIfNull(items);
             if (items.Length != 3 && items.Length != 4)
             {
                 ErrorManager.SignalError("OldSceneryEntry: Wrong number of items");

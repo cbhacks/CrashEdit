@@ -1,13 +1,10 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class SampleLine
     {
         public static SampleLine Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length != 16)
                 throw new ArgumentException("Value must be 16 bytes long.", nameof(data));
             byte[] newdata = new byte[14];
@@ -15,13 +12,12 @@ namespace Crash
             return new SampleLine(data[0], (SampleLineFlags)data[1], newdata);
         }
 
-        private readonly byte info;
-        private readonly byte[] data;
+        private byte info;
+        private byte[] data;
 
         public SampleLine(byte info, SampleLineFlags flags, byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length != 14)
                 throw new ArgumentException("Value must be 14 bytes long.", nameof(data));
             this.info = info;

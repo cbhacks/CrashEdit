@@ -1,7 +1,6 @@
-using System;
 using System.Runtime.Serialization;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
     [Serializable]
     public class EntryAddException : Exception
@@ -19,10 +18,6 @@ namespace Crash
         public EntryAddException(int eid, string message, Exception inner) : base(message, inner)
         {
             EID = eid;
-        }
-
-        protected EntryAddException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
         }
 
         public int EID { get; }

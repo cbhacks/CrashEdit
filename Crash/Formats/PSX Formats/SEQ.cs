@@ -1,6 +1,4 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class SEQ
     {
@@ -9,8 +7,7 @@ namespace Crash
 
         public static SEQ Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             // All SEP/SEQ stuff is big-endian, like MIDI
             if (data.Length < 15)
             {

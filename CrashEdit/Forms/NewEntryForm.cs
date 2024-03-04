@@ -1,9 +1,6 @@
-﻿using Crash;
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
+﻿using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class NewEntryForm : Form
     {
@@ -17,14 +14,14 @@ namespace CrashEdit
             { EntryTypeGOOL, 11 }
         };
 
-        private readonly NSF nsf;
+        private NSF nsf;
 
-        public NewEntryForm(NSFController nsfc)
+        public NewEntryForm(NSF nsf, GameVersion gameVersion)
         {
-            nsf = nsfc.NSF;
+            this.nsf = nsf;
             InitializeComponent();
             dpdType.Items.Add(EntryTypeUnprocessed);
-            switch (nsfc.GameVersion)
+            switch (gameVersion)
             {
                 case GameVersion.Crash1BetaMAR08:
                 case GameVersion.Crash1BetaMAY11:

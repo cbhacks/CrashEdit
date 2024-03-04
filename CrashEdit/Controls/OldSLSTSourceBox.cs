@@ -1,11 +1,10 @@
-using Crash;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class OldSLSTSourceBox : UserControl
     {
-        private readonly ListBox lstValues;
+        private ListBox lstValues;
 
         public OldSLSTSourceBox(OldSLSTSource slstitem)
         {

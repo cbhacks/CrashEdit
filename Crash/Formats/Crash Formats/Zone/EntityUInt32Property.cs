@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class EntityUInt32Property : EntityBasicProperty<uint>
     {

@@ -1,16 +1,12 @@
-using Crash;
-using CrashEdit.Properties;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
+using CrashEdit.CE.Properties;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class EntityBox : UserControl
     {
-        private readonly EntityController controller;
-        private readonly Entity entity;
+        private EntityController controller;
+        private Entity entity;
 
         private int positionindex;
         private int settingindex;
@@ -28,7 +24,7 @@ namespace CrashEdit
         private int fovframeindex;
         private int fovindex;
 
-        private Timer argtexttimer;
+        private System.Windows.Forms.Timer argtexttimer;
 
         internal Stack<bool> dirty = new Stack<bool>();
         internal bool Dirty => dirty.Count > 0 && dirty.Peek();
@@ -147,7 +143,7 @@ namespace CrashEdit
             chkSettingHex_CheckedChanged(null, null);
 
             // use a Timer because of PAL switch
-            argtexttimer = new Timer()
+            argtexttimer = new()
             {
                 Enabled = true,
                 Interval = 40
@@ -163,11 +159,6 @@ namespace CrashEdit
             this.controller = controller;
             entity = controller.Entity;
             MainInit();
-        }
-
-        private void InvalidateNodes()
-        {
-            controller.InvalidateNode();
         }
 
         internal string MakeArgAsText()
@@ -198,13 +189,11 @@ namespace CrashEdit
         {
             txtName.Enabled = chkName.Checked;
             entity.Name = chkName.Checked ? txtName.Text : null;
-            InvalidateNodes();
         }
 
         private void txtName_TextChanged(object sender, EventArgs e)
         {
             entity.Name = txtName.Text;
-            InvalidateNodes();
         }
 
         private void UpdatePosition()
@@ -270,8 +259,6 @@ namespace CrashEdit
         {
             entity.Positions.RemoveAt(positionindex);
             UpdatePosition();
-            if (entity.Positions.Count == 0)
-                InvalidateNodes();
         }
 
         private void cmdAppendPosition_Click(object sender, EventArgs e)
@@ -286,8 +273,6 @@ namespace CrashEdit
                 entity.Positions.Add(new EntityPosition(0, 0, 0));
             }
             UpdatePosition();
-            if (entity.Positions.Count == 1)
-                InvalidateNodes();
         }
 
         private void numX_ValueChanged(object sender, EventArgs e)
@@ -475,13 +460,11 @@ namespace CrashEdit
                 chkID2.Checked = false;
                 entity.ID = null;
             }
-            InvalidateNodes();
         }
 
         private void numID_ValueChanged(object sender, EventArgs e)
         {
             entity.ID = (int)numID.Value;
-            InvalidateNodes();
         }
 
         private void chkID2_CheckedChanged(object sender, EventArgs e)
@@ -1100,7 +1083,7 @@ namespace CrashEdit
 
         private void numEntityA_ValueChanged(object sender, EventArgs e)
         {
-            foreach (ZoneEntry zone in controller.ZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<ZoneEntry>())
+            foreach (ZoneEntry zone in controller.GetEntries<ZoneEntry>())
             {
                 foreach (Entity otherentity in zone.Entities)
                 {
@@ -1259,7 +1242,7 @@ namespace CrashEdit
 
         private void numEntityB_ValueChanged(object sender, EventArgs e)
         {
-            foreach (ZoneEntry zone in controller.ZoneEntryController.EntryChunkController.NSFController.NSF.GetEntries<ZoneEntry>())
+            foreach (ZoneEntry zone in controller.GetEntries<ZoneEntry>())
             {
                 foreach (Entity otherentity in zone.Entities)
                 {
@@ -1591,13 +1574,13 @@ namespace CrashEdit
                     }
                 }
             }
-            EvList<Chunk> chunks = null;
+            List<Chunk> chunks = null;
             HashSet<Entry> entries = null;
-            chunks = controller.ZoneEntryController.EntryChunkController.NSFController.NSF.Chunks;
+            chunks = controller.GetNSF().Chunks;
             entries = new HashSet<Entry>();
             foreach (int eid in loadedentries)
             {
-                entries.Add(controller.ZoneEntryController.EntryChunkController.NSFController.NSF.GetEntry<Entry>(eid));
+                entries.Add(controller.GetEntry<Entry>(eid));
             }
             HashSet<Chunk> loadedchunks = new HashSet<Chunk>();
             foreach (Chunk chunk in chunks)
@@ -1640,18 +1623,20 @@ namespace CrashEdit
             {
                 pos[i] = new Position(entity.Positions[i].X, entity.Positions[i].Y, entity.Positions[i].Z);
             }
-            using InterpolatorForm interpolator = new InterpolatorForm(pos);
-            if (interpolator.ShowDialog() == DialogResult.OK)
+            using (InterpolatorForm interpolator = new InterpolatorForm(pos))
             {
-                for (int m = interpolator.Start - 1, i = interpolator.End - 2; i > m; --i)
+                if (interpolator.ShowDialog() == DialogResult.OK)
                 {
-                    entity.Positions.RemoveAt(i);
+                    for (int m = interpolator.Start - 1, i = interpolator.End - 2; i > m; --i)
+                    {
+                        entity.Positions.RemoveAt(i);
+                    }
+                    for (int i = 0; i < interpolator.Amount; ++i)
+                    {
+                        entity.Positions.Insert(i + interpolator.Start, new EntityPosition(interpolator.NewPositions[i + 1]));
+                    }
+                    UpdatePosition();
                 }
-                for (int i = 0; i < interpolator.Amount; ++i)
-                {
-                    entity.Positions.Insert(i + interpolator.Start, new EntityPosition(interpolator.NewPositions[i + 1]));
-                }
-                UpdatePosition();
             }
         }
 

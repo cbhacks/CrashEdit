@@ -1,7 +1,6 @@
-﻿using System.IO;
-using System.Reflection;
+﻿using System.Reflection;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public static class ResourceLoad
     {
@@ -11,7 +10,7 @@ namespace CrashEdit
         {
             var names = GetAllFileNames();
             var exe = Assembly.GetExecutingAssembly();
-            var fullname = string.Format("{0}.{1}", exe.GetName().Name, name.Replace("/", "."));
+            var fullname = string.Format("{0}.{1}", "CrashEdit.CE", name.Replace("/", "."));
             using var r = new StreamReader(exe.GetManifestResourceStream(fullname));
             return r.ReadToEnd();
         }

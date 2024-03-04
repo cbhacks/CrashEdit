@@ -1,30 +1,18 @@
-using Crash;
-using System;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(PaletteEntry))]
     public sealed class PaletteEntryController : EntryController
     {
-        public PaletteEntryController(EntryChunkController entrychunkcontroller, PaletteEntry paletteentry) : base(entrychunkcontroller, paletteentry)
+        public PaletteEntryController(PaletteEntry paletteentry, SubcontrollerGroup parentGroup) : base(paletteentry, parentGroup)
         {
             PaletteEntry = paletteentry;
-            InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.PaletteEntryController_Text, PaletteEntry.EName);
-        }
+        public override bool EditorAvailable => Type.GetType("Mono.Runtime") == null;
 
-        public override void InvalidateNodeImage()
-        {
-            Node.ImageKey = "yellowb";
-            Node.SelectedImageKey = "yellowb";
-        }
-
-        protected override Control CreateEditor()
+        public override Control CreateEditor()
         {
             // Hack for Mono so it doesn't crash.
             if (Type.GetType("Mono.Runtime") != null)

@@ -1,11 +1,11 @@
-using Crash;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(SceneryEntry))]
     public sealed class SceneryEntryController : EntryController
     {
-        public SceneryEntryController(EntryChunkController entrychunkcontroller, SceneryEntry sceneryentry) : base(entrychunkcontroller, sceneryentry)
+        public SceneryEntryController(SceneryEntry sceneryentry, SubcontrollerGroup parentGroup) : base(sceneryentry, parentGroup)
         {
             SceneryEntry = sceneryentry;
             AddMenuSeparator();
@@ -13,24 +13,13 @@ namespace CrashEdit
             AddMenu("Export as Stanford PLY", Menu_Export_PLY);
             //AddMenu("Export as COLLADA",Menu_Export_COLLADA);
             AddMenu("Fix coords imported from Crash 3", Menu_Fix_WGEOv3);
-            InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.SceneryEntryController_Text, SceneryEntry.EName);
-        }
+        public override bool EditorAvailable => true;
 
-        public override void InvalidateNodeImage()
+        public override Control CreateEditor()
         {
-            Node.ImageKey = "blueb";
-            Node.SelectedImageKey = "blueb";
-        }
-
-        protected override Control CreateEditor()
-        {
-            return new UndockableControl(new SceneryEntryViewer(NSF, SceneryEntry.EID));
+            return new SceneryEntryViewer(GetNSF(), Entry.EID);
         }
 
         public SceneryEntry SceneryEntry { get; }

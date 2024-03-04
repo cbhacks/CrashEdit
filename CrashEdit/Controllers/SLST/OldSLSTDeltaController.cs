@@ -1,35 +1,22 @@
-using Crash;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
-    public sealed class OldSLSTDeltaController : Controller
+    [OrphanLegacyController(typeof(OldSLSTDelta))]
+    public sealed class OldSLSTDeltaController : LegacyController
     {
-        public OldSLSTDeltaController(OldSLSTEntryController oldslstentrycontroller, OldSLSTDelta oldslstdelta)
+        public OldSLSTDeltaController(OldSLSTDelta oldslstdelta, SubcontrollerGroup parentGroup) : base(parentGroup, oldslstdelta)
         {
-            OldSLSTEntryController = oldslstentrycontroller;
             OldSLSTDelta = oldslstdelta;
-            InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
-        {
-            Node.Text = "Delta";
-        }
+        public override bool EditorAvailable => true;
 
-        public override void InvalidateNodeImage()
-        {
-            Node.ImageKey = "arrow";
-            Node.SelectedImageKey = "arrow";
-        }
-
-        protected override Control CreateEditor()
+        public override Control CreateEditor()
         {
             return new OldSLSTDeltaBox(OldSLSTDelta);
         }
 
-        public OldSLSTEntryController OldSLSTEntryController { get; }
         public OldSLSTDelta OldSLSTDelta { get; }
     }
 }

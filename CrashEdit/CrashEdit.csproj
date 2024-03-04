@@ -1,637 +1,105 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
-  <Import Project="..\packages\SharpFont.4.0.1\build\SharpFont.props" Condition="Exists('..\packages\SharpFont.4.0.1\build\SharpFont.props')" />
-  <Import Project="..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props" Condition="Exists('..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{ECE059C1-0706-45F3-B897-7026376F49A9}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CrashEdit</RootNamespace>
-    <AssemblyName>CrashEdit</AssemblyName>
-    <StartupObject>CrashEdit.Program</StartupObject>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <OldToolsVersion>2.0</OldToolsVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <StartupObject>CrashEdit.CE.Program</StartupObject>
+    <PackageIcon></PackageIcon>
     <ApplicationIcon>Resources\Icons\cbhacks-logo-new.ico</ApplicationIcon>
+    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+    <AssemblyVersion>0.4.0.1</AssemblyVersion>
+    <FileVersion>0.4.0.1</FileVersion>
+    <Description>Unofficial Crash Bandicoot 1/2/3 Level Editor</Description>
+    <Company>cbhacks</Company>
+    <PackageProjectUrl>cbhacks.com</PackageProjectUrl>
+    <Title>CrashEdit [deprecate]</Title>
+    <RootNamespace>CrashEdit.CE</RootNamespace>
   </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>10.0</LangVersion>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>False</Optimize>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>10.0</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>True</Optimize>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>10.0</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>10.0</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>10.0</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
   <ItemGroup>
-    <ProjectReference Include="..\Crash.UI\Crash.UI.csproj">
-      <Project>{3B43FB3E-338F-4FA2-9B43-C6E4DE63DC8E}</Project>
-      <Name>Crash.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Crash\Crash.csproj">
-      <Project>{FFBFB4B9-97BD-4D21-91DE-CAF7AE9DDB65}</Project>
-      <Name>Crash</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ISO2PSX\ISO2PSX.csproj">
-      <Project>{b25e0901-a824-4c47-b2b4-048b8c154ccc}</Project>
-      <Name>ISO2PSX</Name>
-    </ProjectReference>
+    <None Remove="freetype6-win32.dll" />
+    <None Remove="freetype6-win64.dll" />
+    <None Remove="Render\Shaders\crash1-generic.frag" />
+    <None Remove="Render\Shaders\crash1-generic.vert" />
+    <None Remove="Render\Shaders\default4.frag" />
+    <None Remove="Render\Shaders\generic.vert" />
+    <None Remove="Render\Shaders\line-static.vert" />
+    <None Remove="Render\Shaders\octree.frag" />
+    <None Remove="Render\Shaders\octree.vert" />
+    <None Remove="Render\Shaders\screen.frag" />
+    <None Remove="Render\Shaders\screen.vert" />
+    <None Remove="Render\Shaders\sprite-generic.vert" />
+    <None Remove="Render\Shaders\sprite.frag" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="ConfigEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ConfigEditor.Designer.cs">
-      <DependentUpon>ConfigEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controllers\Animation\ColoredAnimationEntryController.cs" />
-    <Compile Include="Controllers\Animation\ColoredFrameController.cs" />
-    <Compile Include="Controllers\GOOL\GOOLEntryController.cs" />
-    <Compile Include="Controllers\Image\ImageEntryController.cs" />
-    <Compile Include="Controllers\Map\MapEntryController.cs" />
-    <Compile Include="Controls\3D\ControlsKeyboardInfo.cs" />
-    <Compile Include="Controls\3D\GLViewerLoader.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\BufferedTreeView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\Crash3AnimationSelector.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Crash3AnimationSelector.Designer.cs">
-      <DependentUpon>Crash3AnimationSelector.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\GetAllControls.cs" />
-    <Compile Include="Controls\GOOLBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\MapEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\PaletteEntryBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\3D\OctreeRenderer.cs" />
-    <Compile Include="ExternalTool.cs" />
-    <Compile Include="Forms\ErrorReporter.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ErrorReporter.Designer.cs">
-      <DependentUpon>ErrorReporter.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\ProgressBarForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ProgressBarForm.Designer.cs">
-      <DependentUpon>ProgressBarForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\InterpolatorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\InterpolatorForm.Designer.cs">
-      <DependentUpon>InterpolatorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\NewEntryForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\NewEntryForm.Designer.cs">
-      <DependentUpon>NewEntryForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\TextureViewer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\TextureViewer.Designer.cs">
-      <DependentUpon>TextureViewer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controllers\Animation\AnimationEntryController.cs" />
-    <Compile Include="Controllers\Animation\FrameController.cs" />
-    <Compile Include="Controllers\Base\Chunk\ChunkController.cs" />
-    <Compile Include="Controllers\Controller.cs" />
-    <Compile Include="Controllers\ControllerMenuDelegate.cs" />
-    <Compile Include="Controllers\Animation\OldAnimationEntryController.cs" />
-    <Compile Include="Controllers\Animation\OldFrameController.cs" />
-    <Compile Include="Controllers\Model\ModelEntryController.cs" />
-    <Compile Include="Controllers\Scenery\ProtoSceneryEntryController.cs" />
-    <Compile Include="Controllers\SLST\OldSLSTDeltaController.cs" />
-    <Compile Include="Controllers\SLST\SLSTDeltaController.cs" />
-    <Compile Include="Controllers\SLST\OldSLSTEntryController.cs" />
-    <Compile Include="Controllers\SLST\OldSLSTSourceController.cs" />
-    <Compile Include="Controllers\SLST\SLSTSourceController.cs" />
-    <Compile Include="Controllers\Texture\TextureChunkController.cs" />
-    <Compile Include="Controllers\Music\OldSEQController.cs" />
-    <Compile Include="Controllers\Music\OldVHController.cs" />
-    <Compile Include="Controllers\Music\OldMusicEntryController.cs" />
-    <Compile Include="Controllers\Palette\PaletteEntryController.cs" />
-    <Compile Include="Controllers\T6\T6EntryController.cs" />
-    <Compile Include="Controllers\Zone\OldCameraController.cs" />
-    <Compile Include="Controllers\Zone\ProtoZoneEntryController.cs" />
-    <Compile Include="Controllers\Zone\ProtoEntityController.cs" />
-    <Compile Include="Controllers\Zone\OldEntityController.cs" />
-    <Compile Include="Controllers\Zone\OldZoneEntryController.cs" />
-    <Compile Include="Controllers\Model\OldModelEntryController.cs" />
-    <Compile Include="Controllers\Scenery\OldSceneryEntryController.cs" />
-    <Compile Include="Controllers\Wavebank\WavebankEntryController.cs" />
-    <Compile Include="Controllers\Speech\SpeechEntryController.cs" />
-    <Compile Include="Controllers\Sound\SoundEntryController.cs" />
-    <Compile Include="Controllers\Sound\OldSoundChunkController.cs" />
-    <Compile Include="Controllers\Unprocessed\UnprocessedChunkController.cs" />
-    <Compile Include="Controllers\Base\Entry\ItemController.cs" />
-    <Compile Include="Controllers\Zone\EntityController.cs" />
-    <Compile Include="Controllers\Zone\ZoneEntryController.cs" />
-    <Compile Include="Controllers\Unprocessed\UnprocessedEntryController.cs" />
-    <Compile Include="Controllers\SLST\SLSTEntryController.cs" />
-    <Compile Include="Controllers\Music\VHController.cs" />
-    <Compile Include="Controllers\Demo\DemoEntryController.cs" />
-    <Compile Include="Controllers\T15\T15EntryController.cs" />
-    <Compile Include="Controllers\T21\T21EntryController.cs" />
-    <Compile Include="Controllers\T17\T17EntryController.cs" />
-    <Compile Include="Controllers\Scenery\SceneryEntryController.cs" />
-    <Compile Include="Controllers\Mystery\MysteryMultiItemEntryController.cs" />
-    <Compile Include="Controllers\Mystery\MysteryUniItemEntryController.cs" />
-    <Compile Include="Controllers\Wavebank\WavebankChunkController.cs" />
-    <Compile Include="Controllers\Base\Entry Chunk\EntryChunkController.cs" />
-    <Compile Include="Controllers\Base\Entry\EntryController.cs" />
-    <Compile Include="Controllers\Music\SEQController.cs" />
-    <Compile Include="Controllers\Music\MusicEntryController.cs" />
-    <Compile Include="Controllers\Normal Chunk\NormalChunkController.cs" />
-    <Compile Include="Controllers\Sound\SoundChunkController.cs" />
-    <Compile Include="Controllers\NSFController.cs" />
-    <Compile Include="Controllers\Speech\SpeechChunkController.cs" />
-    <Compile Include="Controls\3D\AnimationEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\OldFrameBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\OldFrameBox.Designer.cs">
-      <DependentUpon>OldFrameBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\OldCameraBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\OldCameraBox.Designer.cs">
-      <DependentUpon>OldCameraBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\3D\ProtoZoneEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\3D\ProtoSceneryEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ProtoEntityBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ProtoEntityBox.Designer.cs">
-      <DependentUpon>ProtoEntityBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\OldEntityBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\OldEntityBox.Designer.cs">
-      <DependentUpon>OldEntityBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\3D\SceneryEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\3D\OldAnimationEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\3D\OldSceneryEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\EntryChunkBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\OldSLSTDeltaBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\OldSLSTSourceBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\SoundBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\SLSTSourceBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\SLSTDeltaBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\3D\GLViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\EntityBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\EntityBox.Designer.cs">
-      <DependentUpon>EntityBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\3D\OldZoneEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\3D\ZoneEntryViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\UndockableControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FileFilters.cs" />
-    <Compile Include="..\Version.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FileUtil.cs" />
-    <Compile Include="Forms\InputWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\InputWindow.Designer.cs">
-      <DependentUpon>InputWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUIException.cs" />
-    <Compile Include="Controls\TextureChunkBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="HexBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="MainControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MainControl.Designer.cs">
-      <DependentUpon>MainControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="OldMainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Controls\MysteryBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\NSFBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="OldResources.cs" />
-    <Compile Include="Properties\Resources.ja.Designer.cs">
-      <DependentUpon>Resources.ja.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Include="Render\FontTable.cs" />
-    <Compile Include="Render\ProjectionInfo.cs" />
-    <Compile Include="Render\RenderInfo.cs" />
-    <Compile Include="Render\Shader.cs" />
-    <Compile Include="Render\ShaderFuncs.cs" />
-    <Compile Include="Render\Vertex.cs" />
-    <Compile Include="Render\VAO.cs" />
-    <Compile Include="Utils\ArrayRef.cs" />
-    <Compile Include="Utils\GameScales.cs" />
-    <Compile Include="Utils\MathExt.cs" />
-    <Compile Include="Utils\ResourceLoad.cs" />
-    <Compile Include="Utils\StopwatchExt.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="DiscUtils.Core, Version=0.16.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
-      <HintPath>..\packages\DiscUtils.Core.0.16.13\lib\net45\DiscUtils.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="DiscUtils.Iso9660, Version=0.16.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
-      <HintPath>..\packages\DiscUtils.Iso9660.0.16.13\lib\net45\DiscUtils.Iso9660.dll</HintPath>
-    </Reference>
-    <Reference Include="DiscUtils.Streams, Version=0.16.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
-      <HintPath>..\packages\DiscUtils.Streams.0.16.13\lib\net45\DiscUtils.Streams.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenTK, Version=3.3.3.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenTK.3.3.3\lib\net20\OpenTK.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenTK.GLControl, Version=3.3.3.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenTK.GLControl.3.3.3\lib\net20\OpenTK.GLControl.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpFont, Version=4.0.1.200, Culture=neutral, PublicKeyToken=48add4c483071cdf, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpFont.4.0.1\lib\net45\SharpFont.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ConfigEditor.resx">
-      <DependentUpon>ConfigEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Crash3AnimationSelector.resx">
-      <DependentUpon>Crash3AnimationSelector.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\OldFrameBox.resx">
-      <DependentUpon>OldFrameBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\OldCameraBox.resx">
-      <DependentUpon>OldCameraBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ProtoEntityBox.resx">
-      <DependentUpon>ProtoEntityBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\OldEntityBox.resx">
-      <DependentUpon>OldEntityBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\EntityBox.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>EntityBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\EntryChunkBox.resx">
-      <DependentUpon>EntryChunkBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\SoundBox.resx">
-      <DependentUpon>SoundBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ErrorReporter.resx">
-      <DependentUpon>ErrorReporter.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ProgressBarForm.resx">
-      <DependentUpon>ProgressBarForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\InterpolatorForm.resx">
-      <DependentUpon>InterpolatorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\NewEntryForm.resx">
-      <DependentUpon>NewEntryForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\TextureViewer.resx">
-      <DependentUpon>TextureViewer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\InputWindow.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>InputWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainControl.resx">
-      <DependentUpon>MainControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OldResources.resx">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.ja.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.ja.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\Computer_File_053.gif" />
-    <Content Include="Resources\Computer_File_063.gif" />
-    <Content Include="Resources\Computer_File_064.gif" />
-    <Content Include="Resources\Computer_File_068.gif" />
     <Content Include="Resources\Icons\cbhacks-logo-new.ico" />
-    <Content Include="Resources\Icons\NSD.ico" />
-    <Content Include="Resources\Icons\NSF.ico" />
-    <Content Include="Resources\Images\Arrow.gif" />
-    <Content Include="Resources\Images\Binoculars.gif" />
-    <Content Include="Resources\Images\BinocularsNext.gif" />
-    <Content Include="Resources\Images\BlueJournal.gif" />
-    <Content Include="Resources\Images\File.gif" />
-    <Content Include="Resources\Images\Folder.gif" />
-    <Content Include="Resources\Images\Image.gif" />
-    <Content Include="Resources\Images\Music.gif" />
-    <Content Include="Resources\Images\Open.gif" />
-    <Content Include="Resources\Images\Save.gif" />
-    <Content Include="Resources\Images\Speaker.gif" />
-    <Content Include="Resources\Images\Thing.gif" />
-    <Content Include="Resources\Images\WhiteJournal.gif" />
-    <Content Include="Resources\Images\YellowJournal.gif" />
-    <Content Include="Resources\objects_006.gif" />
-    <Content Include="Resources\objects_006_red.gif" />
-    <Content Include="Resources\objects_006_yellow.gif" />
-    <Content Include="Resources\objects_012.gif" />
-    <Content Include="Resources\objects_012_blue.gif" />
-    <Content Include="Resources\objects_012_code.gif" />
-    <Content Include="Resources\objects_012_crimson.gif" />
-    <Content Include="Resources\objects_012_gray.gif" />
-    <Content Include="Resources\objects_012_lime.gif" />
-    <EmbeddedResource Include="Render\Shaders\axes.vert" />
-    <EmbeddedResource Include="Render\Shaders\default4.frag" />
-    <EmbeddedResource Include="Render\Shaders\crash1-generic.vert" />
-    <EmbeddedResource Include="Render\Shaders\line-debug.vert" />
-    <EmbeddedResource Include="Render\Shaders\line-static.vert" />
-    <EmbeddedResource Include="Render\Shaders\line-usercolor.vert" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Render\Shaders\crash1-generic.frag" />
-    <None Include="OpenTK.dll.config" />
-    <None Include="packages.config" />
-    <EmbeddedResource Include="Render\Shaders\box-debug.vert" />
-    <EmbeddedResource Include="Render\Shaders\sprite.vert" />
-    <EmbeddedResource Include="Render\Shaders\sprite.frag" />
+    <EmbeddedResource Include="Render\Shaders\crash1-generic.vert" />
+    <EmbeddedResource Include="Render\Shaders\default4.frag" />
     <EmbeddedResource Include="Render\Shaders\generic.vert" />
-    <EmbeddedResource Include="Render\Shaders\sprite-generic.vert" />
-    <EmbeddedResource Include="Render\Shaders\screen.frag" />
-    <EmbeddedResource Include="Render\Shaders\screen.vert" />
+    <EmbeddedResource Include="Render\Shaders\line-static.vert" />
     <EmbeddedResource Include="Render\Shaders\octree.frag" />
     <EmbeddedResource Include="Render\Shaders\octree.vert" />
-    <None Include="Resources\objects_012_red.gif" />
-    <Content Include="Resources\objects_012_violet.gif" />
-    <None Include="Resources\objects_012_yellow.gif" />
-    <Content Include="Resources\objects_020.gif" />
-    <Content Include="Resources\objects_028.gif" />
-    <Content Include="Resources\objects_029.gif" />
-    <Content Include="Resources\objects_036.gif" />
-    <Content Include="Resources\objects_037.gif" />
-    <Content Include="Resources\objects_053_blue.gif" />
-    <Content Include="Resources\objects_053_white.gif" />
-    <Content Include="Resources\objects_070.gif" />
-    <Content Include="Resources\objects_079.gif" />
-    <Content Include="Resources\People_014.gif" />
-    <Content Include="Resources\People_017.gif" />
-    <Content Include="Resources\People_020.gif" />
-    <Content Include="Resources\People_020_code.gif" />
-    <Content Include="Resources\People_020_cyan.gif" />
-    <Content Include="Resources\People_020_red.gif" />
-    <Content Include="Resources\Textures\ActivatorBox.png" />
-    <Content Include="Resources\Textures\Apple.png" />
-    <Content Include="Resources\Textures\AppleBox.png" />
-    <Content Include="Resources\Textures\ArrowBox.png" />
-    <Content Include="Resources\Textures\BodyslamBox.png" />
-    <Content Include="Resources\Textures\Box.png" />
-    <Content Include="Resources\Textures\Checkpoint.png" />
-    <Content Include="Resources\Textures\DetonatorBox.png" />
-    <Content Include="Resources\Textures\DetonatorBoxTop.png" />
-    <Content Include="Resources\Textures\IronArrowBox.png" />
-    <Content Include="Resources\Textures\IronBox.png" />
-    <Content Include="Resources\Textures\Life.png" />
-    <Content Include="Resources\Textures\LifeBox.png" />
-    <Content Include="Resources\Textures\Mask.png" />
-    <Content Include="Resources\Textures\MaskBox.png" />
-    <Content Include="Resources\Textures\Nitro.png" />
-    <Content Include="Resources\Textures\NitroTop.png" />
-    <Content Include="Resources\Textures\Point.png" />
-    <Content Include="Resources\Textures\QuestionMarkBox.png" />
-    <Content Include="Resources\Textures\TNT.png" />
-    <Content Include="Resources\Textures\TNTTop.png" />
-    <Content Include="Resources\Textures\UnknownBox.png" />
-    <Content Include="Resources\Textures\UnknownBoxTop.png" />
-    <Content Include="Resources\Textures\UnknownPickup.png" />
+    <EmbeddedResource Include="Render\Shaders\screen.frag" />
+    <EmbeddedResource Include="Render\Shaders\screen.vert" />
+    <EmbeddedResource Include="Render\Shaders\sprite-generic.vert" />
+    <EmbeddedResource Include="Render\Shaders\sprite.frag" />
   </ItemGroup>
+
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
+    <PackageReference Include="DiscUtils.Iso9660" Version="0.16.13" />
+    <PackageReference Include="OpenTK.WinForms" Version="4.0.0-pre.7" />
+    <PackageReference Include="SpaceWizards.SharpFont" Version="1.0.2" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="Properties\Settings.settings">
+    <ProjectReference Include="..\Crash.UI\Crash.UI.csproj" />
+    <ProjectReference Include="..\FTBitmapExtensions\FTBitmapExtensions.csproj" />
+    <ProjectReference Include="..\CrashEdit.Main.csproj" />
+    <ProjectReference Include="..\ISO2PSX\ISO2PSX.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.ja.resx">
+      <CustomToolNamespace>CrashEdit.CE.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <CustomToolNamespace>CrashEdit.CE.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.7">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.7 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props'))" />
-    <Error Condition="!Exists('..\packages\SharpFont.4.0.1\build\SharpFont.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SharpFont.4.0.1\build\SharpFont.props'))" />
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if '$(Platform)' == 'AnyCPU' (&#xD;&#xA;  rmdir &quot;$(TargetDir)Win32&quot;&#xD;&#xA;  rmdir &quot;$(TargetDir)Win64&quot;&#xD;&#xA;  mkdir &quot;$(TargetDir)Win32&quot;&#xD;&#xA;  mkdir &quot;$(TargetDir)Win64&quot;&#xD;&#xA;  copy /Y &quot;$(ProjectDir)freetype6-win32.dll&quot; &quot;$(TargetDir)Win32/freetype6.dll&quot;&#xD;&#xA;  copy /Y &quot;$(ProjectDir)freetype6-win64.dll&quot; &quot;$(TargetDir)Win64/freetype6.dll&quot;&#xD;&#xA;)" />
   </Target>
-  <PropertyGroup>
-    <PostBuildEvent>if '$(Platform)' == 'AnyCPU' (
-  call "$(ProjectDir)CopyLibs.bat" "$(SolutionDir)\"
-)
-if '$(Platform)' == 'x64' (
-  call "$(ProjectDir)CopyLibs64.bat" "$(SolutionDir)\"
-)
-if '$(Platform)' == 'x86' (
-  call "$(ProjectDir)CopyLibs32.bat" "$(SolutionDir)\"
-)
-</PostBuildEvent>
-  </PropertyGroup>
+
 </Project>

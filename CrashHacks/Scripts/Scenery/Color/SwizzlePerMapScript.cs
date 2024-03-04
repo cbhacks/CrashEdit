@@ -1,6 +1,3 @@
-using Crash;
-using System;
-
 namespace CrashHacks.Scripts.Scenery.Color
 {
     public sealed class SwizzlePerMapScript : Script
@@ -38,7 +35,7 @@ namespace CrashHacks.Scripts.Scenery.Color
             }
         }
 
-        public override void Run(object value,GameVersion gameversion)
+        public override void Run(object value, GameVersion gameversion)
         {
             if (value is NSF nsf)
             {
@@ -60,7 +57,7 @@ namespace CrashHacks.Scripts.Scenery.Color
                 if (b_s == 0) b_s = 1;
                 foreach (SceneryEntry entry in nsf.GetEntries<SceneryEntry>())
                 {
-                    for (int i = 0;i < entry.Colors.Count;i++)
+                    for (int i = 0; i < entry.Colors.Count; i++)
                     {
                         SceneryColor color = entry.Colors[i];
                         int r = color.Red;

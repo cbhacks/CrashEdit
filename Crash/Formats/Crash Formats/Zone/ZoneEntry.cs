@@ -1,22 +1,27 @@
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class ZoneEntry : Entry
     {
-        private readonly List<Entity> entities;
-
         public ZoneEntry(byte[] header, byte[] layout, IEnumerable<Entity> entities, int eid) : base(eid)
         {
             Header = header;
             Layout = layout;
-            this.entities = new List<Entity>(entities);
+            Entities.AddRange(entities);
         }
 
+        public override string Title => $"Zone ({EName})";
+        public override string ImageKey => "ThingViolet";
+
         public override int Type => 7;
-        public byte[] Header { get; }
-        public byte[] Layout { get; }
-        public IList<Entity> Entities => entities;
+
+        [SubresourceSlot]
+        public byte[] Header { get; set; }
+
+        [SubresourceSlot]
+        public byte[] Layout { get; set; }
+
+        [SubresourceList]
+        public List<Entity> Entities { get; } = new List<Entity>();
 
         public int WorldCount
         {
@@ -84,30 +89,29 @@ namespace Crash
 
         public ushort CollisionDepthX
         {
-            get => (ushort)BitConv.FromInt16(Layout, 0x1E);
+            get => BitConv.FromUInt16(Layout, 0x1E);
             set => BitConv.ToInt16(Layout, 0x1E, (short)value);
         }
 
         public ushort CollisionDepthY
         {
-            get => (ushort)BitConv.FromInt16(Layout, 0x20);
+            get => BitConv.FromUInt16(Layout, 0x20);
             set => BitConv.ToInt16(Layout, 0x20, (short)value);
         }
 
         public ushort CollisionDepthZ
         {
-            get => (ushort)BitConv.FromInt16(Layout, 0x22);
+            get => BitConv.FromUInt16(Layout, 0x22);
             set => BitConv.ToInt16(Layout, 0x22, (short)value);
         }
-
         public override UnprocessedEntry Unprocess()
         {
-            byte[][] items = new byte[2 + entities.Count][];
+            byte[][] items = new byte[2 + Entities.Count][];
             items[0] = Header;
             items[1] = Layout;
-            for (int i = 0; i < entities.Count; i++)
+            for (int i = 0; i < Entities.Count; i++)
             {
-                items[2 + i] = entities[i].Save();
+                items[2 + i] = Entities[i].Save();
             }
             return new UnprocessedEntry(items, EID, Type);
         }

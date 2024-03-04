@@ -1,28 +1,23 @@
-using Crash;
-using System;
-using System.IO;
+using CrashEdit.Crash;
 using System.Media;
-using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class SoundBox : UserControl
     {
-        private readonly SampleSet samples;
+        private SampleSet samples;
 
-        private readonly SoundPlayer spPlayer;
+        private SoundPlayer spPlayer;
 
-        private readonly ToolStrip tsToolbar;
-        private readonly ToolStripButton tbbExport;
-        private readonly TableLayoutPanel pnOptions;
-        private readonly Button cmdPlay;
-        private readonly Button cmdExport;
-        private readonly TrackBar trkSampleRate;
-        private readonly Label lblSampleRate;
+        private ToolStrip tsToolbar;
+        private ToolStripButton tbbExport;
+        private TableLayoutPanel pnOptions;
+        private Button cmdPlay;
+        private Button cmdExport;
+        private TrackBar trkSampleRate;
+        private Label lblSampleRate;
 
-        private readonly Entry entry = null;
-
-        public SoundBox(SampleSet samples, float default_pitch = 4.0f)
+        public SoundBox(SampleSet samples)
         {
             this.samples = samples;
 
@@ -41,7 +36,7 @@ namespace CrashEdit
                 Minimum = 0,
                 Maximum = 16 * 256,
                 TickFrequency = 128,
-                Value = (int)(default_pitch * 256),
+                Value = 1024,
                 Dock = DockStyle.Fill
             };
             trkSampleRate.ValueChanged += (object sender, EventArgs e) =>
@@ -97,15 +92,13 @@ namespace CrashEdit
             ExportWave((int)(trkSampleRate.Value / 256.0 * (11025 / 4.0)));
         }
 
-        public SoundBox(SoundEntry entry, float default_pitch = 4.0f)
-            : this(entry.Samples, default_pitch)
+        public SoundBox(SoundEntry entry)
+            : this(entry.Samples)
         {
-            this.entry = entry;
         }
 
-        public SoundBox(SpeechEntry entry, float default_pitch = 8.0f) : this(entry.Samples, default_pitch)
+        public SoundBox(SpeechEntry entry) : this(entry.Samples)
         {
-            this.entry = entry;
         }
 
         void tbbExport_Click(object sender, EventArgs e)
@@ -124,14 +117,7 @@ namespace CrashEdit
         private void ExportWave(int samplerate)
         {
             byte[] wave = WaveConv.ToWave(samples.ToPCM(), samplerate).Save();
-            if (entry != null)
-            {
-                FileUtil.SaveFile(entry.EName, wave, FileFilters.Wave, FileFilters.Any);
-            }
-            else
-            {
-                FileUtil.SaveFile(wave, FileFilters.Wave, FileFilters.Any);
-            }
+            FileUtil.SaveFile(wave, FileFilters.Wave, FileFilters.Any);
         }
 
         protected override void Dispose(bool disposing)

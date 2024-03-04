@@ -1,39 +1,21 @@
-using Crash;
-using System.Collections.Generic;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(ZoneEntry))]
     public sealed class ZoneEntryController : EntryController
     {
-        public ZoneEntryController(EntryChunkController entrychunkcontroller, ZoneEntry zoneentry) : base(entrychunkcontroller, zoneentry)
+        public ZoneEntryController(ZoneEntry zoneentry, SubcontrollerGroup parentGroup) : base(zoneentry, parentGroup)
         {
             ZoneEntry = zoneentry;
-            AddNode(new ItemController(null, zoneentry.Header));
-            AddNode(new ItemController(null, zoneentry.Layout));
-            foreach (Entity entity in zoneentry.Entities)
-            {
-                AddNode(new EntityController(this, entity));
-            }
-            AddMenu(Crash.UI.Properties.Resources.ZoneEntryController_AcAddEntity, Menu_AddEntity);
-            InvalidateNode();
-            InvalidateNodeImage();
+            AddMenu(CrashUI.Properties.Resources.ZoneEntryController_AcAddEntity, Menu_AddEntity);
         }
 
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.ZoneEntryController_Text, ZoneEntry.EName);
-        }
+        public override bool EditorAvailable => true;
 
-        public override void InvalidateNodeImage()
+        public override Control CreateEditor()
         {
-            Node.ImageKey = "violetb";
-            Node.SelectedImageKey = "violetb";
-        }
-
-        protected override Control CreateEditor()
-        {
-            return new UndockableControl(new ZoneEntryViewer(NSF, ZoneEntry.EID));
+            return new ZoneEntryViewer(GetNSF(), Entry.EID);
         }
 
         public ZoneEntry ZoneEntry { get; }
@@ -43,7 +25,7 @@ namespace CrashEdit
             short id = 10;
             while (true)
             {
-                foreach (ZoneEntry zone in EntryChunkController.NSFController.NSF.GetEntries<ZoneEntry>())
+                foreach (ZoneEntry zone in GetEntries<ZoneEntry>())
                 {
                     foreach (Entity otherentity in zone.Entities)
                     {
@@ -61,7 +43,6 @@ namespace CrashEdit
             Entity newentity = Entity.Load(new Entity(new Dictionary<short, EntityProperty>()).Save());
             newentity.ID = id;
             ZoneEntry.Entities.Add(newentity);
-            AddNode(new EntityController(this, newentity));
             ++ZoneEntry.EntityCount;
         }
     }

@@ -1,11 +1,10 @@
-using Crash;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class OldSLSTDeltaBox : UserControl
     {
-        private readonly ListBox lstValues;
+        private ListBox lstValues;
 
         public OldSLSTDeltaBox(OldSLSTDelta slstitem)
         {

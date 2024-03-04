@@ -1,6 +1,4 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public abstract class MysteryUniItemEntry : Entry
     {

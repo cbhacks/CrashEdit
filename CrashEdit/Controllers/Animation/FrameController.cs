@@ -1,38 +1,26 @@
-using Crash;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
-    public sealed class FrameController : Controller
+    [OrphanLegacyController(typeof(Frame))]
+    public sealed class FrameController : LegacyController
     {
-        public FrameController(AnimationEntryController animationentrycontroller, Frame frame)
+        public FrameController(Frame frame, SubcontrollerGroup parentGroup) : base(parentGroup, frame)
         {
-            AnimationEntryController = animationentrycontroller;
             Frame = frame;
-            InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
-        {
-            Node.Text = Crash.UI.Properties.Resources.FrameController_Text;
-        }
+        public override bool EditorAvailable => true;
 
-        public override void InvalidateNodeImage()
-        {
-            Node.ImageKey = "arrow";
-            Node.SelectedImageKey = "arrow";
-        }
-
-        protected override Control CreateEditor()
+        public override Control CreateEditor()
         {
             if (AnimationEntryController.AnimationEntry.IsNew)
-                return new Crash3AnimationSelector(AnimationEntryController.NSF, AnimationEntryController.AnimationEntry, Frame);
+                return new Crash3AnimationSelector(GetNSF(), AnimationEntryController.AnimationEntry, Frame);
             else
-                return new UndockableControl(new AnimationEntryViewer(AnimationEntryController.NSF, AnimationEntryController.AnimationEntry.EID, AnimationEntryController.AnimationEntry.Frames.IndexOf(Frame)));
+                return new AnimationEntryViewer(GetNSF(), AnimationEntryController.AnimationEntry.EID, AnimationEntryController.AnimationEntry.Frames.IndexOf(Frame));
         }
 
-        public AnimationEntryController AnimationEntryController { get; }
+        public AnimationEntryController AnimationEntryController => (AnimationEntryController)Modern.Parent.Legacy;
         public Frame Frame { get; }
     }
 }

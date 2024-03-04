@@ -1,13 +1,10 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     internal static class GOOLEntryLoader
     {
         internal static GOOLEntry LoadGOOL(GOOLVersion goolver, byte[][] items, int eid)
         {
-            if (items == null)
-                throw new ArgumentNullException(nameof(items));
+            ArgumentNullException.ThrowIfNull(items);
             if (items.Length != 3 && items.Length != 5 && items.Length != 6)
             {
                 ErrorManager.SignalError("GOOLEntry: Wrong number of items");
@@ -51,7 +48,11 @@ namespace Crash
                     }
                 }
             }
-            return new GOOLEntry(goolver, items[0], items[1], ins, statemap, statedesc, anims, eid);
+            return new GOOLEntry(goolver, items[0], items[1], ins,
+                statemap,
+                statedesc,
+                anims,
+                eid);
         }
     }
 
@@ -59,7 +60,7 @@ namespace Crash
     [EntryType(11, GameVersion.Crash1BetaMAR08)]
     public sealed class GOOLv0EntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items, int eid, GameVersion version)
+        public override Entry Load(byte[][] items, int eid)
         {
             return GOOLEntryLoader.LoadGOOL(GOOLVersion.Version0, items, eid);
         }
@@ -69,7 +70,7 @@ namespace Crash
     [EntryType(11, GameVersion.Crash1)]
     public sealed class GOOLv1EntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items, int eid, GameVersion version)
+        public override Entry Load(byte[][] items, int eid)
         {
             return GOOLEntryLoader.LoadGOOL(GOOLVersion.Version1, items, eid);
         }
@@ -78,7 +79,7 @@ namespace Crash
     [EntryType(11, GameVersion.Crash2)]
     public sealed class GOOLv2EntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items, int eid, GameVersion version)
+        public override Entry Load(byte[][] items, int eid)
         {
             return GOOLEntryLoader.LoadGOOL(GOOLVersion.Version2, items, eid);
         }
@@ -87,7 +88,7 @@ namespace Crash
     [EntryType(11, GameVersion.Crash3)]
     public sealed class GOOLv3EntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items, int eid, GameVersion version)
+        public override Entry Load(byte[][] items, int eid)
         {
             return GOOLEntryLoader.LoadGOOL(GOOLVersion.Version3, items, eid);
         }

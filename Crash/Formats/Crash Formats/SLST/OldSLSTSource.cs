@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class OldSLSTSource
     {
         public static OldSLSTSource Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length < 4)
             {
                 ErrorManager.SignalError("OldSLSTSource: Data is too short");
@@ -35,12 +31,11 @@ namespace Crash
             return new OldSLSTSource(polygons);
         }
 
-        private readonly List<OldSLSTPolygonID> polygons;
+        private List<OldSLSTPolygonID> polygons;
 
         public OldSLSTSource(IEnumerable<OldSLSTPolygonID> polygons)
         {
-            if (polygons == null)
-                throw new ArgumentNullException(nameof(polygons));
+            ArgumentNullException.ThrowIfNull(polygons);
             this.polygons = new List<OldSLSTPolygonID>(polygons);
         }
 

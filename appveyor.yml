@@ -6,43 +6,55 @@ environment:
     secure: vm68Yr9iFdgnH98tSRvqx1Kg6pX49e2cm9685GwH554=
   CRASHEDIT_S3DEPLOY_ACCESSKEY_SECRET:
     secure: i2KP8L+z+Txf6sYqGwZ8d7I+kDxQfLRBfLimncCKu8xPv3oF6hFsvVKFRVh/Tnd+
-configuration: Debug
+configuration: Release
 platform: Any CPU
-assembly_info:
+dotnet_csproj:
   patch: true
-  file: Version.cs
-  assembly_version: '0.3.{build}'
-  assembly_file_version: '0.3.{build}'
+  file: CrashEdit.csproj
+  version: '0.4.{build}'
+  assembly_version: '0.4.{build}'
+  file_version: '0.4.{build}'
+  informational_version: '0.4.{build}'
 build_script:
   - nuget restore CrashEdit.sln
   - msbuild CrashEdit.sln
 after_build:
   - mkdir pkg
-  - copy .\README.md pkg
-  - copy .\CrashEdit\bin\Debug\Crash.dll pkg
-  - copy .\CrashEdit\bin\Debug\Crash.UI.dll pkg
-  - copy .\CrashEdit\bin\Debug\CrashEdit.exe pkg
-  - copy .\CrashEdit\bin\Debug\CrashEdit.exe.config pkg
-  - copy .\CrashEdit\bin\Debug\ISO2PSX.dll pkg
-  - copy .\CrashHacks\bin\Debug\CrashHacks.exe pkg
-  - copy .\CrashEdit\bin\Debug\OpenTK.dll pkg
-  - copy .\CrashEdit\bin\Debug\OpenTK.GLControl.dll pkg
-  - copy .\CrashEdit\bin\Debug\DiscUtils.Core.dll pkg
-  - copy .\CrashEdit\bin\Debug\DiscUtils.Iso9660.dll pkg
-  - copy .\CrashEdit\bin\Debug\DiscUtils.Streams.dll pkg
-  - copy .\CrashEdit\bin\Debug\SharpFont.dll pkg
-  - copy .\CrashEdit\bin\Debug\SharpFont.dll.config pkg
-  - copy .\CrashEdit\bin\Debug\System.Buffers.dll pkg
-  - copy .\CrashEdit\bin\Debug\System.Memory.dll pkg
-  - copy .\CrashEdit\bin\Debug\System.Numerics.Vectors.dll pkg
-  - copy .\CrashEdit\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll pkg
   - mkdir pkg\ja
-  - copy .\CrashEdit\bin\Debug\ja\Crash.UI.resources.dll pkg\ja
-  - copy .\CrashEdit\bin\Debug\ja\CrashEdit.resources.dll pkg\ja
   - mkdir pkg\Win32
-  - xcopy .\CrashEdit\bin\Debug\Win32 pkg\Win32 /s /e
   - mkdir pkg\Win64
-  - xcopy .\CrashEdit\bin\Debug\Win64 pkg\Win64 /s /e
+  - mkdir pkg\runtimes
+  - copy .\README.md pkg
+  - copy .\README-CE2.md pkg
+  - copy .\CrashHacks\bin\Release\net8.0-windows\CrashHacks.exe pkg
+  - xcopy .\CrashEdit\bin\Release\net8.0-windows\Win32 pkg\Win32 /s /e
+  - xcopy .\CrashEdit\bin\Release\net8.0-windows\Win64 pkg\Win64 /s /e
+  - xcopy .\CrashEdit\bin\Release\net8.0-windows\runtimes pkg\runtimes /s /e
+  - copy .\CrashEdit\bin\Release\net8.0-windows\ja\Crash.UI.resources.dll pkg\ja
+  - copy .\CrashEdit\bin\Release\net8.0-windows\ja\CrashEdit.resources.dll pkg\ja
+  - copy .\CrashEdit\bin\Release\net8.0-windows\Crash.UI.dll pkg
+  - copy .\CrashEdit\bin\Release\net8.0-windows\CrashEdit.deps.json pkg
+  - copy .\CrashEdit\bin\Release\net8.0-windows\CrashEdit.dll pkg
+  - copy .\CrashEdit\bin\Release\net8.0-windows\CrashEdit.exe pkg
+  - copy .\CrashEdit\bin\Release\net8.0-windows\CrashEdit.Main.dll pkg
+  - copy .\CrashEdit\bin\Release\net8.0-windows\CrashEdit.runtimeconfig.json pkg
+  - copy .\CrashHacks\bin\Release\net8.0-windows\CrashHacks.dll pkg
+  - copy .\CrashHacks\bin\Release\net8.0-windows\CrashHacks.exe pkg
+  - copy .\CrashHacks\bin\Release\net8.0-windows\CrashHacks.runtimeconfig.json pkg
+  - copy .\CrashEdit\bin\Release\net8.0-windows\DiscUtils.Core.dll pkg
+  - copy .\CrashEdit\bin\Release\net8.0-windows\DiscUtils.Iso9660.dll pkg
+  - copy .\CrashEdit\bin\Release\net8.0-windows\DiscUtils.Streams.dll pkg
+  - copy .\CrashEdit\bin\Release\net8.0-windows\FTBitmapExtensions.dll pkg
+  - copy .\CrashEdit\bin\Release\net8.0-windows\ISO2PSX.dll pkg
+  - copy .\CrashEdit\bin\Release\net8.0-windows\OpenTK.Core.dll pkg
+  - copy .\CrashEdit\bin\Release\net8.0-windows\OpenTK.Graphics.dll pkg
+  - copy .\CrashEdit\bin\Release\net8.0-windows\OpenTK.Mathematics.dll pkg
+  - copy .\CrashEdit\bin\Release\net8.0-windows\OpenTK.Windowing.Common.dll pkg
+  - copy .\CrashEdit\bin\Release\net8.0-windows\OpenTK.Windowing.Desktop.dll pkg
+  - copy .\CrashEdit\bin\Release\net8.0-windows\OpenTK.Windowing.GraphicsLibraryFramework.dll pkg
+  - copy .\CrashEdit\bin\Release\net8.0-windows\OpenTK.WinForms.dll pkg
+  - copy .\CrashEdit\bin\Release\net8.0-windows\SpaceWizards.SharpFont.dll pkg
+  - copy .\CrashEdit\bin\Release\net8.0-windows\System.Drawing.Common.dll pkg
   - 7z a CrashEdit.zip .\pkg\*
   - move CrashEdit.zip CrashEdit-%APPVEYOR_BUILD_NUMBER%-%APPVEYOR_REPO_COMMIT%.zip
 test: off

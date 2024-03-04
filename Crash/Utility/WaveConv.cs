@@ -1,13 +1,10 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public static class WaveConv
     {
         public static RIFF ToWave(byte[] data, int samplerate)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             byte[] format = new byte[16];
             BitConv.ToInt16(format, 0, 1);
             BitConv.ToInt16(format, 2, 1);

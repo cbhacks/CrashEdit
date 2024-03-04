@@ -1,45 +1,23 @@
-using Crash;
-using System.Collections.Generic;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(OldZoneEntry))]
     public sealed class OldZoneEntryController : EntryController
     {
-        public OldZoneEntryController(EntryChunkController entrychunkcontroller, OldZoneEntry zoneentry)
-            : base(entrychunkcontroller, zoneentry)
+        public OldZoneEntryController(OldZoneEntry zoneentry, SubcontrollerGroup parentGroup)
+            : base(zoneentry, parentGroup)
         {
             OldZoneEntry = zoneentry;
-            AddNode(new ItemController(null, zoneentry.Header));
-            AddNode(new ItemController(null, zoneentry.Layout));
-            foreach (OldCamera camera in zoneentry.Cameras)
-            {
-                AddNode(new OldCameraController(this, camera));
-            }
-            foreach (OldEntity entity in zoneentry.Entities)
-            {
-                AddNode(new OldEntityController(this, entity));
-            }
             AddMenu("Add Camera", Menu_AddCamera);
             AddMenu("Add Entity", Menu_AddEntity);
-            InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.OldZoneEntryController_Text, OldZoneEntry.EName);
-        }
+        public override bool EditorAvailable => true;
 
-        public override void InvalidateNodeImage()
+        public override Control CreateEditor()
         {
-            Node.ImageKey = "violetb";
-            Node.SelectedImageKey = "violetb";
-        }
-
-        protected override Control CreateEditor()
-        {
-            return new UndockableControl(new OldZoneEntryViewer(NSF, OldZoneEntry.EID));
+            return new OldZoneEntryViewer(GetNSF(), Entry.EID);
         }
 
         public OldZoneEntry OldZoneEntry { get; }
@@ -48,7 +26,6 @@ namespace CrashEdit
         {
             OldCamera newcam = OldCamera.Load(new OldCamera(Entry.ENameToEID("NONE!"), 0, 0, new OldCameraNeighbor[4], 0, 0, 0, 0, 1600, 0, 0, 0, 0, 0, 0, new List<OldCameraPosition>(), 0).Save());
             OldZoneEntry.Cameras.Add(newcam);
-            InsertNode(2 + OldZoneEntry.Cameras.Count - 1, new OldCameraController(this, newcam));
         }
 
         void Menu_AddEntity()
@@ -56,7 +33,7 @@ namespace CrashEdit
             short id = 6;
             while (true)
             {
-                foreach (OldZoneEntry zone in EntryChunkController.NSFController.NSF.GetEntries<OldZoneEntry>())
+                foreach (OldZoneEntry zone in GetEntries<OldZoneEntry>())
                 {
                     foreach (OldEntity otherentity in zone.Entities)
                     {
@@ -71,9 +48,8 @@ namespace CrashEdit
                 ++id;
                 continue;
             }
-            OldEntity newentity = OldEntity.Load(new OldEntity(0, 0x0018, 3, 0, id, 0, 0, 0, 0, 0, new List<EntityPosition>() { new EntityPosition(0, 0, 0) }, 0).Save());
+            OldEntity newentity = OldEntity.Load(new OldEntity(0x0018, 3, 0, id, 0, 0, 0, 0, 0, new List<EntityPosition>() { new EntityPosition(0, 0, 0) }, 0).Save());
             OldZoneEntry.Entities.Add(newentity);
-            AddNode(new OldEntityController(this, newentity));
         }
     }
 }

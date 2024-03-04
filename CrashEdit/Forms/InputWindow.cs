@@ -1,7 +1,4 @@
-using System;
-using System.Windows.Forms;
-
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class InputWindow : Form
     {

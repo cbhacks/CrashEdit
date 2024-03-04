@@ -1,12 +1,8 @@
-using Crash;
-using CrashEdit.Properties;
-using OpenTK;
-using OpenTK.Graphics;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
+using CrashEdit.CE.Properties;
+using CrashEdit.Crash;
+using OpenTK.Mathematics;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class ProtoZoneEntryViewer : ProtoSceneryEntryViewer
     {

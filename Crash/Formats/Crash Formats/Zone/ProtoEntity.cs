@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
-    public sealed class ProtoEntity
+    public sealed class ProtoEntity : IResource
     {
         public static ProtoEntity Load(byte[] data)
         {
@@ -39,12 +36,11 @@ namespace Crash
             return new ProtoEntity(flags, spawn, unk, id, startx, starty, startz, vecx, vecy, vecz, type, subtype, deltas, nullfield1);
         }
 
-        private readonly List<ProtoEntityPosition> deltas = null;
+        private List<ProtoEntityPosition> deltas = null;
 
         public ProtoEntity(short flags, byte spawn, byte unk, short id, short startx, short starty, short startz, short vecx, short vecy, short vecz, byte type, byte subtype, IEnumerable<ProtoEntityPosition> deltas, short nullfield1)
         {
-            if (deltas == null)
-                throw new ArgumentNullException(nameof(deltas));
+            ArgumentNullException.ThrowIfNull(deltas);
             Flags = flags;
             Spawn = spawn;
             Unk = unk;
@@ -60,6 +56,9 @@ namespace Crash
             StartY = starty;
             StartZ = startz;
         }
+
+        public string Title => $"Entity {ID} ({Type}-{Subtype})";
+        public string ImageKey => "Arrow";
 
         public short Flags { get; set; }
         public byte Spawn { get; set; }

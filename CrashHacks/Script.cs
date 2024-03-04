@@ -1,6 +1,3 @@
-using System;
-using Crash;
-
 namespace CrashHacks
 {
     public abstract class Script
@@ -27,6 +24,6 @@ namespace CrashHacks
 
         public abstract SupportLevel CheckCompatibility(GameVersion gameversion);
 
-        public abstract void Run(object value,GameVersion gameversion);
+        public abstract void Run(object value, GameVersion gameversion);
     }
 }

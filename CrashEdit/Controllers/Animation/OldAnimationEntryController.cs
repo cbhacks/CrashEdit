@@ -1,37 +1,20 @@
-using Crash;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(OldAnimationEntry))]
     public sealed class OldAnimationEntryController : EntryController
     {
-        public OldAnimationEntryController(EntryChunkController entrychunkcontroller, OldAnimationEntry oldanimationentry) : base(entrychunkcontroller, oldanimationentry)
+        public OldAnimationEntryController(OldAnimationEntry oldanimationentry, SubcontrollerGroup parentGroup) : base(oldanimationentry, parentGroup)
         {
             OldAnimationEntry = oldanimationentry;
-            foreach (OldFrame frame in oldanimationentry.Frames)
-            {
-                AddNode(new OldFrameController(this, frame));
-            }
-            InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.OldAnimationEntryController_Text, OldAnimationEntry.EName);
-            Node.Text = string.Format(OldAnimationEntry.Proto ? Crash.UI.Properties.Resources.ProtoAnimationEntryController_Text
-                                                              : Crash.UI.Properties.Resources.OldAnimationEntryController_Text, OldAnimationEntry.EName);
-        }
+        public override bool EditorAvailable => true;
 
-        public override void InvalidateNodeImage()
+        public override Control CreateEditor()
         {
-            Node.ImageKey = "limeb";
-            Node.SelectedImageKey = "limeb";
-        }
-
-        protected override Control CreateEditor()
-        {
-            return new UndockableControl(new OldAnimationEntryViewer(NSF, Entry.EID));
+            return new OldAnimationEntryViewer(GetNSF(), Entry.EID);
         }
 
         public OldAnimationEntry OldAnimationEntry { get; }

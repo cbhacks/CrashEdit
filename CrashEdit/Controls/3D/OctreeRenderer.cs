@@ -1,18 +1,13 @@
-﻿using Crash;
-using CrashEdit.Properties;
-using OpenTK;
-using OpenTK.Graphics;
+﻿using CrashEdit.CE.Properties;
+using CrashEdit.Crash;
 using OpenTK.Graphics.OpenGL4;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
+using OpenTK.Mathematics;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public class OctreeRenderer : IDisposable
     {
-        public static Rgba[] node_colors = new Rgba[0x8000];
+        private static Rgba[] node_colors = new Rgba[0x8000];
         private const float COLOR_RANGE = 0.75f;
 
         // settings
@@ -36,7 +31,7 @@ namespace CrashEdit
 
         private static int texColors = 0;
         private static int texNodes = 0;
-        private static bool colors_uploaded = false;
+        private bool colors_uploaded = false;
 
         public OctreeRenderer(GLViewer viewer)
         {
@@ -64,7 +59,6 @@ namespace CrashEdit
                 int b = random.Next(range) + min;
                 node_colors[i] = new((byte)r, (byte)g, (byte)b, 255);
             }
-            colors_uploaded = false;
         }
 
         public void UpdateForm()
@@ -181,10 +175,10 @@ namespace CrashEdit
             if (texColors == 0) texColors = GL.GenTexture();
             if (texNodes == 0) texNodes = GL.GenTexture();
 
+            GL.ActiveTexture(TextureUnit.Texture3);
+            GL.BindTexture(TextureTarget.Texture2D, texColors);
             if (!colors_uploaded)
             {
-                GL.ActiveTexture(TextureUnit.Texture3);
-                GL.BindTexture(TextureTarget.Texture2D, texColors);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
                 GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, 256, 128, 0, PixelFormat.Rgba, PixelType.UnsignedByte, node_colors);

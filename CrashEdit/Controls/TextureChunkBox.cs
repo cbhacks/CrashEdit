@@ -1,18 +1,15 @@
-using Crash;
-using System;
-using System.Drawing;
+using CrashEdit.Crash;
 using System.Drawing.Imaging;
-using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class TextureChunkBox : UserControl
     {
-        private readonly TabControl tbcTabs;
+        private TabControl tbcTabs;
 
         private TextureViewer frmViewer = null;
 
-        private readonly TextureChunk texturechunk;
+        private TextureChunk texturechunk;
 
         public TextureChunkBox(TextureChunk chunk)
         {

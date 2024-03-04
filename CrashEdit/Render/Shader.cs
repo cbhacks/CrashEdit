@@ -1,27 +1,18 @@
-﻿using CrashEdit.Properties;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL4;
-using System;
-using System.Collections.Generic;
+﻿using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed partial class ShaderInfo
     {
         internal static readonly Dictionary<string, ShaderInfo> Infos = new()
         {
-            { "axes",           new ShaderInfo("axes.vert", "default4.frag") },
-            { "line",           new ShaderInfo("line-static.vert", "default4.frag") },
-            { "line-debug",     new ShaderInfo("line-debug.vert", "default4.frag", func: RenderLineDebug) },
-            { "crash1",         new ShaderInfo("crash1-generic.vert", "crash1-generic.frag") },
-            { "line-debug-usercolor", new ShaderInfo("line-usercolor.vert", "default4.frag") },
-            { "box-debug",      new ShaderInfo("box-debug.vert", "default4.frag") },
-            { "sprite-debug",   new ShaderInfo("sprite.vert", "sprite.frag") },
-            { "sprite",         new ShaderInfo("sprite-generic.vert", "sprite.frag", func: RenderSprite) },
-            { "generic",        new ShaderInfo("generic.vert", "sprite.frag") },
-            { "screen",         new ShaderInfo("screen.vert", "screen.frag") },
-            { "octree",         new ShaderInfo("octree.vert", "octree.frag", func: RenderOctree) },
+            { "line",       new ShaderInfo("line-static.vert", "default4.frag") },
+            { "crash1",     new ShaderInfo("crash1-generic.vert", "crash1-generic.frag") },
+            { "sprite",     new ShaderInfo("sprite-generic.vert", "sprite.frag") },
+            { "generic",    new ShaderInfo("generic.vert", "sprite.frag") },
+            { "screen",     new ShaderInfo("screen.vert", "screen.frag") },
+            { "octree",     new ShaderInfo("octree.vert", "octree.frag", func: RenderOctree) },
         };
 
         public string VertShaderName { get; }
@@ -30,12 +21,12 @@ namespace CrashEdit
         public ShaderRenderFunc PreRenderFunc { get; }
         public ShaderRenderFunc RenderFunc { get; }
 
-        internal ShaderInfo(string vert, string frag, ShaderRenderFunc func = null, ShaderRenderFunc prefunc = null)
+        internal ShaderInfo(string vert, string frag, ShaderRenderFunc? func = null, ShaderRenderFunc? prefunc = null)
         {
             VertShaderName = vert;
             FragShaderName = frag;
-            RenderFunc = func;
-            PreRenderFunc = prefunc;
+            RenderFunc = func ?? RenderDefault;
+            PreRenderFunc = prefunc ?? PreRenderDefault;
         }
     }
 
@@ -146,21 +137,12 @@ namespace CrashEdit
         public void Dispose()
         {
             GL.DeleteProgram(ID);
+            GC.SuppressFinalize(this);
         }
-
-        private readonly Dictionary<string, int> uniform_locs = new();
 
         private int GetUniformLocation(string name)
         {
-            if (!Settings.Default.CacheShaderUniformLoc)
-                return GL.GetUniformLocation(ID, name);
-
-            if (!uniform_locs.TryGetValue(name, out int loc))
-            {
-                loc = GL.GetUniformLocation(ID, name);
-                uniform_locs.Add(name, loc);
-            }
-            return loc;
+            return GL.GetUniformLocation(ID, name);
         }
 
         public void UniformMat4(string name, ref Matrix4 mat) => GL.UniformMatrix4(GetUniformLocation(name), false, ref mat);
@@ -179,14 +161,8 @@ namespace CrashEdit
             if (!string.IsNullOrEmpty(log))
                 Console.WriteLine($"When validating {Name}:\n {log}");
             GL.UseProgram(ID);
-            if (Info.PreRenderFunc == null)
-                ShaderInfo.PreRenderDefault(this, ri, vao);
-            else
-                Info.PreRenderFunc(this, ri, vao);
-            if (Info.RenderFunc == null)
-                ShaderInfo.RenderDefault(this, ri, vao);
-            else
-                Info.RenderFunc(this, ri, vao);
+            Info.PreRenderFunc(this, ri, vao);
+            Info.RenderFunc(this, ri, vao);
         }
     }
 }

@@ -1,7 +1,7 @@
-namespace Crash
+namespace CrashEdit.Crash
 {
     public abstract class EntryLoader
     {
-        public abstract Entry Load(byte[][] items, int eid, GameVersion version);
+        public abstract Entry Load(byte[][] items, int eid);
     }
 }

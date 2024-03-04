@@ -1,38 +1,23 @@
-using Crash;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(OldSceneryEntry))]
     public sealed class OldSceneryEntryController : EntryController
     {
-        public OldSceneryEntryController(EntryChunkController entrychunkcontroller, OldSceneryEntry oldsceneryentry) : base(entrychunkcontroller, oldsceneryentry)
+        public OldSceneryEntryController(OldSceneryEntry oldsceneryentry, SubcontrollerGroup parentGroup) : base(oldsceneryentry, parentGroup)
         {
             OldSceneryEntry = oldsceneryentry;
-            if (oldsceneryentry.ExtraData != null)
-            {
-                AddNode(new ItemController(null, oldsceneryentry.ExtraData));
-            }
             AddMenuSeparator();
             AddMenu("Export as OBJ", Menu_Export_OBJ);
             AddMenu("Export as COLLADA", Menu_Export_COLLADA);
-            InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.OldSceneryEntryController_Text, OldSceneryEntry.EName);
-        }
+        public override bool EditorAvailable => true;
 
-        public override void InvalidateNodeImage()
+        public override Control CreateEditor()
         {
-            Node.ImageKey = "blueb";
-            Node.SelectedImageKey = "blueb";
-        }
-
-        protected override Control CreateEditor()
-        {
-            return new UndockableControl(new OldSceneryEntryViewer(NSF, OldSceneryEntry.EID));
+            return new OldSceneryEntryViewer(GetNSF(), Entry.EID);
         }
 
         public OldSceneryEntry OldSceneryEntry { get; }

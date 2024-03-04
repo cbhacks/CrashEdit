@@ -1,33 +1,21 @@
-using Crash;
-using System;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(TextureChunk))]
     public sealed class TextureChunkController : ChunkController
     {
-        public TextureChunkController(NSFController nsfcontroller, TextureChunk texturechunk) : base(nsfcontroller, texturechunk)
+        public TextureChunkController(TextureChunk texturechunk, SubcontrollerGroup parentGroup) : base(texturechunk, parentGroup)
         {
             TextureChunk = texturechunk;
-            AddMenu(Crash.UI.Properties.Resources.TextureChunkController_AcRecalcChecksum, Menu_Recalculate_Checksum);
-            AddMenu(Crash.UI.Properties.Resources.TextureChunkController_AcRename, Menu_Rename_Entry);
-            AddMenu(Crash.UI.Properties.Resources.TextureChunkController_AcOpenViewer, Menu_Open_Viewer);
-            InvalidateNode();
-            InvalidateNodeImage();
+            AddMenu(CrashUI.Properties.Resources.TextureChunkController_AcRecalcChecksum, Menu_Recalculate_Checksum);
+            AddMenu(CrashUI.Properties.Resources.TextureChunkController_AcRename, Menu_Rename_Entry);
+            AddMenu(CrashUI.Properties.Resources.TextureChunkController_AcOpenViewer, Menu_Open_Viewer);
         }
 
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.TextureChunkController_Text, Entry.EIDToEName(TextureChunk.EID), NSFController.NSF.Chunks.IndexOf(TextureChunk) * 2 + 1);
-        }
+        public override bool EditorAvailable => Type.GetType("Mono.Runtime") == null;
 
-        public override void InvalidateNodeImage()
-        {
-            Node.ImageKey = "image";
-            Node.SelectedImageKey = "image";
-        }
-
-        protected override Control CreateEditor()
+        public override Control CreateEditor()
         {
             // Hack for Mono so it doesn't crash.
             if (Type.GetType("Mono.Runtime") != null)
@@ -52,13 +40,14 @@ namespace CrashEdit
 
         private void Menu_Rename_Entry()
         {
-            using NewEntryForm newentrywindow = new NewEntryForm(NSFController);
-            newentrywindow.Text = "Rename Entry";
-            newentrywindow.SetRenameMode(TextureChunk.EName);
-            if (newentrywindow.ShowDialog(Node.TreeView.TopLevelControl) == DialogResult.OK)
+            using (NewEntryForm newentrywindow = new NewEntryForm(GetNSF(), GameVersion))
             {
-                TextureChunk.EID = newentrywindow.EID;
-                InvalidateNode();
+                newentrywindow.Text = "Rename Entry";
+                newentrywindow.SetRenameMode(TextureChunk.EName);
+                if (newentrywindow.ShowDialog() == DialogResult.OK)
+                {
+                    TextureChunk.EID = newentrywindow.EID;
+                }
             }
         }
 
@@ -73,7 +62,7 @@ namespace CrashEdit
                 {
                     frmViewer = null;
                 };
-                frmViewer.Show(Node.TreeView);
+                frmViewer.Show();
             }
             else
                 frmViewer.Select();

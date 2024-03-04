@@ -1,9 +1,7 @@
-using Crash;
-using System.Drawing;
+using CrashEdit.Crash;
 using System.Drawing.Imaging;
-using System.Windows.Forms;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class PaletteEntryBox : UserControl
     {

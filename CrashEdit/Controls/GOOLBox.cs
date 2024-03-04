@@ -1,7 +1,6 @@
-using Crash;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class GOOLBox : UserControl
     {

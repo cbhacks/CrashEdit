@@ -1,21 +1,20 @@
-using System;
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class OldModelEntry : Entry
     {
-        private readonly List<OldModelPolygon> polygons;
-        private readonly List<OldModelStruct> structs;
+        private List<OldModelPolygon> polygons;
+        private List<OldModelStruct> structs;
 
         public OldModelEntry(byte[] info, IEnumerable<OldModelPolygon> polygons, IEnumerable<OldModelStruct> structs, int eid) : base(eid)
         {
-            if (polygons == null)
-                throw new ArgumentNullException(nameof(polygons));
+            ArgumentNullException.ThrowIfNull(polygons);
             Info = info ?? throw new ArgumentNullException(nameof(info));
             this.polygons = new List<OldModelPolygon>(polygons);
             this.structs = new List<OldModelStruct>(structs);
         }
+
+        public override string Title => $"Old Model ({EName})";
+        public override string ImageKey => "ThingCrimson";
 
         public override int Type => 2;
         public byte[] Info { get; }

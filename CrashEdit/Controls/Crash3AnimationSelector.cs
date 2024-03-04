@@ -1,9 +1,6 @@
-﻿using Crash;
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
+﻿using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class Crash3AnimationSelector : UserControl
     {
@@ -84,9 +81,9 @@ namespace CrashEdit
                     if (modelentry != null)
                     {
                         if (frame == null)
-                            rewardcontrol = new UndockableControl(new AnimationEntryViewer(nsf, anim.EID, -1, modelentry.EID));
+                            rewardcontrol = new AnimationEntryViewer(nsf, anim.EID, -1, modelentry.EID);
                         else
-                            rewardcontrol = new UndockableControl(new AnimationEntryViewer(nsf, anim.EID, anim.Frames.IndexOf(frame), modelentry.EID));
+                            rewardcontrol = new AnimationEntryViewer(nsf, anim.EID, anim.Frames.IndexOf(frame), modelentry.EID);
                         if (sender != null)
                         {
                             if (Program.C3AnimLinks.ContainsKey(anim.EName))
@@ -103,9 +100,9 @@ namespace CrashEdit
                     else
                     {
                         if (frame == null)
-                            rewardcontrol = new UndockableControl(new AnimationEntryViewer(nsf, anim.EID, -1, modelentry.EID));
+                            rewardcontrol = new AnimationEntryViewer(nsf, anim.EID, -1, modelentry.EID);
                         else
-                            rewardcontrol = new UndockableControl(new AnimationEntryViewer(nsf, anim.EID, anim.Frames.IndexOf(frame), modelentry.EID));
+                            rewardcontrol = new AnimationEntryViewer(nsf, anim.EID, anim.Frames.IndexOf(frame), modelentry.EID);
                     }
                     rewardcontrol.Dock = DockStyle.Fill;
                     Controls.Add(rewardcontrol);

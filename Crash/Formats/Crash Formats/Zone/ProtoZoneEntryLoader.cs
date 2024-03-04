@@ -1,9 +1,9 @@
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntryType(7, GameVersion.Crash1Beta1995)]
     public sealed class ProtoZoneEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items, int eid, GameVersion version)
+        public override Entry Load(byte[][] items, int eid)
         {
             if (items.Length < 2)
             {

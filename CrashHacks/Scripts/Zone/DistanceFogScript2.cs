@@ -1,5 +1,3 @@
-using Crash;
-
 namespace CrashHacks.Scripts.Zone
 {
     public sealed class DistanceFogScript2 : Script
@@ -35,7 +33,7 @@ namespace CrashHacks.Scripts.Zone
             }
         }
 
-        public override void Run(object value,GameVersion gameversion)
+        public override void Run(object value, GameVersion gameversion)
         {
             if (value is ZoneEntry)
             {
@@ -46,7 +44,7 @@ namespace CrashHacks.Scripts.Zone
                 entry.Header[0x2B0] = 0x0;
                 entry.Header[0x2B1] = 0x7F;
                 entry.Header[0x2B2] = 0x0;*/
-                for (int i = 0;i < entry.Entities.Count;i++)
+                for (int i = 0; i < entry.Entities.Count; i++)
                 {
                     Entity entity = entry.Entities[i];
                     if (i % 3 == 1 && entity.Name == null && !entity.ExtraProperties.ContainsKey(0x185))
@@ -54,7 +52,7 @@ namespace CrashHacks.Scripts.Zone
                         EntityPropertyRow<uint> row = new EntityPropertyRow<uint>();
                         row.Values.Add(0x20);
                         row.MetaValue = 0;
-                        entity.ExtraProperties[0x185] = new EntityUInt32Property(new EntityPropertyRow<uint>[] {row,row});
+                        entity.ExtraProperties[0x185] = new EntityUInt32Property(new EntityPropertyRow<uint>[] { row, row });
                     }
                     if (entity.LoadListA != null)
                     {

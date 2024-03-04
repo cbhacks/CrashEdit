@@ -1,54 +1,29 @@
-using Crash;
-using Crash.GOOLIns;
-using System.Windows.Forms;
+using CrashEdit.Crash;
+using CrashEdit.Crash.GOOLIns;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(GOOLEntry))]
     public sealed class GOOLEntryController : EntryController
     {
-        public GOOLEntryController(EntryChunkController entrychunkcontroller, GOOLEntry goolentry) : base(entrychunkcontroller, goolentry)
+        public GOOLEntryController(GOOLEntry goolentry, SubcontrollerGroup parentGroup) : base(goolentry, parentGroup)
         {
             GOOLEntry = goolentry;
             foreach (int ext_eid in goolentry.Externals)
             {
-                GOOLEntry ext_gool = EntryChunkController.NSFController.NSF.GetEntry<GOOLEntry>(ext_eid);
+                GOOLEntry ext_gool = GetEntry<GOOLEntry>(ext_eid);
                 if (ext_gool != null)
                 {
                     ext_gool.ParentGOOL = goolentry;
                 }
             }
-            InvalidateNode();
-            InvalidateNodeImage();
             //if (GOOLEntry.Version == GOOLVersion.Version0)
             //    AddMenu("Export as Crash 1 GOOL", Menu_ExportAsC1);
         }
 
-        public override void InvalidateNode()
-        {
-            switch (GOOLEntry.Version)
-            {
-                case GOOLVersion.Version0:
-                    Node.Text = string.Format(Crash.UI.Properties.Resources.GOOLv0EntryController_Text, GOOLEntry.EName);
-                    break;
-                case GOOLVersion.Version1:
-                    Node.Text = string.Format(Crash.UI.Properties.Resources.GOOLv1EntryController_Text, GOOLEntry.EName);
-                    break;
-                case GOOLVersion.Version2:
-                    Node.Text = string.Format(Crash.UI.Properties.Resources.GOOLv2EntryController_Text, GOOLEntry.EName);
-                    break;
-                case GOOLVersion.Version3:
-                    Node.Text = string.Format(Crash.UI.Properties.Resources.GOOLv3EntryController_Text, GOOLEntry.EName);
-                    break;
-            }
-        }
+        public override bool EditorAvailable => true;
 
-        public override void InvalidateNodeImage()
-        {
-            Node.ImageKey = "codeb";
-            Node.SelectedImageKey = "codeb";
-        }
-
-        protected override Control CreateEditor()
+        public override Control CreateEditor()
         {
             return new GOOLBox(GOOLEntry);
         }
@@ -69,9 +44,9 @@ namespace CrashEdit
                     BitConv.ToInt32(newinstructions, i * 4, newval);
                 }
                 else
-                    BitConv.ToInt32(newinstructions, i * 4, ins.Save());
+                    BitConv.ToInt32(newinstructions, i * 4, GOOLEntry.Instructions[i].Save());
             }
-            GOOLEntry newgool = new(GOOLVersion.Version1, GOOLEntry.Header, newinstructions, GOOLEntry.Data, GOOLEntry.StateMap, GOOLEntry.StateDescriptors, GOOLEntry.Anims, GOOLEntry.EID);
+            GOOLEntry newgool = new GOOLEntry(GOOLVersion.Version1, GOOLEntry.Header, newinstructions, GOOLEntry.Data, GOOLEntry.StateMap, GOOLEntry.StateDescriptors, GOOLEntry.Anims, GOOLEntry.EID);
             FileUtil.SaveFile(newgool.Save(), FileFilters.NSEntry, FileFilters.Any);
         }
     }

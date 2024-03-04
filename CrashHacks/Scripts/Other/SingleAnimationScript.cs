@@ -1,8 +1,6 @@
-using Crash;
-using System;
-
 namespace CrashHacks.Scripts.Other
 {
+
     public sealed class SingleAnimationScript : Script
     {
         private Random random;
@@ -43,12 +41,12 @@ namespace CrashHacks.Scripts.Other
             }
         }
 
-        public override void Run(object value,GameVersion gameversion)
+        public override void Run(object value, GameVersion gameversion)
         {
             if (value is AnimationEntry entry)
             {
                 int f = random.Next(entry.Frames.Count);
-                for (int i = 0;i < entry.Frames.Count;i++)
+                for (int i = 0; i < entry.Frames.Count; i++)
                 {
                     entry.Frames[i] = entry.Frames[f];
                 }

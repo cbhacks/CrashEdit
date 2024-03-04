@@ -1,4 +1,4 @@
-﻿namespace CrashEdit.Forms
+﻿namespace CrashEdit.CE.Forms
 {
     partial class ProgressBarForm
     {

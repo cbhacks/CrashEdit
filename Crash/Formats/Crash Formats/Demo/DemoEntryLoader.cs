@@ -1,4 +1,4 @@
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntryType(19, GameVersion.Crash1BetaMAY11)]
     [EntryType(19, GameVersion.Crash1)]
@@ -6,7 +6,7 @@ namespace Crash
     [EntryType(19, GameVersion.Crash3)]
     public sealed class DemoEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items, int eid, GameVersion version)
+        public override Entry Load(byte[][] items, int eid)
         {
             if (items.Length != 1)
             {

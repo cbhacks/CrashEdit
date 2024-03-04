@@ -1,26 +1,14 @@
-using Crash;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
-    public sealed class UnprocessedEntryController : MysteryMultiItemEntryController
+    [OrphanLegacyController(typeof(UnprocessedEntry))]
+    public sealed class UnprocessedEntryController : EntryController
     {
-        public UnprocessedEntryController(EntryChunkController entrychunkcontroller, UnprocessedEntry unprocessedentry) : base(entrychunkcontroller, unprocessedentry)
+        public UnprocessedEntryController(UnprocessedEntry unprocessedentry, SubcontrollerGroup parentGroup) : base(unprocessedentry, parentGroup)
         {
             UnprocessedEntry = unprocessedentry;
-            AddMenu(string.Format(Crash.UI.Properties.Resources.UnprocessedEntryController_AcProcess, UnprocessedEntry.EName), Menu_Process_Entry);
-            InvalidateNode();
-            InvalidateNodeImage();
-        }
-
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.UnprocessedEntryController_Text, UnprocessedEntry.Type, UnprocessedEntry.EName);
-        }
-
-        public override void InvalidateNodeImage()
-        {
-            Node.ImageKey = "thing";
-            Node.SelectedImageKey = "thing";
+            AddMenu(string.Format(CrashUI.Properties.Resources.UnprocessedEntryController_AcProcess, UnprocessedEntry.EName), Menu_Process_Entry);
         }
 
         public UnprocessedEntry UnprocessedEntry { get; }
@@ -30,24 +18,14 @@ namespace CrashEdit
             Entry processedentry;
             try
             {
-                processedentry = UnprocessedEntry.Process(EntryChunkController.NSFController.GameVersion);
+                processedentry = UnprocessedEntry.Process(GameVersion);
             }
             catch (LoadAbortedException)
             {
                 return;
             }
-            var trv = Node.TreeView;
-            trv.BeginUpdate();
-            int index = UnprocessedEntry.ChunkIndexOf();
-            processedentry.ChunkReplaceWith(UnprocessedEntry);
-            EntryController processedentrycontroller = EntryChunkController.CreateEntryController(processedentry);
-            EntryChunkController.InsertNode(index, processedentrycontroller);
-            if (Node.IsSelected)
-            {
-                Node.TreeView.SelectedNode = processedentrycontroller.Node;
-            }
-            Dispose();
-            trv.EndUpdate();
+            int index = EntryChunkController.EntryChunk.Entries.IndexOf(UnprocessedEntry);
+            EntryChunkController.EntryChunk.Entries[index] = processedentry;
         }
     }
 }

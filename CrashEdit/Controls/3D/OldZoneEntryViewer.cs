@@ -1,13 +1,8 @@
-using Crash;
-using CrashEdit.Properties;
-using OpenTK;
-using OpenTK.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
+using CrashEdit.CE.Properties;
+using CrashEdit.Crash;
+using OpenTK.Mathematics;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class OldZoneEntryViewer : OldSceneryEntryViewer
     {
@@ -61,7 +56,7 @@ namespace CrashEdit
         protected override void OnInvalidated(InvalidateEventArgs e)
         {
             base.OnInvalidated(e);
-            octree_renderer?.UpdateForm();
+            octree_renderer.UpdateForm();
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -268,7 +263,7 @@ namespace CrashEdit
                 anchor_cam_pos += anchor_cam.XDir / 4096F * move_x * move_speed;
                 anchor_cam_pos += anchor_cam.YDir / 4096F * move_y * move_speed;
                 anchor_cam_pos += anchor_cam.ZDir / 4096F * move_z * move_speed;
-                
+
                 if (anchor_cam_pos > anchor_cam.Positions.Count - 1)
                 {
                     if (anchor_next_cam != -1)
@@ -464,7 +459,7 @@ namespace CrashEdit
                     if (slst != null)
                     {
                         var polys = slst.DecodeAt((int)Math.Floor(anchor_cam_pos));
-                        con_debug += string.Format("wgeo polys: {0}/1460({1:F2}%)/2610({2:F2}%)\n", polys.Count, 100f*polys.Count/1460, 100f*polys.Count/2610);
+                        con_debug += string.Format("wgeo polys: {0}/1460({1:F2}%)/2610({2:F2}%)\n", polys.Count, 100f * polys.Count / 1460, 100f * polys.Count / 2610);
                         SetSortList(polys);
                     }
                 }
@@ -690,7 +685,7 @@ namespace CrashEdit
             {
                 vaoTris.PushAttrib(trans: trans + BoxVerts[BoxTriIndices[i]] * 0.5f + new Vector3(0.5f), rgba: cols[i / 6], st: uvs_side[i % 6]);
             }
-            
+
             Rectangle topTexRect = OldResources.TexMap[GetBoxTopTexture(subtype)];
             Span<Vector2> uvs_top = stackalloc Vector2[6] {
                 new Vector2(topTexRect.Left, topTexRect.Bottom),

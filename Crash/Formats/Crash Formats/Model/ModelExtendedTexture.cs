@@ -1,13 +1,10 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public struct ModelExtendedTexture
     {
         public static ModelExtendedTexture Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length != 4)
                 throw new ArgumentException("Value must be 4 bytes long.", nameof(data));
             int rest = BitConv.FromInt32(data, 0);

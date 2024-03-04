@@ -1,13 +1,10 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public struct OldModelPolygon
     {
         public static OldModelPolygon Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length != 8)
                 throw new ArgumentException("Value must be 8 bytes long.", nameof(data));
             short vertexa = BitConv.FromInt16(data, 0);

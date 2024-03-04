@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntityPropertyType(18)]
     public sealed class EntityVictimPropertyLoader : EntityBasicPropertyLoader<EntityVictim>

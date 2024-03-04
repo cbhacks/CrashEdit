@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class OldSLSTDelta
     {
         public static OldSLSTDelta Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length < 8)
             {
                 ErrorManager.SignalError("OldSLSTDelta: Data is too short");
@@ -55,18 +51,15 @@ namespace Crash
             return new OldSLSTDelta(removenodes, addnodes, swapnodes);
         }
 
-        private readonly List<short> removenodes;
-        private readonly List<short> addnodes;
-        private readonly List<short> swapnodes;
+        private List<short> removenodes;
+        private List<short> addnodes;
+        private List<short> swapnodes;
 
         public OldSLSTDelta(IEnumerable<short> removenodes, IEnumerable<short> addnodes, IEnumerable<short> swapnodes)
         {
-            if (removenodes == null)
-                throw new ArgumentNullException(nameof(removenodes));
-            if (addnodes == null)
-                throw new ArgumentNullException(nameof(addnodes));
-            if (swapnodes == null)
-                throw new ArgumentNullException(nameof(swapnodes));
+            ArgumentNullException.ThrowIfNull(removenodes);
+            ArgumentNullException.ThrowIfNull(addnodes);
+            ArgumentNullException.ThrowIfNull(swapnodes);
             this.removenodes = new List<short>(removenodes);
             this.addnodes = new List<short>(addnodes);
             this.swapnodes = new List<short>(swapnodes);

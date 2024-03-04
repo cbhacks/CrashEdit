@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntityPropertyType(1)]
     public sealed class EntityUInt8PropertyLoader : EntityBasicPropertyLoader<byte>

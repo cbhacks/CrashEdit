@@ -1,13 +1,10 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public static class BitConv
     {
         public static short FromInt16(byte[] str, int offset)
         {
-            if (str == null)
-                throw new ArgumentNullException(nameof(str));
+            ArgumentNullException.ThrowIfNull(str);
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 2 > str.Length)
@@ -20,8 +17,7 @@ namespace Crash
 
         public static ushort FromUInt16(byte[] str, int offset)
         {
-            if (str == null)
-                throw new ArgumentNullException(nameof(str));
+            ArgumentNullException.ThrowIfNull(str);
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 2 > str.Length)
@@ -34,8 +30,7 @@ namespace Crash
 
         public static int FromInt24(byte[] str, int offset)
         {
-            if (str == null)
-                throw new ArgumentNullException(nameof(str));
+            ArgumentNullException.ThrowIfNull(str);
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 3 > str.Length)
@@ -56,8 +51,21 @@ namespace Crash
 
         public static int FromInt32(byte[] str, int offset)
         {
-            if (str == null)
-                throw new ArgumentNullException(nameof(str));
+            ArgumentNullException.ThrowIfNull(str);
+            if (offset < 0)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            if (offset + 4 > str.Length)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            int result = 0;
+            result |= str[offset + 0] << 8 * 0;
+            result |= str[offset + 1] << 8 * 1;
+            result |= str[offset + 2] << 8 * 2;
+            result |= str[offset + 3] << 8 * 3;
+            return result;
+        }
+
+        public static int FromInt32(ReadOnlySpan<byte> str, int offset)
+        {
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 4 > str.Length)
@@ -72,8 +80,7 @@ namespace Crash
 
         public static void ToInt16(byte[] str, int offset, short value)
         {
-            if (str == null)
-                throw new ArgumentNullException(nameof(str));
+            ArgumentNullException.ThrowIfNull(str);
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 2 > str.Length)
@@ -84,8 +91,7 @@ namespace Crash
 
         public static void ToInt24(byte[] str, int offset, int value)
         {
-            if (str == null)
-                throw new ArgumentNullException(nameof(str));
+            ArgumentNullException.ThrowIfNull(str);
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 3 > str.Length)
@@ -99,8 +105,7 @@ namespace Crash
 
         public static void ToInt32(byte[] str, int offset, int value)
         {
-            if (str == null)
-                throw new ArgumentNullException(nameof(str));
+            ArgumentNullException.ThrowIfNull(str);
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 4 > str.Length)

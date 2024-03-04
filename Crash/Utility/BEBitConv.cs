@@ -1,13 +1,10 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public static class BEBitConv
     {
         public static short FromInt16(byte[] str, int offset)
         {
-            if (str == null)
-                throw new ArgumentNullException(nameof(str));
+            ArgumentNullException.ThrowIfNull(str);
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 2 > str.Length)
@@ -20,8 +17,7 @@ namespace Crash
 
         public static int FromInt32(byte[] str, int offset)
         {
-            if (str == null)
-                throw new ArgumentNullException(nameof(str));
+            ArgumentNullException.ThrowIfNull(str);
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 4 > str.Length)
@@ -36,8 +32,7 @@ namespace Crash
 
         public static void ToInt16(byte[] str, int offset, short value)
         {
-            if (str == null)
-                throw new ArgumentNullException(nameof(str));
+            ArgumentNullException.ThrowIfNull(str);
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 2 > str.Length)
@@ -48,8 +43,7 @@ namespace Crash
 
         public static void ToInt32(byte[] str, int offset, int value)
         {
-            if (str == null)
-                throw new ArgumentNullException(nameof(str));
+            ArgumentNullException.ThrowIfNull(str);
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + 4 > str.Length)

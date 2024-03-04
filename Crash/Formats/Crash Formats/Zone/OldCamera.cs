@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
-    public sealed class OldCamera
+    public sealed class OldCamera : IResource
     {
         public static OldCamera Load(byte[] data)
         {
@@ -58,12 +55,11 @@ namespace Crash
             return new OldCamera(slsteid, garbage, neighborcount, neighbors, entrypoint, exitpoint, mode, avgdist, zoom, unk1, unk2, unk3, xdir, ydir, zdir, position, blank);
         }
 
-        private readonly List<OldCameraPosition> position;
+        private List<OldCameraPosition> position;
 
         public OldCamera(int slsteid, int garbage, int neighborcount, OldCameraNeighbor[] neighbors, byte entrypoint, byte exitpoint, short mode, short avgdist, short zoom, short unk1, short unk2, short unk3, short xdir, short ydir, short zdir, IEnumerable<OldCameraPosition> position, short blank)
         {
-            if (position == null)
-                throw new ArgumentNullException(nameof(position));
+            ArgumentNullException.ThrowIfNull(position);
             SLSTEID = slsteid;
             Garbage = garbage;
             NeighborCount = neighborcount;
@@ -82,6 +78,9 @@ namespace Crash
             this.position = new List<OldCameraPosition>(position);
             Blank = blank;
         }
+
+        public string Title => "Camera";
+        public string ImageKey => "Arrow";
 
         public int SLSTEID { get; set; }
         public int Garbage { get; set; }

@@ -1,16 +1,22 @@
-namespace Crash
+namespace CrashEdit.Crash
 {
     public struct SLSTPolygonID
     {
-        public SLSTPolygonID(short id, byte state, byte world)
+        short poly;
+
+        public SLSTPolygonID(short poly)
         {
-            ID = id;
-            State = state;
-            World = world;
+            this.poly = poly;
         }
 
-        public short ID { get; }
-        public byte State { get; }
-        public byte World { get; }
+        public SLSTPolygonID(int id, int state, int world)
+        {
+            poly = unchecked((short)(id & 0x7FF | (state << 11) | (world << 13)));
+        }
+
+        public int Poly => poly;
+        public int ID => poly & 0x7FF;
+        public int State => (poly >> 11) & 0x3;
+        public int World => (poly >> 13) & 0x7;
     }
 }

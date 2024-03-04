@@ -1,11 +1,9 @@
-using Crash;
-using CrashEdit.Properties;
-using OpenTK;
-using OpenTK.Graphics;
-using System;
-using System.Collections.Generic;
+using CrashEdit.CE.Properties;
+using CrashEdit.Crash;
+using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public sealed class OldAnimationEntryViewer : GLViewer
     {
@@ -18,7 +16,8 @@ namespace CrashEdit
         private bool enable_interp = true;
         private int cull_mode = 1;
 
-        private VAO[] vaoModel => vaoListCrash1;
+        private static VBO[] vboModel;
+        private VAO[] vaoModel = new VAO[2];
         private BlendMode blend_mask;
 
         public OldAnimationEntryViewer(NSF nsf, int anim_eid, int frame) : base(nsf)
@@ -31,6 +30,21 @@ namespace CrashEdit
         {
             eid_anim = anim_eid;
             frame_id = -1;
+        }
+
+        private static void LoadGLStatic()
+        {
+            vboModel = [new(), new()];
+        }
+
+        protected override void LoadGL()
+        {
+            base.LoadGL();
+
+            for (int i = 0; i < 2; ++i)
+            {
+                vaoModel[i] = new(shaders.GetShader("crash1"), PrimitiveType.Triangles, vboModel[i]);
+            }
         }
 
         private IList<OldFrame> GetFrames()
@@ -141,7 +155,7 @@ namespace CrashEdit
 
                     MathExt.Lerp(ref vaoModel[0].UserTrans, new Vector3(frame2.XOffset, frame2.YOffset, frame2.ZOffset), interp);
 
-                    for (int i = 0; i < vaoModel[0].vert_count; ++i)
+                    for (int i = 0; i < vaoModel[0].CurVert; ++i)
                     {
                         MathExt.Lerp(ref vaoModel[0].Verts[i].trans, vaoModel[1].Verts[i].trans, interp);
                         if (!colored)
@@ -162,7 +176,7 @@ namespace CrashEdit
                 if (enable_normals && !colored)
                 {
                     var ofs = vaoModel[0].UserTrans;
-                    for (int i = 0; i < vaoModel[0].vert_count; ++i)
+                    for (int i = 0; i < vaoModel[0].CurVert; ++i)
                     {
                         var p = (vaoModel[0].Verts[i].trans + ofs) * vaoModel[0].UserScale;
                         vaoLines.PushAttrib(trans: p, rgba: (Rgba)Color4.White);
@@ -237,7 +251,7 @@ namespace CrashEdit
                 // render stuff
                 foreach (OldModelPolygon polygon in model.Polygons)
                 {
-                    int cur_idx = vao.vert_count;
+                    int cur_idx = vao.CurVert;
                     OldModelStruct str = model.Structs[polygon.Unknown & 0x7FFF];
                     if (str is OldModelTexture tex)
                     {
@@ -288,7 +302,7 @@ namespace CrashEdit
         private void RenderVertex(VAO vao, OldFrame frame, int vert_idx)
         {
             OldFrameVertex vert = frame.Vertices[vert_idx];
-            int cur_vert_idx = vao.vert_count;
+            int cur_vert_idx = vao.CurVert;
             vao.Verts[cur_vert_idx].trans = new(vert.X, vert.Y, vert.Z);
             if (colored)
             {
@@ -301,7 +315,17 @@ namespace CrashEdit
             {
                 vao.Verts[cur_vert_idx].normal = Vertex.PackNormal(new Vector3(vert.NormalX, vert.NormalY, vert.NormalZ) / 127);
             }
-            vao.vert_count++;
+            vao.CurVert++;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            for (var i = 0; i < vaoModel.Length; ++i)
+            {
+                vaoModel[i]?.Dispose();
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

@@ -1,13 +1,9 @@
-using System;
-using System.IO;
-using System.Windows.Forms;
-
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public static class FileUtil
     {
-        private static readonly OpenFileDialog openfiledlg;
-        private static readonly SaveFileDialog savefiledlg;
+        private static OpenFileDialog openfiledlg;
+        private static SaveFileDialog savefiledlg;
 
         static FileUtil()
         {
@@ -52,8 +48,7 @@ namespace CrashEdit
 
         public static bool SaveFile(byte[] data, params string[] filters)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             savefiledlg.Filter = string.Join("|", filters);
             if (savefiledlg.ShowDialog(Owner) == DialogResult.OK)
             {
@@ -68,8 +63,7 @@ namespace CrashEdit
 
         public static bool SaveFile(string defaultname, byte[] data, params string[] filters)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             savefiledlg.Filter = string.Join("|", filters);
             savefiledlg.FileName = defaultname;
             if (savefiledlg.ShowDialog(Owner) == DialogResult.OK)

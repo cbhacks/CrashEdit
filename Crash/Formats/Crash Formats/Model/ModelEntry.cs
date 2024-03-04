@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class ModelEntry : Entry
     {
         private List<ModelTransformedTriangle> triangles;
-        private readonly List<SceneryColor> colors;
-        private readonly List<ModelTexture> textures;
-        private readonly List<ModelExtendedTexture> animatedtextures;
-        private readonly List<ModelPosition> positions;
+        private List<SceneryColor> colors;
+        private List<ModelTexture> textures;
+        private List<ModelExtendedTexture> animatedtextures;
+        private List<ModelPosition> positions;
 
         public ModelEntry(byte[] info, uint[] polygons, IEnumerable<SceneryColor> colors, IEnumerable<ModelTexture> textures, IEnumerable<ModelExtendedTexture> animatedtextures, IEnumerable<ModelPosition> positions, int eid) : base(eid)
         {
@@ -173,6 +170,16 @@ namespace Crash
             }
             return result;
         }
+
+        public override string Title =>
+            (Positions == null) ?
+            $"Model ({EName})" :
+            $"Compressed Model ({EName})";
+
+        public override string ImageKey =>
+            (Positions == null) ?
+            "ThingCrimson" :
+            "ThingRed";
 
         public override int Type => 2;
         public byte[] Info { get; }

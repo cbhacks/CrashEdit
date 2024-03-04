@@ -1,38 +1,23 @@
-using Crash;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(AnimationEntry))]
     public sealed class AnimationEntryController : EntryController
     {
-        public AnimationEntryController(EntryChunkController entrychunkcontroller, AnimationEntry animationentry) : base(entrychunkcontroller, animationentry)
+        public AnimationEntryController(AnimationEntry animationentry, SubcontrollerGroup parentGroup) : base(animationentry, parentGroup)
         {
             AnimationEntry = animationentry;
-            foreach (Frame frame in animationentry.Frames)
-            {
-                AddNode(new FrameController(this, frame));
-            }
-            InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.AnimationEntryController_Text, AnimationEntry.EName);
-        }
+        public override bool EditorAvailable => true;
 
-        public override void InvalidateNodeImage()
-        {
-            Node.ImageKey = "limeb";
-            Node.SelectedImageKey = "limeb";
-        }
-
-        protected override Control CreateEditor()
+        public override Control CreateEditor()
         {
             if (AnimationEntry.IsNew)
-                return new Crash3AnimationSelector(NSF, AnimationEntry);
+                return new Crash3AnimationSelector(GetNSF(), AnimationEntry);
             else
-                return new UndockableControl(new AnimationEntryViewer(NSF, Entry.EID));
+                return new AnimationEntryViewer(GetNSF(), Entry.EID);
         }
 
         public AnimationEntry AnimationEntry { get; }

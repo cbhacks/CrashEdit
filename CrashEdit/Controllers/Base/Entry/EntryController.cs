@@ -1,97 +1,76 @@
-using Crash;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
-    public abstract class EntryController : Controller
+    [OrphanLegacyController(typeof(Entry))]
+    public class EntryController : LegacyController
     {
-        public EntryController(EntryChunkController entrychunkcontroller, Entry entry)
+        public EntryController(Entry entry, SubcontrollerGroup parentGroup) : base(parentGroup, entry)
         {
-            EntryChunkController = entrychunkcontroller;
             Entry = entry;
-            AddMenu(string.Format(Crash.UI.Properties.Resources.EntryController_AcExport, entry.EName), Menu_Export_Entry);
-            AddMenu(string.Format(Crash.UI.Properties.Resources.EntryController_AcDelete, entry.EName), Menu_Delete_Entry);
-            AddMenu(string.Format(Crash.UI.Properties.Resources.EntryController_AcRename, entry.EName), Menu_Rename_Entry);
+            AddMenu(string.Format(CrashUI.Properties.Resources.EntryController_AcRename, entry.EName), Menu_Rename_Entry);
             if (!(this is UnprocessedEntryController))
             {
-                AddMenu(string.Format(Crash.UI.Properties.Resources.EntryController_AcDeprocess, entry.EName), Menu_Unprocess_Entry);
+                AddMenu(string.Format(CrashUI.Properties.Resources.EntryController_AcDeprocess, entry.EName), Menu_Unprocess_Entry);
             }
         }
 
-        public EntryChunkController EntryChunkController { get; private set; }
+        protected EntryChunkController EntryChunkController => (EntryChunkController)Modern.Parent.Legacy;
         public Entry Entry { get; }
 
-        public NSF NSF => EntryChunkController.NSFController.NSF;
-
-        public override bool Move(Controller newcontroller, bool commit)
+        public override bool CanMoveTo(CrashEdit.LegacyController newcontroller)
         {
-            if (newcontroller is EntryChunkController entrychunkcontroller)
+            if (newcontroller is EntryChunkController)
             {
-                if (commit)
-                {
-                    Entry.ChunkMoveTo(entrychunkcontroller.EntryChunk);
-                    EntryChunkController = entrychunkcontroller;
-                    Node.Remove();
-                    EntryChunkController.Node.Nodes.Add(Node);
-                }
                 return true;
             }
             else
             {
-                return base.Move(newcontroller, commit);
+                return base.CanMoveTo(newcontroller);
+            }
+        }
+
+        public override void MoveTo(CrashEdit.LegacyController newcontroller)
+        {
+            if (newcontroller is EntryChunkController newecc)
+            {
+                EntryChunkController.EntryChunk.Entries.Remove(Entry);
+                newecc.EntryChunk.Entries.Add(Entry);
+            }
+            else
+            {
+                base.MoveTo(newcontroller);
             }
         }
 
         protected T FindEID<T>(int eid) where T : class, IEntry
         {
-            return NSF.GetEntry<T>(eid);
-        }
-
-        private void Menu_Export_Entry()
-        {
-            FileUtil.SaveFile(Entry.Save(), FileFilters.NSEntry, FileFilters.Any);
-        }
-
-        private void Menu_Delete_Entry()
-        {
-            Entry.ChunkRemove();
-            EntryChunkController.Editor.Invalidate();
-            Dispose();
+            return GetEntry<T>(eid);
         }
 
         private void Menu_Unprocess_Entry()
         {
-            var trv = Node.TreeView;
-            trv.BeginUpdate();
-            int index = Entry.ChunkIndexOf();
+            int index = EntryChunkController.EntryChunk.Entries.IndexOf(Entry);
             UnprocessedEntry unprocessedentry = Entry.Unprocess();
-            unprocessedentry.ChunkReplaceWith(Entry);
-            UnprocessedEntryController unprocessedentrycontroller = new UnprocessedEntryController(EntryChunkController, unprocessedentry);
-            EntryChunkController.InsertNode(index, unprocessedentrycontroller);
-            if (Node.IsSelected)
-            {
-                trv.SelectedNode = unprocessedentrycontroller.Node;
-            }
-            Dispose();
-            trv.EndUpdate();
+            EntryChunkController.EntryChunk.Entries[index] = unprocessedentry;
         }
 
         private void Menu_Rename_Entry()
         {
-            using NewEntryForm newentrywindow = new NewEntryForm(EntryChunkController.NSFController);
-            newentrywindow.Text = "Rename Entry";
-            newentrywindow.SetRenameMode(Entry.EName);
-            if (newentrywindow.ShowDialog(Node.TreeView.TopLevelControl) == DialogResult.OK)
+            using (NewEntryForm newentrywindow = new NewEntryForm(GetNSF(), GameVersion))
             {
-                Entry.EID = newentrywindow.EID;
-                InvalidateNode();
-                EntryChunkController.Editor.Invalidate();
-                ContextMenu.MenuItems[0].Text = string.Format(Crash.UI.Properties.Resources.EntryController_AcExport, Entry.EName);
-                ContextMenu.MenuItems[1].Text = string.Format(Crash.UI.Properties.Resources.EntryController_AcDelete, Entry.EName);
-                ContextMenu.MenuItems[2].Text = string.Format(Crash.UI.Properties.Resources.EntryController_AcRename, Entry.EName);
-                if (!(this is UnprocessedEntryController))
+                newentrywindow.Text = "Rename Entry";
+                newentrywindow.SetRenameMode(Entry.EName);
+                if (newentrywindow.ShowDialog() == DialogResult.OK)
                 {
-                    ContextMenu.MenuItems[3].Text = string.Format(Crash.UI.Properties.Resources.EntryController_AcDeprocess, Entry.EName);
+                    Entry.EID = newentrywindow.EID;
+                    EntryChunkController.NeedsNewEditor = true;
+                    LegacyVerbs[0]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcDelete, Entry.EName);
+                    LegacyVerbs[1]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcRename, Entry.EName);
+                    if (!(this is UnprocessedEntryController))
+                    {
+                        LegacyVerbs[2]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcDeprocess, Entry.EName);
+                    }
                 }
             }
         }

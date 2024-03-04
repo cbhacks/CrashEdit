@@ -1,6 +1,4 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class WavebankEntry : Entry
     {
@@ -11,6 +9,9 @@ namespace Crash
             ID = id;
             Samples = samples ?? throw new ArgumentNullException(nameof(samples));
         }
+
+        public override string Title => $"Wavebank ({EName})";
+        public override string ImageKey => "MusicNoteYellow";
 
         public override int Type => 14;
         public int ID { get; }

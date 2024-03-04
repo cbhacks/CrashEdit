@@ -1,15 +1,12 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class RIFFData : RIFFItem
     {
-        private readonly byte[] data;
+        private byte[] data;
 
         public RIFFData(string name, byte[] data) : base(name)
         {
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
+            ArgumentNullException.ThrowIfNull(name);
             this.data = data ?? throw new ArgumentNullException(nameof(data));
         }
 

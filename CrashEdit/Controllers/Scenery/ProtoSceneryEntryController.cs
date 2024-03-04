@@ -1,36 +1,24 @@
-using Crash;
-using System.Collections.Generic;
-using System.Windows.Forms;
+using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
+    [OrphanLegacyController(typeof(ProtoSceneryEntry))]
     public sealed class ProtoSceneryEntryController : EntryController
     {
-        public ProtoSceneryEntryController(EntryChunkController entrychunkcontroller, ProtoSceneryEntry protosceneryentry) : base(entrychunkcontroller, protosceneryentry)
+        public ProtoSceneryEntryController(ProtoSceneryEntry protosceneryentry, SubcontrollerGroup parentGroup) : base(protosceneryentry, parentGroup)
         {
             ProtoSceneryEntry = protosceneryentry;
             AddMenuSeparator();
             AddMenu("Export as OBJ", Menu_Export_OBJ);
             AddMenu("Export as COLLADA", Menu_Export_COLLADA);
             AddMenu("Export as Crash 1 WGEO", Menu_ExportAsC1);
-            InvalidateNode();
-            InvalidateNodeImage();
         }
 
-        public override void InvalidateNode()
-        {
-            Node.Text = string.Format(Crash.UI.Properties.Resources.ProtoSceneryEntryController_Text, ProtoSceneryEntry.EName);
-        }
+        public override bool EditorAvailable => true;
 
-        public override void InvalidateNodeImage()
+        public override Control CreateEditor()
         {
-            Node.ImageKey = "blueb";
-            Node.SelectedImageKey = "blueb";
-        }
-
-        protected override Control CreateEditor()
-        {
-            return new UndockableControl(new ProtoSceneryEntryViewer(NSF, ProtoSceneryEntry.EID));
+            return new ProtoSceneryEntryViewer(GetNSF(), Entry.EID);
         }
 
         public ProtoSceneryEntry ProtoSceneryEntry { get; }
@@ -104,15 +92,15 @@ namespace CrashEdit
                         {
                             var poly = polygons[k];
                             if (poly.VertexA == j)
-                                poly.VertexA = (short)i;
+                                poly.VertexA = i;
                             else if (poly.VertexA > j)
                                 --poly.VertexA;
                             if (poly.VertexB == j)
-                                poly.VertexB = (short)i;
+                                poly.VertexB = i;
                             else if (poly.VertexB > j)
                                 --poly.VertexB;
                             if (poly.VertexC == j)
-                                poly.VertexC = (short)i;
+                                poly.VertexC = i;
                             else if (poly.VertexC > j)
                                 --poly.VertexC;
                             polygons[k] = poly;

@@ -1,9 +1,6 @@
-﻿using Crash;
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
+﻿using CrashEdit.Crash;
 
-namespace CrashEdit
+namespace CrashEdit.CE
 {
     public partial class InterpolatorForm : Form
     {

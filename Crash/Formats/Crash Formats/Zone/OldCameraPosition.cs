@@ -1,4 +1,4 @@
-namespace Crash
+namespace CrashEdit.Crash
 {
     public readonly struct OldCameraPosition
     {

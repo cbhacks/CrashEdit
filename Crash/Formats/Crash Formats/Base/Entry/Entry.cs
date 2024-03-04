@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 
-namespace Crash
+namespace CrashEdit.Crash
 {
-    public abstract class Entry : IEntry
+    public abstract class Entry : IEntry, IResource
     {
         public const int Magic = 0x100FFFF;
         public const int NullEID = 0x6396347F;
@@ -48,8 +46,7 @@ namespace Crash
 
         public static UnprocessedEntry Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length < 16)
             {
                 ErrorManager.SignalError("Entry: Data is too short");
@@ -132,6 +129,9 @@ namespace Crash
         {
             EID = eid;
         }
+
+        public abstract string Title { get; }
+        public abstract string ImageKey { get; }
 
         public abstract int Type { get; }
         public int EID { get; set; }

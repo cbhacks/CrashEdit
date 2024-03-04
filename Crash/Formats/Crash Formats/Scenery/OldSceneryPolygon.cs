@@ -1,13 +1,10 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public struct OldSceneryPolygon
     {
         public static OldSceneryPolygon Load(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
             if (data.Length != 8)
                 throw new ArgumentException("Value must be 8 bytes long.", nameof(data));
             int worda = BitConv.FromInt32(data, 0);
@@ -32,18 +29,18 @@ namespace Crash
                 throw new ArgumentOutOfRangeException(nameof(vertexc));
             if (modelstruct < 0 || modelstruct > 0xFFF)
                 throw new ArgumentOutOfRangeException(nameof(modelstruct));
-            VertexA = (short)vertexa;
-            VertexB = (short)vertexb;
-            VertexC = (short)vertexc;
+            VertexA = vertexa;
+            VertexB = vertexb;
+            VertexC = vertexc;
             ModelStruct = modelstruct;
             Page = page;
             Anim0 = anim0;
             Unknown = unknown;
         }
 
-        public short VertexA { get; set; }
-        public short VertexB { get; set; }
-        public short VertexC { get; set; }
+        public int VertexA { get; set; }
+        public int VertexB { get; set; }
+        public int VertexC { get; set; }
         public int ModelStruct { get; }
         public byte Page { get; }
         public byte Anim0 { get; }

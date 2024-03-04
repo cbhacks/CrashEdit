@@ -1,15 +1,12 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     [ChunkType(3)]
     public sealed class SoundChunkLoader : EntryChunkLoader
     {
-        public override Chunk Load(Entry[] entries, NSF nsf)
+        public override EntryChunk Load(Entry[] entries)
         {
-            if (entries == null)
-                throw new ArgumentNullException(nameof(entries));
-            return new SoundChunk(entries, nsf);
+            ArgumentNullException.ThrowIfNull(entries);
+            return new SoundChunk(entries);
         }
     }
 }

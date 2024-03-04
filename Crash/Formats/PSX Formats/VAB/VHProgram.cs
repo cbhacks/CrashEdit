@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     public sealed class VHProgram
     {
@@ -46,7 +43,7 @@ namespace Crash
             return new VHProgram(isoldversion, volume, priority, mode, panning, attribute, tones);
         }
 
-        private readonly List<VHTone> tones;
+        private List<VHTone> tones;
 
         public VHProgram(bool isoldversion)
         {
@@ -72,8 +69,7 @@ namespace Crash
 
         public VHProgram(bool isoldversion, byte volume, byte priority, byte mode, byte panning, short attribute, IEnumerable<VHTone> tones)
         {
-            if (tones == null)
-                throw new ArgumentNullException(nameof(tones));
+            ArgumentNullException.ThrowIfNull(tones);
             IsOldVersion = isoldversion;
             Volume = volume;
             Priority = priority;

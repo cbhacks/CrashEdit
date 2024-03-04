@@ -1,15 +1,28 @@
-using System;
-
-namespace Crash
+namespace CrashEdit.Crash
 {
     [EntryType(3, GameVersion.Crash2)]
-    [EntryType(3, GameVersion.Crash3)]
     public sealed class SceneryEntryLoader : EntryLoader
     {
-        public override Entry Load(byte[][] items, int eid, GameVersion version)
+        public override Entry Load(byte[][] items, int eid)
         {
-            if (items == null)
-                throw new ArgumentNullException(nameof(items));
+            return SceneryEntryLoaderInternal.LoadScenery(items, eid, false);
+        }
+    }
+
+    [EntryType(3, GameVersion.Crash3)]
+    public sealed class NewSceneryEntryLoader : EntryLoader
+    {
+        public override Entry Load(byte[][] items, int eid)
+        {
+            return SceneryEntryLoaderInternal.LoadScenery(items, eid, true);
+        }
+    }
+
+    internal static class SceneryEntryLoaderInternal
+    {
+        internal static Entry LoadScenery(byte[][] items, int eid, bool is_c3)
+        {
+            ArgumentNullException.ThrowIfNull(items);
             if (items.Length != 7)
             {
                 ErrorManager.SignalError("SceneryEntry: Wrong number of items");
@@ -55,7 +68,7 @@ namespace Crash
                 byte[] zdata = new byte[2];
                 Array.Copy(items[1], (vertexcount - 1 - i) * 4, xydata, 0, xydata.Length);
                 Array.Copy(items[1], vertexcount * 4 + i * 2, zdata, 0, zdata.Length);
-                vertices[i] = SceneryVertex.Load(xydata, zdata, version == GameVersion.Crash3);
+                vertices[i] = SceneryVertex.Load(xydata, zdata, is_c3);
             }
             SceneryTriangle[] triangles = new SceneryTriangle[trianglecount];
             for (int i = 0; i < trianglecount; i++)
@@ -96,7 +109,7 @@ namespace Crash
                 Array.Copy(items[6], i * 4, animatedtexturedata, 0, animatedtexturedata.Length);
                 animatedtextures[i] = ModelExtendedTexture.Load(animatedtexturedata);
             }
-            return new SceneryEntry(items[0], vertices, triangles, quads, textures, colors, animatedtextures, version == GameVersion.Crash3, eid);
+            return new SceneryEntry(items[0], vertices, triangles, quads, textures, colors, animatedtextures, is_c3, eid);
         }
     }
 }

@@ -1,6 +1,3 @@
-using Crash;
-using System;
-
 namespace CrashHacks.Scripts.Scenery
 {
     public sealed class FeastScript : Script
@@ -24,7 +21,7 @@ namespace CrashHacks.Scripts.Scenery
             return SupportLevel.Experimental;
         }
 
-        public override void Run(object value,GameVersion gameversion)
+        public override void Run(object value, GameVersion gameversion)
         {
             if (value is SceneryEntry)
             {
@@ -32,7 +29,7 @@ namespace CrashHacks.Scripts.Scenery
                 if (entry.Colors.Count < 1)
                     return;
                 SceneryColor feast = new SceneryColor(0, 0, 0, 0);
-                for (int i = 0;i < entry.Colors.Count;++i)
+                for (int i = 0; i < entry.Colors.Count; ++i)
                 {
                     SceneryColor newfeast = entry.Colors[i];
                     if (i != 0)
