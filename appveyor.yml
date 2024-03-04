@@ -1,0 +1,72 @@
+version: appveyor-{build}
+image: Visual Studio 2022
+shallow_clone: true
+environment:
+  CRASHEDIT_S3DEPLOY_ACCESSKEY_ID:
+    secure: vm68Yr9iFdgnH98tSRvqx1Kg6pX49e2cm9685GwH554=
+  CRASHEDIT_S3DEPLOY_ACCESSKEY_SECRET:
+    secure: i2KP8L+z+Txf6sYqGwZ8d7I+kDxQfLRBfLimncCKu8xPv3oF6hFsvVKFRVh/Tnd+
+configuration: Release
+platform: Any CPU
+dotnet_csproj:
+  patch: true
+  file: CrashEdit.csproj
+  version: '0.4.{build}'
+  assembly_version: '0.4.{build}'
+  file_version: '0.4.{build}'
+  informational_version: '0.4.{build}'
+build_script:
+  - nuget restore CrashEdit.sln
+  - msbuild CrashEdit.sln
+after_build:
+  - mkdir pkg
+  - mkdir pkg\ja
+  - mkdir pkg\Win32
+  - mkdir pkg\Win64
+  - mkdir pkg\runtimes
+  - copy .\README.md pkg
+  - copy .\README-CE2.md pkg
+  - copy .\CrashHacks\bin\Release\CrashHacks.exe pkg
+  - xcopy .\CrashEdit\bin\Release\Win32 pkg\Win32 /s /e
+  - xcopy .\CrashEdit\bin\Release\Win64 pkg\Win64 /s /e
+  - xcopy .\CrashEdit\bin\Release\runtimes pkg\runtimes /s /e
+  - copy .\CrashEdit\bin\Release\ja\Crash.UI.resources.dll pkg\ja
+  - copy .\CrashEdit\bin\Release\ja\CrashEdit.resources.dll pkg\ja
+  - copy .\CrashEdit\bin\Release\Crash.UI.dll pkg
+  - copy .\CrashEdit\bin\Release\CrashEdit.deps.json pkg
+  - copy .\CrashEdit\bin\Release\CrashEdit.dll pkg
+  - copy .\CrashEdit\bin\Release\CrashEdit.exe pkg
+  - copy .\CrashEdit\bin\Release\CrashEdit.Main.dll pkg
+  - copy .\CrashEdit\bin\Release\CrashEdit.runtimeconfig.json pkg
+  - copy .\CrashEdit\bin\Release\DiscUtils.Core.dll pkg
+  - copy .\CrashEdit\bin\Release\DiscUtils.Iso9660.dll pkg
+  - copy .\CrashEdit\bin\Release\DiscUtils.Streams.dll pkg
+  - copy .\CrashEdit\bin\Release\FTBitmapExtensions.dll pkg
+  - copy .\CrashEdit\bin\Release\ISO2PSX.dll pkg
+  - copy .\CrashEdit\bin\Release\Microsoft.Win32.SystemEvents.dll pkg
+  - copy .\CrashEdit\bin\Release\OpenTK.Core.dll pkg
+  - copy .\CrashEdit\bin\Release\OpenTK.Graphics.dll pkg
+  - copy .\CrashEdit\bin\Release\OpenTK.Mathematics.dll pkg
+  - copy .\CrashEdit\bin\Release\OpenTK.Windowing.Common.dll pkg
+  - copy .\CrashEdit\bin\Release\OpenTK.Windowing.Desktop.dll pkg
+  - copy .\CrashEdit\bin\Release\OpenTK.Windowing.GraphicsLibraryFramework.dll pkg
+  - copy .\CrashEdit\bin\Release\OpenTK.WinForms.dll pkg
+  - copy .\CrashEdit\bin\Release\SpaceWizards.SharpFont.dll pkg
+  - copy .\CrashEdit\bin\Release\System.Drawing.Common.dll pkg
+  - 7z a CrashEdit.zip .\pkg\*
+  - move CrashEdit.zip CrashEdit-%APPVEYOR_BUILD_NUMBER%-%APPVEYOR_REPO_COMMIT%.zip
+test: off
+artifacts:
+  - path: CrashEdit-$(APPVEYOR_BUILD_NUMBER)-$(APPVEYOR_REPO_COMMIT).zip
+    name: CRASHEDIT-FULLZIP
+deploy:
+  - provider: S3
+    access_key_id: $(CRASHEDIT_S3DEPLOY_ACCESSKEY_ID)
+    secret_access_key: $(CRASHEDIT_S3DEPLOY_ACCESSKEY_SECRET)
+    bucket: builds.crashedit.cbhacks.com
+    region: us-east-1
+    folder: appveyor/build-$(APPVEYOR_BUILD_NUMBER)
+    max_error_retry: 2
+    artifact: CRASHEDIT-FULLZIP
+    on:
+      branch: deprecate
