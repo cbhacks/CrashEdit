@@ -38,9 +38,9 @@ after_build:
   - copy .\CrashEdit\bin\Release\net8.0-windows\CrashEdit.exe pkg
   - copy .\CrashEdit\bin\Release\net8.0-windows\CrashEdit.Main.dll pkg
   - copy .\CrashEdit\bin\Release\net8.0-windows\CrashEdit.runtimeconfig.json pkg
-  - copy .\CrashEdit\bin\Release\net8.0-windows\CrashHacks.dll pkg
-  - copy .\CrashEdit\bin\Release\net8.0-windows\CrashHacks.exe pkg
-  - copy .\CrashEdit\bin\Release\net8.0-windows\CrashHacks.runtimeconfig.json pkg
+  - copy .\CrashHacks\bin\Release\net8.0-windows\CrashHacks.dll pkg
+  - copy .\CrashHacks\bin\Release\net8.0-windows\CrashHacks.exe pkg
+  - copy .\CrashHacks\bin\Release\net8.0-windows\CrashHacks.runtimeconfig.json pkg
   - copy .\CrashEdit\bin\Release\net8.0-windows\DiscUtils.Core.dll pkg
   - copy .\CrashEdit\bin\Release\net8.0-windows\DiscUtils.Iso9660.dll pkg
   - copy .\CrashEdit\bin\Release\net8.0-windows\DiscUtils.Streams.dll pkg
