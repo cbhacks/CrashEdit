@@ -46,7 +46,6 @@ after_build:
   - copy .\CrashEdit\bin\Release\net8.0-windows\DiscUtils.Streams.dll pkg
   - copy .\CrashEdit\bin\Release\net8.0-windows\FTBitmapExtensions.dll pkg
   - copy .\CrashEdit\bin\Release\net8.0-windows\ISO2PSX.dll pkg
-  - copy .\CrashEdit\bin\Release\net8.0-windows\Microsoft.Win32.SystemEvents.dll pkg
   - copy .\CrashEdit\bin\Release\net8.0-windows\OpenTK.Core.dll pkg
   - copy .\CrashEdit\bin\Release\net8.0-windows\OpenTK.Graphics.dll pkg
   - copy .\CrashEdit\bin\Release\net8.0-windows\OpenTK.Mathematics.dll pkg
