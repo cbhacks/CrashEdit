@@ -129,6 +129,7 @@ namespace CrashEdit.CE
         private double dbg_run_ms;
         private long dbg_gpu_time;
         private int qryGpuTime;
+        private static bool debugInitPrinted = false;
 
         #region Internal fields for input status and handling.
         private bool run = false;
@@ -234,7 +235,11 @@ namespace CrashEdit.CE
             // Console.WriteLine($"flags: {flags}");
             if ((flags & (int)ContextFlagMask.ContextFlagDebugBit) != 0)
             {
-                Console.WriteLine("GL debug enabled.");
+                if (!debugInitPrinted)
+                {
+                    Console.WriteLine("GL debug enabled.");
+                    debugInitPrinted = true;
+                }
                 // Enable debug callbacks.
                 GL.Enable(EnableCap.DebugOutput);
                 GL.DebugMessageCallback((source, type, id, severity, length, message, userParam) =>
