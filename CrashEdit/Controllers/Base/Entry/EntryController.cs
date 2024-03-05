@@ -9,7 +9,7 @@ namespace CrashEdit.CE
         {
             Entry = entry;
             AddMenu(string.Format(CrashUI.Properties.Resources.EntryController_AcRename, entry.EName), Menu_Rename_Entry);
-            if (!(this is UnprocessedEntryController))
+            if (this is not UnprocessedEntryController)
             {
                 AddMenu(string.Format(CrashUI.Properties.Resources.EntryController_AcDeprocess, entry.EName), Menu_Unprocess_Entry);
             }
@@ -65,12 +65,11 @@ namespace CrashEdit.CE
                 {
                     Entry.EID = newentrywindow.EID;
                     EntryChunkController.NeedsNewEditor = true;
-                    LegacyVerbs[0]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcDelete, Entry.EName);
-                    LegacyVerbs[1]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcRename, Entry.EName);
-                    if (!(this is UnprocessedEntryController))
-                    {
-                        LegacyVerbs[2]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcDeprocess, Entry.EName);
-                    }
+                    LegacyVerbs[0]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcRename, Entry.EName);
+                    if (this is not UnprocessedEntryController)
+                        LegacyVerbs[1]._text = string.Format(CrashUI.Properties.Resources.EntryController_AcDeprocess, Entry.EName);
+                    else
+                        LegacyVerbs[1]._text = string.Format(CrashUI.Properties.Resources.UnprocessedEntryController_AcProcess, Entry.EName);
                 }
             }
         }
