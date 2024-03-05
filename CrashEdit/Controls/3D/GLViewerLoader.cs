@@ -8,10 +8,6 @@ namespace CrashEdit.CE
 {
     public sealed class GLViewerLoader : GLViewer
     {
-        public GLViewerLoader() : base()
-        {
-        }
-
         protected override IEnumerable<IPosition> CorePositions
         {
             get

@@ -18,8 +18,7 @@ namespace CrashEdit
 
         public object Resource { get; }
 
-        public List<LegacyVerb> LegacyVerbs { get; } =
-            new List<LegacyVerb>();
+        public List<LegacyVerb> LegacyVerbs { get; } = [];
 
         public virtual bool EditorAvailable => false;
 
