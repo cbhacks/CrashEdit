@@ -362,10 +362,10 @@ namespace CrashEdit.CE
         {
             switch (mode)
             {
-                case 0: return "frontface culling";
+                default:
+                case 0: return "no culling";
                 case 1: return "backface culling";
-                case 2:
-                default: return "no culling";
+                case 2: return "frontface culling";
             }
         }
 
