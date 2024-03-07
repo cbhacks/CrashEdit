@@ -207,7 +207,6 @@
   <data name="Toolbar_UndoAction" xml:space="preserve">
     <value>Undo {0}</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Toolbar_UndoNone" xml:space="preserve">
     <value>Undo</value>
   </data>
@@ -688,7 +687,7 @@ as Meters: {3:F3}m</value>
     <value>W/A/S/D to move, Q/E to pan up/down</value>
   </data>
   <data name="ViewerControls_MoveAligned" xml:space="preserve">
-    <value>Hold Ctrl for aligned movement</value>
+    <value>Hold Shift for aligned movement</value>
   </data>
   <data name="ViewerControls_OpenOctreeWindow" xml:space="preserve">
     <value>Open octree node window</value>
@@ -758,5 +757,8 @@ as Meters: {3:F3}m</value>
   </data>
   <data name="ViewerControls_Zoom" xml:space="preserve">
     <value>Scroll wheel to zoom</value>
+  </data>
+  <data name="ViewerControls_ToggleSlowAnim" xml:space="preserve">
+    <value>Toggle half-speed animations ({0})</value>
   </data>
 </root>

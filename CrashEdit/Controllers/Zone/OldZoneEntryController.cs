@@ -31,23 +31,17 @@ namespace CrashEdit.CE
         void Menu_AddEntity()
         {
             short id = 6;
-            while (true)
+            var entities = new List<OldEntity>();
+
+            foreach (OldZoneEntry zone in GetEntries<OldZoneEntry>())
             {
-                foreach (OldZoneEntry zone in GetEntries<OldZoneEntry>())
-                {
-                    foreach (OldEntity otherentity in zone.Entities)
-                    {
-                        if (otherentity.ID == id)
-                        {
-                            goto FOUND_ID;
-                        }
-                    }
-                }
-                break;
-            FOUND_ID:
-                ++id;
-                continue;
+                entities.AddRange(zone.Entities);
             }
+            while (entities.Find(x => x.ID == id) != null)
+            {
+                ++id;
+            }
+
             OldEntity newentity = OldEntity.Load(new OldEntity(0x0018, 3, 0, id, 0, 0, 0, 0, 0, new List<EntityPosition>() { new EntityPosition(0, 0, 0) }, 0).Save());
             OldZoneEntry.Entities.Add(newentity);
         }

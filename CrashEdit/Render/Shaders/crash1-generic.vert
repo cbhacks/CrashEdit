@@ -8,12 +8,6 @@ in ivec2 tex;
 
 uniform mat4 PVM;
 
-uniform int art;
-
-uniform vec3 trans;
-uniform vec3 scale;
-uniform float scaleScalar;
-
 uniform int blendmask;
 uniform int enableTex;
 
@@ -33,6 +27,6 @@ void main(void)
         // discard wrong blend modes, but always let textures pass on solid render
         gl_Position = vec4(0);
     } else {
-        gl_Position = PVM * vec4( (position+trans)*scale, 1.0 );
+        gl_Position = PVM * vec4( position, 1.0 );
     }
 }

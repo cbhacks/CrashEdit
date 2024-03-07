@@ -88,15 +88,6 @@ namespace CrashEdit.CE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cache shader uniform locations.
-        /// </summary>
-        internal static string Config_chkCacheShaderUniformLoc {
-            get {
-                return ResourceManager.GetString("Config_chkCacheShaderUniformLoc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Display frame collision by default.
         /// </summary>
         internal static string Config_chkCollisionDisplay {
@@ -241,7 +232,7 @@ namespace CrashEdit.CE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Amount.
+        ///   Looks up a localized string similar to Size.
         /// </summary>
         internal static string Config_lblAnimGrid {
             get {
@@ -268,29 +259,11 @@ namespace CrashEdit.CE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Height.
-        /// </summary>
-        internal static string Config_lblH {
-            get {
-                return ResourceManager.GetString("Config_lblH", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Language (requires restart).
         /// </summary>
         internal static string Config_lblLang {
             get {
                 return ResourceManager.GetString("Config_lblLang", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Width.
-        /// </summary>
-        internal static string Config_lblW {
-            get {
-                return ResourceManager.GetString("Config_lblW", resourceCulture);
             }
         }
         
@@ -1819,7 +1792,7 @@ namespace CrashEdit.CE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hold Ctrl for aligned movement.
+        ///   Looks up a localized string similar to Hold Shift for aligned movement.
         /// </summary>
         internal static string ViewerControls_MoveAligned {
             get {
@@ -1878,6 +1851,15 @@ namespace CrashEdit.CE.Properties {
         internal static string ViewerControls_ToggleNormals {
             get {
                 return ResourceManager.GetString("ViewerControls_ToggleNormals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle half-speed animations ({0}).
+        /// </summary>
+        internal static string ViewerControls_ToggleSlowAnim {
+            get {
+                return ResourceManager.GetString("ViewerControls_ToggleSlowAnim", resourceCulture);
             }
         }
         

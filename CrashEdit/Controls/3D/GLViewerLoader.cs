@@ -88,5 +88,10 @@ namespace CrashEdit.CE
             fontTable = new();
             texFont = fontTable.LoadFontAndUpload(GL.GenTexture(), fontLib, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), Settings.Default.FontName), Settings.Default.FontSize);
         }
+
+        protected override void CollectTPAGs()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
