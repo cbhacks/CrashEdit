@@ -4,63 +4,32 @@ using OpenTK.Mathematics;
 
 namespace CrashEdit.CE
 {
-    public class SceneryEntryViewer : GLViewer
+    public class SceneryEntryViewer : BaseSceneryEntryViewer<SceneryEntry>
     {
-        private List<int> worlds;
+        private List<SLSTPolygonID>? sortlist;
 
-        private static VBO vboWorld;
-        private VAO vaoWorld;
-        Vector3 world_offset;
-        private BlendMode blend_mask;
+        public SceneryEntryViewer(NSF nsf, int world) : base(nsf, world) { }
 
-        public SceneryEntryViewer(NSF nsf, int world) : base(nsf)
+        public SceneryEntryViewer(NSF nsf, IEnumerable<int> worlds) : base(nsf, worlds) { }
+
+        protected override void SetWorldOffset(SceneryEntry world)
         {
-            worlds = [world];
-        }
-
-        public SceneryEntryViewer(NSF nsf, IEnumerable<int> worlds) : base(nsf)
-        {
-            this.worlds = new(worlds);
-        }
-
-        private static void LoadGLStatic()
-        {
-            vboWorld = new VBO();
-        }
-
-        protected override void LoadGL()
-        {
-            base.LoadGL();
-
-            vaoWorld = new(shaders.GetShader("crash1"), PrimitiveType.Triangles, vboWorld);
-        }
-
-        protected IEnumerable<SceneryEntry> GetWorlds()
-        {
-            foreach (int eid in worlds)
+            if (world.IsSky)
             {
-                var world = nsf.GetEntry<SceneryEntry>(eid);
-                if (world != null)
-                {
-                    yield return world;
-                }
+                world_offset = -render.Projection.Trans * GameScales.WorldC1;
+                if (world.IsC3)
+                    world_offset -= new Vector3(0x2000);
             }
+            else
+                world_offset = new Vector3(world.XOffset, world.YOffset, world.ZOffset);
         }
 
-        protected IEnumerable<SceneryEntry> GetWorlds(bool want_sky)
+        protected void SetSortList(IEnumerable<SLSTPolygonID> sortlist)
         {
-            foreach (SceneryEntry world in GetWorlds())
-            {
-                if (world.IsSky == want_sky)
-                {
-                    yield return world;
-                }
-            }
-        }
-
-        protected void SetWorlds(IEnumerable<int> worlds)
-        {
-            this.worlds = new(worlds);
+            if (sortlist != null)
+                this.sortlist = new(sortlist);
+            else
+                this.sortlist = null;
         }
 
         protected override IEnumerable<IPosition> CorePositions
@@ -79,146 +48,179 @@ namespace CrashEdit.CE
             }
         }
 
-        private Dictionary<int, short> CollectTPAGs()
+        protected override void CollectTPAGs()
         {
-            // collect tpag eids
-            Dictionary<int, short> tex_eids = new();
+            tpages.Clear();
             foreach (var world in GetWorlds())
             {
                 for (int i = 0, m = world.TPAGCount; i < m; ++i)
                 {
                     int tpag_eid = world.GetTPAG(i);
-                    if (!tex_eids.ContainsKey(tpag_eid))
-                        tex_eids[tpag_eid] = (short)tex_eids.Count;
+                    if (!tpages.ContainsKey(tpag_eid))
+                        tpages[tpag_eid] = (short)tpages.Count;
                 }
             }
-            return tex_eids;
         }
 
         protected override void Render()
         {
             base.Render();
 
-            // setup textures
-            var tex_eids = CollectTPAGs();
-            SetupTPAGs(tex_eids);
+            // collect valid worlds
+            var all_worlds = GetWorlds();
+            vaoWorld.TestRealloc(all_worlds.Sum(x => (x?.Triangles.Count ?? 0) + (x?.Quads.Count ?? 0) * 2) * 3);
 
-            // render skies first then other things
+            // render skies first, then other things
             for (int i = 0; i < 2; ++i)
             {
-                IEnumerable<SceneryEntry> worlds_to_use = GetWorlds(i == 0);
-                vaoWorld.ZBufDisableWrite = i == 0;
-                vaoWorld.UserScale = new Vector3(1 / GameScales.WorldC1);
+                bool sky = i == 0;
+                vaoWorld.ZBufDisableWrite = sky;
 
-                int nb = 0;
-                foreach (var world in worlds_to_use)
-                {
-                    nb += world.Triangles.Count * 3 + world.Quads.Count * 6;
-                }
-                vaoWorld.TestRealloc(nb);
                 vaoWorld.DiscardVerts();
 
                 // render stuff
                 blend_mask = BlendMode.Solid;
-                foreach (var world in worlds_to_use)
+                if (sortlist == null)
                 {
-                    RenderWorld(world, tex_eids);
+                    foreach (var world in all_worlds)
+                    {
+                        if (world == null || world.IsSky != sky)
+                            continue;
+                        RenderWorld(world);
+                    }
+                }
+                else
+                {
+                    SceneryEntry lastworld = null;
+                    foreach (var poly_id in sortlist)
+                    {
+                        if (poly_id.World >= all_worlds.Count)
+                            continue;
+                        var world = all_worlds[poly_id.World];
+                        if (world == null || world.IsSky != sky)
+                            continue;
+                        if (world != lastworld)
+                        {
+                            SetWorldOffset(world);
+                            lastworld = world;
+                        }
+                        if (poly_id.State == 0)
+                            RenderTriangle(world, poly_id.ID);
+                        else
+                            RenderQuad(world, poly_id.ID, poly_id.State);
+                    }
                 }
 
-                // render passes
-                RenderWorldPass(BlendMode.Solid);
-                RenderWorldPass(BlendMode.Trans);
-                RenderWorldPass(BlendMode.Subtractive);
-                RenderWorldPass(BlendMode.Additive);
+                RenderPasses();
             }
         }
 
-        protected void RenderWorld(SceneryEntry world, Dictionary<int, short> tex_eids)
+        protected override void RenderWorld(SceneryEntry world)
         {
-            if (world.IsSky)
+            SetWorldOffset(world);
+            for (int i = 0; i < world.Triangles.Count; ++i)
             {
-                world_offset = MathExt.Div(-render.Projection.Trans, vaoWorld.UserScale);
-                if (world.IsC3)
-                    world_offset -= new Vector3(0x2000);
+                RenderTriangle(world, i);
             }
-            else
-                world_offset = new Vector3(world.XOffset, world.YOffset, world.ZOffset);
-            foreach (SceneryTriangle tri in world.Triangles)
+            for (int i = 0; i < world.Quads.Count; ++i)
             {
-                if (tri.VertexA >= world.Vertices.Count || tri.VertexB >= world.Vertices.Count || tri.VertexC >= world.Vertices.Count) continue;
-                if (!ProcessTextureInfoC2(tri.Texture, tri.Animated, world.Textures, world.AnimatedTextures, out var polygon_texture_info))
-                    continue;
-                VertexTexInfo tex = new(); // completely untextured
-                if (polygon_texture_info != null)
-                {
-                    var info = polygon_texture_info;
-                    tex = new(tex_eids[world.GetTPAG(info.Page)], color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY);
-                    vaoWorld.Verts[vaoWorld.CurVert + 0].st = new(info.X2, info.Y2);
-                    vaoWorld.Verts[vaoWorld.CurVert + 1].st = new(info.X1, info.Y1);
-                    vaoWorld.Verts[vaoWorld.CurVert + 2].st = new(info.X3, info.Y3);
-
-                    blend_mask |= VertexTexInfo.GetBlendMode(info.BlendMode);
-                }
-                vaoWorld.Verts[vaoWorld.CurVert + 0].tex = tex;
-                vaoWorld.Verts[vaoWorld.CurVert + 1].tex = tex;
-                vaoWorld.Verts[vaoWorld.CurVert + 2].tex = tex;
-
-                RenderVertex(world, tri.VertexA);
-                RenderVertex(world, tri.VertexB);
-                RenderVertex(world, tri.VertexC);
+                RenderQuad(world, i, 3);
             }
-            foreach (SceneryQuad quad in world.Quads)
+        }
+
+        private void RenderTriangle(SceneryEntry world, int index)
+        {
+            var tri = world.Triangles[index];
+            if (tri.VertexA >= world.Vertices.Count || tri.VertexB >= world.Vertices.Count || tri.VertexC >= world.Vertices.Count)
+                return;
+            if (!ProcessTextureInfoC2(tri.Texture, tri.Animated, world.Textures, world.AnimatedTextures, out var polygon_texture_info))
+                return;
+            ref var a = ref vaoWorld.Verts[vaoWorld.CurVert + 0];
+            ref var b = ref vaoWorld.Verts[vaoWorld.CurVert + 1];
+            ref var c = ref vaoWorld.Verts[vaoWorld.CurVert + 2];
+            VertexTexInfo tex = new(); // completely untextured
+            if (polygon_texture_info != null)
             {
-                if (quad.VertexA >= world.Vertices.Count || quad.VertexB >= world.Vertices.Count || quad.VertexC >= world.Vertices.Count || quad.VertexD >= world.Vertices.Count) continue;
-                if (!ProcessTextureInfoC2(quad.Texture, quad.Animated, world.Textures, world.AnimatedTextures, out var polygon_texture_info))
-                    continue;
-                VertexTexInfo tex = new(); // completely untextured
-                if (polygon_texture_info != null)
-                {
-                    var info = polygon_texture_info;
-                    tex = new(tex_eids[world.GetTPAG(info.Page)], color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY);
-                    vaoWorld.Verts[vaoWorld.CurVert + 0].st = new(info.X2, info.Y2);
-                    vaoWorld.Verts[vaoWorld.CurVert + 1].st = new(info.X1, info.Y1);
-                    vaoWorld.Verts[vaoWorld.CurVert + 2].st = new(info.X3, info.Y3);
-                    vaoWorld.Verts[vaoWorld.CurVert + 4].st = new(info.X4, info.Y4);
+                var info = polygon_texture_info;
+                tex = new(tpages[world.GetTPAG(info.Page)], color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY);
+                a.st = new(info.X2, info.Y2);
+                b.st = new(info.X1, info.Y1);
+                c.st = new(info.X3, info.Y3);
 
-                    blend_mask |= VertexTexInfo.GetBlendMode(info.BlendMode);
-                }
-                vaoWorld.Verts[vaoWorld.CurVert + 0].tex = tex;
-                vaoWorld.Verts[vaoWorld.CurVert + 1].tex = tex;
-                vaoWorld.Verts[vaoWorld.CurVert + 2].tex = tex;
-                vaoWorld.Verts[vaoWorld.CurVert + 3].tex = tex;
-                vaoWorld.Verts[vaoWorld.CurVert + 4].tex = tex;
-                vaoWorld.Verts[vaoWorld.CurVert + 5].tex = tex;
+                blend_mask |= VertexTexInfo.GetBlendMode(info.BlendMode);
+            }
+            a.tex = tex;
+            b.tex = tex;
+            c.tex = tex;
 
+            RenderVertex(world, tri.VertexA);
+            RenderVertex(world, tri.VertexB);
+            RenderVertex(world, tri.VertexC);
+        }
+
+        private void RenderQuad(SceneryEntry world, int index, int state)
+        {
+            var quad = world.Quads[index];
+            if (quad.VertexA >= world.Vertices.Count || quad.VertexB >= world.Vertices.Count || quad.VertexC >= world.Vertices.Count || quad.VertexD >= world.Vertices.Count)
+                return;
+            if (!ProcessTextureInfoC2(quad.Texture, quad.Animated, world.Textures, world.AnimatedTextures, out var polygon_texture_info))
+                return;
+            ref var a = ref vaoWorld.Verts[vaoWorld.CurVert + 0];
+            ref var b = ref vaoWorld.Verts[vaoWorld.CurVert + 1];
+            ref var c = ref vaoWorld.Verts[vaoWorld.CurVert + 2];
+            ref var d = ref vaoWorld.Verts[vaoWorld.CurVert + 3];
+            ref var e = ref vaoWorld.Verts[vaoWorld.CurVert + 4];
+            ref var f = ref vaoWorld.Verts[vaoWorld.CurVert + 5];
+            VertexTexInfo tex = new(); // completely untextured
+            if (polygon_texture_info != null)
+            {
+                var info = polygon_texture_info;
+                tex = new(tpages[world.GetTPAG(info.Page)], color: info.ColorMode, blend: info.BlendMode, clutx: info.ClutX, cluty: info.ClutY);
+                a.st = new(info.X2, info.Y2);
+                b.st = new(info.X1, info.Y1);
+                c.st = new(info.X3, info.Y3);
+                d.st = new(info.X2, info.Y2);
+                e.st = new(info.X4, info.Y4);
+                f.st = new(info.X3, info.Y3);
+
+                blend_mask |= VertexTexInfo.GetBlendMode(info.BlendMode);
+            }
+            a.tex = tex;
+            b.tex = tex;
+            c.tex = tex;
+            d.tex = tex;
+            e.tex = tex;
+            f.tex = tex;
+
+            if (state == 1)
+            {
                 RenderVertex(world, quad.VertexA);
                 RenderVertex(world, quad.VertexB);
                 RenderVertex(world, quad.VertexC);
-                vaoWorld.CurVert++;
-                RenderVertex(world, quad.VertexD);
-                vaoWorld.CurVert++;
-
-                vaoWorld.Verts[vaoWorld.CurVert + 3 - 6] = vaoWorld.Verts[vaoWorld.CurVert + 0 - 6];
-                vaoWorld.Verts[vaoWorld.CurVert + 5 - 6] = vaoWorld.Verts[vaoWorld.CurVert + 2 - 6];
-
             }
-        }
-
-        private void RenderWorldPass(BlendMode pass)
-        {
-            if ((pass & blend_mask) != BlendMode.None)
+            else if (state == 2)
             {
-                SetBlendMode(pass);
-                vaoWorld.BlendMask = BlendModeIndex(pass);
-                vaoWorld.Render(render);
+                b = d;
+                RenderVertex(world, quad.VertexA);
+                RenderVertex(world, quad.VertexD);
+                RenderVertex(world, quad.VertexC);
+            }
+            else if (state == 3)
+            {
+                RenderVertex(world, quad.VertexA);
+                RenderVertex(world, quad.VertexB);
+                RenderVertex(world, quad.VertexC);
+                vaoWorld.CopyAttrib(vaoWorld.CurVert - 3); // copy A
+                RenderVertex(world, quad.VertexD);
+                vaoWorld.CopyAttrib(vaoWorld.CurVert - 3); // copy C
             }
         }
 
-        private void RenderVertex(SceneryEntry world, int vert_idx)
+        private void RenderVertex(SceneryEntry world, int index)
         {
-            SceneryVertex vert = world.Vertices[vert_idx];
+            SceneryVertex vert = world.Vertices[index];
             SceneryColor color = world.Colors[vert.Color];
-            vaoWorld.Verts[vaoWorld.CurVert].trans = new Vector3(vert.X, vert.Y, vert.Z) * 16 + world_offset;
+            vaoWorld.Verts[vaoWorld.CurVert].trans = (new Vector3(vert.X, vert.Y, vert.Z) * 16 + world_offset) / GameScales.WorldC1;
             vaoWorld.Verts[vaoWorld.CurVert].rgba = new(color.Red, color.Green, color.Blue, 255);
             vaoWorld.CurVert++;
         }

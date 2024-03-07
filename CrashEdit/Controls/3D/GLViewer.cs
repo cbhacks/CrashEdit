@@ -131,6 +131,8 @@ namespace CrashEdit.CE
         private int qryGpuTime;
         private static bool debugInitPrinted = false;
 
+        protected Dictionary<int, short> tpages = [];
+
         #region Internal fields for input status and handling.
         private bool run = false;
         private bool loaded = false;
@@ -215,6 +217,7 @@ namespace CrashEdit.CE
             public static readonly ControlsKeyboardInfo ZoneAnchorNextCam = new(Keys.Right, Resources.ViewerControls_ZoneAnchorNextCam);
             public static readonly ControlsKeyboardInfo ZoneAnchorSortList = new(Keys.L, Resources.ViewerControls_ZoneAnchorSortList);
             public static readonly ControlsKeyboardInfo ZoneAnchorDetach = new(Keys.K, Resources.ViewerControls_ZoneAnchorDetach);
+            public static readonly ControlsKeyboardInfo ToggleSlowAnim = new(Keys.P, Resources.ViewerControls_ToggleSlowAnim);
         }
         #endregion
 
@@ -398,7 +401,7 @@ namespace CrashEdit.CE
             if (CanMove())
             {
                 var d = GetMoveSpeed() * PerFrame;
-                if (KDown(Keys.Control))
+                if (KDown(Keys.Shift))
                 {
                     if (KDown(Keys.W, true)) render.Projection.CamTrans.Z += d;
                     if (KDown(Keys.S, true)) render.Projection.CamTrans.Z -= d;
@@ -1023,19 +1026,21 @@ namespace CrashEdit.CE
             }
         }
 
-        protected void SetupTPAGs(Dictionary<int, short> tex_eids)
+        protected abstract void CollectTPAGs();
+
+        protected void UploadTPAGs()
         {
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, texTpages);
 
             // fill texture
             GL.GetTextureLevelParameter(texTpages, 0, GetTextureParameter.TextureHeight, out int tpage_h);
-            if (tpage_h < tex_eids.Count * 128)
+            if (tpage_h < tpages.Count * 128)
             {
                 // realloc if not enough texture mem
-                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8ui, 512, tex_eids.Count * 128, 0, PixelFormat.RedInteger, PixelType.UnsignedByte, IntPtr.Zero);
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8ui, 512, tpages.Count * 128, 0, PixelFormat.RedInteger, PixelType.UnsignedByte, IntPtr.Zero);
             }
-            foreach (var kvp in tex_eids)
+            foreach (var kvp in tpages)
             {
                 var tpag = nsf.GetEntry<TextureChunk>(kvp.Key);
                 if (tpag != null)
@@ -1100,19 +1105,6 @@ namespace CrashEdit.CE
             }
             tex = default;
             return true;
-        }
-
-        protected override bool IsInputKey(Keys keyData)
-        {
-            switch (keyData)
-            {
-                case Keys.Right:
-                case Keys.Left:
-                case Keys.Up:
-                case Keys.Down:
-                    return true;
-            }
-            return base.IsInputKey(keyData);
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)

@@ -24,9 +24,9 @@ namespace CrashEdit.CE
             return (Modern.Root.Resource as LevelWorkspace)?.NSF;
         }
 
-        public T GetEntry<T>(int eid) where T : class, IEntry
+        public T? GetEntry<T>(int eid) where T : class, IEntry
         {
-            return (Modern.Root.Resource as LevelWorkspace)?.NSF?.GetEntry<T>(eid);
+            return (Modern.Root?.Resource as LevelWorkspace)?.NSF?.GetEntry<T>(eid);
         }
 
         public IEnumerable<T> GetEntries<T>() where T : class, IEntry

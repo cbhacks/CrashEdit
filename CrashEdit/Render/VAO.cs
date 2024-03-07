@@ -100,6 +100,8 @@ namespace CrashEdit.CE
             VBO.TestRealloc(vert_count);
         }
 
+        public ref Vertex GetCurrentVert() => ref Verts[VBO.CurVert];
+
         public void CopyAttrib(int idx)
         {
             TestRealloc();
@@ -110,62 +112,69 @@ namespace CrashEdit.CE
         public void PushAttrib(Vector3 trans = default)
         {
             TestRealloc();
-            Verts[VBO.CurVert].trans = trans;
+            ref var v = ref GetCurrentVert();
+            v.trans = trans;
             VBO.CurVert++;
         }
 
         public void PushAttrib(Vector3 trans = default, Rgba rgba = default)
         {
             TestRealloc();
-            Verts[VBO.CurVert].trans = trans;
-            Verts[VBO.CurVert].rgba = rgba;
+            ref var v = ref GetCurrentVert();
+            v.trans = trans;
+            v.rgba = rgba;
             VBO.CurVert++;
         }
 
         public void PushAttrib(Vector3 trans = default, Vector2 st = default)
         {
             TestRealloc();
-            Verts[VBO.CurVert].trans = trans;
-            Verts[VBO.CurVert].st = st;
+            ref var v = ref GetCurrentVert();
+            v.trans = trans;
+            v.st = st;
             VBO.CurVert++;
         }
 
         public void PushAttrib(Vector3 trans = default, Vector2 st = default, Rgba rgba = default)
         {
             TestRealloc();
-            Verts[VBO.CurVert].trans = trans;
-            Verts[VBO.CurVert].st = st;
-            Verts[VBO.CurVert].rgba = rgba;
+            ref var v = ref GetCurrentVert();
+            v.trans = trans;
+            v.st = st;
+            v.rgba = rgba;
             VBO.CurVert++;
         }
 
         public void PushAttrib(Vector3 trans = default, Vector2 st = default, Rgba rgba = default, Vector4 misc = default)
         {
             TestRealloc();
-            Verts[VBO.CurVert].trans = trans;
-            Verts[VBO.CurVert].st = st;
-            Verts[VBO.CurVert].rgba = rgba;
-            Verts[VBO.CurVert].misc = misc;
+            ref var v = ref GetCurrentVert();
+            v.trans = trans;
+            v.st = st;
+            v.rgba = rgba;
+            v.misc = misc;
             VBO.CurVert++;
         }
 
         public void PushAttrib(Vector3 trans = default, Vector4 misc = default)
         {
             TestRealloc();
-            Verts[VBO.CurVert].trans = trans;
-            Verts[VBO.CurVert].misc = misc;
+            ref var v = ref GetCurrentVert();
+            v.trans = trans;
+            v.misc = misc;
             VBO.CurVert++;
         }
 
         public void PushAttrib(Vector3 trans = default, int normal = default, Vector2 st = default, Rgba rgba = default, VertexTexInfo tex = default, Vector4 misc = default)
         {
             TestRealloc();
-            Verts[VBO.CurVert].trans = trans;
-            Verts[VBO.CurVert].normal = normal;
-            Verts[VBO.CurVert].st = st;
-            Verts[VBO.CurVert].rgba = rgba;
-            Verts[VBO.CurVert].tex = tex;
-            Verts[VBO.CurVert].misc = misc;
+            ref var v = ref GetCurrentVert();
+            v.trans = trans;
+            v.normal = normal;
+            v.st = st;
+            v.rgba = rgba;
+            v.tex = tex;
+            v.misc = misc;
             VBO.CurVert++;
         }
 

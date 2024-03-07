@@ -116,7 +116,7 @@ namespace CrashEdit.Crash
 
         private List<FrameCollision> collision;
         private List<FrameVertex> vertices;
-        public IList<Position> MakeVertices(ModelEntry model)
+        public IList<Position> MakeVertices(ModelEntry? model)
         {
             IList<Position> verts = new Position[Vertices.Count];
             if (model != null && model.Positions != null)

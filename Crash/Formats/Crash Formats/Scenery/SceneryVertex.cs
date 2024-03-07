@@ -1,6 +1,6 @@
 namespace CrashEdit.Crash
 {
-    public struct SceneryVertex
+    public readonly struct SceneryVertex
     {
         public static SceneryVertex Load(byte[] xydata, byte[] zdata, bool is_c3 = false)
         {

@@ -248,12 +248,12 @@ namespace CrashEdit.Crash
             }
         }
 
-        public T GetEntry<T>(string ename) where T : class, IEntry
+        public T? GetEntry<T>(string ename) where T : class, IEntry
         {
             return GetEntry<T>(Entry.ENameToEID(ename));
         }
 
-        public T GetEntry<T>(int eid) where T : class, IEntry
+        public T? GetEntry<T>(int eid) where T : class, IEntry
         {
             if (eid == Entry.NullEID || !Entry.ValidEID(eid))
                 return null;
