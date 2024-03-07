@@ -117,15 +117,7 @@ namespace CrashEdit.CE
 
                 UploadTPAGs();
 
-                // note: only buffer 0 is rendered
-                vaoModel[0].UserCullMode = _cullmode;
-                RenderFramePass(BlendMode.Solid);
-                if (render.EnableTexture)
-                {
-                    RenderFramePass(BlendMode.Trans);
-                    RenderFramePass(BlendMode.Subtractive);
-                    RenderFramePass(BlendMode.Additive);
-                }
+                RenderPasses();
 
                 if (_normals && !colored)
                 {

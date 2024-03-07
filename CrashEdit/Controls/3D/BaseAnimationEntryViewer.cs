@@ -74,6 +74,19 @@ namespace CrashEdit.CE
             throw new NotImplementedException();
         }
 
+        protected void RenderPasses()
+        {
+            // note: only buffer 0 is rendered
+            vaoModel[0].UserCullMode = _cullmode;
+            RenderFramePass(BlendMode.Solid);
+            if (render.EnableTexture)
+            {
+                RenderFramePass(BlendMode.Trans);
+                RenderFramePass(BlendMode.Subtractive);
+                RenderFramePass(BlendMode.Additive);
+            }
+        }
+
         protected void RenderFramePass(BlendMode pass)
         {
             if ((pass & blend_mask) != BlendMode.None)
