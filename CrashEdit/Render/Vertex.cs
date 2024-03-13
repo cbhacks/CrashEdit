@@ -3,6 +3,9 @@ using System.Runtime.InteropServices;
 
 namespace CrashEdit.CE
 {
+    [Flags]
+    public enum BlendMode { None = 0, Trans = 1, Additive = 2, Subtractive = 4, Solid = 8, All = Trans | Additive | Subtractive | Solid }
+
     [StructLayout(LayoutKind.Sequential, Size = 4)]
     public struct Rgba
     {
@@ -117,19 +120,19 @@ namespace CrashEdit.CE
 
         public readonly int Pack() => info;
 
-        public static GLViewer.BlendMode GetBlendMode(int blend)
+        public static BlendMode GetBlendMode(int blend)
         {
             switch (blend)
             {
-                case 0: return GLViewer.BlendMode.Trans;
-                case 1: return GLViewer.BlendMode.Additive;
-                case 2: return GLViewer.BlendMode.Subtractive;
+                case 0: return BlendMode.Trans;
+                case 1: return BlendMode.Additive;
+                case 2: return BlendMode.Subtractive;
                 case 3:
-                default: return GLViewer.BlendMode.Solid;
+                default: return BlendMode.Solid;
             }
         }
 
-        public readonly GLViewer.BlendMode GetBlendMode()
+        public readonly BlendMode GetBlendMode()
         {
             return GetBlendMode(Blend);
         }

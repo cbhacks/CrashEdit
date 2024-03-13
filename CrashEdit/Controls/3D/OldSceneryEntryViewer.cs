@@ -43,66 +43,51 @@ namespace CrashEdit.CE
 
         protected override void CollectTPAGs()
         {
-            tpages.Clear();
             foreach (var world in GetWorlds())
             {
                 for (int i = 0, m = world.TPAGCount; i < m; ++i)
                 {
-                    int tpag_eid = world.GetTPAG(i);
-                    if (!tpages.ContainsKey(tpag_eid))
-                        tpages[tpag_eid] = (short)tpages.Count;
+                    tpages.AddTexturePage(world.GetTPAG(i));
                 }
             }
         }
 
-        protected override void Render()
+        protected override void RenderWorlds(bool sky)
         {
-            base.Render();
-
             // collect valid worlds
             var all_worlds = GetWorlds();
-            vaoWorld.TestRealloc(all_worlds.Sum(x => x?.Polygons.Count ?? 0) * 3);
+            _vao.TestRealloc(all_worlds.Sum(x => sky == x?.IsSky ? x.Polygons.Count : 0) * 3);
 
-            // render skies first, then other things
-            for (int i = 0; i < 2; ++i)
+            // render stuff
+            if (sortlist == null)
             {
-                bool sky = i == 0;
-                vaoWorld.ZBufDisableWrite = sky;
-
-                vaoWorld.DiscardVerts();
-
-                // render stuff
-                blend_mask = BlendMode.Solid;
-                if (sortlist == null)
+                foreach (var world in all_worlds)
                 {
-                    foreach (var world in all_worlds)
-                    {
-                        if (world == null || world.IsSky != sky)
-                            continue;
-                        RenderWorld(world);
-                    }
+                    if (world == null || world.IsSky != sky)
+                        continue;
+                    RenderWorld(world);
                 }
-                else
-                {
-                    OldSceneryEntry lastworld = null;
-                    foreach (var poly_id in sortlist)
-                    {
-                        if (poly_id.World >= all_worlds.Count)
-                            continue;
-                        var world = all_worlds[poly_id.World];
-                        if (world == null || world.IsSky != sky)
-                            continue;
-                        if (world != lastworld)
-                        {
-                            SetWorldOffset(world);
-                            lastworld = world;
-                        }
-                        RenderPolygon(world, poly_id.ID);
-                    }
-                }
-
-                RenderPasses();
             }
+            else
+            {
+                OldSceneryEntry lastworld = null;
+                foreach (var poly_id in sortlist)
+                {
+                    if (poly_id.World >= all_worlds.Count)
+                        continue;
+                    var world = all_worlds[poly_id.World];
+                    if (world == null || world.IsSky != sky)
+                        continue;
+                    if (world != lastworld)
+                    {
+                        SetWorldOffset(world);
+                        lastworld = world;
+                    }
+                    RenderPolygon(world, poly_id.ID);
+                }
+            }
+
+            RenderPasses();
         }
 
         protected override void RenderWorld(OldSceneryEntry world)
@@ -118,9 +103,9 @@ namespace CrashEdit.CE
         {
             var polygon = world.Polygons[index];
             OldModelStruct str = world.Structs[polygon.ModelStruct];
-            ref var a = ref vaoWorld.Verts[vaoWorld.CurVert + 0];
-            ref var b = ref vaoWorld.Verts[vaoWorld.CurVert + 1];
-            ref var c = ref vaoWorld.Verts[vaoWorld.CurVert + 2];
+            ref var a = ref _vao.Verts[_vao.CurVert + 0];
+            ref var b = ref _vao.Verts[_vao.CurVert + 1];
+            ref var c = ref _vao.Verts[_vao.CurVert + 2];
             if (str is OldSceneryTexture tex)
             {
                 a.st = new(tex.U3, tex.V3);
@@ -129,7 +114,7 @@ namespace CrashEdit.CE
 
                 a.tex = new VertexTexInfo(tpages[world.GetTPAG(polygon.Page)], color: tex.ColorMode, blend: tex.BlendMode, clutx: tex.ClutX, cluty: tex.ClutY);
 
-                blend_mask |= VertexTexInfo.GetBlendMode(tex.BlendMode);
+                _vao.BlendModes |= VertexTexInfo.GetBlendMode(tex.BlendMode);
             }
             else
             {
@@ -144,10 +129,10 @@ namespace CrashEdit.CE
 
         private void RenderVertex(in OldSceneryVertex vert)
         {
-            ref var v = ref vaoWorld.Verts[vaoWorld.CurVert];
+            ref var v = ref _vao.Verts[_vao.CurVert];
             v.trans = (new Vector3(vert.X, vert.Y, vert.Z) + world_offset) / GameScales.WorldC1;
             v.rgba = new(vert.Red, vert.Green, vert.Blue, 255);
-            vaoWorld.CurVert++;
+            _vao.CurVert++;
         }
     }
 }

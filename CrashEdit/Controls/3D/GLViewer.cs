@@ -131,7 +131,7 @@ namespace CrashEdit.CE
         private int qryGpuTime;
         private static bool debugInitPrinted = false;
 
-        protected Dictionary<int, short> tpages = [];
+        protected TexturePageList tpages = [];
 
         #region Internal fields for input status and handling.
         private bool run = false;
@@ -531,6 +531,9 @@ namespace CrashEdit.CE
                     GL.EndQuery(QueryTarget.TimeElapsed);
 
                     GL.GetQueryObject(qryGpuTime, GetQueryObjectParam.QueryResult, out dbg_gpu_time);
+
+                    // clear the tpage cache for it to be repopulated and uploaded on the next frame
+                    tpages.Clear();
 
                     dbgContextDir.RemoveLast();
                 }
@@ -995,8 +998,6 @@ namespace CrashEdit.CE
             render.Projection.CamRot.X = MathHelper.DegreesToRadians(15);
         }
 
-        [Flags]
-        public enum BlendMode { None = 0, Trans = 1, Additive = 2, Subtractive = 4, Solid = 8, All = Trans | Additive | Subtractive | Solid }
         public static int BlendModeIndex(BlendMode blend) => MathExt.Log2((int)blend);
 
         public static void SetBlendMode(BlendMode bmode)
@@ -1050,7 +1051,9 @@ namespace CrashEdit.CE
             }
         }
 
-        protected bool ProcessTextureInfoC2(int in_tex_id, bool animated, IList<ModelTexture> textures, IList<ModelExtendedTexture> animated_textures, out ModelTexture tex)
+        protected bool ProcessTextureInfoC2(int in_tex_id, bool animated, IList<ModelTexture> textures, IList<ModelExtendedTexture> animated_textures, out ModelTexture tex) => ProcessTextureInfoC2(render.RealCurrentFrame / 2, in_tex_id, animated, textures, animated_textures, out tex);
+
+        public static bool ProcessTextureInfoC2(long texture_frame, int in_tex_id, bool animated, IList<ModelTexture> textures, IList<ModelExtendedTexture> animated_textures, out ModelTexture tex)
         {
             if (in_tex_id != 0 || animated)
             {
@@ -1073,7 +1076,7 @@ namespace CrashEdit.CE
                         }
                         else
                         {
-                            tex_id += (int)((render.RealCurrentFrame / 2 / (1 + anim.Latency) + anim.Delay) & anim.Mask);
+                            tex_id += (int)((texture_frame / (1 + anim.Latency) + anim.Delay) & anim.Mask);
                             if (anim.Leap)
                             {
                                 anim = animated_textures[++tex_id];

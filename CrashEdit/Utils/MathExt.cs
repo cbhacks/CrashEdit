@@ -9,6 +9,11 @@ namespace CrashEdit.CE
             return v - (float)Math.Truncate(v);
         }
 
+        public static double TruncatePart(this double v)
+        {
+            return v - Math.Truncate(v);
+        }
+
         public static Vector3 Div(Vector3 a, Vector3 b)
         {
             a.X /= b.X;

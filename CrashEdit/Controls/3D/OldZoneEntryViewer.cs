@@ -345,7 +345,7 @@ namespace CrashEdit.CE
             return ret;
         }
 
-        private OldZoneEntry GetMasterZone()
+        private OldZoneEntry? GetMasterZone()
         {
             if (!zones.Contains(this_zone))
                 return null;
@@ -403,12 +403,12 @@ namespace CrashEdit.CE
         protected override void Render()
         {
             var allzones = GetZones();
-            OldZoneEntry master_zone = GetMasterZone();
+            OldZoneEntry? master_zone = GetMasterZone();
 
             SetSortList(null);
             if (CheckAnchorMode())
             {
-                master_zone = nsf.GetEntry<OldZoneEntry>(anchor_zone);
+                master_zone = nsf.GetEntry<OldZoneEntry>(anchor_zone)!;
                 allzones.Clear();
                 for (int i = 0; i < master_zone.ZoneCount; ++i)
                 {

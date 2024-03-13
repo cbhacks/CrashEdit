@@ -99,6 +99,7 @@ namespace CrashEdit.CE
         {
             VBO.TestRealloc(vert_count);
         }
+        public void TestReallocExtra(int extra_verts) => VBO.TestRealloc(CurVert + extra_verts);
 
         public ref Vertex GetCurrentVert() => ref Verts[VBO.CurVert];
 
@@ -255,15 +256,11 @@ namespace CrashEdit.CE
         public Vector3 UserTrans;
         public Vector3 UserRot;
         public Vector3 UserScale;
-        public Quaternion UserQuat;
-        public Vector4 UserAxis;
-        public Matrix3 UserMat3;
-        public Vector3 UserColorAmb;
-        public Vector3 UserColorDiff;
         public int UserCullMode; // 0 - no cull, 1 - backface (default), 2 - frontface
         public float UserFloat;
         public float UserFloat2;
 
+        public BlendMode BlendModes;
         public int BlendMask;
 
         public bool ZBufDisable;
