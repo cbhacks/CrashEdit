@@ -1,6 +1,5 @@
 ﻿using CrashEdit.Crash;
 using OpenTK.Mathematics;
-using static CrashEdit.CE.GLViewer;
 
 namespace CrashEdit.CE
 {
@@ -15,6 +14,8 @@ namespace CrashEdit.CE
         public bool Colored { get; private set; }
 
         private Vector3 _globaltrans;
+        private Vector3 _globalscale;
+        private Matrix3 _globalrot;
         private Func<OldFrame, OldModelEntry?> _getmodelfunc;
 
         public void Setup(bool interpolate)
@@ -23,26 +24,29 @@ namespace CrashEdit.CE
             BlendMask = BlendMode.None;
         }
 
-        public bool RenderAnimFrame(Vector3 trans, VAO[] vaos, OldAnimationEntry? anim, double frame, Func<OldFrame, OldModelEntry?> get_model_func)
-        {
-            Colored = false;
-            return RenderAnimFrame(trans, vaos, anim?.Frames, frame, get_model_func);
-        }
-
-        public bool RenderAnimFrame(Vector3 trans, VAO[] vaos, ColoredAnimationEntry? anim, double frame, Func<OldFrame, OldModelEntry?> get_model_func)
-        {
-            Colored = true;
-            return RenderAnimFrame(trans, vaos, anim?.Frames, frame, get_model_func);
-        }
-
-        private bool RenderAnimFrame(Vector3 trans, VAO[] vaos, List<OldFrame>? frames, double frame, Func<OldFrame, OldModelEntry?> get_model_func)
+        public bool RenderAnimFrame(Vector3 trans, VAO[] vaos, Entry? anim, double frame, Func<OldFrame, OldModelEntry?> get_model_func, Vector3 scale = default, Vector3 rot = default)
         {
             BaseFrame = null;
+
+            List<OldFrame>? frames = null;
+
+            if (anim is OldAnimationEntry svtx)
+            {
+                Colored = false;
+                frames = svtx.Frames;
+            }
+            else if (anim is ColoredAnimationEntry cvtx)
+            {
+                Colored = true;
+                frames = cvtx.Frames;
+            }
 
             if (frames == null)
                 return false;
 
             _globaltrans = trans;
+            _globalscale = scale == Vector3.Zero ? Vector3.One : scale;
+            _globalrot = MathExt.MakeCrashRotationMatrix(rot);
             _getmodelfunc = get_model_func!;
 
             OldFrame? frame2 = null;
@@ -149,7 +153,7 @@ namespace CrashEdit.CE
         private void RenderVertex(VAO vao, in OldFrameVertex vert, Vector3 trans, Vector3 scale)
         {
             int cur_vert_idx = vao.CurVert;
-            vao.Verts[cur_vert_idx].trans = (new Vector3(vert.X, vert.Y, vert.Z) + trans) * scale + _globaltrans;
+            vao.Verts[cur_vert_idx].trans = _globalrot * ((new Vector3(vert.X, vert.Y, vert.Z) + trans) * scale) * _globalscale + _globaltrans;
             if (Colored)
             {
                 Rgba old_rgba = vao.Verts[cur_vert_idx].rgba;

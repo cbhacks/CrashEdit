@@ -905,6 +905,51 @@ namespace CrashEdit.CE
                 vaoLines.PushAttrib(trans: verts[i] * radius + trans, rgba: color);
             }
         }
+
+        protected void DrawCameraFov(Vector3 trans, Vector3 rot, float fovx, float fovy, bool fill)
+        {
+            var mrot = MathExt.MakeCrashRotationMatrix(rot);
+
+            var corner = new Vector3(fovx, fovy, 1).Normalized();
+            var ntl = mrot * new Vector3(-corner.X, corner.Y, -corner.Z);
+            var ntr = mrot * new Vector3(corner.X, corner.Y, -corner.Z);
+            var nbl = mrot * new Vector3(-corner.X, -corner.Y, -corner.Z);
+            var nbr = mrot * new Vector3(corner.X, -corner.Y, -corner.Z);
+
+            float cornerlen = (float)MathExt.Pythagoras(MathExt.Pythagoras(fovx, 1), fovy);
+            float near = 1;
+            float far = near + 2;
+            near *= cornerlen;
+            far *= cornerlen;
+
+            Rgba color = (Rgba)Color4.Lime;
+            Span<Vector3> frameverts = [
+                trans + ntl * near,
+                trans + ntl * far,
+                trans + ntr * near,
+                trans + ntr * far,
+                trans + nbl * near,
+                trans + nbl * far,
+                trans + nbr * near,
+                trans + nbr * far,
+            ];
+            for (int i = 0; i < BoxLineIndices.Length; ++i)
+            {
+                vaoLines.PushAttrib(trans: frameverts[BoxLineIndices[i]], rgba: color);
+            }
+            if (fill)
+            {
+                var side_verts = BoxTriIndices.Length / 6;
+                for (int i = side_verts * 1; i < side_verts * 3; ++i)
+                {
+                    vaoTris.PushAttrib(trans: frameverts[BoxTriIndices[i]], rgba: new(color, 64), st: new Vector2(-1));
+                }
+                for (int i = side_verts * 4; i < side_verts * 6; ++i)
+                {
+                    vaoTris.PushAttrib(trans: frameverts[BoxTriIndices[i]], rgba: new(color, 64), st: new Vector2(-1));
+                }
+            }
+        }
         #endregion
 
         public void AddOctreeX(Vector3 trans, Vector3 trans_size, int node, Vector3w nodes_size)

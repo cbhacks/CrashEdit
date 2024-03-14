@@ -145,5 +145,10 @@ namespace CrashEdit.CE
         {
             return Pythagoras(Math.Tan(theta), 1);
         }
+
+        public static Matrix3 MakeCrashRotationMatrix(Vector3 euler)
+        {
+            return Matrix3.CreateFromQuaternion(new(0, 0, euler.Z)) * Matrix3.CreateFromQuaternion(new(euler.X, euler.Y, 0));
+        }
     }
 }

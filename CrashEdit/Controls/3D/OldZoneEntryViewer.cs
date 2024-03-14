@@ -7,6 +7,7 @@ namespace CrashEdit.CE
     public sealed class OldZoneEntryViewer : OldSceneryEntryViewer
     {
         private readonly OctreeRenderer octree_renderer;
+        private readonly OldAnimationRenderer animation_renderer;
 
         private readonly List<int> zones;
         private readonly int this_zone;
@@ -44,6 +45,7 @@ namespace CrashEdit.CE
             zones = new() { zone_eid };
             this_zone = zone_eid;
             octree_renderer = new(this);
+            animation_renderer = new() { TPages = tpages, Render = render };
         }
 
         public OldZoneEntryViewer(NSF nsf, List<int> zone_eids) : base(nsf, new List<int>())
@@ -51,6 +53,7 @@ namespace CrashEdit.CE
             zones = zone_eids;
             this_zone = Entry.NullEID;
             octree_renderer = new(this);
+            animation_renderer = new() { TPages = tpages, Render = render };
         }
 
         protected override void OnInvalidated(InvalidateEventArgs e)
@@ -353,53 +356,6 @@ namespace CrashEdit.CE
                 return nsf.GetEntry<OldZoneEntry>(this_zone);
         }
 
-        private void DrawCameraFov(Vector3 trans, Vector3 rot, float fovx, float fovy, bool fill)
-        {
-            var mrot = Matrix3.CreateFromQuaternion(new(rot.X, rot.Y, 0));
-            var forward = mrot * new Vector3(0, 0, -1);
-            mrot = Matrix3.CreateFromAxisAngle(forward, -rot.Z) * mrot;
-
-            var corner = new Vector3(fovx, fovy, 1).Normalized();
-            var ntl = mrot * new Vector3(-corner.X, corner.Y, -corner.Z);
-            var ntr = mrot * new Vector3(corner.X, corner.Y, -corner.Z);
-            var nbl = mrot * new Vector3(-corner.X, -corner.Y, -corner.Z);
-            var nbr = mrot * new Vector3(corner.X, -corner.Y, -corner.Z);
-
-            float cornerlen = (float)MathExt.Pythagoras(MathExt.Pythagoras(fovx, 1), fovy);
-            float near = 1;
-            float far = near + 2;
-            near *= cornerlen;
-            far *= cornerlen;
-
-            Rgba color = (Rgba)Color4.Lime;
-            Span<Vector3> frameverts = stackalloc Vector3[8] {
-                trans + ntl * near,
-                trans + ntl * far,
-                trans + ntr * near,
-                trans + ntr * far,
-                trans + nbl * near,
-                trans + nbl * far,
-                trans + nbr * near,
-                trans + nbr * far,
-            };
-            for (int i = 0; i < BoxLineIndices.Length; ++i)
-            {
-                vaoLines.PushAttrib(trans: frameverts[BoxLineIndices[i]], rgba: color);
-            }
-            if (fill)
-            {
-                var side_verts = BoxTriIndices.Length / 6;
-                for (int i = side_verts * 1; i < side_verts * 3; ++i)
-                {
-                    vaoTris.PushAttrib(trans: frameverts[BoxTriIndices[i]], rgba: new(color, 64), st: new Vector2(-1));
-                }
-                for (int i = side_verts * 4; i < side_verts * 6; ++i)
-                {
-                    vaoTris.PushAttrib(trans: frameverts[BoxTriIndices[i]], rgba: new(color, 64), st: new Vector2(-1));
-                }
-            }
-        }
-
         protected override void Render()
         {
             var allzones = GetZones();
@@ -486,7 +442,7 @@ namespace CrashEdit.CE
                 }
             }
 
-            base.Render();
+            animation_renderer.Setup(false);
 
             is_master_zone = true;
             zone_alpha = 255;
@@ -502,6 +458,10 @@ namespace CrashEdit.CE
             {
                 RenderZone(zone);
             }
+
+            _vao.BlendModes |= animation_renderer.BlendMask;
+
+            base.Render();
         }
 
         private void RenderZone(OldZoneEntry zone)
@@ -525,6 +485,42 @@ namespace CrashEdit.CE
                 octree_renderer.RenderOctree(zone.Layout, 0x1C, zone_trans, zoneSize, zone.CollisionDepthX, zone.CollisionDepthY, zone.CollisionDepthZ);
             }
         }
+        private bool RenderEntityVisual(EntityVisual visual, Vector3 trans, Vector3 scale = default, Vector3 rot = default)
+        {
+            return animation_renderer.RenderAnimFrame(trans, [_vao, null], nsf.GetEntry<Entry>(visual.AnimName), visual.AnimFrame, x => nsf.GetEntry<OldModelEntry>(x.ModelEID), scale: scale, rot: rot);
+        }
+
+        private bool RenderEntityVisual(OldEntity entity, Vector3 trans)
+        {
+            var map = nsf.Version == GameVersion.Crash2 ? EntityVisual.MapCrash2 : EntityVisual.MapCrash2;
+            int type = entity.Type;
+            int subtype = entity.Subtype;
+            EntityVisual visual;
+            if (type == 1 && subtype == 2 && EntityVisual.MapCrash1.TryGetVisual(type, subtype, out visual)) // monkey
+                return RenderEntityVisual(visual, trans + new Vector3(0, 0.5f, 0));
+            if (type == 22 && subtype == 12 && EntityVisual.MapCrash1.TryGetVisual(type, subtype, out visual)) // boulder
+                return RenderEntityVisual(visual, trans + new Vector3(0, 3.4f, 0));
+            if (type == 33 && subtype == 3 && EntityVisual.MapCrash1.TryGetVisual(type, subtype, out visual)) // spike log up
+                return RenderEntityVisual(visual, trans, rot: new(MathHelper.Pi, MathHelper.Pi, 0));
+            if (type == 34 && EntityVisual.MapCrash1.TryGetVisual(type, subtype, out visual)) // boxes
+                return RenderEntityVisual(visual, trans + new Vector3(0.5f, 0, 0.5f));
+            if (type == 32 && subtype == 1 && EntityVisual.MapCrash1.TryGetVisual(type, subtype, out visual)) // warp out
+                return RenderEntityVisual(visual, trans + new Vector3(0, 1, 0));
+            if (type == 8 && (subtype == 1 || subtype == 3)) // power door double
+            {
+                bool ok = false;
+                if (EntityVisual.MapCrash1.TryGetVisual(type, subtype, out visual)) // left
+                    ok = RenderEntityVisual(visual, trans) || ok;
+                if (EntityVisual.MapCrash1.TryGetVisual(type, subtype + 1000, out visual)) // right
+                    ok = RenderEntityVisual(visual, trans) || ok;
+                return ok;
+            }
+            if (EntityVisual.MapCrash1.TryGetVisual(type, subtype, out visual))
+            {
+                return RenderEntityVisual(visual, trans);
+            }
+            return false;
+        }
 
         private void RenderEntity(OldEntity entity)
         {
@@ -534,6 +530,13 @@ namespace CrashEdit.CE
             if (entity.Positions.Count > 0)
             {
                 AddText3D("entity-" + entity.ID, trans, GetZoneColor(Color4.Yellow), ofs_y: text_y, flags: TextRenderFlags.Default | TextRenderFlags.Bottom);
+
+                bool rendered_model = false;
+                if (true)
+                {
+                    rendered_model = RenderEntityVisual(entity, trans);
+                }
+
                 if (entity.Positions.Count == 1)
                 {
                     if (entity.Type == 3)
@@ -542,7 +545,8 @@ namespace CrashEdit.CE
                     }
                     else if (entity.Type == 34)
                     {
-                        RenderBoxEntity(trans, entity.Subtype);
+                        if (!rendered_model)
+                            RenderBoxEntity(trans, entity.Subtype);
                         draw_type = false;
                         int pickup = entity.VecX;
                         string pickup_name = $"unknown {pickup}";
@@ -591,7 +595,8 @@ namespace CrashEdit.CE
                     }
                     else
                     {
-                        AddSprite(trans, new Vector2(1), GetZoneColor(Color4.White), OldResources.PointTexture);
+                        if (!rendered_model)
+                            AddSprite(trans, new Vector2(1), GetZoneColor(Color4.White), OldResources.PointTexture);
                     }
                 }
                 else
@@ -707,7 +712,7 @@ namespace CrashEdit.CE
             {
                 case 0: // TNT
                 case 16: // TNT AutoGrav
-                    return (OldResources.TNTBoxTopTexture);
+                    return OldResources.TNTBoxTopTexture;
                 case 2: // Empty
                 case 3: // Spring
                 case 6: // Fruit
@@ -717,15 +722,15 @@ namespace CrashEdit.CE
                 case 11: // POW
                 case 17: // Pickup AutoGrav
                 case 20: // Empty AutoGrav
-                    return (OldResources.EmptyBoxTexture);
+                    return OldResources.EmptyBoxTexture;
                 case 4: // Continue
-                    return (OldResources.ContinueBoxTexture);
+                    return OldResources.ContinueBoxTexture;
                 case 5: // Iron
                 case 7: // Action
                 case 15: // Iron Spring
-                    return (OldResources.IronBoxTexture);
+                    return OldResources.IronBoxTexture;
                 default:
-                    return (OldResources.UnknownBoxTopTexture);
+                    return OldResources.UnknownBoxTopTexture;
             }
         }
 
@@ -735,36 +740,36 @@ namespace CrashEdit.CE
             {
                 case 0: // TNT
                 case 16: // TNT AutoGrav
-                    return (OldResources.TNTBoxTexture);
+                    return OldResources.TNTBoxTexture;
                 case 2: // Empty
                 case 20: // Empty AutoGrav
-                    return (OldResources.EmptyBoxTexture);
+                    return OldResources.EmptyBoxTexture;
                 case 3: // Spring
-                    return (OldResources.SpringBoxTexture);
+                    return OldResources.SpringBoxTexture;
                 case 4: // Continue
-                    return (OldResources.ContinueBoxTexture);
+                    return OldResources.ContinueBoxTexture;
                 case 5: // Iron
-                    return (OldResources.IronBoxTexture);
+                    return OldResources.IronBoxTexture;
                 case 6: // Fruit
-                    return (OldResources.FruitBoxTexture);
+                    return OldResources.FruitBoxTexture;
                 case 7: // Action
-                    return (OldResources.ActionBoxTexture);
+                    return OldResources.ActionBoxTexture;
                 case 8: // Life
-                    return (OldResources.LifeBoxTexture);
+                    return OldResources.LifeBoxTexture;
                 case 9: // Doctor
-                    return (OldResources.DoctorBoxTexture);
+                    return OldResources.DoctorBoxTexture;
                 case 10: // Pickup
                 case 17: // Pickup AutoGrav
-                    return (OldResources.PickupBoxTexture);
+                    return OldResources.PickupBoxTexture;
                 case 11: // POW
-                    return (OldResources.POWBoxTexture);
+                    return OldResources.POWBoxTexture;
                 case 13: // Ghost
                 case 19: // Ghost Iron
-                    return (OldResources.UnknownBoxTopTexture);
+                    return OldResources.UnknownBoxTopTexture;
                 case 15: // Iron Spring
-                    return (OldResources.IronSpringBoxTexture);
+                    return OldResources.IronSpringBoxTexture;
                 default:
-                    return (OldResources.UnknownBoxTexture);
+                    return OldResources.UnknownBoxTexture;
             }
         }
 
@@ -773,35 +778,35 @@ namespace CrashEdit.CE
             switch (subtype)
             {
                 case 0: // Lime
-                    return (OldResources.LimeTexture);
+                    return OldResources.LimeTexture;
                 case 1: // Coconut
-                    return (OldResources.CoconutTexture);
+                    return OldResources.CoconutTexture;
                 case 2: // Pineapple
-                    return (OldResources.PineappleTexture);
+                    return OldResources.PineappleTexture;
                 case 3: // Strawberry
-                    return (OldResources.StrawberryTexture);
+                    return OldResources.StrawberryTexture;
                 case 4: // Mango
-                    return (OldResources.MangoTexture);
+                    return OldResources.MangoTexture;
                 case 5: // Life
-                    return (OldResources.LifeTexture);
+                    return OldResources.LifeTexture;
                 case 6: // Mask
-                    return (OldResources.MaskTexture);
+                    return OldResources.MaskTexture;
                 case 7: // Lemon
-                    return (OldResources.LemonTexture);
+                    return OldResources.LemonTexture;
                 case 8: // YYY
-                    return (OldResources.YYYTexture);
+                    return OldResources.YYYTexture;
                 case 11: // Grape
-                    return (OldResources.GrapeTexture);
+                    return OldResources.GrapeTexture;
                 case 16: // Apple
-                    return (OldResources.AppleTexture);
+                    return OldResources.AppleTexture;
                 case 18: // Cortex
-                    return (OldResources.CortexTexture);
+                    return OldResources.CortexTexture;
                 case 19: // Brio
-                    return (OldResources.BrioTexture);
+                    return OldResources.BrioTexture;
                 case 20: // Tawna
-                    return (OldResources.TawnaTexture);
+                    return OldResources.TawnaTexture;
                 default:
-                    return (OldResources.UnknownPickupTexture);
+                    return OldResources.UnknownPickupTexture;
             }
         }
 

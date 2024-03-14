@@ -79,10 +79,7 @@ namespace CrashEdit.CE
 
             animation_renderer.Setup(_interpolate);
 
-            var svtx = nsf.GetEntry<OldAnimationEntry>(animId);
-            var cvtx = svtx == null ? nsf.GetEntry<ColoredAnimationEntry>(animId) : null;
-            if (cvtx != null ? animation_renderer.RenderAnimFrame(new Vector3(0), vaoModel, cvtx, animFrame != -1 ? animFrame : render.FullCurrentFrame / 2, x => nsf.GetEntry<OldModelEntry>(x.ModelEID))
-                             : animation_renderer.RenderAnimFrame(new Vector3(0), vaoModel, svtx, animFrame != -1 ? animFrame : render.FullCurrentFrame / 2, x => nsf.GetEntry<OldModelEntry>(x.ModelEID)))
+            if (animation_renderer.RenderAnimFrame(new Vector3(0), vaoModel, nsf.GetEntry<Entry>(animId), animFrame != -1 ? animFrame : render.FullCurrentFrame / 2, x => nsf.GetEntry<OldModelEntry>(x.ModelEID)))
             {
                 UploadTPAGs();
 
