@@ -211,9 +211,11 @@ namespace CrashEdit.CE
             }
         }
 
+        private VAO[] _vaolist = new VAO[2];
         private bool RenderEntityVisual(EntityVisual visual, Vector3 trans)
         {
-            return animation_renderer.RenderAnimFrame(trans, [_vao, null], nsf.GetEntry<AnimationEntry>(visual.AnimName), visual.AnimFrame, x => nsf.GetEntry<ModelEntry>(x.ModelEID));
+            _vaolist[0] = _vao;
+            return animation_renderer.RenderAnimFrame(trans, _vaolist, nsf.GetEntry<AnimationEntry>(visual.AnimName), visual.AnimFrame, x => nsf.GetEntry<ModelEntry>(x.ModelEID));
         }
 
         private bool RenderEntityVisual(Entity entity, Vector3 trans)
@@ -226,21 +228,21 @@ namespace CrashEdit.CE
             {
                 if (type == 26 && subtype == 0 && entity.ID.HasValue) // ruins crumbler plat
                 {
-                    if (EntityVisual.MapCrash2.TryGetVisual(type, (entity.ID & 0x1) != 0 ? subtype + 1000 : subtype, out visual))
+                    if (map.TryGetVisual(type, (entity.ID & 0x1) != 0 ? subtype + 1000 : subtype, out visual))
                     {
                         return RenderEntityVisual(visual, trans);
                     }
                 }
                 else if (type == 14 && subtype == 4 && entity.Settings.Count > 9) // drop plat
                 {
-                    if (EntityVisual.MapCrash2.TryGetVisual(type, subtype + 1000 * (entity.Settings[entity.Settings.Count - 9 - 1].Value >> 8), out visual))
+                    if (map.TryGetVisual(type, subtype + 1000 * (entity.Settings[entity.Settings.Count - 9 - 1].Value >> 8), out visual))
                     {
                         return RenderEntityVisual(visual, trans);
                     }
                 }
                 else if (type == 55 && subtype == 1 && entity.Settings.Count > 0) // pistons
                 {
-                    if (EntityVisual.MapCrash2.TryGetVisual(type, subtype + 1000 * (entity.Settings[entity.Settings.Count - 0 - 1].Value != 0 ? 1 : 0), out visual))
+                    if (map.TryGetVisual(type, subtype + 1000 * (entity.Settings[entity.Settings.Count - 0 - 1].Value != 0 ? 1 : 0), out visual))
                     {
                         return RenderEntityVisual(visual, trans);
                     }
@@ -248,18 +250,18 @@ namespace CrashEdit.CE
                 else if (type == 42 && subtype == 0) // space lab ass
                 {
                     bool ok = false;
-                    if (EntityVisual.MapCrash2.TryGetVisual(type, subtype, out visual))
+                    if (map.TryGetVisual(type, subtype, out visual))
                     {
                         ok |= RenderEntityVisual(visual, entity.Settings.Count > 0 ? trans + new Vector3(0, 0, entity.Settings[entity.Settings.Count - 0 - 1].Value / (256f * 400)) : trans);
                     }
-                    if (EntityVisual.MapCrash2.TryGetVisual(type, 2, out visual))
+                    if (map.TryGetVisual(type, 2, out visual))
                     {
                         ok |= RenderEntityVisual(visual, trans);
                     }
                     return ok;
                 }
             }
-            if (EntityVisual.MapCrash2.TryGetVisual(type, subtype, out visual))
+            if (map.TryGetVisual(type, subtype, out visual))
             {
                 return RenderEntityVisual(visual, trans);
             }

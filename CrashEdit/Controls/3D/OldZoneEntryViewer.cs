@@ -246,7 +246,7 @@ namespace CrashEdit.CE
                 }
 
                 int move_x = 0, move_y = 0, move_z = 0;
-                if (!anchor_detach || KDown(Keys.Shift))
+                if (!anchor_detach || KDown(Keys.Shift | Keys.Control))
                 {
                     if (KDown(Keys.D, anchor_detach))
                         move_x = 1;
@@ -485,9 +485,12 @@ namespace CrashEdit.CE
                 octree_renderer.RenderOctree(zone.Layout, 0x1C, zone_trans, zoneSize, zone.CollisionDepthX, zone.CollisionDepthY, zone.CollisionDepthZ);
             }
         }
+
+        private VAO[] _vaolist = new VAO[2];
         private bool RenderEntityVisual(EntityVisual visual, Vector3 trans, Vector3 scale = default, Vector3 rot = default)
         {
-            return animation_renderer.RenderAnimFrame(trans, [_vao, null], nsf.GetEntry<Entry>(visual.AnimName), visual.AnimFrame, x => nsf.GetEntry<OldModelEntry>(x.ModelEID), scale: scale, rot: rot);
+            _vaolist[0] = _vao;
+            return animation_renderer.RenderAnimFrame(trans, _vaolist, nsf.GetEntry<Entry>(visual.AnimName), visual.AnimFrame, x => nsf.GetEntry<OldModelEntry>(x.ModelEID), scale: scale, rot: rot);
         }
 
         private bool RenderEntityVisual(OldEntity entity, Vector3 trans)

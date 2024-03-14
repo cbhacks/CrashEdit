@@ -582,6 +582,8 @@ namespace CrashEdit.CE
         #region Functions for generating shapes and text on the debug renderers.
         public Vector2 AddText3D(string text, Vector3 pos, Rgba col, float size = 1, TextRenderFlags flags = TextRenderFlags.Default, float ofs_x = 0, float ofs_y = 0)
         {
+            if (ofs_y == float.MaxValue)
+                return new Vector2(0, 0);
             var screen_pos = new Vector4(pos, 1) * render.Projection.GetPVM();
             screen_pos /= screen_pos.W;
             if (screen_pos.Z >= 1 || screen_pos.Z <= -1)
