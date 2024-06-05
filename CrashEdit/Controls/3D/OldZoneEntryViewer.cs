@@ -490,7 +490,7 @@ namespace CrashEdit.CE
         private bool RenderEntityVisual(EntityVisual visual, Vector3 trans, Vector3 scale = default, Vector3 rot = default)
         {
             _vaolist[0] = _vao;
-            return animation_renderer.RenderAnimFrame(trans, _vaolist, nsf.GetEntry<Entry>(visual.AnimName), visual.AnimFrame, x => nsf.GetEntry<OldModelEntry>(x.ModelEID), scale: scale, rot: rot);
+            return animation_renderer.RenderAnimFrame(trans, _vaolist, nsf.GetEntry<Entry>(visual.AnimName), visual.AnimFrame != -1 ? visual.AnimFrame : render.FullCurrentFrame / 2, x => nsf.GetEntry<OldModelEntry>(x.ModelEID), scale: scale, rot: rot);
         }
 
         private bool RenderEntityVisual(OldEntity entity, Vector3 trans)

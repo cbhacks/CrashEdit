@@ -6,8 +6,9 @@ namespace CrashEdit.CE
     {
         public string AnimName;
         public int AnimFrame;
+        public bool Lerped;
 
-        public EntityVisual(string name, int frame = 0)
+        public EntityVisual(string name, int frame = -1)
         {
             AnimName = name;
             AnimFrame = frame;
@@ -21,7 +22,7 @@ namespace CrashEdit.CE
         {
             // default visuals
             MapCrash1.AddVisual(0, 0, new("WiS1V")); // willy
-            MapCrash1.AddVisual(1, 2, new("Mo1fV")); // monkey
+            MapCrash1.AddVisual(1, 2, new("Mo1fV", 0)); // monkey
             MapCrash1.AddVisual(8, 0, new("PoD1V")); // power door
             MapCrash1.AddVisual(8, 1, new("PoD2V")); // power door double left
             MapCrash1.AddVisual(8, 1 + 1000, new("PoD3V")); // power door double right
@@ -34,7 +35,7 @@ namespace CrashEdit.CE
             MapCrash1.AddVisual(9, 6, new("Psr5V")); // power survey robot
             MapCrash1.AddVisual(10, 0, new("PRESV")); // power robot enemy
             MapCrash1.AddVisual(12, 0, new("SliMV")); // slim
-            MapCrash1.AddVisual(14, 0, new("PoSpV")); // power spring
+            MapCrash1.AddVisual(14, 0, new("PoSpV", 0)); // power spring
             MapCrash1.AddVisual(17, 0, new("FaS1V")); // fat
             MapCrash1.AddVisual(19, 0, new("Tu1iV")); // turtle
             MapCrash1.AddVisual(22, 6, new("JuRcV")); // jungle roller
@@ -45,7 +46,7 @@ namespace CrashEdit.CE
             MapCrash1.AddVisual(22, 16, new("JB1eV")); // jungle barricade low small
             MapCrash1.AddVisual(22, 17, new("JB2eV")); // jungle barricade low medium
             MapCrash1.AddVisual(22, 18, new("JB3eV")); // jungle barricade low large
-            MapCrash1.AddVisual(25, 0, new("JupiV")); // jungle plant
+            MapCrash1.AddVisual(25, 0, new("JuPiV")); // jungle plant
             MapCrash1.AddVisual(27, 0, new("JuOWV")); // jungle ocean wave
             MapCrash1.AddVisual(28, 1, new("Rl1fV")); // river leaf
             MapCrash1.AddVisual(28, 2, new("RB1fV")); // river branch
@@ -58,20 +59,20 @@ namespace CrashEdit.CE
             MapCrash1.AddVisual(33, 1, new("WS1iV")); // wall shield
             MapCrash1.AddVisual(33, 3, new("SL1iV")); // spike log
             MapCrash1.AddVisual(33, 4, new("SL1iV")); // spike log
-            MapCrash1.AddVisual(33, 5, new("WT1iV")); // wall torch
+            MapCrash1.AddVisual(33, 5, new("WT1iV", 0)); // wall torch
             MapCrash1.AddVisual(34, 0, new("BT10V")); // box tnt
             MapCrash1.AddVisual(34, 2, new("BN10V")); // box empty
-            MapCrash1.AddVisual(34, 3, new("BS10V")); // box spring
-            MapCrash1.AddVisual(34, 4, new("BC10V")); // box continue
+            MapCrash1.AddVisual(34, 3, new("BS10V", 0)); // box spring
+            MapCrash1.AddVisual(34, 4, new("BC10V", 0)); // box continue
             MapCrash1.AddVisual(34, 5, new("BI10V")); // box iron
-            MapCrash1.AddVisual(34, 6, new("BF10V")); // box fruit
-            MapCrash1.AddVisual(34, 7, new("BA10V")); // box action
+            MapCrash1.AddVisual(34, 6, new("BF10V", 0)); // box fruit
+            MapCrash1.AddVisual(34, 7, new("BA10V", 0)); // box action
             MapCrash1.AddVisual(34, 8, new("BL10V")); // box life
             MapCrash1.AddVisual(34, 9, new("BD10V")); // box doctor
             MapCrash1.AddVisual(34, 10, new("Bp10V")); // box pickup
             MapCrash1.AddVisual(34, 11, new("BP10V")); // box pow
             MapCrash1.AddVisual(34, 13, new("BG10V")); // box ghost
-            MapCrash1.AddVisual(34, 15, new("BS20V")); // box iron spring
+            MapCrash1.AddVisual(34, 15, new("BS20V", 0)); // box iron spring
             MapCrash1.AddVisual(34, 16, new("BT10V")); // box tnt (auto grav)
             MapCrash1.AddVisual(34, 17, new("Bp10V")); // box pickup (auto grav)
             MapCrash1.AddVisual(34, 19, new("BG10V")); // box ghost iron
@@ -87,24 +88,26 @@ namespace CrashEdit.CE
             MapCrash1.AddVisual(58, 6, new("Ge30V")); // gem orange
 
             MapCrash2.AddVisual(0, 0, new("Cr10V")); // crash
-            MapCrash2.AddVisual(1, 1000 + 7, new("WGB0V")); // warp gate bottom 1
-            MapCrash2.AddVisual(1, 1000 + 8, new("WGb0V")); // warp gate bottom exit 1
-            MapCrash2.AddVisual(1, 1900 + 7, new("WGT0V")); // warp gate top 1
-            MapCrash2.AddVisual(1, 1900 + 8, new("WGt0V")); // warp gate top exit 1
-            MapCrash2.AddVisual(1, 4000 + 7, new("WGBdV")); // warp gate bottom 4
-            MapCrash2.AddVisual(1, 4000 + 8, new("WGbdV")); // warp gate bottom exit 4
-            MapCrash2.AddVisual(1, 4900 + 7, new("WGTdV")); // warp gate top 4
-            MapCrash2.AddVisual(1, 4900 + 8, new("WGtdV")); // warp gate top exit 4
-            MapCrash2.AddVisual(1, 5000 + 7, new("WGBiV")); // warp gate bottom 4
-            MapCrash2.AddVisual(1, 5000 + 8, new("WGbiV")); // warp gate bottom exit 4
-            MapCrash2.AddVisual(1, 5900 + 7, new("WGTiV")); // warp gate top 4
-            MapCrash2.AddVisual(1, 5900 + 8, new("WGtiV")); // warp gate top exit 4
+            MapCrash2.AddVisual(1, 1, new("WWP0V")); // warp out
+            MapCrash2.AddVisual(1, 1000 + 7, new("WGB0V", 0)); // warp gate bottom 1
+            MapCrash2.AddVisual(1, 1000 + 8, new("WGb0V", 0)); // warp gate bottom exit 1
+            MapCrash2.AddVisual(1, 1900 + 7, new("WGT0V", 0)); // warp gate top 1
+            MapCrash2.AddVisual(1, 1900 + 8, new("WGt0V", 0)); // warp gate top exit 1
+            MapCrash2.AddVisual(1, 4000 + 7, new("WGBdV", 0)); // warp gate bottom 4
+            MapCrash2.AddVisual(1, 4000 + 8, new("WGbdV", 0)); // warp gate bottom exit 4
+            MapCrash2.AddVisual(1, 4900 + 7, new("WGTdV", 0)); // warp gate top 4
+            MapCrash2.AddVisual(1, 4900 + 8, new("WGtdV", 0)); // warp gate top exit 4
+            MapCrash2.AddVisual(1, 5000 + 7, new("WGBiV", 0)); // warp gate bottom 4
+            MapCrash2.AddVisual(1, 5000 + 8, new("WGbiV", 0)); // warp gate bottom exit 4
+            MapCrash2.AddVisual(1, 5900 + 7, new("WGTiV", 0)); // warp gate top 4
+            MapCrash2.AddVisual(1, 5900 + 8, new("WGtiV", 0)); // warp gate top exit 4
             // MapCrash2.AddVisual(3, 24, new("Cry1V")); // crystal
             MapCrash2.AddVisual(2, 0, new("Ts1bV")); // spike turtle
             MapCrash2.AddVisual(2, 5, new("Tu1bV")); // saw turtle
             MapCrash2.AddVisual(7, 0, new("Fa1fV")); // fireface
+            MapCrash2.AddVisual(10, 0, new("Mo1fV", 0)); // monkey hop
             MapCrash2.AddVisual(11, 0, new("Go1fV")); // boulder gorilla
-            MapCrash2.AddVisual(12, 0, new("Do1aV")); // sewer door
+            MapCrash2.AddVisual(12, 0, new("Do1aV", 0)); // sewer door
             MapCrash2.AddVisual(12, 8, new("Ee1aV")); // eel
             MapCrash2.AddVisual(14, 4 + 0000, new("Pl1fV")); // drop plat
             MapCrash2.AddVisual(14, 4 + 1000, new("Pl2fV")); // drop plat
@@ -115,11 +118,13 @@ namespace CrashEdit.CE
             // MapCrash2.AddVisual(18, 0, new("Be2lV", 0)); // bees (+ beehive)
             // MapCrash2.AddVisual(18, 0 + 1000, new("Be4lV", 0)); // bees (+ beehive)
             MapCrash2.AddVisual(24, 0, new("Se1eV")); // seal
-            MapCrash2.AddVisual(24, 1, new("Se2eV", 8)); // seal
+            MapCrash2.AddVisual(24, 1, new("Se2eV")); // seal
             MapCrash2.AddVisual(25, 0, new("Pe2eV")); // penguin
             MapCrash2.AddVisual(25, 1, new("Pe2eV")); // penguin pulse
-            MapCrash2.AddVisual(26, 0, new("Pr2fV")); // crumbler plat 2
-            MapCrash2.AddVisual(26, 0 + 1000, new("Pr1fV")); // crumbler plat 1
+            MapCrash2.AddVisual(26, 0 + 1000, new("Pr1fV", 0)); // crumbler plat 1
+            MapCrash2.AddVisual(26, 0 + 2000, new("Pr2fV", 0)); // crumbler plat 2
+            MapCrash2.AddVisual(26, 0 + 3000, new("Pr3fV")); // leaner
+            MapCrash2.AddVisual(26, 0 + 4000, new("Pr4fV")); // spinner
             MapCrash2.AddVisual(27, 0, new("Po3eV")); // porcupine
             MapCrash2.AddVisual(30, 0, new("Ol1bV")); // ostrich
             MapCrash2.AddVisual(32, 0, new("Sm1eV")); // smasher
@@ -129,35 +134,35 @@ namespace CrashEdit.CE
             MapCrash2.AddVisual(33, 0, new("AB10V")); // ass banger
             MapCrash2.AddVisual(34, 0, new("BT10V")); // box tnt
             MapCrash2.AddVisual(34, 2, new("BN10V")); // box empty
-            MapCrash2.AddVisual(34, 3, new("BS10V")); // box spring
-            MapCrash2.AddVisual(34, 4, new("BC10V")); // box continue
-            MapCrash2.AddVisual(34, 4 + 1000, new("BC1iV")); // box continue (space level)
+            MapCrash2.AddVisual(34, 3, new("BS10V", 0)); // box spring
+            MapCrash2.AddVisual(34, 4, new("BC10V", 0)); // box continue
+            MapCrash2.AddVisual(34, 4 + 1000, new("BC1iV", 0)); // box continue (space level)
             MapCrash2.AddVisual(34, 5, new("BI10V")); // box iron
-            MapCrash2.AddVisual(34, 6, new("BF10V")); // box fruit
-            MapCrash2.AddVisual(34, 7, new("BA10V")); // box action
+            MapCrash2.AddVisual(34, 6, new("BF10V", 0)); // box fruit
+            MapCrash2.AddVisual(34, 7, new("BA10V", 0)); // box action
             MapCrash2.AddVisual(34, 8, new("BL10V")); // box life
             MapCrash2.AddVisual(34, 9, new("BD10V")); // box doctor
             MapCrash2.AddVisual(34, 10, new("Bp10V")); // box pickup
             MapCrash2.AddVisual(34, 11, new("BP10V")); // box pow
             MapCrash2.AddVisual(34, 13, new("BG10V")); // box ghost
-            MapCrash2.AddVisual(34, 15, new("BS20V")); // box iron spring
+            MapCrash2.AddVisual(34, 15, new("BS20V", 0)); // box iron spring
             MapCrash2.AddVisual(34, 16, new("BT10V")); // box tnt (auto grav)
             MapCrash2.AddVisual(34, 17, new("Bp10V")); // box pickup (auto grav)
             MapCrash2.AddVisual(34, 18, new("Bn10V")); // box nitro
             MapCrash2.AddVisual(34, 19, new("BG10V")); // box ghost iron
             MapCrash2.AddVisual(34, 20, new("BN10V")); // box empty (auto grav)
-            MapCrash2.AddVisual(34, 23, new("Bs10V")); // box steel
-            MapCrash2.AddVisual(34, 24, new("Ba10V")); // box action nitro
-            MapCrash2.AddVisual(35, 3, new("Do1iV")); // space door
+            MapCrash2.AddVisual(34, 23, new("Bs10V", 0)); // box steel
+            MapCrash2.AddVisual(34, 24, new("Ba10V", 0)); // box action nitro
+            MapCrash2.AddVisual(35, 3, new("Do1iV", 0)); // space door
             MapCrash2.AddVisual(35, 6, new("Do2iV", 0)); // space lock
             MapCrash2.AddVisual(35, 6 + 1000, new("Do4iV")); // space lock (lamps)
             MapCrash2.AddVisual(35, 15, new("Sb1iV")); // space bomb ring
             MapCrash2.AddVisual(35, 11, new("Ca1iV")); // space cable
-            MapCrash2.AddVisual(35, 13, new("SG60V")); // space gun
+            MapCrash2.AddVisual(35, 13, new("SG60V", 0)); // space gun
             MapCrash2.AddVisual(38, 0, new("Ep1nV")); // spore plant
             MapCrash2.AddVisual(38, 0 + 1000, new("Ep5nV", 0)); // spore plant
             MapCrash2.AddVisual(38, 4, new("JuPpV")); // evil plant
-            MapCrash2.AddVisual(39, 0, new("Mi1lV")); // mine
+            MapCrash2.AddVisual(39, 0, new("Mi1lV", 0)); // mine
             MapCrash2.AddVisual(39, 2, new("pl1lV")); // plank
             MapCrash2.AddVisual(42, 0, new("SL1iV")); // space lab ass
             MapCrash2.AddVisual(42, 2, new("SF1iV")); // space fire
@@ -166,16 +171,16 @@ namespace CrashEdit.CE
             MapCrash2.AddVisual(47, 1, new("Hp1pV")); // hippo
             MapCrash2.AddVisual(47, 2, new("Bo1pV")); // board
             MapCrash2.AddVisual(47, 4, new("Mf1pV")); // mine float
-            MapCrash2.AddVisual(47, 5, new("Pa1pV")); // piranha fish
+            MapCrash2.AddVisual(47, 5, new("Pa1pV", 0)); // piranha fish
             MapCrash2.AddVisual(47, 7, new("Mf1pV")); // mine path
-            MapCrash2.AddVisual(50, 8, new("Pu1gV", 8)); // intro crystal light ray
-            MapCrash2.AddVisual(50, 10, new("Sb1sV", 8)); // intro star window opacity 50%
-            MapCrash2.AddVisual(50, 15, new("Sw1sV", 8)); // intro star window opacity 50%
-            MapCrash2.AddVisual(50, 19, new("Li1sV", 8)); // intro ship light
+            MapCrash2.AddVisual(50, 8, new("Cl1sV")); // intro crystal light ray
+            MapCrash2.AddVisual(50, 10, new("Sw1sV")); // intro star window
+            MapCrash2.AddVisual(50, 15, new("Sb1sV")); // intro star window opacity 50%
+            MapCrash2.AddVisual(50, 19, new("Li1sV")); // intro ship light
             MapCrash2.AddVisual(55, 0, new("Pu1gV", 8)); // piston up
             MapCrash2.AddVisual(55, 1 + 0000, new("Pi2gV", 4)); // piston small
             MapCrash2.AddVisual(55, 1 + 1000, new("Pi1gV", 4)); // piston
-            MapCrash2.AddVisual(55, 2, new("Pa1gV")); // pad
+            MapCrash2.AddVisual(55, 2, new("Pa1gV", 0)); // pad
             MapCrash2.AddVisual(55, 3, new("Gu1gV")); // gun
             MapCrash2.AddVisual(55, 4, new("Gd1gV")); // gun down
             MapCrash2.AddVisual(55, 11, new("Bp1gV")); // bonus plaque

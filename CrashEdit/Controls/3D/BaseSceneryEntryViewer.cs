@@ -11,6 +11,7 @@ namespace CrashEdit.CE
         private static VBO vboWorld;
         private static VBO vboSky;
         protected VAO _vao;
+        protected VAO _vao2;
         private VAO vaoWorld;
         private VAO vaoSky;
         protected Vector3 world_offset;
@@ -43,6 +44,7 @@ namespace CrashEdit.CE
             }
 
             _vao = vaoWorld;
+            _vao2 = vaoSky;
         }
 
         protected void SetWorlds(IEnumerable<int> worlds)

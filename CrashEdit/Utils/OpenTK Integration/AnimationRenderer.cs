@@ -51,17 +51,20 @@ namespace CrashEdit.CE
                 if (HalfSpeed)
                     frame /= 2;
                 curframe = (int)((long)Math.Floor(frame) % frames.Count);
-                if (Interpolate)
+                if (vaos[1] != null)
                 {
-                    frame2 = frames[(int)((long)Math.Ceiling(frame) % frames.Count)];
-                    interp = (float)frame.TruncatePart();
-                }
-                else if (HalfSpeed)
-                {
-                    if (((long)(frame * 2) & 0x1) != 0)
+                    if (Interpolate)
                     {
-                        frame2 = frames[(curframe + 1) % frames.Count];
-                        interp = 0.5f;
+                        frame2 = frames[(int)((long)Math.Ceiling(frame) % frames.Count)];
+                        interp = (float)frame.TruncatePart();
+                    }
+                    else if (HalfSpeed)
+                    {
+                        if (((long)(frame * 2) & 0x1) != 0)
+                        {
+                            frame2 = frames[(curframe + 1) % frames.Count];
+                            interp = 0.5f;
+                        }
                     }
                 }
             }
@@ -69,7 +72,8 @@ namespace CrashEdit.CE
 
             BlendMask = BlendMode.Solid;
 
-            int startvert = vaos[0].CurVert;
+            int startvert1 = vaos[0].CurVert;
+            int startvert2 = vaos[1] == null? 0 : vaos[1].CurVert;
 
             if (!RenderFrame(vaos, frame1, 0))
                 return false;
@@ -80,11 +84,13 @@ namespace CrashEdit.CE
                 {
                     MathExt.Lerp(ref _uncompressedverts[0][i], _uncompressedverts[1][i], interp);
                 }
-                for (int i = startvert; i < vaos[0].CurVert; ++i)
+                for (int i = 0; i < (vaos[0].CurVert - startvert1); ++i)
                 {
-                    MathExt.Lerp(ref vaos[0].Verts[i].trans, vaos[1].Verts[i].trans, interp);
-                    MathExt.Lerp(ref vaos[0].Verts[i].rgba, vaos[1].Verts[i].rgba, interp);
+                    MathExt.Lerp(ref vaos[0].Verts[i + startvert1].trans, vaos[1].Verts[i + startvert2].trans, interp);
+                    MathExt.Lerp(ref vaos[0].Verts[i + startvert1].rgba, vaos[1].Verts[i + startvert2].rgba, interp);
                 }
+                // these won't be rendered, so who cares
+                vaos[1].CurVert = startvert2;
             }
 
             _uncompressedvertcount = frame1.SpecialVertexCount;

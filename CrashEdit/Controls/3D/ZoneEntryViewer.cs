@@ -215,7 +215,7 @@ namespace CrashEdit.CE
         private bool RenderEntityVisual(EntityVisual visual, Vector3 trans)
         {
             _vaolist[0] = _vao;
-            return animation_renderer.RenderAnimFrame(trans, _vaolist, nsf.GetEntry<AnimationEntry>(visual.AnimName), visual.AnimFrame, x => nsf.GetEntry<ModelEntry>(x.ModelEID));
+            return animation_renderer.RenderAnimFrame(trans, _vaolist, nsf.GetEntry<AnimationEntry>(visual.AnimName), visual.AnimFrame != -1 ? visual.AnimFrame : render.FullCurrentFrame / 2, x => nsf.GetEntry<ModelEntry>(x.ModelEID));
         }
 
         private bool RenderEntityVisual(Entity entity, Vector3 trans)
@@ -230,7 +230,14 @@ namespace CrashEdit.CE
             {
                 if (type == 26 && subtype == 0 && entity.ID.HasValue) // ruins crumbler plat
                 {
-                    if (map.TryGetVisual(type, (entity.ID & 0x1) != 0 ? subtype + 1000 : subtype, out visual))
+                    if (map.TryGetVisual(type, (entity.ID & 0x1) != 0 ? 1000 : 2000, out visual))
+                    {
+                        return RenderEntityVisual(visual, trans);
+                    }
+                }
+                else if (type == 26 && (subtype == 2 || subtype == 3) && entity.Settings.Count >= 1) // ruins leaner and spinner
+                {
+                    if (map.TryGetVisual(type, (entity.Settings[0].ValueB + 1) * 1000, out visual))
                     {
                         return RenderEntityVisual(visual, trans);
                     }
