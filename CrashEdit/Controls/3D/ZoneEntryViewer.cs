@@ -220,11 +220,13 @@ namespace CrashEdit.CE
 
         private bool RenderEntityVisual(Entity entity, Vector3 trans)
         {
-            var map = nsf.Version == GameVersion.Crash2 ? EntityVisual.MapCrash2 : EntityVisual.MapCrash2;
+            // TODO get rotation along path
+            bool crash2 = nsf.Version == GameVersion.Crash2;
+            var map = crash2 ? EntityVisual.MapCrash2 : EntityVisual.MapCrash3;
             int type = entity.Type.Value;
             int subtype = entity.Subtype.Value;
             EntityVisual visual;
-            if (map == EntityVisual.MapCrash2)
+            if (crash2)
             {
                 if (type == 26 && subtype == 0 && entity.ID.HasValue) // ruins crumbler plat
                 {
@@ -260,6 +262,45 @@ namespace CrashEdit.CE
                     }
                     return ok;
                 }
+                else if (type == 11 && subtype == 0) // boulder gorilla
+                {
+                    if (map.TryGetVisual(type, subtype, out visual))
+                    {
+                        return RenderEntityVisual(visual, trans + new Vector3(0, -1900f / 400f, 0));
+                    }
+                }
+                else if (type == 35 && subtype == 15 && entity.Settings.Count == 9)
+                {
+                    bool ok = false;
+                    if (map.TryGetVisual(type, subtype, out visual))
+                    {
+                        float deg_per_bomb = MathHelper.TwoPi / entity.Settings[0].Value;
+                        float bomb_distance = entity.Settings[2].Value / 256f / 400f;
+                        for (int i = 0; i < entity.Settings[0].Value; i++)
+                        {
+                            float deg = deg_per_bomb * i;
+                            ok |= RenderEntityVisual(visual, trans + new Vector3(MathF.Cos(deg) * bomb_distance, MathF.Sin(deg) * bomb_distance, 0));
+                        }
+                    }
+                    return ok;
+                }
+                else if ((type == 35 && subtype == 6) || (type == 38 && subtype == 0))
+                {
+                    bool ok = false;
+                    if (map.TryGetVisual(type, subtype, out visual))
+                    {
+                        ok |= RenderEntityVisual(visual, trans);
+                    }
+                    if (map.TryGetVisual(type, subtype + 1000, out visual))
+                    {
+                        ok |= RenderEntityVisual(visual, trans);
+                    }
+                    return ok;
+                }
+            }
+            else
+            {
+
             }
             if (map.TryGetVisual(type, subtype, out visual))
             {
@@ -474,8 +515,7 @@ namespace CrashEdit.CE
                 new Vector2(sideTexRect.Right, sideTexRect.Bottom),
                 new Vector2(sideTexRect.Left, sideTexRect.Bottom)
             };
-            Span<Rgba> cols = stackalloc Rgba[6]
-            {
+            Span<Rgba> cols = stackalloc Rgba[6] {
                 GetZoneColor(93*2, 93*2, 93*2),
                 GetZoneColor(51*2, 51*2, 76*2),
                 GetZoneColor(115*2, 115*2, 92*2),

@@ -46,7 +46,7 @@ namespace CrashEdit.CE
 
             _globaltrans = trans;
             _globalscale = scale == Vector3.Zero ? Vector3.One : scale;
-            _globalrot = MathExt.MakeCrashRotationMatrix(rot);
+            _globalrot = MathExt.EulerToMat3_Z_XY(rot);
             _getmodelfunc = get_model_func!;
 
             OldFrame? frame2 = null;

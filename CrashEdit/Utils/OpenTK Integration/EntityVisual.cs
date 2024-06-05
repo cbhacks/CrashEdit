@@ -15,6 +15,7 @@ namespace CrashEdit.CE
 
         public static EntityVisualList MapCrash1 = [];
         public static EntityVisualList MapCrash2 = [];
+        public static EntityVisualList MapCrash3 = [];
 
         static EntityVisual()
         {
@@ -99,7 +100,10 @@ namespace CrashEdit.CE
             MapCrash2.AddVisual(1, 5900 + 7, new("WGTiV")); // warp gate top 4
             MapCrash2.AddVisual(1, 5900 + 8, new("WGtiV")); // warp gate top exit 4
             // MapCrash2.AddVisual(3, 24, new("Cry1V")); // crystal
+            MapCrash2.AddVisual(2, 0, new("Ts1bV")); // spike turtle
+            MapCrash2.AddVisual(2, 5, new("Tu1bV")); // saw turtle
             MapCrash2.AddVisual(7, 0, new("Fa1fV")); // fireface
+            MapCrash2.AddVisual(11, 0, new("Go1fV")); // boulder gorilla
             MapCrash2.AddVisual(12, 0, new("Do1aV")); // sewer door
             MapCrash2.AddVisual(12, 8, new("Ee1aV")); // eel
             MapCrash2.AddVisual(14, 4 + 0000, new("Pl1fV")); // drop plat
@@ -108,14 +112,21 @@ namespace CrashEdit.CE
             MapCrash2.AddVisual(14, 4 + 5000, new("Pl50V")); // drop plat
             MapCrash2.AddVisual(14, 4 + 6000, new("Pl60V")); // drop plat
             MapCrash2.AddVisual(16, 0, new("We1aV")); // welder
+            // MapCrash2.AddVisual(18, 0, new("Be2lV", 0)); // bees (+ beehive)
+            // MapCrash2.AddVisual(18, 0 + 1000, new("Be4lV", 0)); // bees (+ beehive)
             MapCrash2.AddVisual(24, 0, new("Se1eV")); // seal
             MapCrash2.AddVisual(24, 1, new("Se2eV", 8)); // seal
+            MapCrash2.AddVisual(25, 0, new("Pe2eV")); // penguin
+            MapCrash2.AddVisual(25, 1, new("Pe2eV")); // penguin pulse
             MapCrash2.AddVisual(26, 0, new("Pr2fV")); // crumbler plat 2
             MapCrash2.AddVisual(26, 0 + 1000, new("Pr1fV")); // crumbler plat 1
+            MapCrash2.AddVisual(27, 0, new("Po3eV")); // porcupine
+            MapCrash2.AddVisual(30, 0, new("Ol1bV")); // ostrich
             MapCrash2.AddVisual(32, 0, new("Sm1eV")); // smasher
             MapCrash2.AddVisual(32, 1, new("Sm2eV")); // constant smasher
             MapCrash2.AddVisual(32, 2, new("Ro1eV")); // roller
             MapCrash2.AddVisual(32, 3, new("Ic3eV")); // icicle
+            MapCrash2.AddVisual(33, 0, new("AB10V")); // ass banger
             MapCrash2.AddVisual(34, 0, new("BT10V")); // box tnt
             MapCrash2.AddVisual(34, 2, new("BN10V")); // box empty
             MapCrash2.AddVisual(34, 3, new("BS10V")); // box spring
@@ -138,11 +149,29 @@ namespace CrashEdit.CE
             MapCrash2.AddVisual(34, 23, new("Bs10V")); // box steel
             MapCrash2.AddVisual(34, 24, new("Ba10V")); // box action nitro
             MapCrash2.AddVisual(35, 3, new("Do1iV")); // space door
+            MapCrash2.AddVisual(35, 6, new("Do2iV", 0)); // space lock
+            MapCrash2.AddVisual(35, 6 + 1000, new("Do4iV")); // space lock (lamps)
+            MapCrash2.AddVisual(35, 15, new("Sb1iV")); // space bomb ring
             MapCrash2.AddVisual(35, 11, new("Ca1iV")); // space cable
             MapCrash2.AddVisual(35, 13, new("SG60V")); // space gun
+            MapCrash2.AddVisual(38, 0, new("Ep1nV")); // spore plant
+            MapCrash2.AddVisual(38, 0 + 1000, new("Ep5nV", 0)); // spore plant
+            MapCrash2.AddVisual(38, 4, new("JuPpV")); // evil plant
+            MapCrash2.AddVisual(39, 0, new("Mi1lV")); // mine
+            MapCrash2.AddVisual(39, 2, new("pl1lV")); // plank
             MapCrash2.AddVisual(42, 0, new("SL1iV")); // space lab ass
             MapCrash2.AddVisual(42, 2, new("SF1iV")); // space fire
+            MapCrash2.AddVisual(46, 0, new("Dr1cV")); // dragonfly
             MapCrash2.AddVisual(46, 1, new("Dr1cV")); // dragonfly
+            MapCrash2.AddVisual(47, 1, new("Hp1pV")); // hippo
+            MapCrash2.AddVisual(47, 2, new("Bo1pV")); // board
+            MapCrash2.AddVisual(47, 4, new("Mf1pV")); // mine float
+            MapCrash2.AddVisual(47, 5, new("Pa1pV")); // piranha fish
+            MapCrash2.AddVisual(47, 7, new("Mf1pV")); // mine path
+            MapCrash2.AddVisual(50, 8, new("Pu1gV", 8)); // intro crystal light ray
+            MapCrash2.AddVisual(50, 10, new("Sb1sV", 8)); // intro star window opacity 50%
+            MapCrash2.AddVisual(50, 15, new("Sw1sV", 8)); // intro star window opacity 50%
+            MapCrash2.AddVisual(50, 19, new("Li1sV", 8)); // intro ship light
             MapCrash2.AddVisual(55, 0, new("Pu1gV", 8)); // piston up
             MapCrash2.AddVisual(55, 1 + 0000, new("Pi2gV", 4)); // piston small
             MapCrash2.AddVisual(55, 1 + 1000, new("Pi1gV", 4)); // piston

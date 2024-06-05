@@ -910,7 +910,7 @@ namespace CrashEdit.CE
 
         protected void DrawCameraFov(Vector3 trans, Vector3 rot, float fovx, float fovy, bool fill)
         {
-            var mrot = MathExt.MakeCrashRotationMatrix(rot);
+            var mrot = MathExt.EulerToMat3_Z_XY(rot);
 
             var corner = new Vector3(fovx, fovy, 1).Normalized();
             var ntl = mrot * new Vector3(-corner.X, corner.Y, -corner.Z);
