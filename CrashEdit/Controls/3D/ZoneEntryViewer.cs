@@ -277,6 +277,14 @@ namespace CrashEdit.CE
                         return RenderEntityVisual(visual, trans + new Vector3(0, -1900f / 400f, 0));
                     }
                 }
+                else if (type == 46 && subtype == 0) // dragonfly
+                {
+                    if (map.TryGetVisual(type, subtype, out visual))
+                    {
+                        // 2621/4096 scale
+                        return RenderEntityVisual(visual, trans + new Vector3(0, 320f / 400f, 0));
+                    }
+                }
                 else if (type == 35 && subtype == 15 && entity.Settings.Count == 9)
                 {
                     bool ok = false;

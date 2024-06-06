@@ -6,7 +6,6 @@ namespace CrashEdit.CE
     {
         public string AnimName;
         public int AnimFrame;
-        public bool Lerped;
 
         public EntityVisual(string name, int frame = -1)
         {
@@ -189,46 +188,62 @@ namespace CrashEdit.CE
             MapCrash2.AddVisual(57, 1, new("JuFcV")); // firefly
         }
 
+        private const string MapsFileName = "CrashEdit.exe.entityvisuals-v1.json";
+
         public static void SaveMaps()
         {
-            using Utf8JsonWriter writer = new(new FileStream("CrashEdit.exe.entityvisuals.json", FileMode.Create), new() { Indented = true });
-            writer.WriteStartObject();
-            writer.WriteStartObject("crash2");
-            writer.WriteStartArray("models");
-            foreach (var kvp in MapCrash2)
+            static void write_map(Utf8JsonWriter writer, EntityVisualList map, string name)
             {
-                writer.WriteStartObject();
-                writer.WriteNumber("type", kvp.Key / 10000);
-                writer.WriteNumber("subtype", kvp.Key % 10000);
-                writer.WriteString("anim", kvp.Value.AnimName);
-                writer.WriteNumber("frame", kvp.Value.AnimFrame);
+                writer.WriteStartObject(name);
+                writer.WriteStartArray("models");
+                foreach (var kvp in map)
+                {
+                    writer.WriteStartObject();
+                    writer.WriteNumber("type", kvp.Key / 100000);
+                    writer.WriteNumber("subtype", kvp.Key % 100000);
+                    writer.WriteString("anim", kvp.Value.AnimName);
+                    writer.WriteNumber("frame", kvp.Value.AnimFrame);
+                    writer.WriteEndObject();
+                }
+                writer.WriteEndArray();
                 writer.WriteEndObject();
             }
-            writer.WriteEndArray();
-            writer.WriteEndObject();
+
+            using Utf8JsonWriter writer = new(new FileStream(MapsFileName, FileMode.Create), new() { Indented = true });
+            writer.WriteStartObject();
+            write_map(writer, MapCrash1, "crash1");
+            write_map(writer, MapCrash2, "crash2");
             writer.WriteEndObject();
             writer.Flush();
         }
 
         public static void LoadMaps()
         {
-            if (!File.Exists("CrashEdit.exe.entityvisuals.json")) return;
+            static void read_map(EntityVisualList map, JsonProperty elt)
+            {
+                foreach (var vis in elt.Value.GetProperty("models").EnumerateArray())
+                {
+                    var type = vis.GetProperty("type").GetInt32();
+                    var subtype = vis.GetProperty("subtype").GetInt32();
+                    var anim = vis.GetProperty("anim").GetString()!;
+                    var frame = vis.GetProperty("frame").GetInt32();
+                    map.AddVisual(type, subtype, new(anim, frame));
+                }
+            }
+
+            if (!File.Exists(MapsFileName)) return;
             try
             {
-                using var json = JsonDocument.Parse(new System.Buffers.ReadOnlySequence<byte>(File.ReadAllBytes("CrashEdit.exe.entityvisuals.json")));
+                using var json = JsonDocument.Parse(new System.Buffers.ReadOnlySequence<byte>(File.ReadAllBytes(MapsFileName)));
                 foreach (var elt in json.RootElement.EnumerateObject())
                 {
-                    if (elt.Name == "crash2")
+                    if (elt.Name == "crash1")
                     {
-                        MapCrash2.Clear();
-                        foreach (var vis in elt.Value.GetProperty("models").EnumerateArray())
-                        {
-                            var type = vis.GetProperty("type").GetInt32();
-                            var subtype = vis.GetProperty("subtype").GetInt32();
-                            var anim = vis.GetProperty("anim").GetString()!;
-                            var frame = vis.GetProperty("frame").GetInt32();
-                            MapCrash2.AddVisual(type, subtype, new(anim, frame));
-                        }
+                        read_map(MapCrash1, elt);
+                    }
+                    else if (elt.Name == "crash2")
+                    {
+                        read_map(MapCrash2, elt);
                     }
                 }
             }

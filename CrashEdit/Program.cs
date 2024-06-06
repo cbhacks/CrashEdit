@@ -104,7 +104,7 @@ namespace CrashEdit.CE
                 Properties.Settings.Default.DefaultFormH = 480;
             Properties.Settings.Default.Save();
             LoadC3AnimLinks();
-            // EntityVisual.LoadMaps();
+            EntityVisual.LoadMaps();
             EntityVisual.SaveMaps();
 
             Application.EnableVisualStyles();
