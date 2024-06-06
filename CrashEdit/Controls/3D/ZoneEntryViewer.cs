@@ -211,7 +211,7 @@ namespace CrashEdit.CE
             }
         }
 
-        private VAO[] _vaolist = new VAO[2];
+        private readonly VAO[] _vaolist = new VAO[2];
         private bool RenderEntityVisual(EntityVisual visual, Vector3 trans, Vector3 scale = default, Vector3 rot = default)
         {
             _vaolist[0] = _vao;
@@ -232,57 +232,41 @@ namespace CrashEdit.CE
                 if (type == 26 && subtype == 0 && entity.ID.HasValue) // ruins crumbler plat
                 {
                     if (map.TryGetVisual(type, (entity.ID & 0x1) != 0 ? 1000 : 2000, out visual))
-                    {
                         return RenderEntityVisual(visual, trans);
-                    }
                 }
                 else if (type == 26 && (subtype == 2 || subtype == 3) && entity.Settings.Count >= 1) // ruins leaner and spinner
                 {
                     if (map.TryGetVisual(type, (entity.Settings[0].ValueB + 1) * 1000, out visual))
-                    {
                         return RenderEntityVisual(visual, trans);
-                    }
                 }
                 else if (type == 14 && subtype == 4 && entity.Settings.Count > 9) // drop plat
                 {
                     if (map.TryGetVisual(type, subtype + 1000 * (entity.Settings[entity.Settings.Count - 9 - 1].Value >> 8), out visual))
-                    {
                         return RenderEntityVisual(visual, trans);
-                    }
                 }
                 else if (type == 55 && subtype == 1 && entity.Settings.Count > 0) // pistons
                 {
                     if (map.TryGetVisual(type, subtype + 1000 * (entity.Settings[entity.Settings.Count - 0 - 1].Value != 0 ? 1 : 0), out visual))
-                    {
                         return RenderEntityVisual(visual, trans);
-                    }
                 }
                 else if (type == 42 && subtype == 0) // space lab ass
                 {
                     bool ok = false;
                     if (map.TryGetVisual(type, subtype, out visual))
-                    {
                         ok |= RenderEntityVisual(visual, entity.Settings.Count > 0 ? trans + new Vector3(0, 0, entity.Settings[entity.Settings.Count - 0 - 1].Value / (256f * 400)) : trans);
-                    }
                     if (map.TryGetVisual(type, 2, out visual))
-                    {
                         ok |= RenderEntityVisual(visual, trans);
-                    }
                     return ok;
                 }
                 else if (type == 11 && subtype == 0) // boulder gorilla
                 {
                     if (map.TryGetVisual(type, subtype, out visual))
-                    {
                         return RenderEntityVisual(visual, trans + new Vector3(0, -1900f / 400f, 0));
-                    }
                 }
                 else if (type == 46 && subtype == 0) // dragonfly
                 {
                     if (map.TryGetVisual(type, subtype, out visual))
-                    {
                         return RenderEntityVisual(visual, trans + new Vector3(0, 320f / 400f, 0), scale: new Vector3(2621f / 4096f));
-                    }
                 }
                 else if (type == 35 && subtype == 15 && entity.Settings.Count == 9)
                 {
@@ -303,13 +287,9 @@ namespace CrashEdit.CE
                 {
                     bool ok = false;
                     if (map.TryGetVisual(type, subtype, out visual))
-                    {
                         ok |= RenderEntityVisual(visual, trans);
-                    }
                     if (map.TryGetVisual(type, subtype + 1000, out visual))
-                    {
                         ok |= RenderEntityVisual(visual, trans);
-                    }
                     return ok;
                 }
             }
@@ -365,7 +345,7 @@ namespace CrashEdit.CE
                     {
                         draw_type = false;
                         int timetrialcontents = entity.TimeTrialReward.HasValue ? entity.TimeTrialReward.Value >> 8 : 0;
-                        if (entity.Subtype.Value == 29)
+                        if (entity.Subtype.Value == 29 && nsf.Version == GameVersion.Crash3)
                         {
                             float size_x = 1, size_y = 1, size_z = 1;
                             if (entity.Settings.Count > 2)
