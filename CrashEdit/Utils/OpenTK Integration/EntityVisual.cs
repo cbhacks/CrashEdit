@@ -176,9 +176,9 @@ namespace CrashEdit.CE
             MapCrash2.AddVisual(50, 10, new("Sw1sV")); // intro star window
             MapCrash2.AddVisual(50, 15, new("Sb1sV")); // intro star window opacity 50%
             MapCrash2.AddVisual(50, 19, new("Li1sV")); // intro ship light
-            MapCrash2.AddVisual(55, 0, new("Pu1gV", 8)); // piston up
-            MapCrash2.AddVisual(55, 1 + 0000, new("Pi2gV", 4)); // piston small
-            MapCrash2.AddVisual(55, 1 + 1000, new("Pi1gV", 4)); // piston
+            MapCrash2.AddVisual(55, 0, new("Pu1gV", 16)); // piston up
+            MapCrash2.AddVisual(55, 1 + 0000, new("Pi2gV", 8)); // piston small
+            MapCrash2.AddVisual(55, 1 + 1000, new("Pi1gV", 8)); // piston
             MapCrash2.AddVisual(55, 2, new("Pa1gV", 0)); // pad
             MapCrash2.AddVisual(55, 3, new("Gu1gV")); // gun
             MapCrash2.AddVisual(55, 4, new("Gd1gV")); // gun down
