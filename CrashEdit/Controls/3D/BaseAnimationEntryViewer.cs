@@ -95,12 +95,12 @@ namespace CrashEdit.CE
 
         protected override void Dispose(bool disposing)
         {
+            base.Dispose(disposing);
+
             for (var i = 0; i < vaoModel.Length; ++i)
             {
                 vaoModel[i]?.Dispose();
             }
-
-            base.Dispose(disposing);
         }
     }
 }

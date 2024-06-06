@@ -121,10 +121,10 @@ namespace CrashEdit.CE
 
         protected override void Dispose(bool disposing)
         {
+            base.Dispose(disposing);
+
             vaoWorld?.Dispose();
             vaoSky?.Dispose();
-
-            base.Dispose(disposing);
         }
     }
 }

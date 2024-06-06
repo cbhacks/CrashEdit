@@ -446,6 +446,8 @@ namespace CrashEdit.CE
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
+            if (IsDisposed) return;
+
             dbgContextDir.Clear();
             if (!loaded)
             {
@@ -1242,6 +1244,8 @@ namespace CrashEdit.CE
 
         protected override void Dispose(bool disposing)
         {
+            MakeCurrent();
+
             render.Dispose();
 
             GL.DeleteQuery(qryGpuTime);

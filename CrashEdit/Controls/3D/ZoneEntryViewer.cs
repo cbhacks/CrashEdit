@@ -681,9 +681,9 @@ namespace CrashEdit.CE
 
         protected override void Dispose(bool disposing)
         {
-            octree_renderer?.Dispose();
-
             base.Dispose(disposing);
+
+            octree_renderer?.Dispose();
         }
     }
 }

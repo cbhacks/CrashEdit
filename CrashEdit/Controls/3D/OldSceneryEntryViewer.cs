@@ -33,6 +33,8 @@ namespace CrashEdit.CE
             {
                 foreach (var world in GetWorlds())
                 {
+                    if (world == null)
+                        continue;
                     foreach (OldSceneryVertex vertex in world.Vertices)
                     {
                         yield return new Position(world.XOffset + vertex.X, world.YOffset + vertex.Y, world.ZOffset + vertex.Z) / GameScales.WorldC1;
@@ -45,6 +47,8 @@ namespace CrashEdit.CE
         {
             foreach (var world in GetWorlds())
             {
+                if (world == null)
+                    continue;
                 for (int i = 0, m = world.TPAGCount; i < m; ++i)
                 {
                     tpages.AddTexturePage(world.GetTPAG(i));

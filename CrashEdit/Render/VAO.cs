@@ -80,20 +80,6 @@ namespace CrashEdit.CE
             WarnedShaders.Add(Shader.Name);
         }
 
-        public VAO(VAO other)
-        {
-            Shader = other.Shader;
-            Primitive = other.Primitive;
-
-            // Create the vertex array object (VAO), but no buffer (that will be sourced from the other VAO)
-            ID = GL.GenVertexArray();
-            VBO = other.VBO;
-
-            // set up the array
-            EnableCommonAttribs();
-            WarnedShaders.Add(Shader.Name);
-        }
-
         public void TestRealloc() => VBO.TestRealloc();
         public void TestRealloc(int vert_count)
         {

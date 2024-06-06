@@ -22,9 +22,13 @@ namespace CrashEdit.CE
 
         public override void Sync()
         {
-            RootController.Sync();
-            ResourceTree.Sync();
-            ResourceBox.Sync();
+            base.Sync();
+        }
+
+        public override void Kill()
+        {
+            base.Kill();
+            NSFController.Kill();
         }
     }
 }

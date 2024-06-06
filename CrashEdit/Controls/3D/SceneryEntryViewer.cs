@@ -38,6 +38,8 @@ namespace CrashEdit.CE
             {
                 foreach (var world in GetWorlds())
                 {
+                    if (world == null)
+                        continue;
                     Vector3 trans = new Vector3(world.XOffset, world.YOffset, world.ZOffset);
                     foreach (SceneryVertex vertex in world.Vertices)
                     {
@@ -52,6 +54,8 @@ namespace CrashEdit.CE
         {
             foreach (var world in GetWorlds())
             {
+                if (world == null)
+                    continue;
                 for (int i = 0, m = world.TPAGCount; i < m; ++i)
                 {
                     tpages.AddTexturePage(world.GetTPAG(i));
