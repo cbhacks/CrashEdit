@@ -61,7 +61,7 @@ namespace CrashEdit.CE
 
             animation_renderer.Setup(_interpolate, _halfspeed);
 
-            if (animation_renderer.RenderAnimFrame(new Vector3(0), vaoModel, nsf.GetEntry<AnimationEntry>(animId), animFrame != -1 ? animFrame : render.FullCurrentFrame / 2, x => nsf.GetEntry<ModelEntry>(x.ModelEID)))
+            if (animation_renderer.RenderAnimFrame(new Vector3(0), vaoModel, nsf.GetEntry<AnimationEntry>(animId), animFrame != -1 ? animFrame : render.FullCurrentFrame / 2, x => nsf.GetEntry<ModelEntry>(GetModelEID(x))))
             {
                 UploadTPAGs();
 
