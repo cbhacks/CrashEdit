@@ -212,11 +212,11 @@ namespace CrashEdit.CE
         }
 
         private VAO[] _vaolist = new VAO[2];
-        private bool RenderEntityVisual(EntityVisual visual, Vector3 trans)
+        private bool RenderEntityVisual(EntityVisual visual, Vector3 trans, Vector3 scale = default, Vector3 rot = default)
         {
             _vaolist[0] = _vao;
             _vaolist[1] = _vao2;
-            return animation_renderer.RenderAnimFrame(trans, _vaolist, nsf.GetEntry<AnimationEntry>(visual.AnimName), visual.AnimFrame != -1 ? visual.AnimFrame : render.FullCurrentFrame / 2, x => nsf.GetEntry<ModelEntry>(x.ModelEID));
+            return animation_renderer.RenderAnimFrame(trans, _vaolist, nsf.GetEntry<AnimationEntry>(visual.AnimName), visual.AnimFrame != -1 ? visual.AnimFrame : render.FullCurrentFrame / 2, x => nsf.GetEntry<ModelEntry>(x.ModelEID), scale: scale, rot: rot);
         }
 
         private bool RenderEntityVisual(Entity entity, Vector3 trans)
@@ -281,8 +281,7 @@ namespace CrashEdit.CE
                 {
                     if (map.TryGetVisual(type, subtype, out visual))
                     {
-                        // 2621/4096 scale
-                        return RenderEntityVisual(visual, trans + new Vector3(0, 320f / 400f, 0));
+                        return RenderEntityVisual(visual, trans + new Vector3(0, 320f / 400f, 0), scale: new Vector3(2621f / 4096f));
                     }
                 }
                 else if (type == 35 && subtype == 15 && entity.Settings.Count == 9)

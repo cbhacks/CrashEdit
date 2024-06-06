@@ -13,8 +13,10 @@ namespace CrashEdit.CE
         public bool HalfSpeed { get; set; }
         public BlendMode BlendMask { get; private set; }
         public Frame BaseFrame { get; private set; }
-
+        
         private Vector3 _globaltrans;
+        private Vector3 _globalscale;
+        private Matrix3 _globalrot;
         private Func<Frame, ModelEntry?> _getmodelfunc;
 
         private Vector3[]?[] _uncompressedverts = new Vector3[2][];
@@ -32,7 +34,7 @@ namespace CrashEdit.CE
             BlendMask = BlendMode.None;
         }
 
-        public bool RenderAnimFrame(Vector3 trans, VAO[] vaos, AnimationEntry? anim, double frame, Func<Frame, ModelEntry?> get_model_func)
+        public bool RenderAnimFrame(Vector3 trans, VAO[] vaos, AnimationEntry? anim, double frame, Func<Frame, ModelEntry?> get_model_func, Vector3 scale = default, Vector3 rot = default)
         {
             BaseFrame = null;
 
@@ -41,6 +43,8 @@ namespace CrashEdit.CE
                 return false;
 
             _globaltrans = trans;
+            _globalscale = scale == Vector3.Zero ? Vector3.One : scale;
+            _globalrot = MathExt.EulerToMat3_Z_XY(rot);
             _getmodelfunc = get_model_func!;
 
             Frame? frame2 = null;
@@ -178,7 +182,7 @@ namespace CrashEdit.CE
                     var c = model.Colors[tri.Color[v_n]];
                     var v = verts[tri.Vertex[v_n] + frame.SpecialVertexCount];
                     vao.Verts[vao.CurVert].rgba = new(c.Red, c.Green, c.Blue, 255);
-                    vao.Verts[vao.CurVert].trans = (new Vector3(v.X, v.Z, v.Y) + trans) * scale + _globaltrans;
+                    vao.Verts[vao.CurVert].trans = _globalrot * ((new Vector3(v.X, v.Z, v.Y) + trans) * scale) * _globalscale + _globaltrans;
                     vao.CurVert++;
                 }
             }
