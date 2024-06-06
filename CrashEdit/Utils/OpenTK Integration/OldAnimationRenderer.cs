@@ -65,18 +65,21 @@ namespace CrashEdit.CE
 
             BlendMask = BlendMode.Solid;
 
-            int startvert = vaos[0].CurVert;
+            int startvert1 = vaos[0].CurVert;
+            int startvert2 = vaos[1] == null ? 0 : vaos[1].CurVert;
 
             if (!RenderFrame(vaos, frame1, 0))
                 return false;
 
             if (frame2 != null && frame2 != frame1 && frame1.Vertices.Count == frame2.Vertices.Count && RenderFrame(vaos, frame2, 1))
             {
-                for (int i = startvert; i < vaos[0].CurVert; ++i)
+                for (int i = 0; i < (vaos[0].CurVert - startvert1); ++i)
                 {
-                    MathExt.Lerp(ref vaos[0].Verts[i].trans, vaos[1].Verts[i].trans, interp);
-                    MathExt.Lerp(ref vaos[0].Verts[i].rgba, vaos[1].Verts[i].rgba, interp);
+                    MathExt.Lerp(ref vaos[0].Verts[i + startvert1].trans, vaos[1].Verts[i + startvert2].trans, interp);
+                    MathExt.Lerp(ref vaos[0].Verts[i + startvert1].rgba, vaos[1].Verts[i + startvert2].rgba, interp);
                 }
+                // these won't be rendered, so who cares
+                vaos[1].CurVert = startvert2;
             }
 
             BaseFrame = frame1;

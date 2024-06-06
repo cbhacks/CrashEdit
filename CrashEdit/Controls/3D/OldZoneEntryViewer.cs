@@ -442,7 +442,7 @@ namespace CrashEdit.CE
                 }
             }
 
-            animation_renderer.Setup(false);
+            animation_renderer.Setup(true);
 
             is_master_zone = true;
             zone_alpha = 255;
@@ -490,6 +490,7 @@ namespace CrashEdit.CE
         private bool RenderEntityVisual(EntityVisual visual, Vector3 trans, Vector3 scale = default, Vector3 rot = default)
         {
             _vaolist[0] = _vao;
+            _vaolist[1] = _vao2;
             return animation_renderer.RenderAnimFrame(trans, _vaolist, nsf.GetEntry<Entry>(visual.AnimName), visual.AnimFrame != -1 ? visual.AnimFrame : render.FullCurrentFrame / 2, x => nsf.GetEntry<OldModelEntry>(x.ModelEID), scale: scale, rot: rot);
         }
 
