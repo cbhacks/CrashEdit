@@ -10,6 +10,7 @@ namespace CrashEdit.CE
 
         public bool Interpolate { get; set; }
         public bool Player { get; set; }
+        public bool DisableLighting { get; set; }
         public BlendMode BlendMask { get; private set; }
         public OldFrame BaseFrame { get; private set; }
         public bool Colored { get; private set; }
@@ -224,7 +225,7 @@ namespace CrashEdit.CE
             else
             {
                 Vector3 normal = new Vector3(-vert.NormalX, vert.NormalY, vert.NormalZ) * 128;
-                if (!nolight)
+                if (!nolight && !DisableLighting)
                 {
                     // todo rot
                     float sx = MathF.Sin(0);

@@ -14,6 +14,7 @@ namespace CrashEdit.CE
         public OldAnimationEntryViewer(NSF nsf, int anim_eid, int frame = -1) : base(nsf, anim_eid, frame)
         {
             animation_renderer = new() { TPages = tpages, Render = render };
+            animation_renderer.DisableLighting = true;
         }
 
         private List<OldFrame>? GetFrames()
