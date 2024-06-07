@@ -102,6 +102,14 @@ namespace CrashEdit
             ResourceBox.Sync();
         }
 
+        public virtual void Kill()
+        {
+            Controls.Clear();
+            RootController.Kill();
+            ResourceTree.Dispose();
+            ResourceBox.Dispose();
+        }
+
         public void ExecuteVerb(Verb verb)
         {
             ArgumentNullException.ThrowIfNull(verb);

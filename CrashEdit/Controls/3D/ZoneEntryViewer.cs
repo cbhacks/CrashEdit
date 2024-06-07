@@ -7,6 +7,7 @@ namespace CrashEdit.CE
     public sealed class ZoneEntryViewer : SceneryEntryViewer
     {
         private readonly OctreeRenderer octree_renderer;
+        private readonly AnimationRenderer animation_renderer;
 
         private readonly List<int> zones;
         private readonly int this_zone;
@@ -32,6 +33,7 @@ namespace CrashEdit.CE
             zones = new() { zone_eid };
             this_zone = zone_eid;
             octree_renderer = new(this);
+            animation_renderer = new() { TPages = tpages, Render = render };
         }
 
         public ZoneEntryViewer(NSF nsf, List<int> zone_eids) : base(nsf, new List<int>())
@@ -39,6 +41,7 @@ namespace CrashEdit.CE
             zones = zone_eids;
             this_zone = Entry.NullEID;
             octree_renderer = new(this);
+            animation_renderer = new() { TPages = tpages, Render = render };
         }
 
         protected override void OnInvalidated(InvalidateEventArgs e)
@@ -121,18 +124,20 @@ namespace CrashEdit.CE
             return ret;
         }
 
+        private ZoneEntry? GetMasterZone()
+        {
+            if (!zones.Contains(this_zone))
+                return null;
+            else
+                return nsf.GetEntry<ZoneEntry>(this_zone);
+        }
+
         protected override void Render()
         {
             var allzones = GetZones();
-            ZoneEntry master_zone = null;
-            foreach (var zone in allzones)
-            {
-                if (zone.EID == this_zone)
-                {
-                    master_zone = zone;
-                    break;
-                }
-            }
+            ZoneEntry? master_zone = GetMasterZone();
+
+            SetSortList(null);
 
             List<int> worlds = new();
             foreach (var zone in allzones)
@@ -155,6 +160,8 @@ namespace CrashEdit.CE
                 }
             }
 
+            animation_renderer.Setup(true, true);
+
             is_master_zone = true;
             zone_alpha = 255;
             if (master_zone != null)
@@ -165,24 +172,14 @@ namespace CrashEdit.CE
                 is_master_zone = false;
                 zone_alpha = 128;
             }
-            else
-            {
-                foreach (var zone in allzones)
-                {
-                    RenderZone(zone);
-                }
-                allzones.Clear();
-            }
-
-            // render early
-            PostRender();
-
-            base.Render();
-
             foreach (var zone in allzones)
             {
                 RenderZone(zone);
             }
+
+            _vao.BlendModes |= animation_renderer.BlendMask;
+
+            base.Render();
         }
 
         private void RenderZone(ZoneEntry zone)
@@ -214,9 +211,103 @@ namespace CrashEdit.CE
             }
         }
 
+        private readonly VAO[] _vaolist = new VAO[2];
+        private bool RenderEntityVisual(EntityVisual visual, Vector3 trans, Vector3 scale = default, Vector3 rot = default)
+        {
+            _vaolist[0] = _vao;
+            _vaolist[1] = _vao2;
+            return animation_renderer.RenderAnimFrame(trans, _vaolist, nsf.GetEntry<AnimationEntry>(visual.AnimName), visual.AnimFrame != -1 ? visual.AnimFrame : render.FullCurrentFrame / 2, x => nsf.GetEntry<ModelEntry>(x.ModelEID), scale: scale, rot: rot);
+        }
+
+        private bool RenderEntityVisual(Entity entity, Vector3 trans)
+        {
+            // TODO get rotation along path
+            bool crash2 = nsf.Version == GameVersion.Crash2;
+            var map = crash2 ? EntityVisual.MapCrash2 : EntityVisual.MapCrash3;
+            int type = entity.Type.Value;
+            int subtype = entity.Subtype.Value;
+            EntityVisual visual;
+            if (crash2)
+            {
+                if (type == 26 && subtype == 0 && entity.ID.HasValue) // ruins crumbler plat
+                {
+                    if (map.TryGetVisual(type, (entity.ID & 0x1) != 0 ? 1000 : 2000, out visual))
+                        return RenderEntityVisual(visual, trans);
+                }
+                else if (type == 26 && (subtype == 2 || subtype == 3) && entity.Settings.Count >= 1) // ruins leaner and spinner
+                {
+                    if (map.TryGetVisual(type, (entity.Settings[0].ValueB + 1) * 1000, out visual))
+                        return RenderEntityVisual(visual, trans);
+                }
+                else if (type == 14 && subtype == 4 && entity.Settings.Count > 9) // drop plat
+                {
+                    if (map.TryGetVisual(type, subtype + 1000 * (entity.Settings[entity.Settings.Count - 9 - 1].Value >> 8), out visual))
+                        return RenderEntityVisual(visual, trans);
+                }
+                else if (type == 55 && subtype == 1 && entity.Settings.Count > 0) // pistons
+                {
+                    if (map.TryGetVisual(type, subtype + 1000 * (entity.Settings[entity.Settings.Count - 0 - 1].Value != 0 ? 1 : 0), out visual))
+                        return RenderEntityVisual(visual, trans);
+                }
+                else if (type == 42 && subtype == 0) // space lab ass
+                {
+                    bool ok = false;
+                    if (map.TryGetVisual(type, subtype, out visual))
+                        ok |= RenderEntityVisual(visual, entity.Settings.Count > 0 ? trans + new Vector3(0, 0, entity.Settings[entity.Settings.Count - 0 - 1].Value / (256f * 400)) : trans);
+                    if (map.TryGetVisual(type, 2, out visual))
+                        ok |= RenderEntityVisual(visual, trans);
+                    return ok;
+                }
+                else if (type == 11 && subtype == 0) // boulder gorilla
+                {
+                    if (map.TryGetVisual(type, subtype, out visual))
+                        return RenderEntityVisual(visual, trans + new Vector3(0, -1900f / 400f, 0));
+                }
+                else if (type == 46 && subtype == 0) // dragonfly
+                {
+                    if (map.TryGetVisual(type, subtype, out visual))
+                        return RenderEntityVisual(visual, trans + new Vector3(0, 320f / 400f, 0), scale: new Vector3(2621f / 4096f));
+                }
+                else if (type == 35 && subtype == 15 && entity.Settings.Count == 9)
+                {
+                    bool ok = false;
+                    if (map.TryGetVisual(type, subtype, out visual))
+                    {
+                        float deg_per_bomb = MathHelper.TwoPi / entity.Settings[0].Value;
+                        float bomb_distance = entity.Settings[2].Value / 256f / 400f;
+                        for (int i = 0; i < entity.Settings[0].Value; i++)
+                        {
+                            float deg = deg_per_bomb * i;
+                            ok |= RenderEntityVisual(visual, trans + new Vector3(MathF.Cos(deg) * bomb_distance, MathF.Sin(deg) * bomb_distance, 0));
+                        }
+                    }
+                    return ok;
+                }
+                else if ((type == 35 && subtype == 6) || (type == 38 && subtype == 0))
+                {
+                    bool ok = false;
+                    if (map.TryGetVisual(type, subtype, out visual))
+                        ok |= RenderEntityVisual(visual, trans);
+                    if (map.TryGetVisual(type, subtype + 1000, out visual))
+                        ok |= RenderEntityVisual(visual, trans);
+                    return ok;
+                }
+            }
+            else
+            {
+
+            }
+            if (map.TryGetVisual(type, subtype, out visual))
+            {
+                return RenderEntityVisual(visual, trans);
+            }
+            return false;
+        }
+
         private void RenderEntity(Entity entity)
         {
             float text_y = Settings.Default.Font3DEnable ? 0 : float.MaxValue;
+            float text_size = 0.8f;
             bool draw_type = entity.Type.HasValue && entity.Subtype.HasValue;
             float scale = GameScales.ZoneEntityC1;
             if (entity.Scaling.HasValue)
@@ -229,26 +320,32 @@ namespace CrashEdit.CE
                 Vector3 trans = new Vector3(entity.Positions[0].X, entity.Positions[0].Y, entity.Positions[0].Z) / scale + zone_trans;
                 if (!string.IsNullOrEmpty(entity.Name))
                 {
-                    AddText3D(entity.Name, trans, GetZoneColor(Color4.Yellow), ofs_y: text_y, flags: TextRenderFlags.Default | TextRenderFlags.Bottom);
+                    AddText3D(entity.Name, trans, GetZoneColor(Color4.Yellow), size: text_size, ofs_y: text_y, flags: TextRenderFlags.Default | TextRenderFlags.Bottom);
+                }
+
+                bool rendered_model = false;
+                if (entity.Type.HasValue && entity.Subtype.HasValue)
+                {
+                    rendered_model = RenderEntityVisual(entity, trans);
                 }
 
                 if (entity.Positions.Count == 1)
                 {
                     if (entity.Subtype.HasValue && entity.Type == 3)
                     {
-                        draw_type = !RenderPickupEntity(trans + new Vector3(0, .5f, 0), entity.Subtype.Value);
+                        draw_type = !rendered_model && !RenderPickupEntity(trans + new Vector3(0, .5f, 0), entity.Subtype.Value);
                         if (entity.Subtype.Value == 25 && entity.Settings.Count > 0)
                         {
                             draw_type = false;
                             int gem_id = entity.Settings[0].ValueB;
-                            text_y += AddText3D(gem_id.ToString(), trans, GetZoneColor(GetColorForGemId(gem_id)), ofs_y: text_y).Y;
+                            text_y += AddText3D(gem_id.ToString(), trans, GetZoneColor(GetColorForGemId(gem_id)), size: text_size, ofs_y: text_y).Y;
                         }
                     }
                     else if (entity.Subtype.HasValue && entity.Type == 34)
                     {
                         draw_type = false;
                         int timetrialcontents = entity.TimeTrialReward.HasValue ? entity.TimeTrialReward.Value >> 8 : 0;
-                        if (entity.Subtype.Value == 29)
+                        if (entity.Subtype.Value == 29 && nsf.Version == GameVersion.Crash3)
                         {
                             float size_x = 1, size_y = 1, size_z = 1;
                             if (entity.Settings.Count > 2)
@@ -256,13 +353,14 @@ namespace CrashEdit.CE
                                 size_x = entity.Settings[0].Value / 4096f;
                                 size_y = entity.Settings[1].Value / 4096f;
                                 size_z = entity.Settings[2].Value / 4096f;
-                                text_y += AddText3D($"{size_x} x {size_y} x {size_z}", trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
+                                text_y += AddText3D($"{size_x} x {size_y} x {size_z}", trans, GetZoneColor(Color4.White), size: text_size, ofs_y: text_y).Y;
                             }
                             RenderBoxEntity(trans, entity.Subtype.Value, timetrialcontents, size_x, size_y, size_z);
                         }
                         else
                         {
-                            RenderBoxEntity(trans, entity.Subtype.Value, timetrialcontents);
+                            if (!rendered_model)
+                                RenderBoxEntity(trans, entity.Subtype.Value, timetrialcontents);
                             if (entity.Settings.Count > 0)
                             {
                                 int pickup = entity.Settings[0].ValueB;
@@ -279,7 +377,7 @@ namespace CrashEdit.CE
                                 else if (pickup >= 500 && pickup < 564) pickup_name = "relic-2-" + (pickup - 500);
                                 else if (pickup >= 600 && pickup < 664) pickup_name = "relic-3-" + (pickup - 600);
                                 else if (pickup >= 700 && pickup < 764) pickup_name = "power-" + (pickup - 700);
-                                text_y += AddText3D(pickup_name, trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
+                                text_y += AddText3D(pickup_name, trans, GetZoneColor(Color4.White), size: text_size, ofs_y: text_y).Y;
                             }
                             if (entity.Settings.Count > 2)
                             {
@@ -307,14 +405,15 @@ namespace CrashEdit.CE
                                 }
                             }
                             if (entity.DDASettings.HasValue)
-                                text_y += AddText3D($"dda {entity.DDASettings.Value >> 8}", trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
+                                text_y += AddText3D($"dda {entity.DDASettings.Value >> 8}", trans, GetZoneColor(Color4.White), size: text_size, ofs_y: text_y).Y;
                             if (entity.DDASection.HasValue)
-                                text_y += AddText3D($"dda-section {entity.DDASection.Value}", trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
+                                text_y += AddText3D($"dda-section {entity.DDASection.Value}", trans, GetZoneColor(Color4.White), size: text_size, ofs_y: text_y).Y;
                         }
                     }
                     else
                     {
-                        AddSprite(trans, new Vector2(1), GetZoneColor(Color4.White), OldResources.PointTexture);
+                        if (!rendered_model)
+                            AddSprite(trans, new Vector2(1), GetZoneColor(Color4.White), OldResources.PointTexture);
                     }
                 }
                 else
@@ -336,9 +435,9 @@ namespace CrashEdit.CE
                 if (draw_type)
                 {
                     if (gools.ContainsKey(entity.Type.Value))
-                        text_y += AddText3D($"{gools[entity.Type.Value].EName}-{entity.Subtype.Value}", trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
+                        text_y += AddText3D($"{gools[entity.Type.Value].EName}-{entity.Subtype.Value}", trans, GetZoneColor(Color4.White), size: text_size, ofs_y: text_y).Y;
                     else
-                        text_y += AddText3D($"{entity.Type.Value}-{entity.Subtype.Value} (invalid type)", trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
+                        text_y += AddText3D($"{entity.Type.Value}-{entity.Subtype.Value} (invalid type)", trans, GetZoneColor(Color4.White), size: text_size, ofs_y: text_y).Y;
                 }
             }
         }
@@ -411,8 +510,7 @@ namespace CrashEdit.CE
                 new Vector2(sideTexRect.Right, sideTexRect.Bottom),
                 new Vector2(sideTexRect.Left, sideTexRect.Bottom)
             };
-            Span<Rgba> cols = stackalloc Rgba[6]
-            {
+            Span<Rgba> cols = stackalloc Rgba[6] {
                 GetZoneColor(93*2, 93*2, 93*2),
                 GetZoneColor(51*2, 51*2, 76*2),
                 GetZoneColor(115*2, 115*2, 92*2),
@@ -583,9 +681,9 @@ namespace CrashEdit.CE
 
         protected override void Dispose(bool disposing)
         {
-            octree_renderer?.Dispose();
-
             base.Dispose(disposing);
+
+            octree_renderer?.Dispose();
         }
     }
 }

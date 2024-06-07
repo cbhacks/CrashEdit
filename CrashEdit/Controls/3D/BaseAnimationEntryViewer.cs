@@ -1,7 +1,6 @@
 ﻿using CrashEdit.CE.Properties;
 using CrashEdit.Crash;
 using OpenTK.Graphics.OpenGL4;
-using OpenTK.Mathematics;
 
 namespace CrashEdit.CE
 {
@@ -15,24 +14,15 @@ namespace CrashEdit.CE
         protected int _cullmode = 1;
         protected bool _collision = Settings.Default.DisplayFrameCollision;
         protected bool _interpolate = true;
-        protected bool _halfspeed = false;
 
         private static VBO[] vboModel = new VBO[2];
         protected VAO[] vaoModel = new VAO[2];
-        protected BlendMode blend_mask;
-
-        protected readonly Vector3[][] vertCache = new Vector3[2][];
 
         public BaseAnimationEntryViewer(NSF nsf, int anim_eid, int frame = -1, int model_eid = Entry.NullEID) : base(nsf)
         {
             animId = anim_eid;
             animFrame = frame;
             modelId = model_eid;
-
-            for (int i = 0; i < vertCache.Length; ++i)
-            {
-                vertCache[i] = [];
-            }
         }
 
         private static void LoadGLStatic()
@@ -78,6 +68,7 @@ namespace CrashEdit.CE
         {
             // note: only buffer 0 is rendered
             vaoModel[0].UserCullMode = _cullmode;
+            vaoModel[0].BlendModes |= BlendMode.Solid;
             RenderFramePass(BlendMode.Solid);
             if (render.EnableTexture)
             {
@@ -85,11 +76,16 @@ namespace CrashEdit.CE
                 RenderFramePass(BlendMode.Subtractive);
                 RenderFramePass(BlendMode.Additive);
             }
+
+            vaoModel[0].DiscardVerts();
+            vaoModel[1].DiscardVerts();
+            vaoModel[0].BlendModes = BlendMode.None;
+            vaoModel[1].BlendModes = BlendMode.None;
         }
 
         protected void RenderFramePass(BlendMode pass)
         {
-            if ((pass & blend_mask) != BlendMode.None)
+            if ((pass & vaoModel[0].BlendModes) != BlendMode.None)
             {
                 SetBlendMode(pass);
                 vaoModel[0].BlendMask = BlendModeIndex(pass);
@@ -99,12 +95,12 @@ namespace CrashEdit.CE
 
         protected override void Dispose(bool disposing)
         {
+            base.Dispose(disposing);
+
             for (var i = 0; i < vaoModel.Length; ++i)
             {
                 vaoModel[i]?.Dispose();
             }
-
-            base.Dispose(disposing);
         }
     }
 }

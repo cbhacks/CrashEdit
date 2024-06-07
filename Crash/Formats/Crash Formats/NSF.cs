@@ -210,6 +210,8 @@ namespace CrashEdit.Crash
             Chunks = new List<Chunk>(chunks);
         }
 
+        public GameVersion Version { get; private set; }
+
         public string Title => "NSF";
         public string ImageKey => "File";
 
@@ -224,6 +226,7 @@ namespace CrashEdit.Crash
 
         public void ProcessAll(GameVersion gameversion)
         {
+            Version = gameversion;
             for (int i = 0; i < Chunks.Count; i++)
             {
                 if (Chunks[i] is UnprocessedChunk)

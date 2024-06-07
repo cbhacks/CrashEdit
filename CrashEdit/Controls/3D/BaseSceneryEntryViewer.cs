@@ -9,9 +9,12 @@ namespace CrashEdit.CE
         private List<int> worlds;
 
         private static VBO vboWorld;
-        protected VAO vaoWorld;
+        private static VBO vboSky;
+        protected VAO _vao;
+        protected VAO _vao2;
+        private VAO vaoWorld;
+        private VAO vaoSky;
         protected Vector3 world_offset;
-        protected BlendMode blend_mask;
 
         public BaseSceneryEntryViewer(NSF nsf, int world) : base(nsf)
         {
@@ -26,6 +29,7 @@ namespace CrashEdit.CE
         private static void LoadGLStatic()
         {
             vboWorld = new VBO();
+            vboSky = new VBO();
         }
 
         protected override void LoadGL()
@@ -33,6 +37,14 @@ namespace CrashEdit.CE
             base.LoadGL();
 
             vaoWorld = new(shaders.GetShader("crash1"), PrimitiveType.Triangles, vboWorld);
+            if (HasSky)
+            {
+                vaoSky = new(shaders.GetShader("crash1"), PrimitiveType.Triangles, vboSky);
+                vaoSky.ZBufDisableWrite = true;
+            }
+
+            _vao = vaoWorld;
+            _vao2 = vaoSky;
         }
 
         protected void SetWorlds(IEnumerable<int> worlds)
@@ -52,6 +64,8 @@ namespace CrashEdit.CE
             return list;
         }
 
+        protected virtual bool HasSky => true;
+
         protected abstract void SetWorldOffset(T world);
 
         protected override void Render()
@@ -62,13 +76,25 @@ namespace CrashEdit.CE
             CollectTPAGs();
             UploadTPAGs();
 
-            blend_mask = BlendMode.Solid;
+            // render skies first, then everything else
+            for (int i = HasSky ? 0 : 1; i < 2; ++i)
+            {
+                bool sky = i == 0;
+                _vao = sky ? vaoSky : vaoWorld;
+                RenderWorlds(sky);
+            }
+
+            _vao = vaoWorld;
         }
+
+        protected abstract void RenderWorlds(bool sky);
 
         protected abstract void RenderWorld(T world);
 
         protected void RenderPasses()
         {
+            _vao.BlendModes |= BlendMode.Solid;
+
             // render passes
             RenderWorldPass(BlendMode.Solid);
             if (render.EnableTexture)
@@ -77,23 +103,28 @@ namespace CrashEdit.CE
                 RenderWorldPass(BlendMode.Subtractive);
                 RenderWorldPass(BlendMode.Additive);
             }
+
+            // dump all verts, we rendered them!
+            _vao.DiscardVerts();
+            _vao.BlendModes = BlendMode.None;
         }
 
         protected void RenderWorldPass(BlendMode pass)
         {
-            if ((pass & blend_mask) != BlendMode.None)
+            if ((pass & _vao.BlendModes) != BlendMode.None)
             {
                 SetBlendMode(pass);
-                vaoWorld.BlendMask = BlendModeIndex(pass);
-                vaoWorld.Render(render);
+                _vao.BlendMask = BlendModeIndex(pass);
+                _vao.Render(render);
             }
         }
 
         protected override void Dispose(bool disposing)
         {
-            vaoWorld?.Dispose();
-
             base.Dispose(disposing);
+
+            vaoWorld?.Dispose();
+            vaoSky?.Dispose();
         }
     }
 }

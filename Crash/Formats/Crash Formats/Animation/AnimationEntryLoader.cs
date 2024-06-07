@@ -26,7 +26,7 @@ namespace CrashEdit.Crash
             {
                 frames[i] = Frame.LoadNew(items[i]);
             }
-            return new AnimationEntry(frames, false, eid);
+            return new AnimationEntry(frames, true, eid);
         }
     }
 }

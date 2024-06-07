@@ -24,6 +24,8 @@ namespace CrashEdit.CE
                 this.sortlist = null;
         }
 
+        protected override bool HasSky => false;
+
         protected override IEnumerable<IPosition> CorePositions
         {
             get
@@ -40,27 +42,20 @@ namespace CrashEdit.CE
 
         protected override void CollectTPAGs()
         {
-            tpages.Clear();
             foreach (var world in GetWorlds())
             {
                 for (int i = 0, m = world.TPAGCount; i < m; ++i)
                 {
-                    int tpag_eid = world.GetTPAG(i);
-                    if (!tpages.ContainsKey(tpag_eid))
-                        tpages[tpag_eid] = (short)tpages.Count;
+                    tpages.AddTexturePage(world.GetTPAG(i));
                 }
             }
         }
 
-        protected override void Render()
+        protected override void RenderWorlds(bool sky)
         {
-            base.Render();
-
-            vaoWorld.DiscardVerts();
-
             // collect valid worlds
             var all_worlds = GetWorlds();
-            vaoWorld.TestRealloc(all_worlds.Sum(x => x?.Polygons.Count ?? 0) * 3);
+            _vao.TestRealloc(all_worlds.Sum(x => x?.Polygons.Count ?? 0) * 3);
 
             if (sortlist == null)
             {
@@ -107,9 +102,9 @@ namespace CrashEdit.CE
         {
             var polygon = world.Polygons[index];
             OldModelStruct str = world.Structs[polygon.Texture];
-            ref var a = ref vaoWorld.Verts[vaoWorld.CurVert + 0];
-            ref var b = ref vaoWorld.Verts[vaoWorld.CurVert + 1];
-            ref var c = ref vaoWorld.Verts[vaoWorld.CurVert + 2];
+            ref var a = ref _vao.Verts[_vao.CurVert + 0];
+            ref var b = ref _vao.Verts[_vao.CurVert + 1];
+            ref var c = ref _vao.Verts[_vao.CurVert + 2];
             if (str is OldSceneryTexture tex)
             {
                 a.rgba = new(tex.R, tex.G, tex.B, 255);
@@ -119,7 +114,7 @@ namespace CrashEdit.CE
 
                 a.tex = new VertexTexInfo(tpages[world.GetTPAG(polygon.Page)], color: tex.ColorMode, blend: tex.BlendMode, clutx: tex.ClutX, cluty: tex.ClutY);
 
-                blend_mask |= VertexTexInfo.GetBlendMode(tex.BlendMode);
+                _vao.BlendModes |= VertexTexInfo.GetBlendMode(tex.BlendMode);
             }
             else
             {
@@ -138,8 +133,8 @@ namespace CrashEdit.CE
 
         private void RenderVertex(in ProtoSceneryVertex vert)
         {
-            vaoWorld.Verts[vaoWorld.CurVert].trans = (new Vector3(vert.X, vert.Y, vert.Z) + world_offset) / GameScales.WorldC1;
-            vaoWorld.CurVert++;
+            _vao.Verts[_vao.CurVert].trans = (new Vector3(vert.X, vert.Y, vert.Z) + world_offset) / GameScales.WorldC1;
+            _vao.CurVert++;
         }
     }
 }

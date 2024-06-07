@@ -9,6 +9,11 @@ namespace CrashEdit.CE
             return v - (float)Math.Truncate(v);
         }
 
+        public static double TruncatePart(this double v)
+        {
+            return v - Math.Truncate(v);
+        }
+
         public static Vector3 Div(Vector3 a, Vector3 b)
         {
             a.X /= b.X;
@@ -139,6 +144,16 @@ namespace CrashEdit.CE
         public static double Sec(double theta)
         {
             return Pythagoras(Math.Tan(theta), 1);
+        }
+
+        public static Matrix3 EulerToMat3_Z_XY(Vector3 euler)
+        {
+            return Matrix3.CreateFromQuaternion(new(0, 0, euler.Z)) * Matrix3.CreateFromQuaternion(new(euler.X, euler.Y, 0));
+        }
+
+        public static Matrix4 EulerToMat4_Z_XY(Vector3 euler)
+        {
+            return Matrix4.CreateFromQuaternion(new(0, 0, euler.Z)) * Matrix4.CreateFromQuaternion(new(euler.X, euler.Y, 0));
         }
     }
 }

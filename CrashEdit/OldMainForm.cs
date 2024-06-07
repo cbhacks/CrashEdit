@@ -696,6 +696,8 @@ namespace CrashEdit.CE
                 TabPage tab = tbcTabs.SelectedTab;
                 if (tab != null)
                 {
+                    (tab.Tag as NSFBox)?.Kill();
+                    tab.Tag = null;
                     tbcTabs.TabPages.Remove(tab);
                     tab.Dispose();
                 }

@@ -43,7 +43,7 @@ namespace CrashEdit.CE
         public void SetRotation(Vector3 euler)
         {
             Rot = new Quaternion(euler);
-            RotMat = Matrix4.CreateFromQuaternion(Rot);
+            RotMat = MathExt.EulerToMat4_Z_XY(euler);
             Forward = -(RotMat * new Vector4(0, 0, 1, 1)).Xyz;
             View = Matrix4.CreateTranslation(Trans) * RotMat;
         }

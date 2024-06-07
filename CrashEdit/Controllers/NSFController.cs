@@ -41,8 +41,18 @@ namespace CrashEdit.CE
 
         public NSF NSF { get; }
 
-        private Form ShowLevelForm { get; set; }
-        private Form ShowLevelZonesForm { get; set; }
+        private Form? ShowLevelForm { get; set; }
+        private Form? ShowLevelZonesForm { get; set; }
+
+        public void Kill()
+        {
+            ShowLevelForm?.Close();
+            ShowLevelZonesForm?.Close();
+            ShowLevelForm?.Dispose();
+            ShowLevelZonesForm?.Dispose();
+            ShowLevelForm = null;
+            ShowLevelZonesForm = null;
+        }
 
         private void Menu_Add_NormalChunk()
         {

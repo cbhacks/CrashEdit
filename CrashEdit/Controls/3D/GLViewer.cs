@@ -131,7 +131,7 @@ namespace CrashEdit.CE
         private int qryGpuTime;
         private static bool debugInitPrinted = false;
 
-        protected Dictionary<int, short> tpages = [];
+        protected TexturePageList tpages = [];
 
         #region Internal fields for input status and handling.
         private bool run = false;
@@ -446,6 +446,8 @@ namespace CrashEdit.CE
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
+            if (IsDisposed) return;
+
             dbgContextDir.Clear();
             if (!loaded)
             {
@@ -532,6 +534,9 @@ namespace CrashEdit.CE
 
                     GL.GetQueryObject(qryGpuTime, GetQueryObjectParam.QueryResult, out dbg_gpu_time);
 
+                    // clear the tpage cache for it to be repopulated and uploaded on the next frame
+                    tpages.Clear();
+
                     dbgContextDir.RemoveLast();
                 }
 
@@ -579,6 +584,8 @@ namespace CrashEdit.CE
         #region Functions for generating shapes and text on the debug renderers.
         public Vector2 AddText3D(string text, Vector3 pos, Rgba col, float size = 1, TextRenderFlags flags = TextRenderFlags.Default, float ofs_x = 0, float ofs_y = 0)
         {
+            if (ofs_y == float.MaxValue)
+                return new Vector2(0, 0);
             var screen_pos = new Vector4(pos, 1) * render.Projection.GetPVM();
             screen_pos /= screen_pos.W;
             if (screen_pos.Z >= 1 || screen_pos.Z <= -1)
@@ -902,6 +909,51 @@ namespace CrashEdit.CE
                 vaoLines.PushAttrib(trans: verts[i] * radius + trans, rgba: color);
             }
         }
+
+        protected void DrawCameraFov(Vector3 trans, Vector3 rot, float fovx, float fovy, bool fill)
+        {
+            var mrot = MathExt.EulerToMat3_Z_XY(rot);
+
+            var corner = new Vector3(fovx, fovy, 1).Normalized();
+            var ntl = mrot * new Vector3(-corner.X, corner.Y, -corner.Z);
+            var ntr = mrot * new Vector3(corner.X, corner.Y, -corner.Z);
+            var nbl = mrot * new Vector3(-corner.X, -corner.Y, -corner.Z);
+            var nbr = mrot * new Vector3(corner.X, -corner.Y, -corner.Z);
+
+            float cornerlen = (float)MathExt.Pythagoras(MathExt.Pythagoras(fovx, 1), fovy);
+            float near = 1;
+            float far = near + 2;
+            near *= cornerlen;
+            far *= cornerlen;
+
+            Rgba color = (Rgba)Color4.Lime;
+            Span<Vector3> frameverts = [
+                trans + ntl * near,
+                trans + ntl * far,
+                trans + ntr * near,
+                trans + ntr * far,
+                trans + nbl * near,
+                trans + nbl * far,
+                trans + nbr * near,
+                trans + nbr * far,
+            ];
+            for (int i = 0; i < BoxLineIndices.Length; ++i)
+            {
+                vaoLines.PushAttrib(trans: frameverts[BoxLineIndices[i]], rgba: color);
+            }
+            if (fill)
+            {
+                var side_verts = BoxTriIndices.Length / 6;
+                for (int i = side_verts * 1; i < side_verts * 3; ++i)
+                {
+                    vaoTris.PushAttrib(trans: frameverts[BoxTriIndices[i]], rgba: new(color, 64), st: new Vector2(-1));
+                }
+                for (int i = side_verts * 4; i < side_verts * 6; ++i)
+                {
+                    vaoTris.PushAttrib(trans: frameverts[BoxTriIndices[i]], rgba: new(color, 64), st: new Vector2(-1));
+                }
+            }
+        }
         #endregion
 
         public void AddOctreeX(Vector3 trans, Vector3 trans_size, int node, Vector3w nodes_size)
@@ -995,8 +1047,6 @@ namespace CrashEdit.CE
             render.Projection.CamRot.X = MathHelper.DegreesToRadians(15);
         }
 
-        [Flags]
-        public enum BlendMode { None = 0, Trans = 1, Additive = 2, Subtractive = 4, Solid = 8, All = Trans | Additive | Subtractive | Solid }
         public static int BlendModeIndex(BlendMode blend) => MathExt.Log2((int)blend);
 
         public static void SetBlendMode(BlendMode bmode)
@@ -1050,7 +1100,9 @@ namespace CrashEdit.CE
             }
         }
 
-        protected bool ProcessTextureInfoC2(int in_tex_id, bool animated, IList<ModelTexture> textures, IList<ModelExtendedTexture> animated_textures, out ModelTexture tex)
+        protected bool ProcessTextureInfoC2(int in_tex_id, bool animated, IList<ModelTexture> textures, IList<ModelExtendedTexture> animated_textures, out ModelTexture tex) => ProcessTextureInfoC2(render.RealCurrentFrame / 2, in_tex_id, animated, textures, animated_textures, out tex);
+
+        public static bool ProcessTextureInfoC2(long texture_frame, int in_tex_id, bool animated, IList<ModelTexture> textures, IList<ModelExtendedTexture> animated_textures, out ModelTexture tex)
         {
             if (in_tex_id != 0 || animated)
             {
@@ -1073,7 +1125,7 @@ namespace CrashEdit.CE
                         }
                         else
                         {
-                            tex_id += (int)((render.RealCurrentFrame / 2 / (1 + anim.Latency) + anim.Delay) & anim.Mask);
+                            tex_id += (int)((texture_frame / (1 + anim.Latency) + anim.Delay) & anim.Mask);
                             if (anim.Leap)
                             {
                                 anim = animated_textures[++tex_id];
@@ -1192,6 +1244,8 @@ namespace CrashEdit.CE
 
         protected override void Dispose(bool disposing)
         {
+            MakeCurrent();
+
             render.Dispose();
 
             GL.DeleteQuery(qryGpuTime);
