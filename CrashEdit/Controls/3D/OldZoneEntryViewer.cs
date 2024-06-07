@@ -466,6 +466,7 @@ namespace CrashEdit.CE
 
         private void RenderZone(OldZoneEntry zone)
         {
+            animation_renderer.SetZoneMatrices(zone);
             zone_trans = new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
             Vector3 zoneSize = new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1;
             AddText3D(zone.EName, zone_trans + new Vector3(zoneSize.X, 0, zoneSize.Z) / 2, GetZoneColor(Color4.White), size: 2, flags: TextRenderFlags.Shadow | TextRenderFlags.Top | TextRenderFlags.Center);
@@ -496,30 +497,31 @@ namespace CrashEdit.CE
 
         private bool RenderEntityVisual(OldEntity entity, Vector3 trans)
         {
-            var map = nsf.Version == GameVersion.Crash2 ? EntityVisual.MapCrash2 : EntityVisual.MapCrash2;
+            var map = EntityVisual.MapCrash1;
             int type = entity.Type;
             int subtype = entity.Subtype;
+            animation_renderer.Player = type == 0 && subtype == 0;
             EntityVisual visual;
-            if (type == 1 && subtype == 2 && EntityVisual.MapCrash1.TryGetVisual(type, subtype, out visual)) // monkey
+            if (type == 1 && subtype == 2 && map.TryGetVisual(type, subtype, out visual)) // monkey
                 return RenderEntityVisual(visual, trans + new Vector3(0, 0.5f, 0));
-            if (type == 22 && subtype == 12 && EntityVisual.MapCrash1.TryGetVisual(type, subtype, out visual)) // boulder
+            if (type == 22 && subtype == 12 && map.TryGetVisual(type, subtype, out visual)) // boulder
                 return RenderEntityVisual(visual, trans + new Vector3(0, 3.4f, 0));
-            if (type == 33 && subtype == 3 && EntityVisual.MapCrash1.TryGetVisual(type, subtype, out visual)) // spike log up
+            if (type == 33 && subtype == 3 && map.TryGetVisual(type, subtype, out visual)) // spike log up
                 return RenderEntityVisual(visual, trans, rot: new(MathHelper.Pi, MathHelper.Pi, 0));
-            if (type == 34 && EntityVisual.MapCrash1.TryGetVisual(type, subtype, out visual)) // boxes
+            if (type == 34 && map.TryGetVisual(type, subtype, out visual)) // boxes
                 return RenderEntityVisual(visual, trans + new Vector3(0.5f, 0, 0.5f));
-            if (type == 32 && subtype == 1 && EntityVisual.MapCrash1.TryGetVisual(type, subtype, out visual)) // warp out
+            if (type == 32 && subtype == 1 && map.TryGetVisual(type, subtype, out visual)) // warp out
                 return RenderEntityVisual(visual, trans + new Vector3(0, 1, 0));
             if (type == 8 && (subtype == 1 || subtype == 3)) // power door double
             {
                 bool ok = false;
-                if (EntityVisual.MapCrash1.TryGetVisual(type, subtype, out visual)) // left
+                if (map.TryGetVisual(type, subtype, out visual)) // left
                     ok = RenderEntityVisual(visual, trans) || ok;
-                if (EntityVisual.MapCrash1.TryGetVisual(type, subtype + 1000, out visual)) // right
+                if (map.TryGetVisual(type, subtype + 1000, out visual)) // right
                     ok = RenderEntityVisual(visual, trans) || ok;
                 return ok;
             }
-            if (EntityVisual.MapCrash1.TryGetVisual(type, subtype, out visual))
+            if (map.TryGetVisual(type, subtype, out visual))
             {
                 return RenderEntityVisual(visual, trans);
             }
