@@ -31,140 +31,146 @@ namespace CrashEdit.CE
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblTitle = new System.Windows.Forms.Label();
-            this.lblMessage = new System.Windows.Forms.Label();
-            this.pnOptions = new System.Windows.Forms.Panel();
-            this.optIgnore = new System.Windows.Forms.RadioButton();
-            this.optIgnoreAll = new System.Windows.Forms.RadioButton();
-            this.optSkip = new System.Windows.Forms.RadioButton();
-            this.optAbort = new System.Windows.Forms.RadioButton();
-            this.optBreak = new System.Windows.Forms.RadioButton();
-            this.cmdOK = new System.Windows.Forms.Button();
-            this.pnOptions.SuspendLayout();
-            this.SuspendLayout();
+            lblTitle = new Label();
+            lblMessage = new Label();
+            pnOptions = new Panel();
+            optIgnore = new RadioButton();
+            optIgnoreAll = new RadioButton();
+            optSkip = new RadioButton();
+            optAbort = new RadioButton();
+            optBreak = new RadioButton();
+            cmdOK = new Button();
+            pnOptions.SuspendLayout();
+            SuspendLayout();
             // 
             // lblTitle
             // 
-            this.lblTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif",15.75F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-            this.lblTitle.Location = new System.Drawing.Point(12,9);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(390,32);
-            this.lblTitle.TabIndex = 0;
-            this.lblTitle.Text = "An error occurred.";
+            lblTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            lblTitle.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblTitle.Location = new Point(14, 10);
+            lblTitle.Margin = new Padding(4, 0, 4, 0);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(455, 37);
+            lblTitle.TabIndex = 0;
+            lblTitle.Text = "An error occurred.";
             // 
             // lblMessage
             // 
-            this.lblMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblMessage.Location = new System.Drawing.Point(12,41);
-            this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Size = new System.Drawing.Size(390,40);
-            this.lblMessage.TabIndex = 1;
-            this.lblMessage.Text = "<MESSAGE>";
-            this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            lblMessage.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            lblMessage.Location = new Point(14, 47);
+            lblMessage.Margin = new Padding(4, 0, 4, 0);
+            lblMessage.Name = "lblMessage";
+            lblMessage.Size = new Size(455, 46);
+            lblMessage.TabIndex = 1;
+            lblMessage.Text = "<MESSAGE>";
+            lblMessage.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // pnOptions
             // 
-            this.pnOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnOptions.Controls.Add(this.optIgnore);
-            this.pnOptions.Controls.Add(this.optIgnoreAll);
-            this.pnOptions.Controls.Add(this.optSkip);
-            this.pnOptions.Controls.Add(this.optAbort);
-            this.pnOptions.Controls.Add(this.optBreak);
-            this.pnOptions.Location = new System.Drawing.Point(12,84);
-            this.pnOptions.Name = "pnOptions";
-            this.pnOptions.Size = new System.Drawing.Size(390,122);
-            this.pnOptions.TabIndex = 2;
+            pnOptions.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            pnOptions.Controls.Add(optIgnore);
+            pnOptions.Controls.Add(optIgnoreAll);
+            pnOptions.Controls.Add(optSkip);
+            pnOptions.Controls.Add(optAbort);
+            pnOptions.Controls.Add(optBreak);
+            pnOptions.Location = new Point(14, 97);
+            pnOptions.Margin = new Padding(4, 3, 4, 3);
+            pnOptions.Name = "pnOptions";
+            pnOptions.Size = new Size(455, 141);
+            pnOptions.TabIndex = 2;
             // 
             // optIgnore
             // 
-            this.optIgnore.AutoSize = true;
-            this.optIgnore.Location = new System.Drawing.Point(5,49);
-            this.optIgnore.Name = "optIgnore";
-            this.optIgnore.Size = new System.Drawing.Size(204,17);
-            this.optIgnore.TabIndex = 3;
-            this.optIgnore.Text = "Ignore the error and continue anyway.";
-            this.optIgnore.UseVisualStyleBackColor = true;
-            // 
-            // optSkip
-            // 
-            this.optSkip.AutoSize = true;
-            this.optSkip.Location = new System.Drawing.Point(5,26);
-            this.optSkip.Name = "optSkip";
-            this.optSkip.Size = new System.Drawing.Size(212,17);
-            this.optSkip.TabIndex = 2;
-            this.optSkip.Text = "Skip this object, leaving it unprocessed.";
-            this.optSkip.UseVisualStyleBackColor = true;
-            // 
-            // optAbort
-            // 
-            this.optAbort.AutoSize = true;
-            this.optAbort.Checked = true;
-            this.optAbort.Location = new System.Drawing.Point(5,3);
-            this.optAbort.Name = "optAbort";
-            this.optAbort.Size = new System.Drawing.Size(119,17);
-            this.optAbort.TabIndex = 1;
-            this.optAbort.TabStop = true;
-            this.optAbort.Text = "Abort this operation.";
-            this.optAbort.UseVisualStyleBackColor = true;
-            // 
-            // optBreak
-            // 
-            this.optBreak.AutoSize = true;
-            this.optBreak.Location = new System.Drawing.Point(5,95);
-            this.optBreak.Name = "optBreak";
-            this.optBreak.Size = new System.Drawing.Size(209,17);
-            this.optBreak.TabIndex = 0;
-            this.optBreak.Text = "Break out to a debugger. (Experts only)";
-            this.optBreak.UseVisualStyleBackColor = true;
+            optIgnore.AutoSize = true;
+            optIgnore.Location = new Point(6, 57);
+            optIgnore.Margin = new Padding(4, 3, 4, 3);
+            optIgnore.Name = "optIgnore";
+            optIgnore.Size = new Size(226, 19);
+            optIgnore.TabIndex = 3;
+            optIgnore.Text = "Ignore the error and continue anyway.";
+            optIgnore.UseVisualStyleBackColor = true;
             // 
             // optIgnoreAll
             // 
-            this.optIgnoreAll.AutoSize = true;
-            this.optIgnoreAll.Location = new System.Drawing.Point(5,72);
-            this.optIgnoreAll.Name = "optIgnoreAll";
-            this.optIgnoreAll.Size = new System.Drawing.Size(204,17);
-            this.optIgnoreAll.TabIndex = 3;
-            this.optIgnoreAll.Text = "Ignore the error and all others for this object.";
-            this.optIgnoreAll.UseVisualStyleBackColor = true;
+            optIgnoreAll.AutoSize = true;
+            optIgnoreAll.Location = new Point(6, 83);
+            optIgnoreAll.Margin = new Padding(4, 3, 4, 3);
+            optIgnoreAll.Name = "optIgnoreAll";
+            optIgnoreAll.Size = new Size(260, 19);
+            optIgnoreAll.TabIndex = 3;
+            optIgnoreAll.Text = "Ignore the error and all others for this object.";
+            optIgnoreAll.UseVisualStyleBackColor = true;
+            // 
+            // optSkip
+            // 
+            optSkip.AutoSize = true;
+            optSkip.Location = new Point(6, 30);
+            optSkip.Margin = new Padding(4, 3, 4, 3);
+            optSkip.Name = "optSkip";
+            optSkip.Size = new Size(232, 19);
+            optSkip.TabIndex = 2;
+            optSkip.Text = "Skip this object, leaving it unprocessed.";
+            optSkip.UseVisualStyleBackColor = true;
+            // 
+            // optAbort
+            // 
+            optAbort.AutoSize = true;
+            optAbort.Checked = true;
+            optAbort.Location = new Point(6, 3);
+            optAbort.Margin = new Padding(4, 3, 4, 3);
+            optAbort.Name = "optAbort";
+            optAbort.Size = new Size(134, 19);
+            optAbort.TabIndex = 1;
+            optAbort.TabStop = true;
+            optAbort.Text = "Abort this operation.";
+            optAbort.UseVisualStyleBackColor = true;
+            // 
+            // optBreak
+            // 
+            optBreak.AutoSize = true;
+            optBreak.Location = new Point(6, 110);
+            optBreak.Margin = new Padding(4, 3, 4, 3);
+            optBreak.Name = "optBreak";
+            optBreak.Size = new Size(230, 19);
+            optBreak.TabIndex = 0;
+            optBreak.Text = "Break out to a debugger. (Experts only)";
+            optBreak.UseVisualStyleBackColor = true;
             // 
             // cmdOK
             // 
-            this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdOK.Location = new System.Drawing.Point(327,219);
-            this.cmdOK.Name = "cmdOK";
-            this.cmdOK.Size = new System.Drawing.Size(75,23);
-            this.cmdOK.TabIndex = 3;
-            this.cmdOK.Text = "OK";
-            this.cmdOK.UseVisualStyleBackColor = true;
-            this.cmdOK.Click += new System.EventHandler(this.cmdOK_Click);
+            cmdOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            cmdOK.Location = new Point(382, 253);
+            cmdOK.Margin = new Padding(4, 3, 4, 3);
+            cmdOK.Name = "cmdOK";
+            cmdOK.Size = new Size(88, 27);
+            cmdOK.TabIndex = 3;
+            cmdOK.Text = "OK";
+            cmdOK.UseVisualStyleBackColor = true;
+            cmdOK.Click += cmdOK_Click;
             // 
             // ErrorReporter
             // 
-            this.AcceptButton = this.cmdOK;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(414,254);
-            this.ControlBox = false;
-            this.Controls.Add(this.cmdOK);
-            this.Controls.Add(this.pnOptions);
-            this.Controls.Add(this.lblMessage);
-            this.Controls.Add(this.lblTitle);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "ErrorReporter";
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Error Reporter";
-            this.pnOptions.ResumeLayout(false);
-            this.pnOptions.PerformLayout();
-            this.ResumeLayout(false);
-
+            AcceptButton = cmdOK;
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            AutoSize = true;
+            ClientSize = new Size(483, 293);
+            ControlBox = false;
+            Controls.Add(cmdOK);
+            Controls.Add(pnOptions);
+            Controls.Add(lblMessage);
+            Controls.Add(lblTitle);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Margin = new Padding(4, 3, 4, 3);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "ErrorReporter";
+            ShowInTaskbar = false;
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Error Reporter";
+            pnOptions.ResumeLayout(false);
+            pnOptions.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion

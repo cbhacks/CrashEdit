@@ -327,14 +327,8 @@
   <data name="Config_chkAnimGrid" xml:space="preserve">
     <value>有効化</value>
   </data>
-  <data name="Config_chkCollisionDisplay" xml:space="preserve">
-    <value>フレームコリジョンをデフォルトで表示する</value>
-  </data>
   <data name="Config_chkDeleteInvalidEntries" xml:space="preserve">
-    <value>(NSDパッチ) 存在しないエントリをロードリストから削除する</value>
-  </data>
-  <data name="Config_chkNormalDisplay" xml:space="preserve">
-    <value>法線を表示する</value>
+    <value>存在しないエントリをロードリストから削除する</value>
   </data>
   <data name="Config_chkUseAnimLinks" xml:space="preserve">
     <value>(クラッシュ 3) 保存したアニメーションリンクを使用する</value>
@@ -343,7 +337,7 @@
     <value>設定のリセット</value>
   </data>
   <data name="Config_fraAnimGrid" xml:space="preserve">
-    <value>3Dビューワーのグリッド線</value>
+    <value>グリッド線</value>
   </data>
   <data name="Config_fraClearCol" xml:space="preserve">
     <value>クリアカラー</value>
@@ -640,7 +634,7 @@
     <value>BIN の作成</value>
   </data>
   <data name="Config_fraFont" xml:space="preserve">
-    <value>フォントレンダラ</value>
+    <value>3Dテキスト</value>
   </data>
   <data name="Config_lblFontName" xml:space="preserve">
     <value>フォント</value>
@@ -648,14 +642,8 @@
   <data name="Config_lblFontSize" xml:space="preserve">
     <value>フォントサイズ</value>
   </data>
-  <data name="Config_chkFont2DEnable" xml:space="preserve">
-    <value>デバッグテキストを表示する</value>
-  </data>
-  <data name="Config_chkFont3DAutoscale" xml:space="preserve">
-    <value>エンティティテキストをスケールする</value>
-  </data>
   <data name="Config_chkFont3DEnable" xml:space="preserve">
-    <value>エンティティテキストを表示する</value>
+    <value>エンティティ名前を表示する</value>
   </data>
   <data name="Config_fraMisc" xml:space="preserve">
     <value>他のセッティング</value>

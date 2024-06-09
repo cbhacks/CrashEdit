@@ -77,20 +77,17 @@ namespace CrashEdit.CE
             chkDeleteInvalidEntries.Checked = Settings.Default.DeleteInvalidEntries;
             chkAnimGrid.Checked = Settings.Default.DisplayAnimGrid;
             chkFont3DEnable.Checked = Settings.Default.Font3DEnable;
-            chkFont3DAutoscale.Checked = Settings.Default.Font3DAutoscale;
             chkFont2DEnable.Checked = Settings.Default.Font2DEnable;
             chkViewerShowHelp.Checked = Settings.Default.ViewerShowHelp;
             cdlClearCol.Color = picClearCol.BackColor = Color.FromArgb(Settings.Default.ClearColorRGB);
             sldNodeShadeAmt.Value = (int)(Settings.Default.NodeShadeMax * 100);
+            lblNodeShadeAmt.Text = string.Format("{0:F0}%", sldNodeShadeAmt.Value);
 
-            dpdLang.MaximumSize = new Size(lblLang.Width, 0);
-
-            fraMisc.Text = Resources.Config_fraMisc;
             fraSize.Text = Resources.Config_fraSize;
             fraClearCol.Text = Resources.Config_fraClearCol;
             fraFont.Text = Resources.Config_fraFont;
             fraNodeShadeAmt.Text = Resources.Config_fraNodeShadeAmt;
-            lblLang.Text = Resources.Config_lblLang;
+            fraLang.Text = Resources.Config_lblLang;
             lblAnimGrid.Text = Resources.Config_lblAnimGrid;
             lblFontName.Text = Resources.Config_lblFontName;
             lblFontSize.Text = Resources.Config_lblFontSize;
@@ -102,7 +99,6 @@ namespace CrashEdit.CE
             chkDeleteInvalidEntries.Text = Resources.Config_chkDeleteInvalidEntries;
             chkUseAnimLinks.Text = Resources.Config_chkUseAnimLinks;
             chkPatchNSDSavesNSF.Text = Resources.Config_chkPatchNSDSavesNSF;
-            chkFont3DAutoscale.Text = Resources.Config_chkFont3DAutoscale;
             chkFont3DEnable.Text = Resources.Config_chkFont3DEnable;
             chkFont2DEnable.Text = Resources.Config_chkFont2DEnable;
             chkViewerShowHelp.Text = Resources.Config_chkViewerShowHelp;
@@ -202,12 +198,6 @@ namespace CrashEdit.CE
             Settings.Default.Save();
         }
 
-        private void chkFont3DAutoscale_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.Default.Font3DAutoscale = chkFont3DAutoscale.Checked;
-            Settings.Default.Save();
-        }
-
         private void chkFont2DEnable_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Default.Font2DEnable = chkFont2DEnable.Checked;
@@ -223,6 +213,43 @@ namespace CrashEdit.CE
         private void sldNodeShadeAmt_Scroll(object sender, EventArgs e)
         {
             Settings.Default.NodeShadeMax = sldNodeShadeAmt.Value / 100f;
+            lblNodeShadeAmt.Text = string.Format("{0:F0}%", sldNodeShadeAmt.Value);
+            Settings.Default.Save();
+        }
+
+        private void chkViewZoneBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.ViewZoneBox = chkViewZoneBox.Checked;
+            Settings.Default.Save();
+        }
+
+        private void chkViewZoneName_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.ViewZoneName = chkViewZoneName.Checked;
+            Settings.Default.Save();
+        }
+
+        private void chkViewCamera_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.ViewCamera = chkViewCamera.Checked;
+            Settings.Default.Save();
+        }
+
+        private void chkViewCameraAngle_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.ViewCameraAngle = chkViewCameraAngle.Checked;
+            Settings.Default.Save();
+        }
+
+        private void chkDisableVisual_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.DisableVisual = chkDisableVisual.Checked;
+            Settings.Default.Save();
+        }
+
+        private void chkShowEntityParams_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.ShowEntityParams = chkShowEntityParams.Checked;
             Settings.Default.Save();
         }
     }

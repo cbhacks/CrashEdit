@@ -469,8 +469,10 @@ namespace CrashEdit.CE
             animation_renderer.SetZoneMatrices(zone);
             zone_trans = new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
             Vector3 zoneSize = new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1;
-            AddText3D(zone.EName, zone_trans + new Vector3(zoneSize.X, 0, zoneSize.Z) / 2, GetZoneColor(Color4.White), size: 2, flags: TextRenderFlags.Shadow | TextRenderFlags.Top | TextRenderFlags.Center);
-            AddBox(zone_trans, new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1, GetZoneColor(Color4.White), true);
+            if (Settings.Default.ViewZoneName)
+                AddText3D(zone.EName, zone_trans + new Vector3(zoneSize.X, 0, zoneSize.Z) / 2, GetZoneColor(Color4.White), size: 2, flags: TextRenderFlags.Shadow | TextRenderFlags.Top | TextRenderFlags.Center);
+            if (Settings.Default.ViewZoneBox)
+                AddBox(zone_trans, new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1, GetZoneColor(Color4.White), true);
             foreach (OldEntity entity in zone.Entities)
             {
                 RenderEntity(entity);
@@ -530,15 +532,16 @@ namespace CrashEdit.CE
 
         private void RenderEntity(OldEntity entity)
         {
-            float text_y = Settings.Default.Font3DEnable ? 0 : float.MaxValue;
+            float text_y = 0;
             bool draw_type = true;
             Vector3 trans = new Vector3(entity.Positions[0].X, entity.Positions[0].Y, entity.Positions[0].Z) / GameScales.ZoneEntityC1 + zone_trans;
             if (entity.Positions.Count > 0)
             {
-                AddText3D("entity-" + entity.ID, trans, GetZoneColor(Color4.Yellow), ofs_y: text_y, flags: TextRenderFlags.Default | TextRenderFlags.Bottom);
+                if (Settings.Default.Font3DEnable)
+                    AddText3D("entity-" + entity.ID, trans, GetZoneColor(Color4.Yellow), ofs_y: text_y, flags: TextRenderFlags.Default | TextRenderFlags.Bottom);
 
                 bool rendered_model = false;
-                if (true)
+                if (!Settings.Default.DisableVisual)
                 {
                     rendered_model = RenderEntityVisual(entity, trans);
                 }
@@ -565,7 +568,8 @@ namespace CrashEdit.CE
                         else if (pickup == 103) pickup_name = "cortex";
                         else if (pickup == 104) pickup_name = "brio";
                         else if (pickup == 105) pickup_name = "tawna";
-                        text_y += AddText3D(pickup_name, trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
+                        if (Settings.Default.ShowEntityParams)
+                            text_y += AddText3D(pickup_name, trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
                         int link_a = entity.VecZ;
                         var link_info = link_a == 0 ? null : nsf.GetEntityC1(link_a);
                         if (link_info != null)
@@ -621,7 +625,7 @@ namespace CrashEdit.CE
                     }
                 }
 
-                if (draw_type)
+                if (draw_type && Settings.Default.ShowEntityParams)
                 {
                     if (gools.ContainsKey(entity.Type))
                         text_y += AddText3D($"{gools[entity.Type].EName}-{entity.Subtype}", trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
@@ -633,6 +637,9 @@ namespace CrashEdit.CE
 
         private void RenderCamera(OldCamera camera)
         {
+            if (!Settings.Default.ViewCamera)
+                return;
+
             byte alpha_backup;
             for (int i = 0; i < camera.Positions.Count; ++i, zone_alpha = alpha_backup)
             {
@@ -654,15 +661,18 @@ namespace CrashEdit.CE
 
                 AddSprite(trans, new Vector2(1), GetZoneColor(Color4.Yellow), OldResources.PointTexture);
 
-                float ang2rad = MathHelper.Pi / 2048;
-                var quatAng = Quaternion.FromEulerAngles(-position.XRot * ang2rad, -position.YRot * ang2rad, 0);
-                var rot_mat = Matrix4.CreateFromQuaternion(quatAng);
-                var test_vec = (rot_mat * new Vector4(0, 0, -1, 1)).Xyz;
+                if (Settings.Default.ViewCameraAngle)
+                {
+                    float ang2rad = MathHelper.Pi / 2048;
+                    var quatAng = Quaternion.FromEulerAngles(-position.XRot * ang2rad, -position.YRot * ang2rad, 0);
+                    var rot_mat = Matrix4.CreateFromQuaternion(quatAng);
+                    var test_vec = (rot_mat * new Vector4(0, 0, -1, 1)).Xyz;
 
-                Rgba angColor = GetZoneColor(Color4.Olive);
-                vaoLines.PushAttrib(trans: trans, rgba: angColor);
-                vaoLines.PushAttrib(trans: trans + test_vec, rgba: angColor);
-                AddSprite(trans + test_vec, new Vector2(0.5f), angColor, OldResources.PointTexture);
+                    Rgba angColor = GetZoneColor(Color4.Olive);
+                    vaoLines.PushAttrib(trans: trans, rgba: angColor);
+                    vaoLines.PushAttrib(trans: trans + test_vec, rgba: angColor);
+                    AddSprite(trans + test_vec, new Vector2(0.5f), angColor, OldResources.PointTexture);
+                }
             }
         }
 

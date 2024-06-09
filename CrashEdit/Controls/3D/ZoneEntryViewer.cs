@@ -186,11 +186,10 @@ namespace CrashEdit.CE
         {
             zone_trans = new Vector3(zone.X, zone.Y, zone.Z) / GameScales.ZoneC1;
             Vector3 zoneSize = new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1;
-            AddText3D(zone.EName, zone_trans + new Vector3(zoneSize.X, 0, zoneSize.Z) / 2, GetZoneColor(Color4.White), size: 2, flags: TextRenderFlags.Shadow | TextRenderFlags.Top | TextRenderFlags.Center);
-            AddBox(zone_trans,
-                   new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1,
-                   GetZoneColor(Color4.White),
-                   true);
+            if (Settings.Default.ViewZoneName)
+                AddText3D(zone.EName, zone_trans + new Vector3(zoneSize.X, 0, zoneSize.Z) / 2, GetZoneColor(Color4.White), size: 2, flags: TextRenderFlags.Shadow | TextRenderFlags.Top | TextRenderFlags.Center);
+            if (Settings.Default.ViewZoneBox)
+                AddBox(zone_trans, new Vector3(zone.Width, zone.Height, zone.Depth) / GameScales.ZoneC1, GetZoneColor(Color4.White), true);
             for (int i = zone.CameraCount; i < zone.Entities.Count; ++i)
             {
                 Entity entity = zone.Entities[i];
@@ -306,7 +305,7 @@ namespace CrashEdit.CE
 
         private void RenderEntity(Entity entity)
         {
-            float text_y = Settings.Default.Font3DEnable ? 0 : float.MaxValue;
+            float text_y = 0;
             float text_size = 0.8f;
             bool draw_type = entity.Type.HasValue && entity.Subtype.HasValue;
             float scale = GameScales.ZoneEntityC1;
@@ -318,13 +317,13 @@ namespace CrashEdit.CE
             if (entity.Positions.Count > 0)
             {
                 Vector3 trans = new Vector3(entity.Positions[0].X, entity.Positions[0].Y, entity.Positions[0].Z) / scale + zone_trans;
-                if (!string.IsNullOrEmpty(entity.Name))
+                if (!string.IsNullOrEmpty(entity.Name) && Settings.Default.Font3DEnable)
                 {
                     AddText3D(entity.Name, trans, GetZoneColor(Color4.Yellow), size: text_size, ofs_y: text_y, flags: TextRenderFlags.Default | TextRenderFlags.Bottom);
                 }
 
                 bool rendered_model = false;
-                if (entity.Type.HasValue && entity.Subtype.HasValue)
+                if (!Settings.Default.DisableVisual && entity.Type.HasValue && entity.Subtype.HasValue)
                 {
                     rendered_model = RenderEntityVisual(entity, trans);
                 }
@@ -377,7 +376,8 @@ namespace CrashEdit.CE
                                 else if (pickup >= 500 && pickup < 564) pickup_name = "relic-2-" + (pickup - 500);
                                 else if (pickup >= 600 && pickup < 664) pickup_name = "relic-3-" + (pickup - 600);
                                 else if (pickup >= 700 && pickup < 764) pickup_name = "power-" + (pickup - 700);
-                                text_y += AddText3D(pickup_name, trans, GetZoneColor(Color4.White), size: text_size, ofs_y: text_y).Y;
+                                if (Settings.Default.ShowEntityParams)
+                                    text_y += AddText3D(pickup_name, trans, GetZoneColor(Color4.White), size: text_size, ofs_y: text_y).Y;
                             }
                             if (entity.Settings.Count > 2)
                             {
@@ -404,10 +404,13 @@ namespace CrashEdit.CE
                                     }
                                 }
                             }
-                            if (entity.DDASettings.HasValue)
-                                text_y += AddText3D($"dda {entity.DDASettings.Value >> 8}", trans, GetZoneColor(Color4.White), size: text_size, ofs_y: text_y).Y;
-                            if (entity.DDASection.HasValue)
-                                text_y += AddText3D($"dda-section {entity.DDASection.Value}", trans, GetZoneColor(Color4.White), size: text_size, ofs_y: text_y).Y;
+                            if (Settings.Default.ShowEntityParams)
+                            {
+                                if (entity.DDASettings.HasValue)
+                                    text_y += AddText3D($"dda {entity.DDASettings.Value >> 8}", trans, GetZoneColor(Color4.White), size: text_size, ofs_y: text_y).Y;
+                                if (entity.DDASection.HasValue)
+                                    text_y += AddText3D($"dda-section {entity.DDASection.Value}", trans, GetZoneColor(Color4.White), size: text_size, ofs_y: text_y).Y;
+                            }
                         }
                     }
                     else
@@ -432,7 +435,7 @@ namespace CrashEdit.CE
                     }
                 }
 
-                if (draw_type)
+                if (draw_type && Settings.Default.ShowEntityParams)
                 {
                     if (gools.ContainsKey(entity.Type.Value))
                         text_y += AddText3D($"{gools[entity.Type.Value].EName}-{entity.Subtype.Value}", trans, GetZoneColor(Color4.White), size: text_size, ofs_y: text_y).Y;
@@ -444,6 +447,9 @@ namespace CrashEdit.CE
 
         private void RenderCamera(Entity entity1, Entity entity2, Entity entity3)
         {
+            if (!Settings.Default.ViewCamera)
+                return;
+
             for (int i = 1; i < entity1.Positions.Count; ++i)
             {
                 vaoLines.PushAttrib(trans: new Vector3(entity1.Positions[i - 1].X, entity1.Positions[i - 1].Y, entity1.Positions[i - 1].Z) / GameScales.ZoneCameraC1 + zone_trans,
@@ -457,7 +463,7 @@ namespace CrashEdit.CE
                 Vector3 trans = new Vector3(entity1.Positions[i].X, entity1.Positions[i].Y, entity1.Positions[i].Z) / GameScales.ZoneCameraC1 + zone_trans;
                 AddSprite(trans, new Vector2(1), GetZoneColor(Color4.Yellow), OldResources.PointTexture);
 
-                if (render_angles)
+                if (render_angles && Settings.Default.ViewCameraAngle)
                 {
                     const float ang2rad = MathHelper.Pi / 2048;
                     var quatAng1 = Quaternion.FromEulerAngles(-entity2.Positions[i * 2 + 0].X * ang2rad, -entity2.Positions[i * 2 + 0].Y * ang2rad, -entity2.Positions[i * 2 + 0].Z * ang2rad);

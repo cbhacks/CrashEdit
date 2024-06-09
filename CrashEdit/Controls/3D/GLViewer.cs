@@ -594,10 +594,6 @@ namespace CrashEdit.CE
             if ((flags & TextRenderFlags.AutoScale) != 0)
             {
                 flags &= ~TextRenderFlags.Unscaled;
-                if (!Settings.Default.Font3DAutoscale)
-                {
-                    flags |= TextRenderFlags.Unscaled;
-                }
             }
             if ((flags & TextRenderFlags.Unscaled) == 0)
             {
@@ -611,13 +607,13 @@ namespace CrashEdit.CE
 
         public Vector2 AddText(string text, float x, float y, Rgba col, float size = 1, TextRenderFlags flags = TextRenderFlags.Default) => AddText(text, new Vector2(x, y), col, new Vector2(size), flags);
         public Vector2 AddText(string text, Vector2 ofs, Rgba col, float size = 1, TextRenderFlags flags = TextRenderFlags.Default) => AddText(text, ofs, col, new Vector2(size), flags);
-        public Vector2 AddText(string text, Vector2 ofs, Rgba col, Vector2 size, TextRenderFlags flags = TextRenderFlags.Default)
+        public Vector2 AddText(string text, Vector2 ofs, Rgba col, Vector2 scale, TextRenderFlags flags = TextRenderFlags.Default)
         {
             if (fontTable == null || text.Length == 0)
                 return new Vector2(0);
 
             var face = fontTable.Face;
-            var text_size = GetTextSize(text, size, flags);
+            var text_size = GetTextSize(text, scale, flags);
             string[] text_lines = null;
             float[] text_line_sizes = null;
             int line = 0;
@@ -637,18 +633,18 @@ namespace CrashEdit.CE
                 text_line_sizes = new float[text_lines.Length];
                 for (int i = 0; i < text_lines.Length; ++i)
                 {
-                    text_line_sizes[i] = GetTextSize(text_lines[i], new Vector2(1), flags).X * size.X;
+                    text_line_sizes[i] = GetTextSize(text_lines[i], new Vector2(1), flags).X * scale.X;
                 }
                 start_ofs.X -= text_line_sizes[line++] / (((flags & TextRenderFlags.Center) != 0) ? 2 : 1);
             }
 
             // correct size
-            size *= 16;
-            size.X /= fontTable.Width;
-            size.Y /= fontTable.Height;
+            scale *= 16;
+            scale.X /= fontTable.Width;
+            scale.Y /= fontTable.Height;
 
             var cur_ofs = start_ofs;
-            cur_ofs.Y += fontTable.LineHeight * size.Y;
+            cur_ofs.Y += fontTable.LineHeight * scale.Y;
             int start_idx = vaoText.CurVert;
             for (int i = 0; i < text.Length; ++i)
             {
@@ -667,21 +663,21 @@ namespace CrashEdit.CE
                     {
                         cur_ofs.X = start_ofs.X;
                     }
-                    cur_ofs.Y += fontTable.LineHeight * size.Y;
+                    cur_ofs.Y += fontTable.LineHeight * scale.Y;
                     continue;
                 }
                 if (!fontTable.ContainsKey(c))
                 {
-                    cur_ofs.X += fontTable.Width * size.X;
+                    cur_ofs.X += fontTable.Width * scale.X;
                     continue;
                 }
 
                 var glyph = fontTable[c];
 
-                float kBearingX = (float)glyph.BearingX * size.X;
-                float kBearingY = (float)glyph.BearingY * size.Y;
-                float kAdvanceX = (float)glyph.AdvanceX * size.X;
-                var kSize = new Vector2(glyph.Width, glyph.Height) * size;
+                float kBearingX = (float)glyph.BearingX * scale.X;
+                float kBearingY = (float)glyph.BearingY * scale.Y;
+                float kAdvanceX = (float)glyph.AdvanceX * scale.X;
+                var kSize = new Vector2(glyph.Width, glyph.Height) * scale;
 
                 int idx = vaoText.CurVert;
                 var char_ofs = cur_ofs + new Vector2(kBearingX, -kBearingY);
@@ -695,7 +691,7 @@ namespace CrashEdit.CE
                 if (face.HasKerning && i < text.Length - 1)
                 {
                     char cNext = text[i + 1];
-                    float kern = (float)face.GetKerning(glyph.GlyphID, face.GetCharIndex(cNext), KerningMode.Default).X * size.X;
+                    float kern = (float)face.GetKerning(glyph.GlyphID, face.GetCharIndex(cNext), KerningMode.Default).X * scale.X;
                     if (kern > kAdvanceX * 5 || kern < -(kAdvanceX * 5))
                         kern = 0;
                     cur_ofs.X += kern;
@@ -709,7 +705,7 @@ namespace CrashEdit.CE
                 for (int i = 0; i < end_idx - start_idx; ++i)
                 {
                     vaoText.CopyAttrib(start_idx + i);
-                    vaoText.Verts[start_idx + i].trans += new Vector3(new Vector2(2, 2) * size);
+                    vaoText.Verts[start_idx + i].trans += new Vector3(new Vector2(2, 2) * scale);
                     vaoText.Verts[start_idx + i].rgba = new Rgba(0, 0, 0, col.a);
                 }
             }
