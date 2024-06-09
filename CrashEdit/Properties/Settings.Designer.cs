@@ -218,18 +218,6 @@ namespace CrashEdit.CE.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool Font3DAutoscale {
-            get {
-                return ((bool)(this["Font3DAutoscale"]));
-            }
-            set {
-                this["Font3DAutoscale"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool ViewerShowHelp {
             get {
                 return ((bool)(this["ViewerShowHelp"]));
@@ -248,6 +236,78 @@ namespace CrashEdit.CE.Properties {
             }
             set {
                 this["NodeShadeMax"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ViewZoneBox {
+            get {
+                return ((bool)(this["ViewZoneBox"]));
+            }
+            set {
+                this["ViewZoneBox"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ViewZoneName {
+            get {
+                return ((bool)(this["ViewZoneName"]));
+            }
+            set {
+                this["ViewZoneName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ViewCamera {
+            get {
+                return ((bool)(this["ViewCamera"]));
+            }
+            set {
+                this["ViewCamera"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ViewCameraAngle {
+            get {
+                return ((bool)(this["ViewCameraAngle"]));
+            }
+            set {
+                this["ViewCameraAngle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DisableVisual {
+            get {
+                return ((bool)(this["DisableVisual"]));
+            }
+            set {
+                this["DisableVisual"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowEntityParams {
+            get {
+                return ((bool)(this["ShowEntityParams"]));
+            }
+            set {
+                this["ShowEntityParams"] = value;
             }
         }
     }

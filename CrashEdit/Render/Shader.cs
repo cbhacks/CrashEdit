@@ -41,7 +41,6 @@ namespace CrashEdit.CE
         private readonly Dictionary<string, int> fragshaders = new();
 
         // init shaders. Needs a GL context to be active.
-        // TODO see if shaders can be reused across contexts
         public ShaderContext()
         {
             if (shaders.Count != 0)

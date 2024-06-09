@@ -88,7 +88,7 @@ namespace CrashEdit.CE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Display frame collision by default.
+        ///   Looks up a localized string similar to Show collision boxes by default.
         /// </summary>
         internal static string Config_chkCollisionDisplay {
             get {
@@ -97,7 +97,7 @@ namespace CrashEdit.CE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (Patch NSD) Delete non-existent entries from load lists.
+        ///   Looks up a localized string similar to Delete non-existent entries from load lists.
         /// </summary>
         internal static string Config_chkDeleteInvalidEntries {
             get {
@@ -106,7 +106,16 @@ namespace CrashEdit.CE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Display debug text.
+        ///   Looks up a localized string similar to Disable 3D entity display.
+        /// </summary>
+        internal static string Config_chkDisableVisual {
+            get {
+                return ResourceManager.GetString("Config_chkDisableVisual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show debug console.
         /// </summary>
         internal static string Config_chkFont2DEnable {
             get {
@@ -115,16 +124,7 @@ namespace CrashEdit.CE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scale entity text.
-        /// </summary>
-        internal static string Config_chkFont3DAutoscale {
-            get {
-                return ResourceManager.GetString("Config_chkFont3DAutoscale", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Display entity text.
+        ///   Looks up a localized string similar to Show entity names.
         /// </summary>
         internal static string Config_chkFont3DEnable {
             get {
@@ -133,7 +133,7 @@ namespace CrashEdit.CE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Display normals.
+        ///   Looks up a localized string similar to (Crash 1) Show normals in animations.
         /// </summary>
         internal static string Config_chkNormalDisplay {
             get {
@@ -142,7 +142,7 @@ namespace CrashEdit.CE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (Patch NSD) Always save NSF after NSD patching.
+        ///   Looks up a localized string similar to Always save NSF after NSD patching.
         /// </summary>
         internal static string Config_chkPatchNSDSavesNSF {
             get {
@@ -151,7 +151,7 @@ namespace CrashEdit.CE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (Crash 3) Used saved animation-model links.
+        ///   Looks up a localized string similar to (Crash 3) Automatically use saved model names for animations.
         /// </summary>
         internal static string Config_chkUseAnimLinks {
             get {
@@ -160,11 +160,47 @@ namespace CrashEdit.CE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Display help text by default.
+        ///   Looks up a localized string similar to Show camera entities.
+        /// </summary>
+        internal static string Config_chkViewCamera {
+            get {
+                return ResourceManager.GetString("Config_chkViewCamera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show camera entity angles.
+        /// </summary>
+        internal static string Config_chkViewCameraAngle {
+            get {
+                return ResourceManager.GetString("Config_chkViewCameraAngle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show help text by default.
         /// </summary>
         internal static string Config_chkViewerShowHelp {
             get {
                 return ResourceManager.GetString("Config_chkViewerShowHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show zone boundaries.
+        /// </summary>
+        internal static string Config_chkViewZoneBox {
+            get {
+                return ResourceManager.GetString("Config_chkViewZoneBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show zone names.
+        /// </summary>
+        internal static string Config_chkViewZoneName {
+            get {
+                return ResourceManager.GetString("Config_chkViewZoneName", resourceCulture);
             }
         }
         
@@ -178,7 +214,7 @@ namespace CrashEdit.CE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 3D Viewer Grid.
+        ///   Looks up a localized string similar to Grid.
         /// </summary>
         internal static string Config_fraAnimGrid {
             get {
@@ -196,7 +232,7 @@ namespace CrashEdit.CE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Font Renderer.
+        ///   Looks up a localized string similar to 3D Text.
         /// </summary>
         internal static string Config_fraFont {
             get {
@@ -214,7 +250,7 @@ namespace CrashEdit.CE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Collision Node Shade Amount.
+        ///   Looks up a localized string similar to Collision Node Contrast.
         /// </summary>
         internal static string Config_fraNodeShadeAmt {
             get {
