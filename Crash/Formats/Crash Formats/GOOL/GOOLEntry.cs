@@ -9,20 +9,18 @@ namespace CrashEdit.Crash
         static GOOLEntry()
         {
             var assembly_types = Assembly.GetExecutingAssembly().GetTypes();
-            opsets = new Dictionary<GOOLVersion, Dictionary<int, Type>>();
+            opsets = new();
             foreach (Type type in assembly_types)
             {
                 foreach (GOOLInstructionAttribute attribute in type.GetCustomAttributes(typeof(GOOLInstructionAttribute), false))
                 {
-                    if (!opsets.ContainsKey(attribute.Version))
+                    if (!opsets.TryGetValue(attribute.Version, out var value))
                     {
-                        opsets.Add(attribute.Version, new Dictionary<int, Type>());
+                        value = new();
+                        opsets.Add(attribute.Version, value);
                     }
-                    Dictionary<int, Type> opset = opsets[attribute.Version];
-                    if (!opset.ContainsKey(attribute.Opcode))
-                    {
-                        opset.Add(attribute.Opcode, type);
-                    }
+                    Dictionary<int, Type> opset = value;
+                    opset.TryAdd(attribute.Opcode, type);
                 }
             }
         }
@@ -31,9 +29,9 @@ namespace CrashEdit.Crash
         {
             if (!mips)
             {
-                if (opsets.ContainsKey(Version))
+                if (opsets.TryGetValue(Version, out var value))
                 {
-                    Dictionary<int, Type> opset = opsets[Version];
+                    Dictionary<int, Type> opset = value;
                     int opcode = ins >> 24 & 0xFF;
                     if (opset.ContainsKey(opcode))
                     {
@@ -50,13 +48,14 @@ namespace CrashEdit.Crash
 
         private readonly List<GOOLInstruction> instructions;
         private readonly List<GOOLStateDescriptor> statedescriptors;
+        private readonly List<GOOLProtoFrameGroup> framegroups;
         private readonly List<int> externals;
 
-        public GOOLEntry(GOOLVersion version, byte[] header, byte[] instructions, int[] data, short[] statemap, IEnumerable<GOOLStateDescriptor> statedescriptors, byte[] anims, int eid) : base(eid)
+        public GOOLEntry(GOOLVersion version, byte[] header, byte[] instructions, int[] data, short[] statemap, IEnumerable<GOOLStateDescriptor> statedescriptors, IEnumerable<GOOLProtoFrameGroup> fgroups, int eid) : base(eid)
         {
             Version = version;
             Header = header;
-            this.instructions = new List<GOOLInstruction>();
+            this.instructions = new();
             bool mips = false;
             for (int i = 0; i < instructions.Length / 4; ++i)
             {
@@ -81,7 +80,7 @@ namespace CrashEdit.Crash
             }
             Data = data;
             StateMap = statemap;
-            externals = new List<int>();
+            externals = new();
             if (statedescriptors == null)
                 this.statedescriptors = null;
             else
@@ -89,14 +88,14 @@ namespace CrashEdit.Crash
                 this.statedescriptors = new List<GOOLStateDescriptor>(statedescriptors);
                 foreach (var state in this.statedescriptors)
                 {
-                    int ext_eid = Data[state.GOOLID];
+                    int ext_eid = Data[state.GOOLIndex];
                     if (ext_eid != eid && !externals.Contains(ext_eid))
                     {
                         externals.Add(ext_eid);
                     }
                 }
             }
-            Anims = anims;
+            framegroups = fgroups == null && version == GOOLVersion.Version0 ? null : new(fgroups);
         }
 
         public override string Title => Version switch
@@ -118,12 +117,12 @@ namespace CrashEdit.Crash
         public int[] Data { get; }
         public short[] StateMap { get; }
         public IList<GOOLStateDescriptor> StateDescriptors => statedescriptors;
-        public byte[] Anims;
+        public IList<GOOLProtoFrameGroup> FrameGroups => framegroups;
 
         public int ID => BitConv.FromInt32(Header, 0);
-        public int Category => BitConv.FromInt32(Header, 4);
+        public int Class => BitConv.FromInt32(Header, 4);
         public int Format => BitConv.FromInt32(Header, 8);
-        public int StackStart => BitConv.FromInt32(Header, 12);
+        public int HeapBase => BitConv.FromInt32(Header, 12);
         public int EventCount => BitConv.FromInt32(Header, 16);
         public int EntryCount => BitConv.FromInt32(Header, 20);
 
@@ -134,12 +133,7 @@ namespace CrashEdit.Crash
 
         public override UnprocessedEntry Unprocess()
         {
-            int itemcount =
-                Anims != null ? 6 : (
-                statedescriptors != null ? 5 : (
-                StateMap != null ? 4 : 3
-                )
-                );
+            int itemcount = Format == 1 ? (FrameGroups == null ? 5 : 6) : 3;
 
             byte[][] items = new byte[itemcount][];
             items[0] = Header;
@@ -153,23 +147,26 @@ namespace CrashEdit.Crash
             {
                 BitConv.ToInt32(items[2], i * 4, Data[i]);
             }
-            if (itemcount > 3)
+            if (Format == 1)
             {
                 items[3] = new byte[StateMap.Length * 2];
                 for (int i = 0; i < StateMap.Length; ++i)
                 {
                     BitConv.ToInt16(items[3], i * 2, StateMap[i]);
                 }
-                if (itemcount > 4)
+                items[4] = new byte[statedescriptors.Count * 0x10];
+                for (int i = 0; i < statedescriptors.Count; ++i)
                 {
-                    items[4] = new byte[statedescriptors.Count * 0x10];
-                    for (int i = 0; i < statedescriptors.Count; ++i)
+                    statedescriptors[i].Save().CopyTo(items[4], i * 0x10);
+                }
+                if (FrameGroups != null)
+                {
+                    items[5] = new byte[0];
+                    foreach (var group in FrameGroups)
                     {
-                        statedescriptors[i].Save().CopyTo(items[4], i * 0x10);
-                    }
-                    if (itemcount > 5)
-                    {
-                        items[5] = Anims;
+                        var data = group.Save();
+                        Array.Resize(ref items[5], data.Length + items[5].Length);
+                        Array.Copy(data, 0, items[5], items[5].Length - data.Length, data.Length);
                     }
                 }
             }

@@ -46,8 +46,8 @@ namespace CrashEdit.Crash
             this.type = type;
             GOOL = gool;
             Value = value;
-            args = new Dictionary<char, GOOLArgument>();
-            if (!(this is MIPSInstruction))
+            args = new();
+            if (this is not MIPSInstruction)
                 LoadFormat();
         }
 

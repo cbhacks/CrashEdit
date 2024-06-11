@@ -46,7 +46,7 @@ namespace CrashEdit.CE
                 else
                     BitConv.ToInt32(newinstructions, i * 4, GOOLEntry.Instructions[i].Save());
             }
-            GOOLEntry newgool = new GOOLEntry(GOOLVersion.Version1, GOOLEntry.Header, newinstructions, GOOLEntry.Data, GOOLEntry.StateMap, GOOLEntry.StateDescriptors, GOOLEntry.Anims, GOOLEntry.EID);
+            GOOLEntry newgool = new GOOLEntry(GOOLVersion.Version1, GOOLEntry.Header, newinstructions, GOOLEntry.Data, GOOLEntry.StateMap, GOOLEntry.StateDescriptors, GOOLEntry.FrameGroups, GOOLEntry.EID);
             FileUtil.SaveFile(newgool.Save(), FileFilters.NSEntry, FileFilters.Any);
         }
     }

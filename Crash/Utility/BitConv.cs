@@ -78,6 +78,25 @@ namespace CrashEdit.Crash
             return result;
         }
 
+        public static long FromInt64(byte[] str, int offset)
+        {
+            ArgumentNullException.ThrowIfNull(str);
+            if (offset < 0)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            if (offset + 8 > str.Length)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            long result = 0;
+            result |= (long)str[offset + 0] << 8 * 0;
+            result |= (long)str[offset + 1] << 8 * 1;
+            result |= (long)str[offset + 2] << 8 * 2;
+            result |= (long)str[offset + 3] << 8 * 3;
+            result |= (long)str[offset + 4] << 8 * 4;
+            result |= (long)str[offset + 5] << 8 * 5;
+            result |= (long)str[offset + 6] << 8 * 6;
+            result |= (long)str[offset + 7] << 8 * 7;
+            return result;
+        }
+
         public static void ToInt16(byte[] str, int offset, short value)
         {
             ArgumentNullException.ThrowIfNull(str);
@@ -114,6 +133,23 @@ namespace CrashEdit.Crash
             str[offset + 1] = (byte)(value >> 8);
             str[offset + 2] = (byte)(value >> 8 * 2);
             str[offset + 3] = (byte)(value >> 8 * 3);
+        }
+
+        public static void ToInt64(byte[] str, int offset, long value)
+        {
+            ArgumentNullException.ThrowIfNull(str);
+            if (offset < 0)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            if (offset + 8 > str.Length)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            str[offset] = (byte)value;
+            str[offset + 1] = (byte)(value >> 8);
+            str[offset + 2] = (byte)(value >> 8 * 2);
+            str[offset + 3] = (byte)(value >> 8 * 3);
+            str[offset + 4] = (byte)(value >> 8 * 4);
+            str[offset + 5] = (byte)(value >> 8 * 5);
+            str[offset + 6] = (byte)(value >> 8 * 6);
+            str[offset + 7] = (byte)(value >> 8 * 7);
         }
 
         public static int FlipInt32(int value)
