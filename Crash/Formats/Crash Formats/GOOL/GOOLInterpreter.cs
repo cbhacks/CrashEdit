@@ -14,7 +14,7 @@ namespace CrashEdit.Crash
     {
         self = 0,
         parent = 1,
-        sibling = 2,
+        brother = 2,
         child = 3,
         creator = 4,
         player = 5,
@@ -40,7 +40,7 @@ namespace CrashEdit.Crash
         vecz = 25,
         statusa = 26,
         statusb = 27,
-        statusc = 28,
+        blockflag = 28,
         subtype = 29,
         id = 30,
         sp = 31,
@@ -54,8 +54,8 @@ namespace CrashEdit.Crash
         frametime = 39,
         statetime = 40,
         stalltime = 41,
-        animseq = 42,
-        animframe = 43,
+        framegroup = 42,
+        framenum = 43,
         entity = 44,
         pathprog = 45,
         pathlen = 46,
@@ -76,7 +76,8 @@ namespace CrashEdit.Crash
         field_61 = 61,
         field_62 = 62,
         field_63 = 63,
-        mem1 = 64, mem2, mem3, mem4, mem5, mem6, mem7, mem8, mem9,
+        mem1 = 64,
+        mem2, mem3, mem4, mem5, mem6, mem7, mem8, mem9,
         mem10, mem11, mem12, mem13, mem14, mem15, mem16, mem17, mem18, mem19,
         mem20, mem21, mem22, mem23, mem24, mem25, mem26, mem27, mem28, mem29,
         mem30, mem31, mem32, mem33, mem34, mem35, mem36, mem37, mem38, mem39,
@@ -87,30 +88,30 @@ namespace CrashEdit.Crash
 
     public enum ObjectColors1
     {
-        lightsrc11 = 0,
-        lightsrc12,
-        lightsrc13,
-        lightsrc21,
-        lightsrc22,
-        lightsrc23,
-        lightsrc31,
-        lightsrc32,
-        lightsrc33,
+        lightmat11 = 0,
+        lightmat12,
+        lightmat13,
+        lightmat21,
+        lightmat22,
+        lightmat23,
+        lightmat31,
+        lightmat32,
+        lightmat33,
         backr,
         backg,
         backb,
-        lightcolr1,
-        lightcolg1,
-        lightcolb1,
-        lightcolr2,
-        lightcolg2,
-        lightcolb2,
-        lightcolr3,
-        lightcolg3,
-        lightcolb3,
-        ambcolr,
-        ambcolg,
-        ambcolb
+        colormatr1,
+        colormatg1,
+        colormatb1,
+        colormatr2,
+        colormatg2,
+        colormatb2,
+        colormatr3,
+        colormatg3,
+        colormatb3,
+        intr,
+        intg,
+        intb
     }
 
     public enum ObjectColors2
@@ -251,6 +252,7 @@ namespace CrashEdit.Crash
         {
             switch (ver)
             {
+                case GOOLVersion.Version0:
                 case GOOLVersion.Version1:
                     return ((ObjectColors1)col).ToString();
                 case GOOLVersion.Version2:

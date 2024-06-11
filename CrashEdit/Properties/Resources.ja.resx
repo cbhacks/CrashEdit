@@ -330,9 +330,6 @@
   <data name="Config_chkDeleteInvalidEntries" xml:space="preserve">
     <value>存在しないエントリをロードリストから削除する</value>
   </data>
-  <data name="Config_chkUseAnimLinks" xml:space="preserve">
-    <value>(クラッシュ 3) 保存したアニメーションリンクを使用する</value>
-  </data>
   <data name="Config_cmdReset" xml:space="preserve">
     <value>設定のリセット</value>
   </data>

@@ -38,7 +38,6 @@
             chkFont3DEnable = new CheckBox();
             chkCollisionDisplay = new CheckBox();
             chkNormalDisplay = new CheckBox();
-            chkUseAnimLinks = new CheckBox();
             fraAnimGrid = new GroupBox();
             numAnimGrid = new NumericUpDown();
             lblAnimGrid = new Label();
@@ -63,13 +62,13 @@
             fraLang = new GroupBox();
             tbp3D = new TabPage();
             tbpDebugDisplay = new TabPage();
+            chkShowEntityParams = new CheckBox();
             chkDisableVisual = new CheckBox();
             chkViewCamera = new CheckBox();
             chkViewCameraAngle = new CheckBox();
             chkViewZoneName = new CheckBox();
             chkViewZoneBox = new CheckBox();
             tbpPatchNSD = new TabPage();
-            chkShowEntityParams = new CheckBox();
             tableLayoutPanel4 = new TableLayoutPanel();
             tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numFontSize).BeginInit();
@@ -229,20 +228,6 @@
             chkNormalDisplay.UseVisualStyleBackColor = true;
             chkNormalDisplay.CheckedChanged += chkNormalDisplay_CheckedChanged;
             // 
-            // chkUseAnimLinks
-            // 
-            chkUseAnimLinks.AutoSize = true;
-            chkUseAnimLinks.Checked = true;
-            chkUseAnimLinks.CheckState = CheckState.Checked;
-            chkUseAnimLinks.Location = new Point(7, 299);
-            chkUseAnimLinks.Margin = new Padding(4, 3, 4, 3);
-            chkUseAnimLinks.Name = "chkUseAnimLinks";
-            chkUseAnimLinks.Size = new Size(359, 19);
-            chkUseAnimLinks.TabIndex = 3;
-            chkUseAnimLinks.Text = "(Crash 3) Automatically use saved model names for animations";
-            chkUseAnimLinks.UseVisualStyleBackColor = true;
-            chkUseAnimLinks.CheckedChanged += chkUseAnimLinks_CheckedChanged;
-            // 
             // fraAnimGrid
             // 
             fraAnimGrid.AutoSize = true;
@@ -326,7 +311,7 @@
             fraFont.Margin = new Padding(4, 3, 4, 3);
             fraFont.Name = "fraFont";
             fraFont.Padding = new Padding(4, 3, 4, 3);
-            fraFont.Size = new Size(276, 93);
+            fraFont.Size = new Size(276, 78);
             fraFont.TabIndex = 8;
             fraFont.TabStop = false;
             fraFont.Text = "3D Text";
@@ -339,9 +324,9 @@
             chkPatchNSDSavesNSF.Location = new Point(7, 31);
             chkPatchNSDSavesNSF.Margin = new Padding(4, 3, 4, 3);
             chkPatchNSDSavesNSF.Name = "chkPatchNSDSavesNSF";
-            chkPatchNSDSavesNSF.Size = new Size(216, 19);
+            chkPatchNSDSavesNSF.Size = new Size(177, 19);
             chkPatchNSDSavesNSF.TabIndex = 7;
-            chkPatchNSDSavesNSF.Text = "Always save NSF after NSD patching";
+            chkPatchNSDSavesNSF.Text = "Save NSF after NSD patching";
             chkPatchNSDSavesNSF.UseVisualStyleBackColor = true;
             chkPatchNSDSavesNSF.CheckedChanged += chkPatchNSDSavesNSF_CheckedChanged;
             // 
@@ -502,7 +487,7 @@
             tbpGeneral.Location = new Point(4, 24);
             tbpGeneral.Name = "tbpGeneral";
             tbpGeneral.Padding = new Padding(3);
-            tbpGeneral.Size = new Size(434, 389);
+            tbpGeneral.Size = new Size(417, 389);
             tbpGeneral.TabIndex = 0;
             tbpGeneral.Text = "General";
             tbpGeneral.UseVisualStyleBackColor = true;
@@ -520,14 +505,13 @@
             // tbp3D
             // 
             tbp3D.Controls.Add(fraNodeShadeAmt);
-            tbp3D.Controls.Add(chkUseAnimLinks);
             tbp3D.Controls.Add(fraFont);
             tbp3D.Controls.Add(fraClearCol);
             tbp3D.Controls.Add(fraAnimGrid);
             tbp3D.Location = new Point(4, 24);
             tbp3D.Name = "tbp3D";
             tbp3D.Padding = new Padding(3);
-            tbp3D.Size = new Size(434, 389);
+            tbp3D.Size = new Size(417, 389);
             tbp3D.TabIndex = 1;
             tbp3D.Text = "3D Viewer";
             tbp3D.UseVisualStyleBackColor = true;
@@ -552,6 +536,20 @@
             tbpDebugDisplay.TabIndex = 3;
             tbpDebugDisplay.Text = "Debug Displays";
             tbpDebugDisplay.UseVisualStyleBackColor = true;
+            // 
+            // chkShowEntityParams
+            // 
+            chkShowEntityParams.AutoSize = true;
+            chkShowEntityParams.Checked = true;
+            chkShowEntityParams.CheckState = CheckState.Checked;
+            chkShowEntityParams.Location = new Point(7, 81);
+            chkShowEntityParams.Margin = new Padding(4, 3, 4, 3);
+            chkShowEntityParams.Name = "chkShowEntityParams";
+            chkShowEntityParams.Size = new Size(150, 19);
+            chkShowEntityParams.TabIndex = 13;
+            chkShowEntityParams.Text = "Show entity parameters";
+            chkShowEntityParams.UseVisualStyleBackColor = true;
+            chkShowEntityParams.CheckedChanged += chkShowEntityParams_CheckedChanged;
             // 
             // chkDisableVisual
             // 
@@ -628,20 +626,6 @@
             tbpPatchNSD.Text = "Patch NSD";
             tbpPatchNSD.UseVisualStyleBackColor = true;
             // 
-            // chkShowEntityParams
-            // 
-            chkShowEntityParams.AutoSize = true;
-            chkShowEntityParams.Checked = true;
-            chkShowEntityParams.CheckState = CheckState.Checked;
-            chkShowEntityParams.Location = new Point(7, 81);
-            chkShowEntityParams.Margin = new Padding(4, 3, 4, 3);
-            chkShowEntityParams.Name = "chkShowEntityParams";
-            chkShowEntityParams.Size = new Size(150, 19);
-            chkShowEntityParams.TabIndex = 13;
-            chkShowEntityParams.Text = "Show entity parameters";
-            chkShowEntityParams.UseVisualStyleBackColor = true;
-            chkShowEntityParams.CheckedChanged += chkShowEntityParams_CheckedChanged;
-            // 
             // ConfigEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -711,7 +695,6 @@
         private System.Windows.Forms.CheckBox chkNormalDisplay;
         private System.Windows.Forms.CheckBox chkPatchNSDSavesNSF;
         private System.Windows.Forms.CheckBox chkDeleteInvalidEntries;
-        private System.Windows.Forms.CheckBox chkUseAnimLinks;
         private System.Windows.Forms.ComboBox dpdLang;
         private Label lblNodeShadeAmt;
         private TabControl tbcSettings;

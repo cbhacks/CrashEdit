@@ -8,7 +8,6 @@ namespace CrashEdit.CE
     {
         protected int animId;
         protected int animFrame;
-        protected int modelId;
 
         protected int _curframe = 0;
         protected int _cullmode = 1;
@@ -18,11 +17,10 @@ namespace CrashEdit.CE
         private static VBO[] vboModel = new VBO[2];
         protected VAO[] vaoModel = new VAO[2];
 
-        public BaseAnimationEntryViewer(NSF nsf, int anim_eid, int frame = -1, int model_eid = Entry.NullEID) : base(nsf)
+        public BaseAnimationEntryViewer(NSF nsf, int anim_eid, int frame = -1) : base(nsf)
         {
             animId = anim_eid;
             animFrame = frame;
-            modelId = model_eid;
         }
 
         private static void LoadGLStatic()

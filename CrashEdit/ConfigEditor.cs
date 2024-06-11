@@ -72,13 +72,17 @@ namespace CrashEdit.CE
             numAnimGrid.Value = Settings.Default.AnimGridLen;
             chkNormalDisplay.Checked = Settings.Default.DisplayNormals;
             chkCollisionDisplay.Checked = Settings.Default.DisplayFrameCollision;
-            chkUseAnimLinks.Checked = Settings.Default.UseAnimLinks;
             cdlClearCol.Color = picClearCol.BackColor = System.Drawing.Color.FromArgb(Settings.Default.ClearColorRGB);
             chkDeleteInvalidEntries.Checked = Settings.Default.DeleteInvalidEntries;
             chkAnimGrid.Checked = Settings.Default.DisplayAnimGrid;
             chkFont3DEnable.Checked = Settings.Default.Font3DEnable;
             chkFont2DEnable.Checked = Settings.Default.Font2DEnable;
             chkViewerShowHelp.Checked = Settings.Default.ViewerShowHelp;
+            chkViewZoneBox.Checked = Settings.Default.ViewZoneBox;
+            chkViewZoneName.Checked = Settings.Default.ViewZoneName;
+            chkViewCamera.Checked = Settings.Default.ViewCamera;
+            chkViewCameraAngle.Checked = Settings.Default.ViewCameraAngle;
+            chkShowEntityParams.Checked = Settings.Default.ShowEntityParams;
             cdlClearCol.Color = picClearCol.BackColor = Color.FromArgb(Settings.Default.ClearColorRGB);
             sldNodeShadeAmt.Value = (int)(Settings.Default.NodeShadeMax * 100);
             lblNodeShadeAmt.Text = string.Format("{0:F0}%", sldNodeShadeAmt.Value);
@@ -97,11 +101,15 @@ namespace CrashEdit.CE
             chkNormalDisplay.Text = Resources.Config_chkNormalDisplay;
             chkCollisionDisplay.Text = Resources.Config_chkCollisionDisplay;
             chkDeleteInvalidEntries.Text = Resources.Config_chkDeleteInvalidEntries;
-            chkUseAnimLinks.Text = Resources.Config_chkUseAnimLinks;
             chkPatchNSDSavesNSF.Text = Resources.Config_chkPatchNSDSavesNSF;
             chkFont3DEnable.Text = Resources.Config_chkFont3DEnable;
             chkFont2DEnable.Text = Resources.Config_chkFont2DEnable;
             chkViewerShowHelp.Text = Resources.Config_chkViewerShowHelp;
+            chkViewZoneBox.Text = Resources.Config_chkViewZoneBox;
+            chkViewZoneName.Text = Resources.Config_chkViewZoneName;
+            chkViewCamera.Text = Resources.Config_chkViewCamera;
+            chkViewCameraAngle.Text = Resources.Config_chkViewCameraAngle;
+            chkShowEntityParams.Text = Resources.Config_chkShowEntityParams;
             cmdReset.Text = Resources.Config_cmdReset;
         }
 
@@ -144,12 +152,6 @@ namespace CrashEdit.CE
         private void chkCollisionDisplay_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Default.DisplayFrameCollision = chkCollisionDisplay.Checked;
-            Settings.Default.Save();
-        }
-
-        private void chkUseAnimLinks_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.Default.UseAnimLinks = chkUseAnimLinks.Checked;
             Settings.Default.Save();
         }
 

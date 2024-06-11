@@ -27,5 +27,26 @@ namespace CrashEdit.Crash
             }
             return new UnprocessedEntry(items, EID, Type);
         }
+
+        public bool IsLerped(NSF nsf)
+        {
+            foreach (var gool in nsf.GetEntries<GOOLEntry>())
+            {
+                foreach (var group in gool.FrameGroups)
+                {
+                    if (group is VertexGroup3 vgroup3)
+                    {
+                        if (EID == vgroup3.EID)
+                            return vgroup3.Interpolated;
+                    }
+                    else if (group is VertexGroup2 vgroup2)
+                    {
+                        if (EID == vgroup2.EID)
+                            return vgroup2.Interpolated;
+                    }
+                }
+            }
+            return false;
+        }
     }
 }

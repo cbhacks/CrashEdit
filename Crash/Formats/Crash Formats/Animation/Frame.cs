@@ -167,7 +167,7 @@ namespace CrashEdit.Crash
                     verts[i] = new Position((byte)x_acc, (byte)y_acc, (byte)z_acc);
                 }
             }
-            else
+            else if (Temporals.Length >= (Vertices.Count - SpecialVertexCount) * 24)
             {
                 // uncompressed frame
                 bool[] uncompressedbitstream = new bool[Temporals.Length];

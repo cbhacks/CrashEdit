@@ -533,12 +533,13 @@ namespace CrashEdit.CE
         private void RenderEntity(OldEntity entity)
         {
             float text_y = 0;
+            float text_size = 0.65f;
             bool draw_type = true;
             Vector3 trans = new Vector3(entity.Positions[0].X, entity.Positions[0].Y, entity.Positions[0].Z) / GameScales.ZoneEntityC1 + zone_trans;
             if (entity.Positions.Count > 0)
             {
                 if (Settings.Default.Font3DEnable)
-                    AddText3D("entity-" + entity.ID, trans, GetZoneColor(Color4.Yellow), ofs_y: text_y, flags: TextRenderFlags.Default | TextRenderFlags.Bottom);
+                    AddText3D("entity-" + entity.ID, trans, GetZoneColor(Color4.Yellow), size: text_size, ofs_y: text_y, flags: TextRenderFlags.Default | TextRenderFlags.Bottom);
 
                 bool rendered_model = false;
                 if (!Settings.Default.DisableVisual)
@@ -569,7 +570,7 @@ namespace CrashEdit.CE
                         else if (pickup == 104) pickup_name = "brio";
                         else if (pickup == 105) pickup_name = "tawna";
                         if (Settings.Default.ShowEntityParams)
-                            text_y += AddText3D(pickup_name, trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
+                            text_y += AddText3D(pickup_name, trans, GetZoneColor(Color4.White), size: text_size, ofs_y: text_y).Y;
                         int link_a = entity.VecZ;
                         var link_info = link_a == 0 ? null : nsf.GetEntityC1(link_a);
                         if (link_info != null)
@@ -628,9 +629,9 @@ namespace CrashEdit.CE
                 if (draw_type && Settings.Default.ShowEntityParams)
                 {
                     if (gools.ContainsKey(entity.Type))
-                        text_y += AddText3D($"{gools[entity.Type].EName}-{entity.Subtype}", trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
+                        text_y += AddText3D($"{gools[entity.Type].EName}-{entity.Subtype}", trans, GetZoneColor(Color4.White), size: text_size, ofs_y: text_y).Y;
                     else
-                        text_y += AddText3D($"{entity.Type}-{entity.Subtype} (invalid type)", trans, GetZoneColor(Color4.White), ofs_y: text_y).Y;
+                        text_y += AddText3D($"{entity.Type}-{entity.Subtype} (invalid type)", trans, GetZoneColor(Color4.White), size: text_size, ofs_y: text_y).Y;
                 }
             }
         }

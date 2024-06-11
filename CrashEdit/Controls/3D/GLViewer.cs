@@ -218,6 +218,7 @@ namespace CrashEdit.CE
             public static readonly ControlsKeyboardInfo ZoneAnchorSortList = new(Keys.L, Resources.ViewerControls_ZoneAnchorSortList);
             public static readonly ControlsKeyboardInfo ZoneAnchorDetach = new(Keys.K, Resources.ViewerControls_ZoneAnchorDetach);
             public static readonly ControlsKeyboardInfo ToggleSlowAnim = new(Keys.P, Resources.ViewerControls_ToggleSlowAnim);
+            public static readonly ControlsKeyboardInfo ToggleModelCycle = new(Keys.Y, Resources.ViewerControls_ToggleModelCycle);
         }
         #endregion
 
@@ -1203,6 +1204,17 @@ namespace CrashEdit.CE
                 mousex = e.X;
                 mousey = e.Y;
             }
+        }
+
+        protected override bool IsInputKey(Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.Right:
+                case Keys.Left:
+                    return true;
+            }
+            return base.IsInputKey(keyData);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

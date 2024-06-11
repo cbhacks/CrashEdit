@@ -20,7 +20,7 @@ namespace CrashEdit.Crash
             }
             short[] statemap = null;
             GOOLStateDescriptor[] statedesc = null;
-            byte[] anims = null;
+            List<GOOLFrameGroupBase> fgroups = [];
             if (items.Length > 3)
             {
                 statemap = new short[items[3].Length / 2];
@@ -28,31 +28,80 @@ namespace CrashEdit.Crash
                 {
                     statemap[i] = BitConv.FromInt16(items[3], i * 2);
                 }
-                if (items.Length > 4)
+                statedesc = new GOOLStateDescriptor[items[4].Length / 0x10];
+                for (int i = 0; i < statedesc.Length; ++i)
                 {
-                    statedesc = new GOOLStateDescriptor[items[4].Length / 0x10];
-                    for (int i = 0; i < statedesc.Length; ++i)
+                    statedesc[i] = new GOOLStateDescriptor(
+                        BitConv.FromInt32(items[4], i * 0x10 + 0),
+                        BitConv.FromInt32(items[4], i * 0x10 + 4),
+                        BitConv.FromInt16(items[4], i * 0x10 + 8),
+                        BitConv.FromInt16(items[4], i * 0x10 + 10),
+                        BitConv.FromInt16(items[4], i * 0x10 + 12),
+                        BitConv.FromInt16(items[4], i * 0x10 + 14)
+                        );
+                }
+                if (items.Length > 5)
+                {
+                    if (goolver == GOOLVersion.Version0)
                     {
-                        statedesc[i] = new GOOLStateDescriptor(
-                            BitConv.FromInt32(items[4], i * 0x10 + 0),
-                            BitConv.FromInt32(items[4], i * 0x10 + 4),
-                            BitConv.FromInt16(items[4], i * 0x10 + 8),
-                            BitConv.FromInt16(items[4], i * 0x10 + 10),
-                            BitConv.FromInt16(items[4], i * 0x10 + 12),
-                            BitConv.FromInt16(items[4], i * 0x10 + 14)
-                            );
+                        for (int i = 0; i < items[5].Length / 8; ++i)
+                        {
+                            fgroups.Add(new ProtoSpriteTexture(BitConv.FromInt32(items[5], i * 8), BitConv.FromInt32(items[5], i * 8 + 4)));
+                        }
                     }
-                    if (items.Length > 5)
+                    else
                     {
-                        anims = items[5];
+                        int i = 0;
+                        bool warned = false;
+                        while (i + 2 < items[5].Length)
+                        {
+                            int begin = i;
+                            int type = BitConv.FromInt16(items[5], i);
+                            switch (type)
+                            {
+                                case 1:
+                                    if (goolver == GOOLVersion.Version1)
+                                        fgroups.Add(VertexGroup.Load(items[5], ref i));
+                                    else if (goolver == GOOLVersion.Version2)
+                                        fgroups.Add(VertexGroup2.Load(items[5], ref i));
+                                    else if (goolver == GOOLVersion.Version3)
+                                        fgroups.Add(VertexGroup3.Load(items[5], ref i));
+                                    break;
+                                case 2:
+                                    if (goolver == GOOLVersion.Version1)
+                                        fgroups.Add(SpriteGroup.Load(items[5], ref i));
+                                    else if (goolver == GOOLVersion.Version2 || goolver == GOOLVersion.Version3)
+                                        fgroups.Add(SpriteGroup2.Load(items[5], ref i));
+                                    break;
+                                case 3:
+                                    if (goolver == GOOLVersion.Version1)
+                                        fgroups.Add(FontGroup.Load(items[5], ref i));
+                                    else if (goolver == GOOLVersion.Version2 || goolver == GOOLVersion.Version3)
+                                        fgroups.Add(FontGroup2.Load(items[5], ref i));
+                                    break;
+                                case 4:
+                                    fgroups.Add(TextGroup.Load(items[5], ref i));
+                                    break;
+                                case 5:
+                                    if (goolver == GOOLVersion.Version1)
+                                        fgroups.Add(ImageGroup.Load(items[5], ref i));
+                                    else if (goolver == GOOLVersion.Version2 || goolver == GOOLVersion.Version3)
+                                        fgroups.Add(ImageGroup2.Load(items[5], ref i));
+                                    break;
+                            }
+                            if (i == begin)
+                            {
+                                // infinite loop prevention
+                                i += 4;
+
+                                if (!warned)
+                                    ErrorManager.SignalIgnorableError(string.Format("Unknown frame groups in {0}", Entry.EIDToEName(eid)));
+                            }
+                        }
                     }
                 }
             }
-            return new GOOLEntry(goolver, items[0], items[1], ins,
-                statemap,
-                statedesc,
-                anims,
-                eid);
+            return new GOOLEntry(goolver, items[0], items[1], ins, statemap, statedesc, fgroups, eid);
         }
     }
 

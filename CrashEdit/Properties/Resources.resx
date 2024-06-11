@@ -338,9 +338,6 @@
   <data name="Config_chkNormalDisplay" xml:space="preserve">
     <value>(Crash 1) Show normals in animations</value>
   </data>
-  <data name="Config_chkUseAnimLinks" xml:space="preserve">
-    <value>(Crash 3) Automatically use saved model names for animations</value>
-  </data>
   <data name="Config_cmdReset" xml:space="preserve">
     <value>Reset Settings</value>
   </data>
@@ -639,7 +636,7 @@
     <value>Playtest</value>
   </data>
   <data name="Config_chkPatchNSDSavesNSF" xml:space="preserve">
-    <value>Always save NSF after NSD patching</value>
+    <value>Save NSF after NSD patching</value>
   </data>
   <data name="MakeBIN_Making" xml:space="preserve">
     <value>Making BIN...</value>
@@ -772,5 +769,14 @@ as Meters: {3:F3}m</value>
   </data>
   <data name="Config_chkViewZoneName" xml:space="preserve">
     <value>Show zone names</value>
+  </data>
+  <data name="ViewerControls_ToggleModelCycle" xml:space="preserve">
+    <value>Toggle automatic model cycling ({0})</value>
+  </data>
+  <data name="ViewerControls_PickModel" xml:space="preserve">
+    <value>Left/Right to change model (current: {0})</value>
+  </data>
+  <data name="Config_chkShowEntityParams" xml:space="preserve">
+    <value>Show entity parameters</value>
   </data>
 </root>
