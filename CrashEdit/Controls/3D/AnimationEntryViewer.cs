@@ -165,7 +165,7 @@ namespace CrashEdit.CE
                 var models = GetCrash3ModelList(anim);
                 if (models.Count > 1)
                 {
-                    if (anim.Frames.Count > 1 && models.Count == anim.Frames.Count)
+                    if (models.Count == anim.Frames.Count)
                         con_help += KeyboardControls.ToggleModelCycle.Print(OnOffName(_modelautocycle));
                     if (!_modelautocycle)
                         con_help += string.Format(Resources.ViewerControls_PickModel, Entry.EIDToEName(models[_modelforceindex % models.Count]));
@@ -183,7 +183,7 @@ namespace CrashEdit.CE
                 var models = GetCrash3ModelList(anim);
                 if (models.Count > 1)
                 {
-                    if (anim.Frames.Count > 1 && models.Count == anim.Frames.Count)
+                    if (models.Count == anim.Frames.Count)
                         if (KPress(KeyboardControls.ToggleModelCycle)) _modelautocycle = !_modelautocycle;
                     if (!_modelautocycle)
                     {
