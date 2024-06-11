@@ -215,7 +215,20 @@ namespace CrashEdit.CE
         {
             _vaolist[0] = _vao;
             _vaolist[1] = _vao2;
-            return animation_renderer.RenderAnimFrame(trans, _vaolist, nsf.GetEntry<AnimationEntry>(visual.AnimName), visual.AnimFrame != -1 ? visual.AnimFrame : render.FullCurrentFrame / 2, x => nsf.GetEntry<ModelEntry>(x.ModelEID), scale: scale, rot: rot);
+            var framenum = visual.AnimFrame != -1 ? visual.AnimFrame : render.FullCurrentFrame / 2;
+            var anim = nsf.GetEntry<AnimationEntry>(visual.AnimName);
+            if (anim != null)
+            {
+                if (anim.IsLerped(nsf))
+                {
+                    animation_renderer.Setup(true, true);
+                    if (visual.AnimFrame != -1)
+                        framenum *= 2;
+                }
+                else
+                    animation_renderer.Setup(true, false);
+            }
+            return animation_renderer.RenderAnimFrame(trans, _vaolist, anim, framenum, x => nsf.GetEntry<ModelEntry>(x.ModelEID), scale: scale, rot: rot);
         }
 
         private bool RenderEntityVisual(Entity entity, Vector3 trans)
@@ -306,7 +319,7 @@ namespace CrashEdit.CE
         private void RenderEntity(Entity entity)
         {
             float text_y = 0;
-            float text_size = 0.8f;
+            float text_size = 0.65f;
             bool draw_type = entity.Type.HasValue && entity.Subtype.HasValue;
             float scale = GameScales.ZoneEntityC1;
             if (entity.Scaling.HasValue)

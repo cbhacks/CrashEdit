@@ -29,7 +29,7 @@ namespace CrashEdit.CE
                     if (anim.IsNew && frames.Count > 1 && frames.Count == GetCrash3ModelList(anim).Count)
                         _modelautocycle = true;
                     // guess if it's lerped
-                    if (AnimIsLerped(anim))
+                    if (anim.IsLerped(nsf))
                         _halfspeed = true;
 
                     var usedframes = new List<Frame>();
@@ -61,34 +61,6 @@ namespace CrashEdit.CE
             }
         }
 
-        private bool AnimIsLerped(AnimationEntry anim)
-        {
-            if (anim != null)
-            {
-                foreach (var gool in nsf.GetEntries<GOOLEntry>())
-                {
-                    foreach (var group in gool.FrameGroups)
-                    {
-                        if (group is VertexGroup3 vgroup3)
-                        {
-                            if (anim.EID == vgroup3.EID)
-                            {
-                                return vgroup3.Interpolated;
-                            }
-                        }
-                        else if (group is VertexGroup2 vgroup2)
-                        {
-                            if (anim.EID == vgroup2.EID)
-                            {
-                                return vgroup2.Interpolated;
-                            }
-                        }
-                    }
-                }
-            }
-            return false;
-        }
-
         private List<int> GetCrash3ModelList(AnimationEntry anim)
         {
             List<int> models = new();
@@ -100,12 +72,9 @@ namespace CrashEdit.CE
                     {
                         if (group is VertexGroup3 vgroup)
                         {
-                            if (anim.EID == vgroup.EID)
+                            if (anim.EID == vgroup.EID && !models.Contains(vgroup.ModelEID))
                             {
-                                if (!models.Contains(vgroup.ModelEID))
-                                {
-                                    models.Add(vgroup.ModelEID);
-                                }
+                                models.Add(vgroup.ModelEID);
                             }
                         }
                     }
