@@ -28,6 +28,9 @@ namespace CrashEdit.CE
                     // try to guess if this is a 'one model per frame' animation
                     if (anim.IsNew && frames.Count > 1 && frames.Count == GetCrash3ModelList(anim).Count)
                         _modelautocycle = true;
+                    // guess if it's lerped
+                    if (AnimIsLerped(anim))
+                        _halfspeed = true;
 
                     var usedframes = new List<Frame>();
                     if (animFrame != -1)
@@ -58,10 +61,38 @@ namespace CrashEdit.CE
             }
         }
 
+        private bool AnimIsLerped(AnimationEntry anim)
+        {
+            if (anim != null)
+            {
+                foreach (var gool in nsf.GetEntries<GOOLEntry>())
+                {
+                    foreach (var group in gool.FrameGroups)
+                    {
+                        if (group is VertexGroup3 vgroup3)
+                        {
+                            if (anim.EID == vgroup3.EID)
+                            {
+                                return vgroup3.Interpolated;
+                            }
+                        }
+                        else if (group is VertexGroup2 vgroup2)
+                        {
+                            if (anim.EID == vgroup2.EID)
+                            {
+                                return vgroup2.Interpolated;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
         private List<int> GetCrash3ModelList(AnimationEntry anim)
         {
             List<int> models = new();
-            if (anim != null)
+            if (anim != null && anim.IsNew)
             {
                 foreach (var gool in nsf.GetEntries<GOOLEntry>())
                 {
