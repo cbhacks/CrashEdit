@@ -12,7 +12,7 @@ namespace CrashEdit.CE
         private bool _modelautocycle = false;
         private int _modelforceindex = 0;
 
-        public AnimationEntryViewer(NSF nsf, int anim_eid, int frame = -1, int model_eid = Entry.NullEID) : base(nsf, anim_eid, frame, model_eid)
+        public AnimationEntryViewer(NSF nsf, int anim_eid, int frame = -1) : base(nsf, anim_eid, frame)
         {
             animation_renderer = new() { TPages = tpages, Render = render };
         }
@@ -89,14 +89,14 @@ namespace CrashEdit.CE
             {
                 var models = GetCrash3ModelList(anim);
                 if (models.Count == 0)
-                    return modelId;
+                    return Entry.NullEID;
 
                 if (_modelautocycle)
                     return models[anim.Frames.IndexOf(frame) % models.Count];
                 else
                     return models[_modelforceindex % models.Count];
             }
-            return modelId != Entry.NullEID ? modelId : frame.ModelEID;
+            return frame.ModelEID;
         }
 
         protected override void Render()
