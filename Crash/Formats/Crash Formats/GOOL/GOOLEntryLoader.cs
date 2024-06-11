@@ -52,8 +52,10 @@ namespace CrashEdit.Crash
                     else
                     {
                         int i = 0;
+                        bool warned = false;
                         while (i + 2 < items[5].Length)
                         {
+                            int begin = i;
                             int type = BitConv.FromInt16(items[5], i);
                             switch (type)
                             {
@@ -86,6 +88,14 @@ namespace CrashEdit.Crash
                                     else if (goolver == GOOLVersion.Version2 || goolver == GOOLVersion.Version3)
                                         fgroups.Add(ImageGroup2.Load(items[5], ref i));
                                     break;
+                            }
+                            if (i == begin)
+                            {
+                                // infinite loop prevention
+                                i += 4;
+
+                                if (!warned)
+                                    ErrorManager.SignalIgnorableError(string.Format("Unknown frame groups in {0}", Entry.EIDToEName(eid)));
                             }
                         }
                     }
