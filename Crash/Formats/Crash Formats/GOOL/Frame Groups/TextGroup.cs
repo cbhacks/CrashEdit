@@ -31,6 +31,8 @@ namespace CrashEdit.Crash
                 index = end + 1;
             }
 
+            Aligner.Align(ref index, 4);
+
             return new TextGroup(frames, eid, font);
         }
 
