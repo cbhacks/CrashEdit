@@ -1,3 +1,4 @@
+using CrashEdit.CE.Properties;
 using CrashEdit.Crash;
 using OpenTK.Mathematics;
 
@@ -8,6 +9,8 @@ namespace CrashEdit.CE
         private readonly AnimationRenderer animation_renderer;
 
         private bool _halfspeed = false;
+        private bool _modelautocycle = false;
+        private int _modelforceindex = 0;
 
         public AnimationEntryViewer(NSF nsf, int anim_eid, int frame = -1, int model_eid = Entry.NullEID) : base(nsf, anim_eid, frame, model_eid)
         {
@@ -18,9 +21,14 @@ namespace CrashEdit.CE
         {
             get
             {
-                var frames = nsf.GetEntry<AnimationEntry>(animId)?.Frames;
+                var anim = nsf.GetEntry<AnimationEntry>(animId);
+                var frames = anim?.Frames;
                 if (frames != null)
                 {
+                    // try to guess if this is a 'one model per frame' animation
+                    if (anim.IsNew && frames.Count > 1 && frames.Count == GetCrash3ModelList(anim).Count)
+                        _modelautocycle = true;
+
                     var usedframes = new List<Frame>();
                     if (animFrame != -1)
                         usedframes.Add(frames[animFrame]);
@@ -29,7 +37,7 @@ namespace CrashEdit.CE
 
                     foreach (Frame frame in usedframes)
                     {
-                        var model = nsf.GetEntry<ModelEntry>(GetModelEID(frame));
+                        var model = nsf.GetEntry<ModelEntry>(GetModelEID(anim, frame));
                         float mx = 1 / 128f;
                         float my = 1 / 128f;
                         float mz = 1 / 128f;
@@ -50,8 +58,44 @@ namespace CrashEdit.CE
             }
         }
 
-        private int GetModelEID(Frame frame)
+        private List<int> GetCrash3ModelList(AnimationEntry anim)
         {
+            List<int> models = new();
+            if (anim != null)
+            {
+                foreach (var gool in nsf.GetEntries<GOOLEntry>())
+                {
+                    foreach (var group in gool.FrameGroups)
+                    {
+                        if (group is VertexGroup3 vgroup)
+                        {
+                            if (anim.EID == vgroup.EID)
+                            {
+                                if (!models.Contains(vgroup.ModelEID))
+                                {
+                                    models.Add(vgroup.ModelEID);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return models;
+        }
+
+        private int GetModelEID(AnimationEntry anim, Frame frame)
+        {
+            if (anim.IsNew)
+            {
+                var models = GetCrash3ModelList(anim);
+                if (models.Count == 0)
+                    return modelId;
+
+                if (_modelautocycle)
+                    return models[anim.Frames.IndexOf(frame) % models.Count];
+                else
+                    return models[_modelforceindex % models.Count];
+            }
             return modelId != Entry.NullEID ? modelId : frame.ModelEID;
         }
 
@@ -61,7 +105,8 @@ namespace CrashEdit.CE
 
             animation_renderer.Setup(_interpolate, _halfspeed);
 
-            if (animation_renderer.RenderAnimFrame(new Vector3(0), vaoModel, nsf.GetEntry<AnimationEntry>(animId), animFrame != -1 ? animFrame : render.FullCurrentFrame / 2, x => nsf.GetEntry<ModelEntry>(GetModelEID(x))))
+            var anim = nsf.GetEntry<AnimationEntry>(animId);
+            if (animation_renderer.RenderAnimFrame(new Vector3(0), vaoModel, anim, animFrame != -1 ? animFrame : render.FullCurrentFrame / 2, x => nsf.GetEntry<ModelEntry>(GetModelEID(anim, x))))
             {
                 UploadTPAGs();
 
@@ -94,16 +139,66 @@ namespace CrashEdit.CE
             }
         }
 
+        protected override void PrintDebug()
+        {
+            base.PrintDebug();
+
+            var anim = nsf.GetEntry<AnimationEntry>(animId);
+            if (anim != null)
+            {
+                var models = GetCrash3ModelList(anim);
+                con_debug += $"auto? {_modelautocycle} force: {_modelforceindex}\n";
+                for (int i = 0; i < models.Count; ++i)
+                {
+                    con_debug += $"{i}: {Entry.EIDToEName(models[i])}\n";
+                }
+            }
+        }
+
         protected override void PrintHelp()
         {
             base.PrintHelp();
             con_help += KeyboardControls.ToggleSlowAnim.Print(OnOffName(_halfspeed));
+            var anim = nsf.GetEntry<AnimationEntry>(animId);
+            if (anim != null && anim.IsNew)
+            {
+                var models = GetCrash3ModelList(anim);
+                if (models.Count > 1)
+                {
+                    if (anim.Frames.Count > 1 && models.Count == anim.Frames.Count)
+                        con_help += KeyboardControls.ToggleModelCycle.Print(OnOffName(_modelautocycle));
+                    if (!_modelautocycle)
+                        con_help += string.Format(Resources.ViewerControls_PickModel, Entry.EIDToEName(models[_modelforceindex % models.Count]));
+                }
+            }
         }
 
         protected override void RunLogic()
         {
             base.RunLogic();
             if (KPress(KeyboardControls.ToggleSlowAnim)) _halfspeed = !_halfspeed;
+            var anim = nsf.GetEntry<AnimationEntry>(animId);
+            if (anim != null && anim.IsNew)
+            {
+                var models = GetCrash3ModelList(anim);
+                if (models.Count > 1)
+                {
+                    if (anim.Frames.Count > 1 && models.Count == anim.Frames.Count)
+                        if (KPress(KeyboardControls.ToggleModelCycle)) _modelautocycle = !_modelautocycle;
+                    if (!_modelautocycle)
+                    {
+                        if (KPress(Keys.Left))
+                            --_modelforceindex;
+                        if (KPress(Keys.Right))
+                            ++_modelforceindex;
+                        while (_modelforceindex < 0)
+                        {
+                            _modelforceindex += models.Count;
+                        }
+                        _modelforceindex = _modelforceindex % models.Count;
+                    }
+                }
+            }
         }
     }
 }

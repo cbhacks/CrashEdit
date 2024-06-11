@@ -14,10 +14,7 @@ namespace CrashEdit.CE
 
         public override Control CreateEditor()
         {
-            if (AnimationEntry.IsNew)
-                return new Crash3AnimationSelector(GetNSF(), AnimationEntry);
-            else
-                return new AnimationEntryViewer(GetNSF(), Entry.EID);
+            return new AnimationEntryViewer(GetNSF(), Entry.EID);
         }
 
         public AnimationEntry AnimationEntry { get; }

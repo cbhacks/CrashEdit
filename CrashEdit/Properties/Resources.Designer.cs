@@ -142,7 +142,7 @@ namespace CrashEdit.CE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Always save NSF after NSD patching.
+        ///   Looks up a localized string similar to Save NSF after NSD patching.
         /// </summary>
         internal static string Config_chkPatchNSDSavesNSF {
             get {
@@ -151,11 +151,11 @@ namespace CrashEdit.CE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (Crash 3) Automatically use saved model names for animations.
+        ///   Looks up a localized string similar to Show entity parameters.
         /// </summary>
-        internal static string Config_chkUseAnimLinks {
+        internal static string Config_chkShowEntityParams {
             get {
-                return ResourceManager.GetString("Config_chkUseAnimLinks", resourceCulture);
+                return ResourceManager.GetString("Config_chkShowEntityParams", resourceCulture);
             }
         }
         
@@ -1846,6 +1846,15 @@ namespace CrashEdit.CE.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Left/Right to change model (current: {0}).
+        /// </summary>
+        internal static string ViewerControls_PickModel {
+            get {
+                return ResourceManager.GetString("ViewerControls_PickModel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset camera.
         /// </summary>
         internal static string ViewerControls_ResetCamera {
@@ -1878,6 +1887,15 @@ namespace CrashEdit.CE.Properties {
         internal static string ViewerControls_ToggleLerp {
             get {
                 return ResourceManager.GetString("ViewerControls_ToggleLerp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle automatic model cycling ({0}).
+        /// </summary>
+        internal static string ViewerControls_ToggleModelCycle {
+            get {
+                return ResourceManager.GetString("ViewerControls_ToggleModelCycle", resourceCulture);
             }
         }
         
