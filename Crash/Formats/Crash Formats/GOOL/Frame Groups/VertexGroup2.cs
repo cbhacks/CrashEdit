@@ -1,6 +1,6 @@
 ﻿namespace CrashEdit.Crash
 {
-    public sealed class VertexGroup2(bool lerp, short frames, int eid) : GOOLChunkFrameGroup(eid)
+    public sealed class VertexGroup2(bool lerp, short frames, int eid) : GOOLFrameGroupWithChunk(eid)
     {
         public override short Type() => 1;
 

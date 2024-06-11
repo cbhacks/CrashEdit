@@ -48,10 +48,10 @@ namespace CrashEdit.Crash
 
         private readonly List<GOOLInstruction> instructions;
         private readonly List<GOOLStateDescriptor> statedescriptors;
-        private readonly List<GOOLProtoFrameGroup> framegroups;
+        private readonly List<GOOLFrameGroupBase> framegroups;
         private readonly List<int> externals;
 
-        public GOOLEntry(GOOLVersion version, byte[] header, byte[] instructions, int[] data, short[] statemap, IEnumerable<GOOLStateDescriptor> statedescriptors, IEnumerable<GOOLProtoFrameGroup> fgroups, int eid) : base(eid)
+        public GOOLEntry(GOOLVersion version, byte[] header, byte[] instructions, int[] data, short[] statemap, IEnumerable<GOOLStateDescriptor> statedescriptors, IEnumerable<GOOLFrameGroupBase> fgroups, int eid) : base(eid)
         {
             Version = version;
             Header = header;
@@ -117,7 +117,7 @@ namespace CrashEdit.Crash
         public int[] Data { get; }
         public short[] StateMap { get; }
         public IList<GOOLStateDescriptor> StateDescriptors => statedescriptors;
-        public IList<GOOLProtoFrameGroup> FrameGroups => framegroups;
+        public IList<GOOLFrameGroupBase> FrameGroups => framegroups;
 
         public int ID => BitConv.FromInt32(Header, 0);
         public int Class => BitConv.FromInt32(Header, 4);

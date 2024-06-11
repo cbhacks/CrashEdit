@@ -1,8 +1,8 @@
 ﻿namespace CrashEdit.Crash
 {
-    public abstract class GOOLProtoFrameGroup
+    public abstract class GOOLFrameGroupBase
     {
-        public GOOLProtoFrameGroup()
+        public GOOLFrameGroupBase()
         {
         }
 

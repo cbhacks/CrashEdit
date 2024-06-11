@@ -1,12 +1,12 @@
 ﻿namespace CrashEdit.Crash
 {
-    public abstract class GOOLChunkFrameGroup : GOOLProtoFrameGroup
+    public abstract class GOOLFrameGroupWithChunk : GOOLFrameGroupBase
     {
         public abstract short Type();
 
         public int EID { get; set; }
 
-        public GOOLChunkFrameGroup(int eid)
+        public GOOLFrameGroupWithChunk(int eid)
         {
             EID = eid;
         }

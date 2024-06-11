@@ -20,7 +20,7 @@ namespace CrashEdit.Crash
             }
             short[] statemap = null;
             GOOLStateDescriptor[] statedesc = null;
-            List<GOOLProtoFrameGroup> fgroups = [];
+            List<GOOLFrameGroupBase> fgroups = [];
             if (items.Length > 3)
             {
                 statemap = new short[items[3].Length / 2];
@@ -46,7 +46,7 @@ namespace CrashEdit.Crash
                     {
                         for (int i = 0; i < items[5].Length / 8; ++i)
                         {
-                            fgroups.Add(new GOOLProtoFrame(BitConv.FromInt64(items[5], i * 8)));
+                            fgroups.Add(new ProtoSpriteTexture(BitConv.FromInt32(items[5], i * 8), BitConv.FromInt32(items[5], i * 8 + 4)));
                         }
                     }
                     else

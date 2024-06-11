@@ -121,7 +121,7 @@ namespace CrashEdit.CE
                                 new int[1] { newentrywindow.EID },
                                 new short[1] { 0 },
                                 new List<GOOLStateDescriptor>() { new GOOLStateDescriptor(0x1, 0x0, 0x0, 0x3FFF, 0x3FFF, 0x0) },
-                                new List<GOOLProtoFrameGroup>(),
+                                new List<GOOLFrameGroupBase>(),
                                 newentrywindow.EID);
                             break;
                     }
