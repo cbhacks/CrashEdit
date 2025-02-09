@@ -145,7 +145,7 @@ namespace CrashEdit
                     {
                         MathExt.Lerp(ref vaoModel[0].Verts[i].trans, vaoModel[1].Verts[i].trans, interp);
                         if (!colored)
-                            MathExt.Lerp(ref vaoModel[0].Verts[i].normal, vaoModel[1].Verts[i].normal, interp);
+                            vaoModel[0].Verts[i].normal = Vertex.PackNormal(MathExt.Lerp(Vertex.UnpackNormal(vaoModel[0].Verts[i].normal), Vertex.UnpackNormal(vaoModel[1].Verts[i].normal), interp));
                         else
                             MathExt.Lerp(ref vaoModel[0].Verts[i].rgba, vaoModel[1].Verts[i].rgba, interp);
                     }
@@ -166,7 +166,7 @@ namespace CrashEdit
                     {
                         var p = (vaoModel[0].Verts[i].trans + ofs) * vaoModel[0].UserScale;
                         vaoLines.PushAttrib(trans: p, rgba: (Rgba)Color4.White);
-                        vaoLines.PushAttrib(trans: p + vaoModel[0].Verts[i].normal * 0.1f, rgba: (Rgba)Color4.Cyan);
+                        vaoLines.PushAttrib(trans: p + Vertex.UnpackNormal(vaoModel[0].Verts[i].normal) * 0.1f, rgba: (Rgba)Color4.Cyan);
                     }
                 }
                 if (enable_collision)
@@ -247,15 +247,15 @@ namespace CrashEdit
                         vao.Verts[cur_idx + 0].st = new(tex.U3, tex.V3);
                         vao.Verts[cur_idx + 1].st = new(tex.U2, tex.V2);
                         vao.Verts[cur_idx + 2].st = new(tex.U1, tex.V1);
-                        vao.Verts[cur_idx + 2].tex = TexInfoUnpacked.Pack(true, color: tex.ColorMode, blend: tex.BlendMode,
-                                                                                clutx: tex.ClutX, cluty: tex.ClutY,
-                                                                                face: Convert.ToInt32(tex.N),
-                                                                                page: tex_eids[tex.EID]);
+                        vao.Verts[cur_idx + 2].tex = new VertexTexInfo(true, color: tex.ColorMode, blend: tex.BlendMode,
+                                                                             clutx: tex.ClutX, cluty: tex.ClutY,
+                                                                             face: Convert.ToInt32(tex.N),
+                                                                             page: tex_eids[tex.EID]);
                         RenderVertex(vao, frame, polygon.VertexC / 6);
                         RenderVertex(vao, frame, polygon.VertexB / 6);
                         RenderVertex(vao, frame, polygon.VertexA / 6);
 
-                        blend_mask |= TexInfoUnpacked.GetBlendMode(tex.BlendMode);
+                        blend_mask |= VertexTexInfo.GetBlendMode(tex.BlendMode);
                     }
                     else
                     {
@@ -263,7 +263,7 @@ namespace CrashEdit
                         vao.Verts[cur_idx].rgba = new(col.R, col.G, col.B, 255);
                         vao.Verts[cur_idx + 1].rgba = vao.Verts[cur_idx].rgba;
                         vao.Verts[cur_idx + 2].rgba = vao.Verts[cur_idx].rgba;
-                        vao.Verts[cur_idx + 2].tex = TexInfoUnpacked.Pack(false, face: Convert.ToInt32(col.N));
+                        vao.Verts[cur_idx + 2].tex = new VertexTexInfo(false, face: Convert.ToInt32(col.N));
                         RenderVertex(vao, frame, polygon.VertexC / 6);
                         RenderVertex(vao, frame, polygon.VertexB / 6);
                         RenderVertex(vao, frame, polygon.VertexA / 6);
@@ -296,7 +296,7 @@ namespace CrashEdit
             }
             else
             {
-                vao.Verts[cur_vert_idx].normal = new Vector3(vert.NormalX, vert.NormalY, vert.NormalZ) / 127;
+                vao.Verts[cur_vert_idx].normal = Vertex.PackNormal(new Vector3(vert.NormalX, vert.NormalY, vert.NormalZ) / 127);
             }
             vao.vert_count++;
         }

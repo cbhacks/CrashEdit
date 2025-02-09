@@ -69,6 +69,8 @@ namespace CrashEdit
         internal static void Main(string[] args)
         {
 
+            AllocConsole();
+
             PlatformID pid = Environment.OSVersion.Platform;
 #if __MonoCS__
             if (pid != PlatformID.Unix && pid != PlatformID.MacOSX)
@@ -82,8 +84,6 @@ namespace CrashEdit
                 if (!SetDllDirectory(path))
                     throw new System.ComponentModel.Win32Exception();
             }
-
-            AllocConsole();
 
             if (Properties.Settings.Default.UpgradeSettings)
             {

@@ -9,7 +9,7 @@ namespace Crash
         {
             if (data == null)
                 throw new ArgumentNullException("data");
-            if (data.Length < 1788)
+            if (data.Length < 0x6FC)
             {
                 ErrorManager.SignalError("NSD: Data is too short");
             }
@@ -23,7 +23,7 @@ namespace Crash
             {
                 ErrorManager.SignalError("NSD: Entry count is negative");
             }
-            if (data.Length < 1788 + entrycount * 8)
+            if (data.Length < 0x6FC + entrycount * 8)
             {
                 ErrorManager.SignalError("NSD: Data is too short");
             }
@@ -56,7 +56,7 @@ namespace Crash
             {
                 ErrorManager.SignalIgnorableError("NSD: Not enough spawn points");
             }
-            if (data.Length < 1788 + entrycount * 8 + spawncount * 24)
+            if (data.Length < 0x6FC + entrycount * 8 + spawncount * 24)
             {
                 ErrorManager.SignalError("NSD: Data is too short");
             }
@@ -97,7 +97,7 @@ namespace Crash
         {
             if (data == null)
                 throw new ArgumentNullException("data");
-            if (data.Length < 2044)
+            if (data.Length < 0x7FC)
             {
                 ErrorManager.SignalError("NSD: Data is too short");
             }
@@ -111,7 +111,7 @@ namespace Crash
             {
                 ErrorManager.SignalError("NSD: Entry count is negative");
             }
-            if (data.Length < 2044 + entrycount * 8)
+            if (data.Length < 0x7FC + entrycount * 8)
             {
                 ErrorManager.SignalError("NSD: Data is too short");
             }
@@ -144,7 +144,7 @@ namespace Crash
             {
                 ErrorManager.SignalIgnorableError("NSD: Not enough spawn points");
             }
-            if (data.Length < 1788 + entrycount * 8 + spawncount * 24)
+            if (data.Length < 0x7FC + entrycount * 8 + spawncount * 24)
             {
                 ErrorManager.SignalError("NSD: Data is too short");
             }
@@ -156,8 +156,8 @@ namespace Crash
             }
             int id = BitConv.FromInt32(data, 0x528 + 8 * entrycount);
             int entitycount = BitConv.FromInt32(data, 0x52C + 8 * entrycount);
-            int[] goolmap = new int[64];
-            for (int i = 0; i < 64; ++i)
+            int[] goolmap = new int[128];
+            for (int i = 0; i < 128; ++i)
             {
                 goolmap[i] = BitConv.FromInt32(data, 0x530 + 8 * entrycount + i * 4);
             }
@@ -272,7 +272,7 @@ namespace Crash
             {
                 BitConv.ToInt32(result, 0x530 + 8 * entrycount + i * 4, GOOLMap[i]);
             }
-            Array.Copy(ExtraData, 0, result, 0x630 + entrycount * 8, ExtraData.Length);
+            Array.Copy(ExtraData, 0, result, 0x530 + ofs + entrycount * 8, ExtraData.Length);
             for (int i = 0; i < spawncount; ++i)
             {
                 BitConv.ToInt32(result, 0x530 + ofs + 8 * entrycount + ExtraData.Length + i * 24 + 0, spawns[i].ZoneEID);

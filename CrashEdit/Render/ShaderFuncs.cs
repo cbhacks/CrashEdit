@@ -53,5 +53,10 @@ namespace CrashEdit
             sh.UniformVec3("viewColumn0", ref viewColumn0);
             sh.UniformVec3("viewColumn1", ref viewColumn1);
         }
+
+        internal static void RenderOctree(Shader sh, RenderInfo ri, VAO vao)
+        {
+            sh.UniformFloat("uNodeShadeMax", vao.UserFloat);
+        }
     }
 }

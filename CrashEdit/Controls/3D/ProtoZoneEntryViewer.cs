@@ -220,11 +220,11 @@ namespace CrashEdit
                     maxz = maxy;
                 if (octreeFlip)
                 {
-                    octree_renderer.RenderOctree(zone.Layout, 0x1C, zone_trans.X, zone_trans.Y + zoneSize.Y, zone_trans.Z + zoneSize.Z, zoneSize.X, -zoneSize.Y, -zoneSize.Z, maxx, maxy, maxz);
+                    octree_renderer.RenderOctree(zone.Layout, 0x1C, zone_trans + new Vector3(0, zoneSize.Y, zoneSize.Z), new Vector3(zoneSize.X, -zoneSize.Y, -zoneSize.Z), maxx, maxy, maxz);
                 }
                 else
                 {
-                    octree_renderer.RenderOctree(zone.Layout, 0x1C, zone_trans.X, zone_trans.Y, zone_trans.Z, zoneSize.X, zoneSize.Y, zoneSize.Z, maxx, maxy, maxz);
+                    octree_renderer.RenderOctree(zone.Layout, 0x1C, zone_trans, zoneSize, maxx, maxy, maxz);
                 }
             }
         }
