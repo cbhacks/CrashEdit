@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using Crash;
-using OpenTK;
+﻿using CrashEdit.CE;
+using CrashEdit.Crash;
+using OpenTK.Mathematics;
 
 namespace CrashEdit.Exporters;
 
@@ -13,7 +10,7 @@ namespace CrashEdit.Exporters;
 // TODO: BUT THAT WOULD CUT DOWN THE METHODS HERE TO JUST ONE OR TWO
 public static class SceneryExtensions
 {
-    public static void AddScenery (this OBJExporter exporter, NSF nsf, OldSceneryEntry scenery, ref Dictionary<int, int> textureEIDs, ref Dictionary <string, TexInfoUnpacked> objTranslate)
+    public static void AddScenery (this OBJExporter exporter, NSF nsf, OldSceneryEntry scenery, ref Dictionary<int, int> textureEIDs, ref Dictionary <string, VertexTexInfo> objTranslate)
     {
         var offset = new Vector3 (scenery.XOffset, scenery.YOffset, scenery.ZOffset);
         var scale = new Vector3 (1 / GameScales.WorldC1);
@@ -44,7 +41,7 @@ public static class SceneryExtensions
             if (str is OldSceneryTexture t)
             {
                 int textureEID = scenery.GetTPAG (polygon.Page);
-                material = exporter.AddTexture (nsf, t, textureEID, ref textureEIDs, ref objTranslate, out color, out uv1, out uv2, out uv3);
+                material = exporter.AddTexture (nsf, t, textureEID, ref objTranslate, out color, out uv1, out uv2, out uv3);
             }
             else if(str is OldSceneryColor c)
             {
@@ -62,7 +59,7 @@ public static class SceneryExtensions
         }
     }
     
-    public static void AddScenery (this OBJExporter exporter, NSF nsf, SceneryEntry scenery, ref Dictionary <int, int> textureEIDs, ref Dictionary <string, TexInfoUnpacked> objTranslate)
+    public static void AddScenery (this OBJExporter exporter, NSF nsf, SceneryEntry scenery, ref Dictionary <int, int> textureEIDs, ref Dictionary <string, VertexTexInfo> objTranslate)
     {
         var offset = new Vector3 (scenery.XOffset, scenery.YOffset, scenery.ZOffset);
         //var scale = new Vector3 (1 / GameScales.WorldC1);

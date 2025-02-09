@@ -1,4 +1,5 @@
 using CrashEdit.Crash;
+using CrashEdit.Exporters;
 
 namespace CrashEdit.CE
 {
@@ -334,7 +335,7 @@ namespace CrashEdit.CE
             
             // detect how many textures are used and their eids to prepare the image
             Dictionary <int, int> textureEIDs = new ();
-            Dictionary <string, TexInfoUnpacked> objTranslate = new Dictionary <string, TexInfoUnpacked> ();
+            Dictionary <string, VertexTexInfo> objTranslate = new Dictionary <string, VertexTexInfo> ();
             
             // find all the scenery insde chunks
             foreach (SceneryEntry scenery in NSF.GetEntries<SceneryEntry> ())
@@ -351,7 +352,7 @@ namespace CrashEdit.CE
             
             // detect how many textures are used and their eids to prepare the image
             Dictionary <int, int> textureEIDs = new ();
-            Dictionary <string, TexInfoUnpacked> objTranslate = new Dictionary <string, TexInfoUnpacked> ();
+            Dictionary <string, VertexTexInfo> objTranslate = new Dictionary <string, VertexTexInfo> ();
             
             // find all the scenery insde chunks
             foreach (OldSceneryEntry scenery in NSF.GetEntries<OldSceneryEntry> ())

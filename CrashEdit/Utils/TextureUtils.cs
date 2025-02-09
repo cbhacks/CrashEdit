@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using Crash;
+﻿using CrashEdit.Crash;
 
 namespace CrashEdit;
 
 public class TextureUtils
 {
-    public static Tuple<bool, ModelTexture?> ProcessTextureInfoC2(long currentFrame, int in_tex_id, bool animated, IList<ModelTexture> textures, IList<ModelExtendedTexture> animated_textures)
+    public static bool ProcessTextureInfoC2(long texture_frame, int in_tex_id, bool animated, IList<ModelTexture> textures, IList<ModelExtendedTexture> animated_textures, out ModelTexture tex)
     {
         if (in_tex_id != 0 || animated)
         {
-            ModelTexture? info_temp = null;
             int tex_id = in_tex_id - 1;
             if (animated)
             {
                 if (++tex_id >= animated_textures.Count)
                 {
-                    return new(false, null);
+                    tex = default;
+                    return false;
                 }
                 var anim = animated_textures[tex_id];
                 // check if it's an untextured polygon
@@ -29,7 +27,7 @@ public class TextureUtils
                     }
                     else
                     {
-                        tex_id += (int)((currentFrame / 2 / (1 + anim.Latency) + anim.Delay) & anim.Mask);
+                        tex_id += (int)((texture_frame / (1 + anim.Latency) + anim.Delay) & anim.Mask);
                         if (anim.Leap)
                         {
                             anim = animated_textures[++tex_id];
@@ -38,21 +36,28 @@ public class TextureUtils
                     }
                     if (tex_id >= textures.Count)
                     {
-                        return new(false, null);
+                        tex = default;
+                        return false;
                     }
-                    info_temp = textures[tex_id];
+                    tex = textures[tex_id];
+                }
+                else
+                {
+                    tex = default;
                 }
             }
             else
             {
                 if (tex_id >= textures.Count)
                 {
-                    return new(false, null);
+                    tex = default;
+                    return false;
                 }
-                info_temp = textures[tex_id];
+                tex = textures[tex_id];
             }
-            return new(true, info_temp);
+            return true;
         }
-        return new(true, null);
+        tex = default;
+        return true;
     }
 }

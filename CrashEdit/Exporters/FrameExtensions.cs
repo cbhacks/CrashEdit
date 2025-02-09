@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using Crash;
-using OpenTK;
+﻿using CrashEdit.CE;
+using CrashEdit.Crash;
+using OpenTK.Mathematics;
 
 namespace CrashEdit.Exporters;
 
@@ -13,7 +10,7 @@ namespace CrashEdit.Exporters;
 // TODO: BUT THAT WOULD CUT DOWN THE METHODS HERE TO JUST ONE OR TWO
 public static class FrameExtensions
 {
-    public static void AddFrame (this OBJExporter exporter, NSF nsf, OldFrame frame, ref Dictionary <int, int> textureEIDs, ref Dictionary <string, TexInfoUnpacked> objTranslate)
+    public static void AddFrame (this OBJExporter exporter, NSF nsf, OldFrame frame, ref Dictionary <int, int> textureEIDs, ref Dictionary <string, VertexTexInfo> objTranslate)
     {
         var model = nsf.GetEntry<OldModelEntry>(frame.ModelEID);
         var offset = new Vector3 (frame.XOffset, frame.YOffset, frame.ZOffset);
@@ -34,7 +31,7 @@ public static class FrameExtensions
         {
             string material = null;
             Vector2? uv1 = null, uv2 = null, uv3 = null;
-            OldModelStruct str = model.Structs [polygon.Unknown & 0x7FFF];
+            OldModelStruct str = model.Structs [polygon.TexInfo];
             OldFrameVertex ov1 = frame.Vertices [polygon.VertexA / 6];
             OldFrameVertex ov2 = frame.Vertices [polygon.VertexB / 6];
             OldFrameVertex ov3 = frame.Vertices [polygon.VertexC / 6];
@@ -45,7 +42,7 @@ public static class FrameExtensions
 
             if (str is OldModelTexture t)
             {
-                material = exporter.AddTexture (nsf, t, ref textureEIDs, ref objTranslate, out color, out uv1, out uv2, out uv3);
+                material = exporter.AddTexture (nsf, t, ref objTranslate, out color, out uv1, out uv2, out uv3);
             }
             else if (str is OldSceneryColor c)
             {
@@ -63,7 +60,7 @@ public static class FrameExtensions
         }
     }
 
-    public static void AddFrame (this OBJExporter exporter, NSF nsf, Frame frame, ref Dictionary <int, int> textureEIDs, ref Dictionary <string, TexInfoUnpacked> objTranslate)
+    public static void AddFrame (this OBJExporter exporter, NSF nsf, Frame frame, ref Dictionary <int, int> textureEIDs, ref Dictionary <string, VertexTexInfo> objTranslate)
     {
         // TODO: SUPPORT CRASH2 AND CRASH3 PROPER SCALING
         // offset correction is 4f in Crash2, 32f in Crash3

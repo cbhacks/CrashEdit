@@ -31,7 +31,7 @@ namespace CrashEdit.CE
             string path = Path.GetDirectoryName (output);
 
             int id = 0;
-            int count = Node.Nodes.Count.ToString().Length;
+            int count = Modern.SubcontrollerGroups.SelectMany(x => x.Members).Count().ToString().Length;
 
             foreach (Controller node in Modern.SubcontrollerGroups.SelectMany (x => x.Members))
             {

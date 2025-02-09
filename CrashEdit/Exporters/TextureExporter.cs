@@ -1,21 +1,23 @@
 ﻿using System.Drawing;
+using System.Drawing.Imaging;
+using CrashEdit.CE;
 
 namespace CrashEdit.Exporters;
 
 public class TextureExporter
 {
-    public static Bitmap Create4bpp (byte [] data, TexInfoUnpacked info)
+    public static Bitmap Create4bpp (byte [] data, VertexTexInfo info)
     {
         Bitmap bmp = new Bitmap (1024, 128);
 
-        // clutx really contains the count of palettes available
+        // ClutX really contains the count of palettes available
         // so multiplying by 16 gives the right amount of info for it
-        int clutx = info.clutx * 16;
+        int clutx = info.ClutX * 16;
         
         // write the texture somewhere for now, testing
         for (int x = 0; x < 1024; x++)
         {
-            for (int y = info.cluty; y < 128; y++)
+            for (int y = info.ClutY; y < 128; y++)
             {
                 byte entry = data [y * 512 + (x / 2)];
 
@@ -24,10 +26,10 @@ public class TextureExporter
                 else
                     entry = (byte) ((entry >> 4) & 0xF);
                 
-                // now read the color from the palette
+                // now read the Color from the palette
                 ushort color = (ushort) (
-                    data [info.cluty * 512 + ((clutx + entry) * 2)] |
-                    (data [info.cluty * 512 + ((clutx + entry) * 2 + 1)] << 8)
+                    data [info.ClutY * 512 + ((clutx + entry) * 2)] |
+                    (data [info.ClutY * 512 + ((clutx + entry) * 2 + 1)] << 8)
                 );
 
                 int red = (int) (((color & 0x1F) / 31F) * 255);
@@ -36,7 +38,7 @@ public class TextureExporter
                 int a = ((color >> 15) & 0x1);
                 int alpha = 255;
 
-                if (info.blend == 0 && (info.color == 0 || info.color == 1))
+                if (info.Blend == 0 && (info.Color == 0 || info.Color == 1))
                 {
                     if (a == 1)
                         alpha = 127;
@@ -46,13 +48,13 @@ public class TextureExporter
                     if (red == 0 && green == 0 && blue == 0 && a == 0)
                         alpha = 0;
                 }
-                else if (info.blend == 1 && (info.color == 0 || info.color == 1))
+                else if (info.Blend == 1 && (info.Color == 0 || info.Color == 1))
                 {
                     if (red == 0 && green == 0 && blue == 0 && a == 0)
                         alpha = 0;
                 }
 
-                // colors are in rgb15 format
+                // Colors are in rgb15 format
                 Color c = Color.FromArgb (
                     alpha,
                     red,
@@ -67,25 +69,25 @@ public class TextureExporter
         return bmp;
     }
 
-    public static Bitmap Create8bpp (byte [] data, TexInfoUnpacked info)
+    public static Bitmap Create8bpp (byte [] data, VertexTexInfo info)
     {
         Bitmap bmp = new Bitmap (512, 128);
 
-        // clutx really contains the count of palettes available
+        // ClutX really contains the count of palettes available
         // so multiplying by 16 gives the right amount of info for it
-        int clutx = info.clutx * 16;
+        int clutx = info.ClutX * 16;
         
         // write the texture somewhere for now, testing
         for (int x = 0; x < 512; x++)
         {
-            for (int y = info.cluty; y < 128; y++)
+            for (int y = info.ClutY; y < 128; y++)
             {
                 byte entry = data [y * 512 + x];
 
-                // now read the color from the palette
+                // now read the Color from the palette
                 ushort color = (ushort) (
-                    data [info.cluty * 512 + ((clutx + entry) * 2)] |
-                    (data [info.cluty * 512 + ((clutx + entry) * 2 + 1)] << 8)
+                    data [info.ClutY * 512 + ((clutx + entry) * 2)] |
+                    (data [info.ClutY * 512 + ((clutx + entry) * 2 + 1)] << 8)
                 );
 
                 int red = (int) (((color & 0x1F) / 31F) * 255);
@@ -94,7 +96,7 @@ public class TextureExporter
                 int a = ((color >> 15) & 0x1);
                 int alpha = 255;
 
-                if (info.blend == 0 && (info.color == 0 || info.color == 1))
+                if (info.Blend == 0 && (info.Color == 0 || info.Color == 1))
                 {
                     if (a == 1)
                         alpha = 127;
@@ -104,13 +106,13 @@ public class TextureExporter
                     if (red == 0 && green == 0 && blue == 0 && a == 0)
                         alpha = 0;
                 }
-                else if (info.blend == 1 && (info.color == 0 || info.color == 1))
+                else if (info.Blend == 1 && (info.Color == 0 || info.Color == 1))
                 {
                     if (red == 0 && green == 0 && blue == 0 && a == 0)
                         alpha = 0;
                 }
 
-                // colors are in rgb15 format
+                // Colors are in rgb15 format
                 Color c = Color.FromArgb (
                     alpha,
                     red,
@@ -125,28 +127,28 @@ public class TextureExporter
         return bmp;
     }
 
-    public static Bitmap Create16bpp (byte [] data, TexInfoUnpacked info)
+    public static Bitmap Create16bpp (byte [] data, VertexTexInfo info)
     {
         Bitmap bmp = new Bitmap (256, 128);
 
-        // clutx really contains the count of palettes available
+        // ClutX really contains the count of palettes available
         // so multiplying by 16 gives the right amount of info for it
-        int clutx = info.clutx * 16;
+        int clutx = info.ClutX * 16;
         
         // write the texture somewhere for now, testing
         for (int x = 0; x < 256; x++)
         {
-            for (int y = info.cluty; y < 128; y++)
+            for (int y = info.ClutY; y < 128; y++)
             {
-                // now read the color from the palette
+                // now read the Color from the palette
                 ushort color = (ushort) (
-                    data [(info.cluty + y) * 512 + ((clutx + x) * 2)] |
-                    (data [(info.cluty + y) * 512 + ((clutx + x) * 2 + 1)] << 8)
+                    data [(info.ClutY + y) * 512 + ((clutx + x) * 2)] |
+                    (data [(info.ClutY + y) * 512 + ((clutx + x) * 2 + 1)] << 8)
                 );
 
                 // this is not 100% precise, but we can fix these manually
                 // as they're usually not that big
-                // colors are in rgb15 format
+                // Colors are in rgb15 format
                 Color c = Color.FromArgb (
                     ((color >> 15) & 0x1) * 255,
                     (int) (((color & 0x1F) / 31F) * 255),
@@ -161,9 +163,9 @@ public class TextureExporter
         return bmp;
     }
 
-    public static Bitmap CreateTexture (byte [] data, TexInfoUnpacked info)
+    public static Bitmap CreateTexture (byte [] data, VertexTexInfo info)
     {
-        return info.color switch
+        return info.Color switch
         {
             0 => TextureExporter.Create4bpp (data, info),
             1 => TextureExporter.Create8bpp (data, info),
