@@ -1,6 +1,6 @@
 ﻿namespace CrashEdit.Crash
 {
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
     public sealed class GOOLInstructionAttribute : Attribute
     {
         public GOOLInstructionAttribute(int opcode, GameVersion gameversion)

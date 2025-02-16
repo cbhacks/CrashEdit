@@ -779,4 +779,7 @@ as Meters: {3:F3}m</value>
   <data name="Config_chkShowEntityParams" xml:space="preserve">
     <value>Show entity parameters</value>
   </data>
+  <data name="Config_chkGOOLParensOnPool" xml:space="preserve">
+    <value>(GOOL) Show parenthesis around non-EID static pool refs</value>
+  </data>
 </root>

@@ -69,6 +69,8 @@
             chkViewZoneName = new CheckBox();
             chkViewZoneBox = new CheckBox();
             tbpPatchNSD = new TabPage();
+            tbpOther = new TabPage();
+            chkGOOLParensOnPool = new CheckBox();
             tableLayoutPanel4 = new TableLayoutPanel();
             tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numFontSize).BeginInit();
@@ -88,6 +90,7 @@
             tbp3D.SuspendLayout();
             tbpDebugDisplay.SuspendLayout();
             tbpPatchNSD.SuspendLayout();
+            tbpOther.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel4
@@ -311,7 +314,7 @@
             fraFont.Margin = new Padding(4, 3, 4, 3);
             fraFont.Name = "fraFont";
             fraFont.Padding = new Padding(4, 3, 4, 3);
-            fraFont.Size = new Size(276, 78);
+            fraFont.Size = new Size(276, 81);
             fraFont.TabIndex = 8;
             fraFont.TabStop = false;
             fraFont.Text = "3D Text";
@@ -472,6 +475,7 @@
             tbcSettings.Controls.Add(tbp3D);
             tbcSettings.Controls.Add(tbpDebugDisplay);
             tbcSettings.Controls.Add(tbpPatchNSD);
+            tbcSettings.Controls.Add(tbpOther);
             tbcSettings.Dock = DockStyle.Fill;
             tbcSettings.Location = new Point(4, 3);
             tbcSettings.Name = "tbcSettings";
@@ -626,6 +630,31 @@
             tbpPatchNSD.Text = "Patch NSD";
             tbpPatchNSD.UseVisualStyleBackColor = true;
             // 
+            // tbpOther
+            // 
+            tbpOther.Controls.Add(chkGOOLParensOnPool);
+            tbpOther.Location = new Point(4, 24);
+            tbpOther.Name = "tbpOther";
+            tbpOther.Padding = new Padding(3);
+            tbpOther.Size = new Size(417, 389);
+            tbpOther.TabIndex = 4;
+            tbpOther.Text = "Other";
+            tbpOther.UseVisualStyleBackColor = true;
+            // 
+            // chkGOOLParensOnPool
+            // 
+            chkGOOLParensOnPool.AutoSize = true;
+            chkGOOLParensOnPool.Checked = true;
+            chkGOOLParensOnPool.CheckState = CheckState.Checked;
+            chkGOOLParensOnPool.Location = new Point(7, 6);
+            chkGOOLParensOnPool.Margin = new Padding(4, 3, 4, 3);
+            chkGOOLParensOnPool.Name = "chkGOOLParensOnPool";
+            chkGOOLParensOnPool.Size = new Size(328, 19);
+            chkGOOLParensOnPool.TabIndex = 6;
+            chkGOOLParensOnPool.Text = "(GOOL) Show parenthesis around non-EID static pool refs";
+            chkGOOLParensOnPool.UseVisualStyleBackColor = true;
+            chkGOOLParensOnPool.CheckedChanged += chkGOOLParensOnPool_CheckedChanged;
+            // 
             // ConfigEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -665,6 +694,8 @@
             tbpDebugDisplay.PerformLayout();
             tbpPatchNSD.ResumeLayout(false);
             tbpPatchNSD.PerformLayout();
+            tbpOther.ResumeLayout(false);
+            tbpOther.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -709,5 +740,7 @@
         private CheckBox chkDisableVisual;
         private GroupBox fraLang;
         private CheckBox chkShowEntityParams;
+        private TabPage tbpOther;
+        private CheckBox chkGOOLParensOnPool;
     }
 }

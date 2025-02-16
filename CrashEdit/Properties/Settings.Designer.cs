@@ -298,5 +298,17 @@ namespace CrashEdit.CE.Properties {
                 this["ShowEntityParams"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool GOOLParensOnPool {
+            get {
+                return ((bool)(this["GOOLParensOnPool"]));
+            }
+            set {
+                this["GOOLParensOnPool"] = value;
+            }
+        }
     }
 }

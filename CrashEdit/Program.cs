@@ -1,7 +1,6 @@
 using CrashEdit.Crash;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Xml;
 
 namespace CrashEdit.CE
 {
@@ -58,6 +57,7 @@ namespace CrashEdit.CE
             if (Properties.Settings.Default.DefaultFormH < 480)
                 Properties.Settings.Default.DefaultFormH = 480;
             Properties.Settings.Default.Save();
+            GOOLInstruction.ParensOnPool = Properties.Settings.Default.GOOLParensOnPool;
             EntityVisual.LoadMaps();
             EntityVisual.SaveMaps();
 

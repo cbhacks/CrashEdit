@@ -5,9 +5,11 @@ namespace CrashEdit.CE
     public sealed class GOOLBox : UserControl
     {
         private readonly ListBox lstCode;
+        private GOOLEntry gool;
 
         public GOOLBox(GOOLEntry goolentry)
         {
+            gool = goolentry;
             lstCode = new ListBox
             {
                 Dock = DockStyle.Fill,
@@ -143,6 +145,12 @@ namespace CrashEdit.CE
             }
 
             Controls.Add(lstCode);
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            gool.Decompile();
         }
     }
 }

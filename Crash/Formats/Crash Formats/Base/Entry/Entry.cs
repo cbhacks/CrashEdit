@@ -20,28 +20,30 @@ namespace CrashEdit.Crash
 
         static Entry()
         {
-            loadersets = new Dictionary<GameVersion, Dictionary<int, EntryLoader>>();
+            loadersets = [];
         }
 
         internal static Dictionary<int, EntryLoader> GetLoaders(GameVersion gameversion)
         {
-            if (!loadersets.ContainsKey(gameversion))
+            if (!loadersets.TryGetValue(gameversion, out Dictionary<int, EntryLoader>? value))
             {
-                Dictionary<int, EntryLoader> loaders = new Dictionary<int, EntryLoader>();
+                Dictionary<int, EntryLoader> loaders = [];
                 foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
                 {
                     foreach (EntryTypeAttribute attribute in type.GetCustomAttributes(typeof(EntryTypeAttribute), false))
                     {
                         if (attribute.GameVersion == gameversion)
                         {
-                            EntryLoader loader = (EntryLoader)Activator.CreateInstance(type);
+                            EntryLoader loader = (EntryLoader)Activator.CreateInstance(type)!;
                             loaders.Add(attribute.Type, loader);
                         }
                     }
                 }
-                loadersets.Add(gameversion, loaders);
+
+                value = loaders;
+                loadersets.Add(gameversion, value);
             }
-            return loadersets[gameversion];
+            return value;
         }
 
         public static UnprocessedEntry Load(byte[] data)

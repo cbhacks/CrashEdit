@@ -222,30 +222,12 @@ namespace CrashEdit.Crash
 
         public static bool IsReturnInstruction(GOOLInstruction ins)
         {
-            switch (ins.GOOL.Version)
-            {
-                case GOOLVersion.Version0:
-                    return ins.Type == typeof(Cfl_95) && ins.Args['T'].Value == 2;
-                case GOOLVersion.Version1:
-                    return ins.Type == typeof(Cfl) && ins.Args['T'].Value == 2;
-                case GOOLVersion.Version2:
-                case GOOLVersion.Version3:
-                    return ins.Type == typeof(Ret);
-                default:
-                    return false;
-            }
+            return ins.GetName() == "RET";
         }
 
         public static bool IsMIPSInstruction(GOOLInstruction ins)
         {
-            switch (ins.GOOL.Version)
-            {
-                case GOOLVersion.Version2:
-                case GOOLVersion.Version3:
-                    return ins.Type == typeof(Mips);
-                default:
-                    return false;
-            }
+            return ins.GetName() == "MIPS";
         }
 
         public static string GetColor(GOOLVersion ver, int col)

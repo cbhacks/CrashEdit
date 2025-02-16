@@ -133,6 +133,15 @@ namespace CrashEdit.CE.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (GOOL) Show parenthesis around non-EID static pool refs.
+        /// </summary>
+        internal static string Config_chkGOOLParensOnPool {
+            get {
+                return ResourceManager.GetString("Config_chkGOOLParensOnPool", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to (Crash 1) Show normals in animations.
         /// </summary>
         internal static string Config_chkNormalDisplay {
