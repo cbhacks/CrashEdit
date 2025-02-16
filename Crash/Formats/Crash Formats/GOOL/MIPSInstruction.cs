@@ -220,7 +220,7 @@
                     case MIPSInstructionFormats.Jump:
                         return $"{ofs}";
                     case MIPSInstructionFormats.JumpAndLinkRegister:
-                        return $"{GetMIPSReg(rs)},{GetMIPSReg(rd)}";
+                        return $"{GetMIPSReg(rd)},{GetMIPSReg(rs)}";
                     case MIPSInstructionFormats.JumpRegister:
                         return $"{GetMIPSReg(rs)}";
                     case MIPSInstructionFormats.LoadStore:
