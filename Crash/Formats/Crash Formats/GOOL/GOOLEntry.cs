@@ -1,4 +1,5 @@
 using CrashEdit.Crash.GOOLIns;
+using System;
 using System.Reflection;
 using System.Windows;
 using static CrashEdit.Crash.GOOLDecompBlock;
@@ -375,15 +376,15 @@ namespace CrashEdit.Crash
 
                 int ddd = 999;
             }
-            foreach (var func in funcs)
+            void gen_dom_tree(List<GOOLDecompBlock> blocklist)
             {
                 // generate dominators for each block
                 bool changed;
-                GOOLDecompDomVector tested = new(func.BlockList.Count);
+                GOOLDecompDomVector tested = new(blocklist.Count);
                 do
                 {
                     changed = false;
-                    foreach(var block in func.BlockList)
+                    foreach (var block in blocklist)
                     {
                         foreach (var prev in block.prev)
                         {
@@ -401,7 +402,7 @@ namespace CrashEdit.Crash
                 do
                 {
                     changed = false;
-                    foreach (var block in func.BlockList)
+                    foreach (var block in blocklist)
                     {
                         foreach (var next in block.next)
                         {
@@ -416,9 +417,9 @@ namespace CrashEdit.Crash
                     }
                 } while (changed);
                 // grab immediate (post-)dominators
-                foreach (var block in func.BlockList)
+                foreach (var block in blocklist)
                 {
-                    List<GOOLDecompBlock> pdoms = func.BlockList.Where(b => b.DomID != block.DomID && block.PostDominators[b.DomID]).ToList();
+                    List<GOOLDecompBlock> pdoms = blocklist.Where(b => b.DomID != block.DomID && block.PostDominators[b.DomID]).ToList();
                     int pdoms_count = block.PostDominators.Count;
                     foreach (var pdom in pdoms)
                     {
@@ -437,7 +438,7 @@ namespace CrashEdit.Crash
                             break;
                         }
                     }
-                    List<GOOLDecompBlock> doms = func.BlockList.Where(b => b.DomID != block.DomID && block.Dominators[b.DomID]).ToList();
+                    List<GOOLDecompBlock> doms = blocklist.Where(b => b.DomID != block.DomID && block.Dominators[b.DomID]).ToList();
                     int doms_count = block.Dominators.Count;
                     foreach (var dom in doms)
                     {
@@ -457,6 +458,10 @@ namespace CrashEdit.Crash
                         }
                     }
                 }
+            }
+            foreach (var func in funcs)
+            {
+                gen_dom_tree(func.BlockList);
 
                 // check for loops
                 // ---------------
@@ -464,7 +469,7 @@ namespace CrashEdit.Crash
                 // loop gen function
                 GOOLDecompLoop? natural_loop_for_edge(GOOLDecompBlock header, GOOLDecompBlock tail, GOOLDecompBlock? prebranch = null)
                 {
-                    if (header.Type == BranchType.Goto)
+                    if (header.Type == BranchType.Goto && header.next.All(a => a.begin > header.begin))
                         return null;
                     Stack<GOOLDecompBlock> workList = new();
                     GOOLDecompLoop loop = new(header, tail);
@@ -495,7 +500,7 @@ namespace CrashEdit.Crash
                     return loop;
                 }
                 //find loops in function
-                for (int i = 1; i < func.BlockList.Count; ++i)
+                for (int i = 0; i < func.BlockList.Count; ++i)
                 {
                     var block = func.BlockList[i];
                     foreach (var next in block.next)
@@ -649,7 +654,7 @@ namespace CrashEdit.Crash
             debug += "\n";
             foreach (var func in funcs)
             {
-                debug += $"  {func.Name} [fillcolor=red]\n";
+                debug += $"  {func.Name} [fillcolor=pink shape=box]\n";
                 debug += $"  {func.Name} -> {func.start.name} [color=purple]\n";
                 foreach (var block in func.BlockList)
                 {
