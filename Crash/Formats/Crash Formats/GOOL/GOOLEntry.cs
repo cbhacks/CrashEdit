@@ -300,7 +300,7 @@ namespace CrashEdit.Crash
             // we do this for each function instead of every block in file because O(n^2) scaling and there is no inter-procedural CFG (that we care about)
             foreach (var func in funcs)
             {
-                func.Initialize();
+                func.GenerateCFG();
             }
             foreach (var block in blocks)
             {
@@ -324,9 +324,9 @@ namespace CrashEdit.Crash
                         funcs.Add(trans_func);
                         trans_func.start = block_from_index(trans_func.Offset);
                         enter_func.Name = enter_func.Name.Replace("trans", "enter");
-                        // regenerate CFG
-                        trans_func.Initialize();
-                        enter_func.Initialize();
+                        // regenerate CFG since we changed its structure
+                        trans_func.GenerateCFG();
+                        enter_func.GenerateCFG();
                     }
                 }
             }
@@ -387,8 +387,7 @@ namespace CrashEdit.Crash
                     {
                         foreach (var prev in block.prev)
                         {
-                            tested.ClearAll();
-                            tested.Merge(block.Dominators);
+                            tested.Overwrite(block.Dominators);
                             block.Dominators.Mask(prev.Dominators);
                             block.Dominators.Set(block.DomID);
                             if (!block.Dominators.Equal(tested))
@@ -406,8 +405,7 @@ namespace CrashEdit.Crash
                     {
                         foreach (var next in block.next)
                         {
-                            tested.ClearAll();
-                            tested.Merge(block.PostDominators);
+                            tested.Overwrite(block.PostDominators);
                             block.PostDominators.Mask(next.PostDominators);
                             block.PostDominators.Set(block.DomID);
                             if (!block.PostDominators.Equal(tested))
@@ -427,7 +425,7 @@ namespace CrashEdit.Crash
                         bool immediate = true;
                         foreach (var other in pdoms)
                         {
-                            if (pdom.DomID != other.DomID && !other.PostDominators[pdom.DomID])
+                            if (pdom.DomID != other.DomID && pdom.PostDominates(other))
                             {
                                 immediate = false;
                                 break;
@@ -436,6 +434,7 @@ namespace CrashEdit.Crash
                         if (immediate)
                         {
                             block.ImmPostDom = pdom;
+                            break;
                         }
                     }
                     List<GOOLDecompBlock> doms = func.BlockList.Where(b => b.DomID != block.DomID && block.Dominators[b.DomID]).ToList();
@@ -445,7 +444,7 @@ namespace CrashEdit.Crash
                         bool immediate = true;
                         foreach (var other in doms)
                         {
-                            if (dom.DomID != other.DomID && !other.Dominators[dom.DomID])
+                            if (dom.DomID != other.DomID && dom.Dominates(other))
                             {
                                 immediate = false;
                                 break;
@@ -454,6 +453,7 @@ namespace CrashEdit.Crash
                         if (immediate)
                         {
                             block.ImmDom = dom;
+                            break;
                         }
                     }
                 }
@@ -462,8 +462,10 @@ namespace CrashEdit.Crash
                 // ---------------
 
                 // loop gen function
-                GOOLDecompLoop natural_loop_for_edge(GOOLDecompBlock header, GOOLDecompBlock tail)
+                GOOLDecompLoop? natural_loop_for_edge(GOOLDecompBlock header, GOOLDecompBlock tail, GOOLDecompBlock? prebranch = null)
                 {
+                    if (header.Type == BranchType.Goto)
+                        return null;
                     Stack<GOOLDecompBlock> workList = new();
                     GOOLDecompLoop loop = new(header, tail);
                     loop.BlockList.Add(header);
@@ -477,12 +479,17 @@ namespace CrashEdit.Crash
                         var block = workList.Pop();
                         foreach (var prev in block.prev)
                         {
-                            if (!loop.BlockList.Contains(prev))
+                            if (!loop.BlockList.Contains(prev) && prev != prebranch)
                             {
                                 loop.BlockList.Add(prev);
                                 workList.Push(prev);
                             }
                         }
+                    }
+                    if (prebranch != null)
+                    {
+                        loop.BlockList.Add(prebranch);
+                        loop.PreBranch = prebranch;
                     }
                     loop.BlockList.Sort((a, b) => a.begin - b.begin);
                     return loop;
@@ -493,9 +500,43 @@ namespace CrashEdit.Crash
                     var block = func.BlockList[i];
                     foreach (var next in block.next)
                     {
-                        if (block.Dominators[next.DomID] /* next.begin <= block.begin */)
+                        // this successor dominates its predecessor, so it might be a back edge?
+                        if (next.Dominates(block))
                         {
-                            func.LoopList.Add(natural_loop_for_edge(next, block));
+                            var loop = natural_loop_for_edge(next, block);
+                            if (loop == null)
+                                continue;
+                            foreach (var prev in next.prev)
+                            {
+                                if (next.ImmDom == prev && prev.Type == BranchType.Goto && prev.begin < next.begin && !loop.BlockList.Contains(prev))
+                                {
+                                    loop.BlockList.Add(prev);
+                                    loop.PreBranch = prev;
+                                    break;
+                                }
+                            }
+                            if (loop.PreBranch != null)
+                            {
+                                // the head of this loop is actually the immediate dominatee of the tail's back edge
+                                GOOLDecompBlock? realhead = null;
+                                foreach (var head in next.next)
+                                {
+                                    if (next.ImmediateDominates(head) && head.begin <= next.begin)
+                                    {
+                                        realhead = head;
+                                        break;
+                                    }
+                                }
+                                if (realhead == null)
+                                    continue;
+                                loop = natural_loop_for_edge(realhead, next, loop.PreBranch);
+                                if (loop == null)
+                                    continue;
+                            }
+                            if (!func.LoopList.Any(l => l.Header == loop.Header && l.Tail == loop.Tail && l.PreBranch == loop.PreBranch))
+                            {
+                                func.LoopList.Add(loop);
+                            }
                         }
                     }
                 }
@@ -608,29 +649,30 @@ namespace CrashEdit.Crash
             debug += "\n";
             foreach (var func in funcs)
             {
+                debug += $"  {func.Name} [fillcolor=red]\n";
                 debug += $"  {func.Name} -> {func.start.name} [color=purple]\n";
                 foreach (var block in func.BlockList)
                 {
                     if (block.ImmPostDom != null)
                     {
-                        //debug += $"  {block.name} -> {block.ImmPostDom.name} [color=green]\n";
+                        //debug += $"  {block.ImmPostDom.name} -> {block.name} [color=green]\n";
                     }
                     if (block.ImmDom != null)
                     {
-                        //debug += $"  {block.name} -> {block.ImmDom.name} [color=cyan]\n";
+                        //debug += $"  {block.ImmDom.name} -> {block.name} [color=orange]\n";
                     }
                     for (int i = 0; i < func.BlockList.Count; ++i)
                     {
                         var targetblock = func.BlockList[i];
                         // every node dominates and postdominates itself
                         if (block == targetblock) continue;
-                        if (block.Dominators[targetblock.DomID])
+                        if (targetblock.Dominates(block))
                         {
-                            //debug += $"  {block.name} -> {targetblock.name} [color=yellow]\n";
+                            //debug += $"  {targetblock.name} -> {block.name} [color=cyan]\n";
                         }
-                        if (block.PostDominators[targetblock.DomID])
+                        if (targetblock.PostDominates(block))
                         {
-                            //debug += $"  {block.name} -> {targetblock.name} [color=blue]\n";
+                            //debug += $"  {targetblock.name} -> {block.name} [color=blue]\n";
                         }
                     }
                 }
@@ -653,7 +695,9 @@ namespace CrashEdit.Crash
                     }
                     foreach (var block in loop.BlockList.Where(a => !loop.Children.Any(c => c.BlockList.Contains(a))))
                     {
-                        if (block == loop.Header && block == loop.Tail)
+                        if (block == loop.PreBranch)
+                            debug += istr + $"    {block.name} [fillcolor=cyan]\n";
+                        else if (block == loop.Header && block == loop.Tail)
                             debug += istr + $"    {block.name} [fillcolor=yellow]\n";
                         else if (block == loop.Tail)
                             debug += istr + $"    {block.name} [fillcolor=pink]\n";

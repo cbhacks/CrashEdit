@@ -118,8 +118,6 @@ namespace CrashEdit.Crash
         }
         public BranchType Type { get; set; }
 
-        public bool visited = false;
-
         public int DomID = -1;
         public GOOLDecompDomVector Dominators { get; set; } = null;
         public GOOLDecompDomVector PostDominators { get; set; } = null;
@@ -131,42 +129,26 @@ namespace CrashEdit.Crash
 
         public string name = name;
 
-        public void VisitForward(Action<GOOLDecompBlock>? preVisit = null, Action<GOOLDecompBlock>? postVisit = null)
+        public bool Dominates(GOOLDecompBlock other) => other.Dominators[DomID];
+        public bool PostDominates(GOOLDecompBlock other) => other.PostDominators[DomID];
+        public bool ImmediateDominates(GOOLDecompBlock other) => other.ImmDom == this;
+        public bool ImmediatePostDominates(GOOLDecompBlock other) => other.ImmPostDom == this;
+
+        public void VisitForward(Action<GOOLDecompBlock>? preVisit = null, Action<GOOLDecompBlock>? postVisit = null, HashSet<GOOLDecompBlock> visited = null)
         {
-            visited = true;
+            visited ??= new();
+            visited.Add(this);
 
             // pre-visit work
             preVisit?.Invoke(this);
 
             foreach (var block in next)
             {
-                if (!block.visited) block.VisitForward(preVisit, postVisit);
+                if (!visited.Contains(block)) block.VisitForward(preVisit, postVisit, visited);
             }
 
             // post-visit work
             postVisit?.Invoke(this);
-        }
-
-        public int EdgeCountToBlockBack(GOOLDecompBlock target, int edgeCount = 0)
-        {
-            visited = true;
-
-            if (prev.Contains(target))
-                return edgeCount+1;
-
-            int lowestEdges = -1;
-            foreach (var block in prev)
-            {
-                if (block.visited)
-                    continue;
-                int edges = block.EdgeCountToBlockBack(target, edgeCount+1);
-                if (edges != -1)
-                {
-                    if (lowestEdges == -1 || edges < lowestEdges)
-                        lowestEdges = edges;
-                }
-            }
-            return lowestEdges;
         }
     }
 
@@ -228,10 +210,21 @@ namespace CrashEdit.Crash
                 this[i] &= other[i];
             }
         }
+
+        public void Overwrite(GOOLDecompDomVector other)
+        {
+            if (Count != other.Count) return;
+            for (int i = 0; i < Count; ++i)
+            {
+                this[i] = other[i];
+            }
+        }
     }
 
     public class GOOLDecompLoop(GOOLDecompBlock header, GOOLDecompBlock tail)
     {
+        // (while...) blocks are pre-tested by having an unconditional branch straight to the test
+        public GOOLDecompBlock? PreBranch { get; set; } = null;
         public GOOLDecompBlock Header { get; set; } = header;
         public GOOLDecompBlock Tail { get; set; } = tail;
         public List<GOOLDecompBlock> BlockList { get; } = new();
@@ -250,7 +243,7 @@ namespace CrashEdit.Crash
 
         public GOOLDecompBlock start;
 
-        public void Initialize()
+        public void GenerateCFG()
         {
             // generate function block list
             BlockList.Clear();
@@ -289,15 +282,33 @@ namespace CrashEdit.Crash
         }
     }
 
-    public class GOOLDecompBlockDoWhile(string name, GOOLDecompLoop loop, GOOLDecompBlock cont) : GOOLDecompBlock(name)
+    public class GOOLDecompBlockDoWhile : GOOLDecompBlock
     {
-        public GOOLDecompLoop Loop { get; set; } = loop;
+        public GOOLDecompLoop Loop { get; set; }
         // the target of (continue)
-        public GOOLDecompBlock Continue { get; set; } = cont;
-        // the branch condition
-        public GOOLStatement Expression { get; set; } = cont.statements[^1];
+        public GOOLDecompBlock? Continue { get; set; }
         // the target of (break)
-        public GOOLDecompBlock Break { get; set; } = cont.ImmPostDom;
+        public GOOLDecompBlock Break { get; set; }
+        // the branch condition
+        public GOOLStatement Condition { get; set; }
+        public bool PreTested { get; }
+        public GOOLDecompBlock Header => Loop.Header;
+        public GOOLDecompBlock Tail => Loop.Tail;
+
+        public GOOLDecompBlockDoWhile(string name, GOOLDecompLoop loop, GOOLDecompBlock cont) : base(name)
+        {
+            Loop = loop;
+            Continue = cont;
+            Break = cont.ImmPostDom;
+            Condition = cont.statements[^1];
+            PreTested = loop.PreBranch != null;
+
+            if (Continue.statements.Count != 1)
+            {
+                // we did not generate a block for a continue statement, so there must not be one!
+                Continue = null;
+            }
+        }
     }
 
     public class GOOLDecompiler
