@@ -1,4 +1,5 @@
 ﻿using CrashEdit.Crash;
+using OpenTK.Mathematics;
 
 namespace CrashEdit;
 
@@ -59,5 +60,15 @@ public class TextureUtils
         }
         tex = default;
         return true;
+    }
+    
+    public static Vector2 TextureSize (int colorMode)
+    {
+        return colorMode switch
+        {
+            0 => new Vector2 (1024, 128),
+            1 => new Vector2 (512, 128),
+            _ => new Vector2 (256, 128)
+        };
     }
 }

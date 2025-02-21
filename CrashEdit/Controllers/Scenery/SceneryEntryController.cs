@@ -37,7 +37,7 @@ namespace CrashEdit.CE
         {
             var exporter = new OBJExporter ();
             Dictionary <int, int> textureEIDs = new ();
-            Dictionary <string, VertexTexInfo> objTranslate = new Dictionary <string, VertexTexInfo> ();
+            Dictionary <VertexTexInfo, VertexTexInfo> objTranslate = new Dictionary <VertexTexInfo, VertexTexInfo> ();
             
             exporter.AddScenery (this.GetNSF (), SceneryEntry, ref textureEIDs, ref objTranslate);
             exporter.Export (path, modelname);

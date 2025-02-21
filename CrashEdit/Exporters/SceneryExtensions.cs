@@ -10,7 +10,7 @@ namespace CrashEdit.Exporters;
 // TODO: BUT THAT WOULD CUT DOWN THE METHODS HERE TO JUST ONE OR TWO
 public static class SceneryExtensions
 {
-    public static void AddScenery (this OBJExporter exporter, NSF nsf, OldSceneryEntry scenery, ref Dictionary<int, int> textureEIDs, ref Dictionary <string, VertexTexInfo> objTranslate)
+    public static void AddScenery (this OBJExporter exporter, NSF nsf, OldSceneryEntry scenery, ref Dictionary<int, int> textureEIDs, ref Dictionary <VertexTexInfo, VertexTexInfo> objTranslate)
     {
         var offset = new Vector3 (scenery.XOffset, scenery.YOffset, scenery.ZOffset);
         var scale = new Vector3 (1 / GameScales.WorldC1);
@@ -27,7 +27,7 @@ public static class SceneryExtensions
         
         foreach (var polygon in scenery.Polygons)
         {
-            string material = null;
+            VertexTexInfo? material = null;
             Vector2? uv1 = null, uv2 = null, uv3 = null;
             OldModelStruct str = scenery.Structs[polygon.ModelStruct];
             OldSceneryVertex ov1 = scenery.Vertices [polygon.VertexA];
@@ -36,30 +36,35 @@ public static class SceneryExtensions
             Vector3 v1 = new Vector3 (ov1.X, ov1.Y, ov1.Z);
             Vector3 v2 = new Vector3 (ov2.X, ov2.Y, ov2.Z);
             Vector3 v3 = new Vector3 (ov3.X, ov3.Y, ov3.Z);
-            Vector3 color = Vector3.Zero;
+            Vector3 c1 = Vector3.Zero;
+            Vector3 c2 = Vector3.Zero;
+            Vector3 c3 = Vector3.Zero;
 
             if (str is OldSceneryTexture t)
             {
                 int textureEID = scenery.GetTPAG (polygon.Page);
-                material = exporter.AddTexture (nsf, t, textureEID, ref objTranslate, out color, out uv1, out uv2, out uv3);
+                material = exporter.AddTexture (nsf, t, textureEID, ref textureEIDs, ref objTranslate, out uv1, out uv2, out uv3);
+                c1 = new Vector3 (ov1.Red, ov1.Green, ov1.Blue) / 255F;
+                c2 = new Vector3 (ov2.Red, ov2.Green, ov2.Blue) / 255F;
+                c3 = new Vector3 (ov3.Red, ov3.Green, ov3.Blue) / 255F;
             }
             else if(str is OldSceneryColor c)
             {
-                color = new Vector3 (c.R, c.G, c.B) / 255F;
+                c1 = c2 = c3 = new Vector3 (c.R, c.G, c.B) / 255F;
             }
 
             exporter.AddFace (
                 (v1 + offset) * scale,
                 (v2 + offset) * scale,
                 (v3 + offset) * scale,
-                color, color, color,
+                c1, c2, c3,
                 material,
                 uv1, uv2, uv3
             );
         }
     }
     
-    public static void AddScenery (this OBJExporter exporter, NSF nsf, SceneryEntry scenery, ref Dictionary <int, int> textureEIDs, ref Dictionary <string, VertexTexInfo> objTranslate)
+    public static void AddScenery (this OBJExporter exporter, NSF nsf, SceneryEntry scenery, ref Dictionary <int, int> textureEIDs, ref Dictionary <VertexTexInfo, VertexTexInfo> objTranslate)
     {
         var offset = new Vector3 (scenery.XOffset, scenery.YOffset, scenery.ZOffset);
         //var scale = new Vector3 (1 / GameScales.WorldC1);
@@ -83,7 +88,7 @@ public static class SceneryExtensions
             
             Vector2? uv1 = null, uv2 = null, uv3 = null;
 
-            string material = exporter.AddTexture (nsf, tri, scenery, ref textureEIDs, ref objTranslate, out uv1, out uv2, out uv3);
+            VertexTexInfo? texture = exporter.AddTexture (nsf, tri, scenery, ref textureEIDs, ref objTranslate, out uv1, out uv2, out uv3);
 
             // add the face
             SceneryVertex fv1 = scenery.Vertices [tri.VertexA];
@@ -104,7 +109,7 @@ public static class SceneryExtensions
                 (v2 * 16 + offset) / GameScales.WorldC1,
                 (v3 * 16 + offset) / GameScales.WorldC1,
                 c1, c2, c3,
-                material,
+                texture,
                 uv1, uv2, uv3
             );
         }
@@ -119,7 +124,7 @@ public static class SceneryExtensions
                 continue;
             
             Vector2? uv1 = null, uv2 = null, uv3 = null, uv4 = null;
-            string material = exporter.AddTexture (nsf, quad, scenery, ref textureEIDs, ref objTranslate, out uv1, out uv2, out uv3, out uv4);
+            VertexTexInfo? material = exporter.AddTexture (nsf, quad, scenery, ref textureEIDs, ref objTranslate, out uv1, out uv2, out uv3, out uv4);
 
             // add the face
             SceneryVertex fv1 = scenery.Vertices [quad.VertexA];

@@ -64,7 +64,7 @@ namespace CrashEdit.CE
         public void ToOBJ(string path, string modelname)
         {
             Dictionary <int, int> textureEIDs = new Dictionary <int, int> ();
-            Dictionary <string, VertexTexInfo> objTranslate = new Dictionary <string, VertexTexInfo> ();
+            Dictionary <VertexTexInfo, VertexTexInfo> objTranslate = new Dictionary <VertexTexInfo, VertexTexInfo> ();
             
             var exporter = new OBJExporter ();
             

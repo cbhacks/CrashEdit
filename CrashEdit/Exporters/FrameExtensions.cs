@@ -10,7 +10,7 @@ namespace CrashEdit.Exporters;
 // TODO: BUT THAT WOULD CUT DOWN THE METHODS HERE TO JUST ONE OR TWO
 public static class FrameExtensions
 {
-    public static void AddFrame (this OBJExporter exporter, NSF nsf, OldFrame frame, ref Dictionary <int, int> textureEIDs, ref Dictionary <string, VertexTexInfo> objTranslate)
+    public static void AddFrame (this OBJExporter exporter, NSF nsf, OldFrame frame, ref Dictionary <int, int> textureEIDs, ref Dictionary <VertexTexInfo, VertexTexInfo> objTranslate)
     {
         var model = nsf.GetEntry<OldModelEntry>(frame.ModelEID);
         var offset = new Vector3 (frame.XOffset, frame.YOffset, frame.ZOffset);
@@ -29,7 +29,7 @@ public static class FrameExtensions
 
         foreach (OldModelPolygon polygon in model.Polygons)
         {
-            string material = null;
+            VertexTexInfo? material = null;
             Vector2? uv1 = null, uv2 = null, uv3 = null;
             OldModelStruct str = model.Structs [polygon.TexInfo];
             OldFrameVertex ov1 = frame.Vertices [polygon.VertexA / 6];
@@ -42,7 +42,7 @@ public static class FrameExtensions
 
             if (str is OldModelTexture t)
             {
-                material = exporter.AddTexture (nsf, t, ref objTranslate, out color, out uv1, out uv2, out uv3);
+                material = exporter.AddTexture (nsf, t, t.EID, ref textureEIDs, ref objTranslate, out color, out uv1, out uv2, out uv3);
             }
             else if (str is OldSceneryColor c)
             {
@@ -60,7 +60,7 @@ public static class FrameExtensions
         }
     }
 
-    public static void AddFrame (this OBJExporter exporter, NSF nsf, Frame frame, ref Dictionary <int, int> textureEIDs, ref Dictionary <string, VertexTexInfo> objTranslate)
+    public static void AddFrame (this OBJExporter exporter, NSF nsf, Frame frame, ref Dictionary <int, int> textureEIDs, ref Dictionary <VertexTexInfo, VertexTexInfo> objTranslate)
     {
         // TODO: SUPPORT CRASH2 AND CRASH3 PROPER SCALING
         // offset correction is 4f in Crash2, 32f in Crash3
@@ -94,7 +94,7 @@ public static class FrameExtensions
         // iterate all the triangles, get the texture modes and build information about those
         foreach (var tri in model.Triangles)
         {
-            string material = exporter.AddTexture (
+            VertexTexInfo? material = exporter.AddTexture (
                 nsf, tri, model, ref textureEIDs, ref objTranslate,
                 out var uv1, out var uv2, out var uv3,
                 out bool flip

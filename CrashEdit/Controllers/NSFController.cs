@@ -335,7 +335,7 @@ namespace CrashEdit.CE
             
             // detect how many textures are used and their eids to prepare the image
             Dictionary <int, int> textureEIDs = new ();
-            Dictionary <string, VertexTexInfo> objTranslate = new Dictionary <string, VertexTexInfo> ();
+            Dictionary <VertexTexInfo, VertexTexInfo> objTranslate = new Dictionary <VertexTexInfo, VertexTexInfo> ();
             
             // find all the scenery insde chunks
             foreach (SceneryEntry scenery in NSF.GetEntries<SceneryEntry> ())
@@ -352,7 +352,7 @@ namespace CrashEdit.CE
             
             // detect how many textures are used and their eids to prepare the image
             Dictionary <int, int> textureEIDs = new ();
-            Dictionary <string, VertexTexInfo> objTranslate = new Dictionary <string, VertexTexInfo> ();
+            Dictionary <VertexTexInfo, VertexTexInfo> objTranslate = new Dictionary <VertexTexInfo, VertexTexInfo> ();
             
             // find all the scenery insde chunks
             foreach (OldSceneryEntry scenery in NSF.GetEntries<OldSceneryEntry> ())

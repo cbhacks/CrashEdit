@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using CrashEdit.CE;
 using OpenTK.Mathematics;
 
 namespace CrashEdit.Exporters;
@@ -13,7 +14,6 @@ public class OBJExporter
         public Vector3 diffuse;
         public Vector3 specular;
         public float highlight;
-        public Bitmap texture;
     }
 
     class Face
@@ -22,7 +22,7 @@ public class OBJExporter
         public int V2;
         public int V3;
         public int? V4;
-        public string material;
+        public VertexTexInfo? texture;
         public int? UV1;
         public int? UV2;
         public int? UV3;
@@ -34,11 +34,20 @@ public class OBJExporter
         public Vector3 position;
         public Vector3 color;
     }
+
+    class UV
+    {
+        public Vector2 position;
+        public VertexTexInfo texture;
+    }
     
     private Dictionary <string, Material> materials = new Dictionary <string, Material> ();
     private List <Vertex> vertices = new List <Vertex> ();
     private List <Face> faces = new List <Face> ();
-    private List <Vector2> uvs = new List <Vector2> ();
+    private List <UV> uvs = new List <UV> ();
+    private Dictionary <string, TextureAtlas> atlas = new Dictionary <string, TextureAtlas> ();
+    
+    private static string BuildMaterialName (int color, int blending) => $"{DEFAULT_MATERIAL}c{color}b{blending}";
 
     public OBJExporter ()
     {
@@ -49,30 +58,40 @@ public class OBJExporter
             diffuse = Vector3.One,
             highlight = 0.0f,
             specular = Vector3.Zero,
-            texture = null
         };
+        
+        // create the rest of the atlas materials for proper rendering
+        for (int color = 0; color < 4; color++)
+        {
+            for (int blending = 0; blending < 4; blending++)
+            {
+                this.materials [BuildMaterialName (color, blending)] = new Material
+                {
+                    ambient = Vector3.One,
+                    diffuse = Vector3.One,
+                    highlight = 0.0f,
+                    specular = Vector3.Zero,
+                };
+            }
+        }
     }
 
     /// <summary>
     /// Adds a texture with the given name to the obj
     /// </summary>
-    /// <param name="name"></param>
+    /// <param name="texinfo">Texture info</param>
     /// <param name="texture">Texture data</param>
     /// <returns>The identifier for the texture in the obj export</returns>
-    public string AddTexture (string name, Bitmap texture)
+    public void AddTexture (VertexTexInfo texinfo, Bitmap texture)
     {
-        string identifier = $"tex{name}";
+        string name = BuildMaterialName (texinfo.Color, texinfo.Blend);
 
-        this.materials [identifier] = new Material
+        if (!this.atlas.TryGetValue (name, out TextureAtlas atlas))
         {
-            ambient = Vector3.One,
-            diffuse = Vector3.One,
-            highlight = 0.0f,
-            specular = Vector3.Zero,
-            texture = texture
-        };
-
-        return identifier;
+            this.atlas[name] = atlas = new TextureAtlas ();
+        }
+        
+        atlas.AddTexture (texinfo, texture);
     }
 
     /// <summary>
@@ -97,35 +116,40 @@ public class OBJExporter
     /// <param name="v1"></param>
     /// <param name="v2"></param>
     /// <param name="v3"></param>
-    /// <param name="material"></param>
+    /// <param name="texture"></param>
     /// <param name="uv1"></param>
     /// <param name="uv2"></param>
     /// <param name="uv3"></param>
-    public void AddFace (int v1, int v2, int v3, string material = null, Vector2? uv1 = null, Vector2? uv2 = null, Vector2? uv3 = null)
+    public void AddFace (int v1, int v2, int v3, VertexTexInfo? texture = null, Vector2? uv1 = null, Vector2? uv2 = null, Vector2? uv3 = null)
     {
         // add uv coordinates to the lists first
         int? uv1id = null;
         int? uv2id = null;
         int? uv3id = null;
 
-        if (uv1 != uv2 || uv1 != uv3)
-            throw new InvalidDataException ("UVs must all be null or all have values");
+        if(
+            (uv1 is null && (uv2 is not null || uv3 is not null || texture is not null)) ||
+            (uv2 is null && (uv1 is not null || uv3 is not null || texture is not null)) ||
+            (uv3 is null && (uv1 is not null || uv2 is not null || texture is not null)) ||
+            (texture is null && (uv1 is not null || uv2 is not null || uv3 is not null))
+        )
+            throw new InvalidDataException ("UVs and texture must all be null or all have values");
 
-        if (uv1 is not null)
+        if (uv1 is not null && uv2 is not null && uv3 is not null && texture is not null)
         {
             uv1id = this.uvs.Count;
             uv2id = this.uvs.Count + 1;
             uv3id = this.uvs.Count + 2;
 
-            this.uvs.Add (uv1.Value);
-            this.uvs.Add (uv2.Value);
-            this.uvs.Add (uv3.Value);
+            this.uvs.Add (new UV { position = uv1.Value, texture = texture.Value});
+            this.uvs.Add (new UV { position = uv2.Value, texture = texture.Value});
+            this.uvs.Add (new UV { position = uv3.Value, texture = texture.Value});
         }
         
         this.faces.Add (
             new Face
             {
-                material = material ?? DEFAULT_MATERIAL,
+                texture = texture,
                 V1 = v1,
                 V2 = v2,
                 V3 = v3,
@@ -142,11 +166,11 @@ public class OBJExporter
     /// <param name="v1"></param>
     /// <param name="v2"></param>
     /// <param name="v3"></param>
-    /// <param name="material"></param>
+    /// <param name="texture"></param>
     /// <param name="uv1"></param>
     /// <param name="uv2"></param>
     /// <param name="uv3"></param>
-    public void AddFace (int v1, int v2, int v3, int v4, string material = null, Vector2? uv1 = null, Vector2? uv2 = null, Vector2? uv3 = null, Vector2? uv4 = null)
+    public void AddFace (int v1, int v2, int v3, int v4, VertexTexInfo? texture = null, Vector2? uv1 = null, Vector2? uv2 = null, Vector2? uv3 = null, Vector2? uv4 = null)
     {
         // add uv coordinates to the lists first
         int? uv1id = null;
@@ -155,30 +179,31 @@ public class OBJExporter
         int? uv4id = null;
 
         if (
-            (uv1 is null && (uv2 is not null || uv3 is not null || uv4 is not null)) ||
-            (uv2 is null && (uv1 is not null || uv3 is not null || uv4 is not null)) ||
-            (uv3 is null && (uv1 is not null || uv2 is not null || uv4 is not null)) ||
-            (uv4 is null && (uv1 is not null || uv2 is not null || uv3 is not null))
+            (uv1 is null && (uv2 is not null || uv3 is not null || uv4 is not null || texture is not null)) ||
+            (uv2 is null && (uv1 is not null || uv3 is not null || uv4 is not null || texture is not null)) ||
+            (uv3 is null && (uv1 is not null || uv2 is not null || uv4 is not null || texture is not null)) ||
+            (uv4 is null && (uv1 is not null || uv2 is not null || uv3 is not null || texture is not null)) ||
+            (texture is null && (uv1 is not null || uv2 is not null || uv3 is not null || uv4 is not null))
         )
-            throw new InvalidDataException ("UVs must all be null or all have values");
+            throw new InvalidDataException ("UVs and texture must all be null or all have values");
 
-        if (uv1 is not null)
+        if (uv1 is not null && uv2 is not null && uv3 is not null && uv4 is not null && texture is not null)
         {
             uv1id = this.uvs.Count;
             uv2id = this.uvs.Count + 1;
             uv3id = this.uvs.Count + 2;
             uv4id = this.uvs.Count + 3;
-
-            this.uvs.Add (uv1.Value);
-            this.uvs.Add (uv2.Value);
-            this.uvs.Add (uv3.Value);
-            this.uvs.Add (uv4.Value);
+            
+            this.uvs.Add (new UV { position = uv1.Value, texture = texture.Value});
+            this.uvs.Add (new UV { position = uv2.Value, texture = texture.Value});
+            this.uvs.Add (new UV { position = uv3.Value, texture = texture.Value});
+            this.uvs.Add (new UV { position = uv4.Value, texture = texture.Value});
         }
         
         this.faces.Add (
             new Face
             {
-                material = material ?? DEFAULT_MATERIAL,
+                texture = texture,
                 V1 = v1,
                 V2 = v2,
                 V3 = v3,
@@ -200,11 +225,11 @@ public class OBJExporter
     /// <param name="c1"></param>
     /// <param name="c2"></param>
     /// <param name="c3"></param>
-    /// <param name="material"></param>
+    /// <param name="texture"></param>
     /// <param name="uv2"></param>
     /// <param name="uv3"></param>
     /// <param name="uv1"></param>
-    public void AddFace (Vector3 v1, Vector3 v2, Vector3 v3, Vector3 c1, Vector3 c2, Vector3 c3, string material = null, Vector2? uv1 = null, Vector2? uv2 = null, Vector2? uv3 = null)
+    public void AddFace (Vector3 v1, Vector3 v2, Vector3 v3, Vector3 c1, Vector3 c2, Vector3 c3, VertexTexInfo? texture = null, Vector2? uv1 = null, Vector2? uv2 = null, Vector2? uv3 = null)
     {
         int v1id = this.vertices.Count;
         int v2id = this.vertices.Count + 1;
@@ -214,21 +239,22 @@ public class OBJExporter
         int? uv3id = null;
 
         if (
-            (uv1 is null && (uv2 is not null || uv3 is not null)) ||
-            (uv2 is null && (uv1 is not null || uv3 is not null)) ||
-            (uv3 is null && (uv1 is not null || uv2 is not null))
+            (uv1 is null && (uv2 is not null || uv3 is not null || texture is not null)) ||
+            (uv2 is null && (uv1 is not null || uv3 is not null || texture is not null)) ||
+            (uv3 is null && (uv1 is not null || uv2 is not null || texture is not null)) ||
+            (texture is null && (uv1 is not null || uv2 is not null || uv3 is not null))
         )
-            throw new InvalidDataException ("UVs must all be null or all have values");
+            throw new InvalidDataException ("UVs and texture must all be null or all have values");
 
-        if (uv1 is not null)
+        if (uv1 is not null && uv2 is not null && uv3 is not null && texture is not null)
         {
             uv1id = this.uvs.Count;
             uv2id = this.uvs.Count + 1;
             uv3id = this.uvs.Count + 2;
 
-            this.uvs.Add (uv1.Value);
-            this.uvs.Add (uv2.Value);
-            this.uvs.Add (uv3.Value);
+            this.uvs.Add (new UV { position = uv1.Value, texture = texture.Value});
+            this.uvs.Add (new UV { position = uv2.Value, texture = texture.Value});
+            this.uvs.Add (new UV { position = uv3.Value, texture = texture.Value});
         }
 
         this.vertices.Add (
@@ -256,7 +282,7 @@ public class OBJExporter
         this.faces.Add (
             new Face
             {
-                material = material,
+                texture = texture,
                 V1 = v1id,
                 V2 = v2id,
                 V3 = v3id,
@@ -278,12 +304,12 @@ public class OBJExporter
     /// <param name="c2"></param>
     /// <param name="c3"></param>
     /// <param name="c4"></param>
-    /// <param name="material"></param>
+    /// <param name="texture"></param>
     /// <param name="uv2"></param>
     /// <param name="uv3"></param>
     /// <param name="uv1"></param>
     /// <param name="uv4"></param>
-    public void AddFace (Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4, Vector3 c1, Vector3 c2, Vector3 c3, Vector3 c4, string material = null, Vector2? uv1 = null, Vector2? uv2 = null, Vector2? uv3 = null, Vector2? uv4 = null)
+    public void AddFace (Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4, Vector3 c1, Vector3 c2, Vector3 c3, Vector3 c4, VertexTexInfo? texture = null, Vector2? uv1 = null, Vector2? uv2 = null, Vector2? uv3 = null, Vector2? uv4 = null)
     {
         int v1id = this.vertices.Count;
         int v2id = this.vertices.Count + 1;
@@ -295,24 +321,25 @@ public class OBJExporter
         int? uv4id = null;
 
         if (
-            (uv1 is null && (uv2 is not null || uv3 is not null || uv4 is not null)) ||
-            (uv2 is null && (uv1 is not null || uv3 is not null || uv4 is not null)) ||
-            (uv3 is null && (uv1 is not null || uv2 is not null || uv4 is not null)) ||
-            (uv4 is null && (uv1 is not null || uv2 is not null || uv3 is not null))
+            (uv1 is null && (uv2 is not null || uv3 is not null || uv4 is not null || texture is not null)) ||
+            (uv2 is null && (uv1 is not null || uv3 is not null || uv4 is not null || texture is not null)) ||
+            (uv3 is null && (uv1 is not null || uv2 is not null || uv4 is not null || texture is not null)) ||
+            (uv4 is null && (uv1 is not null || uv2 is not null || uv3 is not null || texture is not null)) ||
+            (texture is null && (uv1 is not null || uv2 is not null || uv3 is not null || uv4 is not null))
         )
             throw new InvalidDataException ("UVs must all be null or all have values");
 
-        if (uv1 is not null)
+        if (uv1 is not null && uv2 is not null && uv3 is not null && uv4 is not null && texture is not null)
         {
             uv1id = this.uvs.Count;
             uv2id = this.uvs.Count + 1;
             uv3id = this.uvs.Count + 2;
             uv4id = this.uvs.Count + 3;
 
-            this.uvs.Add (uv1.Value);
-            this.uvs.Add (uv2.Value);
-            this.uvs.Add (uv3.Value);
-            this.uvs.Add (uv4.Value);
+            this.uvs.Add (new UV { position = uv1.Value, texture = texture.Value});
+            this.uvs.Add (new UV { position = uv2.Value, texture = texture.Value});
+            this.uvs.Add (new UV { position = uv3.Value, texture = texture.Value});
+            this.uvs.Add (new UV { position = uv4.Value, texture = texture.Value});
         }
 
         this.vertices.Add (
@@ -347,7 +374,7 @@ public class OBJExporter
         this.faces.Add (
             new Face
             {
-                material = material,
+                texture = texture,
                 V1 = v1id,
                 V2 = v2id,
                 V3 = v3id,
@@ -359,13 +386,20 @@ public class OBJExporter
             }
         );
     }
+
+    struct AtlasInfo
+    {
+        public Vector2 size;
+        public Dictionary <TextureAtlas.TextureInfo, Vector2> pieces;
+    }
     
-    private void ExportMaterials (string path, string modelname)
+    private void ExportMaterials (string path, string modelname, out Dictionary<string, AtlasInfo> topleft)
     {
         // first write all the textures to disk
         // then write the mtl file
         using MemoryStream stream = new MemoryStream ();
         using StreamWriter writer = new StreamWriter (stream);
+        topleft = new Dictionary <string, AtlasInfo> ();
 
         writer.WriteLine ("# CrashEdit exported material");
         
@@ -396,16 +430,24 @@ public class OBJExporter
                 material.Value.highlight.ToString(CultureInfo.InvariantCulture)
             );
 
-            if (material.Value.texture is null)
+            if (!this.atlas.TryGetValue (material.Key, out TextureAtlas atlas))
                 continue;
+
+            string filename = $"{modelname}_{material.Key}";
             
             writer.WriteLine(
                 "map_Kd {0}.bmp",
-                material.Key
+                filename
             );
+
+            Dictionary <TextureAtlas.TextureInfo, Vector2> topleftCurrent = new Dictionary <TextureAtlas.TextureInfo, Vector2> ();
             
-            // write the bitmap to a file too
-            material.Value.texture.Save (path + Path.DirectorySeparatorChar + material.Key + ".bmp");
+            // generate the bitmap based on the atlas
+            // TODO: ADD MODEL SAVENAME TO DIFFERENTIATE THE ATLAS?
+            atlas.BuildAtlas (out int width, out int height, out topleftCurrent).Save(path + Path.DirectorySeparatorChar + filename + ".bmp");
+            
+            // add the textures to the information
+            topleft.Add (material.Key, new AtlasInfo () { size = new Vector2 (width, height), pieces = topleftCurrent});
         }
 
         writer.Flush ();
@@ -417,7 +459,7 @@ public class OBJExporter
     public void Export (string path, string modelname)
     {
         // first write the material file
-        ExportMaterials (path, modelname);
+        ExportMaterials (path, modelname, out Dictionary<string, AtlasInfo> materialsTopleft);
         
         using MemoryStream stream = new MemoryStream();
         using StreamWriter writer = new StreamWriter (stream);
@@ -443,11 +485,26 @@ public class OBJExporter
         writer.WriteLine ();
         writer.WriteLine ("# UVs");
 
-        foreach (Vector2 uv in uvs)
+        foreach (UV uv in uvs)
         {
+            var topleft = materialsTopleft [BuildMaterialName (uv.texture.Color, uv.texture.Blend)];
+            var piece = topleft.pieces.First (x => x.Key.Texinfo == uv.texture);
+            
+            // calculate new uv value
+            // these work from 0 to 1
+            // 0,0 being the leftmost, top side, and 1,1 being the rightmost, bottom side
+            // as we've now got multiple textures in one
+            // these have to be recalculated from their slice texture to the global space
+            // for the model to export properly
+            Vector2 pieceOffset = piece.Value;
+            Vector2 actualPosition = new Vector2(uv.position.X, 1 - uv.position.Y) * new Vector2 (piece.Key.Data.Width, piece.Key.Data.Height) + pieceOffset;
+            Vector2 position = actualPosition / topleft.size;
+            position.Y = 1 - position.Y;
+            
             writer.WriteLine(
                 "vt {0} {1}",
-                uv.X.ToString(CultureInfo.InvariantCulture), uv.Y.ToString(CultureInfo.InvariantCulture)
+                position.X.ToString(CultureInfo.InvariantCulture),
+                position.Y.ToString(CultureInfo.InvariantCulture)
             );
         }
         
@@ -455,18 +512,19 @@ public class OBJExporter
         writer.WriteLine ();
         writer.WriteLine ("# Faces with textures");
 
-        string lastmaterial = null;
+        VertexTexInfo? lastmaterial = null;
 
         // by default use the default material
         writer.WriteLine ("usemtl {0}", DEFAULT_MATERIAL);
 
-        foreach (Face face in faces.OrderBy (x => x.material))
+        foreach (Face face in faces.OrderBy (x => !x.texture.HasValue ? DEFAULT_MATERIAL : BuildMaterialName (x.texture.Value.Color, x.texture.Value.Blend)))
         {
-            if (lastmaterial != face.material)
+            if ((!lastmaterial.HasValue && face.texture.HasValue) ||
+                (lastmaterial.HasValue && face.texture.HasValue && (face.texture.Value.Color != lastmaterial.Value.Color || face.texture.Value.Blend != lastmaterial.Value.Blend)))
             {
-                writer.WriteLine ("usemtl {0}", face.material);
+                writer.WriteLine ("usemtl {0}", BuildMaterialName (face.texture.Value.Color, face.texture.Value.Blend));
 
-                lastmaterial = face.material;
+                lastmaterial = face.texture;
             }
             
             // write face information, UVs must all be null or have value
