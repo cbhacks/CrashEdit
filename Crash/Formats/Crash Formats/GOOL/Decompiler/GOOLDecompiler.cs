@@ -457,6 +457,7 @@ namespace CrashEdit.Crash
                 // regenerate CFG since we changed control flow
                 func.GenerateCFG();
                 GenerateDominationTree(func.BlockList);
+                func.StructureIfElse();
 
                 int b = 9999;
             }

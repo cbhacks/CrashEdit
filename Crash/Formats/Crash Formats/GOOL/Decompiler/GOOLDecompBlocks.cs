@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows.Documents;
-
-namespace CrashEdit.Crash
+﻿namespace CrashEdit.Crash
 {
     public enum GoolBranchType
     {
