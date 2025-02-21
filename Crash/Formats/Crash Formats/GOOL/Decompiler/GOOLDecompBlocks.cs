@@ -1,4 +1,7 @@
-﻿namespace CrashEdit.Crash
+﻿using CrashEdit.Crash.GOOLIns;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+
+namespace CrashEdit.Crash
 {
     public enum GoolBranchType
     {
@@ -96,46 +99,26 @@
             }
         }
 
-        public void GenerateCFGAsRoot(List<GOOLDecompBlock> blocks)
+        public void SliceOutNodeInterval(GOOLDecompBlock header, GOOLDecompBlock tail, GOOLDecompBlock preheader, GOOLDecompBlock posttail)
         {
-            // generate function block list
-            blocks.Clear();
-            int poid = 0;
-            VisitForward(preVisit: (block) =>
+            // disconnect the inner nodes
+            tail.next.Remove(header); // tail -> header
+            header.prev.Remove(tail); // header -> tail
+
+            posttail.prev.Remove(tail); // break -> tail
+            tail.next.Remove(posttail); // tail -> break
+
+            // connect the interval itself
+            next.Add(posttail);
+            posttail.prev.Add(this);
+
+            prev.AddRange(preheader.prev);
+            foreach (var prev in preheader.prev)
             {
-                block.DomID = blocks.Count;
-                blocks.Add(block);
-            }, postVisit: (block) =>
-            {
-                block.PostOrderID = poid++;
-            });
-            blocks.Sort((a, b) => a.begin - b.begin);
-            // initialize dominators and postdominators
-            blocks.ForEach((block) =>
-            {
-                block.Dominators = new(blocks.Count);
-                if (block == this)
-                {
-                    // this is the entry node
-                    block.Dominators.ClearAll();
-                    block.Dominators.Set(block.DomID);
-                }
-                else
-                {
-                    block.Dominators.SetAll();
-                }
-                block.PostDominators = new(blocks.Count);
-                if (block.next.Count == 0)
-                {
-                    // this is an exit node since it cannot go any further
-                    block.PostDominators.ClearAll();
-                    block.PostDominators.Set(block.DomID);
-                }
-                else
-                {
-                    block.PostDominators.SetAll();
-                }
-            });
+                prev.next.Remove(preheader); // also disconnects nodes that lead into loop header
+                prev.next.Add(this);
+            }
+            preheader.prev.Clear();
         }
 
         private string GetNodeColor()
@@ -182,7 +165,7 @@
         }
     }
 
-    public class GOOLDecompBlockDoWhile : GOOLDecompBlock
+    public class GOOLDecompBlockDoWhile : GOOLDecompBlock, IGOOLDecompBlockIterator
     {
         public GOOLDecompLoop Loop { get; set; }
         // the target of (continue)
@@ -194,6 +177,7 @@
         public bool PreTested { get; }
         public GOOLDecompBlock Header => Loop.Header;
         public GOOLDecompBlock Tail => Loop.Tail;
+        public List<GOOLDecompBlock> BlockList => Loop.BlockList;
 
         public GOOLDecompBlockDoWhile(string name, GOOLDecompLoop loop, GOOLDecompBlock cont) : base(name)
         {
@@ -212,48 +196,17 @@
                 Continue = null;
             }
 
+            // note: you MUST regenerate the CFG and domination trees after this!
             if (loop.PreBranch == null)
             {
-                // disconnect the inner nodes
-                Tail.next.Remove(Header); // tail -> header
-                Header.prev.Remove(Tail); // header -> tail
-
-                Break.prev.Remove(Tail); // break -> tail
-                Tail.next.Remove(Break); // tail -> break
-
-                // connect the interval itself
-                next.Add(Break);
-                Break.prev.Add(this);
-
-                prev.AddRange(Header.prev);
-                foreach (var prev in Header.prev)
-                {
-                    prev.next.Remove(Header); // also disconnects nodes that lead into loop header
-                    prev.next.Add(this);
-                }
-                Header.prev.Clear();
+                SliceOutNodeInterval(Header, Tail, Header, Break);
             }
             else
             {
-                // disconnect the inner nodes
-                Tail.next.Remove(Header); // tail -> header
-                Header.prev.Remove(Tail); // header -> tail
-
-                Break.prev.Remove(Tail); // break -> tail
-                Tail.next.Remove(Break); // tail -> break
-
-                // connect the interval itself
-                next.Add(Break);
-                Break.prev.Add(this);
-
-                prev.AddRange(loop.PreBranch.prev);
-                foreach (var prev in loop.PreBranch.prev)
-                {
-                    prev.next.Remove(loop.PreBranch); // also disconnects nodes that lead into loop header
-                    prev.next.Add(this);
-                }
-                loop.PreBranch.prev.Clear();
+                SliceOutNodeInterval(Header, Tail, loop.PreBranch, Break);
                 // we're gonna keep the prebranch for now because it may contain real code before the branch
+                // in the future we kick it out of the interval and turn it into a suspiciously branchless block.
+                // that way it can be output as 'just code' before the loop!
             }
         }
 
@@ -274,14 +227,19 @@
             });
         }
 
+        public void GenerateCFG()
+        {
+            (this as IGOOLDecompBlockIterator).GenerateCFG(Header);
+        }
+
         public void GenerateDominationTree()
         {
-            GOOLDecompiler.GenerateDominationTree(Loop.BlockList);
-            foreach (var block in Loop.BlockList)
-            {
-                if (block is GOOLDecompBlockDoWhile dw)
-                    dw.GenerateDominationTree();
-            }
+            (this as IGOOLDecompBlockIterator).GenerateDominationTree();
+        }
+
+        public void StructureIfElse()
+        {
+            (this as IGOOLDecompBlockIterator).StructureIfElse();
         }
     }
 }

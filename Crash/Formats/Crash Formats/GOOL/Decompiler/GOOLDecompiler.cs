@@ -93,99 +93,6 @@ namespace CrashEdit.Crash
             return loop;
         }
 
-        public static void GenerateDominationTree(List<GOOLDecompBlock> blocklist)
-        {
-            // recursive call and clear stale values
-            foreach (var block in blocklist)
-            {
-                block.ImmPostDom = null;
-                block.ImmDom = null;
-                if (block is GOOLDecompBlockDoWhile dw)
-                    dw.GenerateDominationTree();
-            }
-
-            // generate dominators for each block
-            bool changed;
-            GOOLDecompDomVector tested = new(blocklist.Count);
-            do
-            {
-                changed = false;
-                foreach (var block in blocklist)
-                {
-                    foreach (var prev in block.prev)
-                    {
-                        tested.Overwrite(block.Dominators);
-                        block.Dominators.Mask(prev.Dominators);
-                        block.Dominators.Set(block.DomID);
-                        if (!block.Dominators.Equal(tested))
-                        {
-                            changed = true;
-                        }
-                    }
-                }
-            } while (changed);
-            // generate post-dominators for each block
-            do
-            {
-                changed = false;
-                foreach (var block in blocklist)
-                {
-                    foreach (var next in block.next)
-                    {
-                        tested.Overwrite(block.PostDominators);
-                        block.PostDominators.Mask(next.PostDominators);
-                        block.PostDominators.Set(block.DomID);
-                        if (!block.PostDominators.Equal(tested))
-                        {
-                            changed = true;
-                        }
-                    }
-                }
-            } while (changed);
-            // grab immediate (post-)dominators
-            foreach (var block in blocklist)
-            {
-                List<GOOLDecompBlock> pdoms = blocklist.Where(b => b.DomID != block.DomID && block.PostDominators[b.DomID]).ToList();
-                int pdoms_count = block.PostDominators.Count;
-                foreach (var pdom in pdoms)
-                {
-                    bool immediate = true;
-                    foreach (var other in pdoms)
-                    {
-                        if (pdom.DomID != other.DomID && pdom.PostDominates(other))
-                        {
-                            immediate = false;
-                            break;
-                        }
-                    }
-                    if (immediate)
-                    {
-                        block.ImmPostDom = pdom;
-                        break;
-                    }
-                }
-                List<GOOLDecompBlock> doms = blocklist.Where(b => b.DomID != block.DomID && block.Dominators[b.DomID]).ToList();
-                int doms_count = block.Dominators.Count;
-                foreach (var dom in doms)
-                {
-                    bool immediate = true;
-                    foreach (var other in doms)
-                    {
-                        if (dom.DomID != other.DomID && dom.Dominates(other))
-                        {
-                            immediate = false;
-                            break;
-                        }
-                    }
-                    if (immediate)
-                    {
-                        block.ImmDom = dom;
-                        break;
-                    }
-                }
-            }
-        }
-
         public void Decompile()
         {
             if (gool.Format == 0 || gool.Instructions.Any(ins => ins is MIPSInstruction))
@@ -371,7 +278,7 @@ namespace CrashEdit.Crash
 
             foreach (var func in funcs)
             {
-                GenerateDominationTree(func.BlockList);
+                func.GenerateDominationTree();
 
                 // check for loops
                 // ---------------
@@ -451,12 +358,12 @@ namespace CrashEdit.Crash
                     var do_while = new GOOLDecompBlockDoWhile("dowhile_" + l++ + "_" + loop.BlockList[0].begin, loop, loop.BlockList[^1]);
                     blocks.Add(do_while);
                     do_while.StructureBreakContinue();
-                    do_while.Header.GenerateCFGAsRoot(do_while.Loop.BlockList);
+                    do_while.GenerateCFG();
                 }
 
                 // regenerate CFG since we changed control flow
                 func.GenerateCFG();
-                GenerateDominationTree(func.BlockList);
+                func.GenerateDominationTree();
                 func.StructureIfElse();
 
                 int b = 9999;
