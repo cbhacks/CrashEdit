@@ -359,6 +359,7 @@ namespace CrashEdit.Crash
                     blocks.Add(do_while);
                     do_while.StructureBreakContinue();
                     do_while.GenerateCFG();
+                    do_while.GenerateDominationTree();
                 }
 
                 // regenerate CFG since we changed control flow

@@ -142,7 +142,7 @@ namespace CrashEdit.Crash
             string debug = "";
             VisitForward(preVisit: (block) =>
             {
-                debug += $"  {block.name} [ fillcolor={block.GetNodeColor()} label=\"{block.PostOrderID}\\n";
+                debug += $"  {block.name} [ fillcolor={block.GetNodeColor()} label=\"{block.name}\\n";
                 foreach (var ins in block.instructions)
                 {
                     //debug += string.Format("{0,-6} {1,-28}\\n", ins.GetName(), ins.Arguments);
@@ -154,11 +154,11 @@ namespace CrashEdit.Crash
                 }
                 if (block.ImmPostDom != null)
                 {
-                    debug += $"  {block.ImmPostDom.name} -> {block.name} [color=green]\n";
+                    //debug += $"  {block.ImmPostDom.name} -> {block.name} [color=green]\n";
                 }
                 if (block.ImmDom != null)
                 {
-                    debug += $"  {block.ImmDom.name} -> {block.name} [color=orange]\n";
+                    //debug += $"  {block.ImmDom.name} -> {block.name} [color=orange]\n";
                 }
             });
             return debug;

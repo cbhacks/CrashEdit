@@ -50,13 +50,11 @@
         public void GenerateDominationTree();
         public void GenerateDominationTreeInt()
         {
-            // recursive call and clear stale values
+            // clear stale values
             foreach (var block in BlockList)
             {
                 block.ImmPostDom = null;
                 block.ImmDom = null;
-                if (block is IGOOLDecompBlockIterator bl)
-                    bl.GenerateDominationTree();
             }
 
             // generate dominators for each block
@@ -157,7 +155,7 @@
 
             foreach (var block in as_po)
             {
-                if (block.Type == GoolBranchType.If)
+                if (block.Type == GoolBranchType.If && block.next.Count == 2)
                 {
                     var follow = as_po.Find(n => block.ImmediateDominates(n) && n.prev.Count >= 2);
                     if (follow != null)
@@ -180,10 +178,25 @@
                 }
             }
 
-            foreach (var fkvp in follows)
+            var heads = new List<GOOLDecompBlock>(follows.Keys);
+            heads.Sort((a, b) => a.PostOrderID - b.PostOrderID);
+            foreach (var head in heads)
             {
-                var head = fkvp.Key;
-                var follow = fkvp.Value;
+                var follow = follows[head];
+                // we can do this because we use a consistent format when setting up successors
+                var bbranch = head.next[0];
+                var bfallthru = head.next[1];
+
+                if (head.next.Contains(follow))
+                {
+                    // if, no else
+                    int h = 9;
+                }
+                else
+                {
+                    // if, else
+                    int w = 9;
+                }
                 int z = 99;
             }
         }
