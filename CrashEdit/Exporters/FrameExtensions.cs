@@ -42,7 +42,8 @@ public static class FrameExtensions
 
             if (str is OldModelTexture t)
             {
-                material = exporter.AddTexture (nsf, t, t.EID, ref textureEIDs, ref objTranslate, out color, out uv1, out uv2, out uv3);
+                material = exporter.AddTexture (nsf, t, t.EID, ref textureEIDs, ref objTranslate, out uv1, out uv2, out uv3);
+                color = new Vector3(t.R, t.G, t.B) / 255F;
             }
             else if (str is OldSceneryColor c)
             {

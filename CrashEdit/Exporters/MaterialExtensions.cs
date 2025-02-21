@@ -137,10 +137,8 @@ public static class MaterialExtensions
         return material;
     }
     
-    public static VertexTexInfo? AddTexture (this OBJExporter exporter, NSF nsf, OldModelTexture t, int textureEID, ref Dictionary<int, int> textureEIDs, ref Dictionary<VertexTexInfo, VertexTexInfo> objTranslate, out Vector3 color, out Vector2? uv1, out Vector2? uv2, out Vector2? uv3)
+    public static VertexTexInfo? AddTexture (this OBJExporter exporter, NSF nsf, OldModelTexture t, int textureEID, ref Dictionary<int, int> textureEIDs, ref Dictionary<VertexTexInfo, VertexTexInfo> objTranslate, out Vector2? uv1, out Vector2? uv2, out Vector2? uv3)
     {
-        color = new Vector3 (t.R, t.G, t.B) / 255F;
-
         VertexTexInfo? material = exporter.FindOrAddTexture (nsf, t.ColorMode, t.BlendMode, t.ClutX, t.ClutY, (short) t.UVIndex, Convert.ToInt32 (t.N), textureEID, ref textureEIDs, ref objTranslate);
         Vector2 texsize = TextureUtils.TextureSize (t.ColorMode);
 
