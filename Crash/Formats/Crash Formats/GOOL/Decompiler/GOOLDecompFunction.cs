@@ -4,7 +4,8 @@
     {
         public List<GOOLDecompBlock> BlockList { get; }
 
-        public void GenerateCFG(GOOLDecompBlock start)
+        public void GenerateCFG();
+        public void GenerateCFGInt(GOOLDecompBlock start)
         {
             // generate block list
             BlockList.Clear();
@@ -22,7 +23,7 @@
             BlockList.ForEach((block) =>
             {
                 block.Dominators = new(BlockList.Count);
-                if (block == this)
+                if (block == start)
                 {
                     // this is the entry node
                     block.Dominators.ClearAll();
@@ -46,7 +47,8 @@
             });
         }
 
-        public void GenerateDominationTree()
+        public void GenerateDominationTree();
+        public void GenerateDominationTreeInt()
         {
             // recursive call and clear stale values
             foreach (var block in BlockList)
@@ -146,7 +148,8 @@
             return polist;
         }
 
-        public void StructureIfElse()
+        public void StructureIfElse();
+        public void StructureIfElseInt()
         {
             HashSet<GOOLDecompBlock> unresolved = [];
             var as_po = AsPostOrderList();
@@ -176,6 +179,13 @@
                     bl.StructureIfElse();
                 }
             }
+
+            foreach (var fkvp in follows)
+            {
+                var head = fkvp.Key;
+                var follow = fkvp.Value;
+                int z = 99;
+            }
         }
     }
 
@@ -191,17 +201,17 @@
 
         public void GenerateCFG()
         {
-            (this as IGOOLDecompBlockIterator).GenerateCFG(start);
+            (this as IGOOLDecompBlockIterator).GenerateCFGInt(start);
         }
 
         public void GenerateDominationTree()
         {
-            (this as IGOOLDecompBlockIterator).GenerateDominationTree();
+            (this as IGOOLDecompBlockIterator).GenerateDominationTreeInt();
         }
 
         public void StructureIfElse()
         {
-            (this as IGOOLDecompBlockIterator).StructureIfElse();
+            (this as IGOOLDecompBlockIterator).StructureIfElseInt();
         }
     }
 }

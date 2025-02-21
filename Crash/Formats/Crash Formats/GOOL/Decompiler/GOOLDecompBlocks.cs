@@ -229,17 +229,17 @@ namespace CrashEdit.Crash
 
         public void GenerateCFG()
         {
-            (this as IGOOLDecompBlockIterator).GenerateCFG(Header);
+            (this as IGOOLDecompBlockIterator).GenerateCFGInt(Header);
         }
 
         public void GenerateDominationTree()
         {
-            (this as IGOOLDecompBlockIterator).GenerateDominationTree();
+            (this as IGOOLDecompBlockIterator).GenerateDominationTreeInt();
         }
 
         public void StructureIfElse()
         {
-            (this as IGOOLDecompBlockIterator).StructureIfElse();
+            (this as IGOOLDecompBlockIterator).StructureIfElseInt();
         }
     }
 }
