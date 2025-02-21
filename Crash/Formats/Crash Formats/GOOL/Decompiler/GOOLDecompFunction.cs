@@ -145,61 +145,6 @@
             polist.Sort((a, b) => a.PostOrderID - b.PostOrderID);
             return polist;
         }
-
-        public void StructureIfElse();
-        public void StructureIfElseInt()
-        {
-            HashSet<GOOLDecompBlock> unresolved = [];
-            var as_po = AsPostOrderList();
-            Dictionary<GOOLDecompBlock, GOOLDecompBlock> follows = [];
-
-            foreach (var block in as_po)
-            {
-                if (block.Type == GoolBranchType.If && block.next.Count == 2)
-                {
-                    var follow = as_po.Find(n => block.ImmediateDominates(n) && n.prev.Count >= 2);
-                    if (follow != null)
-                    {
-                        follows.Add(block, follow);
-                        foreach (var x in unresolved)
-                        {
-                            follows.Add(x, follow);
-                        }
-                        unresolved.Clear();
-                    }
-                    else
-                    {
-                        unresolved.Add(block);
-                    }
-                }
-                else if (block is IGOOLDecompBlockIterator bl)
-                {
-                    bl.StructureIfElse();
-                }
-            }
-
-            var heads = new List<GOOLDecompBlock>(follows.Keys);
-            heads.Sort((a, b) => a.PostOrderID - b.PostOrderID);
-            foreach (var head in heads)
-            {
-                var follow = follows[head];
-                // we can do this because we use a consistent format when setting up successors
-                var bbranch = head.next[0];
-                var bfallthru = head.next[1];
-
-                if (head.next.Contains(follow))
-                {
-                    // if, no else
-                    int h = 9;
-                }
-                else
-                {
-                    // if, else
-                    int w = 9;
-                }
-                int z = 99;
-            }
-        }
     }
 
     public class GOOLDecompFunction(string name) : IGOOLDecompBlockIterator
@@ -220,11 +165,6 @@
         public void GenerateDominationTree()
         {
             (this as IGOOLDecompBlockIterator).GenerateDominationTreeInt();
-        }
-
-        public void StructureIfElse()
-        {
-            (this as IGOOLDecompBlockIterator).StructureIfElseInt();
         }
     }
 }

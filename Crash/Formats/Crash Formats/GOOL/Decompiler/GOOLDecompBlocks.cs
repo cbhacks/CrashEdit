@@ -1,7 +1,4 @@
-﻿using CrashEdit.Crash.GOOLIns;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-
-namespace CrashEdit.Crash
+﻿namespace CrashEdit.Crash
 {
     public enum GoolBranchType
     {
@@ -99,9 +96,11 @@ namespace CrashEdit.Crash
             }
         }
 
-        public void SliceOutNodeInterval(GOOLDecompBlock header, GOOLDecompBlock tail, GOOLDecompBlock preheader, GOOLDecompBlock posttail)
+        public void SpliceNodeInterval(GOOLDecompBlock header, GOOLDecompBlock tail, GOOLDecompBlock preheader, GOOLDecompBlock posttail)
         {
             // disconnect the inner nodes
+            if (header != preheader)
+                tail.prev.Remove(preheader); // this is the first pre-test in a while loop
             tail.next.Remove(header); // tail -> header
             header.prev.Remove(tail); // header -> tail
 
@@ -152,16 +151,74 @@ namespace CrashEdit.Crash
                 {
                     debug += $"  {block.name} -> {next.name} [color={(next.begin <= block.begin ? "red" : "black")}]\n";
                 }
+                return;
                 if (block.ImmPostDom != null)
                 {
-                    //debug += $"  {block.ImmPostDom.name} -> {block.name} [color=green]\n";
+                    debug += $"  {block.ImmPostDom.name} -> {block.name} [color=green]\n";
                 }
                 if (block.ImmDom != null)
                 {
-                    //debug += $"  {block.ImmDom.name} -> {block.name} [color=orange]\n";
+                    debug += $"  {block.ImmDom.name} -> {block.name} [color=orange]\n";
                 }
             });
             return debug;
+        }
+    }
+
+    public class GOOLDecompBlockContainer : GOOLDecompBlock, IGOOLDecompBlockIterator
+    {
+        public GOOLDecompBlock Header { get; }
+        public List<GOOLDecompBlock> BlockList { get; } = new();
+
+        public GOOLDecompBlockContainer(string name, GOOLDecompBlock header, GOOLDecompBlock tail, GOOLDecompBlock posttail) : base(name)
+        {
+            Header = header;
+
+            SpliceNodeInterval(header, tail, header, posttail);
+        }
+
+        public void GenerateCFG()
+        {
+            (this as IGOOLDecompBlockIterator).GenerateCFGInt(Header);
+        }
+
+        public void GenerateDominationTree()
+        {
+            (this as IGOOLDecompBlockIterator).GenerateDominationTreeInt();
+        }
+    }
+
+    public class GOOLDecompBlockIf : GOOLDecompBlock
+    {
+        public bool HasElse => Clauses.Length == 2;
+
+        public GOOLDecompBlock Header { get; }
+        public GOOLDecompBlock[] Clauses { get; }
+
+        public GOOLDecompBlockIf(string name, GOOLDecompBlock header, GOOLDecompBlock follow, params GOOLDecompBlock[] clauses) : base(name)
+        {
+            Header = header;
+
+            Clauses = clauses;
+
+            Header.next.Clear();
+            foreach (var clause in clauses)
+            {
+                Header.next.Add(clause);
+                follow.prev.Remove(clause);
+                clause.next.Clear();
+                clause.prev.Clear();
+            }
+            follow.prev.Remove(Header);
+            follow.prev.Add(this);
+            next.Add(follow);
+            foreach (var p in Header.prev)
+            {
+                p.next.Remove(Header);
+                p.next.Add(this);
+                prev.Add(p);
+            }
+            Header.prev.Clear();
         }
     }
 
@@ -199,11 +256,11 @@ namespace CrashEdit.Crash
             // note: you MUST regenerate the CFG and domination trees after this!
             if (loop.PreBranch == null)
             {
-                SliceOutNodeInterval(Header, Tail, Header, Break);
+                SpliceNodeInterval(Header, Tail, Header, Break);
             }
             else
             {
-                SliceOutNodeInterval(Header, Tail, loop.PreBranch, Break);
+                SpliceNodeInterval(Header, Tail, loop.PreBranch, Break);
                 // we're gonna keep the prebranch for now because it may contain real code before the branch
                 // in the future we kick it out of the interval and turn it into a suspiciously branchless block.
                 // that way it can be output as 'just code' before the loop!
@@ -235,11 +292,6 @@ namespace CrashEdit.Crash
         public void GenerateDominationTree()
         {
             (this as IGOOLDecompBlockIterator).GenerateDominationTreeInt();
-        }
-
-        public void StructureIfElse()
-        {
-            (this as IGOOLDecompBlockIterator).StructureIfElseInt();
         }
     }
 }

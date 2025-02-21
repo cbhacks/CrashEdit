@@ -22,8 +22,16 @@ namespace CrashEdit.Crash
             GOOLDecompBlock block = new(name);
             block.begin = begin;
             block.end = end;
-            if (begin >= 0 && end >= 0)
-                block.instructions.AddRange(gool.Instructions.Skip(block.begin).Take(block.end - block.begin));
+            block.instructions.AddRange(gool.Instructions.Skip(block.begin).Take(block.end - block.begin));
+            blocks.Add(block);
+            return block;
+        }
+
+        private GOOLDecompBlock AddBlockNoInstructions(string name)
+        {
+            GOOLDecompBlock block = new(name);
+            block.begin = -1;
+            block.end = -1;
             blocks.Add(block);
             return block;
         }
@@ -31,7 +39,7 @@ namespace CrashEdit.Crash
         private GOOLDecompFunction AddFunc(string name, int offset, bool trans = false)
         {
             GOOLDecompFunction func = new(name) { Offset = offset, Trans = trans };
-            func.start = AddBlock("entry_" + name, -1, -1);
+            func.start = AddBlockNoInstructions("entry_" + name);
             func.start.Type = GoolBranchType.None;
             funcs.Add(func);
             return func;
@@ -91,6 +99,87 @@ namespace CrashEdit.Crash
             }
             loop.BlockList.Sort((a, b) => a.begin - b.begin);
             return loop;
+        }
+
+        private void StructureIfElse(IGOOLDecompBlockIterator lister)
+        {
+            HashSet<GOOLDecompBlock> unresolved = [];
+            var as_po = lister.AsPostOrderList();
+            Dictionary<GOOLDecompBlock, GOOLDecompBlock> follows = [];
+
+            foreach (var block in as_po)
+            {
+                if (block.Type == GoolBranchType.If && block.next.Count == 2)
+                {
+                    var follow = as_po.Find(n => block.ImmediateDominates(n) && n.prev.Count >= 2);
+                    if (follow != null)
+                    {
+                        follows.Add(block, follow);
+                        foreach (var x in unresolved)
+                        {
+                            follows.Add(x, follow);
+                        }
+                        unresolved.Clear();
+                    }
+                    else
+                    {
+                        unresolved.Add(block);
+                    }
+                }
+                else if (block is IGOOLDecompBlockIterator bl && block is not GOOLDecompBlockContainer)
+                {
+                    StructureIfElse(bl);
+                }
+            }
+
+            var heads = new List<GOOLDecompBlock>(follows.Keys);
+            heads.Sort((a, b) => a.PostOrderID - b.PostOrderID);
+            foreach (var head in heads)
+            {
+                var follow = follows[head];
+                // we can do this because we use a consistent format when setting up successors
+                var bbranch = head.next[0];
+                var bfallthru = head.next[1];
+
+                if (head.next.Contains(follow))
+                {
+                    // if, no else
+
+                    head.next.Remove(follow);
+
+                    var noelse = head.next[0];
+                    GOOLDecompBlock tail = follow.prev.Find(a => a != head && noelse.Dominates(a));
+                    var newif = new GOOLDecompBlockContainer("if_ne_" + noelse.name, noelse, tail!, follow);
+                    var ifblock = new GOOLDecompBlockIf("if_" + head.name, head, follow, newif);
+                    blocks.Add(ifblock);
+                    blocks.Add(newif);
+                    newif.GenerateCFG();
+                    newif.GenerateDominationTree();
+                }
+                else
+                {
+                    // if, else
+
+                    GOOLDecompBlock tailbranch = follow.prev.Find(a => bbranch.Dominates(a));
+                    GOOLDecompBlock tailfallthru = follow.prev.Find(a => bfallthru.Dominates(a));
+                    var newbranch = new GOOLDecompBlockContainer("if_b_" + bbranch.name, bbranch, tailbranch!, follow);
+                    var newelse = new GOOLDecompBlockContainer("if_e_" + bfallthru.name, bfallthru, tailfallthru!, follow);
+                    var ifblock = new GOOLDecompBlockIf("if_" + head.name, head, follow, newbranch, newelse);
+                    blocks.Add(ifblock);
+                    blocks.Add(newbranch);
+                    blocks.Add(newelse);
+                    newbranch.GenerateCFG();
+                    newbranch.GenerateDominationTree();
+                    newelse.GenerateCFG();
+                    newelse.GenerateDominationTree();
+                }
+
+                lister.GenerateCFG();
+                lister.GenerateDominationTree();
+
+                StructureIfElse(lister);
+                break;
+            }
         }
 
         public void Decompile()
@@ -276,6 +365,7 @@ namespace CrashEdit.Crash
             }
 
 
+            int l = 0;
             foreach (var func in funcs)
             {
                 func.GenerateDominationTree();
@@ -352,7 +442,6 @@ namespace CrashEdit.Crash
                     loop.Parent?.Children.Add(loop);
                 }
 
-                int l = 0;
                 foreach (var loop in func.LoopList)
                 {
                     var do_while = new GOOLDecompBlockDoWhile("dowhile_" + l++ + "_" + loop.BlockList[0].begin, loop, loop.BlockList[^1]);
@@ -365,7 +454,7 @@ namespace CrashEdit.Crash
                 // regenerate CFG since we changed control flow
                 func.GenerateCFG();
                 func.GenerateDominationTree();
-                func.StructureIfElse();
+                StructureIfElse(func);
 
                 int b = 9999;
             }
@@ -385,6 +474,7 @@ namespace CrashEdit.Crash
                 debug += func.start.PrintRecursiveAsRoot();
                 foreach (var block in func.BlockList)
                 {
+                    break;
                     for (int i = 0; i < func.BlockList.Count; ++i)
                     {
                         var targetblock = func.BlockList[i];
@@ -392,18 +482,38 @@ namespace CrashEdit.Crash
                         if (block == targetblock) continue;
                         if (targetblock.Dominates(block))
                         {
-                            //debug += $"  {targetblock.name} -> {block.name} [color=cyan]\n";
+                            debug += $"  {targetblock.name} -> {block.name} [color=cyan]\n";
                         }
                         if (targetblock.PostDominates(block))
                         {
-                            //debug += $"  {targetblock.name} -> {block.name} [color=blue]\n";
+                            debug += $"  {targetblock.name} -> {block.name} [color=blue]\n";
                         }
                     }
                 }
             }
             foreach (var block in blocks)
             {
-                // this only does top level stuff. oh well. don't care.
+                if (block is IGOOLDecompBlockIterator bl)
+                {
+                    foreach (var lblock in bl.BlockList)
+                    {
+                        break;
+                        for (int i = 0; i < bl.BlockList.Count; ++i)
+                        {
+                            var targetblock = bl.BlockList[i];
+                            // every node dominates and postdominates itself
+                            if (lblock == targetblock) continue;
+                            if (targetblock.Dominates(lblock))
+                            {
+                                debug += $"  {targetblock.name} -> {lblock.name} [color=cyan]\n";
+                            }
+                            if (targetblock.PostDominates(lblock))
+                            {
+                                debug += $"  {targetblock.name} -> {lblock.name} [color=blue]\n";
+                            }
+                        }
+                    }
+                }
                 if (block is GOOLDecompBlockDoWhile dw)
                 {
                     debug += $"  subgraph cluster_{dw.name} {{\n";
@@ -412,6 +522,26 @@ namespace CrashEdit.Crash
                     debug += $"    fontsize = \"25pt\";\n";
                     debug += $"    fillcolor = lightyellow;\n";
                     debug += dw.Header.PrintRecursiveAsRoot();
+                    debug += $"  }}\n";
+                }
+                else if (block is GOOLDecompBlockIf bi)
+                {
+                    debug += $"  subgraph cluster_{bi.name} {{\n";
+                    debug += $"    label = \"{bi.name}\";\n";
+                    debug += $"    style = filled;\n";
+                    debug += $"    fontsize = \"25pt\";\n";
+                    debug += $"    fillcolor = lightyellow;\n";
+                    debug += bi.Header.PrintRecursiveAsRoot();
+                    debug += $"  }}\n";
+                }
+                else if (block is GOOLDecompBlockContainer bc)
+                {
+                    debug += $"  subgraph cluster_{bc.name} {{\n";
+                    debug += $"    label = \"{bc.name}\";\n";
+                    debug += $"    style = filled;\n";
+                    debug += $"    fontsize = \"25pt\";\n";
+                    debug += $"    fillcolor = lightyellow;\n";
+                    debug += bc.Header.PrintRecursiveAsRoot();
                     debug += $"  }}\n";
                 }
             }
