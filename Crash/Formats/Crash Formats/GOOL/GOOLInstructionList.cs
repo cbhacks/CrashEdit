@@ -125,7 +125,7 @@ namespace CrashEdit.Crash.GOOLIns
                 res.Forms.Add(l);
                 return res;
             }
-            return new ListObj([new TokenObj(LispHead), r, l]);
+            return new ListObj([new TokenObj(LispHead), l, r]);
         }
     }
 

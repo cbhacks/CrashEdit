@@ -22,7 +22,7 @@ namespace CrashEdit.Crash
             GOOLDecompBlock block = new(name);
             block.begin = begin;
             block.end = end;
-            block.instructions.AddRange(gool.Instructions.Skip(block.begin).Take(block.end - block.begin));
+            block.Instructions.AddRange(gool.Instructions.Skip(block.begin).Take(block.end - block.begin));
             blocks.Add(block);
             return block;
         }
@@ -34,6 +34,26 @@ namespace CrashEdit.Crash
             block.end = -1;
             blocks.Add(block);
             return block;
+        }
+
+        private void ReplaceBlock(GOOLDecompBlock dst, GOOLDecompBlock src)
+        {
+            foreach (var block in blocks)
+            {
+                if (block == src || block == dst)
+                    continue;
+                if (block is GOOLDecompBlockDoWhile dw)
+                {
+                    if (src == dw.Break) dw.Break = dst;
+                    if (src == dw.Continue) dw.Continue = dst;
+                    if (src == dw.Header) dw.Loop.Header = dst;
+                    if (src == dw.Tail) dw.Loop.Tail = dst;
+                    for (int i = 0; i < dw.BlockList.Count; ++i)
+                    {
+                        if (src == dw.BlockList[i]) dw.BlockList[i] = dst;
+                    }
+                }
+            }
         }
 
         private GOOLDecompFunction AddFunc(string name, int offset, bool trans = false)
@@ -153,6 +173,7 @@ namespace CrashEdit.Crash
                     var ifblock = new GOOLDecompBlockIf("if_" + head.name, head, follow, newif);
                     blocks.Add(ifblock);
                     blocks.Add(newif);
+                    ReplaceBlock(ifblock, head);
                     newif.GenerateCFG();
                     newif.GenerateDominationTree();
                 }
@@ -168,6 +189,7 @@ namespace CrashEdit.Crash
                     blocks.Add(ifblock);
                     blocks.Add(newbranch);
                     blocks.Add(newelse);
+                    ReplaceBlock(ifblock, head);
                     newbranch.GenerateCFG();
                     newbranch.GenerateDominationTree();
                     newelse.GenerateCFG();
@@ -254,8 +276,8 @@ namespace CrashEdit.Crash
 
             foreach (var block in blocks)
             {
-                if (block.instructions.Count == 0) continue;
-                var ins = block.instructions.Last();
+                if (block.Instructions.Count == 0) continue;
+                var ins = block.Instructions.Last();
                 int i = gool.Instructions.IndexOf(ins);
                 if (ins.GetName() == "BRA" && ins.Args['I'].Value != 0)
                 {
@@ -331,18 +353,18 @@ namespace CrashEdit.Crash
                 bool regen = false;
                 foreach (var block in func.BlockList)
                 {
-                    if (block.instructions.Count >= 3 && block.Type == GoolBranchType.Goto && block.next.Count == 1 &&
-                        block.instructions[^2].GetName() == "SETF" &&
-                        block.instructions[^3].GetName() == "ADD" &&
-                        block.instructions[^2].Arguments == "tpc,[sp]" &&
+                    if (block.Instructions.Count >= 3 && block.Type == GoolBranchType.Goto && block.next.Count == 1 &&
+                        block.Instructions[^2].GetName() == "SETF" &&
+                        block.Instructions[^3].GetName() == "ADD" &&
+                        block.Instructions[^2].Arguments == "tpc,[sp]" &&
                        // so lazy!!
-                       (block.instructions[^3].Arguments == "pc,(8)" || block.instructions[^3].Arguments == "pc,8"))
+                       (block.Instructions[^3].Arguments == "pc,(8)" || block.Instructions[^3].Arguments == "pc,8"))
                     {
                         block.next[0].prev.Remove(block);
                         block.next.Clear();
-                        block.instructions.RemoveLast();
-                        block.instructions.RemoveLast();
-                        block.instructions.RemoveLast();
+                        block.Instructions.RemoveLast();
+                        block.Instructions.RemoveLast();
+                        block.Instructions.RemoveLast();
                         var trans_func = AddFunc(func.Name, block.end, true);
                         SetFuncFirstBlock(trans_func, GetBlockFromInsIndex(trans_func.Offset));
                         func.Trans = false;
@@ -442,10 +464,12 @@ namespace CrashEdit.Crash
                     loop.Parent?.Children.Add(loop);
                 }
 
+                List<GOOLDecompBlock> loopblocks = [];
                 foreach (var loop in func.LoopList)
                 {
                     var do_while = new GOOLDecompBlockDoWhile("dowhile_" + l++ + "_" + loop.BlockList[0].begin, loop, loop.BlockList[^1]);
                     blocks.Add(do_while);
+                    loopblocks.Add(do_while);
                     do_while.StructureBreakContinue();
                     do_while.GenerateCFG();
                     do_while.GenerateDominationTree();
@@ -455,11 +479,18 @@ namespace CrashEdit.Crash
                 func.GenerateCFG();
                 func.GenerateDominationTree();
                 StructureIfElse(func);
-
-                int b = 9999;
             }
 
-            DebugPrint();
+            foreach (var func in funcs)
+            {
+                string fout = "(defgfun " + func.Name + " ()\n";
+                int indent = 2;
+                func.start.PrintLispOut(indent, ref fout);
+                fout += "  )\n\n";
+                Console.Write(fout);
+            }
+
+            // DebugPrint();
         }
 
         private void DebugPrint()

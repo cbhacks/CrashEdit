@@ -14,8 +14,8 @@
 
     public class GOOLDecompBlock(string name)
     {
-        public List<GOOLInstruction> instructions = new();
-        public List<GOOLStatement> statements = new();
+        public List<GOOLInstruction> Instructions { get; } = new();
+        public List<GOOLStatement> Statements { get; } = new();
 
         public List<GOOLDecompBlock> prev = new();
         public List<GOOLDecompBlock> next = new();
@@ -58,12 +58,12 @@
 
         public void GenerateStatements()
         {
-            statements.Clear();
+            Statements.Clear();
             GOOLStatement cursment = null;
             int stackwant = 0;
-            for (int i = instructions.Count - 1; i >= 0; --i)
+            for (int i = Instructions.Count - 1; i >= 0; --i)
             {
-                var ins = instructions[i];
+                var ins = Instructions[i];
                 cursment ??= new GOOLStatement();
 
                 if (cursment.Instructions.Count != 0)
@@ -78,7 +78,7 @@
                 if (stackwant == 0)
                 {
                     // no more instructions to add to the statement, move on
-                    statements.Insert(0, cursment);
+                    Statements.Insert(0, cursment);
                     cursment = null;
                 }
             }
@@ -88,11 +88,9 @@
                 Console.WriteLine($"Failed to build statements for block {name}: did not pop {stackwant} values!");
             }
 
-            foreach (var statement in statements)
+            foreach (var statement in Statements)
             {
                 statement.DecompileToLispFull();
-                string tempy = statement.LispOut.Print();
-                Console.WriteLine(tempy);
             }
         }
 
@@ -142,7 +140,7 @@
             VisitForward(preVisit: (block) =>
             {
                 debug += $"  {block.name} [ fillcolor={block.GetNodeColor()} label=\"{block.name}\\n";
-                foreach (var ins in block.instructions)
+                foreach (var ins in block.Instructions)
                 {
                     //debug += string.Format("{0,-6} {1,-28}\\n", ins.GetName(), ins.Arguments);
                 }
@@ -163,16 +161,32 @@
             });
             return debug;
         }
+
+        public virtual void PrintLispOut(int indent, ref string fout)
+        {
+            var istr = new string(' ', indent);
+            foreach (var stmt in Statements)
+            {
+                fout += istr + stmt.LispOut.Print() + "\n";
+            }
+            // assumes no infinite loop lol.
+            foreach (var n in next)
+            {
+                n.PrintLispOut(indent, ref fout);
+            }
+        }
     }
 
     public class GOOLDecompBlockContainer : GOOLDecompBlock, IGOOLDecompBlockIterator
     {
         public GOOLDecompBlock Header { get; }
+        public GOOLDecompBlock Tail { get; }
         public List<GOOLDecompBlock> BlockList { get; } = new();
 
         public GOOLDecompBlockContainer(string name, GOOLDecompBlock header, GOOLDecompBlock tail, GOOLDecompBlock posttail) : base(name)
         {
             Header = header;
+            Tail = tail;
 
             SpliceNodeInterval(header, tail, header, posttail);
         }
@@ -186,10 +200,18 @@
         {
             (this as IGOOLDecompBlockIterator).GenerateDominationTreeInt();
         }
+
+        public override void PrintLispOut(int indent, ref string fout)
+        {
+            Header.PrintLispOut(indent, ref fout);
+        }
     }
 
     public class GOOLDecompBlockIf : GOOLDecompBlock
     {
+        new public List<GOOLInstruction> Instructions => Header.Instructions;
+        new public List<GOOLStatement> Statements => Header.Statements;
+
         public bool HasElse => Clauses.Length == 2;
 
         public GOOLDecompBlock Header { get; }
@@ -202,8 +224,12 @@
             Clauses = clauses;
 
             Header.next.Clear();
-            foreach (var clause in clauses)
+            foreach (GOOLDecompBlockContainer clause in clauses)
             {
+                if (clause.next.Count == 1 && clause.next[0] == follow && clause.Tail.Statements.Count > 0 && clause.Tail.Statements.Last().LispOut.Print().StartsWith("(b "))
+                {
+                    clause.Tail.Statements.RemoveLast();
+                }
                 Header.next.Add(clause);
                 follow.prev.Remove(clause);
                 clause.next.Clear();
@@ -220,6 +246,61 @@
             }
             Header.prev.Clear();
         }
+
+        public override void PrintLispOut(int indent, ref string fout)
+        {
+            var istr = new string(' ', indent);
+            var stmts = Header.Statements;
+            for (int i = 0; i < stmts.Count - 1; ++i)
+            {
+                var stmt = stmts[i];
+                fout += istr + stmt.LispOut.Print() + "\n";
+            }
+            var stmtif = stmts[^1].LispOut as ListObj;
+            if (!HasElse)
+            {
+                if (stmtif != null && stmtif.Forms.Count == 3)
+                {
+                    var cond = stmtif.Forms[2];
+                    if (stmtif.Forms[0].Print() == "b-unless")
+                    {
+                        fout += istr + "(when " + cond.Print() + "\n";
+                        Clauses[0].PrintLispOut(indent + 2, ref fout);
+                        fout += istr + "  )\n";
+                    }
+                    else if (stmtif.Forms[0].Print() == "b-if")
+                    {
+                        fout += istr + "(unless " + cond.Print() + "\n";
+                        Clauses[0].PrintLispOut(indent + 2, ref fout);
+                        fout += istr + "  )\n";
+                    }
+                }
+            }
+            else
+            {
+                if (stmtif != null && stmtif.Forms.Count == 3)
+                {
+                    var cond = stmtif.Forms[2];
+                    if (stmtif.Forms[0].Print() == "b-if")
+                    {
+                        cond = new ListObj(new TokenObj("not"), cond);
+                    }
+                    fout += istr + "(cond\n";
+                    fout += istr + "  (" + cond.Print() + "\n";
+                    Clauses[0].PrintLispOut(indent + 3, ref fout);
+                    fout += istr + "   )\n";
+                    fout += istr + "  (else\n";
+                    Clauses[1].PrintLispOut(indent + 3, ref fout);
+                    fout += istr + "   )\n";
+                    fout += istr + "  )\n";
+                }
+            }
+            // assumes no infinite loop lol.
+            foreach (var n in next)
+            {
+                n.PrintLispOut(indent, ref fout);
+            }
+        }
     }
 
     public class GOOLDecompBlockDoWhile : GOOLDecompBlock, IGOOLDecompBlockIterator
@@ -231,7 +312,8 @@
         public GOOLDecompBlock Break { get; set; }
         // the branch condition
         public GOOLStatement Condition { get; set; }
-        public bool PreTested { get; }
+        public bool PreTested => PreBranch != null;
+        public GOOLDecompBlock? PreBranch { get; }
         public GOOLDecompBlock Header => Loop.Header;
         public GOOLDecompBlock Tail => Loop.Tail;
         public List<GOOLDecompBlock> BlockList => Loop.BlockList;
@@ -241,13 +323,14 @@
             Loop = loop;
             Continue = cont;
             Break = cont.ImmPostDom;
-            Condition = cont.statements[^1];
-            PreTested = loop.PreBranch != null;
+            Condition = cont.Statements[^1];
+            PreBranch = loop.PreBranch;
+            cont.Statements.RemoveLast();
 
             begin = Header.begin;
             end = Tail.end;
 
-            if (Continue.statements.Count != 1)
+            if (Continue.Statements.Count != 0)
             {
                 // we did not generate a block for a continue statement, so there must not be one!
                 Continue = null;
@@ -292,6 +375,48 @@
         public void GenerateDominationTree()
         {
             (this as IGOOLDecompBlockIterator).GenerateDominationTreeInt();
+        }
+
+        public override void PrintLispOut(int indent, ref string fout)
+        {
+            var istr = new string(' ', indent);
+            if (PreTested)
+            {
+                var stmts = Loop.PreBranch.Statements;
+                for (int i = 0; i < stmts.Count - 1; ++i)
+                {
+                    var stmt = stmts[i];
+                    fout += istr + stmt.LispOut.Print() + "\n";
+                }
+            }
+
+            var cond = (Continue?.Type == GoolBranchType.Goto) ? new TokenObj(PreTested ? "t" : "nil") : Condition.LispOut;
+            if (cond is ListObj lcond)
+            {
+                var branchop = lcond.Forms[0].Print();
+                if (branchop == "b")
+                {
+                    cond = new TokenObj(PreTested ? "t" : "nil");
+                }
+                else
+                {
+                    bool addnot = (branchop == "b-if") ^ PreTested;
+                    cond = lcond.Forms[2];
+                    if (addnot)
+                    {
+                        cond = new ListObj(new TokenObj("not"), cond);
+                    }
+                }
+            }
+            fout += istr + "(" + (PreTested ? "while" : "until") + " " + cond.Print() + "\n";
+            Header.PrintLispOut(indent + 2, ref fout);
+            fout += istr + "  )\n";
+
+            // assumes no infinite loop lol.
+            foreach (var n in next)
+            {
+                n.PrintLispOut(indent, ref fout);
+            }
         }
     }
 }
