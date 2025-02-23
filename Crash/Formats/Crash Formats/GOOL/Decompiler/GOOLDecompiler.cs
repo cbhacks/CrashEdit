@@ -464,12 +464,10 @@ namespace CrashEdit.Crash
                     loop.Parent?.Children.Add(loop);
                 }
 
-                List<GOOLDecompBlock> loopblocks = [];
                 foreach (var loop in func.LoopList)
                 {
                     var do_while = new GOOLDecompBlockDoWhile("dowhile_" + l++ + "_" + loop.BlockList[0].begin, loop, loop.BlockList[^1]);
                     blocks.Add(do_while);
-                    loopblocks.Add(do_while);
                     do_while.StructureBreakContinue();
                     do_while.GenerateCFG();
                     do_while.GenerateDominationTree();
