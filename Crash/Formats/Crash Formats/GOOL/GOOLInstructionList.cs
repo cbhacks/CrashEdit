@@ -55,8 +55,8 @@ namespace CrashEdit.Crash.GOOLIns
         public virtual GObj DecompileToLisp(GOOLStatement statement, ref int i)
         {
             var ins = statement.Instructions[i];
-            Console.WriteLine("DecompileToLisp unimplemented for " + ins.GetName());
-            return new ListObj();
+            Console.WriteLine("DecompileToLisp unimplemented for " + ins.GetName() + " " + ins.Arguments + (ins.GetStackPush() > 0 ? " (fix immediately as this pushes to stack)" : ""));
+            return new ListObj([new TokenObj("NYI-" + ins.GetName())]);
         }
 
         protected static GObj DecompileArgStandard(GOOLInstruction ins, char a, GOOLStatement statement, ref int i)
@@ -153,6 +153,10 @@ namespace CrashEdit.Crash.GOOLIns
         public override GObj DecompileToLisp(GOOLStatement statement, ref int i)
         {
             var ins = statement.Instructions[i];
+            if (statement.Type == GoolStatementType.LetEnd && ins.IsStackRef('S') && ins.GetName() == "SETF")
+            {
+                return new ListObj([new TokenObj("setf"), ins.ArgToLisp('D'), new TokenObj("stack-pop-temp")]);
+            }
             GObj s = DecompileArgStandard(ins, 'S', statement, ref i);
             if (ins.IsStackRef('D'))
             {
@@ -796,6 +800,8 @@ namespace CrashEdit.Crash.GOOLIns
                 case 13:
                 case 14:
                     return 1;
+                case 11:
+                    return (ins.Args['S'].Value >= 1 && ins.Args['S'].Value <= 3) ? 1 : 0;
             }
             return 0;
         }
@@ -1130,6 +1136,11 @@ namespace CrashEdit.Crash.GOOLIns
             var res = new ListObj(new TokenObj("b"), new NumberObj(o));
             if(v != 0)
             {
+                if (o != 0)
+                {
+                    int zzzzz = 999 + 1;
+                    Console.Write("");
+                }
                 res.Forms.Add(new TokenObj(":pop"));
                 res.Forms.Add(new NumberObj(v));
             }
@@ -1324,7 +1335,7 @@ namespace CrashEdit.Crash.GOOLIns
             return "CFL";
         }
 
-        public override string GetFormat() => "IIIIIIIIII VVVV (RRRRRR) CC TT";
+        public override string GetFormat() => "<IIIIIIIIII> VVVV (RRRRRR) CC TT";
         public override string GetComment(GOOLInstruction ins)
         {
             int v = ins.Args['V'].Value;
@@ -1440,6 +1451,19 @@ namespace CrashEdit.Crash.GOOLIns
     {
         public override string GetName(GOOLInstruction ins) => "VEC";
         public override string GetFormat() => "[VVVVVVVVVVVV] AAA BBB TTT (LLL)";
+
+        public override int StackPop(GOOLInstruction ins)
+        {
+            int val = 0;
+            switch (ins.Args['T'].Value)
+            {
+                case 4:
+                case 5:
+                    val = 2; break;
+            }
+            return base.StackPop(ins) + val;
+        }
+
         public override string GetComment(GOOLInstruction ins) => string.Empty;
     }
 

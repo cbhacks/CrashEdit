@@ -1,4 +1,6 @@
-﻿namespace CrashEdit.Crash
+﻿using System;
+
+namespace CrashEdit.Crash
 {
     public interface IGOOLDecompBlockIterator
     {
@@ -145,6 +147,83 @@
             polist.Sort((a, b) => a.PostOrderID - b.PostOrderID);
             return polist;
         }
+
+        public void StructureLets(GOOLDecompiler decompiler);
+        public void StructureLetsInt(GOOLDecompiler decompiler, List<GOOLDecompBlock> polist)
+        {
+            for (int i = 0; i < polist.Count; ++i)
+            {
+                var block = polist[i];
+                if (block.Type == GoolBranchType.StackPop || block.IsLetEnd())
+                {
+                    GOOLDecompBlock let_end = block;
+                    GOOLDecompBlock let_begin = null;
+                    List<GOOLDecompBlock> let_region = new();
+                    int stack_depth = block.IsLetEnd() ? 1 : block.stackpop;
+                    for (int j = i + 1; j < polist.Count; ++j)
+                    {
+                        var region_block = polist[j];
+                        if (region_block.IsLetBegin())
+                        {
+                            stack_depth -= 1;
+                        }
+                        else if (region_block.IsLetEnd())
+                        {
+                            stack_depth += 1;
+                        }
+                        else if (region_block.Type == GoolBranchType.StackPop)
+                        {
+                            stack_depth += region_block.stackpop;
+                        }
+
+                        if (stack_depth == 0)
+                        {
+                            let_begin = region_block;
+                            break;
+                        }
+                        else
+                        {
+                            let_region.Insert(0, region_block);
+                        }
+                    }
+                    if (let_begin != null)
+                    {
+                        // potentially valid region. check if it is a SESE region
+                        if (let_region.Any(x => !let_begin.Dominates(x)))
+                        {
+                            Console.WriteLine("Failed to create region for let: entry did not dominate all nodes");
+                        }
+                        else if (let_region.Any(x => !let_end.PostDominates(x)))
+                        {
+                            Console.WriteLine("Failed to create region for let: exit did not postdominate all nodes");
+                        }
+                        else if (let_region.Any(x => x.prev.Any(p => p != let_begin && !let_region.Contains(p)) || x.next.Any(n => n != let_end && !let_region.Contains(n))))
+                        {
+                            Console.WriteLine("Failed to create region for let: some node escapes the region");
+                        }
+                        else
+                        {
+                            // valid region! we can create it now.
+                            var new_region = new GOOLDecompBlockRegion($"let_{let_begin.Name}_{let_end.Name}", let_begin, let_end, let_region);
+                            decompiler.blocks.Add(new_region);
+                            new_region.GenerateCFG();
+                            new_region.GenerateDominationTree();
+                            new_region.StructureLets(decompiler);
+                            // our graph was changed. re-generate it and try to structure more!
+                            GenerateCFG();
+                            decompiler.MakeBlockPrevLists();
+                            GenerateDominationTree();
+                            StructureLets(decompiler);
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Failed to create region for let");
+                    }
+                }
+            }
+        }
     }
 
     public class GOOLDecompFunction(string name) : IGOOLDecompBlockIterator
@@ -157,6 +236,8 @@
 
         public GOOLDecompBlock start;
 
+        public bool HasError { get; set; }
+
         public void GenerateCFG()
         {
             (this as IGOOLDecompBlockIterator).GenerateCFGInt(start);
@@ -165,6 +246,11 @@
         public void GenerateDominationTree()
         {
             (this as IGOOLDecompBlockIterator).GenerateDominationTreeInt();
+        }
+
+        public void StructureLets(GOOLDecompiler decompiler)
+        {
+            (this as IGOOLDecompBlockIterator).StructureLetsInt(decompiler, (this as IGOOLDecompBlockIterator).AsPostOrderList());
         }
     }
 }

@@ -44,7 +44,9 @@ namespace CrashEdit.Crash
         public int ID => Value >> 24 & 0xFF;
         public IDictionary<char, GOOLArgument> Args => args;
 
-        public GOOLInstruction(int value, GOOLEntry gool, Type? type)
+        public bool DecompFakeInstruction { get; private set; }
+
+        public GOOLInstruction(int value, GOOLEntry gool, Type? type, bool fake = false)
         {
             opcode = type != null ? (GOOLInsOpcode)Activator.CreateInstance(type)! : null;
             GOOL = gool;
@@ -52,6 +54,7 @@ namespace CrashEdit.Crash
             args = [];
             if (this is not MIPSInstruction)
                 LoadFormat();
+            DecompFakeInstruction = fake;
         }
 
         private void LoadFormat()

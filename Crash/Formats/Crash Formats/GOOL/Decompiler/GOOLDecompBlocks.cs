@@ -1,4 +1,7 @@
-﻿namespace CrashEdit.Crash
+﻿using System;
+using System.Runtime.InteropServices;
+
+namespace CrashEdit.Crash
 {
     public enum GoolBranchType
     {
@@ -9,7 +12,8 @@
         Continue,
         ContinueIf,
         Break,
-        BreakIf
+        BreakIf,
+        StackPop
     }
 
     public class GOOLDecompBlock(string name)
@@ -29,15 +33,28 @@
         public GOOLDecompBlock ImmDom { get; set; } = null;
         public GOOLDecompBlock ImmPostDom { get; set; } = null;
 
+        public int stackpop = -1;
+
         public int begin;
         public int end;
 
-        public string name = name;
+        public string Name { get; private set; } = name;
+
+        public string GetFullName() => Name + $" ({begin} ~ {end})";
+
+        public void PatchNameTransToEnter()
+        {
+            Name = Name.Replace("trans", "enter");
+        }
 
         public bool Dominates(GOOLDecompBlock other) => other.Dominators[DomID];
         public bool PostDominates(GOOLDecompBlock other) => other.PostDominators[DomID];
         public bool ImmediateDominates(GOOLDecompBlock other) => other.ImmDom == this;
         public bool ImmediatePostDominates(GOOLDecompBlock other) => other.ImmPostDom == this;
+
+        public bool IsLetEnd() => Statements.Count == 1 && Statements[0].Type == GoolStatementType.LetEnd;
+        public bool IsLetBegin() => Statements.Count == 1 && Statements[0].Type == GoolStatementType.LetBegin;
+        public bool IsLetBlock() => IsLetEnd() || IsLetBegin();
 
         public void VisitForward(Action<GOOLDecompBlock>? preVisit = null, Action<GOOLDecompBlock>? postVisit = null, HashSet<GOOLDecompBlock> visited = null)
         {
@@ -56,6 +73,7 @@
             postVisit?.Invoke(this);
         }
 
+        // Generate the statements for the block out of its instructions.
         public void GenerateStatements()
         {
             Statements.Clear();
@@ -66,12 +84,40 @@
                 var ins = Instructions[i];
                 cursment ??= new GOOLStatement();
 
-                if (cursment.Instructions.Count != 0)
+                int push = ins.GetStackPush();
+                int pop = ins.GetStackPop();
+                if (cursment.Instructions.Count == 0 && pop == 0 && push != 0)
                 {
-                    stackwant -= ins.GetStackPush();
+                    // this is pushing to stack, i.e. defining a local var
+                    Console.WriteLine("detected stack push");
+                    cursment.Type = GoolStatementType.LetBegin;
+                    cursment.Instructions.Add(ins);
+                    Statements.Insert(0, cursment);
+                    cursment = null;
+                    stackwant = 0;
+                    continue;
+                }
+                else if (cursment.Instructions.Count == 1 && pop > 0 && push == 0)
+                {
+                    // ^ maybe should be == 1 and not > 0
+                    Console.WriteLine("detected stack pop");
+                    cursment.Type = GoolStatementType.LetEnd;
+                    ++i; // note: we do not add this instruction, because the instruction we want is already there. instead we finish the stament and try this instruction again.
+                    Statements.Insert(0, cursment);
+                    cursment = null;
+                    stackwant = 0;
+                    continue;
                 }
 
-                stackwant += ins.GetStackPop();
+                if (cursment.Instructions.Count != 0)
+                {
+                    stackwant -= push;
+                }
+
+                if (stackpop == -1 || Statements.Count > 0)
+                {
+                    stackwant += pop;
+                }
 
                 cursment.Instructions.Add(ins);
 
@@ -85,7 +131,7 @@
 
             if (cursment != null)
             {
-                Console.WriteLine($"Failed to build statements for block {name}: did not pop {stackwant} values!");
+                Console.WriteLine($"Failed to build statements for block {Name}: did not pop {stackwant} values!");
             }
 
             foreach (var statement in Statements)
@@ -121,9 +167,13 @@
         private string GetNodeColor()
         {
             if (this is GOOLDecompBlockDoWhile) return "red";
+            if (this is GOOLDecompBlockRegion) return "cyan";
             switch (Type)
             {
-                default: return "lightgray";
+                default:
+                    if (IsLetEnd()) return "green2";
+                    if (IsLetBegin()) return "cornflowerblue"; 
+                    return "lightgray";
                 case GoolBranchType.If: return "yellow";
                 case GoolBranchType.Goto: return "lightblue";
                 case GoolBranchType.Return: return "orange";
@@ -131,6 +181,7 @@
                 case GoolBranchType.ContinueIf: return "pink";
                 case GoolBranchType.Break: return "purple";
                 case GoolBranchType.BreakIf: return "indigo";
+                case GoolBranchType.StackPop: return "green1";
             }
         }
 
@@ -139,7 +190,7 @@
             string debug = "";
             VisitForward(preVisit: (block) =>
             {
-                debug += $"  {block.name} [ fillcolor={block.GetNodeColor()} label=\"{block.name}\\n";
+                debug += $"  {block.Name} [ fillcolor={block.GetNodeColor()} label=\"{block.GetFullName()}\\n{block.DomID} | {block.PostOrderID}";
                 foreach (var ins in block.Instructions)
                 {
                     //debug += string.Format("{0,-6} {1,-28}\\n", ins.GetName(), ins.Arguments);
@@ -147,16 +198,15 @@
                 debug += $"\" ];\n";
                 foreach (var next in block.next)
                 {
-                    debug += $"  {block.name} -> {next.name} [color={(next.begin <= block.begin ? "red" : "black")}]\n";
+                    debug += $"  {block.Name} -> {next.Name} [color={(next.begin <= block.begin ? "red" : "black")}]\n";
                 }
-                return;
                 if (block.ImmPostDom != null)
                 {
-                    debug += $"  {block.ImmPostDom.name} -> {block.name} [color=green]\n";
+                    debug += $"  {block.ImmPostDom.Name} -> {block.Name} [color=green]\n";
                 }
                 if (block.ImmDom != null)
                 {
-                    debug += $"  {block.ImmDom.name} -> {block.name} [color=orange]\n";
+                    debug += $"  {block.ImmDom.Name} -> {block.Name} [color=orange]\n";
                 }
             });
             return debug;
@@ -179,8 +229,8 @@
 
     public class GOOLDecompBlockContainer : GOOLDecompBlock, IGOOLDecompBlockIterator
     {
-        public GOOLDecompBlock Header { get; }
-        public GOOLDecompBlock Tail { get; }
+        public GOOLDecompBlock Header { get; set; }
+        public GOOLDecompBlock Tail { get; set; }
         public List<GOOLDecompBlock> BlockList { get; } = new();
 
         public GOOLDecompBlockContainer(string name, GOOLDecompBlock header, GOOLDecompBlock tail, GOOLDecompBlock posttail) : base(name)
@@ -201,6 +251,11 @@
             (this as IGOOLDecompBlockIterator).GenerateDominationTreeInt();
         }
 
+        public void StructureLets(GOOLDecompiler decompiler)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void PrintLispOut(int indent, ref string fout)
         {
             Header.PrintLispOut(indent, ref fout);
@@ -214,7 +269,7 @@
 
         public bool HasElse => Clauses.Length == 2;
 
-        public GOOLDecompBlock Header { get; }
+        public GOOLDecompBlock Header { get; set; }
         public GOOLDecompBlock[] Clauses { get; }
 
         public GOOLDecompBlockIf(string name, GOOLDecompBlock header, GOOLDecompBlock follow, params GOOLDecompBlock[] clauses) : base(name)
@@ -377,6 +432,11 @@
             (this as IGOOLDecompBlockIterator).GenerateDominationTreeInt();
         }
 
+        public void StructureLets(GOOLDecompiler decompiler)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void PrintLispOut(int indent, ref string fout)
         {
             var istr = new string(' ', indent);
@@ -417,6 +477,51 @@
             {
                 n.PrintLispOut(indent, ref fout);
             }
+        }
+    }
+
+    public class GOOLDecompBlockRegion : GOOLDecompBlock, IGOOLDecompBlockIterator
+    {
+        public GOOLDecompBlock Entry { get; }
+        public GOOLDecompBlock Exit { get; }
+        public List<GOOLDecompBlock> Region { get; } = null;
+        public List<GOOLDecompBlock> BlockList { get; } = new();
+
+        public GOOLDecompBlockRegion(string name, GOOLDecompBlock entry, GOOLDecompBlock exit, IEnumerable<GOOLDecompBlock> region) : base(name)
+        {
+            Entry = entry;
+            Exit = exit;
+            Region = new(region);
+            begin = Math.Min(Math.Min(Region.Min(x => x.begin), Entry.begin), Exit.begin);
+            end = Math.Max(Math.Max(Region.Max(x => x.end), Entry.end), Exit.end);
+            next.AddRange(Exit.next);
+            // disconnect entry and exit node from outside region. patch things to connect to the region instead!
+            foreach (var p in Entry.prev)
+            {
+                for (int i = 0; i < p.next.Count; ++i)
+                {
+                    if (p.next[i] == Entry) p.next[i] = this;
+                }
+            }
+            Exit.next.Clear();
+        }
+
+        public void GenerateCFG()
+        {
+            (this as IGOOLDecompBlockIterator).GenerateCFGInt(Entry);
+        }
+
+        public void GenerateDominationTree()
+        {
+            (this as IGOOLDecompBlockIterator).GenerateDominationTreeInt();
+        }
+
+        public void StructureLets(GOOLDecompiler decompiler)
+        {
+            var polist = (this as IGOOLDecompBlockIterator).AsPostOrderList();
+            polist.Remove(Entry);
+            polist.Remove(Exit);
+            (this as IGOOLDecompBlockIterator).StructureLetsInt(decompiler, polist);
         }
     }
 }
