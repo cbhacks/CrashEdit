@@ -1,7 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
-
-namespace CrashEdit.Crash
+﻿namespace CrashEdit.Crash
 {
     public enum GoolBranchType
     {
@@ -168,6 +165,7 @@ namespace CrashEdit.Crash
         {
             if (this is GOOLDecompBlockDoWhile) return "red";
             if (this is GOOLDecompBlockRegion) return "cyan";
+            if (this is GOOLDecompBlockIf) return "deeppink";
             switch (Type)
             {
                 default:
@@ -227,18 +225,50 @@ namespace CrashEdit.Crash
         }
     }
 
-    public class GOOLDecompBlockContainer : GOOLDecompBlock, IGOOLDecompBlockIterator
+    public class GOOLDecompBlockIf : GOOLDecompBlock, IGOOLDecompBlockIterator
     {
-        public GOOLDecompBlock Header { get; set; }
-        public GOOLDecompBlock Tail { get; set; }
+        // the branch condition
+        public GOOLStatement Condition { get; }
+
+        public GOOLDecompBlock Header { get; }
+        public GOOLDecompBlock TrueCase { get; }
+        public GOOLDecompBlock? ElseCase { get; }
+
         public List<GOOLDecompBlock> BlockList { get; } = new();
 
-        public GOOLDecompBlockContainer(string name, GOOLDecompBlock header, GOOLDecompBlock tail, GOOLDecompBlock posttail) : base(name)
+        public GOOLDecompBlockIf(string name, GOOLDecompBlock header, GOOLDecompBlock follow, GOOLDecompBlock true_case, GOOLDecompBlock? else_case) : base(name)
         {
             Header = header;
-            Tail = tail;
+            TrueCase = true_case;
+            ElseCase = else_case;
 
-            SpliceNodeInterval(header, tail, header, posttail);
+            begin = header.begin;
+            end = follow.begin;
+
+            Condition = Header.Statements.Last();
+            Header.Statements.RemoveLast();
+
+            var true_tail = follow.prev.Find(TrueCase.Dominates)!;
+            true_tail.next.Clear();
+            if (ElseCase != null)
+            {
+                var else_tail = follow.prev.Find(ElseCase.Dominates)!;
+                else_tail.next.Clear();
+                true_tail.Statements.RemoveLast();
+            }
+            else
+            {
+                Header.next.Remove(follow);
+            }
+
+            foreach (var p in Header.prev)
+            {
+                for (int i = 0; i < p.next.Count; ++i)
+                {
+                    if (p.next[i] == Header) p.next[i] = this;
+                }
+            }
+            next.Add(follow);
         }
 
         public void GenerateCFG()
@@ -263,52 +293,6 @@ namespace CrashEdit.Crash
 
         public override void PrintLispOut(int indent, ref string fout)
         {
-            Header.PrintLispOut(indent, ref fout);
-        }
-    }
-
-    public class GOOLDecompBlockIf : GOOLDecompBlock
-    {
-        new public List<GOOLInstruction> Instructions => Header.Instructions;
-        new public List<GOOLStatement> Statements => Header.Statements;
-
-        public bool HasElse => Clauses.Length == 2;
-
-        public GOOLDecompBlock Header { get; set; }
-        public GOOLDecompBlock[] Clauses { get; }
-
-        public GOOLDecompBlockIf(string name, GOOLDecompBlock header, GOOLDecompBlock follow, params GOOLDecompBlock[] clauses) : base(name)
-        {
-            Header = header;
-
-            Clauses = clauses;
-
-            Header.next.Clear();
-            foreach (GOOLDecompBlockContainer clause in clauses)
-            {
-                if (clause.next.Count == 1 && clause.next[0] == follow && clause.Tail.Statements.Count > 0 && clause.Tail.Statements.Last().LispOut.Print().StartsWith("(b "))
-                {
-                    clause.Tail.Statements.RemoveLast();
-                }
-                Header.next.Add(clause);
-                follow.prev.Remove(clause);
-                clause.next.Clear();
-                clause.prev.Clear();
-            }
-            follow.prev.Remove(Header);
-            follow.prev.Add(this);
-            next.Add(follow);
-            foreach (var p in Header.prev)
-            {
-                p.next.Remove(Header);
-                p.next.Add(this);
-                prev.Add(p);
-            }
-            Header.prev.Clear();
-        }
-
-        public override void PrintLispOut(int indent, ref string fout)
-        {
             var istr = new string(' ', indent);
             var stmts = Header.Statements;
             for (int i = 0; i < stmts.Count - 1; ++i)
@@ -316,8 +300,8 @@ namespace CrashEdit.Crash
                 var stmt = stmts[i];
                 fout += istr + stmt.LispOut.Print() + "\n";
             }
-            var stmtif = stmts[^1].LispOut as ListObj;
-            if (!HasElse)
+            var stmtif = Condition.LispOut as ListObj;
+            if (ElseCase == null)
             {
                 if (stmtif != null && stmtif.Forms.Count == 3)
                 {
@@ -325,13 +309,13 @@ namespace CrashEdit.Crash
                     if (stmtif.Forms[0].Print() == "b-unless")
                     {
                         fout += istr + "(when " + cond.Print() + "\n";
-                        Clauses[0].PrintLispOut(indent + 2, ref fout);
+                        TrueCase.PrintLispOut(indent + 2, ref fout);
                         fout += istr + "  )\n";
                     }
                     else if (stmtif.Forms[0].Print() == "b-if")
                     {
                         fout += istr + "(unless " + cond.Print() + "\n";
-                        Clauses[0].PrintLispOut(indent + 2, ref fout);
+                        TrueCase.PrintLispOut(indent + 2, ref fout);
                         fout += istr + "  )\n";
                     }
                 }
@@ -347,10 +331,10 @@ namespace CrashEdit.Crash
                     }
                     fout += istr + "(cond\n";
                     fout += istr + "  (" + cond.Print() + "\n";
-                    Clauses[0].PrintLispOut(indent + 3, ref fout);
+                    TrueCase.PrintLispOut(indent + 3, ref fout);
                     fout += istr + "   )\n";
                     fout += istr + "  (else\n";
-                    Clauses[1].PrintLispOut(indent + 3, ref fout);
+                    ElseCase.PrintLispOut(indent + 3, ref fout);
                     fout += istr + "   )\n";
                     fout += istr + "  )\n";
                 }
@@ -368,26 +352,31 @@ namespace CrashEdit.Crash
         // the target of (continue)
         public GOOLDecompBlock? Continue { get; }
         // the target of (break)
-        public GOOLDecompBlock Break => Tail.ImmPostDom;
+        public GOOLDecompBlock Break => ImmPostDom;
         // the branch condition
         public GOOLStatement Condition { get; }
         public bool PreTested => PreBranch != null;
         public GOOLDecompBlock? PreBranch { get; }
         public GOOLDecompBlock Header { get; }
         public GOOLDecompBlock Tail { get; }
-        public GOOLDecompBlock Entry => PreBranch ?? Header;
+        public GOOLDecompBlock Entry { get; }
+        public GOOLDecompBlock Exit { get; }
         public List<GOOLDecompBlock> BlockList { get; } = new();
 
         public GOOLDecompBlockDoWhile(string name, GOOLDecompBlock header, GOOLDecompBlock tail, GOOLDecompBlock? prebranch) : base(name)
         {
+            Entry = new GOOLDecompBlock(name + "_entry");
+            Exit = new GOOLDecompBlock(name + "_exit");
+
             Header = header;
             Tail = tail;
             PreBranch = prebranch;
             Condition = tail.Statements[^1];
             tail.Statements.RemoveLast();
 
-            begin = Entry.begin;
-            end = Tail.end;
+            var entry_block = prebranch ?? header;
+            begin = entry_block.begin;
+            end = tail.end;
 
             // if there are statements in the tail that aren't just the branch condition, we did not generate a block for a continue statement, so there must not be one!
             if (tail.Statements.Count == 0)
@@ -400,8 +389,7 @@ namespace CrashEdit.Crash
             }
 
             // we set up the branch successors consistently, so 1 is always the branchless one
-            next.Add(Tail.next[1]);
-            var entry_block = Entry;
+            next.Add(tail.next[1]);
             foreach (var p in entry_block.prev)
             {
                 if (entry_block.Dominates(p)) continue;
@@ -410,7 +398,13 @@ namespace CrashEdit.Crash
                     if (p.next[i] == entry_block) p.next[i] = this;
                 }
             }
-            Tail.next.RemoveAt(1);
+
+            Entry.begin = begin;
+            Entry.end = begin;
+            Exit.begin = end;
+            Exit.end = end;
+            Entry.next.Add(entry_block);
+            tail.next[1] = Exit;
         }
 
         public void StructureBreakContinue()

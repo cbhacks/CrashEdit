@@ -235,7 +235,7 @@ namespace CrashEdit.Crash
                 // > Then, since to reach the (tail) block execution must go through its dominator,
                 // > we can traverse the predecessors of each block starting from the tail, until we reach the header block
 
-                // this can probably be optimized to just grab a range using a postordering list instead of this stack approach
+                // this can probably be optimized to just grab a range using a postordering list instead of this stack approach?
                 Stack<GOOLDecompBlock> workList = new();
 
                 // note: in pretested loops, header is actually the tail and tail is the pre-tail block. the real header is pointed to by the tail.
@@ -348,7 +348,6 @@ namespace CrashEdit.Crash
                 // regenerate CFG since we changed control flow
                 GenerateCFG();
                 GenerateDominationTree();
-                //StructureIfElse(do_while);
             }
         }
     }
