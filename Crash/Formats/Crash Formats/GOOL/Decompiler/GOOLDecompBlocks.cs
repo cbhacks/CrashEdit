@@ -198,11 +198,11 @@ namespace CrashEdit.Crash
                 debug += $"\" ];\n";
                 foreach (var next in block.next)
                 {
-                    debug += $"  {block.Name} -> {next.Name} [color={(next.begin <= block.begin ? "red" : "black")}]\n";
+                    debug += $"  {block.Name} -> {next.Name} [color={(next.begin < block.end ? "red" : "black")}]\n";
                 }
                 if (block.ImmPostDom != null)
                 {
-                    debug += $"  {block.ImmPostDom.Name} -> {block.Name} [color=green]\n";
+                    //debug += $"  {block.ImmPostDom.Name} -> {block.Name} [color=green]\n";
                 }
                 if (block.ImmDom != null)
                 {
@@ -252,6 +252,11 @@ namespace CrashEdit.Crash
         }
 
         public void StructureLets(GOOLDecompiler decompiler)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void StructureLoops(GOOLDecompiler decompiler)
         {
             throw new NotImplementedException();
         }
@@ -360,53 +365,57 @@ namespace CrashEdit.Crash
 
     public class GOOLDecompBlockDoWhile : GOOLDecompBlock, IGOOLDecompBlockIterator
     {
-        public GOOLDecompLoop Loop { get; set; }
         // the target of (continue)
-        public GOOLDecompBlock? Continue { get; set; }
+        public GOOLDecompBlock? Continue { get; }
         // the target of (break)
-        public GOOLDecompBlock Break { get; set; }
+        public GOOLDecompBlock Break => Tail.ImmPostDom;
         // the branch condition
-        public GOOLStatement Condition { get; set; }
+        public GOOLStatement Condition { get; }
         public bool PreTested => PreBranch != null;
         public GOOLDecompBlock? PreBranch { get; }
-        public GOOLDecompBlock Header => Loop.Header;
-        public GOOLDecompBlock Tail => Loop.Tail;
-        public List<GOOLDecompBlock> BlockList => Loop.BlockList;
+        public GOOLDecompBlock Header { get; }
+        public GOOLDecompBlock Tail { get; }
+        public GOOLDecompBlock Entry => PreBranch ?? Header;
+        public List<GOOLDecompBlock> BlockList { get; } = new();
 
-        public GOOLDecompBlockDoWhile(string name, GOOLDecompLoop loop, GOOLDecompBlock cont) : base(name)
+        public GOOLDecompBlockDoWhile(string name, GOOLDecompBlock header, GOOLDecompBlock tail, GOOLDecompBlock? prebranch) : base(name)
         {
-            Loop = loop;
-            Continue = cont;
-            Break = cont.ImmPostDom;
-            Condition = cont.Statements[^1];
-            PreBranch = loop.PreBranch;
-            cont.Statements.RemoveLast();
+            Header = header;
+            Tail = tail;
+            PreBranch = prebranch;
+            Condition = tail.Statements[^1];
+            tail.Statements.RemoveLast();
 
-            begin = Header.begin;
+            begin = Entry.begin;
             end = Tail.end;
 
-            if (Continue.Statements.Count != 0)
+            // if there are statements in the tail that aren't just the branch condition, we did not generate a block for a continue statement, so there must not be one!
+            if (tail.Statements.Count == 0)
             {
-                // we did not generate a block for a continue statement, so there must not be one!
-                Continue = null;
-            }
-
-            // note: you MUST regenerate the CFG and domination trees after this!
-            if (loop.PreBranch == null)
-            {
-                SpliceNodeInterval(Header, Tail, Header, Break);
+                Continue = tail;
             }
             else
             {
-                SpliceNodeInterval(Header, Tail, loop.PreBranch, Break);
-                // we're gonna keep the prebranch for now because it may contain real code before the branch
-                // in the future we kick it out of the interval and turn it into a suspiciously branchless block.
-                // that way it can be output as 'just code' before the loop!
+                Continue = null;
             }
+
+            // we set up the branch successors consistently, so 1 is always the branchless one
+            next.Add(Tail.next[1]);
+            var entry_block = Entry;
+            foreach (var p in entry_block.prev)
+            {
+                if (entry_block.Dominates(p)) continue;
+                for (int i = 0; i < p.next.Count; ++i)
+                {
+                    if (p.next[i] == entry_block) p.next[i] = this;
+                }
+            }
+            Tail.next.RemoveAt(1);
         }
 
         public void StructureBreakContinue()
         {
+            // we do not use Entry here because we never want to check the prebranch
             Header.VisitForward((block) =>
             {
                 if (block == Continue || block == Break || block.Type == GoolBranchType.None)
@@ -424,7 +433,7 @@ namespace CrashEdit.Crash
 
         public void GenerateCFG()
         {
-            (this as IGOOLDecompBlockIterator).GenerateCFGInt(Header);
+            (this as IGOOLDecompBlockIterator).GenerateCFGInt(Entry);
         }
 
         public void GenerateDominationTree()
@@ -437,12 +446,17 @@ namespace CrashEdit.Crash
             throw new NotImplementedException();
         }
 
+        public void StructureLoops(GOOLDecompiler decompiler)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void PrintLispOut(int indent, ref string fout)
         {
             var istr = new string(' ', indent);
             if (PreTested)
             {
-                var stmts = Loop.PreBranch.Statements;
+                var stmts = PreBranch!.Statements;
                 for (int i = 0; i < stmts.Count - 1; ++i)
                 {
                     var stmt = stmts[i];
@@ -484,16 +498,18 @@ namespace CrashEdit.Crash
     {
         public GOOLDecompBlock Entry { get; }
         public GOOLDecompBlock Exit { get; }
-        public List<GOOLDecompBlock> Region { get; } = null;
         public List<GOOLDecompBlock> BlockList { get; } = new();
 
         public GOOLDecompBlockRegion(string name, GOOLDecompBlock entry, GOOLDecompBlock exit, IEnumerable<GOOLDecompBlock> region) : base(name)
         {
             Entry = entry;
             Exit = exit;
-            Region = new(region);
-            begin = Math.Min(Math.Min(Region.Min(x => x.begin), Entry.begin), Exit.begin);
-            end = Math.Max(Math.Max(Region.Max(x => x.end), Entry.end), Exit.end);
+            begin = Math.Min(Math.Min(region.Min(x => x.begin), Entry.begin), Exit.begin);
+            end = Math.Max(Math.Max(region.Max(x => x.end), Entry.end), Exit.end);
+            if (begin != Entry.begin || end != Exit.end)
+            {
+                Console.WriteLine("mismatch");
+            }
             next.AddRange(Exit.next);
             // disconnect entry and exit node from outside region. patch things to connect to the region instead!
             foreach (var p in Entry.prev)
@@ -522,6 +538,14 @@ namespace CrashEdit.Crash
             polist.Remove(Entry);
             polist.Remove(Exit);
             (this as IGOOLDecompBlockIterator).StructureLetsInt(decompiler, polist);
+        }
+
+        public void StructureLoops(GOOLDecompiler decompiler)
+        {
+            var polist = (this as IGOOLDecompBlockIterator).AsPostOrderList();
+            polist.Remove(Entry);
+            polist.Remove(Exit);
+            (this as IGOOLDecompBlockIterator).StructureLoopsInt(decompiler, polist);
         }
     }
 }

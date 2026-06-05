@@ -54,52 +54,54 @@ namespace CrashEdit.Crash
 
         private void ReplaceBlock(GOOLDecompBlock dst, GOOLDecompBlock src)
         {
-            foreach (var block in blocks)
-            {
-                if (block == src || block == dst)
-                    continue;
-                for (int i = 0; i < block.prev.Count; ++i)
-                {
-                    if (src == block.prev[i]) block.prev[i] = dst;
-                }
-                for (int i = 0; i < block.next.Count; ++i)
-                {
-                    if (src == block.next[i]) block.next[i] = dst;
-                }
-                if (block is GOOLDecompBlockDoWhile dw)
-                {
-                    if (src == dw.Break) dw.Break = dst;
-                    if (src == dw.Continue) dw.Continue = dst;
-                    if (src == dw.Header) dw.Loop.Header = dst;
-                    if (src == dw.Tail) dw.Loop.Tail = dst;
-                    for (int i = 0; i < dw.BlockList.Count; ++i)
-                    {
-                        if (src == dw.BlockList[i]) dw.BlockList[i] = dst;
-                    }
-                }
-                else if (block is GOOLDecompBlockIf cond)
-                {
-                    if (src == cond.Header) cond.Header = dst;
-                    for (int i = 0; i < cond.Clauses.Length; ++i)
-                    {
-                        if (src == cond.Clauses[i]) cond.Clauses[i] = dst;
-                    }
-                }
-                else if (block is GOOLDecompBlockContainer container)
-                {
-                    if (src == container.Header) container.Header = dst;
-                    if (src == container.Tail) container.Tail = dst;
-                    for (int i = 0; i < container.BlockList.Count; ++i)
-                    {
-                        if (src == container.BlockList[i]) container.BlockList[i] = dst;
-                    }
-                }
-            }
+            //foreach (var block in blocks)
+            //{
+            //    if (block == src || block == dst)
+            //        continue;
+            //    for (int i = 0; i < block.prev.Count; ++i)
+            //    {
+            //        if (src == block.prev[i]) block.prev[i] = dst;
+            //    }
+            //    for (int i = 0; i < block.next.Count; ++i)
+            //    {
+            //        if (src == block.next[i]) block.next[i] = dst;
+            //    }
+            //    if (block is GOOLDecompBlockDoWhile dw)
+            //    {
+            //        if (src == dw.Break) dw.Break = dst;
+            //        if (src == dw.Continue) dw.Continue = dst;
+            //        if (src == dw.Header) dw.Loop.Header = dst;
+            //        if (src == dw.Tail) dw.Loop.Tail = dst;
+            //        for (int i = 0; i < dw.BlockList.Count; ++i)
+            //        {
+            //            if (src == dw.BlockList[i]) dw.BlockList[i] = dst;
+            //        }
+            //    }
+            //    else if (block is GOOLDecompBlockIf cond)
+            //    {
+            //        if (src == cond.Header) cond.Header = dst;
+            //        for (int i = 0; i < cond.Clauses.Length; ++i)
+            //        {
+            //            if (src == cond.Clauses[i]) cond.Clauses[i] = dst;
+            //        }
+            //    }
+            //    else if (block is GOOLDecompBlockContainer container)
+            //    {
+            //        if (src == container.Header) container.Header = dst;
+            //        if (src == container.Tail) container.Tail = dst;
+            //        for (int i = 0; i < container.BlockList.Count; ++i)
+            //        {
+            //            if (src == container.BlockList[i]) container.BlockList[i] = dst;
+            //        }
+            //    }
+            //}
         }
 
-        // Add a function to the decompiler. Automatically creates an entry point block that has no statements.
-        private GOOLDecompFunction AddFunc(string name, int offset, bool trans = false)
+        // Add a function to the decompiler, if one does not already exist at that offset.
+        // Automatically creates an entry point block that has no statements.
+        private GOOLDecompFunction? AddFuncIfNoExistAt(string name, int offset, bool trans = false)
         {
+            if (funcs.Any(f => f.Offset == offset)) return null;
             GOOLDecompFunction func = new(name) { Offset = offset, Trans = trans };
             func.start = AddBlockNoInstructions("entry_" + name);
             func.start.Type = GoolBranchType.None;
@@ -124,45 +126,6 @@ namespace CrashEdit.Crash
         private GOOLDecompFunction? FindFuncWithBlock(GOOLDecompBlock block)
         {
             return funcs.Find((func) => func.BlockList.Contains(block));
-        }
-
-        public void MakeBlockPrevLists()
-        {
-            blocks.ForEach(block => block.prev.Clear());
-            blocks.ForEach(block => block.next.ForEach(next => next.prev.Add(block)));
-        }
-
-        private GOOLDecompLoop? CreateLoopFromEdge(GOOLDecompBlock header, GOOLDecompBlock tail, GOOLDecompBlock? prebranch = null)
-        {
-            if (header.Type == GoolBranchType.Goto && header.next.All(a => a.begin > header.begin))
-                return null;
-            Stack<GOOLDecompBlock> workList = new();
-            GOOLDecompLoop loop = new(header, tail);
-            loop.BlockList.Add(header);
-            if (header != tail)
-            {
-                loop.BlockList.Add(tail);
-                workList.Push(tail);
-            }
-            while (workList.Count > 0)
-            {
-                var block = workList.Pop();
-                foreach (var prev in block.prev)
-                {
-                    if (!loop.BlockList.Contains(prev) && prev != prebranch)
-                    {
-                        loop.BlockList.Add(prev);
-                        workList.Push(prev);
-                    }
-                }
-            }
-            if (prebranch != null)
-            {
-                loop.BlockList.Add(prebranch);
-                loop.PreBranch = prebranch;
-            }
-            loop.BlockList.Sort((a, b) => a.begin - b.begin);
-            return loop;
         }
 
         private void StructureIfElse(IGOOLDecompBlockIterator lister)
@@ -269,15 +232,15 @@ namespace CrashEdit.Crash
                 int e = state.EventHook & 0x3FFF;
                 if (t != 0x3FFF)
                 {
-                    AddFunc($"state_{i}_trans", t, true);
+                    AddFuncIfNoExistAt($"state_{i}_trans", t, true);
                 }
                 if (c != 0x3FFF)
                 {
-                    AddFunc($"state_{i}_code", c);
+                    AddFuncIfNoExistAt($"state_{i}_code", c);
                 }
                 if (e != 0x3FFF)
                 {
-                    AddFunc($"state_{i}_event", e);
+                    AddFuncIfNoExistAt($"state_{i}_event", e);
                 }
             }
 
@@ -307,7 +270,7 @@ namespace CrashEdit.Crash
                     TryAddLabel(ofs);
                     if (funcs.Find(x => x.Offset == ofs) == null)
                     {
-                        AddFunc($"func_{ofs}", ofs);
+                        AddFuncIfNoExistAt($"func_{ofs}", ofs);
                     }
                 }
                 else if (ins.GetName() == "RET")
@@ -327,36 +290,37 @@ namespace CrashEdit.Crash
                 AddBlock($"B{block_id++}", labels[i], labels[i + 1]);
             }
 
-            foreach (var block in blocks)
+            for (int i = blocks.Count - 1; i >= 0; --i)
             {
+                var block = blocks[i];
                 if (block.Instructions.Count == 0) continue;
                 var ins = block.Instructions.Last();
-                int i = gool.Instructions.IndexOf(ins);
+                int o = gool.Instructions.IndexOf(ins);
                 if (ins.GetName() == "BRA" && ins.Args['I'].Value != 0)
                 {
                     int branch = ins.Args['I'].Value;
-                    block.next.Add(GetBlockFromInsIndex(i + 1 + branch));
+                    block.next.Add(GetBlockFromInsIndex(o + 1 + branch));
                     block.Type = GoolBranchType.Goto;
                     // dead code detection: assume unconditional backwards-facing branches have code in front of them
                     // we still consider the branch unconditional!
                     if (branch < 0)
                     {
-                        block.next.Add(GetBlockFromInsIndex(i + 1));
+                        block.next.Add(GetBlockFromInsIndex(o + 1));
                     }
                 }
                 else if (ins.GetName() == "BNEZ" || ins.GetName() == "BEQZ")
                 {
-                    block.next.Add(GetBlockFromInsIndex(i + 1 + ins.Args['I'].Value));
-                    block.next.Add(GetBlockFromInsIndex(i + 1));
+                    block.next.Add(GetBlockFromInsIndex(o + 1 + ins.Args['I'].Value));
+                    block.next.Add(GetBlockFromInsIndex(o + 1));
                     block.Type = GoolBranchType.If;
                 }
                 else if ((ins.Type == typeof(Rjev) || ins.Type == typeof(Acev)) && ins.Args['T'].Value == 0)
                 {
                     int branch = ins.Args['I'].Value;
-                    block.next.Add(GetBlockFromInsIndex(i + 1 + branch));
+                    block.next.Add(GetBlockFromInsIndex(o + 1 + branch));
                     if (ins.Args['C'].Value != 0)
                     {
-                        block.next.Add(GetBlockFromInsIndex(i + 1));
+                        block.next.Add(GetBlockFromInsIndex(o + 1));
                         block.Type = GoolBranchType.If;
                     }
                     else
@@ -366,7 +330,7 @@ namespace CrashEdit.Crash
                         // we still consider the branch unconditional!
                         if (branch < 0)
                         {
-                            block.next.Add(GetBlockFromInsIndex(i + 1));
+                            block.next.Add(GetBlockFromInsIndex(o + 1));
                         }
                     }
                 }
@@ -376,11 +340,21 @@ namespace CrashEdit.Crash
                 }
                 else
                 {
-                    block.next.Add(GetBlockFromInsIndex(i + 1));
+                    block.next.Add(GetBlockFromInsIndex(o + 1));
                     block.Type = GoolBranchType.None;
                     if (ins.GetName() == "BRA" && ins.Args['I'].Value == 0)
                     {
-                        block.stackpop = ins.Args['V'].Value;
+                        int stackpop = ins.Args['V'].Value;
+                        while (stackpop > 1)
+                        {
+                            var extra_block = AddBlock($"B{block_id++}", block.begin, block.end);
+                            extra_block.Type = GoolBranchType.None;
+                            extra_block.stackpop = 1;
+                            extra_block.next.Add(block.next[0]);
+                            block.next[0] = extra_block;
+                            stackpop--;
+                        }
+                        block.stackpop = stackpop;
                     }
                 }
             }
@@ -416,7 +390,7 @@ namespace CrashEdit.Crash
                         block.Instructions.RemoveLast();
                         block.Instructions.RemoveLast();
                         block.Instructions.RemoveLast();
-                        var trans_func = AddFunc(func.Name, block.end, true);
+                        var trans_func = AddFuncIfNoExistAt(func.Name, block.end, true)!;
                         SetFuncFirstBlock(trans_func, GetBlockFromInsIndex(trans_func.Offset));
                         func.Trans = false;
                         func.Name = func.Name.Replace("trans", "enter");
@@ -436,8 +410,6 @@ namespace CrashEdit.Crash
             {
                 block.GenerateStatements();
             }
-
-            MakeBlockPrevLists();
 
             // split existing blocks based on statements that signify beginning and end of variable scopes
             for (int i = blocks.Count - 1; i >= 0; --i)
@@ -513,6 +485,7 @@ namespace CrashEdit.Crash
                             block.next.Add(stmt_block);
                             block.Type = GoolBranchType.None;
                             func.GenerateCFG();
+                            continue;
                         }
                         else if (stmt.Type == GoolStatementType.LetBegin)
                         {
@@ -567,9 +540,6 @@ namespace CrashEdit.Crash
                 }
             }
 
-            MakeBlockPrevLists();
-
-
             int l = 0;
             foreach (var func in funcs)
             {
@@ -579,93 +549,10 @@ namespace CrashEdit.Crash
                 // ---------------
                 func.StructureLets(this);
 
-                // check for loops
+                // step 2: recursively structure loops
                 // ---------------
+                func.StructureLoops(this);
 
-                //find loops in function
-                for (int i = 1; i < func.BlockList.Count; ++i)
-                {
-                    var block = func.BlockList[i];
-                    foreach (var next in block.next)
-                    {
-                        // block will proceed into a different block that dominates us - i.e. if we went to the start of a loop and this was a back edge!
-                        if (next.Dominates(block))
-                        {
-                            // that means block is the tail (where the loop ends) and the thing it goes to is the head (where the loop begins)
-                            var loop = CreateLoopFromEdge(next, block);
-                            if (loop == null)
-                                continue;
-                            foreach (var prev in next.prev)
-                            {
-                                if (next.ImmDom == prev && prev.Type == GoolBranchType.Goto && prev.begin < next.begin && !loop.BlockList.Contains(prev))
-                                {
-                                    loop.BlockList.Add(prev);
-                                    loop.PreBranch = prev;
-                                    break;
-                                }
-                            }
-                            if (loop.PreBranch != null)
-                            {
-                                // the head of this loop is actually the immediate dominatee of the tail's back edge
-                                GOOLDecompBlock? realhead = null;
-                                foreach (var head in next.next)
-                                {
-                                    if (next.ImmediateDominates(head) && head.begin <= next.begin)
-                                    {
-                                        realhead = head;
-                                        break;
-                                    }
-                                }
-                                if (realhead == null)
-                                    continue;
-                                loop = CreateLoopFromEdge(realhead, next, loop.PreBranch);
-                                if (loop == null)
-                                    continue;
-                            }
-                            if (!func.LoopList.Any(l => l.Header == loop.Header && l.Tail == loop.Tail && l.PreBranch == loop.PreBranch))
-                            {
-                                func.LoopList.Add(loop);
-                            }
-                        }
-                    }
-                }
-
-                foreach (var loop in func.LoopList)
-                {
-                    loop.LoopDepth = 0;
-                    foreach (var otherloop in func.LoopList)
-                    {
-                        if (otherloop == loop) continue;
-                        if (loop.BlockList.All(otherloop.BlockList.Contains))
-                        {
-                            loop.LoopDepth++;
-                            if (loop.Parent == null || otherloop.BlockList.Count < loop.Parent.BlockList.Count)
-                                loop.Parent = otherloop;
-                        }
-                    }
-                }
-
-                // sort loops by 'depth' (descending, so deepest first) and assign children
-                func.LoopList.Sort((a, b) => b.LoopDepth - a.LoopDepth);
-                foreach (var loop in func.LoopList)
-                {
-                    loop.Parent?.Children.Add(loop);
-                }
-
-                foreach (var loop in func.LoopList)
-                {
-                    break;
-                    var do_while = new GOOLDecompBlockDoWhile("dowhile_" + l++ + "_" + loop.BlockList[0].begin, loop, loop.BlockList[^1]);
-                    blocks.Add(do_while);
-                    do_while.StructureBreakContinue();
-                    // regenerate CFG since we changed control flow
-                    func.GenerateCFG();
-                    func.GenerateDominationTree();
-                    //StructureIfElse(do_while);
-                }
-
-                //func.GenerateCFG();
-                //func.GenerateDominationTree();
                 try
                 {
                     //StructureIfElse(func);
@@ -753,7 +640,7 @@ namespace CrashEdit.Crash
                     debug += $"    style = filled;\n";
                     debug += $"    fontsize = \"25pt\";\n";
                     debug += $"    fillcolor = lightyellow;\n";
-                    debug += dw.Header.PrintRecursiveAsRoot();
+                    debug += dw.Entry.PrintRecursiveAsRoot();
                     debug += $"  }}\n";
                 }
                 else if (block is GOOLDecompBlockIf bi)
@@ -826,7 +713,7 @@ namespace CrashEdit.Crash
             debug += "}\n";
 
             File.WriteAllText("test-decomp.txt", debug);
-            Console.Write(debug);
+            //Console.Write(debug);
             Clipboard.SetText(debug);
             Console.WriteLine("Copied to clipboard!");
         }

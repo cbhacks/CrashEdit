@@ -16,9 +16,11 @@ namespace CrashEdit.Crash
             {
                 block.DomID = BlockList.Count;
                 BlockList.Add(block);
+                block.prev.Clear();
             }, postVisit: (block) =>
             {
                 block.PostOrderID = poid++;
+                block.next.ForEach(next => next.prev.Add(block));
             });
             BlockList.Sort((a, b) => a.begin - b.begin);
             // initialize dominators and postdominators
@@ -211,7 +213,6 @@ namespace CrashEdit.Crash
                             new_region.StructureLets(decompiler);
                             // our graph was changed. re-generate it and try to structure more!
                             GenerateCFG();
-                            decompiler.MakeBlockPrevLists();
                             GenerateDominationTree();
                             StructureLets(decompiler);
                             break;
@@ -224,6 +225,132 @@ namespace CrashEdit.Crash
                 }
             }
         }
+
+        public void StructureLoops(GOOLDecompiler decompiler);
+        public void StructureLoopsInt(GOOLDecompiler decompiler, List<GOOLDecompBlock> polist)
+        {
+            GOOLDecompLoop CreateLoopFromEdge(GOOLDecompBlock header, GOOLDecompBlock tail, GOOLDecompBlock? prebranch = null)
+            {
+                // https://www.backerstreet.com/decompiler/loop_analysis.php
+                // > Then, since to reach the (tail) block execution must go through its dominator,
+                // > we can traverse the predecessors of each block starting from the tail, until we reach the header block
+
+                // this can probably be optimized to just grab a range using a postordering list instead of this stack approach
+                Stack<GOOLDecompBlock> workList = new();
+
+                // note: in pretested loops, header is actually the tail and tail is the pre-tail block. the real header is pointed to by the tail.
+                var real_header = header;
+                var real_tail = tail;
+                if (prebranch != null)
+                {
+                    real_tail = header;
+                    real_header = real_tail.next.Find(x => x.begin < real_tail.end)!;
+                }
+
+                GOOLDecompLoop loop = new(real_header, real_tail, prebranch);
+
+                loop.BlockList.Add(real_header);
+                if (real_header != real_tail)
+                {
+                    loop.BlockList.Add(real_tail);
+                    workList.Push(real_tail);
+                }
+                if (prebranch != null)
+                {
+                    loop.BlockList.Add(prebranch);
+                }
+
+                while (workList.Count > 0)
+                {
+                    var block = workList.Pop();
+                    foreach (var prev in block.prev)
+                    {
+                        if (!loop.BlockList.Contains(prev))
+                        {
+                            loop.BlockList.Add(prev);
+                            workList.Push(prev);
+                        }
+                    }
+                }
+
+                loop.BlockList.Sort((a, b) => a.begin - b.begin);
+                return loop;
+            }
+
+            // find all loops in graph
+            List<GOOLDecompLoop> processed_loops = new();
+            List<GOOLDecompLoop> loops = new();
+            foreach (var block in BlockList)
+            {
+                if (block is IGOOLDecompBlockIterator it) it.StructureLoops(decompiler);
+                foreach (var next in block.next)
+                {
+                    // block will proceed into a different block that dominates us - i.e. if we went to the start of a loop and this was a back edge!
+                    // that means block is the tail (where the loop ends) and the thing it goes to is the head (where the loop begins)
+                    // block = before end of loop; next = end of loop (has branch & condition check) (note: can be the same when loop is only 1 block large)
+                    if (next.Dominates(block))
+                    {
+                        // try to find a "pre-branch". an unconditional branch to the loop condition block. this is a pre-tested loop, so (while) instead of (until)
+                        // if the loop condition check is immediately dominated by an unconditional branch that came before, that's a prebranch
+                        // unconditional branches also appear in if-else constructs, but they dont immediately jump to the middle of loops, so this is okay.
+                        GOOLDecompBlock? prebranch = null;
+                        if (next.prev.Contains(next.ImmDom) && next.ImmDom.Type == GoolBranchType.Goto && next.ImmDom.begin < next.begin)
+                        {
+                            prebranch = next.ImmDom;
+                        }
+                        var loop = CreateLoopFromEdge(next, block, prebranch);
+                        if (!loops.Any(l => l.Header == loop.Header && l.Tail == loop.Tail && l.PreBranch == loop.PreBranch))
+                        {
+                            loops.Add(loop);
+                        }
+                    }
+                }
+            }
+
+            foreach (var loop in loops)
+            {
+                loop.LoopDepth = 0;
+                foreach (var otherloop in loops)
+                {
+                    if (otherloop == loop) continue;
+                    if (loop.BlockList.All(otherloop.BlockList.Contains))
+                    {
+                        loop.LoopDepth++;
+                        if (loop.Parent == null || otherloop.BlockList.Count < loop.Parent.BlockList.Count)
+                            loop.Parent = otherloop;
+                    }
+                }
+            }
+
+            // sort loops by 'depth' (descending, so deepest first) and assign children
+            loops.Sort((a, b) => b.LoopDepth - a.LoopDepth);
+            foreach (var loop in loops)
+            {
+                loop.Parent?.Children.Add(loop);
+            }
+
+            foreach (var loop in loops)
+            {
+                processed_loops.Add(loop);
+                var do_while = new GOOLDecompBlockDoWhile($"dowhile_{loop.Header.Name}_{loop.Tail.Name}", loop.Header, loop.Tail, loop.PreBranch);
+                decompiler.blocks.Add(do_while);
+                do_while.GenerateCFG();
+                do_while.GenerateDominationTree();
+                do_while.StructureBreakContinue();
+                // loops can share headers (i.e. (until cond1 (until cond2 ..) ..), but not tails or prebranches (i think)
+                foreach (var otherloop in loops.Except(processed_loops))
+                {
+                    if (otherloop.Header == loop.Header)
+                    {
+                        otherloop.Header = do_while;
+                    }
+                }
+                // regenerate CFG since we changed control flow
+                GenerateCFG();
+                GenerateDominationTree();
+                //StructureIfElse(do_while);
+            }
+        }
     }
 
     public class GOOLDecompFunction(string name) : IGOOLDecompBlockIterator
@@ -232,7 +359,6 @@ namespace CrashEdit.Crash
         public bool Trans { get; set; }
         public string Name { get; set; } = name;
         public List<GOOLDecompBlock> BlockList { get; } = new();
-        public List<GOOLDecompLoop> LoopList { get; } = new();
 
         public GOOLDecompBlock start;
 
@@ -251,6 +377,11 @@ namespace CrashEdit.Crash
         public void StructureLets(GOOLDecompiler decompiler)
         {
             (this as IGOOLDecompBlockIterator).StructureLetsInt(decompiler, (this as IGOOLDecompBlockIterator).AsPostOrderList());
+        }
+
+        public void StructureLoops(GOOLDecompiler decompiler)
+        {
+            (this as IGOOLDecompBlockIterator).StructureLoopsInt(decompiler, (this as IGOOLDecompBlockIterator).AsPostOrderList());
         }
     }
 }
