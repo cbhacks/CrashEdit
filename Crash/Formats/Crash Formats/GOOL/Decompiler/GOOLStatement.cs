@@ -3,14 +3,17 @@
     public enum GoolStatementType
     {
         Normal,
-        LetBegin,
-        LetEnd
+        StackPush,
+        LetEnd,
+        StackStarve
     }
 
     public class GOOLStatement
     {
         public List<GOOLInstruction> Instructions { get; } = [];
         public GObj LispOut { get; private set; } = null;
+
+        public int StackValue { get; set; }
 
         public GoolStatementType Type { get; set; } = GoolStatementType.Normal;
 

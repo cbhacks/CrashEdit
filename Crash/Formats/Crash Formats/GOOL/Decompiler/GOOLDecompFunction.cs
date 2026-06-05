@@ -156,26 +156,46 @@ namespace CrashEdit.Crash
             for (int i = 0; i < polist.Count; ++i)
             {
                 var block = polist[i];
-                if (block.Type == GoolBranchType.StackPop || block.IsLetEnd())
+                if (block.IsStackPop())
                 {
                     GOOLDecompBlock let_end = block;
                     GOOLDecompBlock let_begin = null;
                     List<GOOLDecompBlock> let_region = new();
-                    int stack_depth = block.IsLetEnd() ? 1 : block.stackpop;
+                    List<GOOLDecompBlock> pushes_waiting_for_dom = new();
+                    List<GOOLDecompBlock> pending_blocks = new();
+                    int stack_depth = block.Type == GoolBranchType.StackPop ? block.StackPop : 1;
                     for (int j = i + 1; j < polist.Count; ++j)
                     {
                         var region_block = polist[j];
                         if (region_block.IsLetBegin())
                         {
-                            stack_depth -= 1;
+                            if (region_block.Dominates(let_end))
+                            {
+                                stack_depth -= 1;
+                            }
+                            else
+                            {
+                                // does not dominate, but comes before pop... perhaps an (if a x y) situation
+                                pushes_waiting_for_dom.Add(region_block);
+                            }
                         }
-                        else if (region_block.IsLetEnd())
+                        else if (region_block.IsStackPop())
                         {
                             stack_depth += 1;
                         }
                         else if (region_block.Type == GoolBranchType.StackPop)
                         {
-                            stack_depth += region_block.stackpop;
+                            stack_depth += region_block.StackPop;
+                        }
+                        else if (pushes_waiting_for_dom.Count > 0 && pushes_waiting_for_dom.All(region_block.Dominates))
+                        {
+                            stack_depth -= 1;
+                            pushes_waiting_for_dom.Clear();
+                            if (stack_depth > 0)
+                            {
+                                let_region.InsertRange(0, pending_blocks);
+                                pending_blocks.Clear();
+                            }
                         }
 
                         if (stack_depth == 0)
@@ -183,9 +203,13 @@ namespace CrashEdit.Crash
                             let_begin = region_block;
                             break;
                         }
-                        else
+                        else if (pushes_waiting_for_dom.Count == 0)
                         {
                             let_region.Insert(0, region_block);
+                        }
+                        else
+                        {
+                            pending_blocks.Insert(0, region_block);
                         }
                     }
                     if (let_begin != null)
@@ -206,7 +230,7 @@ namespace CrashEdit.Crash
                         else
                         {
                             // valid region! we can create it now.
-                            var new_region = new GOOLDecompBlockRegion($"let_{let_begin.Name}_{let_end.Name}", let_begin, let_end, let_region);
+                            var new_region = new GOOLDecompBlockRegion($"let_{let_begin.Name}_{let_end.Name}", let_begin, let_end);
                             decompiler.blocks.Add(new_region);
                             new_region.GenerateCFG();
                             new_region.GenerateDominationTree();

@@ -30,7 +30,7 @@
         public GOOLDecompBlock ImmDom { get; set; } = null;
         public GOOLDecompBlock ImmPostDom { get; set; } = null;
 
-        public int stackpop = -1;
+        public int StackPop { get; set; } = -1;
 
         public int begin;
         public int end;
@@ -50,8 +50,10 @@
         public bool ImmediatePostDominates(GOOLDecompBlock other) => other.ImmPostDom == this;
 
         public bool IsLetEnd() => Statements.Count == 1 && Statements[0].Type == GoolStatementType.LetEnd;
-        public bool IsLetBegin() => Statements.Count == 1 && Statements[0].Type == GoolStatementType.LetBegin;
+        public bool IsLetBegin() => Statements.Count == 1 && Statements[0].Type == GoolStatementType.StackPush;
         public bool IsLetBlock() => IsLetEnd() || IsLetBegin();
+        public bool IsStackStarved() => Statements.Count == 1 && Statements[0].Type == GoolStatementType.StackStarve;
+        public bool IsStackPop() => Type == GoolBranchType.StackPop || IsLetEnd() || IsStackStarved();
 
         public void VisitForward(Action<GOOLDecompBlock>? preVisit = null, Action<GOOLDecompBlock>? postVisit = null, HashSet<GOOLDecompBlock> visited = null)
         {
@@ -76,6 +78,10 @@
             Statements.Clear();
             GOOLStatement cursment = null;
             int stackwant = 0;
+            if (Name == "B72")
+            {
+                int zzzzz = 99;
+            }
             for (int i = Instructions.Count - 1; i >= 0; --i)
             {
                 var ins = Instructions[i];
@@ -83,21 +89,16 @@
 
                 int push = ins.GetStackPush();
                 int pop = ins.GetStackPop();
-                if (cursment.Instructions.Count == 0 && pop == 0 && push != 0)
+                if (cursment.Instructions.Count == 0 && push > 0)
                 {
-                    // this is pushing to stack, i.e. defining a local var
-                    Console.WriteLine("detected stack push");
-                    cursment.Type = GoolStatementType.LetBegin;
-                    cursment.Instructions.Add(ins);
-                    Statements.Insert(0, cursment);
-                    cursment = null;
-                    stackwant = 0;
-                    continue;
+                    // statement pushes to stack (even if it has net stack value of zero)
+                    //Console.WriteLine($"detected stack push in {Name} ins {i}");
+                    cursment.Type = GoolStatementType.StackPush;
+                    cursment.StackValue = push;
                 }
                 else if (cursment.Instructions.Count == 1 && pop > 0 && push == 0)
                 {
-                    // ^ maybe should be == 1 and not > 0
-                    Console.WriteLine("detected stack pop");
+                    //Console.WriteLine($"detected stack pop in {Name} ins {i}");
                     cursment.Type = GoolStatementType.LetEnd;
                     ++i; // note: we do not add this instruction, because the instruction we want is already there. instead we finish the stament and try this instruction again.
                     Statements.Insert(0, cursment);
@@ -106,12 +107,13 @@
                     continue;
                 }
 
-                if (cursment.Instructions.Count != 0)
+                if (cursment.Instructions.Count > 0)
                 {
+                    // we don't count the initial push because that will be consumed later(?)
                     stackwant -= push;
                 }
 
-                if (stackpop == -1 || Statements.Count > 0)
+                if (StackPop == -1 || Statements.Count > 0)
                 {
                     stackwant += pop;
                 }
@@ -128,7 +130,17 @@
 
             if (cursment != null)
             {
-                Console.WriteLine($"Failed to build statements for block {Name}: did not pop {stackwant} values!");
+                if (cursment.Type == GoolStatementType.Normal)
+                {
+                    cursment.Type = GoolStatementType.StackStarve;
+                    cursment.StackValue = stackwant;
+                    Statements.Insert(0, cursment);
+                    cursment = null;
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to build statements for block {Name}: did not pop {stackwant} values!");
+                }
             }
 
             foreach (var statement in Statements)
@@ -169,7 +181,7 @@
             switch (Type)
             {
                 default:
-                    if (IsLetEnd()) return "green2";
+                    if (IsStackPop()) return "green2";
                     if (IsLetBegin()) return "cornflowerblue"; 
                     return "lightgray";
                 case GoolBranchType.If: return "yellow";
@@ -379,7 +391,8 @@
             end = tail.end;
 
             // if there are statements in the tail that aren't just the branch condition, we did not generate a block for a continue statement, so there must not be one!
-            if (tail.Statements.Count == 0)
+            // except if there is a prebranch, which always links to the continue
+            if (tail.Statements.Count == 0 || prebranch != null)
             {
                 Continue = tail;
             }
@@ -417,10 +430,12 @@
                 if (block.next.Contains(Break))
                 {
                     block.Type = block.Type == GoolBranchType.If ? GoolBranchType.BreakIf : GoolBranchType.Break;
+                    block.next.Remove(Break);
                 }
                 else if (Continue != null && block.end != Continue.begin && block.next.Contains(Continue)) // make sure it's not from fallthrough (no branch)
                 {
                     block.Type = block.Type == GoolBranchType.If ? GoolBranchType.ContinueIf : GoolBranchType.Continue;
+                    block.next.Remove(Continue);
                 }
             });
         }
@@ -494,16 +509,12 @@
         public GOOLDecompBlock Exit { get; }
         public List<GOOLDecompBlock> BlockList { get; } = new();
 
-        public GOOLDecompBlockRegion(string name, GOOLDecompBlock entry, GOOLDecompBlock exit, IEnumerable<GOOLDecompBlock> region) : base(name)
+        public GOOLDecompBlockRegion(string name, GOOLDecompBlock entry, GOOLDecompBlock exit) : base(name)
         {
             Entry = entry;
             Exit = exit;
-            begin = Math.Min(Math.Min(region.Min(x => x.begin), Entry.begin), Exit.begin);
-            end = Math.Max(Math.Max(region.Max(x => x.end), Entry.end), Exit.end);
-            if (begin != Entry.begin || end != Exit.end)
-            {
-                Console.WriteLine("mismatch");
-            }
+            begin = entry.begin;
+            end = exit.end;
             next.AddRange(Exit.next);
             // disconnect entry and exit node from outside region. patch things to connect to the region instead!
             foreach (var p in Entry.prev)

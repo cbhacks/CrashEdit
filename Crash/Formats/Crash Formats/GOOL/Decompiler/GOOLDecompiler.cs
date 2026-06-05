@@ -308,12 +308,12 @@ namespace CrashEdit.Crash
                         {
                             var extra_block = AddBlock($"B{block_id++}", block.begin, block.end);
                             extra_block.Type = GoolBranchType.None;
-                            extra_block.stackpop = 1;
+                            extra_block.StackPop = 1;
                             extra_block.next.Add(block.next[0]);
                             block.next[0] = extra_block;
                             stackpop--;
                         }
-                        block.stackpop = stackpop;
+                        block.StackPop = stackpop;
                     }
                 }
             }
@@ -374,7 +374,7 @@ namespace CrashEdit.Crash
             for (int i = blocks.Count - 1; i >= 0; --i)
             {
                 var block = blocks[i];
-                if (block.stackpop != -1 && block.Type == GoolBranchType.None)
+                if (block.StackPop != -1 && block.Type == GoolBranchType.None)
                 {
                     if (block.Statements.Count > 0)
                     {
@@ -387,13 +387,13 @@ namespace CrashEdit.Crash
                         else
                         {
                             var func = FindFuncWithBlock(block)!;
-                            var new_block = new GOOLDecompBlock($"B{block_id++}_branch_pop{block.stackpop}");
+                            var new_block = new GOOLDecompBlock($"B{block_id++}_branch_pop{block.StackPop}");
                             new_block.begin = block.end - 1;
                             new_block.end = block.end;
                             new_block.Instructions.Add(block.Instructions.Last());
                             new_block.Statements.Add(block.Statements.Last());
                             new_block.Type = GoolBranchType.StackPop;
-                            new_block.stackpop = block.stackpop;
+                            new_block.StackPop = block.StackPop;
                             new_block.next.AddRange(block.next);
                             blocks.Add(new_block);
                             block.next.Clear();
@@ -401,7 +401,7 @@ namespace CrashEdit.Crash
                             block.end--;
                             block.Instructions.RemoveLast();
                             block.Statements.RemoveLast();
-                            block.stackpop = -1;
+                            block.StackPop = -1;
                             block.Type = GoolBranchType.None;
                             func.GenerateCFG();
                         }
@@ -413,15 +413,15 @@ namespace CrashEdit.Crash
                     for (int j = block.Statements.Count - 1; j >= 0; --j)
                     {
                         var stmt = block.Statements[j];
-                        if (stmt.Type == GoolStatementType.LetEnd)
+                        if (stmt.Type == GoolStatementType.LetEnd || stmt.Type == GoolStatementType.StackStarve)
                         {
                             var func = FindFuncWithBlock(block)!;
                             var instruction_count = stmt.GetRealInstructionCount();
                             var post_statements = block.Statements.Skip(j + 1).Take(block.Statements.Count - (j + 1));
                             var post_instruction_count = post_statements.Sum(x => x.GetRealInstructionCount());
                             block.end -= post_instruction_count + instruction_count;
-                            // make two blocks: one for after the statement, one for the statement.
-                            var stmt_block = new GOOLDecompBlock($"B{block_id++}_stmt_pop_{j}");
+                            // make two blocks: one for the statement, one for after the statement.
+                            var stmt_block = new GOOLDecompBlock($"{block.Name}_B{block_id++}_stmt_pop");
                             stmt_block.begin = block.end;
                             stmt_block.end = block.end + instruction_count;
                             stmt_block.Statements.Add(stmt);
@@ -429,7 +429,7 @@ namespace CrashEdit.Crash
                             var next_block = stmt_block;
                             if (post_instruction_count > 0)
                             {
-                                var post_block = new GOOLDecompBlock($"B{block_id++}_post_pop_{j}");
+                                var post_block = new GOOLDecompBlock($"{block.Name}_B{block_id++}_post_pop");
                                 post_block.begin = block.end + instruction_count;
                                 post_block.end = block.end + instruction_count + post_instruction_count;
                                 post_block.Statements.AddRange(post_statements);
@@ -443,10 +443,27 @@ namespace CrashEdit.Crash
                             block.next.Clear();
                             block.next.Add(stmt_block);
                             block.Type = GoolBranchType.None;
+                            if (block.Statements.Count == 0)
+                            {
+                                // block became empty... delete.
+                                foreach (var x in block.prev)
+                                {
+                                    for (int p = 0; p < x.next.Count; ++p)
+                                    {
+                                        if (x.next[p] == block) x.next[p] = stmt_block;
+                                    }
+                                }
+                                block.prev.Clear();
+                                blocks.Remove(block);
+                            }
+                            else
+                            {
+                                block.next.Add(stmt_block);
+                            }
                             func.GenerateCFG();
                             continue;
                         }
-                        else if (stmt.Type == GoolStatementType.LetBegin)
+                        else if (stmt.Type == GoolStatementType.StackPush)
                         {
                             var func = FindFuncWithBlock(block)!;
                             var instruction_count = stmt.GetRealInstructionCount();
@@ -454,7 +471,7 @@ namespace CrashEdit.Crash
                             var post_instruction_count = post_statements.Sum(x => x.GetRealInstructionCount());
                             block.end -= post_instruction_count + instruction_count;
                             // make two blocks: one for after the statement, one for the statement.
-                            var stmt_block = new GOOLDecompBlock($"B{block_id++}_stmt_push_{j}");
+                            var stmt_block = new GOOLDecompBlock($"{block.Name}_B{block_id++}_stmt_push");
                             stmt_block.begin = block.end;
                             stmt_block.end = block.end + instruction_count;
                             stmt_block.Statements.Add(stmt);
@@ -462,7 +479,8 @@ namespace CrashEdit.Crash
                             var next_block = stmt_block;
                             if (post_instruction_count > 0)
                             {
-                                var post_block = new GOOLDecompBlock($"B{block_id++}_post_push_{j}");
+                                // this can even be a branch in the case of (let ((var (if t 0 1)) ..) ..)
+                                var post_block = new GOOLDecompBlock($"{block.Name}_B{block_id++}_post_push");
                                 post_block.begin = block.end + instruction_count;
                                 post_block.end = block.end + instruction_count + post_instruction_count;
                                 post_block.Statements.AddRange(post_statements);
