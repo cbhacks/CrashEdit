@@ -149,30 +149,6 @@
             }
         }
 
-        public void SpliceNodeInterval(GOOLDecompBlock header, GOOLDecompBlock tail, GOOLDecompBlock preheader, GOOLDecompBlock posttail)
-        {
-            // disconnect the inner nodes
-            if (header != preheader)
-                tail.prev.Remove(preheader); // this is the first pre-test in a while loop
-            tail.next.Remove(header); // tail -> header
-            header.prev.Remove(tail); // header -> tail
-
-            posttail.prev.Remove(tail); // break -> tail
-            tail.next.Remove(posttail); // tail -> break
-
-            // connect the interval itself
-            next.Add(posttail);
-            posttail.prev.Add(this);
-
-            prev.AddRange(preheader.prev);
-            foreach (var prev in preheader.prev)
-            {
-                prev.next.Remove(preheader); // also disconnects nodes that lead into loop header
-                prev.next.Add(this);
-            }
-            preheader.prev.Clear();
-        }
-
         private string GetNodeColor()
         {
             if (this is GOOLDecompBlockDoWhile) return "red";
@@ -391,8 +367,23 @@
             end = tail.end;
 
             // if there are statements in the tail that aren't just the branch condition, we did not generate a block for a continue statement, so there must not be one!
-            // except if there is a prebranch, which always links to the continue
-            if (tail.Statements.Count == 0 || prebranch != null)
+            // however, if there is a prebranch, we always generate a continue to fix the CFG
+            if (prebranch != null)
+            {
+                Continue = new GOOLDecompBlock(name + "_cont");
+                Continue.begin = tail.begin;
+                Continue.end = tail.begin;
+                Continue.next.Add(tail);
+                foreach (var p in tail.prev)
+                {
+                    if (p == prebranch) continue;
+                    for (int i = 0; i < p.next.Count; ++i)
+                    {
+                        if (p.next[i] == tail) p.next[i] = Continue;
+                    }
+                }
+            }
+            else if (tail.Statements.Count == 0)
             {
                 Continue = tail;
             }
@@ -429,13 +420,14 @@
                     return;
                 if (block.next.Contains(Break))
                 {
-                    block.Type = block.Type == GoolBranchType.If ? GoolBranchType.BreakIf : GoolBranchType.Break;
+                    Console.WriteLine("break detected");
                     block.next.Remove(Break);
+                    block.Type = block.Type == GoolBranchType.If ? GoolBranchType.BreakIf : GoolBranchType.Break;
                 }
                 else if (Continue != null && block.end != Continue.begin && block.next.Contains(Continue)) // make sure it's not from fallthrough (no branch)
                 {
+                    if (block.Type == GoolBranchType.If) block.next.Remove(Continue);
                     block.Type = block.Type == GoolBranchType.If ? GoolBranchType.ContinueIf : GoolBranchType.Continue;
-                    block.next.Remove(Continue);
                 }
             });
         }

@@ -113,10 +113,6 @@ namespace CrashEdit.Crash
                             {
                                 if_follow_map.Add(x, follow);
                             }
-                            else
-                            {
-                                Console.Write("");
-                            }
                         }
                         unresolved.RemoveWhere(if_follow_map.ContainsKey);
                     }
@@ -129,8 +125,7 @@ namespace CrashEdit.Crash
 
             if (unresolved.Count > 0)
             {
-                Console.WriteLine("failed to structure ifs");
-                return;
+                Console.WriteLine("failed to structure ifs: not all ifs were resolved!");
             }
 
             // contains a map of header nodes --> formal if blocks. used to patch follow nodes that were if header nodes so that this function isn't called recursively.
