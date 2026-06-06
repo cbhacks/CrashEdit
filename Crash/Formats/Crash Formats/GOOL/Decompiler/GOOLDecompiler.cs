@@ -1,4 +1,5 @@
 ﻿using CrashEdit.Crash.GOOLIns;
+using System.Windows.Documents;
 using System.Windows.Forms;
 
 namespace CrashEdit.Crash
@@ -20,10 +21,8 @@ namespace CrashEdit.Crash
 
         private GOOLDecompBlock AddBlock(string name, int begin, int end)
         {
-            GOOLDecompBlock block = new(name);
-            block.begin = begin;
-            block.end = end;
-            block.Instructions.AddRange(gool.Instructions.Skip(block.begin).Take(block.end - block.begin));
+            GOOLDecompBlock block = new(name, begin, end);
+            block.Instructions.AddRange(gool.Instructions.Skip(block.OfsBegin).Take(block.OfsEnd - block.OfsBegin));
             for (int i = block.Instructions.Count - 1; i >= 0; --i)
             {
                 var ins = block.Instructions[i];
@@ -45,9 +44,7 @@ namespace CrashEdit.Crash
 
         private GOOLDecompBlock AddBlockNoInstructions(string name)
         {
-            GOOLDecompBlock block = new(name);
-            block.begin = -1;
-            block.end = -1;
+            GOOLDecompBlock block = new(name, -1, -1);
             blocks.Add(block);
             return block;
         }
@@ -67,15 +64,15 @@ namespace CrashEdit.Crash
         // Set a block as the function's entry point. Block will ONLY connect to the function entry point, and entry point will ONLY connect to block.
         private void SetFuncFirstBlock(GOOLDecompFunction func, GOOLDecompBlock block)
         {
-            func.start.next.Clear();
-            func.start.next.Add(block);
-            block.prev.Clear();
-            block.prev.Add(func.start);
+            func.start.Next.Clear();
+            func.start.Next.Add(block);
+            block.Prev.Clear();
+            block.Prev.Add(func.start);
         }
 
         private GOOLDecompBlock GetBlockFromInsIndex(int index)
         {
-            return blocks.Find(b => b.begin == index)!;
+            return blocks.Find(b => b.OfsBegin == index)!;
         }
 
         private GOOLDecompFunction? FindFuncWithBlock(GOOLDecompBlock block)
@@ -95,12 +92,12 @@ namespace CrashEdit.Crash
                 {
                     StructureIfElse(bl);
                 }
-                else if (block.Type == GoolBranchType.If && block.next.Count == 2 && (lister is not GOOLDecompBlockDoWhile dw || block != dw.Tail))
+                else if (block.Type == GoolBranchType.If && block.Next.Count == 2 && (lister is not GOOLDecompBlockDoWhile dw || block != dw.Tail))
                 {
-                    var follow = as_po.Find(n => block.ImmediateDominates(n) && n.prev.Count >= 2);
+                    var follow = as_po.Find(n => block.ImmediateDominates(n) && n.Prev.Count >= 2);
                     if (follow != null)
                     {
-                        if (unresolved.Any(x => x.next.Count <= 1 || x.next[1].ImmDom != x))
+                        if (unresolved.Any(x => x.Next.Count <= 1 || x.Next[1].ImmDom != x))
                         {
                             Console.WriteLine($"short-circuiting detected in if: {block.Name} -> {follow.Name}");
                             unresolved.RemoveWhere(x => x != follow && follow.PostDominates(x));
@@ -128,7 +125,7 @@ namespace CrashEdit.Crash
                 Console.WriteLine("failed to structure ifs: not all ifs were resolved!");
             }
 
-            // contains a map of header nodes --> formal if blocks. used to patch follow nodes that were if header nodes so that this function isn't called recursively.
+            // contains a map of header nodes --> formal if blocks. used to patch other nodes that were If header nodes so that this function isn't called recursively.
             Dictionary<GOOLDecompBlock, GOOLDecompBlock> processed_ifs = new();
             foreach (var kvp in if_follow_map)
             {
@@ -140,20 +137,18 @@ namespace CrashEdit.Crash
                 }
 
                 // we can do this because we use a consistent format when setting up successors
-                var bbranch = if_node.next[0];
-                var bfallthru = if_node.next[1];
+                var bbranch = if_node.Next[0];
+                var bfallthru = if_node.Next[1];
 
                 GOOLDecompBlockIf ifblock;
-                if (if_node.next.Contains(follow_node))
+                if (if_node.Next.Contains(follow_node))
                 {
                     // if, no else
-                    //Console.WriteLine($"Making an if-no-else block out of {if_node.Name}");
                     ifblock = new GOOLDecompBlockIf("if_ne_" + if_node.Name, if_node, follow_node, bfallthru, null);
                 }
                 else
                 {
                     // if, else
-                    //Console.WriteLine($"Making an if-else block out of {if_node.Name}");
                     ifblock = new GOOLDecompBlockIf("if_e_" + if_node.Name, if_node, follow_node, bfallthru, bbranch);
                 }
                 blocks.Add(ifblock);
@@ -163,6 +158,11 @@ namespace CrashEdit.Crash
 
                 lister.GenerateCFG();
                 lister.GenerateDominationTree();
+            }
+
+            if (lister is GOOLDecompBlockSubGraph g)
+            {
+                g.PatchStructuredIf(processed_ifs);
             }
         }
 
@@ -253,28 +253,28 @@ namespace CrashEdit.Crash
                 if (ins.GetName() == "BRA" && ins.Args['I'].Value != 0)
                 {
                     int branch = ins.Args['I'].Value;
-                    block.next.Add(GetBlockFromInsIndex(o + 1 + branch));
+                    block.Next.Add(GetBlockFromInsIndex(o + 1 + branch));
                     block.Type = GoolBranchType.Goto;
                     // dead code detection: assume unconditional backwards-facing branches have code in front of them
                     // we still consider the branch unconditional!
                     if (branch < 0)
                     {
-                        block.next.Add(GetBlockFromInsIndex(o + 1));
+                        block.Next.Add(GetBlockFromInsIndex(o + 1));
                     }
                 }
                 else if (ins.GetName() == "BNEZ" || ins.GetName() == "BEQZ")
                 {
-                    block.next.Add(GetBlockFromInsIndex(o + 1 + ins.Args['I'].Value));
-                    block.next.Add(GetBlockFromInsIndex(o + 1));
+                    block.Next.Add(GetBlockFromInsIndex(o + 1 + ins.Args['I'].Value));
+                    block.Next.Add(GetBlockFromInsIndex(o + 1));
                     block.Type = GoolBranchType.If;
                 }
                 else if ((ins.Type == typeof(Rjev) || ins.Type == typeof(Acev)) && ins.Args['T'].Value == 0)
                 {
                     int branch = ins.Args['I'].Value;
-                    block.next.Add(GetBlockFromInsIndex(o + 1 + branch));
+                    block.Next.Add(GetBlockFromInsIndex(o + 1 + branch));
                     if (ins.Args['C'].Value != 0)
                     {
-                        block.next.Add(GetBlockFromInsIndex(o + 1));
+                        block.Next.Add(GetBlockFromInsIndex(o + 1));
                         block.Type = GoolBranchType.If;
                     }
                     else
@@ -284,7 +284,7 @@ namespace CrashEdit.Crash
                         // we still consider the branch unconditional!
                         if (branch < 0)
                         {
-                            block.next.Add(GetBlockFromInsIndex(o + 1));
+                            block.Next.Add(GetBlockFromInsIndex(o + 1));
                         }
                     }
                 }
@@ -294,18 +294,18 @@ namespace CrashEdit.Crash
                 }
                 else
                 {
-                    block.next.Add(GetBlockFromInsIndex(o + 1));
+                    block.Next.Add(GetBlockFromInsIndex(o + 1));
                     block.Type = GoolBranchType.None;
                     if (ins.GetName() == "BRA" && ins.Args['I'].Value == 0)
                     {
                         int stackpop = ins.Args['V'].Value;
                         while (stackpop > 1)
                         {
-                            var extra_block = AddBlock($"B{block_id++}", block.begin, block.end);
+                            var extra_block = AddBlock($"B{block_id++}", block.OfsBegin, block.OfsEnd);
                             extra_block.Type = GoolBranchType.None;
                             extra_block.StackPop = 1;
-                            extra_block.next.Add(block.next[0]);
-                            block.next[0] = extra_block;
+                            extra_block.Next.Add(block.Next[0]);
+                            block.Next[0] = extra_block;
                             stackpop--;
                         }
                         block.StackPop = stackpop;
@@ -333,18 +333,18 @@ namespace CrashEdit.Crash
                 bool regen = false;
                 foreach (var block in func.BlockList)
                 {
-                    if (block.Instructions.Count >= 3 && block.Type == GoolBranchType.Goto && block.next.Count == 1 &&
+                    if (block.Instructions.Count >= 3 && block.Type == GoolBranchType.Goto && block.Next.Count == 1 &&
                         block.Instructions[^2].GetName() == "SETF" &&
                         block.Instructions[^3].GetName() == "ADD" &&
                         block.Instructions[^2].Arguments == "tpc,[sp]" &&
                        // so lazy!!
                        (block.Instructions[^3].Arguments == "pc,(8)" || block.Instructions[^3].Arguments == "pc,8"))
                     {
-                        block.next.Clear();
+                        block.Next.Clear();
                         block.Instructions.RemoveLast();
                         block.Instructions.RemoveLast();
                         block.Instructions.RemoveLast();
-                        var trans_func = AddFuncIfNoExistAt(func.Name, block.end, true)!;
+                        var trans_func = AddFuncIfNoExistAt(func.Name, block.OfsEnd, true)!;
                         SetFuncFirstBlock(trans_func, GetBlockFromInsIndex(trans_func.Offset));
                         func.Trans = false;
                         func.Name = func.Name.Replace("trans", "enter");
@@ -374,7 +374,7 @@ namespace CrashEdit.Crash
                     if (block.Statements.Count > 0)
                     {
                         // last statement is a single BRA pop instruction
-                        if (block.end == block.begin + 1)
+                        if (block.OfsEnd == block.OfsBegin + 1)
                         {
                             // avoid creating zero-sized blocks
                             block.Type = GoolBranchType.StackPop;
@@ -382,18 +382,16 @@ namespace CrashEdit.Crash
                         else
                         {
                             var func = FindFuncWithBlock(block)!;
-                            var new_block = new GOOLDecompBlock($"B{block_id++}_branch_pop{block.StackPop}");
-                            new_block.begin = block.end - 1;
-                            new_block.end = block.end;
+                            var new_block = new GOOLDecompBlock($"B{block_id++}_branch_pop{block.StackPop}", block.OfsEnd - 1, block.OfsEnd);
                             new_block.Instructions.Add(block.Instructions.Last());
                             new_block.Statements.Add(block.Statements.Last());
                             new_block.Type = GoolBranchType.StackPop;
                             new_block.StackPop = block.StackPop;
-                            new_block.next.AddRange(block.next);
+                            new_block.Next.AddRange(block.Next);
                             blocks.Add(new_block);
-                            block.next.Clear();
-                            block.next.Add(new_block);
-                            block.end--;
+                            block.Next.Clear();
+                            block.Next.Add(new_block);
+                            block.OfsEnd--;
                             block.Instructions.RemoveLast();
                             block.Statements.RemoveLast();
                             block.StackPop = -1;
@@ -414,46 +412,42 @@ namespace CrashEdit.Crash
                             var instruction_count = stmt.GetRealInstructionCount();
                             var post_statements = block.Statements.Skip(j + 1).Take(block.Statements.Count - (j + 1));
                             var post_instruction_count = post_statements.Sum(x => x.GetRealInstructionCount());
-                            block.end -= post_instruction_count + instruction_count;
+                            block.OfsEnd -= post_instruction_count + instruction_count;
                             // make two blocks: one for the statement, one for after the statement.
-                            var stmt_block = new GOOLDecompBlock($"{block.Name}_B{block_id++}_stmt_pop");
-                            stmt_block.begin = block.end;
-                            stmt_block.end = block.end + instruction_count;
+                            var stmt_block = new GOOLDecompBlock($"{block.Name}_B{block_id++}_stmt_pop", block.OfsEnd, block.OfsEnd + instruction_count);
                             stmt_block.Statements.Add(stmt);
                             blocks.Add(stmt_block);
                             var next_block = stmt_block;
                             if (post_instruction_count > 0)
                             {
-                                var post_block = new GOOLDecompBlock($"{block.Name}_B{block_id++}_post_pop");
-                                post_block.begin = block.end + instruction_count;
-                                post_block.end = block.end + instruction_count + post_instruction_count;
+                                var post_block = new GOOLDecompBlock($"{block.Name}_B{block_id++}_post_pop", block.OfsEnd + instruction_count, block.OfsEnd + instruction_count + post_instruction_count);
                                 post_block.Statements.AddRange(post_statements);
-                                stmt_block.next.Add(post_block);
+                                stmt_block.Next.Add(post_block);
                                 blocks.Add(post_block);
                                 next_block = post_block;
                             }
-                            next_block.next.AddRange(block.next);
+                            next_block.Next.AddRange(block.Next);
                             next_block.Type = block.Type;
                             block.Statements.RemoveRange(j, block.Statements.Count - j);
-                            block.next.Clear();
-                            block.next.Add(stmt_block);
+                            block.Next.Clear();
+                            block.Next.Add(stmt_block);
                             block.Type = GoolBranchType.None;
                             if (block.Statements.Count == 0)
                             {
                                 // block became empty... delete.
-                                foreach (var x in block.prev)
+                                foreach (var x in block.Prev)
                                 {
-                                    for (int p = 0; p < x.next.Count; ++p)
+                                    for (int p = 0; p < x.Next.Count; ++p)
                                     {
-                                        if (x.next[p] == block) x.next[p] = stmt_block;
+                                        if (x.Next[p] == block) x.Next[p] = stmt_block;
                                     }
                                 }
-                                block.prev.Clear();
+                                block.Prev.Clear();
                                 blocks.Remove(block);
                             }
                             else
                             {
-                                block.next.Add(stmt_block);
+                                block.Next.Add(stmt_block);
                             }
                             func.GenerateCFG();
                             continue;
@@ -464,46 +458,42 @@ namespace CrashEdit.Crash
                             var instruction_count = stmt.GetRealInstructionCount();
                             var post_statements = block.Statements.Skip(j + 1).Take(block.Statements.Count - (j + 1));
                             var post_instruction_count = post_statements.Sum(x => x.GetRealInstructionCount());
-                            block.end -= post_instruction_count + instruction_count;
+                            block.OfsEnd -= post_instruction_count + instruction_count;
                             // make two blocks: one for after the statement, one for the statement.
-                            var stmt_block = new GOOLDecompBlock($"{block.Name}_B{block_id++}_stmt_push");
-                            stmt_block.begin = block.end;
-                            stmt_block.end = block.end + instruction_count;
+                            var stmt_block = new GOOLDecompBlock($"{block.Name}_B{block_id++}_stmt_push", block.OfsEnd, block.OfsEnd + instruction_count);
                             stmt_block.Statements.Add(stmt);
                             blocks.Add(stmt_block);
                             var next_block = stmt_block;
                             if (post_instruction_count > 0)
                             {
                                 // this can even be a branch in the case of (let ((var (if t 0 1)) ..) ..)
-                                var post_block = new GOOLDecompBlock($"{block.Name}_B{block_id++}_post_push");
-                                post_block.begin = block.end + instruction_count;
-                                post_block.end = block.end + instruction_count + post_instruction_count;
+                                var post_block = new GOOLDecompBlock($"{block.Name}_B{block_id++}_post_push", block.OfsEnd + instruction_count, block.OfsEnd + instruction_count + post_instruction_count);
                                 post_block.Statements.AddRange(post_statements);
-                                stmt_block.next.Add(post_block);
+                                stmt_block.Next.Add(post_block);
                                 blocks.Add(post_block);
                                 next_block = post_block;
                             }
-                            next_block.next.AddRange(block.next);
+                            next_block.Next.AddRange(block.Next);
                             next_block.Type = block.Type;
                             block.Type = GoolBranchType.None;
                             block.Statements.RemoveRange(j, block.Statements.Count - j);
-                            block.next.Clear();
+                            block.Next.Clear();
                             if (block.Statements.Count == 0)
                             {
                                 // block became empty... delete.
-                                foreach (var x in block.prev)
+                                foreach (var x in block.Prev)
                                 {
-                                    for (int p = 0; p < x.next.Count; ++p)
+                                    for (int p = 0; p < x.Next.Count; ++p)
                                     {
-                                        if (x.next[p] == block) x.next[p] = stmt_block;
+                                        if (x.Next[p] == block) x.Next[p] = stmt_block;
                                     }
                                 }
-                                block.prev.Clear();
+                                block.Prev.Clear();
                                 blocks.Remove(block);
                             }
                             else
                             {
-                                block.next.Add(stmt_block);
+                                block.Next.Add(stmt_block);
                             }
                             func.GenerateCFG();
                             continue;
@@ -519,11 +509,11 @@ namespace CrashEdit.Crash
 
                 // step 1: recursively structure lets
                 // ---------------
-                func.StructureLets(this);
+                func.StructureLets();
 
                 // step 2: recursively structure loops
                 // ---------------
-                func.StructureLoops(this);
+                func.StructureLoops();
 
                 StructureIfElse(func);
                 try
@@ -541,11 +531,9 @@ namespace CrashEdit.Crash
 
             foreach (var func in funcs)
             {
-                break;
-                if (func.HasError) continue;
                 string fout = "(defgfun " + func.Name + " ()\n";
                 int indent = 2;
-                func.start.PrintLispOut(indent, ref fout);
+                func.start.PrintLispOut(indent, ref fout, new());
                 fout += "  )\n\n";
                 Console.Write(fout);
             }
@@ -563,114 +551,6 @@ namespace CrashEdit.Crash
                 debug += $"  {func.Name} [fillcolor=pink shape=box fontsize = \"32pt\"]\n";
                 debug += $"  {func.Name} -> {func.start.Name} [color=purple]\n";
                 debug += func.start.PrintRecursiveAsRoot();
-                foreach (var block in func.BlockList)
-                {
-                    continue;
-                    for (int i = 0; i < func.BlockList.Count; ++i)
-                    {
-                        var targetblock = func.BlockList[i];
-                        // every node dominates and postdominates itself
-                        if (block == targetblock) continue;
-                        if (targetblock.Dominates(block))
-                        {
-                            debug += $"  {targetblock.Name} -> {block.Name} [color=cyan]\n";
-                        }
-                        if (targetblock.PostDominates(block))
-                        {
-                            debug += $"  {targetblock.Name} -> {block.Name} [color=blue]\n";
-                        }
-                    }
-                }
-            }
-            foreach (var block in blocks)
-            {
-                if (block is IGOOLDecompBlockIterator bl)
-                {
-                    foreach (var lblock in bl.BlockList)
-                    {
-                        continue;
-                        for (int i = 0; i < bl.BlockList.Count; ++i)
-                        {
-                            var targetblock = bl.BlockList[i];
-                            // every node dominates and postdominates itself
-                            if (lblock == targetblock) continue;
-                            if (targetblock.Dominates(lblock))
-                            {
-                                debug += $"  {targetblock.Name} -> {lblock.Name} [color=cyan]\n";
-                            }
-                            if (targetblock.PostDominates(lblock))
-                            {
-                                debug += $"  {targetblock.Name} -> {lblock.Name} [color=blue]\n";
-                            }
-                        }
-                    }
-                }
-                if (block is GOOLDecompBlockDoWhile dw)
-                {
-                    debug += $"  subgraph cluster_{dw.Name} {{\n";
-                    debug += $"    label = \"{dw.GetFullName()}\";\n";
-                    debug += $"    style = filled;\n";
-                    debug += $"    fontsize = \"25pt\";\n";
-                    debug += $"    fillcolor = lightyellow;\n";
-                    debug += dw.Entry.PrintRecursiveAsRoot();
-                    debug += $"  }}\n";
-                }
-                else if (block is GOOLDecompBlockIf bi)
-                {
-                    debug += $"  subgraph cluster_{bi.Name} {{\n";
-                    debug += $"    label = \"{bi.GetFullName()}\";\n";
-                    debug += $"    style = filled;\n";
-                    debug += $"    fontsize = \"25pt\";\n";
-                    debug += $"    fillcolor = lightyellow;\n";
-                    debug += bi.Header.PrintRecursiveAsRoot();
-                    debug += $"  }}\n";
-                }
-                else if (block is GOOLDecompBlockRegion rg)
-                {
-                    debug += $"  subgraph cluster_{rg.Name} {{\n";
-                    debug += $"    label = \"{rg.GetFullName()}\";\n";
-                    debug += $"    style = filled;\n";
-                    debug += $"    fontsize = \"25pt\";\n";
-                    debug += $"    fillcolor = cyan3;\n";
-                    debug += rg.Entry.PrintRecursiveAsRoot();
-                    debug += $"  }}\n";
-                }
-            }
-            int li = 0;
-            foreach (var func in funcs)
-            {
-                //void print_loop(int indent, GOOLDecompLoop loop)
-                //{
-                //    var istr = new string(' ', indent);
-                //    debug += istr + $"  subgraph cluster_loop_{li} {{\n";
-                //    debug += istr + $"    label = \"loop_{li}\\nheader: {loop.Header.Name}\\ntail: {loop.Tail.Name}\";\n";
-                //    li++;
-                //    debug += istr + $"    style = filled;\n";
-                //    debug += istr + $"    fontsize = \"25pt\";\n";
-                //    debug += istr + $"    fillcolor = lightyellow;\n";
-                //    foreach (var ch in loop.Children)
-                //    {
-                //        print_loop(indent + 2, ch);
-                //    }
-                //    foreach (var block in loop.BlockList.Where(a => !loop.Children.Any(c => c.BlockList.Contains(a))))
-                //    {
-                //        if (block == loop.PreBranch)
-                //            debug += istr + $"    {block.Name} [fillcolor=cyan]\n";
-                //        else if (block == loop.Header && block == loop.Tail)
-                //            debug += istr + $"    {block.Name} [fillcolor=yellow]\n";
-                //        else if (block == loop.Tail)
-                //            debug += istr + $"    {block.Name} [fillcolor=pink]\n";
-                //        else if (block == loop.Header)
-                //            debug += istr + $"    {block.Name} [fillcolor=lightgreen]\n";
-                //        else
-                //            debug += istr + $"    {block.Name}\n";
-                //    }
-                //    debug += istr + $"  }}\n";
-                //}
-                //foreach (var loop in func.LoopList)
-                //{
-                //    if (loop.Parent == null) print_loop(0, loop);
-                //}
             }
             debug += "}\n";
 

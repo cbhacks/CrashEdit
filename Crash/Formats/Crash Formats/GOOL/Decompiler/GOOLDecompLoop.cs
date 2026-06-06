@@ -8,7 +8,5 @@
         public GOOLDecompBlock Tail { get; set; } = tail;
         public List<GOOLDecompBlock> BlockList { get; } = new();
         public int LoopDepth { get; set; } = -1;
-        public GOOLDecompLoop Parent { get; set; } = null;
-        public List<GOOLDecompLoop> Children { get; } = new();
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CrashEdit.Crash
+﻿namespace CrashEdit.Crash
 {
     public interface IGOOLDecompBlockIterator
     {
@@ -16,13 +14,13 @@ namespace CrashEdit.Crash
             {
                 block.DomID = BlockList.Count;
                 BlockList.Add(block);
-                block.prev.Clear();
+                block.Prev.Clear();
             }, postVisit: (block) =>
             {
                 block.PostOrderID = poid++;
-                block.next.ForEach(next => next.prev.Add(block));
+                block.Next.ForEach(next => next.Prev.Add(block));
             });
-            BlockList.Sort((a, b) => a.begin - b.begin);
+            BlockList.Sort((a, b) => a.OfsBegin - b.OfsBegin);
             // initialize dominators and postdominators
             BlockList.ForEach((block) =>
             {
@@ -38,7 +36,7 @@ namespace CrashEdit.Crash
                     block.Dominators.SetAll();
                 }
                 block.PostDominators = new(BlockList.Count);
-                if (block.next.Count == 0)
+                if (block.Next.Count == 0)
                 {
                     // this is an exit node since it cannot go any further
                     block.PostDominators.ClearAll();
@@ -69,7 +67,7 @@ namespace CrashEdit.Crash
                 changed = false;
                 foreach (var block in BlockList)
                 {
-                    foreach (var prev in block.prev)
+                    foreach (var prev in block.Prev)
                     {
                         tested.Overwrite(block.Dominators);
                         block.Dominators.Mask(prev.Dominators);
@@ -87,7 +85,7 @@ namespace CrashEdit.Crash
                 changed = false;
                 foreach (var block in BlockList)
                 {
-                    foreach (var next in block.next)
+                    foreach (var next in block.Next)
                     {
                         tested.Overwrite(block.PostDominators);
                         block.PostDominators.Mask(next.PostDominators);
@@ -150,8 +148,8 @@ namespace CrashEdit.Crash
             return polist;
         }
 
-        public void StructureLets(GOOLDecompiler decompiler);
-        public void StructureLetsInt(GOOLDecompiler decompiler, List<GOOLDecompBlock> polist)
+        public void StructureLets();
+        public void StructureLetsInt(List<GOOLDecompBlock> polist)
         {
             for (int i = 0; i < polist.Count; ++i)
             {
@@ -223,7 +221,7 @@ namespace CrashEdit.Crash
                         {
                             Console.WriteLine("Failed to create region for let: exit did not postdominate all nodes");
                         }
-                        else if (let_region.Any(x => x.prev.Any(p => p != let_begin && !let_region.Contains(p)) || x.next.Any(n => n != let_end && !let_region.Contains(n))))
+                        else if (let_region.Any(x => x.Prev.Any(p => p != let_begin && !let_region.Contains(p)) || x.Next.Any(n => n != let_end && !let_region.Contains(n))))
                         {
                             Console.WriteLine("Failed to create region for let: some node escapes the region");
                         }
@@ -231,14 +229,13 @@ namespace CrashEdit.Crash
                         {
                             // valid region! we can create it now.
                             var new_region = new GOOLDecompBlockRegion($"let_{let_begin.Name}_{let_end.Name}", let_begin, let_end);
-                            decompiler.blocks.Add(new_region);
                             new_region.GenerateCFG();
                             new_region.GenerateDominationTree();
-                            new_region.StructureLets(decompiler);
+                            new_region.StructureLets();
                             // our graph was changed. re-generate it and try to structure more!
                             GenerateCFG();
                             GenerateDominationTree();
-                            StructureLets(decompiler);
+                            StructureLets();
                             break;
                         }
                     }
@@ -250,8 +247,8 @@ namespace CrashEdit.Crash
             }
         }
 
-        public void StructureLoops(GOOLDecompiler decompiler);
-        public void StructureLoopsInt(GOOLDecompiler decompiler, List<GOOLDecompBlock> polist)
+        public void StructureLoops();
+        public void StructureLoopsInt(List<GOOLDecompBlock> polist)
         {
             GOOLDecompLoop CreateLoopFromEdge(GOOLDecompBlock header, GOOLDecompBlock tail, GOOLDecompBlock? prebranch = null)
             {
@@ -268,7 +265,7 @@ namespace CrashEdit.Crash
                 if (prebranch != null)
                 {
                     real_tail = header;
-                    real_header = real_tail.next.Find(x => x.begin < real_tail.end)!;
+                    real_header = real_tail.Next.Find(x => x.OfsBegin < real_tail.OfsEnd)!;
                 }
 
                 GOOLDecompLoop loop = new(real_header, real_tail, prebranch);
@@ -287,7 +284,7 @@ namespace CrashEdit.Crash
                 while (workList.Count > 0)
                 {
                     var block = workList.Pop();
-                    foreach (var prev in block.prev)
+                    foreach (var prev in block.Prev)
                     {
                         if (!loop.BlockList.Contains(prev))
                         {
@@ -297,7 +294,7 @@ namespace CrashEdit.Crash
                     }
                 }
 
-                loop.BlockList.Sort((a, b) => a.begin - b.begin);
+                loop.BlockList.Sort((a, b) => a.OfsBegin - b.OfsBegin);
                 return loop;
             }
 
@@ -306,8 +303,8 @@ namespace CrashEdit.Crash
             List<GOOLDecompLoop> loops = new();
             foreach (var block in BlockList)
             {
-                if (block is IGOOLDecompBlockIterator it) it.StructureLoops(decompiler);
-                foreach (var next in block.next)
+                if (block is IGOOLDecompBlockIterator it) it.StructureLoops();
+                foreach (var next in block.Next)
                 {
                     // block will proceed into a different block that dominates us - i.e. if we went to the start of a loop and this was a back edge!
                     // that means block is the tail (where the loop ends) and the thing it goes to is the head (where the loop begins)
@@ -318,7 +315,7 @@ namespace CrashEdit.Crash
                         // if the loop condition check is immediately dominated by an unconditional branch that came before, that's a prebranch
                         // unconditional branches also appear in if-else constructs, but they dont immediately jump to the middle of loops, so this is okay.
                         GOOLDecompBlock? prebranch = null;
-                        if (next.prev.Contains(next.ImmDom) && next.ImmDom.Type == GoolBranchType.Goto && next.ImmDom.begin < next.begin)
+                        if (next.Prev.Contains(next.ImmDom) && next.ImmDom.Type == GoolBranchType.Goto && next.ImmDom.OfsBegin < next.OfsBegin)
                         {
                             prebranch = next.ImmDom;
                         }
@@ -340,24 +337,17 @@ namespace CrashEdit.Crash
                     if (loop.BlockList.All(otherloop.BlockList.Contains))
                     {
                         loop.LoopDepth++;
-                        if (loop.Parent == null || otherloop.BlockList.Count < loop.Parent.BlockList.Count)
-                            loop.Parent = otherloop;
                     }
                 }
             }
 
             // sort loops by 'depth' (descending, so deepest first) and assign children
             loops.Sort((a, b) => b.LoopDepth - a.LoopDepth);
-            foreach (var loop in loops)
-            {
-                loop.Parent?.Children.Add(loop);
-            }
 
             foreach (var loop in loops)
             {
                 processed_loops.Add(loop);
                 var do_while = new GOOLDecompBlockDoWhile($"dowhile_{loop.Header.Name}_{loop.Tail.Name}", loop.Header, loop.Tail, loop.PreBranch);
-                decompiler.blocks.Add(do_while);
                 do_while.GenerateCFG();
                 do_while.GenerateDominationTree();
                 do_while.StructureBreakContinue();
@@ -397,14 +387,14 @@ namespace CrashEdit.Crash
             (this as IGOOLDecompBlockIterator).GenerateDominationTreeInt();
         }
 
-        public void StructureLets(GOOLDecompiler decompiler)
+        public void StructureLets()
         {
-            (this as IGOOLDecompBlockIterator).StructureLetsInt(decompiler, (this as IGOOLDecompBlockIterator).AsPostOrderList());
+            (this as IGOOLDecompBlockIterator).StructureLetsInt((this as IGOOLDecompBlockIterator).AsPostOrderList());
         }
 
-        public void StructureLoops(GOOLDecompiler decompiler)
+        public void StructureLoops()
         {
-            (this as IGOOLDecompBlockIterator).StructureLoopsInt(decompiler, (this as IGOOLDecompBlockIterator).AsPostOrderList());
+            (this as IGOOLDecompBlockIterator).StructureLoopsInt((this as IGOOLDecompBlockIterator).AsPostOrderList());
         }
     }
 }
