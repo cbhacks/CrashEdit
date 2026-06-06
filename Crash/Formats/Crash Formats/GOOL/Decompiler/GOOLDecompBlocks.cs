@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace CrashEdit.Crash
+﻿namespace CrashEdit.Crash
 {
     public enum GoolBranchType
     {
