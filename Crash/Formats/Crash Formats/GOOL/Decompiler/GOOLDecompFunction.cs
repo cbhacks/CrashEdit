@@ -100,7 +100,7 @@
             // grab immediate (post-)dominators
             foreach (var block in BlockList)
             {
-                List<GOOLDecompBlock> pdoms = BlockList.Where(b => b.DomID != block.DomID && block.PostDominators[b.DomID]).ToList();
+                var pdoms = BlockList.Where(b => b.DomID != block.DomID && block.PostDominators[b.DomID]);
                 int pdoms_count = block.PostDominators.Count;
                 foreach (var pdom in pdoms)
                 {
@@ -119,7 +119,7 @@
                         break;
                     }
                 }
-                List<GOOLDecompBlock> doms = BlockList.Where(b => b.DomID != block.DomID && block.Dominators[b.DomID]).ToList();
+                var doms = BlockList.Where(b => b.DomID != block.DomID && block.Dominators[b.DomID]);
                 int doms_count = block.Dominators.Count;
                 foreach (var dom in doms)
                 {
@@ -366,20 +366,34 @@
         }
     }
 
-    public class GOOLDecompFunction(string name) : IGOOLDecompBlockIterator
+    public class GOOLDecompFunction : IGOOLDecompBlockIterator
     {
         public int Offset { get; set; }
         public bool Trans { get; set; }
-        public string Name { get; set; } = name;
+        public string Name { get; set; }
         public List<GOOLDecompBlock> BlockList { get; } = new();
 
-        public GOOLDecompBlock start;
+        public GOOLDecompBlock Entry { get; set; }
 
-        public bool HasError { get; set; }
+        public GOOLDecompFunction(string name, int offset, bool trans)
+        {
+            Name = name;
+            Offset = offset;
+            Trans = trans;
+            Entry = new("entry_" + name, -1, -1);
+            Entry.Type = GoolBranchType.None;
+        }
+
+        // Set a block as the function's entry point. Block will ONLY connect to the function entry point, and entry point will ONLY connect to block.
+        public void SetFirstBlock(GOOLDecompBlock block)
+        {
+            Entry.Next.Clear();
+            Entry.Next.Add(block);
+        }
 
         public void GenerateCFG()
         {
-            (this as IGOOLDecompBlockIterator).GenerateCFGInt(start);
+            (this as IGOOLDecompBlockIterator).GenerateCFGInt(Entry);
         }
 
         public void GenerateDominationTree()
@@ -395,6 +409,13 @@
         public void StructureLoops()
         {
             (this as IGOOLDecompBlockIterator).StructureLoopsInt((this as IGOOLDecompBlockIterator).AsPostOrderList());
+        }
+
+        public ListObj MakeListOutput()
+        {
+            var res = new ListObj(new TokenObj("defgfun"), new TokenObj(Name), new ListObj());
+
+            return res;
         }
     }
 }

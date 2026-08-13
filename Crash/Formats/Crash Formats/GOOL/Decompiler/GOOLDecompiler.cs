@@ -1,5 +1,4 @@
 ﻿using CrashEdit.Crash.GOOLIns;
-using System.Windows.Documents;
 using System.Windows.Forms;
 
 namespace CrashEdit.Crash
@@ -42,32 +41,15 @@ namespace CrashEdit.Crash
             return block;
         }
 
-        private GOOLDecompBlock AddBlockNoInstructions(string name)
-        {
-            GOOLDecompBlock block = new(name, -1, -1);
-            blocks.Add(block);
-            return block;
-        }
-
         // Add a function to the decompiler, if one does not already exist at that offset.
         // Automatically creates an entry point block that has no statements.
-        private GOOLDecompFunction? AddFuncIfNoExistAt(string name, int offset, bool trans = false)
+        private GOOLDecompFunction? TryAddFunc(string name, int offset, bool trans = false)
         {
             if (funcs.Any(f => f.Offset == offset)) return null;
-            GOOLDecompFunction func = new(name) { Offset = offset, Trans = trans };
-            func.start = AddBlockNoInstructions("entry_" + name);
-            func.start.Type = GoolBranchType.None;
+            GOOLDecompFunction func = new(name, offset, trans);
+            blocks.Add(func.Entry);
             funcs.Add(func);
             return func;
-        }
-
-        // Set a block as the function's entry point. Block will ONLY connect to the function entry point, and entry point will ONLY connect to block.
-        private void SetFuncFirstBlock(GOOLDecompFunction func, GOOLDecompBlock block)
-        {
-            func.start.Next.Clear();
-            func.start.Next.Add(block);
-            block.Prev.Clear();
-            block.Prev.Add(func.start);
         }
 
         private GOOLDecompBlock GetBlockFromInsIndex(int index)
@@ -186,15 +168,15 @@ namespace CrashEdit.Crash
                 int e = state.EventHook & 0x3FFF;
                 if (t != 0x3FFF)
                 {
-                    AddFuncIfNoExistAt($"state_{i}_trans", t, true);
+                    TryAddFunc($"state_{i}_trans", t, true);
                 }
                 if (c != 0x3FFF)
                 {
-                    AddFuncIfNoExistAt($"state_{i}_code", c);
+                    TryAddFunc($"state_{i}_code", c);
                 }
                 if (e != 0x3FFF)
                 {
-                    AddFuncIfNoExistAt($"state_{i}_event", e);
+                    TryAddFunc($"state_{i}_event", e);
                 }
             }
 
@@ -224,7 +206,7 @@ namespace CrashEdit.Crash
                     TryAddLabel(ofs);
                     if (funcs.Find(x => x.Offset == ofs) == null)
                     {
-                        AddFuncIfNoExistAt($"func_{ofs}", ofs);
+                        TryAddFunc($"func_{ofs}", ofs);
                     }
                 }
                 else if (ins.GetName() == "RET")
@@ -315,7 +297,7 @@ namespace CrashEdit.Crash
 
             foreach (var func in funcs)
             {
-                SetFuncFirstBlock(func, GetBlockFromInsIndex(func.Offset));
+                func.SetFirstBlock(GetBlockFromInsIndex(func.Offset));
             }
 
             // generate block list and (post-)dominators for each function's blocks and check for this
@@ -330,33 +312,30 @@ namespace CrashEdit.Crash
                 var func = funcs[i];
                 if (!func.Trans)
                     continue;
-                bool regen = false;
                 foreach (var block in func.BlockList)
                 {
+                    // enter, no trans
                     if (block.Instructions.Count >= 3 && block.Type == GoolBranchType.Goto && block.Next.Count == 1 &&
-                        block.Instructions[^2].GetName() == "SETF" &&
-                        block.Instructions[^3].GetName() == "ADD" &&
-                        block.Instructions[^2].Arguments == "tpc,[sp]" &&
-                       // so lazy!!
-                       (block.Instructions[^3].Arguments == "pc,(8)" || block.Instructions[^3].Arguments == "pc,8"))
+                        (block.Instructions[^3].Value & 0xFF_000_FFF) == 0x00_000_E20 &&
+                        block.Instructions[^3].TryGetImmediate('B', out int val) && val == 8 && // ADD pc,8
+                        block.Instructions[^2].Value == 0x11_E1F_E22) // SETF tpc,[sp]
                     {
                         block.Next.Clear();
                         block.Instructions.RemoveLast();
                         block.Instructions.RemoveLast();
                         block.Instructions.RemoveLast();
-                        var trans_func = AddFuncIfNoExistAt(func.Name, block.OfsEnd, true)!;
-                        SetFuncFirstBlock(trans_func, GetBlockFromInsIndex(trans_func.Offset));
-                        func.Trans = false;
-                        func.Name = func.Name.Replace("trans", "enter");
-                        func.start.PatchNameTransToEnter();
-                        // regenerate CFG since we changed its structure
+                        var trans_func = TryAddFunc(func.Name, block.OfsEnd, true)!;
+                        trans_func.SetFirstBlock(GetBlockFromInsIndex(trans_func.Offset));
                         trans_func.GenerateCFG();
-                        regen = true;
+                        func.Trans = false;
+                        func.Name = func.Name.Replace("trans", "enter_notrans");
+                        func.Entry.Name = func.Name.Replace("trans", "enter_notrans");
+                        // regenerate CFG since we changed its structure
+                        func.GenerateCFG();
                         break;
                     }
+                    // enter, with trans TODO
                 }
-                if (regen)
-                    func.GenerateCFG();
             }
 
             // generate statements in each block
@@ -516,14 +495,6 @@ namespace CrashEdit.Crash
                 func.StructureLoops();
 
                 StructureIfElse(func);
-                try
-                {
-                }
-                catch (Exception ex)
-                {
-                    func.HasError = true;
-                    Console.WriteLine($"failed to structure function {func.Name}: {ex.Message}");
-                }
             }
 
             // find variables
@@ -531,11 +502,7 @@ namespace CrashEdit.Crash
 
             foreach (var func in funcs)
             {
-                string fout = "(defgfun " + func.Name + " ()\n";
-                int indent = 2;
-                func.start.PrintLispOut(indent, ref fout, new());
-                fout += "  )\n\n";
-                Console.Write(fout);
+                Console.Write(func.MakeListOutput().PrettyPrint());
             }
 
             DebugPrint();
@@ -549,8 +516,8 @@ namespace CrashEdit.Crash
             foreach (var func in funcs)
             {
                 debug += $"  {func.Name} [fillcolor=pink shape=box fontsize = \"32pt\"]\n";
-                debug += $"  {func.Name} -> {func.start.Name} [color=purple]\n";
-                debug += func.start.PrintRecursiveAsRoot();
+                debug += $"  {func.Name} -> {func.Entry.Name} [color=purple]\n";
+                debug += func.Entry.PrintRecursiveAsRoot();
             }
             debug += "}\n";
 

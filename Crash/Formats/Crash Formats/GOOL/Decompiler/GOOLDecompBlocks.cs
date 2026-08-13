@@ -35,14 +35,9 @@
         public int OfsBegin { get; set; } = begin;
         public int OfsEnd { get; set; } = end;
 
-        public string Name { get; private set; } = name;
+        public string Name { get; set; } = name;
 
         public string GetFullName() => Name + $" ({OfsBegin} ~ {OfsEnd})";
-
-        public void PatchNameTransToEnter()
-        {
-            Name = Name.Replace("trans", "enter");
-        }
 
         public bool Dominates(GOOLDecompBlock other) => other.Dominators[DomID];
         public bool PostDominates(GOOLDecompBlock other) => other.PostDominators[DomID];
@@ -202,12 +197,45 @@
                 if (!visited.Contains(n)) n.PrintLispOut(indent, ref fout, visited);
             }
         }
+
+        public virtual GObj GetLispOutputSingle()
+        {
+            if (Statements.Count == 0) return new EmptyObj();
+            else if (Statements.Count == 1) return Statements[0].LispOut;
+            else
+            {
+                var res = new ListObj(new TokenObj("begin"));
+                foreach (var stmt in Statements)
+                {
+                    res.Forms.Add(stmt.LispOut);
+                }
+                return res;
+            }
+        }
+
+        public virtual List<GObj> GetLispOutputRecursive()
+        {
+            var res = new List<GObj>();
+            foreach (var stmt in Statements)
+            {
+                res.Add(stmt.LispOut);
+            }
+
+            foreach (var n in Next)
+            {
+                n.GetLispOutputRecursive();
+            }
+            return res;
+        }
     }
 
     public abstract class GOOLDecompBlockSubGraph(string name, int begin, int end) : GOOLDecompBlock(name, begin, end), IGOOLDecompBlockIterator
     {
         public GOOLDecompBlock Entry { get; protected set; }
         public List<GOOLDecompBlock> BlockList { get; } = new();
+
+        [Obsolete("Subgraph nodes don't have statements by themselves.", true)]
+        public new List<GOOLStatement> Statements => null;
 
         public virtual void PatchStructuredIf(Dictionary<GOOLDecompBlock, GOOLDecompBlock> processed_ifs) { }
 
@@ -341,6 +369,84 @@
             {
                 if (!visited.Contains(n)) n.PrintLispOut(indent, ref fout, visited);
             }
+        }
+
+        private ListObj GetFormForIf()
+        {
+            var stmtif = Condition.LispOut as ListObj; // get condition as like (b-if n x)
+            if (stmtif == null || stmtif.Forms.Count != 3) throw new NotImplementedException();
+            var res_true = TrueCase.GetLispOutputRecursive();
+            var res_else = ElseCase?.GetLispOutputRecursive();
+            var cond = stmtif.Forms[2];
+            // (cond (? ..) (t ..))
+            if (res_else != null && (res_true.Count != 1 || res_else.Count != 1))
+            {
+                if (stmtif.Forms[0].Print() == "b-if")
+                {
+                    cond = new ListObj(new TokenObj("not"), cond);
+                }
+                var res_cond_true = new ListObj(cond);
+                res_cond_true.Forms.AddRange(res_true);
+                var res_cond_else = new ListObj(new TokenObj("t"));
+                res_cond_else.Forms.AddRange(res_else);
+                return new ListObj(new TokenObj("cond"), res_cond_true, res_cond_else);
+            }
+            // (if ? .. ..)
+            else if (res_else != null)
+            {
+                if (stmtif.Forms[0].Print() == "b-if")
+                {
+                    cond = new ListObj(new TokenObj("not"), cond);
+                }
+                return new ListObj(new TokenObj("if"), cond, res_true[0], res_else[0]);
+            }
+            // (when ? ..) or (unless ? ..)
+            else
+            {
+                if (stmtif.Forms[0].Print() == "b-unless")
+                {
+                    var res = new ListObj(new TokenObj("when"), cond);
+                    res.Forms.AddRange(res_true);
+                    return res;
+                }
+                else if (stmtif.Forms[0].Print() == "b-if")
+                {
+                    var res = new ListObj(new TokenObj("unless"), cond);
+                    res.Forms.AddRange(res_true);
+                    return res;
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
+        }
+
+        public override GObj GetLispOutputSingle()
+        {
+            if (Entry.Statements.Count == 0) return GetFormForIf();
+            else
+            {
+                var res = new ListObj(new TokenObj("begin"));
+                foreach (var stmt in Entry.Statements)
+                {
+                    res.Forms.Add(stmt.LispOut);
+                }
+                res.Forms.Add(GetFormForIf());
+                return res;
+            }
+        }
+
+        public override List<GObj> GetLispOutputRecursive()
+        {
+            var res = new List<GObj>();
+            foreach (var stmt in Entry.Statements)
+            {
+                res.Add(stmt.LispOut);
+            }
+
+            res.Add(GetFormForIf());
+            return res;
         }
     }
 

@@ -39,6 +39,11 @@
                 return res + ")";
             }
         }
+
+        public string PrettyPrint()
+        {
+            return Print();
+        }
     }
 
     public sealed class TokenObj(string val) : GObj
@@ -78,6 +83,14 @@
         public override string Print()
         {
             return Value.TransformedStringLisp();
+        }
+    }
+
+    public sealed class EmptyObj : GObj
+    {
+        public override string Print()
+        {
+            return string.Empty;
         }
     }
 }
