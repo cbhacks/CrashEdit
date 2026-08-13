@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+﻿using CrashEdit.Crash.GOOLIns;
 
 namespace CrashEdit.Crash
 {
@@ -11,49 +11,55 @@ namespace CrashEdit.Crash
         public const string NullFormat = "000001111101";
         public const int NullRef = 0xBE0;
         public const int DoubleStackRef = 0xBF0;
+        public const int StackRef = 0xE1F;
+
+        public static bool ParensOnPool = false;
 
         private readonly Dictionary<char, GOOLArgument> args;
-        private readonly Type type;
+        private readonly GOOLInsOpcode opcode;
 
         public virtual string GetName()
         {
-            var method = type.GetMethod("GetName", BindingFlags.Public | BindingFlags.Static);
-            return (string)method.Invoke(null, new object[] { this });
+            return opcode.GetName(this);
         }
 
         public virtual string GetFormat()
         {
-            var method = type.GetMethod("GetFormat", BindingFlags.Public | BindingFlags.Static);
-            return (string)method.Invoke(null, null);
+            return opcode.GetFormat();
         }
 
         public virtual string GetComment()
         {
-            var method = type.GetMethod("GetComment", BindingFlags.Public | BindingFlags.Static);
-            return (string)method.Invoke(null, new object[] { this });
+            return opcode.GetComment(this);
         }
+
+        public int GetStackPop() => opcode.StackPop(this);
+        public int GetStackPush() => opcode.StackPush(this);
 
         public virtual string Arguments => GetArguments();
         public GOOLEntry GOOL { get; }
-        public Type Type => type;
+        public Type Type => opcode.GetType();
         public int Value { get; set; }
         public int UnusedArg { get; private set; }
-        public int Opcode => Value >> 24 & 0xFF;
+        public int ID => Value >> 24 & 0xFF;
         public IDictionary<char, GOOLArgument> Args => args;
 
-        public GOOLInstruction(int value, GOOLEntry gool, Type type)
+        public bool DecompFakeInstruction { get; private set; }
+
+        public GOOLInstruction(int value, GOOLEntry gool, Type? type, bool fake = false)
         {
-            this.type = type;
+            opcode = type != null ? (GOOLInsOpcode)Activator.CreateInstance(type)! : null;
             GOOL = gool;
             Value = value;
-            args = new();
+            args = [];
             if (this is not MIPSInstruction)
                 LoadFormat();
+            DecompFakeInstruction = fake;
         }
 
         private void LoadFormat()
         {
-            // [] means a GOOL ref, () means a process field, valid digits are any letter + 0, 1 and -, and each correspond to one bit. Bitfields must be contiguous. Spaces are removed in parsing.
+            // [] means a GOOL ref, () means a process field, valid characters are any letter + 0, 1 and -, and each correspond to one bit. Bitfields must be contiguous. Spaces are removed in parsing.
             args.Clear();
             int vbits = 0;
             int lastv = 0;
@@ -160,31 +166,90 @@ namespace CrashEdit.Crash
             return Value;
         }
 
-        public string GetArg(char a)
+        public bool IsStackRef(char a)
         {
-            if (!args.ContainsKey(a))
+            if (!args.TryGetValue(a, out GOOLArgument value))
                 throw new ArgumentException($"GetArg: Argument `{a}` not found", nameof(a));
-            switch (args[a].Type)
+            switch (value.Type)
             {
                 case GOOLArgumentTypes.Ref:
-                    return GetRefVal(args[a].Value);
                 case GOOLArgumentTypes.DestRef:
-                    return GetDestRefVal(args[a].Value);
+                    return value.Value == StackRef;
                 case GOOLArgumentTypes.ProcessField:
-                    return ((ObjectFields)args[a].Value).ToString();
+                    return (ObjectFields)value.Value == ObjectFields.sp;
                 default:
-                    return args[a].Value.TransformedString();
+                    return false;
+            }
+        }
+
+        public bool IsDoubleStackRef(char a)
+        {
+            if (!args.TryGetValue(a, out GOOLArgument value))
+                throw new ArgumentException($"GetArg: Argument `{a}` not found", nameof(a));
+            switch (value.Type)
+            {
+                case GOOLArgumentTypes.Ref:
+                    return value.Value == DoubleStackRef;
+                default:
+                    return false;
+            }
+        }
+
+        public bool IsNullRef(char a)
+        {
+            if (!args.TryGetValue(a, out GOOLArgument value))
+                throw new ArgumentException($"GetArg: Argument `{a}` not found", nameof(a));
+            switch (value.Type)
+            {
+                case GOOLArgumentTypes.Ref:
+                    return value.Value == NullRef;
+                default:
+                    return false;
+            }
+        }
+
+        public string GetArg(char a)
+        {
+            if (!args.TryGetValue(a, out GOOLArgument value))
+                throw new ArgumentException($"GetArg: Argument `{a}` not found", nameof(a));
+            switch (value.Type)
+            {
+                case GOOLArgumentTypes.Ref:
+                    return GetRefVal(value.Value);
+                case GOOLArgumentTypes.DestRef:
+                    return GetDestRefVal(value.Value);
+                case GOOLArgumentTypes.ProcessField:
+                    return ((ObjectFields)value.Value).ToString();
+                default:
+                    return value.Value.TransformedString();
+            }
+        }
+
+        public string GetArgNoHex(char a)
+        {
+            if (!args.TryGetValue(a, out GOOLArgument value))
+                throw new ArgumentException($"GetArg: Argument `{a}` not found", nameof(a));
+            switch (value.Type)
+            {
+                case GOOLArgumentTypes.Ref:
+                    return GetRefVal(value.Value);
+                case GOOLArgumentTypes.DestRef:
+                    return GetDestRefVal(value.Value);
+                case GOOLArgumentTypes.ProcessField:
+                    return ((ObjectFields)value.Value).ToString();
+                default:
+                    return value.Value.ToString();
             }
         }
 
         public bool TryGetImmediate(char a, out int val)
         {
-            if (!args.ContainsKey(a))
+            if (!args.TryGetValue(a, out GOOLArgument value))
                 throw new ArgumentException($"GetArg: Argument `{a}` not found", nameof(a));
-            switch (args[a].Type)
+            switch (value.Type)
             {
                 case GOOLArgumentTypes.Ref:
-                    return GetRefValImm(args[a].Value, out val);
+                    return GetRefValImm(value.Value, out val);
                 default:
                     val = 0;
                     return false;
@@ -210,28 +275,23 @@ namespace CrashEdit.Crash
 
         private string GetRefVal(int val)
         {
+            if (val == StackRef)
+                return "[sp]";
             if ((val & 0x800) == 0)
             {
                 int off = val & 0x3FF;
+                int cval;
                 if ((val & 0x400) == 0)
                 {
                     if (GOOL.Format == 1 && off < GOOL.Data.Length) // external GOOL entries will logically not have local data...
                     {
-                        int cval = GOOL.Data[off];
-                        if (off < GOOL.EntryCount)
-                            return $"({Entry.EIDToEName(cval)})";
-                        else
-                            return $"({cval.TransformedString()})";
+                        cval = GOOL.Data[off];
                     }
                     else
                     {
                         if (GOOL.ParentGOOL != null && GOOL.Format == 0 && off < GOOL.ParentGOOL.Data.Length)
                         {
-                            int cval = GOOL.ParentGOOL.Data[off];
-                            if (off < GOOL.ParentGOOL.EntryCount)
-                                return $"({Entry.EIDToEName(cval)})";
-                            else
-                                return $"({cval.TransformedString()})";
+                            cval = GOOL.ParentGOOL.Data[off];
                         }
                         else
                             return $"L({off.TransformedString()})";
@@ -241,17 +301,17 @@ namespace CrashEdit.Crash
                 {
                     if (GOOL.Format == 0 && off < GOOL.Data.Length) // local GOOL entries will logically not have external data...
                     {
-                        int cval = GOOL.Data[off];
-                        if (off < GOOL.EntryCount)
-                            return $"({Entry.EIDToEName(cval)})";
-                        else
-                            return $"({cval.TransformedString()})";
+                        cval = GOOL.Data[off];
                     }
                     else
                     {
                         return $"EL({off.TransformedString()})";
                     }
                 }
+                if (off < GOOL.EntryCount)
+                    return $"({Entry.EIDToEName(cval)})";
+                else
+                    return ParensOnPool ? $"({cval.TransformedString()})" : cval.TransformedString();
             }
             if ((val & 0x400) == 0)
             {
@@ -266,15 +326,15 @@ namespace CrashEdit.Crash
                 if ((val & 0x80) == 0)
                 {
                     int n = BitConv.SignExtendInt32(val, 7);
-                    return string.Format("{0}[{1}]", n >= 0 ? "stack" : "arg", (n < 0 ? -n - 1 : n).TransformedString());
+                    return string.Format("{0}[{1}]", n >= 0 ? "stack" : "arg", (n < 0 ? -n - 1 : n));
                 }
                 if (val != 0xBE0)
                 {
                     if (val != 0xBF0)
                     {
-                        return 0xBF0.TransformedString();
+                        throw new Exception("could not resolve null or double stack reference");
                     }
-                    return "[sp2]";
+                    return "[sp-1]";
                 }
             }
             else
@@ -282,15 +342,9 @@ namespace CrashEdit.Crash
                 if ((val & 0x200) == 0)
                 {
                     int link = val >> 6 & 0x7;
-                    //if (link == 0)
-                    //    return ((ObjectFields)(val & 0x3F)).ToString();
-                    //else
                     return $"{ObjectFields.self + link}->{(ObjectFields)(val & 0x3F)}";
                 }
-                if ((val & 0x1FF) == 0x1F)
-                    return "[sp]";
-                else
-                    return ((ObjectFields)(val & 0x1FF)).ToString();
+                return ((ObjectFields)(val & 0x1FF)).ToString();
             }
             return "[null]";
         }
@@ -373,6 +427,103 @@ namespace CrashEdit.Crash
                 else
                     return ((ObjectFields)(val & 0x1FF)).ToString();
             }
+        }
+
+        private GObj GetRefValLisp(int val)
+        {
+            if (val == StackRef)
+                return new SymbolObj("sp");
+            if ((val & 0x800) == 0)
+            {
+                int off = val & 0x3FF;
+                int cval;
+                if ((val & 0x400) == 0)
+                {
+                    if (GOOL.Format == 1 && off < GOOL.Data.Length) // external GOOL entries will logically not have local data...
+                    {
+                        cval = GOOL.Data[off];
+                    }
+                    else
+                    {
+                        if (GOOL.ParentGOOL != null && GOOL.Format == 0 && off < GOOL.ParentGOOL.Data.Length)
+                        {
+                            cval = GOOL.ParentGOOL.Data[off];
+                        }
+                        else
+                            throw new Exception("could not resolve static pool ref in " + GOOL.EName);
+                    }
+                }
+                else
+                {
+                    if (GOOL.Format == 0 && off < GOOL.Data.Length) // local GOOL entries will logically not have external data...
+                    {
+                        cval = GOOL.Data[off];
+                    }
+                    else
+                    {
+                        throw new Exception("could not resolve external static pool ref in " + GOOL.EName);
+                    }
+                }
+                if (off < GOOL.EntryCount)
+                    return new ListObj(new TokenObj("file"), new StringObj(Entry.EIDToEName(cval)));
+                else
+                    return new NumberObj(cval);
+            }
+            if ((val & 0x400) == 0)
+            {
+                if ((val & 0x200) == 0)
+                {
+                    return new NumberObj(val << 0x17 >> 0xF);
+                }
+                if ((val & 0x100) == 0)
+                {
+                    return new NumberObj(val << 0x18 >> 0x14);
+                }
+                if ((val & 0x80) == 0)
+                {
+                    int n = BitConv.SignExtendInt32(val, 7);
+                    return new TokenObj(string.Format("{0}{1}", n >= 0 ? "stack" : "arg", n < 0 ? -n - 1 : n));
+                }
+                if (val != 0xBE0)
+                {
+                    if (val != 0xBF0)
+                    {
+                        throw new Exception("could not resolve null or double stack reference");
+                    }
+                    return new SymbolObj("sp-double");
+                }
+            }
+            else
+            {
+                if ((val & 0x200) == 0)
+                {
+                    int link = val >> 6 & 0x7;
+                    return new ListObj(new TokenObj($"{ObjectFields.self + link}"), new TokenObj($"{(ObjectFields)(val & 0x3F)}"));
+                }
+                return new TokenObj(((ObjectFields)(val & 0x1FF)).ToString());
+            }
+            return new SymbolObj("null");
+        }
+
+        public GObj ArgToLisp(char a)
+        {
+            if (!args.TryGetValue(a, out GOOLArgument value))
+                throw new ArgumentException($"GetArg: Argument `{a}` not found", nameof(a));
+            switch (value.Type)
+            {
+                case GOOLArgumentTypes.Ref:
+                case GOOLArgumentTypes.DestRef:
+                    return GetRefValLisp(value.Value);
+                case GOOLArgumentTypes.ProcessField:
+                    return new TokenObj(((ObjectFields)value.Value).ToString());
+                default:
+                    return new NumberObj(value.Value);
+            }
+        }
+
+        public GObj DecompileToLisp(GOOLStatement statement, ref int i)
+        {
+            return opcode.DecompileToLisp(statement, ref i);
         }
     }
 }

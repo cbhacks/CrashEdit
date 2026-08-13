@@ -11,7 +11,7 @@
                 ErrorManager.SignalError("Vertex frame group version is wrong");
             }
             index += 2;
-            
+
             short frames = BitConv.FromInt16(data, index);
             index += 2;
 

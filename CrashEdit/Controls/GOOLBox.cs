@@ -5,9 +5,11 @@ namespace CrashEdit.CE
     public sealed class GOOLBox : UserControl
     {
         private readonly ListBox lstCode;
+        private GOOLEntry gool;
 
         public GOOLBox(GOOLEntry goolentry)
         {
+            gool = goolentry;
             lstCode = new ListBox
             {
                 Dock = DockStyle.Fill,
@@ -56,7 +58,22 @@ namespace CrashEdit.CE
                     short tpc = (short)(goolentry.StateDescriptors[i].TransHook & 0x3FFF);
                     short cpc = (short)(goolentry.StateDescriptors[i].CodeHook & 0x3FFF);
                     int stategooleid = goolentry.Data[goolentry.StateDescriptors[i].GOOLIndex];
-                    lstCode.Items.Add($"State_{i} [{Entry.EIDToEName(stategooleid)}] (State Flags: {string.Format("0x{0:X}", goolentry.StateDescriptors[i].StateFlags)} | Block Flags: {string.Format("0x{0:X}", goolentry.StateDescriptors[i].BlockFlags)})");
+                    string HexFlagsToSplitText(int flags)
+                    {
+                        if (flags == 0) return "(none)";
+                        string o = "";
+                        for (int i = 0; i < 32; ++i)
+                        {
+                            if ((flags & (1 << i)) != 0)
+                            {
+                                o += "Flag_" + i.ToString() + " ";
+                            }
+                        }
+                        return o;
+                    }
+                    lstCode.Items.Add($"State_{i} [{Entry.EIDToEName(stategooleid)}]");
+                    lstCode.Items.Add($"  State Flags: {HexFlagsToSplitText(goolentry.StateDescriptors[i].StateFlags)}");
+                    lstCode.Items.Add($"  Block Flags: {HexFlagsToSplitText(goolentry.StateDescriptors[i].BlockFlags)}");
                     if (epc != 0x3FFF)
                         lstCode.Items.Add($"    Event: {epc}" + ((goolentry.StateDescriptors[i].EventHook & 0x4000) != 0 ? " (external)" : ""));
                     else
@@ -143,6 +160,12 @@ namespace CrashEdit.CE
             }
 
             Controls.Add(lstCode);
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            //gool.Decompile();
         }
     }
 }

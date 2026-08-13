@@ -4,8 +4,8 @@
     {
         public GOOLUnknownInstruction(int value, GOOLEntry gool) : base(value, gool, null) { }
 
-        public override string GetName() => $"INS{Opcode}";
+        public override string GetName() => $"INS{ID}";
         public override string GetFormat() => "IIIIIIIIIIIIIIIIIIIIIIII";
-        public override string GetComment() => $"invalid opcode {Opcode}";
+        public override string GetComment() => $"invalid opcode {ID}";
     }
 }

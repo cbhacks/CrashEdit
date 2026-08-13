@@ -11,7 +11,7 @@
                 ErrorManager.SignalError("Image frame group version is wrong");
             }
             index += 2;
-            
+
             short framecount = BitConv.FromInt16(data, index);
             index += 2;
 
@@ -28,7 +28,7 @@
                 frames.Add(parts);
                 for (int j = 0; j < partcount; ++j)
                 {
-                    parts.Add(new(BitConv.FromInt32(data, index), BitConv.FromInt32(data, index+4), BitConv.FromInt16(data, index + 8), BitConv.FromInt16(data, index + 10), BitConv.FromInt16(data, index + 12), BitConv.FromInt16(data, index + 14)));
+                    parts.Add(new(BitConv.FromInt32(data, index), BitConv.FromInt32(data, index + 4), BitConv.FromInt16(data, index + 8), BitConv.FromInt16(data, index + 10), BitConv.FromInt16(data, index + 12), BitConv.FromInt16(data, index + 14)));
                     index += 16;
                 }
             }

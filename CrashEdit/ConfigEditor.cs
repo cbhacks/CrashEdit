@@ -1,4 +1,5 @@
 ﻿using CrashEdit.CE.Properties;
+using CrashEdit.Crash;
 
 namespace CrashEdit.CE
 {
@@ -83,6 +84,7 @@ namespace CrashEdit.CE
             chkViewCamera.Checked = Settings.Default.ViewCamera;
             chkViewCameraAngle.Checked = Settings.Default.ViewCameraAngle;
             chkShowEntityParams.Checked = Settings.Default.ShowEntityParams;
+            chkGOOLParensOnPool.Checked = Settings.Default.GOOLParensOnPool;
             cdlClearCol.Color = picClearCol.BackColor = Color.FromArgb(Settings.Default.ClearColorRGB);
             sldNodeShadeAmt.Value = (int)(Settings.Default.NodeShadeMax * 100);
             lblNodeShadeAmt.Text = string.Format("{0:F0}%", sldNodeShadeAmt.Value);
@@ -110,6 +112,7 @@ namespace CrashEdit.CE
             chkViewCamera.Text = Resources.Config_chkViewCamera;
             chkViewCameraAngle.Text = Resources.Config_chkViewCameraAngle;
             chkShowEntityParams.Text = Resources.Config_chkShowEntityParams;
+            chkGOOLParensOnPool.Text = Resources.Config_chkGOOLParensOnPool;
             cmdReset.Text = Resources.Config_cmdReset;
         }
 
@@ -253,6 +256,14 @@ namespace CrashEdit.CE
         {
             Settings.Default.ShowEntityParams = chkShowEntityParams.Checked;
             Settings.Default.Save();
+        }
+
+        private void chkGOOLParensOnPool_CheckedChanged(object sender, EventArgs e)
+        {
+
+            Settings.Default.GOOLParensOnPool = chkGOOLParensOnPool.Checked;
+            Settings.Default.Save();
+            GOOLInstruction.ParensOnPool = Settings.Default.GOOLParensOnPool;
         }
     }
 }

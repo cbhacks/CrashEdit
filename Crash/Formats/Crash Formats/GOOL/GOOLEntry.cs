@@ -1,3 +1,4 @@
+using CrashEdit.Crash.GOOLIns;
 using System.Reflection;
 
 namespace CrashEdit.Crash
@@ -9,18 +10,21 @@ namespace CrashEdit.Crash
         static GOOLEntry()
         {
             var assembly_types = Assembly.GetExecutingAssembly().GetTypes();
-            opsets = new();
+            opsets = [];
             foreach (Type type in assembly_types)
             {
-                foreach (GOOLInstructionAttribute attribute in type.GetCustomAttributes(typeof(GOOLInstructionAttribute), false))
+                if (type.IsSubclassOf(typeof(GOOLInsOpcode)))
                 {
-                    if (!opsets.TryGetValue(attribute.Version, out var value))
+                    foreach (GOOLInstructionAttribute attribute in type.GetCustomAttributes(typeof(GOOLInstructionAttribute), false))
                     {
-                        value = new();
-                        opsets.Add(attribute.Version, value);
+                        if (!opsets.TryGetValue(attribute.Version, out var value))
+                        {
+                            value = [];
+                            opsets.Add(attribute.Version, value);
+                        }
+                        Dictionary<int, Type> opset = value;
+                        opset.TryAdd(attribute.Opcode, type);
                     }
-                    Dictionary<int, Type> opset = value;
-                    opset.TryAdd(attribute.Opcode, type);
                 }
             }
         }
@@ -33,9 +37,9 @@ namespace CrashEdit.Crash
                 {
                     Dictionary<int, Type> opset = value;
                     int opcode = ins >> 24 & 0xFF;
-                    if (opset.ContainsKey(opcode))
+                    if (opset.TryGetValue(opcode, out Type? opcodetype))
                     {
-                        return new GOOLInstruction(ins, this, opset[opcode]);
+                        return new GOOLInstruction(ins, this, opcodetype);
                     }
                 }
                 return new GOOLUnknownInstruction(ins, this);
@@ -61,7 +65,7 @@ namespace CrashEdit.Crash
             {
                 int encins = BitConv.FromInt32(instructions, i * 4);
                 GOOLInstruction ins = LoadInstruction(encins, mips);
-                if (version == GOOLVersion.Version3 && (ins.Opcode == 142 || ins.Opcode == 174 || encins == 0x26D6FFE4 || encins == 0x00002821 || encins == 0x34050001 || (uint)encins == 0x8C670094U))
+                if (version == GOOLVersion.Version3 && (ins.ID == 142 || ins.ID == 174 || encins == 0x26D6FFE4 || encins == 0x00002821 || encins == 0x34050001 || (uint)encins == 0x8C670094U))
                 {
                     mips = true;
                     ins = LoadInstruction(BitConv.FromInt32(instructions, i * 4), mips);
@@ -70,7 +74,7 @@ namespace CrashEdit.Crash
                 if (mips)
                 {
                     MIPSInstruction prev = null;
-                    if (this.instructions[this.instructions.Count - 2] is MIPSInstruction mips_ins)
+                    if (this.instructions[^2] is MIPSInstruction mips_ins)
                         prev = mips_ins;
                     if (prev != null && (prev.Value == 0x03E0A809 || prev.Value == 0x03E00008)) // native mips returns or ends here
                         mips = false;
@@ -130,6 +134,12 @@ namespace CrashEdit.Crash
 
         public IList<int> Externals => externals;
         public GOOLEntry ParentGOOL { get; set; }
+
+        public void Decompile()
+        {
+            var decomp = new GOOLDecompiler(this);
+            decomp.Decompile();
+        }
 
         public override UnprocessedEntry Unprocess()
         {
