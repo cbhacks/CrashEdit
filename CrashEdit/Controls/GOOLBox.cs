@@ -165,7 +165,7 @@ namespace CrashEdit.CE
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            gool.Decompile();
+            //gool.Decompile();
         }
     }
 }
