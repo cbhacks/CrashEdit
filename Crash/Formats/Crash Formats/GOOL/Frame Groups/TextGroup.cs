@@ -13,7 +13,7 @@ namespace CrashEdit.Crash
                 ErrorManager.SignalError("Text frame group version is wrong");
             }
             index += 2;
-            
+
             short framecount = BitConv.FromInt16(data, index);
             index += 2;
 

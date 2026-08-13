@@ -1,8 +1,5 @@
 using CrashEdit.Crash.GOOLIns;
-using System;
 using System.Reflection;
-using System.Windows;
-using static CrashEdit.Crash.GOOLDecompBlock;
 
 namespace CrashEdit.Crash
 {

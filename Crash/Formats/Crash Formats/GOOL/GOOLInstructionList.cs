@@ -3,8 +3,6 @@
  * 
  */
 
-using System.Net;
-
 namespace CrashEdit.Crash.GOOLIns
 {
     public abstract class GOOLInsOpcode
@@ -1134,7 +1132,7 @@ namespace CrashEdit.Crash.GOOLIns
             int v = ins.Args['V'].Value;
             int o = ins.Args['I'].Value;
             var res = new ListObj(new TokenObj("b"), new NumberObj(o));
-            if(v != 0)
+            if (v != 0)
             {
                 if (o != 0)
                 {
@@ -1254,7 +1252,7 @@ namespace CrashEdit.Crash.GOOLIns
         public override string GetName(GOOLInstruction ins) => "GNEZ";
         public override string GetFormat() => "SSSSSSSSSS VVVV (RRRRRR) 10 10";
         public override string GetComment(GOOLInstruction ins) => $"if {(ObjectFields)ins.Args['R'].Value} is true, go to state {ins.GetArg('S')}" + (ins.Args['V'].Value > 0 ? $" with {ins.GetArg('V')} argument(s)" : string.Empty);
-        
+
         public override GObj DecompileToLisp(GOOLStatement statement, ref int i)
         {
             var ins = statement.Instructions[i];
@@ -1272,7 +1270,7 @@ namespace CrashEdit.Crash.GOOLIns
         public override string GetName(GOOLInstruction ins) => "GEQZ";
         public override string GetFormat() => "SSSSSSSSSS VVVV (RRRRRR) 01 10";
         public override string GetComment(GOOLInstruction ins) => $"if {(ObjectFields)ins.Args['R'].Value} is false, go to state {ins.GetArg('S')}" + (ins.Args['V'].Value > 0 ? $" with {ins.GetArg('V')} argument(s)" : string.Empty);
-        
+
         public override GObj DecompileToLisp(GOOLStatement statement, ref int i)
         {
             var ins = statement.Instructions[i];

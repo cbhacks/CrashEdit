@@ -1,5 +1,3 @@
-using System.Runtime.Serialization;
-
 namespace CrashEdit.Crash
 {
     [Serializable]

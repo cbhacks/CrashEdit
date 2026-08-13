@@ -34,7 +34,7 @@ namespace CrashEdit.Crash
                     int a = ins.Args['A'].Value;
                     int b = ins.Args['B'].Value;
                     block.Instructions[i] = new GOOLInstruction(a | (GOOLInstruction.NullRef << 12) | (22 << 24), ins.GOOL, ins.Type, true);
-                    block.Instructions.Insert(i+1, new GOOLInstruction(b | (GOOLInstruction.NullRef << 12) | (22 << 24), ins.GOOL, ins.Type));
+                    block.Instructions.Insert(i + 1, new GOOLInstruction(b | (GOOLInstruction.NullRef << 12) | (22 << 24), ins.GOOL, ins.Type));
                 }
             }
             blocks.Add(block);
