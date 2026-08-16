@@ -13,12 +13,6 @@ namespace CrashEdit
 
             Controller = ctlr;
 
-            TabControl = new TabControl
-            {
-                Dock = DockStyle.Fill
-            };
-            Controls.Add(TabControl);
-
             Editors = Editor.AllEditors
                 .Where(x => x.ApplicableForSubject(ctlr))
                 .Select(x => (Editor)Activator.CreateInstance(x.GetType()))
@@ -27,8 +21,7 @@ namespace CrashEdit
             if (Editors.Count == 0)
             {
                 // No editors available for this resource.
-                TabControl.TabPages.Add("None");
-                TabControl.TabPages[0].Controls.Add(new Label
+                Controls.Add(new Label
                 {
                     Dock = DockStyle.Fill,
                     TextAlign = ContentAlignment.MiddleCenter,
@@ -36,6 +29,22 @@ namespace CrashEdit
                 });
                 return;
             }
+            else if (Editors.Count == 1)
+            {
+                // Only one editor available for this resource. Do not make a whole tab control for it.
+                var editor = Editors[0];
+                editor.Initialize(ctlr);
+                editor.Control.Dock = DockStyle.Fill;
+                Controls.Add(editor.Control);
+                return;
+            }
+
+            // multiple editors, make a tab
+            TabControl = new TabControl
+            {
+                Dock = DockStyle.Fill
+            };
+            Controls.Add(TabControl);
 
             foreach (var editor in Editors)
             {
@@ -56,7 +65,7 @@ namespace CrashEdit
 
         public List<Editor> Editors { get; }
 
-        public TabControl TabControl { get; }
+        public TabControl? TabControl { get; }
 
         protected override void Dispose(bool disposing)
         {

@@ -75,8 +75,7 @@ namespace CrashEdit
 
         public SubcontrollerGroup? ParentGroup { get; }
 
-        public List<SubcontrollerGroup> SubcontrollerGroups { get; } =
-            new List<SubcontrollerGroup>();
+        public List<SubcontrollerGroup> SubcontrollerGroups { get; } = new();
 
         public string Text =>
             (Resource as IResource)?.Title ??

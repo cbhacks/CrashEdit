@@ -196,11 +196,9 @@ namespace CrashEdit
             }
         }
 
-        public Dictionary<Controller, ResourcePanel> AllPanels { get; } =
-            new Dictionary<Controller, ResourcePanel>();
+        public Dictionary<Controller, ResourcePanel> AllPanels { get; } = new();
 
-        public Dictionary<ResourcePanel, Form> UndockForms { get; } =
-            new Dictionary<ResourcePanel, Form>();
+        public Dictionary<ResourcePanel, Form> UndockForms { get; } = new();
 
         public Label NoResourceLabel { get; }
 

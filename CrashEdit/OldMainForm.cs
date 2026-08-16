@@ -168,7 +168,7 @@ namespace CrashEdit.CE
             Height = Settings.Default.DefaultFormH;
             Text = $"CrashEdit v{Assembly.GetExecutingAssembly().GetName().Version}";
 
-            dlgMakeBINFile.Filter = "Playstation Disc Images (*.bin)|*.bin";
+            dlgMakeBINFile.Filter = "PlayStation Disc Image (*.bin)|*.bin";
         }
 
         private void tbcTabs_SelectedIndexChanged(object sender, EventArgs e)
