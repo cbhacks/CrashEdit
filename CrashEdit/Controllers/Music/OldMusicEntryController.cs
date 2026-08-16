@@ -19,10 +19,10 @@ namespace CrashEdit.CE
         private SampleLine[] FindLinkedVB()
         {
             List<SampleLine> samples = new List<SampleLine>();
-            WavebankEntry vb0entry = FindEID<WavebankEntry>(OldMusicEntry.VB0EID);
-            WavebankEntry vb1entry = FindEID<WavebankEntry>(OldMusicEntry.VB1EID);
-            WavebankEntry vb2entry = FindEID<WavebankEntry>(OldMusicEntry.VB2EID);
-            WavebankEntry vb3entry = FindEID<WavebankEntry>(OldMusicEntry.VB3EID);
+            WavebankEntry? vb0entry = GetEntry<WavebankEntry>(OldMusicEntry.VB0EID);
+            WavebankEntry? vb1entry = GetEntry<WavebankEntry>(OldMusicEntry.VB1EID);
+            WavebankEntry? vb2entry = GetEntry<WavebankEntry>(OldMusicEntry.VB2EID);
+            WavebankEntry? vb3entry = GetEntry<WavebankEntry>(OldMusicEntry.VB3EID);
             if (vb0entry != null)
                 samples.AddRange(vb0entry.Samples.SampleLines);
             if (vb1entry != null)

@@ -22,7 +22,7 @@ namespace CrashEdit.CE
 
         private VH FindLinkedVH()
         {
-            MusicEntry vhentry = FindEID<MusicEntry>(MusicEntry.VHEID);
+            MusicEntry? vhentry = GetEntry<MusicEntry>(MusicEntry.VHEID);
             if (vhentry == null)
             {
                 throw new GUIException("The linked music entry could not be found.");
@@ -37,13 +37,13 @@ namespace CrashEdit.CE
         private SampleLine[] FindLinkedVB()
         {
             List<SampleLine> samples = new List<SampleLine>();
-            WavebankEntry vb0entry = FindEID<WavebankEntry>(MusicEntry.VB0EID);
-            WavebankEntry vb1entry = FindEID<WavebankEntry>(MusicEntry.VB1EID);
-            WavebankEntry vb2entry = FindEID<WavebankEntry>(MusicEntry.VB2EID);
-            WavebankEntry vb3entry = FindEID<WavebankEntry>(MusicEntry.VB3EID);
-            WavebankEntry vb4entry = FindEID<WavebankEntry>(MusicEntry.VB4EID);
-            WavebankEntry vb5entry = FindEID<WavebankEntry>(MusicEntry.VB5EID);
-            WavebankEntry vb6entry = FindEID<WavebankEntry>(MusicEntry.VB6EID);
+            WavebankEntry? vb0entry = GetEntry<WavebankEntry>(MusicEntry.VB0EID);
+            WavebankEntry? vb1entry = GetEntry<WavebankEntry>(MusicEntry.VB1EID);
+            WavebankEntry? vb2entry = GetEntry<WavebankEntry>(MusicEntry.VB2EID);
+            WavebankEntry? vb3entry = GetEntry<WavebankEntry>(MusicEntry.VB3EID);
+            WavebankEntry? vb4entry = GetEntry<WavebankEntry>(MusicEntry.VB4EID);
+            WavebankEntry? vb5entry = GetEntry<WavebankEntry>(MusicEntry.VB5EID);
+            WavebankEntry? vb6entry = GetEntry<WavebankEntry>(MusicEntry.VB6EID);
             if (vb0entry != null)
                 samples.AddRange(vb0entry.Samples.SampleLines);
             if (vb1entry != null)
@@ -131,7 +131,7 @@ namespace CrashEdit.CE
                     vb.Add(SampleLine.Load(line_data));
                 }
 
-                MusicEntry vhentry = FindEID<MusicEntry>(MusicEntry.VHEID);
+                MusicEntry? vhentry = GetEntry<MusicEntry>(MusicEntry.VHEID);
                 if (vhentry == null)
                 {
                     throw new GUIException("The linked music entry could not be found.");
@@ -152,13 +152,13 @@ namespace CrashEdit.CE
         private void ReplaceLinkedVB(List<SampleLine> samples)
         {
             var vbEntries = new List<WavebankEntry>();
-            WavebankEntry vb0entry = FindEID<WavebankEntry>(MusicEntry.VB0EID);
-            WavebankEntry vb1entry = FindEID<WavebankEntry>(MusicEntry.VB1EID);
-            WavebankEntry vb2entry = FindEID<WavebankEntry>(MusicEntry.VB2EID);
-            WavebankEntry vb3entry = FindEID<WavebankEntry>(MusicEntry.VB3EID);
-            WavebankEntry vb4entry = FindEID<WavebankEntry>(MusicEntry.VB4EID);
-            WavebankEntry vb5entry = FindEID<WavebankEntry>(MusicEntry.VB5EID);
-            WavebankEntry vb6entry = FindEID<WavebankEntry>(MusicEntry.VB6EID);
+            WavebankEntry? vb0entry = GetEntry<WavebankEntry>(MusicEntry.VB0EID);
+            WavebankEntry? vb1entry = GetEntry<WavebankEntry>(MusicEntry.VB1EID);
+            WavebankEntry? vb2entry = GetEntry<WavebankEntry>(MusicEntry.VB2EID);
+            WavebankEntry? vb3entry = GetEntry<WavebankEntry>(MusicEntry.VB3EID);
+            WavebankEntry? vb4entry = GetEntry<WavebankEntry>(MusicEntry.VB4EID);
+            WavebankEntry? vb5entry = GetEntry<WavebankEntry>(MusicEntry.VB5EID);
+            WavebankEntry? vb6entry = GetEntry<WavebankEntry>(MusicEntry.VB6EID);
             if (vb0entry != null)
                 vbEntries.Add(vb0entry);
             if (vb1entry != null)

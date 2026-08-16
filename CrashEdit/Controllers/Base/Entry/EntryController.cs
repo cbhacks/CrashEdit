@@ -43,11 +43,6 @@ namespace CrashEdit.CE
             }
         }
 
-        protected T FindEID<T>(int eid) where T : class, IEntry
-        {
-            return GetEntry<T>(eid);
-        }
-
         private void Menu_Unprocess_Entry()
         {
             int index = EntryChunkController.EntryChunk.Entries.IndexOf(Entry);
