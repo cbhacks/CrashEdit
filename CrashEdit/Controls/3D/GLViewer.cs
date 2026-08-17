@@ -1081,7 +1081,7 @@ namespace CrashEdit.CE
             GL.BindTexture(TextureTarget.Texture2D, texTpages);
 
             // fill texture
-            GL.GetTextureLevelParameter(texTpages, 0, GetTextureParameter.TextureHeight, out int tpage_h);
+            GL.GetTexLevelParameter(TextureTarget.Texture2D, 0, GetTextureParameter.TextureHeight, out int tpage_h);
             if (tpage_h < tpages.Count * 128)
             {
                 // realloc if not enough texture mem
