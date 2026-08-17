@@ -26,10 +26,7 @@ namespace CrashEdit
             };
             UndockedLabel.Click += (sender, e) =>
             {
-                if (ActivePanelUndockForm != null)
-                {
-                    ActivePanelUndockForm.Focus();
-                }
+                ActivePanelUndockForm?.Focus();
             };
             Controls.Add(UndockedLabel);
         }
@@ -66,6 +63,12 @@ namespace CrashEdit
                 }
 
                 _activeController = value;
+
+                // Destroy inactive panels.
+                foreach (var kvp in AllPanels.ToList().Where(x => x.Value.InactiveTimer.ElapsedMilliseconds > 5000))
+                {
+                    DestroyPanel(kvp.Value);
+                }
             }
         }
 
@@ -92,6 +95,7 @@ namespace CrashEdit
                     {
                         // The panel was active and visible.
                         _activePanel.Visible = false;
+                        _activePanel.InactiveTimer.Start();
                     }
                 }
                 else
@@ -105,6 +109,7 @@ namespace CrashEdit
                 // Show the controls for the new value.
                 if (value != null)
                 {
+                    value.InactiveTimer.Reset();
                     if (UndockForms.TryGetValue(value, out var form))
                     {
                         // The panel is now active, but is currently undocked.
@@ -204,30 +209,34 @@ namespace CrashEdit
 
         public Label UndockedLabel { get; }
 
+        private void DestroyPanel(ResourcePanel panel)
+        {
+
+            // Deselect the controller if it is selected.
+            if (panel.Controller == ActiveController)
+            {
+                ActiveController = null;
+            }
+
+            // Redock the panel if it is undocked.
+            if (UndockForms.TryGetValue(panel, out var form))
+            {
+                form.Close();
+            }
+
+            // Remove the panel and destroy it.
+            Controls.Remove(panel);
+            AllPanels.Remove(panel.Controller);
+            panel.Dispose();
+
+        }
+
         public void Sync()
         {
             // Destroy panels for controllers which have died.
             foreach (var kvp in AllPanels.ToList().Where(x => x.Key.Dead))
             {
-                var ctlr = kvp.Key;
-                var panel = kvp.Value;
-
-                // Deselect the controller if it is selected.
-                if (ctlr == ActiveController)
-                {
-                    ActiveController = null;
-                }
-
-                // Redock the panel if it is undocked.
-                if (UndockForms.TryGetValue(panel, out var form))
-                {
-                    form.Close();
-                }
-
-                // Remove the panel and destroy it.
-                Controls.Remove(panel);
-                AllPanels.Remove(ctlr);
-                panel.Dispose();
+                DestroyPanel(kvp.Value);
             }
 
             // Update undock form titlebars and icons.

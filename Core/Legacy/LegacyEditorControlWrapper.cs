@@ -11,8 +11,8 @@ namespace CrashEdit
             ArgumentNullException.ThrowIfNull(legacyCtlr);
 
             LegacyController = legacyCtlr;
-            legacyCtlr.NeedsNewEditor = false;
-            InnerControl = legacyCtlr.CreateEditor();
+            LegacyController.NeedsNewEditor = false;
+            InnerControl = LegacyController.CreateEditor();
             InnerControl.Dock = DockStyle.Fill;
             Controls.Add(InnerControl);
         }

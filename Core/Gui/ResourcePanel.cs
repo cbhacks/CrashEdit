@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -12,6 +13,8 @@ namespace CrashEdit
             ArgumentNullException.ThrowIfNull(ctlr);
 
             Controller = ctlr;
+
+            InactiveTimer = new();
 
             Editors = Editor.AllEditors
                 .Where(x => x.ApplicableForSubject(ctlr))
@@ -66,6 +69,8 @@ namespace CrashEdit
         public List<Editor> Editors { get; }
 
         public TabControl? TabControl { get; }
+
+        public Stopwatch InactiveTimer { get; private set; }
 
         protected override void Dispose(bool disposing)
         {

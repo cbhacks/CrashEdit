@@ -33,8 +33,7 @@ namespace CrashEdit
         {
             get
             {
-                if (IsDisposed)
-                    throw new ObjectDisposedException(GetType().FullName);
+                ObjectDisposedException.ThrowIf(IsDisposed, this);
                 if (_subject == null)
                     throw new InvalidOperationException();
 
@@ -48,8 +47,7 @@ namespace CrashEdit
         {
             get
             {
-                if (IsDisposed)
-                    throw new ObjectDisposedException(GetType().FullName);
+                ObjectDisposedException.ThrowIf(IsDisposed, this);
                 if (_control == null)
                     throw new InvalidOperationException();
 
