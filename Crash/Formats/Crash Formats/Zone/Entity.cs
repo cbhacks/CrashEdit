@@ -45,7 +45,11 @@ namespace CrashEdit.Crash
                 int offset = BitConv.FromUInt16(data, 18 + i * 8) + 12;
                 int nextoffset = (i == propertycount - 1) ? data.Length : (BitConv.FromUInt16(data, 26 + i * 8) + 12);
                 byte type = data[20 + i * 8];
-                if (id == 0x103 && type == 0x13) type = 4; // force-fix a stupid bug
+                if (id == 0x103 && type == 0x13) type = 4; // force-fix a stupid bug                                                                                                                          
+                if (((type & 128) != 0) != (i == propertycount - 1))
+                {
+                    ErrorManager.SignalIgnorableError("Entity: Property had terminate flag but wasn't final property");
+                }
                 byte elementsize = data[21 + i * 8];
                 short unknown = BitConv.FromInt16(data, 22 + i * 8);
                 if (offset > data.Length)
@@ -68,7 +72,7 @@ namespace CrashEdit.Crash
                 {
                     byte[] propertydata = new byte[nextoffset - offset];
                     Array.Copy(data, offset, propertydata, 0, propertydata.Length);
-                    EntityProperty property = EntityProperty.Load(type, elementsize, unknown, i == propertycount - 1, propertydata);
+                    EntityProperty property = EntityProperty.Load(type, elementsize, unknown, propertydata);
                     properties.Add(id, property);
                 }
             }
@@ -76,10 +80,10 @@ namespace CrashEdit.Crash
         }
 
         //[EntityPropertyField(0x29)]
-        //private byte? mode;
-        //private int? mode;
+        private byte? mode_c2;
+        private int? mode_c3;
         [EntityPropertyField(0x2C)]
-        private string name;
+        private string? name;
         [EntityPropertyField(0x32)]
         private int? zmod;
         [EntityPropertyField(0x4B)]
@@ -87,52 +91,53 @@ namespace CrashEdit.Crash
         [EntityPropertyField(0x9F)]
         private EntityID? id;
         [EntityPropertyField(0xA4)]
-        private readonly List<EntitySetting> settings = null;
+        private readonly List<EntityNumber> settings = null;
         [EntityPropertyField(0xA9)]
         private int? type;
         [EntityPropertyField(0xAA)]
         private int? subtype;
         [EntityPropertyField(0xC9)]
-        private EntitySetting? avgdist;
+        private EntityNumber? avgdist;
         [EntityPropertyField(0x103)]
-        private EntityT4Property slst;
+        private EntityChunkProperty? slst;
         [EntityPropertyField(0x109)]
-        private EntityUInt32Property neighbors = null;
+        private EntityUInt32Property? neighbors = null;
         [EntityPropertyField(0x118)]
         private int? othersettings = null;
         [EntityPropertyField(0x130)]
-        private EntityVictimProperty fov = null;
+        private EntityInt16Property? fov = null;
         [EntityPropertyField(0x13B)]
-        private EntityInt32Property drawlista = null;
+        private EntityInt32Property? drawlista = null;
         [EntityPropertyField(0x13C)]
-        private EntityInt32Property drawlistb = null;
+        private EntityInt32Property? drawlistb = null;
         [EntityPropertyField(0x173)]
         private int? cameraindex = null;
         [EntityPropertyField(0x174)]
         private int? camerasubindex = null;
         [EntityPropertyField(0x208)]
-        private EntityT4Property loadlista = null;
+        private EntityChunkProperty? loadlista = null;
         [EntityPropertyField(0x209)]
-        private EntityT4Property loadlistb = null;
+        private EntityChunkProperty? loadlistb = null;
         [EntityPropertyField(0x277)]
         private int? ddasettings = null;
         [EntityPropertyField(0x287)]
-        private readonly List<EntityVictim> victims = null;
+        private readonly List<short>? victims = null;
         [EntityPropertyField(0x288)]
         private int? ddasection = null;
         [EntityPropertyField(0x28B)]
-        private EntitySetting? boxcount = null;
+        private EntityNumber? boxcount = null;
         [EntityPropertyField(0x30E)]
         private int? scaling = null;
         [EntityPropertyField(0x336)]
         private int? timetrialreward = null;
         [EntityPropertyField(0x337)]
-        private EntitySetting? bonusboxcount = null;
+        private EntityNumber? bonusboxcount = null;
 
         private readonly Dictionary<short, EntityProperty> extraproperties;
 
         public Entity(IDictionary<short, EntityProperty> properties)
         {
+            // extraproperties has every property. we will remove a property from there and add it to a real field, leaving it with only the field-less ones.
             extraproperties = new Dictionary<short, EntityProperty>(properties);
             foreach (KeyValuePair<short, FieldInfo> pair in propertyfields)
             {
@@ -146,12 +151,29 @@ namespace CrashEdit.Crash
                 {
                     field.SetValue(this, null);
                 }
-                if (extraproperties.ContainsKey(id))
+                if (extraproperties.TryGetValue(id, out EntityProperty? property))
                 {
-                    EntityProperty property = extraproperties[id];
                     property.LoadToField(this, field);
                     extraproperties.Remove(id);
                 }
+            }
+            // some properties need special handling for stupid reasons
+            if (extraproperties.TryGetValue(0x29, out var mode))
+            {
+                // 0x29 (camera mode) is u8 in Crash 2 and s32 in Crash 3
+                if (mode is EntityInt32Property s32)
+                {
+                    mode_c3 = s32.GetSingleValue();
+                }
+                else if (mode is EntityUInt8Property u8)
+                {
+                    mode_c2 = u8.GetSingleValue();
+                }
+                else
+                {
+                    throw new Exception("Entity: Camera mode property is in an unknown format");
+                }
+                extraproperties.Remove(0x29);
             }
         }
 
@@ -162,11 +184,17 @@ namespace CrashEdit.Crash
 
         public string ImageKey => "Arrow";
 
-        //public int? Mode
-        //{
-        //    get => mode;
-        //    set => mode = value;
-        //}
+        public byte? ModeC2
+        {
+            get => mode_c2;
+            set => mode_c2 = value;
+        }
+
+        public int? ModeC3
+        {
+            get => mode_c3;
+            set => mode_c3 = value;
+        }
 
         public string Name
         {
@@ -184,7 +212,7 @@ namespace CrashEdit.Crash
 
         public int? ID
         {
-            get => id.HasValue ? (int?)id.Value.ID : null;
+            get => id.HasValue ? id.Value.ID : null;
             set
             {
                 if (value != null)
@@ -228,7 +256,7 @@ namespace CrashEdit.Crash
             }
         }
 
-        public IList<EntitySetting> Settings => settings;
+        public IList<EntityNumber> Settings => settings;
 
         public int? Type
         {
@@ -242,7 +270,7 @@ namespace CrashEdit.Crash
             set => subtype = value;
         }
 
-        public EntitySetting? AverageDistance
+        public EntityNumber? AverageDistance
         {
             get => avgdist;
             set => avgdist = value;
@@ -254,7 +282,7 @@ namespace CrashEdit.Crash
             set => othersettings = value;
         }
 
-        public EntityVictimProperty FOV
+        public EntityInt16Property FOV
         {
             get => fov;
             set => fov = value;
@@ -284,7 +312,7 @@ namespace CrashEdit.Crash
             set => camerasubindex = value;
         }
 
-        public EntityT4Property SLST
+        public EntityChunkProperty SLST
         {
             get => slst;
             set => slst = value;
@@ -296,13 +324,13 @@ namespace CrashEdit.Crash
             set => neighbors = value;
         }
 
-        public EntityT4Property LoadListA
+        public EntityChunkProperty LoadListA
         {
             get => loadlista;
             set => loadlista = value;
         }
 
-        public EntityT4Property LoadListB
+        public EntityChunkProperty LoadListB
         {
             get => loadlistb;
             set => loadlistb = value;
@@ -314,7 +342,7 @@ namespace CrashEdit.Crash
             set => ddasettings = value;
         }
 
-        public List<EntityVictim> Victims => victims;
+        public List<short> Victims => victims;
 
         public int? DDASection
         {
@@ -322,7 +350,7 @@ namespace CrashEdit.Crash
             set => ddasection = value;
         }
 
-        public EntitySetting? BoxCount
+        public EntityNumber? BoxCount
         {
             get => boxcount;
             set => boxcount = value;
@@ -340,7 +368,7 @@ namespace CrashEdit.Crash
             set => timetrialreward = value;
         }
 
-        public EntitySetting? BonusBoxCount
+        public EntityNumber? BonusBoxCount
         {
             get => bonusboxcount;
             set => bonusboxcount = value;
@@ -365,8 +393,18 @@ namespace CrashEdit.Crash
                     properties.Add(id, property);
                 }
             }
+            // special handling here
+            if (mode_c2.HasValue)
+            {
+                properties.Add(0x29, new EntityUInt8Property(mode_c2.Value));
+            }
+            else if (mode_c3.HasValue)
+            {
+                properties.Add(0x29, new EntityInt32Property(mode_c3.Value));
+            }
+
             byte[] header = new byte[16 + 8 * properties.Count];
-            List<byte> result = new List<byte>();
+            List<byte> result = new();
             int i = 0;
             int offset = header.Length - 12;
             foreach (KeyValuePair<short, EntityProperty> pair in properties)
@@ -377,7 +415,7 @@ namespace CrashEdit.Crash
                 {
                     BitConv.ToInt16(header, 16 + 8 * i + 2, (short)offset);
                 }
-                header[16 + 8 * i + 4] = (byte)(property.Type | ((i == properties.Count - 1) ? 128 : 0) | (property.IsSparse ? 64 : 0) | (property.HasMetaValues ? 32 : 0));
+                header[16 + 8 * i + 4] = (byte)((byte)property.Type | ((i == properties.Count - 1) ? 128 : 0) | (property.IsSparse ? 64 : 0) | (property.HasKeyframes ? 32 : 0));
                 header[16 + 8 * i + 5] = property.ElementSize;
                 BitConv.ToInt16(header, 16 + 8 * i + 6, property.RowCount);
                 byte[] propertydata = property.Save();
@@ -394,14 +432,9 @@ namespace CrashEdit.Crash
         }
 
         [AttributeUsage(AttributeTargets.Field)]
-        private class EntityPropertyFieldAttribute : Attribute
+        private class EntityPropertyFieldAttribute(short id) : Attribute
         {
-            public EntityPropertyFieldAttribute(short id)
-            {
-                ID = id;
-            }
-
-            public short ID { get; }
+            public short ID { get; } = id;
         }
     }
 }

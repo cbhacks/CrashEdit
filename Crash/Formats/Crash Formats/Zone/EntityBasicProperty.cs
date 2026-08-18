@@ -6,16 +6,26 @@ namespace CrashEdit.Crash
     {
         public EntityBasicProperty()
         {
-            Rows = new List<EntityPropertyRow<T>>();
+            Rows = new();
         }
 
         public EntityBasicProperty(IEnumerable<EntityPropertyRow<T>> rows)
         {
-            Rows = new List<EntityPropertyRow<T>>(rows);
+            Rows = new(rows);
+        }
+
+        public EntityBasicProperty(T value)
+        {
+            var row = new EntityPropertyRow<T>();
+            row.Values.Add(value);
+            Rows = [row];
         }
 
         public override sealed short RowCount => (short)Rows.Count;
-
+        
+        /// <summary>
+        /// If true, not all rows may be of the same length.
+        /// </summary>
         public override bool IsSparse
         {
             get
@@ -39,13 +49,16 @@ namespace CrashEdit.Crash
             }
         }
 
-        public override bool HasMetaValues
+        /// <summary>
+        /// If true, each row has an assigned keyframe.
+        /// </summary>
+        public override bool HasKeyframes
         {
             get
             {
                 foreach (EntityPropertyRow<T> row in Rows)
                 {
-                    if (row.MetaValue.HasValue)
+                    if (row.Keyframe.HasValue)
                     {
                         return true;
                     }
@@ -56,13 +69,15 @@ namespace CrashEdit.Crash
 
         public List<EntityPropertyRow<T>> Rows { get; }
 
+        public T GetSingleValue() => Rows[0].Values[0];
+
         internal override void LoadToField(object obj, FieldInfo field)
         {
             if (field.FieldType == typeof(T?))
             {
                 if (Rows.Count == 1)
                 {
-                    if (Rows[0].MetaValue == null)
+                    if (Rows[0].Keyframe == null)
                     {
                         if (Rows[0].Values.Count == 1)
                         {
@@ -75,7 +90,7 @@ namespace CrashEdit.Crash
                     }
                     else
                     {
-                        ErrorManager.SignalError("EntityProperty: Property has an unexpected metavalue");
+                        ErrorManager.SignalError("EntityProperty: Property has an unexpected keyframe");
                     }
                 }
                 else
@@ -87,15 +102,15 @@ namespace CrashEdit.Crash
             {
                 if (Rows.Count == 1)
                 {
-                    if (Rows[0].MetaValue == null)
+                    if (Rows[0].Keyframe == null)
                     {
-                        List<T> list = new List<T>();
+                        List<T> list = new();
                         list.AddRange(Rows[0].Values);
                         field.SetValue(obj, list);
                     }
                     else
                     {
-                        ErrorManager.SignalError("EntityProperty: Property has an unexpected metavalue");
+                        ErrorManager.SignalError("EntityProperty: Property has an unexpected keyframe");
                     }
                 }
                 else
@@ -115,16 +130,8 @@ namespace CrashEdit.Crash
 
         public override byte[] Save()
         {
-            int length;
-            if (IsSparse)
-            {
-                length = Rows.Count * 2;
-            }
-            else
-            {
-                length = 2;
-            }
-            if (HasMetaValues)
+            int length = IsSparse ? Rows.Count * 2 : 2;
+            if (HasKeyframes)
             {
                 length += Rows.Count * 2;
             }
@@ -154,15 +161,15 @@ namespace CrashEdit.Crash
                 BitConv.ToInt16(data, offset, (short)Rows[0].Values.Count);
                 offset += 2;
             }
-            if (HasMetaValues)
+            if (HasKeyframes)
             {
                 foreach (EntityPropertyRow<T> row in Rows)
                 {
-                    if (!row.MetaValue.HasValue)
+                    if (!row.Keyframe.HasValue)
                     {
-                        throw new InvalidOperationException("EntityPropertyRow MetaValues must be consistently present or non-present.");
+                        throw new InvalidOperationException("EntityPropertyRow Keyframes must either be consistently present or non-present.");
                     }
-                    BitConv.ToInt16(data, offset, row.MetaValue.Value);
+                    BitConv.ToInt16(data, offset, row.Keyframe.Value);
                     offset += 2;
                 }
             }

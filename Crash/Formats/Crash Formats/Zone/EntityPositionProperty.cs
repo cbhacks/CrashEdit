@@ -10,7 +10,7 @@ namespace CrashEdit.Crash
         {
         }
 
-        public override byte Type => 6;
+        public override EntityPropertyType Type => EntityPropertyType.Vector;
         public override byte ElementSize => 6;
 
         protected override void SaveElement(byte[] data, EntityPosition value)

@@ -60,7 +60,7 @@ namespace CrashEdit.Crash
                 {
                     short metavalue = BitConv.FromInt16(data, offset);
                     offset += 2;
-                    row.MetaValue = metavalue;
+                    row.Keyframe = metavalue;
                 }
             }
             Aligner.Align(ref offset, 4);

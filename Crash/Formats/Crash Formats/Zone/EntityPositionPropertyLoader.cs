@@ -1,6 +1,6 @@
 namespace CrashEdit.Crash
 {
-    [EntityPropertyType(6)]
+    [EntityPropertyType(EntityPropertyType.Vector)]
     public sealed class EntityPositionPropertyLoader : EntityBasicPropertyLoader<EntityPosition>
     {
         protected override byte ElementSize => 6;

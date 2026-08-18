@@ -2,27 +2,27 @@ namespace CrashEdit.Crash
 {
     public sealed class EntityUnknownProperty : EntityProperty
     {
-        private readonly byte type;
+        private readonly EntityPropertyType type;
         private readonly byte elementsize;
         private readonly short unknown;
         private readonly bool issparse;
-        private readonly bool hasmetavalues;
+        private readonly bool haskeyframes;
 
-        public EntityUnknownProperty(byte type, byte elementsize, short unknown, bool issparse, bool hasmetavalues, byte[] data)
+        public EntityUnknownProperty(EntityPropertyType type, byte elementsize, short unknown, bool issparse, bool haskeyframes, byte[] data)
         {
             this.type = type;
             this.elementsize = elementsize;
             this.unknown = unknown;
             this.issparse = issparse;
-            this.hasmetavalues = hasmetavalues;
+            this.haskeyframes = haskeyframes;
             Data = data;
         }
 
-        public override byte Type => type;
+        public override EntityPropertyType Type => type;
         public override byte ElementSize => elementsize;
         public override short RowCount => unknown;
         public override bool IsSparse => issparse;
-        public override bool HasMetaValues => hasmetavalues;
+        public override bool HasKeyframes => haskeyframes;
         public byte[] Data { get; }
 
         public override byte[] Save()

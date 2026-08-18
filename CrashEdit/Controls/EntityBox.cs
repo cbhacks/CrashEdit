@@ -339,8 +339,8 @@ namespace CrashEdit.CE
                 numSettingA.Enabled =
                 numSettingB.Enabled =
                 numSettingC.Enabled = true;
-                numSettingA.Value = entity.Settings[settingindex].ValueA;
-                numSettingB.Value = entity.Settings[settingindex].ValueB;
+                numSettingA.Value = entity.Settings[settingindex].Decimal;
+                numSettingB.Value = entity.Settings[settingindex].Whole;
                 SetCVal(entity.Settings[settingindex].Value);
             }
             dirty.Pop();
@@ -360,7 +360,7 @@ namespace CrashEdit.CE
 
         private void cmdAddSetting_Click(object sender, EventArgs e)
         {
-            entity.Settings.Add(new EntitySetting(0, 0));
+            entity.Settings.Add(new EntityNumber(0, 0));
             UpdateSettings();
         }
 
@@ -374,8 +374,8 @@ namespace CrashEdit.CE
         {
             if (!Dirty)
             {
-                EntitySetting s = entity.Settings[settingindex];
-                entity.Settings[settingindex] = new EntitySetting((byte)numSettingA.Value, s.ValueB);
+                EntityNumber s = entity.Settings[settingindex];
+                entity.Settings[settingindex] = new EntityNumber((byte)numSettingA.Value, s.Whole);
                 SetCVal(entity.Settings[settingindex].Value);
                 lblArgAs.Text = MakeArgAsText();
             }
@@ -385,8 +385,8 @@ namespace CrashEdit.CE
         {
             if (!Dirty)
             {
-                EntitySetting s = entity.Settings[settingindex];
-                entity.Settings[settingindex] = new EntitySetting(s.ValueA, (int)numSettingB.Value);
+                EntityNumber s = entity.Settings[settingindex];
+                entity.Settings[settingindex] = new EntityNumber(s.Decimal, (int)numSettingB.Value);
                 SetCVal(entity.Settings[settingindex].Value);
                 lblArgAs.Text = MakeArgAsText();
             }
@@ -417,10 +417,10 @@ namespace CrashEdit.CE
             if (!Dirty)
             {
                 SetCVal((long)numSettingC.Value);
-                entity.Settings[settingindex] = new EntitySetting(((long)numSettingC.Value).UInt32ToInt32());
+                entity.Settings[settingindex] = new EntityNumber(((long)numSettingC.Value).UInt32ToInt32());
                 dirty.Push(true);
-                numSettingA.Value = entity.Settings[settingindex].ValueA;
-                numSettingB.Value = entity.Settings[settingindex].ValueB;
+                numSettingA.Value = entity.Settings[settingindex].Decimal;
+                numSettingB.Value = entity.Settings[settingindex].Whole;
                 dirty.Pop();
                 lblArgAs.Text = MakeArgAsText();
             }
@@ -545,13 +545,13 @@ namespace CrashEdit.CE
         {
             if (entity.BoxCount.HasValue)
             {
-                numBoxCount.Value = entity.BoxCount.Value.ValueB;
+                numBoxCount.Value = entity.BoxCount.Value.Whole;
             }
             numBoxCount.Enabled = entity.BoxCount.HasValue;
             chkBoxCount.Checked = entity.BoxCount.HasValue;
             if (entity.BonusBoxCount.HasValue)
             {
-                numBonusBoxCount.Value = entity.BonusBoxCount.Value.ValueB;
+                numBonusBoxCount.Value = entity.BonusBoxCount.Value.Whole;
             }
             numBonusBoxCount.Enabled = entity.BonusBoxCount.HasValue;
             chkBonusBoxCount.Checked = entity.BonusBoxCount.HasValue;
@@ -562,7 +562,7 @@ namespace CrashEdit.CE
             numBoxCount.Enabled = chkBoxCount.Checked;
             if (chkBoxCount.Checked)
             {
-                entity.BoxCount = new EntitySetting(0, (int)numBoxCount.Value);
+                entity.BoxCount = new EntityNumber(0, (int)numBoxCount.Value);
             }
             else
             {
@@ -572,7 +572,7 @@ namespace CrashEdit.CE
 
         private void numBoxCount_ValueChanged(object sender, EventArgs e)
         {
-            entity.BoxCount = new EntitySetting(0, (int)numBoxCount.Value);
+            entity.BoxCount = new EntityNumber(0, (int)numBoxCount.Value);
         }
 
         private void chkBonusBoxCount_CheckedChanged(object sender, EventArgs e)
@@ -580,7 +580,7 @@ namespace CrashEdit.CE
             numBonusBoxCount.Enabled = chkBonusBoxCount.Checked;
             if (chkBonusBoxCount.Checked)
             {
-                entity.BonusBoxCount = new EntitySetting(0, (int)numBonusBoxCount.Value);
+                entity.BonusBoxCount = new EntityNumber(0, (int)numBonusBoxCount.Value);
             }
             else
             {
@@ -590,7 +590,7 @@ namespace CrashEdit.CE
 
         private void numBonusBoxCount_ValueChanged(object sender, EventArgs e)
         {
-            entity.BonusBoxCount = new EntitySetting(0, (int)numBonusBoxCount.Value);
+            entity.BonusBoxCount = new EntityNumber(0, (int)numBonusBoxCount.Value);
         }
 
         private void cmdClearAllVictims_Click(object sender, EventArgs e)
@@ -630,7 +630,7 @@ namespace CrashEdit.CE
                 cmdRemoveVictim.Enabled =
                 numVictimID.Enabled =
                 cmdClearAllVictims.Enabled = true;
-                numVictimID.Value = entity.Victims[victimindex].VictimID;
+                numVictimID.Value = entity.Victims[victimindex];
             }
             dirty.Pop();
         }
@@ -656,7 +656,7 @@ namespace CrashEdit.CE
             else
             {
                 victimindex = 0;
-                entity.Victims.Add(new EntityVictim(10));
+                entity.Victims.Add(10);
             }
             UpdateVictim();
         }
@@ -671,7 +671,7 @@ namespace CrashEdit.CE
         {
             if (!Dirty)
             {
-                entity.Victims[victimindex] = new EntityVictim((short)numVictimID.Value);
+                entity.Victims[victimindex] = (short)numVictimID.Value;
             }
         }
 
@@ -685,7 +685,7 @@ namespace CrashEdit.CE
                 lblMetavalueLoadA.Enabled = true;
                 numMetavalueLoadA.Enabled = true;
                 lblLoadListRowIndexA.Text = $"{loadlistarowindex + 1} / {entity.LoadListA.RowCount}";
-                numMetavalueLoadA.Value = entity.LoadListA.Rows[loadlistarowindex].MetaValue.Value;
+                numMetavalueLoadA.Value = entity.LoadListA.Rows[loadlistarowindex].Keyframe.Value;
                 cmdPrevRowA.Enabled = loadlistarowindex > 0;
                 cmdNextRowA.Enabled = loadlistarowindex + 1 < entity.LoadListA.RowCount;
                 cmdRemoveRowA.Enabled = true;
@@ -802,16 +802,16 @@ namespace CrashEdit.CE
         {
             if (entity.LoadListA == null || entity.LoadListA.Rows.Count == 0)
             {
-                entity.LoadListA = new EntityT4Property();
+                entity.LoadListA = new EntityChunkProperty();
                 entity.LoadListA.Rows.Add(new EntityPropertyRow<int>());
-                entity.LoadListA.Rows[entity.LoadListA.RowCount - 1].MetaValue = 0;
+                entity.LoadListA.Rows[entity.LoadListA.RowCount - 1].Keyframe = 0;
                 loadlistarowindex = entity.LoadListA.RowCount - 1;
                 loadlistaeidindex = 0;
             }
             else
             {
                 var newrow = new EntityPropertyRow<int>();
-                newrow.MetaValue = entity.LoadListA.Rows[loadlistarowindex].MetaValue;
+                newrow.Keyframe = entity.LoadListA.Rows[loadlistarowindex].Keyframe;
                 foreach (var val in entity.LoadListA.Rows[loadlistarowindex].Values)
                     newrow.Values.Add(val);
                 entity.LoadListA.Rows.Insert(loadlistarowindex, newrow);
@@ -821,7 +821,7 @@ namespace CrashEdit.CE
 
         private void numMetavalueLoadA_ValueChanged(object sender, EventArgs e)
         {
-            entity.LoadListA.Rows[loadlistarowindex].MetaValue = (short)numMetavalueLoadA.Value;
+            entity.LoadListA.Rows[loadlistarowindex].Keyframe = (short)numMetavalueLoadA.Value;
         }
 
         private void UpdateLoadListB()
@@ -834,7 +834,7 @@ namespace CrashEdit.CE
                 lblMetavalueLoadB.Enabled = true;
                 numMetavalueLoadB.Enabled = true;
                 lblLoadListRowIndexB.Text = $"{loadlistbrowindex + 1} / {entity.LoadListB.RowCount}";
-                numMetavalueLoadB.Value = entity.LoadListB.Rows[loadlistbrowindex].MetaValue.Value;
+                numMetavalueLoadB.Value = entity.LoadListB.Rows[loadlistbrowindex].Keyframe.Value;
                 cmdPrevRowB.Enabled = loadlistbrowindex > 0;
                 cmdNextRowB.Enabled = loadlistbrowindex + 1 < entity.LoadListB.RowCount;
                 cmdRemoveRowB.Enabled = true;
@@ -951,16 +951,16 @@ namespace CrashEdit.CE
         {
             if (entity.LoadListB == null || entity.LoadListB.Rows.Count == 0)
             {
-                entity.LoadListB = new EntityT4Property();
+                entity.LoadListB = new EntityChunkProperty();
                 entity.LoadListB.Rows.Add(new EntityPropertyRow<int>());
-                entity.LoadListB.Rows[entity.LoadListB.RowCount - 1].MetaValue = 0;
+                entity.LoadListB.Rows[entity.LoadListB.RowCount - 1].Keyframe = 0;
                 loadlistbrowindex = entity.LoadListB.RowCount - 1;
                 loadlistbeidindex = 0;
             }
             else
             {
                 var newrow = new EntityPropertyRow<int>();
-                newrow.MetaValue = entity.LoadListB.Rows[loadlistbrowindex].MetaValue;
+                newrow.Keyframe = entity.LoadListB.Rows[loadlistbrowindex].Keyframe;
                 foreach (var val in entity.LoadListB.Rows[loadlistbrowindex].Values)
                     newrow.Values.Add(val);
                 entity.LoadListB.Rows.Insert(loadlistbrowindex, newrow);
@@ -970,7 +970,7 @@ namespace CrashEdit.CE
 
         private void numMetavalueLoadB_ValueChanged(object sender, EventArgs e)
         {
-            entity.LoadListB.Rows[loadlistbrowindex].MetaValue = (short)numMetavalueLoadB.Value;
+            entity.LoadListB.Rows[loadlistbrowindex].Keyframe = (short)numMetavalueLoadB.Value;
         }
 
         private void UpdateDrawListA()
@@ -982,7 +982,7 @@ namespace CrashEdit.CE
                 lblMetavalueDrawA.Enabled = true;
                 numMetavalueDrawA.Enabled = true;
                 lblDrawListRowIndexA.Text = $"{drawlistarowindex + 1} / {entity.DrawListA.RowCount}";
-                numMetavalueDrawA.Value = entity.DrawListA.Rows[drawlistarowindex].MetaValue.Value;
+                numMetavalueDrawA.Value = entity.DrawListA.Rows[drawlistarowindex].Keyframe.Value;
                 cmdPrevRowDrawA.Enabled = drawlistarowindex > 0;
                 cmdNextRowDrawA.Enabled = drawlistarowindex + 1 < entity.DrawListA.RowCount;
                 cmdRemoveRowDrawA.Enabled = true;
@@ -1114,12 +1114,12 @@ namespace CrashEdit.CE
             {
                 entity.DrawListA = new EntityInt32Property();
                 entity.DrawListA.Rows.Add(new EntityPropertyRow<int>());
-                entity.DrawListA.Rows[entity.DrawListA.RowCount - 1].MetaValue = 0;
+                entity.DrawListA.Rows[entity.DrawListA.RowCount - 1].Keyframe = 0;
             }
             else
             {
                 var newrow = new EntityPropertyRow<int>();
-                newrow.MetaValue = entity.DrawListA.Rows[drawlistarowindex].MetaValue;
+                newrow.Keyframe = entity.DrawListA.Rows[drawlistarowindex].Keyframe;
                 foreach (var val in entity.DrawListA.Rows[drawlistarowindex].Values)
                     newrow.Values.Add(val);
                 entity.DrawListA.Rows.Insert(drawlistarowindex, newrow);
@@ -1129,7 +1129,7 @@ namespace CrashEdit.CE
 
         private void numMetavalueDrawA_ValueChanged(object sender, EventArgs e)
         {
-            entity.DrawListA.Rows[drawlistarowindex].MetaValue = (short)numMetavalueDrawA.Value;
+            entity.DrawListA.Rows[drawlistarowindex].Keyframe = (short)numMetavalueDrawA.Value;
         }
 
         private void UpdateDrawListB()
@@ -1141,7 +1141,7 @@ namespace CrashEdit.CE
                 lblMetavalueDrawB.Enabled = true;
                 numMetavalueDrawB.Enabled = true;
                 lblDrawListRowIndexB.Text = $"{drawlistbrowindex + 1} / {entity.DrawListB.RowCount}";
-                numMetavalueDrawB.Value = entity.DrawListB.Rows[drawlistbrowindex].MetaValue.Value;
+                numMetavalueDrawB.Value = entity.DrawListB.Rows[drawlistbrowindex].Keyframe.Value;
                 cmdPrevRowDrawB.Enabled = drawlistbrowindex > 0;
                 cmdNextRowDrawB.Enabled = drawlistbrowindex + 1 < entity.DrawListB.RowCount;
                 cmdRemoveRowDrawB.Enabled = true;
@@ -1273,12 +1273,12 @@ namespace CrashEdit.CE
             {
                 entity.DrawListB = new EntityInt32Property();
                 entity.DrawListB.Rows.Add(new EntityPropertyRow<int>());
-                entity.DrawListB.Rows[entity.DrawListB.RowCount - 1].MetaValue = 0;
+                entity.DrawListB.Rows[entity.DrawListB.RowCount - 1].Keyframe = 0;
             }
             else
             {
                 var newrow = new EntityPropertyRow<int>();
-                newrow.MetaValue = entity.DrawListB.Rows[drawlistbrowindex].MetaValue;
+                newrow.Keyframe = entity.DrawListB.Rows[drawlistbrowindex].Keyframe;
                 foreach (var val in entity.DrawListB.Rows[drawlistbrowindex].Values)
                     newrow.Values.Add(val);
                 entity.DrawListB.Rows.Insert(drawlistbrowindex, newrow);
@@ -1288,7 +1288,7 @@ namespace CrashEdit.CE
 
         private void numMetavalueDrawB_ValueChanged(object sender, EventArgs e)
         {
-            entity.DrawListB.Rows[drawlistbrowindex].MetaValue = (short)numMetavalueDrawB.Value;
+            entity.DrawListB.Rows[drawlistbrowindex].Keyframe = (short)numMetavalueDrawB.Value;
         }
 
         private void UpdateDDASettings()
@@ -1426,7 +1426,7 @@ namespace CrashEdit.CE
             if (chkSLST.Checked)
             {
                 lblEIDErr1.Text = Entry.CheckEIDErrors(txtSLST.Text, true);
-                entity.SLST = new EntityT4Property();
+                entity.SLST = new EntityChunkProperty();
                 entity.SLST.Rows.Add(new EntityPropertyRow<int>());
                 if (lblEIDErr1.Text != string.Empty)
                     entity.SLST.Rows[0].Values.Add(Entry.NullEID);
@@ -1504,7 +1504,7 @@ namespace CrashEdit.CE
             {
                 foreach (var row in entity.LoadListA.Rows)
                 {
-                    if (row.MetaValue == i)
+                    if (row.Keyframe == i)
                     {
                         // load
                         foreach (int eid in row.Values)
@@ -1515,7 +1515,7 @@ namespace CrashEdit.CE
                 }
                 foreach (var row in entity.LoadListB.Rows)
                 {
-                    if (row.MetaValue == i)
+                    if (row.Keyframe == i)
                     {
                         // unload
                         foreach (int eid in row.Values)
@@ -1549,7 +1549,7 @@ namespace CrashEdit.CE
             {
                 foreach (var row in entity.LoadListA.Rows)
                 {
-                    if (row.MetaValue == i)
+                    if (row.Keyframe == i)
                     {
                         // load
                         foreach (int eid in row.Values)
@@ -1560,7 +1560,7 @@ namespace CrashEdit.CE
                 }
                 foreach (var row in entity.LoadListB.Rows)
                 {
-                    if (row.MetaValue == i)
+                    if (row.Keyframe == i)
                     {
                         // unload
                         foreach (int eid in row.Values)
@@ -1744,7 +1744,7 @@ namespace CrashEdit.CE
         {
             if (entity.AverageDistance.HasValue)
             {
-                numAvgDist.Value = entity.AverageDistance.Value.ValueB;
+                numAvgDist.Value = entity.AverageDistance.Value.Whole;
             }
             numAvgDist.Enabled = entity.AverageDistance.HasValue;
             chkAvgDist.Checked = entity.AverageDistance.HasValue;
@@ -1752,14 +1752,14 @@ namespace CrashEdit.CE
 
         private void numAvgDist_ValueChanged(object sender, EventArgs e)
         {
-            entity.AverageDistance = new EntitySetting(0, (int)numAvgDist.Value);
+            entity.AverageDistance = new EntityNumber(0, (int)numAvgDist.Value);
         }
 
         private void chkAvgDist_CheckedChanged(object sender, EventArgs e)
         {
             numAvgDist.Enabled = chkAvgDist.Checked;
             if (chkAvgDist.Checked)
-                entity.AverageDistance = new EntitySetting(0, (int)numAvgDist.Value);
+                entity.AverageDistance = new EntityNumber(0, (int)numAvgDist.Value);
             else
                 entity.AverageDistance = null;
         }
@@ -1770,7 +1770,7 @@ namespace CrashEdit.CE
             {
                 if (neighborindex >= entity.Neighbors.RowCount)
                     neighborindex = entity.Neighbors.RowCount - 1;
-                numNeighborPosition.Value = entity.Neighbors.Rows[neighborindex].MetaValue.Value;
+                numNeighborPosition.Value = entity.Neighbors.Rows[neighborindex].Keyframe.Value;
                 lblNeighbor.Text = $"{neighborindex + 1} / {entity.Neighbors.RowCount}";
                 cmdPrevNeighbor.Enabled = neighborindex > 0;
                 cmdNextNeighbor.Enabled = neighborindex + 1 < entity.Neighbors.RowCount;
@@ -1863,12 +1863,12 @@ namespace CrashEdit.CE
             {
                 entity.Neighbors = new EntityUInt32Property();
                 entity.Neighbors.Rows.Add(new EntityPropertyRow<uint>());
-                entity.Neighbors.Rows[entity.Neighbors.RowCount - 1].MetaValue = 0;
+                entity.Neighbors.Rows[entity.Neighbors.RowCount - 1].Keyframe = 0;
             }
             else
             {
                 var newrow = new EntityPropertyRow<uint>();
-                newrow.MetaValue = entity.Neighbors.Rows[neighborindex].MetaValue;
+                newrow.Keyframe = entity.Neighbors.Rows[neighborindex].Keyframe;
                 foreach (var val in entity.Neighbors.Rows[neighborindex].Values)
                     newrow.Values.Add(val);
                 entity.Neighbors.Rows.Insert(neighborindex, newrow);
@@ -1902,7 +1902,7 @@ namespace CrashEdit.CE
 
         private void numNeighborPosition_ValueChanged(object sender, EventArgs e)
         {
-            entity.Neighbors.Rows[neighborindex].MetaValue = (short)numNeighborPosition.Value;
+            entity.Neighbors.Rows[neighborindex].Keyframe = (short)numNeighborPosition.Value;
         }
 
         private void cmdPrevNeighborSetting_Click(object sender, EventArgs e)
@@ -1968,7 +1968,7 @@ namespace CrashEdit.CE
                     fovframeindex = entity.FOV.RowCount - 1;
                 lblFOVPosition.Enabled = true;
                 numFOVPosition.Enabled = true;
-                numFOVPosition.Value = entity.FOV.Rows[fovframeindex].MetaValue.Value;
+                numFOVPosition.Value = entity.FOV.Rows[fovframeindex].Keyframe.Value;
                 lblFOVFrame.Text = $"{fovframeindex + 1} / {entity.FOV.RowCount}";
                 cmdPrevFOVFrame.Enabled = fovframeindex > 0;
                 cmdNextFOVFrame.Enabled = fovframeindex + 1 < entity.FOV.RowCount;
@@ -1984,7 +1984,7 @@ namespace CrashEdit.CE
                     cmdPrevFOV.Enabled = fovindex > 0;
                     cmdNextFOV.Enabled = fovindex + 1 < entity.FOV.Rows[fovframeindex].Values.Count;
                     lblFOVIndex.Text = $"{fovindex + 1} / {entity.FOV.Rows[fovframeindex].Values.Count}";
-                    numFOV.Value = entity.FOV.Rows[fovframeindex].Values[fovindex].VictimID;
+                    numFOV.Value = entity.FOV.Rows[fovframeindex].Values[fovindex];
                 }
                 else
                 {
@@ -2037,14 +2037,14 @@ namespace CrashEdit.CE
         {
             if (entity.FOV == null || entity.FOV.Rows.Count == 0)
             {
-                entity.FOV = new EntityVictimProperty();
-                entity.FOV.Rows.Add(new EntityPropertyRow<EntityVictim>());
-                entity.FOV.Rows[entity.FOV.RowCount - 1].MetaValue = 0;
+                entity.FOV = new EntityInt16Property();
+                entity.FOV.Rows.Add(new EntityPropertyRow<short>());
+                entity.FOV.Rows[entity.FOV.RowCount - 1].Keyframe = 0;
             }
             else
             {
-                var newrow = new EntityPropertyRow<EntityVictim>();
-                newrow.MetaValue = entity.FOV.Rows[fovframeindex].MetaValue;
+                var newrow = new EntityPropertyRow<short>();
+                newrow.Keyframe = entity.FOV.Rows[fovframeindex].Keyframe;
                 foreach (var val in entity.FOV.Rows[fovframeindex].Values)
                     newrow.Values.Add(val);
                 entity.FOV.Rows.Insert(fovframeindex, newrow);
@@ -2073,7 +2073,7 @@ namespace CrashEdit.CE
         private void cmdInsertFOV_Click(object sender, EventArgs e)
         {
             if (entity.FOV.Rows[fovframeindex].Values.Count == 0)
-                entity.FOV.Rows[fovframeindex].Values.Add(new EntityVictim());
+                entity.FOV.Rows[fovframeindex].Values.Add(0);
             else
                 entity.FOV.Rows[fovframeindex].Values.Insert(fovindex, entity.FOV.Rows[fovframeindex].Values[fovindex]);
             UpdateFOV();
@@ -2081,12 +2081,12 @@ namespace CrashEdit.CE
 
         private void numFOVPosition_ValueChanged(object sender, EventArgs e)
         {
-            entity.FOV.Rows[fovframeindex].MetaValue = (short)numFOVPosition.Value;
+            entity.FOV.Rows[fovframeindex].Keyframe = (short)numFOVPosition.Value;
         }
 
         private void numFOV_ValueChanged(object sender, EventArgs e)
         {
-            entity.FOV.Rows[fovframeindex].Values[fovindex] = new EntityVictim((short)numFOV.Value);
+            entity.FOV.Rows[fovframeindex].Values[fovindex] = (short)numFOV.Value;
         }
     }
 }

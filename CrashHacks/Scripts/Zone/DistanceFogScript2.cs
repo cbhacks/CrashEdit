@@ -51,7 +51,7 @@ namespace CrashHacks.Scripts.Zone
                     {
                         EntityPropertyRow<uint> row = new EntityPropertyRow<uint>();
                         row.Values.Add(0x20);
-                        row.MetaValue = 0;
+                        row.Keyframe = 0;
                         entity.ExtraProperties[0x185] = new EntityUInt32Property(new EntityPropertyRow<uint>[] { row, row });
                     }
                     if (entity.LoadListA != null)

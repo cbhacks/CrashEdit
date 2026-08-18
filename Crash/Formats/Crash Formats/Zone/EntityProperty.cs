@@ -8,33 +8,30 @@ namespace CrashEdit.Crash
 
         static EntityProperty()
         {
-            loaders = new Dictionary<byte, EntityPropertyLoader>();
+            loaders = new();
             foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
             {
                 foreach (EntityPropertyTypeAttribute attribute in type.GetCustomAttributes(typeof(EntityPropertyTypeAttribute), false))
                 {
-                    EntityPropertyLoader loader = (EntityPropertyLoader)Activator.CreateInstance(type);
-                    loaders.Add(attribute.Type, loader);
+                    EntityPropertyLoader loader = (EntityPropertyLoader)Activator.CreateInstance(type)!;
+                    loaders.Add((byte)attribute.Type, loader);
                 }
             }
         }
 
-        public static EntityProperty Load(byte type, byte elementsize, short unknown, bool last, byte[] data)
+        public static EntityProperty Load(byte type, byte elementsize, short unknown, byte[] data)
         {
-            if (((type & 128) != 0) != last)
-            {
-                ErrorManager.SignalIgnorableError("EntityProperty: Flag 128 has an unexpected value");
-            }
             bool issparse = (type & 64) != 0;
-            bool hasmetavalues = (type & 32) != 0;
+            bool haskeyframes = (type & 32) != 0;
             type &= 31;
-            if (loaders.ContainsKey(type))
+            if (loaders.TryGetValue(type, out var loader))
             {
-                return loaders[type].Load(elementsize, unknown, issparse, hasmetavalues, data);
+                return loader.Load(elementsize, unknown, issparse, haskeyframes, data);
             }
             else
             {
-                return new EntityUnknownProperty(type, elementsize, unknown, issparse, hasmetavalues, data);
+                Console.WriteLine($"Unknown entity property type {type}");
+                return new EntityUnknownProperty((EntityPropertyType)type, elementsize, unknown, issparse, haskeyframes, data);
             }
         }
 
@@ -46,7 +43,7 @@ namespace CrashEdit.Crash
                 if (value.HasValue)
                 {
                     EntityBasicProperty<T> p = (EntityBasicProperty<T>)Activator.CreateInstance(type);
-                    EntityPropertyRow<T> row = new EntityPropertyRow<T>();
+                    EntityPropertyRow<T> row = new();
                     row.Values.Add(value.Value);
                     p.Rows.Add(row);
                     property = p;
@@ -62,7 +59,7 @@ namespace CrashEdit.Crash
                 if (values.Count > 0)
                 {
                     EntityBasicProperty<T> p = (EntityBasicProperty<T>)Activator.CreateInstance(type);
-                    EntityPropertyRow<T> row = new EntityPropertyRow<T>();
+                    EntityPropertyRow<T> row = new();
                     foreach (T value in values)
                     {
                         row.Values.Add(value);
@@ -89,13 +86,13 @@ namespace CrashEdit.Crash
             {
                 return null;
             }
-            else if (obj is EntityProperty)
+            else if (obj is EntityProperty prop)
             {
-                return (EntityProperty)obj;
+                return prop;
             }
-            else if (obj is string)
+            else if (obj is string str)
             {
-                List<byte> bytestr = new List<byte>(System.Text.Encoding.UTF8.GetBytes((string)obj)) { 0 };
+                List<byte> bytestr = new(System.Text.Encoding.UTF8.GetBytes(str)) { 0 };
                 return LoadFromField(bytestr);
             }
             else if (obj is EntityID?)
@@ -103,13 +100,13 @@ namespace CrashEdit.Crash
                 EntityID? value = (EntityID?)obj;
                 if (value.HasValue)
                 {
-                    EntityInt32Property p = new EntityInt32Property();
-                    EntityPropertyRow<int> row = new EntityPropertyRow<int>();
+                    EntityInt32Property p = new();
+                    EntityPropertyRow<int> row = new();
                     row.Values.Add(value.Value.ID);
                     p.Rows.Add(row);
                     if (value.Value.AlternateID.HasValue)
                     {
-                        EntityPropertyRow<int> row2 = new EntityPropertyRow<int>();
+                        EntityPropertyRow<int> row2 = new();
                         row2.Values.Add(value.Value.AlternateID.Value);
                         p.Rows.Add(row2);
                     }
@@ -122,10 +119,14 @@ namespace CrashEdit.Crash
             }
             if (
                 LoadFromFieldOf<byte>(out EntityProperty property, obj, typeof(EntityUInt8Property)) ||
-                LoadFromFieldOf<EntityVictim>(out property, obj, typeof(EntityVictimProperty)) ||
+                LoadFromFieldOf<ushort>(out property, obj, typeof(EntityUInt16Property)) ||
+                LoadFromFieldOf<uint>(out property, obj, typeof(EntityUInt32Property)) ||
+                LoadFromFieldOf<sbyte>(out property, obj, typeof(EntityInt8Property)) ||
+                LoadFromFieldOf<short>(out property, obj, typeof(EntityInt16Property)) ||
                 LoadFromFieldOf<int>(out property, obj, typeof(EntityInt32Property)) ||
-                LoadFromFieldOf<EntitySetting>(out property, obj, typeof(EntitySettingProperty)) ||
-                LoadFromFieldOf<EntityPosition>(out property, obj, typeof(EntityPositionProperty)))
+                LoadFromFieldOf<EntityNumber>(out property, obj, typeof(EntityNumberProperty)) ||
+                LoadFromFieldOf<EntityPosition>(out property, obj, typeof(EntityPositionProperty)) ||
+                LoadFromFieldOf<EntityVector32>(out property, obj, typeof(EntityVector32Property)))
             {
                 return property;
             }
@@ -135,11 +136,11 @@ namespace CrashEdit.Crash
             }
         }
 
-        public abstract byte Type { get; }
+        public abstract EntityPropertyType Type { get; }
         public abstract byte ElementSize { get; }
         public abstract short RowCount { get; }
         public abstract bool IsSparse { get; }
-        public abstract bool HasMetaValues { get; }
+        public abstract bool HasKeyframes { get; }
 
         internal virtual void LoadToField(object obj, FieldInfo field)
         {
@@ -147,5 +148,19 @@ namespace CrashEdit.Crash
         }
 
         public abstract byte[] Save();
+    }
+
+    public enum EntityPropertyType : byte
+    {
+        UInt8 = 1, // 8-bit unsigned (also used by UTF8 strings)
+        UInt16 = 2, // 16-bit unsigned
+        UInt32 = 3, // 32-bit unsigned
+        Chunk = 4, // chunk ID
+        Number = 5, // gool number
+        Vector = 6, // 16-bit 3-element vector
+        Vector32 = 7, // 32-bit 3-element vector
+        Int8 = 0x11, // 8-bit signed
+        Int16 = 0x12, // 16-bit signed
+        Int32 = 0x13, // 32-bit signed (also used by IDs)
     }
 }

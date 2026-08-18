@@ -248,7 +248,7 @@ namespace CrashEdit.CE
                 }
                 else if (type == 26 && (subtype == 2 || subtype == 3) && entity.Settings.Count >= 1) // ruins leaner and spinner
                 {
-                    if (map.TryGetVisual(type, (entity.Settings[0].ValueB + 1) * 1000, out visual))
+                    if (map.TryGetVisual(type, (entity.Settings[0].Whole + 1) * 1000, out visual))
                         return RenderEntityVisual(visual, trans);
                 }
                 else if (type == 14 && subtype == 4 && entity.Settings.Count > 9) // drop plat
@@ -349,7 +349,7 @@ namespace CrashEdit.CE
                         if (entity.Subtype.Value == 25 && entity.Settings.Count > 0)
                         {
                             draw_type = false;
-                            int gem_id = entity.Settings[0].ValueB;
+                            int gem_id = entity.Settings[0].Whole;
                             text_y += AddText3D(gem_id.ToString(), trans, GetZoneColor(GetColorForGemId(gem_id)), size: text_size, ofs_y: text_y).Y;
                         }
                     }
@@ -375,7 +375,7 @@ namespace CrashEdit.CE
                                 RenderBoxEntity(trans, entity.Subtype.Value, timetrialcontents);
                             if (entity.Settings.Count > 0)
                             {
-                                int pickup = entity.Settings[0].ValueB;
+                                int pickup = entity.Settings[0].Whole;
                                 string pickup_name = $"unknown {pickup}";
                                 if (pickup == 0) pickup_name = "";
                                 else if (pickup == 100) pickup_name = "random";
@@ -394,11 +394,11 @@ namespace CrashEdit.CE
                             }
                             if (entity.Settings.Count > 2)
                             {
-                                int link_a = entity.Settings[2].ValueB;
+                                int link_a = entity.Settings[2].Whole;
                                 int link_b = 0;
                                 if (entity.Settings.Count > 3 && (entity.Subtype == 7 || entity.Subtype == 24))
                                 {
-                                    link_b = entity.Settings[3].ValueB;
+                                    link_b = entity.Settings[3].Whole;
                                 }
                                 for (int i = link_a; i <= (link_b == 0 ? link_a : link_b); ++i)
                                 {

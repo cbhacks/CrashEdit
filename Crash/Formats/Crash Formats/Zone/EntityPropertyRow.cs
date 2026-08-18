@@ -2,15 +2,15 @@ namespace CrashEdit.Crash
 {
     public sealed class EntityPropertyRow<T>
     {
-        private List<T> values;
+        private readonly List<T> values;
 
         public EntityPropertyRow()
         {
-            MetaValue = null;
-            values = new List<T>();
+            Keyframe = null;
+            values = new();
         }
 
-        public short? MetaValue { get; set; }
+        public short? Keyframe { get; set; }
         public IList<T> Values => values;
     }
 }

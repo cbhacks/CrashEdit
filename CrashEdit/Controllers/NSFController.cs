@@ -110,7 +110,7 @@ namespace CrashEdit.CE
                 detonator.Victims.Clear();
                 foreach (Entity nitro in nitros)
                 {
-                    detonator.Victims.Add(new EntityVictim((short)nitro.ID.Value));
+                    detonator.Victims.Add((short)nitro.ID.Value);
                 }
             }
         }
@@ -165,7 +165,7 @@ namespace CrashEdit.CE
             {
                 if (willy.BoxCount.HasValue)
                 {
-                    willy.BoxCount = new EntitySetting(0, boxcount);
+                    willy.BoxCount = new EntityNumber(0, boxcount);
                 }
             }
         }
