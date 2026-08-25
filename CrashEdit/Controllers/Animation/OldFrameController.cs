@@ -1,4 +1,7 @@
+using System.Globalization;
 using CrashEdit.Crash;
+using CrashEdit.Exporters;
+using OpenTK.Mathematics;
 
 namespace CrashEdit.CE
 {
@@ -8,7 +11,7 @@ namespace CrashEdit.CE
         public OldFrameController(OldFrame oldframe, SubcontrollerGroup parentGroup) : base(parentGroup, oldframe)
         {
             OldFrame = oldframe;
-            AddMenu("Export as OBJ", Menu_Export_OBJ);
+            AddMenu ("Export as OBJ", Menu_Export_OBJ);
         }
 
         public override bool EditorAvailable => true;
@@ -52,11 +55,21 @@ namespace CrashEdit.CE
             {
                 throw new GUIException("The linked model entry could not be found.");
             }
-            if (MessageBox.Show("Texture and color information will not be exported.\n\nContinue anyway?", "Export as OBJ", MessageBoxButtons.YesNo) != DialogResult.Yes)
-            {
+            if (!FileUtil.SelectSaveFile (out string filename, FileFilters.OBJ, FileFilters.Any))
                 return;
-            }
-            FileUtil.SaveFile(OldFrame.ToOBJ(modelentry), FileFilters.OBJ, FileFilters.Any);
+            
+            ToOBJ (Path.GetDirectoryName (filename), Path.GetFileNameWithoutExtension (filename));
+        }
+
+        public void ToOBJ(string path, string modelname)
+        {
+            Dictionary <int, int> textureEIDs = new Dictionary <int, int> ();
+            Dictionary <VertexTexInfo, VertexTexInfo> objTranslate = new Dictionary <VertexTexInfo, VertexTexInfo> ();
+            
+            var exporter = new OBJExporter ();
+            
+            exporter.AddFrame (this.GetNSF (), OldFrame, ref textureEIDs, ref objTranslate);
+            exporter.Export (path, modelname);
         }
     }
 }

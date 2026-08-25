@@ -123,7 +123,7 @@ namespace CrashEdit.CE
             var tri = world.Triangles[index];
             if (tri.VertexA >= world.Vertices.Count || tri.VertexB >= world.Vertices.Count || tri.VertexC >= world.Vertices.Count)
                 return;
-            if (!ProcessTextureInfoC2(tri.Texture, tri.Animated, world.Textures, world.AnimatedTextures, out var polygon_texture_info))
+            if (!TextureUtils.ProcessTextureInfoC2(this.render.CurrentFrame / 2, tri.Texture, tri.Animated, world.Textures, world.AnimatedTextures, out var polygon_texture_info))
                 return;
             ref var a = ref _vao.Verts[_vao.CurVert + 0];
             ref var b = ref _vao.Verts[_vao.CurVert + 1];
@@ -153,7 +153,7 @@ namespace CrashEdit.CE
             var quad = world.Quads[index];
             if (quad.VertexA >= world.Vertices.Count || quad.VertexB >= world.Vertices.Count || quad.VertexC >= world.Vertices.Count || quad.VertexD >= world.Vertices.Count)
                 return;
-            if (!ProcessTextureInfoC2(quad.Texture, quad.Animated, world.Textures, world.AnimatedTextures, out var polygon_texture_info))
+            if (!TextureUtils.ProcessTextureInfoC2(this.render.CurrentFrame / 2, quad.Texture, quad.Animated, world.Textures, world.AnimatedTextures, out var polygon_texture_info))
                 return;
             ref var a = ref _vao.Verts[_vao.CurVert + 0];
             ref var b = ref _vao.Verts[_vao.CurVert + 1];

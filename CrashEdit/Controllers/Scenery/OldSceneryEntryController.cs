@@ -1,4 +1,5 @@
 using CrashEdit.Crash;
+using CrashEdit.Exporters;
 
 namespace CrashEdit.CE
 {
@@ -10,7 +11,6 @@ namespace CrashEdit.CE
             OldSceneryEntry = oldsceneryentry;
             AddMenuSeparator();
             AddMenu("Export as OBJ", Menu_Export_OBJ);
-            AddMenu("Export as COLLADA", Menu_Export_COLLADA);
         }
 
         public override bool EditorAvailable => true;
@@ -24,20 +24,20 @@ namespace CrashEdit.CE
 
         private void Menu_Export_OBJ()
         {
-            if (MessageBox.Show("Exporting to OBJ is experimental.\nTexture and color information will not be exported.\n\nContinue anyway?", "Export as OBJ", MessageBoxButtons.YesNo) != DialogResult.Yes)
-            {
+            if (!FileUtil.SelectSaveFile (out string filename, FileFilters.OBJ, FileFilters.Any))
                 return;
-            }
-            FileUtil.SaveFile(OldSceneryEntry.ToOBJ(), FileFilters.OBJ, FileFilters.Any);
+            
+            ToOBJ (Path.GetDirectoryName (filename), Path.GetFileNameWithoutExtension (filename));
         }
 
-        private void Menu_Export_COLLADA()
+        private void ToOBJ (string path, string modelname)
         {
-            if (MessageBox.Show("Exporting to COLLADA is experimental.\nTexture information will not be exported.\n\nContinue anyway?", "Export as COLLADA", MessageBoxButtons.YesNo) != DialogResult.Yes)
-            {
-                return;
-            }
-            FileUtil.SaveFile(OldSceneryEntry.ToCOLLADA(), FileFilters.COLLADA, FileFilters.Any);
+            var exporter = new OBJExporter ();
+            Dictionary <int, int> textureEIDs = new ();
+            Dictionary <VertexTexInfo, VertexTexInfo> objTranslate = new Dictionary <VertexTexInfo, VertexTexInfo> ();
+            
+            exporter.AddScenery (this.GetNSF (), OldSceneryEntry, ref textureEIDs, ref objTranslate);
+            exporter.Export (path, modelname);
         }
     }
 }

@@ -147,7 +147,7 @@ namespace CrashEdit.CE
             }
             foreach (var tri in model.Triangles)
             {
-                if (!ProcessTextureInfoC2(Render.RealCurrentFrame / 2, tri.Texture, tri.Animated, model.Textures, model.AnimatedTextures, out var polygon_texture_info))
+                if (!TextureUtils.ProcessTextureInfoC2(Render.RealCurrentFrame / 2, tri.Texture, tri.Animated, model.Textures, model.AnimatedTextures, out var polygon_texture_info))
                     continue;
                 bool nocull = tri.Subtype == 0 || tri.Subtype == 2;
                 bool flip = (tri.Type == 2 ^ tri.Subtype == 3) && !nocull;

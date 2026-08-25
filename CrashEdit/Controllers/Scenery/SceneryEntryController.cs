@@ -1,4 +1,6 @@
 using CrashEdit.Crash;
+using CrashEdit.Exporters;
+using OpenTK.Mathematics;
 
 namespace CrashEdit.CE
 {
@@ -10,7 +12,6 @@ namespace CrashEdit.CE
             SceneryEntry = sceneryentry;
             AddMenuSeparator();
             AddMenu("Export as Wavefront OBJ", Menu_Export_OBJ);
-            AddMenu("Export as Stanford PLY", Menu_Export_PLY);
             //AddMenu("Export as COLLADA",Menu_Export_COLLADA);
             AddMenu("Fix coords imported from Crash 3", Menu_Fix_WGEOv3);
         }
@@ -24,33 +25,24 @@ namespace CrashEdit.CE
 
         public SceneryEntry SceneryEntry { get; }
 
-        private void Menu_Export_OBJ()
+        private void Menu_Export_OBJ ()
         {
-            if (MessageBox.Show("Exporting to Wavefront OBJ (.obj) is experimental.\nTexture and color information will not be exported.\n\nContinue anyway?", "Export as OBJ", MessageBoxButtons.YesNo) != DialogResult.Yes)
-            {
+            if (!FileUtil.SelectSaveFile (out string filename, FileFilters.OBJ, FileFilters.Any))
                 return;
-            }
-            FileUtil.SaveFile(SceneryEntry.ToOBJ(), FileFilters.OBJ, FileFilters.Any);
+            
+            ToOBJ (Path.GetDirectoryName (filename), Path.GetFileNameWithoutExtension (filename));
         }
 
-        private void Menu_Export_PLY()
+        private void ToOBJ (string path, string modelname)
         {
-            if (MessageBox.Show("Exporting to Stanford PLY (.ply) is experimental.\nTexture information will not be exported.\n\nContinue anyway?", "Export as PLY", MessageBoxButtons.YesNo) != DialogResult.Yes)
-            {
-                return;
-            }
-            FileUtil.SaveFile(SceneryEntry.ToPLY(), FileFilters.PLY, FileFilters.Any);
+            var exporter = new OBJExporter ();
+            Dictionary <int, int> textureEIDs = new ();
+            Dictionary <VertexTexInfo, VertexTexInfo> objTranslate = new Dictionary <VertexTexInfo, VertexTexInfo> ();
+            
+            exporter.AddScenery (this.GetNSF (), SceneryEntry, ref textureEIDs, ref objTranslate);
+            exporter.Export (path, modelname);
         }
-
-        /*private void Menu_Export_COLLADA()
-        {
-            if (MessageBox.Show("Exporting to COLLADA (.dae) is experimental.\nTexture and quad information will not be exported.\n\nContinue anyway?", "Export as OBJ", MessageBoxButtons.YesNo) != DialogResult.Yes)
-            {
-                return;
-            }
-            FileUtil.SaveFile(sceneryentry.ToCOLLADA(), FileFilters.COLLADA, FileFilters.Any);
-        }*/
-
+        
         private void Menu_Fix_WGEOv3()
         {
             for (int i = 0; i < SceneryEntry.Vertices.Count; i++)
